@@ -13,13 +13,23 @@ from typing import Optional
 
 from .registry import SESSION, is_windows
 
-
 # ── Detection helpers ────────────────────────────────────────────────────────
 
 _VPN_KEYWORDS: tuple[str, ...] = (
-    "cisco", "anyconnect", "pulse", "globalprotect", "juniper",
-    "forticlient", "zscaler", "vpn", "wireguard", "openvpn",
-    "f5", "palo alto", "check point", "sonicwall",
+    "cisco",
+    "anyconnect",
+    "pulse",
+    "globalprotect",
+    "juniper",
+    "forticlient",
+    "zscaler",
+    "vpn",
+    "wireguard",
+    "openvpn",
+    "f5",
+    "palo alto",
+    "check point",
+    "sonicwall",
 )
 
 
@@ -50,9 +60,15 @@ def _is_domain_joined() -> bool:
     # Fallback: WMI via PowerShell
     try:
         result = subprocess.run(
-            ["powershell", "-NoProfile", "-Command",
-             "(Get-CimInstance Win32_ComputerSystem).PartOfDomain"],
-            capture_output=True, text=True, timeout=10,
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "(Get-CimInstance Win32_ComputerSystem).PartOfDomain",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         if result.stdout.strip().lower() == "true":
             SESSION.log("Corp-guard: WMI confirms domain-joined")
@@ -70,7 +86,9 @@ def _is_azure_ad_joined() -> bool:
     try:
         result = subprocess.run(
             ["dsregcmd", "/status"],
-            capture_output=True, text=True, timeout=10,
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         output = result.stdout
         if re.search(r"AzureAdJoined\s*:\s*YES", output, re.IGNORECASE):
@@ -90,10 +108,16 @@ def _has_vpn_adapter() -> bool:
         return False
     try:
         result = subprocess.run(
-            ["powershell", "-NoProfile", "-Command",
-             "Get-NetAdapter | Where-Object Status -eq Up | "
-             "Select-Object -ExpandProperty InterfaceDescription"],
-            capture_output=True, text=True, timeout=10,
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "Get-NetAdapter | Where-Object Status -eq Up | "
+                "Select-Object -ExpandProperty InterfaceDescription",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         for line in result.stdout.splitlines():
             desc = line.strip().lower()
@@ -113,10 +137,16 @@ def _has_management_agent() -> bool:
     # SCCM client
     try:
         result = subprocess.run(
-            ["powershell", "-NoProfile", "-Command",
-             "Get-CimInstance -Namespace root\\ccm -ClassName SMS_Client "
-             "-ErrorAction Stop | Select-Object -ExpandProperty ClientVersion"],
-            capture_output=True, text=True, timeout=10,
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "Get-CimInstance -Namespace root\\ccm -ClassName SMS_Client "
+                "-ErrorAction Stop | Select-Object -ExpandProperty ClientVersion",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=10,
         )
         if result.returncode == 0 and result.stdout.strip():
             SESSION.log("Corp-guard: SCCM client detected")
@@ -153,6 +183,7 @@ def _has_management_agent() -> bool:
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
+
 
 def is_corporate_network() -> bool:
     """Return True when the machine appears to be on a corporate network.
