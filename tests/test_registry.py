@@ -5,20 +5,19 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 # Always importable — the module guards non-Windows imports.
 from turbotweak.registry import (
-    RegistrySession,
     AdminRequirementError,
+    RegistrySession,
+    _split_root,
     assert_admin,
     is_windows,
     platform_summary,
-    _split_root,
 )
-
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 

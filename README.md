@@ -1,142 +1,120 @@
-# TurboTweak
+# ⚡ TurboTweak
 
-![TurboTweak Logo](logo.png) <!-- Upload your custom logo.png to the repo root and replace this line -->
+A best-in-class Windows registry tweak toolkit with **PowerShell scripts**, a **Python CLI/menu**, and a **tkinter GUI**. Designed for power users who want fine-grained control over Windows 11 performance, privacy, and usability.
 
-A modular set of PowerShell scripts for applying and removing advanced Windows 11 registry tweaks tailored for power users. These scripts enhance system performance, usability, and customization while prioritizing safety with backups, error handling, and confirmation prompts.
+## Highlights
 
-## Features
-- **Modular Tweaks**: Individual scripts for specific changes, including:
-  - Add/Remove "Take Ownership" context menu for files, folders, and drives.
-  - Restore "Recent Places" folder in Explorer.
-  - Enable/Disable verbose boot messages.
-  - Apply/Remove performance optimizations (e.g., reduced startup delays, improved responsiveness).
-  - Enable/Disable automatic registry backups.
-- **Menu-Driven Interface**: Easy selection via TurboTweakMenu.ps1 for applying or removing tweaks singly or all at once.
-- **Safety Measures**:
-  - Automatic registry backups to OneDrive or Documents folder.
-  - Elevation checks and UAC prompts where needed.
-  - Error handling with logging (TurboTweak.log).
-  - Optional Explorer restart for immediate application.
-- **Reversibility**: Dedicated removal scripts to restore defaults.
-- **Portability**: Relative paths ensure functionality when folder is moved.
+- **12 tweak categories** — each with an apply + remove script pair
+- **3 interfaces** — interactive PS menu, Python console menu, and tkinter GUI
+- **Corporate network safety** — auto-detects domain-joined, Azure AD, VPN, and managed machines; blocks tweaks to prevent accidental corporate policy violations
+- **Automatic backups** — every registry mutation is backed up before changes
+- **Fully reversible** — dedicated remove/restore for every tweak
+- **Shared libraries** — `Lib-TurboTweak.ps1`, `Lib-BackupRegistry.ps1`, `Lib-CorpGuard.ps1` eliminate duplication
+
+## Tweak Categories
+
+| Category | Apply | Remove | Admin |
+|---|---|---|---|
+| Take Ownership context menu | `Add-TakeOwnership.ps1` | `Remove-TakeOwnership.ps1` | ✅ |
+| Recent Folders in Quick Access | `Add-RecentFolders.ps1` | `Remove-RecentFolders.ps1` | — |
+| Verbose Boot Messages | `Add-VerboseBoot.ps1` | `Remove-VerboseBoot.ps1` | ✅ |
+| Performance Tweaks (visual/network) | `Add-Performance.ps1` | `Remove-Performance.ps1` | ✅ |
+| Registry Auto-Backup Task | `Add-RegistryBackup.ps1` | `Remove-RegistryBackup.ps1` | ✅ |
+| Disable Telemetry | `Add-DisableTelemetry.ps1` | `Remove-DisableTelemetry.ps1` | ✅ |
+| Disable Cortana | `Add-DisableCortana.ps1` | `Remove-DisableCortana.ps1` | ✅ |
+| Disable Mouse Acceleration | `Add-DisableMouseAccel.ps1` | `Remove-DisableMouseAccel.ps1` | — |
+| Disable Game DVR / Game Bar | `Add-DisableGameDVR.ps1` | `Remove-DisableGameDVR.ps1` | ✅ |
+| Optimize SvcHost Split (RAM) | `Add-SvcHostSplit.ps1` | `Remove-SvcHostSplit.ps1` | ✅ |
+| Disable NTFS Last Access | `Add-DisableLastAccess.ps1` | `Remove-DisableLastAccess.ps1` | ✅ |
+| Enable Long Paths (260-char bypass) | `Add-LongPaths.ps1` | `Remove-LongPaths.ps1` | ✅ |
 
 ## Requirements
-- Windows 11 (tested on 22H2+ builds).
-- PowerShell 7+ (pwsh.exe) for modern features; install from [Microsoft's PowerShell GitHub](https://github.com/PowerShell/PowerShell).
-- Administrator privileges for HKLM tweaks (scripts auto-elevate).
-- Optional: System Restore enabled for extra safety.
 
-## Installation
-1. Clone the repository:
-git clone https://github.com/aeger/TurboTweak.git
+- **Windows 11** (tested 22H2+)
+- **PowerShell 5.1+** (PowerShell 7 / pwsh.exe preferred)
+- **Python 3.10+** (for the Python CLI/menu/GUI)
+- Administrator privileges for HKLM tweaks (scripts auto-elevate)
 
-2. Navigate to the folder:
-cd TurboTweak
+## Quick Start
 
-3. (Optional) Create a system restore point:
-.\System_Restore_Point.ps1
-
-4. Run the launcher batch file as administrator (right-click > Run as administrator):
+### PowerShell Menu
+```
 Launch-TurboTweak.bat
+```
+Right-click → Run as administrator. The interactive menu offers all 24 individual options plus batch apply/remove and restore point creation.
 
-- If the .bat is missing, create it with:
-@echo off
-powershell.exe -ExecutionPolicy Bypass -File "%~dp0TurboTweakMenu.ps1"
-
-
-## Usage
-### Via Menu (Recommended)
-Run `Launch-TurboTweak.bat` as admin. The menu appears:
-
-============= TurboTweak Launcher =============
-[1] Add Take Ownership
-[2] Remove Take Ownership
-[3] Add Recent Folders
-[4] Remove Recent Folders
-[5] Enable Verbose Boot Messages
-[6] Disable Verbose Boot Messages
-[7] Apply Performance Tweaks
-[8] Remove Performance Tweaks
-[9] Enable Registry Backup
-[10] Disable Registry Backup
-[11] Apply All Tweaks
-[12] Remove All Tweaks
-[0] Exit
-
-Select an option (e.g., 3 for Recent Folders), confirm prompts, and follow on-screen instructions (e.g., reboot if needed).
-
-### Python edition
-The repository also ships with a Python port of the PowerShell menu. Requirements:
-
-- Python 3.10+
-- Windows host (the code calls `reg.exe`, `powershell`, and `winreg`)
-
-To launch the Python menu from the repo root:
-
+### Python Console Menu
 ```bash
 python -m turbotweak
 ```
 
-You will see the same numbered options as the PowerShell version. Each choice backs up the relevant registry keys (OneDrive → Documents fallback) and writes progress to `TurboTweak.log` in the repository root.
-
-You can also run tweaks directly without the menu. List available actions:
-
+### Python GUI
 ```bash
+python -m turbotweak --gui
+```
+A dark-themed tkinter window with checkboxes for each tweak, progress bar, and category grouping.
+
+### Single Tweak (CLI)
+```bash
+python -m turbotweak disable-telemetry -y
+python -m turbotweak apply-all --assume-yes
 python -m turbotweak --list
 ```
 
-Run a specific action (with a confirmation prompt):
+## Corporate Network Safety
 
-```bash
-python -m turbotweak add-take-ownership
+TurboTweak automatically detects corporate environments and **blocks all tweaks** to prevent accidental policy violations or network bans:
+
+- **Active Directory** domain membership (WMI / `Win32_ComputerSystem`)
+- **Azure AD / Entra ID** join status (`dsregcmd /status`)
+- **VPN adapters** — Cisco AnyConnect, GlobalProtect, Zscaler, WireGuard, etc.
+- **Group Policy** indicators in the registry
+- **SCCM / Intune** management agents
+
+Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
+
+## Project Structure
+
+```
+TurboTweak/
+├── Launch-TurboTweak.bat        # Launcher (pwsh → powershell fallback)
+├── TurboTweakMenu.ps1           # Interactive PS menu
+├── Lib-TurboTweak.ps1           # Shared PS utilities
+├── Lib-BackupRegistry.ps1       # Registry backup helper
+├── Lib-CorpGuard.ps1            # Corporate network detection (PS)
+├── System_Restore_Point.ps1     # Create system restore point
+├── Add-*.ps1 / Remove-*.ps1     # Individual tweak scripts (12 pairs)
+├── turbotweak/                  # Python package
+│   ├── __init__.py
+│   ├── __main__.py
+│   ├── cli.py                   # argparse CLI entry point
+│   ├── menu.py                  # Interactive console menu
+│   ├── gui.py                   # tkinter GUI
+│   ├── tweaks.py                # Tweak implementations (Python)
+│   ├── registry.py              # Registry helpers & session
+│   └── corpguard.py             # Corporate network detection (Python)
+├── tests/                       # Pester + pytest test suites
+├── pyproject.toml               # Python build config (hatchling)
+└── README.md
 ```
 
-Skip confirmations for scripting:
+## Safety Measures
 
-```bash
-python -m turbotweak apply-all --assume-yes
-```
-
-### Individual Scripts
-Run directly (e.g., as admin):
-.\Add-RecentFolders.ps1
-
-- Confirms action, backs up, applies, logs to TurboTweak.log.
-- Example output:
-Restore 'Recent Places' in Explorer? (y/n): y
-✔ Backup saved at: C:\Users\YourUser\Documents\RegistryBackups\RecentFolders_2025-07-13_12-34-56
-✅ 'Recent Places' restored.
-Launch Recent Places to pin? (y/n): y
-📌 Launched. Right-click and pin to Quick Access.
-
-
-### Apply All Tweaks
-Select [11] in menu—applies all with individual confirmations.
-
-### Custom Launcher Icon
-Create a shortcut to Launch-TurboTweak.bat:
-- Right-click shortcut > Properties > Change Icon > Select custom .ico.
-- Use relative paths for portability.
-
-## Examples
-### Adding Take Ownership
-- Runs reg add to create custom shell keys.
-- After, right-click a file > "Take Ownership" (prompts UAC, changes permissions).
-
-### Performance Tweaks
-- Sets StartupDelayInMSec=0, SystemResponsiveness=10.
-- Sets NetworkThrottlingIndex=0xffffffff for improved network performance.
-- Reboot; notice faster app starts and better foreground priority.
-
-## Warnings and Risks
-- **Registry Edits**: Can cause system instability if misapplied—always create a restore point first.
-- **Backups**: Scripts back up keys automatically; check the log if empty (normal if keys don't exist).
-- **Elevation**: Some tweaks require admin; scripts relaunch if needed.
-- **Reversal**: Use remove options to undo; test in VM if possible.
-- **Compatibility**: Win11 only; may break with updates—verify on your build.
+1. **Registry backups** — saved to OneDrive Documents or local Documents before every change
+2. **Confirmation prompts** — every tweak asks for user approval (skip with `-y`)
+3. **Logging** — all operations logged to `TurboTweak.log`
+4. **System Restore Point** — create one before batch operations
+5. **Admin elevation** — scripts auto-elevate when needed; HKCU tweaks run without admin
+6. **Corporate guard** — blocks tweaks on domain/managed machines
 
 ## Contributing
-Fork the repo, add tweaks (with add/remove pairs, backups), and PR. Follow best practices: try-catch, logging, confirmations.
+
+1. Fork the repository
+2. Add new tweak pair (Add-/Remove- scripts + Python function pair)
+3. Register in `TurboTweakMenu.ps1`, `turbotweak/tweaks.py`, `turbotweak/cli.py`, `turbotweak/menu.py`, and `turbotweak/gui.py`
+4. Include backup calls, error handling, logging, and confirmation prompts
+5. Submit a PR
 
 ## License
-MIT License—free to use/modify. See [LICENSE](LICENSE) for details.
+
+MIT License — see [LICENSE](LICENSE) for details.
