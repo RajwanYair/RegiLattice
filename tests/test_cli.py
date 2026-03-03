@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from turbotweak.cli import main, _actions
+from turbotweak.cli import _actions, main
 
 
 class TestListActions:

@@ -24,4 +24,6 @@ class TestMenuConstruction:
     def test_each_item_has_callable_action(self) -> None:
         menu = Menu()
         for item in menu._items:
-            assert callable(item.action), f"Menu item '{item.label}' action is not callable"
+            assert callable(
+                item.action
+            ), f"Menu item '{item.label}' action is not callable"

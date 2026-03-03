@@ -37,7 +37,7 @@ try {
     # If Serialize key is now empty, remove it entirely
     if (Test-Path $keys[0]) {
         $props = Get-ItemProperty -Path $keys[0] -ErrorAction SilentlyContinue |
-                 Select-Object -Property * -ExcludeProperty PSPath,PSParentPath,PSChildName,PSDrive,PSProvider
+        Select-Object -Property * -ExcludeProperty PSPath, PSParentPath, PSChildName, PSDrive, PSProvider
         if (($props.PSObject.Properties | Measure-Object).Count -eq 0) {
             Remove-Item -Path $keys[0] -Recurse -ErrorAction SilentlyContinue
         }

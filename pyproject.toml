@@ -29,12 +29,7 @@ classifiers = [
 turbotweak = "turbotweak.cli:main"
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7",
-    "pytest-cov",
-    "mypy",
-    "ruff",
-]
+dev = ["pytest>=7", "pytest-cov", "mypy", "ruff"]
 
 # ── Tool configuration ──────────────────────────────────────────────────────────
 

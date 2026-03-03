@@ -40,10 +40,10 @@ function Backup-Registry {
             # Normalize PS-style paths (HKLM:\...) to reg.exe paths (HKLM\...)
             $regKey = $key -replace ':\\', '\'
             $safeName = ($regKey -replace '[\\:*{}/<>|"]', '_').TrimStart('_')
-            $regFile  = Join-Path $backupPath "$safeName.reg"
+            $regFile = Join-Path $backupPath "$safeName.reg"
 
             $proc = Start-Process reg -ArgumentList "export `"$regKey`" `"$regFile`" /y" `
-                        -NoNewWindow -Wait -PassThru -RedirectStandardError "$env:TEMP\tt_reg_err.txt" 2>$null
+                -NoNewWindow -Wait -PassThru -RedirectStandardError "$env:TEMP\tt_reg_err.txt" 2>$null
             if ($proc.ExitCode -ne 0) {
                 $errMsg = Get-Content "$env:TEMP\tt_reg_err.txt" -ErrorAction SilentlyContinue
                 Write-Verbose "Backup skipped for $regKey ($errMsg)"
@@ -51,8 +51,7 @@ function Backup-Registry {
         }
 
         Write-Host "✔ Backup saved at: $backupPath" -ForegroundColor Cyan
-    }
-    catch {
+    } catch {
         Write-Host "⚠️ Backup failed: $_" -ForegroundColor Red
     }
 

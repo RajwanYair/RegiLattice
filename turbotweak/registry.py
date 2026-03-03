@@ -37,6 +37,7 @@ if winreg is not None:
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
+
 def _ensure_windows() -> None:
     if os.name != "nt":  # pragma: no cover — platform guard
         raise OSError("Registry tweaks require Windows.")
@@ -47,7 +48,7 @@ def _split_root(path: str) -> Tuple[int, str]:
     _ensure_windows()
     for prefix, root in _ROOTS.items():
         if path.upper().startswith(prefix.upper() + "\\") and root is not None:
-            return root, path[len(prefix) + 1:]
+            return root, path[len(prefix) + 1 :]
     raise ValueError(f"Unsupported registry path: {path}")
 
 
@@ -60,6 +61,7 @@ def platform_summary() -> str:
 
 
 # ── Session ──────────────────────────────────────────────────────────────────
+
 
 @dataclass
 class RegistrySession:
@@ -208,6 +210,7 @@ class RegistrySession:
 
 
 # ── Admin check ──────────────────────────────────────────────────────────────
+
 
 class AdminRequirementError(PermissionError):
     """Raised when administrative rights are required."""
