@@ -208,6 +208,17 @@ class RegistrySession:
         except (FileNotFoundError, OSError):
             return None
 
+    def read_string(self, path: str, name: str) -> Optional[str]:
+        """Return a REG_SZ value or None if missing."""
+        _ensure_windows()
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:  # type: ignore[arg-type]
+                val, typ = winreg.QueryValueEx(handle, name)
+                return str(val) if typ == winreg.REG_SZ else None  # type: ignore[union-attr]
+        except (FileNotFoundError, OSError):
+            return None
+
 
 # ── Admin check ──────────────────────────────────────────────────────────────
 
