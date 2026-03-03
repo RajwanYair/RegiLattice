@@ -9,30 +9,30 @@ $ErrorActionPreference = 'Stop'
 
 # ── Menu definition ────────────────────────────────────────────────────────────
 $menuItems = [ordered]@{
-    '1'  = @{ File = 'Add-TakeOwnership.ps1';    Label = 'Add Take Ownership' }
+    '1'  = @{ File = 'Add-TakeOwnership.ps1'; Label = 'Add Take Ownership' }
     '2'  = @{ File = 'Remove-TakeOwnership.ps1'; Label = 'Remove Take Ownership' }
-    '3'  = @{ File = 'Add-RecentFolders.ps1';    Label = 'Add Recent Folders' }
+    '3'  = @{ File = 'Add-RecentFolders.ps1'; Label = 'Add Recent Folders' }
     '4'  = @{ File = 'Remove-RecentFolders.ps1'; Label = 'Remove Recent Folders' }
-    '5'  = @{ File = 'Add-VerboseBoot.ps1';      Label = 'Enable Verbose Boot Messages' }
-    '6'  = @{ File = 'Remove-VerboseBoot.ps1';   Label = 'Disable Verbose Boot Messages' }
-    '7'  = @{ File = 'Add-Performance.ps1';      Label = 'Apply Performance Tweaks' }
-    '8'  = @{ File = 'Remove-Performance.ps1';   Label = 'Remove Performance Tweaks' }
-    '9'  = @{ File = 'Add-RegistryBackup.ps1';   Label = 'Enable Registry Backup' }
+    '5'  = @{ File = 'Add-VerboseBoot.ps1'; Label = 'Enable Verbose Boot Messages' }
+    '6'  = @{ File = 'Remove-VerboseBoot.ps1'; Label = 'Disable Verbose Boot Messages' }
+    '7'  = @{ File = 'Add-Performance.ps1'; Label = 'Apply Performance Tweaks' }
+    '8'  = @{ File = 'Remove-Performance.ps1'; Label = 'Remove Performance Tweaks' }
+    '9'  = @{ File = 'Add-RegistryBackup.ps1'; Label = 'Enable Registry Backup' }
     '10' = @{ File = 'Remove-RegistryBackup.ps1'; Label = 'Disable Registry Backup' }
-    '11' = @{ File = 'Add-DisableTelemetry.ps1';  Label = 'Disable Telemetry' }
+    '11' = @{ File = 'Add-DisableTelemetry.ps1'; Label = 'Disable Telemetry' }
     '12' = @{ File = 'Remove-DisableTelemetry.ps1'; Label = 'Enable Telemetry' }
-    '13' = @{ File = 'Add-DisableCortana.ps1';    Label = 'Disable Cortana' }
+    '13' = @{ File = 'Add-DisableCortana.ps1'; Label = 'Disable Cortana' }
     '14' = @{ File = 'Remove-DisableCortana.ps1'; Label = 'Enable Cortana' }
     '15' = @{ File = 'Add-DisableMouseAccel.ps1'; Label = 'Disable Mouse Acceleration' }
     '16' = @{ File = 'Remove-DisableMouseAccel.ps1'; Label = 'Enable Mouse Acceleration' }
-    '17' = @{ File = 'Add-DisableGameDVR.ps1';    Label = 'Disable Game DVR / Game Bar' }
+    '17' = @{ File = 'Add-DisableGameDVR.ps1'; Label = 'Disable Game DVR / Game Bar' }
     '18' = @{ File = 'Remove-DisableGameDVR.ps1'; Label = 'Enable Game DVR / Game Bar' }
-    '19' = @{ File = 'Add-SvcHostSplit.ps1';      Label = 'Optimize SvcHost Split (RAM)' }
-    '20' = @{ File = 'Remove-SvcHostSplit.ps1';   Label = 'Restore SvcHost Split Default' }
+    '19' = @{ File = 'Add-SvcHostSplit.ps1'; Label = 'Optimize SvcHost Split (RAM)' }
+    '20' = @{ File = 'Remove-SvcHostSplit.ps1'; Label = 'Restore SvcHost Split Default' }
     '21' = @{ File = 'Add-DisableLastAccess.ps1'; Label = 'Disable NTFS Last Access' }
     '22' = @{ File = 'Remove-DisableLastAccess.ps1'; Label = 'Enable NTFS Last Access' }
-    '23' = @{ File = 'Add-LongPaths.ps1';         Label = 'Enable Long Paths' }
-    '24' = @{ File = 'Remove-LongPaths.ps1';      Label = 'Disable Long Paths' }
+    '23' = @{ File = 'Add-LongPaths.ps1'; Label = 'Enable Long Paths' }
+    '24' = @{ File = 'Remove-LongPaths.ps1'; Label = 'Disable Long Paths' }
 }
 
 $applyAllScripts = @(
@@ -78,7 +78,7 @@ function Show-Banner {
 
     foreach ($key in $menuItems.Keys) {
         $label = $menuItems[$key].Label
-        $pad   = if ($key.Length -eq 1) { ' ' } else { '' }
+        $pad = if ($key.Length -eq 1) { ' ' } else { '' }
         Write-Host "   [$pad$key] $label"
     }
     Write-Host ''
