@@ -4,55 +4,22 @@ Usage examples::
 
     python -m turbotweak                    # interactive menu
     python -m turbotweak --list             # show available actions
-    python -m turbotweak apply-performance  # run a single action
-    python -m turbotweak apply-all -y       # skip confirmation
+    python -m turbotweak apply take-ownership  # apply a single tweak
+    python -m turbotweak remove all -y      # skip confirmation
+    python -m turbotweak --gui              # graphical interface
 """
 
 from __future__ import annotations
 
 import argparse
 import sys
-from typing import Callable, Dict
+from pathlib import Path
 
-from . import __version__, tweaks
+from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-
-Action = Callable[[], None]
-
-
-def _actions() -> Dict[str, Action]:
-    """Return an ordered mapping of action-name → callable."""
-    return {
-        "add-take-ownership": tweaks.add_take_ownership,
-        "remove-take-ownership": tweaks.remove_take_ownership,
-        "add-recent-folders": tweaks.add_recent_places,
-        "remove-recent-folders": tweaks.remove_recent_places,
-        "enable-verbose-boot": tweaks.enable_verbose_boot,
-        "disable-verbose-boot": tweaks.disable_verbose_boot,
-        "apply-performance": tweaks.apply_performance_tweaks,
-        "remove-performance": tweaks.remove_performance_tweaks,
-        "enable-registry-backup": tweaks.enable_registry_backup,
-        "disable-registry-backup": tweaks.disable_registry_backup,
-        "disable-telemetry": tweaks.disable_telemetry,
-        "enable-telemetry": tweaks.enable_telemetry,
-        "disable-cortana": tweaks.disable_cortana,
-        "enable-cortana": tweaks.enable_cortana,
-        "disable-mouse-accel": tweaks.disable_mouse_accel,
-        "enable-mouse-accel": tweaks.enable_mouse_accel,
-        "disable-game-dvr": tweaks.disable_game_dvr,
-        "enable-game-dvr": tweaks.enable_game_dvr,
-        "optimize-svchost": tweaks.optimize_svchost_split,
-        "restore-svchost": tweaks.restore_svchost_split,
-        "disable-last-access": tweaks.disable_last_access,
-        "enable-last-access": tweaks.enable_last_access,
-        "enable-long-paths": tweaks.enable_long_paths,
-        "disable-long-paths": tweaks.disable_long_paths,
-        "create-restore-point": tweaks.create_restore_point,
-        "apply-all": tweaks.apply_all,
-        "remove-all": tweaks.remove_all,
-    }
+from .tweaks import all_tweaks, apply_all, get_tweak, remove_all, tweak_status
 
 
 def _confirm(prompt: str) -> bool:
@@ -62,13 +29,13 @@ def _confirm(prompt: str) -> bool:
         return False
 
 
-def _run_action(name: str, *, assume_yes: bool, force: bool = False) -> int:
-    actions = _actions()
-    action = actions.get(name)
-    if action is None:
-        print(f"❌ Unknown action '{name}'. Use --list to see available options.")
-        return 2
-
+def _run_action(
+    mode: str,
+    tweak_id: str,
+    *,
+    assume_yes: bool,
+    force: bool = False,
+) -> int:
     # Corporate network safety guard
     try:
         assert_not_corporate(force=force)
@@ -76,19 +43,39 @@ def _run_action(name: str, *, assume_yes: bool, force: bool = False) -> int:
         print(f"🛑 {exc}")
         return 6
 
-    if not assume_yes and not _confirm(f"Proceed with '{name}'?"):
+    # Batch operations
+    if tweak_id == "all":
+        label = f"{mode.title()} all tweaks"
+        if not assume_yes and not _confirm(f"Proceed with '{label}'?"):
+            print("ℹ️  Aborted by user.")
+            return 1
+        fn = apply_all if mode == "apply" else remove_all
+        results = fn(force_corp=force)
+        ok = sum(1 for v in results.values() if v in ("applied", "removed"))
+        print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
+        return 0
+
+    # Single tweak
+    td = get_tweak(tweak_id)
+    if td is None:
+        print(f"❌ Unknown tweak '{tweak_id}'. Use --list to see available tweaks.")
+        return 2
+
+    action_label = f"{mode} {td.label}"
+    if not assume_yes and not _confirm(f"Proceed with '{action_label}'?"):
         print("ℹ️  Aborted by user.")
         return 1
 
     try:
-        action()
-        print(f"✅ Completed. Details logged to {SESSION.log_path}")
+        fn = td.apply_fn if mode == "apply" else td.remove_fn
+        fn()
+        print(f"✅ Completed '{action_label}'. Log: {SESSION.log_path}")
         return 0
     except AdminRequirementError as exc:
         print(f"❌ {exc}")
         return 5
     except Exception as exc:  # pragma: no cover — defensive
-        SESSION.log(f"Error running action {name}: {exc}")
+        SESSION.log(f"Error running {action_label}: {exc}")
         print(f"❌ Error: {exc}")
         return 3
 
@@ -99,9 +86,15 @@ def _build_parser() -> argparse.ArgumentParser:
         description="TurboTweak — Windows registry tweak toolkit",
     )
     parser.add_argument(
-        "action",
+        "mode",
         nargs="?",
-        help="Action to run (use --list for options). Omit to launch the interactive menu.",
+        choices=["apply", "remove", "status"],
+        help="Action mode: apply, remove, or status.",
+    )
+    parser.add_argument(
+        "tweak",
+        nargs="?",
+        help="Tweak id (e.g. 'take-ownership') or 'all'. Use --list to see ids.",
     )
     parser.add_argument(
         "-y",
@@ -112,7 +105,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--list",
         action="store_true",
-        help="List available actions and exit.",
+        help="List available tweaks and exit.",
     )
     parser.add_argument(
         "--force",
@@ -122,7 +115,17 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--gui",
         action="store_true",
-        help="Launch the graphical (tkinter) interface instead of the console menu.",
+        help="Launch the graphical (tkinter) interface.",
+    )
+    parser.add_argument(
+        "--snapshot",
+        metavar="PATH",
+        help="Save current tweak state snapshot to file (JSON).",
+    )
+    parser.add_argument(
+        "--restore",
+        metavar="PATH",
+        help="Restore tweaks to state saved in snapshot file.",
     )
     parser.add_argument(
         "--version",
@@ -138,18 +141,47 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.list:
-        print("Available actions:")
-        for key in _actions():
-            print(f"  {key}")
+        tweaks = all_tweaks()
+        print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
+        print("─" * 80)
+        for td in tweaks:
+            st = tweak_status(td)
+            print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
+        return 0
+
+    if args.snapshot:
+        from .tweaks import save_snapshot
+
+        save_snapshot(Path(args.snapshot))
+        print(f"✅ Snapshot saved to {args.snapshot}")
+        return 0
+
+    if args.restore:
+        from .tweaks import restore_snapshot
+
+        results = restore_snapshot(Path(args.restore), force_corp=args.force)
+        for tid, action in results.items():
+            print(f"  {tid}: {action}")
         return 0
 
     if args.gui:
         from .gui import launch
+
         launch()
         return 0
 
-    if args.action:
-        return _run_action(args.action, assume_yes=args.assume_yes, force=args.force)
+    if args.mode and args.tweak:
+        if args.mode == "status":
+            td = get_tweak(args.tweak)
+            if td:
+                print(f"{td.label}: {tweak_status(td)}")
+            else:
+                print(f"❌ Unknown tweak '{args.tweak}'.")
+                return 2
+            return 0
+        return _run_action(
+            args.mode, args.tweak, assume_yes=args.assume_yes, force=args.force
+        )
 
     # Interactive menu
     if not is_windows():

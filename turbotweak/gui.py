@@ -1,6 +1,13 @@
-"""Tkinter GUI for TurboTweak – selective tweak application.
+"""Tkinter GUI for TurboTweak — Windows 11 style, plugin-driven.
 
 Launch via ``python -m turbotweak --gui`` or ``turbotweak --gui``.
+
+Features:
+  • Auto-discovers tweaks from ``turbotweak.tweaks`` plugin package
+  • Live status detection (applied / not applied / unknown)
+  • Save-snapshot / restore-snapshot for undo
+  • Corp-safe enforcement — non-corp-safe tweaks disabled on corp networks
+  • Windows 11 dark Mica-like theme (Catppuccin Mocha palette)
 """
 
 from __future__ import annotations
@@ -8,159 +15,208 @@ from __future__ import annotations
 import sys
 import threading
 import tkinter as tk
-from tkinter import messagebox, ttk
-from dataclasses import dataclass
-from typing import Callable, List, Optional
+from pathlib import Path
+from tkinter import filedialog, messagebox, ttk
+from typing import Dict, List, Optional, Tuple
 
-from . import __version__, tweaks
+from . import __version__
 from .corpguard import (
     CorporateNetworkError,
     assert_not_corporate,
     corp_guard_status,
     is_corporate_network,
 )
-from .registry import (
-    SESSION,
-    AdminRequirementError,
-    is_windows,
-    platform_summary,
+from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
+from .tweaks import (
+    TweakDef,
+    all_tweaks,
+    load_snapshot,
+    restore_snapshot,
+    save_snapshot,
+    tweak_status,
 )
+from .tweaks.maintenance import create_restore_point
+
+# ── Theme — Catppuccin Mocha / Windows 11 dark ──────────────────────────────
+
+_ACCENT = "#89B4FA"  # Blue
+_BG = "#1E1E2E"  # Base
+_BG_SURFACE = "#24273A"  # Surface0
+_FG = "#CDD6F4"  # Text
+_FG_DIM = "#6C7086"  # Overlay0
+_CARD_BG = "#313244"  # Surface1
+_CARD_HOVER = "#45475A"  # Surface2
+_OK_GREEN = "#A6E3A1"  # Green
+_WARN_YELLOW = "#F9E2AF"  # Yellow
+_ERR_RED = "#F38BA8"  # Red
+_PURPLE = "#CBA6F7"  # Mauve
+_HEADER_BG = "#181825"  # Crust
+_BORDER = "#45475A"  # Surface2
+_DIM_BG = "#585B70"  # Overlay2
+
+# Status indicator colours
+_STATUS_APPLIED = _OK_GREEN
+_STATUS_NOT_APPLIED = _FG_DIM
+_STATUS_UNKNOWN = _WARN_YELLOW
+_STATUS_CORP_BLOCKED = _ERR_RED
 
 
-# ── Tweak descriptor ────────────────────────────────────────────────────────
-
-@dataclass
-class TweakDef:
-    """Describes one toggle-able tweak (apply + remove pair)."""
-
-    label: str
-    apply_fn: Callable[[], None]
-    remove_fn: Callable[[], None]
-    needs_admin: bool = True
-    category: str = "General"
+# ── Row widget ───────────────────────────────────────────────────────────────
 
 
-_TWEAKS: List[TweakDef] = [
-    # ── Core tweaks ──────────────────────────────────────────────────────
-    TweakDef(
-        "Take Ownership Context Menu",
-        tweaks.add_take_ownership,
-        tweaks.remove_take_ownership,
-        needs_admin=True,
-        category="Shell",
-    ),
-    TweakDef(
-        "Recent Folders in Quick Access",
-        tweaks.add_recent_places,
-        tweaks.remove_recent_places,
-        needs_admin=False,
-        category="Explorer",
-    ),
-    TweakDef(
-        "Verbose Boot Messages",
-        tweaks.enable_verbose_boot,
-        tweaks.disable_verbose_boot,
-        needs_admin=True,
-        category="Boot",
-    ),
-    TweakDef(
-        "Performance Tweaks (Visual Effects)",
-        tweaks.apply_performance_tweaks,
-        tweaks.remove_performance_tweaks,
-        needs_admin=True,
-        category="Performance",
-    ),
-    TweakDef(
-        "Registry Auto-Backup Task",
-        tweaks.enable_registry_backup,
-        tweaks.disable_registry_backup,
-        needs_admin=True,
-        category="Maintenance",
-    ),
-    # ── New tweaks ───────────────────────────────────────────────────────
-    TweakDef(
-        "Disable Telemetry",
-        tweaks.disable_telemetry,
-        tweaks.enable_telemetry,
-        needs_admin=True,
-        category="Privacy",
-    ),
-    TweakDef(
-        "Disable Cortana",
-        tweaks.disable_cortana,
-        tweaks.enable_cortana,
-        needs_admin=True,
-        category="Privacy",
-    ),
-    TweakDef(
-        "Disable Mouse Acceleration",
-        tweaks.disable_mouse_accel,
-        tweaks.enable_mouse_accel,
-        needs_admin=False,
-        category="Input",
-    ),
-    TweakDef(
-        "Disable Game DVR / Game Bar",
-        tweaks.disable_game_dvr,
-        tweaks.enable_game_dvr,
-        needs_admin=True,
-        category="Gaming",
-    ),
-    TweakDef(
-        "Optimize SvcHost Split (RAM-based)",
-        tweaks.optimize_svchost_split,
-        tweaks.restore_svchost_split,
-        needs_admin=True,
-        category="Performance",
-    ),
-    TweakDef(
-        "Disable NTFS Last Access Timestamp",
-        tweaks.disable_last_access,
-        tweaks.enable_last_access,
-        needs_admin=True,
-        category="Performance",
-    ),
-    TweakDef(
-        "Enable Long Paths (260-char bypass)",
-        tweaks.enable_long_paths,
-        tweaks.disable_long_paths,
-        needs_admin=True,
-        category="System",
-    ),
-]
+class _TweakRow:
+    """Single tweak row: checkbox + status badge + optional admin/corp tags."""
+
+    def __init__(
+        self,
+        parent: ttk.Frame,
+        td: TweakDef,
+        *,
+        corp_blocked: bool,
+    ) -> None:
+        self.td = td
+        self.var = tk.BooleanVar(value=False)
+        self._corp_blocked = corp_blocked
+
+        self.frame = ttk.Frame(parent, style="Card.TFrame")
+        self.frame.pack(fill="x", padx=4, pady=2, ipady=3)
+
+        # Status dot
+        self.status_lbl = tk.Label(
+            self.frame,
+            text="●",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=("Segoe UI", 12),
+            width=2,
+        )
+        self.status_lbl.pack(side="left", padx=(6, 0))
+
+        # Checkbox
+        disabled_by_corp = corp_blocked and not td.corp_safe
+        state = "disabled" if disabled_by_corp else "normal"
+        self.cb = ttk.Checkbutton(
+            self.frame, text=td.label, variable=self.var, state=state
+        )
+        self.cb.pack(side="left", padx=(4, 4), pady=2)
+
+        # Tags (right-aligned)
+        if disabled_by_corp:
+            tk.Label(
+                self.frame,
+                text="CORP BLOCKED",
+                fg=_ERR_RED,
+                bg=_CARD_BG,
+                font=("Segoe UI", 7, "bold"),
+            ).pack(side="right", padx=(0, 8))
+        if td.needs_admin:
+            tk.Label(
+                self.frame,
+                text="ADMIN",
+                fg=_FG_DIM,
+                bg=_CARD_BG,
+                font=("Segoe UI", 7),
+            ).pack(side="right", padx=(0, 6))
+
+        # Tooltip on hover
+        if td.description:
+            self._bind_tooltip(td.description)
+
+    # tooltip helpers
+    def _bind_tooltip(self, text: str) -> None:
+        self._tip: Optional[tk.Toplevel] = None
+
+        def show(event: tk.Event) -> None:  # type: ignore[type-arg]
+            x = event.x_root + 12
+            y = event.y_root + 8
+            self._tip = tw = tk.Toplevel(self.frame)
+            tw.wm_overrideredirect(True)
+            tw.wm_geometry(f"+{x}+{y}")
+            tk.Label(
+                tw,
+                text=text,
+                bg="#45475A",
+                fg=_FG,
+                font=("Segoe UI", 9),
+                padx=8,
+                pady=4,
+                wraplength=320,
+                justify="left",
+            ).pack()
+
+        def hide(_: tk.Event) -> None:  # type: ignore[type-arg]
+            if self._tip:
+                self._tip.destroy()
+                self._tip = None
+
+        self.frame.bind("<Enter>", show)
+        self.frame.bind("<Leave>", hide)
+
+    def refresh_status(self) -> None:
+        """Update the status dot colour based on live detection."""
+        st = tweak_status(self.td)
+        if self._corp_blocked and not self.td.corp_safe:
+            colour = _STATUS_CORP_BLOCKED
+        elif st == "applied":
+            colour = _STATUS_APPLIED
+        elif st == "not applied":
+            colour = _STATUS_NOT_APPLIED
+        else:
+            colour = _STATUS_UNKNOWN
+        self.status_lbl.configure(fg=colour)
 
 
-# ── GUI  ─────────────────────────────────────────────────────────────────────
-
-_ACCENT = "#1E90FF"
-_BG = "#1E1E2E"
-_FG = "#CDD6F4"
-_FG_DIM = "#6C7086"
-_CARD_BG = "#313244"
-_OK_GREEN = "#A6E3A1"
-_WARN_YELLOW = "#F9E2AF"
-_ERR_RED = "#F38BA8"
-_HEADER_BG = "#181825"
+# ── Main GUI ─────────────────────────────────────────────────────────────────
 
 
 class TurboTweakGUI:
-    """Main application window."""
+    """Plugin-driven main application window."""
 
     def __init__(self) -> None:
         self._root = tk.Tk()
         self._root.title(f"TurboTweak  v{__version__}")
-        self._root.geometry("720x780")
-        self._root.minsize(540, 520)
+        self._root.geometry("800x860")
+        self._root.minsize(600, 540)
         self._root.configure(bg=_BG)
         self._root.resizable(True, True)
 
-        # Try to set the window icon (fail silently)
         try:
             self._root.iconbitmap(default="")
         except Exception:
             pass
 
-        # ── Style ────────────────────────────────────────────────────────
+        # Windows 11: attempt DWM dark title bar
+        self._apply_win11_dark_titlebar()
+
+        self._corp_blocked = is_corporate_network()
+        self._tweak_rows: List[_TweakRow] = []
+        self._setup_styles()
+        self._build_ui()
+        self._refresh_status_all()
+
+    # ── Windows 11 dark title bar ────────────────────────────────────────
+
+    @staticmethod
+    def _apply_win11_dark_titlebar() -> None:
+        """Use DwmSetWindowAttribute to request Mica/dark title bar."""
+        try:
+            import ctypes
+
+            hwnd = ctypes.windll.user32.GetForegroundWindow()
+            DWMWA_USE_IMMERSIVE_DARK_MODE = 20
+            value = ctypes.c_int(1)
+            ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                hwnd,
+                DWMWA_USE_IMMERSIVE_DARK_MODE,
+                ctypes.byref(value),
+                ctypes.sizeof(value),
+            )
+        except Exception:
+            pass  # non-Windows or unsupported build
+
+    # ── Styles ───────────────────────────────────────────────────────────
+
+    def _setup_styles(self) -> None:
         style = ttk.Style(self._root)
         style.theme_use("clam")
 
@@ -177,20 +233,18 @@ class TurboTweakGUI:
         )
         style.map(
             "TCheckbutton",
-            background=[("active", _CARD_BG)],
-            foreground=[("active", _FG)],
+            background=[("active", _CARD_BG), ("disabled", _CARD_BG)],
+            foreground=[("active", _FG), ("disabled", _DIM_BG)],
         )
-        style.configure(
-            "TButton",
-            padding=(14, 6),
-            font=("Segoe UI Semibold", 10),
-        )
+        style.configure("TButton", padding=(14, 6), font=("Segoe UI Semibold", 10))
         style.configure("Apply.TButton", foreground="white", background="#40A02B")
         style.map("Apply.TButton", background=[("active", "#2E7D32")])
         style.configure("Remove.TButton", foreground="white", background="#E64A19")
         style.map("Remove.TButton", background=[("active", "#BF360C")])
         style.configure("Restore.TButton", foreground="white", background="#7C3AED")
         style.map("Restore.TButton", background=[("active", "#5B21B6")])
+        style.configure("Snap.TButton", foreground="white", background="#1565C0")
+        style.map("Snap.TButton", background=[("active", "#0D47A1")])
         style.configure(
             "TLabel", background=_BG, foreground=_FG, font=("Segoe UI", 10)
         )
@@ -216,41 +270,32 @@ class TurboTweakGUI:
             "Category.TLabel",
             background=_BG,
             foreground=_ACCENT,
-            font=("Segoe UI Semibold", 10),
-        )
-        style.configure(
-            "CorpWarn.TLabel",
-            background=_ERR_RED,
-            foreground="#1E1E2E",
-            font=("Segoe UI Semibold", 10),
+            font=("Segoe UI Semibold", 11),
         )
 
-        # ── Header ───────────────────────────────────────────────────────
+    # ── UI construction ──────────────────────────────────────────────────
+
+    def _build_ui(self) -> None:
+        # Header
         header = ttk.Frame(self._root, style="Header.TFrame")
-        header.pack(fill="x", padx=0, pady=0)
-
-        ttk.Label(
-            header,
-            text="⚡ TurboTweak",
-            style="Title.TLabel",
-        ).pack(side="left", padx=16, pady=(12, 2))
-
+        header.pack(fill="x")
+        ttk.Label(header, text="⚡ TurboTweak", style="Title.TLabel").pack(
+            side="left", padx=16, pady=(12, 2)
+        )
         ttk.Label(
             header,
             text=f"v{__version__}  |  {platform_summary()}",
             style="Subtitle.TLabel",
         ).pack(side="left", padx=4, pady=(14, 2))
 
-        # ── Corporate-guard banner ───────────────────────────────────────
-        self._corp_blocked = is_corporate_network()
-        self._corp_banner_frame: Optional[tk.Frame] = None
+        # Corp banner
         if self._corp_blocked:
             corp_info = corp_guard_status() or "corporate environment detected"
-            self._corp_banner_frame = tk.Frame(self._root, bg=_ERR_RED)
-            self._corp_banner_frame.pack(fill="x")
+            banner = tk.Frame(self._root, bg=_ERR_RED)
+            banner.pack(fill="x")
             tk.Label(
-                self._corp_banner_frame,
-                text=f"  🛑  Corporate network detected: {corp_info} — tweaks are blocked",
+                banner,
+                text=f"  🛑  Corporate network: {corp_info} — non-corp-safe tweaks blocked",
                 bg=_ERR_RED,
                 fg="#1E1E2E",
                 font=("Segoe UI Semibold", 10),
@@ -259,7 +304,7 @@ class TurboTweakGUI:
                 pady=6,
             ).pack(fill="x")
 
-        # ── Select-all / deselect-all bar ────────────────────────────────
+        # Toolbar
         toolbar = ttk.Frame(self._root)
         toolbar.pack(fill="x", padx=16, pady=(10, 0))
 
@@ -269,16 +314,37 @@ class TurboTweakGUI:
         ttk.Button(toolbar, text="Deselect All", command=self._deselect_all).pack(
             side="left", padx=(0, 4)
         )
+        ttk.Button(
+            toolbar, text="↻ Refresh Status", command=self._refresh_status_all
+        ).pack(side="left", padx=(0, 4))
         self._force_var = tk.BooleanVar(value=False)
-        force_cb = ttk.Checkbutton(
+        ttk.Checkbutton(
             toolbar,
             text="Force (bypass corp guard)",
             variable=self._force_var,
-            style="TCheckbutton",
-        )
-        force_cb.pack(side="right", padx=(8, 0))
+        ).pack(side="right", padx=(8, 0))
 
-        # ── Scrollable tweak checklist ───────────────────────────────────
+        # Legend
+        legend = ttk.Frame(self._root)
+        legend.pack(fill="x", padx=16, pady=(4, 0))
+        for colour, label in [
+            (_STATUS_APPLIED, "Applied"),
+            (_STATUS_NOT_APPLIED, "Not Applied"),
+            (_STATUS_UNKNOWN, "Unknown"),
+            (_STATUS_CORP_BLOCKED, "Corp Blocked"),
+        ]:
+            tk.Label(
+                legend, text="●", fg=colour, bg=_BG, font=("Segoe UI", 10)
+            ).pack(side="left", padx=(0, 2))
+            tk.Label(
+                legend,
+                text=label,
+                fg=_FG_DIM,
+                bg=_BG,
+                font=("Segoe UI", 8),
+            ).pack(side="left", padx=(0, 10))
+
+        # Scrollable tweak list
         container = ttk.Frame(self._root)
         container.pack(fill="both", expand=True, padx=16, pady=8)
 
@@ -292,47 +358,27 @@ class TurboTweakGUI:
         )
         canvas.create_window((0, 0), window=self._inner, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
-
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        # Mouse wheel scrolling
         def _on_mousewheel(event: tk.Event) -> None:  # type: ignore[type-arg]
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
-        # Populate checkboxes grouped by category
-        self._vars: List[tk.BooleanVar] = []
+        # Populate rows from plugin registry grouped by category
+        tweaks = all_tweaks()
         last_cat = ""
-        for td in _TWEAKS:
+        for td in tweaks:
             if td.category != last_cat:
                 last_cat = td.category
                 ttk.Label(
-                    self._inner,
-                    text=f"  {td.category}",
-                    style="Category.TLabel",
-                ).pack(fill="x", pady=(8, 2), padx=4)
+                    self._inner, text=f"  {td.category}", style="Category.TLabel"
+                ).pack(fill="x", pady=(10, 2), padx=4)
+            row = _TweakRow(self._inner, td, corp_blocked=self._corp_blocked)
+            self._tweak_rows.append(row)
 
-            var = tk.BooleanVar(value=True)
-            self._vars.append(var)
-
-            row = ttk.Frame(self._inner, style="Card.TFrame")
-            row.pack(fill="x", padx=4, pady=2, ipady=2)
-
-            cb = ttk.Checkbutton(row, text=td.label, variable=var)
-            cb.pack(side="left", padx=(8, 4), pady=2)
-
-            if td.needs_admin:
-                ttk.Label(
-                    row,
-                    text="(admin)",
-                    foreground=_FG_DIM,
-                    background=_CARD_BG,
-                    font=("Segoe UI", 8),
-                ).pack(side="right", padx=(0, 10))
-
-        # ── Action buttons ───────────────────────────────────────────────
+        # Action buttons (row 1: apply/remove)
         btn_frame = ttk.Frame(self._root)
         btn_frame.pack(fill="x", padx=16, pady=(0, 4))
 
@@ -350,14 +396,32 @@ class TurboTweakGUI:
             command=lambda: self._dispatch("remove"),
         ).pack(side="left", padx=(0, 6), expand=True, fill="x")
 
+        # Action buttons (row 2: snapshot / restore / restore-point)
+        btn2 = ttk.Frame(self._root)
+        btn2.pack(fill="x", padx=16, pady=(0, 4))
+
         ttk.Button(
-            btn_frame,
+            btn2,
+            text="💾  Save Snapshot",
+            style="Snap.TButton",
+            command=self._save_snapshot,
+        ).pack(side="left", padx=(0, 6), expand=True, fill="x")
+
+        ttk.Button(
+            btn2,
+            text="⏪  Restore Snapshot",
+            style="Snap.TButton",
+            command=self._restore_snapshot,
+        ).pack(side="left", padx=(0, 6), expand=True, fill="x")
+
+        ttk.Button(
+            btn2,
             text="🛡  Restore Point",
             style="Restore.TButton",
             command=lambda: self._dispatch("restore"),
         ).pack(side="left", expand=True, fill="x")
 
-        # ── Status / progress bar ────────────────────────────────────────
+        # Progress + status
         status_frame = ttk.Frame(self._root)
         status_frame.pack(fill="x", padx=16, pady=(0, 8))
 
@@ -373,21 +437,81 @@ class TurboTweakGUI:
         )
         self._status_label.pack(fill="x")
 
-    # ── Helpers ──────────────────────────────────────────────────────────
+    # ── Selection helpers ────────────────────────────────────────────────
 
     def _select_all(self) -> None:
-        for v in self._vars:
-            v.set(True)
+        for row in self._tweak_rows:
+            if not (self._corp_blocked and not row.td.corp_safe):
+                row.var.set(True)
 
     def _deselect_all(self) -> None:
-        for v in self._vars:
-            v.set(False)
+        for row in self._tweak_rows:
+            row.var.set(False)
 
     def _set_status(self, text: str, color: str = _FG_DIM) -> None:
         self._status_label.configure(text=text, foreground=color)
 
     def _selected_tweaks(self) -> List[TweakDef]:
-        return [td for td, v in zip(_TWEAKS, self._vars) if v.get()]
+        return [r.td for r in self._tweak_rows if r.var.get()]
+
+    # ── Status refresh ───────────────────────────────────────────────────
+
+    def _refresh_status_all(self) -> None:
+        """Re-detect every tweak and update indicator dots."""
+        for row in self._tweak_rows:
+            row.refresh_status()
+
+    # ── Snapshot ─────────────────────────────────────────────────────────
+
+    def _save_snapshot(self) -> None:
+        path = filedialog.asksaveasfilename(
+            title="Save Tweak Snapshot",
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            initialfile="turbotweak_snapshot.json",
+        )
+        if not path:
+            return
+        try:
+            save_snapshot(Path(path))
+            self._set_status(f"Snapshot saved → {path}", _OK_GREEN)
+        except Exception as exc:
+            messagebox.showerror("Save Error", str(exc))
+
+    def _restore_snapshot(self) -> None:
+        path = filedialog.askopenfilename(
+            title="Open Tweak Snapshot",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+
+        if not messagebox.askyesno(
+            "Confirm Restore",
+            "This will revert tweaks to the state saved in the snapshot. Continue?",
+        ):
+            return
+
+        self._set_status("Restoring snapshot…", _WARN_YELLOW)
+
+        def _worker() -> None:
+            try:
+                results = restore_snapshot(
+                    Path(path), force_corp=self._force_var.get()
+                )
+                summary_parts: List[str] = []
+                for action in set(results.values()):
+                    count = sum(1 for v in results.values() if v == action)
+                    summary_parts.append(f"{count} {action}")
+                summary = "Restore: " + ", ".join(summary_parts)
+                self._root.after(0, self._set_status, summary, _OK_GREEN)
+                self._root.after(0, self._refresh_status_all)
+            except Exception as exc:
+                self._root.after(
+                    0, lambda e=str(exc): messagebox.showerror("Restore Error", e)
+                )
+
+        threading.Thread(target=_worker, daemon=True).start()
 
     # ── Dispatch ─────────────────────────────────────────────────────────
 
@@ -404,9 +528,7 @@ class TurboTweakGUI:
 
         if mode == "restore":
             self._set_status("Creating restore point…", _WARN_YELLOW)
-            threading.Thread(
-                target=self._run_restore_point, daemon=True
-            ).start()
+            threading.Thread(target=self._run_restore_point, daemon=True).start()
             return
 
         selected = self._selected_tweaks()
@@ -430,13 +552,12 @@ class TurboTweakGUI:
         errors: List[str] = []
         for i, td in enumerate(items, 1):
             pct = int(i / total * 100)
-            self._root.after(
-                0, self._progress.configure, {"value": pct}
-            )
+            self._root.after(0, self._progress.configure, {"value": pct})
             self._root.after(
                 0,
                 self._set_status,
-                f"{'Applying' if mode == 'apply' else 'Removing'}: {td.label}  ({i}/{total})",
+                f"{'Applying' if mode == 'apply' else 'Removing'}: "
+                f"{td.label}  ({i}/{total})",
                 _ACCENT,
             )
             try:
@@ -448,28 +569,31 @@ class TurboTweakGUI:
                 errors.append(f"{td.label}: {exc}")
                 SESSION.log(f"[GUI] Error ({mode}) {td.label}: {exc}")
 
-        # Final status
-        summary = f"{'Applied' if mode == 'apply' else 'Removed'} {total - len(errors)}/{total} tweaks"
+        ok_count = total - len(errors)
+        summary = (
+            f"{'Applied' if mode == 'apply' else 'Removed'} "
+            f"{ok_count}/{total} tweaks"
+        )
         if errors:
             summary += f"  •  {len(errors)} error(s)"
-        color = _OK_GREEN if not errors else _WARN_YELLOW
+        colour = _OK_GREEN if not errors else _WARN_YELLOW
 
-        self._root.after(0, self._set_status, summary, color)
+        self._root.after(0, self._set_status, summary, colour)
         self._root.after(0, self._progress.configure, {"value": 100})
+        self._root.after(0, self._refresh_status_all)
 
         if errors:
             err_text = "\n".join(errors)
             self._root.after(
                 0,
                 lambda: messagebox.showwarning(
-                    "Completed with Errors",
-                    f"{summary}\n\n{err_text}",
+                    "Completed with Errors", f"{summary}\n\n{err_text}"
                 ),
             )
 
     def _run_restore_point(self) -> None:
         try:
-            tweaks.create_restore_point()
+            create_restore_point()
             self._root.after(
                 0, self._set_status, "Restore point created ✔", _OK_GREEN
             )
@@ -481,18 +605,16 @@ class TurboTweakGUI:
                     "Creating a restore point requires admin elevation.",
                 ),
             )
-            self._root.after(0, self._set_status, "Restore point failed (admin)", _ERR_RED)
-        except Exception as exc:  # noqa: BLE001
+            self._root.after(
+                0, self._set_status, "Restore point failed (admin)", _ERR_RED
+            )
+        except Exception as exc:
             err_msg = str(exc)
             self._root.after(
-                0,
-                lambda m=err_msg: messagebox.showerror(
-                    "Error", m),
+                0, lambda m=err_msg: messagebox.showerror("Error", m)
             )
             self._root.after(
-                0, self._set_status,
-                f"Restore point error: {err_msg}",
-                _ERR_RED,
+                0, self._set_status, f"Restore point error: {err_msg}", _ERR_RED
             )
 
     # ── Entry point ──────────────────────────────────────────────────────
