@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 $script:TT_ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$script:TT_LogPath   = Join-Path $TT_ScriptDir 'TurboTweak.log'
+$script:TT_LogPath = Join-Path $TT_ScriptDir 'TurboTweak.log'
 
 # ── Logging ────────────────────────────────────────────────────────────────────
 function Write-TurboLog {
@@ -82,7 +82,8 @@ function Invoke-TweakModule {
     #>
     param (
         [Parameter(Mandatory)][string]$FileName,
-        [Parameter(Mandatory)][string]$Label
+        [Parameter(Mandatory)][string]$Label,
+        [switch]$Force
     )
     $fullPath = Join-Path $script:TT_ScriptDir $FileName
     if (-not (Test-Path $fullPath)) {
@@ -90,6 +91,17 @@ function Invoke-TweakModule {
         Read-Host 'Press Enter to return to menu...'
         return
     }
+
+    # ── Corporate network safety guard ─────────────────────────────────────
+    $guardPath = Join-Path $script:TT_ScriptDir 'Lib-CorpGuard.ps1'
+    if (Test-Path $guardPath) {
+        . $guardPath
+        if (Assert-NotCorporate -Force:$Force) {
+            Read-Host 'Press Enter to return to menu...'
+            return
+        }
+    }
+
     Write-Host "`n🧩 Running $Label..." -ForegroundColor Cyan
     try {
         . $fullPath

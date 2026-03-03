@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import os
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Callable, List
 
-from . import __version__
+from . import __version__, tweaks
+from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from . import tweaks
 
 
 @dataclass
@@ -35,9 +35,23 @@ class Menu:
             _MenuItem("8", "Remove Performance Tweaks", tweaks.remove_performance_tweaks),
             _MenuItem("9", "Enable Registry Backup", tweaks.enable_registry_backup),
             _MenuItem("10", "Disable Registry Backup", tweaks.disable_registry_backup),
-            _MenuItem("11", "Apply All Tweaks", tweaks.apply_all, color="\033[92m"),
-            _MenuItem("12", "Remove All Tweaks", tweaks.remove_all, color="\033[93m"),
-            _MenuItem("13", "Create Restore Point", tweaks.create_restore_point, color="\033[95m"),
+            _MenuItem("11", "Disable Telemetry", tweaks.disable_telemetry, color="\033[94m"),
+            _MenuItem("12", "Enable Telemetry", tweaks.enable_telemetry, color="\033[94m"),
+            _MenuItem("13", "Disable Cortana", tweaks.disable_cortana, color="\033[94m"),
+            _MenuItem("14", "Enable Cortana", tweaks.enable_cortana, color="\033[94m"),
+            _MenuItem("15", "Disable Mouse Acceleration", tweaks.disable_mouse_accel, color="\033[94m"),
+            _MenuItem("16", "Enable Mouse Acceleration", tweaks.enable_mouse_accel, color="\033[94m"),
+            _MenuItem("17", "Disable Game DVR / Game Bar", tweaks.disable_game_dvr, color="\033[94m"),
+            _MenuItem("18", "Enable Game DVR / Game Bar", tweaks.enable_game_dvr, color="\033[94m"),
+            _MenuItem("19", "Optimize SvcHost Split (RAM)", tweaks.optimize_svchost_split, color="\033[94m"),
+            _MenuItem("20", "Restore SvcHost Split Default", tweaks.restore_svchost_split, color="\033[94m"),
+            _MenuItem("21", "Disable NTFS Last Access", tweaks.disable_last_access, color="\033[94m"),
+            _MenuItem("22", "Enable NTFS Last Access", tweaks.enable_last_access, color="\033[94m"),
+            _MenuItem("23", "Enable Long Paths", tweaks.enable_long_paths, color="\033[94m"),
+            _MenuItem("24", "Disable Long Paths", tweaks.disable_long_paths, color="\033[94m"),
+            _MenuItem("25", "Apply All Tweaks", tweaks.apply_all, color="\033[92m"),
+            _MenuItem("26", "Remove All Tweaks", tweaks.remove_all, color="\033[93m"),
+            _MenuItem("27", "Create Restore Point", tweaks.create_restore_point, color="\033[95m"),
         ]
         self._lookup = {item.key: item for item in self._items}
 
@@ -52,12 +66,19 @@ class Menu:
         rst = "\033[0m"
         cyan = "\033[96m"
         dim = "\033[90m"
+        red = "\033[91m"
         print()
         print(f"  {cyan}╔══════════════════════════════════════════════╗{rst}")
         print(f"  {cyan}║         ⚡ TurboTweak Launcher ⚡            ║{rst}")
         print(f"  {cyan}╚══════════════════════════════════════════════╝{rst}")
         print(f"  {dim}Version: {__version__} | Platform: {platform_summary()}{rst}")
         print(f"  {dim}Log: {SESSION.log_path}{rst}")
+
+        # Corporate network warning
+        corp_info = corp_guard_status()
+        if corp_info:
+            print(f"  {red}🛑 Corporate network: {corp_info} — tweaks blocked{rst}")
+
         print()
         for item in self._items:
             pad = " " if len(item.key) < 2 else ""
@@ -71,6 +92,13 @@ class Menu:
         item = self._lookup.get(choice)
         if item is None:
             print("  ❌ Invalid selection. Try again.")
+            return
+
+        # Corporate network safety guard
+        try:
+            assert_not_corporate()
+        except CorporateNetworkError as exc:
+            print(f"\n  🛑 {exc}")
             return
 
         print(f"\n  🧩 Running: {item.label} ...")
