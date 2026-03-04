@@ -14,13 +14,6 @@ from regilattice.tweaks import TweakDef
 # ── Key paths ────────────────────────────────────────────────────────────────
 
 _POWER = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
-_USB_POWER = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
-    r"\USB\DisableSelectiveSuspend"
-)
-_USB_HUB = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\usbhub\HubG"
-)
 _HIBERNATE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
 _PREFETCH = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"

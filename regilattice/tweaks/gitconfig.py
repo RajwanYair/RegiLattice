@@ -13,13 +13,6 @@ from regilattice.tweaks import TweakDef
 # ── Key paths ────────────────────────────────────────────────────────────────
 
 _GIT = r"HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows"
-_GIT_SETUP = r"HKEY_CURRENT_USER\Software\GitForWindows"
-_CM = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
-    r"\CurrentVersion\Authentication\LogonUI\CredProviders"
-)
-_CONTEXT = r"HKEY_CLASSES_ROOT\Directory\Background\shell\git_gui"
-_CONTEXT_BASH = r"HKEY_CLASSES_ROOT\Directory\Background\shell\git_shell"
 
 
 # ── Set Git Credential Manager to Windows ────────────────────────────────────

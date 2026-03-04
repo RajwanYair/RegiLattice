@@ -79,23 +79,21 @@ def _detect_disable_ads() -> bool:
 
 # ── Limit OneDrive Upload Bandwidth ─────────────────────────────────────────
 
-_OD_THROTTLE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"
-
 
 def _apply_throttle(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("OneDrive: throttle upload to 1000 KB/s")
-    SESSION.backup([_OD_THROTTLE], "ODThrottle")
-    SESSION.set_dword(_OD_THROTTLE, "UploadBandwidthLimit", 1000)  # KB/s
+    SESSION.backup([_OD], "ODThrottle")
+    SESSION.set_dword(_OD, "UploadBandwidthLimit", 1000)  # KB/s
 
 
 def _remove_throttle(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.delete_value(_OD_THROTTLE, "UploadBandwidthLimit")
+    SESSION.delete_value(_OD, "UploadBandwidthLimit")
 
 
 def _detect_throttle() -> bool:
-    val = SESSION.read_dword(_OD_THROTTLE, "UploadBandwidthLimit")
+    val = SESSION.read_dword(_OD, "UploadBandwidthLimit")
     return val is not None and val > 0
 
 
@@ -153,7 +151,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_throttle,
         needs_admin=True,
         corp_safe=True,
-        registry_keys=[_OD_THROTTLE],
+        registry_keys=[_OD],
         description=(
             "Limits OneDrive upload bandwidth to 1000 KB/s to prevent "
             "saturating your connection."

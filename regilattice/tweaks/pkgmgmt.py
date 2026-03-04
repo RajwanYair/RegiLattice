@@ -42,10 +42,6 @@ def detect_ps_unrestricted() -> bool:
 
 # ── PowerShell Module Auto-Install (PSGallery trust) ────────────────────────
 
-_PSGALLERY_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PowerShellModuleInstallation"
-)
-
 
 def apply_ps_gallery_trust(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)

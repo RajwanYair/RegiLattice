@@ -10,7 +10,7 @@ from regilattice.tweaks import TweakDef
 _MOUSE_KEY = r"HKEY_CURRENT_USER\Control Panel\Mouse"
 
 
-def apply_disable_mouse_accel(*, require_admin: bool = True) -> None:
+def apply_disable_mouse_accel() -> None:
     SESSION.log("Starting Add-DisableMouseAcceleration")
     SESSION.backup([_MOUSE_KEY], "MouseAccel")
     SESSION.set_string(_MOUSE_KEY, "MouseSpeed", "0")
@@ -19,7 +19,7 @@ def apply_disable_mouse_accel(*, require_admin: bool = True) -> None:
     SESSION.log("Completed Add-DisableMouseAcceleration")
 
 
-def remove_disable_mouse_accel(*, require_admin: bool = True) -> None:
+def remove_disable_mouse_accel() -> None:
     SESSION.log("Starting Remove-DisableMouseAcceleration")
     SESSION.backup([_MOUSE_KEY], "MouseAccel_Remove")
     SESSION.set_string(_MOUSE_KEY, "MouseSpeed", "1")

@@ -1,4 +1,4 @@
-"""Tests for turbotweak.cli — argument parsing and action dispatch."""
+"""Tests for regilattice.cli — argument parsing and action dispatch."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from turbotweak.cli import _actions, main
+from regilattice.cli import _actions, main
 
 
 class TestListActions:

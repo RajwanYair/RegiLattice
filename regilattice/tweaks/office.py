@@ -43,12 +43,6 @@ def _detected_versions() -> list[str]:
     return found
 
 
-def _all_keys_for(suffix: str, *, policy: bool = False) -> list[str]:
-    """Return key paths for all detected versions."""
-    fn = _ver_policy if policy else _ver_key
-    return [fn(v, suffix) for v in _detected_versions()]
-
-
 # ── Disable Office Telemetry ────────────────────────────────────────────────
 
 
@@ -275,7 +269,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_start_screen,
         needs_admin=False,
         corp_safe=True,
-        registry_keys=[],
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\General"],
         description=(
             "Skips the Office Start screen and opens directly to a blank "
             "document (all versions)."
@@ -291,7 +285,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_connected,
         needs_admin=False,
         corp_safe=False,
-        registry_keys=[],
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Privacy"],
         description=(
             "Disables cloud-powered Office features (Designer, Editor, "
             "etc.) across all versions."
@@ -307,7 +301,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_hwaccel,
         needs_admin=False,
         corp_safe=True,
-        registry_keys=[],
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Graphics"],
         description=(
             "Disables GPU hardware acceleration in Office apps to fix "
             "display glitches (all versions)."
@@ -323,7 +317,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_macro_trust,
         needs_admin=False,
         corp_safe=False,
-        registry_keys=[],
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Security"],
         description=(
             "Lowers macro security to 'Enable all' and trusts the VBA "
             "project object model (Word, Excel, PowerPoint, Access, "
@@ -340,7 +334,7 @@ TWEAKS: List[TweakDef] = [
         detect_fn=_detect_autosave,
         needs_admin=False,
         corp_safe=True,
-        registry_keys=[],
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Options"],
         description=(
             "Sets the AutoRecover interval to 2 minutes for Word, Excel, "
             "and PowerPoint (all versions)."

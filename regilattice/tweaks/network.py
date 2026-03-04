@@ -41,14 +41,6 @@ _DNS_CLIENT = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\Dnscache\Parameters"
 )
-_NLA = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
-    r"\NlaSvc\Parameters\Internet"
-)
-_FW = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
-    r"\SharedAccess\Parameters\FirewallPolicy\StandardProfile"
-)
 
 
 # ── Increase IRPStackSize ────────────────────────────────────────────────────
@@ -100,13 +92,11 @@ def _apply_disable_throttle(*, require_admin: bool = True) -> None:
     SESSION.log("Network: disable network throttling index")
     SESSION.backup([_THROTTLE], "NetThrottle")
     SESSION.set_dword(_THROTTLE, "NetworkThrottlingIndex", 0xFFFFFFFF)
-    SESSION.set_dword(_THROTTLE, "SystemResponsiveness", 0)
 
 
 def _remove_disable_throttle(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.set_dword(_THROTTLE, "NetworkThrottlingIndex", 10)  # default
-    SESSION.set_dword(_THROTTLE, "SystemResponsiveness", 20)
 
 
 def _detect_disable_throttle() -> bool:

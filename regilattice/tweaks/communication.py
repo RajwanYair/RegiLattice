@@ -14,12 +14,10 @@ from regilattice.tweaks import TweakDef
 
 _RUN = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"
 _TEAMS = r"HKEY_CURRENT_USER\Software\Microsoft\Teams"
-_TEAMS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams"
 _ZOOM = r"HKEY_CURRENT_USER\Software\Zoom\Zoom\General"
 _ZOOM_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Zoom\Zoom\General"
 _DISCORD = r"HKEY_CURRENT_USER\Software\Discord"
 _SPOTIFY = r"HKEY_CURRENT_USER\Software\Spotify"
-_SLACK = r"HKEY_CURRENT_USER\Software\Slack"
 
 
 # ── Disable Teams Auto-Start ────────────────────────────────────────────────
