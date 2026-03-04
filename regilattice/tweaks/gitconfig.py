@@ -72,6 +72,45 @@ def _detect_default_branch() -> bool:
     return SESSION.read_string(_GIT, "DefaultBranch") == "main"
 
 
+# ── Set Git autocrlf to input ─────────────────────────────────────────────
+
+
+def _apply_autocrlf(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Git: set core.autocrlf=input (LF in repo, native checkout)")
+    SESSION.backup([_GIT], "GitAutoCrlf")
+    SESSION.set_string(_GIT, "AutoCRLF", "input")
+
+
+def _remove_autocrlf(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_GIT, "AutoCRLF", "true")  # Windows default
+
+
+def _detect_autocrlf() -> bool:
+    return SESSION.read_string(_GIT, "AutoCRLF") == "input"
+
+
+# ── Set Git Default Editor ───────────────────────────────────────────────
+
+
+def _apply_editor_code(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Git: set core.editor to VS Code (--wait)")
+    SESSION.backup([_GIT], "GitEditor")
+    SESSION.set_string(_GIT, "Editor", "code --wait")
+
+
+def _remove_editor_code(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GIT, "Editor")
+
+
+def _detect_editor_code() -> bool:
+    v = SESSION.read_string(_GIT, "Editor")
+    return v is not None and "code" in v.lower()
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -113,5 +152,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_GIT],
         description="Sets the default branch name to 'main' for new Git repositories.",
         tags=["git", "branch", "developer"],
+    ),
+    TweakDef(
+        id="git-autocrlf-input",
+        label="Git: autocrlf=input (LF in Repo)",
+        category="Developer Tools",
+        apply_fn=_apply_autocrlf,
+        remove_fn=_remove_autocrlf,
+        detect_fn=_detect_autocrlf,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_GIT],
+        description="Sets core.autocrlf to 'input' so files are stored with LF in the repo.",
+        tags=["git", "line-endings", "developer"],
+    ),
+    TweakDef(
+        id="git-editor-vscode",
+        label="Git: Default Editor → VS Code",
+        category="Developer Tools",
+        apply_fn=_apply_editor_code,
+        remove_fn=_remove_editor_code,
+        detect_fn=_detect_editor_code,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_GIT],
+        description="Sets the default Git editor to VS Code with --wait.",
+        tags=["git", "editor", "vscode", "developer"],
     ),
 ]

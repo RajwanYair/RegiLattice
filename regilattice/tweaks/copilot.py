@@ -79,6 +79,51 @@ def detect_disable_recall() -> bool:
     return SESSION.read_dword(_RECALL_KEY, "DisableAIDataAnalysis") == 1
 
 
+# ── Disable AI Suggestions in Settings ───────────────────────────────────
+
+_AI_SETTINGS_CU = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\Advanced"
+)
+
+
+def _apply_disable_ai_settings(*, require_admin: bool = False) -> None:
+    SESSION.log("Copilot: disable AI tips and suggestions in Settings")
+    SESSION.backup([_AI_SETTINGS_CU], "AISettings")
+    SESSION.set_dword(_AI_SETTINGS_CU, "Start_IrisRecommendations", 0)
+
+
+def _remove_disable_ai_settings(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_AI_SETTINGS_CU, "Start_IrisRecommendations")
+
+
+def _detect_disable_ai_settings() -> bool:
+    return SESSION.read_dword(_AI_SETTINGS_CU, "Start_IrisRecommendations") == 0
+
+
+# ── Disable Copilot in Edge ──────────────────────────────────────────────
+
+_EDGE_COPILOT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
+
+
+def _apply_disable_edge_copilot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable Copilot sidebar in Edge")
+    SESSION.backup([_EDGE_COPILOT], "EdgeCopilot")
+    SESSION.set_dword(_EDGE_COPILOT, "HubsSidebarEnabled", 0)
+    SESSION.set_dword(_EDGE_COPILOT, "CopilotCDPPageContext", 0)
+
+
+def _remove_disable_edge_copilot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_COPILOT, "HubsSidebarEnabled")
+    SESSION.delete_value(_EDGE_COPILOT, "CopilotCDPPageContext")
+
+
+def _detect_disable_edge_copilot() -> bool:
+    return SESSION.read_dword(_EDGE_COPILOT, "HubsSidebarEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -113,5 +158,31 @@ TWEAKS: List[TweakDef] = [
             "periodically screenshots your activity. Privacy-critical."
         ),
         tags=["ai", "recall", "privacy"],
+    ),
+    TweakDef(
+        id="disable-ai-suggestions",
+        label="Disable AI Tips in Settings/Start",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_ai_settings,
+        remove_fn=_remove_disable_ai_settings,
+        detect_fn=_detect_disable_ai_settings,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_AI_SETTINGS_CU],
+        description="Disables AI-powered suggestions and tips in the Start menu and Settings.",
+        tags=["ai", "suggestions", "privacy"],
+    ),
+    TweakDef(
+        id="disable-edge-copilot",
+        label="Disable Copilot in Edge Browser",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_edge_copilot,
+        remove_fn=_remove_disable_edge_copilot,
+        detect_fn=_detect_disable_edge_copilot,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_COPILOT],
+        description="Disables the Copilot sidebar and page context sharing in Microsoft Edge.",
+        tags=["ai", "copilot", "edge", "privacy"],
     ),
 ]

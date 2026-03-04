@@ -135,6 +135,50 @@ def detect_disable_last_access() -> bool:
         return False
 
 
+# ── Disable Transparency Effects ─────────────────────────────────────────
+
+_PERSONALIZE = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Themes\Personalize"
+)
+
+
+def _apply_disable_transparency(*, require_admin: bool = False) -> None:
+    SESSION.log("Performance: disable transparency effects")
+    SESSION.backup([_PERSONALIZE], "Transparency")
+    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 0)
+
+
+def _remove_disable_transparency(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 1)
+
+
+def _detect_disable_transparency() -> bool:
+    return SESSION.read_dword(_PERSONALIZE, "EnableTransparency") == 0
+
+
+# ── Disable Background Apps ──────────────────────────────────────────────
+
+_BG_APPS = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\BackgroundAccessApplications"
+)
+
+
+def _apply_disable_bg_apps(*, require_admin: bool = False) -> None:
+    SESSION.log("Performance: disable background UWP apps")
+    SESSION.backup([_BG_APPS], "BgApps")
+    SESSION.set_dword(_BG_APPS, "GlobalUserDisabled", 1)
+
+
+def _remove_disable_bg_apps(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_BG_APPS, "GlobalUserDisabled", 0)
+
+
+def _detect_disable_bg_apps() -> bool:
+    return SESSION.read_dword(_BG_APPS, "GlobalUserDisabled") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -182,5 +226,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[],
         description="Disables NTFS last-access timestamp updates to reduce disk I/O overhead.",
         tags=["performance", "ntfs", "disk"],
+    ),
+    TweakDef(
+        id="disable-transparency",
+        label="Disable Transparency Effects",
+        category="Performance",
+        apply_fn=_apply_disable_transparency,
+        remove_fn=_remove_disable_transparency,
+        detect_fn=_detect_disable_transparency,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PERSONALIZE],
+        description="Disables Windows transparency/blur effects for snappier UI.",
+        tags=["performance", "visual", "transparency"],
+    ),
+    TweakDef(
+        id="disable-background-apps",
+        label="Disable Background UWP Apps",
+        category="Performance",
+        apply_fn=_apply_disable_bg_apps,
+        remove_fn=_remove_disable_bg_apps,
+        detect_fn=_detect_disable_bg_apps,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_BG_APPS],
+        description="Prevents Store/UWP apps from running in the background.",
+        tags=["performance", "uwp", "background"],
     ),
 ]

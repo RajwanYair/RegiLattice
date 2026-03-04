@@ -36,6 +36,54 @@ def detect_regbackup() -> bool:
     return SESSION.read_dword(_REGBACK_KEY, "EnablePeriodicBackup") == 1
 
 
+# ── Disable Scheduled Defragmentation ──────────────────────────────────────
+
+_DEFRAG_KEY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
+)
+
+
+def _apply_disable_defrag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable scheduled defragmentation")
+    SESSION.backup([_DEFRAG_KEY], "Defrag")
+    SESSION.set_string(_DEFRAG_KEY, "Enable", "N")
+
+
+def _remove_disable_defrag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_DEFRAG_KEY, "Enable", "Y")
+
+
+def _detect_disable_defrag() -> bool:
+    return SESSION.read_string(_DEFRAG_KEY, "Enable") == "N"
+
+
+# ── Disable Windows Error Dumps ───────────────────────────────────────────
+
+_CRASH_KEY = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
+)
+
+
+def _apply_disable_dumps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable crash memory dumps")
+    SESSION.backup([_CRASH_KEY], "CrashDumps")
+    SESSION.set_dword(_CRASH_KEY, "CrashDumpEnabled", 0)  # 0 = None
+    SESSION.set_dword(_CRASH_KEY, "LogEvent", 0)
+
+
+def _remove_disable_dumps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH_KEY, "CrashDumpEnabled", 7)  # 7 = Automatic
+    SESSION.set_dword(_CRASH_KEY, "LogEvent", 1)
+
+
+def _detect_disable_dumps() -> bool:
+    return SESSION.read_dword(_CRASH_KEY, "CrashDumpEnabled") == 0
+
+
 # ── System Restore Point ────────────────────────────────────────────────────
 
 
@@ -71,5 +119,37 @@ TWEAKS: List[TweakDef] = [
             r"C:\Windows\System32\config\RegBack."
         ),
         tags=["maintenance", "backup", "registry"],
+    ),
+    TweakDef(
+        id="disable-defrag-schedule",
+        label="Disable Scheduled Defragmentation",
+        category="Maintenance",
+        apply_fn=_apply_disable_defrag,
+        remove_fn=_remove_disable_defrag,
+        detect_fn=_detect_disable_defrag,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DEFRAG_KEY],
+        description=(
+            "Disables the Windows automatic disk defragmentation schedule. "
+            "Recommended for SSD-only systems."
+        ),
+        tags=["maintenance", "disk", "defrag", "ssd"],
+    ),
+    TweakDef(
+        id="disable-crash-dumps",
+        label="Disable Crash Memory Dumps",
+        category="Maintenance",
+        apply_fn=_apply_disable_dumps,
+        remove_fn=_remove_disable_dumps,
+        detect_fn=_detect_disable_dumps,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH_KEY],
+        description=(
+            "Disables crash memory dump files to save disk space "
+            "and avoid large MEMORY.DMP writes."
+        ),
+        tags=["maintenance", "disk", "cleanup", "crash"],
     ),
 ]
