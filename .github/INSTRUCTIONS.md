@@ -1,17 +1,17 @@
-# TurboTweak — AI / Contributor Instructions
+# regilattice — AI / Contributor Instructions
 
 > Canonical reference for any AI agent, copilot, or human contributor
 > working on this repository.
 
 ## 1  Project Overview
 
-TurboTweak is a **Windows 11 registry-tweak toolkit** with three interfaces:
+regilattice is a **Windows 11 registry-tweak toolkit** with three interfaces:
 
 | Interface | Technology | Entry point |
 |---|---|---|
-| PowerShell menu | PS 5.1+ | `Launch-TurboTweak.bat` → `TurboTweakMenu.ps1` |
-| Python console menu | Python 3.10+ | `python -m turbotweak` |
-| Python GUI | tkinter (stdlib) | `python -m turbotweak --gui` |
+| PowerShell menu | PS 5.1+ | `Launch-RegiLattice.bat` → `RegiLatticeMenu.ps1` |
+| Python console menu | Python 3.10+ | `python -m regilattice` |
+| Python GUI | tkinter (stdlib) | `python -m regilattice --gui` |
 
 All tweaks are **reversible**, **backed-up before mutation**, and
 **blocked on corporate networks** unless explicitly forced.
@@ -19,8 +19,8 @@ All tweaks are **reversible**, **backed-up before mutation**, and
 ## 2  Architecture — Plugin-Based TweakDef
 
 Every registry tweak is declared as a **`TweakDef`** dataclass inside
-`turbotweak/tweaks/` sub-modules (one file per category).  The plugin
-loader (`turbotweak/tweaks/__init__.py`) auto-discovers every `TweakDef`
+`regilattice/tweaks/` sub-modules (one file per category).  The plugin
+loader (`regilattice/tweaks/__init__.py`) auto-discovers every `TweakDef`
 instance exported by those sub-modules.
 
 ```python
@@ -39,7 +39,7 @@ class TweakDef:
 
 ### Adding a new tweak
 
-1. Create or edit a file in `turbotweak/tweaks/<category>.py`.
+1. Create or edit a file in `regilattice/tweaks/<category>.py`.
 2. Define `apply_*`, `remove_*`, and `detect_*` functions.
 3. Append a `TweakDef(...)` instance to the module-level `TWEAKS` list.
 4. The GUI, CLI, and menu pick it up automatically — **no manual wiring**.
@@ -64,7 +64,7 @@ if corp_guard.is_corporate_network() and not tweak.corp_safe:
 ### PowerShell
 - `#Requires -Version 5.1` header.
 - `Set-StrictMode -Version Latest; $ErrorActionPreference = 'Stop'`.
-- Shared libs: `Lib-TurboTweak.ps1`, `Lib-BackupRegistry.ps1`,
+- Shared libs: `Lib-RegiLattice.ps1`, `Lib-BackupRegistry.ps1`,
   `Lib-CorpGuard.ps1`.  Dot-source from `$PSScriptRoot`.
 - Every tweak script sources the shared libs, calls `Assert-Elevated`,
   `Confirm-Action`, backs up keys, applies or removes, logs via
@@ -74,12 +74,12 @@ if corp_guard.is_corporate_network() and not tweak.corp_safe:
 - Conventional Commits: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`,
   `chore:`, `ci:`, `assets:`.
 - One logical change per commit.
-- Run `ruff check turbotweak/ tests/` and `pytest` before pushing.
+- Run `ruff check regilattice/ tests/` and `pytest` before pushing.
 
 ## 4  State / Undo System
 
-- `turbotweak/state.py` persists tweak status to
-  `~/.turbotweak/state.json`.
+- `regilattice/state.py` persists tweak status to
+  `~/.regilattice/state.json`.
 - Before every apply/remove, the previous state and registry snapshot
   are saved so the user can **undo** the last action from the GUI.
 - The GUI shows a live status badge (✅ Applied / ⚪ Default) per tweak
@@ -87,7 +87,7 @@ if corp_guard.is_corporate_network() and not tweak.corp_safe:
 
 ## 5  Corporate Guard
 
-Module: `turbotweak/corpguard.py` + `Lib-CorpGuard.ps1`.
+Module: `regilattice/corpguard.py` + `Lib-CorpGuard.ps1`.
 
 **Checks (in order):**
 1. AD domain membership (ctypes `GetComputerNameExW` + WMI fallback)
@@ -106,7 +106,7 @@ Module: `turbotweak/corpguard.py` + `Lib-CorpGuard.ps1`.
 ## 6  File Layout
 
 ```
-TurboTweak/
+regilattice/
 ├── .github/
 │   ├── INSTRUCTIONS.md          ← this file
 │   ├── SKILLS.md                ← reusable patterns
@@ -114,7 +114,7 @@ TurboTweak/
 │   └── workflows/
 │       ├── powershell.yml       ← PSScriptAnalyzer CI
 │       └── python.yml           ← ruff + pytest CI
-├── turbotweak/
+├── regilattice/
 │   ├── __init__.py
 │   ├── __main__.py
 │   ├── cli.py                   ← argparse CLI

@@ -1,4 +1,4 @@
-# TurboTweak — Development Workflow
+# regilattice — Development Workflow
 
 ## Branch Strategy
 
@@ -23,7 +23,7 @@ ci: add Python ruff+pytest workflow
 
 ## Adding a New Registry Tweak
 
-1. **Identify the category** — pick an existing file in `turbotweak/tweaks/`
+1. **Identify the category** — pick an existing file in `regilattice/tweaks/`
    or create a new one.
 
 2. **Implement three functions:**
@@ -60,8 +60,8 @@ ci: add Python ruff+pytest workflow
 # Python
 pip install -e ".[dev]"
 pytest -v
-ruff check turbotweak/ tests/
-mypy turbotweak/
+ruff check regilattice/ tests/
+mypy regilattice/
 
 # PowerShell (Pester)
 Invoke-Pester tests/ -Verbose

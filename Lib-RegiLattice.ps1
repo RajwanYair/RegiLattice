@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# Lib-TurboTweak.ps1
+# Lib-RegiLattice.ps1
 # Shared utility library — elevation, logging, confirmation, explorer restart.
 
 Set-StrictMode -Version Latest
@@ -7,12 +7,12 @@ $ErrorActionPreference = 'Stop'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 $script:TT_ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$script:TT_LogPath = Join-Path $TT_ScriptDir 'TurboTweak.log'
+$script:TT_LogPath = Join-Path $TT_ScriptDir 'RegiLattice.log'
 
 # ── Logging ────────────────────────────────────────────────────────────────────
 function Write-TurboLog {
     <#
-    .SYNOPSIS Appends a timestamped line to TurboTweak.log.
+    .SYNOPSIS Appends a timestamped line to RegiLattice.log.
     #>
     param ([Parameter(Mandatory)][string]$Message)
     $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'

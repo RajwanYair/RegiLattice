@@ -7,7 +7,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 
 function Test-CorporateNetwork {
     <#
@@ -153,7 +153,7 @@ function Assert-NotCorporate {
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 
 function Test-CorporateNetwork {
     <#

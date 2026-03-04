@@ -5,8 +5,8 @@ from __future__ import annotations
 import subprocess
 from typing import List
 
-from turbotweak.registry import SESSION, assert_admin
-from turbotweak.tweaks import TweakDef
+from regilattice.registry import SESSION, assert_admin
+from regilattice.tweaks import TweakDef
 
 # ── Registry Auto-Backup ────────────────────────────────────────────────────
 
@@ -45,7 +45,7 @@ def create_restore_point(*, require_admin: bool = True) -> None:
     SESSION.log("Creating system restore point")
     cmd = (
         'powershell -NoProfile -Command "'
-        "Checkpoint-Computer -Description 'TurboTweak' "
+        "Checkpoint-Computer -Description 'RegiLattice' "
         "-RestorePointType 'MODIFY_SETTINGS'"
         '"'
     )

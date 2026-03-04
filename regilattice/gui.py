@@ -1,9 +1,9 @@
-"""Tkinter GUI for TurboTweak — Windows 11 style, plugin-driven.
+"""Tkinter GUI for RegiLattice — Windows 11 style, plugin-driven.
 
-Launch via ``python -m turbotweak --gui`` or ``turbotweak --gui``.
+Launch via ``python -m regilattice --gui`` or ``regilattice --gui``.
 
 Features:
-  • Auto-discovers tweaks from ``turbotweak.tweaks`` plugin package
+  • Auto-discovers tweaks from ``regilattice.tweaks`` plugin package
   • Live status detection (applied / not applied / unknown)
   • Save-snapshot / restore-snapshot for undo
   • Corp-safe enforcement — non-corp-safe tweaks disabled on corp networks
@@ -169,12 +169,12 @@ class _TweakRow:
 # ── Main GUI ─────────────────────────────────────────────────────────────────
 
 
-class TurboTweakGUI:
+class RegiLatticeGUI:
     """Plugin-driven main application window."""
 
     def __init__(self) -> None:
         self._root = tk.Tk()
-        self._root.title(f"TurboTweak  v{__version__}")
+        self._root.title(f"RegiLattice  v{__version__}")
         self._root.geometry("800x860")
         self._root.minsize(600, 540)
         self._root.configure(bg=_BG)
@@ -245,9 +245,7 @@ class TurboTweakGUI:
         style.map("Restore.TButton", background=[("active", "#5B21B6")])
         style.configure("Snap.TButton", foreground="white", background="#1565C0")
         style.map("Snap.TButton", background=[("active", "#0D47A1")])
-        style.configure(
-            "TLabel", background=_BG, foreground=_FG, font=("Segoe UI", 10)
-        )
+        style.configure("TLabel", background=_BG, foreground=_FG, font=("Segoe UI", 10))
         style.configure(
             "Title.TLabel",
             background=_HEADER_BG,
@@ -279,7 +277,7 @@ class TurboTweakGUI:
         # Header
         header = ttk.Frame(self._root, style="Header.TFrame")
         header.pack(fill="x")
-        ttk.Label(header, text="⚡ TurboTweak", style="Title.TLabel").pack(
+        ttk.Label(header, text="⚡ RegiLattice", style="Title.TLabel").pack(
             side="left", padx=16, pady=(12, 2)
         )
         ttk.Label(
@@ -333,9 +331,9 @@ class TurboTweakGUI:
             (_STATUS_UNKNOWN, "Unknown"),
             (_STATUS_CORP_BLOCKED, "Corp Blocked"),
         ]:
-            tk.Label(
-                legend, text="●", fg=colour, bg=_BG, font=("Segoe UI", 10)
-            ).pack(side="left", padx=(0, 2))
+            tk.Label(legend, text="●", fg=colour, bg=_BG, font=("Segoe UI", 10)).pack(
+                side="left", padx=(0, 2)
+            )
             tk.Label(
                 legend,
                 text=label,
@@ -468,7 +466,7 @@ class TurboTweakGUI:
             title="Save Tweak Snapshot",
             defaultextension=".json",
             filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
-            initialfile="turbotweak_snapshot.json",
+            initialfile="regilattice_snapshot.json",
         )
         if not path:
             return
@@ -496,9 +494,7 @@ class TurboTweakGUI:
 
         def _worker() -> None:
             try:
-                results = restore_snapshot(
-                    Path(path), force_corp=self._force_var.get()
-                )
+                results = restore_snapshot(Path(path), force_corp=self._force_var.get())
                 summary_parts: List[str] = []
                 for action in set(results.values()):
                     count = sum(1 for v in results.values() if v == action)
@@ -594,9 +590,7 @@ class TurboTweakGUI:
     def _run_restore_point(self) -> None:
         try:
             create_restore_point()
-            self._root.after(
-                0, self._set_status, "Restore point created ✔", _OK_GREEN
-            )
+            self._root.after(0, self._set_status, "Restore point created ✔", _OK_GREEN)
         except AdminRequirementError:
             self._root.after(
                 0,
@@ -610,9 +604,7 @@ class TurboTweakGUI:
             )
         except Exception as exc:
             err_msg = str(exc)
-            self._root.after(
-                0, lambda m=err_msg: messagebox.showerror("Error", m)
-            )
+            self._root.after(0, lambda m=err_msg: messagebox.showerror("Error", m))
             self._root.after(
                 0, self._set_status, f"Restore point error: {err_msg}", _ERR_RED
             )
@@ -627,7 +619,7 @@ class TurboTweakGUI:
 def launch() -> None:
     """Convenience entry point used by CLI ``--gui``."""
     if not is_windows():
-        print(f"⚠️  TurboTweak GUI requires Windows. Detected: {platform_summary()}")
+        print(f"⚠️  RegiLattice GUI requires Windows. Detected: {platform_summary()}")
         sys.exit(1)
-    app = TurboTweakGUI()
+    app = RegiLatticeGUI()
     app.run()

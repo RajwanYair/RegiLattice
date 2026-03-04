@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import List
 
-from turbotweak.registry import SESSION, assert_admin
-from turbotweak.tweaks import TweakDef
+from regilattice.registry import SESSION, assert_admin
+from regilattice.tweaks import TweakDef
 
 # ── Long Paths ───────────────────────────────────────────────────────────────
 

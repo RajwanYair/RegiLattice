@@ -1,4 +1,4 @@
-"""Registry helpers for TurboTweak.
+"""Registry helpers for RegiLattice.
 
 Wraps ``winreg`` (and ``reg.exe`` as a fallback) so every tweak can be
 applied from Python with proper backup, logging, and error handling.
@@ -74,7 +74,7 @@ class RegistrySession:
 
     @property
     def log_path(self) -> Path:
-        return self.base_dir / "TurboTweak.log"
+        return self.base_dir / "RegiLattice.log"
 
     def log(self, message: str) -> None:
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

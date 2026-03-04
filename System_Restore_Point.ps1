@@ -3,11 +3,11 @@
 # Creates a system restore point before applying tweaks.
 
 param (
-    [string]$Description = 'TurboTweak Pre-Tweaks',
+    [string]$Description = 'RegiLattice Pre-Tweaks',
     [switch]$Force
 )
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 
 if (Assert-Elevated -Required) { return }
 

@@ -35,7 +35,7 @@ class Menu:
         mag = "\033[95m"
         print()
         print(f"  {cyan}╔══════════════════════════════════════════════╗{rst}")
-        print(f"  {cyan}║         ⚡ TurboTweak Launcher ⚡            ║{rst}")
+        print(f"  {cyan}║         ⚡ RegiLattice Launcher ⚡            ║{rst}")
         print(f"  {cyan}╚══════════════════════════════════════════════╝{rst}")
         print(f"  {dim}Version: {__version__} | Platform: {platform_summary()}{rst}")
         print(f"  {dim}Log: {SESSION.log_path}{rst}")
@@ -100,7 +100,7 @@ class Menu:
                 choice = "0"
 
             if choice == "0":
-                print("\n  👋 TurboTweak session ended.")
+                print("\n  👋 RegiLattice session ended.")
                 break
             elif choice.upper() == "A":
                 try:

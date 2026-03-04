@@ -3,14 +3,21 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "turbotweak"
-version = "1.0.0"
-description = "Windows registry tweak toolkit — performance, usability and shell enhancements."
+name = "regilattice"
+version = "2.0.0"
+description = "RegiLattice — Windows registry tweak toolkit with plugin architecture, GUI, and corporate safety."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "aeger" }]
-keywords = ["windows", "registry", "tweaks", "performance", "powershell"]
+keywords = [
+    "windows",
+    "registry",
+    "tweaks",
+    "performance",
+    "powershell",
+    "regilattice",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -22,11 +29,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: System :: Systems Administration",
 ]
 
 [project.scripts]
-turbotweak = "turbotweak.cli:main"
+regilattice = "regilattice.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "pytest-cov", "mypy", "ruff"]
@@ -50,5 +58,5 @@ testpaths = ["tests"]
 addopts = "-v --tb=short"
 
 [tool.coverage.run]
-source = ["turbotweak"]
-omit = ["turbotweak/__main__.py"]
+source = ["regilattice"]
+omit = ["regilattice/__main__.py"]

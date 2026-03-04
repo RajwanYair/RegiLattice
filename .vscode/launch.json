@@ -1,0 +1,75 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "RegiLattice: CLI (list)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "regilattice",
+      "args": [
+        "--list"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "RegiLattice: GUI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "regilattice",
+      "args": [
+        "--gui"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "RegiLattice: Interactive Menu",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "regilattice",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "RegiLattice: Apply Tweak",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "regilattice",
+      "args": [
+        "apply",
+        "${input:tweakId}",
+        "-y"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "tests",
+        "-v",
+        "--tb=short"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "PS: RegiLattice Menu",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "${workspaceFolder}/RegiLatticeMenu.ps1",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "tweakId",
+      "type": "promptString",
+      "description": "Tweak ID to apply (e.g. disable-telemetry, disable-copilot)"
+    }
+  ]
+}

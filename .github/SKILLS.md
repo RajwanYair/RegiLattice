@@ -1,9 +1,9 @@
-# TurboTweak — Reusable Skills & Patterns
+# regilattice — Reusable Skills & Patterns
 
 ## Skill 1: Registry Read/Write via winreg
 
 ```python
-from turbotweak.registry import SESSION
+from regilattice.registry import SESSION
 
 # Write a DWORD
 SESSION.set_dword(r"HKLM\SOFTWARE\...", "ValueName", 1)
@@ -38,7 +38,7 @@ or `~/Documents/RegistryBackups/`.
 ## Skill 3: Admin Elevation Check
 
 ```python
-from turbotweak.registry import assert_admin
+from regilattice.registry import assert_admin
 
 def my_tweak(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)  # raises AdminRequirementError if not elevated
@@ -47,14 +47,14 @@ def my_tweak(*, require_admin: bool = True) -> None:
 
 In PowerShell:
 ```powershell
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 if (Assert-Elevated -Required) { return }
 ```
 
 ## Skill 4: Corporate Network Detection
 
 ```python
-from turbotweak.corpguard import is_corporate_network, assert_not_corporate
+from regilattice.corpguard import is_corporate_network, assert_not_corporate
 
 # Check passively
 if is_corporate_network():
@@ -84,8 +84,8 @@ undo snapshots.
 ## Skill 6: Plugin Registration
 
 ```python
-# In turbotweak/tweaks/privacy.py
-from turbotweak.tweaks import TweakDef
+# In regilattice/tweaks/privacy.py
+from regilattice.tweaks import TweakDef
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
@@ -102,13 +102,13 @@ TWEAKS: list[TweakDef] = [
 ]
 ```
 
-The plugin loader in `turbotweak/tweaks/__init__.py` collects all
+The plugin loader in `regilattice/tweaks/__init__.py` collects all
 `TWEAKS` lists from every module in the package.
 
 ## Skill 7: State Persistence & Undo
 
 ```python
-from turbotweak.state import TweakState
+from regilattice.state import TweakState
 
 state = TweakState()
 state.save_snapshot("disable-telemetry", before=True, values={...})
@@ -116,7 +116,7 @@ state.mark_applied("disable-telemetry")
 state.undo_last()  # reverts last action
 ```
 
-State file: `~/.turbotweak/state.json`
+State file: `~/.regilattice/state.json`
 
 ## Skill 8: Running External Commands
 

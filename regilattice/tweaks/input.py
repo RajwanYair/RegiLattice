@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import List
 
-from turbotweak.registry import SESSION
-from turbotweak.tweaks import TweakDef
+from regilattice.registry import SESSION
+from regilattice.tweaks import TweakDef
 
 _MOUSE_KEY = r"HKEY_CURRENT_USER\Control Panel\Mouse"
 

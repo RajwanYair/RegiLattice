@@ -1,11 +1,11 @@
 #Requires -Version 5.1
-# TurboTweakMenu.ps1
+# RegiLatticeMenu.ps1
 # Master menu to launch tweak modules.
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 
 # ── Menu definition ────────────────────────────────────────────────────────────
 $menuItems = [ordered]@{
@@ -71,9 +71,9 @@ function Show-Banner {
     $elevated = if (Test-Elevated) { '(Admin)' } else { '(Standard)' }
     Write-Host ''
     Write-Host '  ╔══════════════════════════════════════════════╗' -ForegroundColor DarkCyan
-    Write-Host '  ║         ⚡ TurboTweak Launcher ⚡            ║' -ForegroundColor Cyan
+    Write-Host '  ║         ⚡ RegiLattice Launcher ⚡            ║' -ForegroundColor Cyan
     Write-Host '  ╚══════════════════════════════════════════════╝' -ForegroundColor DarkCyan
-    Write-Host "   Session: $elevated | Log: TurboTweak.log" -ForegroundColor DarkGray
+    Write-Host "   Session: $elevated | Log: RegiLattice.log" -ForegroundColor DarkGray
     Write-Host ''
 
     foreach ($key in $menuItems.Keys) {
@@ -114,7 +114,7 @@ while ($true) {
             Invoke-TweakModule -FileName 'System_Restore_Point.ps1' -Label 'Create Restore Point'
         }
         '0' {
-            Write-Host "`n  👋 TurboTweak session ended." -ForegroundColor Gray
+            Write-Host "`n  👋 RegiLattice session ended." -ForegroundColor Gray
             break
         }
         default {
