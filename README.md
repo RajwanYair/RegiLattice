@@ -1,12 +1,13 @@
 # ⚡ RegiLattice
 
-A comprehensive Windows registry tweak toolkit with **113 tweaks** across **27 categories**, a **plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI**. Designed for power users who want fine-grained control over Windows 11 performance, privacy, usability, and application behaviour.
+A comprehensive Windows registry tweak toolkit with **212 tweaks** across **34 categories**, a **plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI**. Designed for power users who want fine-grained control over Windows 11 performance, privacy, usability, and application behaviour.
 
 ## Highlights
 
-- **113 tweaks** across 27 categories — each fully reversible with apply + remove
+- **212 tweaks** across 34 categories — each fully reversible with apply + remove
 - **Plugin architecture** — auto-discovers tweaks from `regilattice/tweaks/`, easy to extend
 - **3 interfaces** — interactive console menu, CLI with flags, and tkinter GUI
+- **GUI per-row toggle buttons** — each tweak row shows ENABLED / DISABLED status via `detect_fn`
 - **Category grouping & search** — tweaks sorted by category in GUI/menu, live search bar
 - **Concurrent batch operations** — `ThreadPoolExecutor`-powered parallel apply/remove
 - **UAC elevation** — automatic admin re-launch via `ctypes.ShellExecuteW`
@@ -15,38 +16,46 @@ A comprehensive Windows registry tweak toolkit with **113 tweaks** across **27 c
 - **Automatic backups** — every registry mutation is backed up before changes
 - **Snapshot/Undo** — save and restore tweak state snapshots (JSON)
 - **Tags & descriptions** — every tweak has searchable tags and a human-readable description
+- **2 267 tests** across 8 test files — full coverage of registry helpers, CLI, GUI, and all tweak modules
 
 ## Tweak Categories
 
 | Category | # | Tweaks |
 |---|---|---|
-| **Adobe** | 4 | Update, Telemetry, JavaScript, Welcome Screen |
-| **AI / Copilot** | 2 | Disable Copilot, Disable Recall |
-| **Boot** | 1 | Verbose Boot Messages |
-| **Chrome** | 4 | Background Apps, Telemetry, Auto-Update, HW Accel |
-| **Communication** | 7 | Teams (autostart, GPU), Zoom update, Discord (autostart, hwaccel), Spotify (autostart, hwaccel) |
-| **Developer Tools** | 3 | Git Credential Manager, Long Paths, Default Branch |
-| **Edge** | 4 | Startup Boost, Sidebar, Telemetry, Auto-Update |
-| **Explorer** | 12 | File Extensions, Hidden Files, Super Hidden, This PC, Thumbnails, Title Bar Path, Recent Files, Recent Places, Search History, Gallery, Compact View, Auto Folder Type |
-| **Firefox** | 3 | Telemetry, Pocket, Auto-Update |
-| **Gaming** | 1 | Disable Game DVR / Game Bar |
-| **Input** | 1 | Disable Mouse Acceleration |
-| **Java** | 2 | Auto-Update, Web Plugin |
-| **LibreOffice** | 4 | Auto-Update, Crash Reporter, Default OOXML, Default Handler |
-| **Maintenance** | 1 | Registry Auto-Backup |
-| **Network** | 6 | IRP Stack, Nagle Algorithm, Throttle, RDP, DNS-over-HTTPS, Max TCP |
-| **Office** | 6 | Telemetry, Start Screen, Connected, HW Accel, Macro Trust, AutoSave — multi-version (2010–365) |
-| **OneDrive** | 4 | Autostart, Files On-Demand, Ads, Upload Throttle |
-| **Package Management** | 5 | PS Policy, PSGallery, Scoop, Winget, Pip |
-| **Performance** | 3 | Startup Delay, SvcHost Split, NTFS Last Access |
-| **Power** | 6 | USB Suspend, Hibernation, Prefetch, CPU Scheduling, Fast Startup, System Cache |
-| **Privacy** | 8 | Telemetry, Cortana, Activity History, Location, Advertising ID, Camera, Microphone, DiagTrack |
-| **RealVNC** | 6 | Encryption, Auth, Idle Timeout, Tray Icon, Viewer Recent, Viewer Scaling |
-| **Shell** | 1 | Take Ownership Context Menu |
-| **System** | 1 | Long Paths |
-| **VS Code** | 3 | Telemetry, Auto-Update, Extension Update |
-| **Windows 11** | 9 | Widgets, Snap, Context Menu, Lock Screen, WU, Bing, Bloatware, Dark Mode, Notifications |
-| **WSL** | 6 | Default V2, Auto-Start, Nested Virt, Feature, VM Platform, Mirrored Network |
+| **Accessibility** | 7 | Sticky/Toggle/Filter Keys, Dark Mode, Animations, ClearType, Scroll Bar Width, Narrator, High Contrast |
+| **Adobe** | 6 | Auto-Update, Telemetry, JavaScript, Welcome Screen, Protected Mode, Cloud Services |
+| **AI / Copilot** | 4 | Disable Copilot, Disable Recall, AI Tips, Copilot in Edge |
+| **Bluetooth** | 5 | Power Management, Service to Manual, A2DP Audio, Discoverability, LE Low-Latency |
+| **Boot** | 3 | Verbose Boot, Splash Logo, Boot Menu Timeout |
+| **Chrome** | 6 | Background Apps, Telemetry, Auto-Update, HW Accel, Sign-In & Sync, Secure DNS |
+| **Communication** | 9 | Teams (autostart, GPU), Zoom (update, auto-video), Discord (autostart, hwaccel), Spotify (autostart, hwaccel), Slack |
+| **Cortana & Search** | 6 | Lock Screen Cortana, Web Search, Search Highlights, Taskbar Search Box, Disable Cortana, Cloud Content Search |
+| **Developer Tools** | 5 | Git Credential Manager, Long Paths, Default Branch, autocrlf, Default Editor |
+| **Edge** | 6 | Startup Boost, Sidebar & Shopping, Telemetry, Auto-Update, First-Run, Password Manager |
+| **Explorer** | 14 | File Extensions, Hidden Files, Super Hidden, This PC, Thumbnails, Title Bar Path, Recent Files, Recent Places, Search History, Gallery, Compact View, Auto Folder Type, Breadcrumb Bar, Folder Merge |
+| **Firefox** | 5 | Telemetry & Studies, Pocket, Auto-Update, Crash Reporter, Default Browser Check |
+| **Gaming** | 3 | Game DVR / Game Bar, Game Mode, Fullscreen Optimizations |
+| **Input** | 3 | Mouse Acceleration, Keyboard Repeat Rate, Sticky Keys Prompt |
+| **Java** | 4 | Auto-Update, Web Plugin, Usage Tracking, High DPI Scaling |
+| **LibreOffice** | 6 | Auto-Update, Crash Reporter, Default OOXML, Default Handler, Recovery, Start Center |
+| **Maintenance** | 3 | Registry Auto-Backup, Scheduled Defrag, Crash Memory Dumps |
+| **Network** | 8 | IRP Stack, Nagle Algorithm, Throttle, RDP, DNS-over-HTTPS, Max TCP, Wi-Fi Sense, NetBIOS |
+| **Office** | 8 | Telemetry, Start Screen, Connected, HW Accel, Macro Trust, AutoRecover, LinkedIn, UI Animations — multi-version (2010–365) |
+| **OneDrive** | 6 | Autostart, Files On-Demand, Ads, Upload Throttle, Personal Sync, Known Folder Move |
+| **Package Management** | 7 | PS Policy, PSGallery, Scoop, Winget, Pip --user, Pip Cache, npm Offline |
+| **Performance** | 5 | Visual Effects, SvcHost Split, NTFS Last Access, Transparency Effects, Background UWP Apps |
+| **Power** | 8 | USB Suspend, Hibernation, Prefetch, CPU Scheduling, Fast Startup, System Cache, Power Throttling, NTFS Timestamp |
+| **Privacy** | 10 | Telemetry, Cortana, Activity History, Location, Advertising ID, Camera, Microphone, DiagTrack, Speech Recognition, Inking Personalization |
+| **RealVNC** | 8 | Encryption, Auth, Idle Timeout, Tray Icon, Viewer Recent, Viewer Scaling, Blank Screen, Clipboard Sharing |
+| **Security** | 7 | Sample Submission, PUA Protection, SmartScreen, Exploit Telemetry, Scan CPU Limit, Notifications, Dev Folder Exclusions |
+| **Services** | 6 | DiagTrack, Search Indexer, Error Reporting, Print Spooler, SysMain, Diagnostic Service |
+| **Shell** | 3 | Take Ownership, Open CMD Here, Get File Hash |
+| **Startup** | 6 | Startup Delay, Skype, Edge Startup, Store Suggested Apps, Teams, Cortana |
+| **System** | 3 | Long Paths, Reserved Storage, Remote Assistance |
+| **VS Code** | 5 | Telemetry, Auto-Update, Extension Update, A/B Experiments, Settings Sync |
+| **Windows 11** | 11 | Widgets, Snap Assist, Context Menu, Lock Screen, WU Auto-Restart, Bing Search, Bloatware, Dark Mode, Notifications, Snap Layout Flyout, Chat Icon |
+| **Windows Update** | 8 | Delivery Optimization, Quality Deferral, Feature Deferral, Exclude Drivers, Auto-Restart, Notify-Only, WaaS Medic, Update Orchestrator |
+| **WSL** | 8 | Default V2, Auto-Start, Nested Virt, Feature, VM Platform, Mirrored Network, Memory Reclaim, DNS Tunneling |
 
 ## Requirements
 
@@ -60,7 +69,7 @@ A comprehensive Windows registry tweak toolkit with **113 tweaks** across **27 c
 ```bash
 python -m regilattice --gui
 ```
-Dark-themed tkinter window (Catppuccin Mocha) with per-category grouping, live search bar, checkboxes with ON/OFF status, and batch operations.
+Dark-themed tkinter window (Catppuccin Mocha) with per-category grouping, live search bar, per-row toggle buttons showing ENABLED / DISABLED status, and batch operations.
 
 ### Console Menu
 ```bash
@@ -122,34 +131,41 @@ RegiLattice/
 │   ├── elevation.py                 # UAC elevation helpers
 │   ├── registry.py                  # Registry helpers & session
 │   ├── corpguard.py                 # Corporate network detection
-│   └── tweaks/                      # Plugin-based tweak registry (27 modules)
+│   └── tweaks/                      # Plugin-based tweak registry (34 modules)
 │       ├── __init__.py              # TweakDef dataclass + loader
+│       ├── accessibility.py         # Accessibility & visual aids
 │       ├── adobe.py                 # Adobe Reader / Acrobat
+│       ├── bluetooth.py             # Bluetooth power & audio
 │       ├── boot.py                  # Boot tweaks
 │       ├── chrome.py                # Google Chrome policies
-│       ├── communication.py         # Teams, Zoom, Discord, Spotify
+│       ├── communication.py         # Teams, Zoom, Discord, Spotify, Slack
 │       ├── copilot.py               # Windows Copilot / Recall
+│       ├── cortana.py               # Cortana & Search
+│       ├── defender.py              # Windows Security / Defender
 │       ├── edge.py                  # Microsoft Edge policies
-│       ├── explorer.py              # Windows Explorer (12 tweaks)
+│       ├── explorer.py              # Windows Explorer (14 tweaks)
 │       ├── firefox.py               # Mozilla Firefox policies
 │       ├── gaming.py                # Gaming tweaks
 │       ├── gitconfig.py             # Git for Windows
 │       ├── input.py                 # Input tweaks
 │       ├── java.py                  # Java runtime
 │       ├── libreoffice.py           # LibreOffice / OpenOffice
-│       ├── maintenance.py           # Registry auto-backup
+│       ├── maintenance.py           # Registry auto-backup & cleanup
 │       ├── network.py               # Network / connectivity
 │       ├── office.py                # Microsoft Office (multi-version)
 │       ├── onedrive.py              # OneDrive policies
 │       ├── performance.py           # System performance
 │       ├── pkgmgmt.py              # Package managers
 │       ├── power.py                 # Power management
-│       ├── privacy.py               # Windows privacy (8 tweaks)
+│       ├── privacy.py               # Windows privacy (10 tweaks)
 │       ├── realvnc.py               # RealVNC Server & Viewer
+│       ├── services.py              # Windows services
 │       ├── shell.py                 # Shell context menu
+│       ├── startup.py               # Startup programs
 │       ├── system.py                # System capabilities
 │       ├── vscode.py                # VS Code policies
 │       ├── win11.py                 # Windows 11 UI debloating
+│       ├── windowsupdate.py         # Windows Update policies
 │       └── wsl.py                   # WSL optimisation
 ├── tests/                           # pytest test suites
 ├── legacy/                          # Archived PowerShell scripts

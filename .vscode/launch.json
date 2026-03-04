@@ -57,13 +57,6 @@
       "console": "integratedTerminal",
       "justMyCode": false
     },
-    {
-      "name": "PS: RegiLattice Menu",
-      "type": "PowerShell",
-      "request": "launch",
-      "script": "${workspaceFolder}/RegiLatticeMenu.ps1",
-      "cwd": "${workspaceFolder}"
-    }
   ],
   "inputs": [
     {

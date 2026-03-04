@@ -108,15 +108,18 @@ The plugin loader in `regilattice/tweaks/__init__.py` collects all
 ## Skill 7: State Persistence & Undo
 
 ```python
-from regilattice.state import TweakState
+from pathlib import Path
+from regilattice.tweaks import save_snapshot, restore_snapshot
+from regilattice.registry import SESSION
 
-state = TweakState()
-state.save_snapshot("disable-telemetry", before=True, values={...})
-state.mark_applied("disable-telemetry")
-state.undo_last()  # reverts last action
+# Save current state of all tweaks to a JSON file
+save_snapshot(Path("state.json"))
+
+# Restore a previously saved snapshot
+restore_snapshot(Path("state.json"), SESSION)
 ```
 
-State file: `~/.regilattice/state.json`
+Snapshots are plain JSON files mapping tweak IDs to their detected state.
 
 ## Skill 8: Running External Commands
 
