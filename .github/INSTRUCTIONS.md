@@ -9,9 +9,9 @@ regilattice is a **Windows 11 registry-tweak toolkit** with three interfaces:
 
 | Interface | Technology | Entry point |
 |---|---|---|
-| PowerShell menu | PS 5.1+ | `Launch-RegiLattice.bat` → `RegiLatticeMenu.ps1` |
 | Python console menu | Python 3.10+ | `python -m regilattice` |
 | Python GUI | tkinter (stdlib) | `python -m regilattice --gui` |
+| Python CLI | argparse | `python -m regilattice apply <id> -y` |
 
 All tweaks are **reversible**, **backed-up before mutation**, and
 **blocked on corporate networks** unless explicitly forced.
@@ -78,12 +78,14 @@ if corp_guard.is_corporate_network() and not tweak.corp_safe:
 
 ## 4  State / Undo System
 
-- `regilattice/state.py` persists tweak status to
-  `~/.regilattice/state.json`.
+- `regilattice/tweaks/__init__.py` exposes `save_snapshot(path)` and
+  `restore_snapshot(path, registry_session)` which serialise/deserialise
+  the full tweak state to a JSON file.
 - Before every apply/remove, the previous state and registry snapshot
   are saved so the user can **undo** the last action from the GUI.
 - The GUI shows a live status badge (✅ Applied / ⚪ Default) per tweak
-  by calling each `TweakDef.detect_fn`.
+  by calling each `TweakDef.detect_fn`, rendered as per-row
+  ENABLED / DISABLED toggle buttons.
 
 ## 5  Corporate Guard
 
@@ -110,32 +112,55 @@ regilattice/
 ├── .github/
 │   ├── INSTRUCTIONS.md          ← this file
 │   ├── SKILLS.md                ← reusable patterns
-│   ├── WORKFLOW.md              ← dev workflow
 │   └── workflows/
-│       ├── powershell.yml       ← PSScriptAnalyzer CI
-│       └── python.yml           ← ruff + pytest CI
+│       └── python.yml           ← ruff + mypy + pytest CI
 ├── regilattice/
 │   ├── __init__.py
 │   ├── __main__.py
 │   ├── cli.py                   ← argparse CLI
 │   ├── menu.py                  ← console menu
 │   ├── gui.py                   ← tkinter GUI
+│   ├── deps.py                  ← smart dependency management
+│   ├── elevation.py             ← UAC elevation helpers
 │   ├── registry.py              ← winreg helpers & session
 │   ├── corpguard.py             ← corporate network detection
-│   ├── state.py                 ← JSON state/undo persistence
-│   └── tweaks/
-│       ├── __init__.py          ← plugin loader
-│       ├── shell.py             ← Take Ownership
-│       ├── explorer.py          ← Recent Folders
-│       ├── boot.py              ← Verbose Boot
-│       ├── performance.py       ← Perf tweaks, SvcHost, Last Access
-│       ├── privacy.py           ← Telemetry, Cortana
-│       ├── input.py             ← Mouse Acceleration
-│       ├── gaming.py            ← Game DVR
-│       ├── system.py            ← Long Paths, Registry Backup
-│       └── wsl.py               ← WSL optimisation tweaks
-├── tests/
-├── *.ps1                        ← PowerShell tweak scripts
+│   └── tweaks/                  ← plugin-based tweak registry (34 modules)
+│       ├── __init__.py          ← TweakDef dataclass, plugin loader, save/restore snapshot
+│       ├── accessibility.py     ← Accessibility & visual aids (7)
+│       ├── adobe.py             ← Adobe Reader / Acrobat (6)
+│       ├── bluetooth.py         ← Bluetooth power & audio (5)
+│       ├── boot.py              ← Boot tweaks (3)
+│       ├── chrome.py            ← Google Chrome policies (6)
+│       ├── communication.py     ← Teams, Zoom, Discord, Spotify, Slack (9)
+│       ├── copilot.py           ← Windows Copilot / Recall (4)
+│       ├── cortana.py           ← Cortana & Search (6)
+│       ├── defender.py          ← Windows Security / Defender (7)
+│       ├── edge.py              ← Microsoft Edge policies (6)
+│       ├── explorer.py          ← Windows Explorer (14)
+│       ├── firefox.py           ← Mozilla Firefox policies (5)
+│       ├── gaming.py            ← Gaming tweaks (3)
+│       ├── gitconfig.py         ← Git for Windows (5)
+│       ├── input.py             ← Input tweaks (3)
+│       ├── java.py              ← Java runtime (4)
+│       ├── libreoffice.py       ← LibreOffice / OpenOffice (6)
+│       ├── maintenance.py       ← Registry auto-backup & cleanup (3)
+│       ├── network.py           ← Network / connectivity (8)
+│       ├── office.py            ← Microsoft Office multi-version (8)
+│       ├── onedrive.py          ← OneDrive policies (6)
+│       ├── performance.py       ← System performance (5)
+│       ├── pkgmgmt.py           ← Package managers (7)
+│       ├── power.py             ← Power management (8)
+│       ├── privacy.py           ← Windows privacy (10)
+│       ├── realvnc.py           ← RealVNC Server & Viewer (8)
+│       ├── services.py          ← Windows services (6)
+│       ├── shell.py             ← Shell context menu (3)
+│       ├── startup.py           ← Startup programs (6)
+│       ├── system.py            ← System capabilities (3)
+│       ├── vscode.py            ← VS Code policies (5)
+│       ├── win11.py             ← Windows 11 UI debloating (11)
+│       ├── windowsupdate.py     ← Windows Update policies (8)
+│       └── wsl.py               ← WSL optimisation (8)
+├── tests/                       ← 2 267 tests across 8 test files
 ├── pyproject.toml
 └── README.md
 ```
