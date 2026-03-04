@@ -59,5 +59,6 @@ TWEAKS: List[TweakDef] = [
             "Disables Windows Game DVR, Game Bar overlay, and background "
             "recording for better gaming and benchmarking performance."
         ),
+        tags=["gaming", "performance", "dvr"],
     ),
 ]

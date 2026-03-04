@@ -148,6 +148,11 @@ TWEAKS: List[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_PERF_KEYS,
+        description=(
+            "Removes startup delay, lowers system responsiveness timer, "
+            "and disables network throttling for snappier performance."
+        ),
+        tags=["performance", "startup", "network"],
     ),
     TweakDef(
         id="svchost-split",
@@ -159,6 +164,11 @@ TWEAKS: List[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SVCHOST_KEY],
+        description=(
+            "Raises the SvcHost split threshold to match installed RAM, "
+            "reducing the number of svchost.exe processes."
+        ),
+        tags=["performance", "memory", "svchost"],
     ),
     TweakDef(
         id="disable-last-access",
@@ -170,5 +180,7 @@ TWEAKS: List[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[],
+        description="Disables NTFS last-access timestamp updates to reduce disk I/O overhead.",
+        tags=["performance", "ntfs", "disk"],
     ),
 ]

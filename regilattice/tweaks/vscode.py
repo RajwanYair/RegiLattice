@@ -105,6 +105,7 @@ TWEAKS: List[TweakDef] = [
             "Disables VS Code telemetry, crash reporting, and usage "
             "data collection via machine-level policy."
         ),
+        tags=["vscode", "developer", "telemetry", "privacy"],
     ),
     TweakDef(
         id="disable-vscode-update",
@@ -117,6 +118,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=_VSCODE_KEYS,
         description="Prevents VS Code from auto-updating to new versions.",
+        tags=["vscode", "developer", "update"],
     ),
     TweakDef(
         id="disable-vscode-ext-update",
@@ -129,5 +131,6 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=_VSCODE_KEYS,
         description="Prevents VS Code extensions from auto-updating.",
+        tags=["vscode", "developer", "extensions", "update"],
     ),
 ]

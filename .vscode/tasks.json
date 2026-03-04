@@ -1,64 +1,85 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Lint (Ruff)",
-            "type": "shell",
-            "command": "python -m ruff check regilattice/ tests/",
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "Format (Ruff)",
-            "type": "shell",
-            "command": "python -m ruff format regilattice/ tests/",
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "Type Check (mypy)",
-            "type": "shell",
-            "command": "python -m mypy regilattice/",
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "Test (pytest)",
-            "type": "shell",
-            "command": "python -m pytest tests/ -v --tb=short",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "Test + Coverage",
-            "type": "shell",
-            "command": "python -m pytest tests/ -v --tb=short --cov=regilattice --cov-report=term-missing",
-            "group": "test",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "Install (editable)",
-            "type": "shell",
-            "command": "pip install -e .[dev]",
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        },
-        {
-            "label": "List Tweaks",
-            "type": "shell",
-            "command": "python -m regilattice --list",
-            "group": "none",
-            "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "shared" }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lint (Ruff)",
+      "type": "shell",
+      "command": "python -m ruff check regilattice/ tests/",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Format (Ruff)",
+      "type": "shell",
+      "command": "python -m ruff format regilattice/ tests/",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Type Check (mypy)",
+      "type": "shell",
+      "command": "python -m mypy regilattice/",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Test (pytest)",
+      "type": "shell",
+      "command": "python -m pytest tests/ -v --tb=short",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Test + Coverage",
+      "type": "shell",
+      "command": "python -m pytest tests/ -v --tb=short --cov=regilattice --cov-report=term-missing",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Install (editable)",
+      "type": "shell",
+      "command": "pip install -e .[dev]",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "List Tweaks",
+      "type": "shell",
+      "command": "python -m regilattice --list",
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
 }

@@ -70,5 +70,6 @@ TWEAKS: List[TweakDef] = [
             "Enables Windows nightly registry hive backup to "
             r"C:\Windows\System32\config\RegBack."
         ),
+        tags=["maintenance", "backup", "registry"],
     ),
 ]

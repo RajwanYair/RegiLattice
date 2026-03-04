@@ -10,6 +10,8 @@ from __future__ import annotations
 import importlib
 import json
 import pkgutil
+from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
@@ -31,6 +33,7 @@ class TweakDef:
     corp_safe: bool = False
     registry_keys: list[str] = field(default_factory=list)
     description: str = ""
+    tags: list[str] = field(default_factory=list)
 
 
 # ── Plugin loader ────────────────────────────────────────────────────────────
@@ -51,6 +54,8 @@ def _load_plugins() -> None:
                 raise ValueError(f"Duplicate TweakDef id: {td.id!r}")
             seen_ids.add(td.id)
             _ALL_TWEAKS.append(td)
+    # Sort by category (alphabetical), then by label within each category
+    _ALL_TWEAKS.sort(key=lambda t: (t.category.lower(), t.label.lower()))
 
 
 _load_plugins()
@@ -72,6 +77,30 @@ def get_tweak(tweak_id: str) -> TweakDef | None:
 def reload_plugins() -> None:
     """Re-scan sub-modules (useful after hot-adding a plugin)."""
     _load_plugins()
+
+
+def categories() -> List[str]:
+    """Return sorted unique category names."""
+    return list(OrderedDict.fromkeys(td.category for td in _ALL_TWEAKS))
+
+
+def tweaks_by_category() -> Dict[str, List[TweakDef]]:
+    """Return tweaks grouped into ``{category: [TweakDef, ...]}``, sorted."""
+    groups: Dict[str, List[TweakDef]] = OrderedDict()
+    for td in _ALL_TWEAKS:
+        groups.setdefault(td.category, []).append(td)
+    return groups
+
+
+def search_tweaks(query: str) -> List[TweakDef]:
+    """Filter tweaks by a case-insensitive query matching id/label/category/tags."""
+    q = query.lower()
+    results: List[TweakDef] = []
+    for td in _ALL_TWEAKS:
+        fields = [td.id, td.label, td.category, td.description] + td.tags
+        if any(q in f.lower() for f in fields):
+            results.append(td)
+    return results
 
 
 # ── Status helpers ───────────────────────────────────────────────────────────
@@ -150,40 +179,91 @@ def restore_snapshot(
 
 
 def apply_all(
-    *, force_corp: bool = False, require_admin: bool = True
+    *,
+    force_corp: bool = False,
+    require_admin: bool = True,
+    parallel: bool = False,
+    max_workers: int = 4,
+    progress_cb: Optional[Callable[[str, str], None]] = None,
 ) -> Dict[str, str]:
-    """Apply every registered tweak, respecting corp-safe flags."""
+    """Apply every registered tweak, respecting corp-safe flags.
+
+    Parameters
+    ----------
+    parallel:
+        If True, apply tweaks concurrently (non-admin tweaks only when
+        ``require_admin`` is True and process is not elevated).
+    max_workers:
+        Thread count for parallel mode.
+    progress_cb:
+        Optional callback ``(tweak_id, result)`` invoked after each tweak.
+    """
     results: Dict[str, str] = {}
-    for td in _ALL_TWEAKS:
+
+    def _do(td: TweakDef) -> tuple[str, str]:
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                results[td.id] = "skipped (corp)"
-                continue
+                return td.id, "skipped (corp)"
         try:
             td.apply_fn(require_admin=require_admin)
-            results[td.id] = "applied"
+            return td.id, "applied"
         except Exception as exc:
-            results[td.id] = f"error: {exc}"
+            return td.id, f"error: {exc}"
+
+    if parallel:
+        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+            futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
+            for fut in as_completed(futures):
+                tid, res = fut.result()
+                results[tid] = res
+                if progress_cb:
+                    progress_cb(tid, res)
+    else:
+        for td in _ALL_TWEAKS:
+            tid, res = _do(td)
+            results[tid] = res
+            if progress_cb:
+                progress_cb(tid, res)
     return results
 
 
 def remove_all(
-    *, force_corp: bool = False, require_admin: bool = True
+    *,
+    force_corp: bool = False,
+    require_admin: bool = True,
+    parallel: bool = False,
+    max_workers: int = 4,
+    progress_cb: Optional[Callable[[str, str], None]] = None,
 ) -> Dict[str, str]:
     """Remove every registered tweak, respecting corp-safe flags."""
     results: Dict[str, str] = {}
-    for td in _ALL_TWEAKS:
+
+    def _do(td: TweakDef) -> tuple[str, str]:
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                results[td.id] = "skipped (corp)"
-                continue
+                return td.id, "skipped (corp)"
         try:
             td.remove_fn(require_admin=require_admin)
-            results[td.id] = "removed"
+            return td.id, "removed"
         except Exception as exc:
-            results[td.id] = f"error: {exc}"
+            return td.id, f"error: {exc}"
+
+    if parallel:
+        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+            futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
+            for fut in as_completed(futures):
+                tid, res = fut.result()
+                results[tid] = res
+                if progress_cb:
+                    progress_cb(tid, res)
+    else:
+        for td in _ALL_TWEAKS:
+            tid, res = _do(td)
+            results[tid] = res
+            if progress_cb:
+                progress_cb(tid, res)
     return results

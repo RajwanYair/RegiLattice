@@ -137,6 +137,7 @@ TWEAKS: List[TweakDef] = [
             "Prevents Chrome from running in the background after the "
             "browser window is closed, saving memory and CPU."
         ),
+        tags=["chrome", "browser", "background"],
     ),
     TweakDef(
         id="disable-chrome-telemetry",
@@ -152,6 +153,7 @@ TWEAKS: List[TweakDef] = [
             "Disables Chrome metrics, spell-check cloud, translate, "
             "and extended safe-browsing reporting."
         ),
+        tags=["chrome", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
         id="disable-chrome-update",
@@ -164,6 +166,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=[_CHROME_UPDATE],
         description="Prevents Chrome from checking for or installing updates.",
+        tags=["chrome", "browser", "update"],
     ),
     TweakDef(
         id="disable-chrome-hwaccel",
@@ -179,5 +182,6 @@ TWEAKS: List[TweakDef] = [
             "Forces Chrome to use software rendering instead of GPU, "
             "useful for troubleshooting display issues."
         ),
+        tags=["chrome", "browser", "gpu"],
     ),
 ]

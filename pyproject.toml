@@ -15,8 +15,11 @@ keywords = [
     "registry",
     "tweaks",
     "performance",
-    "powershell",
+    "privacy",
+    "debloat",
     "regilattice",
+    "gui",
+    "tkinter",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

@@ -107,6 +107,7 @@ TWEAKS: List[TweakDef] = [
             "Disables Firefox telemetry, Shield studies, and the "
             "Default Browser Agent background task."
         ),
+        tags=["firefox", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
         id="disable-firefox-pocket",
@@ -119,6 +120,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=_FF_KEYS,
         description="Disables the Pocket integration in Firefox new tab page.",
+        tags=["firefox", "browser", "pocket"],
     ),
     TweakDef(
         id="disable-firefox-update",
@@ -131,5 +133,6 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=_FF_KEYS,
         description="Prevents Firefox from auto-updating. Use in controlled environments.",
+        tags=["firefox", "browser", "update"],
     ),
 ]

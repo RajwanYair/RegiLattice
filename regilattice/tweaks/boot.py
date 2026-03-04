@@ -50,5 +50,7 @@ TWEAKS: List[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEY],
+        description="Shows detailed service and driver status messages during boot.",
+        tags=["boot", "debug", "diagnostic"],
     ),
 ]
