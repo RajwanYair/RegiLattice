@@ -6,24 +6,27 @@ from regilattice.menu import Menu
 
 
 class TestMenuConstruction:
-    def test_all_items_present(self) -> None:
+    def test_tweaks_list_populated(self) -> None:
         menu = Menu()
-        assert len(menu._items) == 13
+        assert len(menu._tweaks) > 0
 
-    def test_lookup_keys(self) -> None:
-        menu = Menu()
-        for item in menu._items:
-            assert item.key in menu._lookup
+    def test_tweaks_are_tweakdefs(self) -> None:
+        from regilattice.tweaks import TweakDef
 
-    def test_invalid_choice_prints_error(self, capsys) -> None:
         menu = Menu()
-        menu._run("999")
-        out = capsys.readouterr().out
-        assert "Invalid" in out
+        for td in menu._tweaks:
+            assert isinstance(td, TweakDef)
 
-    def test_each_item_has_callable_action(self) -> None:
+    def test_each_tweak_has_callable_apply(self) -> None:
         menu = Menu()
-        for item in menu._items:
+        for td in menu._tweaks:
             assert callable(
-                item.action
-            ), f"Menu item '{item.label}' action is not callable"
+                td.apply_fn
+            ), f"Tweak '{td.label}' apply_fn is not callable"
+
+    def test_each_tweak_has_callable_remove(self) -> None:
+        menu = Menu()
+        for td in menu._tweaks:
+            assert callable(
+                td.remove_fn
+            ), f"Tweak '{td.label}' remove_fn is not callable"

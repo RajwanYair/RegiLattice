@@ -6,28 +6,24 @@ from unittest.mock import patch
 
 import pytest
 
-from regilattice.cli import _actions, main
+from regilattice.cli import main
 
 
-class TestListActions:
-    def test_list_prints_actions(self, capsys) -> None:
-        rc = main(["--list"])
+class TestListFlag:
+    def test_list_prints_tweaks(self, capsys) -> None:
+        with patch("regilattice.cli.tweak_status", return_value="unknown"):
+            rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out
-        assert "apply-performance" in out
-        assert "remove-all" in out
-        assert "create-restore-point" in out
+        assert "show-file-extensions" in out or "disable-telemetry" in out
 
-    def test_actions_are_callable(self) -> None:
-        for name, fn in _actions().items():
-            assert callable(fn), f"Action '{name}' is not callable"
-
-
-class TestUnknownAction:
-    def test_returns_2(self, capsys) -> None:
-        rc = main(["nonexistent-action", "-y"])
-        assert rc == 2
-        assert "Unknown action" in capsys.readouterr().out
+    def test_list_shows_header(self, capsys) -> None:
+        with patch("regilattice.cli.tweak_status", return_value="unknown"):
+            rc = main(["--list"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "ID" in out
+        assert "Category" in out
 
 
 class TestVersion:
@@ -39,7 +35,22 @@ class TestVersion:
 
 class TestAbortByUser:
     def test_abort_returns_1(self, capsys) -> None:
-        with patch("builtins.input", return_value="n"):
-            rc = main(["apply-performance"])
+        with patch("regilattice.cli.assert_not_corporate"):
+            with patch("builtins.input", return_value="n"):
+                rc = main(["apply", "show-file-extensions"])
         assert rc == 1
         assert "Aborted" in capsys.readouterr().out
+
+
+class TestSnapshotFlag:
+    def test_snapshot_creates_file(self, tmp_path, capsys) -> None:
+        path = tmp_path / "snap.json"
+        with patch("regilattice.tweaks.save_snapshot") as mock_save:
+            def _save(p):
+                import json
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_text(json.dumps({"test": "applied"}))
+            mock_save.side_effect = _save
+            rc = main(["--snapshot", str(path)])
+        assert rc == 0
+        assert path.exists()
