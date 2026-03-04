@@ -17,7 +17,7 @@ import threading
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
-from typing import Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 from . import __version__
 from .corpguard import (CorporateNetworkError, assert_not_corporate,
@@ -56,7 +56,7 @@ _STATUS_CORP_BLOCKED = _ERR_RED
 
 
 class _TweakRow:
-    """Single tweak row: checkbox + status badge + optional admin/corp tags."""
+    """Single tweak row: checkbox + status badge + toggle button + tags."""
 
     def __init__(
         self,
@@ -64,16 +64,19 @@ class _TweakRow:
         td: TweakDef,
         *,
         corp_blocked: bool,
+        on_toggle: "Callable[[_TweakRow], None] | None" = None,
     ) -> None:
         self.td = td
         self.var = tk.BooleanVar(value=False)
         self._corp_blocked = corp_blocked
+        self._on_toggle = on_toggle
+        self._disabled_by_corp = corp_blocked and not td.corp_safe
 
         self.frame = ttk.Frame(parent, style="Card.TFrame")
         self.frame.pack(fill="x", padx=4, pady=2, ipady=3)
 
         # Status dot
-        self.status_lbl = tk.Label(
+        self.status_dot = tk.Label(
             self.frame,
             text="●",
             fg=_STATUS_UNKNOWN,
@@ -81,25 +84,59 @@ class _TweakRow:
             font=("Segoe UI", 12),
             width=2,
         )
-        self.status_lbl.pack(side="left", padx=(6, 0))
+        self.status_dot.pack(side="left", padx=(6, 0))
 
-        # Checkbox
-        disabled_by_corp = corp_blocked and not td.corp_safe
-        state = "disabled" if disabled_by_corp else "normal"
+        # Status text label (ENABLED / DISABLED / UNKNOWN)
+        self.status_text = tk.Label(
+            self.frame,
+            text="…",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=("Segoe UI", 8, "bold"),
+            width=10,
+            anchor="w",
+        )
+        self.status_text.pack(side="left", padx=(2, 4))
+
+        # Checkbox for batch selection
+        state = "disabled" if self._disabled_by_corp else "normal"
         self.cb = ttk.Checkbutton(
             self.frame, text=td.label, variable=self.var, state=state
         )
         self.cb.pack(side="left", padx=(4, 4), pady=2)
 
-        # Tags (right-aligned)
-        if disabled_by_corp:
+        # Toggle button (individual enable/disable)
+        self._toggle_btn = tk.Button(
+            self.frame,
+            text="⏳",
+            font=("Segoe UI", 8, "bold"),
+            width=9,
+            relief="flat",
+            cursor="hand2",
+            bd=0,
+            padx=6,
+            pady=1,
+        )
+        if self._disabled_by_corp:
+            self._toggle_btn.configure(
+                text="BLOCKED",
+                bg=_CARD_BG,
+                fg=_ERR_RED,
+                state="disabled",
+            )
+        else:
+            self._toggle_btn.configure(command=self._on_toggle_click)
+        self._toggle_btn.pack(side="right", padx=(4, 8))
+
+        # Tags (right-aligned, before toggle button)
+        if self._disabled_by_corp:
             tk.Label(
                 self.frame,
-                text="CORP BLOCKED",
+                text="CORP",
                 fg=_ERR_RED,
                 bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
-            ).pack(side="right", padx=(0, 8))
+            ).pack(side="right", padx=(0, 4))
         if td.needs_admin:
             tk.Label(
                 self.frame,
@@ -107,11 +144,16 @@ class _TweakRow:
                 fg=_FG_DIM,
                 bg=_CARD_BG,
                 font=("Segoe UI", 7),
-            ).pack(side="right", padx=(0, 6))
+            ).pack(side="right", padx=(0, 4))
 
         # Tooltip on hover
         if td.description:
             self._bind_tooltip(td.description)
+
+    # -- toggle handler --
+    def _on_toggle_click(self) -> None:
+        if self._on_toggle:
+            self._on_toggle(self)
 
     # tooltip helpers
     def _bind_tooltip(self, text: str) -> None:
@@ -144,17 +186,36 @@ class _TweakRow:
         self.frame.bind("<Leave>", hide)
 
     def refresh_status(self) -> None:
-        """Update the status dot colour based on live detection."""
+        """Update the status dot, text label, and toggle button."""
         st = tweak_status(self.td)
-        if self._corp_blocked and not self.td.corp_safe:
+        if self._disabled_by_corp:
             colour = _STATUS_CORP_BLOCKED
+            text = "BLOCKED"
+            btn_text = "BLOCKED"
+            btn_bg = _CARD_BG
+            btn_fg = _ERR_RED
         elif st == "applied":
             colour = _STATUS_APPLIED
+            text = "ENABLED"
+            btn_text = "Disable ✕"
+            btn_bg = "#40543F"
+            btn_fg = _OK_GREEN
         elif st == "not applied":
             colour = _STATUS_NOT_APPLIED
+            text = "DISABLED"
+            btn_text = "Enable ✓"
+            btn_bg = "#3B3552"
+            btn_fg = _ACCENT
         else:
             colour = _STATUS_UNKNOWN
-        self.status_lbl.configure(fg=colour)
+            text = "UNKNOWN"
+            btn_text = "Enable ✓"
+            btn_bg = "#3B3830"
+            btn_fg = _WARN_YELLOW
+        self.status_dot.configure(fg=colour)
+        self.status_text.configure(text=text, fg=colour)
+        if not self._disabled_by_corp:
+            self._toggle_btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
 
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
@@ -317,8 +378,8 @@ class RegiLatticeGUI:
         legend = ttk.Frame(self._root)
         legend.pack(fill="x", padx=16, pady=(4, 0))
         for colour, label in [
-            (_STATUS_APPLIED, "Applied"),
-            (_STATUS_NOT_APPLIED, "Not Applied"),
+            (_STATUS_APPLIED, "Enabled"),
+            (_STATUS_NOT_APPLIED, "Disabled"),
             (_STATUS_UNKNOWN, "Unknown"),
             (_STATUS_CORP_BLOCKED, "Corp Blocked"),
         ]:
@@ -380,7 +441,12 @@ class RegiLatticeGUI:
             cat_lbl.pack(fill="x", pady=(10, 2), padx=4)
             self._category_labels.append((cat_name, cat_lbl))
             for td in cat_tweaks:
-                row = _TweakRow(self._inner, td, corp_blocked=self._corp_blocked)
+                row = _TweakRow(
+                    self._inner,
+                    td,
+                    corp_blocked=self._corp_blocked,
+                    on_toggle=self._toggle_single,
+                )
                 self._tweak_rows.append(row)
 
         # Action buttons (row 1: apply/remove)
@@ -484,9 +550,54 @@ class RegiLatticeGUI:
     # ── Status refresh ───────────────────────────────────────────────────
 
     def _refresh_status_all(self) -> None:
-        """Re-detect every tweak and update indicator dots."""
+        """Re-detect every tweak and update indicator dots + labels."""
         for row in self._tweak_rows:
             row.refresh_status()
+
+    # ── Individual toggle ────────────────────────────────────────────────
+
+    def _toggle_single(self, row: _TweakRow) -> None:
+        """Toggle a single tweak: apply if not applied, remove if applied."""
+        if not self._force_var.get():
+            try:
+                assert_not_corporate()
+            except CorporateNetworkError as exc:
+                messagebox.showwarning("Corporate Network", str(exc))
+                return
+
+        td = row.td
+        st = tweak_status(td)
+        action = "remove" if st == "applied" else "apply"
+        verb = "Disable" if action == "remove" else "Enable"
+
+        self._set_status(f"{verb}: {td.label}…", _ACCENT)
+        row._toggle_btn.configure(text="⏳…", state="disabled")
+
+        def _worker() -> None:
+            try:
+                fn = td.apply_fn if action == "apply" else td.remove_fn
+                fn()
+                self._root.after(
+                    0, self._set_status,
+                    f"{td.label} — {'enabled' if action == 'apply' else 'disabled'} ✔",
+                    _OK_GREEN,
+                )
+            except AdminRequirementError:
+                self._root.after(
+                    0, self._set_status,
+                    f"{td.label}: admin required", _ERR_RED,
+                )
+            except Exception as exc:
+                SESSION.log(f"[GUI] Toggle error {td.label}: {exc}")
+                self._root.after(
+                    0, self._set_status,
+                    f"{td.label}: {exc}", _ERR_RED,
+                )
+            finally:
+                self._root.after(0, row.refresh_status)
+                self._root.after(0, lambda: row._toggle_btn.configure(state="normal"))
+
+        threading.Thread(target=_worker, daemon=True).start()
 
     # ── Snapshot ─────────────────────────────────────────────────────────
 
