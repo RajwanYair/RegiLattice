@@ -126,6 +126,46 @@ def detect_disable_edge_update() -> bool:
     return SESSION.read_dword(_EDGE_UPDATE, "UpdateDefault") == 0
 
 
+# ── Disable Edge First Run Experience ──────────────────────────────────────
+
+
+def apply_disable_edge_fre(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable first-run experience")
+    SESSION.backup([_EDGE_POLICY], "EdgeFRE")
+    SESSION.set_dword(_EDGE_POLICY, "HideFirstRunExperience", 1)
+    SESSION.set_dword(_EDGE_POLICY, "NewTabPageHideDefaultTopSites", 1)
+
+
+def remove_disable_edge_fre(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "HideFirstRunExperience")
+    SESSION.delete_value(_EDGE_POLICY, "NewTabPageHideDefaultTopSites")
+
+
+def detect_disable_edge_fre() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "HideFirstRunExperience") == 1
+
+
+# ── Disable Edge Password Manager ─────────────────────────────────────────
+
+
+def apply_disable_edge_passwords(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable built-in password manager")
+    SESSION.backup([_EDGE_POLICY], "EdgePasswords")
+    SESSION.set_dword(_EDGE_POLICY, "PasswordManagerEnabled", 0)
+
+
+def remove_disable_edge_passwords(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "PasswordManagerEnabled")
+
+
+def detect_disable_edge_passwords() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "PasswordManagerEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -192,5 +232,31 @@ TWEAKS: List[TweakDef] = [
             "environments or when pinning to a specific version."
         ),
         tags=["edge", "browser", "update"],
+    ),
+    TweakDef(
+        id="disable-edge-first-run",
+        label="Disable Edge First-Run Experience",
+        category="Edge",
+        apply_fn=apply_disable_edge_fre,
+        remove_fn=remove_disable_edge_fre,
+        detect_fn=detect_disable_edge_fre,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description="Skips Edge first-run wizard and hides default top sites on new tab.",
+        tags=["edge", "browser", "ux"],
+    ),
+    TweakDef(
+        id="disable-edge-password-manager",
+        label="Disable Edge Password Manager",
+        category="Edge",
+        apply_fn=apply_disable_edge_passwords,
+        remove_fn=remove_disable_edge_passwords,
+        detect_fn=detect_disable_edge_passwords,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description="Disables the Edge built-in password manager via policy.",
+        tags=["edge", "browser", "password", "security"],
     ),
 ]

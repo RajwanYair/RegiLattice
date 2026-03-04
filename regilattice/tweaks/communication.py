@@ -159,6 +159,47 @@ def _detect_spotify_hwaccel() -> bool:
     return SESSION.read_dword(_SPOTIFY, "ui.hardware_acceleration") == 0
 
 
+# ── Disable Slack Auto-Start ─────────────────────────────────────────────────
+
+_SLACK = r"HKEY_CURRENT_USER\Software\Slack"
+
+
+def _apply_slack_autostart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Slack: disable auto-start")
+    SESSION.backup([_RUN], "SlackAutoStart")
+    SESSION.delete_value(_RUN, "com.squirrel.slack.slack")
+
+
+def _remove_slack_autostart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    # Re-enable would need Slack's actual path; just remove our block
+    SESSION.log("Slack: re-enable auto-start (manual Slack config may be needed)")
+
+
+def _detect_slack_autostart() -> bool:
+    return SESSION.read_string(_RUN, "com.squirrel.slack.slack") is None
+
+
+# ── Disable Zoom Background Video ────────────────────────────────────────────
+
+
+def _apply_zoom_no_video(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Zoom: disable auto-start video in meetings")
+    SESSION.backup([_ZOOM], "ZoomVideo")
+    SESSION.set_dword(_ZOOM, "NoVideo", 1)
+
+
+def _remove_zoom_no_video(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ZOOM, "NoVideo")
+
+
+def _detect_zoom_no_video() -> bool:
+    return SESSION.read_dword(_ZOOM, "NoVideo") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -252,5 +293,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_SPOTIFY],
         description="Disables hardware acceleration in Spotify.",
         tags=["spotify", "performance", "gpu"],
+    ),
+    TweakDef(
+        id="disable-slack-autostart",
+        label="Disable Slack Auto-Start",
+        category="Communication",
+        apply_fn=_apply_slack_autostart,
+        remove_fn=_remove_slack_autostart,
+        detect_fn=_detect_slack_autostart,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_RUN],
+        description="Prevents Slack from starting automatically at login.",
+        tags=["slack", "autostart", "startup"],
+    ),
+    TweakDef(
+        id="disable-zoom-auto-video",
+        label="Disable Zoom Auto-Start Video",
+        category="Communication",
+        apply_fn=_apply_zoom_no_video,
+        remove_fn=_remove_zoom_no_video,
+        detect_fn=_detect_zoom_no_video,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ZOOM],
+        description="Prevents Zoom from automatically enabling video when joining meetings.",
+        tags=["zoom", "video", "privacy"],
     ),
 ]

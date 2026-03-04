@@ -27,6 +27,8 @@ _RESTART = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
     r"\WindowsUpdate\AU"
 )
+_MEDIC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc"
+_ORCHESTRATOR = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc"
 
 
 # ── Disable Delivery Optimization (P2P Updates) ─────────────────────────────
@@ -149,6 +151,44 @@ def _detect_notify_only() -> bool:
     return SESSION.read_dword(_AU, "AUOptions") == 2
 
 
+# ── Disable Windows Update Medic Service ──────────────────────────────────
+
+
+def _apply_disable_medic(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: disable WaaS Medic Service")
+    SESSION.backup([_MEDIC], "WUSMedic")
+    SESSION.set_dword(_MEDIC, "Start", 4)  # Disabled
+
+
+def _remove_disable_medic(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MEDIC, "Start", 3)  # Manual
+
+
+def _detect_disable_medic() -> bool:
+    return SESSION.read_dword(_MEDIC, "Start") == 4
+
+
+# ── Disable Update Orchestrator Service ────────────────────────────────────
+
+
+def _apply_disable_orchestrator(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: disable Update Orchestrator")
+    SESSION.backup([_ORCHESTRATOR], "UsoSvc")
+    SESSION.set_dword(_ORCHESTRATOR, "Start", 4)
+
+
+def _remove_disable_orchestrator(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ORCHESTRATOR, "Start", 2)  # Automatic
+
+
+def _detect_disable_orchestrator() -> bool:
+    return SESSION.read_dword(_ORCHESTRATOR, "Start") == 4
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -241,5 +281,31 @@ TWEAKS: List[TweakDef] = [
             "giving you full control over update timing."
         ),
         tags=["update", "control"],
+    ),
+    TweakDef(
+        id="disable-wus-medic",
+        label="Disable WaaS Medic Service",
+        category="Windows Update",
+        apply_fn=_apply_disable_medic,
+        remove_fn=_remove_disable_medic,
+        detect_fn=_detect_disable_medic,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_MEDIC],
+        description="Disables the Windows Update Medic Service that re-enables disabled updates.",
+        tags=["update", "service", "medic"],
+    ),
+    TweakDef(
+        id="disable-update-orchestrator",
+        label="Disable Update Orchestrator Service",
+        category="Windows Update",
+        apply_fn=_apply_disable_orchestrator,
+        remove_fn=_remove_disable_orchestrator,
+        detect_fn=_detect_disable_orchestrator,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ORCHESTRATOR],
+        description="Disables the Update Orchestrator Service (UsoSvc) that manages update scans.",
+        tags=["update", "service", "orchestrator"],
     ),
 ]

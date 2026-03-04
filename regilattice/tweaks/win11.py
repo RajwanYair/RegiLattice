@@ -302,6 +302,52 @@ def detect_disable_notifications() -> bool:
     return SESSION.read_dword(_NOTIF_KEY, "ToastEnabled") == 0
 
 
+# ── Disable Snap Layout Flyout ───────────────────────────────────────────────
+
+_SNAP_FLYOUT_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+)
+
+
+def apply_disable_snap_flyout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable snap layout flyout on maximize hover")
+    SESSION.backup([_SNAP_FLYOUT_KEY], "SnapFlyout")
+    SESSION.set_dword(_SNAP_FLYOUT_KEY, "EnableSnapAssistFlyout", 0)
+
+
+def remove_disable_snap_flyout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SNAP_FLYOUT_KEY, "EnableSnapAssistFlyout", 1)
+
+
+def detect_disable_snap_flyout() -> bool:
+    return SESSION.read_dword(_SNAP_FLYOUT_KEY, "EnableSnapAssistFlyout") == 0
+
+
+# ── Disable Taskbar Chat Icon ────────────────────────────────────────────────
+
+_CHAT_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+)
+
+
+def apply_disable_chat_icon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable taskbar chat icon")
+    SESSION.backup([_CHAT_KEY], "ChatIcon")
+    SESSION.set_dword(_CHAT_KEY, "TaskbarMn", 0)
+
+
+def remove_disable_chat_icon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CHAT_KEY, "TaskbarMn", 1)
+
+
+def detect_disable_chat_icon() -> bool:
+    return SESSION.read_dword(_CHAT_KEY, "TaskbarMn") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -433,5 +479,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_NOTIF_KEY, _TOAST_KEY],
         description="Disables all toast/push notifications system-wide.",
         tags=["win11", "notifications", "focus"],
+    ),
+    TweakDef(
+        id="disable-snap-flyout",
+        label="Disable Snap Layout Flyout",
+        category="Windows 11",
+        apply_fn=apply_disable_snap_flyout,
+        remove_fn=remove_disable_snap_flyout,
+        detect_fn=detect_disable_snap_flyout,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SNAP_FLYOUT_KEY],
+        description="Disables the snap layout flyout shown on maximize button hover.",
+        tags=["win11", "snap", "ux"],
+    ),
+    TweakDef(
+        id="disable-taskbar-chat",
+        label="Disable Taskbar Chat Icon",
+        category="Windows 11",
+        apply_fn=apply_disable_chat_icon,
+        remove_fn=remove_disable_chat_icon,
+        detect_fn=detect_disable_chat_icon,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CHAT_KEY],
+        description="Removes the Teams Chat icon from the Windows 11 taskbar.",
+        tags=["win11", "taskbar", "teams"],
     ),
 ]

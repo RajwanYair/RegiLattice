@@ -27,6 +27,14 @@ _MM = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
     r"\Session Manager\Memory Management"
 )
+_POWER_THROTTLE = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+    r"\PowerThrottling"
+)
+_DISK_IDLE = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\disk"
+)
 
 
 # ── Disable USB Selective Suspend ────────────────────────────────────────────
@@ -154,6 +162,49 @@ def _detect_large_cache() -> bool:
     return SESSION.read_dword(_MM, "LargeSystemCache") == 1
 
 
+# ── Disable Power Throttling ───────────────────────────────────────────────
+
+
+def _apply_disable_power_throttle(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable power throttling")
+    SESSION.backup([_POWER_THROTTLE], "PowerThrottle")
+    SESSION.set_dword(_POWER_THROTTLE, "PowerThrottlingOff", 1)
+
+
+def _remove_disable_power_throttle(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POWER_THROTTLE, "PowerThrottlingOff")
+
+
+def _detect_disable_power_throttle() -> bool:
+    return SESSION.read_dword(_POWER_THROTTLE, "PowerThrottlingOff") == 1
+
+
+# ── NTFS Disable Last Access Timestamp ────────────────────────────────────
+
+_NTFS = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\FileSystem"
+)
+
+
+def _apply_disable_last_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable NTFS last-access timestamp updates")
+    SESSION.backup([_NTFS], "NtfsLastAccess")
+    SESSION.set_dword(_NTFS, "NtfsDisableLastAccessUpdate", 1)
+
+
+def _remove_disable_last_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_NTFS, "NtfsDisableLastAccessUpdate", 0)
+
+
+def _detect_disable_last_access() -> bool:
+    return SESSION.read_dword(_NTFS, "NtfsDisableLastAccessUpdate") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -249,5 +300,31 @@ TWEAKS: List[TweakDef] = [
             "caching (beneficial with 16 GB+ RAM)."
         ),
         tags=["power", "performance", "memory"],
+    ),
+    TweakDef(
+        id="disable-power-throttling",
+        label="Disable Power Throttling",
+        category="Power",
+        apply_fn=_apply_disable_power_throttle,
+        remove_fn=_remove_disable_power_throttle,
+        detect_fn=_detect_disable_power_throttle,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POWER_THROTTLE],
+        description="Disables CPU power throttling for maximum sustained performance.",
+        tags=["power", "performance", "cpu"],
+    ),
+    TweakDef(
+        id="disable-ntfs-last-access",
+        label="Disable NTFS Last Access Timestamp",
+        category="Power",
+        apply_fn=_apply_disable_last_access,
+        remove_fn=_remove_disable_last_access,
+        detect_fn=_detect_disable_last_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NTFS],
+        description="Stops NTFS from updating last-access timestamps, reducing disk I/O.",
+        tags=["power", "performance", "disk", "ntfs"],
     ),
 ]

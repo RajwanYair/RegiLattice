@@ -137,6 +137,50 @@ def _detect_viewer_scaling() -> bool:
     return SESSION.read_string(_VNC_VIEWER, "Scaling") == "FitWindow"
 
 
+# ── VNC Server: Blank Screen While Connected ─────────────────────────────
+
+
+def _apply_blank_screen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: blank local screen during remote session")
+    SESSION.backup([_VNC_SERVER], "VNCBlank")
+    SESSION.set_string(_VNC_SERVER, "BlankScreen", "WhenConnected")
+
+
+def _remove_blank_screen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_VNC_SERVER, "BlankScreen", "Never")
+
+
+def _detect_blank_screen() -> bool:
+    return SESSION.read_string(_VNC_SERVER, "BlankScreen") == "WhenConnected"
+
+
+# ── VNC Server: Disable Clipboard Sharing ─────────────────────────────────
+
+
+def _apply_no_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: disable clipboard sharing (DLP)")
+    SESSION.backup([_VNC_SERVER, _VNC_POLICY], "VNCClipboard")
+    SESSION.set_dword(_VNC_SERVER, "AcceptCutText", 0)
+    SESSION.set_dword(_VNC_SERVER, "SendCutText", 0)
+    SESSION.set_dword(_VNC_POLICY, "AcceptCutText", 0)
+    SESSION.set_dword(_VNC_POLICY, "SendCutText", 0)
+
+
+def _remove_no_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VNC_SERVER, "AcceptCutText", 1)
+    SESSION.set_dword(_VNC_SERVER, "SendCutText", 1)
+    SESSION.delete_value(_VNC_POLICY, "AcceptCutText")
+    SESSION.delete_value(_VNC_POLICY, "SendCutText")
+
+
+def _detect_no_clipboard() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "AcceptCutText") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -217,5 +261,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_VNC_VIEWER],
         description="Sets the default VNC Viewer scaling mode to 'Fit Window'.",
         tags=["vnc", "viewer", "display"],
+    ),
+    TweakDef(
+        id="vnc-blank-screen",
+        label="VNC: Blank Screen When Connected",
+        category="RealVNC",
+        apply_fn=_apply_blank_screen,
+        remove_fn=_remove_blank_screen,
+        detect_fn=_detect_blank_screen,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VNC_SERVER],
+        description="Blanks the local monitor during an active VNC session for privacy.",
+        tags=["vnc", "security", "privacy"],
+    ),
+    TweakDef(
+        id="vnc-no-clipboard",
+        label="VNC: Disable Clipboard Sharing",
+        category="RealVNC",
+        apply_fn=_apply_no_clipboard,
+        remove_fn=_remove_no_clipboard,
+        detect_fn=_detect_no_clipboard,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VNC_SERVER, _VNC_POLICY],
+        description="Disables clipboard sharing between VNC server and viewer (DLP).",
+        tags=["vnc", "security", "clipboard", "dlp"],
     ),
 ]

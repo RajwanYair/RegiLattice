@@ -240,6 +240,58 @@ def _detect_autosave() -> bool:
     return False
 
 
+# ── Disable LinkedIn Integration ───────────────────────────────────────────
+
+
+def _apply_disable_linkedin(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable LinkedIn integration")
+    for ver in _detected_versions():
+        linkedin = _ver_key(ver, "LinkedIn")
+        SESSION.backup([linkedin], f"OfficeLinkedIn_{ver}")
+        SESSION.set_dword(linkedin, "OfficeLinkedIn", 0)
+
+
+def _remove_disable_linkedin(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        linkedin = _ver_key(ver, "LinkedIn")
+        SESSION.delete_value(linkedin, "OfficeLinkedIn")
+
+
+def _detect_disable_linkedin() -> bool:
+    for ver in _detected_versions():
+        if SESSION.read_dword(_ver_key(ver, "LinkedIn"), "OfficeLinkedIn") == 0:
+            return True
+    return False
+
+
+# ── Disable Office Animations ──────────────────────────────────────────────
+
+
+def _apply_disable_office_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable UI animations")
+    for ver in _detected_versions():
+        graphics = _ver_key(ver, "Graphics")
+        SESSION.backup([graphics], f"OfficeAnimations_{ver}")
+        SESSION.set_dword(graphics, "DisableAnimations", 1)
+
+
+def _remove_disable_office_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        graphics = _ver_key(ver, "Graphics")
+        SESSION.delete_value(graphics, "DisableAnimations")
+
+
+def _detect_disable_office_animations() -> bool:
+    for ver in _detected_versions():
+        if SESSION.read_dword(_ver_key(ver, "Graphics"), "DisableAnimations") == 1:
+            return True
+    return False
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -340,5 +392,31 @@ TWEAKS: List[TweakDef] = [
             "and PowerPoint (all versions)."
         ),
         tags=["office", "autosave", "recovery"],
+    ),
+    TweakDef(
+        id="disable-office-linkedin",
+        label="Disable LinkedIn Integration",
+        category="Office",
+        apply_fn=_apply_disable_linkedin,
+        remove_fn=_remove_disable_linkedin,
+        detect_fn=_detect_disable_linkedin,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\LinkedIn"],
+        description="Disables LinkedIn resume assistant and profile features in Office.",
+        tags=["office", "linkedin", "privacy"],
+    ),
+    TweakDef(
+        id="disable-office-animations",
+        label="Disable Office UI Animations",
+        category="Office",
+        apply_fn=_apply_disable_office_animations,
+        remove_fn=_remove_disable_office_animations,
+        detect_fn=_detect_disable_office_animations,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Graphics"],
+        description="Disables transitions and animations in Office apps for snappier UI.",
+        tags=["office", "performance", "animations"],
     ),
 ]

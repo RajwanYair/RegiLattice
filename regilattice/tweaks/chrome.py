@@ -120,6 +120,46 @@ def detect_disable_chrome_hwaccel() -> bool:
     return SESSION.read_dword(_CHROME_POLICY, "HardwareAccelerationModeEnabled") == 0
 
 
+# ── Disable Chrome Browser Sign-In ────────────────────────────────────────
+
+
+def apply_disable_chrome_signin(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable browser sign-in")
+    SESSION.backup([_CHROME_POLICY], "ChromeSignIn")
+    SESSION.set_dword(_CHROME_POLICY, "BrowserSignin", 0)  # 0=disabled
+    SESSION.set_dword(_CHROME_POLICY, "SyncDisabled", 1)
+
+
+def remove_disable_chrome_signin(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "BrowserSignin")
+    SESSION.delete_value(_CHROME_POLICY, "SyncDisabled")
+
+
+def detect_disable_chrome_signin() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "BrowserSignin") == 0
+
+
+# ── Enable Chrome Secure DNS (DoH) ────────────────────────────────────────
+
+
+def apply_chrome_secure_dns(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: enable DNS-over-HTTPS (Secure DNS)")
+    SESSION.backup([_CHROME_POLICY], "ChromeSecureDNS")
+    SESSION.set_string(_CHROME_POLICY, "DnsOverHttpsMode", "automatic")
+
+
+def remove_chrome_secure_dns(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "DnsOverHttpsMode")
+
+
+def detect_chrome_secure_dns() -> bool:
+    return SESSION.read_string(_CHROME_POLICY, "DnsOverHttpsMode") == "automatic"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -183,5 +223,31 @@ TWEAKS: List[TweakDef] = [
             "useful for troubleshooting display issues."
         ),
         tags=["chrome", "browser", "gpu"],
+    ),
+    TweakDef(
+        id="disable-chrome-signin",
+        label="Disable Chrome Sign-In & Sync",
+        category="Chrome",
+        apply_fn=apply_disable_chrome_signin,
+        remove_fn=remove_disable_chrome_signin,
+        detect_fn=detect_disable_chrome_signin,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description="Disables Chrome browser sign-in and sync via policy.",
+        tags=["chrome", "browser", "privacy", "sync"],
+    ),
+    TweakDef(
+        id="chrome-secure-dns",
+        label="Enable Chrome Secure DNS (DoH)",
+        category="Chrome",
+        apply_fn=apply_chrome_secure_dns,
+        remove_fn=remove_chrome_secure_dns,
+        detect_fn=detect_chrome_secure_dns,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description="Enables DNS-over-HTTPS (automatic mode) in Chrome.",
+        tags=["chrome", "browser", "dns", "security"],
     ),
 ]

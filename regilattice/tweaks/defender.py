@@ -117,6 +117,8 @@ def _detect_disable_exploit_telemetry() -> bool:
 # ── Increase Defender Scan CPU Limit ─────────────────────────────────────────
 
 _SCAN = rf"{_DEFENDER}\Scan"
+_NOTIFICATIONS = rf"{_DEFENDER}\Reporting"
+_EXCLUSIONS = rf"{_DEFENDER}\Exclusions\Paths"
 
 
 def _apply_scan_cpu_limit(*, require_admin: bool = True) -> None:
@@ -133,6 +135,56 @@ def _remove_scan_cpu_limit(*, require_admin: bool = True) -> None:
 
 def _detect_scan_cpu_limit() -> bool:
     return SESSION.read_dword(_SCAN, "AvgCPULoadFactor") == 25
+
+
+# ── Disable Defender Notifications ─────────────────────────────────────────
+
+
+def _apply_disable_defender_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Defender: suppress non-critical notifications")
+    SESSION.backup([_NOTIFICATIONS], "DefenderNotify")
+    SESSION.set_dword(_NOTIFICATIONS, "DisableEnhancedNotifications", 1)
+    SESSION.set_dword(_DEFENDER, "DisableRealtimeMonitoring_Toast", 1)
+
+
+def _remove_disable_defender_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NOTIFICATIONS, "DisableEnhancedNotifications")
+    SESSION.delete_value(_DEFENDER, "DisableRealtimeMonitoring_Toast")
+
+
+def _detect_disable_defender_notify() -> bool:
+    return SESSION.read_dword(_NOTIFICATIONS, "DisableEnhancedNotifications") == 1
+
+
+# ── Add Developer Folder Exclusions ────────────────────────────────────────
+
+_DEV_PATHS = (
+    r"C:\Users\*\source\repos",
+    r"C:\Users\*\.cargo",
+    r"C:\Users\*\.rustup",
+    r"C:\Users\*\go",
+    r"C:\Users\*\node_modules",
+)
+
+
+def _apply_dev_exclusions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Defender: add developer folder scan exclusions")
+    SESSION.backup([_EXCLUSIONS], "DefenderDevExcl")
+    for p in _DEV_PATHS:
+        SESSION.set_dword(_EXCLUSIONS, p, 0)
+
+
+def _remove_dev_exclusions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    for p in _DEV_PATHS:
+        SESSION.delete_value(_EXCLUSIONS, p)
+
+
+def _detect_dev_exclusions() -> bool:
+    return SESSION.read_dword(_EXCLUSIONS, _DEV_PATHS[0]) == 0
 
 
 # ── Plugin registration ─────────────────────────────────────────────────────
@@ -214,5 +266,34 @@ TWEAKS: List[TweakDef] = [
             "to reduce impact during scans."
         ),
         tags=["defender", "performance", "cpu"],
+    ),
+    TweakDef(
+        id="disable-defender-notifications",
+        label="Disable Defender Notifications",
+        category="Security",
+        apply_fn=_apply_disable_defender_notify,
+        remove_fn=_remove_disable_defender_notify,
+        detect_fn=_detect_disable_defender_notify,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NOTIFICATIONS],
+        description="Suppresses non-critical Defender notification toasts.",
+        tags=["defender", "notifications", "ux"],
+    ),
+    TweakDef(
+        id="defender-dev-exclusions",
+        label="Add Developer Folder Exclusions",
+        category="Security",
+        apply_fn=_apply_dev_exclusions,
+        remove_fn=_remove_dev_exclusions,
+        detect_fn=_detect_dev_exclusions,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EXCLUSIONS],
+        description=(
+            "Excludes common dev folders (source/repos, .cargo, .rustup, "
+            "go, node_modules) from real-time Defender scans."
+        ),
+        tags=["defender", "developer", "performance"],
     ),
 ]

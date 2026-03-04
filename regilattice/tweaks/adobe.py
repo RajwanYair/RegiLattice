@@ -18,6 +18,8 @@ _UPDATER2 = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Adobe Acrobat\DC\Featur
 _ARM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM"
 _JS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"
 _WELCOME = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"
+_PROTECTED = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"
+_CLOUD = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"
 
 
 # ── Disable Adobe Auto-Update ───────────────────────────────────────────────
@@ -102,6 +104,48 @@ def _detect_disable_welcome() -> bool:
     return SESSION.read_dword(_WELCOME, "bShowWelcomeScreen") == 0
 
 
+# ── Enable Adobe Protected Mode (Sandbox) ─────────────────────────────────
+
+
+def _apply_protected_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: enable Protected Mode (sandbox)")
+    SESSION.backup([_PROTECTED], "AdobeProtected")
+    SESSION.set_dword(_PROTECTED, "bProtectedMode", 1)
+    SESSION.set_dword(_PROTECTED, "iProtectedView", 2)  # 2 = All files
+
+
+def _remove_protected_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PROTECTED, "bProtectedMode")
+    SESSION.delete_value(_PROTECTED, "iProtectedView")
+
+
+def _detect_protected_mode() -> bool:
+    return SESSION.read_dword(_PROTECTED, "bProtectedMode") == 1
+
+
+# ── Disable Adobe Cloud Services ──────────────────────────────────────────
+
+
+def _apply_disable_cloud(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable cloud storage integration")
+    SESSION.backup([_CLOUD], "AdobeCloud")
+    SESSION.set_dword(_CLOUD, "bDisableADCFileStore", 1)
+    SESSION.set_dword(_CLOUD, "bUpdatesHidden", 1)
+
+
+def _remove_disable_cloud(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLOUD, "bDisableADCFileStore")
+    SESSION.delete_value(_CLOUD, "bUpdatesHidden")
+
+
+def _detect_disable_cloud() -> bool:
+    return SESSION.read_dword(_CLOUD, "bDisableADCFileStore") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -159,5 +203,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_WELCOME],
         description="Suppresses the Adobe Reader welcome / start screen on launch.",
         tags=["adobe", "ux"],
+    ),
+    TweakDef(
+        id="enable-adobe-protected-mode",
+        label="Enable Adobe Protected Mode",
+        category="Adobe",
+        apply_fn=_apply_protected_mode,
+        remove_fn=_remove_protected_mode,
+        detect_fn=_detect_protected_mode,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PROTECTED],
+        description="Enables Protected Mode sandbox and Protected View for all PDF files.",
+        tags=["adobe", "security", "sandbox"],
+    ),
+    TweakDef(
+        id="disable-adobe-cloud",
+        label="Disable Adobe Cloud Services",
+        category="Adobe",
+        apply_fn=_apply_disable_cloud,
+        remove_fn=_remove_disable_cloud,
+        detect_fn=_detect_disable_cloud,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CLOUD],
+        description="Disables Adobe Document Cloud file storage integration.",
+        tags=["adobe", "cloud", "privacy"],
     ),
 ]

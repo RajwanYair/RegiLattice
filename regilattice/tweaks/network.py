@@ -45,6 +45,14 @@ _FW = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\SharedAccess\Parameters\FirewallPolicy\FirewallRules"
 )
+_WIFI_SENSE = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc"
+    r"\wifinetworkmanager\config"
+)
+_NETBT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\NetBT\Parameters"
+)
 
 
 # ── Increase IRPStackSize ────────────────────────────────────────────────────
@@ -171,6 +179,46 @@ def _detect_max_connections() -> bool:
     return SESSION.read_dword(_TCPIP, "MaxUserPort") == 65534
 
 
+# ── Disable Wi-Fi Sense ────────────────────────────────────────────────────
+
+
+def _apply_disable_wifi_sense(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable Wi-Fi Sense auto-connect")
+    SESSION.backup([_WIFI_SENSE], "WiFiSense")
+    SESSION.set_dword(_WIFI_SENSE, "AutoConnectAllowedOEM", 0)
+
+
+def _remove_disable_wifi_sense(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIFI_SENSE, "AutoConnectAllowedOEM")
+
+
+def _detect_disable_wifi_sense() -> bool:
+    return SESSION.read_dword(_WIFI_SENSE, "AutoConnectAllowedOEM") == 0
+
+
+# ── Disable NetBIOS over TCP/IP ────────────────────────────────────────────
+
+
+def _apply_disable_netbios(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable NetBIOS over TCP/IP")
+    SESSION.backup([_NETBT], "NetBIOS")
+    SESSION.set_dword(_NETBT, "NodeType", 2)  # 2 = P-node (no broadcast)
+    SESSION.set_dword(_NETBT, "EnableLMHOSTS", 0)
+
+
+def _remove_disable_netbios(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NETBT, "NodeType")
+    SESSION.set_dword(_NETBT, "EnableLMHOSTS", 1)
+
+
+def _detect_disable_netbios() -> bool:
+    return SESSION.read_dword(_NETBT, "NodeType") == 2
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -266,5 +314,31 @@ TWEAKS: List[TweakDef] = [
             "delay, and enlarges default socket buffer sizes."
         ),
         tags=["network", "performance", "tcp"],
+    ),
+    TweakDef(
+        id="disable-wifi-sense",
+        label="Disable Wi-Fi Sense",
+        category="Network",
+        apply_fn=_apply_disable_wifi_sense,
+        remove_fn=_remove_disable_wifi_sense,
+        detect_fn=_detect_disable_wifi_sense,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WIFI_SENSE],
+        description="Disables Wi-Fi Sense auto-connect to suggested open hotspots.",
+        tags=["network", "wifi", "privacy", "security"],
+    ),
+    TweakDef(
+        id="disable-netbios",
+        label="Disable NetBIOS over TCP/IP",
+        category="Network",
+        apply_fn=_apply_disable_netbios,
+        remove_fn=_remove_disable_netbios,
+        detect_fn=_detect_disable_netbios,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_NETBT],
+        description="Disables NetBIOS name resolution and LMHOSTS lookup for security.",
+        tags=["network", "security", "netbios"],
     ),
 ]

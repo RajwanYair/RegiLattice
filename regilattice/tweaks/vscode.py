@@ -88,6 +88,46 @@ def detect_disable_vscode_ext_update() -> bool:
     return SESSION.read_dword(_VSCODE_POLICY, "extensions.autoUpdate") == 0
 
 
+# ── Disable VSCode A/B Experiments ───────────────────────────────────────────
+
+
+def apply_disable_vscode_experiments(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable A/B experiment framework")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeExperiments")
+    SESSION.set_dword(_VSCODE_POLICY, "experimentalFeatures.enabled", 0)
+    SESSION.set_dword(_VSCODE_POLICY, "workbench.enableExperiments", 0)
+
+
+def remove_disable_vscode_experiments(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "experimentalFeatures.enabled")
+    SESSION.delete_value(_VSCODE_POLICY, "workbench.enableExperiments")
+
+
+def detect_disable_vscode_experiments() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "workbench.enableExperiments") == 0
+
+
+# ── Disable VSCode Settings Sync ─────────────────────────────────────────────
+
+
+def apply_disable_vscode_settings_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable settings sync via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeSettingsSync")
+    SESSION.set_dword(_VSCODE_POLICY, "settingsSync.enabled", 0)
+
+
+def remove_disable_vscode_settings_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "settingsSync.enabled")
+
+
+def detect_disable_vscode_settings_sync() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "settingsSync.enabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -132,5 +172,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_VSCODE_KEYS,
         description="Prevents VS Code extensions from auto-updating.",
         tags=["vscode", "developer", "extensions", "update"],
+    ),
+    TweakDef(
+        id="disable-vscode-experiments",
+        label="Disable VS Code A/B Experiments",
+        category="VS Code",
+        apply_fn=apply_disable_vscode_experiments,
+        remove_fn=remove_disable_vscode_experiments,
+        detect_fn=detect_disable_vscode_experiments,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description="Disables VS Code experiment framework and feature flighting.",
+        tags=["vscode", "developer", "experiments"],
+    ),
+    TweakDef(
+        id="disable-vscode-settings-sync",
+        label="Disable VS Code Settings Sync",
+        category="VS Code",
+        apply_fn=apply_disable_vscode_settings_sync,
+        remove_fn=remove_disable_vscode_settings_sync,
+        detect_fn=detect_disable_vscode_settings_sync,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description="Disables VS Code settings sync via machine policy.",
+        tags=["vscode", "developer", "sync"],
     ),
 ]

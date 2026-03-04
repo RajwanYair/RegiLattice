@@ -96,6 +96,8 @@ def _detect_default_ooxml() -> bool:
 
 _ASSOC_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts"
 _DOC_EXTS = (".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".odt", ".ods", ".odp")
+_LO_RECOVERY = r"HKEY_CURRENT_USER\Software\LibreOffice\Recovery"
+_LO_START = r"HKEY_CURRENT_USER\Software\LibreOffice\StartCenter"
 
 
 def _apply_lo_default_handler(*, require_admin: bool = False) -> None:
@@ -119,6 +121,44 @@ def _detect_lo_default_handler() -> bool:
     choice = rf"{_ASSOC_KEY}\.odt\UserChoice"
     val = SESSION.read_string(choice, "ProgId")
     return val is not None and "LibreOffice" in val
+
+
+# ── Disable LibreOffice Recovery Mode ──────────────────────────────────────
+
+
+def _apply_disable_recovery(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable crash recovery dialogs")
+    SESSION.backup([_LO_RECOVERY], "LORecovery")
+    SESSION.set_dword(_LO_RECOVERY, "AutoSaveEnabled", 0)
+
+
+def _remove_disable_recovery(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LO_RECOVERY, "AutoSaveEnabled")
+
+
+def _detect_disable_recovery() -> bool:
+    return SESSION.read_dword(_LO_RECOVERY, "AutoSaveEnabled") == 0
+
+
+# ── Disable LibreOffice Start Center ──────────────────────────────────────
+
+
+def _apply_disable_startcenter(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable Start Center on launch")
+    SESSION.backup([_LO_START], "LOStartCenter")
+    SESSION.set_dword(_LO_START, "ShowStartCenter", 0)
+
+
+def _remove_disable_startcenter(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LO_START, "ShowStartCenter")
+
+
+def _detect_disable_startcenter() -> bool:
+    return SESSION.read_dword(_LO_START, "ShowStartCenter") == 0
 
 
 # ── Plugin registration ─────────────────────────────────────────────────────
@@ -184,5 +224,31 @@ TWEAKS: List[TweakDef] = [
             "document formats (.doc, .docx, .xls, .xlsx, .ppt, .odt, etc.)."
         ),
         tags=["libreoffice", "file-association", "default"],
+    ),
+    TweakDef(
+        id="disable-libreoffice-recovery",
+        label="Disable LibreOffice Recovery",
+        category="LibreOffice",
+        apply_fn=_apply_disable_recovery,
+        remove_fn=_remove_disable_recovery,
+        detect_fn=_detect_disable_recovery,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_RECOVERY],
+        description="Disables LibreOffice crash recovery and auto-save dialogs.",
+        tags=["libreoffice", "recovery", "ux"],
+    ),
+    TweakDef(
+        id="disable-libreoffice-startcenter",
+        label="Disable LibreOffice Start Center",
+        category="LibreOffice",
+        apply_fn=_apply_disable_startcenter,
+        remove_fn=_remove_disable_startcenter,
+        detect_fn=_detect_disable_startcenter,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_START],
+        description="Opens LibreOffice directly to a new document instead of the Start Center.",
+        tags=["libreoffice", "startcenter", "ux"],
     ),
 ]

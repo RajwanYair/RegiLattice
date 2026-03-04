@@ -23,6 +23,8 @@ _WER_POLICY = (
     r"\Windows Error Reporting"
 )
 _SPOOLER = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"
+_SYSMAIN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"
+_CUXE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagSvc"
 
 
 # ── Disable Diagnostic Tracking Service ──────────────────────────────────────
@@ -105,6 +107,44 @@ def _detect_disable_spooler() -> bool:
     return SESSION.read_dword(_SPOOLER, "Start") == 4
 
 
+# ── Disable SysMain (Superfetch) Service ───────────────────────────────────
+
+
+def _apply_disable_sysmain(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable SysMain (Superfetch)")
+    SESSION.backup([_SYSMAIN], "SysMain")
+    SESSION.set_dword(_SYSMAIN, "Start", 4)
+
+
+def _remove_disable_sysmain(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SYSMAIN, "Start", 2)  # Automatic
+
+
+def _detect_disable_sysmain() -> bool:
+    return SESSION.read_dword(_SYSMAIN, "Start") == 4
+
+
+# ── Disable Diagnostic Service ────────────────────────────────────────────
+
+
+def _apply_disable_diagsvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Diagnostic Service (DiagSvc)")
+    SESSION.backup([_CUXE], "DiagSvc")
+    SESSION.set_dword(_CUXE, "Start", 4)
+
+
+def _remove_disable_diagsvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CUXE, "Start", 3)  # Manual
+
+
+def _detect_disable_diagsvc() -> bool:
+    return SESSION.read_dword(_CUXE, "Start") == 4
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -168,5 +208,31 @@ TWEAKS: List[TweakDef] = [
             "on machines that don't use local printers."
         ),
         tags=["services", "security", "printer"],
+    ),
+    TweakDef(
+        id="disable-sysmain-service",
+        label="Disable SysMain (Superfetch)",
+        category="Services",
+        apply_fn=_apply_disable_sysmain,
+        remove_fn=_remove_disable_sysmain,
+        detect_fn=_detect_disable_sysmain,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SYSMAIN],
+        description="Disables the SysMain (Superfetch) service — beneficial on SSD systems.",
+        tags=["services", "performance", "ssd"],
+    ),
+    TweakDef(
+        id="disable-diagsvc",
+        label="Disable Diagnostic Service",
+        category="Services",
+        apply_fn=_apply_disable_diagsvc,
+        remove_fn=_remove_disable_diagsvc,
+        detect_fn=_detect_disable_diagsvc,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CUXE],
+        description="Disables the Diagnostic Service (DiagSvc) that runs troubleshooters.",
+        tags=["services", "telemetry", "diagnostics"],
     ),
 ]
