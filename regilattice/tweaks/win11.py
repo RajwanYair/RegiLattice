@@ -316,6 +316,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=_WIDGETS_KEYS,
         description="Removes the Widgets button from the taskbar and disables the feed.",
+        tags=["win11", "taskbar", "debloat"],
     ),
     TweakDef(
         id="disable-snap-assist",
@@ -328,6 +329,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=[_SNAP_KEY],
         description="Disables the Snap Assist suggestion panel and Snap Bar when hovering maximize.",
+        tags=["win11", "window-management", "ux"],
     ),
     TweakDef(
         id="classic-context-menu",
@@ -343,6 +345,7 @@ TWEAKS: List[TweakDef] = [
             "Restores the full Windows 10 right-click context menu, "
             "bypassing the truncated Windows 11 menu."
         ),
+        tags=["win11", "context-menu", "ux"],
     ),
     TweakDef(
         id="disable-lockscreen-tips",
@@ -358,6 +361,7 @@ TWEAKS: List[TweakDef] = [
             "Disables Windows Spotlight, lock screen tips, suggested apps, "
             "and silent app installs."
         ),
+        tags=["win11", "lockscreen", "spotlight", "debloat"],
     ),
     TweakDef(
         id="disable-wu-autorestart",
@@ -373,6 +377,7 @@ TWEAKS: List[TweakDef] = [
             "Prevents Windows Update from auto-rebooting while a user "
             "is logged in. Sets updates to notify-before-download."
         ),
+        tags=["win11", "update", "reboot"],
     ),
     TweakDef(
         id="disable-bing-search",
@@ -385,6 +390,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=[_SEARCH_KEY],
         description="Prevents Start Menu from sending search queries to Bing.",
+        tags=["win11", "search", "privacy"],
     ),
     TweakDef(
         id="disable-app-suggestions",
@@ -400,6 +406,7 @@ TWEAKS: List[TweakDef] = [
             "Disables suggested apps in Start Menu and prevents "
             "OEM/pre-installed app promotions."
         ),
+        tags=["win11", "start-menu", "debloat"],
     ),
     TweakDef(
         id="dark-mode",
@@ -412,6 +419,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=[_PERSONALIZE_KEY],
         description="Sets both app and system theme to dark mode.",
+        tags=["win11", "theme", "appearance"],
     ),
     TweakDef(
         id="disable-notifications",
@@ -424,5 +432,6 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=[_NOTIF_KEY, _TOAST_KEY],
         description="Disables all toast/push notifications system-wide.",
+        tags=["win11", "notifications", "focus"],
     ),
 ]

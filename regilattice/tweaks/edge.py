@@ -143,6 +143,7 @@ TWEAKS: List[TweakDef] = [
             "Prevents Edge from pre-launching at login, saving memory and "
             "CPU for users who don't use Edge as primary browser."
         ),
+        tags=["edge", "browser", "startup"],
     ),
     TweakDef(
         id="disable-edge-sidebar",
@@ -158,6 +159,7 @@ TWEAKS: List[TweakDef] = [
             "Disables the Edge sidebar (Discover), shopping assistant, "
             "and collections panel for a cleaner browsing experience."
         ),
+        tags=["edge", "browser", "sidebar"],
     ),
     TweakDef(
         id="disable-edge-telemetry",
@@ -173,6 +175,7 @@ TWEAKS: List[TweakDef] = [
             "Disables Edge metrics, diagnostics, personalisation reporting, "
             "follow, spotlight and recommendation features."
         ),
+        tags=["edge", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
         id="disable-edge-update",
@@ -188,5 +191,6 @@ TWEAKS: List[TweakDef] = [
             "Prevents Edge from auto-updating. Useful for controlled "
             "environments or when pinning to a specific version."
         ),
+        tags=["edge", "browser", "update"],
     ),
 ]

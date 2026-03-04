@@ -44,5 +44,6 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=[_MOUSE_KEY],
         description="Sets MouseSpeed/Threshold to zero for raw 1:1 input.",
+        tags=["input", "mouse", "gaming"],
     ),
 ]

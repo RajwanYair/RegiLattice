@@ -88,5 +88,10 @@ TWEAKS: List[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_KEYS,
+        description=(
+            "Adds a 'Take Ownership' entry to the right-click context "
+            "menu for files, folders, and drives."
+        ),
+        tags=["shell", "context-menu", "ownership"],
     ),
 ]

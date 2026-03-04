@@ -239,6 +239,7 @@ TWEAKS: List[TweakDef] = [
             "Sets PowerShell execution policy to RemoteSigned for "
             "the current user, enabling local scripts."
         ),
+        tags=["powershell", "security", "scripting"],
     ),
     TweakDef(
         id="ps-gallery-trust",
@@ -251,6 +252,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=[],
         description="Sets PSGallery as a trusted repository for Install-Module.",
+        tags=["powershell", "packages", "gallery"],
     ),
     TweakDef(
         id="scoop-setup",
@@ -266,6 +268,7 @@ TWEAKS: List[TweakDef] = [
             "Installs Scoop package manager (if missing) and adds "
             "extras, versions, and nerd-fonts buckets."
         ),
+        tags=["scoop", "packages", "installer"],
     ),
     TweakDef(
         id="enable-winget",
@@ -281,6 +284,7 @@ TWEAKS: List[TweakDef] = [
             "Enables winget (App Installer), experimental features, "
             "and hash override via Group Policy."
         ),
+        tags=["winget", "packages", "installer"],
     ),
     TweakDef(
         id="pip-user-default",
@@ -296,5 +300,6 @@ TWEAKS: List[TweakDef] = [
             "Sets PIP_USER=1 environment variable so pip installs "
             "to user site-packages by default (no admin required)."
         ),
+        tags=["python", "pip", "packages"],
     ),
 ]

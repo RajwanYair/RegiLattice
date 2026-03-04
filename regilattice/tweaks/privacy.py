@@ -1,4 +1,4 @@
-"""Privacy tweaks — Telemetry and Cortana."""
+"""Privacy tweaks — Telemetry, Cortana, Activity History, Location, Advertising ID."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from regilattice.tweaks import TweakDef
 # ── Telemetry ────────────────────────────────────────────────────────────────
 
 _TELEMETRY_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft" r"\Windows\DataCollection"
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 )
 _TELEMETRY_DATA = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
@@ -19,61 +19,210 @@ _TELEMETRY_DATA = (
 _TELEMETRY_KEYS = [_TELEMETRY_POLICY, _TELEMETRY_DATA]
 
 
-def apply_disable_telemetry(*, require_admin: bool = True) -> None:
+def _apply_disable_telemetry(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.log("Starting Add-DisableTelemetry")
+    SESSION.log("Privacy: disable Windows telemetry")
     SESSION.backup(_TELEMETRY_KEYS, "Telemetry")
     SESSION.set_dword(_TELEMETRY_POLICY, "AllowTelemetry", 0)
     SESSION.set_dword(_TELEMETRY_DATA, "AllowTelemetry", 0)
     SESSION.set_dword(_TELEMETRY_POLICY, "DoNotShowFeedbackNotifications", 1)
-    SESSION.log("Completed Add-DisableTelemetry")
 
 
-def remove_disable_telemetry(*, require_admin: bool = True) -> None:
+def _remove_disable_telemetry(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.log("Starting Remove-DisableTelemetry")
     SESSION.backup(_TELEMETRY_KEYS, "Telemetry_Remove")
     SESSION.set_dword(_TELEMETRY_POLICY, "AllowTelemetry", 3)
     SESSION.set_dword(_TELEMETRY_DATA, "AllowTelemetry", 3)
     SESSION.delete_value(_TELEMETRY_POLICY, "DoNotShowFeedbackNotifications")
-    SESSION.log("Completed Remove-DisableTelemetry")
 
 
-def detect_disable_telemetry() -> bool:
+def _detect_disable_telemetry() -> bool:
     return SESSION.read_dword(_TELEMETRY_POLICY, "AllowTelemetry") == 0
 
 
 # ── Cortana ──────────────────────────────────────────────────────────────────
 
 _CORTANA_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft" r"\Windows\Windows Search"
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 )
 
 
-def apply_disable_cortana(*, require_admin: bool = True) -> None:
+def _apply_disable_cortana(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.log("Starting Add-DisableCortana")
+    SESSION.log("Privacy: disable Cortana")
     SESSION.backup([_CORTANA_KEY], "Cortana")
     SESSION.set_dword(_CORTANA_KEY, "AllowCortana", 0)
     SESSION.set_dword(_CORTANA_KEY, "AllowSearchToUseLocation", 0)
     SESSION.set_dword(_CORTANA_KEY, "DisableWebSearch", 1)
     SESSION.set_dword(_CORTANA_KEY, "ConnectedSearchUseWeb", 0)
-    SESSION.log("Completed Add-DisableCortana")
 
 
-def remove_disable_cortana(*, require_admin: bool = True) -> None:
+def _remove_disable_cortana(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.log("Starting Remove-DisableCortana")
     SESSION.backup([_CORTANA_KEY], "Cortana_Remove")
     SESSION.delete_value(_CORTANA_KEY, "AllowCortana")
     SESSION.delete_value(_CORTANA_KEY, "AllowSearchToUseLocation")
     SESSION.delete_value(_CORTANA_KEY, "DisableWebSearch")
     SESSION.delete_value(_CORTANA_KEY, "ConnectedSearchUseWeb")
-    SESSION.log("Completed Remove-DisableCortana")
 
 
-def detect_disable_cortana() -> bool:
+def _detect_disable_cortana() -> bool:
     return SESSION.read_dword(_CORTANA_KEY, "AllowCortana") == 0
+
+
+# ── Disable Activity History ────────────────────────────────────────────────
+
+_ACTIVITY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_disable_activity(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable Activity History / Timeline")
+    SESSION.backup([_ACTIVITY], "ActivityHistory")
+    SESSION.set_dword(_ACTIVITY, "EnableActivityFeed", 0)
+    SESSION.set_dword(_ACTIVITY, "PublishUserActivities", 0)
+    SESSION.set_dword(_ACTIVITY, "UploadUserActivities", 0)
+
+
+def _remove_disable_activity(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ACTIVITY, "EnableActivityFeed")
+    SESSION.delete_value(_ACTIVITY, "PublishUserActivities")
+    SESSION.delete_value(_ACTIVITY, "UploadUserActivities")
+
+
+def _detect_disable_activity() -> bool:
+    return SESSION.read_dword(_ACTIVITY, "EnableActivityFeed") == 0
+
+
+# ── Disable Location Tracking ───────────────────────────────────────────────
+
+_LOCATION = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
+)
+_LOCATION_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors"
+)
+
+
+def _apply_disable_location(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable location tracking")
+    SESSION.backup([_LOCATION, _LOCATION_POLICY], "Location")
+    SESSION.set_string(_LOCATION, "Value", "Deny")
+    SESSION.set_dword(_LOCATION_POLICY, "DisableLocation", 1)
+
+
+def _remove_disable_location(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LOCATION, "Value", "Allow")
+    SESSION.delete_value(_LOCATION_POLICY, "DisableLocation")
+
+
+def _detect_disable_location() -> bool:
+    return SESSION.read_string(_LOCATION, "Value") == "Deny"
+
+
+# ── Disable Advertising ID ──────────────────────────────────────────────────
+
+_ADID = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\AdvertisingInfo"
+)
+_ADID_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
+)
+
+
+def _apply_disable_adid(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable advertising ID")
+    SESSION.backup([_ADID, _ADID_POLICY], "AdvertisingID")
+    SESSION.set_dword(_ADID, "Enabled", 0)
+    SESSION.set_dword(_ADID_POLICY, "DisabledByGroupPolicy", 1)
+
+
+def _remove_disable_adid(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADID, "Enabled", 1)
+    SESSION.delete_value(_ADID_POLICY, "DisabledByGroupPolicy")
+
+
+def _detect_disable_adid() -> bool:
+    return SESSION.read_dword(_ADID, "Enabled") == 0
+
+
+# ── Disable Camera access ───────────────────────────────────────────────────
+
+_CAMERA = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"
+)
+
+
+def _apply_disable_camera(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable camera access for apps")
+    SESSION.backup([_CAMERA], "CameraAccess")
+    SESSION.set_string(_CAMERA, "Value", "Deny")
+
+
+def _remove_disable_camera(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_CAMERA, "Value", "Allow")
+
+
+def _detect_disable_camera() -> bool:
+    return SESSION.read_string(_CAMERA, "Value") == "Deny"
+
+
+# ── Disable Microphone access ───────────────────────────────────────────────
+
+_MIC = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone"
+)
+
+
+def _apply_disable_mic(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable microphone access for apps")
+    SESSION.backup([_MIC], "MicAccess")
+    SESSION.set_string(_MIC, "Value", "Deny")
+
+
+def _remove_disable_mic(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_MIC, "Value", "Allow")
+
+
+def _detect_disable_mic() -> bool:
+    return SESSION.read_string(_MIC, "Value") == "Deny"
+
+
+# ── Disable Diagnostic Data Viewer ───────────────────────────────────────────
+
+_DIAG = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Diagnostics\DiagTrack"
+)
+
+
+def _apply_disable_diagtrack(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable DiagTrack (Connected User Experiences)")
+    SESSION.backup([_DIAG], "DiagTrack")
+    SESSION.set_dword(_DIAG, "ShowedToastAtLevel", 1)
+
+
+def _remove_disable_diagtrack(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DIAG, "ShowedToastAtLevel")
+
+
+def _detect_disable_diagtrack() -> bool:
+    return SESSION.read_dword(_DIAG, "ShowedToastAtLevel") == 1
 
 
 # ── Plugin registration ─────────────────────────────────────────────────────
@@ -81,24 +230,112 @@ def detect_disable_cortana() -> bool:
 TWEAKS: List[TweakDef] = [
     TweakDef(
         id="disable-telemetry",
-        label="Disable Telemetry",
+        label="Disable Windows Telemetry",
         category="Privacy",
-        apply_fn=apply_disable_telemetry,
-        remove_fn=remove_disable_telemetry,
-        detect_fn=detect_disable_telemetry,
+        apply_fn=_apply_disable_telemetry,
+        remove_fn=_remove_disable_telemetry,
+        detect_fn=_detect_disable_telemetry,
         needs_admin=True,
         corp_safe=False,
         registry_keys=_TELEMETRY_KEYS,
+        description="Disables Windows telemetry and feedback notifications.",
+        tags=["privacy", "telemetry", "microsoft"],
     ),
     TweakDef(
         id="disable-cortana",
         label="Disable Cortana",
         category="Privacy",
-        apply_fn=apply_disable_cortana,
-        remove_fn=remove_disable_cortana,
-        detect_fn=detect_disable_cortana,
+        apply_fn=_apply_disable_cortana,
+        remove_fn=_remove_disable_cortana,
+        detect_fn=_detect_disable_cortana,
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CORTANA_KEY],
+        description="Disables Cortana and web search integration.",
+        tags=["privacy", "cortana", "search"],
+    ),
+    TweakDef(
+        id="disable-activity-history",
+        label="Disable Activity History",
+        category="Privacy",
+        apply_fn=_apply_disable_activity,
+        remove_fn=_remove_disable_activity,
+        detect_fn=_detect_disable_activity,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ACTIVITY],
+        description=(
+            "Disables Windows Activity History (Timeline), preventing "
+            "activity data collection and cloud sync."
+        ),
+        tags=["privacy", "activity", "timeline"],
+    ),
+    TweakDef(
+        id="disable-location",
+        label="Disable Location Tracking",
+        category="Privacy",
+        apply_fn=_apply_disable_location,
+        remove_fn=_remove_disable_location,
+        detect_fn=_detect_disable_location,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_LOCATION, _LOCATION_POLICY],
+        description="Disables location tracking for all apps and Windows services.",
+        tags=["privacy", "location", "tracking"],
+    ),
+    TweakDef(
+        id="disable-advertising-id",
+        label="Disable Advertising ID",
+        category="Privacy",
+        apply_fn=_apply_disable_adid,
+        remove_fn=_remove_disable_adid,
+        detect_fn=_detect_disable_adid,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ADID, _ADID_POLICY],
+        description=(
+            "Disables the Windows advertising ID used for cross-app "
+            "ad targeting."
+        ),
+        tags=["privacy", "advertising", "tracking"],
+    ),
+    TweakDef(
+        id="disable-camera-access",
+        label="Deny Camera Access (Apps)",
+        category="Privacy",
+        apply_fn=_apply_disable_camera,
+        remove_fn=_remove_disable_camera,
+        detect_fn=_detect_disable_camera,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CAMERA],
+        description="Denies camera access for UWP/Store apps by default.",
+        tags=["privacy", "camera", "hardware"],
+    ),
+    TweakDef(
+        id="disable-microphone-access",
+        label="Deny Microphone Access (Apps)",
+        category="Privacy",
+        apply_fn=_apply_disable_mic,
+        remove_fn=_remove_disable_mic,
+        detect_fn=_detect_disable_mic,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MIC],
+        description="Denies microphone access for UWP/Store apps by default.",
+        tags=["privacy", "microphone", "hardware"],
+    ),
+    TweakDef(
+        id="disable-diagtrack",
+        label="Disable DiagTrack (CEIP)",
+        category="Privacy",
+        apply_fn=_apply_disable_diagtrack,
+        remove_fn=_remove_disable_diagtrack,
+        detect_fn=_detect_disable_diagtrack,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DIAG],
+        description="Disables Connected User Experiences and Telemetry (DiagTrack).",
+        tags=["privacy", "telemetry", "diagtrack"],
     ),
 ]

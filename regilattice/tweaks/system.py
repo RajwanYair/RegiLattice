@@ -46,5 +46,6 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=[_LONGPATH_KEY],
         description="Allows Win32 applications to use paths longer than 260 chars.",
+        tags=["system", "filesystem", "long-paths"],
     ),
 ]

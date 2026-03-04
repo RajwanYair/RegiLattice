@@ -212,6 +212,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=True,
         registry_keys=_LXSS_KEYS,
         description="Sets new WSL distributions to install as version 2 by default.",
+        tags=["wsl", "linux", "virtualisation"],
     ),
     TweakDef(
         id="wsl-autostart",
@@ -224,6 +225,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=_LXSS_SVC_KEYS,
         description=("Sets LxssManager to automatic start so WSL is ready instantly."),
+        tags=["wsl", "service", "startup"],
     ),
     TweakDef(
         id="wsl-nested-virt",
@@ -239,6 +241,7 @@ TWEAKS: List[TweakDef] = [
             "Enables nested virtualisation for WSL 2 guests, allowing "
             "Docker Desktop, KVM, and other VM workloads inside WSL."
         ),
+        tags=["wsl", "virtualisation", "docker"],
     ),
     TweakDef(
         id="wsl-feature",
@@ -251,6 +254,7 @@ TWEAKS: List[TweakDef] = [
         corp_safe=False,
         registry_keys=[_WSL_FEATURE_KEY],
         description="Enables the Windows Subsystem for Linux optional feature via DISM.",
+        tags=["wsl", "feature", "linux"],
     ),
     TweakDef(
         id="wsl-vm-platform",
@@ -265,6 +269,7 @@ TWEAKS: List[TweakDef] = [
         description=(
             "Enables the Virtual Machine Platform feature (required for WSL 2)."
         ),
+        tags=["wsl", "virtualisation", "feature"],
     ),
     TweakDef(
         id="wsl-mirrored-network",
@@ -280,5 +285,6 @@ TWEAKS: List[TweakDef] = [
             "Switches WSL 2 networking to mirrored mode so localhost "
             "forwarding and host-network access work transparently."
         ),
+        tags=["wsl", "network", "localhost"],
     ),
 ]

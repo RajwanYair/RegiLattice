@@ -34,6 +34,7 @@ from .tweaks import (
     restore_snapshot,
     save_snapshot,
     tweak_status,
+    tweaks_by_category,
 )
 from .tweaks.maintenance import create_restore_point
 
@@ -342,6 +343,21 @@ class RegiLatticeGUI:
                 font=("Segoe UI", 8),
             ).pack(side="left", padx=(0, 10))
 
+        # Search bar
+        search_frame = ttk.Frame(self._root)
+        search_frame.pack(fill="x", padx=16, pady=(6, 0))
+        ttk.Label(search_frame, text="🔍", style="TLabel").pack(side="left", padx=(0, 4))
+        self._search_var = tk.StringVar()
+        self._search_var.trace_add("write", lambda *_: self._filter_rows())
+        self._search_entry = ttk.Entry(
+            search_frame, textvariable=self._search_var, font=("Segoe UI", 10)
+        )
+        self._search_entry.pack(side="left", fill="x", expand=True)
+        ttk.Button(
+            search_frame, text="✕", width=3,
+            command=lambda: self._search_var.set(""),
+        ).pack(side="left", padx=(4, 0))
+
         # Scrollable tweak list
         container = ttk.Frame(self._root)
         container.pack(fill="both", expand=True, padx=16, pady=8)
@@ -364,17 +380,18 @@ class RegiLatticeGUI:
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
-        # Populate rows from plugin registry grouped by category
-        tweaks = all_tweaks()
-        last_cat = ""
-        for td in tweaks:
-            if td.category != last_cat:
-                last_cat = td.category
-                ttk.Label(
-                    self._inner, text=f"  {td.category}", style="Category.TLabel"
-                ).pack(fill="x", pady=(10, 2), padx=4)
-            row = _TweakRow(self._inner, td, corp_blocked=self._corp_blocked)
-            self._tweak_rows.append(row)
+        # Populate rows from plugin registry grouped by category (sorted)
+        self._category_labels: List[Tuple[str, ttk.Label]] = []
+        grouped = tweaks_by_category()
+        for cat_name, cat_tweaks in grouped.items():
+            cat_lbl = ttk.Label(
+                self._inner, text=f"  {cat_name}", style="Category.TLabel"
+            )
+            cat_lbl.pack(fill="x", pady=(10, 2), padx=4)
+            self._category_labels.append((cat_name, cat_lbl))
+            for td in cat_tweaks:
+                row = _TweakRow(self._inner, td, corp_blocked=self._corp_blocked)
+                self._tweak_rows.append(row)
 
         # Action buttons (row 1: apply/remove)
         btn_frame = ttk.Frame(self._root)
@@ -445,6 +462,28 @@ class RegiLatticeGUI:
     def _deselect_all(self) -> None:
         for row in self._tweak_rows:
             row.var.set(False)
+
+    def _filter_rows(self) -> None:
+        """Show/hide rows based on search query."""
+        query = self._search_var.get().strip().lower()
+        visible_cats: set[str] = set()
+        for row in self._tweak_rows:
+            td = row.td
+            match = not query or any(
+                query in f.lower()
+                for f in [td.id, td.label, td.category, td.description] + td.tags
+            )
+            if match:
+                row.frame.pack(fill="x", padx=4, pady=2, ipady=3)
+                visible_cats.add(td.category)
+            else:
+                row.frame.pack_forget()
+        # Show/hide category labels
+        for cat_name, cat_lbl in self._category_labels:
+            if cat_name in visible_cats or not query:
+                cat_lbl.pack(fill="x", pady=(10, 2), padx=4)
+            else:
+                cat_lbl.pack_forget()
 
     def _set_status(self, text: str, color: str = _FG_DIM) -> None:
         self._status_label.configure(text=text, foreground=color)

@@ -96,6 +96,7 @@ TWEAKS: List[TweakDef] = [
             "Disables Windows Copilot via Group Policy and hides the "
             "taskbar button. Prevents AI-powered assistant from running."
         ),
+        tags=["ai", "copilot", "privacy"],
     ),
     TweakDef(
         id="disable-recall",
@@ -111,5 +112,6 @@ TWEAKS: List[TweakDef] = [
             "Disables Windows Recall (AI-powered activity snapshots) which "
             "periodically screenshots your activity. Privacy-critical."
         ),
+        tags=["ai", "recall", "privacy"],
     ),
 ]
