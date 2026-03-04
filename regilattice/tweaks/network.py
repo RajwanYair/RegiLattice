@@ -41,6 +41,10 @@ _DNS_CLIENT = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\Dnscache\Parameters"
 )
+_FW = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\SharedAccess\Parameters\FirewallPolicy\FirewallRules"
+)
 
 
 # ── Increase IRPStackSize ────────────────────────────────────────────────────
