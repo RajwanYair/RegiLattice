@@ -90,6 +90,44 @@ def detect_disable_ff_update() -> bool:
     return SESSION.read_dword(_FF_POLICY, "DisableAppUpdate") == 1
 
 
+# ── Disable Firefox Crash Reporter ────────────────────────────────────────
+
+
+def _apply_disable_ff_crash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable crash reporter")
+    SESSION.backup(_FF_KEYS, "FirefoxCrash")
+    SESSION.set_dword(_FF_POLICY, "DisableCrashReporter", 1)
+
+
+def _remove_disable_ff_crash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableCrashReporter")
+
+
+def _detect_disable_ff_crash() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableCrashReporter") == 1
+
+
+# ── Disable Firefox Default Browser Check ─────────────────────────────────
+
+
+def _apply_disable_ff_default_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable default browser check")
+    SESSION.backup(_FF_KEYS, "FirefoxDefaultCheck")
+    SESSION.set_dword(_FF_POLICY, "DontCheckDefaultBrowser", 1)
+
+
+def _remove_disable_ff_default_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DontCheckDefaultBrowser")
+
+
+def _detect_disable_ff_default_check() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DontCheckDefaultBrowser") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -134,5 +172,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_FF_KEYS,
         description="Prevents Firefox from auto-updating. Use in controlled environments.",
         tags=["firefox", "browser", "update"],
+    ),
+    TweakDef(
+        id="disable-firefox-crash-reporter",
+        label="Disable Firefox Crash Reporter",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_crash,
+        remove_fn=_remove_disable_ff_crash,
+        detect_fn=_detect_disable_ff_crash,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables the Firefox crash reporter dialog after crashes.",
+        tags=["firefox", "browser", "crash"],
+    ),
+    TweakDef(
+        id="disable-firefox-default-check",
+        label="Disable Firefox Default Browser Check",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_default_check,
+        remove_fn=_remove_disable_ff_default_check,
+        detect_fn=_detect_disable_ff_default_check,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Stops Firefox from asking to be the default browser on startup.",
+        tags=["firefox", "browser", "default"],
     ),
 ]

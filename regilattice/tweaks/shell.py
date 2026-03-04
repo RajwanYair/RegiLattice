@@ -75,6 +75,74 @@ def detect_take_ownership() -> bool:
     return SESSION.key_exists(_KEYS[0])
 
 
+# ── Open Command Prompt Here (Context Menu) ───────────────────────────────
+
+_CMD_HERE_KEY = r"HKEY_CLASSES_ROOT\Directory\Background\shell\cmd_here"
+_CMD_HERE_CMD = rf"{_CMD_HERE_KEY}\command"
+_CMD_KEYS = [_CMD_HERE_KEY, _CMD_HERE_CMD]
+
+
+def _apply_cmd_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: add 'Open Command Prompt Here' context menu")
+    SESSION.backup(_CMD_KEYS, "CmdHere")
+    _run = lambda a: subprocess.run(
+        ["reg", *a], check=True, capture_output=True, text=True
+    )
+    _run(["add", _CMD_HERE_KEY, "/ve", "/d", "Open Command Prompt Here", "/f"])
+    _run(["add", _CMD_HERE_KEY, "/v", "Icon", "/d", "cmd.exe", "/f"])
+    _run(["add", _CMD_HERE_CMD, "/ve", "/d", 'cmd.exe /k cd /d "%V"', "/f"])
+
+
+def _remove_cmd_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    subprocess.run(
+        ["reg", "delete", _CMD_HERE_KEY, "/f"],
+        check=False, capture_output=True,
+    )
+
+
+def _detect_cmd_here() -> bool:
+    return SESSION.key_exists(_CMD_HERE_KEY)
+
+
+# ── Add Hash File Context Menu ────────────────────────────────────────────
+
+_HASH_KEY = r"HKEY_CLASSES_ROOT\*\shell\GetFileHash"
+_HASH_CMD = rf"{_HASH_KEY}\command"
+_HASH_KEYS = [_HASH_KEY, _HASH_CMD]
+
+
+def _apply_hash_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: add 'Get File Hash' context menu")
+    SESSION.backup(_HASH_KEYS, "FileHash")
+    _run = lambda a: subprocess.run(
+        ["reg", *a], check=True, capture_output=True, text=True
+    )
+    _run(["add", _HASH_KEY, "/ve", "/d", "Get File Hash (SHA256)", "/f"])
+    _run(["add", _HASH_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
+    ps_cmd = (
+        'powershell.exe -NoProfile -Command "'
+        "Get-FileHash '%1' -Algorithm SHA256 | "
+        "Format-List; pause"
+        '"'
+    )
+    _run(["add", _HASH_CMD, "/ve", "/d", ps_cmd, "/f"])
+
+
+def _remove_hash_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    subprocess.run(
+        ["reg", "delete", _HASH_KEY, "/f"],
+        check=False, capture_output=True,
+    )
+
+
+def _detect_hash_context() -> bool:
+    return SESSION.key_exists(_HASH_KEY)
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -93,5 +161,31 @@ TWEAKS: List[TweakDef] = [
             "menu for files, folders, and drives."
         ),
         tags=["shell", "context-menu", "ownership"],
+    ),
+    TweakDef(
+        id="open-cmd-here",
+        label="'Open CMD Here' Context Menu",
+        category="Shell",
+        apply_fn=_apply_cmd_here,
+        remove_fn=_remove_cmd_here,
+        detect_fn=_detect_cmd_here,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_CMD_KEYS,
+        description="Adds 'Open Command Prompt Here' to the folder background context menu.",
+        tags=["shell", "context-menu", "cmd"],
+    ),
+    TweakDef(
+        id="file-hash-context",
+        label="'Get File Hash' Context Menu",
+        category="Shell",
+        apply_fn=_apply_hash_context,
+        remove_fn=_remove_hash_context,
+        detect_fn=_detect_hash_context,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_HASH_KEYS,
+        description="Adds 'Get File Hash (SHA256)' to the right-click menu for any file.",
+        tags=["shell", "context-menu", "hash", "security"],
     ),
 ]

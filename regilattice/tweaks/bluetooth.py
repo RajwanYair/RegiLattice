@@ -23,6 +23,11 @@ _BT_AUDIO = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\BthA2dp\Parameters"
 )
+_BT_DISCOVER = rf"{_BT_PARAMS}\Devices"
+_BT_LE = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\BthLEEnum\Parameters"
+)
 
 
 # ── Disable Bluetooth Power Management ───────────────────────────────────────
@@ -86,6 +91,46 @@ def _detect_bt_audio_quality() -> bool:
     return SESSION.read_dword(_BT_AUDIO, "MaxBitpool") == 53
 
 
+# ── Disable Bluetooth Discoverability ─────────────────────────────────────
+
+
+def _apply_disable_bt_discover(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: disable discoverability")
+    SESSION.backup([_BT_PARAMS], "BTDiscover")
+    SESSION.set_dword(_BT_PARAMS, "AllowDiscovery", 0)
+
+
+def _remove_disable_bt_discover(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_PARAMS, "AllowDiscovery")
+
+
+def _detect_disable_bt_discover() -> bool:
+    return SESSION.read_dword(_BT_PARAMS, "AllowDiscovery") == 0
+
+
+# ── Bluetooth Low Energy Latency Optimization ────────────────────────────
+
+
+def _apply_bt_le_latency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: optimize BLE connection interval for low latency")
+    SESSION.backup([_BT_LE], "BLELatency")
+    SESSION.set_dword(_BT_LE, "MinimumConnectionInterval", 6)  # 7.5ms
+    SESSION.set_dword(_BT_LE, "MaximumConnectionInterval", 10)  # 12.5ms
+
+
+def _remove_bt_le_latency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_LE, "MinimumConnectionInterval")
+    SESSION.delete_value(_BT_LE, "MaximumConnectionInterval")
+
+
+def _detect_bt_le_latency() -> bool:
+    return SESSION.read_dword(_BT_LE, "MinimumConnectionInterval") == 6
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -136,5 +181,31 @@ TWEAKS: List[TweakDef] = [
             "Bluetooth audio streaming."
         ),
         tags=["bluetooth", "audio", "quality"],
+    ),
+    TweakDef(
+        id="disable-bt-discoverable",
+        label="Disable Bluetooth Discoverability",
+        category="Bluetooth",
+        apply_fn=_apply_disable_bt_discover,
+        remove_fn=_remove_disable_bt_discover,
+        detect_fn=_detect_disable_bt_discover,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BT_PARAMS],
+        description="Prevents the Bluetooth adapter from being discoverable by nearby devices.",
+        tags=["bluetooth", "security", "privacy"],
+    ),
+    TweakDef(
+        id="bt-low-latency",
+        label="Bluetooth LE Low-Latency Mode",
+        category="Bluetooth",
+        apply_fn=_apply_bt_le_latency,
+        remove_fn=_remove_bt_le_latency,
+        detect_fn=_detect_bt_le_latency,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BT_LE],
+        description="Tightens BLE connection intervals for lower latency with peripherals.",
+        tags=["bluetooth", "performance", "latency"],
     ),
 ]
