@@ -129,7 +129,7 @@ def restore_snapshot(
             results[td.id] = "unchanged"
             continue
         if not force_corp and not td.corp_safe:
-            from turbotweak.corpguard import is_corporate_network
+            from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
                 results[td.id] = "skipped (corp)"
@@ -156,7 +156,7 @@ def apply_all(
     results: Dict[str, str] = {}
     for td in _ALL_TWEAKS:
         if not force_corp and not td.corp_safe:
-            from turbotweak.corpguard import is_corporate_network
+            from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
                 results[td.id] = "skipped (corp)"
@@ -176,7 +176,7 @@ def remove_all(
     results: Dict[str, str] = {}
     for td in _ALL_TWEAKS:
         if not force_corp and not td.corp_safe:
-            from turbotweak.corpguard import is_corporate_network
+            from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
                 results[td.id] = "skipped (corp)"

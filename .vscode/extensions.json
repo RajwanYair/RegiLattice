@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.debugpy",
+    "charliermarsh.ruff",
+    "ms-vscode.powershell",
+    "github.copilot",
+    "github.copilot-chat",
+    "tamasfe.even-better-toml",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "eamodio.gitlens",
+    "gruntfuggly.todo-tree",
+    "usernamehw.errorlens"
+  ]
+}

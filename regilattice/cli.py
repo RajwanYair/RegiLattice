@@ -1,12 +1,12 @@
-"""Command-line interface for TurboTweak.
+"""Command-line interface for RegiLattice.
 
 Usage examples::
 
-    python -m turbotweak                    # interactive menu
-    python -m turbotweak --list             # show available actions
-    python -m turbotweak apply take-ownership  # apply a single tweak
-    python -m turbotweak remove all -y      # skip confirmation
-    python -m turbotweak --gui              # graphical interface
+    python -m regilattice                    # interactive menu
+    python -m regilattice --list             # show available actions
+    python -m regilattice apply take-ownership  # apply a single tweak
+    python -m regilattice remove all -y      # skip confirmation
+    python -m regilattice --gui              # graphical interface
 """
 
 from __future__ import annotations
@@ -82,8 +82,8 @@ def _run_action(
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="turbotweak",
-        description="TurboTweak — Windows registry tweak toolkit",
+        prog="regilattice",
+        description="RegiLattice — Windows registry tweak toolkit",
     )
     parser.add_argument(
         "mode",
@@ -130,13 +130,13 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"turbotweak {__version__} ({platform_summary()})",
+        version=f"regilattice {__version__} ({platform_summary()})",
     )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Entry-point for both ``python -m turbotweak`` and the console_script."""
+    """Entry-point for both ``python -m regilattice`` and the console_script."""
     parser = _build_parser()
     args = parser.parse_args(argv)
 

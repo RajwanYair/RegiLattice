@@ -1,9 +1,9 @@
 @echo off
-:: Launch-TurboTweak.bat — Elevated launcher for TurboTweak.
+:: Launch-RegiLattice.bat — Elevated launcher for RegiLattice.
 :: Prefers PowerShell 7 (pwsh.exe), falls back to Windows PowerShell 5.1.
 
 setlocal
-set "psScript=%~dp0TurboTweakMenu.ps1"
+set "psScript=%~dp0RegiLatticeMenu.ps1"
 
 :: Locate the best available PowerShell
 set "pwsh="
@@ -16,7 +16,7 @@ if exist "%ProgramFiles%\PowerShell\7\pwsh.exe" (
 set "pwsh=powershell.exe"
 
 :launch
-echo Starting TurboTweak with %pwsh% ...
+echo Starting RegiLattice with %pwsh% ...
 "%pwsh%" -ExecutionPolicy Bypass -Command ^
     "Start-Process '%pwsh%' -ArgumentList '-ExecutionPolicy','Bypass','-NoExit','-File','\"%psScript%\"' -Verb RunAs"
 endlocal

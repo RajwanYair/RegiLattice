@@ -4,7 +4,7 @@
 
 param ([switch]$Force)
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 . "$PSScriptRoot\Lib-BackupRegistry.ps1"
 
 if (-not (Confirm-Action -Prompt 'Re-enable mouse acceleration (Windows default)?' -Force:$Force)) {

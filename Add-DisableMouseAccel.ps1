@@ -4,7 +4,7 @@
 
 param ([switch]$Force)
 
-. "$PSScriptRoot\Lib-TurboTweak.ps1"
+. "$PSScriptRoot\Lib-RegiLattice.ps1"
 . "$PSScriptRoot\Lib-BackupRegistry.ps1"
 
 # This is a per-user setting — no elevation needed
