@@ -12,9 +12,7 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-# Adobe Reader DC / Acrobat DC (major version key)
-_READER_CU = r"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral"
-_ACROBAT_CU = r"HKEY_CURRENT_USER\Software\Adobe\Adobe Acrobat\DC\AVGeneral"
+# Adobe Reader DC / Acrobat DC policy paths
 _UPDATER = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"
 _UPDATER2 = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Adobe Acrobat\DC\FeatureLockDown"
 _ARM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM"

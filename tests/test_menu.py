@@ -1,8 +1,8 @@
-"""Tests for turbotweak.menu — Menu construction and display."""
+"""Tests for regilattice.menu — Menu construction and display."""
 
 from __future__ import annotations
 
-from turbotweak.menu import Menu
+from regilattice.menu import Menu
 
 
 class TestMenuConstruction:

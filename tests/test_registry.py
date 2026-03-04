@@ -1,4 +1,4 @@
-"""Tests for turbotweak.registry — session, split_root, helpers."""
+"""Tests for regilattice.registry — session, split_root, helpers."""
 
 from __future__ import annotations
 
@@ -10,14 +10,9 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from turbotweak.registry import (
-    AdminRequirementError,
-    RegistrySession,
-    _split_root,
-    assert_admin,
-    is_windows,
-    platform_summary,
-)
+from regilattice.registry import (AdminRequirementError, RegistrySession,
+                                  _split_root, assert_admin, is_windows,
+                                  platform_summary)
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 
@@ -40,9 +35,9 @@ class TestRegistrySession:
         assert "first" in lines[0]
         assert "second" in lines[1]
 
-    def test_log_path_is_turbotweak_log(self, tmp_path: Path) -> None:
+    def test_log_path_is_regilattice_log(self, tmp_path: Path) -> None:
         session = RegistrySession(base_dir=tmp_path)
-        assert session.log_path == tmp_path / "TurboTweak.log"
+        assert session.log_path == tmp_path / "RegiLattice.log"
 
     def test_log_timestamp_format(self, tmp_path: Path) -> None:
         session = RegistrySession(base_dir=tmp_path)

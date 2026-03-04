@@ -20,22 +20,12 @@ from tkinter import filedialog, messagebox, ttk
 from typing import Dict, List, Optional, Tuple
 
 from . import __version__
-from .corpguard import (
-    CorporateNetworkError,
-    assert_not_corporate,
-    corp_guard_status,
-    is_corporate_network,
-)
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakDef,
-    all_tweaks,
-    load_snapshot,
-    restore_snapshot,
-    save_snapshot,
-    tweak_status,
-    tweaks_by_category,
-)
+from .corpguard import (CorporateNetworkError, assert_not_corporate,
+                        corp_guard_status, is_corporate_network)
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakDef, all_tweaks, load_snapshot, restore_snapshot,
+                     save_snapshot, tweak_status, tweaks_by_category)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme — Catppuccin Mocha / Windows 11 dark ──────────────────────────────

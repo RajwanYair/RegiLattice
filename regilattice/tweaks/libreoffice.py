@@ -14,20 +14,9 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-_LO_UPDATE = (
-    r"HKEY_CURRENT_USER\Software\LibreOffice\UNO\InstallPath"
-)
-_LO_SHELL = r"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice\LibreOffice"
-_OO_SHELL = r"HKEY_LOCAL_MACHINE\SOFTWARE\OpenOffice"
-
 # Installer-level auto-update (Windows MSI property):
 _LO_MAINTENANCE = r"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice\MaintenanceService"
 _OO_MAINTENANCE = r"HKEY_LOCAL_MACHINE\SOFTWARE\OpenOffice.org\MaintenanceService"
-
-# File association keys for default-format tweaking
-_LO_CAPS = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice\Capabilities"
-)
 
 # ── Disable LibreOffice Auto-Update ─────────────────────────────────────────
 
