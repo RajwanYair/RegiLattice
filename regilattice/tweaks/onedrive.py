@@ -97,6 +97,44 @@ def _detect_throttle() -> bool:
     return val is not None and val > 0
 
 
+# ── Disable OneDrive Personal Sync ────────────────────────────────────────
+
+
+def _apply_disable_personal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: disable personal (consumer) sync")
+    SESSION.backup([_OD], "ODPersonal")
+    SESSION.set_dword(_OD, "DisablePersonalSync", 1)
+
+
+def _remove_disable_personal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD, "DisablePersonalSync")
+
+
+def _detect_disable_personal() -> bool:
+    return SESSION.read_dword(_OD, "DisablePersonalSync") == 1
+
+
+# ── Disable OneDrive Known Folder Move ─────────────────────────────────────
+
+
+def _apply_disable_kfm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: block Known Folder Move (KFM) prompts")
+    SESSION.backup([_OD], "ODKFM")
+    SESSION.set_dword(_OD, "KFMBlockOptIn", 1)
+
+
+def _remove_disable_kfm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD, "KFMBlockOptIn")
+
+
+def _detect_disable_kfm() -> bool:
+    return SESSION.read_dword(_OD, "KFMBlockOptIn") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -157,5 +195,31 @@ TWEAKS: List[TweakDef] = [
             "saturating your connection."
         ),
         tags=["onedrive", "bandwidth", "network"],
+    ),
+    TweakDef(
+        id="disable-onedrive-personal-sync",
+        label="Disable OneDrive Personal Sync",
+        category="OneDrive",
+        apply_fn=_apply_disable_personal,
+        remove_fn=_remove_disable_personal,
+        detect_fn=_detect_disable_personal,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_OD],
+        description="Blocks OneDrive consumer (personal) account sync via policy.",
+        tags=["onedrive", "sync", "policy"],
+    ),
+    TweakDef(
+        id="disable-onedrive-kfm",
+        label="Block OneDrive Known Folder Move",
+        category="OneDrive",
+        apply_fn=_apply_disable_kfm,
+        remove_fn=_remove_disable_kfm,
+        detect_fn=_detect_disable_kfm,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_OD],
+        description="Prevents OneDrive from prompting to move Desktop, Documents & Pictures.",
+        tags=["onedrive", "kfm", "folders"],
     ),
 ]

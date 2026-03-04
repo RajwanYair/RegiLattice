@@ -109,6 +109,46 @@ def _detect_hide_search_box() -> bool:
     return SESSION.read_dword(_EXPLORER, "SearchboxTaskbarMode") == 0
 
 
+# ── Disable Cortana Completely ─────────────────────────────────────────────
+
+
+def _apply_disable_cortana_completely(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable entirely via policy")
+    SESSION.backup([_CORTANA], "CortanaDisable")
+    SESSION.set_dword(_CORTANA, "AllowCortana", 0)
+
+
+def _remove_disable_cortana_completely(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CORTANA, "AllowCortana")
+
+
+def _detect_disable_cortana_completely() -> bool:
+    return SESSION.read_dword(_CORTANA, "AllowCortana") == 0
+
+
+# ── Disable Cloud Content Search ───────────────────────────────────────────
+
+
+def _apply_disable_cloud_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable cloud content in search results")
+    SESSION.backup([_SEARCH_CU], "CloudSearch")
+    SESSION.set_dword(_SEARCH_CU, "AllowCloudSearch", 0)
+    SESSION.set_dword(_SEARCH_CU, "AllowSearchToUseLocation", 0)
+
+
+def _remove_disable_cloud_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "AllowCloudSearch")
+    SESSION.delete_value(_SEARCH_CU, "AllowSearchToUseLocation")
+
+
+def _detect_disable_cloud_search() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "AllowCloudSearch") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -169,5 +209,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_EXPLORER],
         description="Hides the search box / icon from the taskbar.",
         tags=["search", "taskbar", "ux"],
+    ),
+    TweakDef(
+        id="disable-cortana-completely",
+        label="Disable Cortana Entirely",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_cortana_completely,
+        remove_fn=_remove_disable_cortana_completely,
+        detect_fn=_detect_disable_cortana_completely,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CORTANA],
+        description="Completely disables Cortana via Group Policy.",
+        tags=["cortana", "privacy", "assistant"],
+    ),
+    TweakDef(
+        id="disable-cloud-search",
+        label="Disable Cloud Content Search",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_cloud_search,
+        remove_fn=_remove_disable_cloud_search,
+        detect_fn=_detect_disable_cloud_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description="Disables cloud content and location-based results in Windows search.",
+        tags=["search", "cloud", "privacy"],
     ),
 ]

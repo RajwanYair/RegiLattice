@@ -218,6 +218,46 @@ def detect_pip_user_default() -> bool:
     return SESSION.read_string(_PIP_ENV, "PIP_USER") == "1"
 
 
+# ── Pip Disable Cache (save disk) ──────────────────────────────────────────
+
+
+def apply_pip_no_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Pip: set PIP_NO_CACHE_DIR=1 to save disk space")
+    SESSION.backup([_PIP_ENV], "PipNoCache")
+    SESSION.set_string(_PIP_ENV, "PIP_NO_CACHE_DIR", "1")
+
+
+def remove_pip_no_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_ENV, "PIP_NO_CACHE_DIR")
+
+
+def detect_pip_no_cache() -> bool:
+    return SESSION.read_string(_PIP_ENV, "PIP_NO_CACHE_DIR") == "1"
+
+
+# ── Node.js npm Prefix (user-level installs) ─────────────────────────────
+
+_NODE_ENV = r"HKEY_CURRENT_USER\Environment"
+
+
+def apply_npm_prefer_offline(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("npm: set npm_config_prefer_offline for faster installs")
+    SESSION.backup([_NODE_ENV], "NpmOffline")
+    SESSION.set_string(_NODE_ENV, "npm_config_prefer_offline", "true")
+
+
+def remove_npm_prefer_offline(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NODE_ENV, "npm_config_prefer_offline")
+
+
+def detect_npm_prefer_offline() -> bool:
+    return SESSION.read_string(_NODE_ENV, "npm_config_prefer_offline") == "true"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -297,5 +337,31 @@ TWEAKS: List[TweakDef] = [
             "to user site-packages by default (no admin required)."
         ),
         tags=["python", "pip", "packages"],
+    ),
+    TweakDef(
+        id="pip-no-cache",
+        label="Pip Disable Cache (Save Disk)",
+        category="Package Management",
+        apply_fn=apply_pip_no_cache,
+        remove_fn=remove_pip_no_cache,
+        detect_fn=detect_pip_no_cache,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PIP_ENV],
+        description="Sets PIP_NO_CACHE_DIR=1 to avoid storing downloaded package caches.",
+        tags=["python", "pip", "disk"],
+    ),
+    TweakDef(
+        id="npm-prefer-offline",
+        label="npm Prefer Offline Cache",
+        category="Package Management",
+        apply_fn=apply_npm_prefer_offline,
+        remove_fn=remove_npm_prefer_offline,
+        detect_fn=detect_npm_prefer_offline,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NODE_ENV],
+        description="Sets npm to prefer local cache for faster installs.",
+        tags=["npm", "node", "packages", "offline"],
     ),
 ]

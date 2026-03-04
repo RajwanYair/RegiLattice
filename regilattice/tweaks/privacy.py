@@ -225,6 +225,59 @@ def _detect_disable_diagtrack() -> bool:
     return SESSION.read_dword(_DIAG, "ShowedToastAtLevel") == 1
 
 
+# ── Disable Online Speech Recognition ────────────────────────────────────────
+
+_SPEECH = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
+)
+
+
+def _apply_disable_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable online speech recognition")
+    SESSION.backup([_SPEECH], "Speech")
+    SESSION.set_dword(_SPEECH, "HasAccepted", 0)
+
+
+def _remove_disable_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SPEECH, "HasAccepted", 1)
+
+
+def _detect_disable_speech() -> bool:
+    return SESSION.read_dword(_SPEECH, "HasAccepted") == 0
+
+
+# ── Disable Inking & Typing Personalization ──────────────────────────────────
+
+_INK = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"
+)
+_INK_TRAINED = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore"
+)
+
+
+def _apply_disable_inking(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable inking & typing personalization")
+    SESSION.backup([_INK, _INK_TRAINED], "Inking")
+    SESSION.set_dword(_INK, "RestrictImplicitInkCollection", 1)
+    SESSION.set_dword(_INK, "RestrictImplicitTextCollection", 1)
+    SESSION.set_dword(_INK_TRAINED, "HarvestContacts", 0)
+
+
+def _remove_disable_inking(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_INK, "RestrictImplicitInkCollection", 0)
+    SESSION.set_dword(_INK, "RestrictImplicitTextCollection", 0)
+    SESSION.set_dword(_INK_TRAINED, "HarvestContacts", 1)
+
+
+def _detect_disable_inking() -> bool:
+    return SESSION.read_dword(_INK, "RestrictImplicitInkCollection") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -337,5 +390,31 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_DIAG],
         description="Disables Connected User Experiences and Telemetry (DiagTrack).",
         tags=["privacy", "telemetry", "diagtrack"],
+    ),
+    TweakDef(
+        id="disable-online-speech",
+        label="Disable Online Speech Recognition",
+        category="Privacy",
+        apply_fn=_apply_disable_speech,
+        remove_fn=_remove_disable_speech,
+        detect_fn=_detect_disable_speech,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SPEECH],
+        description="Stops sending voice data to Microsoft for online speech recognition.",
+        tags=["privacy", "speech", "voice"],
+    ),
+    TweakDef(
+        id="disable-inking-personalization",
+        label="Disable Inking & Typing Personalization",
+        category="Privacy",
+        apply_fn=_apply_disable_inking,
+        remove_fn=_remove_disable_inking,
+        detect_fn=_detect_disable_inking,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_INK, _INK_TRAINED],
+        description="Prevents Windows from collecting typing/inking data for personalization.",
+        tags=["privacy", "inking", "typing"],
     ),
 ]

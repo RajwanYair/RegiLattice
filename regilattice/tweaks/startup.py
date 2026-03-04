@@ -123,6 +123,57 @@ def _detect_disable_store_autoinstall() -> bool:
     return SESSION.read_dword(_CONTENT_DELIVERY, "SilentInstalledAppsEnabled") == 0
 
 
+# ── Disable Teams Auto-Start ───────────────────────────────────────────────
+
+
+def _apply_disable_teams(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable Microsoft Teams auto-start")
+    SESSION.backup([_RUN_CU], "TeamsAutoStart")
+    SESSION.delete_value(_RUN_CU, "com.squirrel.Teams.Teams")
+    SESSION.delete_value(_RUN_CU, "MicrosoftTeams")
+
+
+def _remove_disable_teams(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: Teams auto-start removal is a no-op")
+
+
+def _detect_disable_teams() -> bool:
+    return (
+        SESSION.read_string(_RUN_CU, "com.squirrel.Teams.Teams") is None
+        and SESSION.read_string(_RUN_CU, "MicrosoftTeams") is None
+    )
+
+
+# ── Disable Cortana Startup ────────────────────────────────────────────────
+
+_CORTANA_STARTUP = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\StartupApproved\Run"
+)
+
+
+def _apply_disable_cortana_startup(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable Cortana startup task")
+    SESSION.backup([_RUN_CU, _CORTANA_STARTUP], "CortanaStartup")
+    SESSION.delete_value(_RUN_CU, "CortanaUI")
+    SESSION.delete_value(_RUN_CU, "Cortana")
+
+
+def _remove_disable_cortana_startup(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: Cortana startup removal is a no-op")
+
+
+def _detect_disable_cortana_startup() -> bool:
+    return (
+        SESSION.read_string(_RUN_CU, "CortanaUI") is None
+        and SESSION.read_string(_RUN_CU, "Cortana") is None
+    )
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -186,5 +237,31 @@ TWEAKS: List[TweakDef] = [
             "and OEM bloatware from the Microsoft Store."
         ),
         tags=["startup", "bloatware", "store"],
+    ),
+    TweakDef(
+        id="startup-disable-teams",
+        label="Disable Teams Auto-Start",
+        category="Startup",
+        apply_fn=_apply_disable_teams,
+        remove_fn=_remove_disable_teams,
+        detect_fn=_detect_disable_teams,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_RUN_CU],
+        description="Removes Microsoft Teams from the HKCU Run key to prevent auto-start.",
+        tags=["startup", "teams", "performance"],
+    ),
+    TweakDef(
+        id="disable-cortana-startup",
+        label="Disable Cortana Startup",
+        category="Startup",
+        apply_fn=_apply_disable_cortana_startup,
+        remove_fn=_remove_disable_cortana_startup,
+        detect_fn=_detect_disable_cortana_startup,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_RUN_CU],
+        description="Removes Cortana from the HKCU Run key to prevent auto-start at login.",
+        tags=["startup", "cortana", "performance"],
     ),
 ]

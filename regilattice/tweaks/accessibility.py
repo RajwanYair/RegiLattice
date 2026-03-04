@@ -20,6 +20,8 @@ _THEME = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Pe
 _DESKTOP = r"HKEY_CURRENT_USER\Control Panel\Desktop"
 _WINDOW_METRICS = r"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"
 _DWM = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
+_NARRATOR = r"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam"
+_HIGHCONTRAST = r"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast"
 
 
 # ── Disable Sticky/Toggle/Filter Keys Popups ────────────────────────────────
@@ -130,6 +132,46 @@ def _detect_wide_scrollbar() -> bool:
     return SESSION.read_string(_WINDOW_METRICS, "ScrollWidth") == "-400"
 
 
+# ── Disable Narrator at Login ───────────────────────────────────────────────
+
+
+def _apply_disable_narrator(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Narrator auto-start")
+    SESSION.backup([_NARRATOR], "Narrator")
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 0)
+    SESSION.set_dword(_NARRATOR, "RunNarratorAtLogon", 0)
+
+
+def _remove_disable_narrator(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NARRATOR, "WinEnterLaunchEnabled")
+    SESSION.delete_value(_NARRATOR, "RunNarratorAtLogon")
+
+
+def _detect_disable_narrator() -> bool:
+    return SESSION.read_dword(_NARRATOR, "WinEnterLaunchEnabled") == 0
+
+
+# ── Enable High Contrast Mode ───────────────────────────────────────────────
+
+
+def _apply_high_contrast(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: enable high contrast mode")
+    SESSION.backup([_HIGHCONTRAST], "HighContrast")
+    SESSION.set_string(_HIGHCONTRAST, "Flags", "127")
+
+
+def _remove_high_contrast(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_HIGHCONTRAST, "Flags", "126")  # default off
+
+
+def _detect_high_contrast() -> bool:
+    return SESSION.read_string(_HIGHCONTRAST, "Flags") == "127"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -209,5 +251,31 @@ TWEAKS: List[TweakDef] = [
             "for easier targeting with mouse or touch."
         ),
         tags=["accessibility", "ui", "scrollbar"],
+    ),
+    TweakDef(
+        id="disable-narrator",
+        label="Disable Narrator Auto-Start",
+        category="Accessibility",
+        apply_fn=_apply_disable_narrator,
+        remove_fn=_remove_disable_narrator,
+        detect_fn=_detect_disable_narrator,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR],
+        description="Prevents Narrator from starting at login or via Win+Enter.",
+        tags=["accessibility", "narrator", "screen-reader"],
+    ),
+    TweakDef(
+        id="high-contrast-mode",
+        label="Enable High Contrast Mode",
+        category="Accessibility",
+        apply_fn=_apply_high_contrast,
+        remove_fn=_remove_high_contrast,
+        detect_fn=_detect_high_contrast,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_HIGHCONTRAST],
+        description="Enables high contrast mode for improved visual clarity.",
+        tags=["accessibility", "contrast", "display"],
     ),
 ]

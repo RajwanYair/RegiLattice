@@ -198,6 +198,44 @@ def detect_wsl_network_mode() -> bool:
     return SESSION.read_dword(_LXSS_NET, "EnableMirroredNetworking") == 1
 
 
+# ── WSL Memory Reclaim ─────────────────────────────────────────────────────
+
+
+def apply_wsl_memory_reclaim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WSL: enable memory reclaim (gradual free)")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_MemReclaim")
+    SESSION.set_dword(_LXSS_NET, "EnablePageReporting", 1)
+
+
+def remove_wsl_memory_reclaim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "EnablePageReporting")
+
+
+def detect_wsl_memory_reclaim() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "EnablePageReporting") == 1
+
+
+# ── WSL DNS Tunneling ──────────────────────────────────────────────────────
+
+
+def apply_wsl_dns_tunnel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WSL: enable DNS tunneling for VPN compatibility")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_DNS")
+    SESSION.set_dword(_LXSS_NET, "EnableDnsTunneling", 1)
+
+
+def remove_wsl_dns_tunnel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "EnableDnsTunneling")
+
+
+def detect_wsl_dns_tunnel() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "EnableDnsTunneling") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -286,5 +324,31 @@ TWEAKS: List[TweakDef] = [
             "forwarding and host-network access work transparently."
         ),
         tags=["wsl", "network", "localhost"],
+    ),
+    TweakDef(
+        id="wsl-memory-reclaim",
+        label="WSL Memory Reclaim",
+        category="WSL",
+        apply_fn=apply_wsl_memory_reclaim,
+        remove_fn=remove_wsl_memory_reclaim,
+        detect_fn=detect_wsl_memory_reclaim,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description="Enables WSL 2 memory reclaim so unused VM memory is returned to the host.",
+        tags=["wsl", "memory", "performance"],
+    ),
+    TweakDef(
+        id="wsl-dns-tunneling",
+        label="WSL DNS Tunneling",
+        category="WSL",
+        apply_fn=apply_wsl_dns_tunnel,
+        remove_fn=remove_wsl_dns_tunnel,
+        detect_fn=detect_wsl_dns_tunnel,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description="Enables DNS tunneling in WSL 2 for better VPN and proxy compatibility.",
+        tags=["wsl", "dns", "vpn"],
     ),
 ]

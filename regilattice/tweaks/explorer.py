@@ -284,6 +284,50 @@ def _detect_disable_auto_folder_type() -> bool:
     return SESSION.read_string(_BAGS_KEY, "FolderType") == "NotSpecified"
 
 
+# ── Disable Breadcrumb Bar ────────────────────────────────────────────────────
+
+_RIBBON_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
+)
+
+
+def _apply_disable_breadcrumbs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable breadcrumb bar (show full path)")
+    SESSION.backup([_CABINETSTATE], "Breadcrumbs")
+    SESSION.set_dword(_CABINETSTATE, "FullPath", 1)
+
+
+def _remove_disable_breadcrumbs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CABINETSTATE], "Breadcrumbs_Remove")
+    SESSION.delete_value(_CABINETSTATE, "FullPath")
+
+
+def _detect_disable_breadcrumbs() -> bool:
+    return SESSION.read_dword(_CABINETSTATE, "FullPath") == 1
+
+
+# ── Disable Folder Merge Conflicts ──────────────────────────────────────────
+
+
+def _apply_disable_merge_conflicts(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable folder merge conflict prompts")
+    SESSION.backup([_ADV], "MergeConflicts")
+    SESSION.set_dword(_ADV, "HideMergeConflicts", 1)
+
+
+def _remove_disable_merge_conflicts(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "MergeConflicts_Remove")
+    SESSION.set_dword(_ADV, "HideMergeConflicts", 0)
+
+
+def _detect_disable_merge_conflicts() -> bool:
+    return SESSION.read_dword(_ADV, "HideMergeConflicts") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: List[TweakDef] = [
@@ -445,5 +489,31 @@ TWEAKS: List[TweakDef] = [
             "(e.g. 'Pictures', 'Music') which causes slow loading."
         ),
         tags=["explorer", "performance"],
+    ),
+    TweakDef(
+        id="disable-breadcrumbs",
+        label="Disable Breadcrumb Bar",
+        category="Explorer",
+        apply_fn=_apply_disable_breadcrumbs,
+        remove_fn=_remove_disable_breadcrumbs,
+        detect_fn=_detect_disable_breadcrumbs,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CABINETSTATE],
+        description="Shows the full path in Explorer address bar instead of breadcrumbs.",
+        tags=["explorer", "navigation"],
+    ),
+    TweakDef(
+        id="disable-merge-conflicts",
+        label="Disable Folder Merge Conflicts",
+        category="Explorer",
+        apply_fn=_apply_disable_merge_conflicts,
+        remove_fn=_remove_disable_merge_conflicts,
+        detect_fn=_detect_disable_merge_conflicts,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description="Hides folder merge conflict prompts when copying/moving folders.",
+        tags=["explorer", "ux"],
     ),
 ]
