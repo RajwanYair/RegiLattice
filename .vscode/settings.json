@@ -76,7 +76,9 @@
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.env.windows": {
     "PYTHONDONTWRITEBYTECODE": "1",
-    "PYTHONPATH": "${workspaceFolder}"
+    "PYTHONPATH": "${workspaceFolder}",
+    "PYTHONIOENCODING": "utf-8",
+    "PATH": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin;${env:PATH}"
   },
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,

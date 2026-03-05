@@ -7,12 +7,12 @@ so that the GUI, CLI, and menu can iterate over a single flat list.
 
 from __future__ import annotations
 
+import concurrent.futures
 import importlib
 import json
 import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -113,6 +113,7 @@ def _load_plugins() -> None:
     _ALL_TWEAKS.clear()
     _TWEAK_INDEX.clear()
     seen_ids: set[str] = set()
+    assert __package__ is not None
     package = importlib.import_module(__package__)
     for _finder, name, _ispkg in pkgutil.iter_modules(package.__path__):
         if name.startswith("_"):
@@ -421,9 +422,9 @@ def status_map(*, parallel: bool = False, max_workers: int = 8) -> dict[str, str
     if not parallel:
         return {td.id: tweak_status(td) for td in _ALL_TWEAKS}
     results: dict[str, str] = {}
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
-        for fut in as_completed(futures):
+        for fut in concurrent.futures.as_completed(futures):
             results[futures[fut]] = fut.result()
     return results
 
@@ -520,9 +521,9 @@ def apply_all(
             return td.id, f"error: {exc}"
 
     if parallel:
-        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
             futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
-            for fut in as_completed(futures):
+            for fut in concurrent.futures.as_completed(futures):
                 tid, res = fut.result()
                 results[tid] = res
                 if progress_cb:
@@ -560,9 +561,9 @@ def remove_all(
             return td.id, f"error: {exc}"
 
     if parallel:
-        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
             futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
-            for fut in as_completed(futures):
+            for fut in concurrent.futures.as_completed(futures):
                 tid, res = fut.result()
                 results[tid] = res
                 if progress_cb:
