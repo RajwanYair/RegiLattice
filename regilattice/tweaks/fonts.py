@@ -638,3 +638,116 @@ TWEAKS += [
         tags=["fonts", "antialiasing", "smoothing", "rendering"],
     ),
 ]
+
+
+# ── Set Font Smoothing Orientation (RGB) ─────────────────────────────────────
+
+
+def _apply_set_smoothing_orientation(*, require_admin: bool = False) -> None:
+    SESSION.log("Fonts: set font smoothing orientation to RGB")
+    SESSION.backup([_KEY_DESKTOP], "FontSmoothingOrientation")
+    SESSION.set_string(_KEY_DESKTOP, "FontSmoothingOrientation", "1")
+
+
+def _remove_set_smoothing_orientation(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_KEY_DESKTOP, "FontSmoothingOrientation", "0")
+
+
+def _detect_set_smoothing_orientation() -> bool:
+    return SESSION.read_string(_KEY_DESKTOP, "FontSmoothingOrientation") == "1"
+
+
+# ── Set ClearType Contrast Level ─────────────────────────────────────────────
+
+
+def _apply_set_cleartype_contrast(*, require_admin: bool = False) -> None:
+    SESSION.log("Fonts: set ClearType gamma to high contrast (1000)")
+    SESSION.backup([_KEY_DESKTOP], "ClearTypeContrast")
+    SESSION.set_dword(_KEY_DESKTOP, "FontSmoothingGamma", 1000)
+
+
+def _remove_set_cleartype_contrast(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_KEY_DESKTOP, "FontSmoothingGamma", 1400)
+
+
+def _detect_set_cleartype_contrast() -> bool:
+    return SESSION.read_dword(_KEY_DESKTOP, "FontSmoothingGamma") == 1000
+
+
+# ── Increase GDI Font Glyph Cache ────────────────────────────────────────────
+
+_KEY_GRE = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft"
+    r"\Windows NT\CurrentVersion\GRE_Initialize"
+)
+
+
+def _apply_increase_glyph_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Fonts: increase GDI glyph cache to 4 MB")
+    SESSION.backup([_KEY_GRE], "GlyphCacheSize")
+    SESSION.set_dword(_KEY_GRE, "GlyphCacheSize", 4194304)
+
+
+def _remove_increase_glyph_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_GRE, "GlyphCacheSize")
+
+
+def _detect_increase_glyph_cache() -> bool:
+    return SESSION.read_dword(_KEY_GRE, "GlyphCacheSize") == 4194304
+
+
+TWEAKS += [
+    TweakDef(
+        id="font-set-smoothing-orientation",
+        label="Set Font Smoothing Orientation to RGB",
+        category="Fonts",
+        apply_fn=_apply_set_smoothing_orientation,
+        remove_fn=_remove_set_smoothing_orientation,
+        detect_fn=_detect_set_smoothing_orientation,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Sets subpixel font smoothing orientation to RGB for standard LCD "
+            "panels. Improves ClearType rendering on horizontal RGB displays. "
+            "Default: 0 (auto). Recommended: 1 (RGB) for most monitors."
+        ),
+        tags=["fonts", "cleartype", "subpixel", "orientation", "rendering"],
+    ),
+    TweakDef(
+        id="font-set-cleartype-contrast",
+        label="Set ClearType High Contrast",
+        category="Fonts",
+        apply_fn=_apply_set_cleartype_contrast,
+        remove_fn=_remove_set_cleartype_contrast,
+        detect_fn=_detect_set_cleartype_contrast,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Sets ClearType gamma to 1000 for higher contrast text rendering. "
+            "Makes text appear bolder and easier to read on most displays. "
+            "Default: 1400. Recommended: 1000 for high-DPI screens."
+        ),
+        tags=["fonts", "cleartype", "contrast", "gamma", "rendering"],
+    ),
+    TweakDef(
+        id="font-increase-glyph-cache",
+        label="Increase GDI Glyph Cache Size",
+        category="Fonts",
+        apply_fn=_apply_increase_glyph_cache,
+        remove_fn=_remove_increase_glyph_cache,
+        detect_fn=_detect_increase_glyph_cache,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_GRE],
+        description=(
+            "Increases the GDI font glyph cache from default 2 MB to 4 MB. "
+            "Reduces glyph re-rasterization in multi-font or CJK workloads. "
+            "Default: 2097152 (~2 MB). Recommended: 4194304 (4 MB)."
+        ),
+        tags=["fonts", "glyph-cache", "gdi", "performance", "rendering"],
+    ),
+]

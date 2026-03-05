@@ -615,3 +615,115 @@ TWEAKS += [
         tags=["firefox", "update", "auto-update", "policy", "managed"],
     ),
 ]
+
+
+# ── Disable Firefox Password Auto-Save ───────────────────────────────────────
+
+
+def _apply_ff_password_autosave_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Firefox password auto-save via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxPasswordAutoSave")
+    SESSION.set_dword(_FF_POLICY, "OfferToSaveLogins", 0)
+
+
+def _remove_ff_password_autosave_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "OfferToSaveLogins")
+
+
+def _detect_ff_password_autosave_off() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "OfferToSaveLogins") == 0
+
+
+# ── Disable Firefox Screenshots ──────────────────────────────────────────────
+
+
+def _apply_ff_screenshots_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Firefox Screenshots via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxScreenshots")
+    SESSION.set_dword(_FF_POLICY, "DisableFirefoxScreenshots", 1)
+
+
+def _remove_ff_screenshots_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableFirefoxScreenshots")
+
+
+def _detect_ff_screenshots_off() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableFirefoxScreenshots") == 1
+
+
+# ── Disable Firefox Safe Mode ────────────────────────────────────────────────
+
+
+def _apply_ff_safe_mode_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Firefox safe mode access via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxSafeMode")
+    SESSION.set_dword(_FF_POLICY, "DisableSafeMode", 1)
+
+
+def _remove_ff_safe_mode_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableSafeMode")
+
+
+def _detect_ff_safe_mode_off() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableSafeMode") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="ff-disable-password-autosave",
+        label="Disable Firefox Password Auto-Save",
+        category="Firefox",
+        apply_fn=_apply_ff_password_autosave_off,
+        remove_fn=_remove_ff_password_autosave_off,
+        detect_fn=_detect_ff_password_autosave_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables the offer-to-save-logins prompt in Firefox via enterprise "
+            "policy. Use when an external password manager is preferred. "
+            "Default: Enabled. Recommended: Disabled with external manager."
+        ),
+        tags=["firefox", "passwords", "autosave", "policy", "security"],
+    ),
+    TweakDef(
+        id="ff-disable-screenshots",
+        label="Disable Firefox Screenshots",
+        category="Firefox",
+        apply_fn=_apply_ff_screenshots_off,
+        remove_fn=_remove_ff_screenshots_off,
+        detect_fn=_detect_ff_screenshots_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables the built-in Firefox Screenshots feature via enterprise "
+            "policy. Removes the screenshot button from the toolbar. "
+            "Default: Enabled. Recommended: Disabled in managed environments."
+        ),
+        tags=["firefox", "screenshots", "policy", "feature"],
+    ),
+    TweakDef(
+        id="ff-disable-safe-mode",
+        label="Disable Firefox Safe Mode",
+        category="Firefox",
+        apply_fn=_apply_ff_safe_mode_off,
+        remove_fn=_remove_ff_safe_mode_off,
+        detect_fn=_detect_ff_safe_mode_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables access to Firefox Safe Mode via enterprise policy. "
+            "Prevents users from bypassing managed extensions and settings. "
+            "Default: Enabled. Recommended: Disabled for locked-down deployments."
+        ),
+        tags=["firefox", "safe-mode", "policy", "managed", "security"],
+    ),
+]

@@ -542,3 +542,122 @@ TWEAKS += [
         tags=["tasks", "maintenance", "scheduler", "background"],
     ),
 ]
+
+
+# -- Disable CEIP Program Task (Policy) ----------------------------------------
+
+_CEIP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient"
+
+
+def _apply_schtask_disable_ceip(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("ScheduledTasks: disable CEIP data collection via policy")
+    SESSION.backup([_CEIP, _CEIP_POLICY], "SchtaskCEIP")
+    SESSION.set_dword(_CEIP, "CEIPEnable", 0)
+    SESSION.set_dword(_CEIP_POLICY, "CorporateSQMURL", 0)
+
+
+def _remove_schtask_disable_ceip(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CEIP, "CEIPEnable")
+    SESSION.delete_value(_CEIP_POLICY, "CorporateSQMURL")
+
+
+def _detect_schtask_disable_ceip() -> bool:
+    return SESSION.read_dword(_CEIP, "CEIPEnable") == 0
+
+
+# -- Disable Application Experience Task ----------------------------------------
+
+_APP_EXP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
+
+
+def _apply_schtask_disable_app_experience(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("ScheduledTasks: disable Application Experience / PCA")
+    SESSION.backup([_APP_EXP], "SchtaskAppExperience")
+    SESSION.set_dword(_APP_EXP, "DisablePCA", 1)
+    SESSION.set_dword(_APP_EXP, "DisableEngine", 1)
+
+
+def _remove_schtask_disable_app_experience(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_APP_EXP, "DisablePCA")
+    SESSION.delete_value(_APP_EXP, "DisableEngine")
+
+
+def _detect_schtask_disable_app_experience() -> bool:
+    return SESSION.read_dword(_APP_EXP, "DisablePCA") == 1
+
+
+# -- Disable Disk Diagnostics Task ----------------------------------------------
+
+_DISK_DIAG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}"
+
+
+def _apply_schtask_disable_disk_diag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("ScheduledTasks: disable Disk Diagnostics data collector")
+    SESSION.backup([_DISK_DIAG], "SchtaskDiskDiag")
+    SESSION.set_dword(_DISK_DIAG, "ScenarioExecutionEnabled", 0)
+
+
+def _remove_schtask_disable_disk_diag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DISK_DIAG, "ScenarioExecutionEnabled")
+
+
+def _detect_schtask_disable_disk_diag() -> bool:
+    return SESSION.read_dword(_DISK_DIAG, "ScenarioExecutionEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="schtask-disable-ceip",
+        label="Disable CEIP Data Collection (Policy)",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_ceip,
+        remove_fn=_remove_schtask_disable_ceip,
+        detect_fn=_detect_schtask_disable_ceip,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CEIP, _CEIP_POLICY],
+        description=(
+            "Disables Customer Experience Improvement Program data collection via policy. "
+            "Stops CEIP telemetry scheduled tasks. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "ceip", "telemetry", "policy"],
+    ),
+    TweakDef(
+        id="schtask-disable-app-experience",
+        label="Disable Application Experience (PCA)",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_app_experience,
+        remove_fn=_remove_schtask_disable_app_experience,
+        detect_fn=_detect_schtask_disable_app_experience,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_APP_EXP],
+        description=(
+            "Disables Application Experience and Program Compatibility Assistant tasks. "
+            "Reduces background CPU usage from compatibility checks. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "app-experience", "pca", "compatibility"],
+    ),
+    TweakDef(
+        id="schtask-disable-disk-diag",
+        label="Disable Disk Diagnostics Data Collector",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_disk_diag,
+        remove_fn=_remove_schtask_disable_disk_diag,
+        detect_fn=_detect_schtask_disable_disk_diag,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DISK_DIAG],
+        description=(
+            "Disables the Disk Diagnostics data collector scheduled task. "
+            "Stops disk telemetry reporting to Microsoft. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "disk", "diagnostics", "telemetry"],
+    ),
+]

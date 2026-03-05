@@ -959,3 +959,119 @@ TWEAKS += [
         tags=["win11", "taskbar", "alignment", "left"],
     ),
 ]
+
+
+# -- Disable Rounded Corners ---------------------------------------------------
+
+_DWM_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
+
+
+def _apply_w11_disable_rounded_corners(*, require_admin: bool = True) -> None:
+    SESSION.log("Win11: disabling rounded window corners")
+    SESSION.backup([_DWM_KEY], "W11_RoundedCorners")
+    SESSION.set_dword(_DWM_KEY, "UseWindowFrameStagingBuffer", 0)
+
+
+def _remove_w11_disable_rounded_corners(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_DWM_KEY, "UseWindowFrameStagingBuffer")
+
+
+def _detect_w11_disable_rounded_corners() -> bool:
+    return SESSION.read_dword(_DWM_KEY, "UseWindowFrameStagingBuffer") == 0
+
+
+# -- Restore Classic Taskbar Context Menu --------------------------------------
+
+_TASKBAR_CM_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+)
+
+
+def _apply_w11_classic_taskbar_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: restoring classic taskbar context menu")
+    SESSION.backup([_TASKBAR_CM_POLICY], "W11_ClassicTaskbarCM")
+    SESSION.set_dword(_TASKBAR_CM_POLICY, "ForceClassicTaskbarContextMenu", 1)
+
+
+def _remove_w11_classic_taskbar_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TASKBAR_CM_POLICY, "ForceClassicTaskbarContextMenu")
+
+
+def _detect_w11_classic_taskbar_context() -> bool:
+    return SESSION.read_dword(_TASKBAR_CM_POLICY, "ForceClassicTaskbarContextMenu") == 1
+
+
+# -- Disable Suggested Actions (Policy) ----------------------------------------
+
+
+def _apply_w11_disable_suggested_actions_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable suggested actions via Group Policy")
+    SESSION.backup([_TASKBAR_CM_POLICY], "W11_SuggestedActionsPolicy")
+    SESSION.set_dword(_TASKBAR_CM_POLICY, "DisableSuggestedActions", 1)
+
+
+def _remove_w11_disable_suggested_actions_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TASKBAR_CM_POLICY, "DisableSuggestedActions")
+
+
+def _detect_w11_disable_suggested_actions_policy() -> bool:
+    return SESSION.read_dword(_TASKBAR_CM_POLICY, "DisableSuggestedActions") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="w11-disable-rounded-corners",
+        label="Disable Rounded Window Corners",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_rounded_corners,
+        remove_fn=_remove_w11_disable_rounded_corners,
+        detect_fn=_detect_w11_disable_rounded_corners,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DWM_KEY],
+        description=(
+            "Disables Windows 11 rounded window corners by disabling DWM "
+            "frame staging buffer. Gives a sharper, square-corner look. "
+            "Default: enabled. Recommended: personal preference."
+        ),
+        tags=["win11", "rounded-corners", "dwm", "appearance"],
+    ),
+    TweakDef(
+        id="w11-classic-taskbar-context",
+        label="Restore Classic Taskbar Context Menu",
+        category="Windows 11",
+        apply_fn=_apply_w11_classic_taskbar_context,
+        remove_fn=_remove_w11_classic_taskbar_context,
+        detect_fn=_detect_w11_classic_taskbar_context,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TASKBAR_CM_POLICY],
+        description=(
+            "Restores the classic taskbar right-click context menu with full "
+            "options like toolbars and Task Manager via Group Policy. "
+            "Default: modern menu. Recommended: classic."
+        ),
+        tags=["win11", "taskbar", "context-menu", "classic"],
+    ),
+    TweakDef(
+        id="w11-disable-suggested-actions-policy",
+        label="Disable Suggested Actions (Policy)",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_suggested_actions_policy,
+        remove_fn=_remove_w11_disable_suggested_actions_policy,
+        detect_fn=_detect_w11_disable_suggested_actions_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TASKBAR_CM_POLICY],
+        description=(
+            "Disables Windows 11 Suggested Actions popup via Group Policy. "
+            "Machine-wide enforcement for managed environments. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["win11", "suggested-actions", "policy", "gpo"],
+    ),
+]

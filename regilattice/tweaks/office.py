@@ -763,3 +763,125 @@ TWEAKS += [
         tags=["office", "feedback", "survey", "notifications"],
     ),
 ]
+
+
+# ── Disable Office Telemetry Dashboard ────────────────────────────────────────
+
+
+def _apply_disable_telem_dashboard(*, require_admin: bool = False) -> None:
+    SESSION.log("Office: disable telemetry dashboard logging and upload")
+    SESSION.backup([_OFFICE_TELEM_DASH], "OfficeTelemetryDashboard")
+    SESSION.set_dword(_OFFICE_TELEM_DASH, "Enablelogging", 0)
+    SESSION.set_dword(_OFFICE_TELEM_DASH, "EnableUpload", 0)
+
+
+def _remove_disable_telem_dashboard(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_OFFICE_TELEM_DASH, "Enablelogging")
+    SESSION.delete_value(_OFFICE_TELEM_DASH, "EnableUpload")
+
+
+def _detect_disable_telem_dashboard() -> bool:
+    return (
+        SESSION.read_dword(_OFFICE_TELEM_DASH, "Enablelogging") == 0
+        and SESSION.read_dword(_OFFICE_TELEM_DASH, "EnableUpload") == 0
+    )
+
+
+# ── Disable Office Feedback (Policy) ─────────────────────────────────────────
+
+_OFFICE_FEEDBACK_LM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\Feedback"
+
+
+def _apply_disable_office_feedback_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable feedback via machine policy")
+    SESSION.backup([_OFFICE_FEEDBACK_LM], "OfficeFeedbackPolicy")
+    SESSION.set_dword(_OFFICE_FEEDBACK_LM, "Enabled", 0)
+    SESSION.set_dword(_OFFICE_FEEDBACK_LM, "IncludeEmail", 0)
+
+
+def _remove_disable_office_feedback_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OFFICE_FEEDBACK_LM, "Enabled")
+    SESSION.delete_value(_OFFICE_FEEDBACK_LM, "IncludeEmail")
+
+
+def _detect_disable_office_feedback_policy() -> bool:
+    return (
+        SESSION.read_dword(_OFFICE_FEEDBACK_LM, "Enabled") == 0
+        and SESSION.read_dword(_OFFICE_FEEDBACK_LM, "IncludeEmail") == 0
+    )
+
+
+# ── Set Office Visual Theme to Dark ──────────────────────────────────────────
+
+_OFFICE_THEME_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common"
+
+
+def _apply_office_dark_theme(*, require_admin: bool = False) -> None:
+    SESSION.log("Office: set visual theme to dark")
+    SESSION.backup([_OFFICE_THEME_CU], "OfficeThemeDark")
+    SESSION.set_dword(_OFFICE_THEME_CU, "UI Theme", 4)
+
+
+def _remove_office_dark_theme(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_OFFICE_THEME_CU, "UI Theme")
+
+
+def _detect_office_dark_theme() -> bool:
+    return SESSION.read_dword(_OFFICE_THEME_CU, "UI Theme") == 4
+
+
+TWEAKS += [
+    TweakDef(
+        id="office-disable-telemetry-dashboard",
+        label="Disable Office Telemetry Dashboard",
+        category="Office",
+        apply_fn=_apply_disable_telem_dashboard,
+        remove_fn=_remove_disable_telem_dashboard,
+        detect_fn=_detect_disable_telem_dashboard,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICE_TELEM_DASH],
+        description=(
+            "Disables Office telemetry dashboard logging and data upload. "
+            "Prevents usage data collection via OSM. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["office", "telemetry", "dashboard", "privacy"],
+    ),
+    TweakDef(
+        id="office-disable-office-feedback",
+        label="Disable Office Feedback (Policy)",
+        category="Office",
+        apply_fn=_apply_disable_office_feedback_policy,
+        remove_fn=_remove_disable_office_feedback_policy,
+        detect_fn=_detect_disable_office_feedback_policy,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OFFICE_FEEDBACK_LM],
+        description=(
+            "Disables Office feedback collection via machine-level policy. "
+            "Blocks feedback button and email inclusion in reports. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["office", "feedback", "policy", "privacy"],
+    ),
+    TweakDef(
+        id="office-dark-theme",
+        label="Set Office Visual Theme to Dark",
+        category="Office",
+        apply_fn=_apply_office_dark_theme,
+        remove_fn=_remove_office_dark_theme,
+        detect_fn=_detect_office_dark_theme,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICE_THEME_CU],
+        description=(
+            "Sets the Office 365 visual theme to Dark Gray (theme 4). "
+            "Reduces eye strain in low-light environments. "
+            "Default: Colorful (0). Recommended: Dark for dark-mode users."
+        ),
+        tags=["office", "theme", "dark", "appearance"],
+    ),
+]

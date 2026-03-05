@@ -20,7 +20,9 @@ def is_admin() -> bool:
     """Return True if the current process has administrator privileges."""
     if os.name != "nt":
         _getuid = getattr(os, "getuid", None)
-        return bool(_getuid is not None and _getuid() == 0)
+        if callable(_getuid):
+            return _getuid() == 0  # type: ignore[no-any-return]
+        return False
     try:
         return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined,unused-ignore]
     except Exception:

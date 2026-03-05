@@ -752,3 +752,129 @@ TWEAKS += [
         tags=["power", "connected-standby", "pci-express", "idle"],
     ),
 ]
+
+
+# ── Disable USB Selective Suspend (USBHUB3) ─────────────────────────────────
+
+_USBHUB3_KEY = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\USBHUB3\Parameters"
+)
+
+
+def _apply_usb_selective_suspend_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable USB 3.0 hub selective suspend")
+    SESSION.backup([_USBHUB3_KEY], "USBHUB3SelectiveSuspend")
+    SESSION.set_dword(_USBHUB3_KEY, "DisableSelectiveSuspend", 1)
+
+
+def _remove_usb_selective_suspend_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_USBHUB3_KEY, "DisableSelectiveSuspend")
+
+
+def _detect_usb_selective_suspend_off() -> bool:
+    return SESSION.read_dword(_USBHUB3_KEY, "DisableSelectiveSuspend") == 1
+
+
+# ── Disable PCI Express Link State Power Management (ASPM) ──────────────────
+
+_PCI_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PCI"
+
+
+def _apply_pcie_link_pm_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable PCI Express ASPM (link state PM)")
+    SESSION.backup([_PCI_KEY], "PCIeLinkPM")
+    SESSION.set_dword(_PCI_KEY, "ASPMOptOut", 1)
+
+
+def _remove_pcie_link_pm_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PCI_KEY, "ASPMOptOut")
+
+
+def _detect_pcie_link_pm_off() -> bool:
+    return SESSION.read_dword(_PCI_KEY, "ASPMOptOut") == 1
+
+
+# ── Disable Processor Idle States ───────────────────────────────────────────
+
+_POWER_IDLE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+
+
+def _apply_disable_idle_states(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable processor idle states")
+    SESSION.backup([_POWER_IDLE], "ProcessorIdleStates")
+    SESSION.set_dword(_POWER_IDLE, "EnergyEstimationEnabled", 0)
+    SESSION.set_dword(_POWER_IDLE, "ExitLatencyCheckEnabled", 1)
+
+
+def _remove_disable_idle_states(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POWER_IDLE, "EnergyEstimationEnabled")
+    SESSION.delete_value(_POWER_IDLE, "ExitLatencyCheckEnabled")
+
+
+def _detect_disable_idle_states() -> bool:
+    return (
+        SESSION.read_dword(_POWER_IDLE, "EnergyEstimationEnabled") == 0
+        and SESSION.read_dword(_POWER_IDLE, "ExitLatencyCheckEnabled") == 1
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="pwr-disable-usb-selective-suspend",
+        label="Disable USB 3.0 Selective Suspend",
+        category="Power",
+        apply_fn=_apply_usb_selective_suspend_off,
+        remove_fn=_remove_usb_selective_suspend_off,
+        detect_fn=_detect_usb_selective_suspend_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USBHUB3_KEY],
+        description=(
+            "Disables selective suspend on USB 3.0 hubs (USBHUB3 driver). "
+            "Prevents USB 3.0 device disconnects during idle. "
+            "Default: Enabled. Recommended: Disabled for desktop PCs."
+        ),
+        tags=["power", "usb", "selective-suspend", "usb3"],
+    ),
+    TweakDef(
+        id="pwr-pcie-link-pm-off",
+        label="Disable PCI Express Link State Power Management",
+        category="Power",
+        apply_fn=_apply_pcie_link_pm_off,
+        remove_fn=_remove_pcie_link_pm_off,
+        detect_fn=_detect_pcie_link_pm_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PCI_KEY],
+        description=(
+            "Opts out of Active State Power Management (ASPM) for PCI Express "
+            "devices. Prevents link-state power saving that can cause latency. "
+            "Default: ASPM enabled. Recommended: Disabled for low-latency."
+        ),
+        tags=["power", "pcie", "aspm", "latency"],
+    ),
+    TweakDef(
+        id="pwr-disable-idle-states",
+        label="Disable Processor Idle States",
+        category="Power",
+        apply_fn=_apply_disable_idle_states,
+        remove_fn=_remove_disable_idle_states,
+        detect_fn=_detect_disable_idle_states,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER_IDLE],
+        description=(
+            "Disables energy estimation and enables exit latency checking to "
+            "prevent deep processor idle states (C-states). Maximises CPU "
+            "responsiveness. Default: Enabled. Recommended: Disabled for gaming."
+        ),
+        tags=["power", "idle", "c-states", "processor", "latency"],
+    ),
+]

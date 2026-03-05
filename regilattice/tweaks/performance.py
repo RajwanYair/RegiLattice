@@ -910,3 +910,115 @@ TWEAKS += [
         tags=["performance", "memory", "large-pages", "ram"],
     ),
 ]
+
+
+# -- Disable Memory Page Combining (Compression) ───────────────────────────
+
+
+def _apply_disable_memory_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable memory page combining")
+    SESSION.backup([_MEMORY_MGMT], "MemoryCompression")
+    SESSION.set_dword(_MEMORY_MGMT, "DisablePageCombining", 1)
+
+
+def _remove_disable_memory_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MEMORY_MGMT, "DisablePageCombining")
+
+
+def _detect_disable_memory_compression() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "DisablePageCombining") == 1
+
+
+# -- Set Win32PrioritySeparation for Foreground Boost ───────────────────────
+
+
+def _apply_foreground_boost(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: set Win32PrioritySeparation=38 (foreground boost)")
+    SESSION.backup([_PRIORITY_CTRL], "ForegroundBoost")
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 38)
+
+
+def _remove_foreground_boost(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 2)
+
+
+def _detect_foreground_boost() -> bool:
+    return SESSION.read_dword(_PRIORITY_CTRL, "Win32PrioritySeparation") == 38
+
+
+# -- Disable Paging Executive ───────────────────────────────────────────────
+
+
+def _apply_disable_paging_executive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable paging executive")
+    SESSION.backup([_MEMORY_MGMT], "PagingExecutive")
+    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 1)
+
+
+def _remove_disable_paging_executive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 0)
+
+
+def _detect_disable_paging_executive() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "DisablePagingExecutive") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="perf-disable-memory-compression",
+        label="Disable Memory Page Combining",
+        category="Performance",
+        apply_fn=_apply_disable_memory_compression,
+        remove_fn=_remove_disable_memory_compression,
+        detect_fn=_detect_disable_memory_compression,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Disables memory page combining (compression) to reduce CPU overhead "
+            "on systems with ample RAM. Default: Enabled. "
+            "Recommended: Disabled on 16 GB+ systems."
+        ),
+        tags=["performance", "memory", "compression", "page-combining"],
+    ),
+    TweakDef(
+        id="perf-foreground-boost",
+        label="Foreground Priority Boost (Win32PrioritySeparation)",
+        category="Performance",
+        apply_fn=_apply_foreground_boost,
+        remove_fn=_remove_foreground_boost,
+        detect_fn=_detect_foreground_boost,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PRIORITY_CTRL],
+        description=(
+            "Sets Win32PrioritySeparation to 38 (0x26) for maximum foreground "
+            "application priority boost. Improves responsiveness for interactive "
+            "apps. Default: 2. Recommended: 38 for desktops."
+        ),
+        tags=["performance", "priority", "foreground", "responsiveness"],
+    ),
+    TweakDef(
+        id="perf-disable-paging-executive",
+        label="Disable Paging Executive",
+        category="Performance",
+        apply_fn=_apply_disable_paging_executive,
+        remove_fn=_remove_disable_paging_executive,
+        detect_fn=_detect_disable_paging_executive,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Keeps kernel and drivers in physical RAM instead of allowing them "
+            "to be paged to disk. Improves system responsiveness on machines "
+            "with sufficient RAM. Default: 0. Recommended: 1 on 8 GB+ systems."
+        ),
+        tags=["performance", "paging", "executive", "memory", "kernel"],
+    ),
+]

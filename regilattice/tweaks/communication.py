@@ -645,3 +645,116 @@ TWEAKS += [
         tags=["communication", "skype", "telemetry", "privacy", "user"],
     ),
 ]
+
+
+# ── Disable Teams Background Activity ────────────────────────────────────────
+
+
+def _apply_teams_background_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Teams: disable background activity on login")
+    SESSION.backup([_TEAMS], "TeamsBackgroundOff")
+    SESSION.set_dword(_TEAMS, "OpenAsHidden", 0)
+
+
+def _remove_teams_background_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TEAMS, "OpenAsHidden")
+
+
+def _detect_teams_background_off() -> bool:
+    return SESSION.read_dword(_TEAMS, "OpenAsHidden") == 0
+
+
+# ── Disable Skype Feedback Survey ────────────────────────────────────────────
+
+_SKYPE_FEEDBACK = r"HKEY_CURRENT_USER\Software\Microsoft\Skype\Feedback"
+
+
+def _apply_skype_feedback_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Skype: disable feedback survey prompts")
+    SESSION.backup([_SKYPE_FEEDBACK], "SkypeFeedbackOff")
+    SESSION.set_dword(_SKYPE_FEEDBACK, "SurveyEnabled", 0)
+
+
+def _remove_skype_feedback_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SKYPE_FEEDBACK, "SurveyEnabled")
+
+
+def _detect_skype_feedback_off() -> bool:
+    return SESSION.read_dword(_SKYPE_FEEDBACK, "SurveyEnabled") == 0
+
+
+# ── Block Zoom Auto-Update (Policy) ─────────────────────────────────────────
+
+
+def _apply_zoom_auto_update_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Zoom: block auto-update via machine policy")
+    SESSION.backup([_ZOOM_POLICY], "ZoomAutoUpdateOff")
+    SESSION.set_dword(_ZOOM_POLICY, "DisableAutoUpdate", 1)
+
+
+def _remove_zoom_auto_update_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ZOOM_POLICY, "DisableAutoUpdate")
+
+
+def _detect_zoom_auto_update_off() -> bool:
+    return SESSION.read_dword(_ZOOM_POLICY, "DisableAutoUpdate") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="comm-disable-teams-background",
+        label="Disable Teams Background Activity on Login",
+        category="Communication",
+        apply_fn=_apply_teams_background_off,
+        remove_fn=_remove_teams_background_off,
+        detect_fn=_detect_teams_background_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TEAMS],
+        description=(
+            "Prevents Microsoft Teams from running hidden in the background "
+            "on login by setting OpenAsHidden to 0. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["communication", "teams", "background", "login", "performance"],
+    ),
+    TweakDef(
+        id="comm-disable-skype-feedback",
+        label="Disable Skype Feedback Survey Prompts",
+        category="Communication",
+        apply_fn=_apply_skype_feedback_off,
+        remove_fn=_remove_skype_feedback_off,
+        detect_fn=_detect_skype_feedback_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SKYPE_FEEDBACK],
+        description=(
+            "Disables Skype feedback survey prompts and data collection "
+            "at the user level. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["communication", "skype", "feedback", "privacy", "survey"],
+    ),
+    TweakDef(
+        id="comm-block-zoom-auto-update",
+        label="Block Zoom Auto-Update (Policy)",
+        category="Communication",
+        apply_fn=_apply_zoom_auto_update_off,
+        remove_fn=_remove_zoom_auto_update_off,
+        detect_fn=_detect_zoom_auto_update_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ZOOM_POLICY],
+        description=(
+            "Blocks Zoom desktop client from automatically updating "
+            "via machine-level group policy. "
+            "Default: Auto-update enabled. Recommended: Disabled for managed environments."
+        ),
+        tags=["communication", "zoom", "update", "policy", "managed"],
+    ),
+]

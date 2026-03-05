@@ -575,3 +575,123 @@ TWEAKS += [
         tags=["filesystem", "ntfs", "last-access", "performance", "io"],
     ),
 ]
+
+
+# -- Increase NTFS memory usage -----------------------------------------------
+
+_KEY_MEMORY_MGMT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Memory Management"
+)
+
+
+def _apply_increase_ntfs_memory(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("FileSystem: increase NTFS paged-pool memory usage")
+    SESSION.backup([_KEY_FILESYSTEM], "NtfsMemoryUsage")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsMemoryUsage", 2)
+
+
+def _remove_increase_ntfs_memory(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_FILESYSTEM], "NtfsMemoryUsage_Remove")
+    SESSION.delete_value(_KEY_FILESYSTEM, "NtfsMemoryUsage")
+
+
+def _detect_increase_ntfs_memory() -> bool:
+    return SESSION.read_dword(_KEY_FILESYSTEM, "NtfsMemoryUsage") == 2
+
+
+# -- Disable NTFS filename tunneling ------------------------------------------
+
+
+def _apply_disable_tunneling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("FileSystem: disable NTFS filename tunneling")
+    SESSION.backup([_KEY_FILESYSTEM], "DisableTunneling")
+    SESSION.set_dword(_KEY_FILESYSTEM, "MaximumTunnelEntries", 0)
+
+
+def _remove_disable_tunneling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_FILESYSTEM], "DisableTunneling_Remove")
+    SESSION.delete_value(_KEY_FILESYSTEM, "MaximumTunnelEntries")
+
+
+def _detect_disable_tunneling() -> bool:
+    return SESSION.read_dword(_KEY_FILESYSTEM, "MaximumTunnelEntries") == 0
+
+
+# -- Enable large system cache ------------------------------------------------
+
+
+def _apply_enable_large_system_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("FileSystem: enable large system cache for file server workloads")
+    SESSION.backup([_KEY_MEMORY_MGMT], "LargeSystemCache")
+    SESSION.set_dword(_KEY_MEMORY_MGMT, "LargeSystemCache", 1)
+
+
+def _remove_enable_large_system_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_MEMORY_MGMT], "LargeSystemCache_Remove")
+    SESSION.set_dword(_KEY_MEMORY_MGMT, "LargeSystemCache", 0)
+
+
+def _detect_enable_large_system_cache() -> bool:
+    return SESSION.read_dword(_KEY_MEMORY_MGMT, "LargeSystemCache") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="fs-increase-ntfs-memory",
+        label="Increase NTFS Memory Usage",
+        category="File System",
+        apply_fn=_apply_increase_ntfs_memory,
+        remove_fn=_remove_increase_ntfs_memory,
+        detect_fn=_detect_increase_ntfs_memory,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FILESYSTEM],
+        description=(
+            "Sets NtfsMemoryUsage to 2 (maximum) to allocate more paged pool "
+            "for NTFS operations. Improves performance on file-heavy workloads. "
+            "Default: 1. Recommended: 2 on systems with >=16 GB RAM."
+        ),
+        tags=["filesystem", "ntfs", "memory", "performance", "paged-pool"],
+    ),
+    TweakDef(
+        id="fs-disable-tunneling",
+        label="Disable NTFS Filename Tunneling",
+        category="File System",
+        apply_fn=_apply_disable_tunneling,
+        remove_fn=_remove_disable_tunneling,
+        detect_fn=_detect_disable_tunneling,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FILESYSTEM],
+        description=(
+            "Disables NTFS filename tunneling by setting MaximumTunnelEntries "
+            "to 0. Prevents DOS-era filename compatibility caching. "
+            "Default: 256. Recommended: 0 on modern systems."
+        ),
+        tags=["filesystem", "ntfs", "tunneling", "performance", "legacy"],
+    ),
+    TweakDef(
+        id="fs-enable-large-system-cache",
+        label="Enable Large System Cache",
+        category="File System",
+        apply_fn=_apply_enable_large_system_cache,
+        remove_fn=_remove_enable_large_system_cache,
+        detect_fn=_detect_enable_large_system_cache,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_MEMORY_MGMT],
+        description=(
+            "Enables the large system file cache (LargeSystemCache=1). "
+            "Optimizes memory for file server workloads at the cost of app memory. "
+            "Default: 0 (desktop). Recommended: 1 for NAS/file server roles."
+        ),
+        tags=["filesystem", "cache", "memory", "server", "performance"],
+    ),
+]

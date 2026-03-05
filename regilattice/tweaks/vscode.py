@@ -591,3 +591,120 @@ TWEAKS += [
         tags=["vscode", "update", "auto-update", "user-policy"],
     ),
 ]
+
+
+# -- Disable VS Code Telemetry via Registry (Machine Policy) --------------------
+
+
+def _apply_vsc_disable_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VSCode: disabling telemetry via machine registry policy")
+    SESSION.backup([_VSCODE_POLICY], "VscDisableTelemetry")
+    SESSION.set_dword(_VSCODE_POLICY, "EnableTelemetry", 0)
+    SESSION.set_string(_VSCODE_POLICY, "telemetry.telemetryLevel", "off")
+    SESSION.log("VSCode: telemetry disabled via machine policy")
+
+
+def _remove_vsc_disable_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "EnableTelemetry")
+    SESSION.delete_value(_VSCODE_POLICY, "telemetry.telemetryLevel")
+
+
+def _detect_vsc_disable_telemetry() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "EnableTelemetry") == 0
+
+
+# -- Disable VS Code Update Notifications (Machine Policy) ----------------------
+
+
+def _apply_vsc_disable_update_notif(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VSCode: disabling update notifications via machine policy")
+    SESSION.backup([_VSCODE_POLICY], "VscDisableUpdateNotif")
+    SESSION.set_string(_VSCODE_POLICY, "update.mode", "none")
+    SESSION.set_dword(_VSCODE_POLICY, "update.showReleaseNotes", 0)
+    SESSION.log("VSCode: update notifications disabled")
+
+
+def _remove_vsc_disable_update_notif(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "update.mode")
+    SESSION.delete_value(_VSCODE_POLICY, "update.showReleaseNotes")
+
+
+def _detect_vsc_disable_update_notif() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "update.mode") == "none"
+
+
+# -- Set VS Code GPU Acceleration (Machine Policy) ------------------------------
+
+
+def _apply_vsc_set_gpu_accel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VSCode: enabling GPU acceleration via machine policy")
+    SESSION.backup([_VSCODE_POLICY], "VscGPUAccel")
+    SESSION.set_string(_VSCODE_POLICY, "gpu.acceleration", "on")
+    SESSION.log("VSCode: GPU acceleration set to on")
+
+
+def _remove_vsc_set_gpu_accel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "gpu.acceleration")
+
+
+def _detect_vsc_set_gpu_accel() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "gpu.acceleration") == "on"
+
+
+TWEAKS += [
+    TweakDef(
+        id="vsc-disable-telemetry",
+        label="Disable VS Code Telemetry (Machine Policy)",
+        category="VS Code",
+        apply_fn=_apply_vsc_disable_telemetry,
+        remove_fn=_remove_vsc_disable_telemetry,
+        detect_fn=_detect_vsc_disable_telemetry,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VSCODE_POLICY],
+        description=(
+            "Disables VS Code telemetry via HKLM machine-level policy. "
+            "Applies to all users on the machine. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["vscode", "telemetry", "privacy", "machine-policy"],
+    ),
+    TweakDef(
+        id="vsc-disable-update-notif",
+        label="Disable VS Code Update Notifications (Machine Policy)",
+        category="VS Code",
+        apply_fn=_apply_vsc_disable_update_notif,
+        remove_fn=_remove_vsc_disable_update_notif,
+        detect_fn=_detect_vsc_disable_update_notif,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VSCODE_POLICY],
+        description=(
+            "Disables VS Code update notifications and release notes via machine policy. "
+            "Default: Enabled. Recommended: Disabled for stable environments."
+        ),
+        tags=["vscode", "update", "notifications", "machine-policy"],
+    ),
+    TweakDef(
+        id="vsc-set-gpu-accel",
+        label="Set VS Code GPU Acceleration (Machine Policy)",
+        category="VS Code",
+        apply_fn=_apply_vsc_set_gpu_accel,
+        remove_fn=_remove_vsc_set_gpu_accel,
+        detect_fn=_detect_vsc_set_gpu_accel,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VSCODE_POLICY],
+        description=(
+            "Enables GPU acceleration for VS Code via machine-level policy. "
+            "Improves rendering performance. Default: Auto. Recommended: On."
+        ),
+        tags=["vscode", "gpu", "acceleration", "performance", "machine-policy"],
+    ),
+]

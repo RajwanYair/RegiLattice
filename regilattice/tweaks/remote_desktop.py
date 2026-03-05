@@ -423,3 +423,116 @@ TWEAKS += [
         tags=["rdp", "shadow", "observation", "security"],
     ),
 ]
+
+
+# -- Set RDP Security Layer to SSL ---------------------------------------------
+
+
+def _apply_rdp_security_ssl(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RDP: set security layer to SSL/TLS")
+    SESSION.backup([_RDP_TCP], "RDPSecuritySSL")
+    SESSION.set_dword(_RDP_TCP, "SecurityLayer", 2)
+
+
+def _remove_rdp_security_ssl(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_RDP_TCP, "SecurityLayer", 0)
+
+
+def _detect_rdp_security_ssl() -> bool:
+    return SESSION.read_dword(_RDP_TCP, "SecurityLayer") == 2
+
+
+# -- Disable RDP Printer Redirection (Policy) ----------------------------------
+
+
+def _apply_rdp_disable_printer_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RDP: disable printer redirection via policy")
+    SESSION.backup([_TS_POLICY, _RDP_TCP], "RDPPrinterPolicy")
+    SESSION.set_dword(_TS_POLICY, "fDisableCpm", 1)
+    SESSION.set_dword(_RDP_TCP, "fDisableCpm", 1)
+
+
+def _remove_rdp_disable_printer_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TS_POLICY, "fDisableCpm")
+    SESSION.set_dword(_RDP_TCP, "fDisableCpm", 0)
+
+
+def _detect_rdp_disable_printer_policy() -> bool:
+    return SESSION.read_dword(_TS_POLICY, "fDisableCpm") == 1
+
+
+# -- Set RDP Session Timeout (30 min) ------------------------------------------
+
+
+def _apply_rdp_session_timeout_30m(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RDP: set session timeout to 30 minutes")
+    SESSION.backup([_TS_POLICY], "RDPSessionTimeout30m")
+    SESSION.set_dword(_TS_POLICY, "MaxDisconnectionTime", 1_800_000)
+    SESSION.set_dword(_TS_POLICY, "MaxIdleTime", 1_800_000)
+
+
+def _remove_rdp_session_timeout_30m(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TS_POLICY, "MaxDisconnectionTime")
+    SESSION.delete_value(_TS_POLICY, "MaxIdleTime")
+
+
+def _detect_rdp_session_timeout_30m() -> bool:
+    return SESSION.read_dword(_TS_POLICY, "MaxDisconnectionTime") == 1_800_000
+
+
+TWEAKS += [
+    TweakDef(
+        id="rdp-security-layer-ssl",
+        label="Set RDP Security Layer to SSL/TLS",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_security_ssl,
+        remove_fn=_remove_rdp_security_ssl,
+        detect_fn=_detect_rdp_security_ssl,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP_TCP],
+        description=(
+            "Sets the RDP security layer to SSL/TLS (level 2) for encrypted connections. "
+            "Prevents legacy RDP security negotiation. Default: Negotiate. Recommended: SSL."
+        ),
+        tags=["rdp", "ssl", "tls", "security"],
+    ),
+    TweakDef(
+        id="rdp-disable-printer-policy",
+        label="Disable RDP Printer Redirection (Policy + WinStation)",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_disable_printer_policy,
+        remove_fn=_remove_rdp_disable_printer_policy,
+        detect_fn=_detect_rdp_disable_printer_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TS_POLICY, _RDP_TCP],
+        description=(
+            "Disables printer redirection in RDP via both policy and WinStation config. "
+            "Blocks client printers from mapping to RDP sessions. Default: allowed. Recommended: disabled."
+        ),
+        tags=["rdp", "printer", "redirect", "policy"],
+    ),
+    TweakDef(
+        id="rdp-session-timeout-30m",
+        label="Set RDP Session Timeout (30 min)",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_session_timeout_30m,
+        remove_fn=_remove_rdp_session_timeout_30m,
+        detect_fn=_detect_rdp_session_timeout_30m,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TS_POLICY],
+        description=(
+            "Disconnects idle/disconnected RDP sessions after 30 minutes. "
+            "Frees resources and improves security. Default: no timeout. Recommended: 30 min."
+        ),
+        tags=["rdp", "session", "timeout", "security"],
+    ),
+]

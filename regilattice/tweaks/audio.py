@@ -638,3 +638,115 @@ TWEAKS += [
         tags=["audio", "latency", "buffer", "performance"],
     ),
 ]
+
+
+# ── Disable Loudness Equalization ────────────────────────────────────────────
+
+
+def _apply_disable_loudness_eq(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: disable loudness equalization")
+    SESSION.backup([_KEY_MM_AUDIO], "LoudnessEq")
+    SESSION.set_dword(_KEY_MM_AUDIO, "LoudnessEqualization", 0)
+
+
+def _remove_disable_loudness_eq(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_MM_AUDIO, "LoudnessEqualization")
+
+
+def _detect_disable_loudness_eq() -> bool:
+    return SESSION.read_dword(_KEY_MM_AUDIO, "LoudnessEqualization") == 0
+
+
+# ── Set Default Sample Rate to 48 kHz ────────────────────────────────────────
+
+
+def _apply_48khz_sample_rate(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: set default sample rate to 48000 Hz")
+    SESSION.backup([_KEY_MM_AUDIO], "SampleRate48k")
+    SESSION.set_dword(_KEY_MM_AUDIO, "DefaultSampleRate", 48000)
+
+
+def _remove_48khz_sample_rate(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_MM_AUDIO, "DefaultSampleRate")
+
+
+def _detect_48khz_sample_rate() -> bool:
+    return SESSION.read_dword(_KEY_MM_AUDIO, "DefaultSampleRate") == 48000
+
+
+# ── Disable Automatic Gain Control ──────────────────────────────────────────
+
+
+def _apply_disable_auto_gain(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: disable automatic gain control")
+    SESSION.backup([_KEY_MM_AUDIO], "AutoGainControl")
+    SESSION.set_dword(_KEY_MM_AUDIO, "AutomaticGainControl", 0)
+
+
+def _remove_disable_auto_gain(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_MM_AUDIO, "AutomaticGainControl")
+
+
+def _detect_disable_auto_gain() -> bool:
+    return SESSION.read_dword(_KEY_MM_AUDIO, "AutomaticGainControl") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="audio-disable-loudness-eq",
+        label="Disable Loudness Equalization",
+        category="Audio",
+        apply_fn=_apply_disable_loudness_eq,
+        remove_fn=_remove_disable_loudness_eq,
+        detect_fn=_detect_disable_loudness_eq,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_MM_AUDIO],
+        description=(
+            "Disables loudness equalization which normalizes audio levels. "
+            "Preserves original dynamic range of audio output. "
+            "Default: Enabled. Recommended: Disabled for audiophiles."
+        ),
+        tags=["audio", "loudness", "equalization", "dynamic-range"],
+    ),
+    TweakDef(
+        id="audio-48khz-sample-rate",
+        label="Set Default Sample Rate to 48 kHz",
+        category="Audio",
+        apply_fn=_apply_48khz_sample_rate,
+        remove_fn=_remove_48khz_sample_rate,
+        detect_fn=_detect_48khz_sample_rate,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_MM_AUDIO],
+        description=(
+            "Sets the default audio sample rate to 48000 Hz (DVD quality). "
+            "Matches standard for video and professional audio. "
+            "Default: 44100 Hz. Recommended: 48000 Hz."
+        ),
+        tags=["audio", "sample-rate", "48khz", "quality"],
+    ),
+    TweakDef(
+        id="audio-disable-auto-gain",
+        label="Disable Automatic Gain Control",
+        category="Audio",
+        apply_fn=_apply_disable_auto_gain,
+        remove_fn=_remove_disable_auto_gain,
+        detect_fn=_detect_disable_auto_gain,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_MM_AUDIO],
+        description=(
+            "Disables automatic gain control that adjusts microphone "
+            "input levels. Prevents unwanted volume fluctuations. "
+            "Default: Enabled. Recommended: Disabled for streaming."
+        ),
+        tags=["audio", "gain", "microphone", "agc", "streaming"],
+    ),
+]

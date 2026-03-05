@@ -760,3 +760,133 @@ TWEAKS += [
         tags=["privacy", "settings", "suggestions", "content-delivery"],
     ),
 ]
+
+
+# ── Disable Handwriting Data Sharing ────────────────────────────────────────
+
+_HANDWRITING = r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"
+_HANDWRITING_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft"
+    r"\Windows\HandwritingErrorReports"
+)
+
+
+def _apply_disable_handwriting_sharing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable handwriting data sharing")
+    SESSION.backup([_HANDWRITING, _HANDWRITING_POLICY], "HandwritingSharing")
+    SESSION.set_dword(_HANDWRITING, "RestrictImplicitInkCollection", 1)
+    SESSION.set_dword(_HANDWRITING, "RestrictImplicitTextCollection", 1)
+    SESSION.set_dword(_HANDWRITING_POLICY, "PreventHandwritingErrorReports", 1)
+
+
+def _remove_disable_handwriting_sharing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_HANDWRITING, "RestrictImplicitInkCollection")
+    SESSION.delete_value(_HANDWRITING, "RestrictImplicitTextCollection")
+    SESSION.delete_value(_HANDWRITING_POLICY, "PreventHandwritingErrorReports")
+
+
+def _detect_disable_handwriting_sharing() -> bool:
+    return (
+        SESSION.read_dword(_HANDWRITING, "RestrictImplicitInkCollection") == 1
+        and SESSION.read_dword(_HANDWRITING, "RestrictImplicitTextCollection") == 1
+        and SESSION.read_dword(_HANDWRITING_POLICY, "PreventHandwritingErrorReports") == 1
+    )
+
+
+# ── Disable App Launch Tracking (Policy) ───────────────────────────────────
+
+_APP_COMPAT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
+
+
+def _apply_disable_launch_tracking_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable app launch tracking via policy (UAR)")
+    SESSION.backup([_APP_COMPAT], "AppLaunchTrackingPolicy")
+    SESSION.set_dword(_APP_COMPAT, "DisableUAR", 1)
+
+
+def _remove_disable_launch_tracking_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_APP_COMPAT, "DisableUAR")
+
+
+def _detect_disable_launch_tracking_policy() -> bool:
+    return SESSION.read_dword(_APP_COMPAT, "DisableUAR") == 1
+
+
+# ── Disable Cross-Device Experiences ────────────────────────────────────────
+
+_CDP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_disable_cross_device(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable cross-device experiences (CDP)")
+    SESSION.backup([_CDP_POLICY], "CrossDeviceExperiences")
+    SESSION.set_dword(_CDP_POLICY, "EnableCdp", 0)
+
+
+def _remove_disable_cross_device(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDP_POLICY, "EnableCdp")
+
+
+def _detect_disable_cross_device() -> bool:
+    return SESSION.read_dword(_CDP_POLICY, "EnableCdp") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="priv-disable-handwriting-sharing",
+        label="Disable Handwriting Data Sharing",
+        category="Privacy",
+        apply_fn=_apply_disable_handwriting_sharing,
+        remove_fn=_remove_disable_handwriting_sharing,
+        detect_fn=_detect_disable_handwriting_sharing,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_HANDWRITING, _HANDWRITING_POLICY],
+        description=(
+            "Disables implicit ink/text collection and handwriting error reports. "
+            "Prevents handwriting data from being shared with Microsoft. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["privacy", "handwriting", "ink", "data-sharing"],
+    ),
+    TweakDef(
+        id="priv-disable-launch-tracking",
+        label="Disable App Launch Tracking (Policy)",
+        category="Privacy",
+        apply_fn=_apply_disable_launch_tracking_policy,
+        remove_fn=_remove_disable_launch_tracking_policy,
+        detect_fn=_detect_disable_launch_tracking_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_APP_COMPAT],
+        description=(
+            "Disables User Activity Reporting (UAR) at the machine policy level. "
+            "Prevents Windows from tracking application launches system-wide. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["privacy", "tracking", "launch", "uar", "policy"],
+    ),
+    TweakDef(
+        id="priv-disable-cross-device",
+        label="Disable Cross-Device Experiences",
+        category="Privacy",
+        apply_fn=_apply_disable_cross_device,
+        remove_fn=_remove_disable_cross_device,
+        detect_fn=_detect_disable_cross_device,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CDP_POLICY],
+        description=(
+            "Disables the Connected Devices Platform (CDP) which enables "
+            "cross-device experiences like phone-to-PC linking and shared "
+            "clipboard. Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["privacy", "cross-device", "cdp", "phone-link"],
+    ),
+]

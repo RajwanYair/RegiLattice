@@ -466,3 +466,139 @@ TWEAKS += [
         tags=["printing", "driver", "security", "restriction"],
     ),
 ]
+
+
+# -- Disable Print Spooler Legacy Mode ──────────────────────────────────────
+
+
+def _apply_disable_legacy_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Printing: disable spooler legacy compatibility mode")
+    SESSION.backup([_SPOOLER], "SpoolerLegacyMode")
+    SESSION.set_dword(_SPOOLER, "LegacyDefaultPrinterMode", 0)
+
+
+def _remove_disable_legacy_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPOOLER, "LegacyDefaultPrinterMode")
+
+
+def _detect_disable_legacy_mode() -> bool:
+    return SESSION.read_dword(_SPOOLER, "LegacyDefaultPrinterMode") == 0
+
+
+# -- Set Default Paper Size to A4 ───────────────────────────────────────────
+
+_INTL_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"
+
+
+def _apply_default_paper_a4(*, require_admin: bool = False) -> None:
+    SESSION.log("Printing: set default paper size to A4")
+    SESSION.backup([_INTL_KEY], "DefaultPaperA4")
+    SESSION.set_string(_INTL_KEY, "Device", "")
+    SESSION.set_dword(
+        r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows",
+        "DefaultPaperID",
+        9,
+    )
+
+
+def _remove_default_paper_a4(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(
+        r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows",
+        "DefaultPaperID",
+    )
+
+
+def _detect_default_paper_a4() -> bool:
+    return (
+        SESSION.read_dword(
+            r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows",
+            "DefaultPaperID",
+        )
+        == 9
+    )
+
+
+# -- Enable Point and Print Restrictions ────────────────────────────────────
+
+
+def _apply_point_and_print_restrict(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Printing: enable Point and Print restrictions")
+    SESSION.backup([_POINTPRINT], "PointAndPrintRestrict")
+    SESSION.set_dword(_POINTPRINT, "Restricted", 1)
+    SESSION.set_dword(_POINTPRINT, "TrustedServers", 1)
+    SESSION.set_dword(_POINTPRINT, "InForest", 0)
+    SESSION.set_dword(_POINTPRINT, "NoWarningNoElevationOnInstall", 0)
+    SESSION.set_dword(_POINTPRINT, "UpdatePromptSettings", 0)
+
+
+def _remove_point_and_print_restrict(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POINTPRINT, "Restricted")
+    SESSION.delete_value(_POINTPRINT, "TrustedServers")
+    SESSION.delete_value(_POINTPRINT, "InForest")
+    SESSION.delete_value(_POINTPRINT, "NoWarningNoElevationOnInstall")
+    SESSION.delete_value(_POINTPRINT, "UpdatePromptSettings")
+
+
+def _detect_point_and_print_restrict() -> bool:
+    return (
+        SESSION.read_dword(_POINTPRINT, "Restricted") == 1
+        and SESSION.read_dword(_POINTPRINT, "TrustedServers") == 1
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="print-disable-legacy-mode",
+        label="Disable Print Spooler Legacy Mode",
+        category="Printing",
+        apply_fn=_apply_disable_legacy_mode,
+        remove_fn=_remove_disable_legacy_mode,
+        detect_fn=_detect_disable_legacy_mode,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPOOLER],
+        description=(
+            "Disables legacy default printer mode in the print spooler. "
+            "Uses modern Windows-managed default printer instead. "
+            "Default: Legacy. Recommended: Disabled (modern mode)."
+        ),
+        tags=["printing", "spooler", "legacy", "default-printer"],
+    ),
+    TweakDef(
+        id="print-default-paper-a4",
+        label="Set Default Paper Size to A4",
+        category="Printing",
+        apply_fn=_apply_default_paper_a4,
+        remove_fn=_remove_default_paper_a4,
+        detect_fn=_detect_default_paper_a4,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_INTL_KEY],
+        description=(
+            "Sets the default paper size to A4 (paper ID 9) for all printers. "
+            "Default: Letter (US). Recommended: A4 outside North America."
+        ),
+        tags=["printing", "paper", "a4", "international"],
+    ),
+    TweakDef(
+        id="print-point-and-print-restrict",
+        label="Enable Point and Print Restrictions",
+        category="Printing",
+        apply_fn=_apply_point_and_print_restrict,
+        remove_fn=_remove_point_and_print_restrict,
+        detect_fn=_detect_point_and_print_restrict,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POINTPRINT],
+        description=(
+            "Enables strict Point and Print restrictions: trusted servers only, "
+            "no silent installs, UAC prompts on updates. Mitigates PrintNightmare. "
+            "Default: unrestricted. Recommended: restricted."
+        ),
+        tags=["printing", "point-and-print", "security", "printnightmare"],
+    ),
+]

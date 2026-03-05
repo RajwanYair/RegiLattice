@@ -732,3 +732,128 @@ TWEAKS += [
         tags=["ai", "copilot", "edge", "sidebar", "policy"],
     ),
 ]
+
+
+# ── Disable AI Suggestions in Settings ───────────────────────────────────────
+
+_WINDOWS_AI = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"
+
+
+def _apply_disable_ai_in_settings(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable AI data analysis in Windows Settings")
+    SESSION.backup([_WINDOWS_AI], "AISettingsPolicy")
+    SESSION.set_dword(_WINDOWS_AI, "DisableAIDataAnalysis", 1)
+
+
+def _remove_disable_ai_in_settings(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINDOWS_AI, "DisableAIDataAnalysis")
+
+
+def _detect_disable_ai_in_settings() -> bool:
+    return SESSION.read_dword(_WINDOWS_AI, "DisableAIDataAnalysis") == 1
+
+
+# ── Disable Copilot in Taskbar Search ────────────────────────────────────────
+
+_EXPLORER_POLICY_CU = (
+    r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
+)
+
+
+def _apply_disable_copilot_taskbar_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable AI suggestions in taskbar search")
+    SESSION.backup([_EXPLORER_POLICY_CU], "CopilotTaskbarSearch")
+    SESSION.set_dword(_EXPLORER_POLICY_CU, "DisableSearchBarSuggestions", 1)
+
+
+def _remove_disable_copilot_taskbar_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_POLICY_CU, "DisableSearchBarSuggestions")
+
+
+def _detect_disable_copilot_taskbar_search() -> bool:
+    return SESSION.read_dword(_EXPLORER_POLICY_CU, "DisableSearchBarSuggestions") == 1
+
+
+# ── Disable Tips & Suggestions Notifications ─────────────────────────────────
+
+_CDM = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\ContentDeliveryManager"
+)
+
+
+def _apply_disable_tips_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable tips and suggestions notifications")
+    SESSION.backup([_CDM], "TipsSuggestions")
+    SESSION.set_dword(_CDM, "SubscribedContent-338389Enabled", 0)
+    SESSION.set_dword(_CDM, "SoftLandingEnabled", 0)
+
+
+def _remove_disable_tips_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDM, "SubscribedContent-338389Enabled")
+    SESSION.delete_value(_CDM, "SoftLandingEnabled")
+
+
+def _detect_disable_tips_suggestions() -> bool:
+    return SESSION.read_dword(_CDM, "SubscribedContent-338389Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="copilot-disable-ai-in-settings",
+        label="Disable AI Suggestions in Windows Settings",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_ai_in_settings,
+        remove_fn=_remove_disable_ai_in_settings,
+        detect_fn=_detect_disable_ai_in_settings,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WINDOWS_AI],
+        description=(
+            "Disables AI data analysis features in the Windows Settings "
+            "app via the WindowsAI group policy. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["ai", "copilot", "settings", "policy", "privacy"],
+    ),
+    TweakDef(
+        id="copilot-disable-taskbar-search-ai",
+        label="Disable Copilot in Taskbar Search",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_taskbar_search,
+        remove_fn=_remove_disable_copilot_taskbar_search,
+        detect_fn=_detect_disable_copilot_taskbar_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_POLICY_CU],
+        description=(
+            "Disables AI-powered suggestions in the taskbar search box "
+            "via user-level Explorer policy. "
+            "Default: Enabled. Recommended: Disabled for focused search."
+        ),
+        tags=["ai", "copilot", "taskbar", "search", "suggestions"],
+    ),
+    TweakDef(
+        id="copilot-disable-tips-notifications",
+        label="Disable Tips & Suggestions Notifications",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_tips_suggestions,
+        remove_fn=_remove_disable_tips_suggestions,
+        detect_fn=_detect_disable_tips_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables Windows tips, suggestions, and soft-landing "
+            "notification prompts from ContentDeliveryManager. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["ai", "copilot", "tips", "suggestions", "notifications"],
+    ),
+]

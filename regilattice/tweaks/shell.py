@@ -643,3 +643,121 @@ TWEAKS += [
         tags=["shell", "snap", "assist", "multitasking"],
     ),
 ]
+
+
+# -- Disable AutoPlay for All Media --------------------------------------------
+
+_AUTOPLAY_POL = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+_AUTOPLAY_LM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+
+
+def _apply_shell_disable_autoplay(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable AutoPlay for all media")
+    SESSION.backup([_AUTOPLAY_POL, _AUTOPLAY_LM], "AutoPlayDisable")
+    SESSION.set_dword(_AUTOPLAY_POL, "NoDriveTypeAutoRun", 0xFF)
+    SESSION.set_dword(_AUTOPLAY_LM, "NoDriveTypeAutoRun", 0xFF)
+
+
+def _remove_shell_disable_autoplay(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_AUTOPLAY_POL, "NoDriveTypeAutoRun")
+    SESSION.delete_value(_AUTOPLAY_LM, "NoDriveTypeAutoRun")
+
+
+def _detect_shell_disable_autoplay() -> bool:
+    return SESSION.read_dword(_AUTOPLAY_POL, "NoDriveTypeAutoRun") == 0xFF
+
+
+# -- Set Command Prompt Auto-Complete -------------------------------------------
+
+_CMD_PROC = r"HKEY_CURRENT_USER\Software\Microsoft\Command Processor"
+
+
+def _apply_shell_cmd_autocomplete(*, require_admin: bool = False) -> None:
+    SESSION.log("Shell: enable command prompt tab auto-complete")
+    SESSION.backup([_CMD_PROC], "CmdAutoComplete")
+    SESSION.set_dword(_CMD_PROC, "CompletionChar", 0x9)
+    SESSION.set_dword(_CMD_PROC, "PathCompletionChar", 0x9)
+
+
+def _remove_shell_cmd_autocomplete(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_CMD_PROC, "CompletionChar")
+    SESSION.delete_value(_CMD_PROC, "PathCompletionChar")
+
+
+def _detect_shell_cmd_autocomplete() -> bool:
+    return SESSION.read_dword(_CMD_PROC, "CompletionChar") == 0x9
+
+
+# -- Disable Windows Ink Workspace ----------------------------------------------
+
+_INK_WS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"
+
+
+def _apply_shell_disable_ink_workspace(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable Windows Ink Workspace")
+    SESSION.backup([_INK_WS], "InkWorkspaceDisable")
+    SESSION.set_dword(_INK_WS, "AllowWindowsInkWorkspace", 0)
+
+
+def _remove_shell_disable_ink_workspace(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_INK_WS, "AllowWindowsInkWorkspace")
+
+
+def _detect_shell_disable_ink_workspace() -> bool:
+    return SESSION.read_dword(_INK_WS, "AllowWindowsInkWorkspace") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="shell-disable-autoplay",
+        label="Disable AutoPlay for All Media",
+        category="Shell",
+        apply_fn=_apply_shell_disable_autoplay,
+        remove_fn=_remove_shell_disable_autoplay,
+        detect_fn=_detect_shell_disable_autoplay,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AUTOPLAY_POL, _AUTOPLAY_LM],
+        description=(
+            "Disables AutoPlay for all drive types (USB, CD, network). "
+            "Prevents automatic execution of media content. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["shell", "autoplay", "autorun", "security"],
+    ),
+    TweakDef(
+        id="shell-cmd-autocomplete",
+        label="Enable Command Prompt Tab Auto-Complete",
+        category="Shell",
+        apply_fn=_apply_shell_cmd_autocomplete,
+        remove_fn=_remove_shell_cmd_autocomplete,
+        detect_fn=_detect_shell_cmd_autocomplete,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CMD_PROC],
+        description=(
+            "Enables Tab key auto-completion for file and path names in cmd.exe. "
+            "Sets CompletionChar and PathCompletionChar to Tab (0x9). Default: Disabled. Recommended: Enabled."
+        ),
+        tags=["shell", "cmd", "autocomplete", "productivity"],
+    ),
+    TweakDef(
+        id="shell-disable-ink-workspace",
+        label="Disable Windows Ink Workspace",
+        category="Shell",
+        apply_fn=_apply_shell_disable_ink_workspace,
+        remove_fn=_remove_shell_disable_ink_workspace,
+        detect_fn=_detect_shell_disable_ink_workspace,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_INK_WS],
+        description=(
+            "Disables Windows Ink Workspace (pen/touch drawing overlay). "
+            "Frees resources on non-touch devices. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["shell", "ink", "workspace", "pen"],
+    ),
+]

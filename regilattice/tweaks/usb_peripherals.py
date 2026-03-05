@@ -436,3 +436,117 @@ TWEAKS += [
         tags=["usb", "removable", "write-protect", "security", "dlp"],
     ),
 ]
+
+
+# -- Disable USB Hub Power Saving -----------------------------------------------
+
+
+def _apply_usb_disable_hub_power(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("USB: disabling USB hub power saving")
+    SESSION.backup([_USB_HUB], "USBHubPower")
+    SESSION.set_dword(_USB_HUB, "DisableSelectiveSuspend", 1)
+    SESSION.log("USB: hub power saving disabled")
+
+
+def _remove_usb_disable_hub_power(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_USB_HUB, "DisableSelectiveSuspend", 0)
+
+
+def _detect_usb_disable_hub_power() -> bool:
+    return SESSION.read_dword(_USB_HUB, "DisableSelectiveSuspend") == 1
+
+
+# -- Set USB Transfer Mode to Turbo (Write Cache) ------------------------------
+
+
+def _apply_usb_turbo_transfer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("USB: enabling write cache for faster USB transfers")
+    SESSION.backup([_USB_STOR], "USBTurboTransfer")
+    SESSION.set_dword(_USB_STOR, "DisableWriteCache", 0)
+    SESSION.log("USB: write cache enabled (turbo mode)")
+
+
+def _remove_usb_turbo_transfer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_USB_STOR, "DisableWriteCache", 1)
+
+
+def _detect_usb_turbo_transfer() -> bool:
+    return SESSION.read_dword(_USB_STOR, "DisableWriteCache") == 0
+
+
+# -- Disable USB Legacy Support Warning -----------------------------------------
+
+_USB_LEGACY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB"
+
+
+def _apply_usb_disable_legacy_warning(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("USB: disabling legacy support warning")
+    SESSION.backup([_USB_LEGACY], "USBLegacyWarn")
+    SESSION.set_dword(_USB_LEGACY, "DisableLegacyWarning", 1)
+    SESSION.log("USB: legacy support warning disabled")
+
+
+def _remove_usb_disable_legacy_warning(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_USB_LEGACY, "DisableLegacyWarning", 0)
+
+
+def _detect_usb_disable_legacy_warning() -> bool:
+    return SESSION.read_dword(_USB_LEGACY, "DisableLegacyWarning") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="usb-disable-hub-power-saving",
+        label="Disable USB Hub Power Saving",
+        category="USB & Peripherals",
+        apply_fn=_apply_usb_disable_hub_power,
+        remove_fn=_remove_usb_disable_hub_power,
+        detect_fn=_detect_usb_disable_hub_power,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USB_HUB],
+        description=(
+            "Disables selective suspend on USB hubs to prevent device disconnects. "
+            "Default: Enabled. Recommended: Disabled for desktops."
+        ),
+        tags=["usb", "hub", "power", "suspend", "stability"],
+    ),
+    TweakDef(
+        id="usb-turbo-transfer-mode",
+        label="Set USB Transfer Mode to Turbo (Write Cache)",
+        category="USB & Peripherals",
+        apply_fn=_apply_usb_turbo_transfer,
+        remove_fn=_remove_usb_turbo_transfer,
+        detect_fn=_detect_usb_turbo_transfer,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USB_STOR],
+        description=(
+            "Enables write caching on USB storage for faster transfers. "
+            "Requires safe removal. Default: Disabled. Recommended: Enabled."
+        ),
+        tags=["usb", "transfer", "turbo", "write-cache", "speed"],
+    ),
+    TweakDef(
+        id="usb-disable-legacy-warning",
+        label="Disable USB Legacy Support Warning",
+        category="USB & Peripherals",
+        apply_fn=_apply_usb_disable_legacy_warning,
+        remove_fn=_remove_usb_disable_legacy_warning,
+        detect_fn=_detect_usb_disable_legacy_warning,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USB_LEGACY],
+        description=(
+            "Suppresses USB legacy compatibility warnings in the system tray. "
+            "Default: Shown. Recommended: Hidden."
+        ),
+        tags=["usb", "legacy", "warning", "compatibility"],
+    ),
+]

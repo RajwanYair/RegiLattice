@@ -626,3 +626,128 @@ TWEAKS += [
         tags=["update", "defer", "quality", "delay"],
     ),
 ]
+
+
+# -- Set Active Hours 8AM-11PM ------------------------------------------------
+
+
+def _apply_set_active_hours(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WU: setting active hours to 8AM-11PM")
+    SESSION.backup([_WU], "ActiveHours")
+    SESSION.set_dword(_WU, "SetActiveHours", 1)
+    SESSION.set_dword(_WU, "ActiveHoursStart", 8)
+    SESSION.set_dword(_WU, "ActiveHoursEnd", 23)
+
+
+def _remove_set_active_hours(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU, "SetActiveHours")
+    SESSION.delete_value(_WU, "ActiveHoursStart")
+    SESSION.delete_value(_WU, "ActiveHoursEnd")
+
+
+def _detect_set_active_hours() -> bool:
+    return (
+        SESSION.read_dword(_WU, "SetActiveHours") == 1
+        and SESSION.read_dword(_WU, "ActiveHoursStart") == 8
+        and SESSION.read_dword(_WU, "ActiveHoursEnd") == 23
+    )
+
+
+# -- Block Driver Search via Windows Update -----------------------------------
+
+_DRIVER_SEARCH = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\DriverSearching"
+)
+
+
+def _apply_block_driver_search(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WU: blocking driver search through Windows Update")
+    SESSION.backup([_DRIVER_SEARCH], "DriverSearch")
+    SESSION.set_dword(_DRIVER_SEARCH, "SearchOrderConfig", 0)
+
+
+def _remove_block_driver_search(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_DRIVER_SEARCH, "SearchOrderConfig", 1)
+
+
+def _detect_block_driver_search() -> bool:
+    return SESSION.read_dword(_DRIVER_SEARCH, "SearchOrderConfig") == 0
+
+
+# -- Defer Feature Updates 365 Days -------------------------------------------
+
+
+def _apply_defer_feature_365d(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WU: deferring feature updates by 365 days")
+    SESSION.backup([_WU], "DeferFeature365d")
+    SESSION.set_dword(_WU, "DeferFeatureUpdatesPeriodInDays", 365)
+
+
+def _remove_defer_feature_365d(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU, "DeferFeatureUpdatesPeriodInDays")
+
+
+def _detect_defer_feature_365d() -> bool:
+    return SESSION.read_dword(_WU, "DeferFeatureUpdatesPeriodInDays") == 365
+
+
+TWEAKS += [
+    TweakDef(
+        id="wu-set-active-hours",
+        label="Set Active Hours to 8AM-11PM",
+        category="Windows Update",
+        apply_fn=_apply_set_active_hours,
+        remove_fn=_remove_set_active_hours,
+        detect_fn=_detect_set_active_hours,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU],
+        description=(
+            "Sets Windows Update active hours to 8AM-11PM to prevent "
+            "automatic restarts during working hours. "
+            "Default: auto-detected. Recommended: 8AM-11PM."
+        ),
+        tags=["update", "active-hours", "restart", "schedule"],
+    ),
+    TweakDef(
+        id="wu-block-driver-search",
+        label="Block Driver Search via Windows Update",
+        category="Windows Update",
+        apply_fn=_apply_block_driver_search,
+        remove_fn=_remove_block_driver_search,
+        detect_fn=_detect_block_driver_search,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DRIVER_SEARCH],
+        description=(
+            "Prevents Windows from searching for driver updates through "
+            "Windows Update. Different from WU driver exclusion policy. "
+            "Default: enabled. Recommended: disabled for stability."
+        ),
+        tags=["update", "driver", "search", "block"],
+    ),
+    TweakDef(
+        id="wu-defer-feature-365d",
+        label="Defer Feature Updates by 365 Days",
+        category="Windows Update",
+        apply_fn=_apply_defer_feature_365d,
+        remove_fn=_remove_defer_feature_365d,
+        detect_fn=_detect_defer_feature_365d,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU],
+        description=(
+            "Defers Windows feature updates by 365 days. Provides maximum "
+            "time for stability reports before upgrading. "
+            "Default: 0. Recommended: 365 for production stability."
+        ),
+        tags=["update", "defer", "feature", "delay", "365"],
+    ),
+]

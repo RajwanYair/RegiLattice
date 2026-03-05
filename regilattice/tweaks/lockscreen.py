@@ -534,3 +534,110 @@ TWEAKS += [
         tags=["lockscreen", "animation", "first-logon", "login"],
     ),
 ]
+
+
+# -- 14. Disable Lock Screen Content Tips ─────────────────────────────────────
+
+
+def _apply_lock_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.log("LockScreen: disable lock screen content tips")
+    SESSION.backup([_CONTENT_DELIVERY], "LockTips")
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338387Enabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SoftLandingEnabled", 0)
+
+
+def _remove_lock_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338387Enabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SoftLandingEnabled", 1)
+
+
+def _detect_lock_disable_tips() -> bool:
+    return (
+        SESSION.read_dword(_CONTENT_DELIVERY, "SubscribedContent-338387Enabled") == 0
+        and SESSION.read_dword(_CONTENT_DELIVERY, "SoftLandingEnabled") == 0
+    )
+
+
+# -- 15. Set Lock Timeout to 5 Minutes ────────────────────────────────────────
+
+
+def _apply_lock_timeout_5min(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LockScreen: set machine inactivity timeout to 300s (5 min)")
+    SESSION.backup([_SIGNIN_POLICY], "LockTimeout5min")
+    SESSION.set_dword(_SIGNIN_POLICY, "InactivityTimeoutSecs", 300)
+
+
+def _remove_lock_timeout_5min(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SIGNIN_POLICY, "InactivityTimeoutSecs")
+
+
+def _detect_lock_timeout_5min() -> bool:
+    return SESSION.read_dword(_SIGNIN_POLICY, "InactivityTimeoutSecs") == 300
+
+
+# -- 16. Disable Network UI on Lock Screen ────────────────────────────────────
+
+
+def _apply_lock_disable_network_ui(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LockScreen: disable network selection UI on lock screen")
+    SESSION.backup([_LOCK_NET], "LockNetUI")
+    SESSION.set_dword(_LOCK_NET, "DontDisplayNetworkSelectionUI", 1)
+
+
+def _remove_lock_disable_network_ui(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LOCK_NET, "DontDisplayNetworkSelectionUI")
+
+
+def _detect_lock_disable_network_ui() -> bool:
+    return SESSION.read_dword(_LOCK_NET, "DontDisplayNetworkSelectionUI") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="lock-disable-tips",
+        label="Disable Lock Screen Content Tips",
+        category="Lock Screen & Login",
+        apply_fn=_apply_lock_disable_tips,
+        remove_fn=_remove_lock_disable_tips,
+        detect_fn=_detect_lock_disable_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description="Disables lock screen content tips and soft-landing suggestions. Default: Enabled. Recommended: Disabled.",
+        tags=["lockscreen", "tips", "content", "suggestions"],
+    ),
+    TweakDef(
+        id="lock-auto-lock-5min",
+        label="Set Lock Timeout to 5 Minutes",
+        category="Lock Screen & Login",
+        apply_fn=_apply_lock_timeout_5min,
+        remove_fn=_remove_lock_timeout_5min,
+        detect_fn=_detect_lock_timeout_5min,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SIGNIN_POLICY],
+        description="Sets machine inactivity timeout to 300 seconds (5 minutes). Default: no timeout. Recommended: 5 min.",
+        tags=["lockscreen", "timeout", "inactivity", "lock", "5min"],
+    ),
+    TweakDef(
+        id="lock-disable-network-ui",
+        label="Disable Network UI on Lock Screen",
+        category="Lock Screen & Login",
+        apply_fn=_apply_lock_disable_network_ui,
+        remove_fn=_remove_lock_disable_network_ui,
+        detect_fn=_detect_lock_disable_network_ui,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LOCK_NET],
+        description=(
+            "Disables the network selection UI on the lock screen. "
+            "Prevents users from connecting to networks before sign-in. "
+            "Default: Enabled. Recommended: Disabled for security."
+        ),
+        tags=["lockscreen", "network", "selection", "security"],
+    ),
+]

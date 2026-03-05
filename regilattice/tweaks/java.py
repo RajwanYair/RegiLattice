@@ -466,3 +466,110 @@ TWEAKS += [
         tags=["java", "sponsor", "adware", "offers"],
     ),
 ]
+
+
+# -- 14. Disable Java Auto-Update Scheduler Notifications ─────────────────────
+
+
+def _apply_java_disable_update_scheduler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Java: disable auto-update scheduler notifications")
+    SESSION.backup([_JAVA_UPDATE], "JavaUpdateScheduler")
+    SESSION.set_dword(_JAVA_UPDATE, "NotifyDownload", 0)
+    SESSION.set_dword(_JAVA_UPDATE, "NotifyInstall", 0)
+
+
+def _remove_java_disable_update_scheduler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_JAVA_UPDATE, "NotifyDownload", 1)
+    SESSION.set_dword(_JAVA_UPDATE, "NotifyInstall", 1)
+
+
+def _detect_java_disable_update_scheduler() -> bool:
+    return (
+        SESSION.read_dword(_JAVA_UPDATE, "NotifyDownload") == 0
+        and SESSION.read_dword(_JAVA_UPDATE, "NotifyInstall") == 0
+    )
+
+
+# -- 15. Set Java Security Level to Very High ─────────────────────────────────
+
+
+def _apply_java_security_veryhigh(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Java: set deployment security level to VERY_HIGH")
+    SESSION.backup([_JAVA_WEB], "JavaSecVeryHigh")
+    SESSION.set_string(_JAVA_WEB, "deployment.security.level", "VERY_HIGH")
+
+
+def _remove_java_security_veryhigh(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_JAVA_WEB, "deployment.security.level", "HIGH")
+
+
+def _detect_java_security_veryhigh() -> bool:
+    return SESSION.read_string(_JAVA_WEB, "deployment.security.level") == "VERY_HIGH"
+
+
+# -- 16. Disable Java Usage Tracking ──────────────────────────────────────────
+
+_JAVA_ANALYTICS_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"
+
+
+def _apply_java_disable_usage_tracking(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Java: disable usage tracking")
+    SESSION.backup([_JAVA_ANALYTICS_KEY], "JavaUsageTracking")
+    SESSION.set_string(_JAVA_ANALYTICS_KEY, "deployment.usagetracker.enabled", "false")
+
+
+def _remove_java_disable_usage_tracking(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_JAVA_ANALYTICS_KEY, "deployment.usagetracker.enabled")
+
+
+def _detect_java_disable_usage_tracking() -> bool:
+    return SESSION.read_string(_JAVA_ANALYTICS_KEY, "deployment.usagetracker.enabled") == "false"
+
+
+TWEAKS += [
+    TweakDef(
+        id="java-disable-update-scheduler",
+        label="Disable Java Update Scheduler Notifications",
+        category="Java",
+        apply_fn=_apply_java_disable_update_scheduler,
+        remove_fn=_remove_java_disable_update_scheduler,
+        detect_fn=_detect_java_disable_update_scheduler,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_JAVA_UPDATE],
+        description="Disables Java update scheduler download/install notifications. Default: Enabled. Recommended: Disabled.",
+        tags=["java", "update", "scheduler", "notifications"],
+    ),
+    TweakDef(
+        id="java-security-veryhigh",
+        label="Set Java Security Level to Very High",
+        category="Java",
+        apply_fn=_apply_java_security_veryhigh,
+        remove_fn=_remove_java_security_veryhigh,
+        detect_fn=_detect_java_security_veryhigh,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_JAVA_WEB],
+        description="Sets Java deployment security level to VERY_HIGH via policy. Default: HIGH. Recommended: VERY_HIGH.",
+        tags=["java", "security", "deployment", "veryhigh"],
+    ),
+    TweakDef(
+        id="java-disable-usage-tracking",
+        label="Disable Java Usage Tracking",
+        category="Java",
+        apply_fn=_apply_java_disable_usage_tracking,
+        remove_fn=_remove_java_disable_usage_tracking,
+        detect_fn=_detect_java_disable_usage_tracking,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_JAVA_ANALYTICS_KEY],
+        description="Disables Java usage tracker analytics. Default: Enabled. Recommended: Disabled for privacy.",
+        tags=["java", "usage", "tracking", "analytics", "privacy"],
+    ),
+]

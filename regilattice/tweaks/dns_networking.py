@@ -589,3 +589,115 @@ TWEAKS += [
         tags=["dns", "netbios", "security", "network", "hardening"],
     ),
 ]
+
+
+# ── Reduce DNS Query Timeout ─────────────────────────────────────────────────
+
+
+def _apply_dns_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("DNS: reduce query adapter timeout to 2000 ms")
+    SESSION.backup([_DNS_CLIENT], "DnsTimeout")
+    SESSION.set_dword(_DNS_CLIENT, "QueryAdapterTimeout", 2000)
+
+
+def _remove_dns_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_CLIENT, "QueryAdapterTimeout")
+
+
+def _detect_dns_timeout() -> bool:
+    return SESSION.read_dword(_DNS_CLIENT, "QueryAdapterTimeout") == 2000
+
+
+# ── Enable DNS-over-HTTPS (Auto) ─────────────────────────────────────────────
+
+
+def _apply_enable_doh_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("DNS: enable automatic DNS-over-HTTPS")
+    SESSION.backup([_DNS_CLIENT], "DohAuto")
+    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 2)  # 2 = automatic
+
+
+def _remove_enable_doh_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_CLIENT, "EnableAutoDoh")
+
+
+def _detect_enable_doh_auto() -> bool:
+    return SESSION.read_dword(_DNS_CLIENT, "EnableAutoDoh") == 2
+
+
+# ── Disable WPAD Auto-Discovery ──────────────────────────────────────────────
+
+
+def _apply_disable_wpad(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("DNS: disable WPAD auto-discovery")
+    SESSION.backup([_DNS_POLICY], "DisableWpad")
+    SESSION.set_dword(_DNS_POLICY, "DisableWpad", 1)
+
+
+def _remove_disable_wpad(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_POLICY, "DisableWpad")
+
+
+def _detect_disable_wpad() -> bool:
+    return SESSION.read_dword(_DNS_POLICY, "DisableWpad") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="dns-reduce-query-timeout",
+        label="Reduce DNS Query Timeout",
+        category="DNS & Networking Advanced",
+        apply_fn=_apply_dns_timeout,
+        remove_fn=_remove_dns_timeout,
+        detect_fn=_detect_dns_timeout,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_CLIENT],
+        description=(
+            "Reduces DNS query adapter timeout to 2000 ms for faster "
+            "failover to alternate DNS servers. "
+            "Default: 5000 ms. Recommended: 2000 ms."
+        ),
+        tags=["dns", "timeout", "failover", "performance", "network"],
+    ),
+    TweakDef(
+        id="dns-enable-doh-auto",
+        label="Enable DNS-over-HTTPS (Automatic)",
+        category="DNS & Networking Advanced",
+        apply_fn=_apply_enable_doh_auto,
+        remove_fn=_remove_enable_doh_auto,
+        detect_fn=_detect_enable_doh_auto,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_CLIENT],
+        description=(
+            "Enables automatic DNS-over-HTTPS at the system resolver level "
+            "(EnableAutoDoh=2). Attempts DoH if server supports it. "
+            "Default: Disabled. Recommended: Enabled for privacy."
+        ),
+        tags=["dns", "doh", "https", "encryption", "privacy"],
+    ),
+    TweakDef(
+        id="dns-disable-wpad",
+        label="Disable WPAD Auto-Discovery",
+        category="DNS & Networking Advanced",
+        apply_fn=_apply_disable_wpad,
+        remove_fn=_remove_disable_wpad,
+        detect_fn=_detect_disable_wpad,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_POLICY],
+        description=(
+            "Disables Web Proxy Auto-Discovery (WPAD) protocol to prevent "
+            "automatic proxy configuration and WPAD poisoning attacks. "
+            "Default: Enabled. Recommended: Disabled for security."
+        ),
+        tags=["dns", "wpad", "proxy", "security", "hardening"],
+    ),
+]

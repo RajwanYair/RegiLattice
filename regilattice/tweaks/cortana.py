@@ -634,3 +634,117 @@ TWEAKS += [
         tags=["cortana", "search", "suggestions", "taskbar", "privacy"],
     ),
 ]
+
+
+# ── Disable Web Results in Search (Policy) ───────────────────────────────────
+
+
+def _apply_disable_web_results_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable web results in search via HKLM policy")
+    SESSION.backup([_SEARCH], "WebResultsPolicy")
+    SESSION.set_dword(_SEARCH, "DisableWebSearch", 1)
+    SESSION.set_dword(_SEARCH, "ConnectedSearchUseWeb", 0)
+
+
+def _remove_disable_web_results_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "DisableWebSearch")
+    SESSION.delete_value(_SEARCH, "ConnectedSearchUseWeb")
+
+
+def _detect_disable_web_results_policy() -> bool:
+    return SESSION.read_dword(_SEARCH, "DisableWebSearch") == 1
+
+
+# ── Disable Cloud Content Personalization ────────────────────────────────────
+
+
+def _apply_disable_cloud_personalization(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable cloud content personalization")
+    SESSION.backup([_SEARCH], "CloudPersonalization")
+    SESSION.set_dword(_SEARCH, "AllowCloudSearch", 0)
+
+
+def _remove_disable_cloud_personalization(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "AllowCloudSearch")
+
+
+def _detect_disable_cloud_personalization() -> bool:
+    return SESSION.read_dword(_SEARCH, "AllowCloudSearch") == 0
+
+
+# ── Disable Search Over Metered Connections ──────────────────────────────────
+
+
+def _apply_disable_search_metered(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable search over metered connections")
+    SESSION.backup([_SEARCH], "SearchMetered")
+    SESSION.set_dword(_SEARCH, "ConnectedSearchUseWebOverMeteredConnections", 0)
+
+
+def _remove_disable_search_metered(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "ConnectedSearchUseWebOverMeteredConnections")
+
+
+def _detect_disable_search_metered() -> bool:
+    return SESSION.read_dword(_SEARCH, "ConnectedSearchUseWebOverMeteredConnections") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="cortana-block-web-results-policy",
+        label="Disable Web Results in Search (Policy)",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_web_results_policy,
+        remove_fn=_remove_disable_web_results_policy,
+        detect_fn=_detect_disable_web_results_policy,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Disables web results in Windows Search via HKLM group policy. "
+            "Only local results are returned. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "web", "policy", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-cloud-personalization",
+        label="Disable Cloud Content Personalization",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_cloud_personalization,
+        remove_fn=_remove_disable_cloud_personalization,
+        detect_fn=_detect_disable_cloud_personalization,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Disables cloud-based content personalization in Windows Search "
+            "via HKLM policy (AllowCloudSearch=0). "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "cloud", "personalization", "policy"],
+    ),
+    TweakDef(
+        id="cortana-disable-search-metered",
+        label="Disable Search Over Metered Connections",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_metered,
+        remove_fn=_remove_disable_search_metered,
+        detect_fn=_detect_disable_search_metered,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Prevents Windows Search from using web search over metered "
+            "or pay-per-use network connections. "
+            "Default: Enabled. Recommended: Disabled to save bandwidth."
+        ),
+        tags=["cortana", "search", "metered", "bandwidth", "policy"],
+    ),
+]

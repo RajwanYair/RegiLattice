@@ -573,3 +573,123 @@ TWEAKS += [
         tags=["libreoffice", "macros", "security", "policy"],
     ),
 ]
+
+
+# -- 16. Disable LibreOffice Crash Recovery Prompt ─────────────────────────────
+
+_LO_CRASH_RECOVERY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice"
+    r"\org.openoffice.Office.Recovery\RecoveryList"
+)
+
+
+def _apply_lo_disable_crash_recovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable crash recovery prompt")
+    SESSION.backup([_LO_CRASH_RECOVERY], "LOCrashRecovery")
+    SESSION.set_dword(_LO_CRASH_RECOVERY, "RecoveryDisabled", 1)
+
+
+def _remove_lo_disable_crash_recovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LO_CRASH_RECOVERY, "RecoveryDisabled")
+
+
+def _detect_lo_disable_crash_recovery() -> bool:
+    return SESSION.read_dword(_LO_CRASH_RECOVERY, "RecoveryDisabled") == 1
+
+
+# -- 17. Enable LibreOffice Hardware Acceleration ─────────────────────────────
+
+_LO_HW_ACCEL = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice"
+    r"\org.openoffice.Office.Common\VCL"
+)
+
+
+def _apply_lo_enable_hw_accel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: enable hardware acceleration")
+    SESSION.backup([_LO_HW_ACCEL], "LOHWAccel")
+    SESSION.set_dword(_LO_HW_ACCEL, "UseOpenGL", 1)
+    SESSION.set_dword(_LO_HW_ACCEL, "ForceOpenGL", 1)
+
+
+def _remove_lo_enable_hw_accel(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LO_HW_ACCEL, "UseOpenGL")
+    SESSION.delete_value(_LO_HW_ACCEL, "ForceOpenGL")
+
+
+def _detect_lo_enable_hw_accel() -> bool:
+    return (
+        SESSION.read_dword(_LO_HW_ACCEL, "UseOpenGL") == 1
+        and SESSION.read_dword(_LO_HW_ACCEL, "ForceOpenGL") == 1
+    )
+
+
+# -- 18. Disable LibreOffice Online Update Check ─────────────────────────────
+
+_LO_UPDATE_CHECK = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice"
+    r"\org.openoffice.Office.Jobs\AutoCheckUpdate"
+)
+
+
+def _apply_lo_disable_update_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable online update check")
+    SESSION.backup([_LO_UPDATE_CHECK], "LOUpdateCheck")
+    SESSION.set_dword(_LO_UPDATE_CHECK, "AutoCheckEnabled", 0)
+
+
+def _remove_lo_disable_update_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LO_UPDATE_CHECK, "AutoCheckEnabled")
+
+
+def _detect_lo_disable_update_check() -> bool:
+    return SESSION.read_dword(_LO_UPDATE_CHECK, "AutoCheckEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="lo-disable-crash-recovery",
+        label="Disable LibreOffice Crash Recovery Prompt",
+        category="LibreOffice",
+        apply_fn=_apply_lo_disable_crash_recovery,
+        remove_fn=_remove_lo_disable_crash_recovery,
+        detect_fn=_detect_lo_disable_crash_recovery,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LO_CRASH_RECOVERY],
+        description="Disables crash recovery prompt on LibreOffice startup. Default: Enabled. Recommended: Disabled.",
+        tags=["libreoffice", "crash", "recovery", "prompt"],
+    ),
+    TweakDef(
+        id="lo-enable-hw-acceleration",
+        label="Enable LibreOffice Hardware Acceleration",
+        category="LibreOffice",
+        apply_fn=_apply_lo_enable_hw_accel,
+        remove_fn=_remove_lo_enable_hw_accel,
+        detect_fn=_detect_lo_enable_hw_accel,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LO_HW_ACCEL],
+        description="Enables OpenGL hardware acceleration in LibreOffice via policy. Default: Disabled. Recommended: Enabled.",
+        tags=["libreoffice", "hardware", "acceleration", "opengl", "gpu"],
+    ),
+    TweakDef(
+        id="lo-disable-update-check",
+        label="Disable LibreOffice Online Update Check",
+        category="LibreOffice",
+        apply_fn=_apply_lo_disable_update_check,
+        remove_fn=_remove_lo_disable_update_check,
+        detect_fn=_detect_lo_disable_update_check,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LO_UPDATE_CHECK],
+        description="Disables automatic online update checks in LibreOffice via policy. Default: Enabled. Recommended: Disabled.",
+        tags=["libreoffice", "update", "check", "online"],
+    ),
+]

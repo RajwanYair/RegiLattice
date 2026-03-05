@@ -639,3 +639,114 @@ TWEAKS += [
         tags=["services", "fax", "legacy", "cleanup"],
     ),
 ]
+
+
+# -- Disable Windows Biometric Service (WbioSrvc) -----------------------------
+
+
+def _apply_svc_disable_wbiosrvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Windows Biometric Service")
+    SESSION.backup([_BIOMETRIC], "SvcBiometric")
+    SESSION.set_dword(_BIOMETRIC, "Start", 4)
+
+
+def _remove_svc_disable_wbiosrvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_BIOMETRIC, "Start", 3)
+
+
+def _detect_svc_disable_wbiosrvc() -> bool:
+    return SESSION.read_dword(_BIOMETRIC, "Start") == 4
+
+
+# -- Disable Smart Card Service (SCardSvr) -------------------------------------
+
+_SMARTCARD = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SCardSvr"
+
+
+def _apply_svc_disable_smartcard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Smart Card service")
+    SESSION.backup([_SMARTCARD], "SvcSmartCard")
+    SESSION.set_dword(_SMARTCARD, "Start", 4)
+
+
+def _remove_svc_disable_smartcard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SMARTCARD, "Start", 3)
+
+
+def _detect_svc_disable_smartcard() -> bool:
+    return SESSION.read_dword(_SMARTCARD, "Start") == 4
+
+
+# -- Disable Geolocation Service (lfsvc) ---------------------------------------
+
+
+def _apply_svc_disable_geoloc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Geolocation service")
+    SESSION.backup([_GEOLOC], "SvcGeolocation")
+    SESSION.set_dword(_GEOLOC, "Start", 4)
+
+
+def _remove_svc_disable_geoloc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_GEOLOC, "Start", 3)
+
+
+def _detect_svc_disable_geoloc() -> bool:
+    return SESSION.read_dword(_GEOLOC, "Start") == 4
+
+
+TWEAKS += [
+    TweakDef(
+        id="svc-disable-biometric",
+        label="Disable Windows Biometric Service",
+        category="Services",
+        apply_fn=_apply_svc_disable_wbiosrvc,
+        remove_fn=_remove_svc_disable_wbiosrvc,
+        detect_fn=_detect_svc_disable_wbiosrvc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BIOMETRIC],
+        description=(
+            "Disables Windows Biometric Service (WbioSrvc) used for fingerprint and face recognition. "
+            "Frees resources if biometrics are unused. Default: Manual. Recommended: Disabled."
+        ),
+        tags=["services", "biometric", "wbiosrvc", "security"],
+    ),
+    TweakDef(
+        id="svc-disable-smartcard",
+        label="Disable Smart Card Service",
+        category="Services",
+        apply_fn=_apply_svc_disable_smartcard,
+        remove_fn=_remove_svc_disable_smartcard,
+        detect_fn=_detect_svc_disable_smartcard,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SMARTCARD],
+        description=(
+            "Disables the Smart Card service (SCardSvr) for smart-card readers. "
+            "Safe to disable if no smart cards are used. Default: Manual. Recommended: Disabled."
+        ),
+        tags=["services", "smartcard", "scardsvr", "security"],
+    ),
+    TweakDef(
+        id="svc-disable-geolocation",
+        label="Disable Geolocation Service",
+        category="Services",
+        apply_fn=_apply_svc_disable_geoloc,
+        remove_fn=_remove_svc_disable_geoloc,
+        detect_fn=_detect_svc_disable_geoloc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GEOLOC],
+        description=(
+            "Disables the Geolocation service (lfsvc) that tracks device location. "
+            "Improves privacy. Default: Manual. Recommended: Disabled for desktops."
+        ),
+        tags=["services", "geolocation", "lfsvc", "privacy"],
+    ),
+]

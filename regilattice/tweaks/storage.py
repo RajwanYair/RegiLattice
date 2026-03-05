@@ -677,3 +677,123 @@ TWEAKS += [
         tags=["storage", "reserved", "disk-space"],
     ),
 ]
+
+
+# -- Enable TRIM for SSD -------------------------------------------------------
+
+_KEY_TRIM = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"
+
+
+def _apply_stor_enable_trim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Storage: enabling TRIM (DisableDeleteNotification=0)")
+    SESSION.backup([_KEY_TRIM], "StorEnableTrim")
+    SESSION.set_dword(_KEY_TRIM, "DisableDeleteNotification", 0)
+    SESSION.log("Storage: TRIM enabled")
+
+
+def _remove_stor_enable_trim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_TRIM], "StorEnableTrim_Remove")
+    SESSION.set_dword(_KEY_TRIM, "DisableDeleteNotification", 1)
+
+
+def _detect_stor_enable_trim() -> bool:
+    return SESSION.read_dword(_KEY_TRIM, "DisableDeleteNotification") == 0
+
+
+# -- Disable Defrag on SSD -----------------------------------------------------
+
+_KEY_DEFRAG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
+
+
+def _apply_stor_disable_defrag_ssd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Storage: disabling defrag on SSD")
+    SESSION.backup([_KEY_DEFRAG], "StorDisableDefragSSD")
+    SESSION.set_string(_KEY_DEFRAG, "Enable", "N")
+    SESSION.log("Storage: defrag on SSD disabled")
+
+
+def _remove_stor_disable_defrag_ssd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_DEFRAG], "StorDisableDefragSSD_Remove")
+    SESSION.set_string(_KEY_DEFRAG, "Enable", "Y")
+
+
+def _detect_stor_disable_defrag_ssd() -> bool:
+    return SESSION.read_string(_KEY_DEFRAG, "Enable") == "N"
+
+
+# -- Disable Last Access Time Stamp Updates ------------------------------------
+
+
+def _apply_stor_disable_last_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Storage: disabling NTFS last access time stamp updates")
+    SESSION.backup([_KEY_FILESYSTEM], "StorDisableLastAccess")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate", 2147483649)
+    SESSION.log("Storage: last access time stamp updates disabled")
+
+
+def _remove_stor_disable_last_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_FILESYSTEM], "StorDisableLastAccess_Remove")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate", 2147483650)
+
+
+def _detect_stor_disable_last_access() -> bool:
+    val = SESSION.read_dword(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate")
+    return val is not None and val in (1, 2147483649)
+
+
+TWEAKS += [
+    TweakDef(
+        id="stor-enable-trim",
+        label="Enable TRIM for SSD",
+        category="Storage",
+        apply_fn=_apply_stor_enable_trim,
+        remove_fn=_remove_stor_enable_trim,
+        detect_fn=_detect_stor_enable_trim,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_TRIM],
+        description=(
+            "Enables TRIM command for SSDs by setting DisableDeleteNotification to 0. "
+            "Improves SSD longevity and performance. Default: Enabled. Recommended: Enabled."
+        ),
+        tags=["storage", "ssd", "trim", "performance"],
+    ),
+    TweakDef(
+        id="stor-disable-defrag-ssd",
+        label="Disable Defrag on SSD",
+        category="Storage",
+        apply_fn=_apply_stor_disable_defrag_ssd,
+        remove_fn=_remove_stor_disable_defrag_ssd,
+        detect_fn=_detect_stor_disable_defrag_ssd,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_DEFRAG],
+        description=(
+            "Disables boot-time defragmentation optimization on SSDs. "
+            "Defrag is unnecessary and harmful for SSDs. Default: Y. Recommended: N."
+        ),
+        tags=["storage", "ssd", "defrag", "optimization"],
+    ),
+    TweakDef(
+        id="stor-disable-last-access",
+        label="Disable Last Access Time Stamp Updates",
+        category="Storage",
+        apply_fn=_apply_stor_disable_last_access,
+        remove_fn=_remove_stor_disable_last_access,
+        detect_fn=_detect_stor_disable_last_access,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FILESYSTEM],
+        description=(
+            "Disables NTFS last access time stamp updates to reduce disk I/O. "
+            "Default: Enabled. Recommended: Disabled for SSDs."
+        ),
+        tags=["storage", "ntfs", "last-access", "performance", "ssd"],
+    ),
+]

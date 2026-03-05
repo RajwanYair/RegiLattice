@@ -531,3 +531,115 @@ TWEAKS += [
         tags=["onedrive", "sync", "personal", "policy"],
     ),
 ]
+
+
+# ── Disable OneDrive Folder Backup Prompt ─────────────────────────────────────
+
+
+def _apply_od_disable_backup_prompt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: disable folder backup (KFM) opt-in prompt")
+    SESSION.backup([_OD], "ODBackupPrompt")
+    SESSION.set_dword(_OD, "KFMBlockOptIn", 1)
+
+
+def _remove_od_disable_backup_prompt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD, "KFMBlockOptIn")
+
+
+def _detect_od_disable_backup_prompt() -> bool:
+    return SESSION.read_dword(_OD, "KFMBlockOptIn") == 1
+
+
+# ── Block OneDrive for Business Sync ─────────────────────────────────────────
+
+
+def _apply_od_block_business_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: block external / business sync")
+    SESSION.backup([_OD], "ODBusinessSync")
+    SESSION.set_dword(_OD, "BlockExternalSync", 1)
+
+
+def _remove_od_block_business_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD, "BlockExternalSync")
+
+
+def _detect_od_block_business_sync() -> bool:
+    return SESSION.read_dword(_OD, "BlockExternalSync") == 1
+
+
+# ── Disable OneDrive File Collaboration ──────────────────────────────────────
+
+
+def _apply_od_disable_collaboration(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: disable file collaboration (OCSI clients)")
+    SESSION.backup([_OD], "ODCollaboration")
+    SESSION.set_dword(_OD, "EnableAllOcsiClients", 0)
+
+
+def _remove_od_disable_collaboration(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD, "EnableAllOcsiClients")
+
+
+def _detect_od_disable_collaboration() -> bool:
+    return SESSION.read_dword(_OD, "EnableAllOcsiClients") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="od-disable-backup-prompt",
+        label="Disable OneDrive Folder Backup Prompt",
+        category="OneDrive",
+        apply_fn=_apply_od_disable_backup_prompt,
+        remove_fn=_remove_od_disable_backup_prompt,
+        detect_fn=_detect_od_disable_backup_prompt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OD],
+        description=(
+            "Blocks the OneDrive Known Folder Move (KFM) opt-in prompt "
+            "that asks users to back up Desktop, Documents, and Pictures. "
+            "Default: Enabled. Recommended: Disabled on managed machines."
+        ),
+        tags=["onedrive", "backup", "kfm", "prompt"],
+    ),
+    TweakDef(
+        id="od-block-business-sync",
+        label="Block OneDrive for Business Sync",
+        category="OneDrive",
+        apply_fn=_apply_od_block_business_sync,
+        remove_fn=_remove_od_block_business_sync,
+        detect_fn=_detect_od_block_business_sync,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OD],
+        description=(
+            "Blocks OneDrive from syncing with external or business "
+            "SharePoint organizations. Default: Allowed. "
+            "Recommended: Blocked on personal machines."
+        ),
+        tags=["onedrive", "business", "sync", "external"],
+    ),
+    TweakDef(
+        id="od-disable-collaboration",
+        label="Disable OneDrive File Collaboration",
+        category="OneDrive",
+        apply_fn=_apply_od_disable_collaboration,
+        remove_fn=_remove_od_disable_collaboration,
+        detect_fn=_detect_od_disable_collaboration,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OD],
+        description=(
+            "Disables OneDrive OCSI co-authoring clients for real-time "
+            "file collaboration. Default: Enabled. "
+            "Recommended: Disabled for offline-only workflows."
+        ),
+        tags=["onedrive", "collaboration", "coauthoring", "ocsi"],
+    ),
+]

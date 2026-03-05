@@ -475,3 +475,128 @@ TWEAKS += [
         tags=["developer", "longpath", "filesystem", "nodejs", "rust"],
     ),
 ]
+
+
+# -- Key paths (developer mode & Explorer helpers) ----------------------------
+
+_DEV_MODE = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\AppModelUnlock"
+)
+_EXPLORER_ADV = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\Advanced"
+)
+
+
+# -- Enable Windows Developer Mode --------------------------------------------
+
+
+def _apply_enable_developer_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev: enable Windows Developer Mode")
+    SESSION.backup([_DEV_MODE], "DeveloperMode")
+    SESSION.set_dword(_DEV_MODE, "AllowDevelopmentWithoutDevLicense", 1)
+    SESSION.set_dword(_DEV_MODE, "AllowAllTrustedApps", 1)
+
+
+def _remove_enable_developer_mode(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DEV_MODE], "DeveloperMode_Remove")
+    SESSION.set_dword(_DEV_MODE, "AllowDevelopmentWithoutDevLicense", 0)
+    SESSION.set_dword(_DEV_MODE, "AllowAllTrustedApps", 0)
+
+
+def _detect_enable_developer_mode() -> bool:
+    return SESSION.read_dword(_DEV_MODE, "AllowDevelopmentWithoutDevLicense") == 1
+
+
+# -- Show File Extensions for Known Types -------------------------------------
+
+
+def _apply_show_file_extensions(*, require_admin: bool = False) -> None:
+    SESSION.log("Dev: show file extensions for known file types")
+    SESSION.backup([_EXPLORER_ADV], "ShowFileExt")
+    SESSION.set_dword(_EXPLORER_ADV, "HideFileExt", 0)
+
+
+def _remove_show_file_extensions(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXPLORER_ADV, "HideFileExt", 1)
+
+
+def _detect_show_file_extensions() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADV, "HideFileExt") == 0
+
+
+# -- Show Hidden Files and Folders --------------------------------------------
+
+
+def _apply_show_hidden_files(*, require_admin: bool = False) -> None:
+    SESSION.log("Dev: show hidden files and folders in Explorer")
+    SESSION.backup([_EXPLORER_ADV], "ShowHiddenFiles")
+    SESSION.set_dword(_EXPLORER_ADV, "Hidden", 1)
+    SESSION.set_dword(_EXPLORER_ADV, "ShowSuperHidden", 1)
+
+
+def _remove_show_hidden_files(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXPLORER_ADV, "Hidden", 2)
+    SESSION.set_dword(_EXPLORER_ADV, "ShowSuperHidden", 0)
+
+
+def _detect_show_hidden_files() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADV, "Hidden") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="dev-enable-developer-mode",
+        label="Enable Windows Developer Mode",
+        category="Developer Tools",
+        apply_fn=_apply_enable_developer_mode,
+        remove_fn=_remove_enable_developer_mode,
+        detect_fn=_detect_enable_developer_mode,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DEV_MODE],
+        description=(
+            "Enables Windows Developer Mode for sideloading apps and using "
+            "developer features without a license. Required for WSL, Device Portal. "
+            "Default: Disabled. Recommended: Enabled for developers."
+        ),
+        tags=["developer", "dev-mode", "sideloading", "wsl", "deviceportal"],
+    ),
+    TweakDef(
+        id="dev-show-file-extensions",
+        label="Show File Extensions for Known Types",
+        category="Developer Tools",
+        apply_fn=_apply_show_file_extensions,
+        remove_fn=_remove_show_file_extensions,
+        detect_fn=_detect_show_file_extensions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADV],
+        description=(
+            "Shows file extensions for known file types in Explorer. Essential "
+            "for developers to distinguish file types (e.g. .js vs .json). "
+            "Default: Hidden. Recommended: Shown."
+        ),
+        tags=["developer", "explorer", "file-extensions", "ux"],
+    ),
+    TweakDef(
+        id="dev-show-hidden-files",
+        label="Show Hidden Files and Folders",
+        category="Developer Tools",
+        apply_fn=_apply_show_hidden_files,
+        remove_fn=_remove_show_hidden_files,
+        detect_fn=_detect_show_hidden_files,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADV],
+        description=(
+            "Shows hidden files, folders, and protected OS files in Explorer. "
+            "Required for accessing dotfiles and system configuration files. "
+            "Default: Hidden. Recommended: Shown for developers."
+        ),
+        tags=["developer", "explorer", "hidden-files", "dotfiles", "ux"],
+    ),
+]

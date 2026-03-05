@@ -767,3 +767,129 @@ TWEAKS += [
         tags=["system", "crash", "reboot", "bsod", "diagnostic"],
     ),
 ]
+
+
+# -- Enable System Restore Frequency -------------------------------------------
+
+_SYS_RESTORE_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"
+
+
+def _apply_sys_restore_frequency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: setting system restore frequency to unlimited")
+    SESSION.backup([_SYS_RESTORE_KEY], "SysRestoreFreq")
+    SESSION.set_dword(_SYS_RESTORE_KEY, "RPSessionInterval", 0)
+    SESSION.log("System: system restore frequency set")
+
+
+def _remove_sys_restore_frequency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SYS_RESTORE_KEY], "SysRestoreFreq_Remove")
+    SESSION.delete_value(_SYS_RESTORE_KEY, "RPSessionInterval")
+
+
+def _detect_sys_restore_frequency() -> bool:
+    return SESSION.read_dword(_SYS_RESTORE_KEY, "RPSessionInterval") == 0
+
+
+# -- Disable Windows Tips -------------------------------------------------------
+
+_CDM_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\ContentDeliveryManager"
+)
+
+
+def _apply_sys_disable_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disabling Windows Tips and Suggestions")
+    SESSION.backup([_CDM_KEY], "SysDisableTips")
+    SESSION.set_dword(_CDM_KEY, "SoftLandingEnabled", 0)
+    SESSION.set_dword(_CDM_KEY, "SubscribedContent-338389Enabled", 0)
+    SESSION.log("System: Windows Tips disabled")
+
+
+def _remove_sys_disable_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CDM_KEY], "SysDisableTips_Remove")
+    SESSION.set_dword(_CDM_KEY, "SoftLandingEnabled", 1)
+    SESSION.set_dword(_CDM_KEY, "SubscribedContent-338389Enabled", 1)
+
+
+def _detect_sys_disable_tips() -> bool:
+    return SESSION.read_dword(_CDM_KEY, "SoftLandingEnabled") == 0
+
+
+# -- Disable Power Throttling ---------------------------------------------------
+
+_POWER_THROTTLE_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"
+
+
+def _apply_sys_disable_power_throttling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disabling power throttling")
+    SESSION.backup([_POWER_THROTTLE_KEY], "SysPowerThrottle")
+    SESSION.set_dword(_POWER_THROTTLE_KEY, "PowerThrottlingOff", 1)
+    SESSION.log("System: power throttling disabled")
+
+
+def _remove_sys_disable_power_throttling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_POWER_THROTTLE_KEY], "SysPowerThrottle_Remove")
+    SESSION.delete_value(_POWER_THROTTLE_KEY, "PowerThrottlingOff")
+
+
+def _detect_sys_disable_power_throttling() -> bool:
+    return SESSION.read_dword(_POWER_THROTTLE_KEY, "PowerThrottlingOff") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="sys-restore-frequency",
+        label="Enable Unlimited System Restore Frequency",
+        category="System",
+        apply_fn=_apply_sys_restore_frequency,
+        remove_fn=_remove_sys_restore_frequency,
+        detect_fn=_detect_sys_restore_frequency,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SYS_RESTORE_KEY],
+        description=(
+            "Sets RPSessionInterval to 0, allowing unlimited system restore point creation frequency. "
+            "Default: 1. Recommended: 0 for frequent snapshots."
+        ),
+        tags=["system", "restore", "backup", "frequency"],
+    ),
+    TweakDef(
+        id="sys-disable-tips",
+        label="Disable Windows Tips and Suggestions",
+        category="System",
+        apply_fn=_apply_sys_disable_tips,
+        remove_fn=_remove_sys_disable_tips,
+        detect_fn=_detect_sys_disable_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM_KEY],
+        description=(
+            "Disables Windows tips, tricks, and suggestions popups. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["system", "tips", "suggestions", "notifications", "nag"],
+    ),
+    TweakDef(
+        id="sys-disable-power-throttling",
+        label="Disable Power Throttling",
+        category="System",
+        apply_fn=_apply_sys_disable_power_throttling,
+        remove_fn=_remove_sys_disable_power_throttling,
+        detect_fn=_detect_sys_disable_power_throttling,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER_THROTTLE_KEY],
+        description=(
+            "Disables Windows power throttling which limits background app performance. "
+            "Default: Enabled. Recommended: Disabled for desktops."
+        ),
+        tags=["system", "power", "throttling", "performance"],
+    ),
+]

@@ -484,3 +484,122 @@ TWEAKS += [
         tags=["multimedia", "streaming", "media", "sharing", "policy"],
     ),
 ]
+
+
+# -- 13. Disable WMP Network Sharing Service ──────────────────────────────────
+
+
+def _apply_disable_wmp_net_sharing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: disable WMP network sharing service")
+    SESSION.backup([_KEY_MEDIA_SVC], "WMPNetSharing")
+    SESSION.set_dword(_KEY_MEDIA_SVC, "Start", 4)
+
+
+def _remove_disable_wmp_net_sharing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KEY_MEDIA_SVC, "Start", 3)
+
+
+def _detect_disable_wmp_net_sharing() -> bool:
+    return SESSION.read_dword(_KEY_MEDIA_SVC, "Start") == 4
+
+
+# -- 14. Set Default Media Player Associations ─────────────────────────────────
+
+
+def _apply_set_default_player_assoc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: set default media player preferences via policy")
+    SESSION.backup([_KEY_WMP_POLICY], "DefaultPlayerAssoc")
+    SESSION.set_dword(_KEY_WMP_POLICY, "SetupFirstRun", 0)
+    SESSION.set_dword(_KEY_WMP_POLICY, "PlayerPrompt", 0)
+
+
+def _remove_set_default_player_assoc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_WMP_POLICY, "SetupFirstRun")
+    SESSION.delete_value(_KEY_WMP_POLICY, "PlayerPrompt")
+
+
+def _detect_set_default_player_assoc() -> bool:
+    return (
+        SESSION.read_dword(_KEY_WMP_POLICY, "SetupFirstRun") == 0
+        and SESSION.read_dword(_KEY_WMP_POLICY, "PlayerPrompt") == 0
+    )
+
+
+# -- 15. Disable Windows Media DRM ────────────────────────────────────────────
+
+_KEY_WM_DRM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WMDRM"
+
+
+def _apply_disable_wm_drm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: disable Windows Media DRM online access")
+    SESSION.backup([_KEY_WM_DRM], "WMDRM")
+    SESSION.set_dword(_KEY_WM_DRM, "DisableOnline", 1)
+
+
+def _remove_disable_wm_drm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_WM_DRM, "DisableOnline")
+
+
+def _detect_disable_wm_drm() -> bool:
+    return SESSION.read_dword(_KEY_WM_DRM, "DisableOnline") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="media-disable-wmp-network-sharing",
+        label="Disable WMP Network Sharing Service",
+        category="Multimedia",
+        apply_fn=_apply_disable_wmp_net_sharing,
+        remove_fn=_remove_disable_wmp_net_sharing,
+        detect_fn=_detect_disable_wmp_net_sharing,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_MEDIA_SVC],
+        description=(
+            "Disables the Windows Media Player Network Sharing Service (Start=4). "
+            "Prevents DLNA/UPnP media streaming entirely. "
+            "Default: manual (3). Recommended: disabled (4) for security."
+        ),
+        tags=["multimedia", "wmp", "network", "sharing", "dlna"],
+    ),
+    TweakDef(
+        id="media-set-default-player-assoc",
+        label="Set Default Media Player Associations",
+        category="Multimedia",
+        apply_fn=_apply_set_default_player_assoc,
+        remove_fn=_remove_set_default_player_assoc,
+        detect_fn=_detect_set_default_player_assoc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_WMP_POLICY],
+        description=(
+            "Suppresses WMP first-run setup and player prompt via policy. "
+            "Prevents Windows Media Player from claiming file associations. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["multimedia", "player", "associations", "default", "wmp"],
+    ),
+    TweakDef(
+        id="media-disable-wm-drm",
+        label="Disable Windows Media DRM",
+        category="Multimedia",
+        apply_fn=_apply_disable_wm_drm,
+        remove_fn=_remove_disable_wm_drm,
+        detect_fn=_detect_disable_wm_drm,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_WM_DRM],
+        description=(
+            "Disables Windows Media DRM online license acquisition via policy. "
+            "Prevents DRM phone-home for protected media content. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["multimedia", "drm", "wmdrm", "license", "privacy"],
+    ),
+]

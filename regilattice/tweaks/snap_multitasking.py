@@ -430,3 +430,110 @@ TWEAKS += [
         tags=["snap", "peek", "desktop", "aero"],
     ),
 ]
+
+
+# -- Disable Snap Fly-Out Overlay -----------------------------------------------
+
+_SNAP_FLYOUT = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_snap_disable_flyout(*, require_admin: bool = False) -> None:
+    SESSION.log("Snap: disable snap fly-out overlay")
+    SESSION.backup([_SNAP_FLYOUT], "SnapDisableFlyout")
+    SESSION.set_dword(_SNAP_FLYOUT, "EnableSnapBar", 0)
+
+
+def _remove_snap_disable_flyout(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_SNAP_FLYOUT, "EnableSnapBar")
+
+
+def _detect_snap_disable_flyout() -> bool:
+    return SESSION.read_dword(_SNAP_FLYOUT, "EnableSnapBar") == 0
+
+
+# -- Set Virtual Desktop Switch Animation Speed ---------------------------------
+
+_VD_ANIM = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
+
+
+def _apply_snap_vd_anim_speed(*, require_admin: bool = False) -> None:
+    SESSION.log("Snap: set virtual desktop switch animation to fast (100ms)")
+    SESSION.backup([_VD_ANIM], "VDAnimSpeed")
+    SESSION.set_dword(_VD_ANIM, "AnimationSpeed", 100)
+
+
+def _remove_snap_vd_anim_speed(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_VD_ANIM, "AnimationSpeed")
+
+
+def _detect_snap_vd_anim_speed() -> bool:
+    return SESSION.read_dword(_VD_ANIM, "AnimationSpeed") == 100
+
+
+# -- Disable Window Resize Snap Assist ------------------------------------------
+
+
+def _apply_snap_disable_resize_snap(*, require_admin: bool = False) -> None:
+    SESSION.log("Snap: disable window resize snap assist")
+    SESSION.backup([_SNAP], "SnapDisableResizeSnap")
+    SESSION.set_dword(_SNAP, "JointResize", 0)
+
+
+def _remove_snap_disable_resize_snap(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_SNAP, "JointResize", 1)
+
+
+def _detect_snap_disable_resize_snap() -> bool:
+    return SESSION.read_dword(_SNAP, "JointResize") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="snap-disable-flyout",
+        label="Disable Snap Fly-Out Overlay",
+        category="Snap & Multitasking",
+        apply_fn=_apply_snap_disable_flyout,
+        remove_fn=_remove_snap_disable_flyout,
+        detect_fn=_detect_snap_disable_flyout,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SNAP_FLYOUT],
+        description=(
+            "Disables the snap bar fly-out overlay when dragging windows. "
+            "Reduces visual clutter during window arrangement. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["snap", "flyout", "overlay", "ux"],
+    ),
+    TweakDef(
+        id="snap-vd-switch-anim-speed",
+        label="Set Virtual Desktop Switch Animation to Fast",
+        category="Snap & Multitasking",
+        apply_fn=_apply_snap_vd_anim_speed,
+        remove_fn=_remove_snap_vd_anim_speed,
+        detect_fn=_detect_snap_vd_anim_speed,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VD_ANIM],
+        description=(
+            "Sets virtual desktop switch animation speed to 100ms (fast). "
+            "Reduces perceived lag when switching desktops. Default: 200. Recommended: 100."
+        ),
+        tags=["snap", "virtual-desktop", "animation", "speed"],
+    ),
+    TweakDef(
+        id="snap-disable-resize-snap",
+        label="Disable Window Resize Snap Assist",
+        category="Snap & Multitasking",
+        apply_fn=_apply_snap_disable_resize_snap,
+        remove_fn=_remove_snap_disable_resize_snap,
+        detect_fn=_detect_snap_disable_resize_snap,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SNAP],
+        description=(
+            "Disables joint resize when dragging the border between two snapped windows. "
+            "Prevents accidental resizing of adjacent snapped windows. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["snap", "resize", "joint", "multitasking"],
+    ),
+]

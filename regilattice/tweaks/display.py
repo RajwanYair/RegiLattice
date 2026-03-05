@@ -589,3 +589,115 @@ TWEAKS += [
         tags=["display", "animation", "minimize", "performance"],
     ),
 ]
+
+
+# ── Force GPU Scaling Mode ───────────────────────────────────────────────────
+
+
+def _apply_force_gpu_scaling(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Display: enable GPU-based DPI scaling")
+    SESSION.backup([_KEY_DESKTOP], "GpuScaling")
+    SESSION.set_dword(_KEY_DESKTOP, "Win8DpiScaling", 1)
+
+
+def _remove_force_gpu_scaling(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KEY_DESKTOP, "Win8DpiScaling", 0)
+
+
+def _detect_force_gpu_scaling() -> bool:
+    return SESSION.read_dword(_KEY_DESKTOP, "Win8DpiScaling") == 1
+
+
+# ── Disable Auto Color Management ────────────────────────────────────────────
+
+
+def _apply_disable_auto_color_mgmt(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Display: disable automatic color management")
+    SESSION.backup([_KEY_DWM], "AutoColorMgmt")
+    SESSION.set_dword(_KEY_DWM, "EnableAutoColorManagement", 0)
+
+
+def _remove_disable_auto_color_mgmt(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_DWM, "EnableAutoColorManagement")
+
+
+def _detect_disable_auto_color_mgmt() -> bool:
+    return SESSION.read_dword(_KEY_DWM, "EnableAutoColorManagement") == 0
+
+
+# ── Set Font Smoothing Gamma ─────────────────────────────────────────────────
+
+
+def _apply_set_font_gamma(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Display: set ClearType font smoothing gamma to 1200")
+    SESSION.backup([_KEY_DESKTOP], "FontGamma")
+    SESSION.set_dword(_KEY_DESKTOP, "FontSmoothingGamma", 1200)
+
+
+def _remove_set_font_gamma(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_DESKTOP, "FontSmoothingGamma")
+
+
+def _detect_set_font_gamma() -> bool:
+    return SESSION.read_dword(_KEY_DESKTOP, "FontSmoothingGamma") == 1200
+
+
+TWEAKS += [
+    TweakDef(
+        id="display-force-gpu-scaling",
+        label="Force GPU Scaling Mode",
+        category="Display",
+        apply_fn=_apply_force_gpu_scaling,
+        remove_fn=_remove_force_gpu_scaling,
+        detect_fn=_detect_force_gpu_scaling,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Enables GPU-based DPI scaling (Win8DpiScaling) for "
+            "sharper rendering on non-native resolutions. "
+            "Default: Disabled. Recommended: Enabled for high-DPI displays."
+        ),
+        tags=["display", "gpu", "scaling", "dpi", "rendering"],
+    ),
+    TweakDef(
+        id="display-disable-auto-color-mgmt",
+        label="Disable Auto Color Management",
+        category="Display",
+        apply_fn=_apply_disable_auto_color_mgmt,
+        remove_fn=_remove_disable_auto_color_mgmt,
+        detect_fn=_detect_disable_auto_color_mgmt,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DWM],
+        description=(
+            "Disables Windows Desktop Window Manager automatic color "
+            "management for manual ICC profile control. "
+            "Default: Enabled. Recommended: Disabled for color-critical work."
+        ),
+        tags=["display", "color", "management", "dwm", "icc"],
+    ),
+    TweakDef(
+        id="display-set-font-smoothing-gamma",
+        label="Set ClearType Font Smoothing Gamma",
+        category="Display",
+        apply_fn=_apply_set_font_gamma,
+        remove_fn=_remove_set_font_gamma,
+        detect_fn=_detect_set_font_gamma,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Sets ClearType font smoothing gamma to 1200 for optimal "
+            "text contrast on LCD displays. "
+            "Default: Not set. Recommended: 1200 for standard LCD."
+        ),
+        tags=["display", "cleartype", "font", "gamma", "text"],
+    ),
+]

@@ -914,3 +914,120 @@ TWEAKS += [
         tags=["network", "lmhosts", "netbios", "security", "legacy"],
     ),
 ]
+
+
+# ── Set TCP Auto-Tuning to Restricted ────────────────────────────────────────
+
+
+def _apply_tcp_autotune_restricted(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: set TCP receive window auto-tuning to restricted")
+    SESSION.backup([_TCPIP], "TCPAutoTune")
+    SESSION.set_dword(_TCPIP, "EnableAutoTuning", 0)
+
+
+def _remove_tcp_autotune_restricted(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP, "EnableAutoTuning")
+
+
+def _detect_tcp_autotune_restricted() -> bool:
+    return SESSION.read_dword(_TCPIP, "EnableAutoTuning") == 0
+
+
+# ── Disable WiFi Sense ────────────────────────────────────────────────────────
+
+
+def _apply_disable_wifi_sense(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable WiFi Sense")
+    SESSION.backup([_WIFI_SENSE], "WiFiSense")
+    SESSION.set_dword(_WIFI_SENSE, "AutoConnectAllowedOEM", 0)
+
+
+def _remove_disable_wifi_sense(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WIFI_SENSE, "AutoConnectAllowedOEM", 1)
+
+
+def _detect_disable_wifi_sense() -> bool:
+    return SESSION.read_dword(_WIFI_SENSE, "AutoConnectAllowedOEM") == 0
+
+
+# ── Enable DNS Client Cache Optimization ─────────────────────────────────────
+
+
+def _apply_dns_cache_optimization(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: enable DNS client cache optimization")
+    SESSION.backup([_DNS_CLIENT], "DNSCacheOpt")
+    SESSION.set_dword(_DNS_CLIENT, "MaxCacheTtl", 86400)
+    SESSION.set_dword(_DNS_CLIENT, "MaxNegativeCacheTtl", 5)
+
+
+def _remove_dns_cache_optimization(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_CLIENT, "MaxCacheTtl")
+    SESSION.delete_value(_DNS_CLIENT, "MaxNegativeCacheTtl")
+
+
+def _detect_dns_cache_optimization() -> bool:
+    return (
+        SESSION.read_dword(_DNS_CLIENT, "MaxCacheTtl") == 86400
+        and SESSION.read_dword(_DNS_CLIENT, "MaxNegativeCacheTtl") == 5
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-tcp-autotune-restricted",
+        label="Set TCP Auto-Tuning to Restricted",
+        category="Network",
+        apply_fn=_apply_tcp_autotune_restricted,
+        remove_fn=_remove_tcp_autotune_restricted,
+        detect_fn=_detect_tcp_autotune_restricted,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TCPIP],
+        description=(
+            "Sets TCP receive window auto-tuning to restricted mode. "
+            "Can improve compatibility with older routers/firewalls. "
+            "Default: normal. Recommended: restricted for problematic networks."
+        ),
+        tags=["network", "tcp", "autotune", "window", "restricted"],
+    ),
+    TweakDef(
+        id="net-disable-wifi-sense",
+        label="Disable WiFi Sense",
+        category="Network",
+        apply_fn=_apply_disable_wifi_sense,
+        remove_fn=_remove_disable_wifi_sense,
+        detect_fn=_detect_disable_wifi_sense,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIFI_SENSE],
+        description=(
+            "Disables WiFi Sense auto-connect to suggested open hotspots. "
+            "Prevents automatic sharing of WiFi credentials. "
+            "Default: enabled. Recommended: disabled for security."
+        ),
+        tags=["network", "wifi", "sense", "hotspot", "security"],
+    ),
+    TweakDef(
+        id="net-dns-cache-optimization",
+        label="Enable DNS Client Cache Optimization",
+        category="Network",
+        apply_fn=_apply_dns_cache_optimization,
+        remove_fn=_remove_dns_cache_optimization,
+        detect_fn=_detect_dns_cache_optimization,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_CLIENT],
+        description=(
+            "Optimizes DNS client cache by setting MaxCacheTtl to 86400s and "
+            "MaxNegativeCacheTtl to 5s. Improves DNS resolution performance. "
+            "Default: system defaults. Recommended: optimized values."
+        ),
+        tags=["network", "dns", "cache", "optimization", "performance"],
+    ),
+]

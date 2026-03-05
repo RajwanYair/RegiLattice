@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import subprocess
 
-from regilattice.registry import SESSION
+from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
 # ── Helpers ──────────────────────────────────────────────────────────────────────────────────
@@ -278,5 +278,113 @@ TWEAKS += [
         "Statistical analysis, warmup runs, export to CSV/JSON. "
         "Default: Not installed. Recommended: Install.",
         tags=["benchmark", "performance", "developer"],
+    ),
+]
+
+
+# -- Scoop Registry-Based Environment Settings ---------------------------------
+
+_ENV_CU = r"HKEY_CURRENT_USER\Environment"
+_ENV_LM = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Environment"
+)
+
+
+def _apply_scoop_global_path(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Scoop: setting global install path to C:\\ScoopGlobal")
+    SESSION.backup([_ENV_LM], "ScoopGlobalPath")
+    SESSION.set_string(_ENV_LM, "SCOOP_GLOBAL", r"C:\ScoopGlobal")
+
+
+def _remove_scoop_global_path(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ENV_LM, "SCOOP_GLOBAL")
+
+
+def _detect_scoop_global_path() -> bool:
+    return SESSION.read_string(_ENV_LM, "SCOOP_GLOBAL") == r"C:\ScoopGlobal"
+
+
+def _apply_scoop_disable_autoupdate(*, require_admin: bool = True) -> None:
+    SESSION.log("Scoop: disabling auto-update on install")
+    SESSION.backup([_ENV_CU], "ScoopNoAutoUpdate")
+    SESSION.set_string(_ENV_CU, "SCOOP_NO_AUTO_UPDATE", "1")
+
+
+def _remove_scoop_disable_autoupdate(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_ENV_CU, "SCOOP_NO_AUTO_UPDATE")
+
+
+def _detect_scoop_disable_autoupdate() -> bool:
+    return SESSION.read_string(_ENV_CU, "SCOOP_NO_AUTO_UPDATE") == "1"
+
+
+def _apply_scoop_parallel_downloads(*, require_admin: bool = True) -> None:
+    SESSION.log("Scoop: enabling parallel downloads via aria2")
+    SESSION.backup([_ENV_CU], "ScoopParallelDL")
+    SESSION.set_string(_ENV_CU, "SCOOP_ARIA2_ENABLED", "true")
+
+
+def _remove_scoop_parallel_downloads(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_ENV_CU, "SCOOP_ARIA2_ENABLED")
+
+
+def _detect_scoop_parallel_downloads() -> bool:
+    return SESSION.read_string(_ENV_CU, "SCOOP_ARIA2_ENABLED") == "true"
+
+
+TWEAKS += [
+    TweakDef(
+        id="scoop-set-global-path",
+        label="Set Scoop Global Install Path",
+        category="Scoop Tools",
+        apply_fn=_apply_scoop_global_path,
+        remove_fn=_remove_scoop_global_path,
+        detect_fn=_detect_scoop_global_path,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ENV_LM],
+        description=(
+            "Sets the SCOOP_GLOBAL environment variable to C:\\ScoopGlobal "
+            "for system-wide Scoop installations. "
+            "Default: not set. Recommended: set for multi-user machines."
+        ),
+        tags=["scoop", "global", "path", "environment"],
+    ),
+    TweakDef(
+        id="scoop-disable-autoupdate",
+        label="Disable Scoop Auto-Update on Install",
+        category="Scoop Tools",
+        apply_fn=_apply_scoop_disable_autoupdate,
+        remove_fn=_remove_scoop_disable_autoupdate,
+        detect_fn=_detect_scoop_disable_autoupdate,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ENV_CU],
+        description=(
+            "Sets SCOOP_NO_AUTO_UPDATE=1 to prevent Scoop from "
+            "auto-updating itself before every app install. "
+            "Default: auto-update. Recommended: disabled for speed."
+        ),
+        tags=["scoop", "autoupdate", "speed", "environment"],
+    ),
+    TweakDef(
+        id="scoop-parallel-downloads",
+        label="Enable Scoop Parallel Downloads (aria2)",
+        category="Scoop Tools",
+        apply_fn=_apply_scoop_parallel_downloads,
+        remove_fn=_remove_scoop_parallel_downloads,
+        detect_fn=_detect_scoop_parallel_downloads,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ENV_CU],
+        description=(
+            "Sets SCOOP_ARIA2_ENABLED=true to enable parallel downloads "
+            "via aria2 for faster Scoop package installs. "
+            "Default: disabled. Recommended: enabled."
+        ),
+        tags=["scoop", "parallel", "downloads", "aria2", "speed"],
     ),
 ]

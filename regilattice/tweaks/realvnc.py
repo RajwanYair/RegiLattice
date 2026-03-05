@@ -433,3 +433,124 @@ TWEAKS += [
         tags=["vnc", "clipboard", "dlp", "security"],
     ),
 ]
+
+
+# -- VNC: Enforce Encryption Always On (Policy) --------------------------------
+
+
+def _apply_vnc_encryption_always(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: set encryption to AlwaysOn via policy")
+    SESSION.backup([_VNC_POLICY], "VNCEncryptionAlways")
+    SESSION.set_string(_VNC_POLICY, "Encryption", "AlwaysOn")
+    SESSION.set_dword(_VNC_POLICY, "EncryptionForced", 1)
+
+
+def _remove_vnc_encryption_always(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_POLICY, "EncryptionForced")
+    SESSION.set_string(_VNC_POLICY, "Encryption", "PreferOn")
+
+
+def _detect_vnc_encryption_always() -> bool:
+    return (
+        SESSION.read_string(_VNC_POLICY, "Encryption") == "AlwaysOn"
+        and SESSION.read_dword(_VNC_POLICY, "EncryptionForced") == 1
+    )
+
+
+# -- VNC: Disable File Transfer ------------------------------------------------
+
+
+def _apply_vnc_disable_file_transfer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: disable file transfer")
+    SESSION.backup([_VNC_SERVER, _VNC_POLICY], "VNCDisableFileTransfer")
+    SESSION.set_dword(_VNC_SERVER, "EnableFileTransfer", 0)
+    SESSION.set_dword(_VNC_POLICY, "EnableFileTransfer", 0)
+
+
+def _remove_vnc_disable_file_transfer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VNC_SERVER, "EnableFileTransfer", 1)
+    SESSION.delete_value(_VNC_POLICY, "EnableFileTransfer")
+
+
+def _detect_vnc_disable_file_transfer() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "EnableFileTransfer") == 0
+
+
+# -- VNC: Set Authentication to SystemAuth -------------------------------------
+
+
+def _apply_vnc_auth_system(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: set authentication to SystemAuth")
+    SESSION.backup([_VNC_SERVER, _VNC_POLICY], "VNCAuthSystem")
+    SESSION.set_string(_VNC_SERVER, "Authentication", "SystemAuth")
+    SESSION.set_string(_VNC_POLICY, "Authentication", "SystemAuth")
+
+
+def _remove_vnc_auth_system(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_VNC_SERVER, "Authentication", "VncAuth")
+    SESSION.delete_value(_VNC_POLICY, "Authentication")
+
+
+def _detect_vnc_auth_system() -> bool:
+    return SESSION.read_string(_VNC_SERVER, "Authentication") == "SystemAuth"
+
+
+TWEAKS += [
+    TweakDef(
+        id="vnc-encryption-always",
+        label="VNC: Enforce Encryption Always On (Policy)",
+        category="RealVNC",
+        apply_fn=_apply_vnc_encryption_always,
+        remove_fn=_remove_vnc_encryption_always,
+        detect_fn=_detect_vnc_encryption_always,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_POLICY],
+        description=(
+            "Forces VNC encryption to AlwaysOn via group policy key and sets EncryptionForced flag. "
+            "Ensures connections are always encrypted regardless of server config. "
+            "Default: PreferOn. Recommended: AlwaysOn."
+        ),
+        tags=["vnc", "encryption", "policy", "security"],
+    ),
+    TweakDef(
+        id="vnc-disable-file-transfer",
+        label="VNC: Disable File Transfer",
+        category="RealVNC",
+        apply_fn=_apply_vnc_disable_file_transfer,
+        remove_fn=_remove_vnc_disable_file_transfer,
+        detect_fn=_detect_vnc_disable_file_transfer,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER, _VNC_POLICY],
+        description=(
+            "Disables file transfer capability in VNC sessions. "
+            "Prevents users from transferring files via the VNC connection. "
+            "Default: enabled. Recommended: disabled for DLP."
+        ),
+        tags=["vnc", "file-transfer", "dlp", "security"],
+    ),
+    TweakDef(
+        id="vnc-auth-system",
+        label="VNC: Set Authentication to SystemAuth",
+        category="RealVNC",
+        apply_fn=_apply_vnc_auth_system,
+        remove_fn=_remove_vnc_auth_system,
+        detect_fn=_detect_vnc_auth_system,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER, _VNC_POLICY],
+        description=(
+            "Sets VNC authentication to SystemAuth (Windows credentials). "
+            "Uses OS-level authentication instead of VNC-specific password. "
+            "Default: VncAuth. Recommended: SystemAuth for enterprise."
+        ),
+        tags=["vnc", "auth", "system", "security"],
+    ),
+]

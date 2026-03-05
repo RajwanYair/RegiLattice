@@ -637,3 +637,115 @@ TWEAKS += [
         tags=["chrome", "cookies", "third-party", "privacy", "policy"],
     ),
 ]
+
+
+# ── Disable Chrome Translate ────────────────────────────────────────────────
+
+
+def _apply_chrome_translate_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable translate feature")
+    SESSION.backup([_CHROME_POLICY], "ChromeTranslate")
+    SESSION.set_dword(_CHROME_POLICY, "TranslateEnabled", 0)
+
+
+def _remove_chrome_translate_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "TranslateEnabled")
+
+
+def _detect_chrome_translate_off() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "TranslateEnabled") == 0
+
+
+# ── Disable Chrome Media Recommendations ───────────────────────────────────
+
+
+def _apply_chrome_media_rec_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable media recommendations")
+    SESSION.backup([_CHROME_POLICY], "ChromeMediaRec")
+    SESSION.set_dword(_CHROME_POLICY, "MediaRecommendationsEnabled", 0)
+
+
+def _remove_chrome_media_rec_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "MediaRecommendationsEnabled")
+
+
+def _detect_chrome_media_rec_off() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "MediaRecommendationsEnabled") == 0
+
+
+# ── Disable Chrome Password Leak Detection ─────────────────────────────────
+
+
+def _apply_chrome_leak_detect_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable password leak detection")
+    SESSION.backup([_CHROME_POLICY], "ChromeLeakDetect")
+    SESSION.set_dword(_CHROME_POLICY, "PasswordLeakDetectionEnabled", 0)
+
+
+def _remove_chrome_leak_detect_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "PasswordLeakDetectionEnabled")
+
+
+def _detect_chrome_leak_detect_off() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "PasswordLeakDetectionEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="chrome-disable-translate",
+        label="Disable Chrome Translate",
+        category="Chrome",
+        apply_fn=_apply_chrome_translate_off,
+        remove_fn=_remove_chrome_translate_off,
+        detect_fn=_detect_chrome_translate_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables the Chrome built-in page translation feature "
+            "via enterprise policy. Prevents translate bar prompts. "
+            "Default: Enabled. Recommended: Disabled if not needed."
+        ),
+        tags=["chrome", "translate", "language", "policy"],
+    ),
+    TweakDef(
+        id="chrome-disable-media-recommendations",
+        label="Disable Chrome Media Recommendations",
+        category="Chrome",
+        apply_fn=_apply_chrome_media_rec_off,
+        remove_fn=_remove_chrome_media_rec_off,
+        detect_fn=_detect_chrome_media_rec_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables personalized media recommendations on the Chrome "
+            "New Tab page. Reduces data collection and distractions. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["chrome", "media", "recommendations", "privacy", "policy"],
+    ),
+    TweakDef(
+        id="chrome-disable-leak-detection",
+        label="Disable Chrome Password Leak Detection",
+        category="Chrome",
+        apply_fn=_apply_chrome_leak_detect_off,
+        remove_fn=_remove_chrome_leak_detect_off,
+        detect_fn=_detect_chrome_leak_detect_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables Chrome password leak detection that checks saved "
+            "passwords against known data breaches. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["chrome", "password", "leak", "detection", "policy"],
+    ),
+]

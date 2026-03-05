@@ -629,3 +629,130 @@ TWEAKS += [
         tags=["maintenance", "compatibility", "pca", "policy"],
     ),
 ]
+
+
+# ── Disable Automatic Maintenance Wakeup ─────────────────────────────────────
+
+_AUTO_MAINT_KEY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
+    r"\CurrentVersion\Schedule\Maintenance"
+)
+
+
+def _apply_maint_disable_auto_wakeup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable automatic maintenance wakeup")
+    SESSION.backup([_AUTO_MAINT_KEY], "MaintAutoWakeup")
+    SESSION.set_dword(_AUTO_MAINT_KEY, "WakeUp", 0)
+
+
+def _remove_maint_disable_auto_wakeup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_AUTO_MAINT_KEY, "WakeUp", 1)
+
+
+def _detect_maint_disable_auto_wakeup() -> bool:
+    return SESSION.read_dword(_AUTO_MAINT_KEY, "WakeUp") == 0
+
+
+# ── Set Compatibility Telemetry to Minimal ───────────────────────────────────
+
+_COMPAT_TELEMETRY_KEY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
+    r"\DataCollection"
+)
+
+
+def _apply_maint_compat_telemetry_minimal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: set compatibility telemetry to minimal (0)")
+    SESSION.backup([_COMPAT_TELEMETRY_KEY], "CompatTelemetry")
+    SESSION.set_dword(_COMPAT_TELEMETRY_KEY, "AllowTelemetry", 0)
+
+
+def _remove_maint_compat_telemetry_minimal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_COMPAT_TELEMETRY_KEY, "AllowTelemetry", 3)
+
+
+def _detect_maint_compat_telemetry_minimal() -> bool:
+    return SESSION.read_dword(_COMPAT_TELEMETRY_KEY, "AllowTelemetry") == 0
+
+
+# ── Disable Disk Defrag Schedule ─────────────────────────────────────────────
+
+_DEFRAG_SCHED_KEY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\OptimalLayout"
+)
+
+
+def _apply_maint_disable_defrag_sched(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable disk defrag schedule via OptimalLayout")
+    SESSION.backup([_DEFRAG_SCHED_KEY], "DefragSchedule")
+    SESSION.set_dword(_DEFRAG_SCHED_KEY, "EnableAutoLayout", 0)
+
+
+def _remove_maint_disable_defrag_sched(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_DEFRAG_SCHED_KEY, "EnableAutoLayout", 1)
+
+
+def _detect_maint_disable_defrag_sched() -> bool:
+    return SESSION.read_dword(_DEFRAG_SCHED_KEY, "EnableAutoLayout") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="maint-disable-auto-wakeup",
+        label="Disable Automatic Maintenance Wakeup",
+        category="Maintenance",
+        apply_fn=_apply_maint_disable_auto_wakeup,
+        remove_fn=_remove_maint_disable_auto_wakeup,
+        detect_fn=_detect_maint_disable_auto_wakeup,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_AUTO_MAINT_KEY],
+        description=(
+            "Disables automatic maintenance from waking the PC. "
+            "Prevents unexpected wakeups for maintenance tasks. "
+            "Default: Enabled. Recommended: Disabled for always-on PCs."
+        ),
+        tags=["maintenance", "wakeup", "automatic", "sleep"],
+    ),
+    TweakDef(
+        id="maint-compat-telemetry-minimal",
+        label="Set Compatibility Telemetry to Minimal",
+        category="Maintenance",
+        apply_fn=_apply_maint_compat_telemetry_minimal,
+        remove_fn=_remove_maint_compat_telemetry_minimal,
+        detect_fn=_detect_maint_compat_telemetry_minimal,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_COMPAT_TELEMETRY_KEY],
+        description=(
+            "Sets Windows compatibility telemetry to minimal (0) via policy. "
+            "Reduces data sent to Microsoft for compatibility analysis. "
+            "Default: 3 (Full). Recommended: 0 (Security/minimal)."
+        ),
+        tags=["maintenance", "telemetry", "compatibility", "privacy"],
+    ),
+    TweakDef(
+        id="maint-disable-defrag-schedule",
+        label="Disable Disk Defrag Schedule",
+        category="Maintenance",
+        apply_fn=_apply_maint_disable_defrag_sched,
+        remove_fn=_remove_maint_disable_defrag_sched,
+        detect_fn=_detect_maint_disable_defrag_sched,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DEFRAG_SCHED_KEY],
+        description=(
+            "Disables the automatic disk defragmentation schedule via OptimalLayout. "
+            "Prevents background defrag I/O on SSD-based systems. "
+            "Default: Enabled. Recommended: Disabled for SSDs."
+        ),
+        tags=["maintenance", "defrag", "schedule", "ssd", "optimization"],
+    ),
+]

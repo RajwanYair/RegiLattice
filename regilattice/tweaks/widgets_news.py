@@ -493,3 +493,112 @@ TWEAKS += [
         tags=["widgets", "start", "subscribed", "content", "suggestions"],
     ),
 ]
+
+
+# -- Disable News Feed Content ------------------------------------------------
+
+
+def _apply_disable_news_feed(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Widgets: disable news feed content delivery")
+    SESSION.backup([_FEEDS], "NewsFeedContent")
+    SESSION.set_dword(_FEEDS, "ContentEnabled", 0)
+
+
+def _remove_disable_news_feed(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FEEDS, "ContentEnabled")
+
+
+def _detect_disable_news_feed() -> bool:
+    return SESSION.read_dword(_FEEDS, "ContentEnabled") == 0
+
+
+# -- Disable Widget Background Updates ----------------------------------------
+
+
+def _apply_disable_widget_bg_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Widgets: disable background content updates")
+    SESSION.backup([_WIDGETS_POLICY], "WidgetBgUpdates")
+    SESSION.set_dword(_WIDGETS_POLICY, "AllowWidgetContentUpdates", 0)
+
+
+def _remove_disable_widget_bg_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIDGETS_POLICY, "AllowWidgetContentUpdates")
+
+
+def _detect_disable_widget_bg_updates() -> bool:
+    return SESSION.read_dword(_WIDGETS_POLICY, "AllowWidgetContentUpdates") == 0
+
+
+# -- Remove Weather from Taskbar ----------------------------------------------
+
+
+def _apply_remove_weather_taskbar(*, require_admin: bool = True) -> None:
+    SESSION.log("Widgets: hide weather from taskbar")
+    SESSION.backup([_FEEDS_CU], "WeatherTaskbar")
+    SESSION.set_dword(_FEEDS_CU, "ShellFeedsTaskbarViewMode", 2)
+
+
+def _remove_remove_weather_taskbar(*, require_admin: bool = True) -> None:
+    SESSION.set_dword(_FEEDS_CU, "ShellFeedsTaskbarViewMode", 0)
+
+
+def _detect_remove_weather_taskbar() -> bool:
+    return SESSION.read_dword(_FEEDS_CU, "ShellFeedsTaskbarViewMode") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="widget-disable-news-feed",
+        label="Disable News Feed Content",
+        category="Widgets & News",
+        apply_fn=_apply_disable_news_feed,
+        remove_fn=_remove_disable_news_feed,
+        detect_fn=_detect_disable_news_feed,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FEEDS],
+        description=(
+            "Disables the news feed content delivery in Widgets panel via policy. "
+            "Stops news articles from loading in the background. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["widgets", "news", "feed", "content"],
+    ),
+    TweakDef(
+        id="widget-disable-bg-updates",
+        label="Disable Widget Background Updates",
+        category="Widgets & News",
+        apply_fn=_apply_disable_widget_bg_updates,
+        remove_fn=_remove_disable_widget_bg_updates,
+        detect_fn=_detect_disable_widget_bg_updates,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIDGETS_POLICY],
+        description=(
+            "Prevents widgets from updating content in the background. "
+            "Reduces network and CPU usage from the Widgets host process. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["widgets", "background", "updates", "performance"],
+    ),
+    TweakDef(
+        id="widget-remove-weather-taskbar",
+        label="Remove Weather from Taskbar",
+        category="Widgets & News",
+        apply_fn=_apply_remove_weather_taskbar,
+        remove_fn=_remove_remove_weather_taskbar,
+        detect_fn=_detect_remove_weather_taskbar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FEEDS_CU],
+        description=(
+            "Hides the weather widget from the taskbar by setting view mode "
+            "to hidden. Default: shown. Recommended: hidden."
+        ),
+        tags=["widgets", "weather", "taskbar", "hide"],
+    ),
+]

@@ -6,7 +6,7 @@ quick edit mode, legacy console settings, and terminal appearance.
 
 from __future__ import annotations
 
-from regilattice.registry import SESSION
+from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
@@ -497,5 +497,117 @@ TWEAKS += [
         registry_keys=[_CONSOLE],
         description="Sets console window to 95% opacity for slight transparency. Default: 255 (opaque). Recommended: 242 (95%).",
         tags=["terminal", "opacity", "transparency", "appearance"],
+    ),
+]
+
+
+# -- Set Default Terminal to Windows Terminal (Win11 Settings) ------------------
+
+
+def _apply_term_set_default_wt(*, require_admin: bool = False) -> None:
+    SESSION.log("Terminal: setting Win11 default terminal to Windows Terminal")
+    SESSION.backup([_EXPLORER_ADV], "TermSetDefaultWT")
+    SESSION.set_dword(_EXPLORER_ADV, "UseNewTerminal", 1)
+    SESSION.log("Terminal: Win11 default terminal set")
+
+
+def _remove_term_set_default_wt(*, require_admin: bool = False) -> None:
+    SESSION.backup([_EXPLORER_ADV], "TermSetDefaultWT_Remove")
+    SESSION.set_dword(_EXPLORER_ADV, "UseNewTerminal", 0)
+
+
+def _detect_term_set_default_wt() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADV, "UseNewTerminal") == 1
+
+
+# -- Disable Terminal Splash Screen (Policy) ------------------------------------
+
+
+def _apply_term_disable_splash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Terminal: disabling Windows Terminal splash screen")
+    SESSION.backup([_WIN_TERMINAL_POLICY], "TermDisableSplash")
+    SESSION.set_dword(_WIN_TERMINAL_POLICY, "DisableSplashScreen", 1)
+    SESSION.log("Terminal: splash screen disabled")
+
+
+def _remove_term_disable_splash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIN_TERMINAL_POLICY, "DisableSplashScreen")
+
+
+def _detect_term_disable_splash() -> bool:
+    return SESSION.read_dword(_WIN_TERMINAL_POLICY, "DisableSplashScreen") == 1
+
+
+# -- Enable Terminal Always-on-Top (Policy) -------------------------------------
+
+
+def _apply_term_always_on_top(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Terminal: enabling always-on-top via policy")
+    SESSION.backup([_WIN_TERMINAL_POLICY], "TermAlwaysOnTop")
+    SESSION.set_dword(_WIN_TERMINAL_POLICY, "AlwaysOnTop", 1)
+    SESSION.log("Terminal: always-on-top enabled")
+
+
+def _remove_term_always_on_top(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIN_TERMINAL_POLICY, "AlwaysOnTop")
+
+
+def _detect_term_always_on_top() -> bool:
+    return SESSION.read_dword(_WIN_TERMINAL_POLICY, "AlwaysOnTop") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="term-set-default-wt",
+        label="Set Default Terminal to Windows Terminal (Win11)",
+        category="Windows Terminal",
+        apply_fn=_apply_term_set_default_wt,
+        remove_fn=_remove_term_set_default_wt,
+        detect_fn=_detect_term_set_default_wt,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADV],
+        description=(
+            "Sets Windows Terminal as the default terminal via the Win11 UseNewTerminal setting. "
+            "Default: Let Windows decide (0). Recommended: Windows Terminal (1)."
+        ),
+        tags=["terminal", "default", "windows-terminal", "win11"],
+    ),
+    TweakDef(
+        id="term-disable-splash",
+        label="Disable Terminal Splash Screen",
+        category="Windows Terminal",
+        apply_fn=_apply_term_disable_splash,
+        remove_fn=_remove_term_disable_splash,
+        detect_fn=_detect_term_disable_splash,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIN_TERMINAL_POLICY],
+        description=(
+            "Disables the Windows Terminal splash/startup screen via policy. "
+            "Default: Enabled. Recommended: Disabled for faster launch."
+        ),
+        tags=["terminal", "splash", "startup", "performance"],
+    ),
+    TweakDef(
+        id="term-enable-always-on-top",
+        label="Enable Terminal Always-on-Top",
+        category="Windows Terminal",
+        apply_fn=_apply_term_always_on_top,
+        remove_fn=_remove_term_always_on_top,
+        detect_fn=_detect_term_always_on_top,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIN_TERMINAL_POLICY],
+        description=(
+            "Enables always-on-top mode for Windows Terminal via policy. "
+            "Keeps the terminal window above all other windows. "
+            "Default: Disabled. Recommended: Enabled for dev workflows."
+        ),
+        tags=["terminal", "always-on-top", "pin", "window"],
     ),
 ]

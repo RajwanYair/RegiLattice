@@ -482,3 +482,120 @@ TWEAKS += [
         tags=["backup", "bsod", "crash", "reboot"],
     ),
 ]
+
+
+# -- Increase Shadow Copy Storage Limit ----------------------------------------
+
+_VSS_SETTINGS = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\VSS\Settings"
+)
+
+
+def _apply_increase_shadow_storage(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: increasing shadow copy max storage to 64 copies")
+    SESSION.backup([_VSS_SETTINGS], "ShadowCopyStorage")
+    SESSION.set_dword(_VSS_SETTINGS, "MaxShadowCopies", 64)
+
+
+def _remove_increase_shadow_storage(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSS_SETTINGS, "MaxShadowCopies")
+
+
+def _detect_increase_shadow_storage() -> bool:
+    return SESSION.read_dword(_VSS_SETTINGS, "MaxShadowCopies") == 64
+
+
+# -- Disable System Restore on Low Disk ----------------------------------------
+
+
+def _apply_disable_restore_low_disk(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: disable System Restore on low disk space")
+    SESSION.backup([_SYSTEM_RESTORE], "RestoreLowDisk")
+    SESSION.set_dword(_SYSTEM_RESTORE, "DisableSROnLowDisk", 1)
+
+
+def _remove_disable_restore_low_disk(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SYSTEM_RESTORE, "DisableSROnLowDisk")
+
+
+def _detect_disable_restore_low_disk() -> bool:
+    return SESSION.read_dword(_SYSTEM_RESTORE, "DisableSROnLowDisk") == 1
+
+
+# -- Set Backup Schedule Interval ----------------------------------------------
+
+
+def _apply_set_backup_interval(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: setting backup schedule interval to 24 hours")
+    SESSION.backup([_BACKUP_CLIENT], "BackupInterval")
+    SESSION.set_dword(_BACKUP_CLIENT, "BackupFrequency", 24)
+
+
+def _remove_set_backup_interval(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BACKUP_CLIENT, "BackupFrequency")
+
+
+def _detect_set_backup_interval() -> bool:
+    return SESSION.read_dword(_BACKUP_CLIENT, "BackupFrequency") == 24
+
+
+TWEAKS += [
+    TweakDef(
+        id="bak-increase-shadow-storage",
+        label="Increase Shadow Copy Storage Limit",
+        category="Backup & Recovery",
+        apply_fn=_apply_increase_shadow_storage,
+        remove_fn=_remove_increase_shadow_storage,
+        detect_fn=_detect_increase_shadow_storage,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VSS_SETTINGS],
+        description=(
+            "Increases the maximum number of shadow copies to 64. "
+            "Allows more restore points to be retained. "
+            "Default: 16. Recommended: 64."
+        ),
+        tags=["backup", "shadow-copy", "vss", "storage"],
+    ),
+    TweakDef(
+        id="bak-disable-restore-low-disk",
+        label="Disable System Restore on Low Disk",
+        category="Backup & Recovery",
+        apply_fn=_apply_disable_restore_low_disk,
+        remove_fn=_remove_disable_restore_low_disk,
+        detect_fn=_detect_disable_restore_low_disk,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SYSTEM_RESTORE],
+        description=(
+            "Prevents System Restore from being automatically disabled "
+            "when disk space is low. Keeps restore points available. "
+            "Default: auto-disable. Recommended: disabled."
+        ),
+        tags=["backup", "system-restore", "disk", "low-space"],
+    ),
+    TweakDef(
+        id="bak-set-backup-interval",
+        label="Set Backup Schedule Interval to 24 Hours",
+        category="Backup & Recovery",
+        apply_fn=_apply_set_backup_interval,
+        remove_fn=_remove_set_backup_interval,
+        detect_fn=_detect_set_backup_interval,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BACKUP_CLIENT],
+        description=(
+            "Sets the Windows Backup schedule interval to 24 hours. "
+            "Ensures regular daily backups without excessive frequency. "
+            "Default: not set. Recommended: 24 hours."
+        ),
+        tags=["backup", "schedule", "interval", "frequency"],
+    ),
+]

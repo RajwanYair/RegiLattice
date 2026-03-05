@@ -581,3 +581,125 @@ TWEAKS += [
         tags=["taskbar", "people", "social", "declutter"],
     ),
 ]
+
+
+# -- Disable Taskbar Weather Widget (Feeds) ------------------------------------
+
+_FEEDS_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"
+
+
+def _apply_tb_disable_weather(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disabling weather widget (News and Interests)")
+    SESSION.backup([_FEEDS_KEY], "TBWeatherWidget")
+    SESSION.set_dword(_FEEDS_KEY, "EnableFeeds", 0)
+    SESSION.log("Taskbar: weather widget disabled")
+
+
+def _remove_tb_disable_weather(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FEEDS_KEY], "TBWeatherWidget_Remove")
+    SESSION.delete_value(_FEEDS_KEY, "EnableFeeds")
+
+
+def _detect_tb_disable_weather() -> bool:
+    return SESSION.read_dword(_FEEDS_KEY, "EnableFeeds") == 0
+
+
+# -- Disable Meet Now Icon ------------------------------------------------------
+
+_MEET_NOW_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Policies\Explorer"
+)
+
+
+def _apply_tb_disable_meet_now(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: hiding Meet Now icon")
+    SESSION.backup([_MEET_NOW_KEY], "TBMeetNow")
+    SESSION.set_dword(_MEET_NOW_KEY, "HideSCAMeetNow", 1)
+    SESSION.log("Taskbar: Meet Now icon hidden")
+
+
+def _remove_tb_disable_meet_now(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_MEET_NOW_KEY], "TBMeetNow_Remove")
+    SESSION.delete_value(_MEET_NOW_KEY, "HideSCAMeetNow")
+
+
+def _detect_tb_disable_meet_now() -> bool:
+    return SESSION.read_dword(_MEET_NOW_KEY, "HideSCAMeetNow") == 1
+
+
+# -- Set Taskbar Button Grouping (Never Combine) --------------------------------
+
+
+def _apply_tb_button_grouping(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: setting button grouping to never combine")
+    SESSION.backup([_ADV], "TBButtonGrouping")
+    SESSION.set_dword(_ADV, "TaskbarGlomLevel", 2)
+    SESSION.log("Taskbar: button grouping set to never combine")
+
+
+def _remove_tb_button_grouping(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "TBButtonGrouping_Remove")
+    SESSION.set_dword(_ADV, "TaskbarGlomLevel", 0)
+
+
+def _detect_tb_button_grouping() -> bool:
+    return SESSION.read_dword(_ADV, "TaskbarGlomLevel") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="tb-disable-weather-widget",
+        label="Disable Taskbar Weather Widget",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_weather,
+        remove_fn=_remove_tb_disable_weather,
+        detect_fn=_detect_tb_disable_weather,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FEEDS_KEY],
+        description=(
+            "Disables the News and Interests weather widget on the taskbar via group policy. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["taskbar", "weather", "widget", "feeds", "news"],
+    ),
+    TweakDef(
+        id="tb-disable-meet-now",
+        label="Disable Meet Now Icon",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_meet_now,
+        remove_fn=_remove_tb_disable_meet_now,
+        detect_fn=_detect_tb_disable_meet_now,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_MEET_NOW_KEY],
+        description=(
+            "Hides the Meet Now (Skype) icon from the taskbar notification area. "
+            "Default: Shown. Recommended: Hidden."
+        ),
+        tags=["taskbar", "meet-now", "skype", "declutter"],
+    ),
+    TweakDef(
+        id="tb-set-button-grouping",
+        label="Set Taskbar Button Grouping (Never Combine)",
+        category="Taskbar",
+        apply_fn=_apply_tb_button_grouping,
+        remove_fn=_remove_tb_button_grouping,
+        detect_fn=_detect_tb_button_grouping,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Sets taskbar buttons to never combine, showing full labels for each window. "
+            "Default: Always combine (0). Recommended: Never combine (2)."
+        ),
+        tags=["taskbar", "grouping", "combine", "buttons", "labels"],
+    ),
+]
