@@ -118,6 +118,31 @@ class RegistrySession:
         self.log(f"Backup saved at: {backup_path}")
         return backup_path
 
+    def restore_backup(self, backup_path: Path) -> bool:
+        """Import all ``.reg`` files from *backup_path*.
+
+        Returns ``True`` if at least one file was successfully imported.
+        """
+        if self._dry_run:
+            self.log(f"[DRY-RUN] restore_backup {backup_path}")
+            return True
+        _ensure_windows()
+        imported = False
+        for reg_file in sorted(backup_path.glob("*.reg")):
+            try:
+                subprocess.run(
+                    ["reg", "import", str(reg_file)],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                imported = True
+            except subprocess.CalledProcessError as exc:
+                self.log(f"Restore warning for {reg_file.name}: {exc.stderr.strip()}")
+        if imported:
+            self.log(f"Restored backup from: {backup_path}")
+        return imported
+
     # -- Registry write primitives --
 
     def set_value(
