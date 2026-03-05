@@ -25,59 +25,52 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 from . import __version__
-from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakDef,
-    TweakResult,
-    all_tweaks,
-    available_profiles,
-    category_info,
-    profile_info,
-    restore_snapshot,
-    save_snapshot,
-    search_tweaks,
-    status_map,
-    tweak_scope,
-    tweak_status,
-    tweaks_by_category,
-)
+from . import gui_theme as theme
+from .corpguard import (CorporateNetworkError, assert_not_corporate,
+                        corp_guard_status, is_corporate_network,
+                        is_gpo_managed)
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakDef, TweakResult, all_tweaks, available_profiles,
+                     category_info, profile_info, restore_snapshot,
+                     save_snapshot, search_tweaks, status_map, tweak_scope,
+                     tweak_status, tweaks_by_category)
 from .tweaks.maintenance import create_restore_point
 
-# ── Theme — Catppuccin Mocha / Windows 11 dark ──────────────────────────────
+# ── Theme — re-exported from gui_theme for backward compat ──────────────────
 
-_ACCENT = "#89B4FA"  # Blue
-_BG = "#1E1E2E"  # Base
-_BG_SURFACE = "#24273A"  # Surface0
-_FG = "#CDD6F4"  # Text
-_FG_DIM = "#6C7086"  # Overlay0
-_CARD_BG = "#313244"  # Surface1
-_CARD_HOVER = "#45475A"  # Surface2
-_OK_GREEN = "#A6E3A1"  # Green
-_WARN_YELLOW = "#F9E2AF"  # Yellow
-_ERR_RED = "#F38BA8"  # Red
-_PURPLE = "#CBA6F7"  # Mauve
-_HEADER_BG = "#181825"  # Crust
-_BORDER = "#45475A"  # Surface2
-_DIM_BG = "#585B70"  # Overlay2
-_TEAL = "#94E2D5"  # Teal
-_GPO_ORANGE = "#FAB387"  # Peach — Group Policy managed indicator
+_ACCENT = theme.ACCENT
+_BG = theme.BG
+_BG_SURFACE = theme.BG_SURFACE
+_FG = theme.FG
+_FG_DIM = theme.FG_DIM
+_CARD_BG = theme.CARD_BG
+_CARD_HOVER = theme.CARD_HOVER
+_OK_GREEN = theme.OK_GREEN
+_WARN_YELLOW = theme.WARN_YELLOW
+_ERR_RED = theme.ERR_RED
+_PURPLE = theme.PURPLE
+_HEADER_BG = theme.HEADER_BG
+_BORDER = theme.BORDER
+_DIM_BG = theme.DIM_BG
+_TEAL = theme.TEAL
+_GPO_ORANGE = theme.GPO_ORANGE
 
 # Status indicator colours
-_STATUS_APPLIED = _OK_GREEN
-_STATUS_NOT_APPLIED = _FG_DIM
-_STATUS_UNKNOWN = _WARN_YELLOW
-_STATUS_CORP_BLOCKED = _ERR_RED
-_STATUS_DEFAULT = "#89DCEB"  # Sky — tweak not in registry (Windows default)
+_STATUS_APPLIED = theme.STATUS_APPLIED
+_STATUS_NOT_APPLIED = theme.STATUS_NOT_APPLIED
+_STATUS_UNKNOWN = theme.STATUS_UNKNOWN
+_STATUS_CORP_BLOCKED = theme.STATUS_CORP_BLOCKED
+_STATUS_DEFAULT = theme.STATUS_DEFAULT
 
 # Fonts
-_FONT = ("Segoe UI", 10)
-_FONT_BOLD = ("Segoe UI Semibold", 10)
-_FONT_SM = ("Segoe UI", 9)
-_FONT_XS = ("Segoe UI", 8)
-_FONT_XS_BOLD = ("Segoe UI", 8, "bold")
-_FONT_TITLE = ("Segoe UI Semibold", 16)
-_FONT_CAT = ("Segoe UI Semibold", 11)
+_FONT = theme.FONT
+_FONT_BOLD = theme.FONT_BOLD
+_FONT_SM = theme.FONT_SM
+_FONT_XS = theme.FONT_XS
+_FONT_XS_BOLD = theme.FONT_XS_BOLD
+_FONT_TITLE = theme.FONT_TITLE
+_FONT_CAT = theme.FONT_CAT
 
 
 # ── Tooltip helper ───────────────────────────────────────────────────────────
@@ -1319,7 +1312,9 @@ class RegiLatticeGUI:
 
     def _open_scoop_manager(self) -> None:
         """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
-        from .tweaks.scoop_tools import _install_scoop_app, _remove_scoop_app, _scoop_installed, list_installed_scoop_apps
+        from .tweaks.scoop_tools import (_install_scoop_app, _remove_scoop_app,
+                                         _scoop_installed,
+                                         list_installed_scoop_apps)
 
         dlg = tk.Toplevel(self._root)
         dlg.title("Scoop Tools Manager")
