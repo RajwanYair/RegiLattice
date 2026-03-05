@@ -49,19 +49,15 @@
 
 ## Phase 2 — Architecture Improvements
 
-### 2.1 Decompose `RegiLatticeGUI` (1 432 lines -> ~5 modules)
+### 2.1 Decompose `RegiLatticeGUI` (1 432 lines -> ~5 modules) ✅ DONE
 
-Split the god class into:
+Extracted ~750 lines from gui.py (1850→1050) into three focused modules:
+- `gui_tooltip.py`: Tooltip widget + `parse_description_metadata` + `build_tooltip_text`
+- `gui_widgets.py`: `TweakRow` + `CategorySection` classes
+- `gui_dialogs.py`: `import_json_selection`, `export_powershell`, `open_scoop_manager`, `show_about`
 
-| Module | Responsibility | Approx Lines |
-|--------|---------------|-------------|
-| `gui.py` | Main window shell, keyboard bindings | ~200 |
-| `gui_theme.py` | Colors, fonts, padding, styles | ~80 |
-| `gui_rows.py` | `_TweakRow`, `_CategorySection`, widget factories | ~300 |
-| `gui_toolbar.py` | Search bar, filters, profile dropdown, action buttons | ~200 |
-| `gui_dispatch.py` | Threaded execution, progress callbacks, result handling | ~200 |
-| `gui_dialogs.py` | About, Scoop manager, Import JSON, Export PS1 | ~300 |
-| `gui_tooltip.py` | `_Tooltip` class, tooltip text builder | ~100 |
+All dialog methods in gui.py now delegate to gui_dialogs. Proper `Callable`/`Sequence`
+typing eliminates circular import issues.
 
 ### 2.2 Introduce MVC separation
 

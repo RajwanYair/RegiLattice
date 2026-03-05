@@ -393,21 +393,8 @@ def apply_profile(
 ) -> dict[str, TweakResult]:
     """Apply every tweak associated with *name* profile."""
     targets = tweaks_for_profile(name)
-    results: dict[str, TweakResult] = {}
-    for td in targets:
-        if _is_corp_blocked(td, force_corp=force_corp):
-                results[td.id] = TweakResult.SKIPPED_CORP
-                if progress_cb:
-                    progress_cb(td.id, TweakResult.SKIPPED_CORP)
-                continue
-        try:
-            td.apply_fn(require_admin=require_admin)
-            results[td.id] = TweakResult.APPLIED
-        except Exception:
-            results[td.id] = TweakResult.ERROR
-        if progress_cb:
-            progress_cb(td.id, results[td.id])
-    return results
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
+    return exe.run_batch(targets, "apply", progress_cb=progress_cb)
 
 
 # ── Status helpers ───────────────────────────────────────────────────────────
@@ -464,6 +451,7 @@ def restore_snapshot(
     Returns a dict of ``{tweak_id: TweakResult}``.
     """
     saved = load_snapshot(path)
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
     results: dict[str, TweakResult] = {}
     for td in _ALL_TWEAKS:
         saved_state = saved.get(td.id)
@@ -473,22 +461,98 @@ def restore_snapshot(
         if current == saved_state:
             results[td.id] = TweakResult.UNCHANGED
             continue
-        if _is_corp_blocked(td, force_corp=force_corp):
-            results[td.id] = TweakResult.SKIPPED_CORP
-            continue
-        try:
-            if saved_state == TweakResult.APPLIED:
-                td.apply_fn(require_admin=require_admin)
-                results[td.id] = TweakResult.APPLIED
-            else:
-                td.remove_fn(require_admin=require_admin)
-                results[td.id] = TweakResult.REMOVED
-        except Exception:
-            results[td.id] = TweakResult.ERROR
+        if saved_state == TweakResult.APPLIED:
+            results[td.id] = exe.apply_one(td)
+        else:
+            results[td.id] = exe.remove_one(td)
     return results
 
 
-# ── Batch operations ─────────────────────────────────────────────────────────
+# ── Tweak executor ───────────────────────────────────────────────────────────
+
+
+class TweakExecutor:
+    """Centralised pipeline for applying / removing a single tweak.
+
+    Corp-guard check, function call, and exception→TweakResult mapping
+    happen here so that CLI, GUI, menu, and batch helpers all share one path.
+    """
+
+    __slots__ = ("force_corp", "require_admin")
+
+    def __init__(self, *, force_corp: bool = False, require_admin: bool = True) -> None:
+        self.force_corp = force_corp
+        self.require_admin = require_admin
+
+    # ── low-level helpers ────────────────────────────────────────────────
+
+    def _is_blocked(self, td: TweakDef) -> bool:
+        """Return True if *td* should be skipped due to corporate policy."""
+        if self.force_corp or td.corp_safe:
+            return False
+        from regilattice.corpguard import is_corporate_network
+
+        return is_corporate_network()
+
+    def apply_one(self, td: TweakDef) -> TweakResult:
+        """Apply a single tweak, returning a typed result."""
+        if self._is_blocked(td):
+            return TweakResult.SKIPPED_CORP
+        try:
+            td.apply_fn(require_admin=self.require_admin)
+            return TweakResult.APPLIED
+        except Exception:
+            return TweakResult.ERROR
+
+    def remove_one(self, td: TweakDef) -> TweakResult:
+        """Remove (revert) a single tweak, returning a typed result."""
+        if self._is_blocked(td):
+            return TweakResult.SKIPPED_CORP
+        try:
+            td.remove_fn(require_admin=self.require_admin)
+            return TweakResult.REMOVED
+        except Exception:
+            return TweakResult.ERROR
+
+    # ── batch helpers ────────────────────────────────────────────────────
+
+    def run_batch(
+        self,
+        tweaks: list[TweakDef],
+        mode: str,
+        *,
+        parallel: bool = False,
+        max_workers: int = 4,
+        progress_cb: Callable[[str, TweakResult], None] | None = None,
+    ) -> dict[str, TweakResult]:
+        """Apply or remove a list of tweaks, optionally in parallel.
+
+        *mode* must be ``"apply"`` or ``"remove"``.
+        """
+        fn = self.apply_one if mode == "apply" else self.remove_one
+        results: dict[str, TweakResult] = {}
+
+        def _do(td: TweakDef) -> tuple[str, TweakResult]:
+            return td.id, fn(td)
+
+        if parallel:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
+                futures = {pool.submit(_do, td): td for td in tweaks}
+                for fut in concurrent.futures.as_completed(futures):
+                    tid, res = fut.result()
+                    results[tid] = res
+                    if progress_cb:
+                        progress_cb(tid, res)
+        else:
+            for td in tweaks:
+                tid, res = _do(td)
+                results[tid] = res
+                if progress_cb:
+                    progress_cb(tid, res)
+        return results
+
+
+# ── Batch operations (convenience wrappers) ──────────────────────────────────
 
 
 def _is_corp_blocked(td: TweakDef, *, force_corp: bool) -> bool:
@@ -520,32 +584,8 @@ def apply_all(
     progress_cb:
         Optional callback ``(tweak_id, result)`` invoked after each tweak.
     """
-    results: dict[str, TweakResult] = {}
-
-    def _do(td: TweakDef) -> tuple[str, TweakResult]:
-        if _is_corp_blocked(td, force_corp=force_corp):
-            return td.id, TweakResult.SKIPPED_CORP
-        try:
-            td.apply_fn(require_admin=require_admin)
-            return td.id, TweakResult.APPLIED
-        except Exception:
-            return td.id, TweakResult.ERROR
-
-    if parallel:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-            futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
-            for fut in concurrent.futures.as_completed(futures):
-                tid, res = fut.result()
-                results[tid] = res
-                if progress_cb:
-                    progress_cb(tid, res)
-    else:
-        for td in _ALL_TWEAKS:
-            tid, res = _do(td)
-            results[tid] = res
-            if progress_cb:
-                progress_cb(tid, res)
-    return results
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
+    return exe.run_batch(list(_ALL_TWEAKS), "apply", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
 
 
 def remove_all(
@@ -557,29 +597,5 @@ def remove_all(
     progress_cb: Callable[[str, TweakResult], None] | None = None,
 ) -> dict[str, TweakResult]:
     """Remove every registered tweak, respecting corp-safe flags."""
-    results: dict[str, TweakResult] = {}
-
-    def _do(td: TweakDef) -> tuple[str, TweakResult]:
-        if _is_corp_blocked(td, force_corp=force_corp):
-            return td.id, TweakResult.SKIPPED_CORP
-        try:
-            td.remove_fn(require_admin=require_admin)
-            return td.id, TweakResult.REMOVED
-        except Exception:
-            return td.id, TweakResult.ERROR
-
-    if parallel:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-            futures = {pool.submit(_do, td): td for td in _ALL_TWEAKS}
-            for fut in concurrent.futures.as_completed(futures):
-                tid, res = fut.result()
-                results[tid] = res
-                if progress_cb:
-                    progress_cb(tid, res)
-    else:
-        for td in _ALL_TWEAKS:
-            tid, res = _do(td)
-            results[tid] = res
-            if progress_cb:
-                progress_cb(tid, res)
-    return results
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
+    return exe.run_batch(list(_ALL_TWEAKS), "remove", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
