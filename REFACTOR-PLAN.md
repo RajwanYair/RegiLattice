@@ -27,50 +27,23 @@
 - Changed all bare `tk.Event` annotations to `tk.Event[tk.Misc]` in `gui.py`.
 - Pylance `standard` type-checking mode requires explicit generic parameters; mypy does not.
 
-### 1.5 Extract TweakResult enum
+### 1.5 Extract TweakResult enum ✅ DONE
 
-Replace opaque `dict[str, str]` results with a proper enum:
+- Introduced `TweakResult(str, Enum)` with values: APPLIED, REMOVED, NOT_APPLIED, UNKNOWN, UNCHANGED, SKIPPED_CORP, SKIPPED_ADMIN, ERROR.
+- Updated `apply_all`, `remove_all`, `apply_profile`, `status_map`, `restore_snapshot` in `tweaks/__init__.py`.
+- Updated `cli.py`, `menu.py`, `gui.py` to use TweakResult comparisons.
+- Updated all test mocks and assertions in `test_tweaks_init.py` and `test_cli.py`.
 
-```python
-class TweakResult(Enum):
-    APPLIED = "applied"
-    REMOVED = "removed"
-    SKIPPED_CORP = "skipped_corp"
-    SKIPPED_ADMIN = "skipped_admin"
-    ERROR = "error"
-    UNKNOWN = "unknown"
-```
+### 1.6 Extract theme constants to `gui_theme.py` ✅ DONE
 
-Affected: `tweaks/__init__.py` (apply_all, remove_all, apply_profile, status_map), `gui.py`, `cli.py`, `menu.py`.
+- Created `regilattice/gui_theme.py` with all Catppuccin Mocha colour palette, status indicators, and font constants.
+- Updated `gui.py` to import from `gui_theme` module and alias all constants for backward compatibility.
 
-### 1.6 Extract theme constants to `gui_theme.py`
+### 1.7 Deduplicate corporate guard check ✅ DONE
 
-Move 20+ color constants, font definitions, and padding values to a dedicated module:
-
-```python
-# gui_theme.py
-class CatppuccinMocha:
-    BASE = "#1E1E2E"
-    ACCENT = "#89B4FA"
-    FG = "#CDD6F4"
-    ...
-```
-
-### 1.7 Deduplicate corporate guard check
-
-Extract `@corp_safe` decorator or `safe_execute()` helper:
-
-```python
-def safe_execute(fn: Callable, *, force: bool = False) -> TweakResult:
-    try:
-        assert_not_corporate(force=force)
-    except CorporateNetworkError:
-        return TweakResult.SKIPPED_CORP
-    fn()
-    return TweakResult.APPLIED
-```
-
-Affected: `cli.py`, `menu.py`, `gui.py` (3 locations -> 1 shared function).
+- Added `_is_corp_blocked(td, *, force_corp)` helper in `tweaks/__init__.py`.
+- Replaced 4 inline corp-guard checks in `apply_profile`, `apply_all`, `remove_all`, `restore_snapshot` with the centralized helper.
+- Lazy import of `corpguard.is_corporate_network` inside the helper.
 
 ---
 
