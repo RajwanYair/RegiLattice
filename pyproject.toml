@@ -40,7 +40,7 @@ classifiers = [
 regilattice = "regilattice.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "pytest-cov", "mypy", "ruff"]
+dev = ["pytest>=8,<9", "pytest-cov>=7,<8", "mypy>=1.5,<2", "ruff>=0.4,<1"]
 
 # ── Tool configuration ──────────────────────────────────────────────────────────
 
