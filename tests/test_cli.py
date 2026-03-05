@@ -35,9 +35,8 @@ class TestVersion:
 
 class TestAbortByUser:
     def test_abort_returns_1(self, capsys) -> None:
-        with patch("regilattice.cli.assert_not_corporate"):
-            with patch("builtins.input", return_value="n"):
-                rc = main(["apply", "show-file-extensions"])
+        with patch("regilattice.cli.assert_not_corporate"), patch("builtins.input", return_value="n"):
+            rc = main(["apply", "show-file-extensions"])
         assert rc == 1
         assert "Aborted" in capsys.readouterr().out
 

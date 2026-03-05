@@ -4,16 +4,26 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Dict, List
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.tweaks import (TweakDef, all_tweaks, apply_all, categories,
-                                get_tweak, load_snapshot, reload_plugins,
-                                remove_all, restore_snapshot, save_snapshot,
-                                search_tweaks, status_map, tweak_status,
-                                tweaks_by_category)
+from regilattice.tweaks import (
+    TweakDef,
+    all_tweaks,
+    apply_all,
+    categories,
+    get_tweak,
+    load_snapshot,
+    reload_plugins,
+    remove_all,
+    restore_snapshot,
+    save_snapshot,
+    search_tweaks,
+    status_map,
+    tweak_status,
+    tweaks_by_category,
+)
 
 # ── TweakDef dataclass ──────────────────────────────────────────────────────
 
@@ -53,7 +63,8 @@ class TestTweakDef:
         assert "repr.test" in repr(td)
 
     def test_custom_fields(self) -> None:
-        det = lambda: True
+        def det() -> bool:
+            return True
         td = TweakDef(
             id="c",
             label="Custom",
@@ -81,28 +92,28 @@ class TestTweakDef:
 class TestPluginLoader:
     """Test that the plugin loader discovers all TweakDef instances."""
 
-    def test_all_tweaks_non_empty(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_all_tweaks_non_empty(self, all_tweaks_list: list[TweakDef]) -> None:
         assert len(all_tweaks_list) > 0
 
-    def test_no_duplicate_ids(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_no_duplicate_ids(self, all_tweaks_list: list[TweakDef]) -> None:
         ids = [t.id for t in all_tweaks_list]
         assert len(ids) == len(set(ids)), f"Duplicate ids found: {[x for x in ids if ids.count(x) > 1]}"
 
-    def test_all_have_required_fields(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_all_have_required_fields(self, all_tweaks_list: list[TweakDef]) -> None:
         for td in all_tweaks_list:
             assert isinstance(td.id, str) and td.id, f"{td!r}: id must be non-empty str"
             assert isinstance(td.label, str) and td.label, f"{td!r}: label must be non-empty str"
             assert isinstance(td.category, str) and td.category, f"{td!r}: category must be non-empty str"
 
-    def test_apply_fn_callable(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_apply_fn_callable(self, all_tweaks_list: list[TweakDef]) -> None:
         for td in all_tweaks_list:
             assert callable(td.apply_fn), f"{td.id}: apply_fn not callable"
 
-    def test_remove_fn_callable(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_remove_fn_callable(self, all_tweaks_list: list[TweakDef]) -> None:
         for td in all_tweaks_list:
             assert callable(td.remove_fn), f"{td.id}: remove_fn not callable"
 
-    def test_detect_fn_callable_or_none(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_detect_fn_callable_or_none(self, all_tweaks_list: list[TweakDef]) -> None:
         for td in all_tweaks_list:
             assert td.detect_fn is None or callable(td.detect_fn), (
                 f"{td.id}: detect_fn must be callable or None"
@@ -129,7 +140,7 @@ class TestCategories:
         cats = categories()
         assert set(grouped.keys()) == set(cats)
 
-    def test_every_tweak_appears_in_group(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_every_tweak_appears_in_group(self, all_tweaks_list: list[TweakDef]) -> None:
         grouped = tweaks_by_category()
         grouped_ids = {td.id for tds in grouped.values() for td in tds}
         all_ids = {td.id for td in all_tweaks_list}
@@ -146,12 +157,12 @@ class TestCategories:
 class TestSearchTweaks:
     """Test search_tweaks() filtering."""
 
-    def test_search_by_id(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_search_by_id(self, all_tweaks_list: list[TweakDef]) -> None:
         td = all_tweaks_list[0]
         results = search_tweaks(td.id)
         assert any(r.id == td.id for r in results)
 
-    def test_search_by_label(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_search_by_label(self, all_tweaks_list: list[TweakDef]) -> None:
         td = all_tweaks_list[0]
         # Use a word from the label
         word = td.label.split()[0]
@@ -168,7 +179,7 @@ class TestSearchTweaks:
                    any(cat.lower() in t.lower() for t in r.tags)
                    for r in results)
 
-    def test_search_by_tag(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_search_by_tag(self, all_tweaks_list: list[TweakDef]) -> None:
         # Find a tweak with tags
         tagged = [t for t in all_tweaks_list if t.tags]
         if not tagged:
@@ -178,7 +189,7 @@ class TestSearchTweaks:
         results = search_tweaks(tag)
         assert any(r.id == td.id for r in results)
 
-    def test_empty_query_returns_all(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_empty_query_returns_all(self, all_tweaks_list: list[TweakDef]) -> None:
         # Empty string is "in" every string, so everything matches
         results = search_tweaks("")
         assert len(results) == len(all_tweaks_list)
@@ -194,7 +205,7 @@ class TestSearchTweaks:
 class TestGetTweak:
     """Test get_tweak() lookup."""
 
-    def test_existing_id(self, all_tweaks_list: List[TweakDef]) -> None:
+    def test_existing_id(self, all_tweaks_list: list[TweakDef]) -> None:
         td = all_tweaks_list[0]
         found = get_tweak(td.id)
         assert found is not None
@@ -252,7 +263,7 @@ class TestStatusMap:
         assert isinstance(sm, dict)
 
     @patch("regilattice.tweaks.tweak_status", return_value="unknown")
-    def test_all_ids_present(self, _mock: MagicMock, all_tweaks_list: List[TweakDef]) -> None:
+    def test_all_ids_present(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
         sm = status_map()
         for td in all_tweaks_list:
             assert td.id in sm
@@ -310,7 +321,7 @@ class TestSnapshot:
 class TestRestoreSnapshot:
     """Test restore_snapshot with mocked tweaks."""
 
-    def _make_snapshot(self, tmp_path: Path, data: Dict[str, str]) -> Path:
+    def _make_snapshot(self, tmp_path: Path, data: dict[str, str]) -> Path:
         path = tmp_path / "restore.json"
         path.write_text(json.dumps(data), encoding="utf-8")
         return path

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -166,9 +164,142 @@ def detect_disable_edge_passwords() -> bool:
     return SESSION.read_dword(_EDGE_POLICY, "PasswordManagerEnabled") == 0
 
 
+# ── Disable Edge Sync ────────────────────────────────────────────────────────
+
+
+def apply_disable_edge_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable sync")
+    SESSION.backup([_EDGE_POLICY], "EdgeSync")
+    SESSION.set_dword(_EDGE_POLICY, "SyncDisabled", 1)
+
+
+def remove_disable_edge_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "SyncDisabled")
+
+
+def detect_disable_edge_sync() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "SyncDisabled") == 1
+
+
+# ── Disable Edge Shopping Features ──────────────────────────────────────────
+
+
+def apply_disable_edge_shopping(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable shopping features")
+    SESSION.backup([_EDGE_POLICY], "EdgeShopping")
+    SESSION.set_dword(_EDGE_POLICY, "EdgeShoppingAssistantEnabled", 0)
+
+
+def remove_disable_edge_shopping(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "EdgeShoppingAssistantEnabled")
+
+
+def detect_disable_edge_shopping() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "EdgeShoppingAssistantEnabled") == 0
+
+
+# ── Disable Edge Sidebar (Discover) ─────────────────────────────────────────
+
+
+def apply_disable_edge_sidebar_discover(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable sidebar (Discover)")
+    SESSION.backup([_EDGE_POLICY], "EdgeSidebarDiscover")
+    SESSION.set_dword(_EDGE_POLICY, "HubsSidebarEnabled", 0)
+
+
+def remove_disable_edge_sidebar_discover(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "HubsSidebarEnabled")
+
+
+def detect_disable_edge_sidebar_discover() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "HubsSidebarEnabled") == 0
+
+
+# ── Disable Microsoft Rewards Prompts ───────────────────────────────────────
+
+
+def apply_disable_edge_rewards(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable rewards prompts")
+    SESSION.backup([_EDGE_POLICY], "EdgeRewards")
+    SESSION.set_dword(_EDGE_POLICY, "ShowMicrosoftRewards", 0)
+
+
+def remove_disable_edge_rewards(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "ShowMicrosoftRewards")
+
+
+def detect_disable_edge_rewards() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "ShowMicrosoftRewards") == 0
+
+
+# ── Block Edge Third-Party Cookies ──────────────────────────────────────────
+
+
+def apply_block_edge_third_party_cookies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: block third-party cookies")
+    SESSION.backup([_EDGE_POLICY], "EdgeThirdPartyCookies")
+    SESSION.set_dword(_EDGE_POLICY, "BlockThirdPartyCookies", 1)
+
+
+def remove_block_edge_third_party_cookies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "BlockThirdPartyCookies")
+
+
+def detect_block_edge_third_party_cookies() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "BlockThirdPartyCookies") == 1
+
+
+# ── Disable Edge Sidebar (Policy) ───────────────────────────────────────────
+
+
+def _apply_edge_sidebar_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable sidebar via policy")
+    SESSION.backup([_EDGE_POLICY], "EdgeSidebarPolicy")
+    SESSION.set_dword(_EDGE_POLICY, "HubsSidebarEnabled", 0)
+
+
+def _remove_edge_sidebar_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "HubsSidebarEnabled")
+
+
+def _detect_edge_sidebar_policy() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "HubsSidebarEnabled") == 0
+
+
+# ── Disable Edge Shopping Features (Policy) ────────────────────────────────
+
+
+def _apply_edge_shopping_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable shopping features via policy")
+    SESSION.backup([_EDGE_POLICY], "EdgeShoppingPolicy")
+    SESSION.set_dword(_EDGE_POLICY, "EdgeShoppingAssistantEnabled", 0)
+
+
+def _remove_edge_shopping_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "EdgeShoppingAssistantEnabled")
+
+
+def _detect_edge_shopping_policy() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "EdgeShoppingAssistantEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-edge-startup-boost",
         label="Disable Edge Startup Boost",
@@ -258,5 +389,78 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_EDGE_POLICY],
         description="Disables the Edge built-in password manager via policy.",
         tags=["edge", "browser", "password", "security"],
+    ),
+    TweakDef(
+        id="edge-disable-sync",
+        label="Disable Edge Sync",
+        category="Edge",
+        apply_fn=apply_disable_edge_sync,
+        remove_fn=remove_disable_edge_sync,
+        detect_fn=detect_disable_edge_sync,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description="Disables Edge profile sync via policy.",
+        tags=["edge", "browser", "sync", "privacy"],
+    ),
+    TweakDef(
+        id="edge-disable-sidebar",
+        label="Disable Edge Sidebar",
+        category="Edge",
+        apply_fn=_apply_edge_sidebar_policy,
+        remove_fn=_remove_edge_sidebar_policy,
+        detect_fn=_detect_edge_sidebar_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge sidebar (Bing Copilot, games, tools panel). "
+            "Reduces memory usage and distractions. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["edge", "sidebar", "performance", "copilot"],
+    ),
+    TweakDef(
+        id="edge-disable-shopping",
+        label="Disable Edge Shopping Features",
+        category="Edge",
+        apply_fn=_apply_edge_shopping_policy,
+        remove_fn=_remove_edge_shopping_policy,
+        detect_fn=_detect_edge_shopping_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables Edge shopping assistant, price tracking, and coupons. "
+            "Reduces CPU and network usage. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["edge", "shopping", "performance", "privacy"],
+    ),
+    TweakDef(
+        id="edge-disable-rewards",
+        label="Disable Microsoft Rewards Prompts",
+        category="Edge",
+        apply_fn=apply_disable_edge_rewards,
+        remove_fn=remove_disable_edge_rewards,
+        detect_fn=detect_disable_edge_rewards,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description="Disables Microsoft Rewards prompts in Edge via policy.",
+        tags=["edge", "browser", "rewards"],
+    ),
+    TweakDef(
+        id="edge-block-third-party-cookies",
+        label="Block Edge Third-Party Cookies",
+        category="Edge",
+        apply_fn=apply_block_edge_third_party_cookies,
+        remove_fn=remove_block_edge_third_party_cookies,
+        detect_fn=detect_block_edge_third_party_cookies,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description="Blocks third-party cookies in Edge via policy.",
+        tags=["edge", "browser", "cookies", "privacy"],
     ),
 ]

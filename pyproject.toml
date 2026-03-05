@@ -46,10 +46,13 @@ dev = ["pytest>=7", "pytest-cov", "mypy", "ruff"]
 
 [tool.ruff]
 target-version = "py310"
-line-length = 100
+line-length = 150
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+# ARG002: 'require_admin' kwarg is part of the standard TweakDef API signature
+# and must be present even when unused, for consistency.
+ignore = ["ARG002"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -63,3 +66,23 @@ addopts = "-v --tb=short"
 [tool.coverage.run]
 source = ["regilattice"]
 omit = ["regilattice/__main__.py"]
+
+[tool.pylint."messages_control"]
+# W0613 / unused-argument: require_admin kwarg is part of the standard TweakDef
+#   API signature and must be present even when unused (same as ruff ARG002).
+# W0718 / broad-exception-caught: intentional defensive patterns throughout.
+# W1510 / subprocess-run-check: we handle errors ourselves where appropriate.
+# W1404 / implicit-str-concat-in-sequence: used for long registry path strings.
+# W0201 / attribute-defined-outside-init: ctypes struct patterns.
+disable = [
+    "W0613",
+    "unused-argument",
+    "W0718",
+    "broad-exception-caught",
+    "W1510",
+    "subprocess-run-check",
+    "W1404",
+    "implicit-str-concat",
+    "W0201",
+    "attribute-defined-outside-init",
+]

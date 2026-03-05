@@ -1,12 +1,10 @@
-"""RealVNC Server & Viewer registry tweaks.
+r"""RealVNC Server & Viewer registry tweaks.
 
 Covers VNC Server security, connectivity, and Viewer default settings.
 RealVNC stores its configuration under HKLM\SOFTWARE\RealVNC.
 """
 
 from __future__ import annotations
-
-from typing import List
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -181,9 +179,47 @@ def _detect_no_clipboard() -> bool:
     return SESSION.read_dword(_VNC_SERVER, "AcceptCutText") == 0
 
 
+# ── RealVNC Disable Auto-Update ──────────────────────────────────────────────
+
+
+def _apply_disable_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: disable automatic update checks")
+    SESSION.backup([_VNC_SERVER], "VNCAutoUpdate")
+    SESSION.set_dword(_VNC_SERVER, "AutoUpdate", 0)
+
+
+def _remove_disable_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VNC_SERVER, "AutoUpdate", 1)
+
+
+def _detect_disable_auto_update() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "AutoUpdate") == 0
+
+
+# ── RealVNC Optimize Encoding ────────────────────────────────────────────────
+
+
+def _apply_optimize_encoding(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: set preferred encoding to ZRLE")
+    SESSION.backup([_VNC_SERVER], "VNCEncoding")
+    SESSION.set_string(_VNC_SERVER, "PreferredEncoding", "ZRLE")
+
+
+def _remove_optimize_encoding(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_SERVER, "PreferredEncoding")
+
+
+def _detect_optimize_encoding() -> bool:
+    return SESSION.read_string(_VNC_SERVER, "PreferredEncoding") == "ZRLE"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="vnc-enforce-encryption",
         label="VNC: Enforce Encryption",
@@ -287,5 +323,37 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_VNC_SERVER, _VNC_POLICY],
         description="Disables clipboard sharing between VNC server and viewer (DLP).",
         tags=["vnc", "security", "clipboard", "dlp"],
+    ),
+    TweakDef(
+        id="realvnc-disable-auto-update",
+        label="RealVNC Disable Auto-Update",
+        category="RealVNC",
+        apply_fn=_apply_disable_auto_update,
+        remove_fn=_remove_disable_auto_update,
+        detect_fn=_detect_disable_auto_update,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Disables RealVNC automatic update checks. Updates must be applied manually. "
+            "Default: Enabled. Recommended: Disabled for managed deployments."
+        ),
+        tags=["realvnc", "vnc", "update"],
+    ),
+    TweakDef(
+        id="realvnc-optimize-encoding",
+        label="RealVNC Optimize Encoding",
+        category="RealVNC",
+        apply_fn=_apply_optimize_encoding,
+        remove_fn=_remove_optimize_encoding,
+        detect_fn=_detect_optimize_encoding,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Sets VNC encoding to ZRLE for best compression ratio over slow networks. "
+            "Reduces bandwidth usage. Default: Auto. Recommended: ZRLE for WAN connections."
+        ),
+        tags=["realvnc", "vnc", "encoding", "performance", "network"],
     ),
 ]

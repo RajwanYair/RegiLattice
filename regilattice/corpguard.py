@@ -1,15 +1,13 @@
 """Corporate network detection and safety guard.
 
 Prevents accidental registry modifications on domain-joined, Azure-AD-joined,
-VPN-connected, or otherwise managed machines.
+VPN-connected, Group-Policy-managed, or otherwise managed machines.
 """
 
 from __future__ import annotations
 
-import os
 import re
 import subprocess
-from typing import Optional
 
 from .registry import SESSION, is_windows
 
@@ -182,6 +180,175 @@ def _has_management_agent() -> bool:
     return False
 
 
+def _has_group_policy() -> bool:
+    """Detect active Group Policy enforcement via registry indicators.
+
+    Checks:
+    1. ``HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\State``
+    2. Non-empty ``HKLM\\SOFTWARE\\Policies`` tree
+    3. ``HKLM\\SOFTWARE\\Microsoft\\PolicyManager`` (MDM-delivered policies)
+    """
+    if not is_windows():
+        return False
+    try:
+        import winreg
+
+        # Check GP State key — present only after gpupdate has applied policies
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                r"SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\State",
+                0,
+                winreg.KEY_READ,
+            ) as hkey:
+                # If we can enumerate at least one sub-key, GP is active
+                try:
+                    winreg.EnumKey(hkey, 0)
+                    SESSION.log("Corp-guard: Group Policy State key has entries")
+                    return True
+                except OSError:
+                    pass
+        except OSError:
+            pass
+
+        # Check HKLM\SOFTWARE\Policies for substantial policy values
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                r"SOFTWARE\Policies",
+                0,
+                winreg.KEY_READ,
+            ) as hkey:
+                count = 0
+                idx = 0
+                while True:
+                    try:
+                        winreg.EnumKey(hkey, idx)
+                        count += 1
+                        idx += 1
+                        if count >= 3:  # 3+ policy sub-keys = likely GP-managed
+                            SESSION.log(f"Corp-guard: {count}+ policy sub-keys under HKLM\\SOFTWARE\\Policies")
+                            return True
+                    except OSError:
+                        break
+        except OSError:
+            pass
+
+        # Check PolicyManager (MDM / Intune policies)
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                r"SOFTWARE\Microsoft\PolicyManager\current\device",
+                0,
+                winreg.KEY_READ,
+            ):
+                SESSION.log("Corp-guard: MDM PolicyManager detected")
+                return True
+        except OSError:
+            pass
+
+    except Exception as exc:
+        SESSION.log(f"Corp-guard: GP check error: {exc}")
+
+    return False
+
+
+def is_gpo_managed(registry_keys: list[str]) -> bool:
+    """Return True if any of the given registry keys have a Group Policy overlay.
+
+    For each key, checks whether a corresponding path exists under
+    ``HKLM\\SOFTWARE\\Policies\\...`` or ``HKCU\\Software\\Policies\\...``.
+    This indicates the value may be overridden or locked by Group Policy.
+    """
+    if not is_windows() or not registry_keys:
+        return False
+    try:
+        import winreg
+
+        for key in registry_keys:
+            upper = key.upper()
+            # Already a policy path — check if it actually exists with values
+            if "\\POLICIES\\" in upper or "\\SOFTWARE\\POLICIES\\" in upper:
+                hive, subpath = _split_hive(key)
+                if hive is not None:
+                    try:
+                        with winreg.OpenKey(hive, subpath, 0, winreg.KEY_READ) as hk:
+                            try:
+                                winreg.EnumValue(hk, 0)
+                                return True
+                            except OSError:
+                                # Key exists but no values
+                                pass
+                    except OSError:
+                        pass
+                continue
+
+            # Non-policy key — derive the policy overlay path
+            policy_path = _derive_policy_path(key)
+            if policy_path is None:
+                continue
+            hive, subpath = _split_hive(policy_path)
+            if hive is not None:
+                try:
+                    with winreg.OpenKey(hive, subpath, 0, winreg.KEY_READ) as hk:
+                        try:
+                            winreg.EnumValue(hk, 0)
+                            return True
+                        except OSError:
+                            pass
+                except OSError:
+                    pass
+    except Exception:
+        pass
+    return False
+
+
+def _split_hive(key: str) -> tuple[int | None, str]:
+    """Split a full registry path into (hive_constant, subpath)."""
+    import winreg
+
+    upper = key.upper()
+    hive_map: dict[str, int] = {
+        "HKEY_LOCAL_MACHINE\\": winreg.HKEY_LOCAL_MACHINE,
+        "HKLM\\": winreg.HKEY_LOCAL_MACHINE,
+        "HKEY_CURRENT_USER\\": winreg.HKEY_CURRENT_USER,
+        "HKCU\\": winreg.HKEY_CURRENT_USER,
+    }
+    for prefix, hive in hive_map.items():
+        if upper.startswith(prefix):
+            return hive, key[len(prefix):]
+    return None, key
+
+
+def _derive_policy_path(key: str) -> str | None:
+    """Derive the Group Policy overlay path for a non-policy registry key.
+
+    Examples:
+      ``HKLM\\SOFTWARE\\Microsoft\\Edge\\...``
+        → ``HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge\\...``
+      ``HKCU\\Software\\Microsoft\\Office\\...``
+        → ``HKCU\\Software\\Policies\\Microsoft\\Office\\...``
+    """
+    upper = key.upper()
+    # HKLM\\SOFTWARE\\... → HKLM\\SOFTWARE\\Policies\\...
+    for hive_prefix in ("HKEY_LOCAL_MACHINE\\", "HKLM\\"):
+        if upper.startswith(hive_prefix):
+            rest = key[len(hive_prefix):]
+            rest_upper = rest.upper()
+            if rest_upper.startswith("SOFTWARE\\"):
+                inner = rest[len("SOFTWARE\\"):]
+                return f"{key[:len(hive_prefix)]}SOFTWARE\\Policies\\{inner}"
+    # HKCU\\Software\\... → HKCU\\Software\\Policies\\...
+    for hive_prefix in ("HKEY_CURRENT_USER\\", "HKCU\\"):
+        if upper.startswith(hive_prefix):
+            rest = key[len(hive_prefix):]
+            rest_upper = rest.upper()
+            if rest_upper.startswith("SOFTWARE\\"):
+                inner = rest[len("SOFTWARE\\"):]
+                return f"{key[:len(hive_prefix)]}Software\\Policies\\{inner}"
+    return None
+
+
 # ── Public API ───────────────────────────────────────────────────────────────
 
 
@@ -193,12 +360,14 @@ def is_corporate_network() -> bool:
     2. Azure AD / Hybrid join
     3. Active VPN adapters
     4. SCCM / Intune management agent
+    5. Group Policy enforcement
     """
     checks = [
         ("domain-join", _is_domain_joined),
         ("azure-ad", _is_azure_ad_joined),
         ("vpn-adapter", _has_vpn_adapter),
         ("mgmt-agent", _has_management_agent),
+        ("group-policy", _has_group_policy),
     ]
     for name, fn in checks:
         try:
@@ -231,7 +400,7 @@ def assert_not_corporate(*, force: bool = False) -> None:
         )
 
 
-def corp_guard_status() -> Optional[str]:
+def corp_guard_status() -> str | None:
     """Return a human-readable status string, or None if not corporate."""
     if not is_windows():
         return None
@@ -245,5 +414,7 @@ def corp_guard_status() -> Optional[str]:
         reasons.append("VPN connected")
     if _has_management_agent():
         reasons.append("Managed (SCCM/Intune)")
+    if _has_group_policy():
+        reasons.append("Group Policy active")
 
     return ", ".join(reasons) if reasons else None

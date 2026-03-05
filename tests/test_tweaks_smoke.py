@@ -5,8 +5,6 @@ Parametrized by tweak id so failures pinpoint the exact tweak.
 
 from __future__ import annotations
 
-from typing import List
-
 import pytest
 
 from regilattice.tweaks import TweakDef, all_tweaks

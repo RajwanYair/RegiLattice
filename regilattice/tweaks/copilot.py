@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -124,9 +122,186 @@ def _detect_disable_edge_copilot() -> bool:
     return SESSION.read_dword(_EDGE_COPILOT, "HubsSidebarEnabled") == 0
 
 
+# ── Disable Copilot Taskbar Button ──────────────────────────────────────────
+
+_TB_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_disable_copilot_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: hide Copilot taskbar button")
+    SESSION.backup([_TB_KEY], "CopilotButton")
+    SESSION.set_dword(_TB_KEY, "ShowCopilotButton", 0)
+
+
+def _remove_disable_copilot_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TB_KEY, "ShowCopilotButton", 1)
+
+
+def _detect_disable_copilot_button() -> bool:
+    return SESSION.read_dword(_TB_KEY, "ShowCopilotButton") == 0
+
+
+# ── Disable Bing Chat in Search ─────────────────────────────────────────────
+
+_SEARCH_KEY = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
+
+
+def _apply_disable_bing_chat(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable Bing Chat in Windows Search")
+    SESSION.backup([_SEARCH_KEY], "BingChat")
+    SESSION.set_dword(_SEARCH_KEY, "DisableSearchBoxSuggestions", 1)
+
+
+def _remove_disable_bing_chat(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_KEY, "DisableSearchBoxSuggestions")
+
+
+def _detect_disable_bing_chat() -> bool:
+    return SESSION.read_dword(_SEARCH_KEY, "DisableSearchBoxSuggestions") == 1
+
+
+# ── Disable Windows Recall (AI Screenshot Feature) ──────────────────────────
+
+
+def _apply_disable_recall_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable Windows Recall AI data analysis via HKLM policy")
+    SESSION.backup([_RECALL_LM], "RecallAIPolicy")
+    SESSION.set_dword(_RECALL_LM, "DisableAIDataAnalysis", 1)
+
+
+def _remove_disable_recall_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RECALL_LM, "DisableAIDataAnalysis")
+
+
+def _detect_disable_recall_policy() -> bool:
+    return SESSION.read_dword(_RECALL_LM, "DisableAIDataAnalysis") == 1
+
+
+# ── Remove Copilot from Taskbar ─────────────────────────────────────────────
+
+
+def _apply_disable_copilot_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: remove Copilot button from taskbar")
+    SESSION.backup([_TB_KEY], "CopilotTaskbar")
+    SESSION.set_dword(_TB_KEY, "ShowCopilotButton", 0)
+
+
+def _remove_disable_copilot_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TB_KEY, "ShowCopilotButton", 1)
+
+
+def _detect_disable_copilot_taskbar() -> bool:
+    return SESSION.read_dword(_TB_KEY, "ShowCopilotButton") == 0
+
+
+# ── Disable AI-Powered Suggestions in Settings ──────────────────────────────
+
+
+def _apply_disable_ai_start_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable AI-powered suggestions in Settings")
+    SESSION.backup([_AI_SETTINGS_CU], "AIStartSuggestions")
+    SESSION.set_dword(_AI_SETTINGS_CU, "Start_IrisRecommendations", 0)
+
+
+def _remove_disable_ai_start_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_AI_SETTINGS_CU, "Start_IrisRecommendations", 1)
+
+
+def _detect_disable_ai_start_suggestions() -> bool:
+    return SESSION.read_dword(_AI_SETTINGS_CU, "Start_IrisRecommendations") == 0
+
+
+# ── Disable Copilot in Edge Browser (CDP) ────────────────────────────────────
+
+
+def _apply_disable_copilot_edge(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable Copilot page context in Edge")
+    SESSION.backup([_EDGE_COPILOT], "CopilotEdge")
+    SESSION.set_dword(_EDGE_COPILOT, "CopilotCDPPageContext", 0)
+
+
+def _remove_disable_copilot_edge(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_COPILOT, "CopilotCDPPageContext")
+
+
+def _detect_disable_copilot_edge() -> bool:
+    return SESSION.read_dword(_EDGE_COPILOT, "CopilotCDPPageContext") == 0
+
+
+# ── Disable AI-Enhanced Widgets Feed ────────────────────────────────────────
+
+_DSH_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh"
+
+
+def _apply_disable_ai_widgets(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable AI-enhanced widgets feed")
+    SESSION.backup([_DSH_KEY], "AIWidgets")
+    SESSION.set_dword(_DSH_KEY, "AllowNewsAndInterests", 0)
+
+
+def _remove_disable_ai_widgets(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DSH_KEY, "AllowNewsAndInterests")
+
+
+def _detect_disable_ai_widgets() -> bool:
+    return SESSION.read_dword(_DSH_KEY, "AllowNewsAndInterests") == 0
+
+
+# ── Disable Recall Feature ──────────────────────────────────────────────────
+
+
+def _apply_copilot_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: disable Windows Recall AI feature")
+    SESSION.backup([_RECALL_LM], "CopilotDisableRecall")
+    SESSION.set_dword(_RECALL_LM, "DisableAIDataAnalysis", 1)
+
+
+def _remove_copilot_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RECALL_LM, "DisableAIDataAnalysis")
+
+
+def _detect_copilot_disable_recall() -> bool:
+    return SESSION.read_dword(_RECALL_LM, "DisableAIDataAnalysis") == 1
+
+
+# ── Disable Copilot Taskbar Button ─────────────────────────────────────────
+
+
+def _apply_copilot_disable_taskbar_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Copilot: hide Copilot button from taskbar")
+    SESSION.backup([_COPILOT_EXPLORER], "CopilotTaskbarButton")
+    SESSION.set_dword(_COPILOT_EXPLORER, "ShowCopilotButton", 0)
+
+
+def _remove_copilot_disable_taskbar_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_COPILOT_EXPLORER, "ShowCopilotButton", 1)
+
+
+def _detect_copilot_disable_taskbar_button() -> bool:
+    return SESSION.read_dword(_COPILOT_EXPLORER, "ShowCopilotButton") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-copilot",
         label="Disable Windows Copilot",
@@ -184,5 +359,140 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_EDGE_COPILOT],
         description="Disables the Copilot sidebar and page context sharing in Microsoft Edge.",
         tags=["ai", "copilot", "edge", "privacy"],
+    ),
+    TweakDef(
+        id="disable-copilot-button",
+        label="Hide Copilot Taskbar Button",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_button,
+        remove_fn=_remove_disable_copilot_button,
+        detect_fn=_detect_disable_copilot_button,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TB_KEY],
+        description="Hides the Copilot button from the Windows 11 taskbar.",
+        tags=["ai", "copilot", "taskbar", "ux"],
+    ),
+    TweakDef(
+        id="disable-bing-chat",
+        label="Disable Bing Chat in Search",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_bing_chat,
+        remove_fn=_remove_disable_bing_chat,
+        detect_fn=_detect_disable_bing_chat,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_KEY],
+        description="Disables Bing Chat / AI suggestions in Windows Search.",
+        tags=["ai", "bing", "search", "privacy"],
+    ),
+    TweakDef(
+        id="disable-recall-policy",
+        label="Disable Windows Recall (AI Screenshot Feature)",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_recall_policy,
+        remove_fn=_remove_disable_recall_policy,
+        detect_fn=_detect_disable_recall_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RECALL_LM],
+        description=(
+            "Disables Windows Recall AI data analysis via machine-level "
+            "policy. Prevents the AI screenshot feature from capturing activity."
+        ),
+        tags=["ai", "copilot", "recall", "privacy"],
+    ),
+    TweakDef(
+        id="disable-copilot-taskbar",
+        label="Remove Copilot from Taskbar",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_taskbar,
+        remove_fn=_remove_disable_copilot_taskbar,
+        detect_fn=_detect_disable_copilot_taskbar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TB_KEY],
+        description="Removes the Copilot button from the Windows taskbar.",
+        tags=["ai", "copilot", "taskbar"],
+    ),
+    TweakDef(
+        id="disable-ai-start-suggestions",
+        label="Disable AI-Powered Suggestions in Settings",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_ai_start_suggestions,
+        remove_fn=_remove_disable_ai_start_suggestions,
+        detect_fn=_detect_disable_ai_start_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_AI_SETTINGS_CU],
+        description=(
+            "Disables AI-powered Iris recommendations in the Start menu "
+            "and Settings app."
+        ),
+        tags=["ai", "copilot", "suggestions", "start"],
+    ),
+    TweakDef(
+        id="disable-copilot-edge",
+        label="Disable Copilot in Edge Browser",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_edge,
+        remove_fn=_remove_disable_copilot_edge,
+        detect_fn=_detect_disable_copilot_edge,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_COPILOT],
+        description=(
+            "Disables the Copilot CDP page context feature in Microsoft Edge."
+        ),
+        tags=["ai", "copilot", "edge"],
+    ),
+    TweakDef(
+        id="disable-ai-widgets",
+        label="Disable AI-Enhanced Widgets Feed",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_ai_widgets,
+        remove_fn=_remove_disable_ai_widgets,
+        detect_fn=_detect_disable_ai_widgets,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DSH_KEY],
+        description=(
+            "Disables the AI-enhanced News and Interests widgets feed "
+            "via Dsh policy."
+        ),
+        tags=["ai", "copilot", "widgets"],
+    ),
+    TweakDef(
+        id="copilot-disable-recall",
+        label="Disable Recall Feature",
+        category="AI / Copilot",
+        apply_fn=_apply_copilot_disable_recall,
+        remove_fn=_remove_copilot_disable_recall,
+        detect_fn=_detect_copilot_disable_recall,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RECALL_LM],
+        description=(
+            "Disables Windows Recall AI feature that takes periodic screenshots. "
+            "Prevents privacy-invasive screen capture and analysis. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["copilot", "recall", "privacy", "ai"],
+    ),
+    TweakDef(
+        id="copilot-disable-taskbar-button",
+        label="Disable Copilot Taskbar Button",
+        category="AI / Copilot",
+        apply_fn=_apply_copilot_disable_taskbar_button,
+        remove_fn=_remove_copilot_disable_taskbar_button,
+        detect_fn=_detect_copilot_disable_taskbar_button,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_COPILOT_EXPLORER],
+        description=(
+            "Hides the Copilot button from the Windows taskbar. "
+            "Reduces visual clutter. Default: Shown. Recommended: Hidden."
+        ),
+        tags=["copilot", "taskbar", "ux", "ai"],
     ),
 ]

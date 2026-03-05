@@ -6,8 +6,6 @@ covering UI debloating, notification management, and UX improvements.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -331,6 +329,11 @@ _CHAT_KEY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 )
 
+_SMART_CLIPBOARD_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
+    r"\SmartActionPlatform\SmartClipboard"
+)
+
 
 def apply_disable_chat_icon(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
@@ -348,9 +351,47 @@ def detect_disable_chat_icon() -> bool:
     return SESSION.read_dword(_CHAT_KEY, "TaskbarMn") == 0
 
 
+# ── Disable Widgets (Policy Only) ───────────────────────────────────────────
+
+
+def _apply_disable_widgets_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable Widgets board via policy")
+    SESSION.backup([_WIDGETS_KEY], "WidgetsPolicy")
+    SESSION.set_dword(_WIDGETS_KEY, "AllowNewsAndInterests", 0)
+
+
+def _remove_disable_widgets_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIDGETS_KEY, "AllowNewsAndInterests")
+
+
+def _detect_disable_widgets_policy() -> bool:
+    return SESSION.read_dword(_WIDGETS_KEY, "AllowNewsAndInterests") == 0
+
+
+# ── Disable Suggested Actions ────────────────────────────────────────────────
+
+
+def _apply_disable_suggested_actions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable Suggested Actions")
+    SESSION.backup([_SMART_CLIPBOARD_KEY], "SuggestedActions")
+    SESSION.set_dword(_SMART_CLIPBOARD_KEY, "Disabled", 1)
+
+
+def _remove_disable_suggested_actions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SMART_CLIPBOARD_KEY, "Disabled")
+
+
+def _detect_disable_suggested_actions() -> bool:
+    return SESSION.read_dword(_SMART_CLIPBOARD_KEY, "Disabled") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-widgets",
         label="Disable Widgets (News & Interests)",
@@ -505,5 +546,39 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_CHAT_KEY],
         description="Removes the Teams Chat icon from the Windows 11 taskbar.",
         tags=["win11", "taskbar", "teams"],
+    ),
+    TweakDef(
+        id="win11-disable-widgets",
+        label="Disable Widgets",
+        category="Windows 11",
+        apply_fn=_apply_disable_widgets_policy,
+        remove_fn=_remove_disable_widgets_policy,
+        detect_fn=_detect_disable_widgets_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WIDGETS_KEY],
+        description=(
+            "Disables Windows 11 Widgets board and Weather widget on the taskbar. "
+            "Frees resources used by the Edge WebView2 widget host. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["win11", "widgets", "performance", "taskbar"],
+    ),
+    TweakDef(
+        id="win11-disable-suggested-actions",
+        label="Disable Suggested Actions",
+        category="Windows 11",
+        apply_fn=_apply_disable_suggested_actions,
+        remove_fn=_remove_disable_suggested_actions,
+        detect_fn=_detect_disable_suggested_actions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SMART_CLIPBOARD_KEY],
+        description=(
+            "Disables Suggested Actions popup when copying dates, phone numbers, etc. "
+            "Removes the clipboard suggestion overlay. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["win11", "suggested-actions", "clipboard", "ux"],
     ),
 ]

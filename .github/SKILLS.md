@@ -1,165 +1,165 @@
-# regilattice — Reusable Skills & Patterns
+# RegiLattice -- Code Patterns
 
-## Skill 1: Registry Read/Write via winreg
+For API reference, architecture, and project conventions see
+[copilot-instructions.md](copilot-instructions.md).
 
-```python
-from regilattice.registry import SESSION
+---
 
-# Write a DWORD
-SESSION.set_dword(r"HKLM\SOFTWARE\...", "ValueName", 1)
+## 1 -- Scoop package helpers
 
-# Write a string
-SESSION.set_string(r"HKCU\SOFTWARE\...", "ValueName", "data")
-
-# Read a DWORD (returns int | None)
-val = SESSION.read_dword(r"HKLM\...", "ValueName")
-
-# Delete a value
-SESSION.delete_value(r"HKLM\...", "ValueName")
-
-# Delete an entire key tree
-SESSION.delete_tree(r"HKLM\SOFTWARE\...\SomeKey")
-
-# Check key existence
-exists = SESSION.key_exists(r"HKLM\SOFTWARE\...\SomeKey")
-```
-
-## Skill 2: Backup Before Mutation
-
-Always back up keys **before** making changes:
+Factory for standardised install/remove/detect scoop-package tweaks.
 
 ```python
-SESSION.backup([r"HKLM\...", r"HKCU\..."], "LabelForBackup")
+from regilattice.tweaks.scoop_tools import list_installed_scoop_apps, search_scoop_apps
+
+# List currently installed scoop apps
+installed = list_installed_scoop_apps()  # -> list[str] sorted app names
+
+# Search for available scoop apps
+results = search_scoop_apps("git")       # -> list[str] matching app names
+
+# The module also exposes a factory:
+# _make_scoop_tweak(cmd, pkg, label, desc, tags) -> TweakDef
 ```
 
-Backups are stored as `.reg` exports in `OneDrive/RegistryBackups/`
-or `~/Documents/RegistryBackups/`.
+## 2 -- GUI tooltip building
 
-## Skill 3: Admin Elevation Check
+Rich tooltip with description, status, and metadata hints.
 
 ```python
-from regilattice.registry import assert_admin
-
-def my_tweak(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)  # raises AdminRequirementError if not elevated
-    ...
+# gui.py
+def _build_tooltip_text(td: TweakDef, status: str) -> str:
+    """Build rich tooltip including:
+    - Main description text
+    - Separator line
+    - Current status (APPLIED / DEFAULT / UNKNOWN)
+    - Default behaviour hint (if present)
+    - Recommendation hint (if present)
+    - Admin / corp-safe indicators
+    - Tags list
+    - Registry key paths
+    """
 ```
 
-In PowerShell:
-```powershell
-. "$PSScriptRoot\Lib-RegiLattice.ps1"
-if (Assert-Elevated -Required) { return }
-```
+Tooltips follow the mouse via the `_Tooltip` class and update on `refresh_status()`.
 
-## Skill 4: Corporate Network Detection
+## 3 -- Snapshot save / restore
 
-```python
-from regilattice.corpguard import is_corporate_network, assert_not_corporate
-
-# Check passively
-if is_corporate_network():
-    print("Corp detected")
-
-# Block with exception
-assert_not_corporate(force=False)  # raises CorporateNetworkError
-```
-
-## Skill 5: Tweak Status Detection (detect_fn)
-
-Every tweak must have a detection function that returns `True` when
-the tweak is currently active:
-
-```python
-def detect_disable_telemetry() -> bool:
-    val = SESSION.read_dword(
-        r"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-        "AllowTelemetry"
-    )
-    return val == 0
-```
-
-Used by the GUI to show live status badges and by the state system for
-undo snapshots.
-
-## Skill 6: Plugin Registration
-
-```python
-# In regilattice/tweaks/privacy.py
-from regilattice.tweaks import TweakDef
-
-TWEAKS: list[TweakDef] = [
-    TweakDef(
-        id="disable-telemetry",
-        label="Disable Telemetry",
-        category="Privacy",
-        apply_fn=apply_disable_telemetry,
-        remove_fn=remove_disable_telemetry,
-        detect_fn=detect_disable_telemetry,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_TELEMETRY_POLICY, _TELEMETRY_DATA],
-    ),
-]
-```
-
-The plugin loader in `regilattice/tweaks/__init__.py` collects all
-`TWEAKS` lists from every module in the package.
-
-## Skill 7: State Persistence & Undo
+Persist and restore full tweak state as JSON.
 
 ```python
 from pathlib import Path
-from regilattice.tweaks import save_snapshot, restore_snapshot
-from regilattice.registry import SESSION
+from regilattice.tweaks import save_snapshot, load_snapshot, restore_snapshot
 
-# Save current state of all tweaks to a JSON file
 save_snapshot(Path("state.json"))
 
-# Restore a previously saved snapshot
-restore_snapshot(Path("state.json"), SESSION)
+data = load_snapshot(Path("state.json"))  # -> dict[str, str]
+
+results = restore_snapshot(Path("state.json"), force_corp=False, require_admin=True)
+# results: {tweak_id: "applied" | "removed" | "unchanged" | "skipped (corp)" | "error"}
 ```
 
-Snapshots are plain JSON files mapping tweak IDs to their detected state.
+## 4 -- Description metadata parsing
 
-## Skill 8: Running External Commands
+Extracts `Default:` and `Recommended:` hints from tweak descriptions for GUI tooltips.
 
 ```python
-import subprocess
+# gui.py
+@functools.lru_cache(maxsize=1024)
+def _parse_description_metadata(description: str) -> tuple[str, str, str]:
+    """Returns (main_text, default_hint, recommendation_hint)."""
+    main_parts: list[str] = []
+    default_hint = ""
+    rec_hint = ""
+    for sentence in description.replace(". ", ".\n").splitlines():
+        s = sentence.strip()
+        low = s.lower()
+        if low.startswith("default:"):
+            default_hint = s
+        elif low.startswith("recommended:"):
+            rec_hint = s
+        else:
+            main_parts.append(s)
+    return " ".join(main_parts).strip(), default_hint, rec_hint
 
-# reg.exe
-subprocess.run(["reg", "add", key, "/v", name, "/d", val, "/f"],
-               check=True, capture_output=True, text=True)
-
-# fsutil
-subprocess.run(["fsutil", "behavior", "set", "disablelastaccess", "1"],
-               check=True, capture_output=True, text=True)
-
-# PowerShell one-liner
-subprocess.run(["powershell", "-NoProfile", "-Command", "..."],
-               capture_output=True, text=True, timeout=10)
+def _has_recommendation(td: TweakDef) -> bool:
+    return "recommended:" in td.description.lower()
 ```
 
-## Skill 9: GUI Threaded Execution
+**Convention:** Include `Default: <value>.` and optionally `Recommended: <advice>.`
+as separate sentences in descriptions. The GUI shows a teal "REC" badge for tweaks
+with recommendations.
 
-Never run registry operations on the tkinter main thread:
+## 5 -- Parallel status detection
+
+Thread-pool detection for fast GUI refresh.
 
 ```python
-import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from regilattice.tweaks import status_map
 
-def _dispatch(self, mode):
-    threading.Thread(target=self._run, args=(mode,), daemon=True).start()
+# Single-call API
+statuses = status_map(parallel=True, max_workers=8)
+# -> {tweak_id: "applied" | "not applied" | "unknown"}
 
-def _run(self, mode):
-    # ... do work ...
-    self._root.after(0, self._update_ui, result)  # schedule UI update
+# GUI refresh pattern (gui.py)
+def _refresh_status_all(self) -> None:
+    statuses = status_map(parallel=True, max_workers=8)
+    for row in self._tweak_rows:
+        st = statuses.get(row.td.id, "unknown")
+        # update row UI from cached status ...
 ```
 
-## Skill 10: Corp-Safe Classification
+## 6 -- Export PS1 pattern
 
-| corp_safe | Meaning | Example |
-|---|---|---|
-| `True` | HKCU-only, no GPO override risk | Mouse acceleration, Recent Folders |
-| `False` | Touches HKLM/GPO, could conflict with corp policy | Telemetry, Cortana, Game DVR |
+Generates a PowerShell script from selected tweaks.
 
-Rule: if the tweak writes to `HKLM\SOFTWARE\Policies\...` or similar
-GPO paths → `corp_safe = False`.
+```python
+# gui.py
+def _export_powershell(self) -> None:
+    selected = self._selected_tweaks()
+    lines = [
+        "# RegiLattice -- Exported Tweaks",
+        f"# Generated from RegiLattice v{__version__}",
+        f"# Tweaks: {len(selected)}",
+        '#Requires -RunAsAdministrator',
+        "",
+    ]
+    for td in selected:
+        lines.append(f"# -- {td.label} ({'admin' if td.needs_admin else 'user'}) --")
+        if td.description:
+            lines.append(f"# {td.description}")
+        for key in td.registry_keys:
+            ps_key = key.replace("HKEY_LOCAL_MACHINE", "HKLM:")
+            ps_key = ps_key.replace("HKEY_CURRENT_USER", "HKCU:")
+            lines.append(f"# Registry key: {ps_key}")
+        lines.append(f"Write-Host 'Applying: {td.label}...'")
+        lines.append("")
+    # Write with BOM for PowerShell compatibility
+    with open(path, "w", encoding="utf-8-sig") as f:
+        f.write("\n".join(lines))
+```
+
+## 7 -- Scope badge pattern
+
+Classifies tweaks as USER / MACHINE / BOTH from their registry key paths.
+
+```python
+# tweaks/__init__.py
+from regilattice.tweaks import tweak_scope
+
+scope = tweak_scope(td)  # -> "user" | "machine" | "both"
+
+# GUI usage (gui.py) -- colour-coded scope badges per row
+_scope_cfg = {
+    "user":    ("USER",    _OK_GREEN),      # green
+    "machine": ("MACHINE", _ACCENT),        # blue
+    "both":    ("BOTH",    _WARN_YELLOW),   # yellow
+}
+_s_text, _s_color = _scope_cfg.get(scope, ("?", _FG_DIM))
+tk.Label(frame, text=_s_text, fg=_s_color, bg=_CARD_BG,
+         font=("Segoe UI", 7, "bold")).pack(side="right", padx=(0, 4))
+```
+
+Logic: checks `HKCU`/`HKLM` prefixes in `td.registry_keys`; falls back to
+`needs_admin` when no keys are listed.

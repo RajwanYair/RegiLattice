@@ -6,8 +6,6 @@ Iterates detected Office versions (14.0 = 2010, 15.0 = 2013, 16.0 = 2016/
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -18,6 +16,8 @@ _VERSIONS = ("14.0", "15.0", "16.0")
 _OFFICE_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Office"
 _OFFICE_LM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office"
 _OFFICE_COMMON = r"HKEY_CURRENT_USER\Software\Microsoft\Office\Common\ClientTelemetry"
+_OFFICE_TELEM_DASH = r"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\OSM"
+_OFFICE_C2R = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\ClickToRun\Configuration"
 
 
 def _ver_key(ver: str, suffix: str) -> str:
@@ -113,10 +113,7 @@ def _remove_start_screen(*, require_admin: bool = False) -> None:
 
 
 def _detect_start_screen() -> bool:
-    for ver in _detected_versions():
-        if SESSION.read_dword(_ver_key(ver, "General"), "DisableBootToOfficeStart") == 1:
-            return True
-    return False
+    return any(SESSION.read_dword(_ver_key(ver, "General"), "DisableBootToOfficeStart") == 1 for ver in _detected_versions())
 
 
 # ── Disable Office Connected Experiences ─────────────────────────────────────
@@ -141,10 +138,7 @@ def _remove_connected(*, require_admin: bool = False) -> None:
 
 
 def _detect_connected() -> bool:
-    for ver in _detected_versions():
-        if SESSION.read_dword(_ver_key(ver, "Privacy"), "DisconnectedState") == 2:
-            return True
-    return False
+    return any(SESSION.read_dword(_ver_key(ver, "Privacy"), "DisconnectedState") == 2 for ver in _detected_versions())
 
 
 # ── Disable Office Hardware Acceleration ─────────────────────────────────────
@@ -167,15 +161,7 @@ def _remove_hwaccel(*, require_admin: bool = False) -> None:
 
 
 def _detect_hwaccel() -> bool:
-    for ver in _detected_versions():
-        if (
-            SESSION.read_dword(
-                _ver_key(ver, "Graphics"), "DisableHardwareAcceleration"
-            )
-            == 1
-        ):
-            return True
-    return False
+    return any(SESSION.read_dword(_ver_key(ver, "Graphics"), "DisableHardwareAcceleration") == 1 for ver in _detected_versions())
 
 
 # ── Disable Office Macro Security (Trust VBA) ───────────────────────────────
@@ -260,10 +246,7 @@ def _remove_disable_linkedin(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_linkedin() -> bool:
-    for ver in _detected_versions():
-        if SESSION.read_dword(_ver_key(ver, "LinkedIn"), "OfficeLinkedIn") == 0:
-            return True
-    return False
+    return any(SESSION.read_dword(_ver_key(ver, "LinkedIn"), "OfficeLinkedIn") == 0 for ver in _detected_versions())
 
 
 # ── Disable Office Animations ──────────────────────────────────────────────
@@ -286,15 +269,189 @@ def _remove_disable_office_animations(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_office_animations() -> bool:
+    return any(SESSION.read_dword(_ver_key(ver, "Graphics"), "DisableAnimations") == 1 for ver in _detected_versions())
+
+
+# ── Disable Office Recent Documents ──────────────────────────────────────────
+
+
+def _apply_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable recent documents list")
     for ver in _detected_versions():
-        if SESSION.read_dword(_ver_key(ver, "Graphics"), "DisableAnimations") == 1:
+        for app in ("Word", "Excel", "PowerPoint"):
+            place = rf"{_OFFICE_CU}\{ver}\{app}\Place MRU"
+            SESSION.backup([place], f"RecentDocs_{ver}_{app}")
+            SESSION.set_dword(place, "ShowPlaceMRU", 0)
+            SESSION.set_dword(place, "MaxDisplay", 0)
+
+
+def _remove_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        for app in ("Word", "Excel", "PowerPoint"):
+            place = rf"{_OFFICE_CU}\{ver}\{app}\Place MRU"
+            SESSION.delete_value(place, "ShowPlaceMRU")
+            SESSION.delete_value(place, "MaxDisplay")
+
+
+def _detect_disable_recent_docs() -> bool:
+    for ver in _detected_versions():
+        place = rf"{_OFFICE_CU}\{ver}\Word\Place MRU"
+        if SESSION.read_dword(place, "ShowPlaceMRU") == 0:
             return True
     return False
 
 
+# ── Disable Office Cloud File Storage Prompt ──────────────────────────────────
+
+
+def _apply_disable_cloud_save(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: default save to local (disable OneDrive/SharePoint prompt)")
+    for ver in _detected_versions():
+        general = _ver_key(ver, "General")
+        SESSION.backup([general], f"CloudSave_{ver}")
+        SESSION.set_dword(general, "PreferCloudSaveLocations", 0)
+        SESSION.set_dword(general, "SkySaveHost", 0)
+
+
+def _remove_disable_cloud_save(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        general = _ver_key(ver, "General")
+        SESSION.delete_value(general, "PreferCloudSaveLocations")
+        SESSION.delete_value(general, "SkySaveHost")
+
+
+def _detect_disable_cloud_save() -> bool:
+    return any(SESSION.read_dword(_ver_key(ver, "General"), "PreferCloudSaveLocations") == 0 for ver in _detected_versions())
+
+
+# ── Disable Office Feedback Button ───────────────────────────────────────────
+
+
+def _apply_disable_feedback_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable feedback / 'send a smile' button")
+    for ver in _detected_versions():
+        feedback = _ver_key(ver, "Feedback")
+        SESSION.backup([feedback], f"FeedbackBtn_{ver}")
+        SESSION.set_dword(feedback, "Enabled", 0)
+        SESSION.set_dword(feedback, "IncludeEmail", 0)
+
+
+def _remove_disable_feedback_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        feedback = _ver_key(ver, "Feedback")
+        SESSION.delete_value(feedback, "Enabled")
+        SESSION.delete_value(feedback, "IncludeEmail")
+
+
+def _detect_disable_feedback_button() -> bool:
+    return any(SESSION.read_dword(_ver_key(ver, "Feedback"), "Enabled") == 0 for ver in _detected_versions())
+
+
+# ── Disable Office Auto-Updates ──────────────────────────────────────────────
+
+_OFFICE_UPDATE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate"
+
+
+def _apply_disable_office_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable automatic updates")
+    SESSION.backup([_OFFICE_UPDATE], "OfficeUpdate")
+    SESSION.set_dword(_OFFICE_UPDATE, "EnableAutomaticUpdates", 0)
+    SESSION.set_dword(_OFFICE_UPDATE, "HideEnableDisableUpdates", 1)
+
+
+def _remove_disable_office_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OFFICE_UPDATE, "EnableAutomaticUpdates")
+    SESSION.delete_value(_OFFICE_UPDATE, "HideEnableDisableUpdates")
+
+
+def _detect_disable_office_updates() -> bool:
+    return SESSION.read_dword(_OFFICE_UPDATE, "EnableAutomaticUpdates") == 0
+
+
+# ── Relax Protected View ──────────────────────────────────────────────────────
+
+
+def _apply_relax_protected_view(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: relax Protected View for internet/Outlook files")
+    for ver in _detected_versions():
+        for app in ("Word", "Excel", "PowerPoint"):
+            sec = rf"{_OFFICE_CU}\{ver}\{app}\Security\ProtectedView"
+            SESSION.backup([sec], f"ProtectedView_{ver}_{app}")
+            SESSION.set_dword(sec, "DisableInternetFilesInPV", 1)
+            SESSION.set_dword(sec, "DisableAttachementsInPV", 1)
+            SESSION.set_dword(sec, "DisableUnsafeLocationsInPV", 1)
+
+
+def _remove_relax_protected_view(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    for ver in _detected_versions():
+        for app in ("Word", "Excel", "PowerPoint"):
+            sec = rf"{_OFFICE_CU}\{ver}\{app}\Security\ProtectedView"
+            SESSION.delete_value(sec, "DisableInternetFilesInPV")
+            SESSION.delete_value(sec, "DisableAttachementsInPV")
+            SESSION.delete_value(sec, "DisableUnsafeLocationsInPV")
+
+
+def _detect_relax_protected_view() -> bool:
+    for ver in _detected_versions():
+        sec = rf"{_OFFICE_CU}\{ver}\Word\Security\ProtectedView"
+        if SESSION.read_dword(sec, "DisableInternetFilesInPV") == 1:
+            return True
+    return False
+
+
+# ── Disable Office Telemetry Dashboard ───────────────────────────────────────
+
+
+def _apply_disable_telemetry_dash(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable telemetry dashboard agent (OSM)")
+    SESSION.backup([_OFFICE_TELEM_DASH], "OfficeTelemetryDash")
+    SESSION.set_dword(_OFFICE_TELEM_DASH, "Enablelogging", 0)
+    SESSION.set_dword(_OFFICE_TELEM_DASH, "EnableUpload", 0)
+
+
+def _remove_disable_telemetry_dash(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OFFICE_TELEM_DASH, "Enablelogging")
+    SESSION.delete_value(_OFFICE_TELEM_DASH, "EnableUpload")
+
+
+def _detect_disable_telemetry_dash() -> bool:
+    return SESSION.read_dword(_OFFICE_TELEM_DASH, "Enablelogging") == 0
+
+
+# ── Disable Office Background Updates (Click-to-Run) ────────────────────────
+
+
+def _apply_disable_background_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Office: disable background Click-to-Run updates")
+    SESSION.backup([_OFFICE_C2R], "OfficeC2RUpdates")
+    SESSION.set_string(_OFFICE_C2R, "UpdatesEnabled", "False")
+
+
+def _remove_disable_background_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_OFFICE_C2R, "UpdatesEnabled", "True")
+
+
+def _detect_disable_background_updates() -> bool:
+    return SESSION.read_string(_OFFICE_C2R, "UpdatesEnabled") == "False"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-office-telemetry",
         label="Disable Office Telemetry",
@@ -308,7 +465,7 @@ TWEAKS: List[TweakDef] = [
         description=(
             "Disables Microsoft Office telemetry, feedback, and connected "
             "services data collection across all installed versions "
-            "(2010–365)."
+            "(2010-365)."
         ),
         tags=["office", "telemetry", "privacy"],
     ),
@@ -418,5 +575,110 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Graphics"],
         description="Disables transitions and animations in Office apps for snappier UI.",
         tags=["office", "performance", "animations"],
+    ),
+    TweakDef(
+        id="disable-office-recent-docs",
+        label="Disable Office Recent Documents",
+        category="Office",
+        apply_fn=_apply_disable_recent_docs,
+        remove_fn=_remove_disable_recent_docs,
+        detect_fn=_detect_disable_recent_docs,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Place MRU"],
+        description="Hides the recent documents list in Office apps for tidier startup.",
+        tags=["office", "privacy", "recent"],
+    ),
+    TweakDef(
+        id="disable-office-cloud-save",
+        label="Default Save to Local (Not Cloud)",
+        category="Office",
+        apply_fn=_apply_disable_cloud_save,
+        remove_fn=_remove_disable_cloud_save,
+        detect_fn=_detect_disable_cloud_save,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\General"],
+        description=(
+            "Sets Office default save location to local disk instead "
+            "of prompting for OneDrive/SharePoint."
+        ),
+        tags=["office", "save", "cloud", "onedrive"],
+    ),
+    TweakDef(
+        id="disable-office-feedback",
+        label="Disable Office Feedback Button",
+        category="Office",
+        apply_fn=_apply_disable_feedback_button,
+        remove_fn=_remove_disable_feedback_button,
+        detect_fn=_detect_disable_feedback_button,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Feedback"],
+        description="Removes the 'Send a Smile' / feedback button from the Office ribbon.",
+        tags=["office", "feedback", "ux"],
+    ),
+    TweakDef(
+        id="disable-office-updates",
+        label="Disable Office Auto-Updates",
+        category="Office",
+        apply_fn=_apply_disable_office_updates,
+        remove_fn=_remove_disable_office_updates,
+        detect_fn=_detect_disable_office_updates,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OFFICE_UPDATE],
+        description="Disables automatic Office updates so you control when to update.",
+        tags=["office", "update", "control"],
+    ),
+    TweakDef(
+        id="relax-office-protected-view",
+        label="Relax Office Protected View",
+        category="Office",
+        apply_fn=_apply_relax_protected_view,
+        remove_fn=_remove_relax_protected_view,
+        detect_fn=_detect_relax_protected_view,
+        needs_admin=False,
+        corp_safe=False,
+        registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Security\ProtectedView"],
+        description=(
+            "Disables Protected View for files from the internet and "
+            "Outlook attachments. Speeds up opening but reduces security."
+        ),
+        tags=["office", "security", "protected-view"],
+    ),
+    TweakDef(
+        id="office-disable-telemetry-dash",
+        label="Disable Office Telemetry Dashboard",
+        category="Office",
+        apply_fn=_apply_disable_telemetry_dash,
+        remove_fn=_remove_disable_telemetry_dash,
+        detect_fn=_detect_disable_telemetry_dash,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICE_TELEM_DASH],
+        description=(
+            "Disables Office telemetry dashboard and diagnostic data collection. "
+            "Reduces network traffic and CPU from Office telemetry agent. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["office", "telemetry", "privacy", "performance"],
+    ),
+    TweakDef(
+        id="office-disable-background-updates",
+        label="Disable Office Background Updates (C2R)",
+        category="Office",
+        apply_fn=_apply_disable_background_updates,
+        remove_fn=_remove_disable_background_updates,
+        detect_fn=_detect_disable_background_updates,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_OFFICE_C2R],
+        description=(
+            "Disables automatic background Office Click-to-Run updates. Updates must "
+            "be applied manually through Office or WSUS. Default: Enabled. "
+            "Recommended: Disabled for managed environments."
+        ),
+        tags=["office", "updates", "performance"],
     ),
 ]

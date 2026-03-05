@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List
 
 import pytest
 
@@ -18,6 +17,6 @@ def dry_session(tmp_path: Path) -> RegistrySession:
 
 
 @pytest.fixture(scope="session")
-def all_tweaks_list() -> List[TweakDef]:
+def all_tweaks_list() -> list[TweakDef]:
     """Session-scoped cached list of every registered TweakDef."""
     return all_tweaks()

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -128,9 +126,182 @@ def detect_disable_vscode_settings_sync() -> bool:
     return SESSION.read_dword(_VSCODE_POLICY, "settingsSync.enabled") == 0
 
 
+# ── Disable VS Code Startup Editor ──────────────────────────────────────────
+
+
+def apply_disable_vscode_startup_editor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable startup welcome editor via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeStartupEditor")
+    SESSION.set_string(_VSCODE_POLICY, "workbench.startupEditor", "none")
+
+
+def remove_disable_vscode_startup_editor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "workbench.startupEditor")
+
+
+def detect_disable_vscode_startup_editor() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "workbench.startupEditor") == "none"
+
+
+# ── VS Code Disable Recommended Extensions ──────────────────────────────────
+
+
+def apply_disable_vscode_recommendations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable extension recommendations via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeRecommendations")
+    SESSION.set_dword(_VSCODE_POLICY, "extensions.showRecommendationsOnlyOnDemand", 1)
+    SESSION.set_dword(_VSCODE_POLICY, "extensions.ignoreRecommendations", 1)
+
+
+def remove_disable_vscode_recommendations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "extensions.showRecommendationsOnlyOnDemand")
+    SESSION.delete_value(_VSCODE_POLICY, "extensions.ignoreRecommendations")
+
+
+def detect_disable_vscode_recommendations() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "extensions.ignoreRecommendations") == 1
+
+
+# ── Disable VS Code Telemetry (Policy-Level) ────────────────────────────────
+
+
+def apply_vscode_disable_telemetry_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable telemetry via TelemetryLevel policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeTelemetryPolicy")
+    SESSION.set_string(_VSCODE_POLICY, "TelemetryLevel", "off")
+
+
+def remove_vscode_disable_telemetry_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "TelemetryLevel")
+
+
+def detect_vscode_disable_telemetry_policy() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "TelemetryLevel") == "off"
+
+
+# ── Disable VS Code A/B Experiments (Policy-Level) ──────────────────────────
+
+
+def apply_vscode_disable_experiments(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable A/B experiments via EnableExperiments policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeDisableExperiments")
+    SESSION.set_dword(_VSCODE_POLICY, "EnableExperiments", 0)
+
+
+def remove_vscode_disable_experiments(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "EnableExperiments")
+
+
+def detect_vscode_disable_experiments() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "EnableExperiments") == 0
+
+
+# ── Disable VS Code Update Notifications ─────────────────────────────────────
+
+
+def apply_vscode_disable_update_notification(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable update notifications via UpdateMode policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeUpdateNotification")
+    SESSION.set_string(_VSCODE_POLICY, "UpdateMode", "none")
+
+
+def remove_vscode_disable_update_notification(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "UpdateMode")
+
+
+def detect_vscode_disable_update_notification() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "UpdateMode") == "none"
+
+
+# ── Disable VS Code Crash Reporter ───────────────────────────────────────────
+
+
+def apply_vscode_disable_crash_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable crash reporter via CrashReporterEnabled policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeCrashReporter")
+    SESSION.set_dword(_VSCODE_POLICY, "CrashReporterEnabled", 0)
+
+
+def remove_vscode_disable_crash_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "CrashReporterEnabled")
+
+
+def detect_vscode_disable_crash_reporter() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "CrashReporterEnabled") == 0
+
+
+# ── Restrict VS Code Extension Gallery ───────────────────────────────────────
+
+
+def apply_vscode_disable_extension_gallery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: restrict extension gallery via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeExtGallery")
+    SESSION.set_string(_VSCODE_POLICY, "ExtensionGalleryServiceUrl", "")
+
+
+def remove_vscode_disable_extension_gallery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "ExtensionGalleryServiceUrl")
+
+
+def detect_vscode_disable_extension_gallery() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY, "ExtensionGalleryServiceUrl") == ""
+
+
+# ── Restrict VS Code Workspace Trust ────────────────────────────────────────
+
+
+def apply_vscode_restrict_workspace_trust(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable workspace trust prompts via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeWorkspaceTrust")
+    SESSION.set_dword(_VSCODE_POLICY, "security.workspace.trust.enabled", 0)
+
+
+def remove_vscode_restrict_workspace_trust(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "security.workspace.trust.enabled")
+
+
+def detect_vscode_restrict_workspace_trust() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "security.workspace.trust.enabled") == 0
+
+
+# ── Disable VS Code GPU Acceleration ────────────────────────────────────────
+
+
+def apply_vscode_disable_gpu(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VS Code: disable GPU/hardware acceleration via policy")
+    SESSION.backup(_VSCODE_KEYS, "VSCodeGPU")
+    SESSION.set_dword(_VSCODE_POLICY, "disable-hardware-acceleration", 1)
+
+
+def remove_vscode_disable_gpu(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VSCODE_POLICY, "disable-hardware-acceleration")
+
+
+def detect_vscode_disable_gpu() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY, "disable-hardware-acceleration") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-vscode-telemetry",
         label="Disable VS Code Telemetry",
@@ -198,5 +369,145 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_VSCODE_KEYS,
         description="Disables VS Code settings sync via machine policy.",
         tags=["vscode", "developer", "sync"],
+    ),
+    TweakDef(
+        id="disable-vscode-startup-editor",
+        label="Disable VS Code Welcome Tab",
+        category="VS Code",
+        apply_fn=apply_disable_vscode_startup_editor,
+        remove_fn=remove_disable_vscode_startup_editor,
+        detect_fn=detect_disable_vscode_startup_editor,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description="Prevents VS Code from opening the Welcome tab on every launch.",
+        tags=["vscode", "developer", "startup"],
+    ),
+    TweakDef(
+        id="disable-vscode-recommendations",
+        label="Disable VS Code Extension Recommendations",
+        category="VS Code",
+        apply_fn=apply_disable_vscode_recommendations,
+        remove_fn=remove_disable_vscode_recommendations,
+        detect_fn=detect_disable_vscode_recommendations,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description="Disables extension recommendation popups and banners in VS Code.",
+        tags=["vscode", "developer", "recommendations"],
+    ),
+    TweakDef(
+        id="vscode-disable-telemetry-policy",
+        label="Disable VS Code Telemetry (Policy)",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_telemetry_policy,
+        remove_fn=remove_vscode_disable_telemetry_policy,
+        detect_fn=detect_vscode_disable_telemetry_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables VS Code telemetry via the machine-level "
+            "TelemetryLevel policy value."
+        ),
+        tags=["vscode", "telemetry", "privacy", "policy"],
+    ),
+    TweakDef(
+        id="vscode-disable-experiments",
+        label="Disable VS Code A/B Experiments",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_experiments,
+        remove_fn=remove_vscode_disable_experiments,
+        detect_fn=detect_vscode_disable_experiments,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables VS Code A/B experiments via the machine-level "
+            "EnableExperiments policy value."
+        ),
+        tags=["vscode", "experiments", "policy"],
+    ),
+    TweakDef(
+        id="vscode-disable-update-notification",
+        label="Disable VS Code Update Notifications",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_update_notification,
+        remove_fn=remove_vscode_disable_update_notification,
+        detect_fn=detect_vscode_disable_update_notification,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables VS Code update notifications via the machine-level "
+            "UpdateMode policy value."
+        ),
+        tags=["vscode", "update", "notifications", "policy"],
+    ),
+    TweakDef(
+        id="vscode-disable-crash-reporter",
+        label="Disable VS Code Crash Reporter",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_crash_reporter,
+        remove_fn=remove_vscode_disable_crash_reporter,
+        detect_fn=detect_vscode_disable_crash_reporter,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables VS Code crash reporter via the machine-level "
+            "CrashReporterEnabled policy value."
+        ),
+        tags=["vscode", "crash-reporter", "privacy", "policy"],
+    ),
+    TweakDef(
+        id="vscode-disable-extension-gallery",
+        label="Restrict VS Code Extension Gallery (Security)",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_extension_gallery,
+        remove_fn=remove_vscode_disable_extension_gallery,
+        detect_fn=detect_vscode_disable_extension_gallery,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Blocks access to the VS Code extension marketplace by setting "
+            "ExtensionGalleryServiceUrl to an empty string via policy."
+        ),
+        tags=["vscode", "extensions", "security", "policy"],
+    ),
+    TweakDef(
+        id="vscode-restrict-workspace-trust",
+        label="Restrict VS Code Workspace Trust",
+        category="VS Code",
+        apply_fn=apply_vscode_restrict_workspace_trust,
+        remove_fn=remove_vscode_restrict_workspace_trust,
+        detect_fn=detect_vscode_restrict_workspace_trust,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables VS Code Workspace Trust prompts via machine policy. "
+            "All workspaces are treated as trusted. "
+            "Default: Enabled. Recommended: Disabled for developer machines."
+        ),
+        tags=["vscode", "workspace-trust", "ux", "developer"],
+    ),
+    TweakDef(
+        id="vscode-disable-gpu-acceleration",
+        label="Disable VS Code GPU Acceleration",
+        category="VS Code",
+        apply_fn=apply_vscode_disable_gpu,
+        remove_fn=remove_vscode_disable_gpu,
+        detect_fn=detect_vscode_disable_gpu,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_VSCODE_KEYS,
+        description=(
+            "Disables GPU/hardware acceleration in VS Code via machine policy. "
+            "Fixes rendering issues on certain graphics drivers. "
+            "Default: Enabled. Recommended: Disabled if experiencing display glitches."
+        ),
+        tags=["vscode", "gpu", "performance", "rendering"],
     ),
 ]

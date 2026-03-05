@@ -8,7 +8,6 @@ toolkit; see Microsoft docs for those.
 from __future__ import annotations
 
 import subprocess
-from typing import List
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -236,9 +235,85 @@ def detect_wsl_dns_tunnel() -> bool:
     return SESSION.read_dword(_LXSS_NET, "EnableDnsTunneling") == 1
 
 
+# ── WSL Disable Auto-Update ─────────────────────────────────────────────────
+
+_WSL_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForLinux"
+_WSL_POLICY_KEYS = [_WSL_POLICY]
+
+
+def apply_wsl_disable_auto_update(*, require_admin: bool = True) -> None:
+    """Disable automatic WSL kernel updates via policy."""
+    assert_admin(require_admin)
+    SESSION.log("Starting Add-WSLDisableAutoUpdate")
+    SESSION.backup(_WSL_POLICY_KEYS, "WSL_DisableAutoUpdate")
+    SESSION.set_dword(_WSL_POLICY, "AllowAutoUpdate", 0)
+    SESSION.log("Completed Add-WSLDisableAutoUpdate")
+
+
+def remove_wsl_disable_auto_update(*, require_admin: bool = True) -> None:
+    """Re-enable automatic WSL kernel updates."""
+    assert_admin(require_admin)
+    SESSION.log("Starting Remove-WSLDisableAutoUpdate")
+    SESSION.backup(_WSL_POLICY_KEYS, "WSL_DisableAutoUpdate_Remove")
+    SESSION.delete_value(_WSL_POLICY, "AllowAutoUpdate")
+    SESSION.log("Completed Remove-WSLDisableAutoUpdate")
+
+
+def detect_wsl_disable_auto_update() -> bool:
+    return SESSION.read_dword(_WSL_POLICY, "AllowAutoUpdate") == 0
+
+
+# ── WSL Disable Nested Virtualization ───────────────────────────────────────
+
+
+def apply_wsl_disable_nested_virt(*, require_admin: bool = True) -> None:
+    """Disable nested virtualization support in WSL2."""
+    assert_admin(require_admin)
+    SESSION.log("Starting Add-WSLDisableNestedVirt")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_DisableNestedVirt")
+    SESSION.set_dword(_LXSS_NET, "EnableNestedVirtualization", 0)
+    SESSION.log("Completed Add-WSLDisableNestedVirt")
+
+
+def remove_wsl_disable_nested_virt(*, require_admin: bool = True) -> None:
+    """Re-enable nested virtualization in WSL2."""
+    assert_admin(require_admin)
+    SESSION.log("Starting Remove-WSLDisableNestedVirt")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_DisableNestedVirt_Remove")
+    SESSION.delete_value(_LXSS_NET, "EnableNestedVirtualization")
+    SESSION.log("Completed Remove-WSLDisableNestedVirt")
+
+
+def detect_wsl_disable_nested_virt() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "EnableNestedVirtualization") == 0
+
+
+# ── WSL Default Version 2 (HKCU) ───────────────────────────────────────────
+
+
+def apply_wsl_default_version_2(*, require_admin: bool = True) -> None:
+    """Set the default WSL version to WSL2 for new distributions."""
+    SESSION.log("Starting Add-WSLDefaultVersion2")
+    SESSION.backup(_LXSS_KEYS, "WSL_DefaultVersion2")
+    SESSION.set_dword(_LXSS_CU, "DefaultVersion", 2)
+    SESSION.log("Completed Add-WSLDefaultVersion2")
+
+
+def remove_wsl_default_version_2(*, require_admin: bool = True) -> None:
+    """Revert default WSL version to 1."""
+    SESSION.log("Starting Remove-WSLDefaultVersion2")
+    SESSION.backup(_LXSS_KEYS, "WSL_DefaultVersion2_Remove")
+    SESSION.set_dword(_LXSS_CU, "DefaultVersion", 1)
+    SESSION.log("Completed Remove-WSLDefaultVersion2")
+
+
+def detect_wsl_default_version_2() -> bool:
+    return SESSION.read_dword(_LXSS_CU, "DefaultVersion") == 2
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="wsl-default-v2",
         label="WSL Default Version 2",
@@ -350,5 +425,53 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_LXSS_NET_KEYS,
         description="Enables DNS tunneling in WSL 2 for better VPN and proxy compatibility.",
         tags=["wsl", "dns", "vpn"],
+    ),
+    TweakDef(
+        id="wsl-disable-auto-update",
+        label="Disable WSL Automatic Updates",
+        category="WSL",
+        apply_fn=apply_wsl_disable_auto_update,
+        remove_fn=remove_wsl_disable_auto_update,
+        detect_fn=detect_wsl_disable_auto_update,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_WSL_POLICY_KEYS,
+        description=(
+            "Disables automatic WSL kernel updates. Updates must be applied manually. "
+            "Default: Enabled. Recommended: Disabled for controlled environments."
+        ),
+        tags=["wsl", "update", "policy"],
+    ),
+    TweakDef(
+        id="wsl-disable-nested-virt",
+        label="Disable WSL Nested Virtualization",
+        category="WSL",
+        apply_fn=apply_wsl_disable_nested_virt,
+        remove_fn=remove_wsl_disable_nested_virt,
+        detect_fn=detect_wsl_disable_nested_virt,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description=(
+            "Disables nested virtualization support in WSL2. Reduces CPU overhead if you don't run VMs "
+            "inside WSL. Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["wsl", "virtualization", "performance"],
+    ),
+    TweakDef(
+        id="wsl-default-version-2",
+        label="Set WSL Default Version to 2",
+        category="WSL",
+        apply_fn=apply_wsl_default_version_2,
+        remove_fn=remove_wsl_default_version_2,
+        detect_fn=detect_wsl_default_version_2,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=_LXSS_KEYS,
+        description=(
+            "Sets the default WSL version to WSL2 for new distributions. WSL2 uses a real Linux kernel. "
+            "Default: 1. Recommended: 2."
+        ),
+        tags=["wsl", "version", "linux"],
     ),
 ]

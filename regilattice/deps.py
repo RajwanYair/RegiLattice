@@ -22,7 +22,6 @@ import logging
 import subprocess
 import sys
 from types import ModuleType
-from typing import Optional
 
 log = logging.getLogger(__name__)
 
@@ -117,7 +116,7 @@ class _MissingSentinel:
 def lazy_import(
     module_name: str,
     *,
-    pip_name: Optional[str] = None,
+    pip_name: str | None = None,
     auto_install: bool = True,
 ) -> ModuleType:
     """Import *module_name*, auto-installing via pip if missing.

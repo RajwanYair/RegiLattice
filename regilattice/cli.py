@@ -13,13 +13,14 @@ from __future__ import annotations
 
 import argparse
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import all_tweaks, apply_all, get_tweak, remove_all, tweak_status
+from .tweaks import all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
 
 
 def _confirm(prompt: str) -> bool:
@@ -47,7 +48,7 @@ def _run_action(
     if tweak_id == "all":
         label = f"{mode.title()} all tweaks"
         if not assume_yes and not _confirm(f"Proceed with '{label}'?"):
-            print("ℹ️  Aborted by user.")
+            print("i️  Aborted by user.")
             return 1
         fn = apply_all if mode == "apply" else remove_all
         results = fn(force_corp=force)
@@ -63,11 +64,11 @@ def _run_action(
 
     action_label = f"{mode} {td.label}"
     if not assume_yes and not _confirm(f"Proceed with '{action_label}'?"):
-        print("ℹ️  Aborted by user.")
+        print("i️  Aborted by user.")
         return 1
 
     try:
-        fn = td.apply_fn if mode == "apply" else td.remove_fn
+        fn: Callable[..., None] = td.apply_fn if mode == "apply" else td.remove_fn
         fn()
         print(f"✅ Completed '{action_label}'. Log: {SESSION.log_path}")
         return 0
@@ -128,6 +129,15 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Restore tweaks to state saved in snapshot file.",
     )
     parser.add_argument(
+        "--profile",
+        choices=["business", "gaming"],
+        help=(
+            "Apply a machine-purpose profile. "
+            "'business' disables gaming/GPU tweaks; "
+            "'gaming' disables Office/Communication/OneDrive tweaks."
+        ),
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"regilattice {__version__} ({platform_summary()})",
@@ -162,6 +172,24 @@ def main(argv: list[str] | None = None) -> int:
         results = restore_snapshot(Path(args.restore), force_corp=args.force)
         for tid, action in results.items():
             print(f"  {tid}: {action}")
+        return 0
+
+    if args.profile:
+        try:
+            assert_not_corporate(force=args.force)
+        except CorporateNetworkError as exc:
+            print(f"\U0001f6d1 {exc}")
+            return 6
+        targets = tweaks_for_profile(args.profile)
+        label = f"Apply '{args.profile}' profile ({len(targets)} tweaks)"
+        if not args.assume_yes and not _confirm(label):
+            print("\u2139\ufe0f  Aborted by user.")
+            return 1
+        results = apply_profile(args.profile, force_corp=args.force)
+        ok = sum(1 for v in results.values() if v == "applied")
+        print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
+        for tid, res in results.items():
+            print(f"  {tid}: {res}")
         return 0
 
     if args.gui:

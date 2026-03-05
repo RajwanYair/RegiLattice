@@ -5,8 +5,6 @@ Covers: Microsoft Teams, Zoom, Discord, Spotify, Slack.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -18,6 +16,8 @@ _ZOOM = r"HKEY_CURRENT_USER\Software\Zoom\Zoom\General"
 _ZOOM_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Zoom\Zoom\General"
 _DISCORD = r"HKEY_CURRENT_USER\Software\Discord"
 _SPOTIFY = r"HKEY_CURRENT_USER\Software\Spotify"
+_TEAMS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams"
+_SKYPE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness"
 
 
 # ── Disable Teams Auto-Start ────────────────────────────────────────────────
@@ -200,9 +200,104 @@ def _detect_zoom_no_video() -> bool:
     return SESSION.read_dword(_ZOOM, "NoVideo") == 1
 
 
+# ── Disable Teams Background Effects Telemetry ───────────────────────────────
+
+
+def _apply_teams_telemetry(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Teams: disable telemetry & diagnostics")
+    SESSION.backup([_TEAMS], "TeamsTelemetry")
+    SESSION.set_dword(_TEAMS, "disableTelemetry", 1)
+
+
+def _remove_teams_telemetry(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TEAMS, "disableTelemetry")
+
+
+def _detect_teams_telemetry() -> bool:
+    return SESSION.read_dword(_TEAMS, "disableTelemetry") == 1
+
+
+# ── Disable Zoom Chat Notifications ──────────────────────────────────────────
+
+
+def _apply_zoom_mute_chat(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Zoom: mute persistent chat notifications")
+    SESSION.backup([_ZOOM], "ZoomChat")
+    SESSION.set_dword(_ZOOM, "MuteIMNotification", 1)
+
+
+def _remove_zoom_mute_chat(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ZOOM, "MuteIMNotification")
+
+
+def _detect_zoom_mute_chat() -> bool:
+    return SESSION.read_dword(_ZOOM, "MuteIMNotification") == 1
+
+
+# ── Disable Slack HW Acceleration ───────────────────────────────────────────
+
+
+def _apply_slack_hwaccel(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Slack: disable hardware acceleration")
+    SESSION.backup([_SLACK], "SlackHW")
+    SESSION.set_dword(_SLACK, "HardwareAccelerationEnabled", 0)
+
+
+def _remove_slack_hwaccel(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SLACK, "HardwareAccelerationEnabled")
+
+
+def _detect_slack_hwaccel() -> bool:
+    return SESSION.read_dword(_SLACK, "HardwareAccelerationEnabled") == 0
+
+
+# ── Disable Teams Auto-Start (Policy) ───────────────────────────────────────
+
+
+def _apply_teams_autostart_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Teams: disable auto-start via machine policy")
+    SESSION.backup([_TEAMS_POLICY], "TeamsAutoStartPolicy")
+    SESSION.set_dword(_TEAMS_POLICY, "DisableAutoStart", 1)
+
+
+def _remove_teams_autostart_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TEAMS_POLICY, "DisableAutoStart")
+
+
+def _detect_teams_autostart_policy() -> bool:
+    return SESSION.read_dword(_TEAMS_POLICY, "DisableAutoStart") == 1
+
+
+# ── Disable Skype Telemetry ─────────────────────────────────────────────────
+
+
+def _apply_skype_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Skype: disable telemetry and diagnostic data")
+    SESSION.backup([_SKYPE_POLICY], "SkypeTelemetry")
+    SESSION.set_dword(_SKYPE_POLICY, "DisableTelemetry", 1)
+
+
+def _remove_skype_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SKYPE_POLICY, "DisableTelemetry")
+
+
+def _detect_skype_telemetry() -> bool:
+    return SESSION.read_dword(_SKYPE_POLICY, "DisableTelemetry") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-teams-autostart",
         label="Disable Teams Auto-Start",
@@ -319,5 +414,76 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_ZOOM],
         description="Prevents Zoom from automatically enabling video when joining meetings.",
         tags=["zoom", "video", "privacy"],
+    ),
+    TweakDef(
+        id="disable-teams-telemetry",
+        label="Disable Teams Telemetry",
+        category="Communication",
+        apply_fn=_apply_teams_telemetry,
+        remove_fn=_remove_teams_telemetry,
+        detect_fn=_detect_teams_telemetry,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TEAMS],
+        description="Disables Microsoft Teams telemetry and diagnostic data collection.",
+        tags=["teams", "telemetry", "privacy"],
+    ),
+    TweakDef(
+        id="disable-zoom-chat-notify",
+        label="Mute Zoom Chat Notifications",
+        category="Communication",
+        apply_fn=_apply_zoom_mute_chat,
+        remove_fn=_remove_zoom_mute_chat,
+        detect_fn=_detect_zoom_mute_chat,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ZOOM],
+        description="Mutes persistent chat notifications in Zoom.",
+        tags=["zoom", "chat", "notifications"],
+    ),
+    TweakDef(
+        id="disable-slack-hwaccel",
+        label="Disable Slack HW Acceleration",
+        category="Communication",
+        apply_fn=_apply_slack_hwaccel,
+        remove_fn=_remove_slack_hwaccel,
+        detect_fn=_detect_slack_hwaccel,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SLACK],
+        description="Disables hardware acceleration in Slack desktop client.",
+        tags=["slack", "performance", "gpu"],
+    ),
+    TweakDef(
+        id="comm-disable-teams-autostart",
+        label="Disable Teams Auto-Start (Policy)",
+        category="Communication",
+        apply_fn=_apply_teams_autostart_policy,
+        remove_fn=_remove_teams_autostart_policy,
+        detect_fn=_detect_teams_autostart_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TEAMS_POLICY],
+        description=(
+            "Prevents Microsoft Teams from starting automatically at login. "
+            "Reduces boot time and memory usage. Default: Auto-start. Recommended: Disabled."
+        ),
+        tags=["communication", "teams", "startup", "performance"],
+    ),
+    TweakDef(
+        id="comm-disable-skype-telemetry",
+        label="Disable Skype Telemetry",
+        category="Communication",
+        apply_fn=_apply_skype_telemetry,
+        remove_fn=_remove_skype_telemetry,
+        detect_fn=_detect_skype_telemetry,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SKYPE_POLICY],
+        description=(
+            "Disables Skype for Business telemetry and diagnostic data collection. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["communication", "skype", "telemetry", "privacy"],
     ),
 ]
