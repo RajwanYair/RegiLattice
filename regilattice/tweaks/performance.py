@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import subprocess
-from typing import List
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -73,9 +72,7 @@ def apply_svchost_split(*, require_admin: bool = True) -> None:
 
     mem = MEMORYSTATUSEX()
     mem.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
-    ctypes.windll.kernel32.GlobalMemoryStatusEx(  # type: ignore[attr-defined]
-        ctypes.byref(mem)
-    )
+    ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(mem))
     ram_kb = int(mem.ullTotalPhys / 1024)
     SESSION.set_dword(_SVCHOST_KEY, "SvcHostSplitThresholdInKB", ram_kb)
     SESSION.log(f"Completed Add-SvcHostSplit: {ram_kb} KB")
@@ -128,6 +125,7 @@ def detect_disable_last_access() -> bool:
             capture_output=True,
             text=True,
             timeout=5,
+            check=False,
         )
         # Output like "DisableLastAccess = 1"
         return "= 1" in r.stdout
@@ -179,9 +177,244 @@ def _detect_disable_bg_apps() -> bool:
     return SESSION.read_dword(_BG_APPS, "GlobalUserDisabled") == 1
 
 
+# ── Disable Window Animations ───────────────────────────────────────────────
+
+_VISUAL_FX = r"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"
+
+
+def _apply_disable_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable window animations")
+    SESSION.backup([_VISUAL_FX], "Animations")
+    SESSION.set_string(_VISUAL_FX, "MinAnimate", "0")
+
+
+def _remove_disable_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_VISUAL_FX, "MinAnimate", "1")
+
+
+def _detect_disable_animations() -> bool:
+    return SESSION.read_string(_VISUAL_FX, "MinAnimate") == "0"
+
+
+# ── Reduce Menu Show Delay ──────────────────────────────────────────────────
+
+_DESKTOP_KEY = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_menu_delay(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: reduce menu show delay to 50ms")
+    SESSION.backup([_DESKTOP_KEY], "MenuDelay")
+    SESSION.set_string(_DESKTOP_KEY, "MenuShowDelay", "50")
+
+
+def _remove_menu_delay(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_DESKTOP_KEY, "MenuShowDelay", "400")
+
+
+def _detect_menu_delay() -> bool:
+    val = SESSION.read_string(_DESKTOP_KEY, "MenuShowDelay")
+    return val is not None and int(val) <= 100
+
+
+# ── Disable SearchProtocolHost Priority Boost ────────────────────────────────
+
+_SEARCH_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search"
+
+
+def _apply_disable_search_protocol_host(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable SearchProtocolHost priority boost")
+    SESSION.backup([_SEARCH_KEY], "SearchProtocolHost")
+    SESSION.set_dword(_SEARCH_KEY, "SetupCompletedSuccessfully", 0)
+
+
+def _remove_disable_search_protocol_host(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_KEY, "SetupCompletedSuccessfully", 1)
+
+
+def _detect_disable_search_protocol_host() -> bool:
+    return SESSION.read_dword(_SEARCH_KEY, "SetupCompletedSuccessfully") == 0
+
+
+# ── Large System Cache ───────────────────────────────────────────────────────
+
+_MEMORY_MGMT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Memory Management"
+)
+
+
+def _apply_large_system_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: enable large system cache")
+    SESSION.backup([_MEMORY_MGMT], "LargeSystemCache")
+    SESSION.set_dword(_MEMORY_MGMT, "LargeSystemCache", 1)
+
+
+def _remove_large_system_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MEMORY_MGMT, "LargeSystemCache", 0)
+
+
+def _detect_large_system_cache() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "LargeSystemCache") == 1
+
+
+# ── Disable Paging Executive ─────────────────────────────────────────────────
+
+
+def _apply_disable_paging_executive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable paging of kernel to disk")
+    SESSION.backup([_MEMORY_MGMT], "DisablePagingExecutive")
+    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 1)
+
+
+def _remove_disable_paging_executive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 0)
+
+
+def _detect_disable_paging_executive() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "DisablePagingExecutive") == 1
+
+
+# ── Optimize Processor Scheduling ────────────────────────────────────────────
+
+_PRIORITY_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
+
+
+def _apply_optimize_processor_scheduling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: optimize processor scheduling for programs")
+    SESSION.backup([_PRIORITY_CTRL], "ProcessorScheduling")
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 38)
+
+
+def _remove_optimize_processor_scheduling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 2)
+
+
+def _detect_optimize_processor_scheduling() -> bool:
+    return SESSION.read_dword(_PRIORITY_CTRL, "Win32PrioritySeparation") == 38
+
+
+# ── Disable NTFS Encryption (EFS) ────────────────────────────────────────────
+
+_FILESYSTEM = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"
+
+
+def _apply_disable_ntfs_encryption(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable NTFS encryption (EFS)")
+    SESSION.backup([_FILESYSTEM], "NtfsEncryption")
+    SESSION.set_dword(_FILESYSTEM, "NtfsDisableEncryption", 1)
+
+
+def _remove_disable_ntfs_encryption(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FILESYSTEM, "NtfsDisableEncryption", 0)
+
+
+def _detect_disable_ntfs_encryption() -> bool:
+    return SESSION.read_dword(_FILESYSTEM, "NtfsDisableEncryption") == 1
+
+
+# ── Disable Last Access Timestamp ────────────────────────────────────────────
+
+
+def _apply_disable_last_access_ts(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable NTFS last access timestamp updates")
+    SESSION.backup([_FILESYSTEM], "LastAccessTimestamp")
+    SESSION.set_dword(_FILESYSTEM, "NtfsDisableLastAccessUpdate", 1)
+
+
+def _remove_disable_last_access_ts(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FILESYSTEM, "NtfsDisableLastAccessUpdate", 0)
+
+
+def _detect_disable_last_access_ts() -> bool:
+    return SESSION.read_dword(_FILESYSTEM, "NtfsDisableLastAccessUpdate") == 1
+
+
+# ── Increase Processor Queue Length ──────────────────────────────────────────
+
+
+def _apply_processor_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: set Win32PrioritySeparation to 38")
+    SESSION.backup([_PRIORITY_CTRL], "ProcessorQueue")
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 38)
+
+
+def _remove_processor_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 2)
+
+
+def _detect_processor_queue() -> bool:
+    return SESSION.read_dword(_PRIORITY_CTRL, "Win32PrioritySeparation") == 38
+
+
+# ── Disable Spectre/Meltdown Mitigations ────────────────────────────────────
+
+
+def _apply_disable_spectre(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable Spectre/Meltdown mitigations")
+    SESSION.backup([_MEMORY_MGMT], "SpectreMitigations")
+    SESSION.set_dword(_MEMORY_MGMT, "FeatureSettingsOverride", 3)
+    SESSION.set_dword(_MEMORY_MGMT, "FeatureSettingsOverrideMask", 3)
+
+
+def _remove_disable_spectre(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MEMORY_MGMT, "FeatureSettingsOverride")
+    SESSION.delete_value(_MEMORY_MGMT, "FeatureSettingsOverrideMask")
+
+
+def _detect_disable_spectre() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "FeatureSettingsOverride") == 3
+
+
+# ── Unpark CPU Cores ─────────────────────────────────────────────────────────
+
+_CORE_PARKING_PERF = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+    r"\PowerSettings\54533251-82be-4824-96c1-47b60b740d00"
+    r"\0cc5b647-c1df-4637-891a-dec35c318583"
+)
+
+
+def _apply_unpark_cpu_cores(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: unpark all CPU cores")
+    SESSION.backup([_CORE_PARKING_PERF], "UnparkCPUCores")
+    SESSION.set_dword(_CORE_PARKING_PERF, "ValueMax", 0)
+    SESSION.set_dword(_CORE_PARKING_PERF, "ValueMin", 0)
+
+
+def _remove_unpark_cpu_cores(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CORE_PARKING_PERF, "ValueMax")
+    SESSION.delete_value(_CORE_PARKING_PERF, "ValueMin")
+
+
+def _detect_unpark_cpu_cores() -> bool:
+    return SESSION.read_dword(_CORE_PARKING_PERF, "ValueMax") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="performance",
         label="Performance Tweaks (Visual Effects)",
@@ -252,5 +485,188 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_BG_APPS],
         description="Prevents Store/UWP apps from running in the background.",
         tags=["performance", "uwp", "background"],
+    ),
+    TweakDef(
+        id="disable-window-animations",
+        label="Disable Window Animations",
+        category="Performance",
+        apply_fn=_apply_disable_animations,
+        remove_fn=_remove_disable_animations,
+        detect_fn=_detect_disable_animations,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VISUAL_FX],
+        description=(
+            "Disables window minimize/maximize animations and "
+            "taskbar animations for snappier window management."
+        ),
+        tags=["performance", "visual", "animations"],
+    ),
+    TweakDef(
+        id="menu-show-delay",
+        label="Reduce Menu Show Delay",
+        category="Performance",
+        apply_fn=_apply_menu_delay,
+        remove_fn=_remove_menu_delay,
+        detect_fn=_detect_menu_delay,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP_KEY],
+        description=(
+            "Reduces the delay before menus appear from 400ms to 50ms. "
+            "Makes context menus and Start menu feel instant."
+        ),
+        tags=["performance", "menu", "ux", "responsiveness"],
+    ),
+    TweakDef(
+        id="disable-search-protocol-host",
+        label="Disable SearchProtocolHost Priority Boost",
+        category="Performance",
+        apply_fn=_apply_disable_search_protocol_host,
+        remove_fn=_remove_disable_search_protocol_host,
+        detect_fn=_detect_disable_search_protocol_host,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SEARCH_KEY],
+        description=(
+            "Disables SearchProtocolHost priority boost to reduce "
+            "background CPU usage from Windows Search indexing."
+        ),
+        tags=["performance", "search", "indexing"],
+    ),
+    TweakDef(
+        id="perf-large-system-cache",
+        label="Enable Large System Cache",
+        category="Performance",
+        apply_fn=_apply_large_system_cache,
+        remove_fn=_remove_large_system_cache,
+        detect_fn=_detect_large_system_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Enables large system cache, allowing Windows to use more "
+            "RAM for file caching and improving disk performance."
+        ),
+        tags=["performance", "memory", "cache"],
+    ),
+    TweakDef(
+        id="disable-paging-executive",
+        label="Disable Paging of Kernel to Disk",
+        category="Performance",
+        apply_fn=_apply_disable_paging_executive,
+        remove_fn=_remove_disable_paging_executive,
+        detect_fn=_detect_disable_paging_executive,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Keeps kernel and drivers in physical RAM instead of paging "
+            "them to disk, improving system responsiveness."
+        ),
+        tags=["performance", "memory", "kernel", "paging"],
+    ),
+    TweakDef(
+        id="optimize-processor-scheduling",
+        label="Optimize for Programs (Not Services)",
+        category="Performance",
+        apply_fn=_apply_optimize_processor_scheduling,
+        remove_fn=_remove_optimize_processor_scheduling,
+        detect_fn=_detect_optimize_processor_scheduling,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PRIORITY_CTRL],
+        description=(
+            "Sets processor scheduling to favor foreground programs "
+            "over background services for better desktop responsiveness."
+        ),
+        tags=["performance", "cpu", "scheduling", "responsiveness"],
+    ),
+    TweakDef(
+        id="disable-ntfs-encryption",
+        label="Disable NTFS Encryption (EFS) Service",
+        category="Performance",
+        apply_fn=_apply_disable_ntfs_encryption,
+        remove_fn=_remove_disable_ntfs_encryption,
+        detect_fn=_detect_disable_ntfs_encryption,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FILESYSTEM],
+        description=(
+            "Disables NTFS Encrypting File System to reduce filesystem "
+            "overhead. Not recommended if EFS encryption is in use."
+        ),
+        tags=["performance", "ntfs", "encryption", "filesystem"],
+    ),
+    TweakDef(
+        id="perf-disable-last-access",
+        label="Disable Last Access Timestamp",
+        category="Performance",
+        apply_fn=_apply_disable_last_access_ts,
+        remove_fn=_remove_disable_last_access_ts,
+        detect_fn=_detect_disable_last_access_ts,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FILESYSTEM],
+        description=(
+            "Disables NTFS last access timestamp updates. Reduces disk "
+            "I/O for every file read operation. Default: 0 (Enabled). "
+            "Recommended: 1 (Disabled)."
+        ),
+        tags=["performance", "ntfs", "disk", "io"],
+    ),
+    TweakDef(
+        id="perf-processor-queue",
+        label="Increase Processor Queue Length",
+        category="Performance",
+        apply_fn=_apply_processor_queue,
+        remove_fn=_remove_processor_queue,
+        detect_fn=_detect_processor_queue,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PRIORITY_CTRL],
+        description=(
+            "Optimizes process priority separation for desktop "
+            "interactivity. Sets short variable quantum with foreground "
+            "boost. Default: 2. Recommended: 38 for desktops, "
+            "2 for servers."
+        ),
+        tags=["performance", "priority", "scheduler", "quantum"],
+    ),
+    TweakDef(
+        id="perf-disable-spectre-mitigations",
+        label="Disable Spectre/Meltdown Mitigations",
+        category="Performance",
+        apply_fn=_apply_disable_spectre,
+        remove_fn=_remove_disable_spectre,
+        detect_fn=_detect_disable_spectre,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Disables Spectre and Meltdown CPU mitigations for maximum "
+            "performance. WARNING: reduces security. Only use on trusted, "
+            "isolated machines. Default: mitigations enabled. "
+            "Recommended: keep enabled unless benchmarking."
+        ),
+        tags=["performance", "spectre", "meltdown", "cpu", "security"],
+    ),
+    TweakDef(
+        id="perf-unpark-cpu-cores",
+        label="Unpark All CPU Cores",
+        category="Performance",
+        apply_fn=_apply_unpark_cpu_cores,
+        remove_fn=_remove_unpark_cpu_cores,
+        detect_fn=_detect_unpark_cpu_cores,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CORE_PARKING_PERF],
+        description=(
+            "Disables CPU core parking so all cores remain active at all "
+            "times. Reduces latency spikes in real-time and gaming "
+            "workloads. Default: Windows-managed. "
+            "Recommended: disabled for desktops and gaming rigs."
+        ),
+        tags=["performance", "cpu", "core-parking", "latency", "gaming"],
     ),
 ]

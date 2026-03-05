@@ -6,8 +6,6 @@ animations, font smoothing, and scroll bar width.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -22,6 +20,12 @@ _WINDOW_METRICS = r"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"
 _DWM = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
 _NARRATOR = r"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam"
 _HIGHCONTRAST = r"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast"
+_MAGNIFIER = r"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier"
+_MAGNIFIER_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+_OSK = r"HKEY_CURRENT_USER\Software\Microsoft\Osk"
+_OSK_TABLET = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TabletMode"
+_KB_PREF = r"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference"
+_SOUNDSENTRY = r"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry"
 
 
 # ── Disable Sticky/Toggle/Filter Keys Popups ────────────────────────────────
@@ -31,7 +35,7 @@ def _apply_disable_accessibility_shortcuts(*, require_admin: bool = False) -> No
     assert_admin(require_admin)
     SESSION.log("Accessibility: disable Sticky/Toggle/Filter key shortcuts")
     SESSION.backup([_ACCESS, _TOGGLE, _FILTER], "AccessibilityShortcuts")
-    # Flags: 506 = off, 58 = off (shift×5, NumLock, etc.)
+    # Flags: 506 = off, 58 = off (shiftx5, NumLock, etc.)
     SESSION.set_string(_ACCESS, "Flags", "506")
     SESSION.set_string(_TOGGLE, "Flags", "58")
     SESSION.set_string(_FILTER, "Flags", "122")
@@ -172,9 +176,149 @@ def _detect_high_contrast() -> bool:
     return SESSION.read_string(_HIGHCONTRAST, "Flags") == "127"
 
 
+# ── Disable Narrator Win+Enter Hotkey ────────────────────────────────────────
+
+
+def _apply_disable_narrator_hotkey(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Narrator Win+Enter hotkey")
+    SESSION.backup([_NARRATOR], "NarratorHotkey")
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 0)
+
+
+def _remove_disable_narrator_hotkey(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 1)
+
+
+def _detect_disable_narrator_hotkey() -> bool:
+    return SESSION.read_dword(_NARRATOR, "WinEnterLaunchEnabled") == 0
+
+
+# ── Disable Magnifier Win+Plus Hotkey ────────────────────────────────────────
+
+
+def _apply_disable_magnifier_hotkey(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Magnifier Win+Plus hotkey")
+    SESSION.backup([_MAGNIFIER, _MAGNIFIER_POLICY], "MagnifierHotkey")
+    SESSION.set_dword(_MAGNIFIER, "RunningState", 0)
+    SESSION.set_dword(_MAGNIFIER_POLICY, "DisableMagnifier", 1)
+
+
+def _remove_disable_magnifier_hotkey(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MAGNIFIER_POLICY, "DisableMagnifier")
+    SESSION.set_dword(_MAGNIFIER, "RunningState", 1)
+
+
+def _detect_disable_magnifier_hotkey() -> bool:
+    return (
+        SESSION.read_dword(_MAGNIFIER, "RunningState") == 0
+        and SESSION.read_dword(_MAGNIFIER_POLICY, "DisableMagnifier") == 1
+    )
+
+
+# ── Disable On-Screen Keyboard Auto-Launch ───────────────────────────────────
+
+
+def _apply_disable_osk_auto_launch(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable On-Screen Keyboard auto-launch")
+    SESSION.backup([_OSK, _OSK_TABLET], "OskAutoLaunch")
+    SESSION.set_dword(_OSK, "ShowStartupPanel", 0)
+    SESSION.set_dword(_OSK_TABLET, "OpenStandby", 0)
+
+
+def _remove_disable_osk_auto_launch(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_OSK, "ShowStartupPanel", 1)
+    SESSION.set_dword(_OSK_TABLET, "OpenStandby", 1)
+
+
+def _detect_disable_osk_auto_launch() -> bool:
+    return SESSION.read_dword(_OSK, "ShowStartupPanel") == 0
+
+
+# ── Disable Menu Access Key Underlines ───────────────────────────────────────
+
+
+def _apply_disable_underline_shortcuts(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable menu access key underlines")
+    SESSION.backup([_KB_PREF], "UnderlineShortcuts")
+    SESSION.set_string(_KB_PREF, "On", "0")
+
+
+def _remove_disable_underline_shortcuts(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KB_PREF, "On", "1")
+
+
+def _detect_disable_underline_shortcuts() -> bool:
+    return SESSION.read_string(_KB_PREF, "On") == "0"
+
+
+# ── Disable Visual Sound Alerts ──────────────────────────────────────────────
+
+
+def _apply_disable_sound_sentry(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable visual sound alerts (SoundSentry)")
+    SESSION.backup([_SOUNDSENTRY], "SoundSentry")
+    SESSION.set_string(_SOUNDSENTRY, "Flags", "0")
+
+
+def _remove_disable_sound_sentry(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_SOUNDSENTRY, "Flags", "2")
+
+
+def _detect_disable_sound_sentry() -> bool:
+    return SESSION.read_string(_SOUNDSENTRY, "Flags") == "0"
+
+
+# ── Disable Narrator Autostart ───────────────────────────────────────────────
+
+
+def _apply_disable_narrator_autostart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Narrator autostart (Win+Enter)")
+    SESSION.backup([_NARRATOR], "NarratorAutostart")
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 0)
+
+
+def _remove_disable_narrator_autostart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 1)
+
+
+def _detect_disable_narrator_autostart() -> bool:
+    return SESSION.read_dword(_NARRATOR, "WinEnterLaunchEnabled") == 0
+
+
+# ── Disable Magnifier Lens Mode ──────────────────────────────────────────────
+
+
+def _apply_disable_magnifier_lens(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: set Magnifier to docked mode")
+    SESSION.backup([_MAGNIFIER], "MagnifierLens")
+    SESSION.set_dword(_MAGNIFIER, "MagnificationMode", 0)
+
+
+def _remove_disable_magnifier_lens(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MAGNIFIER, "MagnificationMode", 2)
+
+
+def _detect_disable_magnifier_lens() -> bool:
+    return SESSION.read_dword(_MAGNIFIER, "MagnificationMode") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-accessibility-shortcuts",
         label="Disable Sticky/Toggle/Filter Keys",
@@ -277,5 +421,118 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_HIGHCONTRAST],
         description="Enables high contrast mode for improved visual clarity.",
         tags=["accessibility", "contrast", "display"],
+    ),
+    TweakDef(
+        id="disable-narrator-hotkey",
+        label="Disable Narrator Win+Enter Hotkey",
+        category="Accessibility",
+        apply_fn=_apply_disable_narrator_hotkey,
+        remove_fn=_remove_disable_narrator_hotkey,
+        detect_fn=_detect_disable_narrator_hotkey,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR],
+        description=(
+            "Disables the Win+Enter hotkey that launches Narrator, "
+            "preventing accidental activation."
+        ),
+        tags=["accessibility", "narrator", "hotkey"],
+    ),
+    TweakDef(
+        id="disable-magnifier-hotkey",
+        label="Disable Magnifier Win+Plus Hotkey",
+        category="Accessibility",
+        apply_fn=_apply_disable_magnifier_hotkey,
+        remove_fn=_remove_disable_magnifier_hotkey,
+        detect_fn=_detect_disable_magnifier_hotkey,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MAGNIFIER, _MAGNIFIER_POLICY],
+        description=(
+            "Disables the Win+Plus hotkey that launches Magnifier "
+            "and prevents it from running."
+        ),
+        tags=["accessibility", "magnifier", "hotkey"],
+    ),
+    TweakDef(
+        id="disable-osk-auto-launch",
+        label="Disable On-Screen Keyboard Auto-Launch",
+        category="Accessibility",
+        apply_fn=_apply_disable_osk_auto_launch,
+        remove_fn=_remove_disable_osk_auto_launch,
+        detect_fn=_detect_disable_osk_auto_launch,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OSK, _OSK_TABLET],
+        description=(
+            "Prevents the On-Screen Keyboard from automatically launching "
+            "at startup or when entering tablet mode."
+        ),
+        tags=["accessibility", "keyboard", "osk", "tablet"],
+    ),
+    TweakDef(
+        id="disable-underline-shortcuts",
+        label="Disable Menu Access Key Underlines",
+        category="Accessibility",
+        apply_fn=_apply_disable_underline_shortcuts,
+        remove_fn=_remove_disable_underline_shortcuts,
+        detect_fn=_detect_disable_underline_shortcuts,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KB_PREF],
+        description=(
+            "Disables the underline indicators on menu access keys "
+            "(keyboard shortcuts) for a cleaner UI."
+        ),
+        tags=["accessibility", "keyboard", "menu", "ui"],
+    ),
+    TweakDef(
+        id="disable-sound-sentry",
+        label="Disable Visual Sound Alerts",
+        category="Accessibility",
+        apply_fn=_apply_disable_sound_sentry,
+        remove_fn=_remove_disable_sound_sentry,
+        detect_fn=_detect_disable_sound_sentry,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SOUNDSENTRY],
+        description=(
+            "Disables SoundSentry visual alerts that flash the screen "
+            "or window when a system sound plays."
+        ),
+        tags=["accessibility", "sound", "visual-alert"],
+    ),
+    TweakDef(
+        id="access-disable-narrator-autostart",
+        label="Disable Narrator Autostart",
+        category="Accessibility",
+        apply_fn=_apply_disable_narrator_autostart,
+        remove_fn=_remove_disable_narrator_autostart,
+        detect_fn=_detect_disable_narrator_autostart,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR],
+        description=(
+            "Prevents Narrator from launching with Win+Enter shortcut. "
+            "Default: Enabled. Recommended: Disabled if not needed."
+        ),
+        tags=["accessibility", "narrator", "shortcut"],
+    ),
+    TweakDef(
+        id="access-disable-magnifier",
+        label="Disable Magnifier Lens Mode",
+        category="Accessibility",
+        apply_fn=_apply_disable_magnifier_lens,
+        remove_fn=_remove_disable_magnifier_lens,
+        detect_fn=_detect_disable_magnifier_lens,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_MAGNIFIER],
+        description=(
+            "Sets Magnifier to docked mode (least intrusive). Prevents "
+            "fullscreen magnification from activating accidentally. "
+            "Default: Fullscreen (2). Recommended: Docked (0)."
+        ),
+        tags=["accessibility", "magnifier", "ux"],
     ),
 ]

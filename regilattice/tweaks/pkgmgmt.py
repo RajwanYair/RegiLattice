@@ -7,7 +7,6 @@ via registry settings and shell commands.
 from __future__ import annotations
 
 import subprocess
-from typing import List
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -258,9 +257,212 @@ def detect_npm_prefer_offline() -> bool:
     return SESSION.read_string(_NODE_ENV, "npm_config_prefer_offline") == "true"
 
 
+# ── Pip Require Virtualenv (prevent accidental global installs) ──────────────
+
+
+def apply_pip_require_venv(*, require_admin: bool = False) -> None:
+    """Set PIP_REQUIRE_VIRTUALENV=1 to prevent accidental global installs."""
+    assert_admin(require_admin)
+    SESSION.log("Pip: require virtualenv for installs")
+    SESSION.backup([_PIP_ENV], "PipRequireVenv")
+    SESSION.set_string(_PIP_ENV, "PIP_REQUIRE_VIRTUALENV", "1")
+
+
+def remove_pip_require_venv(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_ENV, "PIP_REQUIRE_VIRTUALENV")
+
+
+def detect_pip_require_venv() -> bool:
+    return SESSION.read_string(_PIP_ENV, "PIP_REQUIRE_VIRTUALENV") == "1"
+
+
+# ── Pip Disable Version Check ───────────────────────────────────────────────
+
+
+def apply_pip_disable_version_check(*, require_admin: bool = False) -> None:
+    """Suppress the 'new pip version available' warning."""
+    assert_admin(require_admin)
+    SESSION.log("Pip: disable version check nag")
+    SESSION.backup([_PIP_ENV], "PipVersionCheck")
+    SESSION.set_string(_PIP_ENV, "PIP_DISABLE_PIP_VERSION_CHECK", "1")
+
+
+def remove_pip_disable_version_check(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_ENV, "PIP_DISABLE_PIP_VERSION_CHECK")
+
+
+def detect_pip_disable_version_check() -> bool:
+    return SESSION.read_string(_PIP_ENV, "PIP_DISABLE_PIP_VERSION_CHECK") == "1"
+
+
+# ── Pip Timeout (increase for slow networks) ────────────────────────────────
+
+
+def apply_pip_timeout(*, require_admin: bool = False) -> None:
+    """Set PIP_TIMEOUT=60 for corporate/slow networks."""
+    assert_admin(require_admin)
+    SESSION.log("Pip: set timeout to 60s")
+    SESSION.backup([_PIP_ENV], "PipTimeout")
+    SESSION.set_string(_PIP_ENV, "PIP_TIMEOUT", "60")
+
+
+def remove_pip_timeout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_ENV, "PIP_TIMEOUT")
+
+
+def detect_pip_timeout() -> bool:
+    return SESSION.read_string(_PIP_ENV, "PIP_TIMEOUT") == "60"
+
+
+# ── Pip Trusted Host (corporate proxy/mirror) ───────────────────────────────
+
+
+def apply_pip_trusted_host(*, require_admin: bool = False) -> None:
+    """Add common trusted hosts for pip (useful behind corp proxies)."""
+    assert_admin(require_admin)
+    SESSION.log("Pip: set trusted hosts for corporate environments")
+    SESSION.backup([_PIP_ENV], "PipTrustedHost")
+    SESSION.set_string(_PIP_ENV, "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org pypi.python.org")
+
+
+def remove_pip_trusted_host(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_ENV, "PIP_TRUSTED_HOST")
+
+
+def detect_pip_trusted_host() -> bool:
+    val = SESSION.read_string(_PIP_ENV, "PIP_TRUSTED_HOST")
+    return val is not None and "pypi.org" in val
+
+
+# ── Pip Index URL (system-level, HKLM) ──────────────────────────────────────
+
+_PIP_SYS_ENV = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+
+
+def apply_pip_system_index(*, require_admin: bool = True) -> None:
+    """Set system-wide pip index URL to the official PyPI (HKLM)."""
+    assert_admin(require_admin)
+    SESSION.log("Pip (system): set index URL to official PyPI")
+    SESSION.backup([_PIP_SYS_ENV], "PipSystemIndex")
+    SESSION.set_string(_PIP_SYS_ENV, "PIP_INDEX_URL", "https://pypi.org/simple")
+
+
+def remove_pip_system_index(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_SYS_ENV, "PIP_INDEX_URL")
+
+
+def detect_pip_system_index() -> bool:
+    val = SESSION.read_string(_PIP_SYS_ENV, "PIP_INDEX_URL")
+    return val is not None and "pypi.org" in val
+
+
+# ── Pip System No-Cache (system-level) ──────────────────────────────────────
+
+
+def apply_pip_system_no_cache(*, require_admin: bool = True) -> None:
+    """Set system-wide PIP_NO_CACHE_DIR=1 (HKLM)."""
+    assert_admin(require_admin)
+    SESSION.log("Pip (system): disable cache system-wide")
+    SESSION.backup([_PIP_SYS_ENV], "PipSysNoCache")
+    SESSION.set_string(_PIP_SYS_ENV, "PIP_NO_CACHE_DIR", "1")
+
+
+def remove_pip_system_no_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_SYS_ENV, "PIP_NO_CACHE_DIR")
+
+
+def detect_pip_system_no_cache() -> bool:
+    return SESSION.read_string(_PIP_SYS_ENV, "PIP_NO_CACHE_DIR") == "1"
+
+
+# ── Pip System Trusted Host (system-level, HKLM) ────────────────────────────
+
+
+def apply_pip_system_trusted_host(*, require_admin: bool = True) -> None:
+    """Set system-wide PIP_TRUSTED_HOST for all users."""
+    assert_admin(require_admin)
+    SESSION.log("Pip (system): set trusted hosts for all users")
+    SESSION.backup([_PIP_SYS_ENV], "PipSysTrustedHost")
+    SESSION.set_string(_PIP_SYS_ENV, "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org pypi.python.org")
+
+
+def remove_pip_system_trusted_host(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_SYS_ENV, "PIP_TRUSTED_HOST")
+
+
+def detect_pip_system_trusted_host() -> bool:
+    val = SESSION.read_string(_PIP_SYS_ENV, "PIP_TRUSTED_HOST")
+    return val is not None and "pypi.org" in val
+
+
+# ── Pip System Require Virtualenv (system-level) ────────────────────────────
+
+
+def apply_pip_system_require_venv(*, require_admin: bool = True) -> None:
+    """System-wide PIP_REQUIRE_VIRTUALENV=1 — block global pip installs for all users."""
+    assert_admin(require_admin)
+    SESSION.log("Pip (system): require virtualenv for all users")
+    SESSION.backup([_PIP_SYS_ENV], "PipSysRequireVenv")
+    SESSION.set_string(_PIP_SYS_ENV, "PIP_REQUIRE_VIRTUALENV", "1")
+
+
+def remove_pip_system_require_venv(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PIP_SYS_ENV, "PIP_REQUIRE_VIRTUALENV")
+
+
+def detect_pip_system_require_venv() -> bool:
+    return SESSION.read_string(_PIP_SYS_ENV, "PIP_REQUIRE_VIRTUALENV") == "1"
+
+
+# ── Disable WinGet Auto-Upgrade ─────────────────────────────────────────────
+
+
+def apply_winget_disable_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WinGet: disable automatic package upgrades")
+    SESSION.backup([_WINGET_KEY], "WingetAutoUpdate")
+    SESSION.set_dword(_WINGET_KEY, "EnableAutoUpgrade", 0)
+
+
+def remove_winget_disable_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINGET_KEY, "EnableAutoUpgrade")
+
+
+def detect_winget_disable_auto_update() -> bool:
+    return SESSION.read_dword(_WINGET_KEY, "EnableAutoUpgrade") == 0
+
+
+# ── Disable WinGet Microsoft Store Source ───────────────────────────────────
+
+
+def apply_winget_disable_msstore(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WinGet: disable Microsoft Store package source")
+    SESSION.backup([_WINGET_KEY], "WingetMSStore")
+    SESSION.set_dword(_WINGET_KEY, "EnableMSStoreSource", 0)
+
+
+def remove_winget_disable_msstore(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINGET_KEY, "EnableMSStoreSource")
+
+
+def detect_winget_disable_msstore() -> bool:
+    return SESSION.read_dword(_WINGET_KEY, "EnableMSStoreSource") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="ps-remotesigned",
         label="PowerShell RemoteSigned Policy",
@@ -363,5 +565,168 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_NODE_ENV],
         description="Sets npm to prefer local cache for faster installs.",
         tags=["npm", "node", "packages", "offline"],
+    ),
+    TweakDef(
+        id="pip-require-venv",
+        label="Pip Require Virtualenv",
+        category="Package Management",
+        apply_fn=apply_pip_require_venv,
+        remove_fn=remove_pip_require_venv,
+        detect_fn=detect_pip_require_venv,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PIP_ENV],
+        description=(
+            "Sets PIP_REQUIRE_VIRTUALENV=1 — prevents accidental "
+            "installs into system/global Python. Forces explicit "
+            "virtualenv usage."
+        ),
+        tags=["python", "pip", "virtualenv", "safety"],
+    ),
+    TweakDef(
+        id="pip-disable-version-check",
+        label="Pip Disable Version Nag",
+        category="Package Management",
+        apply_fn=apply_pip_disable_version_check,
+        remove_fn=remove_pip_disable_version_check,
+        detect_fn=detect_pip_disable_version_check,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PIP_ENV],
+        description=(
+            "Sets PIP_DISABLE_PIP_VERSION_CHECK=1 to suppress "
+            "'new pip version available' warnings."
+        ),
+        tags=["python", "pip", "nag"],
+    ),
+    TweakDef(
+        id="pip-timeout",
+        label="Pip Timeout 60s (Slow Networks)",
+        category="Package Management",
+        apply_fn=apply_pip_timeout,
+        remove_fn=remove_pip_timeout,
+        detect_fn=detect_pip_timeout,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PIP_ENV],
+        description=(
+            "Sets PIP_TIMEOUT=60 for more reliable installs on "
+            "slow or corporate networks (default: 15s)."
+        ),
+        tags=["python", "pip", "network", "timeout"],
+    ),
+    TweakDef(
+        id="pip-trusted-host",
+        label="Pip Trusted Hosts (PyPI)",
+        category="Package Management",
+        apply_fn=apply_pip_trusted_host,
+        remove_fn=remove_pip_trusted_host,
+        detect_fn=detect_pip_trusted_host,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PIP_ENV],
+        description=(
+            "Adds pypi.org and pythonhosted.org as trusted hosts "
+            "so pip works behind corporate TLS-inspecting proxies."
+        ),
+        tags=["python", "pip", "proxy", "corporate"],
+    ),
+    TweakDef(
+        id="pip-system-index",
+        label="Pip System Index URL (HKLM)",
+        category="Package Management",
+        apply_fn=apply_pip_system_index,
+        remove_fn=remove_pip_system_index,
+        detect_fn=detect_pip_system_index,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PIP_SYS_ENV],
+        description=(
+            "Sets system-wide PIP_INDEX_URL to official PyPI for "
+            "all users (HKLM environment variable)."
+        ),
+        tags=["python", "pip", "system", "index"],
+    ),
+    TweakDef(
+        id="pip-system-no-cache",
+        label="Pip System Disable Cache (HKLM)",
+        category="Package Management",
+        apply_fn=apply_pip_system_no_cache,
+        remove_fn=remove_pip_system_no_cache,
+        detect_fn=detect_pip_system_no_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PIP_SYS_ENV],
+        description=(
+            "Sets system-wide PIP_NO_CACHE_DIR=1 to prevent "
+            "pip cache accumulation for all users."
+        ),
+        tags=["python", "pip", "system", "disk"],
+    ),
+    TweakDef(
+        id="pip-system-trusted-host",
+        label="Pip System Trusted Hosts (HKLM)",
+        category="Package Management",
+        apply_fn=apply_pip_system_trusted_host,
+        remove_fn=remove_pip_system_trusted_host,
+        detect_fn=detect_pip_system_trusted_host,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PIP_SYS_ENV],
+        description=(
+            "Sets system-wide PIP_TRUSTED_HOST for all users — "
+            "useful for fleet-wide corporate proxy configurations."
+        ),
+        tags=["python", "pip", "system", "proxy", "corporate"],
+    ),
+    TweakDef(
+        id="pip-system-require-venv",
+        label="Pip System Require Virtualenv (HKLM)",
+        category="Package Management",
+        apply_fn=apply_pip_system_require_venv,
+        remove_fn=remove_pip_system_require_venv,
+        detect_fn=detect_pip_system_require_venv,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PIP_SYS_ENV],
+        description=(
+            "System-wide PIP_REQUIRE_VIRTUALENV=1 — blocks any pip "
+            "install outside a virtualenv for all users on the machine."
+        ),
+        tags=["python", "pip", "system", "virtualenv", "safety"],
+    ),
+    TweakDef(
+        id="winget-disable-auto-update",
+        label="Disable WinGet Auto-Upgrade",
+        category="Package Management",
+        apply_fn=apply_winget_disable_auto_update,
+        remove_fn=remove_winget_disable_auto_update,
+        detect_fn=detect_winget_disable_auto_update,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WINGET_KEY],
+        description=(
+            "Disables WinGet automatic package upgrades via Group Policy. "
+            "Packages must be upgraded manually with 'winget upgrade'. "
+            "Default: Enabled. Recommended: Disabled for managed environments."
+        ),
+        tags=["winget", "packages", "update", "performance"],
+    ),
+    TweakDef(
+        id="winget-disable-msstore-source",
+        label="Disable WinGet MS Store Source",
+        category="Package Management",
+        apply_fn=apply_winget_disable_msstore,
+        remove_fn=remove_winget_disable_msstore,
+        detect_fn=detect_winget_disable_msstore,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WINGET_KEY],
+        description=(
+            "Disables the Microsoft Store as a WinGet package source. "
+            "Only the winget community repository is used. "
+            "Default: Enabled. Recommended: Disabled for developer workflows."
+        ),
+        tags=["winget", "packages", "source", "msstore"],
     ),
 ]

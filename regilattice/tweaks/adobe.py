@@ -5,8 +5,6 @@ Covers: auto-update, telemetry, protected mode, JavaScript.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -20,6 +18,13 @@ _JS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLock
 _WELCOME = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"
 _PROTECTED = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"
 _CLOUD = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"
+_CC_FILES = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome"
+_GENUINE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware"
+_CRASH = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess"
+_HOME = r"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC"
+_FONT_SYNC = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop"
+_ARM_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\ARM\1\ARM"
+_READER_GENERAL = r"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral"
 
 
 # ── Disable Adobe Auto-Update ───────────────────────────────────────────────
@@ -146,9 +151,140 @@ def _detect_disable_cloud() -> bool:
     return SESSION.read_dword(_CLOUD, "bDisableADCFileStore") == 1
 
 
+# ── Disable Adobe Creative Cloud File Sync ──────────────────────────────────
+
+
+def _apply_disable_cc_files(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable Creative Cloud file sync")
+    SESSION.backup([_CC_FILES], "AdobeCCFiles")
+    SESSION.set_dword(_CC_FILES, "SyncDisabled", 1)
+
+
+def _remove_disable_cc_files(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CC_FILES, "SyncDisabled")
+
+
+def _detect_disable_cc_files() -> bool:
+    return SESSION.read_dword(_CC_FILES, "SyncDisabled") == 1
+
+
+# ── Disable Adobe Genuine Software Check ────────────────────────────────────
+
+
+def _apply_disable_genuine_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable Genuine Software check")
+    SESSION.backup([_GENUINE], "AdobeGenuine")
+    SESSION.set_dword(_GENUINE, "AdobeGenuineEnabled", 0)
+
+
+def _remove_disable_genuine_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GENUINE, "AdobeGenuineEnabled")
+
+
+def _detect_disable_genuine_check() -> bool:
+    return SESSION.read_dword(_GENUINE, "AdobeGenuineEnabled") == 0
+
+
+# ── Disable Adobe Crash Reporter ────────────────────────────────────────────
+
+
+def _apply_disable_crash_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable crash reporter")
+    SESSION.backup([_CRASH], "AdobeCrash")
+    SESSION.set_dword(_CRASH, "CrashReporting", 0)
+
+
+def _remove_disable_crash_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CRASH, "CrashReporting")
+
+
+def _detect_disable_crash_reporter() -> bool:
+    return SESSION.read_dword(_CRASH, "CrashReporting") == 0
+
+
+# ── Disable Adobe Home Screen on Launch ─────────────────────────────────────
+
+
+def _apply_disable_home_screen() -> None:
+    SESSION.log("Adobe: disable home screen on launch")
+    SESSION.backup([_HOME], "AdobeHomeScreen")
+    SESSION.set_dword(_HOME, "ShowHomeScreen", 0)
+
+
+def _remove_disable_home_screen() -> None:
+    SESSION.set_dword(_HOME, "ShowHomeScreen", 1)
+
+
+def _detect_disable_home_screen() -> bool:
+    return SESSION.read_dword(_HOME, "ShowHomeScreen") == 0
+
+
+# ── Disable Adobe Font Sync ─────────────────────────────────────────────────
+
+
+def _apply_disable_font_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable font sync")
+    SESSION.backup([_FONT_SYNC], "AdobeFontSync")
+    SESSION.set_dword(_FONT_SYNC, "DisableFontSync", 1)
+
+
+def _remove_disable_font_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FONT_SYNC, "DisableFontSync")
+
+
+def _detect_disable_font_sync() -> bool:
+    return SESSION.read_dword(_FONT_SYNC, "DisableFontSync") == 1
+
+
+# ── Disable Adobe Updater (Policy) ──────────────────────────────────────────
+
+
+def _apply_disable_updater(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable Adobe Updater via ARM policy")
+    SESSION.backup([_ARM_POLICY], "AdobeUpdater")
+    SESSION.set_dword(_ARM_POLICY, "iCheckReader", 0)
+
+
+def _remove_disable_updater(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ARM_POLICY, "iCheckReader")
+
+
+def _detect_disable_updater() -> bool:
+    return SESSION.read_dword(_ARM_POLICY, "iCheckReader") == 0
+
+
+# ── Adobe Reduce Memory Usage ──────────────────────────────────────────────
+
+
+def _apply_reduce_memory(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: enable instance reuse to reduce memory")
+    SESSION.backup([_READER_GENERAL], "AdobeReduceMemory")
+    SESSION.set_dword(_READER_GENERAL, "bReuseAcrobatInstance", 1)
+
+
+def _remove_reduce_memory(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_READER_GENERAL, "bReuseAcrobatInstance")
+
+
+def _detect_reduce_memory() -> bool:
+    return SESSION.read_dword(_READER_GENERAL, "bReuseAcrobatInstance") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-adobe-update",
         label="Disable Adobe Auto-Update",
@@ -229,5 +365,104 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_CLOUD],
         description="Disables Adobe Document Cloud file storage integration.",
         tags=["adobe", "cloud", "privacy"],
+    ),
+    TweakDef(
+        id="adobe-disable-cc-files",
+        label="Disable Adobe Creative Cloud File Sync",
+        category="Adobe",
+        apply_fn=_apply_disable_cc_files,
+        remove_fn=_remove_disable_cc_files,
+        detect_fn=_detect_disable_cc_files,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CC_FILES],
+        description="Disables Adobe Creative Cloud file synchronization.",
+        tags=["adobe", "cloud", "sync"],
+    ),
+    TweakDef(
+        id="adobe-disable-genuine-check",
+        label="Disable Adobe Genuine Software Check",
+        category="Adobe",
+        apply_fn=_apply_disable_genuine_check,
+        remove_fn=_remove_disable_genuine_check,
+        detect_fn=_detect_disable_genuine_check,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GENUINE],
+        description="Disables the Adobe Genuine Software integrity check.",
+        tags=["adobe", "genuine", "licensing"],
+    ),
+    TweakDef(
+        id="adobe-disable-crash-reporter",
+        label="Disable Adobe Crash Reporter",
+        category="Adobe",
+        apply_fn=_apply_disable_crash_reporter,
+        remove_fn=_remove_disable_crash_reporter,
+        detect_fn=_detect_disable_crash_reporter,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CRASH],
+        description="Disables Adobe crash reporting.",
+        tags=["adobe", "telemetry", "crash"],
+    ),
+    TweakDef(
+        id="adobe-disable-home-screen",
+        label="Disable Adobe Home Screen on Launch",
+        category="Adobe",
+        apply_fn=_apply_disable_home_screen,
+        remove_fn=_remove_disable_home_screen,
+        detect_fn=_detect_disable_home_screen,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_HOME],
+        description="Disables the Adobe home screen shown on application launch.",
+        tags=["adobe", "ux", "home"],
+    ),
+    TweakDef(
+        id="adobe-disable-font-sync",
+        label="Disable Adobe Font Sync",
+        category="Adobe",
+        apply_fn=_apply_disable_font_sync,
+        remove_fn=_remove_disable_font_sync,
+        detect_fn=_detect_disable_font_sync,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FONT_SYNC],
+        description="Disables Adobe Creative Cloud font synchronization.",
+        tags=["adobe", "fonts", "sync"],
+    ),
+    TweakDef(
+        id="adobe-disable-updater",
+        label="Disable Adobe Updater",
+        category="Adobe",
+        apply_fn=_apply_disable_updater,
+        remove_fn=_remove_disable_updater,
+        detect_fn=_detect_disable_updater,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ARM_POLICY],
+        description=(
+            "Disables Adobe Acrobat Reader automatic updater. Updates must be "
+            "applied manually. Default: Enabled. Recommended: Disabled for "
+            "managed environments."
+        ),
+        tags=["adobe", "updater", "performance"],
+    ),
+    TweakDef(
+        id="adobe-reduce-memory",
+        label="Adobe Reduce Memory Usage",
+        category="Adobe",
+        apply_fn=_apply_reduce_memory,
+        remove_fn=_remove_reduce_memory,
+        detect_fn=_detect_reduce_memory,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_READER_GENERAL],
+        description=(
+            "Forces Adobe Reader to reuse existing instances instead of "
+            "spawning new processes. Reduces memory footprint. "
+            "Default: New instance. Recommended: Reuse."
+        ),
+        tags=["adobe", "memory", "performance"],
     ),
 ]

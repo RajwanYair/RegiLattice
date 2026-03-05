@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -278,9 +276,49 @@ def _detect_disable_inking() -> bool:
     return SESSION.read_dword(_INK, "RestrictImplicitInkCollection") == 1
 
 
+# ── Disable Clipboard History (Privacy) ──────────────────────────────────────
+
+_CLIPBOARD_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_priv_clipboard_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable clipboard history")
+    SESSION.backup([_CLIPBOARD_POLICY], "PrivClipboardHistory")
+    SESSION.set_dword(_CLIPBOARD_POLICY, "AllowClipboardHistory", 0)
+
+
+def _remove_priv_clipboard_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLIPBOARD_POLICY, "AllowClipboardHistory")
+
+
+def _detect_priv_clipboard_history() -> bool:
+    return SESSION.read_dword(_CLIPBOARD_POLICY, "AllowClipboardHistory") == 0
+
+
+# ── Disable Online Speech Recognition (Privacy) ─────────────────────────────
+
+
+def _apply_priv_online_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable online speech recognition (privacy)")
+    SESSION.backup([_SPEECH], "PrivOnlineSpeech")
+    SESSION.set_dword(_SPEECH, "HasAccepted", 0)
+
+
+def _remove_priv_online_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SPEECH, "HasAccepted", 1)
+
+
+def _detect_priv_online_speech() -> bool:
+    return SESSION.read_dword(_SPEECH, "HasAccepted") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-telemetry",
         label="Disable Windows Telemetry",
@@ -416,5 +454,37 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_INK, _INK_TRAINED],
         description="Prevents Windows from collecting typing/inking data for personalization.",
         tags=["privacy", "inking", "typing"],
+    ),
+    TweakDef(
+        id="privacy-disable-clipboard-history",
+        label="Disable Clipboard History",
+        category="Privacy",
+        apply_fn=_apply_priv_clipboard_history,
+        remove_fn=_remove_priv_clipboard_history,
+        detect_fn=_detect_priv_clipboard_history,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CLIPBOARD_POLICY],
+        description=(
+            "Disables Windows clipboard history (Win+V). Prevents sensitive copied data from being stored. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["privacy", "clipboard", "history"],
+    ),
+    TweakDef(
+        id="privacy-disable-online-speech",
+        label="Disable Online Speech Recognition",
+        category="Privacy",
+        apply_fn=_apply_priv_online_speech,
+        remove_fn=_remove_priv_online_speech,
+        detect_fn=_detect_priv_online_speech,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SPEECH],
+        description=(
+            "Disables online speech recognition which sends voice data to Microsoft servers. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["privacy", "speech", "recognition", "telemetry"],
     ),
 ]

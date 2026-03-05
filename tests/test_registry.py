@@ -5,14 +5,12 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from regilattice.registry import (AdminRequirementError, RegistrySession,
-                                  _split_root, assert_admin, is_windows,
-                                  platform_summary)
+from regilattice.registry import AdminRequirementError, RegistrySession, _split_root, assert_admin, is_windows, platform_summary
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 
@@ -97,7 +95,7 @@ class TestSplitRoot:
     def test_short_alias(self) -> None:
         import winreg
 
-        root, subkey = _split_root(r"HKLM\SOFTWARE\X")
+        root, _subkey = _split_root(r"HKLM\SOFTWARE\X")
         assert root == winreg.HKEY_LOCAL_MACHINE
 
     def test_bad_root_raises(self) -> None:
@@ -127,9 +125,8 @@ class TestAssertAdmin:
         assert_admin(required=False)  # no-op
 
     def test_non_admin_raises(self) -> None:
-        with patch("ctypes.windll.shell32.IsUserAnAdmin", return_value=0):
-            with pytest.raises(AdminRequirementError):
-                assert_admin(required=True)
+        with patch("ctypes.windll.shell32.IsUserAnAdmin", return_value=0), pytest.raises(AdminRequirementError):
+            assert_admin(required=True)
 
 
 # ── Utility functions ───────────────────────────────────────────────────────

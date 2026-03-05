@@ -8,8 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.deps import (_ensure_pip, _MissingSentinel, _pip_install,
-                              install_package, lazy_import, require)
+from regilattice.deps import _ensure_pip, _MissingSentinel, _pip_install, install_package, lazy_import, require
 
 # ── _pip_install ─────────────────────────────────────────────────────────────
 
@@ -79,10 +78,9 @@ class TestEnsurePip:
             return MagicMock()  # Should not be reached
 
         import sys
-        with patch("importlib.import_module", side_effect=_import_side_effect):
-            with patch.dict(sys.modules, {"ensurepip": mock_ensurepip}):
-                assert _ensure_pip() is True
-                mock_ensurepip.bootstrap.assert_called_once()
+        with patch("importlib.import_module", side_effect=_import_side_effect), patch.dict(sys.modules, {"ensurepip": mock_ensurepip}):
+            assert _ensure_pip() is True
+            mock_ensurepip.bootstrap.assert_called_once()
 
     def test_pip_missing_ensurepip_fails(self) -> None:
         def _import_side_effect(name: str):
@@ -93,9 +91,8 @@ class TestEnsurePip:
         import sys
 
         # Setting module to None in sys.modules makes `import ensurepip` raise ImportError
-        with patch("importlib.import_module", side_effect=_import_side_effect):
-            with patch.dict(sys.modules, {"ensurepip": None}):
-                assert _ensure_pip() is False
+        with patch("importlib.import_module", side_effect=_import_side_effect), patch.dict(sys.modules, {"ensurepip": None}):
+            assert _ensure_pip() is False
 
 
 # ── install_package ──────────────────────────────────────────────────────────

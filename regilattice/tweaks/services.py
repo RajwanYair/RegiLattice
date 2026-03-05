@@ -7,8 +7,6 @@ Connected User Experiences, and Print Spooler (desktops without printers).
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -145,9 +143,200 @@ def _detect_disable_diagsvc() -> bool:
     return SESSION.read_dword(_CUXE, "Start") == 4
 
 
+# ── Disable Biometric Service ──────────────────────────────────────────────
+
+_BIOMETRIC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WbioSrvc"
+
+
+def _apply_disable_biometric(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Windows Biometric Service")
+    SESSION.backup([_BIOMETRIC], "Biometric")
+    SESSION.set_dword(_BIOMETRIC, "Start", 4)
+
+
+def _remove_disable_biometric(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_BIOMETRIC, "Start", 3)
+
+
+def _detect_disable_biometric() -> bool:
+    return SESSION.read_dword(_BIOMETRIC, "Start") == 4
+
+
+# ── Disable Fax Service ─────────────────────────────────────────────────────
+
+_FAX = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"
+
+
+def _apply_disable_fax(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Fax Service")
+    SESSION.backup([_FAX], "Fax")
+    SESSION.set_dword(_FAX, "Start", 4)
+
+
+def _remove_disable_fax(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FAX, "Start", 3)
+
+
+def _detect_disable_fax() -> bool:
+    return SESSION.read_dword(_FAX, "Start") == 4
+
+
+# ── Disable Remote Registry ──────────────────────────────────────────────────
+
+_REMREG = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry"
+
+
+def _apply_disable_remote_registry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Remote Registry")
+    SESSION.backup([_REMREG], "RemoteRegistry")
+    SESSION.set_dword(_REMREG, "Start", 4)
+
+
+def _remove_disable_remote_registry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_REMREG, "Start", 3)
+
+
+def _detect_disable_remote_registry() -> bool:
+    return SESSION.read_dword(_REMREG, "Start") == 4
+
+
+# ── Disable Xbox Services ───────────────────────────────────────────────────
+
+_XBOX_LIVE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager"
+_XBOX_SAVE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave"
+_XBOX_NET = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc"
+
+
+def _apply_disable_xbox_services(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Xbox Live services")
+    SESSION.backup([_XBOX_LIVE, _XBOX_SAVE, _XBOX_NET], "XboxServices")
+    SESSION.set_dword(_XBOX_LIVE, "Start", 4)
+    SESSION.set_dword(_XBOX_SAVE, "Start", 4)
+    SESSION.set_dword(_XBOX_NET, "Start", 4)
+
+
+def _remove_disable_xbox_services(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_XBOX_LIVE, "Start", 3)
+    SESSION.set_dword(_XBOX_SAVE, "Start", 3)
+    SESSION.set_dword(_XBOX_NET, "Start", 3)
+
+
+def _detect_disable_xbox_services() -> bool:
+    return SESSION.read_dword(_XBOX_LIVE, "Start") == 4
+
+
+# ── Disable Geolocation Service ──────────────────────────────────────────────
+
+_GEOLOC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lfsvc"
+
+
+def _apply_disable_geolocation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Geolocation Service")
+    SESSION.backup([_GEOLOC], "Geolocation")
+    SESSION.set_dword(_GEOLOC, "Start", 4)
+
+
+def _remove_disable_geolocation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_GEOLOC, "Start", 3)
+
+
+def _detect_disable_geolocation() -> bool:
+    return SESSION.read_dword(_GEOLOC, "Start") == 4
+
+
+# ── Disable Delivery Optimization Service ────────────────────────────────────
+
+_DOSERVICE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc"
+
+
+def _apply_disable_delivery_opt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Delivery Optimization")
+    SESSION.backup([_DOSERVICE], "DeliveryOptimization")
+    SESSION.set_dword(_DOSERVICE, "Start", 4)
+
+
+def _remove_disable_delivery_opt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_DOSERVICE, "Start", 2)  # Auto
+
+
+def _detect_disable_delivery_opt() -> bool:
+    return SESSION.read_dword(_DOSERVICE, "Start") == 4
+
+
+# ── Disable AllJoyn Router Service ───────────────────────────────────────────
+
+_ALLJOYN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter"
+
+
+def _apply_disable_alljoyn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable AllJoyn Router")
+    SESSION.backup([_ALLJOYN], "AllJoyn")
+    SESSION.set_dword(_ALLJOYN, "Start", 4)
+
+
+def _remove_disable_alljoyn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ALLJOYN, "Start", 3)
+
+
+def _detect_disable_alljoyn() -> bool:
+    return SESSION.read_dword(_ALLJOYN, "Start") == 4
+
+
+# ── Disable Windows Search Indexer ───────────────────────────────────────────
+
+
+def _apply_disable_search_indexer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Windows Search indexer service")
+    SESSION.backup([_SEARCH], "SearchIndexer")
+    SESSION.set_dword(_SEARCH, "Start", 4)
+
+
+def _remove_disable_search_indexer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH, "Start", 2)
+
+
+def _detect_disable_search_indexer() -> bool:
+    return SESSION.read_dword(_SEARCH, "Start") == 4
+
+
+# ── Disable SysMain (Superfetch) ─────────────────────────────────────────────
+
+
+def _apply_disable_sysmain_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable SysMain (Superfetch) preloading service")
+    SESSION.backup([_SYSMAIN], "SysMainSvc")
+    SESSION.set_dword(_SYSMAIN, "Start", 4)
+
+
+def _remove_disable_sysmain_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SYSMAIN, "Start", 2)
+
+
+def _detect_disable_sysmain_svc() -> bool:
+    return SESSION.read_dword(_SYSMAIN, "Start") == 4
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-diagtrack-service",
         label="Disable DiagTrack Service Startup",
@@ -234,5 +423,141 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_CUXE],
         description="Disables the Diagnostic Service (DiagSvc) that runs troubleshooters.",
         tags=["services", "telemetry", "diagnostics"],
+    ),
+    TweakDef(
+        id="disable-wbiosrvc",
+        label="Disable Biometric Service",
+        category="Services",
+        apply_fn=_apply_disable_biometric,
+        remove_fn=_remove_disable_biometric,
+        detect_fn=_detect_disable_biometric,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BIOMETRIC],
+        description=(
+            "Disables Windows Biometric Service (WbioSrvc). "
+            "Useful if fingerprint/face login is not used."
+        ),
+        tags=["services", "biometric", "security"],
+    ),
+    TweakDef(
+        id="disable-fax",
+        label="Disable Fax Service",
+        category="Services",
+        apply_fn=_apply_disable_fax,
+        remove_fn=_remove_disable_fax,
+        detect_fn=_detect_disable_fax,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FAX],
+        description="Disables the legacy Windows Fax Service.",
+        tags=["services", "legacy", "fax"],
+    ),
+    TweakDef(
+        id="disable-remote-registry",
+        label="Disable Remote Registry",
+        category="Services",
+        apply_fn=_apply_disable_remote_registry,
+        remove_fn=_remove_disable_remote_registry,
+        detect_fn=_detect_disable_remote_registry,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_REMREG],
+        description=(
+            "Disables the Remote Registry service which allows remote "
+            "access to the Windows registry. Security hardening measure."
+        ),
+        tags=["services", "security", "remote"],
+    ),
+    TweakDef(
+        id="disable-xbox-live-services",
+        label="Disable Xbox Live Services",
+        category="Services",
+        apply_fn=_apply_disable_xbox_services,
+        remove_fn=_remove_disable_xbox_services,
+        detect_fn=_detect_disable_xbox_services,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_XBOX_LIVE, _XBOX_SAVE, _XBOX_NET],
+        description="Disables Xbox Live Auth, Game Save, and Networking services.",
+        tags=["services", "xbox", "gaming", "cleanup"],
+    ),
+    TweakDef(
+        id="disable-geolocation-service",
+        label="Disable Geolocation Service",
+        category="Services",
+        apply_fn=_apply_disable_geolocation,
+        remove_fn=_remove_disable_geolocation,
+        detect_fn=_detect_disable_geolocation,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_GEOLOC],
+        description="Disables the Windows Geolocation Service for privacy.",
+        tags=["services", "privacy", "location"],
+    ),
+    TweakDef(
+        id="disable-delivery-optimization-svc",
+        label="Disable Delivery Optimization",
+        category="Services",
+        apply_fn=_apply_disable_delivery_opt,
+        remove_fn=_remove_disable_delivery_opt,
+        detect_fn=_detect_disable_delivery_opt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DOSERVICE],
+        description=(
+            "Disables the Delivery Optimization service which shares "
+            "Windows Update data with other PCs on LAN and internet."
+        ),
+        tags=["services", "update", "bandwidth", "privacy"],
+    ),
+    TweakDef(
+        id="disable-alljoyn",
+        label="Disable AllJoyn Router",
+        category="Services",
+        apply_fn=_apply_disable_alljoyn,
+        remove_fn=_remove_disable_alljoyn,
+        detect_fn=_detect_disable_alljoyn,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ALLJOYN],
+        description="Disables the AllJoyn IoT router service — not needed by most users.",
+        tags=["services", "iot", "cleanup"],
+    ),
+    TweakDef(
+        id="svc-disable-search-indexer",
+        label="Disable Windows Search Indexer",
+        category="Services",
+        apply_fn=_apply_disable_search_indexer,
+        remove_fn=_remove_disable_search_indexer,
+        detect_fn=_detect_disable_search_indexer,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Disables Windows Search indexing service. Significantly "
+            "reduces disk I/O and CPU usage. Use Everything Search as "
+            "alternative. Default: Automatic (2). "
+            "Recommended: Disabled (4)."
+        ),
+        tags=["services", "search", "indexer", "performance", "io"],
+    ),
+    TweakDef(
+        id="svc-disable-sysmain",
+        label="Disable SysMain (Superfetch)",
+        category="Services",
+        apply_fn=_apply_disable_sysmain_svc,
+        remove_fn=_remove_disable_sysmain_svc,
+        detect_fn=_detect_disable_sysmain_svc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SYSMAIN],
+        description=(
+            "Disables SysMain (formerly Superfetch) preloading service. "
+            "Reduces disk I/O on SSDs where preloading provides minimal "
+            "benefit. Default: Automatic (2). "
+            "Recommended: Disabled (4) for SSDs."
+        ),
+        tags=["services", "sysmain", "superfetch", "performance", "ssd"],
     ),
 ]

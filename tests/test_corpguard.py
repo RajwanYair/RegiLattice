@@ -7,10 +7,15 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.corpguard import (CorporateNetworkError, _has_vpn_adapter,
-                                   _is_azure_ad_joined, _is_domain_joined,
-                                   assert_not_corporate, corp_guard_status,
-                                   is_corporate_network)
+from regilattice.corpguard import (
+    CorporateNetworkError,
+    _has_vpn_adapter,
+    _is_azure_ad_joined,
+    _is_domain_joined,
+    assert_not_corporate,
+    corp_guard_status,
+    is_corporate_network,
+)
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -142,6 +147,7 @@ class TestIsAzureAdJoined:
 class TestIsCorporateNetwork:
     """Test the top-level corporate network check."""
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -149,6 +155,7 @@ class TestIsCorporateNetwork:
     def test_no_corporate_indicators(self, *_mocks: MagicMock) -> None:
         assert is_corporate_network() is False
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=True)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -156,6 +163,7 @@ class TestIsCorporateNetwork:
     def test_vpn_triggers_corp(self, *_mocks: MagicMock) -> None:
         assert is_corporate_network() is True
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -163,6 +171,7 @@ class TestIsCorporateNetwork:
     def test_domain_triggers_corp(self, *_mocks: MagicMock) -> None:
         assert is_corporate_network() is True
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=True)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -170,6 +179,7 @@ class TestIsCorporateNetwork:
     def test_management_agent_triggers_corp(self, *_mocks: MagicMock) -> None:
         assert is_corporate_network() is True
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=True)
@@ -177,6 +187,15 @@ class TestIsCorporateNetwork:
     def test_azure_ad_triggers_corp(self, *_mocks: MagicMock) -> None:
         assert is_corporate_network() is True
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=True)
+    @patch("regilattice.corpguard._has_management_agent", return_value=False)
+    @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
+    @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
+    @patch("regilattice.corpguard._is_domain_joined", return_value=False)
+    def test_group_policy_triggers_corp(self, *_mocks: MagicMock) -> None:
+        assert is_corporate_network() is True
+
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", side_effect=Exception("oops"))
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -230,6 +249,7 @@ class TestCorpGuardStatus:
     def test_non_windows_returns_none(self, _mock: MagicMock) -> None:
         assert corp_guard_status() is None
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=False)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)
@@ -238,6 +258,7 @@ class TestCorpGuardStatus:
     def test_returns_none_when_clean(self, *_mocks: MagicMock) -> None:
         assert corp_guard_status() is None
 
+    @patch("regilattice.corpguard._has_group_policy", return_value=False)
     @patch("regilattice.corpguard._has_management_agent", return_value=False)
     @patch("regilattice.corpguard._has_vpn_adapter", return_value=True)
     @patch("regilattice.corpguard._is_azure_ad_joined", return_value=False)

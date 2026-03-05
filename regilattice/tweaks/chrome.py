@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -160,9 +158,144 @@ def detect_chrome_secure_dns() -> bool:
     return SESSION.read_string(_CHROME_POLICY, "DnsOverHttpsMode") == "automatic"
 
 
+# ── Disable Chrome Browser Sign-In Prompt (standalone) ─────────────────────
+
+
+def apply_chrome_disable_signin(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable browser sign-in prompt")
+    SESSION.backup([_CHROME_POLICY], "ChromeDisableSignin")
+    SESSION.set_dword(_CHROME_POLICY, "BrowserSignin", 0)
+
+
+def remove_chrome_disable_signin(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "BrowserSignin")
+
+
+def detect_chrome_disable_signin() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "BrowserSignin") == 0
+
+
+# ── Disable Chrome Sync ────────────────────────────────────────────────────
+
+
+def apply_chrome_disable_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable sync")
+    SESSION.backup([_CHROME_POLICY], "ChromeDisableSync")
+    SESSION.set_dword(_CHROME_POLICY, "SyncDisabled", 1)
+
+
+def remove_chrome_disable_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "SyncDisabled")
+
+
+def detect_chrome_disable_sync() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "SyncDisabled") == 1
+
+
+# ── Disable Chrome Cloud Spell Check ──────────────────────────────────────
+
+
+def apply_chrome_disable_spell_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable cloud spell check service")
+    SESSION.backup([_CHROME_POLICY], "ChromeDisableSpellCheck")
+    SESSION.set_dword(_CHROME_POLICY, "SpellCheckServiceEnabled", 0)
+
+
+def remove_chrome_disable_spell_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "SpellCheckServiceEnabled")
+
+
+def detect_chrome_disable_spell_check() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "SpellCheckServiceEnabled") == 0
+
+
+# ── Block Third-Party Cookies ──────────────────────────────────────────────
+
+
+def apply_chrome_block_third_party_cookies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: block third-party cookies")
+    SESSION.backup([_CHROME_POLICY], "ChromeBlockThirdPartyCookies")
+    SESSION.set_dword(_CHROME_POLICY, "BlockThirdPartyCookies", 1)
+
+
+def remove_chrome_block_third_party_cookies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "BlockThirdPartyCookies")
+
+
+def detect_chrome_block_third_party_cookies() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "BlockThirdPartyCookies") == 1
+
+
+# ── Disable Chrome Password Autofill ──────────────────────────────────────
+
+
+def apply_chrome_disable_autofill_passwords(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable password manager / autofill")
+    SESSION.backup([_CHROME_POLICY], "ChromeDisableAutofillPasswords")
+    SESSION.set_dword(_CHROME_POLICY, "PasswordManagerEnabled", 0)
+
+
+def remove_chrome_disable_autofill_passwords(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "PasswordManagerEnabled")
+
+
+def detect_chrome_disable_autofill_passwords() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "PasswordManagerEnabled") == 0
+
+
+# ── Disable Chrome Software Reporter ───────────────────────────────────────
+
+
+def _apply_chrome_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable Software Reporter Tool")
+    SESSION.backup([_CHROME_POLICY], "ChromeReporter")
+    SESSION.set_dword(_CHROME_POLICY, "ChromeCleanupEnabled", 0)
+    SESSION.set_dword(_CHROME_POLICY, "ChromeCleanupReportingEnabled", 0)
+
+
+def _remove_chrome_reporter(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "ChromeCleanupEnabled")
+    SESSION.delete_value(_CHROME_POLICY, "ChromeCleanupReportingEnabled")
+
+
+def _detect_chrome_reporter() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "ChromeCleanupEnabled") == 0
+
+
+# ── Disable Chrome Background Apps (Policy) ───────────────────────────────
+
+
+def _apply_chrome_background(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable background apps")
+    SESSION.backup([_CHROME_POLICY], "ChromeBackground")
+    SESSION.set_dword(_CHROME_POLICY, "BackgroundModeEnabled", 0)
+
+
+def _remove_chrome_background(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "BackgroundModeEnabled")
+
+
+def _detect_chrome_background() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "BackgroundModeEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-chrome-bg",
         label="Disable Chrome Background Apps",
@@ -249,5 +382,110 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_CHROME_POLICY],
         description="Enables DNS-over-HTTPS (automatic mode) in Chrome.",
         tags=["chrome", "browser", "dns", "security"],
+    ),
+    TweakDef(
+        id="chrome-disable-signin",
+        label="Disable Chrome Browser Sign-In Prompt",
+        category="Chrome",
+        apply_fn=apply_chrome_disable_signin,
+        remove_fn=remove_chrome_disable_signin,
+        detect_fn=detect_chrome_disable_signin,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description="Disables the Chrome browser sign-in prompt via policy.",
+        tags=["chrome", "browser", "signin", "privacy"],
+    ),
+    TweakDef(
+        id="chrome-disable-sync",
+        label="Disable Chrome Sync",
+        category="Chrome",
+        apply_fn=apply_chrome_disable_sync,
+        remove_fn=remove_chrome_disable_sync,
+        detect_fn=detect_chrome_disable_sync,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description="Disables Chrome profile sync via policy.",
+        tags=["chrome", "browser", "sync", "privacy"],
+    ),
+    TweakDef(
+        id="chrome-disable-spell-check-service",
+        label="Disable Chrome Cloud Spell Check",
+        category="Chrome",
+        apply_fn=apply_chrome_disable_spell_check,
+        remove_fn=remove_chrome_disable_spell_check,
+        detect_fn=detect_chrome_disable_spell_check,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables the cloud-based spell-check service in Chrome, "
+            "keeping only the local spell checker."
+        ),
+        tags=["chrome", "browser", "spellcheck", "privacy"],
+    ),
+    TweakDef(
+        id="chrome-block-third-party-cookies",
+        label="Block Third-Party Cookies",
+        category="Chrome",
+        apply_fn=apply_chrome_block_third_party_cookies,
+        remove_fn=remove_chrome_block_third_party_cookies,
+        detect_fn=detect_chrome_block_third_party_cookies,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description="Blocks third-party cookies in Chrome via policy.",
+        tags=["chrome", "browser", "cookies", "privacy"],
+    ),
+    TweakDef(
+        id="chrome-disable-autofill-passwords",
+        label="Disable Chrome Password Autofill",
+        category="Chrome",
+        apply_fn=apply_chrome_disable_autofill_passwords,
+        remove_fn=remove_chrome_disable_autofill_passwords,
+        detect_fn=detect_chrome_disable_autofill_passwords,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables the built-in Chrome password manager and autofill "
+            "for passwords via policy."
+        ),
+        tags=["chrome", "browser", "passwords", "autofill", "security"],
+    ),
+    TweakDef(
+        id="chrome-disable-reporter",
+        label="Disable Chrome Software Reporter",
+        category="Chrome",
+        apply_fn=_apply_chrome_reporter,
+        remove_fn=_remove_chrome_reporter,
+        detect_fn=_detect_chrome_reporter,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables Chrome Software Reporter Tool and cleanup reporting. "
+            "Prevents high CPU usage from background scanning. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["chrome", "reporter", "cleanup", "performance"],
+    ),
+    TweakDef(
+        id="chrome-disable-background",
+        label="Disable Chrome Background Apps",
+        category="Chrome",
+        apply_fn=_apply_chrome_background,
+        remove_fn=_remove_chrome_background,
+        detect_fn=_detect_chrome_background,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Prevents Chrome from running in the background after closing. "
+            "Frees memory and CPU. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["chrome", "background", "performance", "memory"],
     ),
 ]

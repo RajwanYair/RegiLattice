@@ -6,8 +6,6 @@ startup delay, and managing Run/RunOnce keys.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -22,6 +20,18 @@ _STARTUP_APPROVED_CU = (
 _STARTUP_DELAY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Serialize"
+)
+_BOOT_ANIMATION = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Authentication\LogonUI\BootAnimation"
+)
+_LOGON_SYSTEM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+_PERSONALIZATION = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
+)
+_POLICIES_SYSTEM = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Policies\System"
 )
 
 
@@ -174,9 +184,128 @@ def _detect_disable_cortana_startup() -> bool:
     )
 
 
+# ── Disable Windows Startup Sound ───────────────────────────────────────────
+
+
+def _apply_disable_startup_sound(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable Windows startup sound")
+    SESSION.backup([_BOOT_ANIMATION], "StartupSound")
+    SESSION.set_dword(_BOOT_ANIMATION, "DisableStartupSound", 1)
+
+
+def _remove_disable_startup_sound(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_BOOT_ANIMATION, "DisableStartupSound", 0)
+
+
+def _detect_disable_startup_sound() -> bool:
+    return SESSION.read_dword(_BOOT_ANIMATION, "DisableStartupSound") == 1
+
+
+# ── Use Solid Color Login Background ────────────────────────────────────────
+
+
+def _apply_disable_login_background(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: use solid color login background")
+    SESSION.backup([_LOGON_SYSTEM], "LoginBackground")
+    SESSION.set_dword(_LOGON_SYSTEM, "DisableLogonBackgroundImage", 1)
+
+
+def _remove_disable_login_background(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LOGON_SYSTEM, "DisableLogonBackgroundImage")
+
+
+def _detect_disable_login_background() -> bool:
+    return SESSION.read_dword(_LOGON_SYSTEM, "DisableLogonBackgroundImage") == 1
+
+
+# ── Skip Lock Screen ────────────────────────────────────────────────────────
+
+
+def _apply_disable_lock_screen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: skip lock screen (go straight to login)")
+    SESSION.backup([_PERSONALIZATION], "LockScreen")
+    SESSION.set_dword(_PERSONALIZATION, "NoLockScreen", 1)
+
+
+def _remove_disable_lock_screen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PERSONALIZATION, "NoLockScreen")
+
+
+def _detect_disable_lock_screen() -> bool:
+    return SESSION.read_dword(_PERSONALIZATION, "NoLockScreen") == 1
+
+
+# ── Disable First Login Animation ───────────────────────────────────────────
+
+
+def _apply_disable_first_logon_animation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable first login animation")
+    SESSION.backup([_POLICIES_SYSTEM], "FirstLogonAnimation")
+    SESSION.set_dword(_POLICIES_SYSTEM, "EnableFirstLogonAnimation", 0)
+
+
+def _remove_disable_first_logon_animation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_POLICIES_SYSTEM, "EnableFirstLogonAnimation", 1)
+
+
+def _detect_disable_first_logon_animation() -> bool:
+    return SESSION.read_dword(_POLICIES_SYSTEM, "EnableFirstLogonAnimation") == 0
+
+
+# ── Disable Startup Delay (Zero) ────────────────────────────────────────────
+
+
+def _apply_startup_no_delay(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: remove startup delay for Startup folder apps")
+    SESSION.backup([_STARTUP_DELAY], "StartupNoDelay")
+    SESSION.set_dword(_STARTUP_DELAY, "StartupDelayInMSec", 0)
+
+
+def _remove_startup_no_delay(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_STARTUP_DELAY, "StartupDelayInMSec")
+
+
+def _detect_startup_no_delay() -> bool:
+    return SESSION.read_dword(_STARTUP_DELAY, "StartupDelayInMSec") == 0
+
+
+# ── Disable Startup App Tracking ────────────────────────────────────────────
+
+_EXPLORER_ADVANCED = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\Advanced"
+)
+
+
+def _apply_disable_app_tracking(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable startup app tracking")
+    SESSION.backup([_EXPLORER_ADVANCED], "AppTracking")
+    SESSION.set_dword(_EXPLORER_ADVANCED, "Start_TrackProgs", 0)
+
+
+def _remove_disable_app_tracking(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_EXPLORER_ADVANCED, "Start_TrackProgs", 1)
+
+
+def _detect_disable_app_tracking() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADVANCED, "Start_TrackProgs") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-startup-delay",
         label="Disable Startup Delay",
@@ -263,5 +392,98 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_RUN_CU],
         description="Removes Cortana from the HKCU Run key to prevent auto-start at login.",
         tags=["startup", "cortana", "performance"],
+    ),
+    TweakDef(
+        id="disable-startup-sound",
+        label="Disable Windows Startup Sound",
+        category="Startup",
+        apply_fn=_apply_disable_startup_sound,
+        remove_fn=_remove_disable_startup_sound,
+        detect_fn=_detect_disable_startup_sound,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BOOT_ANIMATION],
+        description="Silences the Windows startup sound on boot.",
+        tags=["startup", "sound", "boot"],
+    ),
+    TweakDef(
+        id="disable-login-background",
+        label="Use Solid Color Login Background",
+        category="Startup",
+        apply_fn=_apply_disable_login_background,
+        remove_fn=_remove_disable_login_background,
+        detect_fn=_detect_disable_login_background,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_LOGON_SYSTEM],
+        description=(
+            "Replaces the Windows Spotlight / hero image on the login "
+            "screen with a plain solid color background."
+        ),
+        tags=["startup", "login", "appearance"],
+    ),
+    TweakDef(
+        id="disable-lock-screen",
+        label="Skip Lock Screen (Go Straight to Login)",
+        category="Startup",
+        apply_fn=_apply_disable_lock_screen,
+        remove_fn=_remove_disable_lock_screen,
+        detect_fn=_detect_disable_lock_screen,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PERSONALIZATION],
+        description=(
+            "Bypasses the lock screen so the machine goes directly "
+            "to the password / PIN prompt on wake or boot."
+        ),
+        tags=["startup", "lockscreen", "login"],
+    ),
+    TweakDef(
+        id="disable-first-logon-animation",
+        label="Disable First Login Animation",
+        category="Startup",
+        apply_fn=_apply_disable_first_logon_animation,
+        remove_fn=_remove_disable_first_logon_animation,
+        detect_fn=_detect_disable_first_logon_animation,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POLICIES_SYSTEM],
+        description=(
+            "Disables the 'Hi / We're getting things ready' first-logon "
+            "animation shown after a new user profile is created."
+        ),
+        tags=["startup", "animation", "login", "boot"],
+    ),
+    TweakDef(
+        id="startup-disable-delay",
+        label="Disable Startup Delay",
+        category="Startup",
+        apply_fn=_apply_startup_no_delay,
+        remove_fn=_remove_startup_no_delay,
+        detect_fn=_detect_startup_no_delay,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_STARTUP_DELAY],
+        description=(
+            "Removes the startup delay for programs in the Startup folder. Apps launch immediately "
+            "at logon. Default: ~10s delay. Recommended: 0 (no delay)."
+        ),
+        tags=["startup", "delay", "performance", "boot"],
+    ),
+    TweakDef(
+        id="startup-disable-app-tracking",
+        label="Disable Startup App Tracking",
+        category="Startup",
+        apply_fn=_apply_disable_app_tracking,
+        remove_fn=_remove_disable_app_tracking,
+        detect_fn=_detect_disable_app_tracking,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADVANCED],
+        description=(
+            "Disables tracking of which programs are launched from Start menu. "
+            "Improves privacy and reduces write I/O. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["startup", "tracking", "privacy", "performance"],
     ),
 ]

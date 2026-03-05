@@ -6,8 +6,6 @@ Bing suggestions, and search box visibility.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -28,6 +26,11 @@ _CORTANA = (
 _EXPLORER = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Advanced"
+)
+_WSEARCH_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"
+_SEARCH_SETTINGS = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\SearchSettings"
 )
 
 
@@ -149,9 +152,147 @@ def _detect_disable_cloud_search() -> bool:
     return SESSION.read_dword(_SEARCH_CU, "AllowCloudSearch") == 0
 
 
+# ── Disable Windows Search Indexing Service ─────────────────────────────────
+
+
+def _apply_disable_search_indexing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable Windows Search indexing service")
+    SESSION.backup([_WSEARCH_SVC], "SearchIndexing")
+    SESSION.set_dword(_WSEARCH_SVC, "Start", 4)
+
+
+def _remove_disable_search_indexing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WSEARCH_SVC, "Start", 2)
+
+
+def _detect_disable_search_indexing() -> bool:
+    return SESSION.read_dword(_WSEARCH_SVC, "Start") == 4
+
+
+# ── Disable Search Highlights/Tips (User) ────────────────────────────────────
+
+
+def _apply_disable_search_highlights_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable search highlights / tips")
+    SESSION.backup([_SEARCH_SETTINGS], "SearchHighlightsTips")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled", 0)
+
+
+def _remove_disable_search_highlights_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled", 1)
+
+
+def _detect_disable_search_highlights_tips() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled") == 0
+
+
+# ── Disable Cloud Content in Windows Search ──────────────────────────────────
+
+
+def _apply_disable_cloud_search_content(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable cloud content in Windows Search")
+    SESSION.backup([_SEARCH_SETTINGS], "CloudSearchContent")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsAADCloudSearchEnabled", 0)
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsMSACloudSearchEnabled", 0)
+
+
+def _remove_disable_cloud_search_content(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsAADCloudSearchEnabled", 1)
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsMSACloudSearchEnabled", 1)
+
+
+def _detect_disable_cloud_search_content() -> bool:
+    return (
+        SESSION.read_dword(_SEARCH_SETTINGS, "IsAADCloudSearchEnabled") == 0
+        and SESSION.read_dword(_SEARCH_SETTINGS, "IsMSACloudSearchEnabled") == 0
+    )
+
+
+# ── Disable Enhanced Search (Find My Files) ──────────────────────────────────
+
+
+def _apply_disable_find_my_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable enhanced search (Find My Files)")
+    SESSION.backup([_SEARCH_SETTINGS], "FindMyFiles")
+    SESSION.set_dword(_SEARCH_SETTINGS, "SearchMode", 0)
+
+
+def _remove_disable_find_my_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_SETTINGS, "SearchMode", 1)
+
+
+def _detect_disable_find_my_files() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "SearchMode") == 0
+
+
+# ── Disable Windows Search Location Access ───────────────────────────────────
+
+
+def _apply_disable_search_location(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable location access for Windows Search")
+    SESSION.backup([_SEARCH_CU], "SearchLocation")
+    SESSION.set_dword(_SEARCH_CU, "AllowSearchToUseLocation", 0)
+
+
+def _remove_disable_search_location(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_CU, "AllowSearchToUseLocation", 1)
+
+
+def _detect_disable_search_location() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "AllowSearchToUseLocation") == 0
+
+
+# ── Disable Search Highlights (Dynamic Box) ───────────────────────────────
+
+
+def _apply_disable_search_highlights_box(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable dynamic search box highlights")
+    SESSION.backup([_SEARCH_SETTINGS], "SearchHighlightsBox")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled", 0)
+
+
+def _remove_disable_search_highlights_box(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled", 1)
+
+
+def _detect_disable_search_highlights_box() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled") == 0
+
+
+# ── Disable Cloud Search (Policy) ─────────────────────────────────────────
+
+
+def _apply_disable_cloud_search_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Search: disable cloud search via policy")
+    SESSION.backup([_SEARCH], "CloudSearchPolicy")
+    SESSION.set_dword(_SEARCH, "AllowCloudSearch", 0)
+
+
+def _remove_disable_cloud_search_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "AllowCloudSearch")
+
+
+def _detect_disable_cloud_search_policy() -> bool:
+    return SESSION.read_dword(_SEARCH, "AllowCloudSearch") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-cortana-lockscreen",
         label="Disable Cortana on Lock Screen",
@@ -235,5 +376,107 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_SEARCH_CU],
         description="Disables cloud content and location-based results in Windows search.",
         tags=["search", "cloud", "privacy"],
+    ),
+    TweakDef(
+        id="disable-search-indexing",
+        label="Disable Windows Search Indexing Service",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_indexing,
+        remove_fn=_remove_disable_search_indexing,
+        detect_fn=_detect_disable_search_indexing,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WSEARCH_SVC],
+        description="Disables the Windows Search indexing service entirely.",
+        tags=["search", "cortana", "indexing", "performance"],
+    ),
+    TweakDef(
+        id="disable-search-highlights-dynamic",
+        label="Disable Dynamic Search Highlights",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_highlights_tips,
+        remove_fn=_remove_disable_search_highlights_tips,
+        detect_fn=_detect_disable_search_highlights_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description="Disables dynamic search highlights and tips in the search box.",
+        tags=["search", "cortana", "highlights", "ux"],
+    ),
+    TweakDef(
+        id="disable-cloud-search-aadmsa",
+        label="Disable AAD/MSA Cloud Search",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_cloud_search_content,
+        remove_fn=_remove_disable_cloud_search_content,
+        detect_fn=_detect_disable_cloud_search_content,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description=(
+            "Disables AAD and MSA cloud search content "
+            "in Windows Search results."
+        ),
+        tags=["search", "cortana", "cloud", "privacy"],
+    ),
+    TweakDef(
+        id="disable-find-my-files",
+        label="Disable Enhanced Search (Find My Files)",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_find_my_files,
+        remove_fn=_remove_disable_find_my_files,
+        detect_fn=_detect_disable_find_my_files,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description="Sets search mode to classic, disabling enhanced Find My Files indexing.",
+        tags=["search", "cortana", "indexing", "privacy"],
+    ),
+    TweakDef(
+        id="disable-search-location",
+        label="Disable Windows Search Location Access",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_location,
+        remove_fn=_remove_disable_search_location,
+        detect_fn=_detect_disable_search_location,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description="Prevents Windows Search from using device location.",
+        tags=["search", "cortana", "location", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-search-highlights",
+        label="Disable Search Highlights",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_highlights_box,
+        remove_fn=_remove_disable_search_highlights_box,
+        detect_fn=_detect_disable_search_highlights_box,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description=(
+            "Disables search highlights (trending searches, news) in the "
+            "Windows Search box. Reduces distractions and network traffic. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["cortana", "search", "highlights", "performance"],
+    ),
+    TweakDef(
+        id="cortana-disable-cloud-search",
+        label="Disable Cloud Search",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_cloud_search_policy,
+        remove_fn=_remove_disable_cloud_search_policy,
+        detect_fn=_detect_disable_cloud_search_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SEARCH],
+        description=(
+            "Disables cloud content in Windows Search results. Only shows "
+            "local files and settings. Default: Enabled. "
+            "Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "cloud", "privacy"],
     ),
 ]

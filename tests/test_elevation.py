@@ -5,8 +5,6 @@ from __future__ import annotations
 import subprocess
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from regilattice.elevation import is_admin, request_elevation, run_elevated
 
 # ── is_admin ─────────────────────────────────────────────────────────────────
@@ -110,7 +108,7 @@ class TestRunElevated:
     def test_non_admin_uses_powershell(self, mock_run: MagicMock, _admin: MagicMock) -> None:
         expected = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
         mock_run.return_value = expected
-        result = run_elevated(["reg", "query", "HKCU"])
+        run_elevated(["reg", "query", "HKCU"])
         # Should call powershell with Start-Process -Verb RunAs
         call_args = mock_run.call_args
         cmd_list = call_args[0][0]

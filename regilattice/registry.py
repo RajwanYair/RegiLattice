@@ -10,10 +10,10 @@ import os
 import platform
 import re
 import subprocess
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable, Optional, Tuple
 
 if os.name == "nt":
     import winreg
@@ -43,7 +43,7 @@ def _ensure_windows() -> None:
         raise OSError("Registry tweaks require Windows.")
 
 
-def _split_root(path: str) -> Tuple[int, str]:
+def _split_root(path: str) -> tuple[int, str]:
     """Split a registry path into (root-handle, subkey)."""
     _ensure_windows()
     for prefix, root in _ROOTS.items():
@@ -70,15 +70,18 @@ class RegistrySession:
     base_dir: Path
     _dry_run: bool = field(default=False, repr=False)
 
+    def __post_init__(self) -> None:
+        self._log_path = self.base_dir / "RegiLattice.log"
+
     # -- Logging --
 
     @property
     def log_path(self) -> Path:
-        return self.base_dir / "RegiLattice.log"
+        return self._log_path
 
     def log(self, message: str) -> None:
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with self.log_path.open("a", encoding="utf-8") as fh:
+        with self._log_path.open("a", encoding="utf-8") as fh:
             fh.write(f"{ts} : {message}\n")
 
     # -- Backup --
@@ -90,7 +93,7 @@ class RegistrySession:
         """
         _ensure_windows()
         ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        onedrive = os.environ.get("OneDrive", "")
+        onedrive = os.environ.get("ONEDRIVE", "")
         backup_root = (
             Path(onedrive) / "RegistryBackups"
             if onedrive and Path(onedrive).is_dir()
@@ -120,7 +123,7 @@ class RegistrySession:
     def set_value(
         self,
         path: str,
-        name: Optional[str],
+        name: str | None,
         value: object,
         reg_type: int,
     ) -> None:
@@ -129,14 +132,14 @@ class RegistrySession:
             self.log(f"[DRY-RUN] set_value {path} {name!r} = {value!r}")
             return
         root, subkey = _split_root(path)
-        with winreg.CreateKey(root, subkey) as handle:  # type: ignore[arg-type]
-            winreg.SetValueEx(handle, name or "", 0, reg_type, value)  # type: ignore[arg-type]
+        with winreg.CreateKey(root, subkey) as handle:
+            winreg.SetValueEx(handle, name or "", 0, reg_type, value)  # type: ignore[call-overload]
 
     def set_dword(self, path: str, name: str, value: int) -> None:
-        self.set_value(path, name, value, winreg.REG_DWORD)  # type: ignore[union-attr]
+        self.set_value(path, name, value, winreg.REG_DWORD)
 
-    def set_string(self, path: str, name: Optional[str], value: str) -> None:
-        self.set_value(path, name, value, winreg.REG_SZ)  # type: ignore[union-attr]
+    def set_string(self, path: str, name: str | None, value: str) -> None:
+        self.set_value(path, name, value, winreg.REG_SZ)
 
     # -- Registry delete primitives --
 
@@ -178,7 +181,7 @@ class RegistrySession:
             return
         root, subkey = _split_root(path)
         try:
-            with winreg.OpenKey(root, subkey, 0, winreg.KEY_SET_VALUE) as handle:  # type: ignore[arg-type]
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_SET_VALUE) as handle:
                 winreg.DeleteValue(handle, name)
         except FileNotFoundError:
             return
@@ -192,30 +195,30 @@ class RegistrySession:
         _ensure_windows()
         try:
             root, subkey = _split_root(path)
-            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ):  # type: ignore[arg-type]
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ):
                 return True
         except (FileNotFoundError, OSError):
             return False
 
-    def read_dword(self, path: str, name: str) -> Optional[int]:
+    def read_dword(self, path: str, name: str) -> int | None:
         """Return a DWORD value or None if missing."""
         _ensure_windows()
         try:
             root, subkey = _split_root(path)
-            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:  # type: ignore[arg-type]
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
                 val, typ = winreg.QueryValueEx(handle, name)
-                return int(val) if typ == winreg.REG_DWORD else None  # type: ignore[union-attr]
+                return int(val) if typ == winreg.REG_DWORD else None
         except (FileNotFoundError, OSError):
             return None
 
-    def read_string(self, path: str, name: str) -> Optional[str]:
+    def read_string(self, path: str, name: str) -> str | None:
         """Return a REG_SZ value or None if missing."""
         _ensure_windows()
         try:
             root, subkey = _split_root(path)
-            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:  # type: ignore[arg-type]
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
                 val, typ = winreg.QueryValueEx(handle, name)
-                return str(val) if typ == winreg.REG_SZ else None  # type: ignore[union-attr]
+                return str(val) if typ == winreg.REG_SZ else None
         except (FileNotFoundError, OSError):
             return None
 
@@ -234,7 +237,7 @@ def assert_admin(required: bool = True) -> None:
     _ensure_windows()
     import ctypes
 
-    if not bool(ctypes.windll.shell32.IsUserAnAdmin()):  # type: ignore[attr-defined]
+    if not bool(ctypes.windll.shell32.IsUserAnAdmin()):
         raise AdminRequirementError(
             "Administrator privileges are required for this operation."
         )

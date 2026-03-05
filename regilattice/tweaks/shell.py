@@ -1,9 +1,8 @@
-"""Shell tweaks — Take Ownership context menu."""
+"""Shell tweaks — context-menu helpers & Explorer shell settings."""
 
 from __future__ import annotations
 
 import subprocess
-from typing import List
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -33,9 +32,9 @@ _CMD_DRIVE = (
 
 
 def _add_context_entry(base: str, command: str) -> None:
-    _run = lambda a: subprocess.run(  # noqa: E731
-        ["reg", *a], check=True, capture_output=True, text=True
-    )
+    def _run(a: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["reg", *a], check=True, capture_output=True, text=True)
+
     _run(["add", base, "/f"])
     _run(["add", base, "/ve", "/d", "Take Ownership", "/f"])
     _run(["add", base, "/v", "NoWorkingDirectory", "/d", "", "/f"])
@@ -86,9 +85,10 @@ def _apply_cmd_here(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Shell: add 'Open Command Prompt Here' context menu")
     SESSION.backup(_CMD_KEYS, "CmdHere")
-    _run = lambda a: subprocess.run(
-        ["reg", *a], check=True, capture_output=True, text=True
-    )
+
+    def _run(a: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["reg", *a], check=True, capture_output=True, text=True)
+
     _run(["add", _CMD_HERE_KEY, "/ve", "/d", "Open Command Prompt Here", "/f"])
     _run(["add", _CMD_HERE_KEY, "/v", "Icon", "/d", "cmd.exe", "/f"])
     _run(["add", _CMD_HERE_CMD, "/ve", "/d", 'cmd.exe /k cd /d "%V"', "/f"])
@@ -117,9 +117,10 @@ def _apply_hash_context(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Shell: add 'Get File Hash' context menu")
     SESSION.backup(_HASH_KEYS, "FileHash")
-    _run = lambda a: subprocess.run(
-        ["reg", *a], check=True, capture_output=True, text=True
-    )
+
+    def _run(a: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["reg", *a], check=True, capture_output=True, text=True)
+
     _run(["add", _HASH_KEY, "/ve", "/d", "Get File Hash (SHA256)", "/f"])
     _run(["add", _HASH_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
     ps_cmd = (
@@ -143,9 +144,241 @@ def _detect_hash_context() -> bool:
     return SESSION.key_exists(_HASH_KEY)
 
 
+# ── Open PowerShell Here (Context Menu) ──────────────────────────────────────────────────────
+
+_PS_HERE_KEY = r"HKEY_CLASSES_ROOT\Directory\Background\shell\powershell_here"
+_PS_HERE_CMD = rf"{_PS_HERE_KEY}\command"
+_PS_HERE_KEYS = [_PS_HERE_KEY, _PS_HERE_CMD]
+
+
+def _apply_ps_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: add 'Open PowerShell Here' context menu")
+    SESSION.backup(_PS_HERE_KEYS, "PsHere")
+
+    def _run(a: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["reg", *a], check=True, capture_output=True, text=True)
+
+    _run(["add", _PS_HERE_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
+    _run(["add", _PS_HERE_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
+    _run(["add", _PS_HERE_CMD, "/ve", "/d", 'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+
+
+def _remove_ps_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    subprocess.run(["reg", "delete", _PS_HERE_KEY, "/f"], check=False, capture_output=True)
+
+
+def _detect_ps_here() -> bool:
+    return SESSION.key_exists(_PS_HERE_KEY)
+
+
+# ── Open Windows Terminal Here (Context Menu) ────────────────────────────────────────────────
+
+_WT_HERE_KEY = r"HKEY_CLASSES_ROOT\Directory\Background\shell\wt_here"
+_WT_HERE_CMD = rf"{_WT_HERE_KEY}\command"
+
+
+def _apply_wt_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: add 'Open Windows Terminal Here' context menu")
+    SESSION.backup([_WT_HERE_KEY], "WtHere")
+
+    def _run(a: list[str]) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["reg", *a], check=True, capture_output=True, text=True)
+
+    _run(["add", _WT_HERE_KEY, "/ve", "/d", "Open Terminal Here", "/f"])
+    _run(["add", _WT_HERE_KEY, "/v", "Icon", "/d", "wt.exe", "/f"])
+    _run(["add", _WT_HERE_CMD, "/ve", "/d", 'wt.exe -d "%V"', "/f"])
+
+
+def _remove_wt_here(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    subprocess.run(["reg", "delete", _WT_HERE_KEY, "/f"], check=False, capture_output=True)
+
+
+def _detect_wt_here() -> bool:
+    return SESSION.key_exists(_WT_HERE_KEY)
+
+
+# ── Restore Classic Context Menu (Win11) ─────────────────────────────────────
+
+_CLASSIC_CTX_KEY = (
+    r"HKEY_CURRENT_USER\Software\Classes\CLSID"
+    r"\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+)
+
+
+def _apply_classic_context_menu(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: restore Windows 10 classic context menu")
+    SESSION.backup([_CLASSIC_CTX_KEY], "ClassicContextMenu")
+    SESSION.set_string(_CLASSIC_CTX_KEY, None, "")
+
+
+def _remove_classic_context_menu(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_tree(
+        r"HKEY_CURRENT_USER\Software\Classes\CLSID"
+        r"\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}"
+    )
+
+
+def _detect_classic_context_menu() -> bool:
+    return SESSION.key_exists(_CLASSIC_CTX_KEY)
+
+
+# ── Disable Recent Files in Quick Access ─────────────────────────────────────
+
+_EXPLORER_CU = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
+)
+
+
+def _apply_disable_recent_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable recent files in Quick Access")
+    SESSION.backup([_EXPLORER_CU], "DisableRecentFiles")
+    SESSION.set_dword(_EXPLORER_CU, "ShowRecent", 0)
+
+
+def _remove_disable_recent_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_EXPLORER_CU], "DisableRecentFiles_Remove")
+    SESSION.set_dword(_EXPLORER_CU, "ShowRecent", 1)
+
+
+def _detect_disable_recent_files() -> bool:
+    return SESSION.read_dword(_EXPLORER_CU, "ShowRecent") == 0
+
+
+# ── Disable Frequent Folders in Quick Access ─────────────────────────────────
+
+
+def _apply_disable_frequent_folders(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable frequent folders in Quick Access")
+    SESSION.backup([_EXPLORER_CU], "DisableFrequentFolders")
+    SESSION.set_dword(_EXPLORER_CU, "ShowFrequent", 0)
+
+
+def _remove_disable_frequent_folders(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_EXPLORER_CU], "DisableFrequentFolders_Remove")
+    SESSION.set_dword(_EXPLORER_CU, "ShowFrequent", 1)
+
+
+def _detect_disable_frequent_folders() -> bool:
+    return SESSION.read_dword(_EXPLORER_CU, "ShowFrequent") == 0
+
+
+# ── Enable Compact View in File Explorer ─────────────────────────────────────
+
+_ADV = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+)
+
+
+def _apply_compact_file_explorer(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: enable compact view in File Explorer")
+    SESSION.backup([_ADV], "CompactFileExplorer")
+    SESSION.set_dword(_ADV, "UseCompactMode", 1)
+
+
+def _remove_compact_file_explorer(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "CompactFileExplorer_Remove")
+    SESSION.set_dword(_ADV, "UseCompactMode", 0)
+
+
+def _detect_compact_file_explorer() -> bool:
+    return SESSION.read_dword(_ADV, "UseCompactMode") == 1
+
+
+# ── Show File Extensions in Explorer ─────────────────────────────────────────
+
+
+def _apply_show_file_extensions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: show file extensions")
+    SESSION.backup([_ADV], "ShowFileExtensions")
+    SESSION.set_dword(_ADV, "HideFileExt", 0)
+
+
+def _remove_show_file_extensions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "ShowFileExtensions_Remove")
+    SESSION.set_dword(_ADV, "HideFileExt", 1)
+
+
+def _detect_show_file_extensions() -> bool:
+    return SESSION.read_dword(_ADV, "HideFileExt") == 0
+
+
+# ── Show Hidden Files in Explorer ────────────────────────────────────────────
+
+
+def _apply_show_hidden_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: show hidden files")
+    SESSION.backup([_ADV], "ShowHiddenFiles")
+    SESSION.set_dword(_ADV, "Hidden", 1)
+
+
+def _remove_show_hidden_files(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "ShowHiddenFiles_Remove")
+    SESSION.set_dword(_ADV, "Hidden", 2)
+
+
+def _detect_show_hidden_files() -> bool:
+    return SESSION.read_dword(_ADV, "Hidden") == 1
+
+
+# ── Disable Aero Shake ───────────────────────────────────────────────────────
+
+
+def _apply_disable_aero_shake(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable Aero Shake")
+    SESSION.backup([_ADV], "DisableAeroShake")
+    SESSION.set_dword(_ADV, "DisallowShaking", 1)
+
+
+def _remove_disable_aero_shake(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "DisableAeroShake_Remove")
+    SESSION.delete_value(_ADV, "DisallowShaking")
+
+
+def _detect_disable_aero_shake() -> bool:
+    return SESSION.read_dword(_ADV, "DisallowShaking") == 1
+
+
+# ── Disable Snap Assist Flyout ───────────────────────────────────────────────
+
+
+def _apply_disable_snap_flyout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disable Snap Assist flyout")
+    SESSION.backup([_ADV], "DisableSnapFlyout")
+    SESSION.set_dword(_ADV, "SnapAssist", 0)
+
+
+def _remove_disable_snap_flyout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "DisableSnapFlyout_Remove")
+    SESSION.set_dword(_ADV, "SnapAssist", 1)
+
+
+def _detect_disable_snap_flyout() -> bool:
+    return SESSION.read_dword(_ADV, "SnapAssist") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="take-ownership",
         label="Take Ownership Context Menu",
@@ -187,5 +420,148 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_HASH_KEYS,
         description="Adds 'Get File Hash (SHA256)' to the right-click menu for any file.",
         tags=["shell", "context-menu", "hash", "security"],
+    ),
+    TweakDef(
+        id="open-ps-here",
+        label="'Open PowerShell Here' Context Menu",
+        category="Shell",
+        apply_fn=_apply_ps_here,
+        remove_fn=_remove_ps_here,
+        detect_fn=_detect_ps_here,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_PS_HERE_KEYS,
+        description="Adds 'Open PowerShell Here' to the folder background context menu.",
+        tags=["shell", "context-menu", "powershell"],
+    ),
+    TweakDef(
+        id="open-wt-here",
+        label="'Open Terminal Here' Context Menu",
+        category="Shell",
+        apply_fn=_apply_wt_here,
+        remove_fn=_remove_wt_here,
+        detect_fn=_detect_wt_here,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WT_HERE_KEY],
+        description=(
+            "Adds 'Open Terminal Here' to the folder background right-click menu. "
+            "Requires Windows Terminal to be installed."
+        ),
+        tags=["shell", "context-menu", "terminal", "wt"],
+    ),
+    TweakDef(
+        id="shell-classic-context-menu",
+        label="Restore Classic Context Menu (Win11)",
+        category="Shell",
+        apply_fn=_apply_classic_context_menu,
+        remove_fn=_remove_classic_context_menu,
+        detect_fn=_detect_classic_context_menu,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLASSIC_CTX_KEY],
+        description=(
+            "Restores the full Windows 10-style right-click context menu on "
+            "Windows 11 by disabling the modern truncated menu."
+        ),
+        tags=["shell", "context-menu", "win11", "classic"],
+    ),
+    TweakDef(
+        id="shell-disable-recent-files",
+        label="Disable Recent Files in Quick Access",
+        category="Shell",
+        apply_fn=_apply_disable_recent_files,
+        remove_fn=_remove_disable_recent_files,
+        detect_fn=_detect_disable_recent_files,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_CU],
+        description="Prevents recently opened files from appearing in Quick Access.",
+        tags=["shell", "explorer", "privacy", "recent"],
+    ),
+    TweakDef(
+        id="disable-frequent-folders",
+        label="Disable Frequent Folders in Quick Access",
+        category="Shell",
+        apply_fn=_apply_disable_frequent_folders,
+        remove_fn=_remove_disable_frequent_folders,
+        detect_fn=_detect_disable_frequent_folders,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_CU],
+        description="Prevents frequently used folders from appearing in Quick Access.",
+        tags=["shell", "explorer", "privacy", "frequent"],
+    ),
+    TweakDef(
+        id="compact-file-explorer",
+        label="Enable Compact View in File Explorer",
+        category="Shell",
+        apply_fn=_apply_compact_file_explorer,
+        remove_fn=_remove_compact_file_explorer,
+        detect_fn=_detect_compact_file_explorer,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description="Enables the compact layout in File Explorer, reducing padding between items.",
+        tags=["shell", "explorer", "compact", "layout"],
+    ),
+    TweakDef(
+        id="shell-show-file-extensions",
+        label="Show File Extensions in Explorer",
+        category="Shell",
+        apply_fn=_apply_show_file_extensions,
+        remove_fn=_remove_show_file_extensions,
+        detect_fn=_detect_show_file_extensions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description="Displays file extensions (e.g. .txt, .exe) in File Explorer.",
+        tags=["shell", "explorer", "extensions", "visibility"],
+    ),
+    TweakDef(
+        id="shell-show-hidden-files",
+        label="Show Hidden Files in Explorer",
+        category="Shell",
+        apply_fn=_apply_show_hidden_files,
+        remove_fn=_remove_show_hidden_files,
+        detect_fn=_detect_show_hidden_files,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description="Shows hidden files and folders in File Explorer.",
+        tags=["shell", "explorer", "hidden", "visibility"],
+    ),
+    TweakDef(
+        id="shell-disable-aero-shake",
+        label="Disable Aero Shake",
+        category="Shell",
+        apply_fn=_apply_disable_aero_shake,
+        remove_fn=_remove_disable_aero_shake,
+        detect_fn=_detect_disable_aero_shake,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables Aero Shake (shaking a window to minimize others). "
+            "Prevents accidental minimization. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["shell", "aero", "shake", "ux"],
+    ),
+    TweakDef(
+        id="shell-disable-snap-flyout",
+        label="Disable Snap Assist Flyout",
+        category="Shell",
+        apply_fn=_apply_disable_snap_flyout,
+        remove_fn=_remove_disable_snap_flyout,
+        detect_fn=_detect_disable_snap_flyout,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables the Snap Assist suggestion flyout when snapping windows. "
+            "Windows still snap but without the layout suggestion popup. "
+            "Default: Enabled. Recommended: Disabled for power users."
+        ),
+        tags=["shell", "snap", "flyout", "performance"],
     ),
 ]

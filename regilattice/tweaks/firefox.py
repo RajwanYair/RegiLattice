@@ -6,14 +6,13 @@ These correspond to ``policies.json`` entries but set via registry.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
 _FF_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox"
+_FF_DOH = rf"{_FF_POLICY}\DNSOverHTTPS"
 _FF_KEYS = [_FF_POLICY]
 
 
@@ -128,9 +127,163 @@ def _detect_disable_ff_default_check() -> bool:
     return SESSION.read_dword(_FF_POLICY, "DontCheckDefaultBrowser") == 1
 
 
+# ── Disable Firefox Shield Studies ─────────────────────────────────────────
+
+
+def _apply_disable_ff_studies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable Shield studies")
+    SESSION.backup(_FF_KEYS, "FirefoxStudies")
+    SESSION.set_dword(_FF_POLICY, "DisableFirefoxStudies", 1)
+
+
+def _remove_disable_ff_studies(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableFirefoxStudies")
+
+
+def _detect_disable_ff_studies() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableFirefoxStudies") == 1
+
+
+# ── Disable Firefox Feedback Prompts ───────────────────────────────────────
+
+
+def _apply_disable_ff_feedback(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable feedback prompts")
+    SESSION.backup(_FF_KEYS, "FirefoxFeedback")
+    SESSION.set_dword(_FF_POLICY, "DisableFeedbackCommands", 1)
+
+
+def _remove_disable_ff_feedback(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableFeedbackCommands")
+
+
+def _detect_disable_ff_feedback() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableFeedbackCommands") == 1
+
+
+# ── Disable Firefox Captive Portal Detection ──────────────────────────────
+
+
+def _apply_disable_ff_captive_portal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable captive portal detection")
+    SESSION.backup(_FF_KEYS, "FirefoxCaptivePortal")
+    SESSION.set_dword(_FF_POLICY, "CaptivePortal", 0)
+
+
+def _remove_disable_ff_captive_portal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "CaptivePortal")
+
+
+def _detect_disable_ff_captive_portal() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "CaptivePortal") == 0
+
+
+# ── Enable DNS-over-HTTPS ──────────────────────────────────────────────────
+
+
+def _apply_ff_dns_over_https(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: enable DNS-over-HTTPS")
+    SESSION.backup([_FF_DOH], "FirefoxDNSOverHTTPS")
+    SESSION.set_dword(_FF_DOH, "Enabled", 1)
+    SESSION.set_string(_FF_DOH, "ProviderURL", "https://mozilla.cloudflare-dns.com/dns-query")
+
+
+def _remove_ff_dns_over_https(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_DOH, "Enabled")
+    SESSION.delete_value(_FF_DOH, "ProviderURL")
+
+
+def _detect_ff_dns_over_https() -> bool:
+    return SESSION.read_dword(_FF_DOH, "Enabled") == 1
+
+
+# ── Disable Extension Recommendations ─────────────────────────────────────
+
+
+def _apply_disable_ff_ext_recommendations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable extension recommendations")
+    SESSION.backup(_FF_KEYS, "FirefoxExtRec")
+    SESSION.set_dword(_FF_POLICY, "ExtensionRecommendations", 0)
+
+
+def _remove_disable_ff_ext_recommendations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "ExtensionRecommendations")
+
+
+def _detect_disable_ff_ext_recommendations() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "ExtensionRecommendations") == 0
+
+
+# ── Disable Password Reveal Button ────────────────────────────────────────
+
+
+def _apply_disable_ff_password_reveal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable password reveal button")
+    SESSION.backup(_FF_KEYS, "FirefoxPasswordReveal")
+    SESSION.set_dword(_FF_POLICY, "DisablePasswordReveal", 1)
+
+
+def _remove_disable_ff_password_reveal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisablePasswordReveal")
+
+
+def _detect_disable_ff_password_reveal() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisablePasswordReveal") == 1
+
+
+# ── Disable Firefox Telemetry (Policy Only) ─────────────────────────────────
+
+
+def _apply_ff_telemetry_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable telemetry via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxTelemetryPolicy")
+    SESSION.set_dword(_FF_POLICY, "DisableTelemetry", 1)
+
+
+def _remove_ff_telemetry_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableTelemetry")
+
+
+def _detect_ff_telemetry_policy() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableTelemetry") == 1
+
+
+# ── Disable Firefox Default Browser Check (Policy Only) ──────────────────────
+
+
+def _apply_ff_default_check_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable default browser check via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxDefaultCheckPolicy")
+    SESSION.set_dword(_FF_POLICY, "DontCheckDefaultBrowser", 1)
+
+
+def _remove_ff_default_check_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DontCheckDefaultBrowser")
+
+
+def _detect_ff_default_check_policy() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DontCheckDefaultBrowser") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-firefox-telemetry",
         label="Disable Firefox Telemetry & Studies",
@@ -198,5 +351,119 @@ TWEAKS: List[TweakDef] = [
         registry_keys=_FF_KEYS,
         description="Stops Firefox from asking to be the default browser on startup.",
         tags=["firefox", "browser", "default"],
+    ),
+    TweakDef(
+        id="firefox-disable-studies",
+        label="Disable Firefox Shield Studies",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_studies,
+        remove_fn=_remove_disable_ff_studies,
+        detect_fn=_detect_disable_ff_studies,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables Firefox Shield studies that deploy experimental features.",
+        tags=["firefox", "browser", "studies", "privacy"],
+    ),
+    TweakDef(
+        id="firefox-disable-feedback",
+        label="Disable Firefox Feedback Prompts",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_feedback,
+        remove_fn=_remove_disable_ff_feedback,
+        detect_fn=_detect_disable_ff_feedback,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables feedback prompts and commands in Firefox.",
+        tags=["firefox", "browser", "feedback"],
+    ),
+    TweakDef(
+        id="firefox-disable-captive-portal",
+        label="Disable Firefox Captive Portal Detection",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_captive_portal,
+        remove_fn=_remove_disable_ff_captive_portal,
+        detect_fn=_detect_disable_ff_captive_portal,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables Firefox captive portal detection network requests.",
+        tags=["firefox", "browser", "captive-portal", "network"],
+    ),
+    TweakDef(
+        id="firefox-dns-over-https",
+        label="Enable DNS-over-HTTPS",
+        category="Firefox",
+        apply_fn=_apply_ff_dns_over_https,
+        remove_fn=_remove_ff_dns_over_https,
+        detect_fn=_detect_ff_dns_over_https,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FF_DOH],
+        description=(
+            "Enables DNS-over-HTTPS in Firefox using the Cloudflare resolver."
+        ),
+        tags=["firefox", "browser", "dns", "privacy", "security"],
+    ),
+    TweakDef(
+        id="firefox-disable-extension-recommendations",
+        label="Disable Extension Recommendations",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_ext_recommendations,
+        remove_fn=_remove_disable_ff_ext_recommendations,
+        detect_fn=_detect_disable_ff_ext_recommendations,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables extension recommendations in Firefox.",
+        tags=["firefox", "browser", "extensions", "recommendations"],
+    ),
+    TweakDef(
+        id="firefox-disable-password-reveal",
+        label="Disable Password Reveal Button",
+        category="Firefox",
+        apply_fn=_apply_disable_ff_password_reveal,
+        remove_fn=_remove_disable_ff_password_reveal,
+        detect_fn=_detect_disable_ff_password_reveal,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description="Disables the password reveal button in Firefox login fields.",
+        tags=["firefox", "browser", "password", "security"],
+    ),
+    TweakDef(
+        id="firefox-disable-telemetry",
+        label="Disable Firefox Telemetry",
+        category="Firefox",
+        apply_fn=_apply_ff_telemetry_policy,
+        remove_fn=_remove_ff_telemetry_policy,
+        detect_fn=_detect_ff_telemetry_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables Firefox telemetry data collection via enterprise policy. "
+            "Reduces background network traffic. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["firefox", "telemetry", "privacy", "performance"],
+    ),
+    TweakDef(
+        id="firefox-disable-default-check",
+        label="Disable Firefox Default Browser Check",
+        category="Firefox",
+        apply_fn=_apply_ff_default_check_policy,
+        remove_fn=_remove_ff_default_check_policy,
+        detect_fn=_detect_ff_default_check_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Prevents Firefox from checking if it's the default browser on startup. "
+            "Removes the nag dialog. "
+            "Default: Check enabled. Recommended: Disabled."
+        ),
+        tags=["firefox", "default-browser", "nag"],
     ),
 ]

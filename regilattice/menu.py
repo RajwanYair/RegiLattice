@@ -56,7 +56,6 @@ class Menu:
             pad = " " if idx < 10 else ""
             print(f"  {pad}[{idx:>2}] {tag}  {td.label}")
 
-        n = len(self._tweaks)
         print()
         print(f"  {grn} [A]  Apply All Tweaks{rst}")
         print(f"  {ylw} [R]  Remove All Tweaks{rst}")
@@ -143,7 +142,7 @@ class Menu:
                 break
 
 
-def main(argv: list[str] | None = None) -> int:  # noqa: ARG001
+def main(argv: list[str] | None = None) -> int:
     """Standalone entry point for the interactive menu."""
     menu = Menu()
     menu.loop()

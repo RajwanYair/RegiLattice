@@ -1,0 +1,13 @@
+# Default code owners for all files
+* @aeger
+
+# Tweak modules
+regilattice/tweaks/ @aeger
+
+# Core infrastructure
+regilattice/registry.py @aeger
+regilattice/gui.py @aeger
+regilattice/tweaks/__init__.py @aeger
+
+# CI and documentation
+.github/ @aeger

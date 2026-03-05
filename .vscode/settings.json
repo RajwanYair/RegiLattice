@@ -1,11 +1,11 @@
 {
   // ── Python ──────────────────────────────────────────────────────────
-  "python.defaultInterpreterPath": "C:/Program Files/Python314/python.exe",
+  "python.defaultInterpreterPath": "C:/Users/ryair/AppData/Local/Python/bin/python.exe",
   "python.analysis.typeCheckingMode": "standard",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.diagnosticSeverityOverrides": {
-    "reportMissingModuleSource": "none"
-  },
+  "python.analysis.extraPaths": [
+    "."
+  ],
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "tests",
@@ -13,6 +13,10 @@
     "--tb=short"
   ],
   // ── Ruff (linter + formatter) ───────────────────────────────────────
+  "ruff.path": [],
+  "ruff.lint.args": [
+    "--config=pyproject.toml"
+  ],
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true,
@@ -30,8 +34,13 @@
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "editor.rulers": [
-    100
+    150
   ],
+  // ── Disable built-in linting in favor of ruff ────────────────────────
+  "python.linting.flake8Enabled": false,
+  "python.linting.pylintEnabled": false,
+  "python.linting.mypyEnabled": false,
+  "python.linting.enabled": false,
   "editor.renderWhitespace": "boundary",
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -61,14 +70,44 @@
     "**/dist": true,
     "**/build": true
   },
-  // ── Terminal ─────────────────────────────────────────────────────────
+  // ── Terminal (best shell integration) ────────────────────────────────
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.env.windows": {
-    "PYTHONDONTWRITEBYTECODE": "1"
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "${workspaceFolder}"
   },
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.enablePersistentSessions": true,
   // ── Git ─────────────────────────────────────────────────────────────
   "git.autofetch": true,
   "git.confirmSync": false,
-  "git.enableSmartCommit": true
+  "git.enableSmartCommit": true,
+  // ── Markdown ────────────────────────────────────────────────────────
+  "markdownlint.config": {
+    "MD013": false,
+    "MD033": false,
+    "MD041": false
+  },
+  // ── Pylint (suppress architectural require_admin pattern) ───────────
+  "pylint.args": [
+    "--disable=W0613,W0718,W1510,W1404,W0201"
+  ],
+  // ── Pylance additional suppressions ──────────────────────────────────
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingModuleSource": "none",
+    "reportUnusedParameter": "none",
+    "reportUnusedCallResult": "none",
+    "reportGeneralTypeIssues": "none",
+    "reportCallIssue": "none",
+    "reportReturnType": "none",
+    "reportAttributeAccessIssue": "none",
+    "reportAssignmentType": "none",
+    "reportUntypedFunctionDecorator": "none",
+    "reportOptionalMemberAccess": "none",
+    "reportImplicitStringConcatenation": "none",
+    "reportUnnecessaryTypeIgnoreComment": "none",
+    "reportUnknownMemberType": "none"
+  }
 }

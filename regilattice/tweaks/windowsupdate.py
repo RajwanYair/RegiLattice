@@ -6,8 +6,6 @@ restart policies, and feature update delays.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -189,9 +187,157 @@ def _detect_disable_orchestrator() -> bool:
     return SESSION.read_dword(_ORCHESTRATOR, "Start") == 4
 
 
+# ── Set Active Hours (8 AM - 11 PM) ───────────────────────────────────────────
+
+
+def _apply_active_hours(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: set active hours 8 AM - 11 PM")
+    SESSION.backup([_AU], "ActiveHours")
+    SESSION.set_dword(_AU, "SetActiveHours", 1)
+    SESSION.set_dword(_AU, "ActiveHoursStart", 8)
+    SESSION.set_dword(_AU, "ActiveHoursEnd", 23)
+
+
+def _remove_active_hours(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_AU, "SetActiveHours")
+    SESSION.delete_value(_AU, "ActiveHoursStart")
+    SESSION.delete_value(_AU, "ActiveHoursEnd")
+
+
+def _detect_active_hours() -> bool:
+    return SESSION.read_dword(_AU, "SetActiveHours") == 1
+
+
+# ── Disable MSRT (Malicious Software Removal Tool) ───────────────────────────
+
+_MSRT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"
+
+
+def _apply_disable_msrt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: disable MSRT delivery")
+    SESSION.backup([_MSRT], "MSRT")
+    SESSION.set_dword(_MSRT, "DontOfferThroughWUAU", 1)
+
+
+def _remove_disable_msrt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MSRT, "DontOfferThroughWUAU")
+
+
+def _detect_disable_msrt() -> bool:
+    return SESSION.read_dword(_MSRT, "DontOfferThroughWUAU") == 1
+
+
+# ── Target Specific Release Version ───────────────────────────────────────────
+
+
+def _apply_target_release(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: pin to Windows 11 24H2")
+    SESSION.backup([_WU], "TargetRelease")
+    SESSION.set_dword(_WU, "TargetReleaseVersion", 1)
+    SESSION.set_string(_WU, "TargetReleaseVersionInfo", "24H2")
+    SESSION.set_string(_WU, "ProductVersion", "Windows 11")
+
+
+def _remove_target_release(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU, "TargetReleaseVersion")
+    SESSION.delete_value(_WU, "TargetReleaseVersionInfo")
+    SESSION.delete_value(_WU, "ProductVersion")
+
+
+def _detect_target_release() -> bool:
+    return SESSION.read_dword(_WU, "TargetReleaseVersion") == 1
+
+
+# ── Disable Windows Store Auto-Update ─────────────────────────────────────────
+
+_STORE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"
+
+
+def _apply_disable_store_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: disable Store app auto-updates")
+    SESSION.backup([_STORE], "StoreUpdate")
+    SESSION.set_dword(_STORE, "AutoDownload", 2)  # 2 = Always off
+
+
+def _remove_disable_store_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_STORE, "AutoDownload")
+
+
+def _detect_disable_store_updates() -> bool:
+    return SESSION.read_dword(_STORE, "AutoDownload") == 2
+
+
+# ── Disable Update Restart Notifications ──────────────────────────────────────
+
+
+def _apply_disable_update_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: suppress restart notifications")
+    SESSION.backup([_AU], "UpdateNotify")
+    SESSION.set_dword(_AU, "NoAutoRebootWithLoggedOnUsers", 1)
+    SESSION.set_dword(_AU, "SetAutoRestartNotificationDisable", 1)
+
+
+def _remove_disable_update_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_AU, "SetAutoRestartNotificationDisable")
+
+
+def _detect_disable_update_notify() -> bool:
+    return SESSION.read_dword(_AU, "SetAutoRestartNotificationDisable") == 1
+
+
+# ── Disable Delivery Optimization Upload ─────────────────────────────────────
+
+
+def _apply_disable_do_upload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: disable Delivery Optimization upload bandwidth")
+    SESSION.backup([_DO], "DOUploadDisable")
+    SESSION.set_dword(_DO, "DOMaxUploadBandwidth", 0)
+
+
+def _remove_disable_do_upload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DO, "DOMaxUploadBandwidth")
+
+
+def _detect_disable_do_upload() -> bool:
+    return SESSION.read_dword(_DO, "DOMaxUploadBandwidth") == 0
+
+
+# ── Disable Windows Update Auto-Restart ──────────────────────────────────────
+
+
+def _apply_wu_no_auto_restart(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows Update: block auto-restart with logged-on users")
+    SESSION.backup([_AU], "WUNoAutoRestart")
+    SESSION.set_dword(_AU, "NoAutoRebootWithLoggedOnUsers", 1)
+    SESSION.set_dword(_AU, "AlwaysAutoRebootAtScheduledTime", 0)
+
+
+def _remove_wu_no_auto_restart(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_AU, "NoAutoRebootWithLoggedOnUsers")
+    SESSION.delete_value(_AU, "AlwaysAutoRebootAtScheduledTime")
+
+
+def _detect_wu_no_auto_restart() -> bool:
+    return SESSION.read_dword(_AU, "NoAutoRebootWithLoggedOnUsers") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-delivery-optimization",
         label="Disable Delivery Optimization (P2P)",
@@ -307,5 +453,104 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_ORCHESTRATOR],
         description="Disables the Update Orchestrator Service (UsoSvc) that manages update scans.",
         tags=["update", "service", "orchestrator"],
+    ),
+    TweakDef(
+        id="set-active-hours",
+        label="Set Active Hours (8 AM - 11 PM)",
+        category="Windows Update",
+        apply_fn=_apply_active_hours,
+        remove_fn=_remove_active_hours,
+        detect_fn=_detect_active_hours,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AU],
+        description="Sets Windows Update active hours to 8 AM - 11 PM to prevent restart during work.",
+        tags=["update", "active-hours", "restart"],
+    ),
+    TweakDef(
+        id="disable-msrt",
+        label="Disable MSRT Delivery",
+        category="Windows Update",
+        apply_fn=_apply_disable_msrt,
+        remove_fn=_remove_disable_msrt,
+        detect_fn=_detect_disable_msrt,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MSRT],
+        description="Prevents the Malicious Software Removal Tool from being offered via Windows Update.",
+        tags=["update", "msrt", "security"],
+    ),
+    TweakDef(
+        id="target-release-version",
+        label="Pin to Windows 11 24H2",
+        category="Windows Update",
+        apply_fn=_apply_target_release,
+        remove_fn=_remove_target_release,
+        detect_fn=_detect_target_release,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU],
+        description="Pins the device to Windows 11 24H2 to prevent unwanted feature updates.",
+        tags=["update", "feature", "pin", "24H2"],
+    ),
+    TweakDef(
+        id="disable-store-auto-update",
+        label="Disable Store App Auto-Updates",
+        category="Windows Update",
+        apply_fn=_apply_disable_store_updates,
+        remove_fn=_remove_disable_store_updates,
+        detect_fn=_detect_disable_store_updates,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_STORE],
+        description="Disables automatic app updates from the Microsoft Store.",
+        tags=["update", "store", "apps"],
+    ),
+    TweakDef(
+        id="disable-update-notifications",
+        label="Suppress Update Restart Notifications",
+        category="Windows Update",
+        apply_fn=_apply_disable_update_notify,
+        remove_fn=_remove_disable_update_notify,
+        detect_fn=_detect_disable_update_notify,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AU],
+        description="Suppresses the nagging restart-required notifications from Windows Update.",
+        tags=["update", "notifications", "restart"],
+    ),
+    TweakDef(
+        id="wu-disable-do-upload",
+        label="Disable Delivery Optimization Upload",
+        category="Windows Update",
+        apply_fn=_apply_disable_do_upload,
+        remove_fn=_remove_disable_do_upload,
+        detect_fn=_detect_disable_do_upload,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DO],
+        description=(
+            "Disables Delivery Optimization peer-to-peer upload. Prevents your PC from "
+            "serving update files to other PCs. Sets upload bandwidth to zero. "
+            "Default: Unlimited. Recommended: Disabled."
+        ),
+        tags=["update", "delivery-optimization", "bandwidth", "performance"],
+    ),
+    TweakDef(
+        id="wu-disable-auto-restart",
+        label="Disable Windows Update Auto-Restart",
+        category="Windows Update",
+        apply_fn=_apply_wu_no_auto_restart,
+        remove_fn=_remove_wu_no_auto_restart,
+        detect_fn=_detect_wu_no_auto_restart,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AU],
+        description=(
+            "Prevents Windows Update from automatically restarting the PC while users are "
+            "logged on. Stops unexpected reboots during work. Default: Auto-restart. "
+            "Recommended: Disabled."
+        ),
+        tags=["update", "restart", "reboot", "ux"],
     ),
 ]

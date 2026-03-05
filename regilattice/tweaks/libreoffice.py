@@ -7,8 +7,6 @@ These tweaks cover common registry-accessible settings.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -17,6 +15,9 @@ from regilattice.tweaks import TweakDef
 # Installer-level auto-update (Windows MSI property):
 _LO_MAINTENANCE = r"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice\MaintenanceService"
 _OO_MAINTENANCE = r"HKEY_LOCAL_MACHINE\SOFTWARE\OpenOffice.org\MaintenanceService"
+
+# UNO misc settings (HKCU):
+_LO_UNO_MISC = r"HKEY_CURRENT_USER\Software\LibreOffice\UNO\Misc"
 
 # ── Disable LibreOffice Auto-Update ─────────────────────────────────────────
 
@@ -161,9 +162,142 @@ def _detect_disable_startcenter() -> bool:
     return SESSION.read_dword(_LO_START, "ShowStartCenter") == 0
 
 
+# ── Disable LibreOffice Crash Reporting (UNO) ─────────────────────────────────
+
+
+def _apply_disable_crash_reporting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable crash reporting (UNO)")
+    SESSION.backup([_LO_UNO_MISC], "LOCrashReporting")
+    SESSION.set_string(_LO_UNO_MISC, "CrashReport", "false")
+
+
+def _remove_disable_crash_reporting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "CrashReport", "true")
+
+
+def _detect_disable_crash_reporting() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "CrashReport") == "false"
+
+
+# ── Disable LibreOffice Online Update Check ──────────────────────────────────
+
+
+def _apply_disable_online_update(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable online update check")
+    SESSION.backup([_LO_UNO_MISC], "LOOnlineUpdate")
+    SESSION.set_string(_LO_UNO_MISC, "AutoCheckEnabled", "false")
+
+
+def _remove_disable_online_update(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "AutoCheckEnabled", "true")
+
+
+def _detect_disable_online_update() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "AutoCheckEnabled") == "false"
+
+
+# ── Disable Start Center Recent News ─────────────────────────────────────────
+
+
+def _apply_disable_startcenter_news(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable Start Center recent news")
+    SESSION.backup([_LO_UNO_MISC], "LOStartCenterNews")
+    SESSION.set_string(_LO_UNO_MISC, "StartCenterInfoEnabled", "false")
+
+
+def _remove_disable_startcenter_news(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "StartCenterInfoEnabled", "true")
+
+
+def _detect_disable_startcenter_news() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "StartCenterInfoEnabled") == "false"
+
+
+# ── Disable LibreOffice Macro Execution ──────────────────────────────────────
+
+
+def _apply_disable_macros(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable macro execution (security level 3)")
+    SESSION.backup([_LO_UNO_MISC], "LOMacros")
+    SESSION.set_string(_LO_UNO_MISC, "MacroSecurityLevel", "3")
+
+
+def _remove_disable_macros(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "MacroSecurityLevel", "1")
+
+
+def _detect_disable_macros() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "MacroSecurityLevel") == "3"
+
+
+# ── Disable LibreOffice Send Feedback ────────────────────────────────────────
+
+
+def _apply_disable_send_feedback(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable send feedback")
+    SESSION.backup([_LO_UNO_MISC], "LOSendFeedback")
+    SESSION.set_string(_LO_UNO_MISC, "SendFeedback", "false")
+
+
+def _remove_disable_send_feedback(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "SendFeedback", "true")
+
+
+def _detect_disable_send_feedback() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "SendFeedback") == "false"
+
+
+# ── Disable LibreOffice Java Runtime ─────────────────────────────────────────
+
+
+def _apply_disable_java(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable Java runtime")
+    SESSION.backup([_LO_UNO_MISC], "LOJava")
+    SESSION.set_string(_LO_UNO_MISC, "JavaEnabled", "false")
+
+
+def _remove_disable_java(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "JavaEnabled", "true")
+
+
+def _detect_disable_java() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "JavaEnabled") == "false"
+
+
+# ── Reduce LibreOffice Auto-Save Interval ───────────────────────────────────
+
+
+def _apply_autosave_interval(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: set auto-save interval to 3 minutes")
+    SESSION.backup([_LO_UNO_MISC], "LOAutoSaveInterval")
+    SESSION.set_string(_LO_UNO_MISC, "AutoSaveTimeIntervall", "3")
+
+
+def _remove_autosave_interval(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_UNO_MISC, "AutoSaveTimeIntervall", "10")
+
+
+def _detect_autosave_interval() -> bool:
+    return SESSION.read_string(_LO_UNO_MISC, "AutoSaveTimeIntervall") == "3"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="disable-libreoffice-autoupdate",
         label="Disable LibreOffice Auto-Update",
@@ -250,5 +384,106 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_LO_START],
         description="Opens LibreOffice directly to a new document instead of the Start Center.",
         tags=["libreoffice", "startcenter", "ux"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-crash-reporting",
+        label="Disable LibreOffice Crash Reporting",
+        category="LibreOffice",
+        apply_fn=_apply_disable_crash_reporting,
+        remove_fn=_remove_disable_crash_reporting,
+        detect_fn=_detect_disable_crash_reporting,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description="Disables LibreOffice crash reporting via UNO Misc setting.",
+        tags=["libreoffice", "telemetry", "privacy", "crash"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-online-update",
+        label="Disable LibreOffice Online Update Check",
+        category="LibreOffice",
+        apply_fn=_apply_disable_online_update,
+        remove_fn=_remove_disable_online_update,
+        detect_fn=_detect_disable_online_update,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description="Disables the LibreOffice online update check.",
+        tags=["libreoffice", "update", "privacy"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-startcenter-news",
+        label="Disable Start Center Recent News",
+        category="LibreOffice",
+        apply_fn=_apply_disable_startcenter_news,
+        remove_fn=_remove_disable_startcenter_news,
+        detect_fn=_detect_disable_startcenter_news,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description="Disables the recent news feed on the LibreOffice Start Center.",
+        tags=["libreoffice", "startcenter", "ux", "privacy"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-macros",
+        label="Disable LibreOffice Macro Execution",
+        category="LibreOffice",
+        apply_fn=_apply_disable_macros,
+        remove_fn=_remove_disable_macros,
+        detect_fn=_detect_disable_macros,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description=(
+            "Sets LibreOffice macro security level to Very High (3), "
+            "effectively disabling macro execution."
+        ),
+        tags=["libreoffice", "macros", "security"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-send-feedback",
+        label="Disable LibreOffice Send Feedback",
+        category="LibreOffice",
+        apply_fn=_apply_disable_send_feedback,
+        remove_fn=_remove_disable_send_feedback,
+        detect_fn=_detect_disable_send_feedback,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description="Disables the LibreOffice send feedback feature.",
+        tags=["libreoffice", "telemetry", "privacy", "feedback"],
+    ),
+    TweakDef(
+        id="libre-disable-java",
+        label="Disable LibreOffice Java Runtime",
+        category="LibreOffice",
+        apply_fn=_apply_disable_java,
+        remove_fn=_remove_disable_java,
+        detect_fn=_detect_disable_java,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description=(
+            "Disables Java runtime in LibreOffice. Reduces memory usage "
+            "and startup time. Some wizards/macros may require Java. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["libreoffice", "java", "performance", "memory"],
+    ),
+    TweakDef(
+        id="libre-autosave-interval",
+        label="Reduce LibreOffice Auto-Save Interval",
+        category="LibreOffice",
+        apply_fn=_apply_autosave_interval,
+        remove_fn=_remove_autosave_interval,
+        detect_fn=_detect_autosave_interval,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LO_UNO_MISC],
+        description=(
+            "Sets LibreOffice auto-save interval to 3 minutes for better "
+            "crash recovery. Default: 10 minutes. Recommended: 3 minutes."
+        ),
+        tags=["libreoffice", "autosave", "recovery"],
     ),
 ]

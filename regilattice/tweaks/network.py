@@ -6,8 +6,6 @@ Remote Desktop, and TCP/IP optimizations.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -219,9 +217,200 @@ def _detect_disable_netbios() -> bool:
     return SESSION.read_dword(_NETBT, "NodeType") == 2
 
 
+# ── Disable LLMNR (Link-Local Multicast Name Resolution) ─────────────────────
+
+_LLMNR = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
+
+
+def _apply_disable_llmnr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable LLMNR")
+    SESSION.backup([_LLMNR], "LLMNR")
+    SESSION.set_dword(_LLMNR, "EnableMulticast", 0)
+
+
+def _remove_disable_llmnr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LLMNR, "EnableMulticast")
+
+
+def _detect_disable_llmnr() -> bool:
+    return SESSION.read_dword(_LLMNR, "EnableMulticast") == 0
+
+
+# ── Disable WPAD (Web Proxy Auto-Discovery) ──────────────────────────────────
+
+_WPAD = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad"
+
+
+def _apply_disable_wpad(*, require_admin: bool = False) -> None:
+    SESSION.log("Network: disable WPAD auto-proxy discovery")
+    SESSION.backup([_WPAD], "WPAD")
+    SESSION.set_dword(_WPAD, "WpadOverride", 1)
+
+
+def _remove_disable_wpad(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_WPAD, "WpadOverride")
+
+
+def _detect_disable_wpad() -> bool:
+    return SESSION.read_dword(_WPAD, "WpadOverride") == 1
+
+
+# ── Enable ECN (Explicit Congestion Notification) ────────────────────────────
+
+
+def _apply_enable_ecn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: enable TCP ECN")
+    SESSION.backup([_TCPIP], "ECN")
+    SESSION.set_dword(_TCPIP, "EnableECN", 1)
+
+
+def _remove_enable_ecn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP, "EnableECN")
+
+
+def _detect_enable_ecn() -> bool:
+    return SESSION.read_dword(_TCPIP, "EnableECN") == 1
+
+
+# ── Disable SMBv1 Client ─────────────────────────────────────────────────────
+
+_SMB1 = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"
+
+
+def _apply_disable_smbv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable SMBv1 client")
+    SESSION.backup([_SMB1], "SMBv1")
+    SESSION.set_dword(_SMB1, "EnableSecuritySignature", 1)
+    _svc = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10"
+    SESSION.set_dword(_svc, "Start", 4)  # Disable mrxsmb10 driver
+
+
+def _remove_disable_smbv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    _svc = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10"
+    SESSION.set_dword(_svc, "Start", 3)
+
+
+def _detect_disable_smbv1() -> bool:
+    _svc = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mrxsmb10"
+    return SESSION.read_dword(_svc, "Start") == 4
+
+
+# ── Increase DNS Cache TTL ───────────────────────────────────────────────────
+
+
+def _apply_increase_dns_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: increase DNS cache TTL to 86400s (24h)")
+    SESSION.backup([_DNS_CLIENT], "DNSCache")
+    SESSION.set_dword(_DNS_CLIENT, "MaxCacheTtl", 86400)
+    SESSION.set_dword(_DNS_CLIENT, "MaxNegativeCacheTtl", 5)
+
+
+def _remove_increase_dns_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_CLIENT, "MaxCacheTtl")
+    SESSION.delete_value(_DNS_CLIENT, "MaxNegativeCacheTtl")
+
+
+def _detect_increase_dns_cache() -> bool:
+    return SESSION.read_dword(_DNS_CLIENT, "MaxCacheTtl") == 86400
+
+
+# ── Increase Network Throttling Index ────────────────────────────────────────
+
+
+def _apply_throttling_index(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: set network throttling index to 0xFFFFFFFF")
+    SESSION.backup([_THROTTLE], "ThrottlingIndex")
+    SESSION.set_dword(_THROTTLE, "NetworkThrottlingIndex", 0xFFFFFFFF)
+
+
+def _remove_throttling_index(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_THROTTLE, "NetworkThrottlingIndex", 10)
+
+
+def _detect_throttling_index() -> bool:
+    val = SESSION.read_dword(_THROTTLE, "NetworkThrottlingIndex")
+    return val is not None and val in (0xFFFFFFFF, -1)
+
+
+# ── Enable DNS Over HTTPS ────────────────────────────────────────────────────
+
+
+def _apply_dns_over_https(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: enable DNS over HTTPS (DoH)")
+    SESSION.backup([_DNS_CLIENT], "DnsOverHttps")
+    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 2)
+
+
+def _remove_dns_over_https(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 0)
+
+
+def _detect_dns_over_https() -> bool:
+    return SESSION.read_dword(_DNS_CLIENT, "EnableAutoDoh") == 2
+
+
+# ── Increase ARP Cache Size ────────────────────────────────────────────────
+
+
+def _apply_increase_arp_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: increase ARP cache size to 3600s")
+    SESSION.backup([_TCPIP], "ARPCache")
+    SESSION.set_dword(_TCPIP, "ArpCacheLife", 3600)
+    SESSION.set_dword(_TCPIP, "ArpCacheMinReferencedLife", 3600)
+
+
+def _remove_increase_arp_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP, "ArpCacheLife")
+    SESSION.delete_value(_TCPIP, "ArpCacheMinReferencedLife")
+
+
+def _detect_increase_arp_cache() -> bool:
+    return SESSION.read_dword(_TCPIP, "ArpCacheLife") == 3600
+
+
+# ── Enable Receive Side Scaling (RSS) ────────────────────────────────────
+
+_NDIS = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\NDIS\Parameters"
+)
+
+
+def _apply_rss_enable(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: enable Receive Side Scaling (RSS)")
+    SESSION.backup([_NDIS, _TCPIP], "RSS")
+    SESSION.set_dword(_NDIS, "RssBaseCpu", 1)
+    SESSION.set_dword(_TCPIP, "EnableRSS", 1)
+
+
+def _remove_rss_enable(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NDIS, "RssBaseCpu")
+    SESSION.delete_value(_TCPIP, "EnableRSS")
+
+
+def _detect_rss_enable() -> bool:
+    return SESSION.read_dword(_TCPIP, "EnableRSS") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="increase-irpstack",
         label="Increase IRPStackSize",
@@ -340,5 +529,156 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_NETBT],
         description="Disables NetBIOS name resolution and LMHOSTS lookup for security.",
         tags=["network", "security", "netbios"],
+    ),
+    TweakDef(
+        id="disable-llmnr",
+        label="Disable LLMNR",
+        category="Network",
+        apply_fn=_apply_disable_llmnr,
+        remove_fn=_remove_disable_llmnr,
+        detect_fn=_detect_disable_llmnr,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_LLMNR],
+        description=(
+            "Disables Link-Local Multicast Name Resolution. "
+            "Mitigates LLMNR poisoning attacks on enterprise networks."
+        ),
+        tags=["network", "security", "llmnr", "enterprise"],
+    ),
+    TweakDef(
+        id="disable-wpad",
+        label="Disable WPAD Auto-Proxy",
+        category="Network",
+        apply_fn=_apply_disable_wpad,
+        remove_fn=_remove_disable_wpad,
+        detect_fn=_detect_disable_wpad,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WPAD],
+        description=(
+            "Disables Web Proxy Auto-Discovery (WPAD). "
+            "Prevents rogue WPAD attacks on untrusted networks."
+        ),
+        tags=["network", "security", "proxy", "wpad"],
+    ),
+    TweakDef(
+        id="enable-ecn",
+        label="Enable TCP ECN",
+        category="Network",
+        apply_fn=_apply_enable_ecn,
+        remove_fn=_remove_enable_ecn,
+        detect_fn=_detect_enable_ecn,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TCPIP],
+        description=(
+            "Enables Explicit Congestion Notification for smarter "
+            "TCP congestion control without packet loss."
+        ),
+        tags=["network", "performance", "ecn", "tcp"],
+    ),
+    TweakDef(
+        id="disable-smbv1",
+        label="Disable SMBv1 Client",
+        category="Network",
+        apply_fn=_apply_disable_smbv1,
+        remove_fn=_remove_disable_smbv1,
+        detect_fn=_detect_disable_smbv1,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SMB1],
+        description=(
+            "Disables the legacy and insecure SMBv1 protocol. "
+            "Protects against EternalBlue and similar exploits."
+        ),
+        tags=["network", "security", "smb", "enterprise"],
+    ),
+    TweakDef(
+        id="increase-dns-cache",
+        label="Increase DNS Cache TTL (24h)",
+        category="Network",
+        apply_fn=_apply_increase_dns_cache,
+        remove_fn=_remove_increase_dns_cache,
+        detect_fn=_detect_increase_dns_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DNS_CLIENT],
+        description=(
+            "Increases the DNS cache TTL to 24 hours and reduces negative "
+            "cache to 5 seconds for faster repeat lookups."
+        ),
+        tags=["network", "performance", "dns", "cache"],
+    ),
+    TweakDef(
+        id="net-throttling-index",
+        label="Increase Network Throttling Index",
+        category="Network",
+        apply_fn=_apply_throttling_index,
+        remove_fn=_remove_throttling_index,
+        detect_fn=_detect_throttling_index,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_THROTTLE],
+        description=(
+            "Disables network throttling during multimedia playback. "
+            "Prevents Windows from limiting network bandwidth. "
+            "Default: 10. Recommended: 0xFFFFFFFF (disabled)."
+        ),
+        tags=["network", "throttling", "performance", "bandwidth"],
+    ),
+    TweakDef(
+        id="net-dns-over-https",
+        label="Enable DNS Over HTTPS",
+        category="Network",
+        apply_fn=_apply_dns_over_https,
+        remove_fn=_remove_dns_over_https,
+        detect_fn=_detect_dns_over_https,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_CLIENT],
+        description=(
+            "Enables DNS over HTTPS (DoH) automatic upgrade for "
+            "supported resolvers. Encrypts DNS queries for privacy. "
+            "Options: 0=Off, 1=Automatic, 2=Force. Default: 0. "
+            "Recommended: 2."
+        ),
+        tags=["network", "dns", "doh", "privacy", "security"],
+    ),
+    TweakDef(
+        id="net-increase-arp-cache",
+        label="Increase ARP Cache Size",
+        category="Network",
+        apply_fn=_apply_increase_arp_cache,
+        remove_fn=_remove_increase_arp_cache,
+        detect_fn=_detect_increase_arp_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TCPIP],
+        description=(
+            "Increases the ARP cache lifetime to 3600 seconds (1 hour). "
+            "Reduces ARP broadcast traffic on busy networks and speeds up "
+            "repeated connections to known hosts. "
+            "Default: 120s. Recommended: 3600s."
+        ),
+        tags=["network", "arp", "cache", "performance"],
+    ),
+    TweakDef(
+        id="net-rss-enable",
+        label="Enable Receive Side Scaling (RSS)",
+        category="Network",
+        apply_fn=_apply_rss_enable,
+        remove_fn=_remove_rss_enable,
+        detect_fn=_detect_rss_enable,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NDIS, _TCPIP],
+        description=(
+            "Enables Receive Side Scaling (RSS) to distribute network "
+            "receive processing across multiple CPU cores. Improves "
+            "throughput on multi-core systems with supported NICs. "
+            "Default: OS-managed. Recommended: enabled."
+        ),
+        tags=["network", "rss", "performance", "throughput", "multicore"],
     ),
 ]

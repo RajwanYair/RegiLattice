@@ -6,8 +6,6 @@ folder thumbnails, gallery pane, and more.
 
 from __future__ import annotations
 
-from typing import List
-
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 
@@ -328,9 +326,107 @@ def _detect_disable_merge_conflicts() -> bool:
     return SESSION.read_dword(_ADV, "HideMergeConflicts") == 1
 
 
+# ── Thumbnail Cache Size Increase ────────────────────────────────────────────────────────────
+
+_THUMB_CACHE = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache"
+)
+_THUMB_QUALITY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
+
+
+def _apply_thumbnail_performance(*, require_admin: bool = False) -> None:
+    """Optimize thumbnail display: disable cache cleanup + increase quality."""
+    assert_admin(require_admin)
+    SESSION.log("Explorer: optimize thumbnail caching and quality")
+    SESSION.backup([_THUMB_QUALITY, _ADV], "ThumbnailPerf")
+    # Disable thumbnail cache auto-cleanup via Disk Cleanup
+    SESSION.set_dword(_ADV, "DisableThumbnailCache", 0)       # Keep thumbs.db
+    SESSION.set_dword(_ADV, "DisableThumbsDBOnNetworkFolders", 1)  # No thumbs.db on network
+    # Enable high-quality thumbnails
+    SESSION.set_dword(_THUMB_QUALITY, "ThumbnailSize", 256)    # Larger thumbnails
+    SESSION.set_dword(_THUMB_QUALITY, "ThumbnailQuality", 100)  # Max quality
+
+
+def _remove_thumbnail_performance(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "DisableThumbnailCache")
+    SESSION.set_dword(_ADV, "DisableThumbsDBOnNetworkFolders", 0)
+    SESSION.delete_value(_THUMB_QUALITY, "ThumbnailSize")
+    SESSION.delete_value(_THUMB_QUALITY, "ThumbnailQuality")
+
+
+def _detect_thumbnail_performance() -> bool:
+    return SESSION.read_dword(_THUMB_QUALITY, "ThumbnailSize") == 256
+
+
+# ── Enable Explorer Status Bar ───────────────────────────────────────────────────────────────
+
+
+def _apply_status_bar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable status bar at bottom")
+    SESSION.backup([_ADV], "StatusBar")
+    SESSION.set_dword(_ADV, "ShowStatusBar", 1)
+
+
+def _remove_status_bar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "ShowStatusBar", 0)
+
+
+def _detect_status_bar() -> bool:
+    return SESSION.read_dword(_ADV, "ShowStatusBar") == 1
+
+
+# ── Open PowerShell at Selected Folder ───────────────────────────────────────
+
+_PS_FOLDER_KEY = r"HKEY_CLASSES_ROOT\Directory\shell\OpenPowerShellHere"
+_PS_FOLDER_CMD = rf"{_PS_FOLDER_KEY}\command"
+
+_PS_BG_KEY = r"HKEY_CLASSES_ROOT\Directory\Background\shell\OpenPowerShellHere"
+_PS_BG_CMD = rf"{_PS_BG_KEY}\command"
+
+
+def _apply_explorer_ps_here(*, require_admin: bool = True) -> None:
+    import subprocess
+
+    assert_admin(require_admin)
+    SESSION.log("Explorer: add 'Open PowerShell Here' context menu")
+    SESSION.backup([_PS_FOLDER_KEY, _PS_BG_KEY], "ExplorerPsHere")
+
+    def _run(args: list[str]) -> None:
+        subprocess.run(["reg", *args], check=True, capture_output=True, text=True)
+
+    # Right-click on a folder
+    _run(["add", _PS_FOLDER_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
+    _run(["add", _PS_FOLDER_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
+    _run(["add", _PS_FOLDER_CMD, "/ve", "/d",
+          'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+    # Right-click on folder background
+    _run(["add", _PS_BG_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
+    _run(["add", _PS_BG_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
+    _run(["add", _PS_BG_CMD, "/ve", "/d",
+          'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+
+
+def _remove_explorer_ps_here(*, require_admin: bool = True) -> None:
+    import subprocess
+
+    assert_admin(require_admin)
+    for key in (_PS_FOLDER_KEY, _PS_BG_KEY):
+        subprocess.run(
+            ["reg", "delete", key, "/f"], check=False, capture_output=True,
+        )
+
+
+def _detect_explorer_ps_here() -> bool:
+    return SESSION.key_exists(_PS_FOLDER_KEY) and SESSION.key_exists(_PS_BG_KEY)
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
-TWEAKS: List[TweakDef] = [
+TWEAKS: list[TweakDef] = [
     TweakDef(
         id="show-file-extensions",
         label="Show File Extensions",
@@ -515,5 +611,56 @@ TWEAKS: List[TweakDef] = [
         registry_keys=[_ADV],
         description="Hides folder merge conflict prompts when copying/moving folders.",
         tags=["explorer", "ux"],
+    ),
+    TweakDef(
+        id="thumbnail-performance",
+        label="Optimize Thumbnail Caching & Quality",
+        category="Explorer",
+        apply_fn=_apply_thumbnail_performance,
+        remove_fn=_remove_thumbnail_performance,
+        detect_fn=_detect_thumbnail_performance,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_THUMB_QUALITY, _ADV],
+        description=(
+            "Optimizes Explorer thumbnail display: keeps thumbnail cache, "
+            "increases size to 256px and quality to 100%, disables thumbs.db "
+            "on network folders. Results in sharper, faster file previews. "
+            "Default: 96px low quality. Recommended: 256px max quality."
+        ),
+        tags=["explorer", "thumbnails", "performance", "quality"],
+    ),
+    TweakDef(
+        id="show-status-bar",
+        label="Show Explorer Status Bar",
+        category="Explorer",
+        apply_fn=_apply_status_bar,
+        remove_fn=_remove_status_bar,
+        detect_fn=_detect_status_bar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Enables the status bar at the bottom of Explorer windows showing "
+            "selected item count, size, and free space. "
+            "Default: Hidden. Recommended: Shown."
+        ),
+        tags=["explorer", "ux", "status-bar"],
+    ),
+    TweakDef(
+        id="explorer-ps-here",
+        label="'Open PowerShell Here' in Explorer",
+        category="Explorer",
+        apply_fn=_apply_explorer_ps_here,
+        remove_fn=_remove_explorer_ps_here,
+        detect_fn=_detect_explorer_ps_here,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PS_FOLDER_KEY, _PS_BG_KEY],
+        description=(
+            "Adds 'Open PowerShell Here' to the context menu when "
+            "right-clicking a folder or the folder background in Explorer."
+        ),
+        tags=["explorer", "powershell", "context-menu", "terminal"],
     ),
 ]
