@@ -395,10 +395,7 @@ def apply_profile(
     targets = tweaks_for_profile(name)
     results: dict[str, TweakResult] = {}
     for td in targets:
-        if not force_corp and not td.corp_safe:
-            from regilattice.corpguard import is_corporate_network
-
-            if is_corporate_network():
+        if _is_corp_blocked(td, force_corp=force_corp):
                 results[td.id] = TweakResult.SKIPPED_CORP
                 if progress_cb:
                     progress_cb(td.id, TweakResult.SKIPPED_CORP)
@@ -476,12 +473,9 @@ def restore_snapshot(
         if current == saved_state:
             results[td.id] = TweakResult.UNCHANGED
             continue
-        if not force_corp and not td.corp_safe:
-            from regilattice.corpguard import is_corporate_network
-
-            if is_corporate_network():
-                results[td.id] = TweakResult.SKIPPED_CORP
-                continue
+        if _is_corp_blocked(td, force_corp=force_corp):
+            results[td.id] = TweakResult.SKIPPED_CORP
+            continue
         try:
             if saved_state == TweakResult.APPLIED:
                 td.apply_fn(require_admin=require_admin)
@@ -495,6 +489,15 @@ def restore_snapshot(
 
 
 # ── Batch operations ─────────────────────────────────────────────────────────
+
+
+def _is_corp_blocked(td: TweakDef, *, force_corp: bool) -> bool:
+    """Return True if *td* should be skipped due to corporate-network policy."""
+    if force_corp or td.corp_safe:
+        return False
+    from regilattice.corpguard import is_corporate_network
+
+    return is_corporate_network()
 
 
 def apply_all(
@@ -520,11 +523,8 @@ def apply_all(
     results: dict[str, TweakResult] = {}
 
     def _do(td: TweakDef) -> tuple[str, TweakResult]:
-        if not force_corp and not td.corp_safe:
-            from regilattice.corpguard import is_corporate_network
-
-            if is_corporate_network():
-                return td.id, TweakResult.SKIPPED_CORP
+        if _is_corp_blocked(td, force_corp=force_corp):
+            return td.id, TweakResult.SKIPPED_CORP
         try:
             td.apply_fn(require_admin=require_admin)
             return td.id, TweakResult.APPLIED
@@ -560,11 +560,8 @@ def remove_all(
     results: dict[str, TweakResult] = {}
 
     def _do(td: TweakDef) -> tuple[str, TweakResult]:
-        if not force_corp and not td.corp_safe:
-            from regilattice.corpguard import is_corporate_network
-
-            if is_corporate_network():
-                return td.id, TweakResult.SKIPPED_CORP
+        if _is_corp_blocked(td, force_corp=force_corp):
+            return td.id, TweakResult.SKIPPED_CORP
         try:
             td.remove_fn(require_admin=require_admin)
             return td.id, TweakResult.REMOVED

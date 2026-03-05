@@ -10,11 +10,23 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.tweaks import (TweakDef, TweakResult, all_tweaks, apply_all,
-                                categories, get_tweak, load_snapshot,
-                                reload_plugins, remove_all, restore_snapshot,
-                                save_snapshot, search_tweaks, status_map,
-                                tweak_status, tweaks_by_category)
+from regilattice.tweaks import (
+    TweakDef,
+    TweakResult,
+    all_tweaks,
+    apply_all,
+    categories,
+    get_tweak,
+    load_snapshot,
+    reload_plugins,
+    remove_all,
+    restore_snapshot,
+    save_snapshot,
+    search_tweaks,
+    status_map,
+    tweak_status,
+    tweaks_by_category,
+)
 
 # ── TweakDef dataclass ──────────────────────────────────────────────────────
 
