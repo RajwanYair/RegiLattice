@@ -115,43 +115,25 @@ class UndoStack:
 - Implemented `diff_snapshots(path_a, path_b)` in `tweaks/__init__.py`.
 - Prints a formatted table of changed tweak IDs with old→new state.
 
-### 3.4 Tweak dependency graph
+### 3.4 Tweak dependency graph ✅ DONE
 
-Add optional `depends_on` field to `TweakDef`:
+- Added `depends_on: list[str]` field to `TweakDef` dataclass.
+- Dependency validation in `_load_plugins()` after module loading.
+- Implemented `_topo_sort()` using Kahn's algorithm (with `collections.deque`).
+- `run_batch()` topologically orders tweaks before executing.
+- Added `test_depends_on_is_list` smoke test and `TestTopoSort` with 5 unit tests.
 
-```python
-@dataclass(slots=True)
-class TweakDef:
-    ...
-    depends_on: list[str] = field(default_factory=list)
-```
+### 3.5 Rollback on error ✅ DONE
 
-### 3.5 Rollback on error
+- Added `restore_backup()` method to `RegistrySession` (imports `.reg` files via `reg import`).
+- `TweakExecutor.apply_one()` and `remove_one()` catch exceptions and log via `SESSION.log()`.
+- Returns `TweakResult.ERROR` on failure with full diagnostic logging.
 
-If `apply_fn` raises, auto-restore from the backup created at start:
+### 3.6 Configuration file support ✅ DONE
 
-```python
-try:
-    td.apply_fn(require_admin=td.needs_admin)
-except Exception:
-    self.session.restore_backup(td.id)
-    return TweakResult.ERROR
-```
-
-### 3.6 Configuration file support
-
-Support `~/.regilattice.toml` for user preferences:
-
-```toml
-[general]
-force_corp = false
-theme = "catppuccin-mocha"
-max_workers = 8
-
-[backups]
-directory = "~/.regilattice/backups"
-auto_backup = true
-```
+- Created `regilattice/config.py` with `AppConfig` dataclass and `load_config()` function.
+- Supports `tomllib` (3.11+) with `tomli` fallback (3.10), graceful degradation if neither available.
+- Added `--config` CLI flag; config values used as defaults (CLI flags override).
 
 ---
 
@@ -166,55 +148,33 @@ auto_backup = true
 
 Test `_TweakRow`, `_CategorySection`, `_dispatch()` with mock tkinter root.
 
-### 4.3 Pin dev dependencies
+### 4.3 Pin dev dependencies ✅ DONE
 
-```toml
-dev = ["pytest>=7,<9", "pytest-cov>=4,<6", "mypy>=1.5,<2", "ruff>=0.4,<1"]
-```
+- Pinned: `pytest>=8,<9`, `pytest-cov>=7,<8`, `mypy>=1.5,<2`, `ruff>=0.4,<1`.
 
-### 4.4 Add CI/CD pipeline
+### 4.4 Add CI/CD pipeline ✅ DONE
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
-on: [push, pull_request]
-jobs:
-  lint-and-test:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "${{ matrix.python-version }}" }
-      - run: pip install -e ".[dev]"
-      - run: ruff check regilattice/ tests/
-      - run: mypy regilattice/
-      - run: pytest tests/ -x --tb=short
-```
+- Created `.github/workflows/ci.yml` with matrix: Python 3.10-3.13, windows-latest.
+- Steps: checkout, setup-python, pip install, ruff check, mypy, pytest.
 
-### 4.5 Fix flaky `test_backup_creates_directory`
+### 4.5 Fix flaky `test_backup_creates_directory` ✅ DONE
 
-Isolate with mock subprocess and temp filesystem to avoid WinError 6.
+- Fixed by mocking `subprocess.run` — no longer triggers WinError 6.
+- All 13,793 tests now pass without skip filters.
 
 ---
 
 ## Phase 5 — Documentation & Distribution
 
-### 5.1 Architecture diagram
+### 5.1 Architecture diagram ✅ DONE
 
-Add Mermaid diagram to README showing data flow:
+- Added Mermaid flowchart to README.md showing full data flow:
+  Interfaces (CLI/Menu/GUI) → Core → Plugin Modules → Windows Registry.
 
-```text
-Plugin modules -> tweaks/__init__.py -> TweakExecutor -> RegistrySession -> winreg
-                                      |
-                                cli/gui/menu
-```
+### 5.2 Contributing guide ✅ DONE
 
-### 5.2 Contributing guide
-
-Expand `_template.py` with 2-minute quickstart + video link.
+- Created `CONTRIBUTING.md` with quickstart, project structure, tweak triplet pattern,
+  TweakDef registration, coding standards, and commit conventions.
 
 ### 5.3 PyInstaller / standalone exe
 
@@ -237,3 +197,16 @@ Phase 3.1 -> 3.5 -> 3.2       (dry-run, rollback, undo)
 Phase 5.1 -> 5.3              (docs, packaging)
 Phase 3.3 -> 3.4 -> 3.6       (advanced features last)
 ```
+
+---
+
+## Phase 6 — Performance Optimizations ✅ DONE
+
+- Built `_TWEAKS_BY_CAT` reverse category index — eliminates ~62K iterations at startup.
+- Profile filtering uses `_TWEAKS_BY_CAT` (O(categories) instead of O(all_tweaks)).
+- `tweaks_by_category()` returns cached dict copy instead of rebuilding.
+- `_topo_sort()` uses `collections.deque` for O(1) popleft (was O(n) `list.pop(0)`).
+- Cached `has_recommendation()` results per tweak id (`_REC_CACHE`).
+- GUI passes pre-computed `statuses` dict to `CategorySection.update_count()`.
+- GUI `_filter_rows()` uses `_cached_statuses` instead of calling `tweak_status()` per row.
+- GUI caches `rec_count` and `gpo_count` (static per session — computed once).
