@@ -2,6 +2,7 @@
   // ── Python ──────────────────────────────────────────────────────────
   "python.defaultInterpreterPath": "C:/Users/ryair/AppData/Local/Python/bin/python.exe",
   "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.pythonVersion": "3.10",
   "python.analysis.autoImportCompletions": true,
   "python.analysis.extraPaths": [
     "."
