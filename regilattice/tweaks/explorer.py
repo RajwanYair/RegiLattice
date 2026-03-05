@@ -13,12 +13,8 @@ from regilattice.tweaks import TweakDef
 
 _ADV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 _EXPLORER = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
-_CABINETSTATE = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"
-)
-_SEARCH_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"
-)
+_CABINETSTATE = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"
+_SEARCH_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"
 _GALLERY_KEY = (
     r"HKEY_CURRENT_USER\Software\Classes\CLSID"
     r"\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"
@@ -284,9 +280,7 @@ def _detect_disable_auto_folder_type() -> bool:
 
 # ── Disable Breadcrumb Bar ────────────────────────────────────────────────────
 
-_RIBBON_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
-)
+_RIBBON_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Ribbon"
 
 
 def _apply_disable_breadcrumbs(*, require_admin: bool = False) -> None:
@@ -341,10 +335,10 @@ def _apply_thumbnail_performance(*, require_admin: bool = False) -> None:
     SESSION.log("Explorer: optimize thumbnail caching and quality")
     SESSION.backup([_THUMB_QUALITY, _ADV], "ThumbnailPerf")
     # Disable thumbnail cache auto-cleanup via Disk Cleanup
-    SESSION.set_dword(_ADV, "DisableThumbnailCache", 0)       # Keep thumbs.db
+    SESSION.set_dword(_ADV, "DisableThumbnailCache", 0)  # Keep thumbs.db
     SESSION.set_dword(_ADV, "DisableThumbsDBOnNetworkFolders", 1)  # No thumbs.db on network
     # Enable high-quality thumbnails
-    SESSION.set_dword(_THUMB_QUALITY, "ThumbnailSize", 256)    # Larger thumbnails
+    SESSION.set_dword(_THUMB_QUALITY, "ThumbnailSize", 256)  # Larger thumbnails
     SESSION.set_dword(_THUMB_QUALITY, "ThumbnailQuality", 100)  # Max quality
 
 
@@ -401,13 +395,11 @@ def _apply_explorer_ps_here(*, require_admin: bool = True) -> None:
     # Right-click on a folder
     _run(["add", _PS_FOLDER_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
     _run(["add", _PS_FOLDER_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
-    _run(["add", _PS_FOLDER_CMD, "/ve", "/d",
-          'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+    _run(["add", _PS_FOLDER_CMD, "/ve", "/d", "powershell.exe -NoExit -Command \"Set-Location '%V'\"", "/f"])
     # Right-click on folder background
     _run(["add", _PS_BG_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
     _run(["add", _PS_BG_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
-    _run(["add", _PS_BG_CMD, "/ve", "/d",
-          'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+    _run(["add", _PS_BG_CMD, "/ve", "/d", "powershell.exe -NoExit -Command \"Set-Location '%V'\"", "/f"])
 
 
 def _remove_explorer_ps_here(*, require_admin: bool = True) -> None:
@@ -416,7 +408,9 @@ def _remove_explorer_ps_here(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     for key in (_PS_FOLDER_KEY, _PS_BG_KEY):
         subprocess.run(
-            ["reg", "delete", key, "/f"], check=False, capture_output=True,
+            ["reg", "delete", key, "/f"],
+            check=False,
+            capture_output=True,
         )
 
 
@@ -623,10 +617,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_BAGS_KEY],
-        description=(
-            "Prevents Explorer from auto-detecting folder content type "
-            "(e.g. 'Pictures', 'Music') which causes slow loading."
-        ),
+        description=("Prevents Explorer from auto-detecting folder content type (e.g. 'Pictures', 'Music') which causes slow loading."),
         tags=["explorer", "performance"],
     ),
     TweakDef(
@@ -700,10 +691,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PS_FOLDER_KEY, _PS_BG_KEY],
-        description=(
-            "Adds 'Open PowerShell Here' to the context menu when "
-            "right-clicking a folder or the folder background in Explorer."
-        ),
+        description=("Adds 'Open PowerShell Here' to the context menu when right-clicking a folder or the folder background in Explorer."),
         tags=["explorer", "powershell", "context-menu", "terminal"],
     ),
     TweakDef(
@@ -842,6 +830,11 @@ _SVG_THUMB_HANDLER = "{36B74164-B26E-47A9-ACCE-622F47CB373F}"  # SVG Thumbnail P
 _WEBP_THUMB_HANDLER = "{C7657C4A-9F68-40FA-A4DF-96BC08EB3551}"  # WebP Handler
 _RAW_THUMB_HANDLER = "{E357FCCD-A995-4576-B01F-234630154E96}"  # Windows Imaging Component
 _FONT_THUMB_HANDLER = "{D3B41FA1-01E3-49AF-AA8C-48036EED303F}"  # Font Thumbnail
+_HEIC_THUMB_HANDLER = "{E357FCCD-A995-4576-B01F-234630154E96}"  # WIC handler (HEIF ext)
+_AVIF_THUMB_HANDLER = "{E357FCCD-A995-4576-B01F-234630154E96}"  # WIC handler (AV1 ext)
+_PSD_THUMB_HANDLER = "{C7657C4A-9F68-40FA-A4DF-96BC08EB3551}"  # Shell image handler
+_AI_THUMB_HANDLER = "{36B74164-B26E-47A9-ACCE-622F47CB373F}"  # SVG-compatible handler
+_EPS_THUMB_HANDLER = "{36B74164-B26E-47A9-ACCE-622F47CB373F}"  # SVG-compatible handler
 
 
 def _thumb_key(ext: str) -> str:
@@ -955,6 +948,108 @@ def _detect_font_thumbnail() -> bool:
     return SESSION.read_string(_thumb_key("ttf"), "") == _FONT_THUMB_HANDLER
 
 
+# ── HEIC / HEIF Thumbnail ───────────────────────────────────────────────────
+
+
+def _apply_heic_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable HEIC/HEIF thumbnail preview handler")
+    for ext in ("heic", "heif"):
+        key = _thumb_key(ext)
+        SESSION.backup([key], f"HeicThumbnail_{ext}")
+        SESSION.set_string(key, "", _HEIC_THUMB_HANDLER)
+
+
+def _remove_heic_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    for ext in ("heic", "heif"):
+        SESSION.delete_value(_thumb_key(ext), "")
+
+
+def _detect_heic_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("heic"), "") == _HEIC_THUMB_HANDLER
+
+
+# ── AVIF Thumbnail ───────────────────────────────────────────────────────────
+
+
+def _apply_avif_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable AVIF thumbnail preview handler")
+    key = _thumb_key("avif")
+    SESSION.backup([key], "AvifThumbnail")
+    SESSION.set_string(key, "", _AVIF_THUMB_HANDLER)
+
+
+def _remove_avif_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("avif"), "")
+
+
+def _detect_avif_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("avif"), "") == _AVIF_THUMB_HANDLER
+
+
+# ── PSD (Photoshop) Thumbnail ───────────────────────────────────────────────
+
+
+def _apply_psd_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable PSD (Photoshop) thumbnail preview handler")
+    key = _thumb_key("psd")
+    SESSION.backup([key], "PsdThumbnail")
+    SESSION.set_string(key, "", _PSD_THUMB_HANDLER)
+
+
+def _remove_psd_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("psd"), "")
+
+
+def _detect_psd_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("psd"), "") == _PSD_THUMB_HANDLER
+
+
+# ── AI (Illustrator) Thumbnail ──────────────────────────────────────────────
+
+
+def _apply_ai_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable AI (Illustrator) thumbnail preview handler")
+    key = _thumb_key("ai")
+    SESSION.backup([key], "AiThumbnail")
+    SESSION.set_string(key, "", _AI_THUMB_HANDLER)
+
+
+def _remove_ai_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("ai"), "")
+
+
+def _detect_ai_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("ai"), "") == _AI_THUMB_HANDLER
+
+
+# ── EPS Thumbnail ────────────────────────────────────────────────────────────
+
+
+def _apply_eps_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable EPS thumbnail preview handler")
+    key = _thumb_key("eps")
+    SESSION.backup([key], "EpsThumbnail")
+    SESSION.set_string(key, "", _EPS_THUMB_HANDLER)
+
+
+def _remove_eps_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("eps"), "")
+
+
+def _detect_eps_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("eps"), "") == _EPS_THUMB_HANDLER
+
+
 def _apply_disable_thumb_cache_cleanup(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Explorer: disable thumbnail cache auto-cleanup")
@@ -1001,9 +1096,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_thumb_key("svg")],
         description=(
-            "Registers a shell extension handler for SVG vector image "
-            "thumbnail previews in File Explorer. "
-            "Default: no preview. Recommended: enabled."
+            "Registers a shell extension handler for SVG vector image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled."
         ),
         tags=["explorer", "thumbnail", "svg", "preview", "vector", "file-format"],
     ),
@@ -1018,9 +1111,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_thumb_key("webp")],
         description=(
-            "Registers a shell extension handler for WebP image thumbnail "
-            "previews in File Explorer. "
-            "Default: no preview. Recommended: enabled."
+            "Registers a shell extension handler for WebP image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled."
         ),
         tags=["explorer", "thumbnail", "webp", "preview", "image", "file-format"],
     ),
@@ -1074,6 +1165,96 @@ TWEAKS += [
             "Default: no preview. Recommended: enabled for designers."
         ),
         tags=["explorer", "thumbnail", "font", "ttf", "otf", "preview", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-heic-thumbnail",
+        label="Enable HEIC/HEIF Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_heic_thumbnail,
+        remove_fn=_remove_heic_thumbnail,
+        detect_fn=_detect_heic_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("heic")],
+        description=(
+            "Registers Windows Imaging Component (WIC) handler for HEIC/HEIF "
+            "image thumbnail previews in File Explorer. Requires the HEIF Image "
+            "Extensions from the Microsoft Store. "
+            "Default: no preview. Recommended: enabled for Apple photo imports."
+        ),
+        tags=["explorer", "thumbnail", "heic", "heif", "preview", "apple", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-avif-thumbnail",
+        label="Enable AVIF Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_avif_thumbnail,
+        remove_fn=_remove_avif_thumbnail,
+        detect_fn=_detect_avif_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("avif")],
+        description=(
+            "Registers Windows Imaging Component (WIC) handler for AVIF image "
+            "thumbnail previews in File Explorer. Requires the AV1 Video Extension "
+            "from the Microsoft Store. "
+            "Default: no preview. Recommended: enabled for modern web images."
+        ),
+        tags=["explorer", "thumbnail", "avif", "preview", "av1", "image", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-psd-thumbnail",
+        label="Enable PSD (Photoshop) Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_psd_thumbnail,
+        remove_fn=_remove_psd_thumbnail,
+        detect_fn=_detect_psd_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("psd")],
+        description=(
+            "Registers a shell extension handler for Adobe Photoshop (PSD) file "
+            "thumbnail previews in File Explorer. May require a third-party codec "
+            "or SageThumbs for full support. "
+            "Default: no preview. Recommended: enabled for designers."
+        ),
+        tags=["explorer", "thumbnail", "psd", "photoshop", "adobe", "preview", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-ai-thumbnail",
+        label="Enable AI (Illustrator) Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_ai_thumbnail,
+        remove_fn=_remove_ai_thumbnail,
+        detect_fn=_detect_ai_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("ai")],
+        description=(
+            "Registers a shell extension handler for Adobe Illustrator (AI) file "
+            "thumbnail previews in File Explorer. Modern AI files contain an "
+            "embedded PDF/SVG that compatible handlers can render. "
+            "Default: no preview. Recommended: enabled for designers."
+        ),
+        tags=["explorer", "thumbnail", "ai", "illustrator", "adobe", "vector", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-eps-thumbnail",
+        label="Enable EPS Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_eps_thumbnail,
+        remove_fn=_remove_eps_thumbnail,
+        detect_fn=_detect_eps_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("eps")],
+        description=(
+            "Registers a shell extension handler for Encapsulated PostScript (EPS) "
+            "file thumbnail previews in File Explorer. Best with a PS-compatible "
+            "handler like Ghostscript or SageThumbs installed. "
+            "Default: no preview. Recommended: enabled for print/design workflows."
+        ),
+        tags=["explorer", "thumbnail", "eps", "postscript", "preview", "print", "file-format"],
     ),
     TweakDef(
         id="explorer-disable-thumb-cache-cleanup",
@@ -1203,8 +1384,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_EXP_ADV],
         description=(
-            "Automatically expands the navigation pane tree to show the "
-            "current folder location. Default: collapsed. Recommended: expanded."
+            "Automatically expands the navigation pane tree to show the current folder location. Default: collapsed. Recommended: expanded."
         ),
         tags=["explorer", "navigation", "pane", "expand", "folder"],
     ),
@@ -1218,10 +1398,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_EXP_ADV],
-        description=(
-            "Shows the total file size and count in folder tooltips "
-            "when hovering over a folder. Default: disabled. Recommended: enabled."
-        ),
+        description=("Shows the total file size and count in folder tooltips when hovering over a folder. Default: disabled. Recommended: enabled."),
         tags=["explorer", "folder", "size", "tooltip", "info"],
     ),
     TweakDef(
@@ -1366,9 +1543,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Always shows the classic File/Edit/View/Help menu bar in "
-            "Explorer windows. Default: Hidden. Recommended: Shown for "
-            "power users."
+            "Always shows the classic File/Edit/View/Help menu bar in Explorer windows. Default: Hidden. Recommended: Shown for power users."
         ),
         tags=["explorer", "menu", "classic", "toolbar"],
     ),

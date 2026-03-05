@@ -31,9 +31,11 @@ from .tweaks import (
     TweakDef,
     all_tweaks,
     available_profiles,
+    category_info,
     profile_info,
     restore_snapshot,
     save_snapshot,
+    search_tweaks,
     status_map,
     tweak_scope,
     tweak_status,
@@ -104,8 +106,15 @@ class _Tooltip:
         tw.wm_geometry(f"+{x}+{y}")
         tw.wm_attributes("-topmost", True)
         lbl = tk.Label(
-            tw, text=self._text, bg="#45475A", fg=_FG,
-            font=_FONT_SM, padx=10, pady=6, wraplength=440, justify="left",
+            tw,
+            text=self._text,
+            bg=_CARD_HOVER,
+            fg=_FG,
+            font=_FONT_SM,
+            padx=10,
+            pady=6,
+            wraplength=440,
+            justify="left",
         )
         lbl.pack()
 
@@ -229,33 +238,55 @@ class _TweakRow:
 
         # Status dot
         self.status_dot = tk.Label(
-            self.frame, text="●", fg=_STATUS_UNKNOWN, bg=_CARD_BG,
-            font=("Segoe UI", 12), width=2,
+            self.frame,
+            text="●",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=("Segoe UI", 12),
+            width=2,
         )
         self.status_dot.pack(side="left", padx=(6, 0))
 
         # Status text label (APPLIED / DEFAULT / UNKNOWN)
         self.status_text = tk.Label(
-            self.frame, text="…", fg=_STATUS_UNKNOWN, bg=_CARD_BG,
-            font=_FONT_XS_BOLD, width=10, anchor="w",
+            self.frame,
+            text="…",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=_FONT_XS_BOLD,
+            width=10,
+            anchor="w",
         )
         self.status_text.pack(side="left", padx=(2, 4))
 
         # Checkbox for batch selection
         state = "disabled" if self.disabled_by_corp else "normal"
         self.cb = ttk.Checkbutton(
-            self.frame, text=td.label, variable=self.var, state=state,
+            self.frame,
+            text=td.label,
+            variable=self.var,
+            state=state,
         )
         self.cb.pack(side="left", padx=(4, 4), pady=2)
 
         # Toggle button (individual enable/disable)
         self.toggle_btn = tk.Button(
-            self.frame, text="⏳", font=_FONT_XS_BOLD, width=9,
-            relief="flat", cursor="hand2", bd=0, padx=6, pady=1,
+            self.frame,
+            text="⏳",
+            font=_FONT_XS_BOLD,
+            width=9,
+            relief="flat",
+            cursor="hand2",
+            bd=0,
+            padx=6,
+            pady=1,
         )
         if self.disabled_by_corp:
             self.toggle_btn.configure(
-                text="BLOCKED", bg=_CARD_BG, fg=_ERR_RED, state="disabled",
+                text="BLOCKED",
+                bg=_CARD_BG,
+                fg=_ERR_RED,
+                state="disabled",
             )
         else:
             self.toggle_btn.configure(command=self.on_toggle_click)
@@ -264,22 +295,34 @@ class _TweakRow:
         # Tags (right-aligned, before toggle button)
         if self.disabled_by_corp:
             tk.Label(
-                self.frame, text="CORP", fg=_ERR_RED, bg=_CARD_BG,
+                self.frame,
+                text="CORP",
+                fg=_ERR_RED,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.registry_keys and is_gpo_managed(td.registry_keys):
             tk.Label(
-                self.frame, text="GPO", fg=_GPO_ORANGE, bg=_CARD_BG,
+                self.frame,
+                text="GPO",
+                fg=_GPO_ORANGE,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.needs_admin:
             tk.Label(
-                self.frame, text="ADMIN", fg=_FG_DIM, bg=_CARD_BG,
+                self.frame,
+                text="ADMIN",
+                fg=_FG_DIM,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7),
             ).pack(side="right", padx=(0, 4))
         if _has_recommendation(td):
             tk.Label(
-                self.frame, text="★ REC", fg=_TEAL, bg=_CARD_BG,
+                self.frame,
+                text="★ REC",
+                fg=_TEAL,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
 
@@ -288,12 +331,32 @@ class _TweakRow:
         _scope_cfg = {"user": ("USER", _OK_GREEN), "machine": ("MACHINE", _ACCENT), "both": ("BOTH", _WARN_YELLOW)}
         _s_text, _s_color = _scope_cfg.get(scope, ("?", _FG_DIM))
         tk.Label(
-            self.frame, text=_s_text, fg=_s_color, bg=_CARD_BG,
+            self.frame,
+            text=_s_text,
+            fg=_s_color,
+            bg=_CARD_BG,
             font=("Segoe UI", 7, "bold"),
         ).pack(side="right", padx=(0, 4))
 
         # Tooltip — detailed description with state, options, recommendation
         self.tooltip = _Tooltip(self.frame, _build_tooltip_text(td, "unknown"))
+
+        # Hover highlight effect
+        self.frame.bind("<Enter>", self._on_enter)
+        self.frame.bind("<Leave>", self._on_leave)
+
+    def _on_enter(self, _: tk.Event) -> None:  # type: ignore[type-arg]
+        """Highlight row background on hover."""
+        for w in self.frame.winfo_children():
+            if isinstance(w, tk.Label):
+                w.configure(bg=_CARD_HOVER)
+        # ttk frame style can't be changed per-widget, but tk children can
+
+    def _on_leave(self, _: tk.Event) -> None:  # type: ignore[type-arg]
+        """Restore row background on leave."""
+        for w in self.frame.winfo_children():
+            if isinstance(w, tk.Label):
+                w.configure(bg=_CARD_BG)
 
     def on_toggle_click(self) -> None:
         if self._on_toggle:
@@ -359,31 +422,86 @@ class _CategorySection:
         self.header.pack(fill="x", pady=(8, 0), padx=4)
 
         self._arrow = tk.Label(
-            self.header, text="▼", fg=_ACCENT, bg=_BG_SURFACE, font=_FONT_CAT,
+            self.header,
+            text="▼",
+            fg=_ACCENT,
+            bg=_BG_SURFACE,
+            font=_FONT_CAT,
         )
         self._arrow.pack(side="left", padx=(8, 4))
 
         self._title = tk.Label(
-            self.header, text=name, fg=_ACCENT, bg=_BG_SURFACE, font=_FONT_CAT,
+            self.header,
+            text=name,
+            fg=_ACCENT,
+            bg=_BG_SURFACE,
+            font=_FONT_CAT,
         )
         self._title.pack(side="left")
 
         # Count badge: (N/M applied)
         self._count_lbl = tk.Label(
-            self.header, text=f"  ({len(rows)} tweaks)", fg=_FG_DIM,
-            bg=_BG_SURFACE, font=_FONT_XS,
+            self.header,
+            text=f"  ({len(rows)} tweaks)",
+            fg=_FG_DIM,
+            bg=_BG_SURFACE,
+            font=_FONT_XS,
         )
         self._count_lbl.pack(side="left", padx=(4, 0))
 
+        # Risk / scope badges from CategoryInfo metadata
+        ci = category_info(name)
+        if ci is not None:
+            _risk_colors = {"high": _ERR_RED, "medium": _WARN_YELLOW, "low": _OK_GREEN}
+            risk_fg = _risk_colors.get(ci.risk_level, _FG_DIM)
+            tk.Label(
+                self.header,
+                text=ci.risk_level.upper(),
+                fg=risk_fg,
+                bg=_BG_SURFACE,
+                font=("Segoe UI", 7, "bold"),
+            ).pack(side="left", padx=(6, 0))
+            _scope_colors = {"user": _OK_GREEN, "machine": _PURPLE, "mixed": _WARN_YELLOW}
+            scope_fg = _scope_colors.get(ci.scope, _FG_DIM)
+            tk.Label(
+                self.header,
+                text=ci.scope.upper(),
+                fg=scope_fg,
+                bg=_BG_SURFACE,
+                font=("Segoe UI", 7, "bold"),
+            ).pack(side="left", padx=(4, 0))
+            if ci.profiles:
+                tk.Label(
+                    self.header,
+                    text=", ".join(ci.profiles),
+                    fg=_TEAL,
+                    bg=_BG_SURFACE,
+                    font=("Segoe UI", 7),
+                ).pack(side="left", padx=(6, 0))
+
         # Per-category batch buttons
         self._btn_disable_all = tk.Button(
-            self.header, text="Disable All", font=_FONT_XS, relief="flat",
-            bg=_BG_SURFACE, fg=_ERR_RED, cursor="hand2", bd=0, padx=4,
+            self.header,
+            text="Disable All",
+            font=_FONT_XS,
+            relief="flat",
+            bg=_BG_SURFACE,
+            fg=_ERR_RED,
+            cursor="hand2",
+            bd=0,
+            padx=4,
         )
         self._btn_disable_all.pack(side="right", padx=(2, 8))
         self._btn_enable_all = tk.Button(
-            self.header, text="Enable All", font=_FONT_XS, relief="flat",
-            bg=_BG_SURFACE, fg=_OK_GREEN, cursor="hand2", bd=0, padx=4,
+            self.header,
+            text="Enable All",
+            font=_FONT_XS,
+            relief="flat",
+            bg=_BG_SURFACE,
+            fg=_OK_GREEN,
+            cursor="hand2",
+            bd=0,
+            padx=4,
         )
         self._btn_enable_all.pack(side="right", padx=(2, 0))
 
@@ -409,33 +527,55 @@ class _CategorySection:
 
         # Status dot
         row.status_dot = tk.Label(
-            row.frame, text="●", fg=_STATUS_UNKNOWN, bg=_CARD_BG,
-            font=("Segoe UI", 12), width=2,
+            row.frame,
+            text="●",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=("Segoe UI", 12),
+            width=2,
         )
         row.status_dot.pack(side="left", padx=(6, 0))
 
         # Status text
         row.status_text = tk.Label(
-            row.frame, text="…", fg=_STATUS_UNKNOWN, bg=_CARD_BG,
-            font=_FONT_XS_BOLD, width=10, anchor="w",
+            row.frame,
+            text="…",
+            fg=_STATUS_UNKNOWN,
+            bg=_CARD_BG,
+            font=_FONT_XS_BOLD,
+            width=10,
+            anchor="w",
         )
         row.status_text.pack(side="left", padx=(2, 4))
 
         # Checkbox
         state = "disabled" if disabled else "normal"
         row.cb = ttk.Checkbutton(
-            row.frame, text=td.label, variable=row.var, state=state,
+            row.frame,
+            text=td.label,
+            variable=row.var,
+            state=state,
         )
         row.cb.pack(side="left", padx=(4, 4), pady=2)
 
         # Toggle button
         row.toggle_btn = tk.Button(
-            row.frame, text="⏳", font=_FONT_XS_BOLD, width=9,
-            relief="flat", cursor="hand2", bd=0, padx=6, pady=1,
+            row.frame,
+            text="⏳",
+            font=_FONT_XS_BOLD,
+            width=9,
+            relief="flat",
+            cursor="hand2",
+            bd=0,
+            padx=6,
+            pady=1,
         )
         if disabled:
             row.toggle_btn.configure(
-                text="BLOCKED", bg=_CARD_BG, fg=_ERR_RED, state="disabled",
+                text="BLOCKED",
+                bg=_CARD_BG,
+                fg=_ERR_RED,
+                state="disabled",
             )
         else:
             row.toggle_btn.configure(command=row.on_toggle_click)
@@ -444,22 +584,34 @@ class _CategorySection:
         # Tags
         if disabled:
             tk.Label(
-                row.frame, text="CORP", fg=_ERR_RED, bg=_CARD_BG,
+                row.frame,
+                text="CORP",
+                fg=_ERR_RED,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.registry_keys and is_gpo_managed(td.registry_keys):
             tk.Label(
-                row.frame, text="GPO", fg=_GPO_ORANGE, bg=_CARD_BG,
+                row.frame,
+                text="GPO",
+                fg=_GPO_ORANGE,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.needs_admin:
             tk.Label(
-                row.frame, text="ADMIN", fg=_FG_DIM, bg=_CARD_BG,
+                row.frame,
+                text="ADMIN",
+                fg=_FG_DIM,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7),
             ).pack(side="right", padx=(0, 4))
         if _has_recommendation(td):
             tk.Label(
-                row.frame, text="★ REC", fg=_TEAL, bg=_CARD_BG,
+                row.frame,
+                text="★ REC",
+                fg=_TEAL,
+                bg=_CARD_BG,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
 
@@ -468,7 +620,10 @@ class _CategorySection:
         _scope_cfg = {"user": ("USER", _OK_GREEN), "machine": ("MACHINE", _ACCENT), "both": ("BOTH", _WARN_YELLOW)}
         _s_text, _s_color = _scope_cfg.get(scope, ("?", _FG_DIM))
         tk.Label(
-            row.frame, text=_s_text, fg=_s_color, bg=_CARD_BG,
+            row.frame,
+            text=_s_text,
+            fg=_s_color,
+            bg=_CARD_BG,
             font=("Segoe UI", 7, "bold"),
         ).pack(side="right", padx=(0, 4))
 
@@ -511,10 +666,7 @@ class _CategorySection:
         visible = False
         for row in self.rows:
             td = row.td
-            match = not q or any(
-                q in f.lower()
-                for f in [td.id, td.label, td.category, td.description, *td.tags]
-            )
+            match = not q or any(q in f.lower() for f in [td.id, td.label, td.category, td.description, *td.tags])
             if match:
                 row.pack_row()
                 visible = True
@@ -566,12 +718,15 @@ class RegiLatticeGUI:
         """Use DwmSetWindowAttribute to request Mica/dark title bar."""
         try:
             import ctypes
+
             hwnd = ctypes.windll.user32.GetForegroundWindow()
             DWMWA_USE_IMMERSIVE_DARK_MODE = 20
             value = ctypes.c_int(1)
             ctypes.windll.dwmapi.DwmSetWindowAttribute(
-                hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE,
-                ctypes.byref(value), ctypes.sizeof(value),
+                hwnd,
+                DWMWA_USE_IMMERSIVE_DARK_MODE,
+                ctypes.byref(value),
+                ctypes.sizeof(value),
             )
         except (ImportError, OSError, AttributeError):
             pass  # non-Windows or unsupported build
@@ -587,8 +742,11 @@ class RegiLatticeGUI:
         style.configure("Header.TFrame", background=_HEADER_BG)
         style.configure("Card.TFrame", background=_CARD_BG)
         style.configure(
-            "TCheckbutton", background=_CARD_BG, foreground=_FG,
-            font=_FONT, indicatorsize=16,
+            "TCheckbutton",
+            background=_CARD_BG,
+            foreground=_FG,
+            font=_FONT,
+            indicatorsize=16,
         )
         style.map(
             "TCheckbutton",
@@ -643,7 +801,9 @@ class RegiLatticeGUI:
         header = ttk.Frame(self._root, style="Header.TFrame")
         header.pack(fill="x")
         ttk.Label(header, text="⚡ RegiLattice", style="Title.TLabel").pack(
-            side="left", padx=16, pady=(12, 2),
+            side="left",
+            padx=16,
+            pady=(12, 2),
         )
         ttk.Label(
             header,
@@ -659,7 +819,12 @@ class RegiLatticeGUI:
             tk.Label(
                 banner,
                 text=f"  🛑  Corporate network: {corp_info} — non-corp-safe tweaks blocked",
-                bg=_ERR_RED, fg="#1E1E2E", font=_FONT_BOLD, anchor="w", padx=12, pady=6,
+                bg=_ERR_RED,
+                fg="#1E1E2E",
+                font=_FONT_BOLD,
+                anchor="w",
+                padx=12,
+                pady=6,
             ).pack(fill="x")
 
         # Toolbar
@@ -675,13 +840,20 @@ class RegiLatticeGUI:
         profile_frame = ttk.Frame(toolbar)
         profile_frame.pack(side="right", padx=(8, 0))
         tk.Label(
-            profile_frame, text="Profile:", fg=_FG_DIM, bg=_BG, font=_FONT_XS,
+            profile_frame,
+            text="Profile:",
+            fg=_FG_DIM,
+            bg=_BG,
+            font=_FONT_XS,
         ).pack(side="left", padx=(0, 4))
         self._profile_var = tk.StringVar(value="(none)")
         profile_names = ["(none)"] + [p.title() for p in available_profiles()]
         profile_menu = ttk.OptionMenu(
-            profile_frame, self._profile_var, self._profile_var.get(),
-            *profile_names, command=lambda val: self._apply_profile_selection(str(val)),
+            profile_frame,
+            self._profile_var,
+            self._profile_var.get(),
+            *profile_names,
+            command=lambda val: self._apply_profile_selection(str(val)),
         )
         profile_menu.pack(side="left")
 
@@ -689,12 +861,21 @@ class RegiLatticeGUI:
         scope_frame = ttk.Frame(toolbar)
         scope_frame.pack(side="right", padx=(8, 0))
         tk.Label(
-            scope_frame, text="Scope:", fg=_FG_DIM, bg=_BG, font=_FONT_XS,
+            scope_frame,
+            text="Scope:",
+            fg=_FG_DIM,
+            bg=_BG,
+            font=_FONT_XS,
         ).pack(side="left", padx=(0, 4))
         self._scope_filter_var = tk.StringVar(value="All")
         scope_menu = ttk.OptionMenu(
-            scope_frame, self._scope_filter_var, "All",
-            "All", "User Only", "Machine Only", "Both",
+            scope_frame,
+            self._scope_filter_var,
+            "All",
+            "All",
+            "User Only",
+            "Machine Only",
+            "Both",
             command=lambda _: self._filter_rows(),
         )
         scope_menu.pack(side="left")
@@ -703,24 +884,38 @@ class RegiLatticeGUI:
         filter_frame = ttk.Frame(toolbar)
         filter_frame.pack(side="right", padx=(8, 0))
         tk.Label(
-            filter_frame, text="Filter:", fg=_FG_DIM, bg=_BG, font=_FONT_XS,
+            filter_frame,
+            text="Filter:",
+            fg=_FG_DIM,
+            bg=_BG,
+            font=_FONT_XS,
         ).pack(side="left", padx=(0, 4))
         self._status_filter_var = tk.StringVar(value="All")
         filter_menu = ttk.OptionMenu(
-            filter_frame, self._status_filter_var, "All",
-            "All", "Applied", "Default", "Unknown",
+            filter_frame,
+            self._status_filter_var,
+            "All",
+            "All",
+            "Applied",
+            "Default",
+            "Unknown",
             command=lambda _: self._filter_rows(),
         )
         filter_menu.pack(side="left")
         # Selection counter
         self._sel_count_label = tk.Label(
-            toolbar, text="0 selected", fg=_ACCENT, bg=_BG, font=_FONT_SM,
+            toolbar,
+            text="0 selected",
+            fg=_ACCENT,
+            bg=_BG,
+            font=_FONT_SM,
         )
         self._sel_count_label.pack(side="left", padx=(10, 0))
 
         self._force_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(toolbar, text="Force (bypass corp guard)", variable=self._force_var).pack(
-            side="right", padx=(8, 0),
+            side="right",
+            padx=(8, 0),
         )
 
         # Legend
@@ -740,7 +935,9 @@ class RegiLatticeGUI:
         tk.Label(
             legend,
             text="Ctrl+F Search | Ctrl+A Select | Ctrl+I Invert | Ctrl+L Log | Ctrl+E Expand | Esc Clear",
-            fg=_FG_DIM, bg=_BG, font=("Segoe UI", 7),
+            fg=_FG_DIM,
+            bg=_BG,
+            font=("Segoe UI", 7),
         ).pack(side="right", padx=(10, 0))
 
         # Search bar
@@ -752,7 +949,8 @@ class RegiLatticeGUI:
         self._search_entry = ttk.Entry(search_frame, textvariable=self._search_var, font=_FONT)
         self._search_entry.pack(side="left", fill="x", expand=True)
         ttk.Button(search_frame, text="✕", width=3, command=lambda: self._search_var.set("")).pack(
-            side="left", padx=(4, 0),
+            side="left",
+            padx=(4, 0),
         )
 
         # Scrollable tweak list
@@ -779,7 +977,8 @@ class RegiLatticeGUI:
             cat_rows: list[_TweakRow] = []
             for td in cat_tweaks:
                 row = _TweakRow(
-                    self._inner, td,
+                    self._inner,
+                    td,
                     corp_blocked=self._corp_blocked,
                     on_toggle=self._toggle_single,
                 )
@@ -798,12 +997,16 @@ class RegiLatticeGUI:
         btn_frame.pack(fill="x", padx=16, pady=(0, 4))
 
         ttk.Button(
-            btn_frame, text="▶  Apply Selected", style="Apply.TButton",
+            btn_frame,
+            text="▶  Apply Selected",
+            style="Apply.TButton",
             command=lambda: self._dispatch("apply"),
         ).pack(side="left", padx=(0, 6), expand=True, fill="x")
 
         ttk.Button(
-            btn_frame, text="✖  Remove Selected", style="Remove.TButton",
+            btn_frame,
+            text="✖  Remove Selected",
+            style="Remove.TButton",
             command=lambda: self._dispatch("remove"),
         ).pack(side="left", padx=(0, 6), expand=True, fill="x")
 
@@ -812,19 +1015,29 @@ class RegiLatticeGUI:
         btn2.pack(fill="x", padx=16, pady=(0, 4))
 
         ttk.Button(btn2, text="💾  Save Snapshot", style="Snap.TButton", command=self._save_snapshot).pack(
-            side="left", padx=(0, 6), expand=True, fill="x",
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
         )
         ttk.Button(btn2, text="⏪  Restore Snapshot", style="Snap.TButton", command=self._restore_snapshot).pack(
-            side="left", padx=(0, 6), expand=True, fill="x",
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
         )
         ttk.Button(
-            btn2, text="🛡  Restore Point", style="Restore.TButton",
+            btn2,
+            text="🛡  Restore Point",
+            style="Restore.TButton",
             command=lambda: self._dispatch("restore"),
         ).pack(side="left", padx=(0, 6), expand=True, fill="x")
 
         # Export as PowerShell script
         ttk.Button(
-            btn2, text="\U0001F4CB  Export PS1", style="Snap.TButton",
+            btn2,
+            text="\U0001f4cb  Export PS1",
+            style="Snap.TButton",
             command=self._export_powershell,
         ).pack(side="left", expand=True, fill="x")
 
@@ -832,17 +1045,28 @@ class RegiLatticeGUI:
         btn3 = ttk.Frame(self._root)
         btn3.pack(fill="x", padx=16, pady=(0, 4))
 
-        ttk.Button(btn3, text="\U0001F4C2  Import JSON", command=self._import_json_selection).pack(
-            side="left", padx=(0, 6), expand=True, fill="x",
+        ttk.Button(btn3, text="\U0001f4c2  Import JSON", command=self._import_json_selection).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
         )
-        ttk.Button(btn3, text="\U0001F4E6  Scoop Manager", command=self._open_scoop_manager).pack(
-            side="left", padx=(0, 6), expand=True, fill="x",
+        ttk.Button(btn3, text="\U0001f4e6  Scoop Manager", command=self._open_scoop_manager).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
         )
-        ttk.Button(btn3, text="\U0001F4DC  Toggle Log", command=self._toggle_log_panel).pack(
-            side="left", padx=(0, 6), expand=True, fill="x",
+        ttk.Button(btn3, text="\U0001f4dc  Toggle Log", command=self._toggle_log_panel).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
         )
         ttk.Button(btn3, text="\u2139  About", command=self._show_about).pack(
-            side="left", expand=True, fill="x",
+            side="left",
+            expand=True,
+            fill="x",
         )
 
         # Progress + status bar
@@ -881,9 +1105,16 @@ class RegiLatticeGUI:
         self._log_visible = False
         self._log_frame = ttk.Frame(self._root)
         self._log_text = tk.Text(
-            self._log_frame, bg="#11111B", fg=_FG, font=("Cascadia Code", 9),
-            height=8, wrap="word", state="disabled", relief="flat",
-            insertbackground=_FG, selectbackground=_ACCENT,
+            self._log_frame,
+            bg="#11111B",
+            fg=_FG,
+            font=("Cascadia Code", 9),
+            height=8,
+            wrap="word",
+            state="disabled",
+            relief="flat",
+            insertbackground=_FG,
+            selectbackground=_ACCENT,
         )
         _log_scroll = ttk.Scrollbar(self._log_frame, orient="vertical", command=self._log_text.yview)
         self._log_text.configure(yscrollcommand=_log_scroll.set)
@@ -926,17 +1157,19 @@ class RegiLatticeGUI:
         scope_filter = self._scope_filter_var.get()
         _filter_status = {"Applied": "applied", "Default": "not applied", "Unknown": "unknown"}
         _filter_scope = {"User Only": "user", "Machine Only": "machine", "Both": "both"}
+
+        # Use search_tweaks() for indexed text matching (faster on large tweak sets)
+        matching_ids: set[str] | None = None
+        if query:
+            matching_ids = {td.id for td in search_tweaks(query)}
+
         for section in self._category_sections:
-            q = query.lower()
             visible = False
             target_status = _filter_status.get(status_filter, "")
             target_scope = _filter_scope.get(scope_filter, "")
             for row in section.rows:
                 td = row.td
-                text_match = not q or any(
-                    q in f.lower()
-                    for f in [td.id, td.label, td.category, td.description, *td.tags]
-                )
+                text_match = matching_ids is None or td.id in matching_ids
                 status_match = status_filter == "All" or tweak_status(td) == target_status
                 scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
                 if text_match and status_match and scope_match:
@@ -1017,7 +1250,8 @@ class RegiLatticeGUI:
         self._ctx_menu.add_command(label=f"Copy ID: {td.id}", command=lambda: self._copy_to_clipboard(td.id))
         if td.registry_keys:
             self._ctx_menu.add_command(
-                label="Copy Registry Key", command=lambda: self._copy_to_clipboard(td.registry_keys[0]),
+                label="Copy Registry Key",
+                command=lambda: self._copy_to_clipboard(td.registry_keys[0]),
             )
         self._ctx_menu.add_separator()
         self._ctx_menu.add_command(
@@ -1068,7 +1302,7 @@ class RegiLatticeGUI:
         elif isinstance(data, list):
             ids = set(data)
         else:
-            messagebox.showerror("Import Error", "Expected a JSON list of tweak IDs or {\"tweaks\": [...]}.")
+            messagebox.showerror("Import Error", 'Expected a JSON list of tweak IDs or {"tweaks": [...]}.')
             return
 
         self._deselect_all()
@@ -1084,12 +1318,7 @@ class RegiLatticeGUI:
 
     def _open_scoop_manager(self) -> None:
         """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
-        from .tweaks.scoop_tools import (
-            _install_scoop_app,
-            _remove_scoop_app,
-            _scoop_installed,
-            list_installed_scoop_apps,
-        )
+        from .tweaks.scoop_tools import _install_scoop_app, _remove_scoop_app, _scoop_installed, list_installed_scoop_apps
 
         dlg = tk.Toplevel(self._root)
         dlg.title("Scoop Tools Manager")
@@ -1099,15 +1328,20 @@ class RegiLatticeGUI:
         dlg.grab_set()
 
         # Header
-        tk.Label(dlg, text="\U0001F4E6  Scoop Tools Manager", bg=_BG, fg=_FG, font=_FONT_TITLE).pack(
-            padx=16, pady=(12, 4), anchor="w",
+        tk.Label(dlg, text="\U0001f4e6  Scoop Tools Manager", bg=_BG, fg=_FG, font=_FONT_TITLE).pack(
+            padx=16,
+            pady=(12, 4),
+            anchor="w",
         )
 
         scoop_ok = _scoop_installed()
         if not scoop_ok:
             tk.Label(
-                dlg, text="Scoop is not installed. Install via 'scoop-install' tweak first.",
-                bg=_BG, fg=_ERR_RED, font=_FONT_BOLD,
+                dlg,
+                text="Scoop is not installed. Install via 'scoop-install' tweak first.",
+                bg=_BG,
+                fg=_ERR_RED,
+                font=_FONT_BOLD,
             ).pack(padx=16, pady=8)
             return
 
@@ -1120,8 +1354,14 @@ class RegiLatticeGUI:
         list_frame.pack(fill="both", expand=True, padx=16, pady=4)
 
         listbox = tk.Listbox(
-            list_frame, bg=_CARD_BG, fg=_FG, font=_FONT, selectbackground=_ACCENT,
-            selectforeground="#1E1E2E", relief="flat", highlightthickness=0,
+            list_frame,
+            bg=_CARD_BG,
+            fg=_FG,
+            font=_FONT,
+            selectbackground=_ACCENT,
+            selectforeground="#1E1E2E",
+            relief="flat",
+            highlightthickness=0,
         )
         scroll = ttk.Scrollbar(list_frame, orient="vertical", command=listbox.yview)
         listbox.configure(yscrollcommand=scroll.set)
@@ -1161,7 +1401,7 @@ class RegiLatticeGUI:
                 messagebox.showerror("Install Error", str(exc))
 
         def _remove_action() -> None:
-            sel = listbox.curselection()
+            sel = listbox.curselection()  # type: ignore[no-untyped-call]
             if not sel:
                 messagebox.showinfo("Select Package", "Select a package to remove.")
                 return
@@ -1176,16 +1416,33 @@ class RegiLatticeGUI:
             self._refresh_status_all()
 
         tk.Button(
-            ctrl, text="Install", bg="#40A02B", fg="white", font=_FONT_XS_BOLD,
-            relief="flat", padx=8, command=lambda: threading.Thread(target=_install_action, daemon=True).start(),
+            ctrl,
+            text="Install",
+            bg="#40A02B",
+            fg="white",
+            font=_FONT_XS_BOLD,
+            relief="flat",
+            padx=8,
+            command=lambda: threading.Thread(target=_install_action, daemon=True).start(),
         ).pack(side="left", padx=2)
         tk.Button(
-            ctrl, text="Remove Selected", bg="#E64A19", fg="white", font=_FONT_XS_BOLD,
-            relief="flat", padx=8, command=lambda: threading.Thread(target=_remove_action, daemon=True).start(),
+            ctrl,
+            text="Remove Selected",
+            bg="#E64A19",
+            fg="white",
+            font=_FONT_XS_BOLD,
+            relief="flat",
+            padx=8,
+            command=lambda: threading.Thread(target=_remove_action, daemon=True).start(),
         ).pack(side="left", padx=2)
         tk.Button(
-            ctrl, text="\u21BB Refresh", bg=_CARD_BG, fg=_FG, font=_FONT_XS_BOLD,
-            relief="flat", padx=8,
+            ctrl,
+            text="\u21bb Refresh",
+            bg=_CARD_BG,
+            fg=_FG,
+            font=_FONT_XS_BOLD,
+            relief="flat",
+            padx=8,
             command=lambda: threading.Thread(target=_refresh_list, daemon=True).start(),
         ).pack(side="left", padx=2)
 
@@ -1195,9 +1452,16 @@ class RegiLatticeGUI:
         popular = ["7zip", "git", "ripgrep", "fd", "bat", "fzf", "jq", "gsudo", "neovim", "starship"]
         for i, tool in enumerate(popular):
             tk.Button(
-                pop_frame, text=tool, bg=_CARD_BG, fg=_ACCENT, font=_FONT_XS,
-                relief="flat", padx=4, pady=1, cursor="hand2",
-                command=lambda t=tool: (install_var.set(t),),  # type: ignore[misc]
+                pop_frame,
+                text=tool,
+                bg=_CARD_BG,
+                fg=_ACCENT,
+                font=_FONT_XS,
+                relief="flat",
+                padx=4,
+                pady=1,
+                cursor="hand2",
+                command=lambda t=tool: install_var.set(t),  # type: ignore[misc]
             ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
 
         threading.Thread(target=_refresh_list, daemon=True).start()
@@ -1245,7 +1509,9 @@ class RegiLatticeGUI:
         ):
             return
         threading.Thread(
-            target=self._run_tweaks, args=(tweaks, mode), daemon=True,
+            target=self._run_tweaks,
+            args=(tweaks, mode),
+            daemon=True,
         ).start()
 
     # ── Status refresh ───────────────────────────────────────────────────
@@ -1296,10 +1562,7 @@ class RegiLatticeGUI:
             section.update_count()
         # Update summary stats
         rec_count = sum(1 for r in self._tweak_rows if _has_recommendation(r.td))
-        gpo_count = sum(
-            1 for r in self._tweak_rows
-            if r.td.registry_keys and is_gpo_managed(r.td.registry_keys)
-        )
+        gpo_count = sum(1 for r in self._tweak_rows if r.td.registry_keys and is_gpo_managed(r.td.registry_keys))
         self._stat_applied.configure(text=f"\u25cf {applied} Applied")
         self._stat_default.configure(text=f"\u25cf {default} Default")
         self._stat_unknown.configure(text=f"\u25cf {unknown} Unknown")
@@ -1332,7 +1595,8 @@ class RegiLatticeGUI:
                 fn = td.apply_fn if action == "apply" else td.remove_fn
                 fn()
                 self._root.after(
-                    0, self._set_status,
+                    0,
+                    self._set_status,
                     f"{td.label} — {'enabled' if action == 'apply' else 'disabled'} ✔",
                     _OK_GREEN,
                 )
@@ -1397,7 +1661,7 @@ class RegiLatticeGUI:
             "# Run this script in an elevated PowerShell session.",
             "# WARNING: Modifying the registry can cause system instability.",
             "",
-            '#Requires -RunAsAdministrator',
+            "#Requires -RunAsAdministrator",
             "",
         ]
         for td in selected:
@@ -1423,7 +1687,8 @@ class RegiLatticeGUI:
 
     def _save_snapshot(self) -> None:
         path = filedialog.asksaveasfilename(
-            title="Save Tweak Snapshot", defaultextension=".json",
+            title="Save Tweak Snapshot",
+            defaultextension=".json",
             filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
             initialfile="regilattice_snapshot.json",
         )
@@ -1501,7 +1766,8 @@ class RegiLatticeGUI:
             pct = int(i / total * 100)
             self._root.after(0, self._progress.configure, {"value": pct})
             self._root.after(
-                0, self._set_status,
+                0,
+                self._set_status,
                 f"{'Applying' if mode == 'apply' else 'Removing'}: {td.label}  ({i}/{total})",
                 _ACCENT,
             )
@@ -1527,7 +1793,8 @@ class RegiLatticeGUI:
         if errors:
             err_text = "\n".join(errors)
             self._root.after(
-                0, lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
+                0,
+                lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
             )
 
     def _run_restore_point(self) -> None:
@@ -1536,8 +1803,10 @@ class RegiLatticeGUI:
             self._root.after(0, self._set_status, "Restore point created ✔", _OK_GREEN)
         except AdminRequirementError:
             self._root.after(
-                0, lambda: messagebox.showwarning(
-                    "Admin Required", "Creating a restore point requires admin elevation.",
+                0,
+                lambda: messagebox.showwarning(
+                    "Admin Required",
+                    "Creating a restore point requires admin elevation.",
                 ),
             )
             self._root.after(0, self._set_status, "Restore point failed (admin)", _ERR_RED)

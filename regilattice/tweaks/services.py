@@ -347,10 +347,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DIAGTRACK, _DMWAPPUSH],
-        description=(
-            "Disables the DiagTrack and dmwappushservice services that "
-            "collect and send diagnostic data to Microsoft."
-        ),
+        description=("Disables the DiagTrack and dmwappushservice services that collect and send diagnostic data to Microsoft."),
         tags=["services", "telemetry", "privacy"],
     ),
     TweakDef(
@@ -363,10 +360,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SEARCH],
-        description=(
-            "Disables the Windows Search indexer service — helpful on "
-            "low-resource machines or when using Everything search."
-        ),
+        description=("Disables the Windows Search indexer service — helpful on low-resource machines or when using Everything search."),
         tags=["services", "performance", "disk"],
     ),
     TweakDef(
@@ -392,10 +386,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SPOOLER],
-        description=(
-            "Disables the Print Spooler service — reduces attack surface "
-            "on machines that don't use local printers."
-        ),
+        description=("Disables the Print Spooler service — reduces attack surface on machines that don't use local printers."),
         tags=["services", "security", "printer"],
     ),
     TweakDef(
@@ -434,10 +425,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BIOMETRIC],
-        description=(
-            "Disables Windows Biometric Service (WbioSrvc). "
-            "Useful if fingerprint/face login is not used."
-        ),
+        description=("Disables Windows Biometric Service (WbioSrvc). Useful if fingerprint/face login is not used."),
         tags=["services", "biometric", "security"],
     ),
     TweakDef(
@@ -463,10 +451,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_REMREG],
-        description=(
-            "Disables the Remote Registry service which allows remote "
-            "access to the Windows registry. Security hardening measure."
-        ),
+        description=("Disables the Remote Registry service which allows remote access to the Windows registry. Security hardening measure."),
         tags=["services", "security", "remote"],
     ),
     TweakDef(
@@ -505,10 +490,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DOSERVICE],
-        description=(
-            "Disables the Delivery Optimization service which shares "
-            "Windows Update data with other PCs on LAN and internet."
-        ),
+        description=("Disables the Delivery Optimization service which shares Windows Update data with other PCs on LAN and internet."),
         tags=["services", "update", "bandwidth", "privacy"],
     ),
     TweakDef(
@@ -616,10 +598,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SPOOLER],
-        description=(
-            "Disables Print Spooler to mitigate PrintNightmare vulnerabilities. "
-            "Default: Automatic. Recommended: Disabled."
-        ),
+        description=("Disables Print Spooler to mitigate PrintNightmare vulnerabilities. Default: Automatic. Recommended: Disabled."),
         tags=["services", "spooler", "security", "printnightmare"],
     ),
     TweakDef(
@@ -632,10 +611,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_FAX],
-        description=(
-            "Disables the legacy Fax service to free resources. "
-            "Default: Manual. Recommended: Disabled."
-        ),
+        description=("Disables the legacy Fax service to free resources. Default: Manual. Recommended: Disabled."),
         tags=["services", "fax", "legacy", "cleanup"],
     ),
 ]
@@ -748,5 +724,115 @@ TWEAKS += [
             "Improves privacy. Default: Manual. Recommended: Disabled for desktops."
         ),
         tags=["services", "geolocation", "lfsvc", "privacy"],
+    ),
+]
+
+
+# ══ Additional Service Tweaks ══════════════════════════════════════════
+
+_CDPSVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc"
+_TRKWKS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TrkWks"
+_WALLET = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WalletService"
+
+
+def _apply_svc_disable_cdpsvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Connected Devices Platform Service")
+    SESSION.backup([_CDPSVC], "SvcCDPSvc")
+    SESSION.set_dword(_CDPSVC, "Start", 4)
+
+
+def _remove_svc_disable_cdpsvc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CDPSVC, "Start", 2)
+
+
+def _detect_svc_disable_cdpsvc() -> bool:
+    return SESSION.read_dword(_CDPSVC, "Start") == 4
+
+
+def _apply_svc_disable_link_tracking(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Distributed Link Tracking Client")
+    SESSION.backup([_TRKWKS], "SvcTrkWks")
+    SESSION.set_dword(_TRKWKS, "Start", 4)
+
+
+def _remove_svc_disable_link_tracking(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TRKWKS, "Start", 3)
+
+
+def _detect_svc_disable_link_tracking() -> bool:
+    return SESSION.read_dword(_TRKWKS, "Start") == 4
+
+
+def _apply_svc_disable_wallet(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disable Wallet Service")
+    SESSION.backup([_WALLET], "SvcWallet")
+    SESSION.set_dword(_WALLET, "Start", 4)
+
+
+def _remove_svc_disable_wallet(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WALLET, "Start", 3)
+
+
+def _detect_svc_disable_wallet() -> bool:
+    return SESSION.read_dword(_WALLET, "Start") == 4
+
+
+TWEAKS += [
+    TweakDef(
+        id="svc-disable-cdpsvc",
+        label="Disable Connected Devices Platform Service",
+        category="Services",
+        apply_fn=_apply_svc_disable_cdpsvc,
+        remove_fn=_remove_svc_disable_cdpsvc,
+        detect_fn=_detect_svc_disable_cdpsvc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CDPSVC],
+        description=(
+            "Disables the Connected Devices Platform Service (CDPSvc) used for "
+            "cross-device experiences. Frees resources if unused. "
+            "Default: Automatic. Recommended: Disabled."
+        ),
+        tags=["services", "cdpsvc", "cross-device", "platform"],
+    ),
+    TweakDef(
+        id="svc-disable-link-tracking",
+        label="Disable Distributed Link Tracking Client",
+        category="Services",
+        apply_fn=_apply_svc_disable_link_tracking,
+        remove_fn=_remove_svc_disable_link_tracking,
+        detect_fn=_detect_svc_disable_link_tracking,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TRKWKS],
+        description=(
+            "Disables the Distributed Link Tracking Client (TrkWks) that "
+            "maintains NTFS file links across networked computers. "
+            "Default: Manual. Recommended: Disabled for standalone PCs."
+        ),
+        tags=["services", "link-tracking", "trkwks", "ntfs"],
+    ),
+    TweakDef(
+        id="svc-disable-wallet",
+        label="Disable Wallet Service",
+        category="Services",
+        apply_fn=_apply_svc_disable_wallet,
+        remove_fn=_remove_svc_disable_wallet,
+        detect_fn=_detect_svc_disable_wallet,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WALLET],
+        description=(
+            "Disables the Windows Wallet Service used for NFC-based payments. "
+            "Safe to disable if contactless payments are unused. "
+            "Default: Manual. Recommended: Disabled."
+        ),
+        tags=["services", "wallet", "nfc", "payment"],
     ),
 ]

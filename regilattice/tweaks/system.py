@@ -370,10 +370,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BOOT_KEY],
-        description=(
-            "Shows detailed status messages during Windows startup "
-            "and shutdown instead of the generic loading screen."
-        ),
+        description=("Shows detailed status messages during Windows startup and shutdown instead of the generic loading screen."),
         tags=["system", "boot", "diagnostics"],
     ),
     TweakDef(
@@ -386,10 +383,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_AUTOPLAY_KEY],
-        description=(
-            "Disables AutoPlay for all removable media and devices. "
-            "Security best practice to avoid malware auto-execution."
-        ),
+        description=("Disables AutoPlay for all removable media and devices. Security best practice to avoid malware auto-execution."),
         tags=["system", "security", "autoplay", "usb"],
     ),
     TweakDef(
@@ -402,10 +396,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_ACTIVITY_KEY],
-        description=(
-            "Disables Activity History, preventing Windows from collecting "
-            "and uploading activity data (timeline, app usage)."
-        ),
+        description=("Disables Activity History, preventing Windows from collecting and uploading activity data (timeline, app usage)."),
         tags=["system", "privacy", "activity-history", "timeline"],
     ),
     TweakDef(
@@ -418,10 +409,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CLIPBOARD_KEY],
-        description=(
-            "Disables Windows Clipboard History (Win+V). "
-            "Prevents clipboard content from being stored and synced."
-        ),
+        description=("Disables Windows Clipboard History (Win+V). Prevents clipboard content from being stored and synced."),
         tags=["system", "privacy", "clipboard"],
     ),
     TweakDef(
@@ -434,10 +422,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_LANMAN_KEY],
-        description=(
-            "Disables default administrative shares (C$, ADMIN$). "
-            "Reduces lateral-movement attack surface on workstations."
-        ),
+        description=("Disables default administrative shares (C$, ADMIN$). Reduces lateral-movement attack surface on workstations."),
         tags=["system", "security", "network", "shares"],
     ),
     TweakDef(
@@ -539,10 +524,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SESSION_POWER],
-        description=(
-            "Disables Fast Startup (hybrid shutdown). Ensures clean boot "
-            "every time. Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Fast Startup (hybrid shutdown). Ensures clean boot every time. Default: Enabled. Recommended: Disabled."),
         tags=["system", "fast-startup", "hiberboot", "boot"],
     ),
     TweakDef(
@@ -555,10 +537,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_WER_REPORT_POLICY],
-        description=(
-            "Disables Windows Error Reporting via Group Policy. "
-            "Default: Enabled. Recommended: Disabled for privacy."
-        ),
+        description=("Disables Windows Error Reporting via Group Policy. Default: Enabled. Recommended: Disabled for privacy."),
         tags=["system", "error-reporting", "privacy", "wer"],
     ),
 ]
@@ -870,10 +849,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CDM_KEY],
-        description=(
-            "Disables Windows tips, tricks, and suggestions popups. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Windows tips, tricks, and suggestions popups. Default: Enabled. Recommended: Disabled."),
         tags=["system", "tips", "suggestions", "notifications", "nag"],
     ),
     TweakDef(
@@ -887,9 +863,81 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_POWER_THROTTLE_KEY],
         description=(
-            "Disables Windows power throttling which limits background app performance. "
-            "Default: Enabled. Recommended: Disabled for desktops."
+            "Disables Windows power throttling which limits background app performance. Default: Enabled. Recommended: Disabled for desktops."
         ),
         tags=["system", "power", "throttling", "performance"],
+    ),
+]
+
+
+# ══ Additional System Tweaks ═══════════════════════════════════════════
+
+_POWER_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+_FILESYSTEM_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"
+
+
+def _apply_sys_disable_hibernation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disable hibernation")
+    SESSION.backup([_POWER_KEY], "SysHibernation")
+    SESSION.set_dword(_POWER_KEY, "HibernateEnabled", 0)
+
+
+def _remove_sys_disable_hibernation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_POWER_KEY, "HibernateEnabled", 1)
+
+
+def _detect_sys_disable_hibernation() -> bool:
+    return SESSION.read_dword(_POWER_KEY, "HibernateEnabled") == 0
+
+
+def _apply_sys_disable_8dot3(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disable 8.3 short filename creation")
+    SESSION.backup([_FILESYSTEM_KEY], "Sys8dot3")
+    SESSION.set_dword(_FILESYSTEM_KEY, "NtfsDisable8dot3NameCreation", 1)
+
+
+def _remove_sys_disable_8dot3(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FILESYSTEM_KEY, "NtfsDisable8dot3NameCreation", 0)
+
+
+def _detect_sys_disable_8dot3() -> bool:
+    return SESSION.read_dword(_FILESYSTEM_KEY, "NtfsDisable8dot3NameCreation") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="sys-disable-hibernation",
+        label="Disable Hibernation",
+        category="System",
+        apply_fn=_apply_sys_disable_hibernation,
+        remove_fn=_remove_sys_disable_hibernation,
+        detect_fn=_detect_sys_disable_hibernation,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POWER_KEY],
+        description=(
+            "Disables Windows hibernation, freeing disk space used by hiberfil.sys. Default: Enabled. Recommended: Disabled for desktops with SSDs."
+        ),
+        tags=["system", "hibernation", "power", "disk", "ssd"],
+    ),
+    TweakDef(
+        id="sys-disable-8dot3",
+        label="Disable 8.3 Short Filename Creation",
+        category="System",
+        apply_fn=_apply_sys_disable_8dot3,
+        remove_fn=_remove_sys_disable_8dot3,
+        detect_fn=_detect_sys_disable_8dot3,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FILESYSTEM_KEY],
+        description=(
+            "Disables NTFS 8.3 short filename generation for improved file system "
+            "performance. Default: Enabled. Recommended: Disabled on modern systems."
+        ),
+        tags=["system", "ntfs", "8dot3", "filesystem", "performance"],
     ),
 ]

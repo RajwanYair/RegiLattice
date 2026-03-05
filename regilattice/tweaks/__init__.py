@@ -12,7 +12,10 @@ import json
 import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import (  # type: ignore[attr-defined]
+    ThreadPoolExecutor,
+    as_completed,
+)
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -71,10 +74,7 @@ def _build_category_info() -> None:
         for td in cat_tweaks:
             keys_upper = [k.upper() for k in td.registry_keys]
             has_hkcu = any(k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper)
-            has_hklm = any(
-                k.startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\"))
-                for k in keys_upper
-            )
+            has_hklm = any(k.startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")) for k in keys_upper)
             if has_hkcu:
                 scopes.add("user")
             if has_hklm:
@@ -87,10 +87,7 @@ def _build_category_info() -> None:
             info.scope = "mixed"
 
         # Infer risk from policy-key and admin ratios
-        policy_ratio = sum(
-            1 for t in cat_tweaks
-            if any("\\policies\\" in k.lower() for k in t.registry_keys)
-        ) / max(len(cat_tweaks), 1)
+        policy_ratio = sum(1 for t in cat_tweaks if any("\\policies\\" in k.lower() for k in t.registry_keys)) / max(len(cat_tweaks), 1)
         admin_ratio = sum(1 for t in cat_tweaks if t.needs_admin) / max(len(cat_tweaks), 1)
         if policy_ratio > 0.5 or admin_ratio > 0.8:
             info.risk_level = "high"
@@ -158,14 +155,8 @@ def tweak_scope(td: TweakDef) -> str:
     if not td.registry_keys:
         result = "machine" if td.needs_admin else "user"
     else:
-        has_user = any(
-            k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\"))
-            for k in td.registry_keys
-        )
-        has_machine = any(
-            k.upper().startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\"))
-            for k in td.registry_keys
-        )
+        has_user = any(k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in td.registry_keys)
+        has_machine = any(k.upper().startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")) for k in td.registry_keys)
         if has_user and has_machine:
             result = "both"
         elif has_user:
@@ -231,50 +222,98 @@ def _get_search_index(td: TweakDef) -> str:
 _PROFILES: dict[str, dict[str, object]] = {
     "business": {
         "description": "Business workstation — productivity, security & cloud tweaks",
-        "apply_categories": frozenset({
-            "Cloud Storage", "Office", "Communication", "OneDrive",
-            "Security", "Network", "Privacy", "Printing",
-            "Backup & Recovery", "M365 Copilot",
-        }),
+        "apply_categories": frozenset(
+            {
+                "Cloud Storage",
+                "Office",
+                "Communication",
+                "OneDrive",
+                "Security",
+                "Network",
+                "Privacy",
+                "Printing",
+                "Backup & Recovery",
+                "M365 Copilot",
+            }
+        ),
         "skip_categories": frozenset({"Gaming", "GPU / Graphics", "Virtualization"}),
     },
     "gaming": {
         "description": "Gaming rig — GPU, performance & network tweaks",
-        "apply_categories": frozenset({
-            "Gaming", "GPU / Graphics", "Performance", "Display",
-            "Audio", "Network", "Power", "Services",
-        }),
-        "skip_categories": frozenset({
-            "Office", "Communication", "OneDrive", "Cloud Storage",
-            "LibreOffice", "Printing", "Backup & Recovery",
-        }),
+        "apply_categories": frozenset(
+            {
+                "Gaming",
+                "GPU / Graphics",
+                "Performance",
+                "Display",
+                "Audio",
+                "Network",
+                "Power",
+                "Services",
+            }
+        ),
+        "skip_categories": frozenset(
+            {
+                "Office",
+                "Communication",
+                "OneDrive",
+                "Cloud Storage",
+                "LibreOffice",
+                "Printing",
+                "Backup & Recovery",
+            }
+        ),
     },
     "privacy": {
         "description": "Maximum privacy — disables telemetry, tracking & cloud",
-        "apply_categories": frozenset({
-            "Privacy", "Cortana & Search", "AI / Copilot",
-            "M365 Copilot", "Windows 11", "Cloud Storage", "Communication",
-        }),
+        "apply_categories": frozenset(
+            {
+                "Privacy",
+                "Cortana & Search",
+                "AI / Copilot",
+                "M365 Copilot",
+                "Windows 11",
+                "Cloud Storage",
+                "Communication",
+            }
+        ),
         "skip_categories": frozenset(),
     },
     "minimal": {
         "description": "Minimal — lightweight essentials only (performance, startup, maintenance)",
-        "apply_categories": frozenset({
-            "Performance", "Startup", "Maintenance", "Boot",
-            "Power", "Services",
-        }),
+        "apply_categories": frozenset(
+            {
+                "Performance",
+                "Startup",
+                "Maintenance",
+                "Boot",
+                "Power",
+                "Services",
+            }
+        ),
         "skip_categories": frozenset(),
     },
     "server": {
         "description": "Server — virtualization, network hardening, services optimization",
-        "apply_categories": frozenset({
-            "Network", "Power", "Services", "Security",
-            "Virtualization", "Backup & Recovery",
-        }),
-        "skip_categories": frozenset({
-            "Gaming", "GPU / Graphics", "Communication",
-            "Cloud Storage", "OneDrive",
-        }),
+        "apply_categories": frozenset(
+            {
+                "Network",
+                "Power",
+                "Services",
+                "Security",
+                "Virtualization",
+                "Backup & Recovery",
+            }
+        ),
+        "skip_categories": frozenset(
+            {
+                "Gaming",
+                "GPU / Graphics",
+                "Communication",
+                "Cloud Storage",
+                "OneDrive",
+            }
+        ),
     },
 }
 

@@ -12,12 +12,8 @@ _GAMECONFIG_LM = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default"
     r"\ApplicationManagement\AllowGameDVR"
 )
-_GAMEMODE_CU = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\GameBar"
-)
-_FULLSCREEN_CU = (
-    r"HKEY_CURRENT_USER\System\GameConfigStore"
-)
+_GAMEMODE_CU = r"HKEY_CURRENT_USER\Software\Microsoft\GameBar"
+_FULLSCREEN_CU = r"HKEY_CURRENT_USER\System\GameConfigStore"
 
 _KEYS = [_GAMEDVR_CU, _GAMEBAR_CU, _GAMEDVR_POLICY, _GAMECONFIG_LM]
 
@@ -102,13 +98,13 @@ def _apply_disable_xbox_services(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Gaming: disable Xbox background services")
     SESSION.backup([_XBOX_KEY, _XBOX_SAVE], "XboxServices")
-    SESSION.set_dword(_XBOX_KEY, "Start", 4)   # Disabled
+    SESSION.set_dword(_XBOX_KEY, "Start", 4)  # Disabled
     SESSION.set_dword(_XBOX_SAVE, "Start", 4)  # Disabled
 
 
 def _remove_disable_xbox_services(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.set_dword(_XBOX_KEY, "Start", 3)   # Manual
+    SESSION.set_dword(_XBOX_KEY, "Start", 3)  # Manual
     SESSION.set_dword(_XBOX_SAVE, "Start", 3)  # Manual
 
 
@@ -132,9 +128,9 @@ def _apply_game_priority(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Gaming: set game task priority to high")
     SESSION.backup([_GAME_PERF], "GamePriority")
-    SESSION.set_dword(_GAME_PERF, "Priority", 6)          # High
+    SESSION.set_dword(_GAME_PERF, "Priority", 6)  # High
     SESSION.set_dword(_GAME_PERF, "Scheduling Category", 2)  # High
-    SESSION.set_dword(_GAME_PERF, "SFIO Priority", 3)     # High
+    SESSION.set_dword(_GAME_PERF, "SFIO Priority", 3)  # High
     SESSION.set_string(_GAME_PERF, "GPU Priority", "8")
 
 
@@ -317,10 +313,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_KEYS,
-        description=(
-            "Disables Windows Game DVR, Game Bar overlay, and background "
-            "recording for better gaming and benchmarking performance."
-        ),
+        description=("Disables Windows Game DVR, Game Bar overlay, and background recording for better gaming and benchmarking performance."),
         tags=["gaming", "performance", "dvr"],
     ),
     TweakDef(
@@ -346,10 +339,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_FULLSCREEN_CU],
-        description=(
-            "Disables Windows fullscreen optimizations (DX flip model) "
-            "which can cause input lag in older games."
-        ),
+        description=("Disables Windows fullscreen optimizations (DX flip model) which can cause input lag in older games."),
         tags=["gaming", "performance", "fullscreen"],
     ),
     TweakDef(
@@ -422,10 +412,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_GPU_SCHED],
-        description=(
-            "Enables hardware-accelerated GPU scheduling (HAGS) for reduced "
-            "latency and improved frame scheduling on supported GPUs."
-        ),
+        description=("Enables hardware-accelerated GPU scheduling (HAGS) for reduced latency and improved frame scheduling on supported GPUs."),
         tags=["gaming", "performance", "gpu", "hags"],
     ),
     TweakDef(
@@ -451,10 +438,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_NET_THROTTLE],
-        description=(
-            "Sets NetworkThrottlingIndex to 0xFFFFFFFF to disable network "
-            "throttling, reducing latency for online gaming."
-        ),
+        description=("Sets NetworkThrottlingIndex to 0xFFFFFFFF to disable network throttling, reducing latency for online gaming."),
         tags=["gaming", "network", "performance", "latency"],
     ),
     TweakDef(
@@ -467,10 +451,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_NAGLE],
-        description=(
-            "Disables Nagle's algorithm via TCPNoDelay for lower network "
-            "latency in multiplayer games."
-        ),
+        description=("Disables Nagle's algorithm via TCPNoDelay for lower network latency in multiplayer games."),
         tags=["gaming", "network", "latency", "tcp"],
     ),
     TweakDef(
@@ -526,10 +507,7 @@ def _remove_gamebar_tips_off(*, require_admin: bool = False) -> None:
 
 
 def _detect_gamebar_tips_off() -> bool:
-    return (
-        SESSION.read_dword(_GAMEBAR_TIPS, "ShowStartupPanel") == 0
-        and SESSION.read_dword(_GAMEBAR_TIPS, "UseNexusForGameBarEnabled") == 0
-    )
+    return SESSION.read_dword(_GAMEBAR_TIPS, "ShowStartupPanel") == 0 and SESSION.read_dword(_GAMEBAR_TIPS, "UseNexusForGameBarEnabled") == 0
 
 
 # ── Enable Hardware-Accelerated GPU Scheduling (gaming focus) ────────────────
@@ -700,5 +678,78 @@ TWEAKS += [
             "Default: 0 (disabled). Recommended: 1 for competitive gaming."
         ),
         tags=["gaming", "timer", "resolution", "latency", "precision"],
+    ),
+]
+
+
+# ══ Additional Gaming Tweaks ═══════════════════════════════════════════
+
+
+def _apply_game_disable_dvr_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Gaming: disable Game DVR via policy")
+    SESSION.backup([_GAMEDVR_POLICY], "GameDVRPolicy")
+    SESSION.set_dword(_GAMEDVR_POLICY, "AllowGameDVR", 0)
+
+
+def _remove_game_disable_dvr_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GAMEDVR_POLICY, "AllowGameDVR")
+
+
+def _detect_game_disable_dvr_policy() -> bool:
+    return SESSION.read_dword(_GAMEDVR_POLICY, "AllowGameDVR") == 0
+
+
+def _apply_game_disable_dvr_configstore(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Gaming: disable Game DVR via GameConfigStore")
+    SESSION.backup([_GAMEBAR_CU], "GameDVRConfigStore")
+    SESSION.set_dword(_GAMEBAR_CU, "GameDVR_Enabled", 0)
+
+
+def _remove_game_disable_dvr_configstore(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GAMEBAR_CU, "GameDVR_Enabled")
+
+
+def _detect_game_disable_dvr_configstore() -> bool:
+    return SESSION.read_dword(_GAMEBAR_CU, "GameDVR_Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="game-disable-dvr-policy",
+        label="Disable Game DVR (Policy)",
+        category="Gaming",
+        apply_fn=_apply_game_disable_dvr_policy,
+        remove_fn=_remove_game_disable_dvr_policy,
+        detect_fn=_detect_game_disable_dvr_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_GAMEDVR_POLICY],
+        description=(
+            "Disables Game DVR and Game Bar via HKLM group policy. "
+            "Prevents background game recording system-wide. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["gaming", "dvr", "game-bar", "recording", "policy"],
+    ),
+    TweakDef(
+        id="game-disable-dvr-configstore",
+        label="Disable Game DVR (ConfigStore)",
+        category="Gaming",
+        apply_fn=_apply_game_disable_dvr_configstore,
+        remove_fn=_remove_game_disable_dvr_configstore,
+        detect_fn=_detect_game_disable_dvr_configstore,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_GAMEBAR_CU],
+        description=(
+            "Disables Game DVR via the user-level GameConfigStore. "
+            "Complements the policy-level DVR disable. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["gaming", "dvr", "configstore", "recording", "user"],
     ),
 ]

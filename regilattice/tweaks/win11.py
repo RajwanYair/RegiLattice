@@ -12,9 +12,7 @@ from regilattice.tweaks import TweakDef
 # ── Disable Widgets (News & Interests) ──────────────────────────────────────
 
 _WIDGETS_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh"
-_WIDGETS_CU = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_WIDGETS_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 _WIDGETS_KEYS = [_WIDGETS_KEY, _WIDGETS_CU]
 
 
@@ -42,9 +40,7 @@ def detect_disable_widgets() -> bool:
 
 # ── Disable Snap Assist ─────────────────────────────────────────────────────
 
-_SNAP_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_SNAP_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 
 
 def apply_disable_snap_assist(*, require_admin: bool = False) -> None:
@@ -240,9 +236,7 @@ def detect_disable_app_suggestions() -> bool:
 
 # ── Set Dark Mode ────────────────────────────────────────────────────────────
 
-_PERSONALIZE_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-)
+_PERSONALIZE_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
 
 
 def apply_dark_mode(*, require_admin: bool = False) -> None:
@@ -269,9 +263,7 @@ def detect_dark_mode() -> bool:
 
 # ── Disable Notifications ───────────────────────────────────────────────────
 
-_NOTIF_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion" r"\PushNotifications"
-)
+_NOTIF_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion" r"\PushNotifications"
 _TOAST_KEY = (
     r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion"
     r"\PushNotifications"
@@ -302,9 +294,7 @@ def detect_disable_notifications() -> bool:
 
 # ── Disable Snap Layout Flyout ───────────────────────────────────────────────
 
-_SNAP_FLYOUT_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_SNAP_FLYOUT_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 
 
 def apply_disable_snap_flyout(*, require_admin: bool = False) -> None:
@@ -325,9 +315,7 @@ def detect_disable_snap_flyout() -> bool:
 
 # ── Disable Taskbar Chat Icon ────────────────────────────────────────────────
 
-_CHAT_KEY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_CHAT_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 
 _SMART_CLIPBOARD_KEY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
@@ -428,10 +416,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CTX_KEY],
-        description=(
-            "Restores the full Windows 10 right-click context menu, "
-            "bypassing the truncated Windows 11 menu."
-        ),
+        description=("Restores the full Windows 10 right-click context menu, bypassing the truncated Windows 11 menu."),
         tags=["win11", "context-menu", "ux"],
     ),
     TweakDef(
@@ -444,10 +429,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_LOCKSCREEN_KEY],
-        description=(
-            "Disables Windows Spotlight, lock screen tips, suggested apps, "
-            "and silent app installs."
-        ),
+        description=("Disables Windows Spotlight, lock screen tips, suggested apps, and silent app installs."),
         tags=["win11", "lockscreen", "spotlight", "debloat"],
     ),
     TweakDef(
@@ -460,10 +442,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_WU_KEY],
-        description=(
-            "Prevents Windows Update from auto-rebooting while a user "
-            "is logged in. Sets updates to notify-before-download."
-        ),
+        description=("Prevents Windows Update from auto-rebooting while a user is logged in. Sets updates to notify-before-download."),
         tags=["win11", "update", "reboot"],
     ),
     TweakDef(
@@ -489,10 +468,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SUGGEST_KEY],
-        description=(
-            "Disables suggested apps in Start Menu and prevents "
-            "OEM/pre-installed app promotions."
-        ),
+        description=("Disables suggested apps in Start Menu and prevents OEM/pre-installed app promotions."),
         tags=["win11", "start-menu", "debloat"],
     ),
     TweakDef(
@@ -642,10 +618,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CLASSIC_MENU],
-        description=(
-            "Restores Windows 10 classic context menu on right-click. "
-            "Default: Win11 modern menu. Recommended: Classic."
-        ),
+        description=("Restores Windows 10 classic context menu on right-click. Default: Win11 modern menu. Recommended: Classic."),
         tags=["win11", "context-menu", "right-click", "classic"],
     ),
     TweakDef(
@@ -658,10 +631,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CHAT_KEY],
-        description=(
-            "Removes the Chat/Teams icon from the Windows 11 taskbar. "
-            "Default: Shown. Recommended: Hidden."
-        ),
+        description=("Removes the Chat/Teams icon from the Windows 11 taskbar. Default: Shown. Recommended: Hidden."),
         tags=["win11", "chat", "teams", "taskbar"],
     ),
 ]
@@ -852,10 +822,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_START_CU],
-        description=(
-            "Changes the Start Menu layout to show more pinned apps and fewer "
-            "recommendations. Default: balanced. Recommended: more pins."
-        ),
+        description=("Changes the Start Menu layout to show more pinned apps and fewer recommendations. Default: balanced. Recommended: more pins."),
         tags=["win11", "start-menu", "pins", "layout"],
     ),
     TweakDef(
@@ -902,10 +869,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV_CU],
-        description=(
-            "Disables OneDrive and other sync provider advertising notifications "
-            "in File Explorer. Default: shown. Recommended: disabled."
-        ),
+        description=("Disables OneDrive and other sync provider advertising notifications in File Explorer. Default: shown. Recommended: disabled."),
         tags=["win11", "sync", "notifications", "onedrive", "explorer"],
     ),
     TweakDef(
@@ -952,10 +916,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_TASKBAR_CU],
-        description=(
-            "Aligns the Windows 11 taskbar icons to the left instead of center. "
-            "Default: center. Recommended: personal preference."
-        ),
+        description=("Aligns the Windows 11 taskbar icons to the left instead of center. Default: center. Recommended: personal preference."),
         tags=["win11", "taskbar", "alignment", "left"],
     ),
 ]
@@ -982,9 +943,7 @@ def _detect_w11_disable_rounded_corners() -> bool:
 
 # -- Restore Classic Taskbar Context Menu --------------------------------------
 
-_TASKBAR_CM_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"
-)
+_TASKBAR_CM_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"
 
 
 def _apply_w11_classic_taskbar_context(*, require_admin: bool = True) -> None:
@@ -1073,5 +1032,111 @@ TWEAKS += [
             "Default: enabled. Recommended: disabled."
         ),
         tags=["win11", "suggested-actions", "policy", "gpo"],
+    ),
+]
+
+
+# ══ Windows 11 Additional UI Tweaks ═════════════════════════════════════
+
+_LIGHTING_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Lighting"
+
+
+def _apply_w11_disable_start_account_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows 11: disable Start menu account notifications")
+    SESSION.backup([_ADV_CU], "W11StartAccountNotif")
+    SESSION.set_dword(_ADV_CU, "Start_AccountNotifications", 0)
+
+
+def _remove_w11_disable_start_account_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV_CU, "Start_AccountNotifications")
+
+
+def _detect_w11_disable_start_account_notif() -> bool:
+    return SESSION.read_dword(_ADV_CU, "Start_AccountNotifications") == 0
+
+
+def _apply_w11_disable_dynamic_lighting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows 11: disable dynamic lighting")
+    SESSION.backup([_LIGHTING_KEY], "W11DynamicLighting")
+    SESSION.set_dword(_LIGHTING_KEY, "AmbientLightingEnabled", 0)
+
+
+def _remove_w11_disable_dynamic_lighting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LIGHTING_KEY, "AmbientLightingEnabled")
+
+
+def _detect_w11_disable_dynamic_lighting() -> bool:
+    return SESSION.read_dword(_LIGHTING_KEY, "AmbientLightingEnabled") == 0
+
+
+def _apply_w11_disable_recent_start(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Windows 11: disable recent items in Start menu")
+    SESSION.backup([_ADV_CU], "W11RecentStart")
+    SESSION.set_dword(_ADV_CU, "Start_TrackDocs", 0)
+
+
+def _remove_w11_disable_recent_start(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV_CU, "Start_TrackDocs")
+
+
+def _detect_w11_disable_recent_start() -> bool:
+    return SESSION.read_dword(_ADV_CU, "Start_TrackDocs") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="w11-disable-start-account-notif",
+        label="Disable Start Menu Account Notifications",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_start_account_notif,
+        remove_fn=_remove_w11_disable_start_account_notif,
+        detect_fn=_detect_w11_disable_start_account_notif,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV_CU],
+        description=(
+            "Disables account-related notifications in the Windows 11 "
+            "Start menu (e.g. backup reminders, Microsoft 365 upsells). "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["win11", "start-menu", "account", "notifications"],
+    ),
+    TweakDef(
+        id="w11-disable-dynamic-lighting",
+        label="Disable Dynamic Lighting",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_dynamic_lighting,
+        remove_fn=_remove_w11_disable_dynamic_lighting,
+        detect_fn=_detect_w11_disable_dynamic_lighting,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LIGHTING_KEY],
+        description=(
+            "Disables Windows 11 dynamic lighting (ambient RGB control). "
+            "Prevents Windows from controlling peripheral RGB lighting. "
+            "Default: Enabled. Recommended: Disabled if unused."
+        ),
+        tags=["win11", "lighting", "rgb", "ambient", "peripherals"],
+    ),
+    TweakDef(
+        id="w11-disable-recent-start",
+        label="Disable Recent Items in Start Menu",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_recent_start,
+        remove_fn=_remove_w11_disable_recent_start,
+        detect_fn=_detect_w11_disable_recent_start,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV_CU],
+        description=(
+            "Disables tracking and display of recently opened documents in the Start menu. Improves privacy. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["win11", "start-menu", "recent", "privacy", "tracking"],
     ),
 ]

@@ -310,10 +310,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Sets Windows 11 taskbar alignment to left instead of center. "
-            "Default: center. Recommended: left."
-        ),
+        description=("Sets Windows 11 taskbar alignment to left instead of center. Default: center. Recommended: left."),
         tags=["taskbar", "alignment", "win11"],
     ),
     TweakDef(
@@ -326,10 +323,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Shrinks taskbar icons and reduces taskbar height (Win10). "
-            "Default: large icons. Recommended: small icons."
-        ),
+        description=("Shrinks taskbar icons and reduces taskbar height (Win10). Default: large icons. Recommended: small icons."),
         tags=["taskbar", "icons", "size"],
     ),
     TweakDef(
@@ -343,9 +337,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_SEARCH],
         description=(
-            "Hides the search box or icon from the taskbar. "
-            "You can still search by pressing Win+S. "
-            "Default: enabled. Recommended: disabled."
+            "Hides the search box or icon from the taskbar. You can still search by pressing Win+S. Default: enabled. Recommended: disabled."
         ),
         tags=["taskbar", "search", "declutter"],
     ),
@@ -360,9 +352,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Hides the Task View button from the taskbar. "
-            "You can still use Win+Tab for virtual desktops. "
-            "Default: enabled. Recommended: disabled."
+            "Hides the Task View button from the taskbar. You can still use Win+Tab for virtual desktops. Default: enabled. Recommended: disabled."
         ),
         tags=["taskbar", "task-view", "declutter"],
     ),
@@ -393,10 +383,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Hides the Microsoft Teams Chat icon from the taskbar. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Hides the Microsoft Teams Chat icon from the taskbar. Default: enabled. Recommended: disabled."),
         tags=["taskbar", "chat", "teams", "declutter"],
     ),
     TweakDef(
@@ -409,10 +396,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Hides the Copilot button from the taskbar. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Hides the Copilot button from the taskbar. Default: enabled. Recommended: disabled."),
         tags=["taskbar", "copilot", "ai", "declutter"],
     ),
     TweakDef(
@@ -442,10 +426,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Disables unread message count badges on taskbar app icons. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables unread message count badges on taskbar app icons. Default: enabled. Recommended: disabled."),
         tags=["taskbar", "badges", "notifications", "declutter"],
     ),
     TweakDef(
@@ -458,10 +439,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Stops taskbar buttons from flashing to get your attention. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Stops taskbar buttons from flashing to get your attention. Default: enabled. Recommended: disabled."),
         tags=["taskbar", "flashing", "focus", "ux"],
     ),
     TweakDef(
@@ -475,9 +453,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Adds an End Task option to the taskbar right-click menu "
-            "for quickly killing unresponsive apps. "
-            "Default: disabled. Recommended: enabled."
+            "Adds an End Task option to the taskbar right-click menu for quickly killing unresponsive apps. Default: disabled. Recommended: enabled."
         ),
         tags=["taskbar", "end-task", "productivity"],
     ),
@@ -491,10 +467,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SEARCH],
-        description=(
-            "Disables recent search suggestions shown in the taskbar search box. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables recent search suggestions shown in the taskbar search box. Default: enabled. Recommended: disabled."),
         tags=["taskbar", "search", "privacy", "declutter"],
     ),
 ]
@@ -558,10 +531,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Disables unread notification badges on taskbar app icons. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables unread notification badges on taskbar app icons. Default: Enabled. Recommended: Disabled."),
         tags=["taskbar", "badges", "notifications"],
     ),
     TweakDef(
@@ -574,10 +544,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PEOPLE_KEY],
-        description=(
-            "Removes the People bar from the taskbar. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Removes the People bar from the taskbar. Default: Enabled. Recommended: Disabled."),
         tags=["taskbar", "people", "social", "declutter"],
     ),
 ]
@@ -664,10 +631,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_FEEDS_KEY],
-        description=(
-            "Disables the News and Interests weather widget on the taskbar via group policy. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables the News and Interests weather widget on the taskbar via group policy. Default: Enabled. Recommended: Disabled."),
         tags=["taskbar", "weather", "widget", "feeds", "news"],
     ),
     TweakDef(
@@ -680,10 +644,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_MEET_NOW_KEY],
-        description=(
-            "Hides the Meet Now (Skype) icon from the taskbar notification area. "
-            "Default: Shown. Recommended: Hidden."
-        ),
+        description=("Hides the Meet Now (Skype) icon from the taskbar notification area. Default: Shown. Recommended: Hidden."),
         tags=["taskbar", "meet-now", "skype", "declutter"],
     ),
     TweakDef(
@@ -697,9 +658,73 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Sets taskbar buttons to never combine, showing full labels for each window. "
-            "Default: Always combine (0). Recommended: Never combine (2)."
+            "Sets taskbar buttons to never combine, showing full labels for each window. Default: Always combine (0). Recommended: Never combine (2)."
         ),
         tags=["taskbar", "grouping", "combine", "buttons", "labels"],
+    ),
+]
+
+
+# ══ Additional Taskbar Tweaks ══════════════════════════════════════════
+
+
+def _apply_tb_show_seconds_clock(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: show seconds in system clock")
+    SESSION.backup([_ADV], "TBSecondsClock")
+    SESSION.set_dword(_ADV, "ShowSecondsInSystemClock", 1)
+
+
+def _remove_tb_show_seconds_clock(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "ShowSecondsInSystemClock")
+
+
+def _detect_tb_show_seconds_clock() -> bool:
+    return SESSION.read_dword(_ADV, "ShowSecondsInSystemClock") == 1
+
+
+def _apply_tb_disable_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disable taskbar animations")
+    SESSION.backup([_ADV], "TBAnimations")
+    SESSION.set_dword(_ADV, "TaskbarAnimations", 0)
+
+
+def _remove_tb_disable_animations(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "TaskbarAnimations")
+
+
+def _detect_tb_disable_animations() -> bool:
+    return SESSION.read_dword(_ADV, "TaskbarAnimations") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="tb-show-seconds-clock",
+        label="Show Seconds in System Clock",
+        category="Taskbar",
+        apply_fn=_apply_tb_show_seconds_clock,
+        remove_fn=_remove_tb_show_seconds_clock,
+        detect_fn=_detect_tb_show_seconds_clock,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=("Shows seconds in the taskbar system clock for precision timing. Default: Hidden. Recommended: Personal preference."),
+        tags=["taskbar", "clock", "seconds", "time"],
+    ),
+    TweakDef(
+        id="tb-disable-animations",
+        label="Disable Taskbar Animations",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_animations,
+        remove_fn=_remove_tb_disable_animations,
+        detect_fn=_detect_tb_disable_animations,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=("Disables taskbar button animations for a snappier feel. Default: Enabled. Recommended: Disabled for performance."),
+        tags=["taskbar", "animations", "performance", "ui"],
     ),
 ]
