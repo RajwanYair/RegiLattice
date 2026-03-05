@@ -567,3 +567,196 @@ TWEAKS += [
         tags=["privacy", "advertising", "id", "tracking"],
     ),
 ]
+
+
+# ══ Additional Privacy Tweaks (Sophia Script / WinUtil) ═══════════════════
+
+_TAILORED = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy"
+_CONTENT_DELIVERY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
+    r"\ContentDeliveryManager"
+)
+_FEEDBACK = r"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"
+_SETTINGS_PRIV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SettingsSync"
+
+
+# -- Disable Tailored Experiences ────────────────────────────────────────
+
+
+def _apply_disable_tailored(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable tailored experiences based on diagnostic data")
+    SESSION.backup([_TAILORED], "TailoredExperiences")
+    SESSION.set_dword(_TAILORED, "TailoredExperiencesWithDiagnosticDataEnabled", 0)
+
+
+def _remove_disable_tailored(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TAILORED, "TailoredExperiencesWithDiagnosticDataEnabled", 1)
+
+
+def _detect_disable_tailored() -> bool:
+    return SESSION.read_dword(_TAILORED, "TailoredExperiencesWithDiagnosticDataEnabled") == 0
+
+
+# -- Disable Windows Tips & Suggestions ──────────────────────────────────
+
+
+def _apply_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable Windows tips, tricks, and suggestions")
+    SESSION.backup([_CONTENT_DELIVERY], "WindowsTips")
+    SESSION.set_dword(_CONTENT_DELIVERY, "SoftLandingEnabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338389Enabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-310093Enabled", 0)
+
+
+def _remove_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONTENT_DELIVERY, "SoftLandingEnabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338389Enabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-310093Enabled", 1)
+
+
+def _detect_disable_tips() -> bool:
+    return SESSION.read_dword(_CONTENT_DELIVERY, "SoftLandingEnabled") == 0
+
+
+# -- Disable Feedback Prompts ────────────────────────────────────────────
+
+
+def _apply_disable_feedback(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable feedback frequency prompts")
+    SESSION.backup([_FEEDBACK], "FeedbackPrompts")
+    SESSION.set_dword(_FEEDBACK, "NumberOfSIUFInPeriod", 0)
+
+
+def _remove_disable_feedback(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_FEEDBACK, "NumberOfSIUFInPeriod")
+
+
+def _detect_disable_feedback() -> bool:
+    return SESSION.read_dword(_FEEDBACK, "NumberOfSIUFInPeriod") == 0
+
+
+# -- Disable App Launch Tracking ─────────────────────────────────────────
+
+_LAUNCH_TRACK = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_disable_app_launch_tracking(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable app launch tracking for Start menu")
+    SESSION.backup([_LAUNCH_TRACK], "AppLaunchTracking")
+    SESSION.set_dword(_LAUNCH_TRACK, "Start_TrackProgs", 0)
+
+
+def _remove_disable_app_launch_tracking(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_LAUNCH_TRACK, "Start_TrackProgs", 1)
+
+
+def _detect_disable_app_launch_tracking() -> bool:
+    return SESSION.read_dword(_LAUNCH_TRACK, "Start_TrackProgs") == 0
+
+
+# -- Disable Suggested Content in Settings ───────────────────────────────
+
+
+def _apply_disable_settings_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable suggested content in Settings app")
+    SESSION.backup([_CONTENT_DELIVERY], "SettingsSuggestions")
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338393Enabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-353694Enabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-353696Enabled", 0)
+
+
+def _remove_disable_settings_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338393Enabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-353694Enabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-353696Enabled", 1)
+
+
+def _detect_disable_settings_suggestions() -> bool:
+    return SESSION.read_dword(_CONTENT_DELIVERY, "SubscribedContent-338393Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="privacy-disable-tailored-experiences",
+        label="Disable Tailored Experiences",
+        category="Privacy",
+        apply_fn=_apply_disable_tailored,
+        remove_fn=_remove_disable_tailored,
+        detect_fn=_detect_disable_tailored,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TAILORED],
+        description=(
+            "Disables Microsoft tailored experiences that use diagnostic data "
+            "to personalise ads, tips, and recommendations. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["privacy", "tailored", "diagnostic", "personalisation"],
+    ),
+    TweakDef(
+        id="privacy-disable-windows-tips",
+        label="Disable Windows Tips & Suggestions",
+        category="Privacy",
+        apply_fn=_apply_disable_tips,
+        remove_fn=_remove_disable_tips,
+        detect_fn=_detect_disable_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description=(
+            "Disables Windows tips, tricks, and 'Get started' suggestions "
+            "that appear in Start menu, lock screen and notifications. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["privacy", "tips", "suggestions", "content-delivery"],
+    ),
+    TweakDef(
+        id="privacy-disable-feedback",
+        label="Disable Feedback Prompts",
+        category="Privacy",
+        apply_fn=_apply_disable_feedback,
+        remove_fn=_remove_disable_feedback,
+        detect_fn=_detect_disable_feedback,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FEEDBACK],
+        description=(
+            "Disables 'How likely are you to recommend Windows?' feedback "
+            "prompts from appearing periodically. "
+            "Default: occasional. Recommended: disabled."
+        ),
+        tags=["privacy", "feedback", "prompts", "telemetry"],
+    ),
+    TweakDef(
+        id="privacy-disable-app-launch-tracking",
+        label="Disable App Launch Tracking",
+        category="Privacy",
+        apply_fn=_apply_disable_app_launch_tracking,
+        remove_fn=_remove_disable_app_launch_tracking,
+        detect_fn=_detect_disable_app_launch_tracking,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LAUNCH_TRACK],
+        description=(
+            "Prevents Windows from tracking which apps you launch to improve "
+            "Start menu suggestions. Default: enabled. Recommended: disabled."
+        ),
+        tags=["privacy", "tracking", "start-menu", "launch"],
+    ),
+    TweakDef(
+        id="privacy-disable-settings-suggestions",
+        label="Disable Suggested Content in Settings",
+        category="Privacy",
+        apply_fn=_apply_disable_settings_suggestions,
+        remove_fn=_remove_disable_settings_suggestions,
+        detect_fn=_detect_disable_settings_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description=(
+            "Disables suggested content and recommendations in the Windows "
+            "Settings app. Default: enabled. Recommended: disabled."
+        ),
+        tags=["privacy", "settings", "suggestions", "content-delivery"],
+    ),
+]

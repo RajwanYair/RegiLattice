@@ -562,3 +562,208 @@ TWEAKS += [
         tags=["system", "error-reporting", "privacy", "wer"],
     ),
 ]
+
+
+# ══ Additional System Tweaks (24H2+) ═════════════════════════════════════
+
+_WINLOGON = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+_MEMORY_MGMT = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
+_CRASH_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
+_WPBT_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"
+
+
+# -- Verbose Logon Messages ──────────────────────────────────────────────
+
+
+def _apply_verbose_logon(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: enable verbose logon/logoff status messages")
+    SESSION.backup([_WINLOGON], "VerboseLogon")
+    SESSION.set_dword(
+        r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+        "VerboseStatus",
+        1,
+    )
+
+
+def _remove_verbose_logon(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(
+        r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+        "VerboseStatus",
+    )
+
+
+def _detect_verbose_logon() -> bool:
+    return (
+        SESSION.read_dword(
+            r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+            "VerboseStatus",
+        )
+        == 1
+    )
+
+
+# -- Detailed BSoD (Blue Screen of Death) ────────────────────────────────
+
+
+def _apply_detailed_bsod(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: enable detailed BSoD with parameters")
+    SESSION.backup([_CRASH_CTRL], "DetailedBSoD")
+    SESSION.set_dword(_CRASH_CTRL, "DisplayParameters", 1)
+
+
+def _remove_detailed_bsod(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CRASH_CTRL, "DisplayParameters")
+
+
+def _detect_detailed_bsod() -> bool:
+    return SESSION.read_dword(_CRASH_CTRL, "DisplayParameters") == 1
+
+
+# -- Disable WPBT (Windows Platform Binary Table) ───────────────────────
+
+
+def _apply_disable_wpbt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disable WPBT (vendor bloatware injection via UEFI)")
+    SESSION.backup([_WPBT_KEY], "DisableWPBT")
+    SESSION.set_dword(_WPBT_KEY, "DisableWpbtExecution", 1)
+
+
+def _remove_disable_wpbt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WPBT_KEY, "DisableWpbtExecution")
+
+
+def _detect_disable_wpbt() -> bool:
+    return SESSION.read_dword(_WPBT_KEY, "DisableWpbtExecution") == 1
+
+
+# -- Disable Storage Sense ───────────────────────────────────────────────
+
+_STORAGE_SENSE = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"
+
+
+def _apply_disable_storage_sense(*, require_admin: bool = False) -> None:
+    SESSION.log("System: disable Storage Sense automatic cleanup")
+    SESSION.backup([_STORAGE_SENSE], "StorageSense")
+    SESSION.set_dword(_STORAGE_SENSE, "01", 0)
+
+
+def _remove_disable_storage_sense(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_STORAGE_SENSE, "01", 1)
+
+
+def _detect_disable_storage_sense() -> bool:
+    return SESSION.read_dword(_STORAGE_SENSE, "01") == 0
+
+
+# -- Disable Automatic Reboot After Crash ────────────────────────────────
+
+
+def _apply_disable_auto_reboot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disable automatic reboot after crash")
+    SESSION.backup([_CRASH_CTRL], "AutoReboot")
+    SESSION.set_dword(_CRASH_CTRL, "AutoReboot", 0)
+
+
+def _remove_disable_auto_reboot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH_CTRL, "AutoReboot", 1)
+
+
+def _detect_disable_auto_reboot() -> bool:
+    return SESSION.read_dword(_CRASH_CTRL, "AutoReboot") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="sys-verbose-logon",
+        label="Enable Verbose Logon Messages",
+        category="System",
+        apply_fn=_apply_verbose_logon,
+        remove_fn=_remove_verbose_logon,
+        detect_fn=_detect_verbose_logon,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+        description=(
+            "Shows detailed status messages during logon, logoff, startup, and "
+            "shutdown (e.g., 'Applying Group Policy'). "
+            "Default: disabled. Recommended: enabled for troubleshooting."
+        ),
+        tags=["system", "verbose", "logon", "boot", "diagnostic"],
+    ),
+    TweakDef(
+        id="sys-detailed-bsod",
+        label="Enable Detailed Blue Screen Info",
+        category="System",
+        apply_fn=_apply_detailed_bsod,
+        remove_fn=_remove_detailed_bsod,
+        detect_fn=_detect_detailed_bsod,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CRASH_CTRL],
+        description=(
+            "Shows technical parameters on BSoD screens instead of just the QR code "
+            "and sad-face. Useful for diagnosing crash causes. "
+            "Default: disabled. Recommended: enabled."
+        ),
+        tags=["system", "bsod", "crash", "diagnostic", "blue-screen"],
+    ),
+    TweakDef(
+        id="sys-disable-wpbt",
+        label="Disable WPBT (Vendor Bloatware Injection)",
+        category="System",
+        apply_fn=_apply_disable_wpbt,
+        remove_fn=_remove_disable_wpbt,
+        detect_fn=_detect_disable_wpbt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WPBT_KEY],
+        description=(
+            "Disables the Windows Platform Binary Table which allows vendors "
+            "to inject software via UEFI firmware (e.g., Lenovo, HP bloatware). "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["system", "wpbt", "uefi", "bloatware", "security"],
+    ),
+    TweakDef(
+        id="sys-disable-storage-sense",
+        label="Disable Storage Sense",
+        category="System",
+        apply_fn=_apply_disable_storage_sense,
+        remove_fn=_remove_disable_storage_sense,
+        detect_fn=_detect_disable_storage_sense,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_STORAGE_SENSE],
+        description=(
+            "Disables Storage Sense which automatically deletes temporary files, "
+            "recycle bin contents, and Downloads folder items. "
+            "Default: may be enabled. Recommended: disabled for control."
+        ),
+        tags=["system", "storage-sense", "cleanup", "disk"],
+    ),
+    TweakDef(
+        id="sys-disable-auto-reboot",
+        label="Disable Auto-Reboot After Crash",
+        category="System",
+        apply_fn=_apply_disable_auto_reboot,
+        remove_fn=_remove_disable_auto_reboot,
+        detect_fn=_detect_disable_auto_reboot,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CRASH_CTRL],
+        description=(
+            "Prevents Windows from automatically rebooting after a BSoD crash, "
+            "giving time to read the error information. "
+            "Default: auto-reboot. Recommended: disabled."
+        ),
+        tags=["system", "crash", "reboot", "bsod", "diagnostic"],
+    ),
+]

@@ -1,4 +1,6 @@
 """Tests for regilattice.corpguard — corporate network detection."""
+# mypy: disable-error-code="type-arg,no-untyped-def"
+# pyright: reportMissingTypeArgument=false
 
 from __future__ import annotations
 

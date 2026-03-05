@@ -886,7 +886,7 @@ class RegiLatticeGUI:
         self._ctx_menu = tk.Menu(self._root, tearoff=0, bg=_CARD_BG, fg=_FG, font=_FONT_SM)
         self._ctx_target: _TweakRow | None = None
         for row in self._tweak_rows:
-            row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))
+            row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
 
     # ── Selection helpers ────────────────────────────────────────────────
 

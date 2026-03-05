@@ -821,3 +821,457 @@ TWEAKS += [
         tags=["explorer", "quick-access", "recent", "privacy"],
     ),
 ]
+
+
+# ══ File-Format Thumbnail Preview Handlers ═══════════════════════════════════
+#
+# Windows uses shell extension handlers (IExtractImage/IThumbnailProvider) to
+# generate thumbnail previews for specific file types.  The handler CLSID is
+# stored under:
+#   HKCR\.<ext>\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}  (legacy)
+#   HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap
+# These tweaks enable/disable thumbnail previews per file format.
+
+_SHELLEX_THUMB = r"HKEY_CLASSES_ROOT\.{ext}\shellex\{{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}}"
+_THUMB_CACHE_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache"
+
+# Known thumbnail provider CLSIDs
+_PDF_THUMB_HANDLER = "{DC6EFB56-9CFA-464D-8880-44885D7DC193}"  # PDF Thumbnail Provider
+_STL_THUMB_HANDLER = "{1F3B53AE-B08D-44DE-9D61-E226B39BE6F7}"  # 3D file thumbnailer
+_SVG_THUMB_HANDLER = "{36B74164-B26E-47A9-ACCE-622F47CB373F}"  # SVG Thumbnail Provider
+_WEBP_THUMB_HANDLER = "{C7657C4A-9F68-40FA-A4DF-96BC08EB3551}"  # WebP Handler
+_RAW_THUMB_HANDLER = "{E357FCCD-A995-4576-B01F-234630154E96}"  # Windows Imaging Component
+_FONT_THUMB_HANDLER = "{D3B41FA1-01E3-49AF-AA8C-48036EED303F}"  # Font Thumbnail
+
+
+def _thumb_key(ext: str) -> str:
+    """Return the shellex thumbnail handler key path for a given extension."""
+    return rf"HKEY_CLASSES_ROOT\.{ext}\shellex\{{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}}"
+
+
+def _apply_pdf_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable PDF thumbnail preview handler")
+    key = _thumb_key("pdf")
+    SESSION.backup([key], "PdfThumbnail")
+    SESSION.set_string(key, "", _PDF_THUMB_HANDLER)
+
+
+def _remove_pdf_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("pdf"), "")
+
+
+def _detect_pdf_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("pdf"), "") == _PDF_THUMB_HANDLER
+
+
+def _apply_svg_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable SVG thumbnail preview handler")
+    key = _thumb_key("svg")
+    SESSION.backup([key], "SvgThumbnail")
+    SESSION.set_string(key, "", _SVG_THUMB_HANDLER)
+
+
+def _remove_svg_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("svg"), "")
+
+
+def _detect_svg_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("svg"), "") == _SVG_THUMB_HANDLER
+
+
+def _apply_webp_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable WebP thumbnail preview handler")
+    key = _thumb_key("webp")
+    SESSION.backup([key], "WebpThumbnail")
+    SESSION.set_string(key, "", _WEBP_THUMB_HANDLER)
+
+
+def _remove_webp_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("webp"), "")
+
+
+def _detect_webp_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("webp"), "") == _WEBP_THUMB_HANDLER
+
+
+def _apply_stl_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable STL/3D file thumbnail preview handler")
+    key = _thumb_key("stl")
+    SESSION.backup([key], "StlThumbnail")
+    SESSION.set_string(key, "", _STL_THUMB_HANDLER)
+
+
+def _remove_stl_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_thumb_key("stl"), "")
+
+
+def _detect_stl_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("stl"), "") == _STL_THUMB_HANDLER
+
+
+def _apply_raw_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable RAW image thumbnail preview (WIC handler)")
+    for ext in ("cr2", "nef", "arw", "dng", "orf"):
+        key = _thumb_key(ext)
+        SESSION.backup([key], f"RawThumbnail_{ext}")
+        SESSION.set_string(key, "", _RAW_THUMB_HANDLER)
+
+
+def _remove_raw_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    for ext in ("cr2", "nef", "arw", "dng", "orf"):
+        SESSION.delete_value(_thumb_key(ext), "")
+
+
+def _detect_raw_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("dng"), "") == _RAW_THUMB_HANDLER
+
+
+def _apply_font_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: enable font file thumbnail preview")
+    for ext in ("ttf", "otf", "woff"):
+        key = _thumb_key(ext)
+        SESSION.backup([key], f"FontThumbnail_{ext}")
+        SESSION.set_string(key, "", _FONT_THUMB_HANDLER)
+
+
+def _remove_font_thumbnail(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    for ext in ("ttf", "otf", "woff"):
+        SESSION.delete_value(_thumb_key(ext), "")
+
+
+def _detect_font_thumbnail() -> bool:
+    return SESSION.read_string(_thumb_key("ttf"), "") == _FONT_THUMB_HANDLER
+
+
+def _apply_disable_thumb_cache_cleanup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable thumbnail cache auto-cleanup")
+    SESSION.backup([_THUMB_CACHE_KEY], "ThumbCacheCleanup")
+    SESSION.set_dword(_THUMB_CACHE_KEY, "Autorun", 0)
+
+
+def _remove_disable_thumb_cache_cleanup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_THUMB_CACHE_KEY, "Autorun", 1)
+
+
+def _detect_disable_thumb_cache_cleanup() -> bool:
+    return SESSION.read_dword(_THUMB_CACHE_KEY, "Autorun") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="explorer-pdf-thumbnail",
+        label="Enable PDF Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_pdf_thumbnail,
+        remove_fn=_remove_pdf_thumbnail,
+        detect_fn=_detect_pdf_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("pdf")],
+        description=(
+            "Registers a shell extension handler for PDF thumbnail previews "
+            "in File Explorer. Requires a PDF viewer with thumbnail support "
+            "(e.g., Adobe Acrobat, Sumatra PDF). "
+            "Default: no preview. Recommended: enabled."
+        ),
+        tags=["explorer", "thumbnail", "pdf", "preview", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-svg-thumbnail",
+        label="Enable SVG Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_svg_thumbnail,
+        remove_fn=_remove_svg_thumbnail,
+        detect_fn=_detect_svg_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("svg")],
+        description=(
+            "Registers a shell extension handler for SVG vector image "
+            "thumbnail previews in File Explorer. "
+            "Default: no preview. Recommended: enabled."
+        ),
+        tags=["explorer", "thumbnail", "svg", "preview", "vector", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-webp-thumbnail",
+        label="Enable WebP Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_webp_thumbnail,
+        remove_fn=_remove_webp_thumbnail,
+        detect_fn=_detect_webp_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("webp")],
+        description=(
+            "Registers a shell extension handler for WebP image thumbnail "
+            "previews in File Explorer. "
+            "Default: no preview. Recommended: enabled."
+        ),
+        tags=["explorer", "thumbnail", "webp", "preview", "image", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-stl-thumbnail",
+        label="Enable STL/3D File Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_stl_thumbnail,
+        remove_fn=_remove_stl_thumbnail,
+        detect_fn=_detect_stl_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("stl")],
+        description=(
+            "Registers a shell extension handler for STL and other 3D file "
+            "thumbnail previews in File Explorer. "
+            "Default: no preview. Recommended: enabled for 3D workflows."
+        ),
+        tags=["explorer", "thumbnail", "stl", "3d", "preview", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-raw-thumbnail",
+        label="Enable RAW Image Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_raw_thumbnail,
+        remove_fn=_remove_raw_thumbnail,
+        detect_fn=_detect_raw_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("dng")],
+        description=(
+            "Registers Windows Imaging Component (WIC) handler for RAW camera "
+            "image thumbnails (CR2, NEF, ARW, DNG, ORF) in File Explorer. "
+            "Default: no preview. Recommended: enabled for photographers."
+        ),
+        tags=["explorer", "thumbnail", "raw", "camera", "preview", "photography", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-font-thumbnail",
+        label="Enable Font File Thumbnail Previews",
+        category="Explorer",
+        apply_fn=_apply_font_thumbnail,
+        remove_fn=_remove_font_thumbnail,
+        detect_fn=_detect_font_thumbnail,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_thumb_key("ttf")],
+        description=(
+            "Registers a shell extension handler for font file (TTF, OTF, WOFF) "
+            "thumbnail previews showing sample glyphs in File Explorer. "
+            "Default: no preview. Recommended: enabled for designers."
+        ),
+        tags=["explorer", "thumbnail", "font", "ttf", "otf", "preview", "file-format"],
+    ),
+    TweakDef(
+        id="explorer-disable-thumb-cache-cleanup",
+        label="Disable Thumbnail Cache Auto-Cleanup",
+        category="Explorer",
+        apply_fn=_apply_disable_thumb_cache_cleanup,
+        remove_fn=_remove_disable_thumb_cache_cleanup,
+        detect_fn=_detect_disable_thumb_cache_cleanup,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_THUMB_CACHE_KEY],
+        description=(
+            "Prevents Windows from automatically deleting the thumbnail cache "
+            "during Disk Cleanup. Improves Explorer browsing performance for "
+            "folders with many images. "
+            "Default: auto-cleanup enabled. Recommended: disabled."
+        ),
+        tags=["explorer", "thumbnail", "cache", "cleanup", "performance"],
+    ),
+]
+
+
+# ══ Additional Explorer Tweaks (Sophia Script / WinUtil) ══════════════════
+
+_EXP_ADV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+_EXP_POLICIES = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+
+
+# -- Nav Pane: Expand to Current Folder ──────────────────────────────────
+
+
+def _apply_navpane_expand(*, require_admin: bool = False) -> None:
+    SESSION.log("Explorer: expand navigation pane to current folder")
+    SESSION.backup([_EXP_ADV], "NavPaneExpand")
+    SESSION.set_dword(_EXP_ADV, "NavPaneExpandToCurrentFolder", 1)
+
+
+def _remove_navpane_expand(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXP_ADV, "NavPaneExpandToCurrentFolder", 0)
+
+
+def _detect_navpane_expand() -> bool:
+    return SESSION.read_dword(_EXP_ADV, "NavPaneExpandToCurrentFolder") == 1
+
+
+# -- Show File Size in Folder Tips ───────────────────────────────────────
+
+
+def _apply_folder_size_tips(*, require_admin: bool = False) -> None:
+    SESSION.log("Explorer: show file size info in folder tooltips")
+    SESSION.backup([_EXP_ADV], "FolderSizeTips")
+    SESSION.set_dword(_EXP_ADV, "FolderContentsInfoTip", 1)
+
+
+def _remove_folder_size_tips(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXP_ADV, "FolderContentsInfoTip", 0)
+
+
+def _detect_folder_size_tips() -> bool:
+    return SESSION.read_dword(_EXP_ADV, "FolderContentsInfoTip") == 1
+
+
+# -- Disable Sharing Wizard ──────────────────────────────────────────────
+
+
+def _apply_disable_sharing_wizard(*, require_admin: bool = False) -> None:
+    SESSION.log("Explorer: disable sharing wizard (use advanced sharing)")
+    SESSION.backup([_EXP_ADV], "SharingWizard")
+    SESSION.set_dword(_EXP_ADV, "SharingWizardOn", 0)
+
+
+def _remove_disable_sharing_wizard(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXP_ADV, "SharingWizardOn", 1)
+
+
+def _detect_disable_sharing_wizard() -> bool:
+    return SESSION.read_dword(_EXP_ADV, "SharingWizardOn") == 0
+
+
+# -- Disable No New App Alert ───────────────────────────────────────────
+
+_APP_ASSOC = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+
+
+def _apply_disable_new_app_alert(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable 'new app can open this file' notifications")
+    SESSION.backup([_APP_ASSOC], "NewAppAlert")
+    SESSION.set_dword(_APP_ASSOC, "NoNewAppAlert", 1)
+
+
+def _remove_disable_new_app_alert(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_APP_ASSOC, "NoNewAppAlert")
+
+
+def _detect_disable_new_app_alert() -> bool:
+    return SESSION.read_dword(_APP_ASSOC, "NoNewAppAlert") == 1
+
+
+# -- Show Checkbox Selection ─────────────────────────────────────────────
+
+
+def _apply_checkbox_selection(*, require_admin: bool = False) -> None:
+    SESSION.log("Explorer: enable item check boxes for multi-select")
+    SESSION.backup([_EXP_ADV], "CheckboxSelect")
+    SESSION.set_dword(_EXP_ADV, "AutoCheckSelect", 1)
+
+
+def _remove_checkbox_selection(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_EXP_ADV, "AutoCheckSelect", 0)
+
+
+def _detect_checkbox_selection() -> bool:
+    return SESSION.read_dword(_EXP_ADV, "AutoCheckSelect") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="explorer-navpane-expand",
+        label="Expand Nav Pane to Current Folder",
+        category="Explorer",
+        apply_fn=_apply_navpane_expand,
+        remove_fn=_remove_navpane_expand,
+        detect_fn=_detect_navpane_expand,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXP_ADV],
+        description=(
+            "Automatically expands the navigation pane tree to show the "
+            "current folder location. Default: collapsed. Recommended: expanded."
+        ),
+        tags=["explorer", "navigation", "pane", "expand", "folder"],
+    ),
+    TweakDef(
+        id="explorer-folder-size-tips",
+        label="Show File Size in Folder Tooltips",
+        category="Explorer",
+        apply_fn=_apply_folder_size_tips,
+        remove_fn=_remove_folder_size_tips,
+        detect_fn=_detect_folder_size_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXP_ADV],
+        description=(
+            "Shows the total file size and count in folder tooltips "
+            "when hovering over a folder. Default: disabled. Recommended: enabled."
+        ),
+        tags=["explorer", "folder", "size", "tooltip", "info"],
+    ),
+    TweakDef(
+        id="explorer-disable-sharing-wizard",
+        label="Disable Sharing Wizard",
+        category="Explorer",
+        apply_fn=_apply_disable_sharing_wizard,
+        remove_fn=_remove_disable_sharing_wizard,
+        detect_fn=_detect_disable_sharing_wizard,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXP_ADV],
+        description=(
+            "Disables the simplified sharing wizard and uses the advanced "
+            "security permissions dialog instead. Default: enabled. Recommended: disabled."
+        ),
+        tags=["explorer", "sharing", "wizard", "advanced", "permissions"],
+    ),
+    TweakDef(
+        id="explorer-disable-new-app-alert",
+        label="Disable 'New App' Notifications",
+        category="Explorer",
+        apply_fn=_apply_disable_new_app_alert,
+        remove_fn=_remove_disable_new_app_alert,
+        detect_fn=_detect_disable_new_app_alert,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_APP_ASSOC],
+        description=(
+            "Disables the 'A new app can open this type of file' notification "
+            "that appears when a new program is installed. "
+            "Default: shown. Recommended: disabled."
+        ),
+        tags=["explorer", "notification", "new-app", "association"],
+    ),
+    TweakDef(
+        id="explorer-checkbox-selection",
+        label="Enable Item Check Boxes",
+        category="Explorer",
+        apply_fn=_apply_checkbox_selection,
+        remove_fn=_remove_checkbox_selection,
+        detect_fn=_detect_checkbox_selection,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXP_ADV],
+        description=(
+            "Shows checkboxes next to file and folder names for easier "
+            "multi-selection without holding Ctrl. "
+            "Default: disabled. Recommended: personal preference."
+        ),
+        tags=["explorer", "checkbox", "selection", "multi-select"],
+    ),
+]

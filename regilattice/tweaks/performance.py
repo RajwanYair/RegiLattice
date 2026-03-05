@@ -747,3 +747,166 @@ TWEAKS += [
         tags=["performance", "background", "apps", "memory", "cpu"],
     ),
 ]
+
+
+# ══ Additional Performance Tweaks (Sophia Script / WinUtil) ══════════════
+
+_POWER_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+_MULTIMEDIA_SYS = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
+    r"\CurrentVersion\Multimedia\SystemProfile"
+)
+_MEMORY_MGMT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Memory Management"
+)
+
+
+# -- Disable Modern Standby (S0 Low Power Idle) ─────────────────────────
+
+
+def _apply_disable_modern_standby(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable Modern Standby (S0 Low Power Idle)")
+    SESSION.backup([_POWER_KEY], "ModernStandby")
+    SESSION.set_dword(_POWER_KEY, "PlatformAoAcOverride", 0)
+
+
+def _remove_disable_modern_standby(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POWER_KEY, "PlatformAoAcOverride")
+
+
+def _detect_disable_modern_standby() -> bool:
+    return SESSION.read_dword(_POWER_KEY, "PlatformAoAcOverride") == 0
+
+
+# -- Multimedia System Profile: Gaming Priority ─────────────────────────
+
+
+def _apply_multimedia_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: set multimedia system profile to gaming priority")
+    SESSION.backup([_MULTIMEDIA_SYS], "MultimediaPriority")
+    SESSION.set_dword(_MULTIMEDIA_SYS, "SystemResponsiveness", 0)
+    SESSION.set_string(_MULTIMEDIA_SYS, "NetworkThrottlingIndex", "4294967295")
+
+
+def _remove_multimedia_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MULTIMEDIA_SYS, "SystemResponsiveness", 20)
+    SESSION.delete_value(_MULTIMEDIA_SYS, "NetworkThrottlingIndex")
+
+
+def _detect_multimedia_priority() -> bool:
+    return SESSION.read_dword(_MULTIMEDIA_SYS, "SystemResponsiveness") == 0
+
+
+# -- Disable Prefetch ───────────────────────────────────────────────────
+
+_PREFETCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"
+
+
+def _apply_disable_prefetch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable Prefetch (SSD systems)")
+    SESSION.backup([_PREFETCH], "Prefetch")
+    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 0)
+
+
+def _remove_disable_prefetch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 3)
+
+
+def _detect_disable_prefetch() -> bool:
+    return SESSION.read_dword(_PREFETCH, "EnablePrefetcher") == 0
+
+
+# -- Large Page Support ─────────────────────────────────────────────────
+
+
+def _apply_large_pages(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: enable large memory pages")
+    SESSION.backup([_MEMORY_MGMT], "LargePages")
+    SESSION.set_dword(_MEMORY_MGMT, "LargePageMinimum", 1)
+
+
+def _remove_large_pages(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MEMORY_MGMT, "LargePageMinimum")
+
+
+def _detect_large_pages() -> bool:
+    return SESSION.read_dword(_MEMORY_MGMT, "LargePageMinimum") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="perf-disable-modern-standby",
+        label="Disable Modern Standby (S0)",
+        category="Performance",
+        apply_fn=_apply_disable_modern_standby,
+        remove_fn=_remove_disable_modern_standby,
+        detect_fn=_detect_disable_modern_standby,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER_KEY],
+        description=(
+            "Disables Modern Standby (S0 Low Power Idle) and restores classic "
+            "S3 sleep. Prevents wake-from-sleep issues and battery drain. "
+            "Default: Modern Standby. Recommended: disabled on desktops."
+        ),
+        tags=["performance", "standby", "sleep", "s3", "power"],
+    ),
+    TweakDef(
+        id="perf-multimedia-priority",
+        label="Multimedia Gaming Priority (SystemProfile)",
+        category="Performance",
+        apply_fn=_apply_multimedia_priority,
+        remove_fn=_remove_multimedia_priority,
+        detect_fn=_detect_multimedia_priority,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MULTIMEDIA_SYS],
+        description=(
+            "Configures the multimedia system profile for maximum gaming "
+            "priority (SystemResponsiveness=0, no network throttling). "
+            "Default: balanced (20). Recommended: 0 for gaming."
+        ),
+        tags=["performance", "multimedia", "gaming", "priority", "network"],
+    ),
+    TweakDef(
+        id="perf-disable-prefetch",
+        label="Disable Prefetch (SSD Systems)",
+        category="Performance",
+        apply_fn=_apply_disable_prefetch,
+        remove_fn=_remove_disable_prefetch,
+        detect_fn=_detect_disable_prefetch,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PREFETCH],
+        description=(
+            "Disables the Windows Prefetcher which is unnecessary on SSD systems "
+            "and wastes I/O cycles. Default: enabled (3). Recommended: disabled on SSDs."
+        ),
+        tags=["performance", "prefetch", "ssd", "io"],
+    ),
+    TweakDef(
+        id="perf-large-pages",
+        label="Enable Large Memory Pages",
+        category="Performance",
+        apply_fn=_apply_large_pages,
+        remove_fn=_remove_large_pages,
+        detect_fn=_detect_large_pages,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEMORY_MGMT],
+        description=(
+            "Enables large page support for improved memory performance in "
+            "memory-intensive applications. Default: disabled. Recommended: enabled."
+        ),
+        tags=["performance", "memory", "large-pages", "ram"],
+    ),
+]

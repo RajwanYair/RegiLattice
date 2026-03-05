@@ -682,3 +682,84 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "updates", "performance"],
     ),
 ]
+
+
+# ── Disable Office Connected Experiences ─────────────────────────────────────
+
+_OFFICE_PRIVACY_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy"
+
+
+def _apply_disable_connected_exp(*, require_admin: bool = False) -> None:
+    SESSION.log("Office: disable optional connected experiences")
+    SESSION.backup([_OFFICE_PRIVACY_CU], "OfficeConnectedExp")
+    SESSION.set_dword(_OFFICE_PRIVACY_CU, "DisableOptionalConnectedExperiences", 1)
+
+
+def _remove_disable_connected_exp(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_OFFICE_PRIVACY_CU, "DisableOptionalConnectedExperiences")
+
+
+def _detect_disable_connected_exp() -> bool:
+    return SESSION.read_dword(_OFFICE_PRIVACY_CU, "DisableOptionalConnectedExperiences") == 1
+
+
+# ── Disable Office Feedback Prompts ──────────────────────────────────────────
+
+_OFFICE_FEEDBACK_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback"
+
+
+def _apply_disable_feedback_prompts(*, require_admin: bool = False) -> None:
+    SESSION.log("Office: disable feedback survey prompts")
+    SESSION.backup([_OFFICE_FEEDBACK_CU], "OfficeFeedbackPrompts")
+    SESSION.set_dword(_OFFICE_FEEDBACK_CU, "SurveyEnabled", 0)
+    SESSION.set_dword(_OFFICE_FEEDBACK_CU, "Enabled", 0)
+
+
+def _remove_disable_feedback_prompts(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_OFFICE_FEEDBACK_CU, "SurveyEnabled")
+    SESSION.delete_value(_OFFICE_FEEDBACK_CU, "Enabled")
+
+
+def _detect_disable_feedback_prompts() -> bool:
+    return (
+        SESSION.read_dword(_OFFICE_FEEDBACK_CU, "SurveyEnabled") == 0
+        and SESSION.read_dword(_OFFICE_FEEDBACK_CU, "Enabled") == 0
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="office-disable-connected-experiences",
+        label="Disable Office Connected Experiences",
+        category="Office",
+        apply_fn=_apply_disable_connected_exp,
+        remove_fn=_remove_disable_connected_exp,
+        detect_fn=_detect_disable_connected_exp,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICE_PRIVACY_CU],
+        description=(
+            "Disables optional connected experiences in Office 365. "
+            "Prevents cloud-powered features like LinkedIn integration and 3D maps. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["office", "connected", "privacy", "cloud"],
+    ),
+    TweakDef(
+        id="office-disable-feedback",
+        label="Disable Office Feedback Prompts",
+        category="Office",
+        apply_fn=_apply_disable_feedback_prompts,
+        remove_fn=_remove_disable_feedback_prompts,
+        detect_fn=_detect_disable_feedback_prompts,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICE_FEEDBACK_CU],
+        description=(
+            "Disables Office feedback survey prompts and the feedback button. "
+            "Prevents interruptions during work. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["office", "feedback", "survey", "notifications"],
+    ),
+]

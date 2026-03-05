@@ -665,3 +665,297 @@ TWEAKS += [
         tags=["win11", "chat", "teams", "taskbar"],
     ),
 ]
+
+
+# ══ Windows 11 24H2+ Tweaks ═══════════════════════════════════════════════
+
+_ADV_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+_STNOTIF_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+_START_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+_CDP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+# -- End Task via Taskbar Right-Click (24H2+) ──────────────────────────────
+
+
+def _apply_w11_end_task(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: enable End Task in taskbar right-click menu")
+    SESSION.backup([_ADV_CU], "W11_EndTask")
+    SESSION.set_dword(_ADV_CU, "TaskbarEndTask", 1)
+
+
+def _remove_w11_end_task(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_ADV_CU, "TaskbarEndTask", 0)
+
+
+def _detect_w11_end_task() -> bool:
+    return SESSION.read_dword(_ADV_CU, "TaskbarEndTask") == 1
+
+
+# -- Start Menu: Show More Pins ────────────────────────────────────────────
+
+
+def _apply_w11_more_pins(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: set Start Menu layout to show more pins")
+    SESSION.backup([_START_CU], "W11_MorePins")
+    SESSION.set_dword(_START_CU, "Start_Layout", 1)
+
+
+def _remove_w11_more_pins(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_START_CU, "Start_Layout", 0)
+
+
+def _detect_w11_more_pins() -> bool:
+    return SESSION.read_dword(_START_CU, "Start_Layout") == 1
+
+
+# -- Start Menu: Disable Recommendations ──────────────────────────────────
+
+
+def _apply_w11_disable_recommendations(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: disable Start Menu recommendations section")
+    SESSION.backup([_START_CU], "W11_DisableRecommendations")
+    SESSION.set_dword(_START_CU, "Start_IrisRecommendations", 0)
+
+
+def _remove_w11_disable_recommendations(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_START_CU, "Start_IrisRecommendations", 1)
+
+
+def _detect_w11_disable_recommendations() -> bool:
+    return SESSION.read_dword(_START_CU, "Start_IrisRecommendations") == 0
+
+
+# -- Disable Cross-Device Resume (24H2+) ─────────────────────────────────
+
+
+def _apply_w11_disable_cross_device(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disable Cross-Device Resume / CDP")
+    SESSION.backup([_CDP_POLICY], "W11_CDP")
+    SESSION.set_dword(_CDP_POLICY, "EnableCdp", 0)
+
+
+def _remove_w11_disable_cross_device(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDP_POLICY, "EnableCdp")
+
+
+def _detect_w11_disable_cross_device() -> bool:
+    return SESSION.read_dword(_CDP_POLICY, "EnableCdp") == 0
+
+
+# -- Disable Sync Provider Notifications ─────────────────────────────────
+
+
+def _apply_w11_disable_sync_notifications(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: disable OneDrive/sync provider notifications in Explorer")
+    SESSION.backup([_ADV_CU], "W11_SyncNotif")
+    SESSION.set_dword(_ADV_CU, "ShowSyncProviderNotifications", 0)
+
+
+def _remove_w11_disable_sync_notifications(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_ADV_CU, "ShowSyncProviderNotifications", 1)
+
+
+def _detect_w11_disable_sync_notifications() -> bool:
+    return SESSION.read_dword(_ADV_CU, "ShowSyncProviderNotifications") == 0
+
+
+# -- Taskbar: Never Combine Buttons ──────────────────────────────────────
+
+_TASKBAR_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_w11_never_combine(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: set taskbar to never combine buttons")
+    SESSION.backup([_TASKBAR_CU], "W11_NeverCombine")
+    SESSION.set_dword(_TASKBAR_CU, "TaskbarGlomLevel", 2)
+
+
+def _remove_w11_never_combine(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TASKBAR_CU, "TaskbarGlomLevel", 0)
+
+
+def _detect_w11_never_combine() -> bool:
+    return SESSION.read_dword(_TASKBAR_CU, "TaskbarGlomLevel") == 2
+
+
+# -- Hide Settings Home Page (24H2+) ────────────────────────────────────
+
+_SETTINGS_PAGE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+
+
+def _apply_w11_hide_settings_home(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: hide Settings home page (go directly to System)")
+    SESSION.backup([_SETTINGS_PAGE], "W11_SettingsHome")
+    SESSION.set_string(
+        _SETTINGS_PAGE,
+        "SettingsPageVisibility",
+        "hide:home",
+    )
+
+
+def _remove_w11_hide_settings_home(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SETTINGS_PAGE, "SettingsPageVisibility")
+
+
+def _detect_w11_hide_settings_home() -> bool:
+    val = SESSION.read_string(_SETTINGS_PAGE, "SettingsPageVisibility")
+    return val is not None and "hide:home" in val
+
+
+# -- Taskbar: Left Alignment ─────────────────────────────────────────────
+
+
+def _apply_w11_taskbar_left(*, require_admin: bool = False) -> None:
+    SESSION.log("Win11: align taskbar to the left")
+    SESSION.backup([_TASKBAR_CU], "W11_TaskbarLeft")
+    SESSION.set_dword(_TASKBAR_CU, "TaskbarAl", 0)
+
+
+def _remove_w11_taskbar_left(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TASKBAR_CU, "TaskbarAl", 1)
+
+
+def _detect_w11_taskbar_left() -> bool:
+    return SESSION.read_dword(_TASKBAR_CU, "TaskbarAl") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="w11-end-task-context",
+        label="Enable End Task in Taskbar Right-Click",
+        category="Windows 11",
+        apply_fn=_apply_w11_end_task,
+        remove_fn=_remove_w11_end_task,
+        detect_fn=_detect_w11_end_task,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV_CU],
+        description=(
+            "Adds an 'End Task' option to the taskbar right-click context menu "
+            "for quickly killing unresponsive apps. Win11 23H2+. "
+            "Default: disabled. Recommended: enabled."
+        ),
+        tags=["win11", "taskbar", "end-task", "24h2"],
+    ),
+    TweakDef(
+        id="w11-start-more-pins",
+        label="Start Menu: Show More Pins",
+        category="Windows 11",
+        apply_fn=_apply_w11_more_pins,
+        remove_fn=_remove_w11_more_pins,
+        detect_fn=_detect_w11_more_pins,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_START_CU],
+        description=(
+            "Changes the Start Menu layout to show more pinned apps and fewer "
+            "recommendations. Default: balanced. Recommended: more pins."
+        ),
+        tags=["win11", "start-menu", "pins", "layout"],
+    ),
+    TweakDef(
+        id="w11-disable-recommendations",
+        label="Disable Start Menu Recommendations",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_recommendations,
+        remove_fn=_remove_w11_disable_recommendations,
+        detect_fn=_detect_w11_disable_recommendations,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_START_CU],
+        description=(
+            "Disables the 'Recommended' section in the Win11 Start Menu that "
+            "shows recently opened files and suggested apps. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["win11", "start-menu", "recommendations", "privacy"],
+    ),
+    TweakDef(
+        id="w11-disable-cross-device",
+        label="Disable Cross-Device Resume",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_cross_device,
+        remove_fn=_remove_w11_disable_cross_device,
+        detect_fn=_detect_w11_disable_cross_device,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CDP_POLICY],
+        description=(
+            "Disables Cross-Device Resume (CDP) which syncs activities across "
+            "devices linked to the same Microsoft account. Win11 24H2+. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["win11", "cross-device", "cdp", "privacy", "24h2"],
+    ),
+    TweakDef(
+        id="w11-disable-sync-notifications",
+        label="Disable Sync Provider Notifications",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_sync_notifications,
+        remove_fn=_remove_w11_disable_sync_notifications,
+        detect_fn=_detect_w11_disable_sync_notifications,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV_CU],
+        description=(
+            "Disables OneDrive and other sync provider advertising notifications "
+            "in File Explorer. Default: shown. Recommended: disabled."
+        ),
+        tags=["win11", "sync", "notifications", "onedrive", "explorer"],
+    ),
+    TweakDef(
+        id="w11-never-combine-taskbar",
+        label="Never Combine Taskbar Buttons",
+        category="Windows 11",
+        apply_fn=_apply_w11_never_combine,
+        remove_fn=_remove_w11_never_combine,
+        detect_fn=_detect_w11_never_combine,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TASKBAR_CU],
+        description=(
+            "Sets taskbar to never combine app buttons, showing each window "
+            "individually with its label. Win11 23H2+. "
+            "Default: always combine. Recommended: never combine."
+        ),
+        tags=["win11", "taskbar", "combine", "buttons"],
+    ),
+    TweakDef(
+        id="w11-hide-settings-home",
+        label="Hide Settings Home Page",
+        category="Windows 11",
+        apply_fn=_apply_w11_hide_settings_home,
+        remove_fn=_remove_w11_hide_settings_home,
+        detect_fn=_detect_w11_hide_settings_home,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SETTINGS_PAGE],
+        description=(
+            "Hides the Windows Settings home page that shows recommendations "
+            "and account promotions. Settings opens to System instead. Win11 24H2+. "
+            "Default: shown. Recommended: hidden."
+        ),
+        tags=["win11", "settings", "home", "24h2", "privacy"],
+    ),
+    TweakDef(
+        id="w11-taskbar-left",
+        label="Align Taskbar to the Left",
+        category="Windows 11",
+        apply_fn=_apply_w11_taskbar_left,
+        remove_fn=_remove_w11_taskbar_left,
+        detect_fn=_detect_w11_taskbar_left,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TASKBAR_CU],
+        description=(
+            "Aligns the Windows 11 taskbar icons to the left instead of center. "
+            "Default: center. Recommended: personal preference."
+        ),
+        tags=["win11", "taskbar", "alignment", "left"],
+    ),
+]

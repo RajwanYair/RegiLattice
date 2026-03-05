@@ -43,7 +43,7 @@ def _is_domain_joined() -> bool:
         import ctypes
         import ctypes.wintypes
 
-        advapi32 = ctypes.windll.advapi32  # type: ignore[attr-defined]
+        advapi32 = ctypes.windll.advapi32
         buf = ctypes.create_unicode_buffer(256)
         size = ctypes.wintypes.DWORD(256)
         # GetComputerNameExW with NameDnsDomain (2)

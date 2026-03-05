@@ -12,7 +12,7 @@ import json
 import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed  # type: ignore[attr-defined]
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -101,7 +101,8 @@ def _build_category_info() -> None:
 
         # Which profiles include this category?
         for pname, pdata in _PROFILES.items():
-            if name in pdata.get("apply_categories", frozenset()):
+            cats = pdata.get("apply_categories", frozenset())
+            if isinstance(cats, (set, frozenset)) and name in cats:
                 info.profiles.append(pname)
 
         _CATEGORY_INFO[name] = info

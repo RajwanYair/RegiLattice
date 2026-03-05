@@ -19,7 +19,8 @@ from .registry import SESSION
 def is_admin() -> bool:
     """Return True if the current process has administrator privileges."""
     if os.name != "nt":
-        return bool(os.getuid() == 0)  # type: ignore[attr-defined]
+        _getuid = getattr(os, "getuid", None)
+        return bool(_getuid is not None and _getuid() == 0)
     try:
         return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined,unused-ignore]
     except Exception:
