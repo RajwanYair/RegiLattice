@@ -487,3 +487,86 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "tracking", "privacy", "performance"],
     ),
 ]
+
+
+# -- Disable Last Known Good ---------------------------------------------------
+
+_SESSION_MGR_CM = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Configuration Manager"
+)
+
+
+def _apply_startup_disable_last_known_good(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disabling Last Known Good")
+    SESSION.backup([_SESSION_MGR_CM], "LastKnownGood")
+    SESSION.set_dword(_SESSION_MGR_CM, "LastKnownGood", 0)
+    SESSION.log("Startup: Last Known Good disabled")
+
+
+def _remove_startup_disable_last_known_good(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SESSION_MGR_CM], "LastKnownGood_Remove")
+    SESSION.delete_value(_SESSION_MGR_CM, "LastKnownGood")
+
+
+def _detect_startup_disable_last_known_good() -> bool:
+    return SESSION.read_dword(_SESSION_MGR_CM, "LastKnownGood") == 0
+
+
+# -- Enable Verbose Boot Messages ----------------------------------------------
+
+
+def _apply_startup_verbose_boot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: enabling verbose boot messages")
+    SESSION.backup([_POLICIES_SYSTEM], "VerboseBoot")
+    SESSION.set_dword(_POLICIES_SYSTEM, "VerboseStatus", 1)
+    SESSION.log("Startup: verbose boot messages enabled")
+
+
+def _remove_startup_verbose_boot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_POLICIES_SYSTEM], "VerboseBoot_Remove")
+    SESSION.delete_value(_POLICIES_SYSTEM, "VerboseStatus")
+
+
+def _detect_startup_verbose_boot() -> bool:
+    return SESSION.read_dword(_POLICIES_SYSTEM, "VerboseStatus") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="startup-disable-last-known-good",
+        label="Disable Last Known Good Boot Option",
+        category="Startup",
+        apply_fn=_apply_startup_disable_last_known_good,
+        remove_fn=_remove_startup_disable_last_known_good,
+        detect_fn=_detect_startup_disable_last_known_good,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SESSION_MGR_CM],
+        description=(
+            "Disables the Last Known Good Configuration boot option. "
+            "Default: Enabled. Recommended: Disabled for advanced users."
+        ),
+        tags=["startup", "boot", "last-known-good"],
+    ),
+    TweakDef(
+        id="startup-verbose-boot",
+        label="Enable Verbose Boot Messages",
+        category="Startup",
+        apply_fn=_apply_startup_verbose_boot,
+        remove_fn=_remove_startup_verbose_boot,
+        detect_fn=_detect_startup_verbose_boot,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POLICIES_SYSTEM],
+        description=(
+            "Shows detailed status messages during boot and shutdown. "
+            "Default: Disabled. Recommended: Enabled for troubleshooting."
+        ),
+        tags=["startup", "boot", "verbose", "debug"],
+    ),
+]

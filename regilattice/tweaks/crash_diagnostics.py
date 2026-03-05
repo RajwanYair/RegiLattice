@@ -356,3 +356,81 @@ TWEAKS: list[TweakDef] = [
         tags=["pca", "compatibility", "assistant", "popup"],
     ),
 ]
+
+
+_SIUF = r"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"
+_WIN_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Windows"
+
+
+# -- Disable Feedback Notifications -----------------------------------------------
+
+
+def _apply_disable_feedback_notifications(*, require_admin: bool = True) -> None:
+    SESSION.log("Crash & Diagnostics: disable feedback request notifications")
+    SESSION.backup([_SIUF], "FeedbackNotifications")
+    SESSION.set_dword(_SIUF, "NumberOfSIUFInPeriod", 0)
+
+
+def _remove_disable_feedback_notifications(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_SIUF, "NumberOfSIUFInPeriod")
+
+
+def _detect_disable_feedback_notifications() -> bool:
+    return SESSION.read_dword(_SIUF, "NumberOfSIUFInPeriod") == 0
+
+
+# -- Disable Error Dialog Boxes ---------------------------------------------------
+
+
+def _apply_disable_error_dialog(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash & Diagnostics: disable automatic error dialog boxes")
+    SESSION.backup([_WIN_CTRL], "ErrorDialog")
+    SESSION.set_dword(_WIN_CTRL, "ErrorMode", 2)
+
+
+def _remove_disable_error_dialog(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WIN_CTRL, "ErrorMode", 0)
+
+
+def _detect_disable_error_dialog() -> bool:
+    return SESSION.read_dword(_WIN_CTRL, "ErrorMode") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="crash-disable-feedback-notifications",
+        label="Disable Feedback Request Notifications",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_disable_feedback_notifications,
+        remove_fn=_remove_disable_feedback_notifications,
+        detect_fn=_detect_disable_feedback_notifications,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SIUF],
+        description=(
+            "Disables Windows feedback request notification prompts. "
+            "Sets NumberOfSIUFInPeriod to 0 to suppress all feedback popups. "
+            "Default: periodic. Recommended: disabled."
+        ),
+        tags=["crash", "feedback", "notifications", "privacy"],
+    ),
+    TweakDef(
+        id="crash-disable-error-dialog",
+        label="Disable Automatic Error Dialog Boxes",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_disable_error_dialog,
+        remove_fn=_remove_disable_error_dialog,
+        detect_fn=_detect_disable_error_dialog,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIN_CTRL],
+        description=(
+            "Disables automatic error dialog boxes (ErrorMode=2). "
+            "Suppresses critical-error-handler message boxes for background services. "
+            "Default: 0 (show all). Recommended: 2 for servers."
+        ),
+        tags=["crash", "error", "dialog", "server"],
+    ),
+]

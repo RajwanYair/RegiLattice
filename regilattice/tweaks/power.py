@@ -676,3 +676,79 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "plan", "high-performance", "cpu"],
     ),
 ]
+
+
+# ── Disable USB Power Saving (global) ────────────────────────────────────────
+
+
+def _apply_usb_power_save_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable USB selective suspend globally")
+    SESSION.backup([_USB_KEY], "USBPowerSave")
+    SESSION.set_dword(_USB_KEY, "DisableSelectiveSuspend", 1)
+
+
+def _remove_usb_power_save_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_USB_KEY, "DisableSelectiveSuspend", 0)
+
+
+def _detect_usb_power_save_off() -> bool:
+    return SESSION.read_dword(_USB_KEY, "DisableSelectiveSuspend") == 1
+
+
+# ── Disable Connected Standby (PCI Express PM) ──────────────────────────────
+
+
+def _apply_pci_express_pm_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Power: disable connected standby (CsEnabled=0)")
+    SESSION.backup([_POWER], "PciExpressPM")
+    SESSION.set_dword(_POWER, "CsEnabled", 0)
+
+
+def _remove_pci_express_pm_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_POWER, "CsEnabled", 1)
+
+
+def _detect_pci_express_pm_off() -> bool:
+    return SESSION.read_dword(_POWER, "CsEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="power-disable-usb-power-save",
+        label="Disable USB Power Saving",
+        category="Power",
+        apply_fn=_apply_usb_power_save_off,
+        remove_fn=_remove_usb_power_save_off,
+        detect_fn=_detect_usb_power_save_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USB_KEY],
+        description=(
+            "Disables USB selective suspend globally to prevent USB device "
+            "disconnects. Keeps all USB ports powered at all times. "
+            "Default: Enabled. Recommended: Disabled for desktop PCs."
+        ),
+        tags=["power", "usb", "suspend", "stability"],
+    ),
+    TweakDef(
+        id="power-disable-pci-express-pm",
+        label="Disable Connected Standby",
+        category="Power",
+        apply_fn=_apply_pci_express_pm_off,
+        remove_fn=_remove_pci_express_pm_off,
+        detect_fn=_detect_pci_express_pm_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER],
+        description=(
+            "Disables Connected Standby (Modern Standby) which manages PCI Express "
+            "link state power. Prevents low-power idle states that can cause "
+            "wake issues. Default: Enabled. Recommended: Disabled for desktops."
+        ),
+        tags=["power", "connected-standby", "pci-express", "idle"],
+    ),
+]

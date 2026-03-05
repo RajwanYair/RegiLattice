@@ -394,6 +394,54 @@ def _detect_max_registry_flush() -> bool:
     return SESSION.read_dword(_CONFIG_MGR, "MaximumBandwidthForRegistryFlush") == 0
 
 
+# ── Enable Fast Startup (Hiberboot) ───────────────────────────────────────────
+
+_HIBERBOOT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Power"
+)
+
+
+def _apply_enable_fast_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: enable Fast Startup (Hiberboot)")
+    SESSION.backup([_HIBERBOOT], "FastStartup")
+    SESSION.set_dword(_HIBERBOOT, "HiberbootEnabled", 1)
+
+
+def _remove_enable_fast_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_HIBERBOOT, "HiberbootEnabled", 0)
+
+
+def _detect_enable_fast_startup() -> bool:
+    return SESSION.read_dword(_HIBERBOOT, "HiberbootEnabled") == 1
+
+
+# ── Disable Boot Startup Sound ───────────────────────────────────────────────
+
+_BOOT_SOUND = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Authentication\LogonUI\BootAnimation"
+)
+
+
+def _apply_disable_boot_startup_sound(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: disable Windows startup sound")
+    SESSION.backup([_BOOT_SOUND], "BootStartupSound")
+    SESSION.set_dword(_BOOT_SOUND, "DisableStartupSound", 1)
+
+
+def _remove_disable_boot_startup_sound(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BOOT_SOUND, "DisableStartupSound")
+
+
+def _detect_disable_boot_startup_sound() -> bool:
+    return SESSION.read_dword(_BOOT_SOUND, "DisableStartupSound") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -617,5 +665,121 @@ TWEAKS: list[TweakDef] = [
             "Recommended: 0 (unlimited) on NVMe/SSD."
         ),
         tags=["boot", "registry", "flush", "performance", "ssd"],
+    ),
+    TweakDef(
+        id="boot-enable-fast-startup",
+        label="Enable Fast Startup (Hiberboot)",
+        category="Boot",
+        apply_fn=_apply_enable_fast_startup,
+        remove_fn=_remove_enable_fast_startup,
+        detect_fn=_detect_enable_fast_startup,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_HIBERBOOT],
+        description=(
+            "Enables Windows Fast Startup which uses a hybrid shutdown "
+            "with hibernation to speed up boot time. "
+            "Default: Usually enabled. Recommended: Enabled for fast boot."
+        ),
+        tags=["boot", "fast-startup", "hiberboot", "performance"],
+    ),
+    TweakDef(
+        id="boot-disable-startup-sound",
+        label="Disable Boot Startup Sound",
+        category="Boot",
+        apply_fn=_apply_disable_boot_startup_sound,
+        remove_fn=_remove_disable_boot_startup_sound,
+        detect_fn=_detect_disable_boot_startup_sound,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BOOT_SOUND],
+        description=(
+            "Disables the Windows startup sound that plays during boot. "
+            "Useful for silent or headless environments. "
+            "Default: Enabled. Recommended: Disabled for quiet boot."
+        ),
+        tags=["boot", "sound", "startup", "silent"],
+    ),
+]
+
+
+# ── Disable Hibernation File ─────────────────────────────────────────────────
+
+_POWER_CTL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+_PREFETCH_PARAMS = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Memory Management\PrefetchParameters"
+)
+
+
+def _apply_hiberfile_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable hibernation to free disk space")
+    SESSION.backup([_POWER_CTL], "Hibernation")
+    SESSION.set_dword(_POWER_CTL, "HibernateEnabled", 0)
+
+
+def _remove_hiberfile_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_POWER_CTL, "HibernateEnabled", 1)
+
+
+def _detect_hiberfile_off() -> bool:
+    return SESSION.read_dword(_POWER_CTL, "HibernateEnabled") == 0
+
+
+# ── Boot Prefetch Optimized ──────────────────────────────────────────────────
+
+
+def _apply_prefetch_optimized(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Set boot prefetch to optimized mode")
+    SESSION.backup([_PREFETCH_PARAMS], "BootPrefetch")
+    SESSION.set_dword(_PREFETCH_PARAMS, "EnablePrefetcher", 3)
+
+
+def _remove_prefetch_optimized(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PREFETCH_PARAMS, "EnablePrefetcher", 0)
+
+
+def _detect_prefetch_optimized() -> bool:
+    return SESSION.read_dword(_PREFETCH_PARAMS, "EnablePrefetcher") == 3
+
+
+TWEAKS += [
+    TweakDef(
+        id="boot-disable-hiberfile",
+        label="Disable Hibernation",
+        category="Boot",
+        apply_fn=_apply_hiberfile_off,
+        remove_fn=_remove_hiberfile_off,
+        detect_fn=_detect_hiberfile_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER_CTL],
+        description=(
+            "Disables hibernation and removes the hiberfil.sys file "
+            "to free disk space. Default: Enabled. "
+            "Recommended: Disabled on desktops with SSD."
+        ),
+        tags=["boot", "hibernation", "disk-space", "performance"],
+    ),
+    TweakDef(
+        id="boot-prefetch-optimized",
+        label="Set Prefetch to Optimized Mode",
+        category="Boot",
+        apply_fn=_apply_prefetch_optimized,
+        remove_fn=_remove_prefetch_optimized,
+        detect_fn=_detect_prefetch_optimized,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PREFETCH_PARAMS],
+        description=(
+            "Enables both boot and application prefetching for optimal "
+            "performance. Value 3 = boot + app prefetch. "
+            "Default: 3. Recommended: 3 for SSDs and HDDs."
+        ),
+        tags=["boot", "prefetch", "performance", "startup"],
     ),
 ]

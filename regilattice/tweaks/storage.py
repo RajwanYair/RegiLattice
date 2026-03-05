@@ -599,3 +599,81 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "ntfs", "memory", "paged-pool", "performance"],
     ),
 ]
+
+
+# -- Disable Storage Sense (quick toggle) --------------------------------------
+
+
+def _apply_stor_disable_storage_sense(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Storage: disabling Storage Sense")
+    SESSION.backup([_KEY_STORAGE_SENSE], "StorDisableStorageSense")
+    SESSION.set_dword(_KEY_STORAGE_SENSE, "01", 0)
+    SESSION.log("Storage: Storage Sense disabled")
+
+
+def _remove_stor_disable_storage_sense(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_STORAGE_SENSE], "StorDisableStorageSense_Remove")
+    SESSION.set_dword(_KEY_STORAGE_SENSE, "01", 1)
+
+
+def _detect_stor_disable_storage_sense() -> bool:
+    return SESSION.read_dword(_KEY_STORAGE_SENSE, "01") == 0
+
+
+# -- Disable Reserved Storage (quick toggle) -----------------------------------
+
+
+def _apply_stor_disable_reserved_storage(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Storage: disabling Reserved Storage")
+    SESSION.backup([_KEY_RESERVE], "StorDisableReserved")
+    SESSION.set_dword(_KEY_RESERVE, "ShippedWithReserves", 0)
+    SESSION.log("Storage: Reserved Storage disabled")
+
+
+def _remove_stor_disable_reserved_storage(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_RESERVE], "StorDisableReserved_Remove")
+    SESSION.set_dword(_KEY_RESERVE, "ShippedWithReserves", 1)
+
+
+def _detect_stor_disable_reserved_storage() -> bool:
+    return SESSION.read_dword(_KEY_RESERVE, "ShippedWithReserves") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="stor-disable-storage-sense",
+        label="Disable Storage Sense (Quick)",
+        category="Storage",
+        apply_fn=_apply_stor_disable_storage_sense,
+        remove_fn=_remove_stor_disable_storage_sense,
+        detect_fn=_detect_stor_disable_storage_sense,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_STORAGE_SENSE],
+        description=(
+            "Disables automatic Storage Sense cleanup. "
+            "Default: Enabled. Recommended: Disabled for manual control."
+        ),
+        tags=["storage", "storage-sense", "cleanup"],
+    ),
+    TweakDef(
+        id="stor-disable-reserved-storage",
+        label="Disable Reserved Storage (Quick)",
+        category="Storage",
+        apply_fn=_apply_stor_disable_reserved_storage,
+        remove_fn=_remove_stor_disable_reserved_storage,
+        detect_fn=_detect_stor_disable_reserved_storage,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_RESERVE],
+        description=(
+            "Disables Windows reserved storage (~7 GB). "
+            "Default: Enabled. Recommended: Disabled to reclaim space."
+        ),
+        tags=["storage", "reserved", "disk-space"],
+    ),
+]

@@ -475,3 +475,68 @@ TWEAKS: list[TweakDef] = [
         tags=["wsl", "version", "linux"],
     ),
 ]
+
+
+# -- 12. Disable WSL Windows Interop ─────────────────────────────────────────
+
+
+def _apply_wsl_disable_interop(*, require_admin: bool = False) -> None:
+    SESSION.backup([_LXSS_CU], "WSLDisableInterop")
+    SESSION.set_dword(_LXSS_CU, "WslInterop", 0)
+
+
+def _remove_wsl_disable_interop(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_LXSS_CU, "WslInterop", 1)
+
+
+def _detect_wsl_disable_interop() -> bool:
+    return SESSION.read_dword(_LXSS_CU, "WslInterop") == 0
+
+
+# -- 13. Enable WSL2 Localhost Forwarding ────────────────────────────────────
+
+
+def _apply_wsl_localhost_fwd(*, require_admin: bool = False) -> None:
+    SESSION.backup([_LXSS_CU], "WSLLocalhostFwd")
+    SESSION.set_dword(_LXSS_CU, "LocalhostForwarding", 1)
+
+
+def _remove_wsl_localhost_fwd(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_LXSS_CU, "LocalhostForwarding", 0)
+
+
+def _detect_wsl_localhost_fwd() -> bool:
+    return SESSION.read_dword(_LXSS_CU, "LocalhostForwarding") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="wsl-disable-interop",
+        label="Disable WSL Windows Interop",
+        category="WSL",
+        apply_fn=_apply_wsl_disable_interop,
+        remove_fn=_remove_wsl_disable_interop,
+        detect_fn=_detect_wsl_disable_interop,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LXSS_CU],
+        description="Disables WSL Windows interop (running Windows executables from WSL). Default: Enabled. Recommended: Disabled for isolation.",
+        tags=["wsl", "interop", "windows", "security"],
+    ),
+    TweakDef(
+        id="wsl-enable-localhost-forward",
+        label="Enable WSL2 Localhost Forwarding",
+        category="WSL",
+        apply_fn=_apply_wsl_localhost_fwd,
+        remove_fn=_remove_wsl_localhost_fwd,
+        detect_fn=_detect_wsl_localhost_fwd,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LXSS_CU],
+        description=(
+            "Enables localhost forwarding so WSL2 services are accessible from Windows via localhost. "
+            "Default: Disabled. Recommended: Enabled for development."
+        ),
+        tags=["wsl", "localhost", "forwarding", "networking"],
+    ),
+]

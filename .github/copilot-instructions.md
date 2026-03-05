@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-06-19 (v2.0.0, 798 tweaks, 63 categories, ~8 126 tests).
+> Last verified: 2025-06-21 (v2.0.0, 971 tweaks, 64 categories, ~9 857 tests).
 
 ## Quick Facts
 
@@ -12,8 +12,8 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~8 126 tests)                                          |
-| GUI         | tkinter with Catppuccin Mocha dark theme (~1 210 lines)                      |
+| Test        | `pytest` in `tests/` (~9 857 tests)                                          |
+| GUI         | tkinter with Catppuccin Mocha dark theme (~1 432 lines)                      |
 | Version     | 2.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
@@ -26,7 +26,7 @@ regilattice/
 ├── __main__.py          # entry: delegates to cli.main()
 ├── cli.py               # argparse CLI (apply/remove/list/gui/profile)
 ├── menu.py              # interactive numbered console menu
-├── gui.py               # tkinter GUI (~1 210 lines, Catppuccin Mocha theme)
+├── gui.py               # tkinter GUI (~1 432 lines, Catppuccin Mocha theme)
 ├── registry.py          # RegistrySession: winreg wrapper + backup + logging
 ├── corpguard.py         # corporate network detection (domain/AAD/VPN/GPO/SCCM)
 ├── elevation.py         # UAC elevation helpers (is_admin, request_elevation)
@@ -34,7 +34,7 @@ regilattice/
 └── tweaks/
     ├── __init__.py      # TweakDef dataclass, plugin loader, profiles, batch ops
     ├── _template.py     # contributor guide (not loaded by plugin loader)
-    ├── accessibility.py # 57 category modules ...
+    ├── accessibility.py # 64 category modules ...
     ├── ...              # each exports TWEAKS: list[TweakDef]
     └── wsl.py
 ```
@@ -96,45 +96,46 @@ SESSION.log(message)
 Paths use full hive names: `HKEY_LOCAL_MACHINE\...` or `HKEY_CURRENT_USER\...`
 (abbreviations `HKLM\...` / `HKCU\...` also accepted).
 
-## Current Stats (798 tweaks, 63 categories, 63 modules)
+## Current Stats (971 tweaks, 64 categories, 64 modules)
 
 | Category              | Tweaks | Category            | Tweaks |
 | --------------------- | ------ | ------------------- | ------ |
-| Accessibility         | 14     | Lock Screen & Login | 11     |
-| Adobe                 | 13     | Maintenance         | 13     |
-| AI / Copilot          | 13     | Microsoft Store     | 10     |
-| Audio                 | 12     | Multimedia          | 10     |
-| Backup & Recovery     | 10     | Network             | 15     |
-| Bluetooth             | 12     | Notifications       | 11     |
-| Boot                  | 12     | Office              | 15     |
-| Chrome                | 13     | OneDrive            | 13     |
-| Clipboard & Drag-Drop | 10     | Package Management  | 17     |
-| Cloud Storage         | 25     | Performance         | 14     |
-| Communication         | 14     | Power               | 15     |
-| Context Menu          | 10     | Printing            | 10     |
-| Cortana & Search      | 13     | Privacy             | 12     |
-| Crash & Diagnostics   | 11     | RealVNC             | 10     |
-| Developer Tools       | 12     | Remote Desktop      | 11     |
-| Display               | 12     | Scheduled Tasks     | 11     |
-| DNS & Networking Adv  | 12     | Scoop Tools         | 20     |
-| Edge                  | 11     | Screensaver & Lock  | 11     |
-| Explorer              | 17     | Security            | 14     |
-| File System           | 12     | Services            | 15     |
-| Firefox               | 13     | Shell               | 13     |
-| Fonts                 | 14     | Snap & Multitasking | 12     |
-| Gaming                | 13     | Startup             | 12     |
-| GPU / Graphics        | 15     | Storage             | 12     |
-| Indexing & Search     | 11     | System              | 12     |
-| Input                 | 13     | Taskbar             | 12     |
-| Java                  | 11     | Telemetry Advanced  | 11     |
-| LibreOffice           | 13     | USB & Peripherals   | 11     |
-|                       |        | Virtualization      | 10     |
-|                       |        | VS Code             | 14     |
-|                       |        | Widgets & News      | 10     |
-|                       |        | Windows 11          | 13     |
-|                       |        | Windows Terminal    | 11     |
-|                       |        | Windows Update      | 15     |
-|                       |        | WSL                 | 11     |
+| Accessibility         | 18     | Lock Screen & Login | 13     |
+| Adobe                 | 17     | M365 Copilot        | 15     |
+| AI / Copilot          | 15     | Maintenance         | 15     |
+| Audio                 | 16     | Microsoft Store     | 12     |
+| Backup & Recovery     | 12     | Multimedia          | 12     |
+| Bluetooth             | 16     | Network             | 19     |
+| Boot                  | 18     | Notifications       | 13     |
+| Chrome                | 17     | Office              | 15     |
+| Clipboard & Drag-Drop | 12     | OneDrive            | 15     |
+| Cloud Storage         | 27     | Package Management  | 19     |
+| Communication         | 18     | Performance         | 18     |
+| Context Menu          | 12     | Power               | 19     |
+| Cortana & Search      | 17     | Printing            | 12     |
+| Crash & Diagnostics   | 13     | Privacy             | 14     |
+| Developer Tools       | 14     | RealVNC             | 12     |
+| Display               | 16     | Remote Desktop      | 13     |
+| DNS & Networking Adv  | 14     | Scheduled Tasks     | 13     |
+| Edge                  | 15     | Scoop Tools         | 22     |
+| Explorer              | 21     | Screensaver & Lock  | 13     |
+| File System           | 14     | Security            | 16     |
+| Firefox               | 17     | Services            | 17     |
+| Fonts                 | 16     | Shell               | 15     |
+| Gaming                | 15     | Snap & Multitasking | 14     |
+| GPU / Graphics        | 17     | Startup             | 14     |
+| Indexing & Search     | 13     | Storage             | 16     |
+| Input                 | 15     | System              | 14     |
+| Java                  | 13     | Taskbar             | 14     |
+| LibreOffice           | 15     | Telemetry Advanced  | 13     |
+|                       |        | USB & Peripherals   | 13     |
+|                       |        | Virtualization      | 12     |
+|                       |        | VS Code             | 16     |
+|                       |        | Widgets & News      | 12     |
+|                       |        | Windows 11          | 15     |
+|                       |        | Windows Terminal    | 13     |
+|                       |        | Windows Update      | 17     |
+|                       |        | WSL                 | 13     |
 
 ## 5 Profiles
 
@@ -162,21 +163,26 @@ Public API: `available_profiles()`, `profile_info(name)`, `tweaks_for_profile(na
 If corporate detected → tweaks with `corp_safe=False` are blocked.
 Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 
-## GUI Details (`gui.py`, ~1 210 lines)
+## GUI Details (`gui.py`, ~1 432 lines)
 
 - Catppuccin Mocha palette: `#1E1E2E` (base), `#89B4FA` (accent), etc.
 - Collapsible category sections with tweak counts (applied/total)
 - **Scope badges**: USER (green) / MACHINE (blue) / BOTH (yellow) per tweak row
-- Search bar + status filter (All / Applied / Default / Unknown)
+- Search bar + status filter (All / Applied / Default / Unknown) + scope filter (User/Machine/Both)
 - Profile selector dropdown (Business / Gaming / Privacy / Minimal / Server)
 - Export PS1 button (generates PowerShell script from selected tweaks)
+- Import JSON button (load tweak ID list from file to select)
 - Threaded execution — never blocks UI thread
 - Live status badges via `detect_fn()` with parallel detection (`status_map(parallel=True)`)
 - Rich hover tooltips with description, current state, default/recommendation hints, tags, registry keys
+- Right-click context menu on tweak rows (Enable/Disable, Copy ID, Copy Registry Key, Select category)
 - Recommendation badges (teal "REC" tag) for tweaks with recommendations in description
-- Summary stats bar: Applied / Default / Unknown / Recommended counts
+- Summary stats bar: Applied / Default / Unknown / Recommended / GPO counts
 - Per-category Enable All / Disable All buttons
-- Keyboard shortcuts: Ctrl+A/D/F/E/R, Esc
+- Toggleable log viewer panel (shows session log inline)
+- About dialog with system info and shortcut reference
+- Invert Selection button
+- Keyboard shortcuts: Ctrl+A/D/F/E/I/L/R, Esc
 - `_parse_description_metadata()` extracts `Default:` and `Recommended:` from description text
 - `functools.lru_cache` on description parsing for performance
 - `tweak_scope()` classifies tweaks as user/machine/both from registry keys

@@ -344,3 +344,75 @@ TWEAKS: list[TweakDef] = [
         tags=["location", "search", "privacy", "gps"],
     ),
 ]
+
+
+# -- Disable Dynamic Search Box Content -------------------------------------------
+
+
+def _apply_disable_dynamic_searchbox(*, require_admin: bool = True) -> None:
+    SESSION.log("Indexing & Search: disable dynamic search box content")
+    SESSION.backup([_SEARCH_SETTINGS], "DynamicSearchBox")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled", 0)
+
+
+def _remove_disable_dynamic_searchbox(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled")
+
+
+def _detect_disable_dynamic_searchbox() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "IsDynamicSearchBoxEnabled") == 0
+
+
+# -- Disable Recent Search Suggestions --------------------------------------------
+
+
+def _apply_disable_recent_search(*, require_admin: bool = True) -> None:
+    SESSION.log("Indexing & Search: disable recent search suggestions")
+    SESSION.backup([_SEARCH_SETTINGS], "RecentSearch")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled", 0)
+
+
+def _remove_disable_recent_search(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled")
+
+
+def _detect_disable_recent_search() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="idx-disable-dynamic-searchbox",
+        label="Disable Dynamic Search Box Content",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_dynamic_searchbox,
+        remove_fn=_remove_disable_dynamic_searchbox,
+        detect_fn=_detect_disable_dynamic_searchbox,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description=(
+            "Disables dynamic content in the search box (IsDynamicSearchBoxEnabled=0). "
+            "Removes trending searches and images from the search experience. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["search", "dynamic", "searchbox", "privacy"],
+    ),
+    TweakDef(
+        id="idx-disable-recent-search",
+        label="Disable Recent Search Suggestions",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_recent_search,
+        remove_fn=_remove_disable_recent_search,
+        detect_fn=_detect_disable_recent_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description=(
+            "Disables recent search history suggestions in Windows Search. "
+            "Prevents previously searched terms from appearing as suggestions. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["search", "recent", "history", "suggestions", "privacy"],
+    ),
+]

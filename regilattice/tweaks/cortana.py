@@ -290,6 +290,46 @@ def _detect_disable_cloud_search_policy() -> bool:
     return SESSION.read_dword(_SEARCH, "AllowCloudSearch") == 0
 
 
+# ── Disable Search Box Suggestions ───────────────────────────────────────────
+
+_EXPLORER_POLICIES = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
+
+
+def _apply_disable_search_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable web results in search box")
+    SESSION.backup([_EXPLORER_POLICIES], "SearchBoxSuggestions")
+    SESSION.set_dword(_EXPLORER_POLICIES, "DisableSearchBoxSuggestions", 1)
+
+
+def _remove_disable_search_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_POLICIES, "DisableSearchBoxSuggestions")
+
+
+def _detect_disable_search_suggestions() -> bool:
+    return SESSION.read_dword(_EXPLORER_POLICIES, "DisableSearchBoxSuggestions") == 1
+
+
+# ── Disable Bing Search Results ──────────────────────────────────────────────
+
+
+def _apply_disable_bing_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana: disable Bing search results in Start menu")
+    SESSION.backup([_SEARCH_CU], "BingSearch")
+    SESSION.set_dword(_SEARCH_CU, "BingSearchEnabled", 0)
+
+
+def _remove_disable_bing_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "BingSearchEnabled")
+
+
+def _detect_disable_bing_search() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "BingSearchEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -478,5 +518,119 @@ TWEAKS: list[TweakDef] = [
             "Recommended: Disabled for privacy."
         ),
         tags=["cortana", "search", "cloud", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-web-search",
+        label="Disable Search Box Web Suggestions",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_search_suggestions,
+        remove_fn=_remove_disable_search_suggestions,
+        detect_fn=_detect_disable_search_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_POLICIES],
+        description=(
+            "Disables web suggestions and results in the Windows Search "
+            "box. Only shows local results. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "web", "suggestions", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-bing-search",
+        label="Disable Bing Search in Start Menu",
+        category="Cortana & Search",
+        apply_fn=_apply_disable_bing_search,
+        remove_fn=_remove_disable_bing_search,
+        detect_fn=_detect_disable_bing_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Disables Bing search results integration in the Start menu "
+            "and taskbar search. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "bing", "search", "start-menu", "privacy"],
+    ),
+]
+
+
+# ── Disable Bing Integration in Start ────────────────────────────────────────
+
+
+def _apply_bing_in_start_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Bing integration in Start menu")
+    SESSION.backup([_SEARCH_CU], "BingInStart")
+    SESSION.set_dword(_SEARCH_CU, "ConnectedSearchUseWeb", 0)
+    SESSION.set_dword(_SEARCH_CU, "ConnectedSearchUseWebOverMeteredConnections", 0)
+
+
+def _remove_bing_in_start_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "ConnectedSearchUseWeb")
+    SESSION.delete_value(_SEARCH_CU, "ConnectedSearchUseWebOverMeteredConnections")
+
+
+def _detect_bing_in_start_off() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "ConnectedSearchUseWeb") == 0
+
+
+# ── Disable Search Box Suggestions ──────────────────────────────────────────
+
+
+def _apply_searchbox_suggestions_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable search box suggestions")
+    SESSION.backup([_SEARCH_CU], "SearchBoxSuggestionsOff")
+    SESSION.set_dword(_SEARCH_CU, "SearchboxTaskbarMode", 0)
+    SESSION.set_dword(_SEARCH_CU, "AllowSearchToUseLocation", 0)
+
+
+def _remove_searchbox_suggestions_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "SearchboxTaskbarMode")
+    SESSION.delete_value(_SEARCH_CU, "AllowSearchToUseLocation")
+
+
+def _detect_searchbox_suggestions_off() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "SearchboxTaskbarMode") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="cortana-block-bing-in-start",
+        label="Disable Bing Integration in Start",
+        category="Cortana & Search",
+        apply_fn=_apply_bing_in_start_off,
+        remove_fn=_remove_bing_in_start_off,
+        detect_fn=_detect_bing_in_start_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Disables Bing web search integration in Start menu and "
+            "connected search features including metered connections. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "bing", "start", "connected-search", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-searchbox-suggestions",
+        label="Disable Search Box Suggestions",
+        category="Cortana & Search",
+        apply_fn=_apply_searchbox_suggestions_off,
+        remove_fn=_remove_searchbox_suggestions_off,
+        detect_fn=_detect_searchbox_suggestions_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Disables search box taskbar suggestions and location-based "
+            "search results. Only shows local results. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "suggestions", "taskbar", "privacy"],
     ),
 ]

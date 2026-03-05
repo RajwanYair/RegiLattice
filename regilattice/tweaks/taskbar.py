@@ -498,3 +498,86 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "search", "privacy", "declutter"],
     ),
 ]
+
+
+# -- Disable Notification Badge Overlay ----------------------------------------
+
+
+def _apply_taskbar_disable_notification_badges(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disabling notification badge overlay")
+    SESSION.backup([_ADV], "TaskbarNotifBadges")
+    SESSION.set_dword(_ADV, "TaskbarBadges", 0)
+    SESSION.log("Taskbar: notification badge overlay disabled")
+
+
+def _remove_taskbar_disable_notification_badges(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "TaskbarNotifBadges_Remove")
+    SESSION.set_dword(_ADV, "TaskbarBadges", 1)
+
+
+def _detect_taskbar_disable_notification_badges() -> bool:
+    return SESSION.read_dword(_ADV, "TaskbarBadges") == 0
+
+
+# -- Disable People Bar --------------------------------------------------------
+
+_PEOPLE_KEY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\Advanced\People"
+)
+
+
+def _apply_taskbar_disable_people(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disabling People bar")
+    SESSION.backup([_PEOPLE_KEY], "PeopleBar")
+    SESSION.set_dword(_PEOPLE_KEY, "PeopleBand", 0)
+    SESSION.log("Taskbar: People bar disabled")
+
+
+def _remove_taskbar_disable_people(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_PEOPLE_KEY], "PeopleBar_Remove")
+    SESSION.set_dword(_PEOPLE_KEY, "PeopleBand", 1)
+
+
+def _detect_taskbar_disable_people() -> bool:
+    return SESSION.read_dword(_PEOPLE_KEY, "PeopleBand") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="taskbar-disable-notification-badges",
+        label="Disable Notification Badge Overlay",
+        category="Taskbar",
+        apply_fn=_apply_taskbar_disable_notification_badges,
+        remove_fn=_remove_taskbar_disable_notification_badges,
+        detect_fn=_detect_taskbar_disable_notification_badges,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables unread notification badges on taskbar app icons. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["taskbar", "badges", "notifications"],
+    ),
+    TweakDef(
+        id="taskbar-disable-people",
+        label="Disable People Bar on Taskbar",
+        category="Taskbar",
+        apply_fn=_apply_taskbar_disable_people,
+        remove_fn=_remove_taskbar_disable_people,
+        detect_fn=_detect_taskbar_disable_people,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PEOPLE_KEY],
+        description=(
+            "Removes the People bar from the taskbar. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["taskbar", "people", "social", "declutter"],
+    ),
+]

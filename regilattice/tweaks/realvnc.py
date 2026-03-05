@@ -357,3 +357,79 @@ TWEAKS: list[TweakDef] = [
         tags=["realvnc", "vnc", "encoding", "performance", "network"],
     ),
 ]
+
+
+# -- VNC Session Idle Timeout -----------------------------------------------------
+
+
+def _apply_session_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: set idle session timeout to 30 minutes")
+    SESSION.backup([_VNC_SERVER], "VNCSessionTimeout")
+    SESSION.set_dword(_VNC_SERVER, "IdleTimeout", 1800)
+
+
+def _remove_session_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_SERVER, "IdleTimeout")
+
+
+def _detect_session_timeout() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "IdleTimeout") == 1800
+
+
+# -- VNC Disable Clipboard Sharing ------------------------------------------------
+
+
+def _apply_vnc_disable_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: disable clipboard sharing")
+    SESSION.backup([_VNC_SERVER], "VNCDisableClipboard")
+    SESSION.set_dword(_VNC_SERVER, "DisableClipboard", 1)
+
+
+def _remove_vnc_disable_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_SERVER, "DisableClipboard")
+
+
+def _detect_vnc_disable_clipboard() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "DisableClipboard") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="vnc-session-timeout",
+        label="VNC: Set Idle Session Timeout (30 min)",
+        category="RealVNC",
+        apply_fn=_apply_session_timeout,
+        remove_fn=_remove_session_timeout,
+        detect_fn=_detect_session_timeout,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Sets VNC idle session timeout to 30 minutes (1800 seconds). "
+            "Automatically disconnects idle VNC sessions for security. "
+            "Default: no timeout. Recommended: 1800."
+        ),
+        tags=["vnc", "timeout", "idle", "security"],
+    ),
+    TweakDef(
+        id="vnc-disable-clipboard",
+        label="VNC: Disable Clipboard Sharing (DWord)",
+        category="RealVNC",
+        apply_fn=_apply_vnc_disable_clipboard,
+        remove_fn=_remove_vnc_disable_clipboard,
+        detect_fn=_detect_vnc_disable_clipboard,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Disables clipboard sharing between VNC server and clients via DWORD value. "
+            "Prevents data leakage through clipboard transfer. "
+            "Default: enabled. Recommended: disabled for DLP."
+        ),
+        tags=["vnc", "clipboard", "dlp", "security"],
+    ),
+]

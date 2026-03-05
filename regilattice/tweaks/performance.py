@@ -670,3 +670,80 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "cpu", "core-parking", "latency", "gaming"],
     ),
 ]
+
+
+# ── Disable Transparency (performance) ───────────────────────────────────────
+
+
+def _apply_perf_transparency_off(*, require_admin: bool = False) -> None:
+    SESSION.log("Performance: disable window transparency")
+    SESSION.backup([_PERSONALIZE], "PerfTransparency")
+    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 0)
+
+
+def _remove_perf_transparency_off(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 1)
+
+
+def _detect_perf_transparency_off() -> bool:
+    return SESSION.read_dword(_PERSONALIZE, "EnableTransparency") == 0
+
+
+# ── Disable Background Apps (performance) ────────────────────────────────────
+
+_BG_ACCESS = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\BackgroundAccessApplications"
+)
+
+
+def _apply_perf_bgapps_off(*, require_admin: bool = False) -> None:
+    SESSION.log("Performance: disable all background apps")
+    SESSION.backup([_BG_ACCESS], "PerfBgApps")
+    SESSION.set_dword(_BG_ACCESS, "GlobalUserDisabled", 1)
+
+
+def _remove_perf_bgapps_off(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_BG_ACCESS, "GlobalUserDisabled", 0)
+
+
+def _detect_perf_bgapps_off() -> bool:
+    return SESSION.read_dword(_BG_ACCESS, "GlobalUserDisabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="perf-disable-transparency",
+        label="Disable Window Transparency",
+        category="Performance",
+        apply_fn=_apply_perf_transparency_off,
+        remove_fn=_remove_perf_transparency_off,
+        detect_fn=_detect_perf_transparency_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PERSONALIZE],
+        description=(
+            "Disables window transparency effects for improved rendering "
+            "performance. Reduces GPU compositing overhead. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["performance", "transparency", "gpu", "rendering"],
+    ),
+    TweakDef(
+        id="perf-disable-background-apps",
+        label="Disable All Background Apps",
+        category="Performance",
+        apply_fn=_apply_perf_bgapps_off,
+        remove_fn=_remove_perf_bgapps_off,
+        detect_fn=_detect_perf_bgapps_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_BG_ACCESS],
+        description=(
+            "Disables all background app execution globally. Frees CPU, memory, "
+            "and network resources used by idle Store apps. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["performance", "background", "apps", "memory", "cpu"],
+    ),
+]

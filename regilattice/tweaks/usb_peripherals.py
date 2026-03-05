@@ -360,3 +360,79 @@ TWEAKS: list[TweakDef] = [
         tags=["safe-remove", "eject", "notification"],
     ),
 ]
+
+
+# -- 12. Disable USB 3.0 Link Power Management ───────────────────────────────
+
+_USB_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB"
+
+
+def _apply_disable_usb3_lpm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_USB_CTRL], "USB3LPM")
+    SESSION.set_dword(_USB_CTRL, "EnhancedPowerManagementEnabled", 0)
+
+
+def _remove_disable_usb3_lpm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_USB_CTRL, "EnhancedPowerManagementEnabled", 1)
+
+
+def _detect_disable_usb3_lpm() -> bool:
+    return SESSION.read_dword(_USB_CTRL, "EnhancedPowerManagementEnabled") == 0
+
+
+# -- 13. Disable Write to Removable Storage ─────────────────────────────────
+
+_STORAGE_DEV_POL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies"
+
+
+def _apply_removable_write_protect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STORAGE_DEV_POL], "RemovableWriteProtect")
+    SESSION.set_dword(_STORAGE_DEV_POL, "WriteProtect", 1)
+
+
+def _remove_removable_write_protect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_STORAGE_DEV_POL, "WriteProtect", 0)
+
+
+def _detect_removable_write_protect() -> bool:
+    return SESSION.read_dword(_STORAGE_DEV_POL, "WriteProtect") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="usb-disable-usb3-power-save",
+        label="Disable USB 3.0 Link Power Management",
+        category="USB & Peripherals",
+        apply_fn=_apply_disable_usb3_lpm,
+        remove_fn=_remove_disable_usb3_lpm,
+        detect_fn=_detect_disable_usb3_lpm,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_USB_CTRL],
+        description=(
+            "Disables USB 3.0 enhanced power management / link power management. "
+            "Improves USB stability at cost of power. Default: Enabled. Recommended: Disabled for desktops."
+        ),
+        tags=["usb", "usb3", "power", "lpm", "stability"],
+    ),
+    TweakDef(
+        id="usb-disable-removable-write",
+        label="Disable Write to Removable Storage",
+        category="USB & Peripherals",
+        apply_fn=_apply_removable_write_protect,
+        remove_fn=_remove_removable_write_protect,
+        detect_fn=_detect_removable_write_protect,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_STORAGE_DEV_POL],
+        description=(
+            "Enables write protection on all removable storage devices. "
+            "Prevents data exfiltration via USB drives. Default: Disabled. Recommended: Enabled for secure envs."
+        ),
+        tags=["usb", "removable", "write-protect", "security", "dlp"],
+    ),
+]

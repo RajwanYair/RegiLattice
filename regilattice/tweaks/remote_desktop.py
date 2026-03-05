@@ -357,3 +357,69 @@ TWEAKS: list[TweakDef] = [
         tags=["remote", "assistance", "help", "security"],
     ),
 ]
+
+
+# -- 12. Disable Remote Desktop ──────────────────────────────────────────────
+
+
+def _apply_disable_rdp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RDP], "DisableRDP")
+    SESSION.set_dword(_RDP, "fDenyTSConnections", 1)
+
+
+def _remove_disable_rdp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_RDP, "fDenyTSConnections", 0)
+
+
+def _detect_disable_rdp() -> bool:
+    return SESSION.read_dword(_RDP, "fDenyTSConnections") == 1
+
+
+# -- 13. Disable RDP Session Shadow ──────────────────────────────────────────
+
+
+def _apply_disable_shadow(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_TS_POLICY], "DisableRDPShadow")
+    SESSION.set_dword(_TS_POLICY, "Shadow", 0)
+
+
+def _remove_disable_shadow(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TS_POLICY, "Shadow", 1)
+
+
+def _detect_disable_shadow() -> bool:
+    return SESSION.read_dword(_TS_POLICY, "Shadow") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="rdp-disable-rdp",
+        label="Disable Remote Desktop",
+        category="Remote Desktop",
+        apply_fn=_apply_disable_rdp,
+        remove_fn=_remove_disable_rdp,
+        detect_fn=_detect_disable_rdp,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_RDP],
+        description="Disables Remote Desktop connections entirely. Default: Depends on edition. Recommended: Disabled if unused.",
+        tags=["rdp", "remote", "disable", "security"],
+    ),
+    TweakDef(
+        id="rdp-disable-shadow",
+        label="Disable RDP Session Shadowing",
+        category="Remote Desktop",
+        apply_fn=_apply_disable_shadow,
+        remove_fn=_remove_disable_shadow,
+        detect_fn=_detect_disable_shadow,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TS_POLICY],
+        description="Disables remote session shadowing/observation via RDP. Default: Allowed. Recommended: Disabled for privacy.",
+        tags=["rdp", "shadow", "observation", "security"],
+    ),
+]

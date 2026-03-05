@@ -565,3 +565,81 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "snap", "flyout", "performance"],
     ),
 ]
+
+
+# -- Disable Shake to Minimize -------------------------------------------------
+
+
+def _apply_shell_disable_shake_minimize(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disabling shake to minimize")
+    SESSION.backup([_ADV], "ShakeMinimize")
+    SESSION.set_dword(_ADV, "DisallowShaking", 1)
+    SESSION.log("Shell: shake to minimize disabled")
+
+
+def _remove_shell_disable_shake_minimize(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "ShakeMinimize_Remove")
+    SESSION.delete_value(_ADV, "DisallowShaking")
+
+
+def _detect_shell_disable_shake_minimize() -> bool:
+    return SESSION.read_dword(_ADV, "DisallowShaking") == 1
+
+
+# -- Disable Snap Assist -------------------------------------------------------
+
+
+def _apply_shell_disable_snap_assist(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Shell: disabling Snap Assist")
+    SESSION.backup([_ADV], "SnapAssistDisable")
+    SESSION.set_dword(_ADV, "SnapAssist", 0)
+    SESSION.log("Shell: Snap Assist disabled")
+
+
+def _remove_shell_disable_snap_assist(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "SnapAssistDisable_Remove")
+    SESSION.set_dword(_ADV, "SnapAssist", 1)
+
+
+def _detect_shell_disable_snap_assist() -> bool:
+    return SESSION.read_dword(_ADV, "SnapAssist") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="shell-disable-shake-minimize",
+        label="Disable Shake to Minimize",
+        category="Shell",
+        apply_fn=_apply_shell_disable_shake_minimize,
+        remove_fn=_remove_shell_disable_shake_minimize,
+        detect_fn=_detect_shell_disable_shake_minimize,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables Aero Shake gesture that minimizes all other windows. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["shell", "shake", "minimize", "ux"],
+    ),
+    TweakDef(
+        id="shell-disable-snap-assist",
+        label="Disable Snap Assist Suggestions",
+        category="Shell",
+        apply_fn=_apply_shell_disable_snap_assist,
+        remove_fn=_remove_shell_disable_snap_assist,
+        detect_fn=_detect_shell_disable_snap_assist,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables Snap Assist window arrangement suggestions. "
+            "Default: Enabled. Recommended: Disabled for power users."
+        ),
+        tags=["shell", "snap", "assist", "multitasking"],
+    ),
+]

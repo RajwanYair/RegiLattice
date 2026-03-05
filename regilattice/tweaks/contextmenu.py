@@ -438,3 +438,88 @@ TWEAKS: list[TweakDef] = [
         tags=["context-menu", "pin", "start", "folder", "cleanup"],
     ),
 ]
+
+
+_TAKE_OWNERSHIP = r"HKEY_CURRENT_USER\Software\Classes\*\shell\TakeOwnership"
+_TAKE_OWNERSHIP_CMD = r"HKEY_CURRENT_USER\Software\Classes\*\shell\TakeOwnership\command"
+
+
+# -- Add Take Ownership to Context Menu -------------------------------------------
+
+
+def _apply_take_ownership(*, require_admin: bool = True) -> None:
+    SESSION.log("Context Menu: add Take Ownership entry")
+    SESSION.backup([_TAKE_OWNERSHIP], "TakeOwnership")
+    SESSION.set_string(_TAKE_OWNERSHIP, "", "Take Ownership")
+    SESSION.set_string(_TAKE_OWNERSHIP, "HasLUAShield", "")
+    SESSION.set_string(_TAKE_OWNERSHIP, "NoWorkingDirectory", "")
+    SESSION.set_string(
+        _TAKE_OWNERSHIP_CMD,
+        "",
+        'cmd.exe /c takeown /f "%1" && icacls "%1" /grant administrators:F',
+    )
+
+
+def _remove_take_ownership(*, require_admin: bool = True) -> None:
+    SESSION.delete_tree(_TAKE_OWNERSHIP)
+
+
+def _detect_take_ownership() -> bool:
+    return SESSION.key_exists(_TAKE_OWNERSHIP)
+
+
+# -- Remove Include in Library from Context Menu ----------------------------------
+
+
+def _apply_remove_include_library(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: remove Include in Library via shell extension block")
+    SESSION.backup([_SHARE_KEY], "IncludeInLibrary")
+    SESSION.set_string(_SHARE_KEY, _INCLUDE_LIB_CLSID, "")
+
+
+def _remove_remove_include_library(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHARE_KEY, _INCLUDE_LIB_CLSID)
+
+
+def _detect_remove_include_library() -> bool:
+    return SESSION.read_string(_SHARE_KEY, _INCLUDE_LIB_CLSID) is not None
+
+
+TWEAKS += [
+    TweakDef(
+        id="ctx-add-take-ownership",
+        label="Add 'Take Ownership' to Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_take_ownership,
+        remove_fn=_remove_take_ownership,
+        detect_fn=_detect_take_ownership,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TAKE_OWNERSHIP, _TAKE_OWNERSHIP_CMD],
+        description=(
+            "Adds a 'Take Ownership' option to the right-click context menu. "
+            "Runs takeown and icacls to grant full control. "
+            "Default: not present. Recommended: add for power users."
+        ),
+        tags=["context-menu", "ownership", "takeown", "permissions"],
+    ),
+    TweakDef(
+        id="ctx-remove-include-library",
+        label="Remove 'Include in Library' from Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_remove_include_library,
+        remove_fn=_remove_remove_include_library,
+        detect_fn=_detect_remove_include_library,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SHARE_KEY],
+        description=(
+            "Removes the 'Include in Library' option from the folder context menu "
+            "by blocking its shell extension CLSID. "
+            "Default: shown. Recommended: hidden if unused."
+        ),
+        tags=["context-menu", "library", "include", "cleanup"],
+    ),
+]

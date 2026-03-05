@@ -448,3 +448,69 @@ TWEAKS: list[TweakDef] = [
         tags=["notifications", "autoplay", "media"],
     ),
 ]
+
+
+# -- 12. Disable Taskbar Badge Notifications ─────────────────────────────────
+
+_NOTIF_EXPLORER_ADV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_disable_badge_icons(*, require_admin: bool = False) -> None:
+    SESSION.backup([_NOTIF_EXPLORER_ADV], "BadgeIcons")
+    SESSION.set_dword(_NOTIF_EXPLORER_ADV, "TaskbarBadges", 0)
+
+
+def _remove_disable_badge_icons(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_NOTIF_EXPLORER_ADV, "TaskbarBadges", 1)
+
+
+def _detect_disable_badge_icons() -> bool:
+    return SESSION.read_dword(_NOTIF_EXPLORER_ADV, "TaskbarBadges") == 0
+
+
+# -- 13. Disable Push Toast Notifications ────────────────────────────────────
+
+_PUSH_TOAST = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications"
+
+
+def _apply_push_toast_off(*, require_admin: bool = False) -> None:
+    SESSION.backup([_PUSH_TOAST], "PushToastOff")
+    SESSION.set_dword(_PUSH_TOAST, "ToastEnabled", 0)
+
+
+def _remove_push_toast_off(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PUSH_TOAST, "ToastEnabled", 1)
+
+
+def _detect_push_toast_off() -> bool:
+    return SESSION.read_dword(_PUSH_TOAST, "ToastEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="notif-disable-badge-icons",
+        label="Disable Taskbar Badge Notifications",
+        category="Notifications",
+        apply_fn=_apply_disable_badge_icons,
+        remove_fn=_remove_disable_badge_icons,
+        detect_fn=_detect_disable_badge_icons,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_EXPLORER_ADV],
+        description="Disables notification badge counters on taskbar app icons. Default: Enabled. Recommended: Disabled.",
+        tags=["notifications", "badge", "taskbar", "icons"],
+    ),
+    TweakDef(
+        id="notif-quiet-hours",
+        label="Disable Push Toast Notifications",
+        category="Notifications",
+        apply_fn=_apply_push_toast_off,
+        remove_fn=_remove_push_toast_off,
+        detect_fn=_detect_push_toast_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PUSH_TOAST],
+        description="Disables all push toast notifications globally. Default: Enabled. Recommended: Disabled for focus.",
+        tags=["notifications", "toast", "push", "quiet-hours"],
+    ),
+]

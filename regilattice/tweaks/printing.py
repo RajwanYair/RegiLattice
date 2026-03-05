@@ -387,3 +387,82 @@ TWEAKS: list[TweakDef] = [
         tags=["printing", "remote", "security"],
     ),
 ]
+
+
+_SPOOLER_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"
+
+
+# -- Disable Print Spooler Service ------------------------------------------------
+
+
+def _apply_disable_print_spooler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Printing: disable Print Spooler service")
+    SESSION.backup([_SPOOLER_SVC], "PrintSpooler")
+    SESSION.set_dword(_SPOOLER_SVC, "Start", 4)
+
+
+def _remove_disable_print_spooler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SPOOLER_SVC, "Start", 2)
+
+
+def _detect_disable_print_spooler() -> bool:
+    return SESSION.read_dword(_SPOOLER_SVC, "Start") == 4
+
+
+# -- Restrict Printer Driver Installation -----------------------------------------
+
+
+def _apply_restrict_driver_install(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Printing: restrict printer driver installation to admins")
+    SESSION.backup([_PRINTERS], "RestrictDriverInstall")
+    SESSION.set_dword(_PRINTERS, "RestrictDriverInstallationToAdministrators", 1)
+
+
+def _remove_restrict_driver_install(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PRINTERS, "RestrictDriverInstallationToAdministrators")
+
+
+def _detect_restrict_driver_install() -> bool:
+    return SESSION.read_dword(_PRINTERS, "RestrictDriverInstallationToAdministrators") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="printing-disable-print-spooler",
+        label="Disable Print Spooler Service",
+        category="Printing",
+        apply_fn=_apply_disable_print_spooler,
+        remove_fn=_remove_disable_print_spooler,
+        detect_fn=_detect_disable_print_spooler,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPOOLER_SVC],
+        description=(
+            "Disables the Print Spooler service entirely (Start=4). "
+            "Reduces attack surface on machines that do not use printers. "
+            "Default: Automatic (2). Recommended: Disabled (4) if no printing needed."
+        ),
+        tags=["printing", "spooler", "service", "security"],
+    ),
+    TweakDef(
+        id="printing-restrict-driver-install",
+        label="Restrict Printer Driver Installation",
+        category="Printing",
+        apply_fn=_apply_restrict_driver_install,
+        remove_fn=_remove_restrict_driver_install,
+        detect_fn=_detect_restrict_driver_install,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PRINTERS],
+        description=(
+            "Restricts printer driver installation to administrators only. "
+            "Mitigates PrintNightmare-class vulnerabilities. "
+            "Default: not restricted. Recommended: restricted."
+        ),
+        tags=["printing", "driver", "security", "restriction"],
+    ),
+]

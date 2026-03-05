@@ -400,3 +400,69 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "graphics", "performance"],
     ),
 ]
+
+
+# -- 12. Disable Java Auto-Update ────────────────────────────────────────────
+
+
+def _apply_java_no_auto_upd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_JAVA_UPDATE], "JavaDisableAutoUpdate")
+    SESSION.set_dword(_JAVA_UPDATE, "EnableAutoUpdateCheck", 0)
+
+
+def _remove_java_no_auto_upd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_JAVA_UPDATE, "EnableAutoUpdateCheck", 1)
+
+
+def _detect_java_no_auto_upd() -> bool:
+    return SESSION.read_dword(_JAVA_UPDATE, "EnableAutoUpdateCheck") == 0
+
+
+# -- 13. Disable Java Sponsor Offers ─────────────────────────────────────────
+
+
+def _apply_java_no_sponsor_offers(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_JAVA_UPDATE], "JavaDisableSponsor")
+    SESSION.set_dword(_JAVA_UPDATE, "EnableJavaUpdate", 0)
+
+
+def _remove_java_no_sponsor_offers(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_JAVA_UPDATE, "EnableJavaUpdate", 1)
+
+
+def _detect_java_no_sponsor_offers() -> bool:
+    return SESSION.read_dword(_JAVA_UPDATE, "EnableJavaUpdate") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="java-disable-auto-update",
+        label="Disable Java Auto-Update",
+        category="Java",
+        apply_fn=_apply_java_no_auto_upd,
+        remove_fn=_remove_java_no_auto_upd,
+        detect_fn=_detect_java_no_auto_upd,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_JAVA_UPDATE],
+        description="Disables Java automatic update checks. Default: Enabled. Recommended: Disabled for managed environments.",
+        tags=["java", "auto-update", "update"],
+    ),
+    TweakDef(
+        id="java-disable-sponsor-offers",
+        label="Disable Java Sponsor Offers",
+        category="Java",
+        apply_fn=_apply_java_no_sponsor_offers,
+        remove_fn=_remove_java_no_sponsor_offers,
+        detect_fn=_detect_java_no_sponsor_offers,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_JAVA_UPDATE],
+        description="Disables sponsor/adware offers bundled with Java updates. Default: Enabled. Recommended: Disabled.",
+        tags=["java", "sponsor", "adware", "offers"],
+    ),
+]

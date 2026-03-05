@@ -295,6 +295,51 @@ def _detect_skype_telemetry() -> bool:
     return SESSION.read_dword(_SKYPE_POLICY, "DisableTelemetry") == 1
 
 
+# ── Disable Typing Insights ──────────────────────────────────────────────────
+
+_INPUT_SETTINGS = r"HKEY_CURRENT_USER\Software\Microsoft\input\Settings"
+
+
+def _apply_disable_typing_insights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Communication: disable typing insights/suggestions")
+    SESSION.backup([_INPUT_SETTINGS], "TypingInsights")
+    SESSION.set_dword(_INPUT_SETTINGS, "InsightsEnabled", 0)
+
+
+def _remove_disable_typing_insights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_INPUT_SETTINGS, "InsightsEnabled", 1)
+
+
+def _detect_disable_typing_insights() -> bool:
+    return SESSION.read_dword(_INPUT_SETTINGS, "InsightsEnabled") == 0
+
+
+# ── Disable Online Speech Recognition ────────────────────────────────────────
+
+_SPEECH_PRIVACY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore"
+    r"\Settings\OnlineSpeechPrivacy"
+)
+
+
+def _apply_disable_online_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Communication: disable online speech recognition")
+    SESSION.backup([_SPEECH_PRIVACY], "OnlineSpeech")
+    SESSION.set_dword(_SPEECH_PRIVACY, "HasAccepted", 0)
+
+
+def _remove_disable_online_speech(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SPEECH_PRIVACY, "HasAccepted", 1)
+
+
+def _detect_disable_online_speech() -> bool:
+    return SESSION.read_dword(_SPEECH_PRIVACY, "HasAccepted") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -485,5 +530,118 @@ TWEAKS: list[TweakDef] = [
             "Default: Enabled. Recommended: Disabled."
         ),
         tags=["communication", "skype", "telemetry", "privacy"],
+    ),
+    TweakDef(
+        id="comm-disable-typing-insights",
+        label="Disable Typing Insights",
+        category="Communication",
+        apply_fn=_apply_disable_typing_insights,
+        remove_fn=_remove_disable_typing_insights,
+        detect_fn=_detect_disable_typing_insights,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_INPUT_SETTINGS],
+        description=(
+            "Disables typing insights and suggestions that analyze "
+            "your typing patterns. Improves privacy. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["communication", "typing", "insights", "privacy"],
+    ),
+    TweakDef(
+        id="comm-disable-online-speech",
+        label="Disable Online Speech Recognition",
+        category="Communication",
+        apply_fn=_apply_disable_online_speech,
+        remove_fn=_remove_disable_online_speech,
+        detect_fn=_detect_disable_online_speech,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SPEECH_PRIVACY],
+        description=(
+            "Disables online speech recognition that sends voice data "
+            "to Microsoft for processing. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["communication", "speech", "voice", "privacy"],
+    ),
+]
+
+
+# ── Block Teams First Launch After Install ───────────────────────────────────
+
+_TEAMS_OFFICE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Teams"
+_SKYPE_TELEMETRY_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Skype\Telemetry"
+
+
+def _apply_teams_first_launch_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Prevent Teams first launch after install")
+    SESSION.backup([_TEAMS_OFFICE_POLICY], "TeamsFirstLaunch")
+    SESSION.set_dword(_TEAMS_OFFICE_POLICY, "PreventFirstLaunchAfterInstall", 1)
+
+
+def _remove_teams_first_launch_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TEAMS_OFFICE_POLICY, "PreventFirstLaunchAfterInstall")
+
+
+def _detect_teams_first_launch_off() -> bool:
+    return SESSION.read_dword(_TEAMS_OFFICE_POLICY, "PreventFirstLaunchAfterInstall") == 1
+
+
+# ── Disable Skype Telemetry (User) ──────────────────────────────────────────
+
+
+def _apply_skype_telemetry_off_cu(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Skype telemetry (HKCU)")
+    SESSION.backup([_SKYPE_TELEMETRY_CU], "SkypeTelemetryCU")
+    SESSION.set_dword(_SKYPE_TELEMETRY_CU, "Enabled", 0)
+
+
+def _remove_skype_telemetry_off_cu(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SKYPE_TELEMETRY_CU, "Enabled")
+
+
+def _detect_skype_telemetry_off_cu() -> bool:
+    return SESSION.read_dword(_SKYPE_TELEMETRY_CU, "Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="comm-prevent-teams-first-launch",
+        label="Prevent Teams Auto-Start After Install",
+        category="Communication",
+        apply_fn=_apply_teams_first_launch_off,
+        remove_fn=_remove_teams_first_launch_off,
+        detect_fn=_detect_teams_first_launch_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TEAMS_OFFICE_POLICY],
+        description=(
+            "Prevents Microsoft Teams from automatically launching "
+            "after Office installation via policy. "
+            "Default: Auto-launch. Recommended: Disabled."
+        ),
+        tags=["communication", "teams", "autostart", "office", "policy"],
+    ),
+    TweakDef(
+        id="comm-disable-skype-telemetry-user",
+        label="Disable Skype Telemetry (User)",
+        category="Communication",
+        apply_fn=_apply_skype_telemetry_off_cu,
+        remove_fn=_remove_skype_telemetry_off_cu,
+        detect_fn=_detect_skype_telemetry_off_cu,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SKYPE_TELEMETRY_CU],
+        description=(
+            "Disables Skype desktop telemetry data collection at the "
+            "user level. Reduces background data transmission. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["communication", "skype", "telemetry", "privacy", "user"],
     ),
 ]

@@ -463,3 +463,74 @@ TWEAKS: list[TweakDef] = [
         tags=["lockscreen", "verbose", "status", "login", "debug"],
     ),
 ]
+
+
+# -- 12. Disable Lock Screen Ads/Tips ────────────────────────────────────────
+
+_SYS_LOGON_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+
+
+def _apply_no_lock_ads(*, require_admin: bool = False) -> None:
+    SESSION.backup([_CONTENT_DELIVERY], "LockScreenAds")
+    SESSION.set_dword(_CONTENT_DELIVERY, "RotatingLockScreenEnabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "RotatingLockScreenOverlayEnabled", 0)
+
+
+def _remove_no_lock_ads(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONTENT_DELIVERY, "RotatingLockScreenEnabled", 1)
+    SESSION.set_dword(_CONTENT_DELIVERY, "RotatingLockScreenOverlayEnabled", 1)
+
+
+def _detect_no_lock_ads() -> bool:
+    return (
+        SESSION.read_dword(_CONTENT_DELIVERY, "RotatingLockScreenEnabled") == 0
+        and SESSION.read_dword(_CONTENT_DELIVERY, "RotatingLockScreenOverlayEnabled") == 0
+    )
+
+
+# -- 13. Disable First Sign-In Animation ─────────────────────────────────────
+
+
+def _apply_no_signin_anim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SYS_LOGON_POLICY], "SignInAnimation")
+    SESSION.set_dword(_SYS_LOGON_POLICY, "EnableFirstLogonAnimation", 0)
+
+
+def _remove_no_signin_anim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SYS_LOGON_POLICY, "EnableFirstLogonAnimation", 1)
+
+
+def _detect_no_signin_anim() -> bool:
+    return SESSION.read_dword(_SYS_LOGON_POLICY, "EnableFirstLogonAnimation") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="lock-disable-lock-screen-ads",
+        label="Disable Lock Screen Ads/Tips",
+        category="Lock Screen & Login",
+        apply_fn=_apply_no_lock_ads,
+        remove_fn=_remove_no_lock_ads,
+        detect_fn=_detect_no_lock_ads,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description="Disables rotating lock screen tips and advertising overlays. Default: Enabled. Recommended: Disabled.",
+        tags=["lockscreen", "ads", "tips", "spotlight"],
+    ),
+    TweakDef(
+        id="lock-disable-sign-in-animation",
+        label="Disable First Sign-In Animation",
+        category="Lock Screen & Login",
+        apply_fn=_apply_no_signin_anim,
+        remove_fn=_remove_no_signin_anim,
+        detect_fn=_detect_no_signin_anim,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SYS_LOGON_POLICY],
+        description="Disables the first sign-in animation after new user setup. Speeds up login. Default: Enabled. Recommended: Disabled.",
+        tags=["lockscreen", "animation", "first-logon", "login"],
+    ),
+]

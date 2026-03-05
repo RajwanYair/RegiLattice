@@ -561,3 +561,81 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "sysmain", "superfetch", "performance", "ssd"],
     ),
 ]
+
+
+# -- Disable Print Spooler (security hardening) --------------------------------
+
+
+def _apply_svc_disable_print_spooler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disabling Print Spooler (security)")
+    SESSION.backup([_SPOOLER], "SvcPrintSpooler")
+    SESSION.set_dword(_SPOOLER, "Start", 4)
+    SESSION.log("Services: Print Spooler disabled (security)")
+
+
+def _remove_svc_disable_print_spooler(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPOOLER], "SvcPrintSpooler_Remove")
+    SESSION.set_dword(_SPOOLER, "Start", 2)
+
+
+def _detect_svc_disable_print_spooler() -> bool:
+    return SESSION.read_dword(_SPOOLER, "Start") == 4
+
+
+# -- Disable Fax Service (cleanup) ---------------------------------------------
+
+
+def _apply_svc_disable_fax(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Services: disabling Fax service (cleanup)")
+    SESSION.backup([_FAX], "SvcFax")
+    SESSION.set_dword(_FAX, "Start", 4)
+    SESSION.log("Services: Fax service disabled (cleanup)")
+
+
+def _remove_svc_disable_fax(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FAX], "SvcFax_Remove")
+    SESSION.set_dword(_FAX, "Start", 3)
+
+
+def _detect_svc_disable_fax() -> bool:
+    return SESSION.read_dword(_FAX, "Start") == 4
+
+
+TWEAKS += [
+    TweakDef(
+        id="svc-disable-print-spooler",
+        label="Disable Print Spooler (Security Hardening)",
+        category="Services",
+        apply_fn=_apply_svc_disable_print_spooler,
+        remove_fn=_remove_svc_disable_print_spooler,
+        detect_fn=_detect_svc_disable_print_spooler,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPOOLER],
+        description=(
+            "Disables Print Spooler to mitigate PrintNightmare vulnerabilities. "
+            "Default: Automatic. Recommended: Disabled."
+        ),
+        tags=["services", "spooler", "security", "printnightmare"],
+    ),
+    TweakDef(
+        id="svc-disable-fax",
+        label="Disable Fax Service (Cleanup)",
+        category="Services",
+        apply_fn=_apply_svc_disable_fax,
+        remove_fn=_remove_svc_disable_fax,
+        detect_fn=_detect_svc_disable_fax,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FAX],
+        description=(
+            "Disables the legacy Fax service to free resources. "
+            "Default: Manual. Recommended: Disabled."
+        ),
+        tags=["services", "fax", "legacy", "cleanup"],
+    ),
+]

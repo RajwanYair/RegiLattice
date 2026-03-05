@@ -282,6 +282,48 @@ def _detect_reduce_memory() -> bool:
     return SESSION.read_dword(_READER_GENERAL, "bReuseAcrobatInstance") == 1
 
 
+# ── Disable Adobe Updater Service ────────────────────────────────────────────
+
+_ADOBE_UPDATE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeUpdate"
+
+
+def _apply_disable_updater_service(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable Adobe Updater service via registry")
+    SESSION.backup([_ADOBE_UPDATE_POLICY], "AdobeUpdaterService")
+    SESSION.set_dword(_ADOBE_UPDATE_POLICY, "UpdaterEnabled", 0)
+
+
+def _remove_disable_updater_service(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADOBE_UPDATE_POLICY, "UpdaterEnabled")
+
+
+def _detect_disable_updater_service() -> bool:
+    return SESSION.read_dword(_ADOBE_UPDATE_POLICY, "UpdaterEnabled") == 0
+
+
+# ── Disable Adobe Analytics ──────────────────────────────────────────────────
+
+_ADOBE_ANALYTICS = r"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\Usage"
+
+
+def _apply_disable_adobe_analytics(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disable analytics/telemetry opt-in")
+    SESSION.backup([_ADOBE_ANALYTICS], "AdobeAnalytics")
+    SESSION.set_dword(_ADOBE_ANALYTICS, "OptIn", 0)
+
+
+def _remove_disable_adobe_analytics(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADOBE_ANALYTICS, "OptIn", 1)
+
+
+def _detect_disable_adobe_analytics() -> bool:
+    return SESSION.read_dword(_ADOBE_ANALYTICS, "OptIn") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -464,5 +506,116 @@ TWEAKS: list[TweakDef] = [
             "Default: New instance. Recommended: Reuse."
         ),
         tags=["adobe", "memory", "performance"],
+    ),
+    TweakDef(
+        id="adobe-disable-updater-service",
+        label="Disable Adobe Updater Service",
+        category="Adobe",
+        apply_fn=_apply_disable_updater_service,
+        remove_fn=_remove_disable_updater_service,
+        detect_fn=_detect_disable_updater_service,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ADOBE_UPDATE_POLICY],
+        description=(
+            "Disables the Adobe Updater service via registry policy. "
+            "Prevents background update checks and downloads."
+        ),
+        tags=["adobe", "updater", "service", "performance"],
+    ),
+    TweakDef(
+        id="adobe-disable-analytics",
+        label="Disable Adobe Analytics",
+        category="Adobe",
+        apply_fn=_apply_disable_adobe_analytics,
+        remove_fn=_remove_disable_adobe_analytics,
+        detect_fn=_detect_disable_adobe_analytics,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADOBE_ANALYTICS],
+        description=(
+            "Disables Adobe analytics and telemetry data collection "
+            "by opting out of usage tracking."
+        ),
+        tags=["adobe", "analytics", "telemetry", "privacy"],
+    ),
+]
+
+
+# ── Disable Adobe Creative Cloud Sync ────────────────────────────────────────
+
+_CC_SYNC = r"HKEY_CURRENT_USER\Software\Adobe\CreativeCloud"
+_ADOBE_APP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeApp"
+
+
+def _apply_cc_sync_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Adobe Creative Cloud sync")
+    SESSION.backup([_CC_SYNC], "AdobeCCSync")
+    SESSION.set_dword(_CC_SYNC, "SyncEnabled", 0)
+
+
+def _remove_cc_sync_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CC_SYNC, "SyncEnabled")
+
+
+def _detect_cc_sync_off() -> bool:
+    return SESSION.read_dword(_CC_SYNC, "SyncEnabled") == 0
+
+
+# ── Disable Adobe CEF Helper ────────────────────────────────────────────────
+
+
+def _apply_cef_helper_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Adobe CEF Helper subprocess")
+    SESSION.backup([_ADOBE_APP_POLICY], "AdobeCEFHelper")
+    SESSION.set_dword(_ADOBE_APP_POLICY, "DisableCEFHelper", 1)
+
+
+def _remove_cef_helper_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADOBE_APP_POLICY, "DisableCEFHelper")
+
+
+def _detect_cef_helper_off() -> bool:
+    return SESSION.read_dword(_ADOBE_APP_POLICY, "DisableCEFHelper") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="adobe-disable-cloud-sync",
+        label="Disable Adobe Creative Cloud Sync",
+        category="Adobe",
+        apply_fn=_apply_cc_sync_off,
+        remove_fn=_remove_cc_sync_off,
+        detect_fn=_detect_cc_sync_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CC_SYNC],
+        description=(
+            "Disables Adobe Creative Cloud file and settings sync. "
+            "Reduces background network activity and cloud dependency. "
+            "Default: Enabled. Recommended: Disabled on managed machines."
+        ),
+        tags=["adobe", "cloud", "sync", "creative-cloud"],
+    ),
+    TweakDef(
+        id="adobe-disable-cef-subprocess",
+        label="Disable Adobe CEF Helper",
+        category="Adobe",
+        apply_fn=_apply_cef_helper_off,
+        remove_fn=_remove_cef_helper_off,
+        detect_fn=_detect_cef_helper_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ADOBE_APP_POLICY],
+        description=(
+            "Disables Adobe CEF (Chromium Embedded Framework) helper "
+            "processes via policy. Reduces memory and CPU usage. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["adobe", "cef", "helper", "performance"],
     ),
 ]

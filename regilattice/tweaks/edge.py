@@ -297,6 +297,44 @@ def _detect_edge_shopping_policy() -> bool:
     return SESSION.read_dword(_EDGE_POLICY, "EdgeShoppingAssistantEnabled") == 0
 
 
+# ── Disable Edge Collections ────────────────────────────────────────────────
+
+
+def _apply_edge_disable_collections(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable Collections feature")
+    SESSION.backup([_EDGE_POLICY], "EdgeCollections")
+    SESSION.set_dword(_EDGE_POLICY, "EdgeCollectionsEnabled", 0)
+
+
+def _remove_edge_disable_collections(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "EdgeCollectionsEnabled")
+
+
+def _detect_edge_disable_collections() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "EdgeCollectionsEnabled") == 0
+
+
+# ── Disable Edge Mini Menu ───────────────────────────────────────────────────
+
+
+def _apply_edge_disable_mini_menu(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Edge: disable mini context menu on text selection")
+    SESSION.backup([_EDGE_POLICY], "EdgeMiniMenu")
+    SESSION.set_dword(_EDGE_POLICY, "MiniContextMenuEnabled", 0)
+
+
+def _remove_edge_disable_mini_menu(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "MiniContextMenuEnabled")
+
+
+def _detect_edge_disable_mini_menu() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "MiniContextMenuEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -462,5 +500,115 @@ TWEAKS: list[TweakDef] = [
         registry_keys=[_EDGE_POLICY],
         description="Blocks third-party cookies in Edge via policy.",
         tags=["edge", "browser", "cookies", "privacy"],
+    ),
+    TweakDef(
+        id="edge-disable-collections",
+        label="Disable Edge Collections",
+        category="Edge",
+        apply_fn=_apply_edge_disable_collections,
+        remove_fn=_remove_edge_disable_collections,
+        detect_fn=_detect_edge_disable_collections,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge Collections feature used for organizing "
+            "web content. Reduces UI clutter and memory usage. "
+            "Default: Enabled. Recommended: Disabled if not used."
+        ),
+        tags=["edge", "collections", "ux", "performance"],
+    ),
+    TweakDef(
+        id="edge-disable-mini-menu",
+        label="Disable Edge Mini Context Menu",
+        category="Edge",
+        apply_fn=_apply_edge_disable_mini_menu,
+        remove_fn=_remove_edge_disable_mini_menu,
+        detect_fn=_detect_edge_disable_mini_menu,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the mini context menu that appears on text selection "
+            "in Edge. Removes the floating toolbar with search/copy/etc. "
+            "Default: Enabled. Recommended: Disabled for cleaner UX."
+        ),
+        tags=["edge", "mini-menu", "context-menu", "ux"],
+    ),
+]
+
+
+# ── Disable Edge Sidebar Hub ─────────────────────────────────────────────────
+
+
+def _apply_edge_sidebar_hub_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Edge sidebar panel")
+    SESSION.backup([_EDGE_POLICY], "EdgeSidebarHub")
+    SESSION.set_dword(_EDGE_POLICY, "HubsSidebarEnabled", 0)
+
+
+def _remove_edge_sidebar_hub_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "HubsSidebarEnabled")
+
+
+def _detect_edge_sidebar_hub_off() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "HubsSidebarEnabled") == 0
+
+
+# ── Disable Edge First Run Experience ────────────────────────────────────────
+
+
+def _apply_edge_first_run_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Edge first run experience")
+    SESSION.backup([_EDGE_POLICY], "EdgeFirstRun")
+    SESSION.set_dword(_EDGE_POLICY, "HideFirstRunExperience", 1)
+
+
+def _remove_edge_first_run_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "HideFirstRunExperience")
+
+
+def _detect_edge_first_run_off() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "HideFirstRunExperience") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="edge-disable-sidebar-hub",
+        label="Disable Edge Sidebar Hub",
+        category="Edge",
+        apply_fn=_apply_edge_sidebar_hub_off,
+        remove_fn=_remove_edge_sidebar_hub_off,
+        detect_fn=_detect_edge_sidebar_hub_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge sidebar (Hubs) panel via enterprise "
+            "policy. Removes the sidebar icon and panel. "
+            "Default: Enabled. Recommended: Disabled for cleaner UX."
+        ),
+        tags=["edge", "sidebar", "hubs", "ux", "policy"],
+    ),
+    TweakDef(
+        id="edge-disable-first-run",
+        label="Disable Edge First Run Experience",
+        category="Edge",
+        apply_fn=_apply_edge_first_run_off,
+        remove_fn=_remove_edge_first_run_off,
+        detect_fn=_detect_edge_first_run_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Hides the Edge first run experience and welcome page "
+            "via enterprise policy. "
+            "Default: Shown. Recommended: Hidden for managed deployments."
+        ),
+        tags=["edge", "first-run", "welcome", "policy", "ux"],
     ),
 ]

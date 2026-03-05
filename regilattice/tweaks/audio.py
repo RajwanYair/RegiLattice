@@ -284,6 +284,44 @@ def _detect_exclusive_priority() -> bool:
     return SESSION.read_dword(_KEY_AUDIO_TASK, "Priority") == 6
 
 
+# ── Disable Audio Effects Globally ───────────────────────────────────────────
+
+
+def _apply_disable_effects_global(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: disable all audio effects globally (HKLM DisableEffects)")
+    SESSION.backup([_KEY_AUDIO_GLOBAL], "AudioEffectsGlobal")
+    SESSION.set_dword(_KEY_AUDIO_GLOBAL, "DisableEffects", 1)
+
+
+def _remove_disable_effects_global(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_GLOBAL, "DisableEffects")
+
+
+def _detect_disable_effects_global() -> bool:
+    return SESSION.read_dword(_KEY_AUDIO_GLOBAL, "DisableEffects") == 1
+
+
+# ── Set Exclusive Mode Audio Priority ────────────────────────────────────────
+
+
+def _apply_exclusive_mode_priority(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: set exclusive mode audio priority")
+    SESSION.backup([_KEY_MM_AUDIO], "ExclusiveModePriority")
+    SESSION.set_dword(_KEY_MM_AUDIO, "ExclusiveModePriority", 1)
+
+
+def _remove_exclusive_mode_priority(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_MM_AUDIO, "ExclusiveModePriority")
+
+
+def _detect_exclusive_mode_priority() -> bool:
+    return SESSION.read_dword(_KEY_MM_AUDIO, "ExclusiveModePriority") == 1
+
+
 # ── TWEAKS list ──────────────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -479,5 +517,124 @@ TWEAKS: list[TweakDef] = [
             "Default: Medium. Recommended: High for audio workstations."
         ),
         tags=["audio", "priority", "performance", "latency"],
+    ),
+    TweakDef(
+        id="audio-disable-effects-global",
+        label="Disable Audio Effects Globally",
+        category="Audio",
+        apply_fn=_apply_disable_effects_global,
+        remove_fn=_remove_disable_effects_global,
+        detect_fn=_detect_disable_effects_global,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_AUDIO_GLOBAL],
+        description=(
+            "Disables all audio effects system-wide via DisableEffects flag. "
+            "Eliminates post-processing for cleaner audio output. "
+            "Default: Enabled. Recommended: Disabled for studio use."
+        ),
+        tags=["audio", "effects", "performance", "studio"],
+    ),
+    TweakDef(
+        id="audio-exclusive-mode-priority",
+        label="Set Exclusive Mode Audio Priority",
+        category="Audio",
+        apply_fn=_apply_exclusive_mode_priority,
+        remove_fn=_remove_exclusive_mode_priority,
+        detect_fn=_detect_exclusive_mode_priority,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_MM_AUDIO],
+        description=(
+            "Enables exclusive mode audio priority for applications "
+            "that request dedicated audio device access. "
+            "Default: Disabled. Recommended: Enabled for DAWs."
+        ),
+        tags=["audio", "exclusive", "priority", "daw"],
+    ),
+]
+
+
+# ── Disable Bluetooth Absolute Volume ────────────────────────────────────────
+
+_KEY_BT_AVRCP = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control"
+    r"\Bluetooth\Audio\AVRCP\CT"
+)
+_KEY_AUDIO_LATENCY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Audio"
+)
+
+
+def _apply_bt_abs_vol_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Bluetooth absolute volume")
+    SESSION.backup([_KEY_BT_AVRCP], "BTAbsoluteVolume")
+    SESSION.set_dword(_KEY_BT_AVRCP, "DisableAbsoluteVolume", 1)
+
+
+def _remove_bt_abs_vol_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_BT_AVRCP, "DisableAbsoluteVolume")
+
+
+def _detect_bt_abs_vol_off() -> bool:
+    return SESSION.read_dword(_KEY_BT_AVRCP, "DisableAbsoluteVolume") == 1
+
+
+# ── Reduce Audio Latency ────────────────────────────────────────────────────
+
+
+def _apply_audio_low_latency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Reduce audio latency via LowLatency flag")
+    SESSION.backup([_KEY_AUDIO_LATENCY], "AudioLowLatency")
+    SESSION.set_dword(_KEY_AUDIO_LATENCY, "LowLatency", 1)
+
+
+def _remove_audio_low_latency(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_LATENCY, "LowLatency")
+
+
+def _detect_audio_low_latency() -> bool:
+    return SESSION.read_dword(_KEY_AUDIO_LATENCY, "LowLatency") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="audio-disable-absolute-volume",
+        label="Disable Bluetooth Absolute Volume",
+        category="Audio",
+        apply_fn=_apply_bt_abs_vol_off,
+        remove_fn=_remove_bt_abs_vol_off,
+        detect_fn=_detect_bt_abs_vol_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_BT_AVRCP],
+        description=(
+            "Disables Bluetooth absolute volume control. Allows "
+            "independent volume adjustment for BT and system. "
+            "Default: Enabled. Recommended: Disabled for BT headphones."
+        ),
+        tags=["audio", "bluetooth", "absolute-volume", "headphones"],
+    ),
+    TweakDef(
+        id="audio-reduce-audio-latency",
+        label="Reduce Audio Latency",
+        category="Audio",
+        apply_fn=_apply_audio_low_latency,
+        remove_fn=_remove_audio_low_latency,
+        detect_fn=_detect_audio_low_latency,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_AUDIO_LATENCY],
+        description=(
+            "Enables low-latency audio mode by reducing the audio "
+            "buffer size. Improves real-time audio responsiveness. "
+            "Default: Disabled. Recommended: Enabled for music production."
+        ),
+        tags=["audio", "latency", "buffer", "performance"],
     ),
 ]

@@ -496,3 +496,81 @@ TWEAKS: list[TweakDef] = [
         tags=["copilot", "taskbar", "ux", "ai"],
     ),
 ]
+
+
+# -- Disable Windows Recall (HKLM policy only) --------------------------------
+
+
+def _apply_ai_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("AI: disabling Windows Recall via HKLM policy")
+    SESSION.backup([_RECALL_LM], "AIDisableRecall")
+    SESSION.set_dword(_RECALL_LM, "DisableAIDataAnalysis", 1)
+    SESSION.log("AI: Windows Recall disabled")
+
+
+def _remove_ai_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RECALL_LM], "AIDisableRecall_Remove")
+    SESSION.delete_value(_RECALL_LM, "DisableAIDataAnalysis")
+
+
+def _detect_ai_disable_recall() -> bool:
+    return SESSION.read_dword(_RECALL_LM, "DisableAIDataAnalysis") == 1
+
+
+# -- Disable Copilot Keyboard Shortcut ----------------------------------------
+
+
+def _apply_ai_disable_copilot_keyboard(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("AI: disabling Copilot keyboard shortcut")
+    SESSION.backup([_COPILOT_EXPLORER], "AICopilotKeyboard")
+    SESSION.set_dword(_COPILOT_EXPLORER, "ShowCopilotButton", 0)
+    SESSION.log("AI: Copilot keyboard shortcut disabled")
+
+
+def _remove_ai_disable_copilot_keyboard(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_COPILOT_EXPLORER], "AICopilotKeyboard_Remove")
+    SESSION.set_dword(_COPILOT_EXPLORER, "ShowCopilotButton", 1)
+
+
+def _detect_ai_disable_copilot_keyboard() -> bool:
+    return SESSION.read_dword(_COPILOT_EXPLORER, "ShowCopilotButton") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="ai-disable-recall",
+        label="Disable Windows Recall (HKLM Policy)",
+        category="AI / Copilot",
+        apply_fn=_apply_ai_disable_recall,
+        remove_fn=_remove_ai_disable_recall,
+        detect_fn=_detect_ai_disable_recall,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_RECALL_LM],
+        description=(
+            "Disables Windows Recall AI data analysis via HKLM Group Policy. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["ai", "recall", "privacy", "policy"],
+    ),
+    TweakDef(
+        id="ai-disable-copilot-keyboard",
+        label="Disable Copilot Keyboard Shortcut",
+        category="AI / Copilot",
+        apply_fn=_apply_ai_disable_copilot_keyboard,
+        remove_fn=_remove_ai_disable_copilot_keyboard,
+        detect_fn=_detect_ai_disable_copilot_keyboard,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_COPILOT_EXPLORER],
+        description=(
+            "Hides the Copilot button and disables keyboard shortcut. "
+            "Default: Shown. Recommended: Hidden."
+        ),
+        tags=["ai", "copilot", "keyboard", "shortcut"],
+    ),
+]

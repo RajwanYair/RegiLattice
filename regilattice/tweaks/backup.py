@@ -28,6 +28,10 @@ _CRASH_CONTROL = (
     r"\Control\CrashControl"
 )
 _SHUTDOWN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+_RELIABILITY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
+    r"\CurrentVersion\Reliability"
+)
 _WER = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft"
     r"\Windows\Windows Error Reporting"
@@ -402,5 +406,79 @@ TWEAKS: list[TweakDef] = [
             "telemetry uploads."
         ),
         tags=["backup", "wer", "error-reporting", "privacy", "performance"],
+    ),
+]
+
+
+# ── Disable Reliability Monitoring ───────────────────────────────────────────
+
+
+def _apply_disable_reliability_monitor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: disable reliability monitoring")
+    SESSION.backup([_RELIABILITY], "ReliabilityMonitor")
+    SESSION.set_dword(_RELIABILITY, "TimeStampInterval", 0)
+
+
+def _remove_disable_reliability_monitor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RELIABILITY, "TimeStampInterval")
+
+
+def _detect_disable_reliability_monitor() -> bool:
+    return SESSION.read_dword(_RELIABILITY, "TimeStampInterval") == 0
+
+
+# ── Disable Auto-Reboot After Crash ─────────────────────────────────────────
+
+
+def _apply_disable_auto_reboot_crash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: disable auto-reboot after BSOD")
+    SESSION.backup([_CRASH_CONTROL], "AutoRebootCrash")
+    SESSION.set_dword(_CRASH_CONTROL, "AutoReboot", 0)
+
+
+def _remove_disable_auto_reboot_crash(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH_CONTROL, "AutoReboot", 1)
+
+
+def _detect_disable_auto_reboot_crash() -> bool:
+    return SESSION.read_dword(_CRASH_CONTROL, "AutoReboot") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="backup-disable-reliability-monitor",
+        label="Disable Reliability Monitoring",
+        category="Backup & Recovery",
+        apply_fn=_apply_disable_reliability_monitor,
+        remove_fn=_remove_disable_reliability_monitor,
+        detect_fn=_detect_disable_reliability_monitor,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RELIABILITY],
+        description=(
+            "Disables Windows Reliability Monitor data collection by "
+            "setting TimeStampInterval to 0. Reduces background I/O."
+        ),
+        tags=["backup", "reliability", "performance"],
+    ),
+    TweakDef(
+        id="backup-disable-auto-reboot-crash",
+        label="Disable Auto-Reboot After BSOD",
+        category="Backup & Recovery",
+        apply_fn=_apply_disable_auto_reboot_crash,
+        remove_fn=_remove_disable_auto_reboot_crash,
+        detect_fn=_detect_disable_auto_reboot_crash,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CRASH_CONTROL],
+        description=(
+            "Prevents Windows from automatically rebooting after a blue "
+            "screen crash, allowing you to read the error code."
+        ),
+        tags=["backup", "bsod", "crash", "reboot"],
     ),
 ]

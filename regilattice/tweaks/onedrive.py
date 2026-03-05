@@ -453,3 +453,81 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "bandwidth", "network", "performance"],
     ),
 ]
+
+
+# ── Disable Files On-Demand (global policy) ─────────────────────────────────
+
+
+def _apply_disable_fod_global(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: disable Files On-Demand globally")
+    SESSION.backup([_OD], "ODFodGlobal")
+    SESSION.set_dword(_OD, "FilesOnDemandEnabled", 0)
+
+
+def _remove_disable_fod_global(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_OD, "FilesOnDemandEnabled", 1)
+
+
+def _detect_disable_fod_global() -> bool:
+    return SESSION.read_dword(_OD, "FilesOnDemandEnabled") == 0
+
+
+# ── Disable Personal OneDrive Sync ───────────────────────────────────────────
+
+_OD_WINDOWS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive"
+
+
+def _apply_disable_personal_sync_ngsc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("OneDrive: disable personal sync via DisableFileSyncNGSC")
+    SESSION.backup([_OD_WINDOWS], "ODPersonalSync")
+    SESSION.set_dword(_OD_WINDOWS, "DisableFileSyncNGSC", 1)
+
+
+def _remove_disable_personal_sync_ngsc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OD_WINDOWS, "DisableFileSyncNGSC")
+
+
+def _detect_disable_personal_sync_ngsc() -> bool:
+    return SESSION.read_dword(_OD_WINDOWS, "DisableFileSyncNGSC") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="onedrive-disable-fod-global",
+        label="Disable OneDrive Files On-Demand (Global)",
+        category="OneDrive",
+        apply_fn=_apply_disable_fod_global,
+        remove_fn=_remove_disable_fod_global,
+        detect_fn=_detect_disable_fod_global,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OD],
+        description=(
+            "Disables OneDrive Files On-Demand globally via policy. "
+            "Forces all files to be downloaded locally. "
+            "Default: Enabled. Recommended: Disabled for offline use."
+        ),
+        tags=["onedrive", "files-on-demand", "policy", "offline"],
+    ),
+    TweakDef(
+        id="onedrive-disable-personal-sync",
+        label="Disable Personal OneDrive Sync",
+        category="OneDrive",
+        apply_fn=_apply_disable_personal_sync_ngsc,
+        remove_fn=_remove_disable_personal_sync_ngsc,
+        detect_fn=_detect_disable_personal_sync_ngsc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OD_WINDOWS],
+        description=(
+            "Disables personal OneDrive file sync via DisableFileSyncNGSC policy. "
+            "Prevents OneDrive from syncing any personal accounts. "
+            "Default: Enabled. Recommended: Disabled on corporate machines."
+        ),
+        tags=["onedrive", "sync", "personal", "policy"],
+    ),
+]

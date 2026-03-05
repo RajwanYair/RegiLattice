@@ -554,3 +554,75 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "restart", "reboot", "ux"],
     ),
 ]
+
+
+# -- 16. Disable Driver Updates via WU ───────────────────────────────────────
+
+
+def _apply_no_driver_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU], "NoDriverUpdates")
+    SESSION.set_dword(_WU, "ExcludeWUDriversInQualityUpdate", 1)
+
+
+def _remove_no_driver_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WU, "ExcludeWUDriversInQualityUpdate", 0)
+
+
+def _detect_no_driver_updates() -> bool:
+    return SESSION.read_dword(_WU, "ExcludeWUDriversInQualityUpdate") == 1
+
+
+# -- 17. Defer Quality Updates by 14 Days ───────────────────────────────────
+
+
+def _apply_defer_quality(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU], "DeferQuality14d")
+    SESSION.set_dword(_WU, "DeferQualityUpdatesPeriodInDays", 14)
+
+
+def _remove_defer_quality(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU, "DeferQualityUpdatesPeriodInDays")
+
+
+def _detect_defer_quality() -> bool:
+    return SESSION.read_dword(_WU, "DeferQualityUpdatesPeriodInDays") == 14
+
+
+TWEAKS += [
+    TweakDef(
+        id="wu-disable-driver-updates",
+        label="Disable Driver Updates via Windows Update",
+        category="Windows Update",
+        apply_fn=_apply_no_driver_updates,
+        remove_fn=_remove_no_driver_updates,
+        detect_fn=_detect_no_driver_updates,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU],
+        description=(
+            "Excludes driver updates from Windows Update quality updates. "
+            "Default: Included. Recommended: Excluded for driver stability."
+        ),
+        tags=["update", "driver", "exclude", "stability"],
+    ),
+    TweakDef(
+        id="wu-defer-quality-updates",
+        label="Defer Quality Updates by 14 Days",
+        category="Windows Update",
+        apply_fn=_apply_defer_quality,
+        remove_fn=_remove_defer_quality,
+        detect_fn=_detect_defer_quality,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU],
+        description=(
+            "Defers quality/security updates by 14 days to allow time for issue reports. "
+            "Default: 0. Recommended: 14 for stability."
+        ),
+        tags=["update", "defer", "quality", "delay"],
+    ),
+]

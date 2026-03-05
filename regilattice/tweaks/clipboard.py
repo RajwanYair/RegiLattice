@@ -391,3 +391,82 @@ TWEAKS: list[TweakDef] = [
         tags=["clipboard", "suggestions", "text", "panel"],
     ),
 ]
+
+
+# -- Disable Cloud Clipboard Sync -------------------------------------------------
+
+
+def _apply_disable_cloud_clipboard(*, require_admin: bool = True) -> None:
+    SESSION.log("Clipboard: disable cloud clipboard sync")
+    SESSION.backup([_CLIPBOARD_CU], "CloudClipboard")
+    SESSION.set_dword(_CLIPBOARD_CU, "EnableClipboardHistory", 0)
+    SESSION.set_dword(_CLIPBOARD_CU, "CloudClipboardAutomaticUpload", 0)
+
+
+def _remove_disable_cloud_clipboard(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_CLIPBOARD_CU, "EnableClipboardHistory")
+    SESSION.delete_value(_CLIPBOARD_CU, "CloudClipboardAutomaticUpload")
+
+
+def _detect_disable_cloud_clipboard() -> bool:
+    return (
+        SESSION.read_dword(_CLIPBOARD_CU, "EnableClipboardHistory") == 0
+        and SESSION.read_dword(_CLIPBOARD_CU, "CloudClipboardAutomaticUpload") == 0
+    )
+
+
+# -- Disable Clipboard Roaming (Policy) -------------------------------------------
+
+
+def _apply_disable_clipboard_roaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Clipboard: disable clipboard roaming via policy")
+    SESSION.backup([_CLIPBOARD_POLICY], "ClipboardRoaming")
+    SESSION.set_dword(_CLIPBOARD_POLICY, "AllowCrossDeviceClipboard", 0)
+
+
+def _remove_disable_clipboard_roaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLIPBOARD_POLICY, "AllowCrossDeviceClipboard")
+
+
+def _detect_disable_clipboard_roaming() -> bool:
+    return SESSION.read_dword(_CLIPBOARD_POLICY, "AllowCrossDeviceClipboard") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="clip-disable-cloud-clipboard",
+        label="Disable Cloud Clipboard Sync",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_cloud_clipboard,
+        remove_fn=_remove_disable_cloud_clipboard,
+        detect_fn=_detect_disable_cloud_clipboard,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLIPBOARD_CU],
+        description=(
+            "Disables cloud clipboard sync and automatic upload. "
+            "Prevents clipboard data from being sent to Microsoft cloud services. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["clipboard", "cloud", "sync", "privacy"],
+    ),
+    TweakDef(
+        id="clip-disable-clipboard-roaming",
+        label="Disable Clipboard Roaming (Policy)",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_clipboard_roaming,
+        remove_fn=_remove_disable_clipboard_roaming,
+        detect_fn=_detect_disable_clipboard_roaming,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CLIPBOARD_POLICY],
+        description=(
+            "Disables cross-device clipboard roaming via Group Policy. "
+            "Prevents clipboard content from syncing across devices. "
+            "Default: allowed. Recommended: disabled for security."
+        ),
+        tags=["clipboard", "roaming", "policy", "cross-device"],
+    ),
+]

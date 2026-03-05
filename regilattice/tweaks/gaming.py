@@ -508,3 +508,82 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "priority", "performance", "latency"],
     ),
 ]
+
+
+# ── Disable Game Bar Tips/Notifications (policy) ────────────────────────────
+
+
+def _apply_gamebar_tips_off(*, require_admin: bool = False) -> None:
+    SESSION.log("Gaming: disable Game Bar startup panel tips")
+    SESSION.backup([_GAMEBAR_TIPS], "GameBarTipsOff")
+    SESSION.set_dword(_GAMEBAR_TIPS, "ShowStartupPanel", 0)
+    SESSION.set_dword(_GAMEBAR_TIPS, "UseNexusForGameBarEnabled", 0)
+
+
+def _remove_gamebar_tips_off(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_GAMEBAR_TIPS, "ShowStartupPanel", 1)
+    SESSION.set_dword(_GAMEBAR_TIPS, "UseNexusForGameBarEnabled", 1)
+
+
+def _detect_gamebar_tips_off() -> bool:
+    return (
+        SESSION.read_dword(_GAMEBAR_TIPS, "ShowStartupPanel") == 0
+        and SESSION.read_dword(_GAMEBAR_TIPS, "UseNexusForGameBarEnabled") == 0
+    )
+
+
+# ── Enable Hardware-Accelerated GPU Scheduling (gaming focus) ────────────────
+
+
+def _apply_hwgpu_sched_opt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Gaming: enable hardware-accelerated GPU scheduling")
+    SESSION.backup([_GPU_SCHED], "HwGpuSchedOpt")
+    SESSION.set_dword(_GPU_SCHED, "HwSchMode", 2)
+
+
+def _remove_hwgpu_sched_opt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_GPU_SCHED, "HwSchMode", 1)
+
+
+def _detect_hwgpu_sched_opt() -> bool:
+    return SESSION.read_dword(_GPU_SCHED, "HwSchMode") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="game-disable-game-bar-tips",
+        label="Disable Game Bar Tips",
+        category="Gaming",
+        apply_fn=_apply_gamebar_tips_off,
+        remove_fn=_remove_gamebar_tips_off,
+        detect_fn=_detect_gamebar_tips_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_GAMEBAR_TIPS],
+        description=(
+            "Disables Game Bar tips and startup panel notifications. "
+            "Also disables the Nexus overlay for Game Bar. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["gaming", "game-bar", "tips", "notifications"],
+    ),
+    TweakDef(
+        id="game-optimize-gpu-scheduling",
+        label="Optimize GPU Scheduling",
+        category="Gaming",
+        apply_fn=_apply_hwgpu_sched_opt,
+        remove_fn=_remove_hwgpu_sched_opt,
+        detect_fn=_detect_hwgpu_sched_opt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_SCHED],
+        description=(
+            "Enables hardware-accelerated GPU scheduling (HwSchMode=2). "
+            "Reduces latency by letting the GPU manage its own scheduling. "
+            "Default: 1 (off). Recommended: 2 for modern GPUs."
+        ),
+        tags=["gaming", "gpu", "scheduling", "latency", "performance"],
+    ),
+]

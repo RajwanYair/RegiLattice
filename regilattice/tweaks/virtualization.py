@@ -385,3 +385,81 @@ TWEAKS: list[TweakDef] = [
         tags=["hyperv", "virtualization", "performance", "priority"],
     ),
 ]
+
+
+_VMMS_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms"
+
+
+# -- Enable Nested Virtualization -------------------------------------------------
+
+
+def _apply_enable_nested_virt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Virtualization: enable Hyper-V nested virtualization")
+    SESSION.backup([_HYPERV], "NestedVirt")
+    SESSION.set_dword(_HYPERV, "NestedVirtualization", 1)
+
+
+def _remove_enable_nested_virt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_HYPERV, "NestedVirtualization")
+
+
+def _detect_enable_nested_virt() -> bool:
+    return SESSION.read_dword(_HYPERV, "NestedVirtualization") == 1
+
+
+# -- Disable Hyper-V Autostart (vmms service to manual) ---------------------------
+
+
+def _apply_disable_hyperv_autostart(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Virtualization: set Hyper-V vmms service to manual start")
+    SESSION.backup([_VMMS_SVC], "HypervAutostart")
+    SESSION.set_dword(_VMMS_SVC, "Start", 3)
+
+
+def _remove_disable_hyperv_autostart(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VMMS_SVC, "Start", 2)
+
+
+def _detect_disable_hyperv_autostart() -> bool:
+    return SESSION.read_dword(_VMMS_SVC, "Start") == 3
+
+
+TWEAKS += [
+    TweakDef(
+        id="virt-enable-nested-virt",
+        label="Enable Nested Virtualization",
+        category="Virtualization",
+        apply_fn=_apply_enable_nested_virt,
+        remove_fn=_remove_enable_nested_virt,
+        detect_fn=_detect_enable_nested_virt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_HYPERV],
+        description=(
+            "Enables Hyper-V nested virtualization. Allows running hypervisors inside "
+            "Hyper-V VMs. Default: disabled. Recommended: enable for dev/test workloads."
+        ),
+        tags=["hyperv", "virtualization", "nested", "development"],
+    ),
+    TweakDef(
+        id="virt-disable-hyperv-autostart",
+        label="Disable Hyper-V Autostart (vmms Manual)",
+        category="Virtualization",
+        apply_fn=_apply_disable_hyperv_autostart,
+        remove_fn=_remove_disable_hyperv_autostart,
+        detect_fn=_detect_disable_hyperv_autostart,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VMMS_SVC],
+        description=(
+            "Sets the Hyper-V Virtual Machine Management service to manual start. "
+            "Reduces boot time and background resource usage when VMs are not in use. "
+            "Default: Automatic (2). Recommended: Manual (3)."
+        ),
+        tags=["hyperv", "virtualization", "autostart", "service", "boot"],
+    ),
+]

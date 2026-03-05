@@ -468,3 +468,77 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "disk", "diagnostics", "telemetry"],
     ),
 ]
+
+
+# -- 12. Disable Compatibility Appraiser ─────────────────────────────────────
+
+
+def _apply_disable_compat_appr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_APP_COMPAT], "CompatAppraiser")
+    SESSION.set_dword(_APP_COMPAT, "DisableUAR", 1)
+
+
+def _remove_disable_compat_appr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_APP_COMPAT, "DisableUAR", 0)
+
+
+def _detect_disable_compat_appr() -> bool:
+    return SESSION.read_dword(_APP_COMPAT, "DisableUAR") == 1
+
+
+# -- 13. Disable Automatic Maintenance ───────────────────────────────────────
+
+_SCHED_MAINT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
+
+
+def _apply_disable_auto_maint(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SCHED_MAINT], "AutoMaintenance")
+    SESSION.set_dword(_SCHED_MAINT, "MaintenanceDisabled", 1)
+
+
+def _remove_disable_auto_maint(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SCHED_MAINT, "MaintenanceDisabled")
+
+
+def _detect_disable_auto_maint() -> bool:
+    return SESSION.read_dword(_SCHED_MAINT, "MaintenanceDisabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="task-disable-compat-appraiser",
+        label="Disable Compatibility Appraiser",
+        category="Scheduled Tasks",
+        apply_fn=_apply_disable_compat_appr,
+        remove_fn=_remove_disable_compat_appr,
+        detect_fn=_detect_disable_compat_appr,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_APP_COMPAT],
+        description=(
+            "Disables the Compatibility Appraiser that collects program telemetry. "
+            "Reduces CPU and disk usage. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "compatibility", "appraiser", "telemetry"],
+    ),
+    TweakDef(
+        id="task-disable-maintenance",
+        label="Disable Automatic Maintenance",
+        category="Scheduled Tasks",
+        apply_fn=_apply_disable_auto_maint,
+        remove_fn=_remove_disable_auto_maint,
+        detect_fn=_detect_disable_auto_maint,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SCHED_MAINT],
+        description=(
+            "Disables Windows automatic maintenance scheduler. Prevents background maintenance tasks. "
+            "Default: Enabled. Recommended: Disabled for full user control."
+        ),
+        tags=["tasks", "maintenance", "scheduler", "background"],
+    ),
+]

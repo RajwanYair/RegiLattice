@@ -419,3 +419,77 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "finish-setup", "nag", "reminder"],
     ),
 ]
+
+
+# -- Disable News and Interests on Taskbar ----------------------------------------
+
+
+def _apply_disable_feeds_taskbar(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Widgets: disable news and interests on taskbar")
+    SESSION.backup([_FEEDS], "FeedsTaskbar")
+    SESSION.set_dword(_FEEDS, "EnableFeeds", 0)
+
+
+def _remove_disable_feeds_taskbar(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FEEDS, "EnableFeeds")
+
+
+def _detect_disable_feeds_taskbar() -> bool:
+    return SESSION.read_dword(_FEEDS, "EnableFeeds") == 0
+
+
+# -- Disable Subscribed Content 338388 in Start ----------------------------------
+
+
+def _apply_disable_subscribed_338388(*, require_admin: bool = True) -> None:
+    SESSION.log("Widgets: disable SubscribedContent-338388 in Start")
+    SESSION.backup([_CONTENT], "SubscribedContent338388")
+    SESSION.set_dword(_CONTENT, "SubscribedContent-338388Enabled", 0)
+
+
+def _remove_disable_subscribed_338388(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_CONTENT, "SubscribedContent-338388Enabled")
+
+
+def _detect_disable_subscribed_338388() -> bool:
+    return SESSION.read_dword(_CONTENT, "SubscribedContent-338388Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="news-disable-feeds-taskbar",
+        label="Disable News and Interests on Taskbar",
+        category="Widgets & News",
+        apply_fn=_apply_disable_feeds_taskbar,
+        remove_fn=_remove_disable_feeds_taskbar,
+        detect_fn=_detect_disable_feeds_taskbar,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FEEDS],
+        description=(
+            "Disables news and interests feed on the Windows taskbar via policy. "
+            "Removes the weather/news widget from the taskbar. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["widgets", "news", "feeds", "taskbar"],
+    ),
+    TweakDef(
+        id="news-disable-subscribed-content",
+        label="Disable Subscribed Content in Start (338388)",
+        category="Widgets & News",
+        apply_fn=_apply_disable_subscribed_338388,
+        remove_fn=_remove_disable_subscribed_338388,
+        detect_fn=_detect_disable_subscribed_338388,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT],
+        description=(
+            "Disables SubscribedContent-338388 in the Start menu. "
+            "Removes suggested content and app recommendations from Start. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["widgets", "start", "subscribed", "content", "suggestions"],
+    ),
+]

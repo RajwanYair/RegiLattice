@@ -344,3 +344,71 @@ TWEAKS: list[TweakDef] = [
         tags=["transparency", "acrylic", "effects", "visual"],
     ),
 ]
+
+
+# -- 12. Set Screensaver Timeout to 15 Minutes ──────────────────────────────
+
+
+def _apply_ss_timeout_15m(*, require_admin: bool = False) -> None:
+    SESSION.backup([_SS_CU], "SSTimeout15m")
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "900")
+
+
+def _remove_ss_timeout_15m(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "600")
+
+
+def _detect_ss_timeout_15m() -> bool:
+    return SESSION.read_string(_SS_CU, "ScreenSaveTimeOut") == "900"
+
+
+# -- 13. Set Screensaver Timeout to 30 Minutes ──────────────────────────────
+
+
+def _apply_ss_timeout_30m(*, require_admin: bool = False) -> None:
+    SESSION.backup([_SS_CU], "SSTimeout30m")
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "1800")
+
+
+def _remove_ss_timeout_30m(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "600")
+
+
+def _detect_ss_timeout_30m() -> bool:
+    return SESSION.read_string(_SS_CU, "ScreenSaveTimeOut") == "1800"
+
+
+TWEAKS += [
+    TweakDef(
+        id="ss-set-timeout-15min",
+        label="Set Screensaver Timeout to 15 Minutes",
+        category="Screensaver & Lock",
+        apply_fn=_apply_ss_timeout_15m,
+        remove_fn=_remove_ss_timeout_15m,
+        detect_fn=_detect_ss_timeout_15m,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SS_CU],
+        description=(
+            "Sets the screensaver activation timeout to 15 minutes (900 seconds). "
+            "Default: 600. Recommended: 900 for balanced security and convenience."
+        ),
+        tags=["screensaver", "timeout", "15min", "lock"],
+    ),
+    TweakDef(
+        id="ss-set-timeout-30min",
+        label="Set Screensaver Timeout to 30 Minutes",
+        category="Screensaver & Lock",
+        apply_fn=_apply_ss_timeout_30m,
+        remove_fn=_remove_ss_timeout_30m,
+        detect_fn=_detect_ss_timeout_30m,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SS_CU],
+        description=(
+            "Sets the screensaver activation timeout to 30 minutes (1800 seconds). "
+            "Default: 600. Recommended: 1800 for extended-focus workflows."
+        ),
+        tags=["screensaver", "timeout", "30min", "lock"],
+    ),
+]
