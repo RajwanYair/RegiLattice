@@ -26,15 +26,23 @@ from tkinter import filedialog, messagebox, ttk
 
 from . import __version__
 from . import gui_theme as theme
-from .corpguard import (CorporateNetworkError, assert_not_corporate,
-                        corp_guard_status, is_corporate_network,
-                        is_gpo_managed)
-from .registry import (SESSION, AdminRequirementError, is_windows,
-                       platform_summary)
-from .tweaks import (TweakDef, TweakResult, all_tweaks, available_profiles,
-                     category_info, profile_info, restore_snapshot,
-                     save_snapshot, search_tweaks, status_map, tweak_scope,
-                     tweak_status, tweaks_by_category)
+from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
+from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
+from .tweaks import (
+    TweakDef,
+    TweakResult,
+    all_tweaks,
+    available_profiles,
+    category_info,
+    profile_info,
+    restore_snapshot,
+    save_snapshot,
+    search_tweaks,
+    status_map,
+    tweak_scope,
+    tweak_status,
+    tweaks_by_category,
+)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme — re-exported from gui_theme for backward compat ──────────────────
@@ -1312,9 +1320,7 @@ class RegiLatticeGUI:
 
     def _open_scoop_manager(self) -> None:
         """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
-        from .tweaks.scoop_tools import (_install_scoop_app, _remove_scoop_app,
-                                         _scoop_installed,
-                                         list_installed_scoop_apps)
+        from .tweaks.scoop_tools import _install_scoop_app, _remove_scoop_app, _scoop_installed, list_installed_scoop_apps
 
         dlg = tk.Toplevel(self._root)
         dlg.title("Scoop Tools Manager")
