@@ -29,6 +29,7 @@ from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_s
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
 from .tweaks import (
     TweakDef,
+    TweakResult,
     all_tweaks,
     available_profiles,
     category_info,
@@ -160,7 +161,7 @@ def _has_recommendation(td: TweakDef) -> bool:
     return "recommended:" in td.description.lower()
 
 
-def _build_tooltip_text(td: TweakDef, status: str) -> str:
+def _build_tooltip_text(td: TweakDef, status: str | TweakResult) -> str:
     """Build rich tooltip including description, current state, options, and recommendation."""
     parts: list[str] = []
 
@@ -171,10 +172,10 @@ def _build_tooltip_text(td: TweakDef, status: str) -> str:
     parts.append("─" * 40)
 
     # Status line
-    status_labels = {
-        "applied": "✔ Currently: APPLIED (tweak is active)",
-        "not applied": "○ Currently: DEFAULT (tweak is not active)",
-        "unknown": "? Currently: UNKNOWN (cannot detect state)",
+    status_labels: dict[str, str] = {
+        TweakResult.APPLIED: "✔ Currently: APPLIED (tweak is active)",
+        TweakResult.NOT_APPLIED: "○ Currently: DEFAULT (tweak is not active)",
+        TweakResult.UNKNOWN: "? Currently: UNKNOWN (cannot detect state)",
     }
     parts.append(status_labels.get(status, f"Currently: {status}"))
 
@@ -339,7 +340,7 @@ class _TweakRow:
         ).pack(side="right", padx=(0, 4))
 
         # Tooltip — detailed description with state, options, recommendation
-        self.tooltip = _Tooltip(self.frame, _build_tooltip_text(td, "unknown"))
+        self.tooltip = _Tooltip(self.frame, _build_tooltip_text(td, TweakResult.UNKNOWN))
 
         # Hover highlight effect
         self.frame.bind("<Enter>", self._on_enter)
@@ -379,13 +380,13 @@ class _TweakRow:
             btn_text = "BLOCKED"
             btn_bg = _CARD_BG
             btn_fg = _ERR_RED
-        elif st == "applied":
+        elif st == TweakResult.APPLIED:
             colour = _STATUS_APPLIED
             text = "APPLIED"
             btn_text = "Disable ✕"
             btn_bg = "#40543F"
             btn_fg = _OK_GREEN
-        elif st == "not applied":
+        elif st == TweakResult.NOT_APPLIED:
             colour = _STATUS_DEFAULT
             text = "DEFAULT"
             btn_text = "Enable ✓"
@@ -628,7 +629,7 @@ class _CategorySection:
         ).pack(side="right", padx=(0, 4))
 
         # Tooltip
-        row.tooltip = _Tooltip(row.frame, _build_tooltip_text(td, "unknown"))
+        row.tooltip = _Tooltip(row.frame, _build_tooltip_text(td, TweakResult.UNKNOWN))
 
     def toggle(self, _: tk.Event[tk.Misc] | None = None) -> None:
         self.expanded = not self.expanded
@@ -651,7 +652,7 @@ class _CategorySection:
 
     def update_count(self) -> None:
         """Update the applied/total count in the header badge."""
-        applied = sum(1 for r in self.rows if tweak_status(r.td) == "applied")
+        applied = sum(1 for r in self.rows if tweak_status(r.td) == TweakResult.APPLIED)
         total = len(self.rows)
         self._count_lbl.configure(text=f"  ({applied}/{total} applied)")
 
@@ -1155,7 +1156,7 @@ class RegiLatticeGUI:
         query = self._search_var.get().strip()
         status_filter = self._status_filter_var.get()
         scope_filter = self._scope_filter_var.get()
-        _filter_status = {"Applied": "applied", "Default": "not applied", "Unknown": "unknown"}
+        _filter_status = {"Applied": TweakResult.APPLIED, "Default": TweakResult.NOT_APPLIED, "Unknown": TweakResult.UNKNOWN}
         _filter_scope = {"User Only": "user", "Machine Only": "machine", "Both": "both"}
 
         # Use search_tweaks() for indexed text matching (faster on large tweak sets)
@@ -1165,7 +1166,7 @@ class RegiLatticeGUI:
 
         for section in self._category_sections:
             visible = False
-            target_status = _filter_status.get(status_filter, "")
+            target_status = _filter_status.get(status_filter)
             target_scope = _filter_scope.get(scope_filter, "")
             for row in section.rows:
                 td = row.td
@@ -1241,7 +1242,7 @@ class RegiLatticeGUI:
         td = row.td
         st = tweak_status(td)
 
-        if st == "applied":
+        if st == TweakResult.APPLIED:
             self._ctx_menu.add_command(label="Disable this tweak", command=lambda: self._toggle_single(row))
         else:
             self._ctx_menu.add_command(label="Enable this tweak", command=lambda: self._toggle_single(row))
@@ -1531,16 +1532,16 @@ class RegiLatticeGUI:
             if row.disabled_by_corp:
                 blocked += 1
                 continue
-            st = statuses.get(row.td.id, "unknown")
+            st = statuses.get(row.td.id, TweakResult.UNKNOWN)
             # Update row directly from the cached status
-            if st == "applied":
+            if st == TweakResult.APPLIED:
                 colour = _STATUS_APPLIED
                 text = "APPLIED"
                 btn_text = "Disable \u2715"
                 btn_bg = "#40543F"
                 btn_fg = _OK_GREEN
                 applied += 1
-            elif st == "not applied":
+            elif st == TweakResult.NOT_APPLIED:
                 colour = _STATUS_DEFAULT
                 text = "DEFAULT"
                 btn_text = "Enable \u2713"
@@ -1584,7 +1585,7 @@ class RegiLatticeGUI:
 
         td = row.td
         st = tweak_status(td)
-        action = "remove" if st == "applied" else "apply"
+        action = "remove" if st == TweakResult.APPLIED else "apply"
         verb = "Disable" if action == "remove" else "Enable"
 
         self._set_status(f"{verb}: {td.label}…", _ACCENT)

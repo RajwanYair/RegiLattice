@@ -20,7 +20,7 @@ from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
+from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
 
 
 def _confirm(prompt: str) -> bool:
@@ -52,7 +52,7 @@ def _run_action(
             return 1
         batch_fn = apply_all if mode == "apply" else remove_all
         results = batch_fn(force_corp=force)
-        ok = sum(1 for v in results.values() if v in ("applied", "removed"))
+        ok = sum(1 for v in results.values() if v in (TweakResult.APPLIED, TweakResult.REMOVED))
         print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
         return 0
 
@@ -186,7 +186,7 @@ def main(argv: list[str] | None = None) -> int:
             print("\u2139\ufe0f  Aborted by user.")
             return 1
         results = apply_profile(args.profile, force_corp=args.force)
-        ok = sum(1 for v in results.values() if v == "applied")
+        ok = sum(1 for v in results.values() if v == TweakResult.APPLIED)
         print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
         for tid, res in results.items():
             print(f"  {tid}: {res}")

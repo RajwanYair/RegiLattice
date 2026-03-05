@@ -12,6 +12,7 @@ import pytest
 
 from regilattice.tweaks import (
     TweakDef,
+    TweakResult,
     all_tweaks,
     apply_all,
     categories,
@@ -236,21 +237,21 @@ class TestTweakStatus:
 
     def test_detect_returns_true(self) -> None:
         td = self._make_tweak(detect_fn=lambda: True)
-        assert tweak_status(td) == "applied"
+        assert tweak_status(td) == TweakResult.APPLIED
 
     def test_detect_returns_false(self) -> None:
         td = self._make_tweak(detect_fn=lambda: False)
-        assert tweak_status(td) == "not applied"
+        assert tweak_status(td) == TweakResult.NOT_APPLIED
 
     def test_detect_raises(self) -> None:
         def bad():
             raise RuntimeError("boom")
         td = self._make_tweak(detect_fn=bad)
-        assert tweak_status(td) == "unknown"
+        assert tweak_status(td) == TweakResult.UNKNOWN
 
     def test_detect_is_none(self) -> None:
         td = self._make_tweak(detect_fn=None)
-        assert tweak_status(td) == "unknown"
+        assert tweak_status(td) == TweakResult.UNKNOWN
 
 
 # ── status_map ───────────────────────────────────────────────────────────────
@@ -259,20 +260,20 @@ class TestTweakStatus:
 class TestStatusMap:
     """Test status_map() returns dict with all tweak ids."""
 
-    @patch("regilattice.tweaks.tweak_status", return_value="unknown")
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.UNKNOWN)
     def test_returns_dict(self, _mock: MagicMock) -> None:
         sm = status_map()
         assert isinstance(sm, dict)
 
-    @patch("regilattice.tweaks.tweak_status", return_value="unknown")
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.UNKNOWN)
     def test_all_ids_present(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
         sm = status_map()
         for td in all_tweaks_list:
             assert td.id in sm
 
-    @patch("regilattice.tweaks.tweak_status", return_value="applied")
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.APPLIED)
     def test_values_are_valid_statuses(self, _mock: MagicMock) -> None:
-        valid = {"applied", "not applied", "unknown"}
+        valid = {TweakResult.APPLIED, TweakResult.NOT_APPLIED, TweakResult.UNKNOWN}
         for status in status_map().values():
             assert status in valid
 
@@ -283,33 +284,33 @@ class TestStatusMap:
 class TestSnapshot:
     """Test save/load snapshot round-trip."""
 
-    @patch("regilattice.tweaks.status_map", return_value={"fake.id": "unknown"})
+    @patch("regilattice.tweaks.status_map", return_value={"fake.id": TweakResult.UNKNOWN})
     def test_save_creates_file(self, _mock: MagicMock, tmp_path: Path) -> None:
         path = tmp_path / "snap.json"
         save_snapshot(path)
         assert path.exists()
 
-    @patch("regilattice.tweaks.status_map", return_value={"fake.id": "applied"})
+    @patch("regilattice.tweaks.status_map", return_value={"fake.id": TweakResult.APPLIED})
     def test_load_reads_snapshot(self, _mock: MagicMock, tmp_path: Path) -> None:
         path = tmp_path / "snap.json"
         save_snapshot(path)
         data = load_snapshot(path)
         assert isinstance(data, dict)
 
-    @patch("regilattice.tweaks.status_map", return_value={"a": "applied", "b": "not applied"})
+    @patch("regilattice.tweaks.status_map", return_value={"a": TweakResult.APPLIED, "b": TweakResult.NOT_APPLIED})
     def test_round_trip_consistency(self, mock_sm: MagicMock, tmp_path: Path) -> None:
         path = tmp_path / "snap.json"
         save_snapshot(path)
         loaded = load_snapshot(path)
         assert loaded == {"a": "applied", "b": "not applied"}
 
-    @patch("regilattice.tweaks.status_map", return_value={"x": "unknown"})
+    @patch("regilattice.tweaks.status_map", return_value={"x": TweakResult.UNKNOWN})
     def test_save_creates_parent_dirs(self, _mock: MagicMock, tmp_path: Path) -> None:
         path = tmp_path / "deep" / "nested" / "snap.json"
         save_snapshot(path)
         assert path.exists()
 
-    @patch("regilattice.tweaks.status_map", return_value={"y": "applied"})
+    @patch("regilattice.tweaks.status_map", return_value={"y": TweakResult.APPLIED})
     def test_snapshot_is_valid_json(self, _mock: MagicMock, tmp_path: Path) -> None:
         path = tmp_path / "snap.json"
         save_snapshot(path)
@@ -340,12 +341,12 @@ class TestRestoreSnapshot:
             apply_fn=apply_fn, remove_fn=remove_fn, corp_safe=True,
         )
         mock_all.append(td)
-        mock_status.return_value = "not applied"
+        mock_status.return_value = TweakResult.NOT_APPLIED
 
         path = self._make_snapshot(tmp_path, {"t1": "applied"})
         result = restore_snapshot(path, force_corp=True)
         apply_fn.assert_called_once()
-        assert result["t1"] == "applied"
+        assert result["t1"] == TweakResult.APPLIED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
@@ -359,12 +360,12 @@ class TestRestoreSnapshot:
             apply_fn=apply_fn, remove_fn=remove_fn, corp_safe=True,
         )
         mock_all.append(td)
-        mock_status.return_value = "applied"
+        mock_status.return_value = TweakResult.APPLIED
 
         path = self._make_snapshot(tmp_path, {"t1": "not applied"})
         result = restore_snapshot(path, force_corp=True)
         remove_fn.assert_called_once()
-        assert result["t1"] == "removed"
+        assert result["t1"] == TweakResult.REMOVED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
@@ -376,11 +377,11 @@ class TestRestoreSnapshot:
             apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True,
         )
         mock_all.append(td)
-        mock_status.return_value = "applied"
+        mock_status.return_value = TweakResult.APPLIED
 
         path = self._make_snapshot(tmp_path, {"t1": "applied"})
         result = restore_snapshot(path, force_corp=True)
-        assert result["t1"] == "unchanged"
+        assert result["t1"] == TweakResult.UNCHANGED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
@@ -393,11 +394,11 @@ class TestRestoreSnapshot:
             apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False,
         )
         mock_all.append(td)
-        mock_status.return_value = "not applied"
+        mock_status.return_value = TweakResult.NOT_APPLIED
 
         path = self._make_snapshot(tmp_path, {"t1": "applied"})
         result = restore_snapshot(path, force_corp=False)
-        assert result["t1"] == "skipped (corp)"
+        assert result["t1"] == TweakResult.SKIPPED_CORP
 
 
 # ── apply_all / remove_all ───────────────────────────────────────────────────
@@ -417,8 +418,8 @@ class TestApplyAll:
         result = apply_all(force_corp=True)
         fn1.assert_called_once()
         fn2.assert_called_once()
-        assert result["a1"] == "applied"
-        assert result["a2"] == "applied"
+        assert result["a1"] == TweakResult.APPLIED
+        assert result["a2"] == TweakResult.APPLIED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_progress_cb_called(self, mock_all: list) -> None:
@@ -427,7 +428,7 @@ class TestApplyAll:
         )
         cb = MagicMock()
         apply_all(force_corp=True, progress_cb=cb)
-        cb.assert_called_once_with("p1", "applied")
+        cb.assert_called_once_with("p1", TweakResult.APPLIED)
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.corpguard.is_corporate_network", return_value=True)
@@ -438,7 +439,7 @@ class TestApplyAll:
         )
         result = apply_all(force_corp=False)
         fn.assert_not_called()
-        assert result["cs1"] == "skipped (corp)"
+        assert result["cs1"] == TweakResult.SKIPPED_CORP
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_parallel_mode(self, mock_all: list) -> None:
@@ -448,7 +449,7 @@ class TestApplyAll:
         )
         result = apply_all(force_corp=True, parallel=True, max_workers=2)
         fn.assert_called_once()
-        assert result["par1"] == "applied"
+        assert result["par1"] == TweakResult.APPLIED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_error_handling(self, mock_all: list) -> None:
@@ -457,7 +458,7 @@ class TestApplyAll:
             TweakDef(id="err1", label="E", category="C", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True),
         )
         result = apply_all(force_corp=True)
-        assert result["err1"].startswith("error:")
+        assert result["err1"] == TweakResult.ERROR
 
 
 class TestRemoveAll:
@@ -474,8 +475,8 @@ class TestRemoveAll:
         result = remove_all(force_corp=True)
         fn1.assert_called_once()
         fn2.assert_called_once()
-        assert result["r1"] == "removed"
-        assert result["r2"] == "removed"
+        assert result["r1"] == TweakResult.REMOVED
+        assert result["r2"] == TweakResult.REMOVED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_progress_cb_called(self, mock_all: list) -> None:
@@ -484,7 +485,7 @@ class TestRemoveAll:
         )
         cb = MagicMock()
         remove_all(force_corp=True, progress_cb=cb)
-        cb.assert_called_once_with("rp1", "removed")
+        cb.assert_called_once_with("rp1", TweakResult.REMOVED)
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.corpguard.is_corporate_network", return_value=True)
@@ -495,7 +496,7 @@ class TestRemoveAll:
         )
         result = remove_all(force_corp=False)
         fn.assert_not_called()
-        assert result["rcs1"] == "skipped (corp)"
+        assert result["rcs1"] == TweakResult.SKIPPED_CORP
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_parallel_mode(self, mock_all: list) -> None:
@@ -505,7 +506,7 @@ class TestRemoveAll:
         )
         result = remove_all(force_corp=True, parallel=True, max_workers=2)
         fn.assert_called_once()
-        assert result["rpar1"] == "removed"
+        assert result["rpar1"] == TweakResult.REMOVED
 
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     def test_error_handling(self, mock_all: list) -> None:
@@ -514,7 +515,7 @@ class TestRemoveAll:
             TweakDef(id="rerr1", label="RE", category="C", apply_fn=MagicMock(), remove_fn=fn, corp_safe=True),
         )
         result = remove_all(force_corp=True)
-        assert result["rerr1"].startswith("error:")
+        assert result["rerr1"] == TweakResult.ERROR
 
 
 # ── reload_plugins ───────────────────────────────────────────────────────────

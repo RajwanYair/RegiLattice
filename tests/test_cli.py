@@ -7,18 +7,19 @@ from unittest.mock import patch
 import pytest
 
 from regilattice.cli import main
+from regilattice.tweaks import TweakResult
 
 
 class TestListFlag:
     def test_list_prints_tweaks(self, capsys) -> None:
-        with patch("regilattice.cli.tweak_status", return_value="unknown"):
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out
         assert "show-file-extensions" in out or "disable-telemetry" in out
 
     def test_list_shows_header(self, capsys) -> None:
-        with patch("regilattice.cli.tweak_status", return_value="unknown"):
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out

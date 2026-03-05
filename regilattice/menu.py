@@ -8,7 +8,7 @@ import sys
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import TweakDef, all_tweaks, apply_all, remove_all, tweak_status
+from .tweaks import TweakDef, TweakResult, all_tweaks, apply_all, remove_all, tweak_status
 from .tweaks.maintenance import create_restore_point
 
 
@@ -52,7 +52,7 @@ class Menu:
                 last_cat = td.category
                 print(f"  {cyan}── {td.category} ──{rst}")
             status = tweak_status(td)
-            tag = f"{grn}[ON] {rst}" if status == "applied" else f"{dim}[OFF]{rst}"
+            tag = f"{grn}[ON] {rst}" if status == TweakResult.APPLIED else f"{dim}[OFF]{rst}"
             pad = " " if idx < 10 else ""
             print(f"  {pad}[{idx:>2}] {tag}  {td.label}")
 
@@ -129,7 +129,7 @@ class Menu:
                     if 0 <= idx < len(self._tweaks):
                         td = self._tweaks[idx]
                         st = tweak_status(td)
-                        mode = "remove" if st == "applied" else "apply"
+                        mode = "remove" if st == TweakResult.APPLIED else "apply"
                         self._run_single(td, mode)
                     else:
                         print("  ❌ Invalid selection.")
