@@ -523,23 +523,35 @@ class TweakExecutor:
         return is_corporate_network()
 
     def apply_one(self, td: TweakDef) -> TweakResult:
-        """Apply a single tweak, returning a typed result."""
+        """Apply a single tweak, returning a typed result.
+
+        If the apply function raises, logs the error for diagnostics.
+        """
         if self._is_blocked(td):
             return TweakResult.SKIPPED_CORP
         try:
             td.apply_fn(require_admin=self.require_admin)
             return TweakResult.APPLIED
         except Exception:
+            from regilattice.registry import SESSION
+
+            SESSION.log(f"ERROR applying {td.id!r}")
             return TweakResult.ERROR
 
     def remove_one(self, td: TweakDef) -> TweakResult:
-        """Remove (revert) a single tweak, returning a typed result."""
+        """Remove (revert) a single tweak, returning a typed result.
+
+        If the remove function raises, logs the error for diagnostics.
+        """
         if self._is_blocked(td):
             return TweakResult.SKIPPED_CORP
         try:
             td.remove_fn(require_admin=self.require_admin)
             return TweakResult.REMOVED
         except Exception:
+            from regilattice.registry import SESSION
+
+            SESSION.log(f"ERROR removing {td.id!r}")
             return TweakResult.ERROR
 
     # ── batch helpers ────────────────────────────────────────────────────
