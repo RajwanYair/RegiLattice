@@ -496,3 +496,82 @@ TWEAKS: list[TweakDef] = [
         tags=["filesystem", "azure", "cloud", "indexing", "search", "privacy"],
     ),
 ]
+
+
+# -- Disable 8.3 short filename creation ------------------------------------
+
+
+def _apply_disable_8dot3_names(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("FileSystem: disable 8.3 short file name creation")
+    SESSION.backup([_KEY_FILESYSTEM], "Disable8dot3")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsDisable8dot3NameCreation", 1)
+
+
+def _remove_disable_8dot3_names(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_FILESYSTEM], "Disable8dot3_Remove")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsDisable8dot3NameCreation", 0)
+
+
+def _detect_disable_8dot3_names() -> bool:
+    return SESSION.read_dword(_KEY_FILESYSTEM, "NtfsDisable8dot3NameCreation") == 1
+
+
+# -- Disable last access time updates ----------------------------------------
+
+
+def _apply_disable_last_access_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("FileSystem: disable NTFS last access time updates")
+    SESSION.backup([_KEY_FILESYSTEM], "DisableLastAccess")
+    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate", 0x80000003)
+
+
+def _remove_disable_last_access_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY_FILESYSTEM], "DisableLastAccess_Remove")
+    SESSION.delete_value(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate")
+
+
+def _detect_disable_last_access_update() -> bool:
+    val = SESSION.read_dword(_KEY_FILESYSTEM, "NtfsDisableLastAccessUpdate")
+    return val in (1, 0x80000003)
+
+
+TWEAKS += [
+    TweakDef(
+        id="fs-disable-8dot3-names",
+        label="Disable 8.3 Short Filename Creation",
+        category="File System",
+        apply_fn=_apply_disable_8dot3_names,
+        remove_fn=_remove_disable_8dot3_names,
+        detect_fn=_detect_disable_8dot3_names,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FILESYSTEM],
+        description=(
+            "Disables automatic 8.3 (DOS-compatible) short filename generation on NTFS. "
+            "Reduces directory enumeration overhead and speeds up file creation. "
+            "Default: 0 (enabled). Recommended: 1 (disabled)."
+        ),
+        tags=["filesystem", "ntfs", "8dot3", "performance", "filenames"],
+    ),
+    TweakDef(
+        id="fs-disable-last-access-update",
+        label="Disable NTFS Last Access Time Updates",
+        category="File System",
+        apply_fn=_apply_disable_last_access_update,
+        remove_fn=_remove_disable_last_access_update,
+        detect_fn=_detect_disable_last_access_update,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FILESYSTEM],
+        description=(
+            "Disables updating the last-access timestamp on every file read. "
+            "Significant NTFS performance improvement for I/O-heavy workloads. "
+            "Default: 0 (system managed). Recommended: 0x80000003 (user-disabled, system-managed)."
+        ),
+        tags=["filesystem", "ntfs", "last-access", "performance", "io"],
+    ),
+]

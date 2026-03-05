@@ -538,3 +538,82 @@ TWEAKS: list[TweakDef] = [
         tags=["m365", "copilot", "autosuggest", "ux"],
     ),
 ]
+
+# -- Key paths (HKCU-only M365 tweaks) ----------------------------------------
+
+_OFFICEGRAPH_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\OfficeGraph"
+_FLUID_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Fluid"
+
+
+# -- Disable M365 Copilot Web Access (HKCU) -----------------------------------
+
+
+def _apply_disable_copilot_web_cu(*, require_admin: bool = False) -> None:
+    SESSION.log("M365 Copilot: disable Copilot web access (HKCU)")
+    SESSION.backup([_OFFICEGRAPH_CU], "M365CopilotWebCU")
+    SESSION.set_dword(_OFFICEGRAPH_CU, "DisableGraphOnline", 1)
+
+
+def _remove_disable_copilot_web_cu(*, require_admin: bool = False) -> None:
+    SESSION.backup([_OFFICEGRAPH_CU], "M365CopilotWebCU_Remove")
+    SESSION.delete_value(_OFFICEGRAPH_CU, "DisableGraphOnline")
+
+
+def _detect_disable_copilot_web_cu() -> bool:
+    return SESSION.read_dword(_OFFICEGRAPH_CU, "DisableGraphOnline") == 1
+
+
+# -- Disable Loop Components in M365 (HKCU) -----------------------------------
+
+
+def _apply_disable_loop_components_cu(*, require_admin: bool = False) -> None:
+    SESSION.log("M365 Copilot: disable Loop components (HKCU)")
+    SESSION.backup([_FLUID_CU], "M365LoopComponentsCU")
+    SESSION.set_dword(_FLUID_CU, "LoopEnabled", 0)
+
+
+def _remove_disable_loop_components_cu(*, require_admin: bool = False) -> None:
+    SESSION.backup([_FLUID_CU], "M365LoopComponentsCU_Remove")
+    SESSION.delete_value(_FLUID_CU, "LoopEnabled")
+
+
+def _detect_disable_loop_components_cu() -> bool:
+    return SESSION.read_dword(_FLUID_CU, "LoopEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="m365-disable-copilot-web",
+        label="Disable M365 Copilot Web Access (User)",
+        category="M365 Copilot",
+        apply_fn=_apply_disable_copilot_web_cu,
+        remove_fn=_remove_disable_copilot_web_cu,
+        detect_fn=_detect_disable_copilot_web_cu,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_OFFICEGRAPH_CU],
+        description=(
+            "Disables M365 Copilot web/graph access at the user level via OfficeGraph policy. "
+            "Prevents Copilot from reaching external data sources. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["m365", "copilot", "web", "privacy", "officegraph"],
+    ),
+    TweakDef(
+        id="m365-disable-loop-components",
+        label="Disable Loop Components in M365 (User)",
+        category="M365 Copilot",
+        apply_fn=_apply_disable_loop_components_cu,
+        remove_fn=_remove_disable_loop_components_cu,
+        detect_fn=_detect_disable_loop_components_cu,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FLUID_CU],
+        description=(
+            "Disables Microsoft Loop embedded components in Office apps at the user level. "
+            "Prevents Fluid/Loop collaborative blocks from rendering. "
+            "Default: Enabled. Recommended: Disabled if Loop is not needed."
+        ),
+        tags=["m365", "loop", "fluid", "components", "collaboration"],
+    ),
+]

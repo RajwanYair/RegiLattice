@@ -392,3 +392,86 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "fetch", "prune", "cleanup", "developer"],
     ),
 ]
+
+# -- Key paths (system-wide developer helpers) --------------------------------
+
+_WIN_SEARCH_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
+_FILESYSTEM_CTL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"
+
+
+# -- Prevent indexing on dev workloads ----------------------------------------
+
+
+def _apply_disable_search_indexing_dev(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev: prevent Windows Search from indexing dev folders (set large low-disk threshold)")
+    SESSION.backup([_WIN_SEARCH_POLICY], "DevSearchIndex")
+    SESSION.set_dword(_WIN_SEARCH_POLICY, "PreventIndexingLowDiskSpaceMB", 999999)
+
+
+def _remove_disable_search_indexing_dev(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WIN_SEARCH_POLICY], "DevSearchIndex_Remove")
+    SESSION.delete_value(_WIN_SEARCH_POLICY, "PreventIndexingLowDiskSpaceMB")
+
+
+def _detect_disable_search_indexing_dev() -> bool:
+    return SESSION.read_dword(_WIN_SEARCH_POLICY, "PreventIndexingLowDiskSpaceMB") == 999999
+
+
+# -- Enable Win32 Long Path Support -------------------------------------------
+
+
+def _apply_enable_long_paths(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev: enable Win32 long path support")
+    SESSION.backup([_FILESYSTEM_CTL], "LongPathsEnabled")
+    SESSION.set_dword(_FILESYSTEM_CTL, "LongPathsEnabled", 1)
+
+
+def _remove_enable_long_paths(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FILESYSTEM_CTL], "LongPathsEnabled_Remove")
+    SESSION.set_dword(_FILESYSTEM_CTL, "LongPathsEnabled", 0)
+
+
+def _detect_enable_long_paths() -> bool:
+    return SESSION.read_dword(_FILESYSTEM_CTL, "LongPathsEnabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="dev-disable-windows-search-indexing-dev-folders",
+        label="Prevent Windows Search Indexing on Dev Folders",
+        category="Developer Tools",
+        apply_fn=_apply_disable_search_indexing_dev,
+        remove_fn=_remove_disable_search_indexing_dev,
+        detect_fn=_detect_disable_search_indexing_dev,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WIN_SEARCH_POLICY],
+        description=(
+            "Sets PreventIndexingLowDiskSpaceMB to 999999 to effectively disable "
+            "Windows Search indexing on developer workloads. Reduces I/O contention "
+            "during builds. Default: not set. Recommended: Apply on dev machines."
+        ),
+        tags=["developer", "search", "indexing", "performance", "build"],
+    ),
+    TweakDef(
+        id="dev-enable-long-paths",
+        label="Enable Win32 Long Path Support",
+        category="Developer Tools",
+        apply_fn=_apply_enable_long_paths,
+        remove_fn=_remove_enable_long_paths,
+        detect_fn=_detect_enable_long_paths,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FILESYSTEM_CTL],
+        description=(
+            "Enables Win32 long path support (paths > 260 chars). Required for deep "
+            "node_modules, Rust target dirs, and deeply nested repos. "
+            "Default: 0 (disabled). Recommended: 1 (enabled)."
+        ),
+        tags=["developer", "longpath", "filesystem", "nodejs", "rust"],
+    ),
+]

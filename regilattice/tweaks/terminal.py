@@ -437,3 +437,65 @@ TWEAKS: list[TweakDef] = [
         tags=["terminal", "colors", "theme", "campbell", "appearance"],
     ),
 ]
+
+
+# -- 12. Set Console Cursor to Block ─────────────────────────────────────────
+
+
+def _apply_block_cursor(*, require_admin: bool = False) -> None:
+    SESSION.backup([_CONSOLE], "BlockCursor")
+    SESSION.set_dword(_CONSOLE, "CursorSize", 100)
+
+
+def _remove_block_cursor(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONSOLE, "CursorSize", 25)
+
+
+def _detect_block_cursor() -> bool:
+    return SESSION.read_dword(_CONSOLE, "CursorSize") == 100
+
+
+# -- 13. Set Console Window Opacity ──────────────────────────────────────────
+
+
+def _apply_window_opacity(*, require_admin: bool = False) -> None:
+    SESSION.backup([_CONSOLE], "ConsoleOpacity")
+    SESSION.set_dword(_CONSOLE, "WindowAlpha", 242)
+
+
+def _remove_window_opacity(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CONSOLE, "WindowAlpha", 255)
+
+
+def _detect_window_opacity() -> bool:
+    return SESSION.read_dword(_CONSOLE, "WindowAlpha") == 242
+
+
+TWEAKS += [
+    TweakDef(
+        id="term-set-cursor-block",
+        label="Set Console Cursor to Block",
+        category="Windows Terminal",
+        apply_fn=_apply_block_cursor,
+        remove_fn=_remove_block_cursor,
+        detect_fn=_detect_block_cursor,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONSOLE],
+        description="Sets the console cursor to full block style for better visibility. Default: 25 (line). Recommended: 100 (block).",
+        tags=["terminal", "cursor", "block", "appearance"],
+    ),
+    TweakDef(
+        id="term-set-window-opacity",
+        label="Set Console Window Opacity (95%)",
+        category="Windows Terminal",
+        apply_fn=_apply_window_opacity,
+        remove_fn=_remove_window_opacity,
+        detect_fn=_detect_window_opacity,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONSOLE],
+        description="Sets console window to 95% opacity for slight transparency. Default: 255 (opaque). Recommended: 242 (95%).",
+        tags=["terminal", "opacity", "transparency", "appearance"],
+    ),
+]

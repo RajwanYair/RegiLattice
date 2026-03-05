@@ -469,3 +469,77 @@ TWEAKS: list[TweakDef] = [
         tags=["telemetry", "start-menu", "usage", "tracking", "privacy"],
     ),
 ]
+
+
+# -- 12. Disable Windows Error Reporting ─────────────────────────────────────
+
+_TELEM_WER = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"
+
+
+def _apply_disable_wer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_TELEM_WER], "DisableWER")
+    SESSION.set_dword(_TELEM_WER, "Disabled", 1)
+
+
+def _remove_disable_wer(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TELEM_WER, "Disabled", 0)
+
+
+def _detect_disable_wer() -> bool:
+    return SESSION.read_dword(_TELEM_WER, "Disabled") == 1
+
+
+# -- 13. Disable Inventory Collector ─────────────────────────────────────────
+
+
+def _apply_disable_inventory(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_APP_TELEMETRY], "InventoryCollector")
+    SESSION.set_dword(_APP_TELEMETRY, "DisableInventory", 1)
+
+
+def _remove_disable_inventory(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_APP_TELEMETRY, "DisableInventory", 0)
+
+
+def _detect_disable_inventory() -> bool:
+    return SESSION.read_dword(_APP_TELEMETRY, "DisableInventory") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="telem-disable-win-error-reporting",
+        label="Disable Windows Error Reporting",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_wer,
+        remove_fn=_remove_disable_wer,
+        detect_fn=_detect_disable_wer,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TELEM_WER],
+        description=(
+            "Disables Windows Error Reporting (WER). Prevents sending crash data to Microsoft. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["telemetry", "wer", "error-reporting", "crash", "privacy"],
+    ),
+    TweakDef(
+        id="telem-disable-inventory-collector",
+        label="Disable Inventory Collector",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_inventory,
+        remove_fn=_remove_disable_inventory,
+        detect_fn=_detect_disable_inventory,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_APP_TELEMETRY],
+        description=(
+            "Disables the Inventory Collector that sends application/driver data to Microsoft. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["telemetry", "inventory", "collector", "appcompat"],
+    ),
+]

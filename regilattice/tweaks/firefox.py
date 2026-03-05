@@ -281,6 +281,44 @@ def _detect_ff_default_check_policy() -> bool:
     return SESSION.read_dword(_FF_POLICY, "DontCheckDefaultBrowser") == 1
 
 
+# ── Disable Firefox Form History ────────────────────────────────────────────
+
+
+def _apply_ff_disable_form_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable form auto-fill history via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxFormHistory")
+    SESSION.set_dword(_FF_POLICY, "DisableFormHistory", 1)
+
+
+def _remove_ff_disable_form_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableFormHistory")
+
+
+def _detect_ff_disable_form_history() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableFormHistory") == 1
+
+
+# ── Disable Firefox Profile Import ──────────────────────────────────────────
+
+
+def _apply_ff_disable_profile_import(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Firefox: disable profile import wizard via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxProfileImport")
+    SESSION.set_dword(_FF_POLICY, "DisableProfileImport", 1)
+
+
+def _remove_ff_disable_profile_import(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableProfileImport")
+
+
+def _detect_ff_disable_profile_import() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableProfileImport") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -465,5 +503,115 @@ TWEAKS: list[TweakDef] = [
             "Default: Check enabled. Recommended: Disabled."
         ),
         tags=["firefox", "default-browser", "nag"],
+    ),
+    TweakDef(
+        id="firefox-disable-form-history",
+        label="Disable Firefox Form History",
+        category="Firefox",
+        apply_fn=_apply_ff_disable_form_history,
+        remove_fn=_remove_ff_disable_form_history,
+        detect_fn=_detect_ff_disable_form_history,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables Firefox form auto-fill history via enterprise policy. "
+            "Prevents saving of form data and search history. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["firefox", "form", "history", "privacy"],
+    ),
+    TweakDef(
+        id="firefox-disable-profile-import",
+        label="Disable Firefox Profile Import",
+        category="Firefox",
+        apply_fn=_apply_ff_disable_profile_import,
+        remove_fn=_remove_ff_disable_profile_import,
+        detect_fn=_detect_ff_disable_profile_import,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables the profile import wizard in Firefox. Prevents "
+            "importing data from other browsers. "
+            "Default: Enabled. Recommended: Disabled for managed environments."
+        ),
+        tags=["firefox", "import", "profile", "managed"],
+    ),
+]
+
+
+# ── Disable Firefox Pocket ───────────────────────────────────────────────────
+
+
+def _apply_ff_pocket_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Firefox Pocket integration")
+    SESSION.backup(_FF_KEYS, "FirefoxPocket")
+    SESSION.set_dword(_FF_POLICY, "DisablePocket", 1)
+
+
+def _remove_ff_pocket_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisablePocket")
+
+
+def _detect_ff_pocket_off() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisablePocket") == 1
+
+
+# ── Disable Firefox Auto-Update ──────────────────────────────────────────────
+
+
+def _apply_ff_auto_update_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Firefox auto-update via policy")
+    SESSION.backup(_FF_KEYS, "FirefoxAutoUpdate")
+    SESSION.set_dword(_FF_POLICY, "DisableAppUpdate", 1)
+
+
+def _remove_ff_auto_update_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FF_POLICY, "DisableAppUpdate")
+
+
+def _detect_ff_auto_update_off() -> bool:
+    return SESSION.read_dword(_FF_POLICY, "DisableAppUpdate") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="firefox-disable-pocket",
+        label="Disable Firefox Pocket",
+        category="Firefox",
+        apply_fn=_apply_ff_pocket_off,
+        remove_fn=_remove_ff_pocket_off,
+        detect_fn=_detect_ff_pocket_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables Firefox Pocket integration via enterprise policy. "
+            "Removes the Pocket button and save-to-Pocket feature. "
+            "Default: Enabled. Recommended: Disabled if not used."
+        ),
+        tags=["firefox", "pocket", "policy", "feature"],
+    ),
+    TweakDef(
+        id="firefox-disable-auto-update",
+        label="Disable Firefox Auto-Update",
+        category="Firefox",
+        apply_fn=_apply_ff_auto_update_off,
+        remove_fn=_remove_ff_auto_update_off,
+        detect_fn=_detect_ff_auto_update_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=_FF_KEYS,
+        description=(
+            "Disables Firefox automatic updates via enterprise policy. "
+            "Allows manual update control for managed environments. "
+            "Default: Auto-update. Recommended: Disabled for managed setups."
+        ),
+        tags=["firefox", "update", "auto-update", "policy", "managed"],
     ),
 ]

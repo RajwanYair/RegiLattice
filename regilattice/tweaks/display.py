@@ -242,6 +242,49 @@ def _detect_dpi_override() -> bool:
     return SESSION.read_dword(_KEY_DESKTOP, "Win8DpiScaling") == 1
 
 
+# ── Disable Adaptive Brightness (ICM Calibration) ───────────────────────────
+
+_KEY_ICM_CALIBRATION = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
+    r"\CurrentVersion\ICM\Calibration"
+)
+
+
+def _apply_disable_adaptive_brightness_icm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Display: disable adaptive brightness via ICM calibration")
+    SESSION.backup([_KEY_ICM_CALIBRATION], "AdaptiveBrightnessICM")
+    SESSION.set_dword(_KEY_ICM_CALIBRATION, "AdaptiveBrightness", 0)
+
+
+def _remove_disable_adaptive_brightness_icm(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_ICM_CALIBRATION, "AdaptiveBrightness")
+
+
+def _detect_disable_adaptive_brightness_icm() -> bool:
+    return SESSION.read_dword(_KEY_ICM_CALIBRATION, "AdaptiveBrightness") == 0
+
+
+# ── Force Hardware Cursor (Disable Smooth Scroll) ───────────────────────────
+
+
+def _apply_hardware_cursor(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Display: force hardware cursor (disable smooth scrolling)")
+    SESSION.backup([_KEY_DESKTOP], "HardwareCursor")
+    SESSION.set_string(_KEY_DESKTOP, "SmoothScroll", "0")
+
+
+def _remove_hardware_cursor(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KEY_DESKTOP, "SmoothScroll", "1")
+
+
+def _detect_hardware_cursor() -> bool:
+    return SESSION.read_string(_KEY_DESKTOP, "SmoothScroll") == "0"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -434,5 +477,115 @@ TWEAKS: list[TweakDef] = [
             "Recommended: 96 DPI for external monitors."
         ),
         tags=["display", "dpi", "scaling", "performance"],
+    ),
+    TweakDef(
+        id="display-disable-adaptive-brightness-icm",
+        label="Disable Adaptive Brightness (ICM)",
+        category="Display",
+        apply_fn=_apply_disable_adaptive_brightness_icm,
+        remove_fn=_remove_disable_adaptive_brightness_icm,
+        detect_fn=_detect_disable_adaptive_brightness_icm,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_ICM_CALIBRATION],
+        description=(
+            "Disables adaptive brightness via ICM display calibration. "
+            "Prevents automatic brightness adjustments based on content. "
+            "Default: Enabled. Recommended: Disabled for consistent brightness."
+        ),
+        tags=["display", "brightness", "icm", "calibration"],
+    ),
+    TweakDef(
+        id="display-hardware-cursor",
+        label="Force Hardware Cursor",
+        category="Display",
+        apply_fn=_apply_hardware_cursor,
+        remove_fn=_remove_hardware_cursor,
+        detect_fn=_detect_hardware_cursor,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Forces hardware cursor rendering and disables smooth scrolling. "
+            "Reduces input lag and cursor rendering overhead. "
+            "Default: Smooth scrolling on. Recommended: Hardware cursor for gaming."
+        ),
+        tags=["display", "cursor", "hardware", "performance"],
+    ),
+]
+
+
+# ── Disable Window Transparency Effect ───────────────────────────────────────
+
+
+def _apply_transparency_effect_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable window transparency effects")
+    SESSION.backup([_KEY_PERSONALIZE], "TransparencyEffect")
+    SESSION.set_dword(_KEY_PERSONALIZE, "EnableTransparency", 0)
+
+
+def _remove_transparency_effect_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KEY_PERSONALIZE, "EnableTransparency", 1)
+
+
+def _detect_transparency_effect_off() -> bool:
+    return SESSION.read_dword(_KEY_PERSONALIZE, "EnableTransparency") == 0
+
+
+# ── Disable Minimize Animation ───────────────────────────────────────────────
+
+
+def _apply_min_animate_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable window minimize/maximize animation")
+    SESSION.backup([_KEY_WINDOW_METRICS], "MinAnimate")
+    SESSION.set_string(_KEY_WINDOW_METRICS, "MinAnimate", "0")
+
+
+def _remove_min_animate_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KEY_WINDOW_METRICS, "MinAnimate", "1")
+
+
+def _detect_min_animate_off() -> bool:
+    return SESSION.read_string(_KEY_WINDOW_METRICS, "MinAnimate") == "0"
+
+
+TWEAKS += [
+    TweakDef(
+        id="display-disable-transparency-effect",
+        label="Disable Window Transparency Effect",
+        category="Display",
+        apply_fn=_apply_transparency_effect_off,
+        remove_fn=_remove_transparency_effect_off,
+        detect_fn=_detect_transparency_effect_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_PERSONALIZE],
+        description=(
+            "Disables window transparency and acrylic blur effects. "
+            "Improves rendering performance on integrated GPUs. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["display", "transparency", "acrylic", "performance"],
+    ),
+    TweakDef(
+        id="display-disable-animation-effects",
+        label="Disable Minimize/Maximize Animation",
+        category="Display",
+        apply_fn=_apply_min_animate_off,
+        remove_fn=_remove_min_animate_off,
+        detect_fn=_detect_min_animate_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_WINDOW_METRICS],
+        description=(
+            "Disables minimize and maximize window animations via "
+            "WindowMetrics. Makes window switching feel instant. "
+            "Default: Enabled. Recommended: Disabled for responsiveness."
+        ),
+        tags=["display", "animation", "minimize", "performance"],
     ),
 ]

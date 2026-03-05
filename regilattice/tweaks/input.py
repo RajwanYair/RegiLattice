@@ -438,3 +438,75 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "sticky-keys", "gaming", "accessibility"],
     ),
 ]
+
+
+# ── Disable Spell Check ──────────────────────────────────────────────────────
+
+
+def _apply_disable_spell_check(*, require_admin: bool = False) -> None:
+    SESSION.log("Input: disable auto spell checking")
+    SESSION.backup([_TOUCH_KB_AUTO], "SpellCheck")
+    SESSION.set_dword(_TOUCH_KB_AUTO, "EnableSpellchecking", 0)
+
+
+def _remove_disable_spell_check(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCH_KB_AUTO, "EnableSpellchecking", 1)
+
+
+def _detect_disable_spell_check() -> bool:
+    return SESSION.read_dword(_TOUCH_KB_AUTO, "EnableSpellchecking") == 0
+
+
+# ── Disable Text Suggestions ─────────────────────────────────────────────────
+
+
+def _apply_disable_text_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.log("Input: disable text suggestions while typing")
+    SESSION.backup([_TOUCH_KB_AUTO], "TextSuggestions")
+    SESSION.set_dword(_TOUCH_KB_AUTO, "EnableTextPrediction", 0)
+
+
+def _remove_disable_text_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCH_KB_AUTO, "EnableTextPrediction", 1)
+
+
+def _detect_disable_text_suggestions() -> bool:
+    return SESSION.read_dword(_TOUCH_KB_AUTO, "EnableTextPrediction") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="input-disable-spell-check",
+        label="Disable Spell Checking",
+        category="Input",
+        apply_fn=_apply_disable_spell_check,
+        remove_fn=_remove_disable_spell_check,
+        detect_fn=_detect_disable_spell_check,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCH_KB_AUTO],
+        description=(
+            "Disables automatic spell checking in Windows text input. "
+            "Reduces CPU usage from background spell-check processing. "
+            "Default: Enabled. Recommended: Disabled for developers."
+        ),
+        tags=["input", "spell-check", "typing", "performance"],
+    ),
+    TweakDef(
+        id="input-disable-text-suggestions",
+        label="Disable Text Suggestions",
+        category="Input",
+        apply_fn=_apply_disable_text_suggestions,
+        remove_fn=_remove_disable_text_suggestions,
+        detect_fn=_detect_disable_text_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCH_KB_AUTO],
+        description=(
+            "Disables text prediction and suggestions while typing. "
+            "Prevents the suggestion bar from appearing above the keyboard. "
+            "Default: Enabled. Recommended: Disabled for power users."
+        ),
+        tags=["input", "text-prediction", "suggestions", "typing"],
+    ),
+]

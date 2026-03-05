@@ -615,6 +615,8 @@ class RegiLatticeGUI:
         self._root.bind("<Control-e>", lambda _: self._expand_all())
         self._root.bind("<Control-Shift-E>", lambda _: self._collapse_all())
         self._root.bind("<Control-r>", lambda _: self._refresh_status_all())
+        self._root.bind("<Control-i>", lambda _: self._invert_selection())
+        self._root.bind("<Control-l>", lambda _: self._toggle_log_panel())
         self._root.bind("<Escape>", lambda _: self._clear_search())
 
     def _focus_search(self) -> None:
@@ -678,6 +680,20 @@ class RegiLatticeGUI:
         )
         profile_menu.pack(side="left")
 
+        # Scope filter dropdown
+        scope_frame = ttk.Frame(toolbar)
+        scope_frame.pack(side="right", padx=(8, 0))
+        tk.Label(
+            scope_frame, text="Scope:", fg=_FG_DIM, bg=_BG, font=_FONT_XS,
+        ).pack(side="left", padx=(0, 4))
+        self._scope_filter_var = tk.StringVar(value="All")
+        scope_menu = ttk.OptionMenu(
+            scope_frame, self._scope_filter_var, "All",
+            "All", "User Only", "Machine Only", "Both",
+            command=lambda _: self._filter_rows(),
+        )
+        scope_menu.pack(side="left")
+
         # Status filter dropdown
         filter_frame = ttk.Frame(toolbar)
         filter_frame.pack(side="right", padx=(8, 0))
@@ -718,7 +734,7 @@ class RegiLatticeGUI:
         # Keyboard shortcut hints
         tk.Label(
             legend,
-            text="Ctrl+F Search  |  Ctrl+A Select All  |  Ctrl+E Expand  |  Esc Clear",
+            text="Ctrl+F Search | Ctrl+A Select | Ctrl+I Invert | Ctrl+L Log | Ctrl+E Expand | Esc Clear",
             fg=_FG_DIM, bg=_BG, font=("Segoe UI", 7),
         ).pack(side="right", padx=(10, 0))
 
@@ -807,6 +823,20 @@ class RegiLatticeGUI:
             command=self._export_powershell,
         ).pack(side="left", expand=True, fill="x")
 
+        # Action buttons (row 3: import / log / about)
+        btn3 = ttk.Frame(self._root)
+        btn3.pack(fill="x", padx=16, pady=(0, 4))
+
+        ttk.Button(btn3, text="\U0001F4C2  Import JSON", command=self._import_json_selection).pack(
+            side="left", padx=(0, 6), expand=True, fill="x",
+        )
+        ttk.Button(btn3, text="\U0001F4DC  Toggle Log", command=self._toggle_log_panel).pack(
+            side="left", padx=(0, 6), expand=True, fill="x",
+        )
+        ttk.Button(btn3, text="\u2139  About", command=self._show_about).pack(
+            side="left", expand=True, fill="x",
+        )
+
         # Progress + status bar
         status_frame = ttk.Frame(self._root)
         status_frame.pack(fill="x", padx=16, pady=(0, 4))
@@ -834,10 +864,29 @@ class RegiLatticeGUI:
 
         self._status_label = ttk.Label(
             status_frame,
-            text=f"Ready  •  {total_tweaks} tweaks in {total_cats} categories  •  Log: {SESSION.log_path}",
+            text=f"Ready  \u2022  {total_tweaks} tweaks in {total_cats} categories  \u2022  Log: {SESSION.log_path}",
             style="Status.TLabel",
         )
         self._status_label.pack(fill="x")
+
+        # Log viewer panel (hidden by default)
+        self._log_visible = False
+        self._log_frame = ttk.Frame(self._root)
+        self._log_text = tk.Text(
+            self._log_frame, bg="#11111B", fg=_FG, font=("Cascadia Code", 9),
+            height=8, wrap="word", state="disabled", relief="flat",
+            insertbackground=_FG, selectbackground=_ACCENT,
+        )
+        _log_scroll = ttk.Scrollbar(self._log_frame, orient="vertical", command=self._log_text.yview)
+        self._log_text.configure(yscrollcommand=_log_scroll.set)
+        self._log_text.pack(side="left", fill="both", expand=True)
+        _log_scroll.pack(side="right", fill="y")
+
+        # Right-click context menu for tweak rows
+        self._ctx_menu = tk.Menu(self._root, tearoff=0, bg=_CARD_BG, fg=_FG, font=_FONT_SM)
+        self._ctx_target: _TweakRow | None = None
+        for row in self._tweak_rows:
+            row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))
 
     # ── Selection helpers ────────────────────────────────────────────────
 
@@ -863,38 +912,37 @@ class RegiLatticeGUI:
                 section.toggle()
 
     def _filter_rows(self) -> None:
-        """Show/hide rows based on search query AND status filter."""
+        """Show/hide rows based on search query, status filter, AND scope filter."""
         query = self._search_var.get().strip()
         status_filter = self._status_filter_var.get()
+        scope_filter = self._scope_filter_var.get()
         _filter_status = {"Applied": "applied", "Default": "not applied", "Unknown": "unknown"}
+        _filter_scope = {"User Only": "user", "Machine Only": "machine", "Both": "both"}
         for section in self._category_sections:
-            if status_filter == "All":
-                section.filter_rows(query)
-            else:
-                # Custom filter: text + status
-                q = query.lower()
-                visible = False
-                target_status = _filter_status.get(status_filter, "")
-                for row in section.rows:
-                    td = row.td
-                    text_match = not q or any(
-                        q in f.lower()
-                        for f in [td.id, td.label, td.category, td.description, *td.tags]
-                    )
-                    st = tweak_status(td)
-                    status_match = st == target_status
-                    if text_match and status_match:
-                        row.pack_row()
-                        visible = True
-                    else:
-                        row.unpack_row()
-                if visible:
-                    section.header.pack(fill="x", pady=(8, 0), padx=4)
-                    if section.expanded:
-                        section.content_frame.pack(fill="x")
+            q = query.lower()
+            visible = False
+            target_status = _filter_status.get(status_filter, "")
+            target_scope = _filter_scope.get(scope_filter, "")
+            for row in section.rows:
+                td = row.td
+                text_match = not q or any(
+                    q in f.lower()
+                    for f in [td.id, td.label, td.category, td.description, *td.tags]
+                )
+                status_match = status_filter == "All" or tweak_status(td) == target_status
+                scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
+                if text_match and status_match and scope_match:
+                    row.pack_row()
+                    visible = True
                 else:
-                    section.header.pack_forget()
-                    section.content_frame.pack_forget()
+                    row.unpack_row()
+            if visible:
+                section.header.pack(fill="x", pady=(8, 0), padx=4)
+                if section.expanded:
+                    section.content_frame.pack(fill="x")
+            else:
+                section.header.pack_forget()
+                section.content_frame.pack_forget()
 
     def _update_selection_count(self) -> None:
         """Update the selection counter in the toolbar."""
@@ -906,6 +954,152 @@ class RegiLatticeGUI:
 
     def _selected_tweaks(self) -> list[TweakDef]:
         return [r.td for r in self._tweak_rows if r.var.get()]
+
+    # ── Invert selection ─────────────────────────────────────────────────
+
+    def _invert_selection(self) -> None:
+        """Toggle the selection state of every tweak row."""
+        for row in self._tweak_rows:
+            if not row.disabled_by_corp:
+                row.var.set(not row.var.get())
+        self._update_selection_count()
+
+    # ── Log panel ────────────────────────────────────────────────────────
+
+    def _toggle_log_panel(self) -> None:
+        """Show/hide the log viewer panel at the bottom."""
+        if self._log_visible:
+            self._log_frame.pack_forget()
+            self._log_visible = False
+        else:
+            self._log_frame.pack(fill="both", padx=16, pady=(0, 4), expand=False)
+            self._log_visible = True
+            self._refresh_log()
+
+    def _refresh_log(self) -> None:
+        """Load the session log file into the log text widget."""
+        log_path = SESSION.log_path
+        content = ""
+        try:
+            with open(log_path, encoding="utf-8", errors="replace") as f:
+                content = f.read()
+        except OSError:
+            content = f"(Could not read log file: {log_path})"
+        self._log_text.configure(state="normal")
+        self._log_text.delete("1.0", "end")
+        self._log_text.insert("1.0", content)
+        self._log_text.configure(state="disabled")
+        self._log_text.see("end")
+
+    # ── Right-click context menu ─────────────────────────────────────────
+
+    def _show_context_menu(self, event: tk.Event, row: _TweakRow) -> None:  # type: ignore[type-arg]
+        """Display a context menu for a tweak row."""
+        self._ctx_target = row
+        self._ctx_menu.delete(0, "end")
+        td = row.td
+        st = tweak_status(td)
+
+        if st == "applied":
+            self._ctx_menu.add_command(label="Disable this tweak", command=lambda: self._toggle_single(row))
+        else:
+            self._ctx_menu.add_command(label="Enable this tweak", command=lambda: self._toggle_single(row))
+
+        self._ctx_menu.add_separator()
+        self._ctx_menu.add_command(label=f"Copy ID: {td.id}", command=lambda: self._copy_to_clipboard(td.id))
+        if td.registry_keys:
+            self._ctx_menu.add_command(
+                label="Copy Registry Key", command=lambda: self._copy_to_clipboard(td.registry_keys[0]),
+            )
+        self._ctx_menu.add_separator()
+        self._ctx_menu.add_command(
+            label="Select" if not row.var.get() else "Deselect",
+            command=lambda: row.var.set(not row.var.get()),
+        )
+        self._ctx_menu.add_command(label="Select all in category", command=lambda: self._select_category(td.category))
+
+        try:
+            self._ctx_menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            self._ctx_menu.grab_release()
+
+    def _copy_to_clipboard(self, text: str) -> None:
+        """Copy text to system clipboard."""
+        self._root.clipboard_clear()
+        self._root.clipboard_append(text)
+        self._set_status(f"Copied: {text}", _ACCENT)
+
+    def _select_category(self, category: str) -> None:
+        """Select all tweaks in the given category."""
+        for row in self._tweak_rows:
+            if row.td.category == category and not row.disabled_by_corp:
+                row.var.set(True)
+        self._update_selection_count()
+
+    # ── Import JSON ──────────────────────────────────────────────────────
+
+    def _import_json_selection(self) -> None:
+        """Import a JSON file containing a list of tweak IDs to select."""
+        import json
+
+        path = filedialog.askopenfilename(
+            title="Import Tweak Selection",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError) as exc:
+            messagebox.showerror("Import Error", str(exc))
+            return
+
+        if isinstance(data, dict):
+            ids = set(data.get("tweaks", []))
+        elif isinstance(data, list):
+            ids = set(data)
+        else:
+            messagebox.showerror("Import Error", "Expected a JSON list of tweak IDs or {\"tweaks\": [...]}.")
+            return
+
+        self._deselect_all()
+        count = 0
+        for row in self._tweak_rows:
+            if row.td.id in ids and not row.disabled_by_corp:
+                row.var.set(True)
+                count += 1
+        self._update_selection_count()
+        self._set_status(f"Imported {count} tweaks from {Path(path).name}", _OK_GREEN)
+
+    # ── About dialog ─────────────────────────────────────────────────────
+
+    def _show_about(self) -> None:
+        """Show an About dialog with system and project info."""
+        total = len(all_tweaks())
+        cats = len(tweaks_by_category())
+        corp = "Yes" if self._corp_blocked else "No"
+        info_lines = [
+            f"RegiLattice  v{__version__}",
+            "",
+            f"Tweaks: {total}  |  Categories: {cats}",
+            f"Platform: {platform_summary()}",
+            f"Corporate: {corp}",
+            f"Python: {sys.version.split()[0]}",
+            "",
+            f"Log: {SESSION.log_path}",
+            "",
+            "Keyboard Shortcuts:",
+            "  Ctrl+A  Select All",
+            "  Ctrl+D  Deselect All",
+            "  Ctrl+I  Invert Selection",
+            "  Ctrl+F  Focus Search",
+            "  Ctrl+E  Expand All",
+            "  Ctrl+L  Toggle Log Panel",
+            "  Ctrl+R  Refresh Status",
+            "  Esc     Clear Search",
+        ]
+        messagebox.showinfo("About RegiLattice", "\n".join(info_lines))
 
     # ── Category batch actions ───────────────────────────────────────────
 

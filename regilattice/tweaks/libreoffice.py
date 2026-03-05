@@ -487,3 +487,89 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "autosave", "recovery"],
     ),
 ]
+
+
+# ── Disable LibreOffice Recovery (Policy) ────────────────────────────────────
+
+_LO_RECOVERY_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice"
+    r"\org.openoffice.Office.Recovery\Recovery"
+)
+
+
+def _apply_disable_lo_recovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: disable document recovery via policy")
+    SESSION.backup([_LO_RECOVERY_POLICY], "LORecovery")
+    SESSION.set_string(_LO_RECOVERY_POLICY, "AutoSaveEnabled", "false")
+
+
+def _remove_disable_lo_recovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_LO_RECOVERY_POLICY, "AutoSaveEnabled", "true")
+
+
+def _detect_disable_lo_recovery() -> bool:
+    return SESSION.read_string(_LO_RECOVERY_POLICY, "AutoSaveEnabled") == "false"
+
+
+# ── Disable LibreOffice Macro Execution (Policy) ─────────────────────────────
+
+_LO_MACRO_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice"
+    r"\org.openoffice.Office.Common\Security\Scripting"
+)
+
+
+def _apply_disable_lo_macros(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("LibreOffice: set macro security to Very High (3)")
+    SESSION.backup([_LO_MACRO_POLICY], "LOMacroSec")
+    SESSION.set_dword(_LO_MACRO_POLICY, "MacroSecurityLevel", 3)
+
+
+def _remove_disable_lo_macros(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_LO_MACRO_POLICY, "MacroSecurityLevel", 1)
+
+
+def _detect_disable_lo_macros() -> bool:
+    return SESSION.read_dword(_LO_MACRO_POLICY, "MacroSecurityLevel") == 3
+
+
+TWEAKS += [
+    TweakDef(
+        id="libreoffice-disable-recovery",
+        label="Disable LibreOffice Document Recovery",
+        category="LibreOffice",
+        apply_fn=_apply_disable_lo_recovery,
+        remove_fn=_remove_disable_lo_recovery,
+        detect_fn=_detect_disable_lo_recovery,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LO_RECOVERY_POLICY],
+        description=(
+            "Disables LibreOffice automatic document recovery via Group Policy. "
+            "Prevents crash recovery prompts on startup. "
+            "Default: Enabled. Recommended: Disabled for managed environments."
+        ),
+        tags=["libreoffice", "recovery", "autosave", "policy"],
+    ),
+    TweakDef(
+        id="libreoffice-disable-macro-exec",
+        label="Disable LibreOffice Macro Execution",
+        category="LibreOffice",
+        apply_fn=_apply_disable_lo_macros,
+        remove_fn=_remove_disable_lo_macros,
+        detect_fn=_detect_disable_lo_macros,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LO_MACRO_POLICY],
+        description=(
+            "Sets LibreOffice macro security level to Very High (3) via policy. "
+            "Only trusted signed macros will execute. "
+            "Default: 1 (Medium). Recommended: 3 (Very High) for security."
+        ),
+        tags=["libreoffice", "macros", "security", "policy"],
+    ),
+]

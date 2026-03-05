@@ -345,3 +345,82 @@ TWEAKS: list[TweakDef] = [
         tags=["store", "content", "delivery", "privacy"],
     ),
 ]
+
+
+# -- Disable Remote Push-to-Install -----------------------------------------------
+
+
+def _apply_disable_push_install(*, require_admin: bool = True) -> None:
+    SESSION.log("Microsoft Store: disable remote push-to-install")
+    SESSION.backup([_CDM], "PushInstall")
+    SESSION.set_dword(_CDM, "SilentInstalledAppsEnabled", 0)
+
+
+def _remove_disable_push_install(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_CDM, "SilentInstalledAppsEnabled")
+
+
+def _detect_disable_push_install() -> bool:
+    return SESSION.read_dword(_CDM, "SilentInstalledAppsEnabled") == 0
+
+
+# -- Disable Windows Consumer Experiences (Policy) --------------------------------
+
+
+def _apply_disable_consumer_experiences(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable Windows consumer experiences via policy")
+    SESSION.backup([_CLOUD_CONTENT], "ConsumerExperiences")
+    SESSION.set_dword(_CLOUD_CONTENT, "DisableWindowsConsumerFeatures", 1)
+    SESSION.set_dword(_CLOUD_CONTENT, "DisableConsumerAccountStateContent", 1)
+
+
+def _remove_disable_consumer_experiences(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLOUD_CONTENT, "DisableWindowsConsumerFeatures")
+    SESSION.delete_value(_CLOUD_CONTENT, "DisableConsumerAccountStateContent")
+
+
+def _detect_disable_consumer_experiences() -> bool:
+    return (
+        SESSION.read_dword(_CLOUD_CONTENT, "DisableWindowsConsumerFeatures") == 1
+        and SESSION.read_dword(_CLOUD_CONTENT, "DisableConsumerAccountStateContent") == 1
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="msstore-disable-push-install",
+        label="Disable Remote Push-to-Install",
+        category="Microsoft Store",
+        apply_fn=_apply_disable_push_install,
+        remove_fn=_remove_disable_push_install,
+        detect_fn=_detect_disable_push_install,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables remote push-to-install from Microsoft Store. "
+            "Prevents apps from being silently installed via the web store. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "push", "install", "silent"],
+    ),
+    TweakDef(
+        id="msstore-disable-consumer-experiences",
+        label="Disable Windows Consumer Experiences (Policy)",
+        category="Microsoft Store",
+        apply_fn=_apply_disable_consumer_experiences,
+        remove_fn=_remove_disable_consumer_experiences,
+        detect_fn=_detect_disable_consumer_experiences,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CLOUD_CONTENT],
+        description=(
+            "Disables Windows consumer experiences via Group Policy. "
+            "Prevents bloatware, suggested apps, and consumer account content. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "consumer", "bloatware", "policy", "experiences"],
+    ),
+]

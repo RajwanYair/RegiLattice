@@ -316,6 +316,46 @@ def _detect_disable_magnifier_lens() -> bool:
     return SESSION.read_dword(_MAGNIFIER, "MagnificationMode") == 0
 
 
+# ── Disable Filter Keys Shortcut ─────────────────────────────────────────────
+
+_FILTER_KEYS_ACC = r"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys"
+
+
+def _apply_disable_filter_keys_shortcut(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Filter Keys shortcut")
+    SESSION.backup([_FILTER_KEYS_ACC], "FilterKeysShortcut")
+    SESSION.set_string(_FILTER_KEYS_ACC, "Flags", "0")
+
+
+def _remove_disable_filter_keys_shortcut(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_FILTER_KEYS_ACC, "Flags", "126")
+
+
+def _detect_disable_filter_keys_shortcut() -> bool:
+    return SESSION.read_string(_FILTER_KEYS_ACC, "Flags") == "0"
+
+
+# ── Disable Toggle Keys Shortcut ─────────────────────────────────────────────
+
+
+def _apply_disable_toggle_keys_shortcut(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: disable Toggle Keys shortcut")
+    SESSION.backup([_TOGGLE], "ToggleKeysShortcut")
+    SESSION.set_string(_TOGGLE, "Flags", "0")
+
+
+def _remove_disable_toggle_keys_shortcut(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_TOGGLE, "Flags", "62")
+
+
+def _detect_disable_toggle_keys_shortcut() -> bool:
+    return SESSION.read_string(_TOGGLE, "Flags") == "0"
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -534,5 +574,115 @@ TWEAKS: list[TweakDef] = [
             "Default: Fullscreen (2). Recommended: Docked (0)."
         ),
         tags=["accessibility", "magnifier", "ux"],
+    ),
+    TweakDef(
+        id="acc-disable-filter-keys",
+        label="Disable Filter Keys Shortcut",
+        category="Accessibility",
+        apply_fn=_apply_disable_filter_keys_shortcut,
+        remove_fn=_remove_disable_filter_keys_shortcut,
+        detect_fn=_detect_disable_filter_keys_shortcut,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FILTER_KEYS_ACC],
+        description=(
+            "Disables the Filter Keys shortcut, preventing accidental "
+            "activation that can interfere with typing and gaming."
+        ),
+        tags=["accessibility", "filter-keys", "keyboard"],
+    ),
+    TweakDef(
+        id="acc-disable-toggle-keys",
+        label="Disable Toggle Keys Shortcut",
+        category="Accessibility",
+        apply_fn=_apply_disable_toggle_keys_shortcut,
+        remove_fn=_remove_disable_toggle_keys_shortcut,
+        detect_fn=_detect_disable_toggle_keys_shortcut,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOGGLE],
+        description=(
+            "Disables the Toggle Keys shortcut that plays a tone when "
+            "Caps Lock, Num Lock, or Scroll Lock is pressed."
+        ),
+        tags=["accessibility", "toggle-keys", "keyboard"],
+    ),
+]
+
+
+# ── Disable Narrator Hotkey ──────────────────────────────────────────────────
+
+_MOUSE_KEYS = r"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys"
+
+
+def _apply_narrator_hotkey_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Win+Enter narrator shortcut")
+    SESSION.backup([_NARRATOR], "NarratorHotkey")
+    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 0)
+
+
+def _remove_narrator_hotkey_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NARRATOR, "WinEnterLaunchEnabled")
+
+
+def _detect_narrator_hotkey_off() -> bool:
+    return SESSION.read_dword(_NARRATOR, "WinEnterLaunchEnabled") == 0
+
+
+# ── Disable Mouse Keys ──────────────────────────────────────────────────────
+
+
+def _apply_mouse_keys_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Mouse Keys feature")
+    SESSION.backup([_MOUSE_KEYS], "MouseKeys")
+    SESSION.set_string(_MOUSE_KEYS, "Flags", "0")
+
+
+def _remove_mouse_keys_off(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_MOUSE_KEYS, "Flags", "62")
+
+
+def _detect_mouse_keys_off() -> bool:
+    return SESSION.read_string(_MOUSE_KEYS, "Flags") == "0"
+
+
+TWEAKS += [
+    TweakDef(
+        id="acc-disable-narrator-hotkey",
+        label="Disable Narrator Hotkey (Win+Enter)",
+        category="Accessibility",
+        apply_fn=_apply_narrator_hotkey_off,
+        remove_fn=_remove_narrator_hotkey_off,
+        detect_fn=_detect_narrator_hotkey_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR],
+        description=(
+            "Disables the Win+Enter keyboard shortcut that launches "
+            "Narrator. Prevents accidental Narrator activation. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["accessibility", "narrator", "hotkey", "keyboard"],
+    ),
+    TweakDef(
+        id="acc-disable-mouse-keys",
+        label="Disable Mouse Keys",
+        category="Accessibility",
+        apply_fn=_apply_mouse_keys_off,
+        remove_fn=_remove_mouse_keys_off,
+        detect_fn=_detect_mouse_keys_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_MOUSE_KEYS],
+        description=(
+            "Disables the Mouse Keys accessibility feature that allows "
+            "the numeric keypad to control the mouse pointer. "
+            "Default: Enabled. Recommended: Disabled for gamers."
+        ),
+        tags=["accessibility", "mouse-keys", "keyboard", "numpad"],
     ),
 ]

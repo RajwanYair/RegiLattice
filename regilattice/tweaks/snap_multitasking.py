@@ -366,3 +366,67 @@ TWEAKS: list[TweakDef] = [
         tags=["dwm", "animation", "policy"],
     ),
 ]
+
+
+# -- 13. Disable Edge Swipe Navigation ───────────────────────────────────────
+
+
+def _apply_disable_edge_swipe_nav(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SNAP_POLICY], "EdgeSwipeNav")
+    SESSION.set_dword(_SNAP_POLICY, "AllowEdgeSwipe", 0)
+
+
+def _remove_disable_edge_swipe_nav(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SNAP_POLICY, "AllowEdgeSwipe", 1)
+
+
+def _detect_disable_edge_swipe_nav() -> bool:
+    return SESSION.read_dword(_SNAP_POLICY, "AllowEdgeSwipe") == 0
+
+
+# -- 14. Disable Desktop Peek ───────────────────────────────────────────────
+
+
+def _apply_disable_peek(*, require_admin: bool = False) -> None:
+    SESSION.backup([_SNAP], "DesktopPeek")
+    SESSION.set_dword(_SNAP, "DisablePreviewDesktop", 1)
+
+
+def _remove_disable_peek(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_SNAP, "DisablePreviewDesktop", 0)
+
+
+def _detect_disable_peek() -> bool:
+    return SESSION.read_dword(_SNAP, "DisablePreviewDesktop") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="snap-disable-edge-swipe-nav",
+        label="Disable Edge Swipe Navigation",
+        category="Snap & Multitasking",
+        apply_fn=_apply_disable_edge_swipe_nav,
+        remove_fn=_remove_disable_edge_swipe_nav,
+        detect_fn=_detect_disable_edge_swipe_nav,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SNAP_POLICY],
+        description="Disables edge swipe navigation gestures on touchscreens. Default: Enabled. Recommended: Disabled on desktops.",
+        tags=["snap", "edge", "swipe", "gesture", "touch"],
+    ),
+    TweakDef(
+        id="snap-disable-desktop-peek",
+        label="Disable Desktop Peek",
+        category="Snap & Multitasking",
+        apply_fn=_apply_disable_peek,
+        remove_fn=_remove_disable_peek,
+        detect_fn=_detect_disable_peek,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SNAP],
+        description="Disables Aero Peek / desktop preview when hovering over the Show Desktop button. Default: Enabled.",
+        tags=["snap", "peek", "desktop", "aero"],
+    ),
+]

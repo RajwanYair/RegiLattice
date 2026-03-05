@@ -582,3 +582,86 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "suggested-actions", "clipboard", "ux"],
     ),
 ]
+
+
+# -- Restore Classic Right-Click Context Menu ----------------------------------
+
+_CLASSIC_MENU = (
+    r"HKEY_CURRENT_USER\Software\Classes\CLSID"
+    r"\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+)
+
+
+def _apply_w11_restore_right_click(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: restoring classic right-click menu")
+    SESSION.backup([_CLASSIC_MENU], "ClassicRightClick")
+    SESSION.set_string(_CLASSIC_MENU, "", "")
+    SESSION.log("Win11: classic right-click menu restored")
+
+
+def _remove_w11_restore_right_click(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CLASSIC_MENU], "ClassicRightClick_Remove")
+    SESSION.delete_tree(_CLASSIC_MENU)
+
+
+def _detect_w11_restore_right_click() -> bool:
+    return SESSION.key_exists(_CLASSIC_MENU)
+
+
+# -- Disable Chat/Teams Icon on Taskbar ----------------------------------------
+
+
+def _apply_w11_disable_chat_icon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Win11: disabling Chat/Teams taskbar icon")
+    SESSION.backup([_CHAT_KEY], "ChatIcon_W11")
+    SESSION.set_dword(_CHAT_KEY, "TaskbarMn", 0)
+    SESSION.log("Win11: Chat/Teams taskbar icon disabled")
+
+
+def _remove_w11_disable_chat_icon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CHAT_KEY], "ChatIcon_W11_Remove")
+    SESSION.set_dword(_CHAT_KEY, "TaskbarMn", 1)
+
+
+def _detect_w11_disable_chat_icon() -> bool:
+    return SESSION.read_dword(_CHAT_KEY, "TaskbarMn") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="w11-restore-right-click",
+        label="Restore Classic Right-Click Menu",
+        category="Windows 11",
+        apply_fn=_apply_w11_restore_right_click,
+        remove_fn=_remove_w11_restore_right_click,
+        detect_fn=_detect_w11_restore_right_click,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLASSIC_MENU],
+        description=(
+            "Restores Windows 10 classic context menu on right-click. "
+            "Default: Win11 modern menu. Recommended: Classic."
+        ),
+        tags=["win11", "context-menu", "right-click", "classic"],
+    ),
+    TweakDef(
+        id="w11-disable-chat-icon",
+        label="Disable Chat/Teams Taskbar Icon",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_chat_icon,
+        remove_fn=_remove_w11_disable_chat_icon,
+        detect_fn=_detect_w11_disable_chat_icon,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CHAT_KEY],
+        description=(
+            "Removes the Chat/Teams icon from the Windows 11 taskbar. "
+            "Default: Shown. Recommended: Hidden."
+        ),
+        tags=["win11", "chat", "teams", "taskbar"],
+    ),
+]

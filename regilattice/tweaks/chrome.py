@@ -293,6 +293,44 @@ def _detect_chrome_background() -> bool:
     return SESSION.read_dword(_CHROME_POLICY, "BackgroundModeEnabled") == 0
 
 
+# ── Disable Chrome Metrics Reporting ─────────────────────────────────────────
+
+
+def _apply_chrome_disable_metrics(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable metrics reporting via policy")
+    SESSION.backup([_CHROME_POLICY], "ChromeMetrics")
+    SESSION.set_dword(_CHROME_POLICY, "MetricsReportingEnabled", 0)
+
+
+def _remove_chrome_disable_metrics(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "MetricsReportingEnabled")
+
+
+def _detect_chrome_disable_metrics() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "MetricsReportingEnabled") == 0
+
+
+# ── Disable Chrome Default Browser Check ─────────────────────────────────────
+
+
+def _apply_chrome_disable_default_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Chrome: disable default browser check prompt")
+    SESSION.backup([_CHROME_POLICY], "ChromeDefaultBrowserCheck")
+    SESSION.set_dword(_CHROME_POLICY, "DefaultBrowserSettingEnabled", 0)
+
+
+def _remove_chrome_disable_default_check(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "DefaultBrowserSettingEnabled")
+
+
+def _detect_chrome_disable_default_check() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "DefaultBrowserSettingEnabled") == 0
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -487,5 +525,115 @@ TWEAKS: list[TweakDef] = [
             "Default: Enabled. Recommended: Disabled."
         ),
         tags=["chrome", "background", "performance", "memory"],
+    ),
+    TweakDef(
+        id="chrome-disable-metrics-reporting",
+        label="Disable Chrome Metrics Reporting",
+        category="Chrome",
+        apply_fn=_apply_chrome_disable_metrics,
+        remove_fn=_remove_chrome_disable_metrics,
+        detect_fn=_detect_chrome_disable_metrics,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables Chrome metrics and usage reporting via enterprise "
+            "policy. Prevents Chrome from sending usage statistics. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["chrome", "metrics", "telemetry", "privacy"],
+    ),
+    TweakDef(
+        id="chrome-disable-default-browser-check",
+        label="Disable Chrome Default Browser Check",
+        category="Chrome",
+        apply_fn=_apply_chrome_disable_default_check,
+        remove_fn=_remove_chrome_disable_default_check,
+        detect_fn=_detect_chrome_disable_default_check,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Prevents Chrome from prompting to set itself as the default "
+            "browser on startup. Default: Enabled. "
+            "Recommended: Disabled for managed environments."
+        ),
+        tags=["chrome", "default-browser", "prompt", "ux"],
+    ),
+]
+
+
+# ── Disable Chrome Hardware Acceleration (Policy) ────────────────────────────
+
+
+def _apply_chrome_hw_accel_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Chrome hardware acceleration via policy")
+    SESSION.backup([_CHROME_POLICY], "ChromeHWAccel")
+    SESSION.set_dword(_CHROME_POLICY, "HardwareAccelerationModeEnabled", 0)
+
+
+def _remove_chrome_hw_accel_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "HardwareAccelerationModeEnabled")
+
+
+def _detect_chrome_hw_accel_off() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "HardwareAccelerationModeEnabled") == 0
+
+
+# ── Block Third-Party Cookies (Policy) ───────────────────────────────────────
+
+
+def _apply_chrome_3p_cookies_block(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Block Chrome third-party cookies via policy")
+    SESSION.backup([_CHROME_POLICY], "Chrome3pCookies")
+    SESSION.set_dword(_CHROME_POLICY, "BlockThirdPartyCookies", 1)
+
+
+def _remove_chrome_3p_cookies_block(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHROME_POLICY, "BlockThirdPartyCookies")
+
+
+def _detect_chrome_3p_cookies_block() -> bool:
+    return SESSION.read_dword(_CHROME_POLICY, "BlockThirdPartyCookies") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="chrome-disable-hardware-accel-policy",
+        label="Disable Chrome Hardware Acceleration (Policy)",
+        category="Chrome",
+        apply_fn=_apply_chrome_hw_accel_off,
+        remove_fn=_remove_chrome_hw_accel_off,
+        detect_fn=_detect_chrome_hw_accel_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Disables Chrome hardware acceleration via enterprise policy. "
+            "Useful for troubleshooting GPU-related rendering issues. "
+            "Default: Enabled. Recommended: Disabled if GPU issues occur."
+        ),
+        tags=["chrome", "hardware", "acceleration", "gpu", "policy"],
+    ),
+    TweakDef(
+        id="chrome-enforce-3p-cookie-block",
+        label="Block Chrome Third-Party Cookies (Policy)",
+        category="Chrome",
+        apply_fn=_apply_chrome_3p_cookies_block,
+        remove_fn=_remove_chrome_3p_cookies_block,
+        detect_fn=_detect_chrome_3p_cookies_block,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHROME_POLICY],
+        description=(
+            "Blocks third-party cookies in Chrome via enterprise policy. "
+            "Enhances privacy by preventing cross-site tracking. "
+            "Default: Allowed. Recommended: Blocked for privacy."
+        ),
+        tags=["chrome", "cookies", "third-party", "privacy", "policy"],
     ),
 ]

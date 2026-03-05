@@ -560,3 +560,81 @@ TWEAKS: list[TweakDef] = [
         tags=["fonts", "cleartype", "rendering", "display"],
     ),
 ]
+
+
+# ── Disable Font Fallback ────────────────────────────────────────────────────
+
+_KEY_FONT_SUBSTITUTES = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"
+
+
+def _apply_disable_font_fallback(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Fonts: disable font fallback (MS Shell Dlg -> Segoe UI)")
+    SESSION.backup([_KEY_FONT_SUBSTITUTES], "FontFallback")
+    SESSION.set_string(_KEY_FONT_SUBSTITUTES, "MS Shell Dlg", "Segoe UI")
+    SESSION.set_string(_KEY_FONT_SUBSTITUTES, "MS Shell Dlg 2", "Segoe UI")
+
+
+def _remove_disable_font_fallback(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KEY_FONT_SUBSTITUTES, "MS Shell Dlg", "Microsoft Sans Serif")
+    SESSION.set_string(_KEY_FONT_SUBSTITUTES, "MS Shell Dlg 2", "Tahoma")
+
+
+def _detect_disable_font_fallback() -> bool:
+    return SESSION.read_string(_KEY_FONT_SUBSTITUTES, "MS Shell Dlg") == "Segoe UI"
+
+
+# ── Disable Font Anti-Aliasing ───────────────────────────────────────────────
+
+
+def _apply_disable_font_antialiasing(*, require_admin: bool = False) -> None:
+    SESSION.log("Fonts: disable font anti-aliasing smoothing")
+    SESSION.backup([_KEY_DESKTOP], "FontAntiAliasing")
+    SESSION.set_string(_KEY_DESKTOP, "FontSmoothing", "0")
+
+
+def _remove_disable_font_antialiasing(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_KEY_DESKTOP, "FontSmoothing", "2")
+
+
+def _detect_disable_font_antialiasing() -> bool:
+    return SESSION.read_string(_KEY_DESKTOP, "FontSmoothing") == "0"
+
+
+TWEAKS += [
+    TweakDef(
+        id="fonts-disable-font-fallback",
+        label="Disable Font Fallback",
+        category="Fonts",
+        apply_fn=_apply_disable_font_fallback,
+        remove_fn=_remove_disable_font_fallback,
+        detect_fn=_detect_disable_font_fallback,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_FONT_SUBSTITUTES],
+        description=(
+            "Overrides MS Shell Dlg font fallback to Segoe UI for consistent "
+            "rendering across legacy and modern applications. "
+            "Default: Microsoft Sans Serif. Recommended: Segoe UI."
+        ),
+        tags=["fonts", "fallback", "substitutes", "rendering"],
+    ),
+    TweakDef(
+        id="fonts-disable-font-antialiasing",
+        label="Disable Font Anti-Aliasing",
+        category="Fonts",
+        apply_fn=_apply_disable_font_antialiasing,
+        remove_fn=_remove_disable_font_antialiasing,
+        detect_fn=_detect_disable_font_antialiasing,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DESKTOP],
+        description=(
+            "Disables font smoothing/anti-aliasing for sharper pixel-aligned text. "
+            "May improve readability on low-DPI screens. "
+            "Default: 2 (enabled). Recommended: Disabled for CRT/low-DPI."
+        ),
+        tags=["fonts", "antialiasing", "smoothing", "rendering"],
+    ),
+]

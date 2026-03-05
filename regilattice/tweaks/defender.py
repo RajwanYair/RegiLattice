@@ -551,3 +551,87 @@ TWEAKS: list[TweakDef] = [
         tags=["security", "defender", "network", "performance"],
     ),
 ]
+
+
+# -- Disable Credential Guard --------------------------------------------------
+
+_DEVICE_GUARD = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"
+)
+
+
+def _apply_sec_disable_credential_guard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disabling Credential Guard")
+    SESSION.backup([_DEVICE_GUARD], "CredentialGuard")
+    SESSION.set_dword(_DEVICE_GUARD, "EnableVirtualizationBasedSecurity", 0)
+    SESSION.log("Security: Credential Guard disabled")
+
+
+def _remove_sec_disable_credential_guard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DEVICE_GUARD], "CredentialGuard_Remove")
+    SESSION.set_dword(_DEVICE_GUARD, "EnableVirtualizationBasedSecurity", 1)
+
+
+def _detect_sec_disable_credential_guard() -> bool:
+    return SESSION.read_dword(_DEVICE_GUARD, "EnableVirtualizationBasedSecurity") == 0
+
+
+# -- Enable Logon Event Auditing -----------------------------------------------
+
+_LSA = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+
+
+def _apply_sec_enable_audit_logon(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: enabling logon event auditing")
+    SESSION.backup([_LSA], "AuditLogon")
+    SESSION.set_dword(_LSA, "AuditLogonEvents", 3)
+    SESSION.log("Security: logon event auditing enabled")
+
+
+def _remove_sec_enable_audit_logon(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LSA], "AuditLogon_Remove")
+    SESSION.set_dword(_LSA, "AuditLogonEvents", 0)
+
+
+def _detect_sec_enable_audit_logon() -> bool:
+    return SESSION.read_dword(_LSA, "AuditLogonEvents") == 3
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-disable-credential-guard",
+        label="Disable Credential Guard",
+        category="Security",
+        apply_fn=_apply_sec_disable_credential_guard,
+        remove_fn=_remove_sec_disable_credential_guard,
+        detect_fn=_detect_sec_disable_credential_guard,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DEVICE_GUARD],
+        description=(
+            "Disables Virtualization Based Security / Credential Guard. "
+            "May improve performance. Default: Enabled. Recommended: Keep enabled."
+        ),
+        tags=["security", "credential-guard", "vbs", "performance"],
+    ),
+    TweakDef(
+        id="sec-enable-audit-logon",
+        label="Enable Logon Event Auditing",
+        category="Security",
+        apply_fn=_apply_sec_enable_audit_logon,
+        remove_fn=_remove_sec_enable_audit_logon,
+        detect_fn=_detect_sec_enable_audit_logon,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LSA],
+        description=(
+            "Enables auditing of logon success and failure events. "
+            "Default: Disabled. Recommended: Enabled for security monitoring."
+        ),
+        tags=["security", "audit", "logon", "monitoring"],
+    ),
+]

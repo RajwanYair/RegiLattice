@@ -511,3 +511,81 @@ TWEAKS: list[TweakDef] = [
         tags=["dns", "ncsi", "privacy", "network", "probe"],
     ),
 ]
+
+
+# -- Disable LLMNR ---------------------------------------------------------
+
+
+def _apply_disable_llmnr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("DNS: disable Link-Local Multicast Name Resolution (LLMNR)")
+    SESSION.backup([_DNS_POLICY], "DisableLLMNR")
+    SESSION.set_dword(_DNS_POLICY, "EnableMulticast", 0)
+
+
+def _remove_disable_llmnr(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DNS_POLICY], "DisableLLMNR_Remove")
+    SESSION.delete_value(_DNS_POLICY, "EnableMulticast")
+
+
+def _detect_disable_llmnr() -> bool:
+    return SESSION.read_dword(_DNS_POLICY, "EnableMulticast") == 0
+
+
+# -- Disable NetBIOS over TCP/IP -------------------------------------------
+
+
+def _apply_disable_netbios(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("DNS: disable NetBIOS over TCP/IP (set NodeType=2 / P-node)")
+    SESSION.backup([_NETBT], "DisableNetBIOS")
+    SESSION.set_dword(_NETBT, "NodeType", 2)
+
+
+def _remove_disable_netbios(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NETBT], "DisableNetBIOS_Remove")
+    SESSION.delete_value(_NETBT, "NodeType")
+
+
+def _detect_disable_netbios() -> bool:
+    return SESSION.read_dword(_NETBT, "NodeType") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="dns-disable-llmnr",
+        label="Disable LLMNR (Link-Local Multicast Name Resolution)",
+        category="DNS & Networking Advanced",
+        apply_fn=_apply_disable_llmnr,
+        remove_fn=_remove_disable_llmnr,
+        detect_fn=_detect_disable_llmnr,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_POLICY],
+        description=(
+            "Disables LLMNR to prevent local name-resolution poisoning attacks. "
+            "LLMNR responds to multicast queries on the local subnet and can be "
+            "exploited for credential relay. Default: enabled. Recommended: disabled."
+        ),
+        tags=["dns", "llmnr", "security", "network", "hardening"],
+    ),
+    TweakDef(
+        id="dns-disable-netbios",
+        label="Disable NetBIOS over TCP/IP",
+        category="DNS & Networking Advanced",
+        apply_fn=_apply_disable_netbios,
+        remove_fn=_remove_disable_netbios,
+        detect_fn=_detect_disable_netbios,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_NETBT],
+        description=(
+            "Sets NetBT NodeType to 2 (P-node, point-to-point only) to disable "
+            "broadcast-based NetBIOS name resolution. Mitigates NBNS spoofing. "
+            "Default: 0 (B-node broadcast). Recommended: 2 (P-node)."
+        ),
+        tags=["dns", "netbios", "security", "network", "hardening"],
+    ),
+]

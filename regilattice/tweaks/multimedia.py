@@ -407,3 +407,80 @@ TWEAKS: list[TweakDef] = [
         tags=["multimedia", "startup", "sound", "boot"],
     ),
 ]
+
+
+_KEY_WMP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"
+
+
+# -- Disable AutoPlay Handlers (User) ---------------------------------------------
+
+
+def _apply_disable_autoplay_handlers(*, require_admin: bool = True) -> None:
+    SESSION.log("Multimedia: disable AutoPlay handlers at user level")
+    SESSION.backup([_KEY_AUTOPLAY_CU], "AutoPlayHandlers")
+    SESSION.set_dword(_KEY_AUTOPLAY_CU, "DisableAutoplay", 1)
+
+
+def _remove_disable_autoplay_handlers(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_KEY_AUTOPLAY_CU, "DisableAutoplay")
+
+
+def _detect_disable_autoplay_handlers() -> bool:
+    return SESSION.read_dword(_KEY_AUTOPLAY_CU, "DisableAutoplay") == 1
+
+
+# -- Disable Media Streaming (Policy) --------------------------------------------
+
+
+def _apply_disable_media_streaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: disable Windows Media streaming via policy")
+    SESSION.backup([_KEY_WMP_POLICY], "MediaStreaming")
+    SESSION.set_dword(_KEY_WMP_POLICY, "PreventLibrarySharing", 1)
+
+
+def _remove_disable_media_streaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_WMP_POLICY, "PreventLibrarySharing")
+
+
+def _detect_disable_media_streaming() -> bool:
+    return SESSION.read_dword(_KEY_WMP_POLICY, "PreventLibrarySharing") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="media-disable-autoplay-handlers",
+        label="Disable AutoPlay Handlers (User)",
+        category="Multimedia",
+        apply_fn=_apply_disable_autoplay_handlers,
+        remove_fn=_remove_disable_autoplay_handlers,
+        detect_fn=_detect_disable_autoplay_handlers,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_AUTOPLAY_CU],
+        description=(
+            "Disables AutoPlay handlers at the user level via DisableAutoplay DWORD. "
+            "Prevents automatic launch of programs when media is inserted. "
+            "Default: enabled. Recommended: disabled for security."
+        ),
+        tags=["multimedia", "autoplay", "handlers", "security"],
+    ),
+    TweakDef(
+        id="media-disable-media-streaming",
+        label="Disable Windows Media Streaming (Policy)",
+        category="Multimedia",
+        apply_fn=_apply_disable_media_streaming,
+        remove_fn=_remove_disable_media_streaming,
+        detect_fn=_detect_disable_media_streaming,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_WMP_POLICY],
+        description=(
+            "Disables Windows Media Player library sharing via policy. "
+            "Prevents media streaming to other devices on the network. "
+            "Default: allowed. Recommended: disabled for security."
+        ),
+        tags=["multimedia", "streaming", "media", "sharing", "policy"],
+    ),
+]

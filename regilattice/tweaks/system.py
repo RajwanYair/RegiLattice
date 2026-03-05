@@ -474,3 +474,91 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "maintenance", "performance", "scheduled"],
     ),
 ]
+
+
+# -- Disable Fast Startup (HiberBoot) ------------------------------------------
+
+_SESSION_POWER = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Power"
+)
+
+
+def _apply_sys_disable_fast_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disabling Fast Startup")
+    SESSION.backup([_SESSION_POWER], "FastStartup")
+    SESSION.set_dword(_SESSION_POWER, "HiberbootEnabled", 0)
+    SESSION.log("System: Fast Startup disabled")
+
+
+def _remove_sys_disable_fast_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SESSION_POWER], "FastStartup_Remove")
+    SESSION.set_dword(_SESSION_POWER, "HiberbootEnabled", 1)
+
+
+def _detect_sys_disable_fast_startup() -> bool:
+    return SESSION.read_dword(_SESSION_POWER, "HiberbootEnabled") == 0
+
+
+# -- Disable Windows Error Reporting -------------------------------------------
+
+_WER_REPORT_POLICY = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
+    r"\Windows Error Reporting"
+)
+
+
+def _apply_sys_disable_error_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("System: disabling Windows Error Reporting")
+    SESSION.backup([_WER_REPORT_POLICY], "ErrorReporting")
+    SESSION.set_dword(_WER_REPORT_POLICY, "Disabled", 1)
+    SESSION.log("System: Windows Error Reporting disabled")
+
+
+def _remove_sys_disable_error_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WER_REPORT_POLICY], "ErrorReporting_Remove")
+    SESSION.delete_value(_WER_REPORT_POLICY, "Disabled")
+
+
+def _detect_sys_disable_error_reporting() -> bool:
+    return SESSION.read_dword(_WER_REPORT_POLICY, "Disabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="sys-disable-fast-startup",
+        label="Disable Fast Startup (HiberBoot)",
+        category="System",
+        apply_fn=_apply_sys_disable_fast_startup,
+        remove_fn=_remove_sys_disable_fast_startup,
+        detect_fn=_detect_sys_disable_fast_startup,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SESSION_POWER],
+        description=(
+            "Disables Fast Startup (hybrid shutdown). Ensures clean boot "
+            "every time. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["system", "fast-startup", "hiberboot", "boot"],
+    ),
+    TweakDef(
+        id="sys-disable-error-reporting",
+        label="Disable Windows Error Reporting",
+        category="System",
+        apply_fn=_apply_sys_disable_error_reporting,
+        remove_fn=_remove_sys_disable_error_reporting,
+        detect_fn=_detect_sys_disable_error_reporting,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WER_REPORT_POLICY],
+        description=(
+            "Disables Windows Error Reporting via Group Policy. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["system", "error-reporting", "privacy", "wer"],
+    ),
+]

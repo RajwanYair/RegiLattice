@@ -511,3 +511,83 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "gpu", "performance", "rendering"],
     ),
 ]
+
+
+# -- Disable VS Code Telemetry Reporting (HKCU) --------------------------------
+
+_VSCODE_POLICY_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\VisualStudioCode"
+
+
+def _apply_vscode_disable_telemetry_reporting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VSCode: disabling telemetry reporting (HKCU)")
+    SESSION.backup([_VSCODE_POLICY_CU], "VSCodeTelemetryReporting")
+    SESSION.set_dword(_VSCODE_POLICY_CU, "EnableTelemetry", 0)
+    SESSION.log("VSCode: telemetry reporting disabled (HKCU)")
+
+
+def _remove_vscode_disable_telemetry_reporting(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VSCODE_POLICY_CU], "VSCodeTelemetryReporting_Remove")
+    SESSION.delete_value(_VSCODE_POLICY_CU, "EnableTelemetry")
+
+
+def _detect_vscode_disable_telemetry_reporting() -> bool:
+    return SESSION.read_dword(_VSCODE_POLICY_CU, "EnableTelemetry") == 0
+
+
+# -- Disable VS Code Update Check (HKCU) --------------------------------------
+
+
+def _apply_vscode_disable_update_check(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("VSCode: disabling update check (HKCU)")
+    SESSION.backup([_VSCODE_POLICY_CU], "VSCodeUpdateCheck")
+    SESSION.set_string(_VSCODE_POLICY_CU, "UpdateMode", "disabled")
+    SESSION.log("VSCode: update check disabled (HKCU)")
+
+
+def _remove_vscode_disable_update_check(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VSCODE_POLICY_CU], "VSCodeUpdateCheck_Remove")
+    SESSION.delete_value(_VSCODE_POLICY_CU, "UpdateMode")
+
+
+def _detect_vscode_disable_update_check() -> bool:
+    return SESSION.read_string(_VSCODE_POLICY_CU, "UpdateMode") == "disabled"
+
+
+TWEAKS += [
+    TweakDef(
+        id="vscode-disable-telemetry-reporting",
+        label="Disable VS Code Telemetry (User Policy)",
+        category="VS Code",
+        apply_fn=_apply_vscode_disable_telemetry_reporting,
+        remove_fn=_remove_vscode_disable_telemetry_reporting,
+        detect_fn=_detect_vscode_disable_telemetry_reporting,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VSCODE_POLICY_CU],
+        description=(
+            "Disables VS Code telemetry via user-level policy. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["vscode", "telemetry", "privacy", "user-policy"],
+    ),
+    TweakDef(
+        id="vscode-disable-update-check",
+        label="Disable VS Code Update Check (User Policy)",
+        category="VS Code",
+        apply_fn=_apply_vscode_disable_update_check,
+        remove_fn=_remove_vscode_disable_update_check,
+        detect_fn=_detect_vscode_disable_update_check,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VSCODE_POLICY_CU],
+        description=(
+            "Disables VS Code auto-update checking via user-level policy. "
+            "Default: Enabled. Recommended: Disabled for stable environments."
+        ),
+        tags=["vscode", "update", "auto-update", "user-policy"],
+    ),
+]

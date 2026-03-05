@@ -269,6 +269,44 @@ def _detect_bt_audio_offload() -> bool:
     return SESSION.read_dword(_BT_A2DP_PARAMS, "AllowSidebandAudio") == 1
 
 
+# ── Disable Bluetooth LE Device Discovery ────────────────────────────────────
+
+
+def _apply_disable_le_discovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: disable Bluetooth LE device discovery")
+    SESSION.backup([_BT_DISCOVER], "BTLEDiscovery")
+    SESSION.set_dword(_BT_DISCOVER, "DisableLEDiscovery", 1)
+
+
+def _remove_disable_le_discovery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_DISCOVER, "DisableLEDiscovery")
+
+
+def _detect_disable_le_discovery() -> bool:
+    return SESSION.read_dword(_BT_DISCOVER, "DisableLEDiscovery") == 1
+
+
+# ── Disable Bluetooth Handsfree Telephony ────────────────────────────────────
+
+
+def _apply_disable_handsfree_telephony(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: disable Handsfree telephony via BTHPORT parameter")
+    SESSION.backup([_BT_PARAMS], "BTHandsfreeTelephony")
+    SESSION.set_dword(_BT_PARAMS, "DisableHandsfree", 1)
+
+
+def _remove_disable_handsfree_telephony(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_PARAMS, "DisableHandsfree")
+
+
+def _detect_disable_handsfree_telephony() -> bool:
+    return SESSION.read_dword(_BT_PARAMS, "DisableHandsfree") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -459,5 +497,118 @@ TWEAKS: list[TweakDef] = [
             "Default: Disabled. Recommended: Enabled."
         ),
         tags=["bluetooth", "audio", "performance", "offload"],
+    ),
+    TweakDef(
+        id="bt-disable-le-discovery",
+        label="Disable Bluetooth LE Device Discovery",
+        category="Bluetooth",
+        apply_fn=_apply_disable_le_discovery,
+        remove_fn=_remove_disable_le_discovery,
+        detect_fn=_detect_disable_le_discovery,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BT_DISCOVER],
+        description=(
+            "Disables Bluetooth Low Energy device discovery. "
+            "Reduces power usage and limits BLE scanning surface. "
+            "Default: Enabled. Recommended: Disabled if BLE not needed."
+        ),
+        tags=["bluetooth", "ble", "discovery", "security"],
+    ),
+    TweakDef(
+        id="bt-disable-handsfree-telephony",
+        label="Disable Bluetooth Handsfree Telephony",
+        category="Bluetooth",
+        apply_fn=_apply_disable_handsfree_telephony,
+        remove_fn=_remove_disable_handsfree_telephony,
+        detect_fn=_detect_disable_handsfree_telephony,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BT_PARAMS],
+        description=(
+            "Disables the Bluetooth Handsfree telephony profile via "
+            "BTHPORT parameter. Prevents low-quality HFP audio mode. "
+            "Default: Enabled. Recommended: Disabled for A2DP-only use."
+        ),
+        tags=["bluetooth", "handsfree", "telephony", "audio"],
+    ),
+]
+
+
+# ── Disable Bluetooth Auto-Pairing ───────────────────────────────────────────
+
+_BT_AUTOCONFIG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Bluetooth"
+_BT_MS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"
+
+
+def _apply_bt_auto_pair_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Bluetooth auto-pairing")
+    SESSION.backup([_BT_AUTOCONFIG], "BTAutoPairing")
+    SESSION.set_dword(_BT_AUTOCONFIG, "DisableAutoPairing", 1)
+
+
+def _remove_bt_auto_pair_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_AUTOCONFIG, "DisableAutoPairing")
+
+
+def _detect_bt_auto_pair_off() -> bool:
+    return SESSION.read_dword(_BT_AUTOCONFIG, "DisableAutoPairing") == 1
+
+
+# ── Disable Bluetooth Advertising (Policy) ──────────────────────────────────
+
+
+def _apply_bt_ms_advertising_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Bluetooth advertising via policy")
+    SESSION.backup([_BT_MS_POLICY], "BTAdvertisingPolicy")
+    SESSION.set_dword(_BT_MS_POLICY, "AllowAdvertising", 0)
+
+
+def _remove_bt_ms_advertising_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_MS_POLICY, "AllowAdvertising")
+
+
+def _detect_bt_ms_advertising_off() -> bool:
+    return SESSION.read_dword(_BT_MS_POLICY, "AllowAdvertising") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="bt-disable-auto-pair",
+        label="Disable Bluetooth Auto-Pairing",
+        category="Bluetooth",
+        apply_fn=_apply_bt_auto_pair_off,
+        remove_fn=_remove_bt_auto_pair_off,
+        detect_fn=_detect_bt_auto_pair_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BT_AUTOCONFIG],
+        description=(
+            "Disables automatic Bluetooth device pairing. Devices must "
+            "be paired manually for better security control. "
+            "Default: Enabled. Recommended: Disabled for security."
+        ),
+        tags=["bluetooth", "auto-pair", "security", "pairing"],
+    ),
+    TweakDef(
+        id="bt-disable-advertising",
+        label="Disable Bluetooth Advertising (Policy)",
+        category="Bluetooth",
+        apply_fn=_apply_bt_ms_advertising_off,
+        remove_fn=_remove_bt_ms_advertising_off,
+        detect_fn=_detect_bt_ms_advertising_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BT_MS_POLICY],
+        description=(
+            "Disables Bluetooth advertising via Microsoft policy. "
+            "Prevents the device from broadcasting its presence. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["bluetooth", "advertising", "privacy", "policy"],
     ),
 ]

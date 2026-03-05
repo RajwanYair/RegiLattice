@@ -424,6 +424,49 @@ def _detect_explorer_ps_here() -> bool:
     return SESSION.key_exists(_PS_FOLDER_KEY) and SESSION.key_exists(_PS_BG_KEY)
 
 
+# ── Disable Recent Documents History ─────────────────────────────────────────
+
+_EXPLORER_POLICIES = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Policies\Explorer"
+)
+
+
+def _apply_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable recent documents tracking")
+    SESSION.backup([_EXPLORER_POLICIES], "RecentDocs")
+    SESSION.set_dword(_EXPLORER_POLICIES, "NoRecentDocsHistory", 1)
+
+
+def _remove_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_POLICIES, "NoRecentDocsHistory")
+
+
+def _detect_disable_recent_docs() -> bool:
+    return SESSION.read_dword(_EXPLORER_POLICIES, "NoRecentDocsHistory") == 1
+
+
+# ── Disable Thumbnail Cache ─────────────────────────────────────────────────
+
+
+def _apply_disable_thumbnail_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable thumbnail cache files")
+    SESSION.backup([_ADV], "ThumbnailCache")
+    SESSION.set_dword(_ADV, "DisableThumbnailCache", 1)
+
+
+def _remove_disable_thumbnail_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "DisableThumbnailCache", 0)
+
+
+def _detect_disable_thumbnail_cache() -> bool:
+    return SESSION.read_dword(_ADV, "DisableThumbnailCache") == 1
+
+
 # ── Plugin registration ─────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -662,5 +705,119 @@ TWEAKS: list[TweakDef] = [
             "right-clicking a folder or the folder background in Explorer."
         ),
         tags=["explorer", "powershell", "context-menu", "terminal"],
+    ),
+    TweakDef(
+        id="explorer-disable-recent-docs",
+        label="Disable Recent Documents History",
+        category="Explorer",
+        apply_fn=_apply_disable_recent_docs,
+        remove_fn=_remove_disable_recent_docs,
+        detect_fn=_detect_disable_recent_docs,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_POLICIES],
+        description=(
+            "Disables recent documents tracking in the Start menu and "
+            "File Explorer. Improves privacy by not recording file access. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["explorer", "recent", "privacy", "history"],
+    ),
+    TweakDef(
+        id="explorer-disable-thumbnail-cache",
+        label="Disable Thumbnail Cache",
+        category="Explorer",
+        apply_fn=_apply_disable_thumbnail_cache,
+        remove_fn=_remove_disable_thumbnail_cache,
+        detect_fn=_detect_disable_thumbnail_cache,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables thumbnail cache (thumbs.db) creation in folders. "
+            "Reduces disk writes and avoids locked files on network shares. "
+            "Default: Enabled. Recommended: Disabled on SSDs/network drives."
+        ),
+        tags=["explorer", "thumbnails", "cache", "performance"],
+    ),
+]
+
+
+# ── Explorer Open to This PC ─────────────────────────────────────────────────
+
+
+def _apply_launch_this_pc(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Set Explorer to open to This PC")
+    SESSION.backup([_ADV], "LaunchToThisPC")
+    SESSION.set_dword(_ADV, "LaunchTo", 1)
+
+
+def _remove_launch_this_pc(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "LaunchTo", 2)
+
+
+def _detect_launch_this_pc() -> bool:
+    return SESSION.read_dword(_ADV, "LaunchTo") == 1
+
+
+# ── Disable Quick Access Recent Files ────────────────────────────────────────
+
+
+def _apply_disable_quick_access_recent(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Quick Access recent and frequent files")
+    SESSION.backup([_EXPLORER], "QuickAccessRecent")
+    SESSION.set_dword(_EXPLORER, "ShowRecent", 0)
+    SESSION.set_dword(_EXPLORER, "ShowFrequent", 0)
+
+
+def _remove_disable_quick_access_recent(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_EXPLORER, "ShowRecent", 1)
+    SESSION.set_dword(_EXPLORER, "ShowFrequent", 1)
+
+
+def _detect_disable_quick_access_recent() -> bool:
+    v1 = SESSION.read_dword(_EXPLORER, "ShowRecent") == 0
+    v2 = SESSION.read_dword(_EXPLORER, "ShowFrequent") == 0
+    return v1 and v2
+
+
+TWEAKS += [
+    TweakDef(
+        id="explorer-launch-to-this-pc",
+        label="Open Explorer to This PC",
+        category="Explorer",
+        apply_fn=_apply_launch_this_pc,
+        remove_fn=_remove_launch_this_pc,
+        detect_fn=_detect_launch_this_pc,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Sets File Explorer to open to This PC instead of Quick "
+            "Access or Home. Provides direct access to drives. "
+            "Default: Quick Access. Recommended: This PC."
+        ),
+        tags=["explorer", "this-pc", "launch", "navigation"],
+    ),
+    TweakDef(
+        id="explorer-disable-quick-access",
+        label="Disable Quick Access Recent Files",
+        category="Explorer",
+        apply_fn=_apply_disable_quick_access_recent,
+        remove_fn=_remove_disable_quick_access_recent,
+        detect_fn=_detect_disable_quick_access_recent,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER],
+        description=(
+            "Disables Quick Access recent and frequent files display. "
+            "Improves privacy and reduces Explorer clutter. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["explorer", "quick-access", "recent", "privacy"],
     ),
 ]

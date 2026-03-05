@@ -930,3 +930,85 @@ TWEAKS: list[TweakDef] = [
         tags=["cloud", "content", "suggestions", "privacy"],
     ),
 ]
+
+
+# -- Disable iCloud Auto-Sync -------------------------------------------------
+
+_ICLOUD_SYNC_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apple\iCloud"
+
+
+def _apply_cloud_disable_icloud_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cloud: disabling iCloud auto-sync")
+    SESSION.backup([_ICLOUD_SYNC_POLICY], "iCloudSync")
+    SESSION.set_dword(_ICLOUD_SYNC_POLICY, "DisableSync", 1)
+    SESSION.log("Cloud: iCloud auto-sync disabled")
+
+
+def _remove_cloud_disable_icloud_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ICLOUD_SYNC_POLICY], "iCloudSync_Remove")
+    SESSION.delete_value(_ICLOUD_SYNC_POLICY, "DisableSync")
+
+
+def _detect_cloud_disable_icloud_sync() -> bool:
+    return SESSION.read_dword(_ICLOUD_SYNC_POLICY, "DisableSync") == 1
+
+
+# -- Disable Adobe Creative Cloud Startup --------------------------------------
+
+_CCX_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess\cep"
+
+
+def _apply_cloud_disable_creative_cloud_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cloud: disabling Adobe Creative Cloud startup sync")
+    SESSION.backup([_CCX_POLICY], "CreativeCloudStartup")
+    SESSION.set_dword(_CCX_POLICY, "disableSync", 1)
+    SESSION.log("Cloud: Adobe Creative Cloud startup sync disabled")
+
+
+def _remove_cloud_disable_creative_cloud_startup(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CCX_POLICY], "CreativeCloudStartup_Remove")
+    SESSION.delete_value(_CCX_POLICY, "disableSync")
+
+
+def _detect_cloud_disable_creative_cloud_startup() -> bool:
+    return SESSION.read_dword(_CCX_POLICY, "disableSync") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="cloud-disable-icloud-sync",
+        label="Disable iCloud Auto-Sync",
+        category="Cloud Storage",
+        apply_fn=_apply_cloud_disable_icloud_sync,
+        remove_fn=_remove_cloud_disable_icloud_sync,
+        detect_fn=_detect_cloud_disable_icloud_sync,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ICLOUD_SYNC_POLICY],
+        description=(
+            "Disables iCloud automatic synchronization via Group Policy. "
+            "Default: Enabled. Recommended: Disabled if not using Apple services."
+        ),
+        tags=["cloud", "icloud", "sync", "apple"],
+    ),
+    TweakDef(
+        id="cloud-disable-creative-cloud-startup",
+        label="Disable Adobe Creative Cloud Startup",
+        category="Cloud Storage",
+        apply_fn=_apply_cloud_disable_creative_cloud_startup,
+        remove_fn=_remove_cloud_disable_creative_cloud_startup,
+        detect_fn=_detect_cloud_disable_creative_cloud_startup,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CCX_POLICY],
+        description=(
+            "Disables Adobe Creative Cloud startup sync via policy. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["cloud", "adobe", "creative-cloud", "startup"],
+    ),
+]

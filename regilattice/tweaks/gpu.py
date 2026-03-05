@@ -597,3 +597,77 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "wddm", "flip-queue", "latency", "gaming"],
     ),
 ]
+
+
+# ── Disable DWM Animations ───────────────────────────────────────────────────
+
+
+def _apply_disable_dwm_anim(*, require_admin: bool = False) -> None:
+    SESSION.log("GPU: disable DWM Aero Peek animations")
+    SESSION.backup([_DWMKEY], "DwmAnimations")
+    SESSION.set_dword(_DWMKEY, "EnableAeroPeek", 0)
+
+
+def _remove_disable_dwm_anim(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_DWMKEY, "EnableAeroPeek", 1)
+
+
+def _detect_disable_dwm_anim() -> bool:
+    return SESSION.read_dword(_DWMKEY, "EnableAeroPeek") == 0
+
+
+# ── Increase GPU TDR Delay ───────────────────────────────────────────────────
+
+
+def _apply_increase_tdr_delay(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: increase TDR timeout to 10 seconds")
+    SESSION.backup([_GPU_SCHED], "TdrDelay")
+    SESSION.set_dword(_GPU_SCHED, "TdrDelay", 10)
+
+
+def _remove_increase_tdr_delay(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GPU_SCHED, "TdrDelay")
+
+
+def _detect_increase_tdr_delay() -> bool:
+    return SESSION.read_dword(_GPU_SCHED, "TdrDelay") == 10
+
+
+TWEAKS += [
+    TweakDef(
+        id="gpu-disable-dwm-animations",
+        label="Disable DWM Animations",
+        category="GPU / Graphics",
+        apply_fn=_apply_disable_dwm_anim,
+        remove_fn=_remove_disable_dwm_anim,
+        detect_fn=_detect_disable_dwm_anim,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DWMKEY],
+        description=(
+            "Disables DWM Aero Peek animations for reduced GPU overhead. "
+            "Saves GPU cycles on compositing effects. "
+            "Default: 1 (enabled). Recommended: Disabled for performance."
+        ),
+        tags=["gpu", "dwm", "animations", "aero-peek", "performance"],
+    ),
+    TweakDef(
+        id="gpu-increase-tdr-delay",
+        label="Increase GPU TDR Timeout",
+        category="GPU / Graphics",
+        apply_fn=_apply_increase_tdr_delay,
+        remove_fn=_remove_increase_tdr_delay,
+        detect_fn=_detect_increase_tdr_delay,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_SCHED],
+        description=(
+            "Increases GPU Timeout Detection and Recovery delay to 10 seconds. "
+            "Prevents false TDR resets during heavy GPU workloads. "
+            "Default: 2s. Recommended: 10s for compute/rendering."
+        ),
+        tags=["gpu", "tdr", "timeout", "stability", "compute"],
+    ),
+]

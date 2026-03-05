@@ -682,3 +682,79 @@ TWEAKS: list[TweakDef] = [
         tags=["network", "rss", "performance", "throughput", "multicore"],
     ),
 ]
+
+
+# ── Disable Nagle's Algorithm ────────────────────────────────────────────────
+
+
+def _apply_nagle_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable Nagle's algorithm (TcpNoDelay)")
+    SESSION.backup([_TCPIP], "NagleOff")
+    SESSION.set_dword(_TCPIP, "TcpNoDelay", 1)
+
+
+def _remove_nagle_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP, "TcpNoDelay")
+
+
+def _detect_nagle_off() -> bool:
+    return SESSION.read_dword(_TCPIP, "TcpNoDelay") == 1
+
+
+# ── Increase Max User Port Range ─────────────────────────────────────────────
+
+
+def _apply_increase_max_port(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: increase max user port to 65534")
+    SESSION.backup([_TCPIP], "MaxUserPort")
+    SESSION.set_dword(_TCPIP, "MaxUserPort", 65534)
+
+
+def _remove_increase_max_port(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP, "MaxUserPort")
+
+
+def _detect_increase_max_port() -> bool:
+    return SESSION.read_dword(_TCPIP, "MaxUserPort") == 65534
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-disable-nagle",
+        label="Disable Nagle's Algorithm",
+        category="Network",
+        apply_fn=_apply_nagle_off,
+        remove_fn=_remove_nagle_off,
+        detect_fn=_detect_nagle_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TCPIP],
+        description=(
+            "Disables Nagle's algorithm via TcpNoDelay for lower network latency. "
+            "Sends TCP packets immediately without buffering. "
+            "Default: Enabled. Recommended: Disabled for gaming/real-time."
+        ),
+        tags=["network", "nagle", "tcp", "latency", "gaming"],
+    ),
+    TweakDef(
+        id="net-increase-max-connections",
+        label="Increase Max User Port Range",
+        category="Network",
+        apply_fn=_apply_increase_max_port,
+        remove_fn=_remove_increase_max_port,
+        detect_fn=_detect_increase_max_port,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TCPIP],
+        description=(
+            "Increases maximum ephemeral port range to 65534. Allows more "
+            "concurrent outbound connections for high-throughput workloads. "
+            "Default: 5000. Recommended: 65534 for servers."
+        ),
+        tags=["network", "port", "connections", "throughput", "server"],
+    ),
+]

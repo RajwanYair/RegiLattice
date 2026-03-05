@@ -548,3 +548,84 @@ TWEAKS: list[TweakDef] = [
         tags=["maintenance", "defrag", "performance", "ssd"],
     ),
 ]
+
+
+# ── Disable Prefetch (targeted) ──────────────────────────────────────────────
+
+
+def _apply_prefetch_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable Prefetch and Superfetch services")
+    SESSION.backup([_PREFETCH_KEY], "PrefetchOff")
+    SESSION.set_dword(_PREFETCH_KEY, "EnablePrefetcher", 0)
+    SESSION.set_dword(_PREFETCH_KEY, "EnableSuperfetch", 0)
+
+
+def _remove_prefetch_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PREFETCH_KEY, "EnablePrefetcher", 3)
+    SESSION.set_dword(_PREFETCH_KEY, "EnableSuperfetch", 3)
+
+
+def _detect_prefetch_off() -> bool:
+    return (
+        SESSION.read_dword(_PREFETCH_KEY, "EnablePrefetcher") == 0
+        and SESSION.read_dword(_PREFETCH_KEY, "EnableSuperfetch") == 0
+    )
+
+
+# ── Disable Program Compatibility Assistant (policy) ─────────────────────────
+
+
+def _apply_compat_assistant_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Maintenance: disable Program Compatibility Assistant (policy)")
+    SESSION.backup([_PCA_KEY], "CompatAssistOff")
+    SESSION.set_dword(_PCA_KEY, "DisablePCA", 1)
+
+
+def _remove_compat_assistant_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PCA_KEY, "DisablePCA")
+
+
+def _detect_compat_assistant_off() -> bool:
+    return SESSION.read_dword(_PCA_KEY, "DisablePCA") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="maint-disable-prefetch",
+        label="Disable Prefetch/Superfetch",
+        category="Maintenance",
+        apply_fn=_apply_prefetch_off,
+        remove_fn=_remove_prefetch_off,
+        detect_fn=_detect_prefetch_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PREFETCH_KEY],
+        description=(
+            "Disables both Prefetch and Superfetch/SysMain services. "
+            "Reduces disk I/O overhead on SSD-based systems. "
+            "Default: 3 (enabled). Recommended: 0 (disabled) for SSDs."
+        ),
+        tags=["maintenance", "prefetch", "superfetch", "ssd", "performance"],
+    ),
+    TweakDef(
+        id="maint-disable-compatibility-assistant",
+        label="Disable Compatibility Assistant",
+        category="Maintenance",
+        apply_fn=_apply_compat_assistant_off,
+        remove_fn=_remove_compat_assistant_off,
+        detect_fn=_detect_compat_assistant_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PCA_KEY],
+        description=(
+            "Disables the Program Compatibility Assistant via Group Policy. "
+            "Prevents compatibility shims from being applied automatically. "
+            "Default: Enabled. Recommended: Disabled for power users."
+        ),
+        tags=["maintenance", "compatibility", "pca", "policy"],
+    ),
+]

@@ -263,3 +263,20 @@ TWEAKS: list[TweakDef] = [
         tags=["documentation", "terminal", "developer"],
     ),
 ]
+
+TWEAKS += [
+    _make_scoop_tweak(
+        "dust", "dust", "Scoop: dust (Disk Usage TUI)",
+        "dust -- a more intuitive version of du written in Rust. "
+        "Visualizes disk usage with a bar chart in the terminal. "
+        "Default: Not installed. Recommended: Install.",
+        tags=["disk", "utility", "terminal", "rust"],
+    ),
+    _make_scoop_tweak(
+        "hyperfine", "hyperfine", "Scoop: hyperfine (Benchmarking)",
+        "hyperfine -- command-line benchmarking tool. "
+        "Statistical analysis, warmup runs, export to CSV/JSON. "
+        "Default: Not installed. Recommended: Install.",
+        tags=["benchmark", "performance", "developer"],
+    ),
+]

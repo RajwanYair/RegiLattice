@@ -488,3 +488,82 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "speech", "recognition", "telemetry"],
     ),
 ]
+
+
+# ── Disable Activity History (policy) ────────────────────────────────────────
+
+
+def _apply_priv_activity_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable activity history via policy")
+    SESSION.backup([_ACTIVITY], "PrivActivityHistory")
+    SESSION.set_dword(_ACTIVITY, "EnableActivityFeed", 0)
+    SESSION.set_dword(_ACTIVITY, "PublishUserActivities", 0)
+
+
+def _remove_priv_activity_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ACTIVITY, "EnableActivityFeed")
+    SESSION.delete_value(_ACTIVITY, "PublishUserActivities")
+
+
+def _detect_priv_activity_history() -> bool:
+    return (
+        SESSION.read_dword(_ACTIVITY, "EnableActivityFeed") == 0
+        and SESSION.read_dword(_ACTIVITY, "PublishUserActivities") == 0
+    )
+
+
+# ── Disable Advertising ID (user-level) ─────────────────────────────────────
+
+
+def _apply_priv_adid_off(*, require_admin: bool = False) -> None:
+    SESSION.log("Privacy: disable advertising ID")
+    SESSION.backup([_ADID], "PrivAdID")
+    SESSION.set_dword(_ADID, "Enabled", 0)
+
+
+def _remove_priv_adid_off(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_ADID, "Enabled", 1)
+
+
+def _detect_priv_adid_off() -> bool:
+    return SESSION.read_dword(_ADID, "Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="privacy-disable-activity-history",
+        label="Disable Activity History",
+        category="Privacy",
+        apply_fn=_apply_priv_activity_history,
+        remove_fn=_remove_priv_activity_history,
+        detect_fn=_detect_priv_activity_history,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ACTIVITY],
+        description=(
+            "Disables Windows activity history and timeline via Group Policy. "
+            "Prevents activity feed and user activity publishing. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["privacy", "activity", "history", "timeline", "policy"],
+    ),
+    TweakDef(
+        id="privacy-disable-advertising-id",
+        label="Disable Advertising ID",
+        category="Privacy",
+        apply_fn=_apply_priv_adid_off,
+        remove_fn=_remove_priv_adid_off,
+        detect_fn=_detect_priv_adid_off,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADID],
+        description=(
+            "Disables the Windows advertising ID for the current user. "
+            "Prevents apps from using the ID for cross-app ad targeting. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["privacy", "advertising", "id", "tracking"],
+    ),
+]
