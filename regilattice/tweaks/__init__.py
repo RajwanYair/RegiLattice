@@ -112,8 +112,7 @@ def _build_category_info() -> None:
 
         # Which profiles include this category?
         for pname, pdata in _PROFILES.items():
-            cats = pdata.get("apply_categories", frozenset())
-            if isinstance(cats, (set, frozenset)) and name in cats:
+            if name in pdata.apply_categories:
                 info.profiles.append(pname)
 
         _CATEGORY_INFO[name] = info
@@ -234,103 +233,77 @@ def _get_search_index(td: TweakDef) -> str:
 
 # ── Machine profiles ─────────────────────────────────────────────────────────
 
-_PROFILES: dict[str, dict[str, object]] = {
-    "business": {
-        "description": "Business workstation — productivity, security & cloud tweaks",
-        "apply_categories": frozenset(
-            {
-                "Cloud Storage",
-                "Office",
-                "Communication",
-                "OneDrive",
-                "Security",
-                "Network",
-                "Privacy",
-                "Printing",
-                "Backup & Recovery",
-                "M365 Copilot",
-            }
+@dataclass(slots=True)
+class ProfileDef:
+    """Declarative description of a machine profile."""
+
+    id: str
+    description: str
+    apply_categories: frozenset[str]
+    skip_categories: frozenset[str] = field(default_factory=frozenset)
+
+
+_PROFILES: dict[str, ProfileDef] = {}
+
+
+def _register_profiles() -> None:
+    """Populate the profile registry."""
+    defs = [
+        ProfileDef(
+            id="business",
+            description="Business workstation — productivity, security & cloud tweaks",
+            apply_categories=frozenset({
+                "Cloud Storage", "Office", "Communication", "OneDrive",
+                "Security", "Network", "Privacy", "Printing",
+                "Backup & Recovery", "M365 Copilot",
+            }),
+            skip_categories=frozenset({"Gaming", "GPU / Graphics", "Virtualization"}),
         ),
-        "skip_categories": frozenset({"Gaming", "GPU / Graphics", "Virtualization"}),
-    },
-    "gaming": {
-        "description": "Gaming rig — GPU, performance & network tweaks",
-        "apply_categories": frozenset(
-            {
-                "Gaming",
-                "GPU / Graphics",
-                "Performance",
-                "Display",
-                "Audio",
-                "Network",
-                "Power",
-                "Services",
-            }
+        ProfileDef(
+            id="gaming",
+            description="Gaming rig — GPU, performance & network tweaks",
+            apply_categories=frozenset({
+                "Gaming", "GPU / Graphics", "Performance", "Display",
+                "Audio", "Network", "Power", "Services",
+            }),
+            skip_categories=frozenset({
+                "Office", "Communication", "OneDrive", "Cloud Storage",
+                "LibreOffice", "Printing", "Backup & Recovery",
+            }),
         ),
-        "skip_categories": frozenset(
-            {
-                "Office",
-                "Communication",
-                "OneDrive",
-                "Cloud Storage",
-                "LibreOffice",
-                "Printing",
-                "Backup & Recovery",
-            }
+        ProfileDef(
+            id="privacy",
+            description="Maximum privacy — disables telemetry, tracking & cloud",
+            apply_categories=frozenset({
+                "Privacy", "Cortana & Search", "AI / Copilot", "M365 Copilot",
+                "Windows 11", "Cloud Storage", "Communication",
+            }),
         ),
-    },
-    "privacy": {
-        "description": "Maximum privacy — disables telemetry, tracking & cloud",
-        "apply_categories": frozenset(
-            {
-                "Privacy",
-                "Cortana & Search",
-                "AI / Copilot",
-                "M365 Copilot",
-                "Windows 11",
-                "Cloud Storage",
-                "Communication",
-            }
+        ProfileDef(
+            id="minimal",
+            description="Minimal — lightweight essentials only (performance, startup, maintenance)",
+            apply_categories=frozenset({
+                "Performance", "Startup", "Maintenance", "Boot", "Power", "Services",
+            }),
         ),
-        "skip_categories": frozenset(),
-    },
-    "minimal": {
-        "description": "Minimal — lightweight essentials only (performance, startup, maintenance)",
-        "apply_categories": frozenset(
-            {
-                "Performance",
-                "Startup",
-                "Maintenance",
-                "Boot",
-                "Power",
-                "Services",
-            }
+        ProfileDef(
+            id="server",
+            description="Server — virtualization, network hardening, services optimization",
+            apply_categories=frozenset({
+                "Network", "Power", "Services", "Security",
+                "Virtualization", "Backup & Recovery",
+            }),
+            skip_categories=frozenset({
+                "Gaming", "GPU / Graphics", "Communication",
+                "Cloud Storage", "OneDrive",
+            }),
         ),
-        "skip_categories": frozenset(),
-    },
-    "server": {
-        "description": "Server — virtualization, network hardening, services optimization",
-        "apply_categories": frozenset(
-            {
-                "Network",
-                "Power",
-                "Services",
-                "Security",
-                "Virtualization",
-                "Backup & Recovery",
-            }
-        ),
-        "skip_categories": frozenset(
-            {
-                "Gaming",
-                "GPU / Graphics",
-                "Communication",
-                "Cloud Storage",
-                "OneDrive",
-            }
-        ),
-    },
-}
+    ]
+    for p in defs:
+        _PROFILES[p.id] = p
+
+
+_register_profiles()
 
 # Build category metadata now that both _ALL_TWEAKS and _PROFILES are ready
 _build_category_info()
@@ -361,7 +334,7 @@ def available_profiles() -> list[str]:
     return list(_PROFILES)
 
 
-def profile_info(name: str) -> dict[str, object] | None:
+def profile_info(name: str) -> ProfileDef | None:
     """Return metadata for a profile or ``None``."""
     return _PROFILES.get(name)
 
@@ -371,8 +344,7 @@ def tweaks_for_profile(name: str) -> list[TweakDef]:
     prof = _PROFILES.get(name)
     if prof is None:
         raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
-    cats: frozenset[str] = prof["apply_categories"]  # type: ignore[assignment]
-    return [td for td in _ALL_TWEAKS if td.category in cats]
+    return [td for td in _ALL_TWEAKS if td.category in prof.apply_categories]
 
 
 def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:
@@ -380,8 +352,7 @@ def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:
     prof = _PROFILES.get(name)
     if prof is None:
         raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
-    cats: frozenset[str] = prof["skip_categories"]  # type: ignore[assignment]
-    return [td for td in _ALL_TWEAKS if td.category in cats]
+    return [td for td in _ALL_TWEAKS if td.category in prof.skip_categories]
 
 
 def apply_profile(
