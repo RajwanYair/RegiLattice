@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
@@ -110,10 +111,15 @@ class TestSplitRoot:
 class TestBackup:
     def test_backup_creates_directory(self, tmp_path: Path) -> None:
         session = RegistrySession(base_dir=tmp_path)
-        with patch.dict(os.environ, {"OneDrive": str(tmp_path / "od")}):
+        with (
+            patch.dict(os.environ, {"OneDrive": str(tmp_path / "od")}),
+            patch("subprocess.run") as mock_run,
+        ):
+            mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0)
             path = session.backup(["HKEY_CURRENT_USER\\Environment"], "TestLabel")
         assert path.exists()
         assert "TestLabel" in path.name
+        mock_run.assert_called_once()
 
 
 # ── Admin assertion ─────────────────────────────────────────────────────────
