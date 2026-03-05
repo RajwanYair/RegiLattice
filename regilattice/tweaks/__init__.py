@@ -14,7 +14,24 @@ import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
+
+# ── Tweak result enum ────────────────────────────────────────────────────────
+
+
+class TweakResult(str, Enum):
+    """Typed result from applying, removing, or detecting a tweak."""
+
+    APPLIED = "applied"
+    REMOVED = "removed"
+    NOT_APPLIED = "not applied"
+    UNKNOWN = "unknown"
+    UNCHANGED = "unchanged"
+    SKIPPED_CORP = "skipped (corp)"
+    SKIPPED_ADMIN = "skipped (admin)"
+    ERROR = "error"
+
 
 # ── Core descriptor ──────────────────────────────────────────────────────────
 
@@ -372,30 +389,25 @@ def apply_profile(
     *,
     force_corp: bool = False,
     require_admin: bool = True,
-    progress_cb: Callable[[str, str], None] | None = None,
-) -> dict[str, str]:
-    """Apply every tweak associated with *name* profile.
-
-    For ``"business"`` this applies all Gaming / GPU tweaks (disabling gaming).
-    For ``"gaming"`` this applies all Office / Communication / OneDrive tweaks
-    (disabling productivity bloat).
-    """
+    progress_cb: Callable[[str, TweakResult], None] | None = None,
+) -> dict[str, TweakResult]:
+    """Apply every tweak associated with *name* profile."""
     targets = tweaks_for_profile(name)
-    results: dict[str, str] = {}
+    results: dict[str, TweakResult] = {}
     for td in targets:
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                results[td.id] = "skipped (corp)"
+                results[td.id] = TweakResult.SKIPPED_CORP
                 if progress_cb:
-                    progress_cb(td.id, "skipped (corp)")
+                    progress_cb(td.id, TweakResult.SKIPPED_CORP)
                 continue
         try:
             td.apply_fn(require_admin=require_admin)
-            results[td.id] = "applied"
-        except Exception as exc:
-            results[td.id] = f"error: {exc}"
+            results[td.id] = TweakResult.APPLIED
+        except Exception:
+            results[td.id] = TweakResult.ERROR
         if progress_cb:
             progress_cb(td.id, results[td.id])
     return results
@@ -404,24 +416,24 @@ def apply_profile(
 # ── Status helpers ───────────────────────────────────────────────────────────
 
 
-def tweak_status(td: TweakDef) -> str:
-    """Return ``'applied'``, ``'not applied'``, or ``'unknown'``."""
+def tweak_status(td: TweakDef) -> TweakResult:
+    """Return the current status of a tweak as a :class:`TweakResult`."""
     if td.detect_fn is None:
-        return "unknown"
+        return TweakResult.UNKNOWN
     try:
-        return "applied" if td.detect_fn() else "not applied"
+        return TweakResult.APPLIED if td.detect_fn() else TweakResult.NOT_APPLIED
     except Exception:
-        return "unknown"
+        return TweakResult.UNKNOWN
 
 
-def status_map(*, parallel: bool = False, max_workers: int = 8) -> dict[str, str]:
-    """Return ``{tweak_id: status}`` for every registered tweak.
+def status_map(*, parallel: bool = False, max_workers: int = 8) -> dict[str, TweakResult]:
+    """Return ``{tweak_id: TweakResult}`` for every registered tweak.
 
     With ``parallel=True`` the detection runs in a thread-pool for faster GUI refresh.
     """
     if not parallel:
         return {td.id: tweak_status(td) for td in _ALL_TWEAKS}
-    results: dict[str, str] = {}
+    results: dict[str, TweakResult] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
         for fut in concurrent.futures.as_completed(futures):
@@ -434,7 +446,7 @@ def status_map(*, parallel: bool = False, max_workers: int = 8) -> dict[str, str
 
 def save_snapshot(path: Path) -> None:
     """Persist the current status of all tweaks to *path* (JSON)."""
-    data = status_map()
+    data = {tid: res.value for tid, res in status_map().items()}
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
@@ -449,37 +461,36 @@ def restore_snapshot(
     *,
     force_corp: bool = False,
     require_admin: bool = True,
-) -> dict[str, str]:
+) -> dict[str, TweakResult]:
     """Compare *path* against the live status and revert changed tweaks.
 
-    Returns a dict of ``{tweak_id: action}`` where action is
-    ``'applied'``, ``'removed'``, or ``'skipped'``.
+    Returns a dict of ``{tweak_id: TweakResult}``.
     """
     saved = load_snapshot(path)
-    results: dict[str, str] = {}
+    results: dict[str, TweakResult] = {}
     for td in _ALL_TWEAKS:
         saved_state = saved.get(td.id)
         if saved_state is None:
             continue
         current = tweak_status(td)
         if current == saved_state:
-            results[td.id] = "unchanged"
+            results[td.id] = TweakResult.UNCHANGED
             continue
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                results[td.id] = "skipped (corp)"
+                results[td.id] = TweakResult.SKIPPED_CORP
                 continue
         try:
-            if saved_state == "applied":
+            if saved_state == TweakResult.APPLIED:
                 td.apply_fn(require_admin=require_admin)
-                results[td.id] = "applied"
+                results[td.id] = TweakResult.APPLIED
             else:
                 td.remove_fn(require_admin=require_admin)
-                results[td.id] = "removed"
+                results[td.id] = TweakResult.REMOVED
         except Exception:
-            results[td.id] = "error"
+            results[td.id] = TweakResult.ERROR
     return results
 
 
@@ -492,8 +503,8 @@ def apply_all(
     require_admin: bool = True,
     parallel: bool = False,
     max_workers: int = 4,
-    progress_cb: Callable[[str, str], None] | None = None,
-) -> dict[str, str]:
+    progress_cb: Callable[[str, TweakResult], None] | None = None,
+) -> dict[str, TweakResult]:
     """Apply every registered tweak, respecting corp-safe flags.
 
     Parameters
@@ -506,19 +517,19 @@ def apply_all(
     progress_cb:
         Optional callback ``(tweak_id, result)`` invoked after each tweak.
     """
-    results: dict[str, str] = {}
+    results: dict[str, TweakResult] = {}
 
-    def _do(td: TweakDef) -> tuple[str, str]:
+    def _do(td: TweakDef) -> tuple[str, TweakResult]:
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                return td.id, "skipped (corp)"
+                return td.id, TweakResult.SKIPPED_CORP
         try:
             td.apply_fn(require_admin=require_admin)
-            return td.id, "applied"
-        except Exception as exc:
-            return td.id, f"error: {exc}"
+            return td.id, TweakResult.APPLIED
+        except Exception:
+            return td.id, TweakResult.ERROR
 
     if parallel:
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
@@ -543,22 +554,22 @@ def remove_all(
     require_admin: bool = True,
     parallel: bool = False,
     max_workers: int = 4,
-    progress_cb: Callable[[str, str], None] | None = None,
-) -> dict[str, str]:
+    progress_cb: Callable[[str, TweakResult], None] | None = None,
+) -> dict[str, TweakResult]:
     """Remove every registered tweak, respecting corp-safe flags."""
-    results: dict[str, str] = {}
+    results: dict[str, TweakResult] = {}
 
-    def _do(td: TweakDef) -> tuple[str, str]:
+    def _do(td: TweakDef) -> tuple[str, TweakResult]:
         if not force_corp and not td.corp_safe:
             from regilattice.corpguard import is_corporate_network
 
             if is_corporate_network():
-                return td.id, "skipped (corp)"
+                return td.id, TweakResult.SKIPPED_CORP
         try:
             td.remove_fn(require_admin=require_admin)
-            return td.id, "removed"
-        except Exception as exc:
-            return td.id, f"error: {exc}"
+            return td.id, TweakResult.REMOVED
+        except Exception:
+            return td.id, TweakResult.ERROR
 
     if parallel:
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
