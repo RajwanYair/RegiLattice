@@ -153,7 +153,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.list:
         tweaks = all_tweaks()
         print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
-        print("─" * 80)
+        print("-" * 80)
         for td in tweaks:
             st = tweak_status(td)
             print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
