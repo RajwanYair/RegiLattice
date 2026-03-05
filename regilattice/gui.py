@@ -99,6 +99,8 @@ class RegiLatticeGUI:
         self._corp_blocked = is_corporate_network()
         self._tweak_rows: list[TweakRow] = []
         self._category_sections: list[CategorySection] = []
+        self._running = False  # True while a batch operation is active
+        self._cancel = threading.Event()  # set to request cancellation
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
@@ -389,19 +391,21 @@ class RegiLatticeGUI:
         btn_frame = ttk.Frame(self._root)
         btn_frame.pack(fill="x", padx=16, pady=(0, 4))
 
-        ttk.Button(
+        self._btn_apply = ttk.Button(
             btn_frame,
             text="▶  Apply Selected",
             style="Apply.TButton",
             command=lambda: self._dispatch("apply"),
-        ).pack(side="left", padx=(0, 6), expand=True, fill="x")
+        )
+        self._btn_apply.pack(side="left", padx=(0, 6), expand=True, fill="x")
 
-        ttk.Button(
+        self._btn_remove = ttk.Button(
             btn_frame,
             text="✖  Remove Selected",
             style="Remove.TButton",
             command=lambda: self._dispatch("remove"),
-        ).pack(side="left", padx=(0, 6), expand=True, fill="x")
+        )
+        self._btn_remove.pack(side="left", padx=(0, 6), expand=True, fill="x")
 
         # Action buttons (row 2: snapshot / restore / restore-point)
         btn2 = ttk.Frame(self._root)
@@ -892,6 +896,11 @@ class RegiLatticeGUI:
 
     def _dispatch(self, mode: str) -> None:
         """Run tweaks in a background thread to keep the UI responsive."""
+        if self._running:
+            self._cancel.set()
+            self._set_status("Cancelling…", _WARN_YELLOW)
+            return
+
         if not self._force_var.get():
             try:
                 assert_not_corporate()
@@ -913,12 +922,25 @@ class RegiLatticeGUI:
         if not messagebox.askyesno("Confirm", confirm_msg):
             return
 
+        self._set_running(True)
         threading.Thread(target=self._run_tweaks, args=(selected, mode), daemon=True).start()
+
+    def _set_running(self, running: bool) -> None:
+        """Toggle UI lock during batch operations."""
+        self._running = running
+        state = "disabled" if running else "!disabled"
+        self._btn_apply.state([state])  # type: ignore[no-untyped-call]
+        self._btn_remove.state([state])  # type: ignore[no-untyped-call]
+        if running:
+            self._cancel.clear()
 
     def _run_tweaks(self, items: list[TweakDef], mode: str) -> None:
         total = len(items)
         errors: list[str] = []
         for i, td in enumerate(items, 1):
+            if self._cancel.is_set():
+                self._root.after(0, self._set_status, f"Cancelled after {i - 1}/{total}", _WARN_YELLOW)
+                break
             pct = int(i / total * 100)
             self._root.after(0, self._progress.configure, {"value": pct})
             self._root.after(
@@ -935,19 +957,23 @@ class RegiLatticeGUI:
             except (OSError, RuntimeError, ValueError) as exc:
                 errors.append(f"{td.label}: {exc}")
                 SESSION.log(f"[GUI] Error ({mode}) {td.label}: {exc}")
+        else:
+            # Only show full summary if not cancelled
+            ok_count = total - len(errors)
+            summary = f"{'Applied' if mode == 'apply' else 'Removed'} {ok_count}/{total} tweaks"
+            if errors:
+                summary += f"  •  {len(errors)} error(s)"
+            colour = _OK_GREEN if not errors else _WARN_YELLOW
+            self._root.after(0, self._set_status, summary, colour)
 
-        ok_count = total - len(errors)
-        summary = f"{'Applied' if mode == 'apply' else 'Removed'} {ok_count}/{total} tweaks"
-        if errors:
-            summary += f"  •  {len(errors)} error(s)"
-        colour = _OK_GREEN if not errors else _WARN_YELLOW
-
-        self._root.after(0, self._set_status, summary, colour)
         self._root.after(0, self._progress.configure, {"value": 100})
         self._root.after(0, self._refresh_status_all)
+        self._root.after(0, self._set_running, False)
 
         if errors:
             err_text = "\n".join(errors)
+            ok_count = total - len(errors)
+            summary = f"{'Applied' if mode == 'apply' else 'Removed'} {ok_count}/{total} tweaks  •  {len(errors)} error(s)"
             self._root.after(
                 0,
                 lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
