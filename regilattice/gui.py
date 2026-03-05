@@ -25,24 +25,17 @@ from tkinter import filedialog, messagebox, ttk
 from . import __version__
 from . import gui_dialogs as dialogs
 from . import gui_theme as theme
-from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
+from .corpguard import (CorporateNetworkError, assert_not_corporate,
+                        corp_guard_status, is_corporate_network,
+                        is_gpo_managed)
 from .gui_tooltip import build_tooltip_text, has_recommendation
 from .gui_widgets import CategorySection, TweakRow
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakDef,
-    TweakResult,
-    all_tweaks,
-    available_profiles,
-    profile_info,
-    restore_snapshot,
-    save_snapshot,
-    search_tweaks,
-    status_map,
-    tweak_scope,
-    tweak_status,
-    tweaks_by_category,
-)
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakDef, TweakResult, all_tweaks, available_profiles,
+                     profile_info, restore_snapshot, save_snapshot,
+                     search_tweaks, status_map, tweak_scope, tweak_status,
+                     tweaks_by_category)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme aliases ────────────────────────────────────────────────────────────

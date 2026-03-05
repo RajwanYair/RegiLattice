@@ -19,8 +19,10 @@ from pathlib import Path
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakResult, all_tweaks, apply_all, apply_profile,
+                     get_tweak, remove_all, tweak_status, tweaks_for_profile)
 
 
 def _confirm(prompt: str) -> bool:
@@ -129,6 +131,12 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Restore tweaks to state saved in snapshot file.",
     )
     parser.add_argument(
+        "--snapshot-diff",
+        nargs=2,
+        metavar=("FILE_A", "FILE_B"),
+        help="Compare two snapshot files and show differences.",
+    )
+    parser.add_argument(
         "--profile",
         choices=["business", "gaming"],
         help=(
@@ -181,6 +189,20 @@ def main(argv: list[str] | None = None) -> int:
         results = restore_snapshot(Path(args.restore), force_corp=args.force)
         for tid, action in results.items():
             print(f"  {tid}: {action}")
+        return 0
+
+    if args.snapshot_diff:
+        from .tweaks import diff_snapshots
+
+        diffs = diff_snapshots(Path(args.snapshot_diff[0]), Path(args.snapshot_diff[1]))
+        if not diffs:
+            print("No differences found.")
+        else:
+            print(f"{'Tweak ID':<35} {'File A':<18} {'File B':<18}")
+            print("-" * 71)
+            for tid, (sa, sb) in diffs.items():
+                print(f"{tid:<35} {sa:<18} {sb:<18}")
+            print(f"\n{len(diffs)} tweak(s) differ.")
         return 0
 
     if args.profile:
