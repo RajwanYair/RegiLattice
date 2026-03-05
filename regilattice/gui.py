@@ -25,22 +25,15 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 from . import __version__
-from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakDef,
-    all_tweaks,
-    available_profiles,
-    category_info,
-    profile_info,
-    restore_snapshot,
-    save_snapshot,
-    search_tweaks,
-    status_map,
-    tweak_scope,
-    tweak_status,
-    tweaks_by_category,
-)
+from .corpguard import (CorporateNetworkError, assert_not_corporate,
+                        corp_guard_status, is_corporate_network,
+                        is_gpo_managed)
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakDef, all_tweaks, available_profiles, category_info,
+                     profile_info, restore_snapshot, save_snapshot,
+                     search_tweaks, status_map, tweak_scope, tweak_status,
+                     tweaks_by_category)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme — Catppuccin Mocha / Windows 11 dark ──────────────────────────────
@@ -96,7 +89,7 @@ class _Tooltip:
     def update_text(self, text: str) -> None:
         self._text = text
 
-    def _show(self, event: tk.Event) -> None:  # type: ignore[type-arg]
+    def _show(self, event: tk.Event[tk.Misc]) -> None:
         if self._tip:
             return
         x = event.x_root + 14
@@ -118,11 +111,11 @@ class _Tooltip:
         )
         lbl.pack()
 
-    def _move(self, event: tk.Event) -> None:  # type: ignore[type-arg]
+    def _move(self, event: tk.Event[tk.Misc]) -> None:
         if self._tip:
             self._tip.wm_geometry(f"+{event.x_root + 14}+{event.y_root + 10}")
 
-    def _hide(self, _: tk.Event) -> None:  # type: ignore[type-arg]
+    def _hide(self, _: tk.Event[tk.Misc]) -> None:
         if self._tip:
             self._tip.destroy()
             self._tip = None
@@ -345,14 +338,14 @@ class _TweakRow:
         self.frame.bind("<Enter>", self._on_enter)
         self.frame.bind("<Leave>", self._on_leave)
 
-    def _on_enter(self, _: tk.Event) -> None:  # type: ignore[type-arg]
+    def _on_enter(self, _: tk.Event[tk.Misc]) -> None:
         """Highlight row background on hover."""
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
                 w.configure(bg=_CARD_HOVER)
         # ttk frame style can't be changed per-widget, but tk children can
 
-    def _on_leave(self, _: tk.Event) -> None:  # type: ignore[type-arg]
+    def _on_leave(self, _: tk.Event[tk.Misc]) -> None:
         """Restore row background on leave."""
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
@@ -630,7 +623,7 @@ class _CategorySection:
         # Tooltip
         row.tooltip = _Tooltip(row.frame, _build_tooltip_text(td, "unknown"))
 
-    def toggle(self, _: tk.Event | None = None) -> None:  # type: ignore[type-arg]
+    def toggle(self, _: tk.Event[tk.Misc] | None = None) -> None:
         self.expanded = not self.expanded
         if self.expanded:
             self._arrow.configure(text="▼")
@@ -698,7 +691,7 @@ class RegiLatticeGUI:
         self._root.resizable(True, True)
 
         with contextlib.suppress(tk.TclError, OSError):
-            self._root.iconbitmap(default="")
+            self._root.iconbitmap(default="")  # type: ignore[no-untyped-call]
 
         # Windows 11: attempt DWM dark title bar
         self._apply_win11_dark_titlebar()
@@ -967,7 +960,7 @@ class RegiLatticeGUI:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        def _on_mousewheel(event: tk.Event) -> None:  # type: ignore[type-arg]
+        def _on_mousewheel(event: tk.Event[tk.Misc]) -> None:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
@@ -1234,7 +1227,7 @@ class RegiLatticeGUI:
 
     # ── Right-click context menu ─────────────────────────────────────────
 
-    def _show_context_menu(self, event: tk.Event, row: _TweakRow) -> None:  # type: ignore[type-arg]
+    def _show_context_menu(self, event: tk.Event[tk.Misc], row: _TweakRow) -> None:
         """Display a context menu for a tweak row."""
         self._ctx_target = row
         self._ctx_menu.delete(0, "end")
@@ -1318,7 +1311,9 @@ class RegiLatticeGUI:
 
     def _open_scoop_manager(self) -> None:
         """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
-        from .tweaks.scoop_tools import _install_scoop_app, _remove_scoop_app, _scoop_installed, list_installed_scoop_apps
+        from .tweaks.scoop_tools import (_install_scoop_app, _remove_scoop_app,
+                                         _scoop_installed,
+                                         list_installed_scoop_apps)
 
         dlg = tk.Toplevel(self._root)
         dlg.title("Scoop Tools Manager")

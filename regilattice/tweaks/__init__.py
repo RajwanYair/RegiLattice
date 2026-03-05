@@ -12,10 +12,7 @@ import json
 import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
-from concurrent.futures import (  # type: ignore[attr-defined]
-    ThreadPoolExecutor,
-    as_completed,
-)
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
