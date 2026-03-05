@@ -22,6 +22,43 @@ A comprehensive Windows registry tweak toolkit with **427 tweaks** across **40 c
 - **Newbie-friendly template** — `_template.py` with step-by-step instructions for adding tweaks
 - **4 400+ tests** across 8 test files — full coverage of registry helpers, CLI, GUI, and all tweak modules
 
+## Architecture
+
+```mermaid
+graph LR
+    subgraph Interfaces
+        CLI[cli.py]
+        Menu[menu.py]
+        GUI[gui.py]
+    end
+
+    subgraph Core
+        TI[tweaks/__init__.py<br/>TweakDef · TweakExecutor<br/>ProfileDef · _topo_sort]
+        REG[registry.py<br/>RegistrySession]
+        CFG[config.py<br/>AppConfig]
+        CG[corpguard.py]
+    end
+
+    subgraph Plugins
+        P1[performance.py]
+        P2[privacy.py]
+        P3[gaming.py]
+        PN[... 61 more]
+    end
+
+    CLI --> TI
+    Menu --> TI
+    GUI --> TI
+    TI --> REG
+    TI --> CG
+    CLI --> CFG
+    P1 --> TI
+    P2 --> TI
+    P3 --> TI
+    PN --> TI
+    REG -->|winreg / reg.exe| WR[(Windows Registry)]
+```
+
 ## Tweak Categories
 
 | Category | # | Tweaks |
