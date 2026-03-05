@@ -27,4 +27,4 @@ jobs:
       - name: Type check (mypy)
         run: python -m mypy regilattice/
       - name: Test (pytest)
-        run: python -m pytest tests/ -x --tb=short -k "not test_backup_creates_directory"
+        run: python -m pytest tests/ -x --tb=short
