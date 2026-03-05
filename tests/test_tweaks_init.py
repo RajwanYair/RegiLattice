@@ -13,6 +13,7 @@ import pytest
 from regilattice.tweaks import (
     TweakDef,
     TweakResult,
+    _topo_sort,
     all_tweaks,
     apply_all,
     categories,
@@ -532,3 +533,49 @@ class TestReloadPlugins:
         reload_plugins()
         after = len(all_tweaks())
         assert before == after
+
+
+# ── _topo_sort ───────────────────────────────────────────────────────────────
+
+def _td(tid: str, deps: list[str] | None = None) -> TweakDef:
+    """Create a minimal TweakDef with optional depends_on."""
+    return TweakDef(
+        id=tid, label=tid.upper(), category="C",
+        apply_fn=MagicMock(), remove_fn=MagicMock(),
+        corp_safe=True,
+        depends_on=deps or [],
+    )
+
+
+class TestTopoSort:
+    """Tests for the dependency-aware topological sort."""
+
+    def test_no_deps_preserves_order(self) -> None:
+        tweaks = [_td("a"), _td("b"), _td("c")]
+        result = _topo_sort(tweaks)
+        assert [t.id for t in result] == ["a", "b", "c"]
+
+    def test_simple_chain(self) -> None:
+        tweaks = [_td("c", ["b"]), _td("b", ["a"]), _td("a")]
+        result = _topo_sort(tweaks)
+        ids = [t.id for t in result]
+        assert ids.index("a") < ids.index("b") < ids.index("c")
+
+    def test_diamond_dependency(self) -> None:
+        tweaks = [_td("d", ["b", "c"]), _td("b", ["a"]), _td("c", ["a"]), _td("a")]
+        result = _topo_sort(tweaks)
+        ids = [t.id for t in result]
+        assert ids.index("a") < ids.index("b")
+        assert ids.index("a") < ids.index("c")
+        assert ids.index("b") < ids.index("d")
+        assert ids.index("c") < ids.index("d")
+
+    def test_missing_dep_outside_batch_ignored(self) -> None:
+        tweaks = [_td("x", ["missing-id"])]
+        result = _topo_sort(tweaks)
+        assert [t.id for t in result] == ["x"]
+
+    def test_cycle_raises(self) -> None:
+        tweaks = [_td("a", ["b"]), _td("b", ["a"])]
+        with pytest.raises(ValueError, match="Cyclic dependency"):
+            _topo_sort(tweaks)

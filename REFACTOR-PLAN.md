@@ -68,62 +68,35 @@ Controller: gui_dispatch.py (threading, result routing)
 View: gui.py + gui_rows.py + gui_toolbar.py (pure widget code)
 ```
 
-### 2.3 Extract `TweakExecutor` class
+### 2.3 Extract `TweakExecutor` class ✅ DONE
 
-Centralize tweak execution with corp guard, admin check, backup, logging:
+- Created `TweakExecutor` class in `tweaks/__init__.py` with `_is_blocked()`, `apply_one()`, `remove_one()`, `run_batch()` methods.
+- Refactored `apply_all`, `remove_all`, `apply_profile`, `restore_snapshot` to delegate to `TweakExecutor`.
+- Backward-compatible `_is_corp_blocked` standalone function kept.
 
-```python
-class TweakExecutor:
-    def __init__(self, session: RegistrySession, *, force_corp: bool = False):
-        self.session = session
-        self.force_corp = force_corp
+### 2.4 Thread safety in GUI ✅ DONE
 
-    def apply(self, td: TweakDef) -> TweakResult:
-        if not self.force_corp and not td.corp_safe:
-            if is_corporate_network():
-                return TweakResult.SKIPPED_CORP
-        self.session.backup(td.registry_keys, td.id)
-        td.apply_fn(require_admin=td.needs_admin)
-        return TweakResult.APPLIED
-```
+- Added `_running` flag and `_cancel = threading.Event()` for batch operation control.
+- Stored button references as instance variables; `_set_running()` toggles button state.
+- `_dispatch()` checks `_running` flag — if already running, signals cancellation.
+- `_run_tweaks()` checks `_cancel.is_set()` each iteration with for/else pattern.
 
-### 2.4 Thread safety in GUI
+### 2.5 ProfileDef dataclass ✅ DONE
 
-Replace direct callback invocation from worker threads with `root.after()`:
-
-```python
-def _thread_safe_cb(self, tid: str, res: TweakResult) -> None:
-    self._root.after(0, lambda: self._update_row_status(tid, res))
-```
-
-Add cancellation token pattern for long-running batch operations.
-
-### 2.5 Profile system as plugins
-
-Move `_PROFILES` dict from `tweaks/__init__.py` to separate profile modules:
-
-```text
-regilattice/profiles/
-    __init__.py   # auto-discovers profiles (same pattern as tweaks)
-    business.py   # ProfileDef(id="business", categories=[...])
-    gaming.py
-    privacy.py
-    minimal.py
-    server.py
-```
+- Created `ProfileDef` dataclass (slots=True) with id, description, apply_categories, skip_categories.
+- Replaced `_PROFILES: dict[str, dict[str, object]]` with `_PROFILES: dict[str, ProfileDef]`.
+- Updated `profile_info()` return type to `ProfileDef | None`, eliminating all `type: ignore[assignment]` casts.
+- Note: Kept profiles in `tweaks/__init__.py` (not separate plugin modules) — pragmatic choice for only 5 profiles.
 
 ---
 
 ## Phase 3 — Enhanced Capabilities
 
-### 3.1 Dry-run mode for CLI
+### 3.1 Dry-run mode for CLI ✅ DONE
 
-Expose the existing `_dry_run=True` mechanism:
-
-```bash
-regilattice apply --dry-run perf-startup-delay
-# Output: Would set HKLM\...\StartupDelay to 0 (currently: 10)
-```
+- Added `--dry-run` argument to CLI parser.
+- Handler sets `SESSION._dry_run = True` before executing commands.
+- All registry mutations log `[DRY-RUN]` prefix without touching the registry.
 
 ### 3.2 Undo/redo stack
 
@@ -136,12 +109,11 @@ class UndoStack:
     def redo(self) -> TweakDef | None: ...
 ```
 
-### 3.3 Snapshot diff tool
+### 3.3 Snapshot diff tool ✅ DONE
 
-```bash
-regilattice snapshot diff baseline.json current.json
-# Output: 12 tweaks changed, 5 applied, 7 removed
-```
+- Added `--snapshot-diff FILE_A FILE_B` CLI argument.
+- Implemented `diff_snapshots(path_a, path_b)` in `tweaks/__init__.py`.
+- Prints a formatted table of changed tweak IDs with old→new state.
 
 ### 3.4 Tweak dependency graph
 

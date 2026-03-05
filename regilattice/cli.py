@@ -19,10 +19,8 @@ from pathlib import Path
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
-from .registry import (SESSION, AdminRequirementError, is_windows,
-                       platform_summary)
-from .tweaks import (TweakResult, all_tweaks, apply_all, apply_profile,
-                     get_tweak, remove_all, tweak_status, tweaks_for_profile)
+from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
+from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
 
 
 def _confirm(prompt: str) -> bool:
