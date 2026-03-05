@@ -51,6 +51,7 @@ class TweakDef:
     registry_keys: list[str] = field(default_factory=list)
     description: str = ""
     tags: list[str] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
 
 
 # ── Category metadata ────────────────────────────────────────────────────────
@@ -142,6 +143,11 @@ def _load_plugins() -> None:
             seen_ids.add(td.id)
             _ALL_TWEAKS.append(td)
             _TWEAK_INDEX[td.id] = td
+    # Validate depends_on references
+    for td in _ALL_TWEAKS:
+        for dep in td.depends_on:
+            if dep not in _TWEAK_INDEX:
+                raise ValueError(f"TweakDef {td.id!r} depends_on unknown id: {dep!r}")
     # Sort by category (alphabetical), then by label within each category
     _ALL_TWEAKS.sort(key=lambda t: (t.category.lower(), t.label.lower()))
 
@@ -456,6 +462,40 @@ def diff_snapshots(path_a: Path, path_b: Path) -> dict[str, tuple[str, str]]:
     return diffs
 
 
+# ── Dependency ordering ───────────────────────────────────────────────────────
+
+
+def _topo_sort(tweaks: list[TweakDef]) -> list[TweakDef]:
+    """Return *tweaks* in dependency-first order (Kahn's algorithm).
+
+    Only tweaks **in the input list** participate; missing deps are silently
+    skipped (they may have already been applied in a prior batch).
+    Cycles raise :class:`ValueError`.
+    """
+    ids = {td.id for td in tweaks}
+    by_id = {td.id: td for td in tweaks}
+    # in-degree only for deps inside this batch
+    in_deg: dict[str, int] = {td.id: 0 for td in tweaks}
+    children: dict[str, list[str]] = {td.id: [] for td in tweaks}
+    for td in tweaks:
+        for dep in td.depends_on:
+            if dep in ids:
+                in_deg[td.id] += 1
+                children[dep].append(td.id)
+    queue = [tid for tid, deg in in_deg.items() if deg == 0]
+    ordered: list[TweakDef] = []
+    while queue:
+        tid = queue.pop(0)
+        ordered.append(by_id[tid])
+        for child in children[tid]:
+            in_deg[child] -= 1
+            if in_deg[child] == 0:
+                queue.append(child)
+    if len(ordered) != len(tweaks):
+        raise ValueError("Cyclic dependency detected among tweaks")
+    return ordered
+
+
 # ── Tweak executor ───────────────────────────────────────────────────────────
 
 
@@ -519,20 +559,21 @@ class TweakExecutor:
         """
         fn = self.apply_one if mode == "apply" else self.remove_one
         results: dict[str, TweakResult] = {}
+        ordered = _topo_sort(tweaks)
 
         def _do(td: TweakDef) -> tuple[str, TweakResult]:
             return td.id, fn(td)
 
         if parallel:
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-                futures = {pool.submit(_do, td): td for td in tweaks}
+                futures = {pool.submit(_do, td): td for td in ordered}
                 for fut in concurrent.futures.as_completed(futures):
                     tid, res = fut.result()
                     results[tid] = res
                     if progress_cb:
                         progress_cb(tid, res)
         else:
-            for td in tweaks:
+            for td in ordered:
                 tid, res = _do(td)
                 results[tid] = res
                 if progress_cb:

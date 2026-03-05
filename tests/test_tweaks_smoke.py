@@ -80,6 +80,10 @@ class TestTweakContract:
         td = _get_tweak(tweak_id)
         assert isinstance(td.tags, list)
 
+    def test_depends_on_is_list(self, tweak_id: str) -> None:
+        td = _get_tweak(tweak_id)
+        assert isinstance(td.depends_on, list)
+
     def test_needs_admin_is_bool(self, tweak_id: str) -> None:
         td = _get_tweak(tweak_id)
         assert isinstance(td.needs_admin, bool)
