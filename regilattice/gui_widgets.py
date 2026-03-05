@@ -474,9 +474,16 @@ class CategorySection:
             row.unpack_row()
         self.content_frame.pack_forget()
 
-    def update_count(self) -> None:
-        """Update the applied/total count in the header badge."""
-        applied = sum(1 for r in self.rows if tweak_status(r.td) == TweakResult.APPLIED)
+    def update_count(self, statuses: dict[str, TweakResult] | None = None) -> None:
+        """Update the applied/total count in the header badge.
+
+        If *statuses* is provided, uses it for O(1) lookups instead of
+        calling ``tweak_status()`` per row.
+        """
+        if statuses is not None:
+            applied = sum(1 for r in self.rows if statuses.get(r.td.id) == TweakResult.APPLIED)
+        else:
+            applied = sum(1 for r in self.rows if tweak_status(r.td) == TweakResult.APPLIED)
         total = len(self.rows)
         self._count_lbl.configure(text=f"  ({applied}/{total} applied)")
 

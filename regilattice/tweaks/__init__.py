@@ -11,7 +11,7 @@ import concurrent.futures
 import importlib
 import json
 import pkgutil
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -80,12 +80,11 @@ def _build_category_info() -> None:
     """
     _CATEGORY_INFO.clear()
 
-    for name in OrderedDict.fromkeys(td.category for td in _ALL_TWEAKS):
+    for name, cat_tweaks in _TWEAKS_BY_CAT.items():
         info = CategoryInfo(name=name)
 
         # Infer scope from tweaks in this category
         scopes: set[str] = set()
-        cat_tweaks = [t for t in _ALL_TWEAKS if t.category == name]
         for td in cat_tweaks:
             keys_upper = [k.upper() for k in td.registry_keys]
             has_hkcu = any(k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper)
@@ -123,12 +122,14 @@ def _build_category_info() -> None:
 
 _ALL_TWEAKS: list[TweakDef] = []
 _TWEAK_INDEX: dict[str, TweakDef] = {}  # O(1) lookup by id
+_TWEAKS_BY_CAT: dict[str, list[TweakDef]] = {}  # O(1) category lookup
 
 
 def _load_plugins() -> None:
     """Import every sibling module and collect TWEAKS lists."""
     _ALL_TWEAKS.clear()
     _TWEAK_INDEX.clear()
+    _TWEAKS_BY_CAT.clear()
     seen_ids: set[str] = set()
     assert __package__ is not None
     package = importlib.import_module(__package__)
@@ -150,6 +151,9 @@ def _load_plugins() -> None:
                 raise ValueError(f"TweakDef {td.id!r} depends_on unknown id: {dep!r}")
     # Sort by category (alphabetical), then by label within each category
     _ALL_TWEAKS.sort(key=lambda t: (t.category.lower(), t.label.lower()))
+    # Build reverse category index for O(1) category lookups
+    for td in _ALL_TWEAKS:
+        _TWEAKS_BY_CAT.setdefault(td.category, []).append(td)
 
 
 _load_plugins()
@@ -207,10 +211,7 @@ def categories() -> list[str]:
 
 def tweaks_by_category() -> dict[str, list[TweakDef]]:
     """Return tweaks grouped into ``{category: [TweakDef, ...]}``, sorted."""
-    groups: dict[str, list[TweakDef]] = OrderedDict()
-    for td in _ALL_TWEAKS:
-        groups.setdefault(td.category, []).append(td)
-    return groups
+    return dict(_TWEAKS_BY_CAT)
 
 
 def search_tweaks(query: str) -> list[TweakDef]:
@@ -350,7 +351,10 @@ def tweaks_for_profile(name: str) -> list[TweakDef]:
     prof = _PROFILES.get(name)
     if prof is None:
         raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
-    return [td for td in _ALL_TWEAKS if td.category in prof.apply_categories]
+    result: list[TweakDef] = []
+    for cat in prof.apply_categories:
+        result.extend(_TWEAKS_BY_CAT.get(cat, []))
+    return result
 
 
 def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:
@@ -358,7 +362,10 @@ def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:
     prof = _PROFILES.get(name)
     if prof is None:
         raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
-    return [td for td in _ALL_TWEAKS if td.category in prof.skip_categories]
+    result: list[TweakDef] = []
+    for cat in prof.skip_categories:
+        result.extend(_TWEAKS_BY_CAT.get(cat, []))
+    return result
 
 
 def apply_profile(
@@ -482,10 +489,10 @@ def _topo_sort(tweaks: list[TweakDef]) -> list[TweakDef]:
             if dep in ids:
                 in_deg[td.id] += 1
                 children[dep].append(td.id)
-    queue = [tid for tid, deg in in_deg.items() if deg == 0]
+    queue = deque(tid for tid, deg in in_deg.items() if deg == 0)
     ordered: list[TweakDef] = []
     while queue:
-        tid = queue.pop(0)
+        tid = queue.popleft()
         ordered.append(by_id[tid])
         for child in children[tid]:
             in_deg[child] -= 1

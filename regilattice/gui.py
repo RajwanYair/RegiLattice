@@ -99,6 +99,9 @@ class RegiLatticeGUI:
         self._corp_blocked = is_corporate_network()
         self._tweak_rows: list[TweakRow] = []
         self._category_sections: list[CategorySection] = []
+        self._cached_statuses: dict[str, TweakResult] = {}
+        self._cached_rec_count: int | None = None  # computed once (static)
+        self._cached_gpo_count: int | None = None  # computed once per session
         self._running = False  # True while a batch operation is active
         self._cancel = threading.Event()  # set to request cancellation
         self._setup_styles()
@@ -567,7 +570,7 @@ class RegiLatticeGUI:
             for row in section.rows:
                 td = row.td
                 text_match = matching_ids is None or td.id in matching_ids
-                status_match = status_filter == "All" or tweak_status(td) == target_status
+                status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
                 scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
                 if text_match and status_match and scope_match:
                     row.pack_row()
@@ -723,6 +726,7 @@ class RegiLatticeGUI:
         """
         # Batch-detect all statuses in parallel for speed
         statuses = status_map(parallel=True, max_workers=8)
+        self._cached_statuses = statuses
         applied = 0
         default = 0
         unknown = 0
@@ -759,15 +763,17 @@ class RegiLatticeGUI:
             row.toggle_btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
             row.tooltip.update_text(build_tooltip_text(row.td, st))
         for section in self._category_sections:
-            section.update_count()
-        # Update summary stats
-        rec_count = sum(1 for r in self._tweak_rows if has_recommendation(r.td))
-        gpo_count = sum(1 for r in self._tweak_rows if r.td.registry_keys and is_gpo_managed(r.td.registry_keys))
+            section.update_count(statuses)
+        # Update summary stats (rec/gpo counts are static — compute once)
+        if self._cached_rec_count is None:
+            self._cached_rec_count = sum(1 for r in self._tweak_rows if has_recommendation(r.td))
+        if self._cached_gpo_count is None:
+            self._cached_gpo_count = sum(1 for r in self._tweak_rows if r.td.registry_keys and is_gpo_managed(r.td.registry_keys))
         self._stat_applied.configure(text=f"\u25cf {applied} Applied")
         self._stat_default.configure(text=f"\u25cf {default} Default")
         self._stat_unknown.configure(text=f"\u25cf {unknown} Unknown")
-        self._stat_rec.configure(text=f"\u2605 {rec_count} Recommended")
-        self._stat_gpo.configure(text=f"\u25cf {gpo_count} GPO")
+        self._stat_rec.configure(text=f"\u2605 {self._cached_rec_count} Recommended")
+        self._stat_gpo.configure(text=f"\u25cf {self._cached_gpo_count} GPO")
         if self._stat_blocked is not None:
             self._stat_blocked.configure(text=f"\u25cf {blocked} Blocked")
 
