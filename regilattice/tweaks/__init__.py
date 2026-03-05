@@ -439,6 +439,23 @@ def restore_snapshot(
     return results
 
 
+def diff_snapshots(path_a: Path, path_b: Path) -> dict[str, tuple[str, str]]:
+    """Compare two snapshot files and return a dict of changed tweaks.
+
+    Returns ``{tweak_id: (state_a, state_b)}`` for tweaks that differ.
+    """
+    snap_a = load_snapshot(path_a)
+    snap_b = load_snapshot(path_b)
+    all_ids = set(snap_a) | set(snap_b)
+    diffs: dict[str, tuple[str, str]] = {}
+    for tid in sorted(all_ids):
+        sa = snap_a.get(tid, "(absent)")
+        sb = snap_b.get(tid, "(absent)")
+        if sa != sb:
+            diffs[tid] = (sa, sb)
+    return diffs
+
+
 # ── Tweak executor ───────────────────────────────────────────────────────────
 
 
