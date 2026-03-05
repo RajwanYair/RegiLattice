@@ -138,6 +138,11 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Preview changes without modifying the registry.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"regilattice {__version__} ({platform_summary()})",
@@ -149,6 +154,10 @@ def main(argv: list[str] | None = None) -> int:
     """Entry-point for both ``python -m regilattice`` and the console_script."""
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    if args.dry_run:
+        SESSION._dry_run = True
+        print("🔍 Dry-run mode — no registry changes will be made.")
 
     if args.list:
         tweaks = all_tweaks()
