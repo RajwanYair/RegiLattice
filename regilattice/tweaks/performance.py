@@ -345,25 +345,6 @@ def _detect_disable_last_access_ts() -> bool:
     return SESSION.read_dword(_FILESYSTEM, "NtfsDisableLastAccessUpdate") == 1
 
 
-# ── Increase Processor Queue Length ──────────────────────────────────────────
-
-
-def _apply_processor_queue(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Performance: set Win32PrioritySeparation to 38")
-    SESSION.backup([_PRIORITY_CTRL], "ProcessorQueue")
-    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 38)
-
-
-def _remove_processor_queue(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 2)
-
-
-def _detect_processor_queue() -> bool:
-    return SESSION.read_dword(_PRIORITY_CTRL, "Win32PrioritySeparation") == 38
-
-
 # ── Disable Spectre/Meltdown Mitigations ────────────────────────────────────
 
 
@@ -425,10 +406,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_PERF_KEYS,
-        description=(
-            "Removes startup delay, lowers system responsiveness timer, "
-            "and disables network throttling for snappier performance."
-        ),
+        description=("Removes startup delay, lowers system responsiveness timer, and disables network throttling for snappier performance."),
         tags=["performance", "startup", "network"],
     ),
     TweakDef(
@@ -441,10 +419,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SVCHOST_KEY],
-        description=(
-            "Raises the SvcHost split threshold to match installed RAM, "
-            "reducing the number of svchost.exe processes."
-        ),
+        description=("Raises the SvcHost split threshold to match installed RAM, reducing the number of svchost.exe processes."),
         tags=["performance", "memory", "svchost"],
     ),
     TweakDef(
@@ -470,7 +445,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PERSONALIZE],
-        description="Disables Windows transparency/blur effects for snappier UI.",
+        description=(
+            "Disables window transparency/blur effects for snappier UI. "
+            "Reduces GPU compositing overhead. Default: Enabled. "
+            "Recommended: Disabled for performance."
+        ),
         tags=["performance", "visual", "transparency"],
     ),
     TweakDef(
@@ -483,7 +462,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_BG_APPS],
-        description="Prevents Store/UWP apps from running in the background.",
+        description=(
+            "Prevents Store/UWP apps from running in the background. Frees CPU, "
+            "memory, and network resources used by idle Store apps. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
         tags=["performance", "uwp", "background"],
     ),
     TweakDef(
@@ -496,10 +479,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_VISUAL_FX],
-        description=(
-            "Disables window minimize/maximize animations and "
-            "taskbar animations for snappier window management."
-        ),
+        description=("Disables window minimize/maximize animations and taskbar animations for snappier window management."),
         tags=["performance", "visual", "animations"],
     ),
     TweakDef(
@@ -512,10 +492,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_DESKTOP_KEY],
-        description=(
-            "Reduces the delay before menus appear from 400ms to 50ms. "
-            "Makes context menus and Start menu feel instant."
-        ),
+        description=("Reduces the delay before menus appear from 400ms to 50ms. Makes context menus and Start menu feel instant."),
         tags=["performance", "menu", "ux", "responsiveness"],
     ),
     TweakDef(
@@ -528,10 +505,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SEARCH_KEY],
-        description=(
-            "Disables SearchProtocolHost priority boost to reduce "
-            "background CPU usage from Windows Search indexing."
-        ),
+        description=("Disables SearchProtocolHost priority boost to reduce background CPU usage from Windows Search indexing."),
         tags=["performance", "search", "indexing"],
     ),
     TweakDef(
@@ -544,10 +518,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MEMORY_MGMT],
-        description=(
-            "Enables large system cache, allowing Windows to use more "
-            "RAM for file caching and improving disk performance."
-        ),
+        description=("Enables large system cache, allowing Windows to use more RAM for file caching and improving disk performance."),
         tags=["performance", "memory", "cache"],
     ),
     TweakDef(
@@ -560,10 +531,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MEMORY_MGMT],
-        description=(
-            "Keeps kernel and drivers in physical RAM instead of paging "
-            "them to disk, improving system responsiveness."
-        ),
+        description=("Keeps kernel and drivers in physical RAM instead of paging them to disk, improving system responsiveness."),
         tags=["performance", "memory", "kernel", "paging"],
     ),
     TweakDef(
@@ -577,10 +545,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_PRIORITY_CTRL],
         description=(
-            "Sets processor scheduling to favor foreground programs "
-            "over background services for better desktop responsiveness."
+            "Sets Win32PrioritySeparation to 38 (0x26): short variable quantum "
+            "with maximum foreground boost. Prioritizes interactive desktop apps "
+            "over background services and increases scheduler responsiveness. "
+            "Default: 2. Recommended: 38 for desktops, 2 for servers."
         ),
-        tags=["performance", "cpu", "scheduling", "responsiveness"],
+        tags=["performance", "cpu", "scheduling", "responsiveness", "priority", "foreground", "quantum"],
     ),
     TweakDef(
         id="disable-ntfs-encryption",
@@ -592,10 +562,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_FILESYSTEM],
-        description=(
-            "Disables NTFS Encrypting File System to reduce filesystem "
-            "overhead. Not recommended if EFS encryption is in use."
-        ),
+        description=("Disables NTFS Encrypting File System to reduce filesystem overhead. Not recommended if EFS encryption is in use."),
         tags=["performance", "ntfs", "encryption", "filesystem"],
     ),
     TweakDef(
@@ -614,24 +581,6 @@ TWEAKS: list[TweakDef] = [
             "Recommended: 1 (Disabled)."
         ),
         tags=["performance", "ntfs", "disk", "io"],
-    ),
-    TweakDef(
-        id="perf-processor-queue",
-        label="Increase Processor Queue Length",
-        category="Performance",
-        apply_fn=_apply_processor_queue,
-        remove_fn=_remove_processor_queue,
-        detect_fn=_detect_processor_queue,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_PRIORITY_CTRL],
-        description=(
-            "Optimizes process priority separation for desktop "
-            "interactivity. Sets short variable quantum with foreground "
-            "boost. Default: 2. Recommended: 38 for desktops, "
-            "2 for servers."
-        ),
-        tags=["performance", "priority", "scheduler", "quantum"],
     ),
     TweakDef(
         id="perf-disable-spectre-mitigations",
@@ -668,83 +617,6 @@ TWEAKS: list[TweakDef] = [
             "Recommended: disabled for desktops and gaming rigs."
         ),
         tags=["performance", "cpu", "core-parking", "latency", "gaming"],
-    ),
-]
-
-
-# ── Disable Transparency (performance) ───────────────────────────────────────
-
-
-def _apply_perf_transparency_off(*, require_admin: bool = False) -> None:
-    SESSION.log("Performance: disable window transparency")
-    SESSION.backup([_PERSONALIZE], "PerfTransparency")
-    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 0)
-
-
-def _remove_perf_transparency_off(*, require_admin: bool = False) -> None:
-    SESSION.set_dword(_PERSONALIZE, "EnableTransparency", 1)
-
-
-def _detect_perf_transparency_off() -> bool:
-    return SESSION.read_dword(_PERSONALIZE, "EnableTransparency") == 0
-
-
-# ── Disable Background Apps (performance) ────────────────────────────────────
-
-_BG_ACCESS = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
-    r"\CurrentVersion\BackgroundAccessApplications"
-)
-
-
-def _apply_perf_bgapps_off(*, require_admin: bool = False) -> None:
-    SESSION.log("Performance: disable all background apps")
-    SESSION.backup([_BG_ACCESS], "PerfBgApps")
-    SESSION.set_dword(_BG_ACCESS, "GlobalUserDisabled", 1)
-
-
-def _remove_perf_bgapps_off(*, require_admin: bool = False) -> None:
-    SESSION.set_dword(_BG_ACCESS, "GlobalUserDisabled", 0)
-
-
-def _detect_perf_bgapps_off() -> bool:
-    return SESSION.read_dword(_BG_ACCESS, "GlobalUserDisabled") == 1
-
-
-TWEAKS += [
-    TweakDef(
-        id="perf-disable-transparency",
-        label="Disable Window Transparency",
-        category="Performance",
-        apply_fn=_apply_perf_transparency_off,
-        remove_fn=_remove_perf_transparency_off,
-        detect_fn=_detect_perf_transparency_off,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_PERSONALIZE],
-        description=(
-            "Disables window transparency effects for improved rendering "
-            "performance. Reduces GPU compositing overhead. "
-            "Default: Enabled. Recommended: Disabled for performance."
-        ),
-        tags=["performance", "transparency", "gpu", "rendering"],
-    ),
-    TweakDef(
-        id="perf-disable-background-apps",
-        label="Disable All Background Apps",
-        category="Performance",
-        apply_fn=_apply_perf_bgapps_off,
-        remove_fn=_remove_perf_bgapps_off,
-        detect_fn=_detect_perf_bgapps_off,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_BG_ACCESS],
-        description=(
-            "Disables all background app execution globally. Frees CPU, memory, "
-            "and network resources used by idle Store apps. "
-            "Default: Enabled. Recommended: Disabled for performance."
-        ),
-        tags=["performance", "background", "apps", "memory", "cpu"],
     ),
 ]
 
@@ -904,8 +776,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_MEMORY_MGMT],
         description=(
-            "Enables large page support for improved memory performance in "
-            "memory-intensive applications. Default: disabled. Recommended: enabled."
+            "Enables large page support for improved memory performance in memory-intensive applications. Default: disabled. Recommended: enabled."
         ),
         tags=["performance", "memory", "large-pages", "ram"],
     ),
@@ -931,44 +802,6 @@ def _detect_disable_memory_compression() -> bool:
     return SESSION.read_dword(_MEMORY_MGMT, "DisablePageCombining") == 1
 
 
-# -- Set Win32PrioritySeparation for Foreground Boost ───────────────────────
-
-
-def _apply_foreground_boost(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Performance: set Win32PrioritySeparation=38 (foreground boost)")
-    SESSION.backup([_PRIORITY_CTRL], "ForegroundBoost")
-    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 38)
-
-
-def _remove_foreground_boost(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_PRIORITY_CTRL, "Win32PrioritySeparation", 2)
-
-
-def _detect_foreground_boost() -> bool:
-    return SESSION.read_dword(_PRIORITY_CTRL, "Win32PrioritySeparation") == 38
-
-
-# -- Disable Paging Executive ───────────────────────────────────────────────
-
-
-def _apply_disable_paging_executive(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Performance: disable paging executive")
-    SESSION.backup([_MEMORY_MGMT], "PagingExecutive")
-    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 1)
-
-
-def _remove_disable_paging_executive(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_MEMORY_MGMT, "DisablePagingExecutive", 0)
-
-
-def _detect_disable_paging_executive() -> bool:
-    return SESSION.read_dword(_MEMORY_MGMT, "DisablePagingExecutive") == 1
-
-
 TWEAKS += [
     TweakDef(
         id="perf-disable-memory-compression",
@@ -986,39 +819,5 @@ TWEAKS += [
             "Recommended: Disabled on 16 GB+ systems."
         ),
         tags=["performance", "memory", "compression", "page-combining"],
-    ),
-    TweakDef(
-        id="perf-foreground-boost",
-        label="Foreground Priority Boost (Win32PrioritySeparation)",
-        category="Performance",
-        apply_fn=_apply_foreground_boost,
-        remove_fn=_remove_foreground_boost,
-        detect_fn=_detect_foreground_boost,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_PRIORITY_CTRL],
-        description=(
-            "Sets Win32PrioritySeparation to 38 (0x26) for maximum foreground "
-            "application priority boost. Improves responsiveness for interactive "
-            "apps. Default: 2. Recommended: 38 for desktops."
-        ),
-        tags=["performance", "priority", "foreground", "responsiveness"],
-    ),
-    TweakDef(
-        id="perf-disable-paging-executive",
-        label="Disable Paging Executive",
-        category="Performance",
-        apply_fn=_apply_disable_paging_executive,
-        remove_fn=_remove_disable_paging_executive,
-        detect_fn=_detect_disable_paging_executive,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_MEMORY_MGMT],
-        description=(
-            "Keeps kernel and drivers in physical RAM instead of allowing them "
-            "to be paged to disk. Improves system responsiveness on machines "
-            "with sufficient RAM. Default: 0. Recommended: 1 on 8 GB+ systems."
-        ),
-        tags=["performance", "paging", "executive", "memory", "kernel"],
     ),
 ]

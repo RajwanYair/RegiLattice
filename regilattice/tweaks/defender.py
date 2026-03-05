@@ -78,9 +78,7 @@ def _apply_harden_smartscreen(*, require_admin: bool = True) -> None:
     SESSION.log("Security: harden SmartScreen to warn + block")
     SESSION.backup([_SMARTSCREEN], "SmartScreen")
     SESSION.set_dword(_SMARTSCREEN, "EnableSmartScreen", 2)  # 2 = Warn
-    SESSION.set_string(
-        _SMARTSCREEN, "ShellSmartScreenLevel", "Block"
-    )
+    SESSION.set_string(_SMARTSCREEN, "ShellSmartScreenLevel", "Block")
 
 
 def _remove_harden_smartscreen(*, require_admin: bool = True) -> None:
@@ -344,10 +342,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SPYNET],
-        description=(
-            "Prevents Windows Defender from automatically uploading "
-            "file samples to Microsoft for analysis."
-        ),
+        description=("Prevents Windows Defender from automatically uploading file samples to Microsoft for analysis."),
         tags=["defender", "privacy", "security"],
     ),
     TweakDef(
@@ -360,10 +355,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PUA],
-        description=(
-            "Enables Potentially Unwanted Application (PUA) detection "
-            "in Windows Defender."
-        ),
+        description=("Enables Potentially Unwanted Application (PUA) detection in Windows Defender."),
         tags=["defender", "security", "adware"],
     ),
     TweakDef(
@@ -376,10 +368,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SMARTSCREEN],
-        description=(
-            "Sets SmartScreen to warn and block unrecognized apps "
-            "and downloads."
-        ),
+        description=("Sets SmartScreen to warn and block unrecognized apps and downloads."),
         tags=["smartscreen", "security"],
     ),
     TweakDef(
@@ -405,10 +394,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SCAN],
-        description=(
-            "Limits Windows Defender scheduled-scan CPU usage to 25% "
-            "to reduce impact during scans."
-        ),
+        description=("Limits Windows Defender scheduled-scan CPU usage to 25% to reduce impact during scans."),
         tags=["defender", "performance", "cpu"],
     ),
     TweakDef(
@@ -434,10 +420,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_EXCLUSIONS],
-        description=(
-            "Excludes common dev folders (source/repos, .cargo, .rustup, "
-            "go, node_modules) from real-time Defender scans."
-        ),
+        description=("Excludes common dev folders (source/repos, .cargo, .rustup, go, node_modules) from real-time Defender scans."),
         tags=["defender", "developer", "performance"],
     ),
     TweakDef(
@@ -450,10 +433,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CFA_KEY],
-        description=(
-            "Enables Controlled Folder Access (ransomware protection) "
-            "which blocks unauthorized changes to protected folders."
-        ),
+        description=("Enables Controlled Folder Access (ransomware protection) which blocks unauthorized changes to protected folders."),
         tags=["defender", "ransomware", "security"],
     ),
     TweakDef(
@@ -466,10 +446,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_NET_PROTECT],
-        description=(
-            "Enables Defender Network Protection to block connections "
-            "to malicious domains and IP addresses."
-        ),
+        description=("Enables Defender Network Protection to block connections to malicious domains and IP addresses."),
         tags=["defender", "network", "security"],
     ),
     TweakDef(
@@ -482,10 +459,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_ASR],
-        description=(
-            "Enables Defender ASR rules which block common attack vectors "
-            "like Office macro exploits and script-based threats."
-        ),
+        description=("Enables Defender ASR rules which block common attack vectors like Office macro exploits and script-based threats."),
         tags=["defender", "asr", "security", "enterprise"],
     ),
     TweakDef(
@@ -498,10 +472,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_RT],
-        description=(
-            "Disables Defender real-time, behavior, and on-access monitoring "
-            "for maximum performance. USE WITH CAUTION."
-        ),
+        description=("Disables Defender real-time, behavior, and on-access monitoring for maximum performance. USE WITH CAUTION."),
         tags=["defender", "performance", "realtime"],
     ),
     TweakDef(
@@ -555,9 +526,7 @@ TWEAKS: list[TweakDef] = [
 
 # -- Disable Credential Guard --------------------------------------------------
 
-_DEVICE_GUARD = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"
-)
+_DEVICE_GUARD = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"
 
 
 def _apply_sec_disable_credential_guard(*, require_admin: bool = True) -> None:
@@ -613,8 +582,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_DEVICE_GUARD],
         description=(
-            "Disables Virtualization Based Security / Credential Guard. "
-            "May improve performance. Default: Enabled. Recommended: Keep enabled."
+            "Disables Virtualization Based Security / Credential Guard. May improve performance. Default: Enabled. Recommended: Keep enabled."
         ),
         tags=["security", "credential-guard", "vbs", "performance"],
     ),
@@ -628,10 +596,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_LSA],
-        description=(
-            "Enables auditing of logon success and failure events. "
-            "Default: Disabled. Recommended: Enabled for security monitoring."
-        ),
+        description=("Enables auditing of logon success and failure events. Default: Disabled. Recommended: Enabled for security monitoring."),
         tags=["security", "audit", "logon", "monitoring"],
     ),
 ]
@@ -747,5 +712,83 @@ TWEAKS += [
             "Default: Safe samples. Recommended: Disabled for privacy."
         ),
         tags=["security", "defender", "samples", "cloud", "privacy"],
+    ),
+]
+
+
+# ══ Additional Security Tweaks ═════════════════════════════════════════
+
+_SMB_PARAMS = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
+    r"\LanmanServer\Parameters"
+)
+
+
+def _apply_sec_disable_smbv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disable SMBv1 protocol")
+    SESSION.backup([_SMB_PARAMS], "SecSMBv1")
+    SESSION.set_dword(_SMB_PARAMS, "SMB1", 0)
+
+
+def _remove_sec_disable_smbv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SMB_PARAMS, "SMB1", 1)
+
+
+def _detect_sec_disable_smbv1() -> bool:
+    return SESSION.read_dword(_SMB_PARAMS, "SMB1") == 0
+
+
+def _apply_sec_enable_lsa_protection(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: enable LSA protection (RunAsPPL)")
+    SESSION.backup([_LSA], "SecLSAProtection")
+    SESSION.set_dword(_LSA, "RunAsPPL", 1)
+
+
+def _remove_sec_enable_lsa_protection(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_LSA, "RunAsPPL", 0)
+
+
+def _detect_sec_enable_lsa_protection() -> bool:
+    return SESSION.read_dword(_LSA, "RunAsPPL") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-disable-smbv1",
+        label="Disable SMBv1 Protocol",
+        category="Security",
+        apply_fn=_apply_sec_disable_smbv1,
+        remove_fn=_remove_sec_disable_smbv1,
+        detect_fn=_detect_sec_disable_smbv1,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SMB_PARAMS],
+        description=(
+            "Disables the legacy SMBv1 protocol on the server side. "
+            "Mitigates WannaCry and EternalBlue vulnerabilities. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["security", "smb", "smbv1", "protocol", "vulnerability"],
+    ),
+    TweakDef(
+        id="sec-enable-lsa-protection",
+        label="Enable LSA Protection (RunAsPPL)",
+        category="Security",
+        apply_fn=_apply_sec_enable_lsa_protection,
+        remove_fn=_remove_sec_enable_lsa_protection,
+        detect_fn=_detect_sec_enable_lsa_protection,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LSA],
+        description=(
+            "Enables Local Security Authority (LSA) protection by running "
+            "LSASS as a Protected Process Light (PPL). Mitigates credential theft. "
+            "Default: Disabled. Recommended: Enabled."
+        ),
+        tags=["security", "lsa", "lsass", "ppl", "credential"],
     ),
 ]

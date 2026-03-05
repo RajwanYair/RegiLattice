@@ -26,9 +26,7 @@ _BOOT_ANIMATION = (
     r"\CurrentVersion\Authentication\LogonUI\BootAnimation"
 )
 _LOGON_SYSTEM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-_PERSONALIZATION = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-)
+_PERSONALIZATION = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
 _POLICIES_SYSTEM = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\Policies\System"
@@ -72,17 +70,12 @@ def _remove_disable_skype(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_skype() -> bool:
-    return (
-        SESSION.read_string(_RUN_CU, "Skype") is None
-        and SESSION.read_string(_RUN_CU, "Skype for Desktop") is None
-    )
+    return SESSION.read_string(_RUN_CU, "Skype") is None and SESSION.read_string(_RUN_CU, "Skype for Desktop") is None
 
 
 # ── Disable Edge Auto-Start ─────────────────────────────────────────────────
 
-_EDGE_STARTUP = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
-)
+_EDGE_STARTUP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
 
 
 def _apply_disable_edge_autostart(*, require_admin: bool = True) -> None:
@@ -150,10 +143,7 @@ def _remove_disable_teams(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_teams() -> bool:
-    return (
-        SESSION.read_string(_RUN_CU, "com.squirrel.Teams.Teams") is None
-        and SESSION.read_string(_RUN_CU, "MicrosoftTeams") is None
-    )
+    return SESSION.read_string(_RUN_CU, "com.squirrel.Teams.Teams") is None and SESSION.read_string(_RUN_CU, "MicrosoftTeams") is None
 
 
 # ── Disable Cortana Startup ────────────────────────────────────────────────
@@ -178,10 +168,7 @@ def _remove_disable_cortana_startup(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_cortana_startup() -> bool:
-    return (
-        SESSION.read_string(_RUN_CU, "CortanaUI") is None
-        and SESSION.read_string(_RUN_CU, "Cortana") is None
-    )
+    return SESSION.read_string(_RUN_CU, "CortanaUI") is None and SESSION.read_string(_RUN_CU, "Cortana") is None
 
 
 # ── Disable Windows Startup Sound ───────────────────────────────────────────
@@ -316,10 +303,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_STARTUP_DELAY],
-        description=(
-            "Removes the artificial startup delay for Run-key programs, "
-            "allowing them to launch immediately at login."
-        ),
+        description=("Removes the artificial startup delay for Run-key programs, allowing them to launch immediately at login."),
         tags=["startup", "performance", "boot"],
     ),
     TweakDef(
@@ -345,10 +329,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_EDGE_STARTUP],
-        description=(
-            "Disables Edge's Startup Boost pre-launch and background "
-            "mode to free memory and reduce startup load."
-        ),
+        description=("Disables Edge's Startup Boost pre-launch and background mode to free memory and reduce startup load."),
         tags=["startup", "edge", "performance"],
     ),
     TweakDef(
@@ -361,10 +342,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONTENT_DELIVERY],
-        description=(
-            "Prevents Windows from silently installing suggested apps "
-            "and OEM bloatware from the Microsoft Store."
-        ),
+        description=("Prevents Windows from silently installing suggested apps and OEM bloatware from the Microsoft Store."),
         tags=["startup", "bloatware", "store"],
     ),
     TweakDef(
@@ -416,10 +394,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_LOGON_SYSTEM],
-        description=(
-            "Replaces the Windows Spotlight / hero image on the login "
-            "screen with a plain solid color background."
-        ),
+        description=("Replaces the Windows Spotlight / hero image on the login screen with a plain solid color background."),
         tags=["startup", "login", "appearance"],
     ),
     TweakDef(
@@ -432,10 +407,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_PERSONALIZATION],
-        description=(
-            "Bypasses the lock screen so the machine goes directly "
-            "to the password / PIN prompt on wake or boot."
-        ),
+        description=("Bypasses the lock screen so the machine goes directly to the password / PIN prompt on wake or boot."),
         tags=["startup", "lockscreen", "login"],
     ),
     TweakDef(
@@ -448,10 +420,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_POLICIES_SYSTEM],
-        description=(
-            "Disables the 'Hi / We're getting things ready' first-logon "
-            "animation shown after a new user profile is created."
-        ),
+        description=("Disables the 'Hi / We're getting things ready' first-logon animation shown after a new user profile is created."),
         tags=["startup", "animation", "login", "boot"],
     ),
     TweakDef(
@@ -547,10 +516,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SESSION_MGR_CM],
-        description=(
-            "Disables the Last Known Good Configuration boot option. "
-            "Default: Enabled. Recommended: Disabled for advanced users."
-        ),
+        description=("Disables the Last Known Good Configuration boot option. Default: Enabled. Recommended: Disabled for advanced users."),
         tags=["startup", "boot", "last-known-good"],
     ),
     TweakDef(
@@ -563,10 +529,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_POLICIES_SYSTEM],
-        description=(
-            "Shows detailed status messages during boot and shutdown. "
-            "Default: Disabled. Recommended: Enabled for troubleshooting."
-        ),
+        description=("Shows detailed status messages during boot and shutdown. Default: Disabled. Recommended: Enabled for troubleshooting."),
         tags=["startup", "boot", "verbose", "debug"],
     ),
 ]
@@ -651,8 +614,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_SERIALIZE],
         description=(
-            "Removes the artificial startup delay for desktop applications. "
-            "Apps launch immediately at logon. Default: ~10s delay. Recommended: 0."
+            "Removes the artificial startup delay for desktop applications. Apps launch immediately at logon. Default: ~10s delay. Recommended: 0."
         ),
         tags=["startup", "delay", "performance", "boot"],
     ),
@@ -666,10 +628,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEYBOARD_DEFAULT],
-        description=(
-            "Enables Num Lock at the Windows login screen by default. "
-            "Default: Off. Recommended: On for desktop keyboards."
-        ),
+        description=("Enables Num Lock at the Windows login screen by default. Default: Off. Recommended: On for desktop keyboards."),
         tags=["startup", "numlock", "keyboard", "boot"],
     ),
     TweakDef(
@@ -687,5 +646,80 @@ TWEAKS += [
             "Reduces startup distractions. Default: Enabled. Recommended: Disabled."
         ),
         tags=["startup", "tips", "suggestions", "notifications"],
+    ),
+]
+
+
+# ══ Additional Startup Tweaks ══════════════════════════════════════════
+
+_WINLOGON_CU = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT"
+    r"\CurrentVersion\Winlogon"
+)
+
+
+def _apply_start_disable_app_restart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable automatic app restart on login")
+    SESSION.backup([_WINLOGON_CU], "StartAppRestart")
+    SESSION.set_dword(_WINLOGON_CU, "RestartApps", 0)
+
+
+def _remove_start_disable_app_restart(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINLOGON_CU, "RestartApps")
+
+
+def _detect_start_disable_app_restart() -> bool:
+    return SESSION.read_dword(_WINLOGON_CU, "RestartApps") == 0
+
+
+def _apply_start_disable_welcome_experience(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: disable Windows welcome experience")
+    SESSION.backup([_CONTENT_DELIVERY], "StartWelcomeExp")
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-310093Enabled", 0)
+
+
+def _remove_start_disable_welcome_experience(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTENT_DELIVERY, "SubscribedContent-310093Enabled")
+
+
+def _detect_start_disable_welcome_experience() -> bool:
+    return SESSION.read_dword(_CONTENT_DELIVERY, "SubscribedContent-310093Enabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="start-disable-app-restart",
+        label="Disable Automatic App Restart on Login",
+        category="Startup",
+        apply_fn=_apply_start_disable_app_restart,
+        remove_fn=_remove_start_disable_app_restart,
+        detect_fn=_detect_start_disable_app_restart,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WINLOGON_CU],
+        description=(
+            "Prevents Windows from automatically restarting apps that were open before shutdown/restart. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["startup", "restart", "apps", "login", "winlogon"],
+    ),
+    TweakDef(
+        id="start-disable-welcome-experience",
+        label="Disable Windows Welcome Experience",
+        category="Startup",
+        apply_fn=_apply_start_disable_welcome_experience,
+        remove_fn=_remove_start_disable_welcome_experience,
+        detect_fn=_detect_start_disable_welcome_experience,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description=(
+            "Disables the Windows welcome experience that shows after updates "
+            "with feature highlights and suggestions. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["startup", "welcome", "experience", "updates", "nag"],
     ),
 ]

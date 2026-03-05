@@ -111,10 +111,7 @@ def apply_wsl_feature(*, require_admin: bool = True) -> None:
     """Enable the 'Windows Subsystem for Linux' optional feature."""
     assert_admin(require_admin)
     SESSION.log("Starting Add-WSLFeature")
-    cmd = (
-        "dism.exe /online /enable-feature "
-        "/featurename:Microsoft-Windows-Subsystem-Linux /all /norestart"
-    )
+    cmd = "dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart"
     subprocess.run(cmd, shell=True, check=False, capture_output=True)
     SESSION.log("Completed Add-WSLFeature")
 
@@ -122,10 +119,7 @@ def apply_wsl_feature(*, require_admin: bool = True) -> None:
 def remove_wsl_feature(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Starting Remove-WSLFeature")
-    cmd = (
-        "dism.exe /online /disable-feature "
-        "/featurename:Microsoft-Windows-Subsystem-Linux /norestart"
-    )
+    cmd = "dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux /norestart"
     subprocess.run(cmd, shell=True, check=False, capture_output=True)
     SESSION.log("Completed Remove-WSLFeature")
 
@@ -147,10 +141,7 @@ def apply_vmp_feature(*, require_admin: bool = True) -> None:
     """Enable Virtual Machine Platform (required for WSL 2)."""
     assert_admin(require_admin)
     SESSION.log("Starting Add-VMPlatform")
-    cmd = (
-        "dism.exe /online /enable-feature "
-        "/featurename:VirtualMachinePlatform /all /norestart"
-    )
+    cmd = "dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart"
     subprocess.run(cmd, shell=True, check=False, capture_output=True)
     SESSION.log("Completed Add-VMPlatform")
 
@@ -158,10 +149,7 @@ def apply_vmp_feature(*, require_admin: bool = True) -> None:
 def remove_vmp_feature(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Starting Remove-VMPlatform")
-    cmd = (
-        "dism.exe /online /disable-feature "
-        "/featurename:VirtualMachinePlatform /norestart"
-    )
+    cmd = "dism.exe /online /disable-feature /featurename:VirtualMachinePlatform /norestart"
     subprocess.run(cmd, shell=True, check=False, capture_output=True)
     SESSION.log("Completed Remove-VMPlatform")
 
@@ -351,10 +339,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_HYPERV_KEYS,
-        description=(
-            "Enables nested virtualisation for WSL 2 guests, allowing "
-            "Docker Desktop, KVM, and other VM workloads inside WSL."
-        ),
+        description=("Enables nested virtualisation for WSL 2 guests, allowing Docker Desktop, KVM, and other VM workloads inside WSL."),
         tags=["wsl", "virtualisation", "docker"],
     ),
     TweakDef(
@@ -380,9 +365,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_VMP_KEY],
-        description=(
-            "Enables the Virtual Machine Platform feature (required for WSL 2)."
-        ),
+        description=("Enables the Virtual Machine Platform feature (required for WSL 2)."),
         tags=["wsl", "virtualisation", "feature"],
     ),
     TweakDef(
@@ -395,10 +378,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_LXSS_NET_KEYS,
-        description=(
-            "Switches WSL 2 networking to mirrored mode so localhost "
-            "forwarding and host-network access work transparently."
-        ),
+        description=("Switches WSL 2 networking to mirrored mode so localhost forwarding and host-network access work transparently."),
         tags=["wsl", "network", "localhost"],
     ),
     TweakDef(
@@ -469,10 +449,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=_LXSS_KEYS,
-        description=(
-            "Sets the default WSL version to WSL2 for new distributions. WSL2 uses a real Linux kernel. "
-            "Default: 1. Recommended: 2."
-        ),
+        description=("Sets the default WSL version to WSL2 for new distributions. WSL2 uses a real Linux kernel. Default: 1. Recommended: 2."),
         tags=["wsl", "version", "linux"],
     ),
 ]
@@ -610,11 +587,7 @@ def _detect_wsl_kernel_update() -> bool:
 def _apply_wsl_enable_systemd(*, require_admin: bool = True) -> None:
     """Enable systemd inside the default WSL distro by writing /etc/wsl.conf."""
     SESSION.log("WSL: enabling systemd in default distro")
-    cmd = (
-        "wsl -- sudo sh -c '"
-        'mkdir -p /etc && printf "[boot]\\nsystemd=true\\n" > /etc/wsl.conf'
-        "'"
-    )
+    cmd = "wsl -- sudo sh -c 'mkdir -p /etc && printf \"[boot]\\nsystemd=true\\n\" > /etc/wsl.conf'"
     try:
         subprocess.run(cmd, shell=True, check=False, capture_output=True, timeout=30)
         SESSION.log("WSL: systemd enabled — restart WSL to take effect")
@@ -624,11 +597,7 @@ def _apply_wsl_enable_systemd(*, require_admin: bool = True) -> None:
 
 def _remove_wsl_enable_systemd(*, require_admin: bool = True) -> None:
     SESSION.log("WSL: disabling systemd in default distro")
-    cmd = (
-        "wsl -- sudo sh -c '"
-        "sed -i 's/^systemd=true/systemd=false/' /etc/wsl.conf"
-        "'"
-    )
+    cmd = "wsl -- sudo sh -c 'sed -i 's/^systemd=true/systemd=false/' /etc/wsl.conf'"
     with contextlib.suppress(FileNotFoundError, subprocess.TimeoutExpired):
         subprocess.run(cmd, shell=True, check=False, capture_output=True, timeout=30)
 
@@ -1008,9 +977,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=_LXSS_POLICY_KEYS,
         description=(
-            "Enforces WSL version 2 as the default for all new distributions "
-            "via machine-wide Group Policy. "
-            "Default: not set. Recommended: version 2."
+            "Enforces WSL version 2 as the default for all new distributions via machine-wide Group Policy. Default: not set. Recommended: version 2."
         ),
         tags=["wsl", "version", "v2", "policy", "default"],
     ),
@@ -1047,5 +1014,161 @@ TWEAKS += [
             "Default: disabled. Recommended: enabled."
         ),
         tags=["wsl", "systemd", "init", "policy", "services"],
+    ),
+]
+
+
+# ══ Additional WSL Tweaks ════════════════════════════════════════════════════
+
+# -- 26. DrvFs Auto-Mount with Metadata ──────────────────────────────────────
+
+
+def _apply_wsl_automount_metadata(*, require_admin: bool = True) -> None:
+    """Enable DrvFs auto-mount with Linux metadata (uid/gid/mode support)."""
+    assert_admin(require_admin)
+    SESSION.log("WSL: enabling DrvFs auto-mount with metadata")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_AutomountMetadata")
+    SESSION.set_dword(_LXSS_NET, "DrvFsEnableMetadata", 1)
+
+
+def _remove_wsl_automount_metadata(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "DrvFsEnableMetadata")
+
+
+def _detect_wsl_automount_metadata() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "DrvFsEnableMetadata") == 1
+
+
+# -- 27. Disable Windows PATH Append in WSL ──────────────────────────────────
+
+
+def _apply_wsl_no_windows_path(*, require_admin: bool = True) -> None:
+    """Prevent WSL from appending Windows PATH to Linux $PATH."""
+    assert_admin(require_admin)
+    SESSION.log("WSL: disabling Windows PATH append to $PATH")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_NoWindowsPath")
+    SESSION.set_dword(_LXSS_NET, "AppendNtPath", 0)
+
+
+def _remove_wsl_no_windows_path(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "AppendNtPath")
+
+
+def _detect_wsl_no_windows_path() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "AppendNtPath") == 0
+
+
+# -- 28. Swap Size Limit ─────────────────────────────────────────────────────
+
+
+def _apply_wsl_swap_size(*, require_admin: bool = True) -> None:
+    """Limit WSL2 swap to 2 GB via registry."""
+    assert_admin(require_admin)
+    SESSION.log("WSL: setting swap size to 2 GB")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_SwapSize")
+    SESSION.set_dword(_LXSS_NET, "SwapSize", 2048)
+
+
+def _remove_wsl_swap_size(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "SwapSize")
+
+
+def _detect_wsl_swap_size() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "SwapSize") == 2048
+
+
+# -- 29. GPU Compute Pass-Through ────────────────────────────────────────────
+
+
+def _apply_wsl_gpu_compute(*, require_admin: bool = True) -> None:
+    """Enable GPU compute pass-through (CUDA/DirectML) in WSL2."""
+    assert_admin(require_admin)
+    SESSION.log("WSL: enabling GPU compute pass-through")
+    SESSION.backup(_LXSS_NET_KEYS, "WSL_GpuCompute")
+    SESSION.set_dword(_LXSS_NET, "EnableGpuSupport", 1)
+
+
+def _remove_wsl_gpu_compute(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_NET, "EnableGpuSupport")
+
+
+def _detect_wsl_gpu_compute() -> bool:
+    return SESSION.read_dword(_LXSS_NET, "EnableGpuSupport") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="wsl-automount-metadata",
+        label="Enable DrvFs Auto-Mount with Metadata",
+        category="WSL",
+        apply_fn=_apply_wsl_automount_metadata,
+        remove_fn=_remove_wsl_automount_metadata,
+        detect_fn=_detect_wsl_automount_metadata,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description=(
+            "Enables DrvFs metadata on Windows drive mounts inside WSL, "
+            "allowing proper Linux file permissions (chmod/chown) on /mnt/c etc. "
+            "Default: disabled. Recommended: enabled for development."
+        ),
+        tags=["wsl", "drvfs", "mount", "metadata", "permissions"],
+    ),
+    TweakDef(
+        id="wsl-no-windows-path",
+        label="Disable Windows PATH Append in WSL",
+        category="WSL",
+        apply_fn=_apply_wsl_no_windows_path,
+        remove_fn=_remove_wsl_no_windows_path,
+        detect_fn=_detect_wsl_no_windows_path,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description=(
+            "Prevents WSL from appending Windows system PATH directories to the "
+            "Linux $PATH. Keeps the Linux environment clean and avoids Windows "
+            "executable conflicts. Default: append enabled. "
+            "Recommended: disabled for isolated dev environments."
+        ),
+        tags=["wsl", "path", "interop", "isolation", "development"],
+    ),
+    TweakDef(
+        id="wsl-swap-size",
+        label="Limit WSL2 Swap to 2 GB",
+        category="WSL",
+        apply_fn=_apply_wsl_swap_size,
+        remove_fn=_remove_wsl_swap_size,
+        detect_fn=_detect_wsl_swap_size,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description=(
+            "Limits the WSL2 virtual machine swap file to 2 GB to prevent "
+            "excessive disk usage. Default: 25%% of host RAM. "
+            "Recommended: 2 GB for most workloads."
+        ),
+        tags=["wsl", "swap", "disk", "memory", "performance"],
+    ),
+    TweakDef(
+        id="wsl-gpu-compute",
+        label="Enable GPU Compute Pass-Through (CUDA/DirectML)",
+        category="WSL",
+        apply_fn=_apply_wsl_gpu_compute,
+        remove_fn=_remove_wsl_gpu_compute,
+        detect_fn=_detect_wsl_gpu_compute,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_NET_KEYS,
+        description=(
+            "Enables GPU compute pass-through in WSL2 for CUDA, DirectML, and "
+            "OpenCL workloads. Required for machine learning and GPU-accelerated "
+            "applications inside WSL. Default: enabled on Win11. "
+            "Recommended: enabled."
+        ),
+        tags=["wsl", "gpu", "cuda", "directml", "compute", "ml"],
     ),
 ]

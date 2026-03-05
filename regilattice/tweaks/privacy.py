@@ -7,9 +7,7 @@ from regilattice.tweaks import TweakDef
 
 # ── Telemetry ────────────────────────────────────────────────────────────────
 
-_TELEMETRY_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-)
+_TELEMETRY_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 _TELEMETRY_DATA = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\Policies\DataCollection"
@@ -40,9 +38,7 @@ def _detect_disable_telemetry() -> bool:
 
 # ── Cortana ──────────────────────────────────────────────────────────────────
 
-_CORTANA_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
-)
+_CORTANA_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 
 
 def _apply_disable_cortana(*, require_admin: bool = True) -> None:
@@ -99,9 +95,7 @@ _LOCATION = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\CapabilityAccessManager\ConsentStore\location"
 )
-_LOCATION_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors"
-)
+_LOCATION_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors"
 
 
 def _apply_disable_location(*, require_admin: bool = True) -> None:
@@ -128,9 +122,7 @@ _ADID = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\AdvertisingInfo"
 )
-_ADID_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
-)
+_ADID_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"
 
 
 def _apply_disable_adid(*, require_admin: bool = True) -> None:
@@ -225,9 +217,7 @@ def _detect_disable_diagtrack() -> bool:
 
 # ── Disable Online Speech Recognition ────────────────────────────────────────
 
-_SPEECH = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
-)
+_SPEECH = r"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"
 
 
 def _apply_disable_speech(*, require_admin: bool = False) -> None:
@@ -248,12 +238,8 @@ def _detect_disable_speech() -> bool:
 
 # ── Disable Inking & Typing Personalization ──────────────────────────────────
 
-_INK = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"
-)
-_INK_TRAINED = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore"
-)
+_INK = r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"
+_INK_TRAINED = r"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore"
 
 
 def _apply_disable_inking(*, require_admin: bool = False) -> None:
@@ -355,10 +341,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_ACTIVITY],
-        description=(
-            "Disables Windows Activity History (Timeline), preventing "
-            "activity data collection and cloud sync."
-        ),
+        description=("Disables Windows Activity History (Timeline), preventing activity data collection and cloud sync."),
         tags=["privacy", "activity", "timeline"],
     ),
     TweakDef(
@@ -384,10 +367,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_ADID, _ADID_POLICY],
-        description=(
-            "Disables the Windows advertising ID used for cross-app "
-            "ad targeting."
-        ),
+        description=("Disables the Windows advertising ID used for cross-app ad targeting."),
         tags=["privacy", "advertising", "tracking"],
     ),
     TweakDef(
@@ -482,8 +462,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_SPEECH],
         description=(
-            "Disables online speech recognition which sends voice data to Microsoft servers. "
-            "Default: Enabled. Recommended: Disabled for privacy."
+            "Disables online speech recognition which sends voice data to Microsoft servers. Default: Enabled. Recommended: Disabled for privacy."
         ),
         tags=["privacy", "speech", "recognition", "telemetry"],
     ),
@@ -508,10 +487,7 @@ def _remove_priv_activity_history(*, require_admin: bool = True) -> None:
 
 
 def _detect_priv_activity_history() -> bool:
-    return (
-        SESSION.read_dword(_ACTIVITY, "EnableActivityFeed") == 0
-        and SESSION.read_dword(_ACTIVITY, "PublishUserActivities") == 0
-    )
+    return SESSION.read_dword(_ACTIVITY, "EnableActivityFeed") == 0 and SESSION.read_dword(_ACTIVITY, "PublishUserActivities") == 0
 
 
 # ── Disable Advertising ID (user-level) ─────────────────────────────────────
@@ -738,8 +714,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_LAUNCH_TRACK],
         description=(
-            "Prevents Windows from tracking which apps you launch to improve "
-            "Start menu suggestions. Default: enabled. Recommended: disabled."
+            "Prevents Windows from tracking which apps you launch to improve Start menu suggestions. Default: enabled. Recommended: disabled."
         ),
         tags=["privacy", "tracking", "start-menu", "launch"],
     ),
@@ -753,10 +728,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONTENT_DELIVERY],
-        description=(
-            "Disables suggested content and recommendations in the Windows "
-            "Settings app. Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables suggested content and recommendations in the Windows Settings app. Default: enabled. Recommended: disabled."),
         tags=["privacy", "settings", "suggestions", "content-delivery"],
     ),
 ]
@@ -888,5 +860,120 @@ TWEAKS += [
             "clipboard. Default: Enabled. Recommended: Disabled for privacy."
         ),
         tags=["privacy", "cross-device", "cdp", "phone-link"],
+    ),
+]
+
+
+# ══ Privacy Tweaks — Consent Store ════════════════════════════════════════
+
+_APP_DIAG_CONSENT = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
+    r"\CapabilityAccessManager\ConsentStore\appDiagnostics"
+)
+_ACCOUNT_INFO_CONSENT = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
+    r"\CapabilityAccessManager\ConsentStore\userAccountInformation"
+)
+_NOTIF_LISTENER_CONSENT = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
+    r"\CapabilityAccessManager\ConsentStore\userNotificationListener"
+)
+
+
+def _apply_disable_app_diagnostics(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable app diagnostics access")
+    SESSION.backup([_APP_DIAG_CONSENT], "PrivAppDiag")
+    SESSION.set_string(_APP_DIAG_CONSENT, "Value", "Deny")
+
+
+def _remove_disable_app_diagnostics(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_APP_DIAG_CONSENT, "Value")
+
+
+def _detect_disable_app_diagnostics() -> bool:
+    return SESSION.read_string(_APP_DIAG_CONSENT, "Value") == "Deny"
+
+
+def _apply_disable_account_info_access(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable account info access")
+    SESSION.backup([_ACCOUNT_INFO_CONSENT], "PrivAccountInfo")
+    SESSION.set_string(_ACCOUNT_INFO_CONSENT, "Value", "Deny")
+
+
+def _remove_disable_account_info_access(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ACCOUNT_INFO_CONSENT, "Value")
+
+
+def _detect_disable_account_info_access() -> bool:
+    return SESSION.read_string(_ACCOUNT_INFO_CONSENT, "Value") == "Deny"
+
+
+def _apply_disable_notification_listener(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable notification listener access")
+    SESSION.backup([_NOTIF_LISTENER_CONSENT], "PrivNotifListener")
+    SESSION.set_string(_NOTIF_LISTENER_CONSENT, "Value", "Deny")
+
+
+def _remove_disable_notification_listener(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NOTIF_LISTENER_CONSENT, "Value")
+
+
+def _detect_disable_notification_listener() -> bool:
+    return SESSION.read_string(_NOTIF_LISTENER_CONSENT, "Value") == "Deny"
+
+
+TWEAKS += [
+    TweakDef(
+        id="priv-disable-app-diagnostics",
+        label="Disable App Diagnostics Access",
+        category="Privacy",
+        apply_fn=_apply_disable_app_diagnostics,
+        remove_fn=_remove_disable_app_diagnostics,
+        detect_fn=_detect_disable_app_diagnostics,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_APP_DIAG_CONSENT],
+        description=(
+            "Denies applications access to diagnostic information about "
+            "other apps. Protects inter-app data leakage. "
+            "Default: Allow. Recommended: Deny."
+        ),
+        tags=["privacy", "app-diagnostics", "consent", "capability"],
+    ),
+    TweakDef(
+        id="priv-disable-account-info-access",
+        label="Disable Account Info Access",
+        category="Privacy",
+        apply_fn=_apply_disable_account_info_access,
+        remove_fn=_remove_disable_account_info_access,
+        detect_fn=_detect_disable_account_info_access,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ACCOUNT_INFO_CONSENT],
+        description=("Denies applications access to user account information (name, picture). Improves privacy. Default: Allow. Recommended: Deny."),
+        tags=["privacy", "account-info", "consent", "capability"],
+    ),
+    TweakDef(
+        id="priv-disable-notification-listener",
+        label="Disable Notification Listener Access",
+        category="Privacy",
+        apply_fn=_apply_disable_notification_listener,
+        remove_fn=_remove_disable_notification_listener,
+        detect_fn=_detect_disable_notification_listener,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_LISTENER_CONSENT],
+        description=(
+            "Denies applications access to user notification content. "
+            "Prevents apps from reading notification text. "
+            "Default: Allow. Recommended: Deny."
+        ),
+        tags=["privacy", "notifications", "listener", "consent"],
     ),
 ]

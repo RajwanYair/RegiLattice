@@ -209,8 +209,7 @@ def _remove_disable_cloud_search_content(*, require_admin: bool = False) -> None
 
 def _detect_disable_cloud_search_content() -> bool:
     return (
-        SESSION.read_dword(_SEARCH_SETTINGS, "IsAADCloudSearchEnabled") == 0
-        and SESSION.read_dword(_SEARCH_SETTINGS, "IsMSACloudSearchEnabled") == 0
+        SESSION.read_dword(_SEARCH_SETTINGS, "IsAADCloudSearchEnabled") == 0 and SESSION.read_dword(_SEARCH_SETTINGS, "IsMSACloudSearchEnabled") == 0
     )
 
 
@@ -356,10 +355,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SEARCH_CU],
-        description=(
-            "Disables Bing web results in Start menu search "
-            "via CurrentUser registry keys."
-        ),
+        description=("Disables Bing web results in Start menu search via CurrentUser registry keys."),
         tags=["search", "privacy", "bing"],
     ),
     TweakDef(
@@ -372,10 +368,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SEARCH],
-        description=(
-            "Removes the Bing-curated 'Search Highlights' content "
-            "from the Windows search box."
-        ),
+        description=("Removes the Bing-curated 'Search Highlights' content from the Windows search box."),
         tags=["search", "bing", "ux"],
     ),
     TweakDef(
@@ -453,10 +446,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SEARCH_SETTINGS],
-        description=(
-            "Disables AAD and MSA cloud search content "
-            "in Windows Search results."
-        ),
+        description=("Disables AAD and MSA cloud search content in Windows Search results."),
         tags=["search", "cortana", "cloud", "privacy"],
     ),
     TweakDef(
@@ -547,9 +537,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_SEARCH_CU],
         description=(
-            "Disables Bing search results integration in the Start menu "
-            "and taskbar search. "
-            "Default: Enabled. Recommended: Disabled for privacy."
+            "Disables Bing search results integration in the Start menu and taskbar search. Default: Enabled. Recommended: Disabled for privacy."
         ),
         tags=["cortana", "bing", "search", "start-menu", "privacy"],
     ),
@@ -746,5 +734,83 @@ TWEAKS += [
             "Default: Enabled. Recommended: Disabled to save bandwidth."
         ),
         tags=["cortana", "search", "metered", "bandwidth", "policy"],
+    ),
+]
+
+
+# ══ Additional Cortana & Search Tweaks ═════════════════════════════════
+
+_SPEECH_PREFS = (
+    r"HKEY_CURRENT_USER\Software\Microsoft"
+    r"\Speech_OneCore\Preferences"
+)
+
+
+def _apply_cortana_disable_voice_activation(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana & Search: disable voice activation")
+    SESSION.backup([_SPEECH_PREFS], "CortanaVoiceActivation")
+    SESSION.set_dword(_SPEECH_PREFS, "VoiceActivationOn", 0)
+
+
+def _remove_cortana_disable_voice_activation(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPEECH_PREFS, "VoiceActivationOn")
+
+
+def _detect_cortana_disable_voice_activation() -> bool:
+    return SESSION.read_dword(_SPEECH_PREFS, "VoiceActivationOn") == 0
+
+
+def _apply_cortana_disable_device_search_history(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cortana & Search: disable device search history")
+    SESSION.backup([_SEARCH_SETTINGS], "CortanaDeviceSearchHistory")
+    SESSION.set_dword(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled", 0)
+
+
+def _remove_cortana_disable_device_search_history(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled")
+
+
+def _detect_cortana_disable_device_search_history() -> bool:
+    return SESSION.read_dword(_SEARCH_SETTINGS, "IsDeviceSearchHistoryEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="cortana-disable-voice-activation",
+        label="Disable Voice Activation",
+        category="Cortana & Search",
+        apply_fn=_apply_cortana_disable_voice_activation,
+        remove_fn=_remove_cortana_disable_voice_activation,
+        detect_fn=_detect_cortana_disable_voice_activation,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SPEECH_PREFS],
+        description=(
+            "Disables voice activation for Cortana and speech services. "
+            "Prevents the microphone from listening for wake words. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "voice", "activation", "microphone", "privacy"],
+    ),
+    TweakDef(
+        id="cortana-disable-device-search-history",
+        label="Disable Device Search History",
+        category="Cortana & Search",
+        apply_fn=_apply_cortana_disable_device_search_history,
+        remove_fn=_remove_cortana_disable_device_search_history,
+        detect_fn=_detect_cortana_disable_device_search_history,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SETTINGS],
+        description=(
+            "Disables local device search history storage. "
+            "Prevents Windows from saving search queries on the device. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["cortana", "search", "history", "device", "privacy"],
     ),
 ]
