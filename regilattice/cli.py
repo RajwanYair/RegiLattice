@@ -149,6 +149,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Preview changes without modifying the registry.",
     )
     parser.add_argument(
+        "--config",
+        metavar="PATH",
+        help="Path to config file (default: ~/.regilattice.toml).",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"regilattice {__version__} ({platform_summary()})",
@@ -160,6 +165,15 @@ def main(argv: list[str] | None = None) -> int:
     """Entry-point for both ``python -m regilattice`` and the console_script."""
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    # Load user config (~/.regilattice.toml or --config path)
+    from .config import load_config
+
+    cfg = load_config(Path(args.config) if args.config else None)
+
+    # Apply config defaults (CLI flags override config)
+    if cfg.force_corp and not args.force:
+        args.force = True
 
     if args.dry_run:
         SESSION._dry_run = True
