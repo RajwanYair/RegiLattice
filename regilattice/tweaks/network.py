@@ -758,3 +758,159 @@ TWEAKS += [
         tags=["network", "port", "connections", "throughput", "server"],
     ),
 ]
+
+
+# ══ Additional Network Tweaks (Sophia Script / WinUtil) ══════════════════
+
+_TEREDO = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters"
+_TCPIP6 = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
+_ISATAP = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters"
+_LMHOSTS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
+
+
+# -- Disable Teredo Tunneling ────────────────────────────────────────────
+
+
+def _apply_disable_teredo(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable Teredo tunneling")
+    SESSION.backup([_TEREDO], "DisableTeredo")
+    # Type 4 = disabled
+    SESSION.set_dword(_TEREDO, "Type", 4)
+
+
+def _remove_disable_teredo(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TEREDO, "Type", 0)
+
+
+def _detect_disable_teredo() -> bool:
+    return SESSION.read_dword(_TEREDO, "Type") == 4
+
+
+# -- Prefer IPv4 over IPv6 ──────────────────────────────────────────────
+
+
+def _apply_prefer_ipv4(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: prefer IPv4 over IPv6 (DisabledComponents=0x20)")
+    SESSION.backup([_TCPIP6], "PreferIPv4")
+    SESSION.set_dword(_TCPIP6, "DisabledComponents", 0x20)
+
+
+def _remove_prefer_ipv4(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TCPIP6, "DisabledComponents", 0)
+
+
+def _detect_prefer_ipv4() -> bool:
+    val = SESSION.read_dword(_TCPIP6, "DisabledComponents")
+    return val is not None and (val & 0x20) != 0
+
+
+# -- Disable ISATAP ──────────────────────────────────────────────────────
+
+
+def _apply_disable_isatap(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable ISATAP adapter")
+    SESSION.backup([_ISATAP], "DisableISATAP")
+    SESSION.set_string(_ISATAP, "State", "Disabled")
+
+
+def _remove_disable_isatap(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_ISATAP, "State", "Default")
+
+
+def _detect_disable_isatap() -> bool:
+    return SESSION.read_string(_ISATAP, "State") == "Disabled"
+
+
+# -- Disable LMHOSTS Lookup ─────────────────────────────────────────────
+
+
+def _apply_disable_lmhosts(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable LMHOSTS lookup")
+    SESSION.backup([_LMHOSTS], "DisableLMHOSTS")
+    SESSION.set_dword(_LMHOSTS, "EnableLMHOSTS", 0)
+
+
+def _remove_disable_lmhosts(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_LMHOSTS, "EnableLMHOSTS", 1)
+
+
+def _detect_disable_lmhosts() -> bool:
+    return SESSION.read_dword(_LMHOSTS, "EnableLMHOSTS") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-disable-teredo",
+        label="Disable Teredo Tunneling",
+        category="Network",
+        apply_fn=_apply_disable_teredo,
+        remove_fn=_remove_disable_teredo,
+        detect_fn=_detect_disable_teredo,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TEREDO],
+        description=(
+            "Disables Teredo IPv6 tunneling which is rarely used and can be a "
+            "security risk. Default: enabled. Recommended: disabled."
+        ),
+        tags=["network", "teredo", "ipv6", "tunneling", "security"],
+    ),
+    TweakDef(
+        id="net-prefer-ipv4",
+        label="Prefer IPv4 over IPv6",
+        category="Network",
+        apply_fn=_apply_prefer_ipv4,
+        remove_fn=_remove_prefer_ipv4,
+        detect_fn=_detect_prefer_ipv4,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TCPIP6],
+        description=(
+            "Configures Windows to prefer IPv4 over IPv6 for DNS resolution and "
+            "connections. Useful for networks without proper IPv6 infrastructure. "
+            "Default: IPv6 preferred. Recommended: IPv4 for compatibility."
+        ),
+        tags=["network", "ipv4", "ipv6", "dns", "priority"],
+    ),
+    TweakDef(
+        id="net-disable-isatap",
+        label="Disable ISATAP",
+        category="Network",
+        apply_fn=_apply_disable_isatap,
+        remove_fn=_remove_disable_isatap,
+        detect_fn=_detect_disable_isatap,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ISATAP],
+        description=(
+            "Disables the ISATAP IPv6 transition adapter. Removes an unnecessary "
+            "virtual adapter. Default: enabled. Recommended: disabled."
+        ),
+        tags=["network", "isatap", "ipv6", "adapter", "security"],
+    ),
+    TweakDef(
+        id="net-disable-lmhosts",
+        label="Disable LMHOSTS Lookup",
+        category="Network",
+        apply_fn=_apply_disable_lmhosts,
+        remove_fn=_remove_disable_lmhosts,
+        detect_fn=_detect_disable_lmhosts,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LMHOSTS],
+        description=(
+            "Disables LMHOSTS file lookup for NetBIOS name resolution. "
+            "Reduces legacy protocol attack surface. "
+            "Default: enabled. Recommended: disabled on modern networks."
+        ),
+        tags=["network", "lmhosts", "netbios", "security", "legacy"],
+    ),
+]

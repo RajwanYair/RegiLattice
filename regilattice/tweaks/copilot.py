@@ -574,3 +574,161 @@ TWEAKS += [
         tags=["ai", "copilot", "keyboard", "shortcut"],
     ),
 ]
+
+
+# ══ Windows 11 24H2+ Copilot Paths ══════════════════════════════════════
+
+# In 24H2, Copilot moved from a sidebar to a system app with new registry
+# paths.  These tweaks target the updated locations.
+
+_COPILOT_24H2 = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
+_COPILOT_RUNTIME = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CopilotRuntime"
+_BING_CHAT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\BingChat"
+_COPILOT_ELIGIBLE = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat"
+)
+
+
+# -- Disable Copilot Runtime (24H2) ────────────────────────────────────
+
+
+def _apply_disable_copilot_runtime(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("AI: disable Copilot Runtime (24H2+ system app)")
+    SESSION.backup([_COPILOT_RUNTIME], "CopilotRuntime24H2")
+    SESSION.set_dword(_COPILOT_RUNTIME, "AllowCopilotRuntime", 0)
+
+
+def _remove_disable_copilot_runtime(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_COPILOT_RUNTIME, "AllowCopilotRuntime")
+
+
+def _detect_disable_copilot_runtime() -> bool:
+    return SESSION.read_dword(_COPILOT_RUNTIME, "AllowCopilotRuntime") == 0
+
+
+# -- Disable Bing Chat in Edge (24H2) ──────────────────────────────────
+
+
+def _apply_disable_bing_chat_edge(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("AI: disable Bing Chat / Copilot in Edge sidebar (24H2 path)")
+    SESSION.backup([_BING_CHAT], "BingChatEdge24H2")
+    SESSION.set_dword(_BING_CHAT, "IsUserEligible", 0)
+
+
+def _remove_disable_bing_chat_edge(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BING_CHAT, "IsUserEligible")
+
+
+def _detect_disable_bing_chat_edge() -> bool:
+    return SESSION.read_dword(_BING_CHAT, "IsUserEligible") == 0
+
+
+# -- Block Copilot User Eligibility ────────────────────────────────────
+
+
+def _apply_copilot_ineligible(*, require_admin: bool = False) -> None:
+    SESSION.log("AI: mark user as ineligible for Copilot")
+    SESSION.backup([_COPILOT_ELIGIBLE], "CopilotEligible")
+    SESSION.set_dword(_COPILOT_ELIGIBLE, "IsUserEligible", 0)
+
+
+def _remove_copilot_ineligible(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_COPILOT_ELIGIBLE, "IsUserEligible")
+
+
+def _detect_copilot_ineligible() -> bool:
+    return SESSION.read_dword(_COPILOT_ELIGIBLE, "IsUserEligible") == 0
+
+
+# -- Disable Copilot in Edge via Policy ────────────────────────────────
+
+
+def _apply_disable_copilot_edge_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("AI: disable Copilot in Edge via HubsSidebarEnabled policy")
+    SESSION.backup([_COPILOT_24H2], "CopilotEdgePolicy")
+    SESSION.set_dword(_COPILOT_24H2, "HubsSidebarEnabled", 0)
+
+
+def _remove_disable_copilot_edge_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_COPILOT_24H2, "HubsSidebarEnabled")
+
+
+def _detect_disable_copilot_edge_policy() -> bool:
+    return SESSION.read_dword(_COPILOT_24H2, "HubsSidebarEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="ai-disable-copilot-runtime-24h2",
+        label="Disable Copilot Runtime (24H2)",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_runtime,
+        remove_fn=_remove_disable_copilot_runtime,
+        detect_fn=_detect_disable_copilot_runtime,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_COPILOT_RUNTIME],
+        description=(
+            "Disables the Copilot Runtime system app introduced in Windows 11 24H2. "
+            "Uses the new AllowCopilotRuntime policy path. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["ai", "copilot", "24h2", "runtime", "policy"],
+    ),
+    TweakDef(
+        id="ai-disable-bing-chat-edge-24h2",
+        label="Disable Bing Chat in Edge (24H2)",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_bing_chat_edge,
+        remove_fn=_remove_disable_bing_chat_edge,
+        detect_fn=_detect_disable_bing_chat_edge,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BING_CHAT],
+        description=(
+            "Blocks Bing Chat / Copilot in Edge sidebar using the updated "
+            "24H2 policy path (BingChat\\IsUserEligible). "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["ai", "copilot", "edge", "bing-chat", "24h2"],
+    ),
+    TweakDef(
+        id="ai-copilot-ineligible",
+        label="Block Copilot User Eligibility",
+        category="AI / Copilot",
+        apply_fn=_apply_copilot_ineligible,
+        remove_fn=_remove_copilot_ineligible,
+        detect_fn=_detect_copilot_ineligible,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_COPILOT_ELIGIBLE],
+        description=(
+            "Marks the current user as ineligible for Copilot via the Shell "
+            "BingChat registry key. Prevents Copilot from activating. "
+            "Default: eligible. Recommended: ineligible for privacy."
+        ),
+        tags=["ai", "copilot", "eligible", "user", "shell"],
+    ),
+    TweakDef(
+        id="ai-disable-copilot-edge-sidebar",
+        label="Disable Copilot Edge Sidebar (Policy)",
+        category="AI / Copilot",
+        apply_fn=_apply_disable_copilot_edge_policy,
+        remove_fn=_remove_disable_copilot_edge_policy,
+        detect_fn=_detect_disable_copilot_edge_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_COPILOT_24H2],
+        description=(
+            "Disables the Copilot/Bing sidebar in Microsoft Edge via the "
+            "HubsSidebarEnabled policy. Default: enabled. Recommended: disabled."
+        ),
+        tags=["ai", "copilot", "edge", "sidebar", "policy"],
+    ),
+]

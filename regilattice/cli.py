@@ -50,8 +50,8 @@ def _run_action(
         if not assume_yes and not _confirm(f"Proceed with '{label}'?"):
             print("i️  Aborted by user.")
             return 1
-        fn = apply_all if mode == "apply" else remove_all
-        results = fn(force_corp=force)
+        batch_fn = apply_all if mode == "apply" else remove_all
+        results = batch_fn(force_corp=force)
         ok = sum(1 for v in results.values() if v in ("applied", "removed"))
         print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
         return 0
@@ -200,9 +200,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.mode and args.tweak:
         if args.mode == "status":
-            td = get_tweak(args.tweak)
-            if td:
-                print(f"{td.label}: {tweak_status(td)}")
+            found = get_tweak(args.tweak)
+            if found:
+                print(f"{found.label}: {tweak_status(found)}")
             else:
                 print(f"❌ Unknown tweak '{args.tweak}'.")
                 return 2

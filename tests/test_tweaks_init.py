@@ -1,4 +1,6 @@
 """Tests for regilattice.tweaks.__init__ — plugin loader, search, status, snapshots."""
+# mypy: disable-error-code="type-arg,no-untyped-def"
+# pyright: reportMissingTypeArgument=false
 
 from __future__ import annotations
 

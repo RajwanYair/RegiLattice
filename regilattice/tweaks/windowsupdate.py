@@ -559,36 +559,36 @@ TWEAKS: list[TweakDef] = [
 # -- 16. Disable Driver Updates via WU ───────────────────────────────────────
 
 
-def _apply_no_driver_updates(*, require_admin: bool = True) -> None:
+def _apply_exclude_driver_wu(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.backup([_WU], "NoDriverUpdates")
     SESSION.set_dword(_WU, "ExcludeWUDriversInQualityUpdate", 1)
 
 
-def _remove_no_driver_updates(*, require_admin: bool = True) -> None:
+def _remove_exclude_driver_wu(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.set_dword(_WU, "ExcludeWUDriversInQualityUpdate", 0)
 
 
-def _detect_no_driver_updates() -> bool:
+def _detect_exclude_driver_wu() -> bool:
     return SESSION.read_dword(_WU, "ExcludeWUDriversInQualityUpdate") == 1
 
 
 # -- 17. Defer Quality Updates by 14 Days ───────────────────────────────────
 
 
-def _apply_defer_quality(*, require_admin: bool = True) -> None:
+def _apply_defer_quality_14d(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.backup([_WU], "DeferQuality14d")
     SESSION.set_dword(_WU, "DeferQualityUpdatesPeriodInDays", 14)
 
 
-def _remove_defer_quality(*, require_admin: bool = True) -> None:
+def _remove_defer_quality_14d(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.delete_value(_WU, "DeferQualityUpdatesPeriodInDays")
 
 
-def _detect_defer_quality() -> bool:
+def _detect_defer_quality_14d() -> bool:
     return SESSION.read_dword(_WU, "DeferQualityUpdatesPeriodInDays") == 14
 
 
@@ -597,9 +597,9 @@ TWEAKS += [
         id="wu-disable-driver-updates",
         label="Disable Driver Updates via Windows Update",
         category="Windows Update",
-        apply_fn=_apply_no_driver_updates,
-        remove_fn=_remove_no_driver_updates,
-        detect_fn=_detect_no_driver_updates,
+        apply_fn=_apply_exclude_driver_wu,
+        remove_fn=_remove_exclude_driver_wu,
+        detect_fn=_detect_exclude_driver_wu,
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_WU],
@@ -613,9 +613,9 @@ TWEAKS += [
         id="wu-defer-quality-updates",
         label="Defer Quality Updates by 14 Days",
         category="Windows Update",
-        apply_fn=_apply_defer_quality,
-        remove_fn=_remove_defer_quality,
-        detect_fn=_detect_defer_quality,
+        apply_fn=_apply_defer_quality_14d,
+        remove_fn=_remove_defer_quality_14d,
+        detect_fn=_detect_defer_quality_14d,
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_WU],
