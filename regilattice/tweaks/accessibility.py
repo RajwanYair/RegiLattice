@@ -686,3 +686,120 @@ TWEAKS += [
         tags=["accessibility", "mouse-keys", "keyboard", "numpad"],
     ),
 ]
+
+
+# ── Increase Mouse Hover Time for Tooltips ───────────────────────────────────
+
+
+def _apply_increase_hover_time(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: increase mouse hover time to 1000ms")
+    SESSION.backup([_DESKTOP], "MouseHoverTime")
+    SESSION.set_string(_DESKTOP, "MouseHoverTime", "1000")
+
+
+def _remove_increase_hover_time(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DESKTOP], "MouseHoverTime_Remove")
+    SESSION.set_string(_DESKTOP, "MouseHoverTime", "400")
+
+
+def _detect_increase_hover_time() -> bool:
+    return SESSION.read_string(_DESKTOP, "MouseHoverTime") == "1000"
+
+
+# ── Widen Text Cursor (Caret) ────────────────────────────────────────────────
+
+
+def _apply_widen_caret(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: widen text cursor to 3px")
+    SESSION.backup([_DESKTOP], "CaretWidth")
+    SESSION.set_dword(_DESKTOP, "CaretWidth", 3)
+
+
+def _remove_widen_caret(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DESKTOP], "CaretWidth_Remove")
+    SESSION.set_dword(_DESKTOP, "CaretWidth", 1)
+
+
+def _detect_widen_caret() -> bool:
+    return SESSION.read_dword(_DESKTOP, "CaretWidth") == 3
+
+
+# ── Increase Focus Border Width ──────────────────────────────────────────────
+
+
+def _apply_increase_focus_border(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Accessibility: increase focus border width to 3px")
+    SESSION.backup([_DESKTOP], "FocusBorder")
+    SESSION.set_dword(_DESKTOP, "FocusBorderWidth", 3)
+    SESSION.set_dword(_DESKTOP, "FocusBorderHeight", 3)
+
+
+def _remove_increase_focus_border(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DESKTOP], "FocusBorder_Remove")
+    SESSION.set_dword(_DESKTOP, "FocusBorderWidth", 1)
+    SESSION.set_dword(_DESKTOP, "FocusBorderHeight", 1)
+
+
+def _detect_increase_focus_border() -> bool:
+    return SESSION.read_dword(_DESKTOP, "FocusBorderWidth") == 3
+
+
+TWEAKS += [
+    TweakDef(
+        id="acc-increase-hover-time",
+        label="Increase Tooltip Hover Time",
+        category="Accessibility",
+        apply_fn=_apply_increase_hover_time,
+        remove_fn=_remove_increase_hover_time,
+        detect_fn=_detect_increase_hover_time,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP],
+        description=(
+            "Increases the mouse hover delay before tooltips appear "
+            "from 400ms to 1000ms. Reduces accidental tooltip popups. "
+            "Default: 400ms. Recommended: 1000ms for accessibility."
+        ),
+        tags=["accessibility", "mouse", "hover", "tooltip", "delay"],
+    ),
+    TweakDef(
+        id="acc-widen-caret",
+        label="Widen Text Cursor (Caret)",
+        category="Accessibility",
+        apply_fn=_apply_widen_caret,
+        remove_fn=_remove_widen_caret,
+        detect_fn=_detect_widen_caret,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP],
+        description=(
+            "Increases the text cursor (caret) width from 1px to 3px. "
+            "Makes the blinking text cursor easier to locate visually. "
+            "Default: 1px. Recommended: 3px for visibility."
+        ),
+        tags=["accessibility", "caret", "cursor", "visibility"],
+    ),
+    TweakDef(
+        id="acc-increase-focus-border",
+        label="Increase Focus Border Width",
+        category="Accessibility",
+        apply_fn=_apply_increase_focus_border,
+        remove_fn=_remove_increase_focus_border,
+        detect_fn=_detect_increase_focus_border,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP],
+        description=(
+            "Increases the focus rectangle border from 1px to 3px wide. "
+            "Makes keyboard-focused controls easier to identify visually. "
+            "Default: 1px. Recommended: 3px for low vision."
+        ),
+        tags=["accessibility", "focus", "border", "keyboard", "visibility"],
+    ),
+]

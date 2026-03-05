@@ -815,3 +815,116 @@ TWEAKS += [
         tags=["packages", "suggested", "bloatware"],
     ),
 ]
+
+
+# ── Disable WinGet Auto-Update ───────────────────────────────────────────────
+
+
+def _apply_pkg_disable_winget_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Pkg: disabling WinGet auto-update")
+    SESSION.backup([_WINGET_KEY], "WinGetAutoUpdate")
+    SESSION.set_dword(_WINGET_KEY, "EnableAutoUpdate", 0)
+
+
+def _remove_pkg_disable_winget_auto_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINGET_KEY, "EnableAutoUpdate")
+
+
+def _detect_pkg_disable_winget_auto_update() -> bool:
+    return SESSION.read_dword(_WINGET_KEY, "EnableAutoUpdate") == 0
+
+
+# ── Set Chocolatey System Proxy ───────────────────────────────────────────────
+
+_CHOCO_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey"
+
+
+def _apply_pkg_choco_proxy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Pkg: enabling Chocolatey system proxy usage")
+    SESSION.backup([_CHOCO_POLICY], "ChocoProxy")
+    SESSION.set_dword(_CHOCO_POLICY, "UseSystemProxy", 1)
+
+
+def _remove_pkg_choco_proxy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CHOCO_POLICY, "UseSystemProxy")
+
+
+def _detect_pkg_choco_proxy() -> bool:
+    return SESSION.read_dword(_CHOCO_POLICY, "UseSystemProxy") == 1
+
+
+# ── Enable Package Source Validation ─────────────────────────────────────────
+
+
+def _apply_pkg_source_validation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Pkg: enabling package source hash validation")
+    SESSION.backup([_WINGET_KEY], "PkgSourceValidation")
+    SESSION.set_dword(_WINGET_KEY, "EnableHashOverride", 0)
+
+
+def _remove_pkg_source_validation(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WINGET_KEY, "EnableHashOverride", 1)
+
+
+def _detect_pkg_source_validation() -> bool:
+    return SESSION.read_dword(_WINGET_KEY, "EnableHashOverride") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="pkg-disable-winget-auto-update",
+        label="Disable WinGet Auto-Update",
+        category="Package Management",
+        apply_fn=_apply_pkg_disable_winget_auto_update,
+        remove_fn=_remove_pkg_disable_winget_auto_update,
+        detect_fn=_detect_pkg_disable_winget_auto_update,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WINGET_KEY],
+        description=(
+            "Disables automatic WinGet package manager self-updates via policy. "
+            "Default: Enabled. Recommended: Disabled for controlled environments."
+        ),
+        tags=["packages", "winget", "auto-update", "policy"],
+    ),
+    TweakDef(
+        id="pkg-choco-proxy",
+        label="Set Chocolatey System Proxy",
+        category="Package Management",
+        apply_fn=_apply_pkg_choco_proxy,
+        remove_fn=_remove_pkg_choco_proxy,
+        detect_fn=_detect_pkg_choco_proxy,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CHOCO_POLICY],
+        description=(
+            "Configures Chocolatey to use the system proxy for package downloads. "
+            "Useful in corporate environments behind a proxy. "
+            "Default: Direct. Recommended: Enabled behind proxy."
+        ),
+        tags=["packages", "chocolatey", "proxy", "corporate"],
+    ),
+    TweakDef(
+        id="pkg-source-validation",
+        label="Enable Package Source Validation",
+        category="Package Management",
+        apply_fn=_apply_pkg_source_validation,
+        remove_fn=_remove_pkg_source_validation,
+        detect_fn=_detect_pkg_source_validation,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WINGET_KEY],
+        description=(
+            "Prevents WinGet from overriding package hash validation. "
+            "Ensures integrity checks are enforced for all package sources. "
+            "Default: Override allowed. Recommended: Disabled (validation enforced)."
+        ),
+        tags=["packages", "winget", "hash", "validation", "security"],
+    ),
+]

@@ -783,3 +783,126 @@ TWEAKS += [
         tags=["boot", "prefetch", "performance", "startup"],
     ),
 ]
+
+
+_CRASH_CTL = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
+)
+_MEM_MGMT = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\Memory Management"
+)
+
+
+# ── Disable Auto-Reboot on BSOD ───────────────────────────────────────────
+
+
+def _apply_disable_auto_reboot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: disable automatic reboot after BSOD")
+    SESSION.backup([_CRASH_CTL], "AutoReboot")
+    SESSION.set_dword(_CRASH_CTL, "AutoReboot", 0)
+
+
+def _remove_disable_auto_reboot(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CRASH_CTL], "AutoReboot_Remove")
+    SESSION.set_dword(_CRASH_CTL, "AutoReboot", 1)
+
+
+def _detect_disable_auto_reboot() -> bool:
+    return SESSION.read_dword(_CRASH_CTL, "AutoReboot") == 0
+
+
+# ── Show Full BSOD Parameters ──────────────────────────────────────────────
+
+
+def _apply_full_bsod_info(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: show full BSOD crash parameters")
+    SESSION.backup([_CRASH_CTL], "BsodDisplayParams")
+    SESSION.set_dword(_CRASH_CTL, "DisplayParameters", 1)
+
+
+def _remove_full_bsod_info(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CRASH_CTL, "DisplayParameters")
+
+
+def _detect_full_bsod_info() -> bool:
+    return SESSION.read_dword(_CRASH_CTL, "DisplayParameters") == 1
+
+
+# ── Disable Paging Executive ───────────────────────────────────────────────
+
+
+def _apply_disable_paging_exec(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: disable paging of kernel and drivers to disk")
+    SESSION.backup([_MEM_MGMT], "PagingExecutive")
+    SESSION.set_dword(_MEM_MGMT, "DisablePagingExecutive", 1)
+
+
+def _remove_disable_paging_exec(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_MEM_MGMT], "PagingExecutive_Remove")
+    SESSION.set_dword(_MEM_MGMT, "DisablePagingExecutive", 0)
+
+
+def _detect_disable_paging_exec() -> bool:
+    return SESSION.read_dword(_MEM_MGMT, "DisablePagingExecutive") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="boot-disable-auto-reboot",
+        label="Disable Auto-Reboot on BSOD",
+        category="Boot",
+        apply_fn=_apply_disable_auto_reboot,
+        remove_fn=_remove_disable_auto_reboot,
+        detect_fn=_detect_disable_auto_reboot,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH_CTL],
+        description=(
+            "Disables automatic reboot after a Blue Screen of Death. "
+            "Allows reading the full BSOD error before the system restarts. "
+            "Default: Enabled. Recommended: Disabled for debugging."
+        ),
+        tags=["boot", "bsod", "reboot", "crash", "debugging"],
+    ),
+    TweakDef(
+        id="boot-full-bsod-info",
+        label="Show Full BSOD Parameters",
+        category="Boot",
+        apply_fn=_apply_full_bsod_info,
+        remove_fn=_remove_full_bsod_info,
+        detect_fn=_detect_full_bsod_info,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH_CTL],
+        description=(
+            "Shows detailed crash parameters on the Blue Screen of Death. "
+            "Displays bug-check code and arguments for troubleshooting. "
+            "Default: Hidden. Recommended: Shown for diagnostics."
+        ),
+        tags=["boot", "bsod", "parameters", "crash", "diagnostics"],
+    ),
+    TweakDef(
+        id="boot-disable-paging-executive",
+        label="Disable Paging Executive",
+        category="Boot",
+        apply_fn=_apply_disable_paging_exec,
+        remove_fn=_remove_disable_paging_exec,
+        detect_fn=_detect_disable_paging_exec,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_MEM_MGMT],
+        description=(
+            "Keeps kernel and drivers in physical RAM instead of paging "
+            "to disk. Improves system responsiveness on machines with "
+            "ample RAM. Default: Paging allowed. Recommended: Disabled."
+        ),
+        tags=["boot", "paging", "kernel", "memory", "performance"],
+    ),
+]

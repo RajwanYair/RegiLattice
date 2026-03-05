@@ -619,3 +619,113 @@ TWEAKS += [
         tags=["adobe", "cef", "helper", "performance"],
     ),
 ]
+
+
+# -- Disable Adobe Acrobat Cloud Services -------------------------------------
+
+
+def _apply_disable_acrobat_cloud(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disabling Acrobat cloud file store")
+    SESSION.backup([_CLOUD], "AcrobatCloud")
+    SESSION.set_dword(_CLOUD, "bDisableADCFileStore", 1)
+
+
+def _remove_disable_acrobat_cloud(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLOUD, "bDisableADCFileStore")
+
+
+def _detect_disable_acrobat_cloud() -> bool:
+    return SESSION.read_dword(_CLOUD, "bDisableADCFileStore") == 1
+
+
+# -- Set PDF Default View to Single Page --------------------------------------
+
+
+def _apply_pdf_single_page_view(*, require_admin: bool = True) -> None:
+    SESSION.log("Adobe: setting default PDF view to single page")
+    SESSION.backup([_READER_GENERAL], "PDFSinglePage")
+    SESSION.set_dword(_READER_GENERAL, "iPageViewLayoutMode", 0)
+
+
+def _remove_pdf_single_page_view(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_READER_GENERAL, "iPageViewLayoutMode")
+
+
+def _detect_pdf_single_page_view() -> bool:
+    return SESSION.read_dword(_READER_GENERAL, "iPageViewLayoutMode") == 0
+
+
+# -- Disable Adobe Whats New Screen -------------------------------------------
+
+
+def _apply_disable_whats_new(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Adobe: disabling What's New screen on launch")
+    SESSION.backup([_WELCOME], "AdobeWhatsNew")
+    SESSION.set_dword(_WELCOME, "bShowWhatsNew", 0)
+
+
+def _remove_disable_whats_new(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WELCOME, "bShowWhatsNew")
+
+
+def _detect_disable_whats_new() -> bool:
+    return SESSION.read_dword(_WELCOME, "bShowWhatsNew") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="adobe-disable-acrobat-cloud",
+        label="Disable Adobe Acrobat Cloud Services",
+        category="Adobe",
+        apply_fn=_apply_disable_acrobat_cloud,
+        remove_fn=_remove_disable_acrobat_cloud,
+        detect_fn=_detect_disable_acrobat_cloud,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CLOUD],
+        description=(
+            "Disables Adobe Document Cloud file store integration in "
+            "Acrobat Reader. Prevents cloud save prompts. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["adobe", "acrobat", "cloud", "document-cloud"],
+    ),
+    TweakDef(
+        id="adobe-pdf-single-page-view",
+        label="Set PDF Default View to Single Page",
+        category="Adobe",
+        apply_fn=_apply_pdf_single_page_view,
+        remove_fn=_remove_pdf_single_page_view,
+        detect_fn=_detect_pdf_single_page_view,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_READER_GENERAL],
+        description=(
+            "Sets the default PDF page layout to single page view. "
+            "Overrides continuous scroll as the default. "
+            "Default: continuous. Recommended: single page."
+        ),
+        tags=["adobe", "pdf", "view", "layout", "single-page"],
+    ),
+    TweakDef(
+        id="adobe-disable-welcome-screen",
+        label="Disable Adobe What's New Screen",
+        category="Adobe",
+        apply_fn=_apply_disable_whats_new,
+        remove_fn=_remove_disable_whats_new,
+        detect_fn=_detect_disable_whats_new,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WELCOME],
+        description=(
+            "Disables the What's New promotional screen shown after "
+            "Adobe Reader updates. Different from the start screen. "
+            "Default: shown. Recommended: hidden."
+        ),
+        tags=["adobe", "welcome", "whats-new", "ux"],
+    ),
+]

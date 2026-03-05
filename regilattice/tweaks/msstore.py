@@ -424,3 +424,117 @@ TWEAKS += [
         tags=["store", "consumer", "bloatware", "policy", "experiences"],
     ),
 ]
+
+
+# -- 13. Disable Auto-Install of Suggested Apps ───────────────────────────────
+
+
+def _apply_store_disable_suggested_install(*, require_admin: bool = False) -> None:
+    SESSION.log("Microsoft Store: disable silent auto-install of suggested apps")
+    SESSION.backup([_CDM], "StoreSuggestedInstall")
+    SESSION.set_dword(_CDM, "SilentInstalledAppsEnabled", 0)
+    SESSION.set_dword(_CDM, "ContentDeliveryAllowed", 0)
+
+
+def _remove_store_disable_suggested_install(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CDM, "SilentInstalledAppsEnabled", 1)
+    SESSION.set_dword(_CDM, "ContentDeliveryAllowed", 1)
+
+
+def _detect_store_disable_suggested_install() -> bool:
+    return (
+        SESSION.read_dword(_CDM, "SilentInstalledAppsEnabled") == 0
+        and SESSION.read_dword(_CDM, "ContentDeliveryAllowed") == 0
+    )
+
+
+# -- 14. Disable Store App Recommendations ───────────────────────────────────
+
+
+def _apply_store_disable_recommendations(*, require_admin: bool = False) -> None:
+    SESSION.log("Microsoft Store: disable app recommendations")
+    SESSION.backup([_CDM], "StoreRecommendations")
+    SESSION.set_dword(_CDM, "SubscribedContent-314559Enabled", 0)
+    SESSION.set_dword(_CDM, "SubscribedContent-310093Enabled", 0)
+
+
+def _remove_store_disable_recommendations(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CDM, "SubscribedContent-314559Enabled", 1)
+    SESSION.set_dword(_CDM, "SubscribedContent-310093Enabled", 1)
+
+
+def _detect_store_disable_recommendations() -> bool:
+    return (
+        SESSION.read_dword(_CDM, "SubscribedContent-314559Enabled") == 0
+        and SESSION.read_dword(_CDM, "SubscribedContent-310093Enabled") == 0
+    )
+
+
+# -- 15. Disable Store Video Autoplay ─────────────────────────────────────────
+
+_STORE_APP = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Store"
+
+
+def _apply_store_disable_video_autoplay(*, require_admin: bool = False) -> None:
+    SESSION.log("Microsoft Store: disable video autoplay in Store app")
+    SESSION.backup([_STORE_APP], "StoreVideoAutoplay")
+    SESSION.set_dword(_STORE_APP, "AutoPlayVideo", 0)
+
+
+def _remove_store_disable_video_autoplay(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_STORE_APP, "AutoPlayVideo", 1)
+
+
+def _detect_store_disable_video_autoplay() -> bool:
+    return SESSION.read_dword(_STORE_APP, "AutoPlayVideo") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="store-disable-auto-install-suggested",
+        label="Disable Auto-Install of Suggested Apps",
+        category="Microsoft Store",
+        apply_fn=_apply_store_disable_suggested_install,
+        remove_fn=_remove_store_disable_suggested_install,
+        detect_fn=_detect_store_disable_suggested_install,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables silent auto-install of suggested apps via ContentDeliveryManager. "
+            "Prevents Microsoft from pushing unwanted app installations. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "auto-install", "suggested", "silent", "bloatware"],
+    ),
+    TweakDef(
+        id="store-disable-app-recommendations",
+        label="Disable Store App Recommendations",
+        category="Microsoft Store",
+        apply_fn=_apply_store_disable_recommendations,
+        remove_fn=_remove_store_disable_recommendations,
+        detect_fn=_detect_store_disable_recommendations,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables app recommendation content via SubscribedContent policies. "
+            "Prevents promoted app suggestions in Start and Settings. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "recommendations", "subscribed", "content", "ads"],
+    ),
+    TweakDef(
+        id="store-disable-video-autoplay",
+        label="Disable Store Video Autoplay",
+        category="Microsoft Store",
+        apply_fn=_apply_store_disable_video_autoplay,
+        remove_fn=_remove_store_disable_video_autoplay,
+        detect_fn=_detect_store_disable_video_autoplay,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_STORE_APP],
+        description="Disables video autoplay in the Microsoft Store app. Default: enabled. Recommended: disabled.",
+        tags=["store", "video", "autoplay", "media"],
+    ),
+]

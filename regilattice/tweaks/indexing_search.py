@@ -416,3 +416,116 @@ TWEAKS += [
         tags=["search", "recent", "history", "suggestions", "privacy"],
     ),
 ]
+
+
+# -- Reduce Indexer I/O Footprint ---------------------------------------------
+
+
+def _apply_reduce_indexer_io(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: raise gathering disk-space threshold")
+    SESSION.backup([_GATHER], "ReduceIndexerIO")
+    SESSION.set_dword(_GATHER, "DesiredRemainingDiskSpaceMB", 5000)
+
+
+def _remove_reduce_indexer_io(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GATHER, "DesiredRemainingDiskSpaceMB")
+
+
+def _detect_reduce_indexer_io() -> bool:
+    val = SESSION.read_dword(_GATHER, "DesiredRemainingDiskSpaceMB")
+    return val is not None and val >= 5000
+
+
+# -- Disable Outlook Indexing -------------------------------------------------
+
+
+def _apply_disable_outlook_indexing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: disable Outlook data indexing")
+    SESSION.backup([_SEARCH], "OutlookIndexing")
+    SESSION.set_dword(_SEARCH, "PreventIndexingOutlook", 1)
+
+
+def _remove_disable_outlook_indexing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "PreventIndexingOutlook")
+
+
+def _detect_disable_outlook_indexing() -> bool:
+    return SESSION.read_dword(_SEARCH, "PreventIndexingOutlook") == 1
+
+
+# -- Prevent Indexing on Battery Power ----------------------------------------
+
+
+def _apply_prevent_indexing_battery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: prevent indexing when on battery")
+    SESSION.backup([_SEARCH], "IndexOnBattery")
+    SESSION.set_dword(_SEARCH, "PreventIndexOnBattery", 1)
+
+
+def _remove_prevent_indexing_battery(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "PreventIndexOnBattery")
+
+
+def _detect_prevent_indexing_battery() -> bool:
+    return SESSION.read_dword(_SEARCH, "PreventIndexOnBattery") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="idx-reduce-indexer-io",
+        label="Reduce Indexer Disk I/O",
+        category="Indexing & Search",
+        apply_fn=_apply_reduce_indexer_io,
+        remove_fn=_remove_reduce_indexer_io,
+        detect_fn=_detect_reduce_indexer_io,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GATHER],
+        description=(
+            "Sets the Gathering Manager disk-space threshold to 5 GB, causing "
+            "the indexer to back off earlier and reduce disk I/O pressure. "
+            "Default: not set. Recommended: Apply on systems with slow disks."
+        ),
+        tags=["search", "indexer", "disk", "io", "performance"],
+    ),
+    TweakDef(
+        id="idx-disable-outlook-indexing",
+        label="Disable Outlook Indexing",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_outlook_indexing,
+        remove_fn=_remove_disable_outlook_indexing,
+        detect_fn=_detect_disable_outlook_indexing,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Prevents Windows Search from indexing Outlook email data via "
+            "policy. Reduces indexer CPU and disk usage on large mailboxes. "
+            "Default: indexed. Recommended: Disabled if Outlook search unused."
+        ),
+        tags=["search", "outlook", "email", "indexing", "performance"],
+    ),
+    TweakDef(
+        id="idx-prevent-indexing-battery",
+        label="Prevent Indexing on Battery Power",
+        category="Indexing & Search",
+        apply_fn=_apply_prevent_indexing_battery,
+        remove_fn=_remove_prevent_indexing_battery,
+        detect_fn=_detect_prevent_indexing_battery,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Prevents the Windows Search indexer from running when on battery "
+            "power. Significantly improves laptop battery life. "
+            "Default: indexing continues. Recommended: Apply on laptops."
+        ),
+        tags=["search", "indexer", "battery", "power", "laptop"],
+    ),
+]

@@ -12,7 +12,7 @@ import json
 import pkgutil
 from collections import OrderedDict
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor, as_completed  # type: ignore[attr-defined]
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -143,29 +143,37 @@ def all_tweaks() -> list[TweakDef]:
     return list(_ALL_TWEAKS)
 
 
+# Scope cache — avoids repeated upper() + startswith() per tweak row
+_SCOPE_CACHE: dict[str, str] = {}
+
+
 def tweak_scope(td: TweakDef) -> str:
     """Return ``'user'``, ``'machine'``, or ``'both'`` based on registry keys.
 
-    User-space tweaks target ``HKCU`` / ``HKEY_CURRENT_USER``.
-    Machine-space tweaks target ``HKLM`` / ``HKEY_LOCAL_MACHINE``.
-    If a tweak touches both hives, returns ``'both'``.
-    Falls back to ``needs_admin`` when no registry keys are listed.
+    Results are cached by tweak id for fast GUI lookups.
     """
+    cached = _SCOPE_CACHE.get(td.id)
+    if cached is not None:
+        return cached
     if not td.registry_keys:
-        return "machine" if td.needs_admin else "user"
-    has_user = any(
-        k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\"))
-        for k in td.registry_keys
-    )
-    has_machine = any(
-        k.upper().startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\"))
-        for k in td.registry_keys
-    )
-    if has_user and has_machine:
-        return "both"
-    if has_user:
-        return "user"
-    return "machine"
+        result = "machine" if td.needs_admin else "user"
+    else:
+        has_user = any(
+            k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\"))
+            for k in td.registry_keys
+        )
+        has_machine = any(
+            k.upper().startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\"))
+            for k in td.registry_keys
+        )
+        if has_user and has_machine:
+            result = "both"
+        elif has_user:
+            result = "user"
+        else:
+            result = "machine"
+    _SCOPE_CACHE[td.id] = result
+    return result
 
 
 def get_tweak(tweak_id: str) -> TweakDef | None:
@@ -175,6 +183,8 @@ def get_tweak(tweak_id: str) -> TweakDef | None:
 
 def reload_plugins() -> None:
     """Re-scan sub-modules (useful after hot-adding a plugin)."""
+    _SCOPE_CACHE.clear()
+    _SEARCH_INDEX.clear()
     _load_plugins()
     _build_category_info()
 
@@ -193,14 +203,27 @@ def tweaks_by_category() -> dict[str, list[TweakDef]]:
 
 
 def search_tweaks(query: str) -> list[TweakDef]:
-    """Filter tweaks by a case-insensitive query matching id/label/category/tags."""
+    """Filter tweaks by a case-insensitive query matching id/label/category/tags.
+
+    Uses pre-built search index for O(n) scanning with minimal allocations.
+    """
     q = query.lower()
-    results: list[TweakDef] = []
-    for td in _ALL_TWEAKS:
-        fields = [td.id, td.label, td.category, td.description, *td.tags]
-        if any(q in f.lower() for f in fields):
-            results.append(td)
-    return results
+    return [td for td in _ALL_TWEAKS if q in _get_search_index(td)]
+
+
+# Pre-built search index for fast full-text scanning
+_SEARCH_INDEX: dict[str, str] = {}
+
+
+def _get_search_index(td: TweakDef) -> str:
+    """Return cached lowercased search string for a tweak."""
+    cached = _SEARCH_INDEX.get(td.id)
+    if cached is not None:
+        return cached
+    sep = "\0"
+    result = sep.join([td.id, td.label, td.category, td.description, *td.tags]).lower()
+    _SEARCH_INDEX[td.id] = result
+    return result
 
 
 # ── Machine profiles ─────────────────────────────────────────────────────────

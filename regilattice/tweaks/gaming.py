@@ -587,3 +587,118 @@ TWEAKS += [
         tags=["gaming", "gpu", "scheduling", "latency", "performance"],
     ),
 ]
+
+
+# ── Disable Auto HDR ─────────────────────────────────────────────────────────
+
+
+def _apply_disable_auto_hdr(*, require_admin: bool = False) -> None:
+    SESSION.log("Gaming: disable Auto HDR")
+    SESSION.backup([_GAMEBAR_CU], "AutoHDR")
+    SESSION.set_dword(_GAMEBAR_CU, "AutoHDREnable", 0)
+
+
+def _remove_disable_auto_hdr(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_GAMEBAR_CU, "AutoHDREnable", 1)
+
+
+def _detect_disable_auto_hdr() -> bool:
+    return SESSION.read_dword(_GAMEBAR_CU, "AutoHDREnable") == 0
+
+
+# ── Set System Responsiveness for Gaming ─────────────────────────────────────
+
+
+def _apply_system_responsiveness_gaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Gaming: set SystemResponsiveness to 0 (max game CPU time)")
+    SESSION.backup([_NET_THROTTLE], "SystemResponsiveness")
+    SESSION.set_dword(_NET_THROTTLE, "SystemResponsiveness", 0)
+
+
+def _remove_system_responsiveness_gaming(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_NET_THROTTLE, "SystemResponsiveness", 20)
+
+
+def _detect_system_responsiveness_gaming() -> bool:
+    return SESSION.read_dword(_NET_THROTTLE, "SystemResponsiveness") == 0
+
+
+# ── Enable Global Timer Resolution Requests ─────────────────────────────────
+
+_SESSION_KERNEL = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\Session Manager\kernel"
+)
+
+
+def _apply_timer_resolution(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Gaming: enable global timer resolution requests")
+    SESSION.backup([_SESSION_KERNEL], "TimerResolution")
+    SESSION.set_dword(_SESSION_KERNEL, "GlobalTimerResolutionRequests", 1)
+
+
+def _remove_timer_resolution(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SESSION_KERNEL, "GlobalTimerResolutionRequests", 0)
+
+
+def _detect_timer_resolution() -> bool:
+    return SESSION.read_dword(_SESSION_KERNEL, "GlobalTimerResolutionRequests") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="game-disable-auto-hdr",
+        label="Disable Auto HDR",
+        category="Gaming",
+        apply_fn=_apply_disable_auto_hdr,
+        remove_fn=_remove_disable_auto_hdr,
+        detect_fn=_detect_disable_auto_hdr,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_GAMEBAR_CU],
+        description=(
+            "Disables Windows Auto HDR for games. Prevents automatic "
+            "tone-mapping that can cause washed-out colors in SDR titles. "
+            "Default: Enabled. Recommended: Disabled if HDR causes issues."
+        ),
+        tags=["gaming", "hdr", "auto-hdr", "display", "colors"],
+    ),
+    TweakDef(
+        id="game-set-system-responsiveness",
+        label="Set System Responsiveness for Gaming",
+        category="Gaming",
+        apply_fn=_apply_system_responsiveness_gaming,
+        remove_fn=_remove_system_responsiveness_gaming,
+        detect_fn=_detect_system_responsiveness_gaming,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_NET_THROTTLE],
+        description=(
+            "Sets SystemResponsiveness to 0, allocating maximum CPU cycles "
+            "to foreground games instead of background services. "
+            "Default: 20 (%). Recommended: 0 for dedicated gaming PCs."
+        ),
+        tags=["gaming", "cpu", "responsiveness", "priority", "performance"],
+    ),
+    TweakDef(
+        id="game-enable-timer-resolution",
+        label="Enable Global Timer Resolution Requests",
+        category="Gaming",
+        apply_fn=_apply_timer_resolution,
+        remove_fn=_remove_timer_resolution,
+        detect_fn=_detect_timer_resolution,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SESSION_KERNEL],
+        description=(
+            "Enables global timer resolution requests for lower input latency. "
+            "Allows applications to request higher timer precision (0.5 ms). "
+            "Default: 0 (disabled). Recommended: 1 for competitive gaming."
+        ),
+        tags=["gaming", "timer", "resolution", "latency", "precision"],
+    ),
+]

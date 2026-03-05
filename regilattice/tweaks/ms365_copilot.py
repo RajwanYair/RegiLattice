@@ -617,3 +617,121 @@ TWEAKS += [
         tags=["m365", "loop", "fluid", "components", "collaboration"],
     ),
 ]
+
+
+# -- Disable Copilot Compose in Word ───────────────────────────────────────────
+
+_WORD_COMPOSE = rf"{_OFFICE_POLICY}\word\options\vpref"
+
+
+def _apply_disable_word_copilot_compose(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("M365 Copilot: disable Copilot compose in Word")
+    SESSION.backup([_WORD_COMPOSE], "M365WordCompose")
+    SESSION.set_dword(_WORD_COMPOSE, "EnableCopilotCompose", 0)
+
+
+def _remove_disable_word_copilot_compose(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WORD_COMPOSE, "EnableCopilotCompose")
+
+
+def _detect_disable_word_copilot_compose() -> bool:
+    return SESSION.read_dword(_WORD_COMPOSE, "EnableCopilotCompose") == 0
+
+
+# -- Disable Copilot Preview Features ─────────────────────────────────────────
+
+_COPILOT_PREVIEW = rf"{_OFFICE_POLICY}\common\copilotpreview"
+
+
+def _apply_disable_copilot_preview(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("M365 Copilot: disable preview features")
+    SESSION.backup([_COPILOT_PREVIEW], "M365CopilotPreview")
+    SESSION.set_dword(_COPILOT_PREVIEW, "EnablePreviewFeatures", 0)
+
+
+def _remove_disable_copilot_preview(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_COPILOT_PREVIEW, "EnablePreviewFeatures")
+
+
+def _detect_disable_copilot_preview() -> bool:
+    return SESSION.read_dword(_COPILOT_PREVIEW, "EnablePreviewFeatures") == 0
+
+
+# -- Disable AI-Powered Suggestions in Outlook ─────────────────────────────────
+
+_OUTLOOK_AI = rf"{_OFFICE_POLICY}\outlook\options\mail\compose"
+
+
+def _apply_disable_outlook_ai_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("M365 Copilot: disable AI-powered suggestions in Outlook")
+    SESSION.backup([_OUTLOOK_AI], "M365OutlookAI")
+    SESSION.set_dword(_OUTLOOK_AI, "EnableAISuggestions", 0)
+
+
+def _remove_disable_outlook_ai_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OUTLOOK_AI, "EnableAISuggestions")
+
+
+def _detect_disable_outlook_ai_suggestions() -> bool:
+    return SESSION.read_dword(_OUTLOOK_AI, "EnableAISuggestions") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="m365-disable-word-copilot-compose",
+        label="Disable Copilot Compose in Word",
+        category="M365 Copilot",
+        apply_fn=_apply_disable_word_copilot_compose,
+        remove_fn=_remove_disable_word_copilot_compose,
+        detect_fn=_detect_disable_word_copilot_compose,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WORD_COMPOSE],
+        description=(
+            "Disables Copilot compose/draft features in Word via policy. "
+            "Prevents AI-assisted text generation in documents. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["m365", "copilot", "word", "compose", "draft"],
+    ),
+    TweakDef(
+        id="m365-disable-copilot-preview",
+        label="Disable Copilot Preview Features",
+        category="M365 Copilot",
+        apply_fn=_apply_disable_copilot_preview,
+        remove_fn=_remove_disable_copilot_preview,
+        detect_fn=_detect_disable_copilot_preview,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_COPILOT_PREVIEW],
+        description=(
+            "Disables M365 Copilot preview/experimental features via policy. "
+            "Prevents early-access AI features from appearing in Office apps. "
+            "Default: Enabled. Recommended: Disabled for stability."
+        ),
+        tags=["m365", "copilot", "preview", "experimental", "features"],
+    ),
+    TweakDef(
+        id="m365-disable-outlook-ai-suggestions",
+        label="Disable AI-Powered Suggestions in Outlook",
+        category="M365 Copilot",
+        apply_fn=_apply_disable_outlook_ai_suggestions,
+        remove_fn=_remove_disable_outlook_ai_suggestions,
+        detect_fn=_detect_disable_outlook_ai_suggestions,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_OUTLOOK_AI],
+        description=(
+            "Disables AI-powered compose suggestions in Outlook via policy. "
+            "Prevents AI text predictions and smart reply features. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["m365", "copilot", "outlook", "ai", "suggestions"],
+    ),
+]

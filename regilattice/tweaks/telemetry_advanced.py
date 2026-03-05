@@ -543,3 +543,130 @@ TWEAKS += [
         tags=["telemetry", "inventory", "collector", "appcompat"],
     ),
 ]
+
+
+# -- Disable Connected User Experiences -----------------------------------------
+
+_CONNECTED_UX = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
+    r"\CurrentVersion\PushNotifications"
+)
+
+
+def _apply_disable_connected_ux(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Telemetry: disabling Connected User Experiences")
+    SESSION.backup([_DATA_COLLECTION, _CONNECTED_UX], "ConnectedUX")
+    SESSION.set_dword(_DATA_COLLECTION, "DisableEnterpriseAuthProxy", 1)
+    SESSION.set_dword(_CONNECTED_UX, "NoCloudApplicationNotification", 1)
+    SESSION.log("Telemetry: Connected User Experiences disabled")
+
+
+def _remove_disable_connected_ux(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DATA_COLLECTION, "DisableEnterpriseAuthProxy")
+    SESSION.delete_value(_CONNECTED_UX, "NoCloudApplicationNotification")
+
+
+def _detect_disable_connected_ux() -> bool:
+    return SESSION.read_dword(_DATA_COLLECTION, "DisableEnterpriseAuthProxy") == 1
+
+
+# -- Set Telemetry Max Cache Size -----------------------------------------------
+
+_DIAGTRACK_CONF = (
+    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
+    r"\DataCollection"
+)
+
+
+def _apply_set_telemetry_max_size(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Telemetry: setting max telemetry cache to 1 MB")
+    SESSION.backup([_DIAGTRACK_CONF], "TelemMaxSize")
+    SESSION.set_dword(_DIAGTRACK_CONF, "LimitDumpCollection", 1)
+    SESSION.set_dword(_DIAGTRACK_CONF, "LimitDiagnosticLogCollection", 0)
+    SESSION.log("Telemetry: max cache size set")
+
+
+def _remove_set_telemetry_max_size(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DIAGTRACK_CONF, "LimitDumpCollection")
+    SESSION.delete_value(_DIAGTRACK_CONF, "LimitDiagnosticLogCollection")
+
+
+def _detect_set_telemetry_max_size() -> bool:
+    return SESSION.read_dword(_DIAGTRACK_CONF, "LimitDumpCollection") == 1
+
+
+# -- Disable Diagnostic Log Collection ------------------------------------------
+
+
+def _apply_disable_diag_log(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Telemetry: disabling diagnostic log collection")
+    SESSION.backup([_DIAGTRACK_CONF], "DiagLogCollection")
+    SESSION.set_dword(_DIAGTRACK_CONF, "LimitDiagnosticLogCollection", 1)
+    SESSION.log("Telemetry: diagnostic log collection disabled")
+
+
+def _remove_disable_diag_log(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_DIAGTRACK_CONF, "LimitDiagnosticLogCollection", 0)
+
+
+def _detect_disable_diag_log() -> bool:
+    return SESSION.read_dword(_DIAGTRACK_CONF, "LimitDiagnosticLogCollection") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="telemetry-disable-connected-user",
+        label="Disable Connected User Experiences",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_connected_ux,
+        remove_fn=_remove_disable_connected_ux,
+        detect_fn=_detect_disable_connected_ux,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DATA_COLLECTION, _CONNECTED_UX],
+        description=(
+            "Disables Connected User Experiences and Telemetry proxy. "
+            "Prevents cloud-based notifications and data sync. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["telemetry", "connected-ux", "push", "privacy"],
+    ),
+    TweakDef(
+        id="telemetry-set-max-size",
+        label="Limit Telemetry Cache / Dump Collection",
+        category="Telemetry Advanced",
+        apply_fn=_apply_set_telemetry_max_size,
+        remove_fn=_remove_set_telemetry_max_size,
+        detect_fn=_detect_set_telemetry_max_size,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DIAGTRACK_CONF],
+        description=(
+            "Limits telemetry dump collection to reduce disk usage and data sent to Microsoft. "
+            "Default: Unlimited. Recommended: Limited."
+        ),
+        tags=["telemetry", "cache", "dump", "size", "limit"],
+    ),
+    TweakDef(
+        id="telemetry-disable-diagnostic-log",
+        label="Disable Diagnostic Log Collection",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_diag_log,
+        remove_fn=_remove_disable_diag_log,
+        detect_fn=_detect_disable_diag_log,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DIAGTRACK_CONF],
+        description=(
+            "Disables diagnostic log collection via LimitDiagnosticLogCollection policy. "
+            "Reduces telemetry data stored locally. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["telemetry", "diagnostic", "log", "collection", "privacy"],
+    ),
+]

@@ -635,3 +635,117 @@ TWEAKS += [
         tags=["security", "audit", "logon", "monitoring"],
     ),
 ]
+
+
+# ── Disable PUA Protection ───────────────────────────────────────────────────
+
+
+def _apply_sec_disable_pua(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disabling PUA/Potentially Unwanted App detection")
+    SESSION.backup([_PUA], "PUAProtection")
+    SESSION.set_dword(_PUA, "MpEnablePus", 0)
+
+
+def _remove_sec_disable_pua(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PUA, "MpEnablePus", 1)
+
+
+def _detect_sec_disable_pua() -> bool:
+    return SESSION.read_dword(_PUA, "MpEnablePus") == 0
+
+
+# ── Set Defender Scan Schedule to Weekly ─────────────────────────────────────
+
+_SCAN = rf"{_DEFENDER}\Scan"
+
+
+def _apply_sec_scan_weekly(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: setting scan schedule to weekly (Sunday)")
+    SESSION.backup([_SCAN], "ScanScheduleWeekly")
+    SESSION.set_dword(_SCAN, "ScheduleDay", 1)  # 1 = Sunday
+
+
+def _remove_sec_scan_weekly(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SCAN, "ScheduleDay")
+
+
+def _detect_sec_scan_weekly() -> bool:
+    return SESSION.read_dword(_SCAN, "ScheduleDay") == 1
+
+
+# ── Disable Automatic Sample Submission ──────────────────────────────────────
+
+
+def _apply_sec_disable_sample_submission(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disabling automatic sample submission")
+    SESSION.backup([_SPYNET], "SampleSubmission")
+    SESSION.set_dword(_SPYNET, "SubmitSamplesConsent", 2)  # 2 = Never send
+
+
+def _remove_sec_disable_sample_submission(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SPYNET, "SubmitSamplesConsent", 1)  # 1 = Safe samples
+
+
+def _detect_sec_disable_sample_submission() -> bool:
+    return SESSION.read_dword(_SPYNET, "SubmitSamplesConsent") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-disable-pua-protection",
+        label="Disable PUA Detection",
+        category="Security",
+        apply_fn=_apply_sec_disable_pua,
+        remove_fn=_remove_sec_disable_pua,
+        detect_fn=_detect_sec_disable_pua,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PUA],
+        description=(
+            "Disables Potentially Unwanted Application (PUA) detection "
+            "in Windows Defender via MpEnablePus policy. "
+            "Default: Enabled. Recommended: Keep enabled for safety."
+        ),
+        tags=["security", "defender", "pua", "detection", "policy"],
+    ),
+    TweakDef(
+        id="sec-scan-schedule-weekly",
+        label="Set Defender Scan Schedule to Weekly",
+        category="Security",
+        apply_fn=_apply_sec_scan_weekly,
+        remove_fn=_remove_sec_scan_weekly,
+        detect_fn=_detect_sec_scan_weekly,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SCAN],
+        description=(
+            "Sets Windows Defender scheduled scan to run weekly on Sunday "
+            "instead of daily. Reduces system overhead. "
+            "Default: Daily. Recommended: Weekly for low-risk environments."
+        ),
+        tags=["security", "defender", "scan", "schedule", "weekly"],
+    ),
+    TweakDef(
+        id="sec-disable-auto-sample-submission",
+        label="Disable Automatic Sample Submission",
+        category="Security",
+        apply_fn=_apply_sec_disable_sample_submission,
+        remove_fn=_remove_sec_disable_sample_submission,
+        detect_fn=_detect_sec_disable_sample_submission,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPYNET],
+        description=(
+            "Disables automatic submission of file samples to Microsoft "
+            "for cloud-based analysis (SubmitSamplesConsent=2). "
+            "Default: Safe samples. Recommended: Disabled for privacy."
+        ),
+        tags=["security", "defender", "samples", "cloud", "privacy"],
+    ),
+]

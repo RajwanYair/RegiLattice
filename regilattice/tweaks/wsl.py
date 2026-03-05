@@ -936,3 +936,116 @@ TWEAKS += [
         tags=["wsl", "debug", "console", "kernel", "diagnostic"],
     ),
 ]
+
+
+# -- Set WSL Default Version 2 (Policy) ----------------------------------------
+
+_LXSS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss"
+_LXSS_POLICY_KEYS = [_LXSS_POLICY]
+
+
+def _apply_wsl_enforce_v2_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WSL: enforcing WSL version 2 as default via policy")
+    SESSION.backup(_LXSS_POLICY_KEYS, "WSL_EnforceV2Policy")
+    SESSION.set_dword(_LXSS_POLICY, "DefaultVersion", 2)
+
+
+def _remove_wsl_enforce_v2_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_POLICY, "DefaultVersion")
+
+
+def _detect_wsl_enforce_v2_policy() -> bool:
+    return SESSION.read_dword(_LXSS_POLICY, "DefaultVersion") == 2
+
+
+# -- Limit WSL Memory Usage ----------------------------------------------------
+
+
+def _apply_wsl_limit_memory(*, require_admin: bool = True) -> None:
+    SESSION.log("WSL: setting maximum VM memory to 4096 MB")
+    SESSION.backup(_LXSS_KEYS, "WSL_LimitMemory")
+    SESSION.set_dword(_LXSS_CU, "MaxVmMemory", 4096)
+
+
+def _remove_wsl_limit_memory(*, require_admin: bool = True) -> None:
+    SESSION.delete_value(_LXSS_CU, "MaxVmMemory")
+
+
+def _detect_wsl_limit_memory() -> bool:
+    return SESSION.read_dword(_LXSS_CU, "MaxVmMemory") == 4096
+
+
+# -- Enable WSL Systemd as Default Init ----------------------------------------
+
+
+def _apply_wsl_systemd_default(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("WSL: enabling systemd as default init via policy")
+    SESSION.backup(_LXSS_POLICY_KEYS, "WSL_SystemdDefault")
+    SESSION.set_dword(_LXSS_POLICY, "SystemdEnabled", 1)
+
+
+def _remove_wsl_systemd_default(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_LXSS_POLICY, "SystemdEnabled")
+
+
+def _detect_wsl_systemd_default() -> bool:
+    return SESSION.read_dword(_LXSS_POLICY, "SystemdEnabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="wsl-enforce-v2-policy",
+        label="Enforce WSL Version 2 as Default (Policy)",
+        category="WSL",
+        apply_fn=_apply_wsl_enforce_v2_policy,
+        remove_fn=_remove_wsl_enforce_v2_policy,
+        detect_fn=_detect_wsl_enforce_v2_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_POLICY_KEYS,
+        description=(
+            "Enforces WSL version 2 as the default for all new distributions "
+            "via machine-wide Group Policy. "
+            "Default: not set. Recommended: version 2."
+        ),
+        tags=["wsl", "version", "v2", "policy", "default"],
+    ),
+    TweakDef(
+        id="wsl-limit-memory",
+        label="Limit WSL Memory to 4 GB",
+        category="WSL",
+        apply_fn=_apply_wsl_limit_memory,
+        remove_fn=_remove_wsl_limit_memory,
+        detect_fn=_detect_wsl_limit_memory,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=_LXSS_KEYS,
+        description=(
+            "Limits the maximum memory allocated to WSL2 virtual machines "
+            "to 4096 MB. Prevents WSL from consuming excessive host RAM. "
+            "Default: 50%% of host RAM. Recommended: 4 GB."
+        ),
+        tags=["wsl", "memory", "limit", "ram", "performance"],
+    ),
+    TweakDef(
+        id="wsl-systemd-default",
+        label="Enable Systemd as Default Init (Policy)",
+        category="WSL",
+        apply_fn=_apply_wsl_systemd_default,
+        remove_fn=_remove_wsl_systemd_default,
+        detect_fn=_detect_wsl_systemd_default,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_LXSS_POLICY_KEYS,
+        description=(
+            "Enables systemd as the default init system for WSL2 distributions "
+            "via Group Policy. Required for services like snap and Docker. "
+            "Default: disabled. Recommended: enabled."
+        ),
+        tags=["wsl", "systemd", "init", "policy", "services"],
+    ),
+]

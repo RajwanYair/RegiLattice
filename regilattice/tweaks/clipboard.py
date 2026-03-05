@@ -470,3 +470,116 @@ TWEAKS += [
         tags=["clipboard", "roaming", "policy", "cross-device"],
     ),
 ]
+
+
+# ── Disable Full Window Drag ────────────────────────────────────────────────
+
+
+def _apply_disable_drag_full_windows(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Clipboard: disable full window drag")
+    SESSION.backup([_DRAG_DROP], "DragFullWindows")
+    SESSION.set_string(_DRAG_DROP, "DragFullWindows", "0")
+
+
+def _remove_disable_drag_full_windows(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DRAG_DROP], "DragFullWindows_Remove")
+    SESSION.set_string(_DRAG_DROP, "DragFullWindows", "1")
+
+
+def _detect_disable_drag_full_windows() -> bool:
+    return SESSION.read_string(_DRAG_DROP, "DragFullWindows") == "0"
+
+
+# ── Set Maximum Clipboard History Items ─────────────────────────────────────
+
+
+def _apply_max_history_items(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Clipboard: set max clipboard history items to 50")
+    SESSION.backup([_CLIPBOARD_POLICY], "MaxClipHistoryItems")
+    SESSION.set_dword(_CLIPBOARD_POLICY, "MaxClipboardHistoryItems", 50)
+
+
+def _remove_max_history_items(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLIPBOARD_POLICY, "MaxClipboardHistoryItems")
+
+
+def _detect_max_history_items() -> bool:
+    return SESSION.read_dword(_CLIPBOARD_POLICY, "MaxClipboardHistoryItems") == 50
+
+
+# ── Disable Clipboard Experience Host ───────────────────────────────────────
+
+
+def _apply_disable_clip_experience(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Clipboard: disable clipboard experience host")
+    SESSION.backup([_CLIPBOARD_CU], "ClipboardExperience")
+    SESSION.set_dword(_CLIPBOARD_CU, "EnableClipboardExperience", 0)
+
+
+def _remove_disable_clip_experience(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLIPBOARD_CU, "EnableClipboardExperience")
+
+
+def _detect_disable_clip_experience() -> bool:
+    return SESSION.read_dword(_CLIPBOARD_CU, "EnableClipboardExperience") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="clip-disable-drag-full-windows",
+        label="Disable Full Window Drag",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_drag_full_windows,
+        remove_fn=_remove_disable_drag_full_windows,
+        detect_fn=_detect_disable_drag_full_windows,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DRAG_DROP],
+        description=(
+            "Shows window outline instead of full content while dragging. "
+            "Reduces GPU load and improves drag responsiveness. "
+            "Default: Full window. Recommended: Outline for performance."
+        ),
+        tags=["clipboard", "drag", "window", "performance"],
+    ),
+    TweakDef(
+        id="clip-max-history-items",
+        label="Increase Clipboard History Limit",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_max_history_items,
+        remove_fn=_remove_max_history_items,
+        detect_fn=_detect_max_history_items,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CLIPBOARD_POLICY],
+        description=(
+            "Sets maximum clipboard history entries to 50 via policy. "
+            "Allows storing more copied items in clipboard history. "
+            "Default: 25 items. Recommended: 50 for productivity."
+        ),
+        tags=["clipboard", "history", "limit", "policy", "productivity"],
+    ),
+    TweakDef(
+        id="clip-disable-clipboard-experience",
+        label="Disable Clipboard Experience Host",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_clip_experience,
+        remove_fn=_remove_disable_clip_experience,
+        detect_fn=_detect_disable_clip_experience,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLIPBOARD_CU],
+        description=(
+            "Disables the clipboard experience host process that manages "
+            "rich clipboard UI and suggestions. Saves memory and CPU. "
+            "Default: Enabled. Recommended: Disabled for minimal setups."
+        ),
+        tags=["clipboard", "experience", "host", "memory", "minimal"],
+    ),
+]

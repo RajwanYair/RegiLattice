@@ -514,3 +514,105 @@ TWEAKS += [
         tags=["notifications", "toast", "push", "quiet-hours"],
     ),
 ]
+
+
+# -- 14. Disable Notification Sounds ─────────────────────────────────────────
+
+
+def _apply_disable_notif_sounds(*, require_admin: bool = False) -> None:
+    SESSION.backup([_NOTIF_SETTINGS], "NotifSounds")
+    SESSION.set_dword(_NOTIF_SETTINGS, "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)
+
+
+def _remove_disable_notif_sounds(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_NOTIF_SETTINGS, "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 1)
+
+
+def _detect_disable_notif_sounds() -> bool:
+    return SESSION.read_dword(_NOTIF_SETTINGS, "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND") == 0
+
+
+# -- 15. Set Notification Display Time to 3 Seconds ──────────────────────────
+
+_ACCESSIBILITY_KEY = r"HKEY_CURRENT_USER\Control Panel\Accessibility"
+
+
+def _apply_notif_display_time_3s(*, require_admin: bool = False) -> None:
+    SESSION.backup([_ACCESSIBILITY_KEY], "NotifDisplayTime")
+    SESSION.set_dword(_ACCESSIBILITY_KEY, "MessageDuration", 3)
+
+
+def _remove_notif_display_time_3s(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_ACCESSIBILITY_KEY, "MessageDuration", 5)
+
+
+def _detect_notif_display_time_3s() -> bool:
+    return SESSION.read_dword(_ACCESSIBILITY_KEY, "MessageDuration") == 3
+
+
+# -- 16. Disable Notification Banners ────────────────────────────────────────
+
+_NOTIF_BANNER_POLICY = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"
+
+
+def _apply_disable_notif_banners(*, require_admin: bool = False) -> None:
+    SESSION.backup([_NOTIF_BANNER_POLICY], "NotifBanners")
+    SESSION.set_dword(_NOTIF_BANNER_POLICY, "NoToastApplicationNotification", 1)
+
+
+def _remove_disable_notif_banners(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_NOTIF_BANNER_POLICY, "NoToastApplicationNotification")
+
+
+def _detect_disable_notif_banners() -> bool:
+    return SESSION.read_dword(_NOTIF_BANNER_POLICY, "NoToastApplicationNotification") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="notif-silence-global-sounds",
+        label="Silence Global Notification Sounds",
+        category="Notifications",
+        apply_fn=_apply_disable_notif_sounds,
+        remove_fn=_remove_disable_notif_sounds,
+        detect_fn=_detect_disable_notif_sounds,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_SETTINGS],
+        description="Disables notification sounds via the global NOC sound setting. Default: Enabled. Recommended: Disabled.",
+        tags=["notifications", "sounds", "audio", "focus", "global"],
+    ),
+    TweakDef(
+        id="notif-display-time-3s",
+        label="Set Notification Display Time to 3 Seconds",
+        category="Notifications",
+        apply_fn=_apply_notif_display_time_3s,
+        remove_fn=_remove_notif_display_time_3s,
+        detect_fn=_detect_notif_display_time_3s,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ACCESSIBILITY_KEY],
+        description=(
+            "Sets notification display duration to 3 seconds instead of the default 5. "
+            "Reduces visual distraction. Default: 5s. Recommended: 3s."
+        ),
+        tags=["notifications", "display-time", "duration", "accessibility"],
+    ),
+    TweakDef(
+        id="notif-disable-banners",
+        label="Disable Notification Banners",
+        category="Notifications",
+        apply_fn=_apply_disable_notif_banners,
+        remove_fn=_remove_disable_notif_banners,
+        detect_fn=_detect_disable_notif_banners,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_BANNER_POLICY],
+        description=(
+            "Disables toast notification banners (pop-ups) via policy. "
+            "Notifications still appear in Action Center. "
+            "Default: Enabled. Recommended: Disabled for focus."
+        ),
+        tags=["notifications", "banners", "toast", "policy"],
+    ),
+]

@@ -671,3 +671,115 @@ TWEAKS += [
         tags=["gpu", "tdr", "timeout", "stability", "compute"],
     ),
 ]
+
+
+# ── Disable GPU Power Throttling ─────────────────────────────────────────────────────────────
+
+
+def _apply_disable_gpu_power_throttle(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: disable GPU power throttling")
+    SESSION.backup([_GPU_SCHED], "GpuPowerThrottle")
+    SESSION.set_dword(_GPU_SCHED, "PowerThrottleQos", 0)
+
+
+def _remove_disable_gpu_power_throttle(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GPU_SCHED, "PowerThrottleQos")
+
+
+def _detect_disable_gpu_power_throttle() -> bool:
+    return SESSION.read_dword(_GPU_SCHED, "PowerThrottleQos") == 0
+
+
+# ── Force Software Cursor ────────────────────────────────────────────────────────────────────
+
+
+def _apply_force_sw_cursor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: force software cursor rendering")
+    SESSION.backup([_DWM_LM], "SwCursor")
+    SESSION.set_dword(_DWM_LM, "UseSWCursor", 1)
+
+
+def _remove_force_sw_cursor(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DWM_LM, "UseSWCursor")
+
+
+def _detect_force_sw_cursor() -> bool:
+    return SESSION.read_dword(_DWM_LM, "UseSWCursor") == 1
+
+
+# ── Set Maximum Pre-Rendered Frames to 1 ─────────────────────────────────────────────────────
+
+
+def _apply_max_prerendered_frames(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: set max pre-rendered frames to 1")
+    SESSION.backup([_GPU_SCHED], "FlipQueueSize")
+    SESSION.set_dword(_GPU_SCHED, "FlipQueueSize", 1)
+
+
+def _remove_max_prerendered_frames(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GPU_SCHED, "FlipQueueSize")
+
+
+def _detect_max_prerendered_frames() -> bool:
+    return SESSION.read_dword(_GPU_SCHED, "FlipQueueSize") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="gpu-disable-power-throttle",
+        label="Disable GPU Power Throttling",
+        category="GPU / Graphics",
+        apply_fn=_apply_disable_gpu_power_throttle,
+        remove_fn=_remove_disable_gpu_power_throttle,
+        detect_fn=_detect_disable_gpu_power_throttle,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_SCHED],
+        description=(
+            "Disables GPU power throttling in the graphics driver scheduler. "
+            "Prevents the GPU from downclocking during sustained workloads. "
+            "Default: Enabled. Recommended: Disabled for compute workloads."
+        ),
+        tags=["gpu", "power", "throttle", "performance", "compute"],
+    ),
+    TweakDef(
+        id="gpu-force-software-cursor",
+        label="Force Software Cursor",
+        category="GPU / Graphics",
+        apply_fn=_apply_force_sw_cursor,
+        remove_fn=_remove_force_sw_cursor,
+        detect_fn=_detect_force_sw_cursor,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DWM_LM],
+        description=(
+            "Forces DWM to use software cursor rendering instead of hardware. "
+            "Can reduce perceived input lag on some GPU/driver combinations. "
+            "Default: Hardware cursor. Recommended: Software for low-latency."
+        ),
+        tags=["gpu", "cursor", "input-lag", "dwm", "latency"],
+    ),
+    TweakDef(
+        id="gpu-max-prerendered-frames",
+        label="Set Max Pre-Rendered Frames to 1",
+        category="GPU / Graphics",
+        apply_fn=_apply_max_prerendered_frames,
+        remove_fn=_remove_max_prerendered_frames,
+        detect_fn=_detect_max_prerendered_frames,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_SCHED],
+        description=(
+            "Sets the flip queue size to 1, limiting pre-rendered frames. "
+            "Reduces input lag at the cost of slightly lower throughput. "
+            "Default: 3 frames. Recommended: 1 for competitive gaming."
+        ),
+        tags=["gpu", "pre-rendered", "frames", "input-lag", "gaming"],
+    ),
+]

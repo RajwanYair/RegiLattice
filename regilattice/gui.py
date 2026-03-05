@@ -122,15 +122,16 @@ class _Tooltip:
 # ── Tooltip text builder ─────────────────────────────────────────────────────
 
 
-@functools.lru_cache(maxsize=1024)
-def _parse_description_metadata(description: str) -> tuple[str, str, str]:
-    """Extract Default/Recommended hints from description text.
+@functools.lru_cache(maxsize=2048)
+def _parse_description_metadata(description: str) -> tuple[str, str, str, str]:
+    """Extract Default/Recommended/Options hints from description text.
 
-    Returns (main_text, default_hint, recommendation_hint).
+    Returns (main_text, default_hint, recommendation_hint, options_hint).
     """
     main_parts: list[str] = []
     default_hint = ""
     rec_hint = ""
+    options_hint = ""
     for sentence in description.replace(". ", ".\n").splitlines():
         s = sentence.strip()
         low = s.lower()
@@ -138,9 +139,11 @@ def _parse_description_metadata(description: str) -> tuple[str, str, str]:
             default_hint = s
         elif low.startswith("recommended:"):
             rec_hint = s
+        elif low.startswith("options:") or low.startswith("values:"):
+            options_hint = s
         else:
             main_parts.append(s)
-    return " ".join(main_parts).strip(), default_hint, rec_hint
+    return " ".join(main_parts).strip(), default_hint, rec_hint, options_hint
 
 
 def _has_recommendation(td: TweakDef) -> bool:
@@ -152,7 +155,7 @@ def _build_tooltip_text(td: TweakDef, status: str) -> str:
     """Build rich tooltip including description, current state, options, and recommendation."""
     parts: list[str] = []
 
-    main_desc, default_hint, rec_hint = _parse_description_metadata(td.description or "")
+    main_desc, default_hint, rec_hint, options_hint = _parse_description_metadata(td.description or "")
     if main_desc:
         parts.append(main_desc)
 
@@ -171,6 +174,8 @@ def _build_tooltip_text(td: TweakDef, status: str) -> str:
         parts.append(f"i {default_hint}")
     if rec_hint:
         parts.append(f"★ {rec_hint}")
+    if options_hint:
+        parts.append(f"☰ {options_hint}")
 
     parts.append("")
 
@@ -830,6 +835,9 @@ class RegiLatticeGUI:
         ttk.Button(btn3, text="\U0001F4C2  Import JSON", command=self._import_json_selection).pack(
             side="left", padx=(0, 6), expand=True, fill="x",
         )
+        ttk.Button(btn3, text="\U0001F4E6  Scoop Manager", command=self._open_scoop_manager).pack(
+            side="left", padx=(0, 6), expand=True, fill="x",
+        )
         ttk.Button(btn3, text="\U0001F4DC  Toggle Log", command=self._toggle_log_panel).pack(
             side="left", padx=(0, 6), expand=True, fill="x",
         )
@@ -1071,6 +1079,128 @@ class RegiLatticeGUI:
                 count += 1
         self._update_selection_count()
         self._set_status(f"Imported {count} tweaks from {Path(path).name}", _OK_GREEN)
+
+    # ── Scoop Tools Manager ────────────────────────────────────────────
+
+    def _open_scoop_manager(self) -> None:
+        """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
+        from .tweaks.scoop_tools import (
+            _install_scoop_app,
+            _remove_scoop_app,
+            _scoop_installed,
+            list_installed_scoop_apps,
+        )
+
+        dlg = tk.Toplevel(self._root)
+        dlg.title("Scoop Tools Manager")
+        dlg.geometry("620x520")
+        dlg.configure(bg=_BG)
+        dlg.transient(self._root)
+        dlg.grab_set()
+
+        # Header
+        tk.Label(dlg, text="\U0001F4E6  Scoop Tools Manager", bg=_BG, fg=_FG, font=_FONT_TITLE).pack(
+            padx=16, pady=(12, 4), anchor="w",
+        )
+
+        scoop_ok = _scoop_installed()
+        if not scoop_ok:
+            tk.Label(
+                dlg, text="Scoop is not installed. Install via 'scoop-install' tweak first.",
+                bg=_BG, fg=_ERR_RED, font=_FONT_BOLD,
+            ).pack(padx=16, pady=8)
+            return
+
+        # Status label
+        status_lbl = tk.Label(dlg, text="Loading installed packages...", bg=_BG, fg=_FG_DIM, font=_FONT_SM)
+        status_lbl.pack(padx=16, pady=4, anchor="w")
+
+        # Installed packages list
+        list_frame = tk.Frame(dlg, bg=_BG)
+        list_frame.pack(fill="both", expand=True, padx=16, pady=4)
+
+        listbox = tk.Listbox(
+            list_frame, bg=_CARD_BG, fg=_FG, font=_FONT, selectbackground=_ACCENT,
+            selectforeground="#1E1E2E", relief="flat", highlightthickness=0,
+        )
+        scroll = ttk.Scrollbar(list_frame, orient="vertical", command=listbox.yview)
+        listbox.configure(yscrollcommand=scroll.set)
+        listbox.pack(side="left", fill="both", expand=True)
+        scroll.pack(side="right", fill="y")
+
+        def _refresh_list() -> None:
+            listbox.delete(0, "end")
+            status_lbl.configure(text="Scanning installed packages...")
+            dlg.update()
+            apps = list_installed_scoop_apps()
+            for app in apps:
+                listbox.insert("end", app)
+            status_lbl.configure(text=f"{len(apps)} packages installed")
+
+        # Install / Remove / Search controls
+        ctrl = tk.Frame(dlg, bg=_BG)
+        ctrl.pack(fill="x", padx=16, pady=(4, 8))
+
+        install_var = tk.StringVar()
+        tk.Label(ctrl, text="Package:", bg=_BG, fg=_FG, font=_FONT_SM).pack(side="left")
+        entry = ttk.Entry(ctrl, textvariable=install_var, font=_FONT, width=20)
+        entry.pack(side="left", padx=(4, 4))
+
+        def _install_action() -> None:
+            name = install_var.get().strip()
+            if not name:
+                return
+            status_lbl.configure(text=f"Installing {name}...")
+            dlg.update()
+            try:
+                _install_scoop_app(name)
+                status_lbl.configure(text=f"Installed {name} \u2714")
+                _refresh_list()
+                self._refresh_status_all()
+            except RuntimeError as exc:
+                messagebox.showerror("Install Error", str(exc))
+
+        def _remove_action() -> None:
+            sel = listbox.curselection()
+            if not sel:
+                messagebox.showinfo("Select Package", "Select a package to remove.")
+                return
+            name = listbox.get(sel[0])
+            if not messagebox.askyesno("Confirm Remove", f"Remove '{name}'?"):
+                return
+            status_lbl.configure(text=f"Removing {name}...")
+            dlg.update()
+            _remove_scoop_app(name)
+            status_lbl.configure(text=f"Removed {name} \u2714")
+            _refresh_list()
+            self._refresh_status_all()
+
+        tk.Button(
+            ctrl, text="Install", bg="#40A02B", fg="white", font=_FONT_XS_BOLD,
+            relief="flat", padx=8, command=lambda: threading.Thread(target=_install_action, daemon=True).start(),
+        ).pack(side="left", padx=2)
+        tk.Button(
+            ctrl, text="Remove Selected", bg="#E64A19", fg="white", font=_FONT_XS_BOLD,
+            relief="flat", padx=8, command=lambda: threading.Thread(target=_remove_action, daemon=True).start(),
+        ).pack(side="left", padx=2)
+        tk.Button(
+            ctrl, text="\u21BB Refresh", bg=_CARD_BG, fg=_FG, font=_FONT_XS_BOLD,
+            relief="flat", padx=8,
+            command=lambda: threading.Thread(target=_refresh_list, daemon=True).start(),
+        ).pack(side="left", padx=2)
+
+        # Quick install popular tools
+        pop_frame = tk.LabelFrame(dlg, text="Quick Install Popular Tools", bg=_BG, fg=_FG_DIM, font=_FONT_XS)
+        pop_frame.pack(fill="x", padx=16, pady=(0, 8))
+        popular = ["7zip", "git", "ripgrep", "fd", "bat", "fzf", "jq", "gsudo", "neovim", "starship"]
+        for i, tool in enumerate(popular):
+            tk.Button(
+                pop_frame, text=tool, bg=_CARD_BG, fg=_ACCENT, font=_FONT_XS,
+                relief="flat", padx=4, pady=1, cursor="hand2",
+                command=lambda t=tool: (install_var.set(t),),  # type: ignore[misc]
+            ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
+
+        threading.Thread(target=_refresh_list, daemon=True).start()
 
     # ── About dialog ─────────────────────────────────────────────────────
 

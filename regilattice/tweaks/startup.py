@@ -570,3 +570,122 @@ TWEAKS += [
         tags=["startup", "boot", "verbose", "debug"],
     ),
 ]
+
+
+# -- Disable Startup Delay for Apps ---------------------------------------------
+
+_SERIALIZE = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\Explorer\Serialize"
+)
+
+
+def _apply_start_disable_delay(*, require_admin: bool = False) -> None:
+    SESSION.log("Startup: disable startup delay for desktop apps")
+    SESSION.backup([_SERIALIZE], "StartDisableDelay")
+    SESSION.set_dword(_SERIALIZE, "StartupDelayInMSec", 0)
+
+
+def _remove_start_disable_delay(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_SERIALIZE, "StartupDelayInMSec")
+
+
+def _detect_start_disable_delay() -> bool:
+    return SESSION.read_dword(_SERIALIZE, "StartupDelayInMSec") == 0
+
+
+# -- Set Boot-Up Num Lock to On ------------------------------------------------
+
+_KEYBOARD_DEFAULT = r"HKEY_USERS\.DEFAULT\Control Panel\Keyboard"
+
+
+def _apply_start_boot_numlock(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Startup: set Num Lock on at boot")
+    SESSION.backup([_KEYBOARD_DEFAULT], "BootNumLock")
+    SESSION.set_string(_KEYBOARD_DEFAULT, "InitialKeyboardIndicators", "2")
+
+
+def _remove_start_boot_numlock(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KEYBOARD_DEFAULT, "InitialKeyboardIndicators", "0")
+
+
+def _detect_start_boot_numlock() -> bool:
+    return SESSION.read_string(_KEYBOARD_DEFAULT, "InitialKeyboardIndicators") == "2"
+
+
+# -- Disable Windows Tips on Startup --------------------------------------------
+
+_CONTENT_DELIVERY = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
+    r"\CurrentVersion\ContentDeliveryManager"
+)
+
+
+def _apply_start_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.log("Startup: disable Windows tips and suggestions")
+    SESSION.backup([_CONTENT_DELIVERY], "StartDisableTips")
+    SESSION.set_dword(_CONTENT_DELIVERY, "SoftLandingEnabled", 0)
+    SESSION.set_dword(_CONTENT_DELIVERY, "SubscribedContent-338389Enabled", 0)
+
+
+def _remove_start_disable_tips(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_CONTENT_DELIVERY, "SoftLandingEnabled")
+    SESSION.delete_value(_CONTENT_DELIVERY, "SubscribedContent-338389Enabled")
+
+
+def _detect_start_disable_tips() -> bool:
+    return SESSION.read_dword(_CONTENT_DELIVERY, "SoftLandingEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="start-disable-startup-delay",
+        label="Disable Startup Delay for Apps",
+        category="Startup",
+        apply_fn=_apply_start_disable_delay,
+        remove_fn=_remove_start_disable_delay,
+        detect_fn=_detect_start_disable_delay,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SERIALIZE],
+        description=(
+            "Removes the artificial startup delay for desktop applications. "
+            "Apps launch immediately at logon. Default: ~10s delay. Recommended: 0."
+        ),
+        tags=["startup", "delay", "performance", "boot"],
+    ),
+    TweakDef(
+        id="start-boot-numlock-on",
+        label="Set Boot-Up Num Lock to On",
+        category="Startup",
+        apply_fn=_apply_start_boot_numlock,
+        remove_fn=_remove_start_boot_numlock,
+        detect_fn=_detect_start_boot_numlock,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEYBOARD_DEFAULT],
+        description=(
+            "Enables Num Lock at the Windows login screen by default. "
+            "Default: Off. Recommended: On for desktop keyboards."
+        ),
+        tags=["startup", "numlock", "keyboard", "boot"],
+    ),
+    TweakDef(
+        id="start-disable-tips",
+        label="Disable Windows Tips on Startup",
+        category="Startup",
+        apply_fn=_apply_start_disable_tips,
+        remove_fn=_remove_start_disable_tips,
+        detect_fn=_detect_start_disable_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CONTENT_DELIVERY],
+        description=(
+            "Disables Windows tips, tricks, and suggestions that appear after login. "
+            "Reduces startup distractions. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["startup", "tips", "suggestions", "notifications"],
+    ),
+]

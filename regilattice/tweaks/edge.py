@@ -612,3 +612,115 @@ TWEAKS += [
         tags=["edge", "first-run", "welcome", "policy", "ux"],
     ),
 ]
+
+
+# ── Disable Edge Workspaces ──────────────────────────────────────────────────
+
+
+def _apply_edge_workspaces_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Edge Workspaces feature")
+    SESSION.backup([_EDGE_POLICY], "EdgeWorkspaces")
+    SESSION.set_dword(_EDGE_POLICY, "EdgeWorkspacesEnabled", 0)
+
+
+def _remove_edge_workspaces_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "EdgeWorkspacesEnabled")
+
+
+def _detect_edge_workspaces_off() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "EdgeWorkspacesEnabled") == 0
+
+
+# ── Disable Edge Drop ────────────────────────────────────────────────────────
+
+
+def _apply_edge_drop_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Edge Drop file sharing feature")
+    SESSION.backup([_EDGE_POLICY], "EdgeDrop")
+    SESSION.set_dword(_EDGE_POLICY, "EdgeEDropEnabled", 0)
+
+
+def _remove_edge_drop_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "EdgeEDropEnabled")
+
+
+def _detect_edge_drop_off() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "EdgeEDropEnabled") == 0
+
+
+# ── Disable Edge Discover Button ─────────────────────────────────────────────
+
+
+def _apply_edge_discover_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Disable Edge Discover page context button")
+    SESSION.backup([_EDGE_POLICY], "EdgeDiscover")
+    SESSION.set_dword(_EDGE_POLICY, "DiscoverPageContextEnabled", 0)
+
+
+def _remove_edge_discover_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EDGE_POLICY, "DiscoverPageContextEnabled")
+
+
+def _detect_edge_discover_off() -> bool:
+    return SESSION.read_dword(_EDGE_POLICY, "DiscoverPageContextEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="edge-disable-workspaces",
+        label="Disable Edge Workspaces",
+        category="Edge",
+        apply_fn=_apply_edge_workspaces_off,
+        remove_fn=_remove_edge_workspaces_off,
+        detect_fn=_detect_edge_workspaces_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge Workspaces feature for shared browsing sessions "
+            "via enterprise policy. Reduces background sync overhead. "
+            "Default: Enabled. Recommended: Disabled if not used."
+        ),
+        tags=["edge", "workspaces", "collaboration", "policy", "performance"],
+    ),
+    TweakDef(
+        id="edge-disable-drop",
+        label="Disable Edge Drop",
+        category="Edge",
+        apply_fn=_apply_edge_drop_off,
+        remove_fn=_remove_edge_drop_off,
+        detect_fn=_detect_edge_drop_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge Drop feature used for cross-device file sharing "
+            "via enterprise policy. Reduces cloud sync and network usage. "
+            "Default: Enabled. Recommended: Disabled for managed environments."
+        ),
+        tags=["edge", "drop", "file-sharing", "policy", "privacy"],
+    ),
+    TweakDef(
+        id="edge-disable-discover",
+        label="Disable Edge Discover Button",
+        category="Edge",
+        apply_fn=_apply_edge_discover_off,
+        remove_fn=_remove_edge_discover_off,
+        detect_fn=_detect_edge_discover_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_EDGE_POLICY],
+        description=(
+            "Disables the Edge Discover (compass) button and page context "
+            "features via enterprise policy. Reduces Copilot integration. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["edge", "discover", "copilot", "policy", "privacy"],
+    ),
+]

@@ -1275,3 +1275,118 @@ TWEAKS += [
         tags=["explorer", "checkbox", "selection", "multi-select"],
     ),
 ]
+
+
+# ── Disable Sync Provider Notifications (Ads) ──────────────────────────────
+
+
+def _apply_disable_sync_ads(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable sync provider notifications")
+    SESSION.backup([_ADV], "SyncProviderAds")
+    SESSION.set_dword(_ADV, "ShowSyncProviderNotifications", 0)
+
+
+def _remove_disable_sync_ads(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "SyncProviderAds_Remove")
+    SESSION.set_dword(_ADV, "ShowSyncProviderNotifications", 1)
+
+
+def _detect_disable_sync_ads() -> bool:
+    return SESSION.read_dword(_ADV, "ShowSyncProviderNotifications") == 0
+
+
+# ── Always Show Classic Menu Bar ────────────────────────────────────────────
+
+
+def _apply_always_show_menus(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: always show classic menu bar")
+    SESSION.backup([_ADV], "AlwaysShowMenus")
+    SESSION.set_dword(_ADV, "AlwaysShowMenus", 1)
+
+
+def _remove_always_show_menus(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "AlwaysShowMenus_Remove")
+    SESSION.set_dword(_ADV, "AlwaysShowMenus", 0)
+
+
+def _detect_always_show_menus() -> bool:
+    return SESSION.read_dword(_ADV, "AlwaysShowMenus") == 1
+
+
+# ── Launch Folder Windows in Separate Process ───────────────────────────────
+
+
+def _apply_separate_process(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: launch folders in separate process")
+    SESSION.backup([_ADV], "SeparateProcess")
+    SESSION.set_dword(_ADV, "SeparateProcess", 1)
+
+
+def _remove_separate_process(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ADV], "SeparateProcess_Remove")
+    SESSION.set_dword(_ADV, "SeparateProcess", 0)
+
+
+def _detect_separate_process() -> bool:
+    return SESSION.read_dword(_ADV, "SeparateProcess") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="explorer-disable-sync-ads",
+        label="Disable Sync Provider Ads",
+        category="Explorer",
+        apply_fn=_apply_disable_sync_ads,
+        remove_fn=_remove_disable_sync_ads,
+        detect_fn=_detect_disable_sync_ads,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables sync provider notifications in Explorer that show "
+            "ads for OneDrive and other cloud services. "
+            "Default: Shown. Recommended: Disabled."
+        ),
+        tags=["explorer", "ads", "onedrive", "sync", "notifications"],
+    ),
+    TweakDef(
+        id="explorer-always-show-menus",
+        label="Always Show Classic Menu Bar",
+        category="Explorer",
+        apply_fn=_apply_always_show_menus,
+        remove_fn=_remove_always_show_menus,
+        detect_fn=_detect_always_show_menus,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Always shows the classic File/Edit/View/Help menu bar in "
+            "Explorer windows. Default: Hidden. Recommended: Shown for "
+            "power users."
+        ),
+        tags=["explorer", "menu", "classic", "toolbar"],
+    ),
+    TweakDef(
+        id="explorer-separate-process",
+        label="Launch Folders in Separate Process",
+        category="Explorer",
+        apply_fn=_apply_separate_process,
+        remove_fn=_remove_separate_process,
+        detect_fn=_detect_separate_process,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Launches each Explorer folder window in its own process. "
+            "Prevents a crash in one window from closing all others. "
+            "Default: Shared process. Recommended: Separate for stability."
+        ),
+        tags=["explorer", "process", "stability", "crash-recovery"],
+    ),
+]

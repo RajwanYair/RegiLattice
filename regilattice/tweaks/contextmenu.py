@@ -523,3 +523,128 @@ TWEAKS += [
         tags=["context-menu", "library", "include", "cleanup"],
     ),
 ]
+
+
+# ── Remove "Send to" from Context Menu ───────────────────────────────────────
+
+_SEND_TO_CLSID = "{7BA4C740-9E81-11CF-99D3-00AA004AE837}"
+
+
+def _apply_remove_send_to(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: remove Send to via shell extension block")
+    SESSION.backup([_SHARE_KEY], "RemoveSendTo")
+    SESSION.set_string(_SHARE_KEY, _SEND_TO_CLSID, "")
+
+
+def _remove_remove_send_to(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHARE_KEY, _SEND_TO_CLSID)
+
+
+def _detect_remove_send_to() -> bool:
+    return SESSION.read_string(_SHARE_KEY, _SEND_TO_CLSID) is not None
+
+
+# ── Remove "Print" from Context Menu ─────────────────────────────────────────
+
+_PRINT_CLSID = "{09799AFB-AD67-11d1-ABCD-00C04FC30936}"
+
+
+def _apply_remove_print(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: remove Print from shell extension")
+    SESSION.backup([_SHARE_KEY], "RemovePrint")
+    SESSION.set_string(_SHARE_KEY, _PRINT_CLSID, "")
+
+
+def _remove_remove_print(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHARE_KEY, _PRINT_CLSID)
+
+
+def _detect_remove_print() -> bool:
+    return SESSION.read_string(_SHARE_KEY, _PRINT_CLSID) is not None
+
+
+# ── Add "Open PowerShell Here" to Context Menu ───────────────────────────────
+
+_PS_HERE = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\PowerShellHere"
+_PS_HERE_CMD = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\PowerShellHere\command"
+
+
+def _apply_powershell_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: add Open PowerShell Here")
+    SESSION.backup([_PS_HERE], "PowerShellHere")
+    SESSION.set_string(_PS_HERE, "", "Open PowerShell Here")
+    SESSION.set_string(_PS_HERE, "Icon", "powershell.exe")
+    SESSION.set_string(
+        _PS_HERE_CMD,
+        "",
+        "powershell.exe -NoExit -Command Set-Location -LiteralPath '%V'",
+    )
+
+
+def _remove_powershell_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_tree(_PS_HERE)
+
+
+def _detect_powershell_here() -> bool:
+    return SESSION.key_exists(_PS_HERE)
+
+
+TWEAKS += [
+    TweakDef(
+        id="ctx-remove-send-to",
+        label="Remove 'Send to' from Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_remove_send_to,
+        remove_fn=_remove_remove_send_to,
+        detect_fn=_detect_remove_send_to,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SHARE_KEY],
+        description=(
+            "Removes the 'Send to' cascading menu from the right-click "
+            "context menu by blocking its shell extension CLSID. "
+            "Default: shown. Recommended: hidden if unused."
+        ),
+        tags=["context-menu", "send-to", "cleanup", "shell"],
+    ),
+    TweakDef(
+        id="ctx-remove-print",
+        label="Remove 'Print' from Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_remove_print,
+        remove_fn=_remove_remove_print,
+        detect_fn=_detect_remove_print,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SHARE_KEY],
+        description=(
+            "Removes the 'Print' option from the right-click context menu "
+            "by blocking its shell extension CLSID. "
+            "Default: shown. Recommended: hidden if no printer is used."
+        ),
+        tags=["context-menu", "print", "cleanup", "shell"],
+    ),
+    TweakDef(
+        id="ctx-add-powershell-here",
+        label="Add 'Open PowerShell Here' to Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_powershell_here,
+        remove_fn=_remove_powershell_here,
+        detect_fn=_detect_powershell_here,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PS_HERE, _PS_HERE_CMD],
+        description=(
+            "Adds an 'Open PowerShell Here' entry to the directory background "
+            "context menu for quick terminal access. "
+            "Default: not present. Recommended: add for power users."
+        ),
+        tags=["context-menu", "powershell", "terminal", "productivity"],
+    ),
+]

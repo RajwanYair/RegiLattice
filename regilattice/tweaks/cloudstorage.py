@@ -1012,3 +1012,119 @@ TWEAKS += [
         tags=["cloud", "adobe", "creative-cloud", "startup"],
     ),
 ]
+
+
+# -- Disable iCloud Photo Sync ------------------------------------------------
+
+_ICLOUD_PHOTO = r"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Inc.\iCloud\PhotoStream"
+
+
+def _apply_cloud_disable_icloud_photo_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cloud: disabling iCloud photo stream auto-upload")
+    SESSION.backup([_ICLOUD_PHOTO], "iCloudPhotoSync")
+    SESSION.set_dword(_ICLOUD_PHOTO, "AutoUpload", 0)
+
+
+def _remove_cloud_disable_icloud_photo_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ICLOUD_PHOTO, "AutoUpload")
+
+
+def _detect_cloud_disable_icloud_photo_sync() -> bool:
+    return SESSION.read_dword(_ICLOUD_PHOTO, "AutoUpload") == 0
+
+
+# -- Disable Google Drive Offline Mode -----------------------------------------
+
+
+def _apply_cloud_disable_gdrive_offline(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cloud: disabling Google Drive offline mode")
+    SESSION.backup([_GDRIVE_UPDATE], "GDriveOffline")
+    SESSION.set_dword(_GDRIVE_UPDATE, "DisableOfflineMode", 1)
+
+
+def _remove_cloud_disable_gdrive_offline(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GDRIVE_UPDATE, "DisableOfflineMode")
+
+
+def _detect_cloud_disable_gdrive_offline() -> bool:
+    return SESSION.read_dword(_GDRIVE_UPDATE, "DisableOfflineMode") == 1
+
+
+# -- Block Dropbox LAN Sync ---------------------------------------------------
+
+_DROPBOX_LAN = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Dropbox\Sync"
+
+
+def _apply_cloud_block_dropbox_lan_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Cloud: blocking Dropbox LAN sync")
+    SESSION.backup([_DROPBOX_LAN], "DropboxLanSync")
+    SESSION.set_dword(_DROPBOX_LAN, "DisableLanSync", 1)
+
+
+def _remove_cloud_block_dropbox_lan_sync(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DROPBOX_LAN, "DisableLanSync")
+
+
+def _detect_cloud_block_dropbox_lan_sync() -> bool:
+    return SESSION.read_dword(_DROPBOX_LAN, "DisableLanSync") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="cloud-disable-icloud-photo-sync",
+        label="Disable iCloud Photo Sync",
+        category="Cloud Storage",
+        apply_fn=_apply_cloud_disable_icloud_photo_sync,
+        remove_fn=_remove_cloud_disable_icloud_photo_sync,
+        detect_fn=_detect_cloud_disable_icloud_photo_sync,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ICLOUD_PHOTO],
+        description=(
+            "Disables iCloud Photo Stream automatic upload to prevent "
+            "photos from syncing to Apple cloud services. "
+            "Default: enabled. Recommended: disabled on corporate machines."
+        ),
+        tags=["cloud", "icloud", "photo", "sync", "apple"],
+    ),
+    TweakDef(
+        id="cloud-disable-gdrive-offline",
+        label="Disable Google Drive Offline Mode",
+        category="Cloud Storage",
+        apply_fn=_apply_cloud_disable_gdrive_offline,
+        remove_fn=_remove_cloud_disable_gdrive_offline,
+        detect_fn=_detect_cloud_disable_gdrive_offline,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GDRIVE_UPDATE],
+        description=(
+            "Disables Google Drive offline mode via policy. Prevents local "
+            "caching of Drive files, reducing disk usage. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["cloud", "google-drive", "offline", "cache"],
+    ),
+    TweakDef(
+        id="cloud-block-dropbox-lan-sync",
+        label="Block Dropbox LAN Sync",
+        category="Cloud Storage",
+        apply_fn=_apply_cloud_block_dropbox_lan_sync,
+        remove_fn=_remove_cloud_block_dropbox_lan_sync,
+        detect_fn=_detect_cloud_block_dropbox_lan_sync,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DROPBOX_LAN],
+        description=(
+            "Blocks Dropbox LAN sync discovery which broadcasts on the "
+            "local network. Improves security on shared networks. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["cloud", "dropbox", "lan", "sync", "security"],
+    ),
+]

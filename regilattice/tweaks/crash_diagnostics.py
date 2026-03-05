@@ -434,3 +434,115 @@ TWEAKS += [
         tags=["crash", "error", "dialog", "server"],
     ),
 ]
+
+
+# ── Enable Full Memory Dumps ─────────────────────────────────────────────────
+
+
+def _apply_full_memory_dump(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: set CrashDumpEnabled to full memory dump (1)")
+    SESSION.backup([_CRASH], "FullMemoryDump")
+    SESSION.set_dword(_CRASH, "CrashDumpEnabled", 1)
+
+
+def _remove_full_memory_dump(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH, "CrashDumpEnabled", 7)  # 7 = Automatic (default)
+
+
+def _detect_full_memory_dump() -> bool:
+    return SESSION.read_dword(_CRASH, "CrashDumpEnabled") == 1
+
+
+# ── Disable WER Queue Reporting ──────────────────────────────────────────────
+
+
+def _apply_disable_wer_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: disable WER queue-based reporting")
+    SESSION.backup([_WER], "WerQueueOff")
+    SESSION.set_dword(_WER, "DisableQueue", 1)
+
+
+def _remove_disable_wer_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER, "DisableQueue")
+
+
+def _detect_disable_wer_queue() -> bool:
+    return SESSION.read_dword(_WER, "DisableQueue") == 1
+
+
+# ── Set Crash Dump to Kernel Only ────────────────────────────────────────────
+
+
+def _apply_kernel_dump_only(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: set crash dump to kernel-only mode (2)")
+    SESSION.backup([_CRASH], "KernelDumpOnly")
+    SESSION.set_dword(_CRASH, "CrashDumpEnabled", 2)
+
+
+def _remove_kernel_dump_only(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH, "CrashDumpEnabled", 7)  # 7 = Automatic (default)
+
+
+def _detect_kernel_dump_only() -> bool:
+    return SESSION.read_dword(_CRASH, "CrashDumpEnabled") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="crash-enable-full-memory-dump",
+        label="Enable Full Memory Dumps",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_full_memory_dump,
+        remove_fn=_remove_full_memory_dump,
+        detect_fn=_detect_full_memory_dump,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH],
+        description=(
+            "Sets CrashDumpEnabled to 1 (Complete memory dump) for "
+            "full debugging information on BSOD. Requires sufficient page file. "
+            "Default: 7 (Automatic). Recommended: 1 for debugging."
+        ),
+        tags=["crash", "dump", "memory", "debugging", "bsod"],
+    ),
+    TweakDef(
+        id="crash-disable-wer-queue",
+        label="Disable WER Queue Reporting",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_disable_wer_queue,
+        remove_fn=_remove_disable_wer_queue,
+        detect_fn=_detect_disable_wer_queue,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WER],
+        description=(
+            "Disables Windows Error Reporting queue-based report collection. "
+            "Stops WER from queuing reports for later submission. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["crash", "wer", "queue", "reporting", "privacy"],
+    ),
+    TweakDef(
+        id="crash-set-kernel-dump-only",
+        label="Set Crash Dump to Kernel Only",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_kernel_dump_only,
+        remove_fn=_remove_kernel_dump_only,
+        detect_fn=_detect_kernel_dump_only,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH],
+        description=(
+            "Sets CrashDumpEnabled to 2 (Kernel memory dump). Captures only "
+            "kernel-mode memory, saving disk space while retaining key info. "
+            "Default: 7 (Automatic). Recommended: 2 for production."
+        ),
+        tags=["crash", "dump", "kernel", "production", "disk"],
+    ),
+]

@@ -412,3 +412,119 @@ TWEAKS += [
         tags=["screensaver", "timeout", "30min", "lock"],
     ),
 ]
+
+
+# -- Set Screensaver Timeout to 10 Minutes (Policy) ----------------------------
+
+
+def _apply_scr_timeout_10min(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Screensaver: set timeout to 10 minutes via policy")
+    SESSION.backup([_SS_CU, _SS_POLICY], "ScrTimeout10min")
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "600")
+    SESSION.set_string(_SS_POLICY, "ScreenSaveTimeOut", "600")
+
+
+def _remove_scr_timeout_10min(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SS_POLICY, "ScreenSaveTimeOut")
+    SESSION.set_string(_SS_CU, "ScreenSaveTimeOut", "900")
+
+
+def _detect_scr_timeout_10min() -> bool:
+    return SESSION.read_string(_SS_POLICY, "ScreenSaveTimeOut") == "600"
+
+
+# -- Require Password on Resume (Policy) ----------------------------------------
+
+
+def _apply_scr_password_resume(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Screensaver: require password on resume via policy")
+    SESSION.backup([_SS_CU, _SS_POLICY], "ScrPasswordResume")
+    SESSION.set_string(_SS_CU, "ScreenSaverIsSecure", "1")
+    SESSION.set_string(_SS_POLICY, "ScreenSaverIsSecure", "1")
+
+
+def _remove_scr_password_resume(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SS_POLICY, "ScreenSaverIsSecure")
+    SESSION.set_string(_SS_CU, "ScreenSaverIsSecure", "0")
+
+
+def _detect_scr_password_resume() -> bool:
+    return SESSION.read_string(_SS_POLICY, "ScreenSaverIsSecure") == "1"
+
+
+# -- Disable Screensaver Completely (Policy) ------------------------------------
+
+
+def _apply_scr_disable_screensaver(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Screensaver: disable screensaver via policy")
+    SESSION.backup([_SS_CU, _SS_POLICY], "ScrDisable")
+    SESSION.set_string(_SS_CU, "ScreenSaveActive", "0")
+    SESSION.set_string(_SS_POLICY, "ScreenSaveActive", "0")
+
+
+def _remove_scr_disable_screensaver(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SS_POLICY, "ScreenSaveActive")
+    SESSION.set_string(_SS_CU, "ScreenSaveActive", "1")
+
+
+def _detect_scr_disable_screensaver() -> bool:
+    return SESSION.read_string(_SS_POLICY, "ScreenSaveActive") == "0"
+
+
+TWEAKS += [
+    TweakDef(
+        id="scr-timeout-10min",
+        label="Set Screensaver Timeout to 10 Minutes (Policy)",
+        category="Screensaver & Lock",
+        apply_fn=_apply_scr_timeout_10min,
+        remove_fn=_remove_scr_timeout_10min,
+        detect_fn=_detect_scr_timeout_10min,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SS_CU, _SS_POLICY],
+        description=(
+            "Sets screensaver timeout to 10 minutes via machine policy. "
+            "Enforced across all users. Default: varies. Recommended: 600 seconds."
+        ),
+        tags=["screensaver", "timeout", "10min", "policy"],
+    ),
+    TweakDef(
+        id="scr-password-on-resume",
+        label="Require Password on Resume (Policy)",
+        category="Screensaver & Lock",
+        apply_fn=_apply_scr_password_resume,
+        remove_fn=_remove_scr_password_resume,
+        detect_fn=_detect_scr_password_resume,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SS_CU, _SS_POLICY],
+        description=(
+            "Requires password entry when resuming from screensaver via policy. "
+            "Enforces lock screen security. Default: varies. Recommended: enabled."
+        ),
+        tags=["screensaver", "password", "resume", "security"],
+    ),
+    TweakDef(
+        id="scr-disable-screensaver",
+        label="Disable Screensaver Completely (Policy)",
+        category="Screensaver & Lock",
+        apply_fn=_apply_scr_disable_screensaver,
+        remove_fn=_remove_scr_disable_screensaver,
+        detect_fn=_detect_scr_disable_screensaver,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SS_CU, _SS_POLICY],
+        description=(
+            "Disables the screensaver completely via machine policy. "
+            "Prevents screensaver from activating on any user. "
+            "Default: Enabled. Recommended: Disabled only for kiosks."
+        ),
+        tags=["screensaver", "disable", "policy"],
+    ),
+]

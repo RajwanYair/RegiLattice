@@ -463,3 +463,123 @@ TWEAKS += [
         tags=["hyperv", "virtualization", "autostart", "service", "boot"],
     ),
 ]
+
+
+# -- Enable Nested Virtualization (Policy) --------------------------------------
+
+
+def _apply_enable_nested_virt_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Virtualization: enabling nested virtualization via policy")
+    SESSION.backup([_HYPERV_POLICY], "NestedVirtPolicy")
+    SESSION.set_dword(_HYPERV_POLICY, "AllowNestedVirtualization", 1)
+    SESSION.log("Virtualization: nested virtualization policy enabled")
+
+
+def _remove_enable_nested_virt_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_HYPERV_POLICY, "AllowNestedVirtualization")
+
+
+def _detect_enable_nested_virt_policy() -> bool:
+    return SESSION.read_dword(_HYPERV_POLICY, "AllowNestedVirtualization") == 1
+
+
+# -- Enable Hyper-V Enhanced Session Mode ---------------------------------------
+
+
+def _apply_enable_enhanced_session(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Virtualization: enabling Hyper-V Enhanced Session Mode")
+    SESSION.backup([_HYPERV], "EnableEnhancedSession")
+    SESSION.set_dword(_HYPERV, "AllowEnhancedSessionMode", 1)
+    SESSION.log("Virtualization: Enhanced Session Mode enabled")
+
+
+def _remove_enable_enhanced_session(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_HYPERV, "AllowEnhancedSessionMode", 0)
+
+
+def _detect_enable_enhanced_session() -> bool:
+    return SESSION.read_dword(_HYPERV, "AllowEnhancedSessionMode") == 1
+
+
+# -- Enable Virtual Machine Platform (HypervisorEnforcedCodeIntegrity) ----------
+
+_VM_PLATFORM = (
+    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
+    r"\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"
+)
+
+
+def _apply_enable_vm_platform(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Virtualization: enabling Virtual Machine Platform")
+    SESSION.backup([_VM_PLATFORM], "VMPlatform")
+    SESSION.set_dword(_VM_PLATFORM, "Enabled", 1)
+    SESSION.log("Virtualization: Virtual Machine Platform enabled")
+
+
+def _remove_enable_vm_platform(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VM_PLATFORM, "Enabled", 0)
+
+
+def _detect_enable_vm_platform() -> bool:
+    return SESSION.read_dword(_VM_PLATFORM, "Enabled") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="virt-nested-virt-policy",
+        label="Enable Nested Virtualization (Policy)",
+        category="Virtualization",
+        apply_fn=_apply_enable_nested_virt_policy,
+        remove_fn=_remove_enable_nested_virt_policy,
+        detect_fn=_detect_enable_nested_virt_policy,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_HYPERV_POLICY],
+        description=(
+            "Enables nested virtualization via Hyper-V group policy. "
+            "Allows hypervisors inside VMs at the policy level. "
+            "Default: Not set. Recommended: Enabled for dev workloads."
+        ),
+        tags=["hyperv", "virtualization", "nested", "policy"],
+    ),
+    TweakDef(
+        id="virt-enable-enhanced-session",
+        label="Enable Hyper-V Enhanced Session Mode",
+        category="Virtualization",
+        apply_fn=_apply_enable_enhanced_session,
+        remove_fn=_remove_enable_enhanced_session,
+        detect_fn=_detect_enable_enhanced_session,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_HYPERV],
+        description=(
+            "Enables Hyper-V Enhanced Session Mode for RDP-like VM experience "
+            "with clipboard, audio, and drive sharing. "
+            "Default: Disabled. Recommended: Enabled."
+        ),
+        tags=["hyperv", "virtualization", "enhanced-session", "rdp"],
+    ),
+    TweakDef(
+        id="virt-enable-vm-platform",
+        label="Enable Virtual Machine Platform",
+        category="Virtualization",
+        apply_fn=_apply_enable_vm_platform,
+        remove_fn=_remove_enable_vm_platform,
+        detect_fn=_detect_enable_vm_platform,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VM_PLATFORM],
+        description=(
+            "Enables the Virtual Machine Platform / Hypervisor Enforced Code Integrity. "
+            "Required for WSL2 and Android subsystem. "
+            "Default: Disabled. Recommended: Enabled if using VMs."
+        ),
+        tags=["virtualization", "vm-platform", "wsl2", "hypervisor"],
+    ),
+]

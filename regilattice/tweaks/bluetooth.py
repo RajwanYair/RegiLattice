@@ -612,3 +612,119 @@ TWEAKS += [
         tags=["bluetooth", "advertising", "privacy", "policy"],
     ),
 ]
+
+
+_BT_AG = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAGAudio"
+
+
+# ── Disable Bluetooth LE Background Scanning ───────────────────────────────
+
+
+def _apply_bt_le_scan_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: disable LE background scanning")
+    SESSION.backup([_BT_LE], "BtLeScan")
+    SESSION.set_dword(_BT_LE, "ScanEnabled", 0)
+
+
+def _remove_bt_le_scan_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_LE, "ScanEnabled")
+
+
+def _detect_bt_le_scan_off() -> bool:
+    return SESSION.read_dword(_BT_LE, "ScanEnabled") == 0
+
+
+# ── Set Bluetooth Page Timeout ───────────────────────────────────────────────
+
+
+def _apply_bt_page_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: set page timeout to 16384 slots (10s)")
+    SESSION.backup([_BT_PARAMS], "BtPageTimeout")
+    SESSION.set_dword(_BT_PARAMS, "PageTimeout", 16384)
+
+
+def _remove_bt_page_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BT_PARAMS, "PageTimeout")
+
+
+def _detect_bt_page_timeout() -> bool:
+    return SESSION.read_dword(_BT_PARAMS, "PageTimeout") == 16384
+
+
+# ── Disable Bluetooth Audio Gateway ─────────────────────────────────────────
+
+
+def _apply_bt_ag_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Bluetooth: disable Audio Gateway service")
+    SESSION.backup([_BT_AG], "BtAudioGateway")
+    SESSION.set_dword(_BT_AG, "Start", 4)
+
+
+def _remove_bt_ag_off(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_BT_AG], "BtAudioGateway_Remove")
+    SESSION.set_dword(_BT_AG, "Start", 3)
+
+
+def _detect_bt_ag_off() -> bool:
+    return SESSION.read_dword(_BT_AG, "Start") == 4
+
+
+TWEAKS += [
+    TweakDef(
+        id="bt-disable-le-scan",
+        label="Disable Bluetooth LE Scanning",
+        category="Bluetooth",
+        apply_fn=_apply_bt_le_scan_off,
+        remove_fn=_remove_bt_le_scan_off,
+        detect_fn=_detect_bt_le_scan_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BT_LE],
+        description=(
+            "Disables Bluetooth Low Energy background scanning. "
+            "Reduces power consumption and radio interference. "
+            "Default: Enabled. Recommended: Disabled for battery life."
+        ),
+        tags=["bluetooth", "le", "scanning", "power", "battery"],
+    ),
+    TweakDef(
+        id="bt-page-timeout",
+        label="Set Bluetooth Page Timeout",
+        category="Bluetooth",
+        apply_fn=_apply_bt_page_timeout,
+        remove_fn=_remove_bt_page_timeout,
+        detect_fn=_detect_bt_page_timeout,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BT_PARAMS],
+        description=(
+            "Sets Bluetooth page timeout to 16384 slots (~10 seconds). "
+            "Increases time allowed for device connection establishment. "
+            "Default: 8192 slots. Recommended: 16384 for reliability."
+        ),
+        tags=["bluetooth", "page", "timeout", "connection", "reliability"],
+    ),
+    TweakDef(
+        id="bt-disable-audio-gateway",
+        label="Disable Bluetooth Audio Gateway",
+        category="Bluetooth",
+        apply_fn=_apply_bt_ag_off,
+        remove_fn=_remove_bt_ag_off,
+        detect_fn=_detect_bt_ag_off,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BT_AG],
+        description=(
+            "Disables the Bluetooth Audio Gateway service driver. "
+            "Prevents phone call audio routing through the PC. "
+            "Default: Enabled. Recommended: Disabled if unused."
+        ),
+        tags=["bluetooth", "audio-gateway", "telephony", "service"],
+    ),
+]

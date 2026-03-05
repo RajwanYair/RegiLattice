@@ -510,3 +510,116 @@ TWEAKS += [
         tags=["input", "text-prediction", "suggestions", "typing"],
     ),
 ]
+
+
+# ── Set Cursor Blink Rate ───────────────────────────────────────────────────
+
+
+def _apply_set_cursor_blink_rate(*, require_admin: bool = False) -> None:
+    SESSION.log("Input: set cursor blink rate to 400 ms (fast)")
+    SESSION.backup([_DESKTOP_KEY], "CursorBlinkRate")
+    SESSION.set_string(_DESKTOP_KEY, "CursorBlinkRate", "400")
+
+
+def _remove_set_cursor_blink_rate(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_DESKTOP_KEY, "CursorBlinkRate", "530")
+
+
+def _detect_set_cursor_blink_rate() -> bool:
+    return SESSION.read_string(_DESKTOP_KEY, "CursorBlinkRate") == "400"
+
+
+# ── Increase Double-Click Speed ──────────────────────────────────────────────
+
+
+def _apply_increase_double_click_speed(*, require_admin: bool = False) -> None:
+    SESSION.log("Input: increase double-click speed (lower threshold)")
+    SESSION.backup([_MOUSE_KEY], "DoubleClickSpeed")
+    SESSION.set_string(_MOUSE_KEY, "DoubleClickSpeed", "200")
+
+
+def _remove_increase_double_click_speed(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_MOUSE_KEY, "DoubleClickSpeed", "500")
+
+
+def _detect_increase_double_click_speed() -> bool:
+    return SESSION.read_string(_MOUSE_KEY, "DoubleClickSpeed") == "200"
+
+
+# ── Disable Touch Visual Feedback ────────────────────────────────────────────
+
+_CURSOR_KEY = r"HKEY_CURRENT_USER\Control Panel\Cursors"
+
+
+def _apply_disable_touch_feedback(*, require_admin: bool = False) -> None:
+    SESSION.log("Input: disable touch and pen visual feedback")
+    SESSION.backup([_CURSOR_KEY], "TouchFeedback")
+    SESSION.set_dword(_CURSOR_KEY, "ContactVisualization", 0)
+    SESSION.set_dword(_CURSOR_KEY, "GestureVisualization", 0)
+
+
+def _remove_disable_touch_feedback(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CURSOR_KEY, "ContactVisualization", 1)
+    SESSION.set_dword(_CURSOR_KEY, "GestureVisualization", 31)
+
+
+def _detect_disable_touch_feedback() -> bool:
+    return (
+        SESSION.read_dword(_CURSOR_KEY, "ContactVisualization") == 0
+        and SESSION.read_dword(_CURSOR_KEY, "GestureVisualization") == 0
+    )
+
+
+TWEAKS += [
+    TweakDef(
+        id="input-set-cursor-blink-rate",
+        label="Set Fast Cursor Blink Rate",
+        category="Input",
+        apply_fn=_apply_set_cursor_blink_rate,
+        remove_fn=_remove_set_cursor_blink_rate,
+        detect_fn=_detect_set_cursor_blink_rate,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP_KEY],
+        description=(
+            "Sets the cursor blink rate to 400 ms (faster than default). "
+            "Makes the text cursor more visible and responsive. "
+            "Default: 530 ms. Recommended: 400 ms for faster feedback."
+        ),
+        tags=["input", "cursor", "blink-rate", "typing", "ux"],
+    ),
+    TweakDef(
+        id="input-increase-double-click-speed",
+        label="Increase Double-Click Speed",
+        category="Input",
+        apply_fn=_apply_increase_double_click_speed,
+        remove_fn=_remove_increase_double_click_speed,
+        detect_fn=_detect_increase_double_click_speed,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_MOUSE_KEY],
+        description=(
+            "Reduces the double-click detection interval to 200 ms for faster "
+            "response. Requires quicker double-clicks but feels responsive. "
+            "Default: 500 ms. Recommended: 200 ms for power users."
+        ),
+        tags=["input", "mouse", "double-click", "speed", "ux"],
+    ),
+    TweakDef(
+        id="input-disable-touch-feedback",
+        label="Disable Touch Visual Feedback",
+        category="Input",
+        apply_fn=_apply_disable_touch_feedback,
+        remove_fn=_remove_disable_touch_feedback,
+        detect_fn=_detect_disable_touch_feedback,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CURSOR_KEY],
+        description=(
+            "Disables visual feedback animations for touch and pen input. "
+            "Removes the circle/ripple effect on touch and gesture indicators. "
+            "Default: Enabled. Recommended: Disabled on non-touch devices."
+        ),
+        tags=["input", "touch", "pen", "feedback", "visual"],
+    ),
+]
