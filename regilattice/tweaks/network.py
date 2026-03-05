@@ -935,25 +935,6 @@ def _detect_tcp_autotune_restricted() -> bool:
     return SESSION.read_dword(_TCPIP, "EnableAutoTuning") == 0
 
 
-# ── Disable WiFi Sense ────────────────────────────────────────────────────────
-
-
-def _apply_disable_wifi_sense(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: disable WiFi Sense")
-    SESSION.backup([_WIFI_SENSE], "WiFiSense")
-    SESSION.set_dword(_WIFI_SENSE, "AutoConnectAllowedOEM", 0)
-
-
-def _remove_disable_wifi_sense(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_WIFI_SENSE, "AutoConnectAllowedOEM", 1)
-
-
-def _detect_disable_wifi_sense() -> bool:
-    return SESSION.read_dword(_WIFI_SENSE, "AutoConnectAllowedOEM") == 0
-
-
 # ── Enable DNS Client Cache Optimization ─────────────────────────────────────
 
 
@@ -995,23 +976,6 @@ TWEAKS += [
             "Default: normal. Recommended: restricted for problematic networks."
         ),
         tags=["network", "tcp", "autotune", "window", "restricted"],
-    ),
-    TweakDef(
-        id="net-disable-wifi-sense",
-        label="Disable WiFi Sense",
-        category="Network",
-        apply_fn=_apply_disable_wifi_sense,
-        remove_fn=_remove_disable_wifi_sense,
-        detect_fn=_detect_disable_wifi_sense,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_WIFI_SENSE],
-        description=(
-            "Disables WiFi Sense auto-connect to suggested open hotspots. "
-            "Prevents automatic sharing of WiFi credentials. "
-            "Default: enabled. Recommended: disabled for security."
-        ),
-        tags=["network", "wifi", "sense", "hotspot", "security"],
     ),
     TweakDef(
         id="net-dns-cache-optimization",
