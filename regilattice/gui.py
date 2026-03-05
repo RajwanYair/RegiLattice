@@ -826,10 +826,7 @@ class RegiLatticeGUI:
         info = profile_info(key)
         if info is None:
             return
-        raw_cats = info.get("apply_categories")
-        apply_cats: set[str] = set()
-        if isinstance(raw_cats, (set, frozenset, list, tuple)):
-            apply_cats = {str(c).lower() for c in raw_cats}
+        apply_cats = {c.lower() for c in info.apply_categories}
         for row in self._tweak_rows:
             if row.td.category.lower() in apply_cats and not row.disabled_by_corp:
                 row.var.set(True)
