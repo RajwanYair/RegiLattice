@@ -20,9 +20,7 @@ _PREFETCH = (
     r"\Session Manager\Memory Management\PrefetchParameters"
 )
 _SUPERFETCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"
-_PRIO_CTRL = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
-)
+_PRIO_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
 _MM = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
     r"\Session Manager\Memory Management"
@@ -388,7 +386,9 @@ def _apply_high_perf_plan(*, require_admin: bool = True) -> None:
     SESSION.log("Power: set active power plan to High Performance")
     subprocess.run(
         ["powercfg", "/setactive", "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"],
-        check=True, capture_output=True, text=True,
+        check=True,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -397,7 +397,9 @@ def _remove_high_perf_plan(*, require_admin: bool = True) -> None:
     SESSION.log("Power: restore Balanced power plan")
     subprocess.run(
         ["powercfg", "/setactive", "381b4222-f694-41f0-9685-ff5bb260df2e"],
-        check=True, capture_output=True, text=True,
+        check=True,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -405,7 +407,10 @@ def _detect_high_perf_plan() -> bool:
     try:
         r = subprocess.run(
             ["powercfg", "/getactivescheme"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         return "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c" in r.stdout
     except (OSError, subprocess.SubprocessError):
@@ -416,23 +421,7 @@ def _detect_high_perf_plan() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-usb-suspend",
-        label="Disable USB Selective Suspend",
-        category="Power",
-        apply_fn=_apply_disable_usb_suspend,
-        remove_fn=_remove_disable_usb_suspend,
-        detect_fn=_detect_disable_usb_suspend,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_USB_KEY],
-        description=(
-            "Prevents Windows from powering down USB devices to save "
-            "energy, fixing USB disconnection issues."
-        ),
-        tags=["power", "usb", "stability"],
-    ),
-    TweakDef(
-        id="disable-hibernation",
+        id="power-disable-hibernation",
         label="Disable Hibernation",
         category="Power",
         apply_fn=_apply_disable_hibernation,
@@ -445,7 +434,7 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "disk", "performance"],
     ),
     TweakDef(
-        id="disable-prefetch",
+        id="power-disable-prefetch",
         label="Disable Prefetch / Superfetch",
         category="Power",
         apply_fn=_apply_disable_prefetch,
@@ -454,14 +443,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PREFETCH, _SUPERFETCH],
-        description=(
-            "Disables Prefetch and Superfetch (SysMain) services — "
-            "beneficial on SSD-only systems."
-        ),
+        description=("Disables Prefetch and Superfetch (SysMain) services — beneficial on SSD-only systems."),
         tags=["power", "performance", "ssd"],
     ),
     TweakDef(
-        id="optimize-proc-scheduling",
+        id="power-optimize-proc-scheduling",
         label="Optimize Processor Scheduling",
         category="Power",
         apply_fn=_apply_proc_scheduling,
@@ -470,14 +456,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PRIO_CTRL],
-        description=(
-            "Adjusts Win32PrioritySeparation for foreground-app "
-            "responsiveness (value 38)."
-        ),
+        description=("Adjusts Win32PrioritySeparation for foreground-app responsiveness (value 38)."),
         tags=["power", "performance", "cpu"],
     ),
     TweakDef(
-        id="disable-fast-startup",
+        id="power-disable-fast-startup",
         label="Disable Fast Startup",
         category="Power",
         apply_fn=_apply_disable_fast_startup,
@@ -486,14 +469,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_POWER],
-        description=(
-            "Disables Windows Fast Startup (hybrid boot) which can "
-            "cause driver and dual-boot issues."
-        ),
+        description=("Disables Windows Fast Startup (hybrid boot) which can cause driver and dual-boot issues."),
         tags=["power", "boot", "stability"],
     ),
     TweakDef(
-        id="large-system-cache",
+        id="power-large-system-cache",
         label="Enable Large System Cache",
         category="Power",
         apply_fn=_apply_large_cache,
@@ -502,14 +482,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MM],
-        description=(
-            "Enables large system cache, dedicating more RAM for file "
-            "caching (beneficial with 16 GB+ RAM)."
-        ),
+        description=("Enables large system cache, dedicating more RAM for file caching (beneficial with 16 GB+ RAM)."),
         tags=["power", "performance", "memory"],
     ),
     TweakDef(
-        id="disable-power-throttling",
+        id="power-disable-power-throttling",
         label="Disable Power Throttling",
         category="Power",
         apply_fn=_apply_disable_power_throttle,
@@ -522,7 +499,7 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "performance", "cpu"],
     ),
     TweakDef(
-        id="disable-ntfs-last-access",
+        id="power-disable-ntfs-last-access",
         label="Disable NTFS Last Access Timestamp",
         category="Power",
         apply_fn=_apply_disable_last_access,
@@ -535,7 +512,7 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "performance", "disk", "ntfs"],
     ),
     TweakDef(
-        id="disable-connected-standby",
+        id="power-disable-connected-standby",
         label="Disable Connected Standby",
         category="Power",
         apply_fn=_apply_disable_connected_standby,
@@ -544,14 +521,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_POWER],
-        description=(
-            "Disables Modern/Connected Standby which can cause high battery "
-            "drain and wake-from-sleep issues on some laptops."
-        ),
+        description=("Disables Modern/Connected Standby which can cause high battery drain and wake-from-sleep issues on some laptops."),
         tags=["power", "standby", "laptop", "battery"],
     ),
     TweakDef(
-        id="disable-core-parking",
+        id="power-disable-core-parking",
         label="Disable CPU Core Parking",
         category="Power",
         apply_fn=_apply_disable_core_parking,
@@ -560,14 +534,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CORE_PARKING],
-        description=(
-            "Disables CPU core parking so all cores stay active. "
-            "Can improve latency-sensitive workloads and gaming."
-        ),
+        description=("Disables CPU core parking so all cores stay active. Can improve latency-sensitive workloads and gaming."),
         tags=["power", "cpu", "performance", "gaming"],
     ),
     TweakDef(
-        id="max-processor-turbo",
+        id="power-max-processor-turbo",
         label="Set Max Processor State to 100%",
         category="Power",
         apply_fn=_apply_max_turbo,
@@ -580,7 +551,7 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "cpu", "turbo", "performance"],
     ),
     TweakDef(
-        id="disable-sleep-ac",
+        id="power-disable-sleep-ac",
         label="Disable Auto-Sleep on AC Power",
         category="Power",
         apply_fn=_apply_disable_sleep,
@@ -593,7 +564,7 @@ TWEAKS: list[TweakDef] = [
         tags=["power", "sleep", "desktop"],
     ),
     TweakDef(
-        id="disable-disk-idle",
+        id="power-disable-disk-idle",
         label="Disable Disk Idle Timeout",
         category="Power",
         apply_fn=_apply_disable_disk_idle,
@@ -819,15 +790,12 @@ def _remove_disable_idle_states(*, require_admin: bool = True) -> None:
 
 
 def _detect_disable_idle_states() -> bool:
-    return (
-        SESSION.read_dword(_POWER_IDLE, "EnergyEstimationEnabled") == 0
-        and SESSION.read_dword(_POWER_IDLE, "ExitLatencyCheckEnabled") == 1
-    )
+    return SESSION.read_dword(_POWER_IDLE, "EnergyEstimationEnabled") == 0 and SESSION.read_dword(_POWER_IDLE, "ExitLatencyCheckEnabled") == 1
 
 
 TWEAKS += [
     TweakDef(
-        id="pwr-disable-usb-selective-suspend",
+        id="power-pwr-disable-usb-selective-suspend",
         label="Disable USB 3.0 Selective Suspend",
         category="Power",
         apply_fn=_apply_usb_selective_suspend_off,
@@ -844,7 +812,7 @@ TWEAKS += [
         tags=["power", "usb", "selective-suspend", "usb3"],
     ),
     TweakDef(
-        id="pwr-pcie-link-pm-off",
+        id="power-pwr-pcie-link-pm-off",
         label="Disable PCI Express Link State Power Management",
         category="Power",
         apply_fn=_apply_pcie_link_pm_off,
@@ -861,7 +829,7 @@ TWEAKS += [
         tags=["power", "pcie", "aspm", "latency"],
     ),
     TweakDef(
-        id="pwr-disable-idle-states",
+        id="power-pwr-disable-idle-states",
         label="Disable Processor Idle States",
         category="Power",
         apply_fn=_apply_disable_idle_states,

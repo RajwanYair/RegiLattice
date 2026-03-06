@@ -325,7 +325,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vnc", "security", "clipboard", "dlp"],
     ),
     TweakDef(
-        id="realvnc-disable-auto-update",
+        id="vnc-realvnc-disable-auto-update",
         label="RealVNC Disable Auto-Update",
         category="RealVNC",
         apply_fn=_apply_disable_auto_update,
@@ -341,7 +341,7 @@ TWEAKS: list[TweakDef] = [
         tags=["realvnc", "vnc", "update"],
     ),
     TweakDef(
-        id="realvnc-optimize-encoding",
+        id="vnc-realvnc-optimize-encoding",
         label="RealVNC Optimize Encoding",
         category="RealVNC",
         apply_fn=_apply_optimize_encoding,
@@ -453,10 +453,7 @@ def _remove_vnc_encryption_always(*, require_admin: bool = True) -> None:
 
 
 def _detect_vnc_encryption_always() -> bool:
-    return (
-        SESSION.read_string(_VNC_POLICY, "Encryption") == "AlwaysOn"
-        and SESSION.read_dword(_VNC_POLICY, "EncryptionForced") == 1
-    )
+    return SESSION.read_string(_VNC_POLICY, "Encryption") == "AlwaysOn" and SESSION.read_dword(_VNC_POLICY, "EncryptionForced") == 1
 
 
 # -- VNC: Disable File Transfer ------------------------------------------------

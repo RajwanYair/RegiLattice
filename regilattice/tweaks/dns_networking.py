@@ -15,9 +15,7 @@ _DNS_CLIENT = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\Dnscache\Parameters"
 )
-_DNS_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
-)
+_DNS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
 _TCPIP = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\Tcpip\Parameters"
@@ -46,9 +44,7 @@ _LMHOSTS = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\NetBT\Parameters"
 )
-_QOS = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched"
-)
+_QOS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched"
 _THROTTLE = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
     r"\CurrentVersion\Multimedia\SystemProfile"
@@ -57,9 +53,7 @@ _AFD = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
     r"\AFD\Parameters"
 )
-_DNS_DOH_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
-)
+_DNS_DOH_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
 
 
 # ── Force DNS-over-HTTPS via Group Policy ────────────────────────────────────
@@ -265,8 +259,8 @@ def _apply_tcp_keepalive(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("DNS: set TCP KeepAliveInterval to 1s, KeepAliveTime to 300s")
     SESSION.backup([_TCPIP], "TcpKeepAlive")
-    SESSION.set_dword(_TCPIP, "KeepAliveTime", 300000)     # 5 min (ms)
-    SESSION.set_dword(_TCPIP, "KeepAliveInterval", 1000)   # 1 s (ms)
+    SESSION.set_dword(_TCPIP, "KeepAliveTime", 300000)  # 5 min (ms)
+    SESSION.set_dword(_TCPIP, "KeepAliveInterval", 1000)  # 1 s (ms)
 
 
 def _remove_tcp_keepalive(*, require_admin: bool = True) -> None:
@@ -435,11 +429,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_QOS],
-        description=(
-            "Sets QoS non-best-effort bandwidth limit to 0%, reclaiming "
-            "the 20% Windows reserves by default. "
-            "Default: 20. Recommended: 0."
-        ),
+        description=("Sets QoS non-best-effort bandwidth limit to 0%, reclaiming the 20% Windows reserves by default. Default: 20. Recommended: 0."),
         tags=["dns", "qos", "bandwidth", "performance", "network"],
     ),
     TweakDef(
@@ -660,9 +650,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_DNS_CLIENT],
         description=(
-            "Reduces DNS query adapter timeout to 2000 ms for faster "
-            "failover to alternate DNS servers. "
-            "Default: 5000 ms. Recommended: 2000 ms."
+            "Reduces DNS query adapter timeout to 2000 ms for faster failover to alternate DNS servers. Default: 5000 ms. Recommended: 2000 ms."
         ),
         tags=["dns", "timeout", "failover", "performance", "network"],
     ),

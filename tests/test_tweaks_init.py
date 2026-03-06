@@ -49,8 +49,11 @@ class TestTweakDef:
 
     def test_defaults(self) -> None:
         td = TweakDef(
-            id="t", label="L", category="C",
-            apply_fn=lambda: None, remove_fn=lambda: None,
+            id="t",
+            label="L",
+            category="C",
+            apply_fn=lambda: None,
+            remove_fn=lambda: None,
         )
         assert td.detect_fn is None
         assert td.needs_admin is True
@@ -61,14 +64,18 @@ class TestTweakDef:
 
     def test_repr_contains_id(self) -> None:
         td = TweakDef(
-            id="repr.test", label="R", category="C",
-            apply_fn=lambda: None, remove_fn=lambda: None,
+            id="repr.test",
+            label="R",
+            category="C",
+            apply_fn=lambda: None,
+            remove_fn=lambda: None,
         )
         assert "repr.test" in repr(td)
 
     def test_custom_fields(self) -> None:
         def det() -> bool:
             return True
+
         td = TweakDef(
             id="c",
             label="Custom",
@@ -119,9 +126,7 @@ class TestPluginLoader:
 
     def test_detect_fn_callable_or_none(self, all_tweaks_list: list[TweakDef]) -> None:
         for td in all_tweaks_list:
-            assert td.detect_fn is None or callable(td.detect_fn), (
-                f"{td.id}: detect_fn must be callable or None"
-            )
+            assert td.detect_fn is None or callable(td.detect_fn), f"{td.id}: detect_fn must be callable or None"
 
 
 # ── Categories ───────────────────────────────────────────────────────────────
@@ -176,12 +181,14 @@ class TestSearchTweaks:
     def test_search_by_category(self) -> None:
         cat = categories()[0]
         results = search_tweaks(cat)
-        assert all(cat.lower() in r.category.lower() or
-                   cat.lower() in r.id.lower() or
-                   cat.lower() in r.label.lower() or
-                   cat.lower() in r.description.lower() or
-                   any(cat.lower() in t.lower() for t in r.tags)
-                   for r in results)
+        assert all(
+            cat.lower() in r.category.lower()
+            or cat.lower() in r.id.lower()
+            or cat.lower() in r.label.lower()
+            or cat.lower() in r.description.lower()
+            or any(cat.lower() in t.lower() for t in r.tags)
+            for r in results
+        )
 
     def test_search_by_tag(self, all_tweaks_list: list[TweakDef]) -> None:
         # Find a tweak with tags
@@ -247,6 +254,7 @@ class TestTweakStatus:
     def test_detect_raises(self) -> None:
         def bad():
             raise RuntimeError("boom")
+
         td = self._make_tweak(detect_fn=bad)
         assert tweak_status(td) == TweakResult.UNKNOWN
 
@@ -333,13 +341,20 @@ class TestRestoreSnapshot:
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
     def test_applies_missing_tweak(
-        self, mock_status: MagicMock, mock_all: list, tmp_path: Path,
+        self,
+        mock_status: MagicMock,
+        mock_all: list,
+        tmp_path: Path,
     ) -> None:
         apply_fn = MagicMock()
         remove_fn = MagicMock()
         td = TweakDef(
-            id="t1", label="T", category="C",
-            apply_fn=apply_fn, remove_fn=remove_fn, corp_safe=True,
+            id="t1",
+            label="T",
+            category="C",
+            apply_fn=apply_fn,
+            remove_fn=remove_fn,
+            corp_safe=True,
         )
         mock_all.append(td)
         mock_status.return_value = TweakResult.NOT_APPLIED
@@ -352,13 +367,20 @@ class TestRestoreSnapshot:
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
     def test_removes_applied_tweak(
-        self, mock_status: MagicMock, mock_all: list, tmp_path: Path,
+        self,
+        mock_status: MagicMock,
+        mock_all: list,
+        tmp_path: Path,
     ) -> None:
         apply_fn = MagicMock()
         remove_fn = MagicMock()
         td = TweakDef(
-            id="t1", label="T", category="C",
-            apply_fn=apply_fn, remove_fn=remove_fn, corp_safe=True,
+            id="t1",
+            label="T",
+            category="C",
+            apply_fn=apply_fn,
+            remove_fn=remove_fn,
+            corp_safe=True,
         )
         mock_all.append(td)
         mock_status.return_value = TweakResult.APPLIED
@@ -371,11 +393,18 @@ class TestRestoreSnapshot:
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks.tweak_status")
     def test_unchanged_tweak(
-        self, mock_status: MagicMock, mock_all: list, tmp_path: Path,
+        self,
+        mock_status: MagicMock,
+        mock_all: list,
+        tmp_path: Path,
     ) -> None:
         td = TweakDef(
-            id="t1", label="T", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True,
+            id="t1",
+            label="T",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=True,
         )
         mock_all.append(td)
         mock_status.return_value = TweakResult.APPLIED
@@ -388,11 +417,19 @@ class TestRestoreSnapshot:
     @patch("regilattice.tweaks.tweak_status")
     @patch("regilattice.corpguard.is_corporate_network", return_value=True)
     def test_corp_skip(
-        self, mock_corp: MagicMock, mock_status: MagicMock, mock_all: list, tmp_path: Path,
+        self,
+        mock_corp: MagicMock,
+        mock_status: MagicMock,
+        mock_all: list,
+        tmp_path: Path,
     ) -> None:
         td = TweakDef(
-            id="t1", label="T", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False,
+            id="t1",
+            label="T",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=False,
         )
         mock_all.append(td)
         mock_status.return_value = TweakResult.NOT_APPLIED
@@ -412,10 +449,12 @@ class TestApplyAll:
     def test_applies_tweaks(self, mock_all: list) -> None:
         fn1 = MagicMock()
         fn2 = MagicMock()
-        mock_all.extend([
-            TweakDef(id="a1", label="A", category="C", apply_fn=fn1, remove_fn=MagicMock(), corp_safe=True),
-            TweakDef(id="a2", label="B", category="C", apply_fn=fn2, remove_fn=MagicMock(), corp_safe=True),
-        ])
+        mock_all.extend(
+            [
+                TweakDef(id="a1", label="A", category="C", apply_fn=fn1, remove_fn=MagicMock(), corp_safe=True),
+                TweakDef(id="a2", label="B", category="C", apply_fn=fn2, remove_fn=MagicMock(), corp_safe=True),
+            ]
+        )
         result = apply_all(force_corp=True)
         fn1.assert_called_once()
         fn2.assert_called_once()
@@ -469,10 +508,12 @@ class TestRemoveAll:
     def test_removes_tweaks(self, mock_all: list) -> None:
         fn1 = MagicMock()
         fn2 = MagicMock()
-        mock_all.extend([
-            TweakDef(id="r1", label="R", category="C", apply_fn=MagicMock(), remove_fn=fn1, corp_safe=True),
-            TweakDef(id="r2", label="R2", category="C", apply_fn=MagicMock(), remove_fn=fn2, corp_safe=True),
-        ])
+        mock_all.extend(
+            [
+                TweakDef(id="r1", label="R", category="C", apply_fn=MagicMock(), remove_fn=fn1, corp_safe=True),
+                TweakDef(id="r2", label="R2", category="C", apply_fn=MagicMock(), remove_fn=fn2, corp_safe=True),
+            ]
+        )
         result = remove_all(force_corp=True)
         fn1.assert_called_once()
         fn2.assert_called_once()
@@ -537,11 +578,15 @@ class TestReloadPlugins:
 
 # ── _topo_sort ───────────────────────────────────────────────────────────────
 
+
 def _td(tid: str, deps: list[str] | None = None) -> TweakDef:
     """Create a minimal TweakDef with optional depends_on."""
     return TweakDef(
-        id=tid, label=tid.upper(), category="C",
-        apply_fn=MagicMock(), remove_fn=MagicMock(),
+        id=tid,
+        label=tid.upper(),
+        category="C",
+        apply_fn=MagicMock(),
+        remove_fn=MagicMock(),
         corp_safe=True,
         depends_on=deps or [],
     )

@@ -12,15 +12,11 @@ from regilattice.tweaks import TweakDef
 # ── Key paths ────────────────────────────────────────────────────────────────
 
 _CONSOLE = r"HKEY_CURRENT_USER\Console"
-_DEFAULT_TERMINAL = (
-    r"HKEY_CURRENT_USER\Console\%%Startup"
-)
+_DEFAULT_TERMINAL = r"HKEY_CURRENT_USER\Console\%%Startup"
 _CONSOLE_V2 = r"HKEY_CURRENT_USER\Console"
 _VIRTUAL_TERMINAL = r"HKEY_CURRENT_USER\Console"
 _CMD_KEYS = r"HKEY_CURRENT_USER\Console"
-_WIN_TERMINAL_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"
-)
+_WIN_TERMINAL_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"
 _EXPLORER_ADV = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Advanced"
@@ -39,11 +35,13 @@ def _apply_default_wt(*, require_admin: bool = False) -> None:
     SESSION.backup([_DEFAULT_TERMINAL], "DefaultTerminal")
     # {2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69} = Windows Terminal GUID
     SESSION.set_string(
-        _DEFAULT_TERMINAL, "DelegationConsole",
+        _DEFAULT_TERMINAL,
+        "DelegationConsole",
         "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}",
     )
     SESSION.set_string(
-        _DEFAULT_TERMINAL, "DelegationTerminal",
+        _DEFAULT_TERMINAL,
+        "DelegationTerminal",
         "{E12CFF52-A866-4C77-9A90-F570A7AA2C6B}",
     )
 
@@ -279,9 +277,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_CONSOLE_V2],
         description=(
-            "Forces the new Console V2 host with ANSI support, "
-            "line wrapping, and improved rendering. "
-            "Default: 1 (enabled). Recommended: 1."
+            "Forces the new Console V2 host with ANSI support, line wrapping, and improved rendering. Default: 1 (enabled). Recommended: 1."
         ),
         tags=["terminal", "console", "v2", "modern"],
     ),
@@ -329,10 +325,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONSOLE],
-        description=(
-            "Sets insert mode as the default typing mode in consoles. "
-            "Default: 1 (insert). Recommended: 1."
-        ),
+        description=("Sets insert mode as the default typing mode in consoles. Default: 1 (insert). Recommended: 1."),
         tags=["terminal", "insert", "mode", "typing"],
     ),
     TweakDef(
@@ -345,11 +338,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONSOLE],
-        description=(
-            "Increases the console screen buffer to 9999 lines for "
-            "longer scrollback history. "
-            "Default: 300 lines. Recommended: 9999."
-        ),
+        description=("Increases the console screen buffer to 9999 lines for longer scrollback history. Default: 300 lines. Recommended: 9999."),
         tags=["terminal", "buffer", "scrollback", "history"],
     ),
     TweakDef(
@@ -362,10 +351,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONSOLE],
-        description=(
-            "Enables automatic line wrapping when resizing the console. "
-            "Default: 1. Recommended: 1."
-        ),
+        description=("Enables automatic line wrapping when resizing the console. Default: 1. Recommended: 1."),
         tags=["terminal", "wrap", "resize", "console"],
     ),
     TweakDef(
@@ -379,9 +365,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_LEGACY],
         description=(
-            "Disables the legacy console subsystem. Required for "
-            "Console V2 features like ANSI escape support. "
-            "Default: 0 (modern). Recommended: 0."
+            "Disables the legacy console subsystem. Required for Console V2 features like ANSI escape support. Default: 0 (modern). Recommended: 0."
         ),
         tags=["terminal", "legacy", "console", "modern"],
     ),
@@ -587,10 +571,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_WIN_TERMINAL_POLICY],
-        description=(
-            "Disables the Windows Terminal splash/startup screen via policy. "
-            "Default: Enabled. Recommended: Disabled for faster launch."
-        ),
+        description=("Disables the Windows Terminal splash/startup screen via policy. Default: Enabled. Recommended: Disabled for faster launch."),
         tags=["terminal", "splash", "startup", "performance"],
     ),
     TweakDef(

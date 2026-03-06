@@ -74,7 +74,11 @@ def search_scoop_apps(query: str) -> list[str]:
     """Search for available scoop apps matching query."""
     try:
         r = subprocess.run(
-            ["scoop", "search", query], capture_output=True, text=True, timeout=30, check=False,
+            ["scoop", "search", query],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
         )
         if r.returncode != 0:
             return []
@@ -126,91 +130,113 @@ def _make_scoop_tweak(
 
 TWEAKS: list[TweakDef] = [
     _make_scoop_tweak(
-        "7zip", "7zip", "Scoop: 7-Zip",
+        "7zip",
+        "7zip",
+        "Scoop: 7-Zip",
         "7-Zip file archiver — fast compression/decompression "
         "supporting 7z, ZIP, RAR, TAR, GZIP, and more. "
         "Default: Not installed. Recommended: Install.",
         tags=["archiver", "compression"],
     ),
     _make_scoop_tweak(
-        "git", "git", "Scoop: Git",
+        "git",
+        "git",
+        "Scoop: Git",
         "Git distributed version control system. "
         "Required by many scoop buckets and developer workflows. "
         "Default: Not installed. Recommended: Install.",
         tags=["git", "vcs", "developer"],
     ),
     _make_scoop_tweak(
-        "curl", "curl", "Scoop: cURL",
+        "curl",
+        "curl",
+        "Scoop: cURL",
         "cURL command-line tool for transferring data with URLs. "
         "Supports HTTP, HTTPS, FTP, and many other protocols. "
         "Default: Not installed. Recommended: Install.",
         tags=["networking", "download"],
     ),
     _make_scoop_tweak(
-        "wget", "wget", "Scoop: wget",
+        "wget",
+        "wget",
+        "Scoop: wget",
         "GNU Wget — non-interactive network downloader. "
         "Supports HTTP, HTTPS, and FTP with recursive download. "
         "Default: Not installed. Recommended: Install.",
         tags=["networking", "download"],
     ),
     _make_scoop_tweak(
-        "fzf", "fzf", "Scoop: fzf (fuzzy finder)",
+        "fzf",
+        "fzf",
+        "Scoop: fzf (fuzzy finder)",
         "fzf is a general-purpose command-line fuzzy finder. "
         "Blazing fast, works with any list — files, history, processes. "
         "Default: Not installed. Recommended: Install.",
         tags=["search", "productivity"],
     ),
     _make_scoop_tweak(
-        "ripgrep", "ripgrep", "Scoop: ripgrep (rg)",
+        "ripgrep",
+        "ripgrep",
+        "Scoop: ripgrep (rg)",
         "ripgrep (rg) — lightning-fast regex search tool. "
         "Recursively searches directories, respects .gitignore. "
         "Default: Not installed. Recommended: Install.",
         tags=["search", "developer"],
     ),
     _make_scoop_tweak(
-        "fd", "fd", "Scoop: fd (find alternative)",
+        "fd",
+        "fd",
+        "Scoop: fd (find alternative)",
         "fd is a fast, user-friendly alternative to 'find'. "
         "Colorized output, regex support, respects .gitignore. "
         "Default: Not installed. Recommended: Install.",
         tags=["search", "files", "developer"],
     ),
     _make_scoop_tweak(
-        "bat", "bat", "Scoop: bat (cat with syntax)",
+        "bat",
+        "bat",
+        "Scoop: bat (cat with syntax)",
         "bat — a cat clone with syntax highlighting, git integration, "
         "and automatic paging. Drop-in replacement for cat. "
         "Default: Not installed. Recommended: Install.",
         tags=["terminal", "developer"],
     ),
     _make_scoop_tweak(
-        "jq", "jq", "Scoop: jq (JSON processor)",
+        "jq",
+        "jq",
+        "Scoop: jq (JSON processor)",
         "jq — lightweight command-line JSON processor. "
         "Slice, filter, map, and transform structured data. "
         "Default: Not installed. Recommended: Install.",
         tags=["json", "developer"],
     ),
     _make_scoop_tweak(
-        "neovim", "neovim", "Scoop: Neovim",
-        "Neovim — hyperextensible Vim-based text editor. "
-        "Async plugins, built-in LSP, Lua scripting. "
-        "Default: Not installed.",
+        "neovim",
+        "neovim",
+        "Scoop: Neovim",
+        "Neovim — hyperextensible Vim-based text editor. Async plugins, built-in LSP, Lua scripting. Default: Not installed.",
         tags=["editor", "vim", "developer"],
     ),
     _make_scoop_tweak(
-        "starship", "starship", "Scoop: Starship Prompt",
+        "starship",
+        "starship",
+        "Scoop: Starship Prompt",
         "Starship — blazing-fast, cross-shell prompt in Rust. "
         "Shows git status, language versions, battery, and more. "
         "Default: Not installed. Recommended: Install.",
         tags=["terminal", "prompt", "shell"],
     ),
     _make_scoop_tweak(
-        "delta", "delta", "Scoop: delta (git diff)",
-        "delta — syntax-highlighting pager for git, diff, and grep. "
-        "Modern, beautiful git diffs. "
-        "Default: Not installed. Recommended: Install.",
+        "delta",
+        "delta",
+        "Scoop: delta (git diff)",
+        "delta — syntax-highlighting pager for git, diff, and grep. Modern, beautiful git diffs. Default: Not installed. Recommended: Install.",
         tags=["git", "diff", "developer"],
     ),
     _make_scoop_tweak(
-        "everything", "everything", "Scoop: Everything Search",
+        "everything",
+        "everything",
+        "Scoop: Everything Search",
         "Everything — instant file search for Windows by name. "
         "Indexes NTFS drives in seconds — near-zero memory usage. "
         "Default: Not installed. Recommended: Install.",
@@ -218,62 +244,71 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "files", "productivity"],
     ),
     _make_scoop_tweak(
-        "gsudo", "gsudo", "Scoop: gsudo (sudo for Windows)",
-        "gsudo — a sudo equivalent for Windows. "
-        "Run elevated commands from your current console. "
-        "Default: Not installed. Recommended: Install.",
+        "gsudo",
+        "gsudo",
+        "Scoop: gsudo (sudo for Windows)",
+        "gsudo — a sudo equivalent for Windows. Run elevated commands from your current console. Default: Not installed. Recommended: Install.",
         tags=["admin", "terminal", "elevation"],
     ),
     _make_scoop_tweak(
-        "python", "python", "Scoop: Python",
-        "Python interpreter managed via Scoop. "
-        "Easy version switching with scoop reset. "
-        "Default: Not installed.",
+        "python",
+        "python",
+        "Scoop: Python",
+        "Python interpreter managed via Scoop. Easy version switching with scoop reset. Default: Not installed.",
         tags=["python", "developer", "language"],
     ),
     _make_scoop_tweak(
-        "nodejs", "nodejs", "Scoop: Node.js",
-        "Node.js JavaScript runtime managed via Scoop. "
-        "Includes npm package manager. "
-        "Default: Not installed.",
+        "nodejs",
+        "nodejs",
+        "Scoop: Node.js",
+        "Node.js JavaScript runtime managed via Scoop. Includes npm package manager. Default: Not installed.",
         tags=["nodejs", "javascript", "developer"],
     ),
     _make_scoop_tweak(
-        "btop", "btop", "Scoop: btop++ (Resource Monitor)",
+        "btop",
+        "btop",
+        "Scoop: btop++ (Resource Monitor)",
         "btop++ \u2014 modern resource monitor with battery, CPU, memory, disk, network stats. "
         "Beautiful TUI. Default: Not installed. Recommended: Install.",
         tags=["monitor", "resource", "terminal"],
     ),
     _make_scoop_tweak(
-        "lazygit", "lazygit", "Scoop: lazygit (Git TUI)",
-        "lazygit \u2014 simple terminal UI for git commands. "
-        "Stage, commit, rebase interactively. Default: Not installed. Recommended: Install.",
+        "lazygit",
+        "lazygit",
+        "Scoop: lazygit (Git TUI)",
+        "lazygit \u2014 simple terminal UI for git commands. Stage, commit, rebase interactively. Default: Not installed. Recommended: Install.",
         tags=["git", "tui", "developer"],
     ),
     _make_scoop_tweak(
-        "duf", "duf", "Scoop: duf (Disk Usage)",
-        "duf \u2014 disk usage/free utility with colorful output. "
-        "Modern alternative to df. Default: Not installed.",
+        "duf",
+        "duf",
+        "Scoop: duf (Disk Usage)",
+        "duf \u2014 disk usage/free utility with colorful output. Modern alternative to df. Default: Not installed.",
         tags=["disk", "utility", "terminal"],
     ),
     _make_scoop_tweak(
-        "tldr", "tldr", "Scoop: tldr (Simplified Man Pages)",
-        "tldr \u2014 simplified, community-driven man pages. "
-        "Quick command reference. Default: Not installed. Recommended: Install.",
+        "tldr",
+        "tldr",
+        "Scoop: tldr (Simplified Man Pages)",
+        "tldr \u2014 simplified, community-driven man pages. Quick command reference. Default: Not installed. Recommended: Install.",
         tags=["documentation", "terminal", "developer"],
     ),
 ]
 
 TWEAKS += [
     _make_scoop_tweak(
-        "dust", "dust", "Scoop: dust (Disk Usage TUI)",
+        "dust",
+        "dust",
+        "Scoop: dust (Disk Usage TUI)",
         "dust -- a more intuitive version of du written in Rust. "
         "Visualizes disk usage with a bar chart in the terminal. "
         "Default: Not installed. Recommended: Install.",
         tags=["disk", "utility", "terminal", "rust"],
     ),
     _make_scoop_tweak(
-        "hyperfine", "hyperfine", "Scoop: hyperfine (Benchmarking)",
+        "hyperfine",
+        "hyperfine",
+        "Scoop: hyperfine (Benchmarking)",
         "hyperfine -- command-line benchmarking tool. "
         "Statistical analysis, warmup runs, export to CSV/JSON. "
         "Default: Not installed. Recommended: Install.",

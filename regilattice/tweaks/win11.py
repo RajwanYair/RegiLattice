@@ -381,7 +381,7 @@ def _detect_disable_suggested_actions() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-widgets",
+        id="w11-disable-widgets",
         label="Disable Widgets (News & Interests)",
         category="Windows 11",
         apply_fn=apply_disable_widgets,
@@ -394,7 +394,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "taskbar", "debloat"],
     ),
     TweakDef(
-        id="disable-snap-assist",
+        id="w11-disable-snap-assist",
         label="Disable Snap Assist & Flyout",
         category="Windows 11",
         apply_fn=apply_disable_snap_assist,
@@ -407,7 +407,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "window-management", "ux"],
     ),
     TweakDef(
-        id="classic-context-menu",
+        id="w11-classic-context-menu",
         label="Classic Right-Click Context Menu",
         category="Windows 11",
         apply_fn=apply_classic_context_menu,
@@ -420,7 +420,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "context-menu", "ux"],
     ),
     TweakDef(
-        id="disable-lockscreen-tips",
+        id="w11-disable-lockscreen-tips",
         label="Disable Lock Screen Tips & Spotlight",
         category="Windows 11",
         apply_fn=apply_disable_lockscreen_tips,
@@ -433,7 +433,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "lockscreen", "spotlight", "debloat"],
     ),
     TweakDef(
-        id="disable-wu-autorestart",
+        id="w11-disable-wu-autorestart",
         label="Disable Windows Update Auto-Restart",
         category="Windows 11",
         apply_fn=apply_disable_wu_autorestart,
@@ -446,7 +446,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "update", "reboot"],
     ),
     TweakDef(
-        id="disable-bing-search",
+        id="w11-disable-bing-search",
         label="Disable Bing Search in Start Menu",
         category="Windows 11",
         apply_fn=apply_disable_bing_search,
@@ -459,7 +459,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "search", "privacy"],
     ),
     TweakDef(
-        id="disable-app-suggestions",
+        id="w11-disable-app-suggestions",
         label="Disable App Suggestions & Bloatware",
         category="Windows 11",
         apply_fn=apply_disable_app_suggestions,
@@ -472,7 +472,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "start-menu", "debloat"],
     ),
     TweakDef(
-        id="dark-mode",
+        id="w11-dark-mode",
         label="Enable System-Wide Dark Mode",
         category="Windows 11",
         apply_fn=apply_dark_mode,
@@ -485,7 +485,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "theme", "appearance"],
     ),
     TweakDef(
-        id="disable-notifications",
+        id="w11-disable-notifications",
         label="Disable Toast Notifications",
         category="Windows 11",
         apply_fn=apply_disable_notifications,
@@ -498,7 +498,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "notifications", "focus"],
     ),
     TweakDef(
-        id="disable-snap-flyout",
+        id="w11-disable-snap-flyout",
         label="Disable Snap Layout Flyout",
         category="Windows 11",
         apply_fn=apply_disable_snap_flyout,
@@ -511,7 +511,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "snap", "ux"],
     ),
     TweakDef(
-        id="disable-taskbar-chat",
+        id="w11-disable-taskbar-chat",
         label="Disable Taskbar Chat Icon",
         category="Windows 11",
         apply_fn=apply_disable_chat_icon,
@@ -524,7 +524,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "taskbar", "teams"],
     ),
     TweakDef(
-        id="win11-disable-widgets",
+        id="w11-win11-disable-widgets",
         label="Disable Widgets",
         category="Windows 11",
         apply_fn=_apply_disable_widgets_policy,
@@ -541,7 +541,7 @@ TWEAKS: list[TweakDef] = [
         tags=["win11", "widgets", "performance", "taskbar"],
     ),
     TweakDef(
-        id="win11-disable-suggested-actions",
+        id="w11-win11-disable-suggested-actions",
         label="Disable Suggested Actions",
         category="Windows 11",
         apply_fn=_apply_disable_suggested_actions,

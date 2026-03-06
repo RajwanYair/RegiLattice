@@ -383,9 +383,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_KEY_SOUND_SCHEME_CU],
         description=(
-            "Sets the system sound scheme to None, silencing all "
-            "Windows event sounds. "
-            "Default: .Default. Recommended: .None for quiet operation."
+            "Sets the system sound scheme to None, silencing all Windows event sounds. Default: .Default. Recommended: .None for quiet operation."
         ),
         tags=["multimedia", "sounds", "scheme", "quiet"],
     ),
@@ -399,11 +397,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_KEY_BOOT_ANIM_LM],
-        description=(
-            "Disables the Windows startup/logon sound. "
-            "Silences the chime played during boot. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables the Windows startup/logon sound. Silences the chime played during boot. Default: Enabled. Recommended: Disabled."),
         tags=["multimedia", "startup", "sound", "boot"],
     ),
 ]
@@ -523,10 +517,7 @@ def _remove_set_default_player_assoc(*, require_admin: bool = True) -> None:
 
 
 def _detect_set_default_player_assoc() -> bool:
-    return (
-        SESSION.read_dword(_KEY_WMP_POLICY, "SetupFirstRun") == 0
-        and SESSION.read_dword(_KEY_WMP_POLICY, "PlayerPrompt") == 0
-    )
+    return SESSION.read_dword(_KEY_WMP_POLICY, "SetupFirstRun") == 0 and SESSION.read_dword(_KEY_WMP_POLICY, "PlayerPrompt") == 0
 
 
 # -- 15. Disable Windows Media DRM ────────────────────────────────────────────

@@ -195,10 +195,7 @@ def _remove_disable_prefetch(*, require_admin: bool = True) -> None:
 
 
 def _detect_disable_prefetch() -> bool:
-    return (
-        SESSION.read_dword(_KEY_PREFETCH, "EnablePrefetcher") == 0
-        and SESSION.read_dword(_KEY_PREFETCH, "EnableSuperfetch") == 0
-    )
+    return SESSION.read_dword(_KEY_PREFETCH, "EnablePrefetcher") == 0 and SESSION.read_dword(_KEY_PREFETCH, "EnableSuperfetch") == 0
 
 
 # -- 8. Optimize NTFS Memory Usage --------------------------------------------
@@ -361,7 +358,7 @@ def _detect_increase_ntfs_memory() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="storage-disable-hibernation",
+        id="stor-storage-disable-hibernation",
         label="Disable Hibernation File",
         category="Storage",
         apply_fn=_apply_disable_hibernation,
@@ -378,7 +375,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "hibernation", "disk", "space"],
     ),
     TweakDef(
-        id="storage-disable-reserved",
+        id="stor-storage-disable-reserved",
         label="Disable Reserved Storage",
         category="Storage",
         apply_fn=_apply_disable_reserved,
@@ -395,7 +392,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "reserved", "disk", "update"],
     ),
     TweakDef(
-        id="storage-disable-storage-sense",
+        id="stor-storage-disable-storage-sense",
         label="Disable Storage Sense Auto-Cleanup",
         category="Storage",
         apply_fn=_apply_disable_storage_sense,
@@ -412,7 +409,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "cleanup", "storage-sense", "automatic"],
     ),
     TweakDef(
-        id="storage-disable-recycle-confirm",
+        id="stor-storage-disable-recycle-confirm",
         label="Disable Recycle Bin Confirmation Dialog",
         category="Storage",
         apply_fn=_apply_disable_recycle_confirm,
@@ -429,7 +426,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "recycle-bin", "confirmation", "explorer"],
     ),
     TweakDef(
-        id="storage-disable-thumbs-db",
+        id="stor-storage-disable-thumbs-db",
         label="Disable Thumbs.db on Network Folders",
         category="Storage",
         apply_fn=_apply_disable_thumbs_db,
@@ -446,7 +443,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "thumbs", "network", "cache", "explorer"],
     ),
     TweakDef(
-        id="storage-compact-os",
+        id="stor-storage-compact-os",
         label="Enable Compact OS Compression Flag",
         category="Storage",
         apply_fn=_apply_compact_os,
@@ -463,7 +460,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "compact", "compression", "disk", "ssd"],
     ),
     TweakDef(
-        id="storage-disable-prefetch",
+        id="stor-storage-disable-prefetch",
         label="Disable Prefetch and Superfetch",
         category="Storage",
         apply_fn=_apply_disable_prefetch,
@@ -480,7 +477,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "prefetch", "superfetch", "sysmain", "ssd"],
     ),
     TweakDef(
-        id="storage-optimize-ntfs-memory",
+        id="stor-storage-optimize-ntfs-memory",
         label="NTFS Memory Usage High",
         category="Storage",
         apply_fn=_apply_optimize_ntfs_memory,
@@ -497,7 +494,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "ntfs", "memory", "performance", "filesystem"],
     ),
     TweakDef(
-        id="storage-disable-last-access",
+        id="stor-storage-disable-last-access",
         label="Disable NTFS Last Access Timestamp",
         category="Storage",
         apply_fn=_apply_disable_last_access,
@@ -514,7 +511,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "ntfs", "last-access", "timestamp", "performance"],
     ),
     TweakDef(
-        id="storage-disable-8dot3",
+        id="stor-storage-disable-8dot3",
         label="Disable 8.3 Short Filename Creation",
         category="Storage",
         apply_fn=_apply_disable_8dot3,
@@ -531,7 +528,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "ntfs", "8dot3", "short-name", "performance"],
     ),
     TweakDef(
-        id="storage-large-system-cache",
+        id="stor-storage-large-system-cache",
         label="Enable Large System Cache",
         category="Storage",
         apply_fn=_apply_large_system_cache,
@@ -548,7 +545,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "cache", "memory", "file-server", "performance"],
     ),
     TweakDef(
-        id="storage-enable-long-paths",
+        id="stor-storage-enable-long-paths",
         label="Enable Win32 Long Path Support",
         category="Storage",
         apply_fn=_apply_enable_long_paths,
@@ -565,7 +562,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "long-path", "260", "developer", "filesystem"],
     ),
     TweakDef(
-        id="storage-disable-defrag-boot",
+        id="stor-storage-disable-defrag-boot",
         label="Disable Boot Defragmentation",
         category="Storage",
         apply_fn=_apply_disable_defrag_boot,
@@ -582,7 +579,7 @@ TWEAKS: list[TweakDef] = [
         tags=["storage", "defrag", "boot", "ssd", "performance"],
     ),
     TweakDef(
-        id="storage-increase-ntfs-memory",
+        id="stor-storage-increase-ntfs-memory",
         label="Increase NTFS Paged Pool Memory",
         category="Storage",
         apply_fn=_apply_increase_ntfs_memory,
@@ -654,10 +651,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_STORAGE_SENSE],
-        description=(
-            "Disables automatic Storage Sense cleanup. "
-            "Default: Enabled. Recommended: Disabled for manual control."
-        ),
+        description=("Disables automatic Storage Sense cleanup. Default: Enabled. Recommended: Disabled for manual control."),
         tags=["storage", "storage-sense", "cleanup"],
     ),
     TweakDef(
@@ -670,10 +664,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_KEY_RESERVE],
-        description=(
-            "Disables Windows reserved storage (~7 GB). "
-            "Default: Enabled. Recommended: Disabled to reclaim space."
-        ),
+        description=("Disables Windows reserved storage (~7 GB). Default: Enabled. Recommended: Disabled to reclaim space."),
         tags=["storage", "reserved", "disk-space"],
     ),
 ]
@@ -775,8 +766,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_KEY_DEFRAG],
         description=(
-            "Disables boot-time defragmentation optimization on SSDs. "
-            "Defrag is unnecessary and harmful for SSDs. Default: Y. Recommended: N."
+            "Disables boot-time defragmentation optimization on SSDs. Defrag is unnecessary and harmful for SSDs. Default: Y. Recommended: N."
         ),
         tags=["storage", "ssd", "defrag", "optimization"],
     ),
@@ -790,10 +780,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_KEY_FILESYSTEM],
-        description=(
-            "Disables NTFS last access time stamp updates to reduce disk I/O. "
-            "Default: Enabled. Recommended: Disabled for SSDs."
-        ),
+        description=("Disables NTFS last access time stamp updates to reduce disk I/O. Default: Enabled. Recommended: Disabled for SSDs."),
         tags=["storage", "ntfs", "last-access", "performance", "ssd"],
     ),
 ]

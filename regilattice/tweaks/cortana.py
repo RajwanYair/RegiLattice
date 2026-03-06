@@ -333,7 +333,7 @@ def _detect_disable_bing_search() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-cortana-lockscreen",
+        id="cortana-disable-cortana-lockscreen",
         label="Disable Cortana on Lock Screen",
         category="Cortana & Search",
         apply_fn=_apply_disable_cortana,
@@ -346,7 +346,7 @@ TWEAKS: list[TweakDef] = [
         tags=["cortana", "privacy", "lockscreen"],
     ),
     TweakDef(
-        id="disable-web-search",
+        id="cortana-disable-web-search-start",
         label="Disable Web Search in Start Menu",
         category="Cortana & Search",
         apply_fn=_apply_disable_web_search,
@@ -359,7 +359,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "privacy", "bing"],
     ),
     TweakDef(
-        id="disable-search-highlights",
+        id="cortana-disable-search-highlights-policy",
         label="Disable Search Highlights",
         category="Cortana & Search",
         apply_fn=_apply_disable_search_highlights,
@@ -372,7 +372,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "bing", "ux"],
     ),
     TweakDef(
-        id="hide-search-box",
+        id="cortana-hide-search-box",
         label="Hide Taskbar Search Box",
         category="Cortana & Search",
         apply_fn=_apply_hide_search_box,
@@ -385,7 +385,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "taskbar", "ux"],
     ),
     TweakDef(
-        id="disable-cortana-completely",
+        id="cortana-disable-cortana-completely",
         label="Disable Cortana Entirely",
         category="Cortana & Search",
         apply_fn=_apply_disable_cortana_completely,
@@ -398,7 +398,7 @@ TWEAKS: list[TweakDef] = [
         tags=["cortana", "privacy", "assistant"],
     ),
     TweakDef(
-        id="disable-cloud-search",
+        id="cortana-disable-cloud-content-search",
         label="Disable Cloud Content Search",
         category="Cortana & Search",
         apply_fn=_apply_disable_cloud_search,
@@ -411,7 +411,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "cloud", "privacy"],
     ),
     TweakDef(
-        id="disable-search-indexing",
+        id="cortana-disable-search-indexing",
         label="Disable Windows Search Indexing Service",
         category="Cortana & Search",
         apply_fn=_apply_disable_search_indexing,
@@ -424,7 +424,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "cortana", "indexing", "performance"],
     ),
     TweakDef(
-        id="disable-search-highlights-dynamic",
+        id="cortana-disable-search-highlights-dynamic",
         label="Disable Dynamic Search Highlights",
         category="Cortana & Search",
         apply_fn=_apply_disable_search_highlights_tips,
@@ -437,7 +437,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "cortana", "highlights", "ux"],
     ),
     TweakDef(
-        id="disable-cloud-search-aadmsa",
+        id="cortana-disable-cloud-search-aadmsa",
         label="Disable AAD/MSA Cloud Search",
         category="Cortana & Search",
         apply_fn=_apply_disable_cloud_search_content,
@@ -450,7 +450,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "cortana", "cloud", "privacy"],
     ),
     TweakDef(
-        id="disable-find-my-files",
+        id="cortana-disable-find-my-files",
         label="Disable Enhanced Search (Find My Files)",
         category="Cortana & Search",
         apply_fn=_apply_disable_find_my_files,
@@ -463,7 +463,7 @@ TWEAKS: list[TweakDef] = [
         tags=["search", "cortana", "indexing", "privacy"],
     ),
     TweakDef(
-        id="disable-search-location",
+        id="cortana-disable-search-location",
         label="Disable Windows Search Location Access",
         category="Cortana & Search",
         apply_fn=_apply_disable_search_location,

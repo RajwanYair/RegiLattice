@@ -344,7 +344,7 @@ def _detect_disable_online_speech() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-teams-autostart",
+        id="comm-disable-teams-autostart-user",
         label="Disable Teams Auto-Start",
         category="Communication",
         apply_fn=_apply_teams_autostart,
@@ -357,7 +357,7 @@ TWEAKS: list[TweakDef] = [
         tags=["teams", "autostart", "startup"],
     ),
     TweakDef(
-        id="disable-teams-gpu",
+        id="comm-disable-teams-gpu",
         label="Disable Teams GPU Acceleration",
         category="Communication",
         apply_fn=_apply_teams_gpu,
@@ -370,7 +370,7 @@ TWEAKS: list[TweakDef] = [
         tags=["teams", "performance", "gpu"],
     ),
     TweakDef(
-        id="disable-zoom-autoupdate",
+        id="comm-disable-zoom-autoupdate",
         label="Disable Zoom Auto-Update",
         category="Communication",
         apply_fn=_apply_zoom_update,
@@ -383,7 +383,7 @@ TWEAKS: list[TweakDef] = [
         tags=["zoom", "update"],
     ),
     TweakDef(
-        id="disable-discord-autostart",
+        id="comm-disable-discord-autostart",
         label="Disable Discord Auto-Start",
         category="Communication",
         apply_fn=_apply_discord_autostart,
@@ -396,7 +396,7 @@ TWEAKS: list[TweakDef] = [
         tags=["discord", "autostart", "startup"],
     ),
     TweakDef(
-        id="disable-discord-hwaccel",
+        id="comm-disable-discord-hwaccel",
         label="Disable Discord HW Acceleration",
         category="Communication",
         apply_fn=_apply_discord_hwaccel,
@@ -409,7 +409,7 @@ TWEAKS: list[TweakDef] = [
         tags=["discord", "performance", "gpu"],
     ),
     TweakDef(
-        id="disable-spotify-autostart",
+        id="comm-disable-spotify-autostart",
         label="Disable Spotify Auto-Start",
         category="Communication",
         apply_fn=_apply_spotify_autostart,
@@ -422,7 +422,7 @@ TWEAKS: list[TweakDef] = [
         tags=["spotify", "autostart", "startup"],
     ),
     TweakDef(
-        id="disable-spotify-hwaccel",
+        id="comm-disable-spotify-hwaccel",
         label="Disable Spotify HW Acceleration",
         category="Communication",
         apply_fn=_apply_spotify_hwaccel,
@@ -435,7 +435,7 @@ TWEAKS: list[TweakDef] = [
         tags=["spotify", "performance", "gpu"],
     ),
     TweakDef(
-        id="disable-slack-autostart",
+        id="comm-disable-slack-autostart",
         label="Disable Slack Auto-Start",
         category="Communication",
         apply_fn=_apply_slack_autostart,
@@ -448,7 +448,7 @@ TWEAKS: list[TweakDef] = [
         tags=["slack", "autostart", "startup"],
     ),
     TweakDef(
-        id="disable-zoom-auto-video",
+        id="comm-disable-zoom-auto-video",
         label="Disable Zoom Auto-Start Video",
         category="Communication",
         apply_fn=_apply_zoom_no_video,
@@ -461,7 +461,7 @@ TWEAKS: list[TweakDef] = [
         tags=["zoom", "video", "privacy"],
     ),
     TweakDef(
-        id="disable-teams-telemetry",
+        id="comm-disable-teams-telemetry",
         label="Disable Teams Telemetry",
         category="Communication",
         apply_fn=_apply_teams_telemetry,
@@ -474,7 +474,7 @@ TWEAKS: list[TweakDef] = [
         tags=["teams", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-zoom-chat-notify",
+        id="comm-disable-zoom-chat-notify",
         label="Mute Zoom Chat Notifications",
         category="Communication",
         apply_fn=_apply_zoom_mute_chat,
@@ -487,7 +487,7 @@ TWEAKS: list[TweakDef] = [
         tags=["zoom", "chat", "notifications"],
     ),
     TweakDef(
-        id="disable-slack-hwaccel",
+        id="comm-disable-slack-hwaccel",
         label="Disable Slack HW Acceleration",
         category="Communication",
         apply_fn=_apply_slack_hwaccel,
@@ -525,10 +525,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SKYPE_POLICY],
-        description=(
-            "Disables Skype for Business telemetry and diagnostic data collection. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Skype for Business telemetry and diagnostic data collection. Default: Enabled. Recommended: Disabled."),
         tags=["communication", "skype", "telemetry", "privacy"],
     ),
     TweakDef(
@@ -542,9 +539,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_INPUT_SETTINGS],
         description=(
-            "Disables typing insights and suggestions that analyze "
-            "your typing patterns. Improves privacy. "
-            "Default: Enabled. Recommended: Disabled."
+            "Disables typing insights and suggestions that analyze your typing patterns. Improves privacy. Default: Enabled. Recommended: Disabled."
         ),
         tags=["communication", "typing", "insights", "privacy"],
     ),
@@ -621,9 +616,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_TEAMS_OFFICE_POLICY],
         description=(
-            "Prevents Microsoft Teams from automatically launching "
-            "after Office installation via policy. "
-            "Default: Auto-launch. Recommended: Disabled."
+            "Prevents Microsoft Teams from automatically launching after Office installation via policy. Default: Auto-launch. Recommended: Disabled."
         ),
         tags=["communication", "teams", "autostart", "office", "policy"],
     ),
@@ -734,10 +727,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SKYPE_FEEDBACK],
-        description=(
-            "Disables Skype feedback survey prompts and data collection "
-            "at the user level. Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Skype feedback survey prompts and data collection at the user level. Default: Enabled. Recommended: Disabled."),
         tags=["communication", "skype", "feedback", "privacy", "survey"],
     ),
     TweakDef(

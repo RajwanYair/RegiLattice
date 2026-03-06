@@ -16,9 +16,7 @@ _EXPLORER_ADV = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Advanced"
 )
-_FEEDS = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"
-)
+_FEEDS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"
 _FEEDS_CU = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Feeds"
@@ -27,22 +25,14 @@ _CONTENT = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\ContentDeliveryManager"
 )
-_CLOUD_CONTENT = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-)
-_CLOUD_CU = (
-    r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"
-)
+_CLOUD_CONTENT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+_CLOUD_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"
 _SUGGESTIONS = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\ContentDeliveryManager"
 )
-_SPOTLIGHT_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-)
-_SYSTEM_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
+_SPOTLIGHT_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+_SYSTEM_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
 
 
 # ── Disable Widgets Panel (Win11) ────────────────────────────────────────────
@@ -251,7 +241,7 @@ def _detect_disable_finish_setup() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="news-disable-widgets-panel",
+        id="widgets-news-disable-widgets-panel",
         label="Disable Widgets Panel (Win11)",
         category="Widgets & News",
         apply_fn=_apply_disable_widgets,
@@ -268,7 +258,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "news", "taskbar", "win11"],
     ),
     TweakDef(
-        id="news-disable-news-interests",
+        id="widgets-news-disable-news-interests",
         label="Disable News and Interests (Win10)",
         category="Widgets & News",
         apply_fn=_apply_disable_news,
@@ -285,7 +275,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "news", "interests", "taskbar", "win10"],
     ),
     TweakDef(
-        id="news-disable-tips-suggestions",
+        id="widgets-news-disable-tips-suggestions",
         label="Disable Tips and Suggestions",
         category="Widgets & News",
         apply_fn=_apply_disable_tips,
@@ -294,14 +284,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONTENT],
-        description=(
-            "Disables Windows tips, tricks, and suggestions notifications. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables Windows tips, tricks, and suggestions notifications. Default: enabled. Recommended: disabled."),
         tags=["widgets", "tips", "suggestions", "notifications"],
     ),
     TweakDef(
-        id="news-disable-spotlight",
+        id="widgets-news-disable-spotlight",
         label="Disable Windows Spotlight",
         category="Widgets & News",
         apply_fn=_apply_disable_spotlight,
@@ -318,7 +305,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "spotlight", "lockscreen", "bing"],
     ),
     TweakDef(
-        id="news-disable-welcome-experience",
+        id="widgets-news-disable-welcome-experience",
         label="Disable Welcome Experience",
         category="Widgets & News",
         apply_fn=_apply_disable_welcome,
@@ -328,14 +315,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_CONTENT],
         description=(
-            "Disables the Windows Welcome Experience page that opens "
-            "after updates to show new features. "
-            "Default: enabled. Recommended: disabled."
+            "Disables the Windows Welcome Experience page that opens after updates to show new features. Default: enabled. Recommended: disabled."
         ),
         tags=["widgets", "welcome", "update", "experience"],
     ),
     TweakDef(
-        id="news-disable-get-more",
+        id="widgets-news-disable-get-more",
         label="Disable 'Get Even More Out of Windows'",
         category="Widgets & News",
         apply_fn=_apply_disable_get_more,
@@ -352,7 +337,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "suggestions", "nag", "onedrive", "m365"],
     ),
     TweakDef(
-        id="news-disable-start-suggestions",
+        id="widgets-news-disable-start-suggestions",
         label="Disable Suggested Apps in Start Menu",
         category="Widgets & News",
         apply_fn=_apply_disable_start_suggestions,
@@ -369,7 +354,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "start", "suggestions", "apps", "ads"],
     ),
     TweakDef(
-        id="news-disable-settings-suggestions",
+        id="widgets-news-disable-settings-suggestions",
         label="Disable Suggested Content in Settings",
         category="Widgets & News",
         apply_fn=_apply_disable_settings_suggestions,
@@ -378,14 +363,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONTENT],
-        description=(
-            "Disables suggested content and feature highlights in the "
-            "Windows Settings app. Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables suggested content and feature highlights in the Windows Settings app. Default: enabled. Recommended: disabled."),
         tags=["widgets", "settings", "suggestions", "content"],
     ),
     TweakDef(
-        id="news-disable-cloud-consumer-features",
+        id="widgets-news-disable-cloud-consumer-features",
         label="Disable Cloud Consumer Features (Policy)",
         category="Widgets & News",
         apply_fn=_apply_disable_cloud_content,
@@ -402,7 +384,7 @@ TWEAKS: list[TweakDef] = [
         tags=["widgets", "cloud", "consumer", "policy", "bloat"],
     ),
     TweakDef(
-        id="news-disable-finish-setup",
+        id="widgets-news-disable-finish-setup",
         label="Disable 'Finish Setting Up' Reminder",
         category="Widgets & News",
         apply_fn=_apply_disable_finish_setup,
@@ -412,9 +394,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_CONTENT],
         description=(
-            "Disables the recurring 'Let's finish setting up your device' "
-            "nag screen after updates. "
-            "Default: enabled. Recommended: disabled."
+            "Disables the recurring 'Let's finish setting up your device' nag screen after updates. Default: enabled. Recommended: disabled."
         ),
         tags=["widgets", "finish-setup", "nag", "reminder"],
     ),
@@ -459,7 +439,7 @@ def _detect_disable_subscribed_338388() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="news-disable-feeds-taskbar",
+        id="widgets-news-disable-feeds-taskbar",
         label="Disable News and Interests on Taskbar",
         category="Widgets & News",
         apply_fn=_apply_disable_feeds_taskbar,
@@ -476,7 +456,7 @@ TWEAKS += [
         tags=["widgets", "news", "feeds", "taskbar"],
     ),
     TweakDef(
-        id="news-disable-subscribed-content",
+        id="widgets-news-disable-subscribed-content",
         label="Disable Subscribed Content in Start (338388)",
         category="Widgets & News",
         apply_fn=_apply_disable_subscribed_338388,
@@ -552,7 +532,7 @@ def _detect_remove_weather_taskbar() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="widget-disable-news-feed",
+        id="widgets-widget-disable-news-feed",
         label="Disable News Feed Content",
         category="Widgets & News",
         apply_fn=_apply_disable_news_feed,
@@ -569,7 +549,7 @@ TWEAKS += [
         tags=["widgets", "news", "feed", "content"],
     ),
     TweakDef(
-        id="widget-disable-bg-updates",
+        id="widgets-widget-disable-bg-updates",
         label="Disable Widget Background Updates",
         category="Widgets & News",
         apply_fn=_apply_disable_widget_bg_updates,
@@ -586,7 +566,7 @@ TWEAKS += [
         tags=["widgets", "background", "updates", "performance"],
     ),
     TweakDef(
-        id="widget-remove-weather-taskbar",
+        id="widgets-widget-remove-weather-taskbar",
         label="Remove Weather from Taskbar",
         category="Widgets & News",
         apply_fn=_apply_remove_weather_taskbar,
@@ -595,10 +575,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_FEEDS_CU],
-        description=(
-            "Hides the weather widget from the taskbar by setting view mode "
-            "to hidden. Default: shown. Recommended: hidden."
-        ),
+        description=("Hides the weather widget from the taskbar by setting view mode to hidden. Default: shown. Recommended: hidden."),
         tags=["widgets", "weather", "taskbar", "hide"],
     ),
 ]

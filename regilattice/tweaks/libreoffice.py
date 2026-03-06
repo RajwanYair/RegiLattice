@@ -42,9 +42,7 @@ def _detect_disable_autoupdate() -> bool:
 
 # ── Disable LibreOffice Crash Reporter ───────────────────────────────────────
 
-_LO_CRASH = (
-    r"HKEY_CURRENT_USER\Software\LibreOffice\CrashReport"
-)
+_LO_CRASH = r"HKEY_CURRENT_USER\Software\LibreOffice\CrashReport"
 
 
 def _apply_disable_crash(*, require_admin: bool = False) -> None:
@@ -67,9 +65,7 @@ def _detect_disable_crash() -> bool:
 
 # ── Set Default Save Format to OOXML (docx/xlsx/pptx) ───────────────────────
 
-_LO_DEFAULT_FMT = (
-    r"HKEY_CURRENT_USER\Software\LibreOffice\DefaultFormat"
-)
+_LO_DEFAULT_FMT = r"HKEY_CURRENT_USER\Software\LibreOffice\DefaultFormat"
 
 
 def _apply_default_ooxml(*, require_admin: bool = False) -> None:
@@ -299,7 +295,7 @@ def _detect_autosave_interval() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-libreoffice-autoupdate",
+        id="lo-disable-libreoffice-autoupdate",
         label="Disable LibreOffice Auto-Update",
         category="LibreOffice",
         apply_fn=_apply_disable_autoupdate,
@@ -308,14 +304,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_LO_MAINTENANCE, _OO_MAINTENANCE],
-        description=(
-            "Disables the LibreOffice / OpenOffice maintenance service "
-            "auto-update mechanism."
-        ),
+        description=("Disables the LibreOffice / OpenOffice maintenance service auto-update mechanism."),
         tags=["libreoffice", "openoffice", "update"],
     ),
     TweakDef(
-        id="disable-libreoffice-crash-reporter",
+        id="lo-disable-libreoffice-crash-reporter",
         label="Disable LibreOffice Crash Reporter",
         category="LibreOffice",
         apply_fn=_apply_disable_crash,
@@ -328,7 +321,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="libreoffice-default-ooxml",
+        id="lo-libreoffice-default-ooxml",
         label="Default Save as OOXML (docx/xlsx)",
         category="LibreOffice",
         apply_fn=_apply_default_ooxml,
@@ -337,14 +330,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_LO_DEFAULT_FMT],
-        description=(
-            "Sets LibreOffice default save format to Microsoft OOXML "
-            "(docx, xlsx, pptx) for better interoperability."
-        ),
+        description=("Sets LibreOffice default save format to Microsoft OOXML (docx, xlsx, pptx) for better interoperability."),
         tags=["libreoffice", "format", "compatibility"],
     ),
     TweakDef(
-        id="libreoffice-default-handler",
+        id="lo-libreoffice-default-handler",
         label="Set LibreOffice as Default Handler",
         category="LibreOffice",
         apply_fn=_apply_lo_default_handler,
@@ -353,14 +343,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ASSOC_KEY],
-        description=(
-            "Registers LibreOffice as the default handler for common "
-            "document formats (.doc, .docx, .xls, .xlsx, .ppt, .odt, etc.)."
-        ),
+        description=("Registers LibreOffice as the default handler for common document formats (.doc, .docx, .xls, .xlsx, .ppt, .odt, etc.)."),
         tags=["libreoffice", "file-association", "default"],
     ),
     TweakDef(
-        id="disable-libreoffice-recovery",
+        id="lo-disable-libreoffice-recovery",
         label="Disable LibreOffice Recovery",
         category="LibreOffice",
         apply_fn=_apply_disable_recovery,
@@ -373,7 +360,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "recovery", "ux"],
     ),
     TweakDef(
-        id="disable-libreoffice-startcenter",
+        id="lo-disable-libreoffice-startcenter",
         label="Disable LibreOffice Start Center",
         category="LibreOffice",
         apply_fn=_apply_disable_startcenter,
@@ -386,7 +373,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "startcenter", "ux"],
     ),
     TweakDef(
-        id="libreoffice-disable-crash-reporting",
+        id="lo-libreoffice-disable-crash-reporting",
         label="Disable LibreOffice Crash Reporting",
         category="LibreOffice",
         apply_fn=_apply_disable_crash_reporting,
@@ -399,7 +386,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "telemetry", "privacy", "crash"],
     ),
     TweakDef(
-        id="libreoffice-disable-online-update",
+        id="lo-libreoffice-disable-online-update",
         label="Disable LibreOffice Online Update Check",
         category="LibreOffice",
         apply_fn=_apply_disable_online_update,
@@ -412,7 +399,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "update", "privacy"],
     ),
     TweakDef(
-        id="libreoffice-disable-startcenter-news",
+        id="lo-libreoffice-disable-startcenter-news",
         label="Disable Start Center Recent News",
         category="LibreOffice",
         apply_fn=_apply_disable_startcenter_news,
@@ -425,7 +412,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "startcenter", "ux", "privacy"],
     ),
     TweakDef(
-        id="libreoffice-disable-macros",
+        id="lo-libreoffice-disable-macros",
         label="Disable LibreOffice Macro Execution",
         category="LibreOffice",
         apply_fn=_apply_disable_macros,
@@ -434,14 +421,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_LO_UNO_MISC],
-        description=(
-            "Sets LibreOffice macro security level to Very High (3), "
-            "effectively disabling macro execution."
-        ),
+        description=("Sets LibreOffice macro security level to Very High (3), effectively disabling macro execution."),
         tags=["libreoffice", "macros", "security"],
     ),
     TweakDef(
-        id="libreoffice-disable-send-feedback",
+        id="lo-libreoffice-disable-send-feedback",
         label="Disable LibreOffice Send Feedback",
         category="LibreOffice",
         apply_fn=_apply_disable_send_feedback,
@@ -454,7 +438,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "telemetry", "privacy", "feedback"],
     ),
     TweakDef(
-        id="libre-disable-java",
+        id="lo-libre-disable-java",
         label="Disable LibreOffice Java Runtime",
         category="LibreOffice",
         apply_fn=_apply_disable_java,
@@ -471,7 +455,7 @@ TWEAKS: list[TweakDef] = [
         tags=["libreoffice", "java", "performance", "memory"],
     ),
     TweakDef(
-        id="libre-autosave-interval",
+        id="lo-libre-autosave-interval",
         label="Reduce LibreOffice Auto-Save Interval",
         category="LibreOffice",
         apply_fn=_apply_autosave_interval,
@@ -480,10 +464,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_LO_UNO_MISC],
-        description=(
-            "Sets LibreOffice auto-save interval to 3 minutes for better "
-            "crash recovery. Default: 10 minutes. Recommended: 3 minutes."
-        ),
+        description=("Sets LibreOffice auto-save interval to 3 minutes for better crash recovery. Default: 10 minutes. Recommended: 3 minutes."),
         tags=["libreoffice", "autosave", "recovery"],
     ),
 ]
@@ -539,7 +520,7 @@ def _detect_disable_lo_macros() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="libreoffice-disable-recovery",
+        id="lo-libreoffice-disable-recovery",
         label="Disable LibreOffice Document Recovery",
         category="LibreOffice",
         apply_fn=_apply_disable_lo_recovery,
@@ -556,7 +537,7 @@ TWEAKS += [
         tags=["libreoffice", "recovery", "autosave", "policy"],
     ),
     TweakDef(
-        id="libreoffice-disable-macro-exec",
+        id="lo-libreoffice-disable-macro-exec",
         label="Disable LibreOffice Macro Execution",
         category="LibreOffice",
         apply_fn=_apply_disable_lo_macros,
@@ -622,10 +603,7 @@ def _remove_lo_enable_hw_accel(*, require_admin: bool = True) -> None:
 
 
 def _detect_lo_enable_hw_accel() -> bool:
-    return (
-        SESSION.read_dword(_LO_HW_ACCEL, "UseOpenGL") == 1
-        and SESSION.read_dword(_LO_HW_ACCEL, "ForceOpenGL") == 1
-    )
+    return SESSION.read_dword(_LO_HW_ACCEL, "UseOpenGL") == 1 and SESSION.read_dword(_LO_HW_ACCEL, "ForceOpenGL") == 1
 
 
 # -- 18. Disable LibreOffice Online Update Check ─────────────────────────────

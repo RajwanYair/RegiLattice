@@ -107,7 +107,8 @@ class RegiLatticeGUI:
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
-        self._refresh_status_all()
+        # Defer initial status detection so the window appears immediately
+        self._root.after(50, self._initial_refresh)
 
     # ── Windows 11 dark title bar ────────────────────────────────────────
 
@@ -683,7 +684,11 @@ class RegiLatticeGUI:
     def _import_json_selection(self) -> None:
         """Import a JSON file containing a list of tweak IDs to select."""
         dialogs.import_json_selection(
-            self._root, self._tweak_rows, self._deselect_all, self._update_selection_count, self._set_status,
+            self._root,
+            self._tweak_rows,
+            self._deselect_all,
+            self._update_selection_count,
+            self._set_status,
         )
 
     # ── Scoop Tools Manager ────────────────────────────────────────────
@@ -719,13 +724,26 @@ class RegiLatticeGUI:
 
     # ── Status refresh ───────────────────────────────────────────────────
 
+    def _initial_refresh(self) -> None:
+        """Kick off status detection in a background thread so the window shows immediately."""
+        self._set_status("Detecting tweak states\u2026", _WARN_YELLOW)
+
+        def _worker() -> None:
+            statuses = status_map(parallel=True, max_workers=8)
+            self._root.after(0, lambda: self._apply_statuses(statuses))
+
+        threading.Thread(target=_worker, daemon=True).start()
+
     def _refresh_status_all(self) -> None:
         """Re-detect every tweak and update dots, labels, counts, and stats.
 
         Uses parallel detection via thread-pool for faster refresh.
         """
-        # Batch-detect all statuses in parallel for speed
         statuses = status_map(parallel=True, max_workers=8)
+        self._apply_statuses(statuses)
+
+    def _apply_statuses(self, statuses: dict[str, TweakResult]) -> None:
+        """Push a pre-computed status dict into every UI row and update counters."""
         self._cached_statuses = statuses
         applied = 0
         default = 0

@@ -167,10 +167,7 @@ def _remove_disable_spotlight(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_spotlight() -> bool:
-    return (
-        SESSION.read_dword(_CDM, "RotatingLockScreenEnabled") == 0
-        and SESSION.read_dword(_CDM, "RotatingLockScreenOverlayEnabled") == 0
-    )
+    return SESSION.read_dword(_CDM, "RotatingLockScreenEnabled") == 0 and SESSION.read_dword(_CDM, "RotatingLockScreenOverlayEnabled") == 0
 
 
 # -- 9. Disable app suggestions in Start --------------------------------------
@@ -442,10 +439,7 @@ def _remove_store_disable_suggested_install(*, require_admin: bool = False) -> N
 
 
 def _detect_store_disable_suggested_install() -> bool:
-    return (
-        SESSION.read_dword(_CDM, "SilentInstalledAppsEnabled") == 0
-        and SESSION.read_dword(_CDM, "ContentDeliveryAllowed") == 0
-    )
+    return SESSION.read_dword(_CDM, "SilentInstalledAppsEnabled") == 0 and SESSION.read_dword(_CDM, "ContentDeliveryAllowed") == 0
 
 
 # -- 14. Disable Store App Recommendations ───────────────────────────────────
@@ -464,10 +458,7 @@ def _remove_store_disable_recommendations(*, require_admin: bool = False) -> Non
 
 
 def _detect_store_disable_recommendations() -> bool:
-    return (
-        SESSION.read_dword(_CDM, "SubscribedContent-314559Enabled") == 0
-        and SESSION.read_dword(_CDM, "SubscribedContent-310093Enabled") == 0
-    )
+    return SESSION.read_dword(_CDM, "SubscribedContent-314559Enabled") == 0 and SESSION.read_dword(_CDM, "SubscribedContent-310093Enabled") == 0
 
 
 # -- 15. Disable Store Video Autoplay ─────────────────────────────────────────
@@ -491,7 +482,7 @@ def _detect_store_disable_video_autoplay() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="store-disable-auto-install-suggested",
+        id="msstore-store-disable-auto-install-suggested",
         label="Disable Auto-Install of Suggested Apps",
         category="Microsoft Store",
         apply_fn=_apply_store_disable_suggested_install,
@@ -508,7 +499,7 @@ TWEAKS += [
         tags=["store", "auto-install", "suggested", "silent", "bloatware"],
     ),
     TweakDef(
-        id="store-disable-app-recommendations",
+        id="msstore-store-disable-app-recommendations",
         label="Disable Store App Recommendations",
         category="Microsoft Store",
         apply_fn=_apply_store_disable_recommendations,
@@ -525,7 +516,7 @@ TWEAKS += [
         tags=["store", "recommendations", "subscribed", "content", "ads"],
     ),
     TweakDef(
-        id="store-disable-video-autoplay",
+        id="msstore-store-disable-video-autoplay",
         label="Disable Store Video Autoplay",
         category="Microsoft Store",
         apply_fn=_apply_store_disable_video_autoplay,

@@ -287,7 +287,7 @@ def _detect_disable_auto_maintenance() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="enable-long-paths",
+        id="sys-enable-long-paths",
         label="Enable Win32 Long Paths",
         category="System",
         apply_fn=apply_long_paths,
@@ -300,7 +300,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "filesystem", "long-paths"],
     ),
     TweakDef(
-        id="disable-reserved-storage",
+        id="sys-disable-reserved-storage",
         label="Disable Reserved Storage (~7 GB)",
         category="System",
         apply_fn=_apply_disable_reserved,
@@ -313,7 +313,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "disk", "storage", "cleanup"],
     ),
     TweakDef(
-        id="disable-remote-assistance",
+        id="sys-disable-remote-assistance",
         label="Disable Remote Assistance",
         category="System",
         apply_fn=_apply_disable_remote_assist,
@@ -326,7 +326,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "security", "remote"],
     ),
     TweakDef(
-        id="high-timer-resolution",
+        id="sys-high-timer-resolution",
         label="Enable High Timer Resolution (Perf)",
         category="System",
         apply_fn=_apply_high_timer_resolution,
@@ -344,7 +344,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "performance", "timer", "latency"],
     ),
     TweakDef(
-        id="disable-uac-dimming",
+        id="sys-disable-uac-dimming",
         label="Disable UAC Secure Desktop Dimming",
         category="System",
         apply_fn=_apply_disable_uac_dimming,
@@ -361,7 +361,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "uac", "ux"],
     ),
     TweakDef(
-        id="verbose-boot-status",
+        id="sys-verbose-boot-status",
         label="Enable Verbose Boot Messages",
         category="System",
         apply_fn=_apply_verbose_boot,
@@ -374,7 +374,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "boot", "diagnostics"],
     ),
     TweakDef(
-        id="disable-autoplay",
+        id="sys-disable-autoplay",
         label="Disable AutoPlay",
         category="System",
         apply_fn=_apply_disable_autoplay,
@@ -400,7 +400,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "privacy", "activity-history", "timeline"],
     ),
     TweakDef(
-        id="disable-clipboard-history",
+        id="sys-disable-clipboard-history",
         label="Disable Clipboard History",
         category="System",
         apply_fn=_apply_disable_clipboard_history,
@@ -413,7 +413,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "privacy", "clipboard"],
     ),
     TweakDef(
-        id="disable-admin-shares",
+        id="sys-disable-admin-shares",
         label="Disable Administrative Shares (C$, ADMIN$)",
         category="System",
         apply_fn=_apply_disable_admin_shares,
@@ -426,7 +426,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "security", "network", "shares"],
     ),
     TweakDef(
-        id="system-disable-tips",
+        id="sys-system-disable-tips",
         label="Disable Windows Tips and Suggestions",
         category="System",
         apply_fn=_apply_disable_tips,
@@ -442,7 +442,7 @@ TWEAKS: list[TweakDef] = [
         tags=["system", "tips", "suggestions", "nag"],
     ),
     TweakDef(
-        id="system-disable-auto-maintenance",
+        id="sys-system-disable-auto-maintenance",
         label="Disable Automatic Maintenance",
         category="System",
         apply_fn=_apply_disable_auto_maintenance,

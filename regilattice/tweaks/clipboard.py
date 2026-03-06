@@ -11,15 +11,9 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-_CLIPBOARD_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
-_CLIPBOARD_CU = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"
-)
-_DRAG_DROP = (
-    r"HKEY_CURRENT_USER\Control Panel\Desktop"
-)
+_CLIPBOARD_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+_CLIPBOARD_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"
+_DRAG_DROP = r"HKEY_CURRENT_USER\Control Panel\Desktop"
 _EXPLORER_ADV = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Advanced"
@@ -28,9 +22,7 @@ _TS_CLIENT = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft"
     r"\Windows NT\Terminal Services"
 )
-_CLOUD_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
+_CLOUD_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
 
 
 # ── Disable Clipboard History ────────────────────────────────────────────────
@@ -181,9 +173,7 @@ def _detect_drag_delay() -> bool:
 
 # ── Disable Clipboard Suggested Actions (Win11 22H2+) ───────────────────────
 
-_SMART_CLIP = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
+_SMART_CLIP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
 
 
 def _apply_disable_suggested_actions(*, require_admin: bool = True) -> None:
@@ -250,9 +240,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_CLIPBOARD_CU],
         description=(
-            "Enables clipboard history (Win+V) for the current user. "
-            "Stores last 25 copied items. "
-            "Default: 0 (off). Recommended: 1 (enabled)."
+            "Enables clipboard history (Win+V) for the current user. Stores last 25 copied items. Default: 0 (off). Recommended: 1 (enabled)."
         ),
         tags=["clipboard", "history", "productivity"],
     ),
@@ -284,9 +272,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_DRAG_DROP],
         description=(
-            "Increases drag start threshold to 10 pixels. "
-            "Prevents accidental drag on high-DPI screens. "
-            "Default: 4 pixels. Recommended: 10."
+            "Increases drag start threshold to 10 pixels. Prevents accidental drag on high-DPI screens. Default: 4 pixels. Recommended: 10."
         ),
         tags=["clipboard", "drag", "drop", "sensitivity", "dpi"],
     ),
@@ -300,10 +286,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_DRAG_DROP],
-        description=(
-            "Decreases drag start threshold to 2 pixels for easier dragging. "
-            "Default: 4 pixels. Recommended: 2 (for touchscreen/pen)."
-        ),
+        description=("Decreases drag start threshold to 2 pixels for easier dragging. Default: 4 pixels. Recommended: 2 (for touchscreen/pen)."),
         tags=["clipboard", "drag", "drop", "sensitivity", "touch"],
     ),
     TweakDef(
@@ -351,9 +334,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_DRAG_DROP],
         description=(
-            "Removes the 200 ms delay before a drag operation begins. "
-            "Makes drag-and-drop feel more responsive. "
-            "Default: 200 ms. Recommended: 0."
+            "Removes the 200 ms delay before a drag operation begins. Makes drag-and-drop feel more responsive. Default: 200 ms. Recommended: 0."
         ),
         tags=["clipboard", "drag", "delay", "responsiveness"],
     ),
@@ -384,10 +365,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CLIPBOARD_CU],
-        description=(
-            "Disables text prediction suggestions in the clipboard panel. "
-            "Default: enabled. Recommended: 0 (disabled)."
-        ),
+        description=("Disables text prediction suggestions in the clipboard panel. Default: enabled. Recommended: 0 (disabled)."),
         tags=["clipboard", "suggestions", "text", "panel"],
     ),
 ]
@@ -410,8 +388,7 @@ def _remove_disable_cloud_clipboard_cu(*, require_admin: bool = True) -> None:
 
 def _detect_disable_cloud_clipboard_cu() -> bool:
     return (
-        SESSION.read_dword(_CLIPBOARD_CU, "EnableClipboardHistory") == 0
-        and SESSION.read_dword(_CLIPBOARD_CU, "CloudClipboardAutomaticUpload") == 0
+        SESSION.read_dword(_CLIPBOARD_CU, "EnableClipboardHistory") == 0 and SESSION.read_dword(_CLIPBOARD_CU, "CloudClipboardAutomaticUpload") == 0
     )
 
 

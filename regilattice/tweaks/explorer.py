@@ -465,7 +465,7 @@ def _detect_disable_thumbnail_cache() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="show-file-extensions",
+        id="explorer-show-file-extensions",
         label="Show File Extensions",
         category="Explorer",
         apply_fn=_apply_show_extensions,
@@ -478,7 +478,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "files", "security"],
     ),
     TweakDef(
-        id="show-hidden-files",
+        id="explorer-show-hidden-files",
         label="Show Hidden Files",
         category="Explorer",
         apply_fn=_apply_show_hidden,
@@ -491,7 +491,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "files"],
     ),
     TweakDef(
-        id="show-super-hidden",
+        id="explorer-show-super-hidden",
         label="Show Protected OS Files",
         category="Explorer",
         apply_fn=_apply_show_super_hidden,
@@ -504,7 +504,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "files", "advanced"],
     ),
     TweakDef(
-        id="open-this-pc",
+        id="explorer-open-this-pc",
         label="Open Explorer to This PC",
         category="Explorer",
         apply_fn=_apply_open_this_pc,
@@ -517,7 +517,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "navigation"],
     ),
     TweakDef(
-        id="disable-thumbnails",
+        id="explorer-disable-thumbnails",
         label="Disable Folder Thumbnails",
         category="Explorer",
         apply_fn=_apply_disable_thumbnails,
@@ -530,7 +530,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "performance"],
     ),
     TweakDef(
-        id="full-path-title",
+        id="explorer-full-path-title",
         label="Full Path in Title Bar",
         category="Explorer",
         apply_fn=_apply_full_path_title,
@@ -543,7 +543,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "navigation"],
     ),
     TweakDef(
-        id="disable-recent-files",
+        id="explorer-disable-recent-files",
         label="Disable Recent Files in Quick Access",
         category="Explorer",
         apply_fn=_apply_disable_recent_files,
@@ -556,7 +556,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "privacy"],
     ),
     TweakDef(
-        id="recent-places",
+        id="explorer-recent-places",
         label="Recent Folders in Quick Access",
         category="Explorer",
         apply_fn=_apply_recent_places,
@@ -569,7 +569,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "navigation"],
     ),
     TweakDef(
-        id="disable-search-history",
+        id="explorer-disable-search-history",
         label="Disable Search History",
         category="Explorer",
         apply_fn=_apply_disable_search_history,
@@ -582,7 +582,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "privacy"],
     ),
     TweakDef(
-        id="disable-gallery",
+        id="explorer-disable-gallery",
         label="Disable Gallery in Nav Pane",
         category="Explorer",
         apply_fn=_apply_disable_gallery,
@@ -595,7 +595,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "win11"],
     ),
     TweakDef(
-        id="compact-view",
+        id="explorer-compact-view",
         label="Enable Compact View",
         category="Explorer",
         apply_fn=_apply_compact_view,
@@ -608,7 +608,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "win11"],
     ),
     TweakDef(
-        id="disable-auto-folder-type",
+        id="explorer-disable-auto-folder-type",
         label="Disable Auto Folder Type Detection",
         category="Explorer",
         apply_fn=_apply_disable_auto_folder_type,
@@ -621,7 +621,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "performance"],
     ),
     TweakDef(
-        id="disable-breadcrumbs",
+        id="explorer-disable-breadcrumbs",
         label="Disable Breadcrumb Bar",
         category="Explorer",
         apply_fn=_apply_disable_breadcrumbs,
@@ -634,7 +634,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "navigation"],
     ),
     TweakDef(
-        id="disable-merge-conflicts",
+        id="explorer-disable-merge-conflicts",
         label="Disable Folder Merge Conflicts",
         category="Explorer",
         apply_fn=_apply_disable_merge_conflicts,
@@ -647,7 +647,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "ux"],
     ),
     TweakDef(
-        id="thumbnail-performance",
+        id="explorer-thumbnail-performance",
         label="Optimize Thumbnail Caching & Quality",
         category="Explorer",
         apply_fn=_apply_thumbnail_performance,
@@ -665,7 +665,7 @@ TWEAKS: list[TweakDef] = [
         tags=["explorer", "thumbnails", "performance", "quality"],
     ),
     TweakDef(
-        id="show-status-bar",
+        id="explorer-show-status-bar",
         label="Show Explorer Status Bar",
         category="Explorer",
         apply_fn=_apply_status_bar,

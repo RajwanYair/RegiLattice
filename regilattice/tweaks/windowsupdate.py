@@ -339,7 +339,7 @@ def _detect_wu_no_auto_restart() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-delivery-optimization",
+        id="wu-disable-delivery-optimization",
         label="Disable Delivery Optimization (P2P)",
         category="Windows Update",
         apply_fn=_apply_disable_do,
@@ -348,14 +348,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DO],
-        description=(
-            "Disables peer-to-peer update sharing, forcing updates "
-            "to download only from Microsoft servers."
-        ),
+        description=("Disables peer-to-peer update sharing, forcing updates to download only from Microsoft servers."),
         tags=["update", "network", "p2p"],
     ),
     TweakDef(
-        id="defer-quality-updates",
+        id="wu-defer-quality-updates",
         label="Defer Quality Updates (30 days)",
         category="Windows Update",
         apply_fn=_apply_defer_quality,
@@ -368,7 +365,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "deferral"],
     ),
     TweakDef(
-        id="defer-feature-updates",
+        id="wu-defer-feature-updates",
         label="Defer Feature Updates (90 days)",
         category="Windows Update",
         apply_fn=_apply_defer_feature,
@@ -381,23 +378,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "deferral"],
     ),
     TweakDef(
-        id="disable-driver-updates",
-        label="Exclude Drivers from Windows Update",
-        category="Windows Update",
-        apply_fn=_apply_disable_driver_updates,
-        remove_fn=_remove_disable_driver_updates,
-        detect_fn=_detect_disable_driver_updates,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_DRIVER],
-        description=(
-            "Prevents Windows Update from installing driver updates, "
-            "letting you manage drivers manually."
-        ),
-        tags=["update", "drivers"],
-    ),
-    TweakDef(
-        id="no-auto-restart",
+        id="wu-no-auto-restart",
         label="Disable Forced Auto-Restart",
         category="Windows Update",
         apply_fn=_apply_no_auto_restart,
@@ -406,14 +387,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_RESTART],
-        description=(
-            "Prevents Windows from automatically restarting while "
-            "a user is logged in after update installation."
-        ),
+        description=("Prevents Windows from automatically restarting while a user is logged in after update installation."),
         tags=["update", "restart"],
     ),
     TweakDef(
-        id="update-notify-only",
+        id="wu-update-notify-only",
         label="Notify-Only Updates (No Auto-Install)",
         category="Windows Update",
         apply_fn=_apply_notify_only,
@@ -422,14 +400,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_AU],
-        description=(
-            "Sets Windows Update to notify before downloading, "
-            "giving you full control over update timing."
-        ),
+        description=("Sets Windows Update to notify before downloading, giving you full control over update timing."),
         tags=["update", "control"],
     ),
     TweakDef(
-        id="disable-wus-medic",
+        id="wu-disable-wus-medic",
         label="Disable WaaS Medic Service",
         category="Windows Update",
         apply_fn=_apply_disable_medic,
@@ -442,7 +417,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "service", "medic"],
     ),
     TweakDef(
-        id="disable-update-orchestrator",
+        id="wu-disable-update-orchestrator",
         label="Disable Update Orchestrator Service",
         category="Windows Update",
         apply_fn=_apply_disable_orchestrator,
@@ -455,7 +430,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "service", "orchestrator"],
     ),
     TweakDef(
-        id="set-active-hours",
+        id="wu-set-active-hours-au",
         label="Set Active Hours (8 AM - 11 PM)",
         category="Windows Update",
         apply_fn=_apply_active_hours,
@@ -468,7 +443,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "active-hours", "restart"],
     ),
     TweakDef(
-        id="disable-msrt",
+        id="wu-disable-msrt",
         label="Disable MSRT Delivery",
         category="Windows Update",
         apply_fn=_apply_disable_msrt,
@@ -481,7 +456,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "msrt", "security"],
     ),
     TweakDef(
-        id="target-release-version",
+        id="wu-target-release-version",
         label="Pin to Windows 11 24H2",
         category="Windows Update",
         apply_fn=_apply_target_release,
@@ -494,7 +469,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "feature", "pin", "24H2"],
     ),
     TweakDef(
-        id="disable-store-auto-update",
+        id="wu-disable-store-auto-update",
         label="Disable Store App Auto-Updates",
         category="Windows Update",
         apply_fn=_apply_disable_store_updates,
@@ -507,7 +482,7 @@ TWEAKS: list[TweakDef] = [
         tags=["update", "store", "apps"],
     ),
     TweakDef(
-        id="disable-update-notifications",
+        id="wu-disable-update-notifications",
         label="Suppress Update Restart Notifications",
         category="Windows Update",
         apply_fn=_apply_disable_update_notify,
@@ -603,14 +578,11 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_WU],
-        description=(
-            "Excludes driver updates from Windows Update quality updates. "
-            "Default: Included. Recommended: Excluded for driver stability."
-        ),
+        description=("Excludes driver updates from Windows Update quality updates. Default: Included. Recommended: Excluded for driver stability."),
         tags=["update", "driver", "exclude", "stability"],
     ),
     TweakDef(
-        id="wu-defer-quality-updates",
+        id="wu-defer-quality-updates-14d",
         label="Defer Quality Updates by 14 Days",
         category="Windows Update",
         apply_fn=_apply_defer_quality_14d,
@@ -619,10 +591,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_WU],
-        description=(
-            "Defers quality/security updates by 14 days to allow time for issue reports. "
-            "Default: 0. Recommended: 14 for stability."
-        ),
+        description=("Defers quality/security updates by 14 days to allow time for issue reports. Default: 0. Recommended: 14 for stability."),
         tags=["update", "defer", "quality", "delay"],
     ),
 ]

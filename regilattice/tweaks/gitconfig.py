@@ -233,7 +233,7 @@ def _detect_fetch_prune() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="git-credential-manager",
+        id="dev-git-credential-manager",
         label="Git: Use Credential Manager",
         category="Developer Tools",
         apply_fn=_apply_credential_manager,
@@ -246,7 +246,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "credentials", "developer"],
     ),
     TweakDef(
-        id="git-long-paths",
+        id="dev-git-long-paths",
         label="Git: Enable Long Paths",
         category="Developer Tools",
         apply_fn=_apply_git_longpaths,
@@ -259,7 +259,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "longpaths", "developer"],
     ),
     TweakDef(
-        id="git-default-branch-main",
+        id="dev-git-default-branch-main",
         label="Git: Default Branch → main",
         category="Developer Tools",
         apply_fn=_apply_default_branch,
@@ -272,7 +272,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "branch", "developer"],
     ),
     TweakDef(
-        id="git-autocrlf-input",
+        id="dev-git-autocrlf-input",
         label="Git: autocrlf=input (LF in Repo)",
         category="Developer Tools",
         apply_fn=_apply_autocrlf,
@@ -285,7 +285,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "line-endings", "developer"],
     ),
     TweakDef(
-        id="git-editor-vscode",
+        id="dev-git-editor-vscode",
         label="Git: Default Editor → VS Code",
         category="Developer Tools",
         apply_fn=_apply_editor_code,
@@ -298,7 +298,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "editor", "vscode", "developer"],
     ),
     TweakDef(
-        id="git-fsmonitor",
+        id="dev-git-fsmonitor",
         label="Git: Enable Built-in FS Monitor",
         category="Developer Tools",
         apply_fn=_apply_fsmonitor,
@@ -311,7 +311,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "fsmonitor", "performance", "developer"],
     ),
     TweakDef(
-        id="git-manyfiles",
+        id="dev-git-manyfiles",
         label="Git: Enable manyFiles Feature",
         category="Developer Tools",
         apply_fn=_apply_manyfiles,
@@ -324,7 +324,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "manyfiles", "performance", "developer"],
     ),
     TweakDef(
-        id="git-parallel-checkout",
+        id="dev-git-parallel-checkout",
         label="Git: Enable Parallel Checkout",
         category="Developer Tools",
         apply_fn=_apply_parallel_checkout,
@@ -337,7 +337,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "checkout", "performance", "developer"],
     ),
     TweakDef(
-        id="git-gc-auto",
+        id="dev-git-gc-auto",
         label="Git: Set Auto-GC Threshold to 512",
         category="Developer Tools",
         apply_fn=_apply_gc_auto,
@@ -350,7 +350,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "gc", "performance", "developer"],
     ),
     TweakDef(
-        id="git-delta-cache",
+        id="dev-git-delta-cache",
         label="Git: Increase Delta Cache Limit",
         category="Developer Tools",
         apply_fn=_apply_delta_cache,
@@ -363,7 +363,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "delta-cache", "performance", "developer"],
     ),
     TweakDef(
-        id="git-commit-gpgsign",
+        id="dev-git-commit-gpgsign",
         label="Git: Enable Commit GPG Signing",
         category="Developer Tools",
         apply_fn=_apply_commit_gpgsign,
@@ -376,7 +376,7 @@ TWEAKS: list[TweakDef] = [
         tags=["git", "gpg", "signing", "security", "developer"],
     ),
     TweakDef(
-        id="git-fetch-prune",
+        id="dev-git-fetch-prune",
         label="Git: Enable Fetch Prune",
         category="Developer Tools",
         apply_fn=_apply_fetch_prune,
@@ -385,10 +385,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_GIT_USER],
-        description=(
-            "Automatically prunes stale remote-tracking branches on fetch "
-            "(fetch.prune=true). Keeps branch lists clean."
-        ),
+        description=("Automatically prunes stale remote-tracking branches on fetch (fetch.prune=true). Keeps branch lists clean."),
         tags=["git", "fetch", "prune", "cleanup", "developer"],
     ),
 ]

@@ -45,9 +45,7 @@ def _pip_install(package: str, *, user: bool = False) -> bool:
         if result.returncode == 0:
             log.info("Installed %s via pip%s", package, " (--user)" if user else "")
             return True
-        log.debug(
-            "pip install failed (rc=%d): %s", result.returncode, result.stderr[:200]
-        )
+        log.debug("pip install failed (rc=%d): %s", result.returncode, result.stderr[:200])
     except (subprocess.TimeoutExpired, FileNotFoundError, OSError) as exc:
         log.debug("pip install error: %s", exc)
     return False
@@ -107,10 +105,7 @@ class _MissingSentinel:
         self._name = name
 
     def __getattr__(self, item: str) -> None:
-        raise ImportError(
-            f"Optional dependency '{self._name}' is not available. "
-            f"Install it manually: pip install {self._name}"
-        )
+        raise ImportError(f"Optional dependency '{self._name}' is not available. Install it manually: pip install {self._name}")
 
 
 def lazy_import(
@@ -170,6 +165,5 @@ def require(*packages: str) -> None:
         except ImportError:
             if not install_package(pkg):
                 raise ImportError(
-                    f"Required package '{pkg}' is not available and could not "
-                    f"be installed automatically. Run: pip install {pkg}"
+                    f"Required package '{pkg}' is not available and could not be installed automatically. Run: pip install {pkg}"
                 ) from None

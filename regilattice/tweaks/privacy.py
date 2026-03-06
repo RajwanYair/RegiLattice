@@ -306,7 +306,7 @@ def _detect_priv_online_speech() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-telemetry",
+        id="priv-disable-telemetry",
         label="Disable Windows Telemetry",
         category="Privacy",
         apply_fn=_apply_disable_telemetry,
@@ -319,7 +319,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "telemetry", "microsoft"],
     ),
     TweakDef(
-        id="disable-cortana",
+        id="priv-disable-cortana",
         label="Disable Cortana",
         category="Privacy",
         apply_fn=_apply_disable_cortana,
@@ -332,7 +332,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "cortana", "search"],
     ),
     TweakDef(
-        id="disable-activity-history",
+        id="priv-disable-activity-history",
         label="Disable Activity History",
         category="Privacy",
         apply_fn=_apply_disable_activity,
@@ -345,7 +345,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "activity", "timeline"],
     ),
     TweakDef(
-        id="disable-location",
+        id="priv-disable-location",
         label="Disable Location Tracking",
         category="Privacy",
         apply_fn=_apply_disable_location,
@@ -358,7 +358,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "location", "tracking"],
     ),
     TweakDef(
-        id="disable-advertising-id",
+        id="priv-disable-advertising-id",
         label="Disable Advertising ID",
         category="Privacy",
         apply_fn=_apply_disable_adid,
@@ -371,7 +371,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "advertising", "tracking"],
     ),
     TweakDef(
-        id="disable-camera-access",
+        id="priv-disable-camera-access",
         label="Deny Camera Access (Apps)",
         category="Privacy",
         apply_fn=_apply_disable_camera,
@@ -384,7 +384,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "camera", "hardware"],
     ),
     TweakDef(
-        id="disable-microphone-access",
+        id="priv-disable-microphone-access",
         label="Deny Microphone Access (Apps)",
         category="Privacy",
         apply_fn=_apply_disable_mic,
@@ -397,7 +397,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "microphone", "hardware"],
     ),
     TweakDef(
-        id="disable-diagtrack",
+        id="priv-disable-diagtrack",
         label="Disable DiagTrack (CEIP)",
         category="Privacy",
         apply_fn=_apply_disable_diagtrack,
@@ -410,7 +410,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "telemetry", "diagtrack"],
     ),
     TweakDef(
-        id="disable-online-speech",
+        id="priv-disable-online-speech",
         label="Disable Online Speech Recognition",
         category="Privacy",
         apply_fn=_apply_disable_speech,
@@ -423,7 +423,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "speech", "voice"],
     ),
     TweakDef(
-        id="disable-inking-personalization",
+        id="priv-disable-inking-personalization",
         label="Disable Inking & Typing Personalization",
         category="Privacy",
         apply_fn=_apply_disable_inking,
@@ -436,7 +436,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "inking", "typing"],
     ),
     TweakDef(
-        id="privacy-disable-clipboard-history",
+        id="priv-privacy-disable-clipboard-history",
         label="Disable Clipboard History",
         category="Privacy",
         apply_fn=_apply_priv_clipboard_history,
@@ -452,7 +452,7 @@ TWEAKS: list[TweakDef] = [
         tags=["privacy", "clipboard", "history"],
     ),
     TweakDef(
-        id="privacy-disable-online-speech",
+        id="priv-privacy-disable-online-speech",
         label="Disable Online Speech Recognition",
         category="Privacy",
         apply_fn=_apply_priv_online_speech,
@@ -509,7 +509,7 @@ def _detect_priv_adid_off() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="privacy-disable-activity-history",
+        id="priv-privacy-disable-activity-history",
         label="Disable Activity History",
         category="Privacy",
         apply_fn=_apply_priv_activity_history,
@@ -526,7 +526,7 @@ TWEAKS += [
         tags=["privacy", "activity", "history", "timeline", "policy"],
     ),
     TweakDef(
-        id="privacy-disable-advertising-id",
+        id="priv-privacy-disable-advertising-id",
         label="Disable Advertising ID",
         category="Privacy",
         apply_fn=_apply_priv_adid_off,
@@ -653,7 +653,7 @@ def _detect_disable_settings_suggestions() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="privacy-disable-tailored-experiences",
+        id="priv-privacy-disable-tailored-experiences",
         label="Disable Tailored Experiences",
         category="Privacy",
         apply_fn=_apply_disable_tailored,
@@ -670,7 +670,7 @@ TWEAKS += [
         tags=["privacy", "tailored", "diagnostic", "personalisation"],
     ),
     TweakDef(
-        id="privacy-disable-windows-tips",
+        id="priv-privacy-disable-windows-tips",
         label="Disable Windows Tips & Suggestions",
         category="Privacy",
         apply_fn=_apply_disable_tips,
@@ -687,7 +687,7 @@ TWEAKS += [
         tags=["privacy", "tips", "suggestions", "content-delivery"],
     ),
     TweakDef(
-        id="privacy-disable-feedback",
+        id="priv-privacy-disable-feedback",
         label="Disable Feedback Prompts",
         category="Privacy",
         apply_fn=_apply_disable_feedback,
@@ -704,7 +704,7 @@ TWEAKS += [
         tags=["privacy", "feedback", "prompts", "telemetry"],
     ),
     TweakDef(
-        id="privacy-disable-app-launch-tracking",
+        id="priv-privacy-disable-app-launch-tracking",
         label="Disable App Launch Tracking",
         category="Privacy",
         apply_fn=_apply_disable_app_launch_tracking,
@@ -719,7 +719,7 @@ TWEAKS += [
         tags=["privacy", "tracking", "start-menu", "launch"],
     ),
     TweakDef(
-        id="privacy-disable-settings-suggestions",
+        id="priv-privacy-disable-settings-suggestions",
         label="Disable Suggested Content in Settings",
         category="Privacy",
         apply_fn=_apply_disable_settings_suggestions,

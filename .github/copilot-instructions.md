@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-06-21 (v2.0.0, 971 tweaks, 64 categories, ~9 857 tests).
+> Last verified: 2025-06-22 (v2.0.0, 1 231 tweaks, 64 categories, ~13 695 tests).
 
 ## Quick Facts
 
@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~9 857 tests)                                          |
+| Test        | `pytest` in `tests/` (~13 695 tests)                                         |
 | GUI         | tkinter with Catppuccin Mocha dark theme (~1 432 lines)                      |
 | Version     | 2.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -96,7 +96,48 @@ SESSION.log(message)
 Paths use full hive names: `HKEY_LOCAL_MACHINE\...` or `HKEY_CURRENT_USER\...`
 (abbreviations `HKLM\...` / `HKCU\...` also accepted).
 
-## Current Stats (971 tweaks, 64 categories, 64 modules)
+## Tweak ID Naming Convention
+
+All tweak IDs follow the pattern: `{category_slug}-{descriptive-name}`
+
+Canonical category slugs:
+
+| Slug | Category | Slug | Category |
+| --- | --- | --- | --- |
+| `acc` | Accessibility | `lo` | LibreOffice |
+| `adobe` | Adobe | `lock` | Lock Screen & Login |
+| `ai` | AI / Copilot | `m365` | M365 Copilot |
+| `audio` | Audio | `maint` | Maintenance |
+| `backup` | Backup & Recovery | `media` | Multimedia |
+| `boot` | Boot | `msstore` | Microsoft Store |
+| `bt` | Bluetooth | `net` | Network |
+| `chrome` | Chrome | `notif` | Notifications |
+| `clip` | Clipboard & Drag-Drop | `od` | OneDrive |
+| `cloud` | Cloud Storage | `office` | Office |
+| `comm` | Communication | `perf` | Performance |
+| `cortana` | Cortana & Search | `pkg` | Package Management |
+| `crash` | Crash & Diagnostics | `power` | Power |
+| `ctx` | Context Menu | `printing` | Printing |
+| `dev` | Developer Tools | `priv` | Privacy |
+| `display` | Display | `rdp` | Remote Desktop |
+| `dns` | DNS & Networking Adv | `schtask` | Scheduled Tasks |
+| `edge` | Edge | `scoop` | Scoop Tools |
+| `explorer` | Explorer | `sec` | Security |
+| `firefox` | Firefox | `shell` | Shell |
+| `font` | Fonts | `snap` | Snap & Multitasking |
+| `fs` | File System | `ss` | Screensaver & Lock |
+| `game` | Gaming | `startup` | Startup |
+| `gpu` | GPU / Graphics | `stor` | Storage |
+| `idx` | Indexing & Search | `svc` | Services |
+| `input` | Input | `sys` | System |
+| `java` | Java | `tb` | Taskbar |
+| `telem` | Telemetry Advanced | `usb` | USB & Peripherals |
+| `term` | Windows Terminal | `virt` | Virtualization |
+| `vnc` | RealVNC | `vscode` | VS Code |
+| `w11` | Windows 11 | `widgets` | Widgets & News |
+| `wsl` | WSL | `wu` | Windows Update |
+
+## Current Stats (1 231 tweaks, 64 categories, 64 modules)
 
 | Category              | Tweaks | Category            | Tweaks |
 | --------------------- | ------ | ------------------- | ------ |

@@ -294,7 +294,7 @@ def _detect_disable_app_tracking() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-startup-delay",
+        id="startup-disable-startup-delay",
         label="Disable Startup Delay",
         category="Startup",
         apply_fn=_apply_disable_startup_delay,
@@ -307,7 +307,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "performance", "boot"],
     ),
     TweakDef(
-        id="disable-skype-autostart",
+        id="startup-disable-skype-autostart",
         label="Disable Skype Auto-Start",
         category="Startup",
         apply_fn=_apply_disable_skype,
@@ -320,7 +320,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "skype"],
     ),
     TweakDef(
-        id="disable-edge-autostart",
+        id="startup-disable-edge-autostart",
         label="Disable Edge Startup Boost & Background",
         category="Startup",
         apply_fn=_apply_disable_edge_autostart,
@@ -333,7 +333,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "edge", "performance"],
     ),
     TweakDef(
-        id="disable-store-autoinstall",
+        id="startup-disable-store-autoinstall",
         label="Disable Store Suggested App Install",
         category="Startup",
         apply_fn=_apply_disable_store_autoinstall,
@@ -359,7 +359,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "teams", "performance"],
     ),
     TweakDef(
-        id="disable-cortana-startup",
+        id="startup-disable-cortana-startup",
         label="Disable Cortana Startup",
         category="Startup",
         apply_fn=_apply_disable_cortana_startup,
@@ -372,7 +372,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "cortana", "performance"],
     ),
     TweakDef(
-        id="disable-startup-sound",
+        id="startup-disable-startup-sound",
         label="Disable Windows Startup Sound",
         category="Startup",
         apply_fn=_apply_disable_startup_sound,
@@ -385,7 +385,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "sound", "boot"],
     ),
     TweakDef(
-        id="disable-login-background",
+        id="startup-disable-login-background",
         label="Use Solid Color Login Background",
         category="Startup",
         apply_fn=_apply_disable_login_background,
@@ -398,7 +398,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "login", "appearance"],
     ),
     TweakDef(
-        id="disable-lock-screen",
+        id="startup-disable-lock-screen",
         label="Skip Lock Screen (Go Straight to Login)",
         category="Startup",
         apply_fn=_apply_disable_lock_screen,
@@ -411,7 +411,7 @@ TWEAKS: list[TweakDef] = [
         tags=["startup", "lockscreen", "login"],
     ),
     TweakDef(
-        id="disable-first-logon-animation",
+        id="startup-disable-first-logon-animation",
         label="Disable First Login Animation",
         category="Startup",
         apply_fn=_apply_disable_first_logon_animation,
@@ -604,7 +604,7 @@ def _detect_start_disable_tips() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="start-disable-startup-delay",
+        id="startup-start-disable-startup-delay",
         label="Disable Startup Delay for Apps",
         category="Startup",
         apply_fn=_apply_start_disable_delay,
@@ -619,7 +619,7 @@ TWEAKS += [
         tags=["startup", "delay", "performance", "boot"],
     ),
     TweakDef(
-        id="start-boot-numlock-on",
+        id="startup-start-boot-numlock-on",
         label="Set Boot-Up Num Lock to On",
         category="Startup",
         apply_fn=_apply_start_boot_numlock,
@@ -632,7 +632,7 @@ TWEAKS += [
         tags=["startup", "numlock", "keyboard", "boot"],
     ),
     TweakDef(
-        id="start-disable-tips",
+        id="startup-start-disable-tips",
         label="Disable Windows Tips on Startup",
         category="Startup",
         apply_fn=_apply_start_disable_tips,
@@ -692,7 +692,7 @@ def _detect_start_disable_welcome_experience() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="start-disable-app-restart",
+        id="startup-start-disable-app-restart",
         label="Disable Automatic App Restart on Login",
         category="Startup",
         apply_fn=_apply_start_disable_app_restart,
@@ -707,7 +707,7 @@ TWEAKS += [
         tags=["startup", "restart", "apps", "login", "winlogon"],
     ),
     TweakDef(
-        id="start-disable-welcome-experience",
+        id="startup-start-disable-welcome-experience",
         label="Disable Windows Welcome Experience",
         category="Startup",
         apply_fn=_apply_start_disable_welcome_experience,

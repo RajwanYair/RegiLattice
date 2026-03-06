@@ -1,145 +1,205 @@
-"""Interactive menu driven by the plugin tweak registry."""
+"""Interactive category-based menu driven by the plugin tweak registry."""
 
 from __future__ import annotations
 
+import contextlib
 import os
 import sys
 
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import TweakDef, TweakResult, all_tweaks, apply_all, remove_all, tweak_status
-from .tweaks.maintenance import create_restore_point
+from .tweaks import TweakDef, TweakResult, apply_all, categories, remove_all, tweak_status, tweaks_by_category
+
+# ANSI colour shortcuts
+_RST = "\033[0m"
+_CYAN = "\033[96m"
+_DIM = "\033[90m"
+_RED = "\033[91m"
+_GRN = "\033[92m"
+_YLW = "\033[93m"
+_MAG = "\033[95m"
+_BLU = "\033[94m"
 
 
 class Menu:
-    """Interactive numbered menu auto-built from registered tweaks."""
+    """Interactive two-level menu: categories → tweaks within a category."""
 
     def __init__(self) -> None:
-        self._tweaks = all_tweaks()
+        self._categories = categories()
+        self._by_cat = tweaks_by_category()
 
-    # -- Display --
+    # ── helpers ───────────────────────────────────────────────────────────
 
     @staticmethod
     def _clear() -> None:
         os.system("cls" if os.name == "nt" else "clear")
 
-    def _banner(self) -> None:
-        self._clear()
-        rst = "\033[0m"
-        cyan = "\033[96m"
-        dim = "\033[90m"
-        red = "\033[91m"
-        grn = "\033[92m"
-        ylw = "\033[93m"
-        mag = "\033[95m"
-        print()
-        print(f"  {cyan}╔══════════════════════════════════════════════╗{rst}")
-        print(f"  {cyan}║         ⚡ RegiLattice Launcher ⚡            ║{rst}")
-        print(f"  {cyan}╚══════════════════════════════════════════════╝{rst}")
-        print(f"  {dim}Version: {__version__} | Platform: {platform_summary()}{rst}")
-        print(f"  {dim}Log: {SESSION.log_path}{rst}")
+    @staticmethod
+    def _pause() -> None:
+        with contextlib.suppress(EOFError, KeyboardInterrupt):
+            input(f"  {_DIM}Press Enter to continue...{_RST}")
 
-        # Corporate network warning
+    def _header(self, subtitle: str = "") -> None:
+        self._clear()
+        print()
+        print(f"  {_CYAN}\u2554{'═' * 46}\u2557{_RST}")
+        print(f"  {_CYAN}\u2551         \u26a1 RegiLattice Launcher \u26a1            \u2551{_RST}")
+        print(f"  {_CYAN}\u255a{'═' * 46}\u255d{_RST}")
+        print(f"  {_DIM}Version: {__version__} | Platform: {platform_summary()}{_RST}")
+        print(f"  {_DIM}Log: {SESSION.log_path}{_RST}")
         corp_info = corp_guard_status()
         if corp_info:
-            print(f"  {red}🛑 Corporate network: {corp_info} — tweaks blocked{rst}")
-
+            print(f"  {_RED}\U0001f6d1 Corporate network: {corp_info} \u2014 tweaks blocked{_RST}")
+        if subtitle:
+            print(f"\n  {_BLU}{subtitle}{_RST}")
         print()
-        last_cat = ""
-        for idx, td in enumerate(self._tweaks, 1):
-            if td.category != last_cat:
-                last_cat = td.category
-                print(f"  {cyan}── {td.category} ──{rst}")
-            status = tweak_status(td)
-            tag = f"{grn}[ON] {rst}" if status == TweakResult.APPLIED else f"{dim}[OFF]{rst}"
-            pad = " " if idx < 10 else ""
-            print(f"  {pad}[{idx:>2}] {tag}  {td.label}")
-
-        print()
-        print(f"  {grn} [A]  Apply All Tweaks{rst}")
-        print(f"  {ylw} [R]  Remove All Tweaks{rst}")
-        print(f"  {mag} [P]  Create Restore Point{rst}")
-        print(f"\n  {dim} [ 0] Exit{rst}\n")
-
-    # -- Action dispatch --
 
     def _run_single(self, td: TweakDef, mode: str) -> None:
-        # Corporate network safety guard
         try:
             assert_not_corporate()
         except CorporateNetworkError as exc:
-            print(f"\n  🛑 {exc}")
+            print(f"\n  \U0001f6d1 {exc}")
             return
-
         label = f"{'Apply' if mode == 'apply' else 'Remove'}: {td.label}"
-        print(f"\n  🧩 Running: {label} ...")
+        print(f"\n  \U0001f9e9 Running: {label} ...")
         try:
             fn = td.apply_fn if mode == "apply" else td.remove_fn
             fn()
-            print(f"  ✅ Done. Logged to {SESSION.log_path}")
+            print(f"  \u2705 Done. Logged to {SESSION.log_path}")
         except AdminRequirementError as exc:
-            print(f"  ❌ {exc}")
+            print(f"  \u274c {exc}")
         except Exception as exc:
             SESSION.log(f"Error running {label}: {exc}")
-            print(f"  ❌ Error: {exc}")
+            print(f"  \u274c Error: {exc}")
 
-    # -- Main loop --
+    # ── category list ─────────────────────────────────────────────────────
 
-    def loop(self) -> None:
-        if not is_windows():
-            print(f"⚠️  Intended for Windows. Detected: {platform_summary()}")
+    def _show_categories(self) -> str:
+        """Display categories and return user choice."""
+        self._header("Select a category")
+        for idx, cat in enumerate(self._categories, 1):
+            count = len(self._by_cat.get(cat, []))
+            print(f"  [{idx:>2}] {cat}  {_DIM}({count} tweaks){_RST}")
+        print()
+        print(f"  {_GRN} [A]  Apply All Tweaks{_RST}")
+        print(f"  {_YLW} [R]  Remove All Tweaks{_RST}")
+        print(f"  {_MAG} [G]  Launch GUI{_RST}")
+        print(f"\n  {_DIM} [ 0] Exit{_RST}\n")
+        try:
+            return input("  Choose category (number), A/R/G, or 0: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            return "0"
+
+    # ── tweak list within a category ──────────────────────────────────────
+
+    def _show_tweaks(self, cat_name: str) -> None:
+        """Display tweaks in a category and handle actions."""
+        tweaks = self._by_cat.get(cat_name, [])
+        if not tweaks:
+            print(f"  {_RED}No tweaks in '{cat_name}'{_RST}")
             return
 
         while True:
-            self._banner()
+            self._header(f"Category: {cat_name}")
+            for idx, td in enumerate(tweaks, 1):
+                st = tweak_status(td)
+                tag = f"{_GRN}[ON] {_RST}" if st == TweakResult.APPLIED else f"{_DIM}[OFF]{_RST}"
+                if st == TweakResult.UNKNOWN:
+                    tag = f"{_YLW}[???]{_RST}"
+                print(f"  [{idx:>2}] {tag}  {td.label}  {_DIM}({td.id}){_RST}")
+            print()
+            print(f"  {_GRN} [A]  Apply All in {cat_name}{_RST}")
+            print(f"  {_YLW} [R]  Remove All in {cat_name}{_RST}")
+            print(f"\n  {_DIM} [ 0] Back to categories{_RST}\n")
             try:
-                choice = input("  Enter choice (number=toggle, A/R/P/0): ").strip()
+                choice = input("  Choose tweak (number), A/R, or 0: ").strip()
             except (EOFError, KeyboardInterrupt):
-                choice = "0"
+                break
 
             if choice == "0":
-                print("\n  👋 RegiLattice session ended.")
                 break
             elif choice.upper() == "A":
                 try:
                     assert_not_corporate()
                 except CorporateNetworkError as exc:
-                    print(f"\n  🛑 {exc}")
+                    print(f"\n  \U0001f6d1 {exc}")
                 else:
-                    apply_all()
-                    print("  ✅ All tweaks applied.")
+                    for td in tweaks:
+                        self._run_single(td, "apply")
+                self._pause()
             elif choice.upper() == "R":
                 try:
                     assert_not_corporate()
                 except CorporateNetworkError as exc:
-                    print(f"\n  🛑 {exc}")
+                    print(f"\n  \U0001f6d1 {exc}")
                 else:
-                    remove_all()
-                    print("  ✅ All tweaks removed.")
-            elif choice.upper() == "P":
-                try:
-                    create_restore_point()
-                    print("  ✅ Restore point created.")
-                except Exception as exc:
-                    print(f"  ❌ {exc}")
+                    for td in tweaks:
+                        self._run_single(td, "remove")
+                self._pause()
             else:
                 try:
                     idx = int(choice) - 1
-                    if 0 <= idx < len(self._tweaks):
-                        td = self._tweaks[idx]
+                    if 0 <= idx < len(tweaks):
+                        td = tweaks[idx]
                         st = tweak_status(td)
                         mode = "remove" if st == TweakResult.APPLIED else "apply"
                         self._run_single(td, mode)
                     else:
-                        print("  ❌ Invalid selection.")
+                        print(f"  {_RED}Invalid selection.{_RST}")
                 except ValueError:
-                    print("  ❌ Invalid selection. Try again.")
+                    print(f"  {_RED}Invalid selection. Try again.{_RST}")
+                self._pause()
 
+    # ── main loop ─────────────────────────────────────────────────────────
+
+    def loop(self) -> None:
+        if not is_windows():
+            print(f"\u26a0\ufe0f  Intended for Windows. Detected: {platform_summary()}")
+            return
+
+        while True:
             try:
-                input("  Press Enter to return to the menu...")
+                choice = self._show_categories()
             except (EOFError, KeyboardInterrupt):
                 break
+
+            if choice == "0":
+                print("\n  \U0001f44b RegiLattice session ended.")
+                break
+            elif choice.upper() == "A":
+                try:
+                    assert_not_corporate()
+                except CorporateNetworkError as exc:
+                    print(f"\n  \U0001f6d1 {exc}")
+                else:
+                    apply_all()
+                    print("  \u2705 All tweaks applied.")
+                self._pause()
+            elif choice.upper() == "R":
+                try:
+                    assert_not_corporate()
+                except CorporateNetworkError as exc:
+                    print(f"\n  \U0001f6d1 {exc}")
+                else:
+                    remove_all()
+                    print("  \u2705 All tweaks removed.")
+                self._pause()
+            elif choice.upper() == "G":
+                from .gui import launch
+
+                launch()
+            else:
+                try:
+                    idx = int(choice) - 1
+                    if 0 <= idx < len(self._categories):
+                        self._show_tweaks(self._categories[idx])
+                    else:
+                        print(f"  {_RED}Invalid selection.{_RST}")
+                        self._pause()
+                except ValueError:
+                    print(f"  {_RED}Invalid selection. Try again.{_RST}")
+                    self._pause()
 
 
 def main(argv: list[str] | None = None) -> int:

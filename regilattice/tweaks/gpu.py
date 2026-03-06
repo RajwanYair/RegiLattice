@@ -354,7 +354,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "performance", "scheduling", "latency"],
     ),
     TweakDef(
-        id="disable-mpo",
+        id="gpu-disable-mpo",
         label="Disable Multi-Plane Overlay (MPO)",
         category="GPU / Graphics",
         apply_fn=_apply_disable_mpo,
@@ -390,7 +390,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "stability", "tdr", "rendering"],
     ),
     TweakDef(
-        id="disable-nvidia-telemetry",
+        id="gpu-disable-nvidia-telemetry",
         label="Disable NVIDIA Telemetry",
         category="GPU / Graphics",
         apply_fn=_apply_disable_nvidia_telemetry,
@@ -424,23 +424,6 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "performance", "directx"],
     ),
     TweakDef(
-        id="disable-dwm-animations",
-        label="Disable DWM Desktop Animations",
-        category="GPU / Graphics",
-        apply_fn=_apply_disable_dwm_animations,
-        remove_fn=_remove_disable_dwm_animations,
-        detect_fn=_detect_disable_dwm_animations,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_DWMKEY],
-        description=(
-            "Disables Desktop Window Manager peek/flip animations for a "
-            "snappier desktop experience. Reduces GPU compositor overhead. "
-            "Default: Enabled. Recommended: Disabled for performance."
-        ),
-        tags=["gpu", "performance", "dwm", "animations"],
-    ),
-    TweakDef(
         id="gpu-preemption-disable",
         label="Disable GPU Preemption (Lower Latency)",
         category="GPU / Graphics",
@@ -458,7 +441,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "performance", "latency", "gaming"],
     ),
     TweakDef(
-        id="disable-fullscreen-optimizations-global",
+        id="gpu-disable-fullscreen-optimizations-global",
         label="Disable Fullscreen Optimizations Globally",
         category="GPU / Graphics",
         apply_fn=_apply_disable_fse_global,
@@ -476,7 +459,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "gaming", "fullscreen", "performance"],
     ),
     TweakDef(
-        id="disable-game-bar-overlay",
+        id="gpu-disable-game-bar-overlay",
         label="Disable Game Bar Overlay for GPU",
         category="GPU / Graphics",
         apply_fn=_apply_disable_game_bar_overlay,
@@ -493,7 +476,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "gaming", "overlay", "game-bar"],
     ),
     TweakDef(
-        id="nvidia-tdr-delay",
+        id="gpu-nvidia-tdr-delay",
         label="Increase NVIDIA TDR Delay (8s)",
         category="GPU / Graphics",
         apply_fn=_apply_nvidia_tdr_delay,
@@ -511,7 +494,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "nvidia", "stability", "tdr"],
     ),
     TweakDef(
-        id="disable-gpu-preemption",
+        id="gpu-disable-gpu-preemption",
         label="Disable GPU Preemption (Low Latency)",
         category="GPU / Graphics",
         apply_fn=_apply_disable_gpu_preemption,
@@ -529,7 +512,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gpu", "latency", "gaming", "preemption"],
     ),
     TweakDef(
-        id="multiplane-overlay-disable",
+        id="gpu-multiplane-overlay-disable",
         label="Disable Multi-Plane Overlay (Anti-Stutter)",
         category="GPU / Graphics",
         apply_fn=_apply_mpo_disable,

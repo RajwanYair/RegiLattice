@@ -281,10 +281,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_EXPLORER_POLICY],
-        description=(
-            "Disables the Windows Action Center sidebar. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables the Windows Action Center sidebar. Default: enabled. Recommended: disabled."),
         tags=["notifications", "action-center", "sidebar"],
     ),
     TweakDef(
@@ -297,10 +294,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PUSH_KEY],
-        description=(
-            "Disables pop-up toast notifications from all applications. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables pop-up toast notifications from all applications. Default: enabled. Recommended: disabled."),
         tags=["notifications", "toast", "popup"],
     ),
     TweakDef(
@@ -313,10 +307,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_NOTIF_SETTINGS],
-        description=(
-            "Prevents notifications from appearing on the lock screen. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Prevents notifications from appearing on the lock screen. Default: enabled. Recommended: disabled."),
         tags=["notifications", "lock-screen", "privacy"],
     ),
     TweakDef(
@@ -329,10 +320,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_NOTIF_SETTINGS],
-        description=(
-            "Silences all notification sounds system-wide. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Silences all notification sounds system-wide. Default: enabled. Recommended: disabled."),
         tags=["notifications", "sounds", "audio"],
     ),
     TweakDef(
@@ -345,10 +333,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CDM],
-        description=(
-            "Stops Windows from showing tips, tricks, and suggestion notifications. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Stops Windows from showing tips, tricks, and suggestion notifications. Default: enabled. Recommended: disabled."),
         tags=["notifications", "suggestions", "tips"],
     ),
     TweakDef(
@@ -361,10 +346,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CDM],
-        description=(
-            "Disables the Windows welcome experience shown after updates. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables the Windows welcome experience shown after updates. Default: enabled. Recommended: disabled."),
         tags=["notifications", "welcome", "updates"],
     ),
     TweakDef(
@@ -377,10 +359,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PROFILE_ENGAGE],
-        description=(
-            "Suppresses the recurring 'finish setting up your device' reminders. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Suppresses the recurring 'finish setting up your device' reminders. Default: enabled. Recommended: disabled."),
         tags=["notifications", "setup", "reminders"],
     ),
     TweakDef(
@@ -393,10 +372,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CDM],
-        description=(
-            "Prevents Windows from suggesting apps in the Start menu. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Prevents Windows from suggesting apps in the Start menu. Default: enabled. Recommended: disabled."),
         tags=["notifications", "suggestions", "start-menu"],
     ),
     TweakDef(
@@ -409,10 +385,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_NOTIF_SETTINGS],
-        description=(
-            "Enables quiet hours (focus assist) to suppress all toast notifications. "
-            "Default: disabled. Recommended: enabled."
-        ),
+        description=("Enables quiet hours (focus assist) to suppress all toast notifications. Default: disabled. Recommended: enabled."),
         tags=["notifications", "quiet-hours", "focus-assist"],
     ),
     TweakDef(
@@ -425,10 +398,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_BG_ACCESS],
-        description=(
-            "Disables 'apps are running in the background' system toast notifications. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables 'apps are running in the background' system toast notifications. Default: enabled. Recommended: disabled."),
         tags=["notifications", "background", "startup"],
     ),
     TweakDef(
@@ -441,10 +411,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_AUTOPLAY],
-        description=(
-            "Disables AutoPlay notifications when removable media is inserted. "
-            "Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables AutoPlay notifications when removable media is inserted. Default: enabled. Recommended: disabled."),
         tags=["notifications", "autoplay", "media"],
     ),
 ]
@@ -593,8 +560,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_ACCESSIBILITY_KEY],
         description=(
-            "Sets notification display duration to 3 seconds instead of the default 5. "
-            "Reduces visual distraction. Default: 5s. Recommended: 3s."
+            "Sets notification display duration to 3 seconds instead of the default 5. Reduces visual distraction. Default: 5s. Recommended: 3s."
         ),
         tags=["notifications", "display-time", "duration", "accessibility"],
     ),

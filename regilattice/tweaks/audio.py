@@ -16,9 +16,7 @@ _KEY_BOOT_ANIM = (
 
 _KEY_MM_AUDIO = r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
 
-_KEY_CUR_AUDIO = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio"
-)
+_KEY_CUR_AUDIO = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio"
 
 _KEY_NOTIF_SETTINGS = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
@@ -35,21 +33,13 @@ _KEY_SPEECH = (
     r"\Settings\OnlineSpeechPrivacy"
 )
 
-_KEY_SOUND_COMMS = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
-)
+_KEY_SOUND_COMMS = r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
 
-_KEY_EXCLUSIVE = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
-)
+_KEY_EXCLUSIVE = r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
 
-_KEY_DEFAULT_FMT = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
-)
+_KEY_DEFAULT_FMT = r"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"
 
-_KEY_AUDIO_GLOBAL = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"
-)
+_KEY_AUDIO_GLOBAL = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"
 
 _KEY_AUDIO_TASK = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
@@ -335,10 +325,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_SOUND_SCHEME],
-        description=(
-            "Sets the Windows sound scheme to .None, silencing all "
-            "system event sounds (alerts, notifications, asterisks, etc.)."
-        ),
+        description=("Sets the Windows sound scheme to .None, silencing all system event sounds (alerts, notifications, asterisks, etc.)."),
         tags=["audio", "sounds", "scheme", "silence"],
     ),
     TweakDef(
@@ -351,9 +338,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEY_BOOT_ANIM],
-        description=(
-            "Disables the Windows boot/startup sound played when logging in."
-        ),
+        description=("Disables the Windows boot/startup sound played when logging in."),
         tags=["audio", "startup", "boot", "logon"],
     ),
     TweakDef(
@@ -366,10 +351,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_MM_AUDIO],
-        description=(
-            "Prevents Windows from automatically reducing the volume of "
-            "other sounds during voice/video calls (UserDuckingPreference=3)."
-        ),
+        description=("Prevents Windows from automatically reducing the volume of other sounds during voice/video calls (UserDuckingPreference=3)."),
         tags=["audio", "ducking", "communication", "volume"],
     ),
     TweakDef(
@@ -382,10 +364,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_MM_AUDIO],
-        description=(
-            "Disables all audio enhancements (equalizer, bass boost, "
-            "virtual surround, loudness equalization)."
-        ),
+        description=("Disables all audio enhancements (equalizer, bass boost, virtual surround, loudness equalization)."),
         tags=["audio", "enhancements", "equalizer", "processing"],
     ),
     TweakDef(
@@ -398,10 +377,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_CUR_AUDIO],
-        description=(
-            "Disables automatic spatial audio (Windows Sonic / Dolby Atmos) "
-            "activation by the OS."
-        ),
+        description=("Disables automatic spatial audio (Windows Sonic / Dolby Atmos) activation by the OS."),
         tags=["audio", "spatial", "sonic", "atmos"],
     ),
     TweakDef(
@@ -414,10 +390,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_NOTIF_SETTINGS],
-        description=(
-            "Silences all notification sounds while keeping toast "
-            "notifications visible."
-        ),
+        description=("Silences all notification sounds while keeping toast notifications visible."),
         tags=["audio", "notifications", "sounds", "toast"],
     ),
     TweakDef(
@@ -430,10 +403,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DEFAULT_FMT],
-        description=(
-            "Sets the default audio format to 24-bit quality for improved "
-            "audio fidelity."
-        ),
+        description=("Sets the default audio format to 24-bit quality for improved audio fidelity."),
         tags=["audio", "quality", "24-bit", "format"],
     ),
     TweakDef(
@@ -446,10 +416,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_EXCLUSIVE],
-        description=(
-            "Prevents applications from taking exclusive control of audio "
-            "devices, avoiding sound conflicts."
-        ),
+        description=("Prevents applications from taking exclusive control of audio devices, avoiding sound conflicts."),
         tags=["audio", "exclusive", "sharing", "device"],
     ),
     TweakDef(
@@ -462,10 +429,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEY_LOW_BATTERY],
-        description=(
-            "Silences the audible alert played when the battery level "
-            "drops below the warning threshold."
-        ),
+        description=("Silences the audible alert played when the battery level drops below the warning threshold."),
         tags=["audio", "battery", "warning", "power"],
     ),
     TweakDef(
@@ -478,10 +442,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_SPEECH],
-        description=(
-            "Opts out of online speech recognition, preventing voice data "
-            "from being sent to Microsoft cloud services."
-        ),
+        description=("Opts out of online speech recognition, preventing voice data from being sent to Microsoft cloud services."),
         tags=["audio", "speech", "recognition", "privacy"],
     ),
     TweakDef(

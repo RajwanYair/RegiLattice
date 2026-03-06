@@ -240,6 +240,7 @@ def _get_search_index(td: TweakDef) -> str:
 
 # ── Machine profiles ─────────────────────────────────────────────────────────
 
+
 @dataclass(slots=True)
 class ProfileDef:
     """Declarative description of a machine profile."""
@@ -259,51 +260,100 @@ def _register_profiles() -> None:
         ProfileDef(
             id="business",
             description="Business workstation — productivity, security & cloud tweaks",
-            apply_categories=frozenset({
-                "Cloud Storage", "Office", "Communication", "OneDrive",
-                "Security", "Network", "Privacy", "Printing",
-                "Backup & Recovery", "M365 Copilot",
-            }),
+            apply_categories=frozenset(
+                {
+                    "Cloud Storage",
+                    "Office",
+                    "Communication",
+                    "OneDrive",
+                    "Security",
+                    "Network",
+                    "Privacy",
+                    "Printing",
+                    "Backup & Recovery",
+                    "M365 Copilot",
+                }
+            ),
             skip_categories=frozenset({"Gaming", "GPU / Graphics", "Virtualization"}),
         ),
         ProfileDef(
             id="gaming",
             description="Gaming rig — GPU, performance & network tweaks",
-            apply_categories=frozenset({
-                "Gaming", "GPU / Graphics", "Performance", "Display",
-                "Audio", "Network", "Power", "Services",
-            }),
-            skip_categories=frozenset({
-                "Office", "Communication", "OneDrive", "Cloud Storage",
-                "LibreOffice", "Printing", "Backup & Recovery",
-            }),
+            apply_categories=frozenset(
+                {
+                    "Gaming",
+                    "GPU / Graphics",
+                    "Performance",
+                    "Display",
+                    "Audio",
+                    "Network",
+                    "Power",
+                    "Services",
+                }
+            ),
+            skip_categories=frozenset(
+                {
+                    "Office",
+                    "Communication",
+                    "OneDrive",
+                    "Cloud Storage",
+                    "LibreOffice",
+                    "Printing",
+                    "Backup & Recovery",
+                }
+            ),
         ),
         ProfileDef(
             id="privacy",
             description="Maximum privacy — disables telemetry, tracking & cloud",
-            apply_categories=frozenset({
-                "Privacy", "Cortana & Search", "AI / Copilot", "M365 Copilot",
-                "Windows 11", "Cloud Storage", "Communication",
-            }),
+            apply_categories=frozenset(
+                {
+                    "Privacy",
+                    "Cortana & Search",
+                    "AI / Copilot",
+                    "M365 Copilot",
+                    "Windows 11",
+                    "Cloud Storage",
+                    "Communication",
+                }
+            ),
         ),
         ProfileDef(
             id="minimal",
             description="Minimal — lightweight essentials only (performance, startup, maintenance)",
-            apply_categories=frozenset({
-                "Performance", "Startup", "Maintenance", "Boot", "Power", "Services",
-            }),
+            apply_categories=frozenset(
+                {
+                    "Performance",
+                    "Startup",
+                    "Maintenance",
+                    "Boot",
+                    "Power",
+                    "Services",
+                }
+            ),
         ),
         ProfileDef(
             id="server",
             description="Server — virtualization, network hardening, services optimization",
-            apply_categories=frozenset({
-                "Network", "Power", "Services", "Security",
-                "Virtualization", "Backup & Recovery",
-            }),
-            skip_categories=frozenset({
-                "Gaming", "GPU / Graphics", "Communication",
-                "Cloud Storage", "OneDrive",
-            }),
+            apply_categories=frozenset(
+                {
+                    "Network",
+                    "Power",
+                    "Services",
+                    "Security",
+                    "Virtualization",
+                    "Backup & Recovery",
+                }
+            ),
+            skip_categories=frozenset(
+                {
+                    "Gaming",
+                    "GPU / Graphics",
+                    "Communication",
+                    "Cloud Storage",
+                    "OneDrive",
+                }
+            ),
         ),
     ]
     for p in defs:

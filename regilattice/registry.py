@@ -94,11 +94,7 @@ class RegistrySession:
         _ensure_windows()
         ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         onedrive = os.environ.get("ONEDRIVE", "")
-        backup_root = (
-            Path(onedrive) / "RegistryBackups"
-            if onedrive and Path(onedrive).is_dir()
-            else Path.home() / "Documents" / "RegistryBackups"
-        )
+        backup_root = Path(onedrive) / "RegistryBackups" if onedrive and Path(onedrive).is_dir() else Path.home() / "Documents" / "RegistryBackups"
         backup_path = backup_root / f"{label}_{ts}"
         backup_path.mkdir(parents=True, exist_ok=True)
 
@@ -263,9 +259,7 @@ def assert_admin(required: bool = True) -> None:
     import ctypes
 
     if not bool(ctypes.windll.shell32.IsUserAnAdmin()):
-        raise AdminRequirementError(
-            "Administrator privileges are required for this operation."
-        )
+        raise AdminRequirementError("Administrator privileges are required for this operation.")
 
 
 # ── Module-level singleton ───────────────────────────────────────────────────

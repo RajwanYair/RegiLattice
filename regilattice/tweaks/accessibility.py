@@ -213,10 +213,7 @@ def _remove_disable_magnifier_hotkey(*, require_admin: bool = True) -> None:
 
 
 def _detect_disable_magnifier_hotkey() -> bool:
-    return (
-        SESSION.read_dword(_MAGNIFIER, "RunningState") == 0
-        and SESSION.read_dword(_MAGNIFIER_POLICY, "DisableMagnifier") == 1
-    )
+    return SESSION.read_dword(_MAGNIFIER, "RunningState") == 0 and SESSION.read_dword(_MAGNIFIER_POLICY, "DisableMagnifier") == 1
 
 
 # ── Disable On-Screen Keyboard Auto-Launch ───────────────────────────────────
@@ -360,7 +357,7 @@ def _detect_disable_toggle_keys_shortcut() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-accessibility-shortcuts",
+        id="acc-disable-accessibility-shortcuts",
         label="Disable Sticky/Toggle/Filter Keys",
         category="Accessibility",
         apply_fn=_apply_disable_accessibility_shortcuts,
@@ -369,14 +366,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ACCESS, _TOGGLE, _FILTER],
-        description=(
-            "Suppresses the Sticky Keys, Toggle Keys, and Filter Keys "
-            "popups triggered by repeated key presses."
-        ),
+        description=("Suppresses the Sticky Keys, Toggle Keys, and Filter Keys popups triggered by repeated key presses."),
         tags=["accessibility", "keyboard", "gaming"],
     ),
     TweakDef(
-        id="force-dark-mode",
+        id="acc-force-dark-mode",
         label="Force System-Wide Dark Mode",
         category="Accessibility",
         apply_fn=_apply_dark_mode,
@@ -385,14 +379,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_THEME],
-        description=(
-            "Enables dark mode for both Windows system chrome and "
-            "applications via the Personalize theme registry."
-        ),
+        description=("Enables dark mode for both Windows system chrome and applications via the Personalize theme registry."),
         tags=["accessibility", "theme", "dark-mode"],
     ),
     TweakDef(
-        id="disable-animations",
+        id="acc-disable-animations",
         label="Disable Window Animations",
         category="Accessibility",
         apply_fn=_apply_disable_animations,
@@ -401,14 +392,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_DWM, _DESKTOP],
-        description=(
-            "Disables desktop window animations (Aero Peek, minimize/"
-            "maximize effects) for snappier UI."
-        ),
+        description=("Disables desktop window animations (Aero Peek, minimize/maximize effects) for snappier UI."),
         tags=["accessibility", "performance", "animation"],
     ),
     TweakDef(
-        id="enable-cleartype",
+        id="acc-enable-cleartype",
         label="Enable ClearType Font Smoothing",
         category="Accessibility",
         apply_fn=_apply_cleartype,
@@ -421,7 +409,7 @@ TWEAKS: list[TweakDef] = [
         tags=["accessibility", "font", "display"],
     ),
     TweakDef(
-        id="wide-scrollbar",
+        id="acc-wide-scrollbar",
         label="Increase Scroll Bar Width",
         category="Accessibility",
         apply_fn=_apply_wide_scrollbar,
@@ -430,14 +418,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_WINDOW_METRICS],
-        description=(
-            "Increases scroll bar width from default (17px) to 25px "
-            "for easier targeting with mouse or touch."
-        ),
+        description=("Increases scroll bar width from default (17px) to 25px for easier targeting with mouse or touch."),
         tags=["accessibility", "ui", "scrollbar"],
     ),
     TweakDef(
-        id="disable-narrator",
+        id="acc-disable-narrator",
         label="Disable Narrator Auto-Start",
         category="Accessibility",
         apply_fn=_apply_disable_narrator,
@@ -450,7 +435,7 @@ TWEAKS: list[TweakDef] = [
         tags=["accessibility", "narrator", "screen-reader"],
     ),
     TweakDef(
-        id="high-contrast-mode",
+        id="acc-high-contrast-mode",
         label="Enable High Contrast Mode",
         category="Accessibility",
         apply_fn=_apply_high_contrast,
@@ -463,23 +448,7 @@ TWEAKS: list[TweakDef] = [
         tags=["accessibility", "contrast", "display"],
     ),
     TweakDef(
-        id="disable-narrator-hotkey",
-        label="Disable Narrator Win+Enter Hotkey",
-        category="Accessibility",
-        apply_fn=_apply_disable_narrator_hotkey,
-        remove_fn=_remove_disable_narrator_hotkey,
-        detect_fn=_detect_disable_narrator_hotkey,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_NARRATOR],
-        description=(
-            "Disables the Win+Enter hotkey that launches Narrator, "
-            "preventing accidental activation."
-        ),
-        tags=["accessibility", "narrator", "hotkey"],
-    ),
-    TweakDef(
-        id="disable-magnifier-hotkey",
+        id="acc-disable-magnifier-hotkey",
         label="Disable Magnifier Win+Plus Hotkey",
         category="Accessibility",
         apply_fn=_apply_disable_magnifier_hotkey,
@@ -488,14 +457,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MAGNIFIER, _MAGNIFIER_POLICY],
-        description=(
-            "Disables the Win+Plus hotkey that launches Magnifier "
-            "and prevents it from running."
-        ),
+        description=("Disables the Win+Plus hotkey that launches Magnifier and prevents it from running."),
         tags=["accessibility", "magnifier", "hotkey"],
     ),
     TweakDef(
-        id="disable-osk-auto-launch",
+        id="acc-disable-osk-auto-launch",
         label="Disable On-Screen Keyboard Auto-Launch",
         category="Accessibility",
         apply_fn=_apply_disable_osk_auto_launch,
@@ -504,14 +470,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_OSK, _OSK_TABLET],
-        description=(
-            "Prevents the On-Screen Keyboard from automatically launching "
-            "at startup or when entering tablet mode."
-        ),
+        description=("Prevents the On-Screen Keyboard from automatically launching at startup or when entering tablet mode."),
         tags=["accessibility", "keyboard", "osk", "tablet"],
     ),
     TweakDef(
-        id="disable-underline-shortcuts",
+        id="acc-disable-underline-shortcuts",
         label="Disable Menu Access Key Underlines",
         category="Accessibility",
         apply_fn=_apply_disable_underline_shortcuts,
@@ -520,14 +483,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KB_PREF],
-        description=(
-            "Disables the underline indicators on menu access keys "
-            "(keyboard shortcuts) for a cleaner UI."
-        ),
+        description=("Disables the underline indicators on menu access keys (keyboard shortcuts) for a cleaner UI."),
         tags=["accessibility", "keyboard", "menu", "ui"],
     ),
     TweakDef(
-        id="disable-sound-sentry",
+        id="acc-disable-sound-sentry",
         label="Disable Visual Sound Alerts",
         category="Accessibility",
         apply_fn=_apply_disable_sound_sentry,
@@ -536,14 +496,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_SOUNDSENTRY],
-        description=(
-            "Disables SoundSentry visual alerts that flash the screen "
-            "or window when a system sound plays."
-        ),
+        description=("Disables SoundSentry visual alerts that flash the screen or window when a system sound plays."),
         tags=["accessibility", "sound", "visual-alert"],
     ),
     TweakDef(
-        id="access-disable-narrator-autostart",
+        id="acc-access-disable-narrator-autostart",
         label="Disable Narrator Autostart",
         category="Accessibility",
         apply_fn=_apply_disable_narrator_autostart,
@@ -552,14 +509,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_NARRATOR],
-        description=(
-            "Prevents Narrator from launching with Win+Enter shortcut. "
-            "Default: Enabled. Recommended: Disabled if not needed."
-        ),
+        description=("Prevents Narrator from launching with Win+Enter shortcut. Default: Enabled. Recommended: Disabled if not needed."),
         tags=["accessibility", "narrator", "shortcut"],
     ),
     TweakDef(
-        id="access-disable-magnifier",
+        id="acc-access-disable-magnifier",
         label="Disable Magnifier Lens Mode",
         category="Accessibility",
         apply_fn=_apply_disable_magnifier_lens,
@@ -585,10 +539,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_FILTER_KEYS_ACC],
-        description=(
-            "Disables the Filter Keys shortcut, preventing accidental "
-            "activation that can interfere with typing and gaming."
-        ),
+        description=("Disables the Filter Keys shortcut, preventing accidental activation that can interfere with typing and gaming."),
         tags=["accessibility", "filter-keys", "keyboard"],
     ),
     TweakDef(
@@ -601,10 +552,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_TOGGLE],
-        description=(
-            "Disables the Toggle Keys shortcut that plays a tone when "
-            "Caps Lock, Num Lock, or Scroll Lock is pressed."
-        ),
+        description=("Disables the Toggle Keys shortcut that plays a tone when Caps Lock, Num Lock, or Scroll Lock is pressed."),
         tags=["accessibility", "toggle-keys", "keyboard"],
     ),
 ]

@@ -406,8 +406,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_SS_CU],
         description=(
-            "Sets the screensaver activation timeout to 30 minutes (1800 seconds). "
-            "Default: 600. Recommended: 1800 for extended-focus workflows."
+            "Sets the screensaver activation timeout to 30 minutes (1800 seconds). Default: 600. Recommended: 1800 for extended-focus workflows."
         ),
         tags=["screensaver", "timeout", "30min", "lock"],
     ),
@@ -479,7 +478,7 @@ def _detect_scr_disable_screensaver() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="scr-timeout-10min",
+        id="ss-scr-timeout-10min",
         label="Set Screensaver Timeout to 10 Minutes (Policy)",
         category="Screensaver & Lock",
         apply_fn=_apply_scr_timeout_10min,
@@ -489,13 +488,12 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_SS_CU, _SS_POLICY],
         description=(
-            "Sets screensaver timeout to 10 minutes via machine policy. "
-            "Enforced across all users. Default: varies. Recommended: 600 seconds."
+            "Sets screensaver timeout to 10 minutes via machine policy. Enforced across all users. Default: varies. Recommended: 600 seconds."
         ),
         tags=["screensaver", "timeout", "10min", "policy"],
     ),
     TweakDef(
-        id="scr-password-on-resume",
+        id="ss-scr-password-on-resume",
         label="Require Password on Resume (Policy)",
         category="Screensaver & Lock",
         apply_fn=_apply_scr_password_resume,
@@ -505,13 +503,12 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_SS_CU, _SS_POLICY],
         description=(
-            "Requires password entry when resuming from screensaver via policy. "
-            "Enforces lock screen security. Default: varies. Recommended: enabled."
+            "Requires password entry when resuming from screensaver via policy. Enforces lock screen security. Default: varies. Recommended: enabled."
         ),
         tags=["screensaver", "password", "resume", "security"],
     ),
     TweakDef(
-        id="scr-disable-screensaver",
+        id="ss-scr-disable-screensaver",
         label="Disable Screensaver Completely (Policy)",
         category="Screensaver & Lock",
         apply_fn=_apply_scr_disable_screensaver,

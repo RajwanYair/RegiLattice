@@ -18,17 +18,9 @@ _KEYS = [
     r"HKEY_CLASSES_ROOT\Drive\shell\TakeOwnership\command",
 ]
 
-_CMD_FILE = (
-    'cmd.exe /k takeown /f "%1" && icacls "%1"' " /grant *S-1-3-4:F /t /c /l && pause"
-)
-_CMD_DIR = (
-    'cmd.exe /k takeown /f "%1" /r /d y && icacls "%1"'
-    " /grant *S-1-3-4:F /t /c /q && pause"
-)
-_CMD_DRIVE = (
-    'cmd.exe /k takeown /f "%1" /r /d y && icacls "%1"'
-    " /grant *S-1-3-4:F /t /c && pause"
-)
+_CMD_FILE = 'cmd.exe /k takeown /f "%1" && icacls "%1" /grant *S-1-3-4:F /t /c /l && pause'
+_CMD_DIR = 'cmd.exe /k takeown /f "%1" /r /d y && icacls "%1" /grant *S-1-3-4:F /t /c /q && pause'
+_CMD_DRIVE = 'cmd.exe /k takeown /f "%1" /r /d y && icacls "%1" /grant *S-1-3-4:F /t /c && pause'
 
 
 def _add_context_entry(base: str, command: str) -> None:
@@ -98,7 +90,8 @@ def _remove_cmd_here(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["reg", "delete", _CMD_HERE_KEY, "/f"],
-        check=False, capture_output=True,
+        check=False,
+        capture_output=True,
     )
 
 
@@ -123,12 +116,7 @@ def _apply_hash_context(*, require_admin: bool = True) -> None:
 
     _run(["add", _HASH_KEY, "/ve", "/d", "Get File Hash (SHA256)", "/f"])
     _run(["add", _HASH_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
-    ps_cmd = (
-        'powershell.exe -NoProfile -Command "'
-        "Get-FileHash '%1' -Algorithm SHA256 | "
-        "Format-List; pause"
-        '"'
-    )
+    ps_cmd = "powershell.exe -NoProfile -Command \"Get-FileHash '%1' -Algorithm SHA256 | Format-List; pause\""
     _run(["add", _HASH_CMD, "/ve", "/d", ps_cmd, "/f"])
 
 
@@ -136,7 +124,8 @@ def _remove_hash_context(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["reg", "delete", _HASH_KEY, "/f"],
-        check=False, capture_output=True,
+        check=False,
+        capture_output=True,
     )
 
 
@@ -161,7 +150,7 @@ def _apply_ps_here(*, require_admin: bool = True) -> None:
 
     _run(["add", _PS_HERE_KEY, "/ve", "/d", "Open PowerShell Here", "/f"])
     _run(["add", _PS_HERE_KEY, "/v", "Icon", "/d", "powershell.exe", "/f"])
-    _run(["add", _PS_HERE_CMD, "/ve", "/d", 'powershell.exe -NoExit -Command "Set-Location \'%V\'"', "/f"])
+    _run(["add", _PS_HERE_CMD, "/ve", "/d", "powershell.exe -NoExit -Command \"Set-Location '%V'\"", "/f"])
 
 
 def _remove_ps_here(*, require_admin: bool = True) -> None:
@@ -230,9 +219,7 @@ def _detect_classic_context_menu() -> bool:
 
 # ── Disable Recent Files in Quick Access ─────────────────────────────────────
 
-_EXPLORER_CU = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
-)
+_EXPLORER_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
 
 
 def _apply_disable_recent_files(*, require_admin: bool = False) -> None:
@@ -274,9 +261,7 @@ def _detect_disable_frequent_folders() -> bool:
 
 # ── Enable Compact View in File Explorer ─────────────────────────────────────
 
-_ADV = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_ADV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 
 
 def _apply_compact_file_explorer(*, require_admin: bool = False) -> None:
@@ -380,7 +365,7 @@ def _detect_disable_snap_flyout() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="take-ownership",
+        id="shell-take-ownership",
         label="Take Ownership Context Menu",
         category="Shell",
         apply_fn=apply_take_ownership,
@@ -389,14 +374,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_KEYS,
-        description=(
-            "Adds a 'Take Ownership' entry to the right-click context "
-            "menu for files, folders, and drives."
-        ),
+        description=("Adds a 'Take Ownership' entry to the right-click context menu for files, folders, and drives."),
         tags=["shell", "context-menu", "ownership"],
     ),
     TweakDef(
-        id="open-cmd-here",
+        id="shell-open-cmd-here",
         label="'Open CMD Here' Context Menu",
         category="Shell",
         apply_fn=_apply_cmd_here,
@@ -409,7 +391,7 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "context-menu", "cmd"],
     ),
     TweakDef(
-        id="file-hash-context",
+        id="shell-file-hash-context",
         label="'Get File Hash' Context Menu",
         category="Shell",
         apply_fn=_apply_hash_context,
@@ -422,7 +404,7 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "context-menu", "hash", "security"],
     ),
     TweakDef(
-        id="open-ps-here",
+        id="shell-open-ps-here",
         label="'Open PowerShell Here' Context Menu",
         category="Shell",
         apply_fn=_apply_ps_here,
@@ -435,7 +417,7 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "context-menu", "powershell"],
     ),
     TweakDef(
-        id="open-wt-here",
+        id="shell-open-wt-here",
         label="'Open Terminal Here' Context Menu",
         category="Shell",
         apply_fn=_apply_wt_here,
@@ -444,10 +426,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_WT_HERE_KEY],
-        description=(
-            "Adds 'Open Terminal Here' to the folder background right-click menu. "
-            "Requires Windows Terminal to be installed."
-        ),
+        description=("Adds 'Open Terminal Here' to the folder background right-click menu. Requires Windows Terminal to be installed."),
         tags=["shell", "context-menu", "terminal", "wt"],
     ),
     TweakDef(
@@ -460,10 +439,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CLASSIC_CTX_KEY],
-        description=(
-            "Restores the full Windows 10-style right-click context menu on "
-            "Windows 11 by disabling the modern truncated menu."
-        ),
+        description=("Restores the full Windows 10-style right-click context menu on Windows 11 by disabling the modern truncated menu."),
         tags=["shell", "context-menu", "win11", "classic"],
     ),
     TweakDef(
@@ -480,7 +456,7 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "explorer", "privacy", "recent"],
     ),
     TweakDef(
-        id="disable-frequent-folders",
+        id="shell-disable-frequent-folders",
         label="Disable Frequent Folders in Quick Access",
         category="Shell",
         apply_fn=_apply_disable_frequent_folders,
@@ -493,7 +469,7 @@ TWEAKS: list[TweakDef] = [
         tags=["shell", "explorer", "privacy", "frequent"],
     ),
     TweakDef(
-        id="compact-file-explorer",
+        id="shell-compact-file-explorer",
         label="Enable Compact View in File Explorer",
         category="Shell",
         apply_fn=_apply_compact_file_explorer,
@@ -542,8 +518,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Disables Aero Shake (shaking a window to minimize others). "
-            "Prevents accidental minimization. Default: Enabled. Recommended: Disabled."
+            "Disables Aero Shake (shaking a window to minimize others). Prevents accidental minimization. Default: Enabled. Recommended: Disabled."
         ),
         tags=["shell", "aero", "shake", "ux"],
     ),
@@ -620,10 +595,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Disables Aero Shake gesture that minimizes all other windows. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Aero Shake gesture that minimizes all other windows. Default: Enabled. Recommended: Disabled."),
         tags=["shell", "shake", "minimize", "ux"],
     ),
     TweakDef(
@@ -636,10 +608,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV],
-        description=(
-            "Disables Snap Assist window arrangement suggestions. "
-            "Default: Enabled. Recommended: Disabled for power users."
-        ),
+        description=("Disables Snap Assist window arrangement suggestions. Default: Enabled. Recommended: Disabled for power users."),
         tags=["shell", "snap", "assist", "multitasking"],
     ),
 ]
