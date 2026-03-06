@@ -11,22 +11,35 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from regilattice.tweaks import (
+    CategoryInfo,
     TweakDef,
+    TweakExecutor,
     TweakResult,
     _topo_sort,
+    all_category_info,
     all_tweaks,
     apply_all,
+    apply_profile,
+    available_profiles,
     categories,
+    categories_by_risk,
+    categories_by_scope,
+    category_info,
+    diff_snapshots,
     get_tweak,
     load_snapshot,
+    profile_info,
     reload_plugins,
     remove_all,
     restore_snapshot,
     save_snapshot,
     search_tweaks,
     status_map,
+    tweak_scope,
     tweak_status,
     tweaks_by_category,
+    tweaks_excluded_by_profile,
+    tweaks_for_profile,
 )
 
 # ── TweakDef dataclass ──────────────────────────────────────────────────────
@@ -624,3 +637,264 @@ class TestTopoSort:
         tweaks = [_td("a", ["b"]), _td("b", ["a"])]
         with pytest.raises(ValueError, match="Cyclic dependency"):
             _topo_sort(tweaks)
+
+
+# ── tweak_scope ──────────────────────────────────────────────────────────────
+
+
+class TestTweakScope:
+    """Test tweak_scope() classification."""
+
+    def test_hkcu_is_user(self) -> None:
+        td = TweakDef(id="scope.u", label="U", category="C", apply_fn=lambda: None, remove_fn=lambda: None, registry_keys=[r"HKCU\Test"])
+        assert tweak_scope(td) == "user"
+
+    def test_hklm_is_machine(self) -> None:
+        td = TweakDef(id="scope.m", label="M", category="C", apply_fn=lambda: None, remove_fn=lambda: None, registry_keys=[r"HKLM\Test"])
+        assert tweak_scope(td) == "machine"
+
+    def test_both_hives(self) -> None:
+        td = TweakDef(id="scope.b", label="B", category="C", apply_fn=lambda: None, remove_fn=lambda: None, registry_keys=[r"HKCU\A", r"HKLM\B"])
+        assert tweak_scope(td) == "both"
+
+    def test_no_keys_admin(self) -> None:
+        td = TweakDef(id="scope.na", label="NA", category="C", apply_fn=lambda: None, remove_fn=lambda: None, needs_admin=True)
+        assert tweak_scope(td) == "machine"
+
+    def test_no_keys_no_admin(self) -> None:
+        td = TweakDef(id="scope.nn", label="NN", category="C", apply_fn=lambda: None, remove_fn=lambda: None, needs_admin=False)
+        assert tweak_scope(td) == "user"
+
+    def test_hkcr_is_machine(self) -> None:
+        td = TweakDef(id="scope.cr", label="CR", category="C", apply_fn=lambda: None, remove_fn=lambda: None, registry_keys=[r"HKEY_CLASSES_ROOT\Test"])
+        assert tweak_scope(td) == "machine"
+
+    def test_real_tweaks_have_scope(self, all_tweaks_list: list[TweakDef]) -> None:
+        for td in all_tweaks_list[:10]:
+            s = tweak_scope(td)
+            assert s in {"user", "machine", "both"}
+
+
+# ── Category info ────────────────────────────────────────────────────────────
+
+
+class TestCategoryInfo:
+    """Test category metadata functions."""
+
+    def test_category_info_returns_for_known(self) -> None:
+        cats = categories()
+        assert len(cats) > 0
+        ci = category_info(cats[0])
+        assert ci is not None
+        assert isinstance(ci, CategoryInfo)
+        assert ci.name == cats[0]
+
+    def test_category_info_returns_none_for_unknown(self) -> None:
+        assert category_info("__nonexistent_category__") is None
+
+    def test_all_category_info_matches_categories(self) -> None:
+        all_ci = all_category_info()
+        assert set(all_ci.keys()) == set(categories())
+
+    def test_category_info_risk_is_valid(self) -> None:
+        for ci in all_category_info().values():
+            assert ci.risk_level in {"low", "medium", "high"}
+
+    def test_category_info_scope_is_valid(self) -> None:
+        for ci in all_category_info().values():
+            assert ci.scope in {"user", "machine", "mixed"}
+
+    def test_categories_by_risk(self) -> None:
+        high = categories_by_risk("high")
+        assert isinstance(high, list)
+        for name in high:
+            ci = category_info(name)
+            assert ci is not None
+            assert ci.risk_level == "high"
+
+    def test_categories_by_scope_user(self) -> None:
+        user_cats = categories_by_scope("user")
+        for name in user_cats:
+            ci = category_info(name)
+            assert ci is not None
+            assert ci.scope == "user"
+
+    def test_categories_by_scope_machine(self) -> None:
+        machine_cats = categories_by_scope("machine")
+        for name in machine_cats:
+            ci = category_info(name)
+            assert ci is not None
+            assert ci.scope == "machine"
+
+
+# ── Profiles ─────────────────────────────────────────────────────────────────
+
+
+class TestProfiles:
+    """Test profile metadata and tweak retrieval."""
+
+    def test_available_profiles(self) -> None:
+        profs = available_profiles()
+        assert isinstance(profs, list)
+        assert "business" in profs
+        assert "gaming" in profs
+        assert "privacy" in profs
+        assert "minimal" in profs
+        assert "server" in profs
+
+    def test_profile_info_known(self) -> None:
+        pi = profile_info("business")
+        assert pi is not None
+        assert pi.id == "business"
+        assert len(pi.description) > 0
+        assert len(pi.apply_categories) > 0
+
+    def test_profile_info_unknown(self) -> None:
+        assert profile_info("__fake_profile__") is None
+
+    def test_tweaks_for_profile_returns_list(self) -> None:
+        result = tweaks_for_profile("business")
+        assert isinstance(result, list)
+        assert all(isinstance(td, TweakDef) for td in result)
+
+    def test_tweaks_for_profile_unknown_raises(self) -> None:
+        with pytest.raises(ValueError, match="Unknown profile"):
+            tweaks_for_profile("__fake__")
+
+    def test_tweaks_excluded_by_profile(self) -> None:
+        result = tweaks_excluded_by_profile("business")
+        assert isinstance(result, list)
+
+    def test_tweaks_excluded_unknown_raises(self) -> None:
+        with pytest.raises(ValueError, match="Unknown profile"):
+            tweaks_excluded_by_profile("__fake__")
+
+    def test_gaming_profile_covers_gaming_category(self) -> None:
+        result = tweaks_for_profile("gaming")
+        cats = {td.category for td in result}
+        assert "Gaming" in cats
+
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    @patch("regilattice.tweaks._TWEAKS_BY_CAT", new_callable=dict)
+    def test_apply_profile(self, mock_cat: dict, mock_all: list) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="ap1", label="AP", category="Cloud Storage", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+        mock_all.append(td)
+        mock_cat["Cloud Storage"] = [td]
+        result = apply_profile("business", force_corp=True)
+        fn.assert_called_once()
+        assert result["ap1"] == TweakResult.APPLIED
+
+
+# ── diff_snapshots ───────────────────────────────────────────────────────────
+
+
+class TestDiffSnapshots:
+    """Test snapshot diff comparison."""
+
+    def test_identical_snapshots(self, tmp_path: Path) -> None:
+        a = tmp_path / "a.json"
+        b = tmp_path / "b.json"
+        data = {"x": "applied", "y": "not applied"}
+        a.write_text(json.dumps(data), encoding="utf-8")
+        b.write_text(json.dumps(data), encoding="utf-8")
+        assert diff_snapshots(a, b) == {}
+
+    def test_different_snapshots(self, tmp_path: Path) -> None:
+        a = tmp_path / "a.json"
+        b = tmp_path / "b.json"
+        a.write_text(json.dumps({"x": "applied", "y": "applied"}), encoding="utf-8")
+        b.write_text(json.dumps({"x": "applied", "y": "not applied"}), encoding="utf-8")
+        diffs = diff_snapshots(a, b)
+        assert "y" in diffs
+        assert diffs["y"] == ("applied", "not applied")
+        assert "x" not in diffs
+
+    def test_missing_in_one_snapshot(self, tmp_path: Path) -> None:
+        a = tmp_path / "a.json"
+        b = tmp_path / "b.json"
+        a.write_text(json.dumps({"x": "applied"}), encoding="utf-8")
+        b.write_text(json.dumps({"y": "applied"}), encoding="utf-8")
+        diffs = diff_snapshots(a, b)
+        assert diffs["x"] == ("applied", "(absent)")
+        assert diffs["y"] == ("(absent)", "applied")
+
+
+# ── TweakExecutor ────────────────────────────────────────────────────────────
+
+
+class TestTweakExecutor:
+    """Test the TweakExecutor class directly."""
+
+    def test_apply_one_corp_blocked(self) -> None:
+        td = TweakDef(id="te1", label="TE", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False)
+        exe = TweakExecutor(force_corp=False)
+        with patch("regilattice.tweaks.TweakExecutor._is_blocked", return_value=True):
+            assert exe.apply_one(td) == TweakResult.SKIPPED_CORP
+
+    def test_apply_one_success(self) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="te2", label="TE", category="C", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        assert exe.apply_one(td) == TweakResult.APPLIED
+        fn.assert_called_once()
+
+    def test_apply_one_error(self) -> None:
+        fn = MagicMock(side_effect=RuntimeError("boom"))
+        td = TweakDef(id="te3", label="TE", category="C", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        assert exe.apply_one(td) == TweakResult.ERROR
+
+    def test_remove_one_success(self) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="te4", label="TE", category="C", apply_fn=MagicMock(), remove_fn=fn, corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        assert exe.remove_one(td) == TweakResult.REMOVED
+        fn.assert_called_once()
+
+    def test_remove_one_error(self) -> None:
+        fn = MagicMock(side_effect=RuntimeError("boom"))
+        td = TweakDef(id="te5", label="TE", category="C", apply_fn=MagicMock(), remove_fn=fn, corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        assert exe.remove_one(td) == TweakResult.ERROR
+
+    def test_remove_one_corp_blocked(self) -> None:
+        td = TweakDef(id="te6", label="TE", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False)
+        exe = TweakExecutor(force_corp=False)
+        with patch("regilattice.tweaks.TweakExecutor._is_blocked", return_value=True):
+            assert exe.remove_one(td) == TweakResult.SKIPPED_CORP
+
+    def test_run_batch_apply(self) -> None:
+        fn1 = MagicMock()
+        fn2 = MagicMock()
+        td1 = TweakDef(id="rb1", label="RB1", category="C", apply_fn=fn1, remove_fn=MagicMock(), corp_safe=True)
+        td2 = TweakDef(id="rb2", label="RB2", category="C", apply_fn=fn2, remove_fn=MagicMock(), corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        result = exe.run_batch([td1, td2], "apply")
+        assert result["rb1"] == TweakResult.APPLIED
+        assert result["rb2"] == TweakResult.APPLIED
+
+    def test_run_batch_remove_parallel(self) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="rbp1", label="RBP", category="C", apply_fn=MagicMock(), remove_fn=fn, corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        result = exe.run_batch([td], "remove", parallel=True, max_workers=2)
+        assert result["rbp1"] == TweakResult.REMOVED
+
+    def test_run_batch_progress_cb(self) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="rbcb1", label="RBCB", category="C", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+        exe = TweakExecutor(force_corp=True)
+        cb = MagicMock()
+        exe.run_batch([td], "apply", progress_cb=cb)
+        cb.assert_called_once_with("rbcb1", TweakResult.APPLIED)
+
+    def test_is_blocked_force_corp(self) -> None:
+        td = TweakDef(id="bl1", label="BL", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False)
+        exe = TweakExecutor(force_corp=True)
+        assert exe._is_blocked(td) is False
+
+    def test_is_blocked_corp_safe(self) -> None:
+        td = TweakDef(id="bl2", label="BL", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True)
+        exe = TweakExecutor(force_corp=False)
+        assert exe._is_blocked(td) is False
