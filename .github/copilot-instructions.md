@@ -13,7 +13,7 @@
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
 | Test        | `pytest` in `tests/` (~13 900 tests)                                         |
-| GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)    |
+| GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
@@ -268,20 +268,20 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 
 ## File-by-File Quick Ref
 
-| File                  | Purpose           | Key exports                                                                                                                                                                                       |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `__init__.py` (root)  | Version           | `__version__`                                                                                                                                                                                     |
-| `__main__.py`         | Entry point       | delegates to `cli.main()`                                                                                                                                                                         |
-| `cli.py`              | argparse CLI      | `main()`                                                                                                                                                                                          |
-| `menu.py`             | Console menu      | `Menu` class                                                                                                                                                                                      |
-| `gui.py`              | Tkinter GUI       | `RegiLatticeGUI` class, `launch()`                                                                                                                                                                |
-| `gui_widgets.py`      | Row/section widgets | `TweakRow`, `CategorySection`                                                                                                                                                                    |
-| `gui_theme.py`        | Theme engine      | `set_theme()`, `available_themes()`, `current_theme()`, colour & font constants                                                                                                                   |
-| `gui_tooltip.py`      | Tooltips          | `Tooltip`, `build_tooltip_text()`, `has_recommendation()`, `parse_description_metadata()`                                                                                                         |
-| `gui_dialogs.py`      | Dialogs           | `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`                                                                                                          |
-| `registry.py`         | Registry wrapper  | `SESSION`, `RegistrySession`, `assert_admin`, `is_windows`, `platform_summary`                                                                                                                    |
-| `corpguard.py`        | Corp detection    | `is_corporate_network()`, `assert_not_corporate()`, `corp_guard_status()`, `CorporateNetworkError`                                                                                                |
-| `elevation.py`        | UAC helpers       | `is_admin()`, `request_elevation()`                                                                                                                                                               |
-| `deps.py`             | Lazy imports      | `lazy_import()`                                                                                                                                                                                   |
-| `tweaks/__init__.py`  | Core engine       | `TweakDef`, `all_tweaks()`, `get_tweak()`, `categories()`, `tweaks_by_category()`, `search_tweaks()`, `apply_profile()`, `status_map()`, `tweak_scope()`, `save_snapshot()`, `restore_snapshot()` |
-| `tweaks/_template.py` | Contributor guide | (not loaded)                                                                                                                                                                                      |
+| File                  | Purpose             | Key exports                                                                                                                                                                                       |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `__init__.py` (root)  | Version             | `__version__`                                                                                                                                                                                     |
+| `__main__.py`         | Entry point         | delegates to `cli.main()`                                                                                                                                                                         |
+| `cli.py`              | argparse CLI        | `main()`                                                                                                                                                                                          |
+| `menu.py`             | Console menu        | `Menu` class                                                                                                                                                                                      |
+| `gui.py`              | Tkinter GUI         | `RegiLatticeGUI` class, `launch()`                                                                                                                                                                |
+| `gui_widgets.py`      | Row/section widgets | `TweakRow`, `CategorySection`                                                                                                                                                                     |
+| `gui_theme.py`        | Theme engine        | `set_theme()`, `available_themes()`, `current_theme()`, colour & font constants                                                                                                                   |
+| `gui_tooltip.py`      | Tooltips            | `Tooltip`, `build_tooltip_text()`, `has_recommendation()`, `parse_description_metadata()`                                                                                                         |
+| `gui_dialogs.py`      | Dialogs             | `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`                                                                                                          |
+| `registry.py`         | Registry wrapper    | `SESSION`, `RegistrySession`, `assert_admin`, `is_windows`, `platform_summary`                                                                                                                    |
+| `corpguard.py`        | Corp detection      | `is_corporate_network()`, `assert_not_corporate()`, `corp_guard_status()`, `CorporateNetworkError`                                                                                                |
+| `elevation.py`        | UAC helpers         | `is_admin()`, `request_elevation()`                                                                                                                                                               |
+| `deps.py`             | Lazy imports        | `lazy_import()`                                                                                                                                                                                   |
+| `tweaks/__init__.py`  | Core engine         | `TweakDef`, `all_tweaks()`, `get_tweak()`, `categories()`, `tweaks_by_category()`, `search_tweaks()`, `apply_profile()`, `status_map()`, `tweak_scope()`, `save_snapshot()`, `restore_snapshot()` |
+| `tweaks/_template.py` | Contributor guide   | (not loaded)                                                                                                                                                                                      |

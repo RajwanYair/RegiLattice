@@ -20,6 +20,7 @@ class ThemeDict(TypedDict):
     fg: str
     fg_dim: str
     card_bg: str
+    card_bg_alt: str
     card_hover: str
     ok_green: str
     warn_yellow: str
@@ -41,6 +42,7 @@ _THEMES: dict[str, ThemeDict] = {
         "fg": "#CDD6F4",
         "fg_dim": "#6C7086",
         "card_bg": "#313244",
+        "card_bg_alt": "#2A2B3D",
         "card_hover": "#45475A",
         "ok_green": "#A6E3A1",
         "warn_yellow": "#F9E2AF",
@@ -60,6 +62,7 @@ _THEMES: dict[str, ThemeDict] = {
         "fg": "#4C4F69",
         "fg_dim": "#8C8FA1",
         "card_bg": "#DCE0E8",
+        "card_bg_alt": "#D3D7DF",
         "card_hover": "#CCD0DA",
         "ok_green": "#40A02B",
         "warn_yellow": "#DF8E1D",
@@ -79,6 +82,7 @@ _THEMES: dict[str, ThemeDict] = {
         "fg": "#ECEFF4",
         "fg_dim": "#7B88A1",
         "card_bg": "#434C5E",
+        "card_bg_alt": "#3D4555",
         "card_hover": "#4C566A",
         "ok_green": "#A3BE8C",
         "warn_yellow": "#EBCB8B",
@@ -98,6 +102,7 @@ _THEMES: dict[str, ThemeDict] = {
         "fg": "#F8F8F2",
         "fg_dim": "#6272A4",
         "card_bg": "#44475A",
+        "card_bg_alt": "#3E4152",
         "card_hover": "#515470",
         "ok_green": "#50FA7B",
         "warn_yellow": "#F1FA8C",
@@ -130,6 +135,7 @@ BG_SURFACE = _t()["bg_surface"]
 FG = _t()["fg"]
 FG_DIM = _t()["fg_dim"]
 CARD_BG = _t()["card_bg"]
+CARD_BG_ALT = _t()["card_bg_alt"]
 CARD_HOVER = _t()["card_hover"]
 OK_GREEN = _t()["ok_green"]
 WARN_YELLOW = _t()["warn_yellow"]
@@ -173,7 +179,7 @@ def current_theme() -> str:
 def set_theme(name: str) -> None:
     """Switch the active theme and update all module-level constants."""
     global _current_theme
-    global ACCENT, BG, BG_SURFACE, FG, FG_DIM, CARD_BG, CARD_HOVER
+    global ACCENT, BG, BG_SURFACE, FG, FG_DIM, CARD_BG, CARD_BG_ALT, CARD_HOVER
     global OK_GREEN, WARN_YELLOW, ERR_RED, PURPLE, HEADER_BG, DIM_BG, TEAL, GPO_ORANGE
     global STATUS_APPLIED, STATUS_NOT_APPLIED, STATUS_UNKNOWN, STATUS_CORP_BLOCKED, STATUS_DEFAULT
 
@@ -189,6 +195,7 @@ def set_theme(name: str) -> None:
     FG = t["fg"]
     FG_DIM = t["fg_dim"]
     CARD_BG = t["card_bg"]
+    CARD_BG_ALT = t["card_bg_alt"]
     CARD_HOVER = t["card_hover"]
     OK_GREEN = t["ok_green"]
     WARN_YELLOW = t["warn_yellow"]
