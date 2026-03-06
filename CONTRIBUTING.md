@@ -1,6 +1,9 @@
 # Contributing to RegiLattice
 
-Thank you for your interest in contributing! This guide will get you from zero to a merged tweak in minutes.
+Thank you for your interest in contributing! This guide covers everything from
+environment setup to submitting a PR.
+
+---
 
 ## Quick Start (5 minutes)
 
@@ -13,96 +16,297 @@ Thank you for your interest in contributing! This guide will get you from zero t
    ```bash
    cp regilattice/tweaks/_template.py regilattice/tweaks/myapp.py
    ```
-4. **Edit** `myapp.py` — define your registry key paths, implement the `_apply_*` / `_remove_*` / `_detect_*` triplet, and register a `TweakDef` in the `TWEAKS` list.
+4. **Edit** `myapp.py` -- define registry key paths, implement the
+   `_apply_*` / `_remove_*` / `_detect_*` triplet, and register a `TweakDef`
+   in the `TWEAKS` list.
 5. **Validate** your work:
    ```bash
    python -m ruff check regilattice/ tests/
    python -m mypy regilattice/
-   python -m pytest tests/ -x --tb=short
+   python -m pytest tests/test_tweaks_smoke.py -x --tb=short
    ```
-6. **Commit** with a conventional commit message and open a PR.
+6. **Commit** with a conventional message and open a PR.
+
+---
+
+## Environment Setup
+
+### Python Executable
+
+Use the non-WindowsApps Python. The Windows Store alias often fails silently.
+
+```powershell
+# Correct (adjust version):
+C:\Users\<user>\AppData\Local\Python\bin\python.exe
+
+# Or use py launcher:
+py -3.10
+
+# NEVER: C:\Users\<user>\AppData\Local\Microsoft\WindowsApps\python.exe
+```
+
+### Dev Dependencies
+
+| Package | Purpose | Config |
+|---------|---------|--------|
+| `ruff` | Linting + formatting | `pyproject.toml [tool.ruff]` |
+| `mypy` | Strict type checking | `pyproject.toml [tool.mypy]` |
+| `pytest` | Test runner | `pyproject.toml [tool.pytest.ini_options]` |
+| `pytest-cov` | Coverage reporting | `pyproject.toml [tool.coverage]` |
+
+---
 
 ## Project Structure
 
 ```
 regilattice/
-├── tweaks/            # Plugin modules — each exports TWEAKS: list[TweakDef]
+├── tweaks/            # Plugin modules -- each exports TWEAKS: list[TweakDef]
 │   ├── _template.py   # Contributor guide and example code
 │   ├── performance.py # Example: 18 performance tweaks
 │   └── ...            # 64 category modules, auto-discovered
 ├── cli.py             # argparse CLI
-├── gui.py             # tkinter GUI (Catppuccin Mocha theme)
-├── registry.py        # RegistrySession: winreg wrapper + backup + logging
+├── menu.py            # Interactive console menu
+├── gui.py             # tkinter GUI (Catppuccin Mocha, ~1 432 lines)
+├── gui_theme.py       # Theme constants (colours, fonts)
+├── gui_tooltip.py     # Tooltip + description metadata parser
+├── gui_widgets.py     # TweakRow + CategorySection
+├── gui_dialogs.py     # Import/export/about dialogs
 ├── config.py          # ~/.regilattice.toml support
-└── corpguard.py       # Corporate network detection
+├── registry.py        # RegistrySession: winreg wrapper + backup + logging
+├── corpguard.py       # Corporate network detection
+├── elevation.py       # UAC elevation helpers
+└── deps.py            # Lazy-import + auto-install
 ```
 
-## The Tweak Triplet Pattern
+---
 
-Every tweak implements three functions:
+## Adding a New Tweak (Step-by-Step)
+
+### 1. Choose or create the module file
+
+Each category has its own file in `regilattice/tweaks/`. If your tweak fits an
+existing category, add to that file. Otherwise create a new `.py` file -- the
+loader discovers it automatically.
+
+### 2. Define key-path constants at module top
 
 ```python
-def _apply_my_tweak(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_KEY], "my-tweak")
-    SESSION.set_dword(_KEY, "ValueName", 0)
-    SESSION.log("Applied my-tweak")
-
-def _remove_my_tweak(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_KEY], "my-tweak-remove")
-    SESSION.set_dword(_KEY, "ValueName", 1)
-    SESSION.log("Removed my-tweak")
-
-def _detect_my_tweak() -> bool:
-    return SESSION.read_dword(_KEY, "ValueName") == 0
+_MYAPP_KEY = r"HKEY_CURRENT_USER\Software\MyApp"
+_MYAPP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\MyApp"
 ```
 
-## TweakDef Registration
+Use raw strings (`r"..."`) for all registry paths.
+
+### 3. Implement the apply / remove / detect triplet
+
+```python
+def _apply_no_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_MYAPP_POLICY], "MyAppTelemetry")
+    SESSION.set_dword(_MYAPP_POLICY, "DisableTelemetry", 1)
+    SESSION.log("MyApp: disabled telemetry")
+
+def _remove_no_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MYAPP_POLICY, "DisableTelemetry")
+
+def _detect_no_telemetry() -> bool:
+    return SESSION.read_dword(_MYAPP_POLICY, "DisableTelemetry") == 1
+```
+
+**Rules:**
+- `require_admin` must be keyword-only (`*,`) even if unused (ARG002 suppressed)
+- Call `assert_admin()` first, then `SESSION.backup()`, then the mutation
+- `_detect` returns `True` when the tweak is currently active
+- `_remove` should restore the default state (delete value or set original default)
+
+### 4. Export the `TWEAKS` list
 
 ```python
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="myapp-disable-telemetry",       # globally unique kebab-case
+        id="myapp-no-telemetry",           # globally unique kebab-case
         label="Disable MyApp Telemetry",
-        category="MyApp",                    # creates new category if needed
-        apply_fn=_apply_my_tweak,
-        remove_fn=_remove_my_tweak,
-        detect_fn=_detect_my_tweak,
-        needs_admin=True,                    # True for HKLM keys
-        corp_safe=False,                     # True if HKCU-only and safe on corp
-        registry_keys=[_KEY],
-        description="Disables telemetry data collection in MyApp.",
+        category="MyApp",
+        apply_fn=_apply_no_telemetry,
+        remove_fn=_remove_no_telemetry,
+        detect_fn=_detect_no_telemetry,
+        needs_admin=True,                   # False for HKCU-only tweaks
+        corp_safe=False,                    # True if HKCU-only and no GPO risk
+        registry_keys=[_MYAPP_POLICY],
+        description="Prevents MyApp from sending usage data.",
         tags=["myapp", "telemetry", "privacy"],
     ),
 ]
 ```
 
+### 5. Verify
+
+```bash
+python -m regilattice --list | findstr myapp
+python -m pytest tests/test_tweaks_smoke.py -x --tb=short
+python -m ruff check regilattice/ tests/
+```
+
+**No edits to `tweaks/__init__.py` needed** -- the loader auto-discovers it.
+
+---
+
+## Common Tweak Patterns
+
+### Pattern A: Toggle a single DWORD
+
+```python
+def _apply_x(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY], "label")
+    SESSION.set_dword(_KEY, "ValueName", 1)
+
+def _remove_x(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY, "ValueName")
+
+def _detect_x() -> bool:
+    return SESSION.read_dword(_KEY, "ValueName") == 1
+```
+
+### Pattern B: Tweak = absence of a value
+
+```python
+def _apply_x(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_KEY], "label")
+    SESSION.delete_value(_KEY, "ValueName")
+
+def _remove_x(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KEY, "ValueName", default_value)
+
+def _detect_x() -> bool:
+    return SESSION.read_dword(_KEY, "ValueName") is None
+```
+
+### Pattern C: Disable a Windows service
+
+```python
+_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ServiceName"
+
+def _apply_disable_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SVC], "disable-svc")
+    SESSION.set_dword(_SVC, "Start", 4)   # 4 = Disabled
+
+def _remove_disable_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SVC, "Start", 3)   # 3 = Manual
+
+def _detect_disable_svc() -> bool:
+    return SESSION.read_dword(_SVC, "Start") == 4
+```
+
+Service Start values: 0=Boot, 1=System, 2=Automatic, 3=Manual, 4=Disabled.
+
+### Pattern D: Description metadata
+
+Include `Default:` and optionally `Recommended:` as standalone sentences.
+The GUI extracts these for tooltip hints and shows a teal "REC" badge.
+
+```python
+description="Disables X. Default: Enabled. Recommended: Disabled for privacy."
+```
+
+---
+
 ## Coding Standards
 
-| Tool | Config | Command |
-|------|--------|---------|
-| **Linter** | ruff (E, F, W, I, UP, B, SIM, RUF; line-length 150) | `ruff check regilattice/ tests/` |
-| **Type checker** | mypy --strict (Python 3.10) | `mypy regilattice/` |
-| **Tests** | pytest (~13 800 tests) | `pytest tests/ -x --tb=short` |
+| Tool | Rules | Command |
+|------|-------|---------|
+| **ruff** | E, F, W, I, UP, B, SIM, RUF; line-length 150 | `ruff check regilattice/ tests/` |
+| **mypy** | `--strict`, `python_version = "3.10"` | `mypy regilattice/` |
+| **pytest** | ~13 700 tests | `pytest tests/ -x --tb=short` |
 
-- `require_admin` keyword argument must be present on apply/remove functions (ARG002 is suppressed).
+- `require_admin` kwarg must be present on apply/remove functions (ARG002 suppressed).
 - Use `SESSION.backup()` before any registry mutation.
-- Keep IDs globally unique (kebab-case: `<module>-<verb>-<noun>`).
+- Keep IDs globally unique, kebab-case: `{category_slug}-{descriptive-name}`.
+- Line length: 150 chars (configured in pyproject.toml).
+- Use plain ASCII hyphens `-` and quotes `"` (ruff flags Unicode confusables).
 
-## Commit Convention
+---
 
-Use [Conventional Commits](https://www.conventionalcommits.org/):
+## Git Conventions
 
-- `feat:` — new tweak, feature, or capability
-- `fix:` — bug fix
-- `refactor:` — code restructuring without behavior change
-- `docs:` — documentation only
-- `chore:` — tooling, CI, dependencies
-- `ci:` — CI/CD changes
+### Branching
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Stable, always passes CI |
+| `feat/*` | New features or tweak modules |
+| `fix/*` | Bug fixes |
+
+### Commit Messages
+
+[Conventional Commits](https://www.conventionalcommits.org/) format:
+
+| Prefix | Use |
+|--------|-----|
+| `feat:` | New feature or tweak |
+| `fix:` | Bug fix |
+| `docs:` | Documentation only |
+| `test:` | Adding or updating tests |
+| `refactor:` | Code change that is not a fix or feature |
+| `chore:` | Maintenance (deps, CI config) |
+| `ci:` | CI/CD pipeline changes |
+
+---
+
+## Pre-Commit Checklist
+
+1. `python -m ruff check regilattice/ tests/`
+2. `python -m mypy regilattice/`
+3. `python -m pytest tests/ -x --tb=short`
+4. Verify no duplicate tweak IDs: `python -m regilattice --list`
+5. Line length <= 150 and ASCII-only strings
+
+---
+
+## Testing
+
+```bash
+# Full suite (~13 700 tests)
+python -m pytest tests/ -v --tb=short
+
+# Smoke tests only (fastest, covers all tweaks)
+python -m pytest tests/test_tweaks_smoke.py -x --tb=short
+
+# With coverage
+python -m pytest tests/ --cov=regilattice --cov-report=term-missing
+
+# Lint + type check
+python -m ruff check regilattice/ tests/
+python -m mypy regilattice/
+```
+
+Tests use `_dry_run=True` so no real registry writes happen. `detect_fn` tests
+call the function but don't assert specific values (host-dependent).
+
+---
+
+## Key Files to Know
+
+| File | Purpose |
+|------|---------|
+| `regilattice/tweaks/__init__.py` | Plugin loader, TweakDef, TweakExecutor, profiles, batch ops |
+| `regilattice/tweaks/_template.py` | Detailed contributor guide with working examples |
+| `regilattice/registry.py` | Registry read/write/backup/logging (SESSION) |
+| `regilattice/corpguard.py` | Corporate network detection |
+| `regilattice/config.py` | TOML config file support |
+| `tests/conftest.py` | Test fixtures (dry_session, all_tweaks_list) |
+| `tests/test_tweaks_smoke.py` | Auto-parametrized smoke tests for all tweaks |
+
+---
 
 ## Need Help?
 
 - Read `regilattice/tweaks/_template.py` for detailed patterns and troubleshooting.
-- Check `REFACTOR-PLAN.md` for the project roadmap.
 - Look at existing tweak modules (e.g., `performance.py`, `privacy.py`) for real examples.
+- See [.github/ARCHITECTURE.md](.github/ARCHITECTURE.md) for data flow and design decisions.

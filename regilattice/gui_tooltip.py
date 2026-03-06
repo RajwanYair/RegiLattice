@@ -92,17 +92,10 @@ def parse_description_metadata(description: str) -> tuple[str, str, str, str]:
     return " ".join(main_parts).strip(), default_hint, rec_hint, options_hint
 
 
-_REC_CACHE: dict[str, bool] = {}
-
-
 def has_recommendation(td: TweakDef) -> bool:
     """Return True if the tweak description contains a recommendation."""
-    cached = _REC_CACHE.get(td.id)
-    if cached is not None:
-        return cached
-    result = "recommended:" in td.description.lower() if td.description else False
-    _REC_CACHE[td.id] = result
-    return result
+    _, _, rec_hint, _ = parse_description_metadata(td.description or "")
+    return bool(rec_hint)
 
 
 def build_tooltip_text(td: TweakDef, status: str | TweakResult) -> str:

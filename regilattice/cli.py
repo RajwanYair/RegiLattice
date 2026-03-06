@@ -20,7 +20,7 @@ from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, get_tweak, remove_all, tweak_status, tweaks_for_profile
+from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, available_profiles, get_tweak, remove_all, tweak_status, tweaks_for_profile
 
 
 def _confirm(prompt: str) -> bool:
@@ -136,8 +136,8 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--profile",
-        choices=["business", "gaming"],
-        help=("Apply a machine-purpose profile. 'business' disables gaming/GPU tweaks; 'gaming' disables Office/Communication/OneDrive tweaks."),
+        choices=list(available_profiles()),
+        help="Apply a machine-purpose profile (business, gaming, privacy, minimal, server).",
     )
     parser.add_argument(
         "--dry-run",
@@ -153,6 +153,11 @@ def _build_parser() -> argparse.ArgumentParser:
         "--version",
         action="version",
         version=f"regilattice {__version__} ({platform_summary()})",
+    )
+    parser.add_argument(
+        "--check-deps",
+        action="store_true",
+        help="Verify dev dependencies (pytest, ruff, mypy) and auto-install missing ones.",
     )
     return parser
 
@@ -173,7 +178,20 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.dry_run:
         SESSION._dry_run = True
-        print("🔍 Dry-run mode — no registry changes will be made.")
+        print("\U0001f50d Dry-run mode \u2014 no registry changes will be made.")
+
+    if args.check_deps:
+        from .deps import require
+
+        _DEV_DEPS = ["pytest", "mypy", "ruff"]
+        print("Checking dev dependencies\u2026")
+        for pkg in _DEV_DEPS:
+            try:
+                require(pkg)
+                print(f"  \u2705 {pkg}")
+            except ImportError:
+                print(f"  \u274c {pkg} \u2014 could not install")
+        return 0
 
     if args.list:
         tweaks = all_tweaks()

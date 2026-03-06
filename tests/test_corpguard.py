@@ -9,8 +9,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.registry import is_windows
-
 from regilattice.corpguard import (
     CorporateNetworkError,
     _derive_policy_path,
@@ -25,6 +23,7 @@ from regilattice.corpguard import (
     is_corporate_network,
     is_gpo_managed,
 )
+from regilattice.registry import is_windows
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 

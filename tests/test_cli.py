@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -254,7 +253,7 @@ class TestRunAction:
         from regilattice.registry import AdminRequirementError
         from regilattice.tweaks import all_tweaks
 
-        first = all_tweaks()[0]
+        all_tweaks()  # ensure tweaks loaded
         with (
             patch("regilattice.cli.assert_not_corporate"),
             patch("regilattice.cli.get_tweak") as mock_get,

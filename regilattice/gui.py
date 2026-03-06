@@ -96,7 +96,7 @@ class RegiLatticeGUI:
         # Windows 11: attempt DWM dark title bar
         self._apply_win11_dark_titlebar()
 
-        self._corp_blocked = is_corporate_network()
+        self._corp_blocked = False  # checked asynchronously after window shows
         self._tweak_rows: list[TweakRow] = []
         self._category_sections: list[CategorySection] = []
         self._cached_statuses: dict[str, TweakResult] = {}
@@ -104,11 +104,12 @@ class RegiLatticeGUI:
         self._cached_gpo_count: int | None = None  # computed once per session
         self._running = False  # True while a batch operation is active
         self._cancel = threading.Event()  # set to request cancellation
+        self._loading = True  # True while progressive loading is in progress
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
-        # Defer initial status detection so the window appears immediately
-        self._root.after(50, self._initial_refresh)
+        # Defer heavy work (corp check + row creation) so the window appears instantly
+        self._root.after(50, self._deferred_init)
 
     # ── Windows 11 dark title bar ────────────────────────────────────────
 
@@ -192,9 +193,8 @@ class RegiLatticeGUI:
     # ── UI construction ──────────────────────────────────────────────────
 
     def _build_ui(self) -> None:
-        grouped = tweaks_by_category()
         total_tweaks = len(all_tweaks())
-        total_cats = len(grouped)
+        total_cats = len(tweaks_by_category())
 
         # Header
         header = ttk.Frame(self._root, style="Header.TFrame")
@@ -210,21 +210,9 @@ class RegiLatticeGUI:
             style="Subtitle.TLabel",
         ).pack(side="left", padx=4, pady=(14, 2))
 
-        # Corp banner
-        if self._corp_blocked:
-            corp_info = corp_guard_status() or "corporate environment detected"
-            banner = tk.Frame(self._root, bg=_ERR_RED)
-            banner.pack(fill="x")
-            tk.Label(
-                banner,
-                text=f"  🛑  Corporate network: {corp_info} — non-corp-safe tweaks blocked",
-                bg=_ERR_RED,
-                fg="#1E1E2E",
-                font=_FONT_BOLD,
-                anchor="w",
-                padx=12,
-                pady=6,
-            ).pack(fill="x")
+        # Corp banner placeholder — populated after async corp check
+        self._corp_banner_frame = tk.Frame(self._root, bg=_BG)
+        self._corp_banner_frame.pack(fill="x")
 
         # Toolbar
         toolbar = ttk.Frame(self._root)
@@ -255,6 +243,26 @@ class RegiLatticeGUI:
             command=lambda val: self._apply_profile_selection(str(val)),
         )
         profile_menu.pack(side="left")
+
+        # Theme selector dropdown
+        theme_frame = ttk.Frame(toolbar)
+        theme_frame.pack(side="right", padx=(8, 0))
+        tk.Label(
+            theme_frame,
+            text="Theme:",
+            fg=_FG_DIM,
+            bg=_BG,
+            font=_FONT_XS,
+        ).pack(side="left", padx=(0, 4))
+        self._theme_var = tk.StringVar(value=theme.current_theme())
+        theme_names = theme.available_themes()
+        ttk.OptionMenu(
+            theme_frame,
+            self._theme_var,
+            self._theme_var.get(),
+            *theme_names,
+            command=lambda val: self._switch_theme(str(val)),
+        ).pack(side="left")
 
         # Scope filter dropdown
         scope_frame = ttk.Frame(toolbar)
@@ -371,25 +379,7 @@ class RegiLatticeGUI:
 
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
-        # Populate tweak rows grouped by category — each category is collapsible
-        for cat_name, cat_tweaks in grouped.items():
-            cat_rows: list[TweakRow] = []
-            for td in cat_tweaks:
-                row = TweakRow(
-                    self._inner,
-                    td,
-                    corp_blocked=self._corp_blocked,
-                    on_toggle=self._toggle_single,
-                )
-                self._tweak_rows.append(row)
-                cat_rows.append(row)
-            section = CategorySection(self._inner, cat_name, cat_rows)
-            section.set_on_batch(self._batch_category)
-            self._category_sections.append(section)
-
-        # Wire checkbox changes → selection counter update
-        for row in self._tweak_rows:
-            row.var.trace_add("write", lambda *_: self._update_selection_count())
+        # Tweak rows are populated progressively in _deferred_init()
 
         # Action buttons (row 1: apply/remove)
         btn_frame = ttk.Frame(self._root)
@@ -490,14 +480,11 @@ class RegiLatticeGUI:
         self._stat_rec.pack(side="left", padx=(0, 12))
         self._stat_gpo = tk.Label(self._stats_frame, text="● 0 GPO", fg=_GPO_ORANGE, bg=_BG, font=_FONT_XS)
         self._stat_gpo.pack(side="left", padx=(0, 12))
-        self._stat_blocked: tk.Label | None = None
-        if self._corp_blocked:
-            self._stat_blocked = tk.Label(self._stats_frame, text="● 0 Blocked", fg=_ERR_RED, bg=_BG, font=_FONT_XS)
-            self._stat_blocked.pack(side="left", padx=(0, 12))
+        self._stat_blocked: tk.Label | None = None  # created after corp check if needed
 
         self._status_label = ttk.Label(
             status_frame,
-            text=f"Ready  \u2022  {total_tweaks} tweaks in {total_cats} categories  \u2022  Log: {SESSION.log_path}",
+            text="Loading tweaks\u2026",
             style="Status.TLabel",
         )
         self._status_label.pack(fill="x")
@@ -525,8 +512,105 @@ class RegiLatticeGUI:
         # Right-click context menu for tweak rows
         self._ctx_menu = tk.Menu(self._root, tearoff=0, bg=_CARD_BG, fg=_FG, font=_FONT_SM)
         self._ctx_target: TweakRow | None = None
+        # Context menu bindings are wired after rows are created in _deferred_init
+
+    # ── Deferred heavy initialisation ────────────────────────────────────
+
+    def _deferred_init(self) -> None:
+        """Run after mainloop starts — corp check (background) + progressive row creation.
+
+        Keeps the window visible and responsive while 1 200+ tweak rows load.
+        The corporate environment check runs in a background thread so it never
+        blocks the UI — tweak loading starts immediately.
+        """
+        # Start corp check in background — results applied via after() callback
+        threading.Thread(target=self._corp_check_worker, daemon=True).start()
+
+        self._set_status("Loading tweaks\u2026", _WARN_YELLOW)
+        self._root.update_idletasks()
+
+        grouped = tweaks_by_category()
+        self._grouped_items = list(grouped.items())
+        self._populate_batch(0)
+
+    def _corp_check_worker(self) -> None:
+        """Background thread: detect corporate environment and push result to UI."""
+        is_corp = is_corporate_network()
+        corp_info = corp_guard_status() if is_corp else None
+        self._root.after(0, self._apply_corp_result, is_corp, corp_info)
+
+    def _apply_corp_result(self, is_corp: bool, corp_info: str | None) -> None:
+        """Apply corporate detection result on the main thread."""
+        self._corp_blocked = is_corp
+        if is_corp:
+            info_text = corp_info or "corporate environment detected"
+            self._corp_banner_frame.configure(bg=_ERR_RED)
+            tk.Label(
+                self._corp_banner_frame,
+                text=f"  \U0001f6d1  Corporate network: {info_text} \u2014 non-corp-safe tweaks blocked",
+                bg=_ERR_RED,
+                fg="#1E1E2E",
+                font=_FONT_BOLD,
+                anchor="w",
+                padx=12,
+                pady=6,
+            ).pack(fill="x")
+            self._stat_blocked = tk.Label(self._stats_frame, text="\u25cf 0 Blocked", fg=_ERR_RED, bg=_BG, font=_FONT_XS)
+            self._stat_blocked.pack(side="left", padx=(0, 12))
+            # Disable non-corp-safe rows that were already created
+            for row in self._tweak_rows:
+                if not row.td.corp_safe:
+                    row.mark_corp_blocked()
+
+    _BATCH_SIZE = 4  # categories per batch — keeps UI fluid
+
+    def _populate_batch(self, idx: int) -> None:
+        """Create tweak rows for a batch of categories, then schedule the next batch."""
+        end = min(idx + self._BATCH_SIZE, len(self._grouped_items))
+        for cat_name, cat_tweaks in self._grouped_items[idx:end]:
+            cat_rows: list[TweakRow] = []
+            for td in cat_tweaks:
+                row = TweakRow(
+                    self._inner,
+                    td,
+                    corp_blocked=self._corp_blocked,
+                    on_toggle=self._toggle_single,
+                    defer_widgets=True,
+                )
+                self._tweak_rows.append(row)
+                cat_rows.append(row)
+            section = CategorySection(self._inner, cat_name, cat_rows)
+            section.set_on_batch(self._batch_category)
+            self._category_sections.append(section)
+
+        pct = min(100, int(end / len(self._grouped_items) * 100))
+        self._progress.configure(value=pct)
+        self._set_status(f"Loading tweaks\u2026 {pct}%", _WARN_YELLOW)
+
+        if end < len(self._grouped_items):
+            self._root.after(1, self._populate_batch, end)
+        else:
+            self._finish_loading()
+
+    def _finish_loading(self) -> None:
+        """Wire up bindings and kick off status detection after all rows are created."""
+        self._loading = False
+        # Wire checkbox → selection counter
+        for row in self._tweak_rows:
+            row.var.trace_add("write", lambda *_: self._update_selection_count())
+        # Right-click context menu
         for row in self._tweak_rows:
             row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
+        self._progress.configure(value=0)
+        total_tweaks = len(self._tweak_rows)
+        total_cats = len(self._category_sections)
+        self._set_status(
+            f"Ready  \u2022  {total_tweaks} tweaks in {total_cats} categories  \u2022  Log: {SESSION.log_path}",
+        )
+        # Clean up temporary data
+        del self._grouped_items
+        # Kick off status detection
+        self._initial_refresh()
 
     # ── Selection helpers ────────────────────────────────────────────────
 
@@ -553,6 +637,8 @@ class RegiLatticeGUI:
 
     def _filter_rows(self) -> None:
         """Show/hide rows based on search query, status filter, AND scope filter."""
+        if self._loading:
+            return
         query = self._search_var.get().strip()
         status_filter = self._status_filter_var.get()
         scope_filter = self._scope_filter_var.get()
@@ -857,6 +943,43 @@ class RegiLatticeGUI:
         self._update_selection_count()
         count = sum(1 for r in self._tweak_rows if r.var.get())
         self._set_status(f"Profile '{profile_name}' selected ({count} tweaks)", _ACCENT)
+
+    # ── Theme switching ──────────────────────────────────────────────────
+
+    def _switch_theme(self, name: str) -> None:
+        """Apply a new colour theme and reconfigure core UI elements."""
+        # Update module-level theme
+        theme.set_theme(name)
+        # Re-read into local aliases used by _setup_styles and widget creation
+        self._reload_theme_aliases()
+        self._setup_styles()
+        self._root.configure(bg=theme.BG)
+        self._set_status(f"Theme \u2192 {name}", theme.ACCENT)
+
+    @staticmethod
+    def _reload_theme_aliases() -> None:
+        """Refresh the module-level ``_*`` aliases after ``set_theme``."""
+        global _ACCENT, _BG, _BG_SURFACE, _FG, _FG_DIM, _CARD_BG
+        global _OK_GREEN, _WARN_YELLOW, _ERR_RED, _HEADER_BG, _DIM_BG, _TEAL, _GPO_ORANGE
+        global _STATUS_APPLIED, _STATUS_NOT_APPLIED, _STATUS_UNKNOWN, _STATUS_CORP_BLOCKED, _STATUS_DEFAULT
+        _ACCENT = theme.ACCENT
+        _BG = theme.BG
+        _BG_SURFACE = theme.BG_SURFACE
+        _FG = theme.FG
+        _FG_DIM = theme.FG_DIM
+        _CARD_BG = theme.CARD_BG
+        _OK_GREEN = theme.OK_GREEN
+        _WARN_YELLOW = theme.WARN_YELLOW
+        _ERR_RED = theme.ERR_RED
+        _HEADER_BG = theme.HEADER_BG
+        _DIM_BG = theme.DIM_BG
+        _TEAL = theme.TEAL
+        _GPO_ORANGE = theme.GPO_ORANGE
+        _STATUS_APPLIED = theme.STATUS_APPLIED
+        _STATUS_NOT_APPLIED = theme.STATUS_NOT_APPLIED
+        _STATUS_UNKNOWN = theme.STATUS_UNKNOWN
+        _STATUS_CORP_BLOCKED = theme.STATUS_CORP_BLOCKED
+        _STATUS_DEFAULT = theme.STATUS_DEFAULT
 
     # ── Export as PowerShell ─────────────────────────────────────────────
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "regilattice"
-version = "2.0.0"
+version = "1.0.0"
 description = "RegiLattice — Windows registry tweak toolkit with plugin architecture, GUI, and corporate safety."
 readme = "README.md"
 license = { text = "MIT" }
@@ -22,7 +22,7 @@ keywords = [
     "tkinter",
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: MIT License",
