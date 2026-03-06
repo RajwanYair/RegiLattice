@@ -6,6 +6,7 @@ VPN-connected, Group-Policy-managed, or otherwise managed machines.
 
 from __future__ import annotations
 
+import functools
 import re
 import subprocess
 
@@ -257,7 +258,15 @@ def is_gpo_managed(registry_keys: list[str]) -> bool:
     For each key, checks whether a corresponding path exists under
     ``HKLM\\SOFTWARE\\Policies\\...`` or ``HKCU\\Software\\Policies\\...``.
     This indicates the value may be overridden or locked by Group Policy.
+
+    Results are cached per unique key-set for the process lifetime.
     """
+    return _is_gpo_managed_cached(tuple(registry_keys))
+
+
+@functools.lru_cache(maxsize=2048)
+def _is_gpo_managed_cached(registry_keys: tuple[str, ...]) -> bool:
+    """Cached implementation of :func:`is_gpo_managed`."""
     if not is_windows() or not registry_keys:
         return False
     try:

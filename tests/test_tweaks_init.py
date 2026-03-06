@@ -901,3 +901,36 @@ class TestTweakExecutor:
         td = TweakDef(id="bl2", label="BL", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True)
         exe = TweakExecutor(force_corp=False)
         assert exe._is_blocked(td) is False
+
+
+# ── Snapshot full round-trip ─────────────────────────────────────────────────
+
+
+class TestSnapshotRoundTrip:
+    """End-to-end save → load → diff → restore cycle."""
+
+    def test_save_load_round_trip(self, tmp_path: Path) -> None:
+        with patch("regilattice.tweaks.status_map", return_value={"a": TweakResult.APPLIED, "b": TweakResult.NOT_APPLIED}):
+            save_snapshot(tmp_path / "s.json")
+        loaded = load_snapshot(tmp_path / "s.json")
+        assert loaded == {"a": "applied", "b": "not applied"}
+
+    def test_diff_against_self_is_empty(self, tmp_path: Path) -> None:
+        data = {"x": "applied", "y": "unknown"}
+        (tmp_path / "a.json").write_text(json.dumps(data), encoding="utf-8")
+        (tmp_path / "b.json").write_text(json.dumps(data), encoding="utf-8")
+        assert diff_snapshots(tmp_path / "a.json", tmp_path / "b.json") == {}
+
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    @patch("regilattice.tweaks.tweak_status")
+    def test_restore_then_diff_shows_no_changes(self, mock_status: MagicMock, mock_all: list, tmp_path: Path) -> None:
+        """After restoring, a new snapshot should match the original."""
+        apply_fn = MagicMock()
+        td = TweakDef(id="rt1", label="RT", category="C", apply_fn=apply_fn, remove_fn=MagicMock(), corp_safe=True)
+        mock_all.append(td)
+        mock_status.return_value = TweakResult.NOT_APPLIED
+        snap = tmp_path / "snap.json"
+        snap.write_text(json.dumps({"rt1": "applied"}), encoding="utf-8")
+        result = restore_snapshot(snap, force_corp=True)
+        assert result["rt1"] == TweakResult.APPLIED
+        apply_fn.assert_called_once()

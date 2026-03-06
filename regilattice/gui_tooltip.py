@@ -20,11 +20,16 @@ _FONT_SM = theme.FONT_SM
 
 
 class Tooltip:
-    """Hover tooltip that follows the mouse cursor and supports text updates."""
+    """Hover tooltip that follows the mouse cursor and supports text updates.
 
-    def __init__(self, widget: tk.Widget, text: str) -> None:
+    Accepts either a text string or a callable that returns text.
+    When a callable is provided, the text is computed lazily on first hover.
+    """
+
+    def __init__(self, widget: tk.Widget, text: str | None = None, *, text_fn: object = None) -> None:
         self._widget = widget
-        self._text = text
+        self._text = text or ""
+        self._text_fn = text_fn  # Callable[[], str] | None
         self._tip: tk.Toplevel | None = None
         widget.bind("<Enter>", self._show)
         widget.bind("<Leave>", self._hide)
@@ -32,6 +37,13 @@ class Tooltip:
 
     def update_text(self, text: str) -> None:
         self._text = text
+        self._text_fn = None  # clear lazy source on explicit update
+
+    def _resolve_text(self) -> str:
+        if self._text_fn is not None and callable(self._text_fn):
+            self._text = self._text_fn()
+            self._text_fn = None
+        return self._text
 
     def _show(self, event: tk.Event[tk.Misc]) -> None:
         if self._tip:
@@ -44,7 +56,7 @@ class Tooltip:
         tw.wm_attributes("-topmost", True)
         lbl = tk.Label(
             tw,
-            text=self._text,
+            text=self._resolve_text(),
             bg=_CARD_HOVER,
             fg=_FG,
             font=_FONT_SM,

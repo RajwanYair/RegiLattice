@@ -65,7 +65,10 @@ def _run_action(
         batch_fn = apply_all if mode == "apply" else remove_all
         results = batch_fn(force_corp=force)
         ok = sum(1 for v in results.values() if v in (TweakResult.APPLIED, TweakResult.REMOVED))
-        print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
+        if SESSION._dry_run:
+            print(f"\U0001f50d Dry-run: {ok}/{len(results)} tweaks would be processed ({SESSION._dry_ops} registry ops skipped).")
+        else:
+            print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
         return 0
 
     # Single tweak
@@ -82,7 +85,14 @@ def _run_action(
     try:
         fn: Callable[..., None] = td.apply_fn if mode == "apply" else td.remove_fn
         fn()
-        print(f"✅ Completed '{action_label}'. Log: {SESSION.log_path}")
+        if SESSION._dry_run:
+            print(f"\U0001f50d Dry-run '{action_label}' — {SESSION._dry_ops} registry op(s) skipped.")
+            if td.registry_keys:
+                print("  Registry keys that would be touched:")
+                for rk in td.registry_keys:
+                    print(f"    \u2022 {rk}")
+        else:
+            print(f"✅ Completed '{action_label}'. Log: {SESSION.log_path}")
         return 0
     except AdminRequirementError as exc:
         print(f"❌ {exc}")
@@ -306,7 +316,13 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         results = apply_profile(args.profile, force_corp=args.force)
         ok = sum(1 for v in results.values() if v == TweakResult.APPLIED)
-        print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
+        if SESSION._dry_run:
+            print(
+                f"\U0001f50d Dry-run profile '{args.profile}': {ok}/{len(results)} tweaks would be applied"
+                f" ({SESSION._dry_ops} registry ops skipped)."
+            )
+        else:
+            print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
         for tid, res in results.items():
             print(f"  {tid}: {res}")
         return 0
@@ -333,7 +349,13 @@ def main(argv: list[str] | None = None) -> int:
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
                 errors.append(f"{td.label}: {exc}")
         ok = len(cat_tweaks) - len(errors)
-        print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
+        if SESSION._dry_run:
+            print(
+                f"\U0001f50d Dry-run: {ok}/{len(cat_tweaks)} tweaks would be processed in '{args.category}'"
+                f" ({SESSION._dry_ops} registry ops skipped)."
+            )
+        else:
+            print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
         for e in errors:
             print(f"  \u274c {e}")
         return 0

@@ -147,6 +147,11 @@ def _load_plugins() -> None:
             if td.id in seen_ids:
                 raise ValueError(f"Duplicate TweakDef id: {td.id!r}")
             seen_ids.add(td.id)
+            # Validate registry key paths start with a known hive prefix
+            _VALID_HIVE_PREFIXES = ("HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER", "HKEY_CLASSES_ROOT", "HKEY_USERS", "HKLM", "HKCU", "HKCR", "HKU")
+            for key in td.registry_keys:
+                if not any(key.startswith(p) for p in _VALID_HIVE_PREFIXES):
+                    warnings.warn(f"TweakDef {td.id!r}: invalid registry path {key!r}", stacklevel=2)
             _ALL_TWEAKS.append(td)
             _TWEAK_INDEX[td.id] = td
     # Validate depends_on references

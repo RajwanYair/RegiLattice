@@ -33,7 +33,7 @@ def _reset_corp_cache() -> None:
     """Clear the corp detection cache before each test."""
     import regilattice.corpguard as _cg
 
-    _cg._corp_cache = None  # noqa: SLF001
+    _cg._corp_cache = None
 
 
 def _completed(stdout: str = "", returncode: int = 0) -> subprocess.CompletedProcess:

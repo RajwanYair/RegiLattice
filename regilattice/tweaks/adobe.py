@@ -211,13 +211,13 @@ def _detect_disable_crash_reporter() -> bool:
 # ── Disable Adobe Home Screen on Launch ─────────────────────────────────────
 
 
-def _apply_disable_home_screen() -> None:
+def _apply_disable_home_screen(*, require_admin: bool = True) -> None:
     SESSION.log("Adobe: disable home screen on launch")
     SESSION.backup([_HOME], "AdobeHomeScreen")
     SESSION.set_dword(_HOME, "ShowHomeScreen", 0)
 
 
-def _remove_disable_home_screen() -> None:
+def _remove_disable_home_screen(*, require_admin: bool = True) -> None:
     SESSION.set_dword(_HOME, "ShowHomeScreen", 1)
 
 

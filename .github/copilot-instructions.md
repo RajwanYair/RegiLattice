@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 700 tests).
+> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 900 tests).
 
 ## Quick Facts
 
@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~13 695 tests)                                         |
+| Test        | `pytest` in `tests/` (~13 900 tests)                                         |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)    |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -227,7 +227,11 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 - Toggleable log viewer panel (shows session log inline)
 - About dialog with system info and shortcut reference
 - Invert Selection button
-- Keyboard shortcuts: Ctrl+A/D/F/E/I/L/R, Esc
+- Keyboard shortcuts: Ctrl+A/D/F/E/I/L/R, Up/Down/Space, Esc
+- Keyboard row navigation: Up/Down arrows move focus, Space toggles selection
+- Auto-refreshing log panel (every 2s while visible)
+- Lazy tooltip creation via `text_fn` callable (deferred until first hover)
+- GPO check caching via `functools.lru_cache` (avoids repeated winreg lookups)
 - `parse_description_metadata()` extracts `Default:` and `Recommended:` from description text
 - `functools.lru_cache` on description parsing for performance
 - `tweak_scope()` classifies tweaks as user/machine/both from registry keys
@@ -235,8 +239,12 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 ## Test Infrastructure
 
 - `tests/conftest.py`: `dry_session` fixture (RegistrySession with `_dry_run=True`), `all_tweaks_list` session fixture
-- `tests/test_tweaks_smoke.py`: auto-parametrized over all tweaks — tests triplet signatures, ID uniqueness, detect_fn callability
-- `tests/test_tweaks_init.py`: plugin loader, categories, profiles, search, batch ops
+- `tests/test_tweaks_smoke.py`: auto-parametrized over all tweaks — tests triplet signatures, ID uniqueness, detect_fn callability, `require_admin` kwarg validation
+- `tests/test_tweaks_init.py`: plugin loader, categories, profiles, search, batch ops, snapshot round-trip
+- `tests/test_gui_theme.py`: theme switching, colour attribute validation
+- `tests/test_gui_tooltip.py`: tooltip text building, metadata parsing, recommendation detection
+- `tests/test_gui_widgets.py`: tweak scope classification
+- `tests/test_gui_dialogs.py`: PS1 export, JSON import, about dialog
 - Known: `test_registry.py::TestBackup::test_backup_creates_directory` may fail with WinError 6 (handle issue, environment-specific)
 
 ## Adding a New Tweak — Checklist
