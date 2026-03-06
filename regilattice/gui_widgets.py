@@ -175,8 +175,8 @@ class TweakRow:
             font=("Segoe UI", 7, "bold"),
         ).pack(side="right", padx=(0, 4))
 
-        # Tooltip — detailed description with state, options, recommendation
-        self.tooltip = Tooltip(self.frame, build_tooltip_text(td, TweakResult.UNKNOWN))
+        # Tooltip — detailed description with state, options, recommendation (lazy)
+        self.tooltip = Tooltip(self.frame, text_fn=lambda: build_tooltip_text(td, TweakResult.UNKNOWN))
 
         # Hover highlight effect
         self.frame.bind("<Enter>", self._on_enter)

@@ -206,6 +206,36 @@ class RegiLatticeGUI:
         self._root.bind("<Control-i>", lambda _: self._invert_selection())
         self._root.bind("<Control-l>", lambda _: self._toggle_log_panel())
         self._root.bind("<Escape>", lambda _: self._clear_search())
+        self._root.bind("<Down>", lambda _: self._navigate_rows(1))
+        self._root.bind("<Up>", lambda _: self._navigate_rows(-1))
+        self._root.bind("<space>", self._toggle_focused_row)
+
+    def _navigate_rows(self, direction: int) -> None:
+        """Move keyboard focus between visible tweak rows."""
+        visible = [r for r in self._tweak_rows if r.frame is not None and r.frame.winfo_ismapped()]
+        if not visible:
+            return
+        current = getattr(self, "_focused_row_idx", -1)
+        new_idx = max(0, min(len(visible) - 1, current + direction))
+        self._focused_row_idx = new_idx
+        row = visible[new_idx]
+        row.frame.focus_set()
+        row.frame.event_generate("<Enter>")
+        # Scroll into view
+        row.frame.update_idletasks()
+        row.frame.winfo_toplevel()
+
+    def _toggle_focused_row(self, event: tk.Event[tk.Misc]) -> None:
+        """Toggle selection of the currently focused row via spacebar."""
+        # Don't intercept space when typing in the search bar
+        if event.widget == self._search_entry:
+            return
+        visible = [r for r in self._tweak_rows if r.frame is not None and r.frame.winfo_ismapped()]
+        idx = getattr(self, "_focused_row_idx", -1)
+        if 0 <= idx < len(visible):
+            row = visible[idx]
+            if not row.disabled_by_corp:
+                row.var.set(not row.var.get())
 
     def _focus_search(self) -> None:
         self._search_entry.focus_set()
@@ -763,9 +793,10 @@ class RegiLatticeGUI:
             self._log_frame.pack(fill="both", padx=16, pady=(0, 4), expand=False)
             self._log_visible = True
             self._refresh_log()
+            self._auto_refresh_log()
 
     def _refresh_log(self) -> None:
-        """Load the session log file into the log text widget."""
+        """Load the session log file into the log text widget and scroll to end."""
         log_path = SESSION.log_path
         content = ""
         try:
@@ -778,6 +809,12 @@ class RegiLatticeGUI:
         self._log_text.insert("1.0", content)
         self._log_text.configure(state="disabled")
         self._log_text.see("end")
+
+    def _auto_refresh_log(self) -> None:
+        """Periodically refresh the log panel while it is visible."""
+        if self._log_visible:
+            self._refresh_log()
+            self._root.after(2000, self._auto_refresh_log)
 
     # ── Right-click context menu ─────────────────────────────────────────
 

@@ -5,6 +5,8 @@ Parametrized by tweak id so failures pinpoint the exact tweak.
 
 from __future__ import annotations
 
+import inspect
+
 import pytest
 
 from regilattice.tweaks import TweakDef, all_tweaks
@@ -91,3 +93,19 @@ class TestTweakContract:
     def test_corp_safe_is_bool(self, tweak_id: str) -> None:
         td = _get_tweak(tweak_id)
         assert isinstance(td.corp_safe, bool)
+
+    def test_apply_fn_accepts_require_admin(self, tweak_id: str) -> None:
+        """Ensure apply_fn accepts a keyword-only ``require_admin`` parameter."""
+        td = _get_tweak(tweak_id)
+        sig = inspect.signature(td.apply_fn)
+        param = sig.parameters.get("require_admin")
+        assert param is not None, f"{td.id} apply_fn missing require_admin kwarg"
+        assert param.kind == inspect.Parameter.KEYWORD_ONLY
+
+    def test_remove_fn_accepts_require_admin(self, tweak_id: str) -> None:
+        """Ensure remove_fn accepts a keyword-only ``require_admin`` parameter."""
+        td = _get_tweak(tweak_id)
+        sig = inspect.signature(td.remove_fn)
+        param = sig.parameters.get("require_admin")
+        assert param is not None, f"{td.id} remove_fn missing require_admin kwarg"
+        assert param.kind == inspect.Parameter.KEYWORD_ONLY

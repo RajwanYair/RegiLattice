@@ -69,6 +69,7 @@ class RegistrySession:
 
     base_dir: Path
     _dry_run: bool = field(default=False, repr=False)
+    _dry_ops: int = field(default=0, repr=False)
 
     def __post_init__(self) -> None:
         self._log_path = self.base_dir / "RegiLattice.log"
@@ -120,6 +121,7 @@ class RegistrySession:
         Returns ``True`` if at least one file was successfully imported.
         """
         if self._dry_run:
+            self._dry_ops += 1
             self.log(f"[DRY-RUN] restore_backup {backup_path}")
             return True
         _ensure_windows()
@@ -150,6 +152,7 @@ class RegistrySession:
     ) -> None:
         """Create/open the key and set *name* to *value*."""
         if self._dry_run:
+            self._dry_ops += 1
             self.log(f"[DRY-RUN] set_value {path} {name!r} = {value!r}")
             return
         root, subkey = _split_root(path)
@@ -167,6 +170,7 @@ class RegistrySession:
     def delete_tree(self, path: str) -> None:
         """Recursively delete a registry key and all its children."""
         if self._dry_run:
+            self._dry_ops += 1
             self.log(f"[DRY-RUN] delete_tree {path}")
             return
         root, subkey = _split_root(path)
@@ -198,6 +202,7 @@ class RegistrySession:
     def delete_value(self, path: str, name: str) -> None:
         """Delete a single value from a key."""
         if self._dry_run:
+            self._dry_ops += 1
             self.log(f"[DRY-RUN] delete_value {path} {name!r}")
             return
         root, subkey = _split_root(path)
