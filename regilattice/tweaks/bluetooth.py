@@ -311,7 +311,7 @@ def _detect_disable_handsfree_telephony() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-bt-power-mgmt",
+        id="bt-disable-bt-power-mgmt",
         label="Disable Bluetooth Power Management",
         category="Bluetooth",
         apply_fn=_apply_disable_bt_power,
@@ -320,10 +320,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_PARAMS],
-        description=(
-            "Prevents Windows from suspending the Bluetooth adapter "
-            "to save power, reducing connection drops."
-        ),
+        description=("Prevents Windows from suspending the Bluetooth adapter to save power, reducing connection drops."),
         tags=["bluetooth", "power", "stability"],
     ),
     TweakDef(
@@ -336,10 +333,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_SVC, _BT_SUPPORT],
-        description=(
-            "Sets Bluetooth support service to manual start — saves "
-            "resources on machines that rarely use Bluetooth."
-        ),
+        description=("Sets Bluetooth support service to manual start — saves resources on machines that rarely use Bluetooth."),
         tags=["bluetooth", "services", "startup"],
     ),
     TweakDef(
@@ -352,14 +346,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_AUDIO],
-        description=(
-            "Increases the A2DP SBC bitpool range for higher-fidelity "
-            "Bluetooth audio streaming."
-        ),
+        description=("Increases the A2DP SBC bitpool range for higher-fidelity Bluetooth audio streaming."),
         tags=["bluetooth", "audio", "quality"],
     ),
     TweakDef(
-        id="disable-bt-discoverable",
+        id="bt-disable-bt-discoverable",
         label="Disable Bluetooth Discoverability",
         category="Bluetooth",
         apply_fn=_apply_disable_bt_discover,
@@ -394,10 +385,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_HFP],
-        description=(
-            "Disables the Bluetooth Handsfree Profile (HFP) service, "
-            "preventing hands-free audio device connections."
-        ),
+        description=("Disables the Bluetooth Handsfree Profile (HFP) service, preventing hands-free audio device connections."),
         tags=["bluetooth", "handsfree", "services"],
     ),
     TweakDef(
@@ -410,10 +398,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_OBEX],
-        description=(
-            "Disables the Bluetooth OBEX service, blocking file transfer "
-            "over Bluetooth to reduce attack surface."
-        ),
+        description=("Disables the Bluetooth OBEX service, blocking file transfer over Bluetooth to reduce attack surface."),
         tags=["bluetooth", "obex", "security", "file-transfer"],
     ),
     TweakDef(
@@ -426,10 +411,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_PAN],
-        description=(
-            "Disables Bluetooth Personal Area Networking (PAN), "
-            "preventing network sharing over Bluetooth."
-        ),
+        description=("Disables Bluetooth Personal Area Networking (PAN), preventing network sharing over Bluetooth."),
         tags=["bluetooth", "network", "pan", "security"],
     ),
     TweakDef(
@@ -442,10 +424,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_SERIAL],
-        description=(
-            "Disables the Bluetooth BTHMODEM serial port driver, "
-            "preventing legacy COM-port connections over Bluetooth."
-        ),
+        description=("Disables the Bluetooth BTHMODEM serial port driver, preventing legacy COM-port connections over Bluetooth."),
         tags=["bluetooth", "serial", "com", "security"],
     ),
     TweakDef(
@@ -458,10 +437,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BT_A2DP_SINK],
-        description=(
-            "Disables the Bluetooth A2DP Sink service, preventing the PC "
-            "from receiving audio streams over Bluetooth."
-        ),
+        description=("Disables the Bluetooth A2DP Sink service, preventing the PC from receiving audio streams over Bluetooth."),
         tags=["bluetooth", "a2dp", "audio", "security"],
     ),
     TweakDef(

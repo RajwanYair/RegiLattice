@@ -23,23 +23,15 @@ _EXPLORER_OVERLAYS = (
 )
 
 # Dropbox
-_DROPBOX_UPDATE = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Dropbox\Update"
-)
-_DROPBOX_BANDWIDTH = (
-    r"HKEY_CURRENT_USER\Software\Dropbox\Config"
-)
+_DROPBOX_UPDATE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Dropbox\Update"
+_DROPBOX_BANDWIDTH = r"HKEY_CURRENT_USER\Software\Dropbox\Config"
 
 # Google Drive
-_GDRIVE_UPDATE = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\DriveFS"
-)
+_GDRIVE_UPDATE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\DriveFS"
 _GDRIVE_KEY = r"HKEY_CURRENT_USER\Software\Google\DriveFS"
 
 # iCloud
-_ICLOUD_UPDATE = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Inc.\iCloud"
-)
+_ICLOUD_UPDATE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Inc.\iCloud"
 
 # Box
 _BOX_KEY = r"HKEY_CURRENT_USER\Software\Box\Box"
@@ -208,10 +200,7 @@ def _remove_disable_icloud_autostart(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_icloud_autostart() -> bool:
-    return (
-        SESSION.read_string(_RUN_CU, "iCloudDrive") is None
-        and SESSION.read_string(_RUN_CU, "iCloudServices") is None
-    )
+    return SESSION.read_string(_RUN_CU, "iCloudDrive") is None and SESSION.read_string(_RUN_CU, "iCloudServices") is None
 
 
 # ── Disable iCloud Photo Upload ─────────────────────────────────────────────
@@ -250,10 +239,7 @@ def _remove_disable_box_autostart(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_box_autostart() -> bool:
-    return (
-        SESSION.read_string(_RUN_CU, "Box") is None
-        and SESSION.read_string(_RUN_CU, "BoxDrive") is None
-    )
+    return SESSION.read_string(_RUN_CU, "Box") is None and SESSION.read_string(_RUN_CU, "BoxDrive") is None
 
 
 # ── Disable MEGA Auto-Start ─────────────────────────────────────────────────
@@ -524,7 +510,9 @@ def _apply_limit_overlays(*, require_admin: bool = True) -> None:
     # to lower-priority entries.  We just set a registry flag indicating
     # the tweak is active for detect purposes.
     SESSION.set_dword(
-        _OVERLAY_LIMIT_KEY, "RegiLattice_OverlayOptimised", 1,
+        _OVERLAY_LIMIT_KEY,
+        "RegiLattice_OverlayOptimised",
+        1,
     )
 
 
@@ -579,7 +567,7 @@ def _detect_disable_cloud_suggestions() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-dropbox-autostart",
+        id="cloud-disable-dropbox-autostart",
         label="Disable Dropbox Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_dropbox_autostart,
@@ -592,7 +580,7 @@ TWEAKS: list[TweakDef] = [
         tags=["dropbox", "autostart", "cloud"],
     ),
     TweakDef(
-        id="disable-dropbox-update",
+        id="cloud-disable-dropbox-update",
         label="Disable Dropbox Auto-Update",
         category="Cloud Storage",
         apply_fn=_apply_disable_dropbox_update,
@@ -605,7 +593,7 @@ TWEAKS: list[TweakDef] = [
         tags=["dropbox", "update", "cloud"],
     ),
     TweakDef(
-        id="disable-dropbox-lan-sync",
+        id="cloud-disable-dropbox-lan-sync",
         label="Disable Dropbox LAN Sync",
         category="Cloud Storage",
         apply_fn=_apply_disable_dropbox_lan_sync,
@@ -621,7 +609,7 @@ TWEAKS: list[TweakDef] = [
         tags=["dropbox", "lan", "network", "cloud"],
     ),
     TweakDef(
-        id="disable-gdrive-autostart",
+        id="cloud-disable-gdrive-autostart",
         label="Disable Google Drive Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_gdrive_autostart,
@@ -634,7 +622,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gdrive", "google", "autostart", "cloud"],
     ),
     TweakDef(
-        id="disable-gdrive-update",
+        id="cloud-disable-gdrive-update",
         label="Disable Google Drive Auto-Update",
         category="Cloud Storage",
         apply_fn=_apply_disable_gdrive_update,
@@ -647,7 +635,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gdrive", "google", "update", "cloud"],
     ),
     TweakDef(
-        id="gdrive-bandwidth-limit",
+        id="cloud-gdrive-bandwidth-limit",
         label="Limit Google Drive Upload (1 MB/s)",
         category="Cloud Storage",
         apply_fn=_apply_gdrive_bandwidth_limit,
@@ -656,14 +644,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_GDRIVE_UPDATE],
-        description=(
-            "Caps Google Drive upload bandwidth at 1 MB/s to prevent "
-            "saturating your internet connection during large syncs."
-        ),
+        description=("Caps Google Drive upload bandwidth at 1 MB/s to prevent saturating your internet connection during large syncs."),
         tags=["gdrive", "google", "bandwidth", "cloud"],
     ),
     TweakDef(
-        id="disable-icloud-autostart",
+        id="cloud-disable-icloud-autostart",
         label="Disable iCloud Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_icloud_autostart,
@@ -676,7 +661,7 @@ TWEAKS: list[TweakDef] = [
         tags=["icloud", "apple", "autostart", "cloud"],
     ),
     TweakDef(
-        id="disable-icloud-photos",
+        id="cloud-disable-icloud-photos",
         label="Disable iCloud Photo Stream Upload",
         category="Cloud Storage",
         apply_fn=_apply_disable_icloud_photos,
@@ -689,7 +674,7 @@ TWEAKS: list[TweakDef] = [
         tags=["icloud", "apple", "photos", "cloud"],
     ),
     TweakDef(
-        id="disable-box-autostart",
+        id="cloud-disable-box-autostart",
         label="Disable Box Drive Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_box_autostart,
@@ -702,7 +687,7 @@ TWEAKS: list[TweakDef] = [
         tags=["box", "autostart", "cloud"],
     ),
     TweakDef(
-        id="disable-mega-autostart",
+        id="cloud-disable-mega-autostart",
         label="Disable MEGA Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_mega_autostart,
@@ -715,7 +700,7 @@ TWEAKS: list[TweakDef] = [
         tags=["mega", "autostart", "cloud"],
     ),
     TweakDef(
-        id="disable-pcloud-autostart",
+        id="cloud-disable-pcloud-autostart",
         label="Disable pCloud Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_pcloud_autostart,
@@ -747,7 +732,7 @@ TWEAKS: list[TweakDef] = [
     ),
     # ── New cloud storage tweaks ─────────────────────────────────────────
     TweakDef(
-        id="disable-nextcloud-autostart",
+        id="cloud-disable-nextcloud-autostart",
         label="Disable Nextcloud Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_nextcloud_autostart,
@@ -760,7 +745,7 @@ TWEAKS: list[TweakDef] = [
         tags=["nextcloud", "autostart", "cloud", "opensource"],
     ),
     TweakDef(
-        id="disable-tresorit-autostart",
+        id="cloud-disable-tresorit-autostart",
         label="Disable Tresorit Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_tresorit_autostart,
@@ -773,7 +758,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tresorit", "autostart", "cloud", "encrypted"],
     ),
     TweakDef(
-        id="disable-synccom-autostart",
+        id="cloud-disable-synccom-autostart",
         label="Disable Sync.com Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_synccom_autostart,
@@ -786,7 +771,7 @@ TWEAKS: list[TweakDef] = [
         tags=["sync.com", "autostart", "cloud", "encrypted"],
     ),
     TweakDef(
-        id="disable-spideroak-autostart",
+        id="cloud-disable-spideroak-autostart",
         label="Disable SpiderOak ONE Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_spideroak_autostart,
@@ -799,7 +784,7 @@ TWEAKS: list[TweakDef] = [
         tags=["spideroak", "autostart", "cloud", "backup"],
     ),
     TweakDef(
-        id="disable-amazondrive-autostart",
+        id="cloud-disable-amazondrive-autostart",
         label="Disable Amazon Drive Auto-Start",
         category="Cloud Storage",
         apply_fn=_apply_disable_amazondrive_autostart,
@@ -812,7 +797,7 @@ TWEAKS: list[TweakDef] = [
         tags=["amazon", "autostart", "cloud"],
     ),
     TweakDef(
-        id="dropbox-upload-throttle",
+        id="cloud-dropbox-upload-throttle",
         label="Throttle Dropbox Upload (512 KB/s)",
         category="Cloud Storage",
         apply_fn=_apply_dropbox_upload_throttle,
@@ -821,14 +806,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_DROPBOX_BANDWIDTH],
-        description=(
-            "Caps Dropbox upload bandwidth at 512 KB/s to prevent "
-            "saturating your internet connection."
-        ),
+        description=("Caps Dropbox upload bandwidth at 512 KB/s to prevent saturating your internet connection."),
         tags=["dropbox", "bandwidth", "throttle", "cloud"],
     ),
     TweakDef(
-        id="disable-dropbox-telemetry",
+        id="cloud-disable-dropbox-telemetry",
         label="Disable Dropbox Telemetry",
         category="Cloud Storage",
         apply_fn=_apply_disable_dropbox_telemetry,
@@ -841,7 +823,7 @@ TWEAKS: list[TweakDef] = [
         tags=["dropbox", "telemetry", "privacy", "cloud"],
     ),
     TweakDef(
-        id="gdrive-cache-limit",
+        id="cloud-gdrive-cache-limit",
         label="Limit Google Drive Cache (10 GB)",
         category="Cloud Storage",
         apply_fn=_apply_gdrive_cache_limit,
@@ -850,14 +832,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_GDRIVE_UPDATE],
-        description=(
-            "Caps the Google Drive File Stream local cache at 10 GB "
-            "to recover disk space on smaller SSDs."
-        ),
+        description=("Caps the Google Drive File Stream local cache at 10 GB to recover disk space on smaller SSDs."),
         tags=["gdrive", "google", "cache", "disk", "cloud"],
     ),
     TweakDef(
-        id="disable-gdrive-telemetry",
+        id="cloud-disable-gdrive-telemetry",
         label="Disable Google Drive Telemetry",
         category="Cloud Storage",
         apply_fn=_apply_disable_gdrive_telemetry,
@@ -870,7 +849,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gdrive", "google", "telemetry", "privacy", "cloud"],
     ),
     TweakDef(
-        id="disable-mega-update",
+        id="cloud-disable-mega-update",
         label="Disable MEGA Auto-Update",
         category="Cloud Storage",
         apply_fn=_apply_disable_mega_update,
@@ -883,7 +862,7 @@ TWEAKS: list[TweakDef] = [
         tags=["mega", "update", "cloud"],
     ),
     TweakDef(
-        id="disable-box-update",
+        id="cloud-disable-box-update",
         label="Disable Box Drive Auto-Update",
         category="Cloud Storage",
         apply_fn=_apply_disable_box_update,
@@ -990,8 +969,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_ICLOUD_SYNC_POLICY],
         description=(
-            "Disables iCloud automatic synchronization via Group Policy. "
-            "Default: Enabled. Recommended: Disabled if not using Apple services."
+            "Disables iCloud automatic synchronization via Group Policy. Default: Enabled. Recommended: Disabled if not using Apple services."
         ),
         tags=["cloud", "icloud", "sync", "apple"],
     ),
@@ -1005,10 +983,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CCX_POLICY],
-        description=(
-            "Disables Adobe Creative Cloud startup sync via policy. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Adobe Creative Cloud startup sync via policy. Default: Enabled. Recommended: Disabled."),
         tags=["cloud", "adobe", "creative-cloud", "startup"],
     ),
 ]

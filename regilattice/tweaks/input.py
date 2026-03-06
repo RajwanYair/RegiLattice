@@ -44,12 +44,12 @@ def _apply_fast_keyboard(*, require_admin: bool = False) -> None:
     SESSION.log("Input: set keyboard repeat rate to maximum")
     SESSION.backup([_KEYBOARD_KEY], "KeyboardRepeat")
     SESSION.set_string(_KEYBOARD_KEY, "KeyboardSpeed", "31")  # max = 31
-    SESSION.set_string(_KEYBOARD_KEY, "KeyboardDelay", "0")   # shortest delay
+    SESSION.set_string(_KEYBOARD_KEY, "KeyboardDelay", "0")  # shortest delay
 
 
 def _remove_fast_keyboard(*, require_admin: bool = False) -> None:
     SESSION.set_string(_KEYBOARD_KEY, "KeyboardSpeed", "31")  # default
-    SESSION.set_string(_KEYBOARD_KEY, "KeyboardDelay", "1")   # default
+    SESSION.set_string(_KEYBOARD_KEY, "KeyboardDelay", "1")  # default
 
 
 def _detect_fast_keyboard() -> bool:
@@ -253,7 +253,7 @@ def _detect_disable_sticky_keys() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-mouse-accel",
+        id="input-disable-mouse-accel",
         label="Disable Mouse Acceleration",
         category="Input",
         apply_fn=apply_disable_mouse_accel,
@@ -266,7 +266,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "mouse", "gaming"],
     ),
     TweakDef(
-        id="fast-keyboard-repeat",
+        id="input-fast-keyboard-repeat",
         label="Maximize Keyboard Repeat Rate",
         category="Input",
         apply_fn=_apply_fast_keyboard,
@@ -279,7 +279,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "keyboard", "performance"],
     ),
     TweakDef(
-        id="disable-sticky-keys-prompt",
+        id="input-disable-sticky-keys-prompt",
         label="Disable Sticky Keys Prompt (5x Shift)",
         category="Input",
         apply_fn=_apply_disable_sticky_prompt,
@@ -292,7 +292,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "accessibility", "gaming"],
     ),
     TweakDef(
-        id="disable-touchpad-tap",
+        id="input-disable-touchpad-tap",
         label="Disable Touchpad Tap-to-Click (Perf)",
         category="Input",
         apply_fn=_apply_disable_touchpad_tap,
@@ -309,7 +309,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "touchpad", "performance"],
     ),
     TweakDef(
-        id="increase-hover-time",
+        id="input-increase-hover-time",
         label="Increase Mouse Hover Time (1s)",
         category="Input",
         apply_fn=_apply_increase_hover_time,
@@ -326,7 +326,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "mouse", "ux"],
     ),
     TweakDef(
-        id="filter-keys",
+        id="input-filter-keys",
         label="Disable Filter Keys",
         category="Input",
         apply_fn=_apply_disable_filter_keys,
@@ -339,7 +339,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "accessibility", "gaming"],
     ),
     TweakDef(
-        id="toggle-keys",
+        id="input-toggle-keys",
         label="Disable Toggle Keys Beep",
         category="Input",
         apply_fn=_apply_disable_toggle_keys,
@@ -352,7 +352,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "accessibility", "gaming"],
     ),
     TweakDef(
-        id="enhanced-pointer-precision",
+        id="input-enhanced-pointer-precision",
         label="Disable Enhanced Pointer Precision",
         category="Input",
         apply_fn=_apply_disable_epp,
@@ -365,7 +365,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "mouse", "gaming"],
     ),
     TweakDef(
-        id="mouse-scroll-lines",
+        id="input-mouse-scroll-lines",
         label="Set Mouse Scroll to 5 Lines",
         category="Input",
         apply_fn=_apply_mouse_scroll_lines,
@@ -378,7 +378,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "mouse", "ux"],
     ),
     TweakDef(
-        id="keyboard-delay-zero",
+        id="input-keyboard-delay-zero",
         label="Set Keyboard Repeat Delay to Minimum",
         category="Input",
         apply_fn=_apply_keyboard_delay_zero,
@@ -391,7 +391,7 @@ TWEAKS: list[TweakDef] = [
         tags=["input", "keyboard", "performance"],
     ),
     TweakDef(
-        id="touch-keyboard-disable",
+        id="input-touch-keyboard-disable",
         label="Disable Touch Keyboard Auto-Launch",
         category="Input",
         apply_fn=_apply_disable_touch_keyboard,
@@ -414,9 +414,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_TOUCH_KB_AUTO],
         description=(
-            "Prevents the touch keyboard from automatically appearing on "
-            "desktops without touchscreens. Default: Enabled. "
-            "Recommended: Disabled."
+            "Prevents the touch keyboard from automatically appearing on desktops without touchscreens. Default: Enabled. Recommended: Disabled."
         ),
         tags=["input", "touch", "keyboard", "performance"],
     ),
@@ -564,10 +562,7 @@ def _remove_disable_touch_feedback(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_touch_feedback() -> bool:
-    return (
-        SESSION.read_dword(_CURSOR_KEY, "ContactVisualization") == 0
-        and SESSION.read_dword(_CURSOR_KEY, "GestureVisualization") == 0
-    )
+    return SESSION.read_dword(_CURSOR_KEY, "ContactVisualization") == 0 and SESSION.read_dword(_CURSOR_KEY, "GestureVisualization") == 0
 
 
 TWEAKS += [

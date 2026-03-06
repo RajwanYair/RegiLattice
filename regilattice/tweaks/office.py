@@ -453,7 +453,7 @@ def _detect_disable_background_updates() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-office-telemetry",
+        id="office-disable-office-telemetry",
         label="Disable Office Telemetry",
         category="Office",
         apply_fn=_apply_telemetry,
@@ -463,14 +463,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[_OFFICE_COMMON],
         description=(
-            "Disables Microsoft Office telemetry, feedback, and connected "
-            "services data collection across all installed versions "
-            "(2010-365)."
+            "Disables Microsoft Office telemetry, feedback, and connected services data collection across all installed versions (2010-365)."
         ),
         tags=["office", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-office-start-screen",
+        id="office-disable-office-start-screen",
         label="Disable Office Start Screen",
         category="Office",
         apply_fn=_apply_start_screen,
@@ -479,14 +477,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Common\General"],
-        description=(
-            "Skips the Office Start screen and opens directly to a blank "
-            "document (all versions)."
-        ),
+        description=("Skips the Office Start screen and opens directly to a blank document (all versions)."),
         tags=["office", "ux"],
     ),
     TweakDef(
-        id="disable-office-connected",
+        id="office-disable-office-connected",
         label="Disable Office Connected Experiences",
         category="Office",
         apply_fn=_apply_connected,
@@ -495,14 +490,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=False,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Privacy"],
-        description=(
-            "Disables cloud-powered Office features (Designer, Editor, "
-            "etc.) across all versions."
-        ),
+        description=("Disables cloud-powered Office features (Designer, Editor, etc.) across all versions."),
         tags=["office", "privacy", "cloud"],
     ),
     TweakDef(
-        id="disable-office-hwaccel",
+        id="office-disable-office-hwaccel",
         label="Disable Office Hardware Acceleration",
         category="Office",
         apply_fn=_apply_hwaccel,
@@ -511,10 +503,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Common\Graphics"],
-        description=(
-            "Disables GPU hardware acceleration in Office apps to fix "
-            "display glitches (all versions)."
-        ),
+        description=("Disables GPU hardware acceleration in Office apps to fix display glitches (all versions)."),
         tags=["office", "performance", "gpu"],
     ),
     TweakDef(
@@ -528,9 +517,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Security"],
         description=(
-            "Lowers macro security to 'Enable all' and trusts the VBA "
-            "project object model (Word, Excel, PowerPoint, Access, "
-            "Outlook, Publisher)."
+            "Lowers macro security to 'Enable all' and trusts the VBA project object model (Word, Excel, PowerPoint, Access, Outlook, Publisher)."
         ),
         tags=["office", "macros", "security"],
     ),
@@ -544,14 +531,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Options"],
-        description=(
-            "Sets the AutoRecover interval to 2 minutes for Word, Excel, "
-            "and PowerPoint (all versions)."
-        ),
+        description=("Sets the AutoRecover interval to 2 minutes for Word, Excel, and PowerPoint (all versions)."),
         tags=["office", "autosave", "recovery"],
     ),
     TweakDef(
-        id="disable-office-linkedin",
+        id="office-disable-office-linkedin",
         label="Disable LinkedIn Integration",
         category="Office",
         apply_fn=_apply_disable_linkedin,
@@ -564,7 +548,7 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "linkedin", "privacy"],
     ),
     TweakDef(
-        id="disable-office-animations",
+        id="office-disable-office-animations",
         label="Disable Office UI Animations",
         category="Office",
         apply_fn=_apply_disable_office_animations,
@@ -577,7 +561,7 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "performance", "animations"],
     ),
     TweakDef(
-        id="disable-office-recent-docs",
+        id="office-disable-office-recent-docs",
         label="Disable Office Recent Documents",
         category="Office",
         apply_fn=_apply_disable_recent_docs,
@@ -590,7 +574,7 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "privacy", "recent"],
     ),
     TweakDef(
-        id="disable-office-cloud-save",
+        id="office-disable-office-cloud-save",
         label="Default Save to Local (Not Cloud)",
         category="Office",
         apply_fn=_apply_disable_cloud_save,
@@ -599,14 +583,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Common\General"],
-        description=(
-            "Sets Office default save location to local disk instead "
-            "of prompting for OneDrive/SharePoint."
-        ),
+        description=("Sets Office default save location to local disk instead of prompting for OneDrive/SharePoint."),
         tags=["office", "save", "cloud", "onedrive"],
     ),
     TweakDef(
-        id="disable-office-feedback",
+        id="office-disable-feedback-button",
         label="Disable Office Feedback Button",
         category="Office",
         apply_fn=_apply_disable_feedback_button,
@@ -619,7 +600,7 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "feedback", "ux"],
     ),
     TweakDef(
-        id="disable-office-updates",
+        id="office-disable-office-updates",
         label="Disable Office Auto-Updates",
         category="Office",
         apply_fn=_apply_disable_office_updates,
@@ -632,7 +613,7 @@ TWEAKS: list[TweakDef] = [
         tags=["office", "update", "control"],
     ),
     TweakDef(
-        id="relax-office-protected-view",
+        id="office-relax-office-protected-view",
         label="Relax Office Protected View",
         category="Office",
         apply_fn=_apply_relax_protected_view,
@@ -641,10 +622,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=False,
         registry_keys=[rf"{_OFFICE_CU}\16.0\Word\Security\ProtectedView"],
-        description=(
-            "Disables Protected View for files from the internet and "
-            "Outlook attachments. Speeds up opening but reduces security."
-        ),
+        description=("Disables Protected View for files from the internet and Outlook attachments. Speeds up opening but reduces security."),
         tags=["office", "security", "protected-view"],
     ),
     TweakDef(
@@ -721,10 +699,7 @@ def _remove_disable_feedback_prompts(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_feedback_prompts() -> bool:
-    return (
-        SESSION.read_dword(_OFFICE_FEEDBACK_CU, "SurveyEnabled") == 0
-        and SESSION.read_dword(_OFFICE_FEEDBACK_CU, "Enabled") == 0
-    )
+    return SESSION.read_dword(_OFFICE_FEEDBACK_CU, "SurveyEnabled") == 0 and SESSION.read_dword(_OFFICE_FEEDBACK_CU, "Enabled") == 0
 
 
 TWEAKS += [
@@ -781,10 +756,7 @@ def _remove_disable_telem_dashboard(*, require_admin: bool = False) -> None:
 
 
 def _detect_disable_telem_dashboard() -> bool:
-    return (
-        SESSION.read_dword(_OFFICE_TELEM_DASH, "Enablelogging") == 0
-        and SESSION.read_dword(_OFFICE_TELEM_DASH, "EnableUpload") == 0
-    )
+    return SESSION.read_dword(_OFFICE_TELEM_DASH, "Enablelogging") == 0 and SESSION.read_dword(_OFFICE_TELEM_DASH, "EnableUpload") == 0
 
 
 # ── Disable Office Feedback (Policy) ─────────────────────────────────────────
@@ -807,10 +779,7 @@ def _remove_disable_office_feedback_policy(*, require_admin: bool = True) -> Non
 
 
 def _detect_disable_office_feedback_policy() -> bool:
-    return (
-        SESSION.read_dword(_OFFICE_FEEDBACK_LM, "Enabled") == 0
-        and SESSION.read_dword(_OFFICE_FEEDBACK_LM, "IncludeEmail") == 0
-    )
+    return SESSION.read_dword(_OFFICE_FEEDBACK_LM, "Enabled") == 0 and SESSION.read_dword(_OFFICE_FEEDBACK_LM, "IncludeEmail") == 0
 
 
 # ── Set Office Visual Theme to Dark ──────────────────────────────────────────

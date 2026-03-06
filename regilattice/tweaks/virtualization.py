@@ -236,10 +236,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_HYPERV],
-        description=(
-            "Disables Hyper-V Enhanced Session Mode by default. "
-            "Useful if clipboard/file sharing between host and VM causes issues."
-        ),
+        description=("Disables Hyper-V Enhanced Session Mode by default. Useful if clipboard/file sharing between host and VM causes issues."),
         tags=["hyperv", "virtualization", "enhanced-session"],
     ),
     TweakDef(
@@ -252,10 +249,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MEMORY],
-        description=(
-            "Tunes Windows memory manager for better VM density "
-            "by disabling large system cache and second-level data cache."
-        ),
+        description=("Tunes Windows memory manager for better VM density by disabling large system cache and second-level data cache."),
         tags=["hyperv", "virtualization", "memory", "performance"],
     ),
     TweakDef(
@@ -284,10 +278,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_VIRT_SECURITY],
-        description=(
-            "Disables Credential Guard (VBS-backed LSASS protection). "
-            "May be needed for compatibility with third-party VPN/auth tools."
-        ),
+        description=("Disables Credential Guard (VBS-backed LSASS protection). May be needed for compatibility with third-party VPN/auth tools."),
         tags=["virtualization", "security", "credential-guard"],
     ),
     TweakDef(
@@ -330,8 +321,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[_VBS],
         description=(
-            "Disables Hypervisor-enforced Code Integrity (HVCI / Memory Integrity). "
-            "Can improve gaming performance by 5-10% but reduces security."
+            "Disables Hypervisor-enforced Code Integrity (HVCI / Memory Integrity). Can improve gaming performance by 5-10% but reduces security."
         ),
         tags=["hvci", "virtualization", "performance", "gaming"],
     ),

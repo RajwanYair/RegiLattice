@@ -13,9 +13,7 @@ from regilattice.tweaks import TweakDef
 
 # ── PowerShell Execution Policy (CurrentUser) ───────────────────────────────
 
-_PS_KEY = (
-    r"HKEY_CURRENT_USER\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
-)
+_PS_KEY = r"HKEY_CURRENT_USER\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
 
 
 def apply_ps_unrestricted(*, require_admin: bool = False) -> None:
@@ -112,9 +110,7 @@ def apply_scoop_setup(*, require_admin: bool = False) -> None:
     SESSION.log("Starting Add-ScoopSetup")
     # Check if scoop is available
     try:
-        r = subprocess.run(
-            ["scoop", "--version"], capture_output=True, text=True, timeout=15
-        )
+        r = subprocess.run(["scoop", "--version"], capture_output=True, text=True, timeout=15)
         if r.returncode != 0:
             raise FileNotFoundError
     except (FileNotFoundError, OSError):
@@ -125,8 +121,7 @@ def apply_scoop_setup(*, require_admin: bool = False) -> None:
                 "powershell",
                 "-NoProfile",
                 "-Command",
-                "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; "
-                "iwr -useb get.scoop.sh | iex",
+                "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; iwr -useb get.scoop.sh | iex",
             ],
             capture_output=True,
             text=True,
@@ -152,9 +147,7 @@ def remove_scoop_setup(*, require_admin: bool = False) -> None:
 
 def detect_scoop_setup() -> bool:
     try:
-        r = subprocess.run(
-            ["scoop", "--version"], capture_output=True, text=True, timeout=10
-        )
+        r = subprocess.run(["scoop", "--version"], capture_output=True, text=True, timeout=10)
         return r.returncode == 0
     except (FileNotFoundError, OSError):
         return False
@@ -464,7 +457,7 @@ def detect_winget_disable_msstore() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="ps-remotesigned",
+        id="pkg-ps-remotesigned",
         label="PowerShell RemoteSigned Policy",
         category="Package Management",
         apply_fn=apply_ps_unrestricted,
@@ -473,14 +466,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=False,
         registry_keys=[_PS_KEY],
-        description=(
-            "Sets PowerShell execution policy to RemoteSigned for "
-            "the current user, enabling local scripts."
-        ),
+        description=("Sets PowerShell execution policy to RemoteSigned for the current user, enabling local scripts."),
         tags=["powershell", "security", "scripting"],
     ),
     TweakDef(
-        id="ps-gallery-trust",
+        id="pkg-ps-gallery-trust",
         label="Trust PSGallery Repository",
         category="Package Management",
         apply_fn=apply_ps_gallery_trust,
@@ -493,7 +483,7 @@ TWEAKS: list[TweakDef] = [
         tags=["powershell", "packages", "gallery"],
     ),
     TweakDef(
-        id="scoop-setup",
+        id="pkg-scoop-setup",
         label="Install & Configure Scoop",
         category="Package Management",
         apply_fn=apply_scoop_setup,
@@ -502,14 +492,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=False,
         registry_keys=[],
-        description=(
-            "Installs Scoop package manager (if missing) and adds "
-            "extras, versions, and nerd-fonts buckets."
-        ),
+        description=("Installs Scoop package manager (if missing) and adds extras, versions, and nerd-fonts buckets."),
         tags=["scoop", "packages", "installer"],
     ),
     TweakDef(
-        id="enable-winget",
+        id="pkg-enable-winget",
         label="Enable Winget (App Installer)",
         category="Package Management",
         apply_fn=apply_enable_winget,
@@ -518,14 +505,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_WINGET_KEY],
-        description=(
-            "Enables winget (App Installer), experimental features, "
-            "and hash override via Group Policy."
-        ),
+        description=("Enables winget (App Installer), experimental features, and hash override via Group Policy."),
         tags=["winget", "packages", "installer"],
     ),
     TweakDef(
-        id="pip-user-default",
+        id="pkg-pip-user-default",
         label="Pip Default --user Install",
         category="Package Management",
         apply_fn=apply_pip_user_default,
@@ -534,14 +518,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PIP_ENV],
-        description=(
-            "Sets PIP_USER=1 environment variable so pip installs "
-            "to user site-packages by default (no admin required)."
-        ),
+        description=("Sets PIP_USER=1 environment variable so pip installs to user site-packages by default (no admin required)."),
         tags=["python", "pip", "packages"],
     ),
     TweakDef(
-        id="pip-no-cache",
+        id="pkg-pip-no-cache",
         label="Pip Disable Cache (Save Disk)",
         category="Package Management",
         apply_fn=apply_pip_no_cache,
@@ -554,7 +535,7 @@ TWEAKS: list[TweakDef] = [
         tags=["python", "pip", "disk"],
     ),
     TweakDef(
-        id="npm-prefer-offline",
+        id="pkg-npm-prefer-offline",
         label="npm Prefer Offline Cache",
         category="Package Management",
         apply_fn=apply_npm_prefer_offline,
@@ -567,7 +548,7 @@ TWEAKS: list[TweakDef] = [
         tags=["npm", "node", "packages", "offline"],
     ),
     TweakDef(
-        id="pip-require-venv",
+        id="pkg-pip-require-venv",
         label="Pip Require Virtualenv",
         category="Package Management",
         apply_fn=apply_pip_require_venv,
@@ -576,15 +557,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PIP_ENV],
-        description=(
-            "Sets PIP_REQUIRE_VIRTUALENV=1 — prevents accidental "
-            "installs into system/global Python. Forces explicit "
-            "virtualenv usage."
-        ),
+        description=("Sets PIP_REQUIRE_VIRTUALENV=1 — prevents accidental installs into system/global Python. Forces explicit virtualenv usage."),
         tags=["python", "pip", "virtualenv", "safety"],
     ),
     TweakDef(
-        id="pip-disable-version-check",
+        id="pkg-pip-disable-version-check",
         label="Pip Disable Version Nag",
         category="Package Management",
         apply_fn=apply_pip_disable_version_check,
@@ -593,14 +570,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PIP_ENV],
-        description=(
-            "Sets PIP_DISABLE_PIP_VERSION_CHECK=1 to suppress "
-            "'new pip version available' warnings."
-        ),
+        description=("Sets PIP_DISABLE_PIP_VERSION_CHECK=1 to suppress 'new pip version available' warnings."),
         tags=["python", "pip", "nag"],
     ),
     TweakDef(
-        id="pip-timeout",
+        id="pkg-pip-timeout",
         label="Pip Timeout 60s (Slow Networks)",
         category="Package Management",
         apply_fn=apply_pip_timeout,
@@ -609,14 +583,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PIP_ENV],
-        description=(
-            "Sets PIP_TIMEOUT=60 for more reliable installs on "
-            "slow or corporate networks (default: 15s)."
-        ),
+        description=("Sets PIP_TIMEOUT=60 for more reliable installs on slow or corporate networks (default: 15s)."),
         tags=["python", "pip", "network", "timeout"],
     ),
     TweakDef(
-        id="pip-trusted-host",
+        id="pkg-pip-trusted-host",
         label="Pip Trusted Hosts (PyPI)",
         category="Package Management",
         apply_fn=apply_pip_trusted_host,
@@ -625,14 +596,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PIP_ENV],
-        description=(
-            "Adds pypi.org and pythonhosted.org as trusted hosts "
-            "so pip works behind corporate TLS-inspecting proxies."
-        ),
+        description=("Adds pypi.org and pythonhosted.org as trusted hosts so pip works behind corporate TLS-inspecting proxies."),
         tags=["python", "pip", "proxy", "corporate"],
     ),
     TweakDef(
-        id="pip-system-index",
+        id="pkg-pip-system-index",
         label="Pip System Index URL (HKLM)",
         category="Package Management",
         apply_fn=apply_pip_system_index,
@@ -641,14 +609,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PIP_SYS_ENV],
-        description=(
-            "Sets system-wide PIP_INDEX_URL to official PyPI for "
-            "all users (HKLM environment variable)."
-        ),
+        description=("Sets system-wide PIP_INDEX_URL to official PyPI for all users (HKLM environment variable)."),
         tags=["python", "pip", "system", "index"],
     ),
     TweakDef(
-        id="pip-system-no-cache",
+        id="pkg-pip-system-no-cache",
         label="Pip System Disable Cache (HKLM)",
         category="Package Management",
         apply_fn=apply_pip_system_no_cache,
@@ -657,14 +622,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PIP_SYS_ENV],
-        description=(
-            "Sets system-wide PIP_NO_CACHE_DIR=1 to prevent "
-            "pip cache accumulation for all users."
-        ),
+        description=("Sets system-wide PIP_NO_CACHE_DIR=1 to prevent pip cache accumulation for all users."),
         tags=["python", "pip", "system", "disk"],
     ),
     TweakDef(
-        id="pip-system-trusted-host",
+        id="pkg-pip-system-trusted-host",
         label="Pip System Trusted Hosts (HKLM)",
         category="Package Management",
         apply_fn=apply_pip_system_trusted_host,
@@ -673,14 +635,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PIP_SYS_ENV],
-        description=(
-            "Sets system-wide PIP_TRUSTED_HOST for all users — "
-            "useful for fleet-wide corporate proxy configurations."
-        ),
+        description=("Sets system-wide PIP_TRUSTED_HOST for all users — useful for fleet-wide corporate proxy configurations."),
         tags=["python", "pip", "system", "proxy", "corporate"],
     ),
     TweakDef(
-        id="pip-system-require-venv",
+        id="pkg-pip-system-require-venv",
         label="Pip System Require Virtualenv (HKLM)",
         category="Package Management",
         apply_fn=apply_pip_system_require_venv,
@@ -689,14 +648,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PIP_SYS_ENV],
-        description=(
-            "System-wide PIP_REQUIRE_VIRTUALENV=1 — blocks any pip "
-            "install outside a virtualenv for all users on the machine."
-        ),
+        description=("System-wide PIP_REQUIRE_VIRTUALENV=1 — blocks any pip install outside a virtualenv for all users on the machine."),
         tags=["python", "pip", "system", "virtualenv", "safety"],
     ),
     TweakDef(
-        id="winget-disable-auto-update",
+        id="pkg-winget-disable-auto-update",
         label="Disable WinGet Auto-Upgrade",
         category="Package Management",
         apply_fn=apply_winget_disable_auto_update,
@@ -713,7 +669,7 @@ TWEAKS: list[TweakDef] = [
         tags=["winget", "packages", "update", "performance"],
     ),
     TweakDef(
-        id="winget-disable-msstore-source",
+        id="pkg-winget-disable-msstore-source",
         label="Disable WinGet MS Store Source",
         category="Package Management",
         apply_fn=apply_winget_disable_msstore,
@@ -792,10 +748,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_STORE_POLICY],
-        description=(
-            "Prevents Microsoft Store from auto-downloading apps. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Prevents Microsoft Store from auto-downloading apps. Default: Enabled. Recommended: Disabled."),
         tags=["packages", "store", "auto-download"],
     ),
     TweakDef(
@@ -808,10 +761,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CDM],
-        description=(
-            "Prevents Windows from silently installing suggested apps. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Prevents Windows from silently installing suggested apps. Default: Enabled. Recommended: Disabled."),
         tags=["packages", "suggested", "bloatware"],
     ),
 ]
@@ -888,8 +838,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_WINGET_KEY],
         description=(
-            "Disables automatic WinGet package manager self-updates via policy. "
-            "Default: Enabled. Recommended: Disabled for controlled environments."
+            "Disables automatic WinGet package manager self-updates via policy. Default: Enabled. Recommended: Disabled for controlled environments."
         ),
         tags=["packages", "winget", "auto-update", "policy"],
     ),

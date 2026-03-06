@@ -303,7 +303,7 @@ def detect_vscode_disable_gpu() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-vscode-telemetry",
+        id="vscode-disable-vscode-telemetry",
         label="Disable VS Code Telemetry",
         category="VS Code",
         apply_fn=apply_disable_vscode_telemetry,
@@ -312,14 +312,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Disables VS Code telemetry, crash reporting, and usage "
-            "data collection via machine-level policy."
-        ),
+        description=("Disables VS Code telemetry, crash reporting, and usage data collection via machine-level policy."),
         tags=["vscode", "developer", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-vscode-update",
+        id="vscode-disable-vscode-update",
         label="Disable VS Code Auto-Update",
         category="VS Code",
         apply_fn=apply_disable_vscode_update,
@@ -332,7 +329,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "developer", "update"],
     ),
     TweakDef(
-        id="disable-vscode-ext-update",
+        id="vscode-disable-vscode-ext-update",
         label="Disable VS Code Extension Auto-Update",
         category="VS Code",
         apply_fn=apply_disable_vscode_ext_update,
@@ -345,7 +342,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "developer", "extensions", "update"],
     ),
     TweakDef(
-        id="disable-vscode-experiments",
+        id="vscode-disable-vscode-experiments",
         label="Disable VS Code A/B Experiments",
         category="VS Code",
         apply_fn=apply_disable_vscode_experiments,
@@ -358,7 +355,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "developer", "experiments"],
     ),
     TweakDef(
-        id="disable-vscode-settings-sync",
+        id="vscode-disable-vscode-settings-sync",
         label="Disable VS Code Settings Sync",
         category="VS Code",
         apply_fn=apply_disable_vscode_settings_sync,
@@ -371,7 +368,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "developer", "sync"],
     ),
     TweakDef(
-        id="disable-vscode-startup-editor",
+        id="vscode-disable-vscode-startup-editor",
         label="Disable VS Code Welcome Tab",
         category="VS Code",
         apply_fn=apply_disable_vscode_startup_editor,
@@ -384,7 +381,7 @@ TWEAKS: list[TweakDef] = [
         tags=["vscode", "developer", "startup"],
     ),
     TweakDef(
-        id="disable-vscode-recommendations",
+        id="vscode-disable-vscode-recommendations",
         label="Disable VS Code Extension Recommendations",
         category="VS Code",
         apply_fn=apply_disable_vscode_recommendations,
@@ -406,10 +403,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Disables VS Code telemetry via the machine-level "
-            "TelemetryLevel policy value."
-        ),
+        description=("Disables VS Code telemetry via the machine-level TelemetryLevel policy value."),
         tags=["vscode", "telemetry", "privacy", "policy"],
     ),
     TweakDef(
@@ -422,10 +416,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Disables VS Code A/B experiments via the machine-level "
-            "EnableExperiments policy value."
-        ),
+        description=("Disables VS Code A/B experiments via the machine-level EnableExperiments policy value."),
         tags=["vscode", "experiments", "policy"],
     ),
     TweakDef(
@@ -438,10 +429,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Disables VS Code update notifications via the machine-level "
-            "UpdateMode policy value."
-        ),
+        description=("Disables VS Code update notifications via the machine-level UpdateMode policy value."),
         tags=["vscode", "update", "notifications", "policy"],
     ),
     TweakDef(
@@ -454,10 +442,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Disables VS Code crash reporter via the machine-level "
-            "CrashReporterEnabled policy value."
-        ),
+        description=("Disables VS Code crash reporter via the machine-level CrashReporterEnabled policy value."),
         tags=["vscode", "crash-reporter", "privacy", "policy"],
     ),
     TweakDef(
@@ -470,10 +455,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=_VSCODE_KEYS,
-        description=(
-            "Blocks access to the VS Code extension marketplace by setting "
-            "ExtensionGalleryServiceUrl to an empty string via policy."
-        ),
+        description=("Blocks access to the VS Code extension marketplace by setting ExtensionGalleryServiceUrl to an empty string via policy."),
         tags=["vscode", "extensions", "security", "policy"],
     ),
     TweakDef(
@@ -568,10 +550,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_VSCODE_POLICY_CU],
-        description=(
-            "Disables VS Code telemetry via user-level policy. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables VS Code telemetry via user-level policy. Default: Enabled. Recommended: Disabled."),
         tags=["vscode", "telemetry", "privacy", "user-policy"],
     ),
     TweakDef(
@@ -584,10 +563,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_VSCODE_POLICY_CU],
-        description=(
-            "Disables VS Code auto-update checking via user-level policy. "
-            "Default: Enabled. Recommended: Disabled for stable environments."
-        ),
+        description=("Disables VS Code auto-update checking via user-level policy. Default: Enabled. Recommended: Disabled for stable environments."),
         tags=["vscode", "update", "auto-update", "user-policy"],
     ),
 ]
@@ -659,7 +635,7 @@ def _detect_vsc_set_gpu_accel() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="vsc-disable-telemetry",
+        id="vscode-vsc-disable-telemetry",
         label="Disable VS Code Telemetry (Machine Policy)",
         category="VS Code",
         apply_fn=_apply_vsc_disable_telemetry,
@@ -669,14 +645,12 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_VSCODE_POLICY],
         description=(
-            "Disables VS Code telemetry via HKLM machine-level policy. "
-            "Applies to all users on the machine. "
-            "Default: Enabled. Recommended: Disabled."
+            "Disables VS Code telemetry via HKLM machine-level policy. Applies to all users on the machine. Default: Enabled. Recommended: Disabled."
         ),
         tags=["vscode", "telemetry", "privacy", "machine-policy"],
     ),
     TweakDef(
-        id="vsc-disable-update-notif",
+        id="vscode-vsc-disable-update-notif",
         label="Disable VS Code Update Notifications (Machine Policy)",
         category="VS Code",
         apply_fn=_apply_vsc_disable_update_notif,
@@ -692,7 +666,7 @@ TWEAKS += [
         tags=["vscode", "update", "notifications", "machine-policy"],
     ),
     TweakDef(
-        id="vsc-set-gpu-accel",
+        id="vscode-vsc-set-gpu-accel",
         label="Set VS Code GPU Acceleration (Machine Policy)",
         category="VS Code",
         apply_fn=_apply_vsc_set_gpu_accel,
@@ -702,8 +676,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_VSCODE_POLICY],
         description=(
-            "Enables GPU acceleration for VS Code via machine-level policy. "
-            "Improves rendering performance. Default: Auto. Recommended: On."
+            "Enables GPU acceleration for VS Code via machine-level policy. Improves rendering performance. Default: Auto. Recommended: On."
         ),
         tags=["vscode", "gpu", "acceleration", "performance", "machine-policy"],
     ),

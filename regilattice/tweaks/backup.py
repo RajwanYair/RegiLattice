@@ -252,10 +252,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_FILE_HISTORY],
-        description=(
-            "Disables Windows File History backup feature via Group Policy. "
-            "Useful when you use a third-party backup solution instead."
-        ),
+        description=("Disables Windows File History backup feature via Group Policy. Useful when you use a third-party backup solution instead."),
         tags=["backup", "file-history", "policy"],
     ),
     TweakDef(
@@ -268,10 +265,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SYSTEM_RESTORE],
-        description=(
-            "Disables System Restore and removes existing restore points. "
-            "Frees disk space but removes the safety net. Use with caution."
-        ),
+        description=("Disables System Restore and removes existing restore points. Frees disk space but removes the safety net. Use with caution."),
         tags=["backup", "system-restore", "disk", "policy"],
     ),
     TweakDef(
@@ -284,10 +278,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_VSS],
-        description=(
-            "Sets the VSS service to Manual start. Reduces background I/O "
-            "if you don't use System Restore or Previous Versions."
-        ),
+        description=("Sets the VSS service to Manual start. Reduces background I/O if you don't use System Restore or Previous Versions."),
         tags=["backup", "vss", "shadow-copy", "performance"],
     ),
     TweakDef(
@@ -300,10 +291,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BACKUP],
-        description=(
-            "Hides the Windows Backup page in Settings via policy. "
-            "Useful for managed environments that use different backup solutions."
-        ),
+        description=("Hides the Windows Backup page in Settings via policy. Useful for managed environments that use different backup solutions."),
         tags=["backup", "settings", "policy", "enterprise"],
     ),
     TweakDef(
@@ -317,8 +305,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_BACKUP_CLIENT],
         description=(
-            "Disables all Windows Backup reminder notifications. "
-            "Stops nagging popups about configuring backup to disk, network, or optical."
+            "Disables all Windows Backup reminder notifications. Stops nagging popups about configuring backup to disk, network, or optical."
         ),
         tags=["backup", "notifications", "nag", "policy"],
     ),
@@ -332,10 +319,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PREV_VERSIONS],
-        description=(
-            "Removes the 'Previous Versions' tab from file/folder properties. "
-            "Cleans up the context menu when VSS is not in use."
-        ),
+        description=("Removes the 'Previous Versions' tab from file/folder properties. Cleans up the context menu when VSS is not in use."),
         tags=["backup", "previous-versions", "explorer", "cleanup"],
     ),
     TweakDef(
@@ -401,9 +385,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_WER],
         description=(
-            "Stops Windows Error Reporting from collecting and sending "
-            "crash data. Reduces disk I/O and network usage from WER "
-            "telemetry uploads."
+            "Stops Windows Error Reporting from collecting and sending crash data. Reduces disk I/O and network usage from WER telemetry uploads."
         ),
         tags=["backup", "wer", "error-reporting", "privacy", "performance"],
     ),
@@ -459,10 +441,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_RELIABILITY],
-        description=(
-            "Disables Windows Reliability Monitor data collection by "
-            "setting TimeStampInterval to 0. Reduces background I/O."
-        ),
+        description=("Disables Windows Reliability Monitor data collection by setting TimeStampInterval to 0. Reduces background I/O."),
         tags=["backup", "reliability", "performance"],
     ),
     TweakDef(
@@ -475,10 +454,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CRASH_CONTROL],
-        description=(
-            "Prevents Windows from automatically rebooting after a blue "
-            "screen crash, allowing you to read the error code."
-        ),
+        description=("Prevents Windows from automatically rebooting after a blue screen crash, allowing you to read the error code."),
         tags=["backup", "bsod", "crash", "reboot"],
     ),
 ]
@@ -548,7 +524,7 @@ def _detect_set_backup_interval() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="bak-increase-shadow-storage",
+        id="backup-bak-increase-shadow-storage",
         label="Increase Shadow Copy Storage Limit",
         category="Backup & Recovery",
         apply_fn=_apply_increase_shadow_storage,
@@ -557,15 +533,11 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_VSS_SETTINGS],
-        description=(
-            "Increases the maximum number of shadow copies to 64. "
-            "Allows more restore points to be retained. "
-            "Default: 16. Recommended: 64."
-        ),
+        description=("Increases the maximum number of shadow copies to 64. Allows more restore points to be retained. Default: 16. Recommended: 64."),
         tags=["backup", "shadow-copy", "vss", "storage"],
     ),
     TweakDef(
-        id="bak-disable-restore-low-disk",
+        id="backup-bak-disable-restore-low-disk",
         label="Disable System Restore on Low Disk",
         category="Backup & Recovery",
         apply_fn=_apply_disable_restore_low_disk,
@@ -582,7 +554,7 @@ TWEAKS += [
         tags=["backup", "system-restore", "disk", "low-space"],
     ),
     TweakDef(
-        id="bak-set-backup-interval",
+        id="backup-bak-set-backup-interval",
         label="Set Backup Schedule Interval to 24 Hours",
         category="Backup & Recovery",
         apply_fn=_apply_set_backup_interval,

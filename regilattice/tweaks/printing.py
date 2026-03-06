@@ -236,8 +236,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
         description=(
-            "Sets the Print Spooler service to Manual start. Reduces attack "
-            "surface (PrintNightmare) and improves boot time if no printer is used."
+            "Sets the Print Spooler service to Manual start. Reduces attack surface (PrintNightmare) and improves boot time if no printer is used."
         ),
         tags=["printing", "spooler", "security", "performance"],
     ),
@@ -251,10 +250,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SPOOLER],
-        description=(
-            "Runs third-party print drivers in an isolated process. "
-            "Prevents a buggy driver from crashing the spooler service."
-        ),
+        description=("Runs third-party print drivers in an isolated process. Prevents a buggy driver from crashing the spooler service."),
         tags=["printing", "driver", "stability", "isolation"],
     ),
     TweakDef(
@@ -267,10 +263,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_POINTPRINT],
-        description=(
-            "Requires admin approval for Point-and-Print driver installs. "
-            "Mitigates PrintNightmare and similar spooler vulnerabilities."
-        ),
+        description=("Requires admin approval for Point-and-Print driver installs. Mitigates PrintNightmare and similar spooler vulnerabilities."),
         tags=["printing", "security", "pointandprint", "policy"],
     ),
     TweakDef(
@@ -283,10 +276,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_PRINTING_CU],
-        description=(
-            "Stops Windows from automatically setting the default printer "
-            "to the last one used. Keeps your chosen default printer fixed."
-        ),
+        description=("Stops Windows from automatically setting the default printer to the last one used. Keeps your chosen default printer fixed."),
         tags=["printing", "default", "management"],
     ),
     TweakDef(
@@ -299,10 +289,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PRINTERS],
-        description=(
-            "Removes the Microsoft XPS Document Writer virtual printer "
-            "from the printers list. Reduces clutter if you never use XPS."
-        ),
+        description=("Removes the Microsoft XPS Document Writer virtual printer from the printers list. Reduces clutter if you never use XPS."),
         tags=["printing", "xps", "cleanup"],
     ),
     TweakDef(
@@ -315,10 +302,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PRINTERS],
-        description=(
-            "Prevents shared printers from being published in Active Directory. "
-            "Reduces AD clutter on enterprise networks."
-        ),
+        description=("Prevents shared printers from being published in Active Directory. Reduces AD clutter on enterprise networks."),
         tags=["printing", "network", "activedirectory", "enterprise"],
     ),
     TweakDef(
@@ -331,10 +315,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PRINTERS],
-        description=(
-            "Disables Internet Printing Protocol and Web PnP driver downloads. "
-            "Reduces attack surface from internet-facing print services."
-        ),
+        description=("Disables Internet Printing Protocol and Web PnP driver downloads. Reduces attack surface from internet-facing print services."),
         tags=["printing", "internet", "security", "ipp"],
     ),
     TweakDef(
@@ -544,15 +525,12 @@ def _remove_point_and_print_restrict(*, require_admin: bool = True) -> None:
 
 
 def _detect_point_and_print_restrict() -> bool:
-    return (
-        SESSION.read_dword(_POINTPRINT, "Restricted") == 1
-        and SESSION.read_dword(_POINTPRINT, "TrustedServers") == 1
-    )
+    return SESSION.read_dword(_POINTPRINT, "Restricted") == 1 and SESSION.read_dword(_POINTPRINT, "TrustedServers") == 1
 
 
 TWEAKS += [
     TweakDef(
-        id="print-disable-legacy-mode",
+        id="printing-print-disable-legacy-mode",
         label="Disable Print Spooler Legacy Mode",
         category="Printing",
         apply_fn=_apply_disable_legacy_mode,
@@ -569,7 +547,7 @@ TWEAKS += [
         tags=["printing", "spooler", "legacy", "default-printer"],
     ),
     TweakDef(
-        id="print-default-paper-a4",
+        id="printing-print-default-paper-a4",
         label="Set Default Paper Size to A4",
         category="Printing",
         apply_fn=_apply_default_paper_a4,
@@ -578,14 +556,11 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_INTL_KEY],
-        description=(
-            "Sets the default paper size to A4 (paper ID 9) for all printers. "
-            "Default: Letter (US). Recommended: A4 outside North America."
-        ),
+        description=("Sets the default paper size to A4 (paper ID 9) for all printers. Default: Letter (US). Recommended: A4 outside North America."),
         tags=["printing", "paper", "a4", "international"],
     ),
     TweakDef(
-        id="print-point-and-print-restrict",
+        id="printing-print-point-and-print-restrict",
         label="Enable Point and Print Restrictions",
         category="Printing",
         apply_fn=_apply_point_and_print_restrict,

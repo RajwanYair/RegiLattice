@@ -53,7 +53,9 @@ def apply_disable_boot_logo(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: disable boot splash logo via bcdedit")
     subprocess.run(
         ["bcdedit", "/set", "quietboot", "off"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
     SESSION.log("Completed disable-boot-logo")
 
@@ -62,7 +64,9 @@ def remove_disable_boot_logo(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["bcdedit", "/set", "quietboot", "on"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -70,7 +74,10 @@ def detect_disable_boot_logo() -> bool:
     try:
         r = subprocess.run(
             ["bcdedit", "/enum", "{current}"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         return "quietboot" in r.stdout.lower() and "off" in r.stdout.lower()
     except (OSError, subprocess.SubprocessError):
@@ -85,7 +92,9 @@ def apply_fast_boot_timeout(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: set OS selection timeout to 3 seconds")
     subprocess.run(
         ["bcdedit", "/timeout", "3"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -93,7 +102,9 @@ def remove_fast_boot_timeout(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["bcdedit", "/timeout", "30"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -101,7 +112,10 @@ def detect_fast_boot_timeout() -> bool:
     try:
         r = subprocess.run(
             ["bcdedit", "/enum", "{bootmgr}"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         for line in r.stdout.splitlines():
             if "timeout" in line.lower():
@@ -166,7 +180,9 @@ def _apply_boot_log(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: enable boot log (ntbtlog.txt)")
     subprocess.run(
         ["bcdedit", "/set", "{current}", "bootlog", "Yes"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -174,7 +190,9 @@ def _remove_boot_log(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["bcdedit", "/set", "{current}", "bootlog", "No"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -182,7 +200,10 @@ def _detect_boot_log() -> bool:
     try:
         r = subprocess.run(
             ["bcdedit", "/enum", "{current}"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         return "bootlog" in r.stdout.lower() and "yes" in r.stdout.lower()
     except (OSError, subprocess.SubprocessError):
@@ -197,7 +218,9 @@ def _apply_disable_winre(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: disable Windows Recovery Environment")
     subprocess.run(
         ["reagentc", "/disable"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -205,7 +228,9 @@ def _remove_disable_winre(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["reagentc", "/enable"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -213,7 +238,10 @@ def _detect_disable_winre() -> bool:
     try:
         r = subprocess.run(
             ["reagentc", "/info"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         return "disabled" in r.stdout.lower()
     except (OSError, subprocess.SubprocessError):
@@ -228,7 +256,9 @@ def _apply_disable_auto_repair(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: disable automatic repair")
     subprocess.run(
         ["bcdedit", "/set", "{current}", "recoveryenabled", "No"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -236,7 +266,9 @@ def _remove_disable_auto_repair(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["bcdedit", "/set", "{current}", "recoveryenabled", "Yes"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -244,7 +276,10 @@ def _detect_disable_auto_repair() -> bool:
     try:
         r = subprocess.run(
             ["bcdedit", "/enum", "{current}"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         for line in r.stdout.splitlines():
             if "recoveryenabled" in line.lower():
@@ -262,7 +297,9 @@ def _apply_ignore_boot_failures(*, require_admin: bool = True) -> None:
     SESSION.log("Boot: set boot failure policy to ignore")
     subprocess.run(
         ["bcdedit", "/set", "{current}", "bootstatuspolicy", "IgnoreAllFailures"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -270,7 +307,9 @@ def _remove_ignore_boot_failures(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     subprocess.run(
         ["bcdedit", "/deletevalue", "{current}", "bootstatuspolicy"],
-        check=False, capture_output=True, text=True,
+        check=False,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -278,7 +317,10 @@ def _detect_ignore_boot_failures() -> bool:
     try:
         r = subprocess.run(
             ["bcdedit", "/enum", "{current}"],
-            capture_output=True, text=True, timeout=5, check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
         )
         return "ignoreallfailures" in r.stdout.lower()
     except (OSError, subprocess.SubprocessError):
@@ -287,9 +329,7 @@ def _detect_ignore_boot_failures() -> bool:
 
 # ── Disable UEFI Secure Boot Check ───────────────────────────────────────────
 
-_SECBOOT_KEY = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State"
-)
+_SECBOOT_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State"
 
 
 def _apply_disable_secboot_check(*, require_admin: bool = True) -> None:
@@ -446,7 +486,7 @@ def _detect_disable_boot_startup_sound() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="verbose-boot",
+        id="boot-verbose-boot",
         label="Verbose Boot Messages",
         category="Boot",
         apply_fn=apply_verbose_boot,
@@ -459,7 +499,7 @@ TWEAKS: list[TweakDef] = [
         tags=["boot", "debug", "diagnostic"],
     ),
     TweakDef(
-        id="disable-boot-logo",
+        id="boot-disable-boot-logo",
         label="Disable Boot Splash Logo",
         category="Boot",
         apply_fn=apply_disable_boot_logo,
@@ -472,7 +512,7 @@ TWEAKS: list[TweakDef] = [
         tags=["boot", "performance", "splash"],
     ),
     TweakDef(
-        id="fast-boot-timeout",
+        id="boot-fast-boot-timeout",
         label="Reduce Boot Menu Timeout (3s)",
         category="Boot",
         apply_fn=apply_fast_boot_timeout,
@@ -485,7 +525,7 @@ TWEAKS: list[TweakDef] = [
         tags=["boot", "performance", "timeout"],
     ),
     TweakDef(
-        id="numlock-on-boot",
+        id="boot-numlock-on-boot",
         label="Enable NumLock at Boot",
         category="Boot",
         apply_fn=_apply_numlock_on_boot,
@@ -494,14 +534,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEYBOARD_KEY],
-        description=(
-            "Turns on NumLock automatically at the login screen. "
-            "Options: 0=Off, 2=On. Default: 0 (Off). Recommended: On."
-        ),
+        description=("Turns on NumLock automatically at the login screen. Options: 0=Off, 2=On. Default: 0 (Off). Recommended: On."),
         tags=["boot", "keyboard", "numlock"],
     ),
     TweakDef(
-        id="disable-driver-verifier",
+        id="boot-disable-driver-verifier",
         label="Disable Boot Driver Verifier (Perf)",
         category="Boot",
         apply_fn=_apply_disable_driver_verifier,
@@ -527,14 +564,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[],
-        description=(
-            "Creates a text file (ntbtlog.txt) listing all drivers loaded "
-            "during boot. Useful for diagnosing boot problems."
-        ),
+        description=("Creates a text file (ntbtlog.txt) listing all drivers loaded during boot. Useful for diagnosing boot problems."),
         tags=["boot", "debug", "log"],
     ),
     TweakDef(
-        id="disable-winre",
+        id="boot-disable-winre",
         label="Disable Windows Recovery Environment",
         category="Boot",
         apply_fn=_apply_disable_winre,
@@ -544,13 +578,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[],
         description=(
-            "Disables the Windows Recovery Environment (WinRE). Saves ~450 MB "
-            "of reserved disk space but prevents automatic repair on failures."
+            "Disables the Windows Recovery Environment (WinRE). Saves ~450 MB of reserved disk space but prevents automatic repair on failures."
         ),
         tags=["boot", "recovery", "disk"],
     ),
     TweakDef(
-        id="disable-auto-repair",
+        id="boot-disable-auto-repair",
         label="Disable Automatic Boot Repair",
         category="Boot",
         apply_fn=_apply_disable_auto_repair,
@@ -559,14 +592,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[],
-        description=(
-            "Prevents Windows from launching Automatic Repair after boot failures. "
-            "Useful when the repair loop causes more harm than good."
-        ),
+        description=("Prevents Windows from launching Automatic Repair after boot failures. Useful when the repair loop causes more harm than good."),
         tags=["boot", "repair", "recovery"],
     ),
     TweakDef(
-        id="ignore-boot-failures",
+        id="boot-ignore-boot-failures",
         label="Ignore All Boot Failures",
         category="Boot",
         apply_fn=_apply_ignore_boot_failures,
@@ -575,14 +605,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[],
-        description=(
-            "Sets boot status policy to ignore all failures, suppressing "
-            "the 'Windows did not start successfully' screen."
-        ),
+        description=("Sets boot status policy to ignore all failures, suppressing the 'Windows did not start successfully' screen."),
         tags=["boot", "performance", "failure"],
     ),
     TweakDef(
-        id="disable-secboot-check",
+        id="boot-disable-secboot-check",
         label="Suppress Secure Boot Status Check",
         category="Boot",
         apply_fn=_apply_disable_secboot_check,
@@ -591,10 +618,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_SECBOOT_KEY],
-        description=(
-            "Suppresses the Secure Boot status notification in Windows "
-            "by setting UEFISecureBootEnabled to 0 in the registry."
-        ),
+        description=("Suppresses the Secure Boot status notification in Windows by setting UEFISecureBootEnabled to 0 in the registry."),
         tags=["boot", "security", "uefi"],
     ),
     TweakDef(
@@ -759,9 +783,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_POWER_CTL],
         description=(
-            "Disables hibernation and removes the hiberfil.sys file "
-            "to free disk space. Default: Enabled. "
-            "Recommended: Disabled on desktops with SSD."
+            "Disables hibernation and removes the hiberfil.sys file to free disk space. Default: Enabled. Recommended: Disabled on desktops with SSD."
         ),
         tags=["boot", "hibernation", "disk-space", "performance"],
     ),
@@ -785,9 +807,7 @@ TWEAKS += [
 ]
 
 
-_CRASH_CTL = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
-)
+_CRASH_CTL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
 _MEM_MGMT = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
     r"\Session Manager\Memory Management"

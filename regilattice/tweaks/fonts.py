@@ -9,9 +9,7 @@ from regilattice.tweaks import TweakDef
 
 _KEY_DESKTOP = r"HKEY_CURRENT_USER\Control Panel\Desktop"
 
-_KEY_USER_FONTS = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
-)
+_KEY_USER_FONTS = r"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
 
 _KEY_EDGE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
 
@@ -20,30 +18,20 @@ _KEY_KERNEL = (
     r"\Session Manager\Kernel"
 )
 
-_KEY_FONTCACHE_SVC = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache"
-)
+_KEY_FONTCACHE_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache"
 
-_KEY_FONTCACHE3_SVC = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache3.0.0.0"
-)
+_KEY_FONTCACHE3_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache3.0.0.0"
 
-_KEY_AVALON_DISPLAY1 = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1"
-)
+_KEY_AVALON_DISPLAY1 = r"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1"
 
-_KEY_AVALON_GRAPHICS = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics"
-)
+_KEY_AVALON_GRAPHICS = r"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics"
 
 _KEY_IE_SECURITY = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft"
     r"\Windows\CurrentVersion\Internet Settings\Zones\3"
 )
 
-_KEY_FONT_PROVIDERS = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
+_KEY_FONT_PROVIDERS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
 
 
 # ── 1. Enable ClearType ─────────────────────────────────────────────────────
@@ -105,18 +93,10 @@ def _detect_disable_antialiasing() -> bool:
 def _apply_set_segoe_ui(*, require_admin: bool = False) -> None:
     SESSION.log("Fonts: set default system font to Segoe UI")
     SESSION.backup([_KEY_USER_FONTS], "DefaultFont")
-    SESSION.set_string(
-        _KEY_USER_FONTS, "Segoe UI (TrueType)", "segoeui.ttf"
-    )
-    SESSION.set_string(
-        _KEY_USER_FONTS, "Segoe UI Bold (TrueType)", "segoeuib.ttf"
-    )
-    SESSION.set_string(
-        _KEY_USER_FONTS, "Segoe UI Italic (TrueType)", "segoeuii.ttf"
-    )
-    SESSION.set_string(
-        _KEY_USER_FONTS, "Segoe UI Bold Italic (TrueType)", "segoeuiz.ttf"
-    )
+    SESSION.set_string(_KEY_USER_FONTS, "Segoe UI (TrueType)", "segoeui.ttf")
+    SESSION.set_string(_KEY_USER_FONTS, "Segoe UI Bold (TrueType)", "segoeuib.ttf")
+    SESSION.set_string(_KEY_USER_FONTS, "Segoe UI Italic (TrueType)", "segoeuii.ttf")
+    SESSION.set_string(_KEY_USER_FONTS, "Segoe UI Bold Italic (TrueType)", "segoeuiz.ttf")
 
 
 def _remove_set_segoe_ui(*, require_admin: bool = False) -> None:
@@ -127,10 +107,7 @@ def _remove_set_segoe_ui(*, require_admin: bool = False) -> None:
 
 
 def _detect_set_segoe_ui() -> bool:
-    return (
-        SESSION.read_string(_KEY_USER_FONTS, "Segoe UI (TrueType)")
-        == "segoeui.ttf"
-    )
+    return SESSION.read_string(_KEY_USER_FONTS, "Segoe UI (TrueType)") == "segoeui.ttf"
 
 
 # ── 5. Disable Font Download via Edge Policy ────────────────────────────────
@@ -149,9 +126,7 @@ def _remove_disable_font_download_edge(*, require_admin: bool = True) -> None:
 
 
 def _detect_disable_font_download_edge() -> bool:
-    return (
-        SESSION.read_dword(_KEY_EDGE_POLICY, "DefaultFontDownloadSetting") == 2
-    )
+    return SESSION.read_dword(_KEY_EDGE_POLICY, "DefaultFontDownloadSetting") == 2
 
 
 # ── 6. Block Untrusted Fonts ────────────────────────────────────────────────
@@ -165,9 +140,7 @@ def _apply_block_untrusted_fonts(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Fonts: block untrusted font loading")
     SESSION.backup([_KEY_KERNEL], "UntrustedFonts")
-    SESSION.set_string(
-        _KEY_KERNEL, "MitigationOptions", _BLOCK_UNTRUSTED_FONTS_VALUE
-    )
+    SESSION.set_string(_KEY_KERNEL, "MitigationOptions", _BLOCK_UNTRUSTED_FONTS_VALUE)
 
 
 def _remove_block_untrusted_fonts(*, require_admin: bool = True) -> None:
@@ -176,10 +149,7 @@ def _remove_block_untrusted_fonts(*, require_admin: bool = True) -> None:
 
 
 def _detect_block_untrusted_fonts() -> bool:
-    return (
-        SESSION.read_string(_KEY_KERNEL, "MitigationOptions")
-        == _BLOCK_UNTRUSTED_FONTS_VALUE
-    )
+    return SESSION.read_string(_KEY_KERNEL, "MitigationOptions") == _BLOCK_UNTRUSTED_FONTS_VALUE
 
 
 # ── 7. Disable Font Cache Service (FontCache) ───────────────────────────────
@@ -268,9 +238,7 @@ def _remove_wpf_hw_text(*, require_admin: bool = False) -> None:
 
 
 def _detect_wpf_hw_text() -> bool:
-    return (
-        SESSION.read_dword(_KEY_AVALON_GRAPHICS, "DisableHWAcceleration") == 0
-    )
+    return SESSION.read_dword(_KEY_AVALON_GRAPHICS, "DisableHWAcceleration") == 0
 
 
 # ── 12. Block Font Downloads in Internet Explorer Zones ─────────────────────
@@ -341,10 +309,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Enables ClearType sub-pixel rendering for sharper text on LCD "
-            "displays (sets FontSmoothingType to 2)."
-        ),
+        description=("Enables ClearType sub-pixel rendering for sharper text on LCD displays (sets FontSmoothingType to 2)."),
         tags=["fonts", "cleartype", "rendering", "display"],
     ),
     TweakDef(
@@ -357,10 +322,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Activates font smoothing at the system level so all text "
-            "benefits from anti-aliased rendering."
-        ),
+        description=("Activates font smoothing at the system level so all text benefits from anti-aliased rendering."),
         tags=["fonts", "smoothing", "display"],
     ),
     TweakDef(
@@ -373,10 +335,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Turns off all font smoothing and antialiasing for a minor "
-            "performance gain — text will appear jagged on LCD displays."
-        ),
+        description=("Turns off all font smoothing and antialiasing for a minor performance gain — text will appear jagged on LCD displays."),
         tags=["fonts", "antialiasing", "performance"],
     ),
     TweakDef(
@@ -389,10 +348,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_USER_FONTS],
-        description=(
-            "Registers Segoe UI and its variants as the per-user default "
-            "font, overriding any previous user-level font substitution."
-        ),
+        description=("Registers Segoe UI and its variants as the per-user default font, overriding any previous user-level font substitution."),
         tags=["fonts", "segoe", "default", "system"],
     ),
     TweakDef(
@@ -405,10 +361,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEY_EDGE_POLICY],
-        description=(
-            "Prevents Microsoft Edge from downloading web fonts via the "
-            "DefaultFontDownloadSetting policy (value 2 = block)."
-        ),
+        description=("Prevents Microsoft Edge from downloading web fonts via the DefaultFontDownloadSetting policy (value 2 = block)."),
         tags=["fonts", "edge", "download", "policy", "security"],
     ),
     TweakDef(
@@ -438,10 +391,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_KEY_FONTCACHE_SVC],
-        description=(
-            "Disables the Windows Font Cache Service (FontCache). "
-            "May reduce memory usage but can slow down font loading."
-        ),
+        description=("Disables the Windows Font Cache Service (FontCache). May reduce memory usage but can slow down font loading."),
         tags=["fonts", "cache", "service", "performance"],
     ),
     TweakDef(
@@ -454,10 +404,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_KEY_FONTCACHE3_SVC],
-        description=(
-            "Disables the Windows Presentation Foundation Font Cache 3.0 "
-            "Service used by WPF applications."
-        ),
+        description=("Disables the Windows Presentation Foundation Font Cache 3.0 Service used by WPF applications."),
         tags=["fonts", "cache", "wpf", "service"],
     ),
     TweakDef(
@@ -470,10 +417,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_AVALON_DISPLAY1],
-        description=(
-            "Sets the ClearType rendering level to 100 (maximum) for "
-            "WPF and Avalon-based applications on the primary display."
-        ),
+        description=("Sets the ClearType rendering level to 100 (maximum) for WPF and Avalon-based applications on the primary display."),
         tags=["fonts", "cleartype", "tuning", "wpf", "rendering"],
     ),
     TweakDef(
@@ -486,10 +430,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_AVALON_DISPLAY1],
-        description=(
-            "Sets the WPF text contrast level to 1 for a more natural, "
-            "softer ClearType appearance on the primary display."
-        ),
+        description=("Sets the WPF text contrast level to 1 for a more natural, softer ClearType appearance on the primary display."),
         tags=["fonts", "cleartype", "contrast", "wpf", "rendering"],
     ),
     TweakDef(
@@ -502,10 +443,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_AVALON_GRAPHICS],
-        description=(
-            "Ensures WPF applications use GPU-accelerated text rendering "
-            "by explicitly setting DisableHWAcceleration to 0."
-        ),
+        description=("Ensures WPF applications use GPU-accelerated text rendering by explicitly setting DisableHWAcceleration to 0."),
         tags=["fonts", "wpf", "gpu", "hardware", "rendering"],
     ),
     TweakDef(
@@ -526,7 +464,7 @@ TWEAKS: list[TweakDef] = [
         tags=["fonts", "internet", "zone", "download", "security", "policy"],
     ),
     TweakDef(
-        id="fonts-disable-streaming",
+        id="font-fonts-disable-streaming",
         label="Disable Font Streaming",
         category="Fonts",
         apply_fn=_apply_disable_font_streaming,
@@ -543,7 +481,7 @@ TWEAKS: list[TweakDef] = [
         tags=["fonts", "streaming", "network", "performance"],
     ),
     TweakDef(
-        id="fonts-cleartype-performance",
+        id="font-fonts-cleartype-performance",
         label="Set ClearType Gamma",
         category="Fonts",
         apply_fn=_apply_cleartype_gamma,
@@ -552,11 +490,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_AVALON_DISPLAY1],
-        description=(
-            "Optimizes ClearType font rendering gamma to 2200 for better "
-            "readability on LCD displays. Default: 1800. "
-            "Recommended: 2200."
-        ),
+        description=("Optimizes ClearType font rendering gamma to 2200 for better readability on LCD displays. Default: 1800. Recommended: 2200."),
         tags=["fonts", "cleartype", "rendering", "display"],
     ),
 ]
@@ -604,7 +538,7 @@ def _detect_disable_font_antialiasing() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="fonts-disable-font-fallback",
+        id="font-fonts-disable-font-fallback",
         label="Disable Font Fallback",
         category="Fonts",
         apply_fn=_apply_disable_font_fallback,
@@ -621,7 +555,7 @@ TWEAKS += [
         tags=["fonts", "fallback", "substitutes", "rendering"],
     ),
     TweakDef(
-        id="fonts-disable-font-antialiasing",
+        id="font-fonts-disable-font-antialiasing",
         label="Disable Font Anti-Aliasing",
         category="Fonts",
         apply_fn=_apply_disable_font_antialiasing,

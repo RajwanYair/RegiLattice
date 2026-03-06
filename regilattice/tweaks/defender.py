@@ -333,7 +333,7 @@ def _detect_disable_nis() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-defender-cloud-samples",
+        id="sec-disable-defender-cloud-samples",
         label="Disable Defender Sample Submission",
         category="Security",
         apply_fn=_apply_disable_cloud_samples,
@@ -346,7 +346,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "privacy", "security"],
     ),
     TweakDef(
-        id="enable-pua-protection",
+        id="sec-enable-pua-protection",
         label="Enable PUA / Adware Protection",
         category="Security",
         apply_fn=_apply_pua_protection,
@@ -359,7 +359,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "security", "adware"],
     ),
     TweakDef(
-        id="harden-smartscreen",
+        id="sec-harden-smartscreen",
         label="Harden SmartScreen (Warn + Block)",
         category="Security",
         apply_fn=_apply_harden_smartscreen,
@@ -372,7 +372,7 @@ TWEAKS: list[TweakDef] = [
         tags=["smartscreen", "security"],
     ),
     TweakDef(
-        id="disable-exploit-telemetry",
+        id="sec-disable-exploit-telemetry",
         label="Disable Exploit Protection Telemetry",
         category="Security",
         apply_fn=_apply_disable_exploit_telemetry,
@@ -385,7 +385,7 @@ TWEAKS: list[TweakDef] = [
         tags=["security", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="defender-scan-cpu-limit",
+        id="sec-defender-scan-cpu-limit",
         label="Limit Defender Scan CPU to 25%",
         category="Security",
         apply_fn=_apply_scan_cpu_limit,
@@ -398,7 +398,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "performance", "cpu"],
     ),
     TweakDef(
-        id="disable-defender-notifications",
+        id="sec-disable-defender-notifications",
         label="Disable Defender Notifications",
         category="Security",
         apply_fn=_apply_disable_defender_notify,
@@ -411,7 +411,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "notifications", "ux"],
     ),
     TweakDef(
-        id="defender-dev-exclusions",
+        id="sec-defender-dev-exclusions",
         label="Add Developer Folder Exclusions",
         category="Security",
         apply_fn=_apply_dev_exclusions,
@@ -424,7 +424,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "developer", "performance"],
     ),
     TweakDef(
-        id="enable-controlled-folder-access",
+        id="sec-enable-controlled-folder-access",
         label="Enable Controlled Folder Access",
         category="Security",
         apply_fn=_apply_controlled_folder_access,
@@ -437,7 +437,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "ransomware", "security"],
     ),
     TweakDef(
-        id="enable-network-protection",
+        id="sec-enable-network-protection",
         label="Enable Network Protection",
         category="Security",
         apply_fn=_apply_network_protection,
@@ -450,7 +450,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "network", "security"],
     ),
     TweakDef(
-        id="enable-asr-rules",
+        id="sec-enable-asr-rules",
         label="Enable Attack Surface Reduction",
         category="Security",
         apply_fn=_apply_asr_rules,
@@ -463,7 +463,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "asr", "security", "enterprise"],
     ),
     TweakDef(
-        id="disable-defender-realtime",
+        id="sec-disable-defender-realtime",
         label="Disable Real-Time Protection",
         category="Security",
         apply_fn=_apply_disable_realtime,
@@ -476,7 +476,7 @@ TWEAKS: list[TweakDef] = [
         tags=["defender", "performance", "realtime"],
     ),
     TweakDef(
-        id="disable-edge-smartscreen",
+        id="sec-disable-edge-smartscreen",
         label="Disable SmartScreen for Edge",
         category="Security",
         apply_fn=_apply_disable_edge_smartscreen,

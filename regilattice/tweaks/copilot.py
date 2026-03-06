@@ -7,13 +7,9 @@ from regilattice.tweaks import TweakDef
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-_COPILOT_POLICY = (
-    r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsCopilot"
-)
+_COPILOT_POLICY = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsCopilot"
 _COPILOT_LM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot"
-_COPILOT_EXPLORER = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-)
+_COPILOT_EXPLORER = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 _COPILOT_KEYS = [_COPILOT_POLICY, _COPILOT_LM, _COPILOT_EXPLORER]
 
 
@@ -303,7 +299,7 @@ def _detect_copilot_disable_taskbar_button() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-copilot",
+        id="ai-disable-copilot",
         label="Disable Windows Copilot",
         category="AI / Copilot",
         apply_fn=apply_disable_copilot,
@@ -312,14 +308,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_COPILOT_KEYS,
-        description=(
-            "Disables Windows Copilot via Group Policy and hides the "
-            "taskbar button. Prevents AI-powered assistant from running."
-        ),
+        description=("Disables Windows Copilot via Group Policy and hides the taskbar button. Prevents AI-powered assistant from running."),
         tags=["ai", "copilot", "privacy"],
     ),
     TweakDef(
-        id="disable-recall",
+        id="ai-disable-recall-snapshots",
         label="Disable Recall (AI Snapshots)",
         category="AI / Copilot",
         apply_fn=apply_disable_recall,
@@ -328,14 +321,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_RECALL_KEYS,
-        description=(
-            "Disables Windows Recall (AI-powered activity snapshots) which "
-            "periodically screenshots your activity. Privacy-critical."
-        ),
+        description=("Disables Windows Recall (AI-powered activity snapshots) which periodically screenshots your activity. Privacy-critical."),
         tags=["ai", "recall", "privacy"],
     ),
     TweakDef(
-        id="disable-ai-suggestions",
+        id="ai-disable-ai-suggestions",
         label="Disable AI Tips in Settings/Start",
         category="AI / Copilot",
         apply_fn=_apply_disable_ai_settings,
@@ -348,7 +338,7 @@ TWEAKS: list[TweakDef] = [
         tags=["ai", "suggestions", "privacy"],
     ),
     TweakDef(
-        id="disable-edge-copilot",
+        id="ai-disable-edge-copilot",
         label="Disable Copilot in Edge Browser",
         category="AI / Copilot",
         apply_fn=_apply_disable_edge_copilot,
@@ -361,7 +351,7 @@ TWEAKS: list[TweakDef] = [
         tags=["ai", "copilot", "edge", "privacy"],
     ),
     TweakDef(
-        id="disable-copilot-button",
+        id="ai-disable-copilot-button",
         label="Hide Copilot Taskbar Button",
         category="AI / Copilot",
         apply_fn=_apply_disable_copilot_button,
@@ -374,7 +364,7 @@ TWEAKS: list[TweakDef] = [
         tags=["ai", "copilot", "taskbar", "ux"],
     ),
     TweakDef(
-        id="disable-bing-chat",
+        id="ai-disable-bing-chat",
         label="Disable Bing Chat in Search",
         category="AI / Copilot",
         apply_fn=_apply_disable_bing_chat,
@@ -387,7 +377,7 @@ TWEAKS: list[TweakDef] = [
         tags=["ai", "bing", "search", "privacy"],
     ),
     TweakDef(
-        id="disable-recall-policy",
+        id="ai-disable-recall-policy",
         label="Disable Windows Recall (AI Screenshot Feature)",
         category="AI / Copilot",
         apply_fn=_apply_disable_recall_policy,
@@ -397,13 +387,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_RECALL_LM],
         description=(
-            "Disables Windows Recall AI data analysis via machine-level "
-            "policy. Prevents the AI screenshot feature from capturing activity."
+            "Disables Windows Recall AI data analysis via machine-level policy. Prevents the AI screenshot feature from capturing activity."
         ),
         tags=["ai", "copilot", "recall", "privacy"],
     ),
     TweakDef(
-        id="disable-copilot-taskbar",
+        id="ai-disable-copilot-taskbar",
         label="Remove Copilot from Taskbar",
         category="AI / Copilot",
         apply_fn=_apply_disable_copilot_taskbar,
@@ -416,7 +405,7 @@ TWEAKS: list[TweakDef] = [
         tags=["ai", "copilot", "taskbar"],
     ),
     TweakDef(
-        id="disable-ai-start-suggestions",
+        id="ai-disable-ai-start-suggestions",
         label="Disable AI-Powered Suggestions in Settings",
         category="AI / Copilot",
         apply_fn=_apply_disable_ai_start_suggestions,
@@ -425,14 +414,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_AI_SETTINGS_CU],
-        description=(
-            "Disables AI-powered Iris recommendations in the Start menu "
-            "and Settings app."
-        ),
+        description=("Disables AI-powered Iris recommendations in the Start menu and Settings app."),
         tags=["ai", "copilot", "suggestions", "start"],
     ),
     TweakDef(
-        id="disable-copilot-edge",
+        id="ai-disable-copilot-edge",
         label="Disable Copilot in Edge Browser",
         category="AI / Copilot",
         apply_fn=_apply_disable_copilot_edge,
@@ -441,13 +427,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_EDGE_COPILOT],
-        description=(
-            "Disables the Copilot CDP page context feature in Microsoft Edge."
-        ),
+        description=("Disables the Copilot CDP page context feature in Microsoft Edge."),
         tags=["ai", "copilot", "edge"],
     ),
     TweakDef(
-        id="disable-ai-widgets",
+        id="ai-disable-ai-widgets",
         label="Disable AI-Enhanced Widgets Feed",
         category="AI / Copilot",
         apply_fn=_apply_disable_ai_widgets,
@@ -456,14 +440,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_DSH_KEY],
-        description=(
-            "Disables the AI-enhanced News and Interests widgets feed "
-            "via Dsh policy."
-        ),
+        description=("Disables the AI-enhanced News and Interests widgets feed via Dsh policy."),
         tags=["ai", "copilot", "widgets"],
     ),
     TweakDef(
-        id="copilot-disable-recall",
+        id="ai-copilot-disable-recall",
         label="Disable Recall Feature",
         category="AI / Copilot",
         apply_fn=_apply_copilot_disable_recall,
@@ -480,7 +461,7 @@ TWEAKS: list[TweakDef] = [
         tags=["copilot", "recall", "privacy", "ai"],
     ),
     TweakDef(
-        id="copilot-disable-taskbar-button",
+        id="ai-copilot-disable-taskbar-button",
         label="Disable Copilot Taskbar Button",
         category="AI / Copilot",
         apply_fn=_apply_copilot_disable_taskbar_button,
@@ -489,10 +470,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_COPILOT_EXPLORER],
-        description=(
-            "Hides the Copilot button from the Windows taskbar. "
-            "Reduces visual clutter. Default: Shown. Recommended: Hidden."
-        ),
+        description=("Hides the Copilot button from the Windows taskbar. Reduces visual clutter. Default: Shown. Recommended: Hidden."),
         tags=["copilot", "taskbar", "ux", "ai"],
     ),
 ]
@@ -551,10 +529,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_RECALL_LM],
-        description=(
-            "Disables Windows Recall AI data analysis via HKLM Group Policy. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables Windows Recall AI data analysis via HKLM Group Policy. Default: Enabled. Recommended: Disabled."),
         tags=["ai", "recall", "privacy", "policy"],
     ),
     TweakDef(
@@ -567,10 +542,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_COPILOT_EXPLORER],
-        description=(
-            "Hides the Copilot button and disables keyboard shortcut. "
-            "Default: Shown. Recommended: Hidden."
-        ),
+        description=("Hides the Copilot button and disables keyboard shortcut. Default: Shown. Recommended: Hidden."),
         tags=["ai", "copilot", "keyboard", "shortcut"],
     ),
 ]
@@ -584,9 +556,7 @@ TWEAKS += [
 _COPILOT_24H2 = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"
 _COPILOT_RUNTIME = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CopilotRuntime"
 _BING_CHAT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\BingChat"
-_COPILOT_ELIGIBLE = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat"
-)
+_COPILOT_ELIGIBLE = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat"
 
 
 # -- Disable Copilot Runtime (24H2) ────────────────────────────────────
@@ -726,8 +696,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_COPILOT_24H2],
         description=(
-            "Disables the Copilot/Bing sidebar in Microsoft Edge via the "
-            "HubsSidebarEnabled policy. Default: enabled. Recommended: disabled."
+            "Disables the Copilot/Bing sidebar in Microsoft Edge via the HubsSidebarEnabled policy. Default: enabled. Recommended: disabled."
         ),
         tags=["ai", "copilot", "edge", "sidebar", "policy"],
     ),
@@ -757,9 +726,7 @@ def _detect_disable_ai_in_settings() -> bool:
 
 # ── Disable Copilot in Taskbar Search ────────────────────────────────────────
 
-_EXPLORER_POLICY_CU = (
-    r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
-)
+_EXPLORER_POLICY_CU = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
 
 
 def _apply_disable_copilot_taskbar_search(*, require_admin: bool = False) -> None:
@@ -806,7 +773,7 @@ def _detect_disable_tips_suggestions() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="copilot-disable-ai-in-settings",
+        id="ai-copilot-disable-ai-in-settings",
         label="Disable AI Suggestions in Windows Settings",
         category="AI / Copilot",
         apply_fn=_apply_disable_ai_in_settings,
@@ -823,7 +790,7 @@ TWEAKS += [
         tags=["ai", "copilot", "settings", "policy", "privacy"],
     ),
     TweakDef(
-        id="copilot-disable-taskbar-search-ai",
+        id="ai-copilot-disable-taskbar-search-ai",
         label="Disable Copilot in Taskbar Search",
         category="AI / Copilot",
         apply_fn=_apply_disable_copilot_taskbar_search,
@@ -840,7 +807,7 @@ TWEAKS += [
         tags=["ai", "copilot", "taskbar", "search", "suggestions"],
     ),
     TweakDef(
-        id="copilot-disable-tips-notifications",
+        id="ai-copilot-disable-tips-notifications",
         label="Disable Tips & Suggestions Notifications",
         category="AI / Copilot",
         apply_fn=_apply_disable_tips_suggestions,

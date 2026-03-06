@@ -12,19 +12,13 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-_DATA_COLLECTION = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-)
+_DATA_COLLECTION = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
 _DATA_COLLECTION_CU = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\Policies\DataCollection"
 )
-_DIAGTRACK_SVC = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"
-)
-_APP_TELEMETRY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
-)
+_DIAGTRACK_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"
+_APP_TELEMETRY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
 _HANDWRITING = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
     r"\TabletPC"
@@ -41,22 +35,14 @@ _ADVERTISING_POLICY = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
     r"\AdvertisingInfo"
 )
-_FEEDBACK = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"
-)
-_CEIP_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"
-)
-_INVENTORY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
-)
+_FEEDBACK = r"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"
+_CEIP_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"
+_INVENTORY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
 _USAGE_STATS = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\Explorer\Advanced"
 )
-_INPUT_TELEMETRY = (
-    r"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC"
-)
+_INPUT_TELEMETRY = r"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC"
 _DIAG_LOG = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
     r"\WMI\Autologger\AutoLogger-Diagtrack-Listener"
@@ -242,9 +228,7 @@ def _detect_disable_diag_autologger() -> bool:
 
 # ── Disable Tailored Experiences ─────────────────────────────────────────────
 
-_TAILORED = (
-    r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"
-)
+_TAILORED = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"
 
 
 def _apply_disable_tailored(*, require_admin: bool = False) -> None:
@@ -343,9 +327,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_HANDWRITING],
         description=(
-            "Prevents handwriting recognition data and error reports "
-            "from being sent to Microsoft. "
-            "Default: allowed. Recommended: 1 (blocked)."
+            "Prevents handwriting recognition data and error reports from being sent to Microsoft. Default: allowed. Recommended: 1 (blocked)."
         ),
         tags=["telemetry", "handwriting", "privacy", "tablet"],
     ),
@@ -377,9 +359,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_FEEDBACK],
         description=(
-            "Sets feedback frequency to 0 (never). Stops 'Rate Windows' "
-            "and similar feedback prompts. "
-            "Default: automatic. Recommended: 0 (never)."
+            "Sets feedback frequency to 0 (never). Stops 'Rate Windows' and similar feedback prompts. Default: automatic. Recommended: 0 (never)."
         ),
         tags=["telemetry", "feedback", "notifications", "privacy"],
     ),
@@ -394,9 +374,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_INPUT_TELEMETRY],
         description=(
-            "Disables collection of typing and inking data for "
-            "improving language recognition. "
-            "Default: 1 (enabled). Recommended: 0 (disabled)."
+            "Disables collection of typing and inking data for improving language recognition. Default: 1 (enabled). Recommended: 0 (disabled)."
         ),
         tags=["telemetry", "typing", "inking", "input", "privacy"],
     ),
@@ -411,9 +389,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_TYPE_INSIGHTS],
         description=(
-            "Disables inking and typing personalization that learns "
-            "from your writing patterns. "
-            "Default: 1 (enabled). Recommended: 0 (disabled)."
+            "Disables inking and typing personalization that learns from your writing patterns. Default: 1 (enabled). Recommended: 0 (disabled)."
         ),
         tags=["telemetry", "inking", "typing", "personalization"],
     ),
@@ -462,9 +438,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_USAGE_STATS],
         description=(
-            "Disables app launch tracking used for Start menu 'Most Used' "
-            "list and personalization. "
-            "Default: 1 (track). Recommended: 0 (disabled)."
+            "Disables app launch tracking used for Start menu 'Most Used' list and personalization. Default: 1 (track). Recommended: 0 (disabled)."
         ),
         tags=["telemetry", "start-menu", "usage", "tracking", "privacy"],
     ),
@@ -521,8 +495,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_TELEM_WER],
         description=(
-            "Disables Windows Error Reporting (WER). Prevents sending crash data to Microsoft. "
-            "Default: Enabled. Recommended: Disabled for privacy."
+            "Disables Windows Error Reporting (WER). Prevents sending crash data to Microsoft. Default: Enabled. Recommended: Disabled for privacy."
         ),
         tags=["telemetry", "wer", "error-reporting", "crash", "privacy"],
     ),
@@ -536,10 +509,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_APP_TELEMETRY],
-        description=(
-            "Disables the Inventory Collector that sends application/driver data to Microsoft. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Disables the Inventory Collector that sends application/driver data to Microsoft. Default: Enabled. Recommended: Disabled."),
         tags=["telemetry", "inventory", "collector", "appcompat"],
     ),
 ]
@@ -621,7 +591,7 @@ def _detect_disable_diag_log() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="telemetry-disable-connected-user",
+        id="telem-telemetry-disable-connected-user",
         label="Disable Connected User Experiences",
         category="Telemetry Advanced",
         apply_fn=_apply_disable_connected_ux,
@@ -638,7 +608,7 @@ TWEAKS += [
         tags=["telemetry", "connected-ux", "push", "privacy"],
     ),
     TweakDef(
-        id="telemetry-set-max-size",
+        id="telem-telemetry-set-max-size",
         label="Limit Telemetry Cache / Dump Collection",
         category="Telemetry Advanced",
         apply_fn=_apply_set_telemetry_max_size,
@@ -647,14 +617,11 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DIAGTRACK_CONF],
-        description=(
-            "Limits telemetry dump collection to reduce disk usage and data sent to Microsoft. "
-            "Default: Unlimited. Recommended: Limited."
-        ),
+        description=("Limits telemetry dump collection to reduce disk usage and data sent to Microsoft. Default: Unlimited. Recommended: Limited."),
         tags=["telemetry", "cache", "dump", "size", "limit"],
     ),
     TweakDef(
-        id="telemetry-disable-diagnostic-log",
+        id="telem-telemetry-disable-diagnostic-log",
         label="Disable Diagnostic Log Collection",
         category="Telemetry Advanced",
         apply_fn=_apply_disable_diag_log,

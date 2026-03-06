@@ -328,7 +328,7 @@ def _detect_disable_adobe_analytics() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-adobe-update",
+        id="adobe-disable-adobe-update",
         label="Disable Adobe Auto-Update",
         category="Adobe",
         apply_fn=_apply_disable_update,
@@ -341,7 +341,7 @@ TWEAKS: list[TweakDef] = [
         tags=["adobe", "update"],
     ),
     TweakDef(
-        id="disable-adobe-telemetry",
+        id="adobe-disable-adobe-telemetry",
         label="Disable Adobe Telemetry",
         category="Adobe",
         apply_fn=_apply_disable_telemetry,
@@ -354,7 +354,7 @@ TWEAKS: list[TweakDef] = [
         tags=["adobe", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-adobe-javascript",
+        id="adobe-disable-adobe-javascript",
         label="Disable Adobe PDF JavaScript",
         category="Adobe",
         apply_fn=_apply_disable_js,
@@ -363,14 +363,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_JS],
-        description=(
-            "Disables JavaScript execution in PDF documents — "
-            "major security hardening."
-        ),
+        description=("Disables JavaScript execution in PDF documents — major security hardening."),
         tags=["adobe", "security", "javascript"],
     ),
     TweakDef(
-        id="disable-adobe-welcome",
+        id="adobe-disable-adobe-welcome",
         label="Disable Adobe Welcome Screen",
         category="Adobe",
         apply_fn=_apply_disable_welcome,
@@ -383,7 +380,7 @@ TWEAKS: list[TweakDef] = [
         tags=["adobe", "ux"],
     ),
     TweakDef(
-        id="enable-adobe-protected-mode",
+        id="adobe-enable-adobe-protected-mode",
         label="Enable Adobe Protected Mode",
         category="Adobe",
         apply_fn=_apply_protected_mode,
@@ -396,7 +393,7 @@ TWEAKS: list[TweakDef] = [
         tags=["adobe", "security", "sandbox"],
     ),
     TweakDef(
-        id="disable-adobe-cloud",
+        id="adobe-disable-adobe-cloud",
         label="Disable Adobe Cloud Services",
         category="Adobe",
         apply_fn=_apply_disable_cloud,
@@ -517,10 +514,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_ADOBE_UPDATE_POLICY],
-        description=(
-            "Disables the Adobe Updater service via registry policy. "
-            "Prevents background update checks and downloads."
-        ),
+        description=("Disables the Adobe Updater service via registry policy. Prevents background update checks and downloads."),
         tags=["adobe", "updater", "service", "performance"],
     ),
     TweakDef(
@@ -533,10 +527,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADOBE_ANALYTICS],
-        description=(
-            "Disables Adobe analytics and telemetry data collection "
-            "by opting out of usage tracking."
-        ),
+        description=("Disables Adobe analytics and telemetry data collection by opting out of usage tracking."),
         tags=["adobe", "analytics", "telemetry", "privacy"],
     ),
 ]

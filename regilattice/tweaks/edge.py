@@ -339,7 +339,7 @@ def _detect_edge_disable_mini_menu() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-edge-startup-boost",
+        id="edge-disable-edge-startup-boost",
         label="Disable Edge Startup Boost",
         category="Edge",
         apply_fn=apply_disable_edge_startup_boost,
@@ -348,14 +348,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_EDGE_POLICY],
-        description=(
-            "Prevents Edge from pre-launching at login, saving memory and "
-            "CPU for users who don't use Edge as primary browser."
-        ),
+        description=("Prevents Edge from pre-launching at login, saving memory and CPU for users who don't use Edge as primary browser."),
         tags=["edge", "browser", "startup"],
     ),
     TweakDef(
-        id="disable-edge-sidebar",
+        id="edge-disable-edge-sidebar",
         label="Disable Edge Sidebar & Shopping",
         category="Edge",
         apply_fn=apply_disable_edge_sidebar,
@@ -364,14 +361,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_EDGE_POLICY],
-        description=(
-            "Disables the Edge sidebar (Discover), shopping assistant, "
-            "and collections panel for a cleaner browsing experience."
-        ),
+        description=("Disables the Edge sidebar (Discover), shopping assistant, and collections panel for a cleaner browsing experience."),
         tags=["edge", "browser", "sidebar"],
     ),
     TweakDef(
-        id="disable-edge-telemetry",
+        id="edge-disable-edge-telemetry",
         label="Disable Edge Telemetry",
         category="Edge",
         apply_fn=apply_disable_edge_telemetry,
@@ -380,14 +374,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_EDGE_KEYS,
-        description=(
-            "Disables Edge metrics, diagnostics, personalisation reporting, "
-            "follow, spotlight and recommendation features."
-        ),
+        description=("Disables Edge metrics, diagnostics, personalisation reporting, follow, spotlight and recommendation features."),
         tags=["edge", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-edge-update",
+        id="edge-disable-edge-update",
         label="Disable Edge Auto-Update",
         category="Edge",
         apply_fn=apply_disable_edge_update,
@@ -396,14 +387,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_EDGE_UPDATE],
-        description=(
-            "Prevents Edge from auto-updating. Useful for controlled "
-            "environments or when pinning to a specific version."
-        ),
+        description=("Prevents Edge from auto-updating. Useful for controlled environments or when pinning to a specific version."),
         tags=["edge", "browser", "update"],
     ),
     TweakDef(
-        id="disable-edge-first-run",
+        id="edge-disable-edge-first-run",
         label="Disable Edge First-Run Experience",
         category="Edge",
         apply_fn=apply_disable_edge_fre,
@@ -416,7 +404,7 @@ TWEAKS: list[TweakDef] = [
         tags=["edge", "browser", "ux"],
     ),
     TweakDef(
-        id="disable-edge-password-manager",
+        id="edge-disable-edge-password-manager",
         label="Disable Edge Password Manager",
         category="Edge",
         apply_fn=apply_disable_edge_passwords,
@@ -469,9 +457,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_EDGE_POLICY],
         description=(
-            "Disables Edge shopping assistant, price tracking, and coupons. "
-            "Reduces CPU and network usage. "
-            "Default: Enabled. Recommended: Disabled."
+            "Disables Edge shopping assistant, price tracking, and coupons. Reduces CPU and network usage. Default: Enabled. Recommended: Disabled."
         ),
         tags=["edge", "shopping", "performance", "privacy"],
     ),
@@ -605,9 +591,7 @@ TWEAKS += [
         corp_safe=False,
         registry_keys=[_EDGE_POLICY],
         description=(
-            "Hides the Edge first run experience and welcome page "
-            "via enterprise policy. "
-            "Default: Shown. Recommended: Hidden for managed deployments."
+            "Hides the Edge first run experience and welcome page via enterprise policy. Default: Shown. Recommended: Hidden for managed deployments."
         ),
         tags=["edge", "first-run", "welcome", "policy", "ux"],
     ),

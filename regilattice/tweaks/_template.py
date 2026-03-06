@@ -148,12 +148,12 @@ _EXAMPLE_HKLM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\MyApp"
 def _apply_disable_telemetry(*, require_admin: bool = False) -> None:
     # No assert_admin() needed — HKCU key, user-level.
     SESSION.log("MyApp: disable telemetry")
-    SESSION.backup([_EXAMPLE_KEY], "MyAppTelemetry")       # always backup first
-    SESSION.set_dword(_EXAMPLE_KEY, "Telemetry", 0)        # DWORD value
+    SESSION.backup([_EXAMPLE_KEY], "MyAppTelemetry")  # always backup first
+    SESSION.set_dword(_EXAMPLE_KEY, "Telemetry", 0)  # DWORD value
 
 
 def _remove_disable_telemetry(*, require_admin: bool = False) -> None:
-    SESSION.set_dword(_EXAMPLE_KEY, "Telemetry", 1)        # restore default
+    SESSION.set_dword(_EXAMPLE_KEY, "Telemetry", 1)  # restore default
 
 
 def _detect_disable_telemetry() -> bool:
@@ -166,7 +166,7 @@ def _detect_disable_telemetry() -> bool:
 def _apply_dark_theme(*, require_admin: bool = False) -> None:
     SESSION.log("MyApp: set dark theme")
     SESSION.backup([_EXAMPLE_KEY], "MyAppTheme")
-    SESSION.set_string(_EXAMPLE_KEY, "Theme", "dark")      # string value
+    SESSION.set_string(_EXAMPLE_KEY, "Theme", "dark")  # string value
 
 
 def _remove_dark_theme(*, require_admin: bool = False) -> None:
@@ -189,7 +189,7 @@ def _apply_disable_policy(*, require_admin: bool = True) -> None:
 
 def _remove_disable_policy(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    SESSION.delete_value(_EXAMPLE_HKLM, "DisableMyApp")    # remove entirely
+    SESSION.delete_value(_EXAMPLE_HKLM, "DisableMyApp")  # remove entirely
 
 
 def _detect_disable_policy() -> bool:
@@ -209,16 +209,16 @@ def _detect_disable_policy() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="myapp-disable-telemetry",       # must be unique across all modules
-        label="Disable MyApp Telemetry",    # shown in GUI
-        category="My Category",             # creates new category if none exists
+        id="myapp-disable-telemetry",  # must be unique across all modules
+        label="Disable MyApp Telemetry",  # shown in GUI
+        category="My Category",  # creates new category if none exists
         apply_fn=_apply_disable_telemetry,
         remove_fn=_remove_disable_telemetry,
         detect_fn=_detect_disable_telemetry,
-        needs_admin=False,                  # HKCU → no admin needed
-        corp_safe=True,                     # safe for corporate environments
-        registry_keys=[_EXAMPLE_KEY],       # every key the tweak touches
-        description=(                       # shown in tooltip
+        needs_admin=False,  # HKCU → no admin needed
+        corp_safe=True,  # safe for corporate environments
+        registry_keys=[_EXAMPLE_KEY],  # every key the tweak touches
+        description=(  # shown in tooltip
             "Stops MyApp from sending usage data to vendor servers."
         ),
         tags=["myapp", "telemetry", "privacy"],  # used for search / filtering
@@ -243,8 +243,8 @@ TWEAKS: list[TweakDef] = [
         apply_fn=_apply_disable_policy,
         remove_fn=_remove_disable_policy,
         detect_fn=_detect_disable_policy,
-        needs_admin=True,                   # HKLM → admin required
-        corp_safe=True,                     # policy-based → corp friendly
+        needs_admin=True,  # HKLM → admin required
+        corp_safe=True,  # policy-based → corp friendly
         registry_keys=[_EXAMPLE_HKLM],
         description="Disables MyApp entirely via a machine-level Group Policy key.",
         tags=["myapp", "policy", "disable"],

@@ -511,10 +511,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_USB_HUB],
-        description=(
-            "Disables selective suspend on USB hubs to prevent device disconnects. "
-            "Default: Enabled. Recommended: Disabled for desktops."
-        ),
+        description=("Disables selective suspend on USB hubs to prevent device disconnects. Default: Enabled. Recommended: Disabled for desktops."),
         tags=["usb", "hub", "power", "suspend", "stability"],
     ),
     TweakDef(
@@ -527,10 +524,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_USB_STOR],
-        description=(
-            "Enables write caching on USB storage for faster transfers. "
-            "Requires safe removal. Default: Disabled. Recommended: Enabled."
-        ),
+        description=("Enables write caching on USB storage for faster transfers. Requires safe removal. Default: Disabled. Recommended: Enabled."),
         tags=["usb", "transfer", "turbo", "write-cache", "speed"],
     ),
     TweakDef(
@@ -543,10 +537,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_USB_LEGACY],
-        description=(
-            "Suppresses USB legacy compatibility warnings in the system tray. "
-            "Default: Shown. Recommended: Hidden."
-        ),
+        description=("Suppresses USB legacy compatibility warnings in the system tray. Default: Shown. Recommended: Hidden."),
         tags=["usb", "legacy", "warning", "compatibility"],
     ),
 ]

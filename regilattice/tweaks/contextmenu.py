@@ -33,15 +33,9 @@ _GIVE_ACCESS_CLSID = "{F81E9010-6EA4-11CE-A7FF-00AA003CA9F6}"
 _INCLUDE_LIB_CLSID = "{3DAD6C5D-2167-4CAE-9914-F99E41C12CFA}"
 
 # Edit with Paint 3D = {D2B7917A-1EAC-4872-B063-0E97D5A82E89}
-_PAINT3D_KEY = (
-    r"HKEY_CLASSES_ROOT\SystemFileAssociations\.bmp\Shell\3D Edit"
-)
-_PAINT3D_JPG = (
-    r"HKEY_CLASSES_ROOT\SystemFileAssociations\.jpg\Shell\3D Edit"
-)
-_PAINT3D_PNG = (
-    r"HKEY_CLASSES_ROOT\SystemFileAssociations\.png\Shell\3D Edit"
-)
+_PAINT3D_KEY = r"HKEY_CLASSES_ROOT\SystemFileAssociations\.bmp\Shell\3D Edit"
+_PAINT3D_JPG = r"HKEY_CLASSES_ROOT\SystemFileAssociations\.jpg\Shell\3D Edit"
+_PAINT3D_PNG = r"HKEY_CLASSES_ROOT\SystemFileAssociations\.png\Shell\3D Edit"
 
 # Edit with Photos
 _PHOTOS_KEY = (
@@ -67,14 +61,10 @@ _PREV_VER = (
 )
 
 # Pin to Quick Access / Pin to Start
-_PIN_START = (
-    r"HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\PintoStartScreen"
-)
+_PIN_START = r"HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\PintoStartScreen"
 
 # Open With
-_OPEN_WITH = (
-    r"HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\OpenWith"
-)
+_OPEN_WITH = r"HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\OpenWith"
 
 
 # ── Restore Classic Context Menu (Win11) ─────────────────────────────────────
@@ -302,10 +292,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SHARE_KEY],
-        description=(
-            "Blocks the Share shell extension from appearing in the "
-            "context menu. Default: shown. Recommended: hidden."
-        ),
+        description=("Blocks the Share shell extension from appearing in the context menu. Default: shown. Recommended: hidden."),
         tags=["context-menu", "share", "shell-extension", "cleanup"],
     ),
     TweakDef(
@@ -318,10 +305,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SHARE_KEY],
-        description=(
-            "Removes 'Cast to Device' (Play To) from the right-click menu. "
-            "Default: shown. Recommended: hidden."
-        ),
+        description=("Removes 'Cast to Device' (Play To) from the right-click menu. Default: shown. Recommended: hidden."),
         tags=["context-menu", "cast", "miracast", "cleanup"],
     ),
     TweakDef(
@@ -334,10 +318,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SHARE_KEY],
-        description=(
-            "Removes 'Give access to' (Share with) from the context menu. "
-            "Default: shown. Recommended: hidden."
-        ),
+        description=("Removes 'Give access to' (Share with) from the context menu. Default: shown. Recommended: hidden."),
         tags=["context-menu", "give-access", "share", "cleanup"],
     ),
     TweakDef(
@@ -350,10 +331,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SHARE_KEY],
-        description=(
-            "Removes 'Include in library' from the folder context menu. "
-            "Default: shown. Recommended: hidden."
-        ),
+        description=("Removes 'Include in library' from the folder context menu. Default: shown. Recommended: hidden."),
         tags=["context-menu", "library", "cleanup"],
     ),
     TweakDef(
@@ -367,9 +345,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_PAINT3D_KEY, _PAINT3D_JPG, _PAINT3D_PNG],
         description=(
-            "Removes 'Edit with Paint 3D' from .bmp, .jpg, .png context menus. "
-            "Uses ProgrammaticAccessOnly flag. "
-            "Default: shown. Recommended: hidden."
+            "Removes 'Edit with Paint 3D' from .bmp, .jpg, .png context menus. Uses ProgrammaticAccessOnly flag. Default: shown. Recommended: hidden."
         ),
         tags=["context-menu", "paint3d", "images", "cleanup"],
     ),
@@ -383,10 +359,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PHOTOS_KEY],
-        description=(
-            "Removes the 'Edit' option added by the Photos app from "
-            "image context menus. Default: shown. Recommended: hidden."
-        ),
+        description=("Removes the 'Edit' option added by the Photos app from image context menus. Default: shown. Recommended: hidden."),
         tags=["context-menu", "photos", "edit", "images", "cleanup"],
     ),
     TweakDef(
@@ -399,10 +372,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_COMPAT],
-        description=(
-            "Removes the 'Troubleshoot compatibility' option from "
-            "executable context menus. Default: shown. Recommended: hidden."
-        ),
+        description=("Removes the 'Troubleshoot compatibility' option from executable context menus. Default: shown. Recommended: hidden."),
         tags=["context-menu", "compatibility", "troubleshoot", "cleanup"],
     ),
     TweakDef(
@@ -415,10 +385,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PREV_VER_DIR, _PREV_VER],
-        description=(
-            "Removes 'Restore previous versions' from file/folder "
-            "context menus. Default: shown. Recommended: hidden."
-        ),
+        description=("Removes 'Restore previous versions' from file/folder context menus. Default: shown. Recommended: hidden."),
         tags=["context-menu", "previous-versions", "shadow-copy", "cleanup"],
     ),
     TweakDef(
@@ -431,10 +398,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PIN_START],
-        description=(
-            "Removes 'Pin to Start' from the folder right-click menu. "
-            "Default: shown. Recommended: hidden."
-        ),
+        description=("Removes 'Pin to Start' from the folder right-click menu. Default: shown. Recommended: hidden."),
         tags=["context-menu", "pin", "start", "folder", "cleanup"],
     ),
 ]

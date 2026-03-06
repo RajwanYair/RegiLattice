@@ -110,8 +110,7 @@ def _has_vpn_adapter() -> bool:
                 "powershell",
                 "-NoProfile",
                 "-Command",
-                "Get-NetAdapter | Where-Object Status -eq Up | "
-                "Select-Object -ExpandProperty InterfaceDescription",
+                "Get-NetAdapter | Where-Object Status -eq Up | Select-Object -ExpandProperty InterfaceDescription",
             ],
             capture_output=True,
             text=True,
@@ -139,8 +138,7 @@ def _has_management_agent() -> bool:
                 "powershell",
                 "-NoProfile",
                 "-Command",
-                "Get-CimInstance -Namespace root\\ccm -ClassName SMS_Client "
-                "-ErrorAction Stop | Select-Object -ExpandProperty ClientVersion",
+                "Get-CimInstance -Namespace root\\ccm -ClassName SMS_Client -ErrorAction Stop | Select-Object -ExpandProperty ClientVersion",
             ],
             capture_output=True,
             text=True,
@@ -316,7 +314,7 @@ def _split_hive(key: str) -> tuple[int | None, str]:
     }
     for prefix, hive in hive_map.items():
         if upper.startswith(prefix):
-            return hive, key[len(prefix):]
+            return hive, key[len(prefix) :]
     return None, key
 
 
@@ -333,19 +331,19 @@ def _derive_policy_path(key: str) -> str | None:
     # HKLM\\SOFTWARE\\... → HKLM\\SOFTWARE\\Policies\\...
     for hive_prefix in ("HKEY_LOCAL_MACHINE\\", "HKLM\\"):
         if upper.startswith(hive_prefix):
-            rest = key[len(hive_prefix):]
+            rest = key[len(hive_prefix) :]
             rest_upper = rest.upper()
             if rest_upper.startswith("SOFTWARE\\"):
-                inner = rest[len("SOFTWARE\\"):]
-                return f"{key[:len(hive_prefix)]}SOFTWARE\\Policies\\{inner}"
+                inner = rest[len("SOFTWARE\\") :]
+                return f"{key[: len(hive_prefix)]}SOFTWARE\\Policies\\{inner}"
     # HKCU\\Software\\... → HKCU\\Software\\Policies\\...
     for hive_prefix in ("HKEY_CURRENT_USER\\", "HKCU\\"):
         if upper.startswith(hive_prefix):
-            rest = key[len(hive_prefix):]
+            rest = key[len(hive_prefix) :]
             rest_upper = rest.upper()
             if rest_upper.startswith("SOFTWARE\\"):
-                inner = rest[len("SOFTWARE\\"):]
-                return f"{key[:len(hive_prefix)]}Software\\Policies\\{inner}"
+                inner = rest[len("SOFTWARE\\") :]
+                return f"{key[: len(hive_prefix)]}Software\\Policies\\{inner}"
     return None
 
 

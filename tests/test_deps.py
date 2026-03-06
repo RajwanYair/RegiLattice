@@ -19,14 +19,20 @@ class TestPipInstall:
     @patch("regilattice.deps.subprocess.run")
     def test_success(self, mock_run: MagicMock) -> None:
         mock_run.return_value = subprocess.CompletedProcess(
-            args=[], returncode=0, stdout="", stderr="",
+            args=[],
+            returncode=0,
+            stdout="",
+            stderr="",
         )
         assert _pip_install("some-pkg") is True
 
     @patch("regilattice.deps.subprocess.run")
     def test_failure(self, mock_run: MagicMock) -> None:
         mock_run.return_value = subprocess.CompletedProcess(
-            args=[], returncode=1, stdout="", stderr="error",
+            args=[],
+            returncode=1,
+            stdout="",
+            stderr="error",
         )
         assert _pip_install("bad-pkg") is False
 
@@ -41,7 +47,10 @@ class TestPipInstall:
     @patch("regilattice.deps.subprocess.run")
     def test_user_flag(self, mock_run: MagicMock) -> None:
         mock_run.return_value = subprocess.CompletedProcess(
-            args=[], returncode=0, stdout="", stderr="",
+            args=[],
+            returncode=0,
+            stdout="",
+            stderr="",
         )
         _pip_install("pkg", user=True)
         cmd = mock_run.call_args[0][0]
@@ -50,7 +59,10 @@ class TestPipInstall:
     @patch("regilattice.deps.subprocess.run")
     def test_no_user_flag(self, mock_run: MagicMock) -> None:
         mock_run.return_value = subprocess.CompletedProcess(
-            args=[], returncode=0, stdout="", stderr="",
+            args=[],
+            returncode=0,
+            stdout="",
+            stderr="",
         )
         _pip_install("pkg", user=False)
         cmd = mock_run.call_args[0][0]
@@ -78,6 +90,7 @@ class TestEnsurePip:
             return MagicMock()  # Should not be reached
 
         import sys
+
         with patch("importlib.import_module", side_effect=_import_side_effect), patch.dict(sys.modules, {"ensurepip": mock_ensurepip}):
             assert _ensure_pip() is True
             mock_ensurepip.bootstrap.assert_called_once()
@@ -180,6 +193,7 @@ class TestRequire:
     def test_missing_but_install_succeeds(self) -> None:
         # Patch install_package first (before import_module mock breaks resolution)
         with patch("regilattice.deps.install_package", return_value=True):
+
             def _import_side_effect(name: str):
                 raise ImportError(f"No module named '{name}'")
 

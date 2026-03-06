@@ -59,7 +59,12 @@ def request_elevation(args: list[str] | None = None) -> int:
     try:
         # ShellExecuteW returns >32 on success
         ret = ctypes.windll.shell32.ShellExecuteW(  # type: ignore[attr-defined,unused-ignore]
-            None, "runas", exe, params, None, 1  # SW_SHOWNORMAL
+            None,
+            "runas",
+            exe,
+            params,
+            None,
+            1,  # SW_SHOWNORMAL
         )
         return 0 if ret > 32 else int(ret)
     except Exception as exc:
@@ -78,11 +83,7 @@ def run_elevated(command: list[str], *, timeout: int = 120) -> subprocess.Comple
 
     # Wrap in PowerShell Start-Process -Verb RunAs -Wait
 
-    ps_cmd = (
-        f"Start-Process -FilePath '{command[0]}' "
-        f"-ArgumentList '{' '.join(command[1:])}' "
-        f"-Verb RunAs -Wait -PassThru"
-    )
+    ps_cmd = f"Start-Process -FilePath '{command[0]}' -ArgumentList '{' '.join(command[1:])}' -Verb RunAs -Wait -PassThru"
     return subprocess.run(
         ["powershell", "-NoProfile", "-Command", ps_cmd],
         capture_output=True,

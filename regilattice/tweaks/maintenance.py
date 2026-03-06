@@ -37,9 +37,7 @@ def detect_regbackup() -> bool:
 
 # ── Disable Scheduled Defragmentation ──────────────────────────────────────
 
-_DEFRAG_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
-)
+_DEFRAG_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
 
 
 def _apply_disable_defrag(*, require_admin: bool = True) -> None:
@@ -60,9 +58,7 @@ def _detect_disable_defrag() -> bool:
 
 # ── Disable Windows Error Dumps ───────────────────────────────────────────
 
-_CRASH_KEY = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
-)
+_CRASH_KEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"
 
 
 def _apply_disable_dumps(*, require_admin: bool = True) -> None:
@@ -90,12 +86,7 @@ def create_restore_point(*, require_admin: bool = True) -> None:
     """Create a Windows System Restore checkpoint via PowerShell."""
     assert_admin(require_admin)
     SESSION.log("Creating system restore point")
-    cmd = (
-        'powershell -NoProfile -Command "'
-        "Checkpoint-Computer -Description 'RegiLattice' "
-        "-RestorePointType 'MODIFY_SETTINGS'"
-        '"'
-    )
+    cmd = "powershell -NoProfile -Command \"Checkpoint-Computer -Description 'RegiLattice' -RestorePointType 'MODIFY_SETTINGS'\""
     subprocess.run(cmd, shell=True, check=False)
     SESSION.log("Restore point created")
 
@@ -240,17 +231,12 @@ def _remove_disable_superfetch_prefetch(*, require_admin: bool = True) -> None:
 
 
 def _detect_disable_superfetch_prefetch() -> bool:
-    return (
-        SESSION.read_dword(_PREFETCH_KEY, "EnablePrefetcher") == 0
-        and SESSION.read_dword(_PREFETCH_KEY, "EnableSuperfetch") == 0
-    )
+    return SESSION.read_dword(_PREFETCH_KEY, "EnablePrefetcher") == 0 and SESSION.read_dword(_PREFETCH_KEY, "EnableSuperfetch") == 0
 
 
 # ── Disable Program Compatibility Assistant ─────────────────────────────────
 
-_PCA_KEY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
-)
+_PCA_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
 
 
 def _apply_disable_compatibility_assistant(*, require_admin: bool = True) -> None:
@@ -275,9 +261,7 @@ _STORAGE_SENSE_KEY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\StorageSense\Parameters\StoragePolicy"
 )
-_STORAGE_POLICY = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense"
-)
+_STORAGE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense"
 
 
 def _apply_disable_storage_sense(*, require_admin: bool = False) -> None:
@@ -336,7 +320,7 @@ def _detect_disable_bg_defrag() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="registry-autobackup",
+        id="maint-registry-autobackup",
         label="Enable Registry Auto-Backup",
         category="Maintenance",
         apply_fn=apply_regbackup,
@@ -352,7 +336,7 @@ TWEAKS: list[TweakDef] = [
         tags=["maintenance", "backup", "registry"],
     ),
     TweakDef(
-        id="disable-defrag-schedule",
+        id="maint-disable-defrag-boot-optimize",
         label="Disable Scheduled Defragmentation",
         category="Maintenance",
         apply_fn=_apply_disable_defrag,
@@ -361,14 +345,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DEFRAG_KEY],
-        description=(
-            "Disables the Windows automatic disk defragmentation schedule. "
-            "Recommended for SSD-only systems."
-        ),
+        description=("Disables the Windows automatic disk defragmentation schedule. Recommended for SSD-only systems."),
         tags=["maintenance", "disk", "defrag", "ssd"],
     ),
     TweakDef(
-        id="disable-crash-dumps",
+        id="maint-disable-crash-dumps",
         label="Disable Crash Memory Dumps",
         category="Maintenance",
         apply_fn=_apply_disable_dumps,
@@ -377,14 +358,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CRASH_KEY],
-        description=(
-            "Disables crash memory dump files to save disk space "
-            "and avoid large MEMORY.DMP writes."
-        ),
+        description=("Disables crash memory dump files to save disk space and avoid large MEMORY.DMP writes."),
         tags=["maintenance", "disk", "cleanup", "crash"],
     ),
     TweakDef(
-        id="disable-tips-suggestions",
+        id="maint-disable-tips-suggestions",
         label="Disable Windows Tips & Suggestions",
         category="Maintenance",
         apply_fn=_apply_disable_tips,
@@ -401,7 +379,7 @@ TWEAKS: list[TweakDef] = [
         tags=["maintenance", "notifications", "ux"],
     ),
     TweakDef(
-        id="disable-reliability-monitor",
+        id="maint-disable-reliability-monitor",
         label="Disable Reliability Monitor (Perf)",
         category="Maintenance",
         apply_fn=_apply_disable_reliability_monitor,
@@ -418,7 +396,7 @@ TWEAKS: list[TweakDef] = [
         tags=["maintenance", "performance", "monitoring"],
     ),
     TweakDef(
-        id="disable-maintenance-wakeup",
+        id="maint-disable-maintenance-wakeup",
         label="Disable Automatic Maintenance Wake-Up",
         category="Maintenance",
         apply_fn=_apply_disable_maintenance_wakeup,
@@ -427,14 +405,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MAINT_WAKEUP_KEY],
-        description=(
-            "Prevents Windows from waking the PC to run automatic "
-            "maintenance tasks. Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Prevents Windows from waking the PC to run automatic maintenance tasks. Default: Enabled. Recommended: Disabled."),
         tags=["maintenance", "power", "wakeup"],
     ),
     TweakDef(
-        id="disable-disk-diagnostics",
+        id="maint-disable-disk-diagnostics",
         label="Disable Disk Diagnostics",
         category="Maintenance",
         apply_fn=_apply_disable_disk_diagnostics,
@@ -443,14 +418,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_DISK_DIAG_KEY],
-        description=(
-            "Disables the Windows Disk Diagnostic scenario via WDI policy. "
-            "Reduces background disk analysis overhead."
-        ),
+        description=("Disables the Windows Disk Diagnostic scenario via WDI policy. Reduces background disk analysis overhead."),
         tags=["maintenance", "disk", "diagnostics"],
     ),
     TweakDef(
-        id="disable-error-reporting",
+        id="maint-disable-error-reporting",
         label="Disable Windows Error Reporting",
         category="Maintenance",
         apply_fn=_apply_disable_error_reporting,
@@ -459,14 +431,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_WER_KEY],
-        description=(
-            "Disables Windows Error Reporting (WER). Stops automatic "
-            "submission of crash data to Microsoft."
-        ),
+        description=("Disables Windows Error Reporting (WER). Stops automatic submission of crash data to Microsoft."),
         tags=["maintenance", "privacy", "error-reporting"],
     ),
     TweakDef(
-        id="disable-superfetch-prefetch",
+        id="maint-disable-superfetch-prefetch",
         label="Disable SuperFetch/SysMain Prefetch",
         category="Maintenance",
         apply_fn=_apply_disable_superfetch_prefetch,
@@ -475,30 +444,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_PREFETCH_KEY],
-        description=(
-            "Disables the SuperFetch (SysMain) and Prefetcher services via "
-            "registry. Recommended for SSD-only systems to reduce writes."
-        ),
+        description=("Disables the SuperFetch (SysMain) and Prefetcher services via registry. Recommended for SSD-only systems to reduce writes."),
         tags=["maintenance", "performance", "ssd", "prefetch"],
     ),
     TweakDef(
-        id="disable-compatibility-assistant",
-        label="Disable Program Compatibility Assistant",
-        category="Maintenance",
-        apply_fn=_apply_disable_compatibility_assistant,
-        remove_fn=_remove_disable_compatibility_assistant,
-        detect_fn=_detect_disable_compatibility_assistant,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_PCA_KEY],
-        description=(
-            "Disables the Program Compatibility Assistant (PCA) that "
-            "checks for compatibility issues after running programs."
-        ),
-        tags=["maintenance", "compatibility", "pca"],
-    ),
-    TweakDef(
-        id="disable-storage-sense",
+        id="maint-disable-storage-sense",
         label="Disable Storage Sense Auto-Cleanup",
         category="Maintenance",
         apply_fn=_apply_disable_storage_sense,
@@ -507,10 +457,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_STORAGE_SENSE_KEY],
-        description=(
-            "Disables Storage Sense automatic disk cleanup. Prevents "
-            "Windows from automatically deleting temporary files."
-        ),
+        description=("Disables Storage Sense automatic disk cleanup. Prevents Windows from automatically deleting temporary files."),
         tags=["maintenance", "disk", "storage-sense", "cleanup"],
     ),
     TweakDef(
@@ -568,10 +515,7 @@ def _remove_prefetch_off(*, require_admin: bool = True) -> None:
 
 
 def _detect_prefetch_off() -> bool:
-    return (
-        SESSION.read_dword(_PREFETCH_KEY, "EnablePrefetcher") == 0
-        and SESSION.read_dword(_PREFETCH_KEY, "EnableSuperfetch") == 0
-    )
+    return SESSION.read_dword(_PREFETCH_KEY, "EnablePrefetcher") == 0 and SESSION.read_dword(_PREFETCH_KEY, "EnableSuperfetch") == 0
 
 
 # ── Disable Program Compatibility Assistant (policy) ─────────────────────────

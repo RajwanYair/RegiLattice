@@ -19,9 +19,7 @@ _KEY_VISUAL_FX = (
     r"\CurrentVersion\Explorer\VisualEffects"
 )
 _KEY_EDGE_UI = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI"
-_KEY_SENSRSVC = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc"
-)
+_KEY_SENSRSVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc"
 _KEY_COLORS = r"HKEY_CURRENT_USER\Control Panel\Colors"
 
 
@@ -60,10 +58,7 @@ def _remove_enable_cleartype(*, require_admin: bool = False) -> None:
 
 
 def _detect_enable_cleartype() -> bool:
-    return (
-        SESSION.read_string(_KEY_DESKTOP, "FontSmoothing") == "2"
-        and SESSION.read_dword(_KEY_DESKTOP, "FontSmoothingType") == 2
-    )
+    return SESSION.read_string(_KEY_DESKTOP, "FontSmoothing") == "2" and SESSION.read_dword(_KEY_DESKTOP, "FontSmoothingType") == 2
 
 
 # ── Force Custom DPI (96 DPI / 100%) ────────────────────────────────────────
@@ -298,10 +293,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Enables the Windows 8-style DPI scaling override, forcing "
-            "the system DPI setting for all applications."
-        ),
+        description=("Enables the Windows 8-style DPI scaling override, forcing the system DPI setting for all applications."),
         tags=["display", "dpi", "scaling"],
     ),
     TweakDef(
@@ -314,10 +306,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Enables ClearType sub-pixel font rendering for sharper "
-            "text on LCD screens."
-        ),
+        description=("Enables ClearType sub-pixel font rendering for sharper text on LCD screens."),
         tags=["display", "cleartype", "font", "smoothing"],
     ),
     TweakDef(
@@ -330,10 +319,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Forces the display to use 96 DPI (100% scaling), disabling "
-            "any high-DPI scaling that Windows may apply."
-        ),
+        description=("Forces the display to use 96 DPI (100% scaling), disabling any high-DPI scaling that Windows may apply."),
         tags=["display", "dpi", "scaling", "96dpi"],
     ),
     TweakDef(
@@ -359,10 +345,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_PERSONALIZE],
-        description=(
-            "Switches the Windows system theme (taskbar, Start menu, "
-            "Action Center) to dark mode."
-        ),
+        description=("Switches the Windows system theme (taskbar, Start menu, Action Center) to dark mode."),
         tags=["display", "dark", "theme", "system"],
     ),
     TweakDef(
@@ -375,10 +358,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_PERSONALIZE],
-        description=(
-            "Disables the acrylic/blur transparency effects on the "
-            "taskbar, Start menu, and window backgrounds."
-        ),
+        description=("Disables the acrylic/blur transparency effects on the taskbar, Start menu, and window backgrounds."),
         tags=["display", "transparency", "performance", "visual"],
     ),
     TweakDef(
@@ -391,10 +371,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_WINDOW_METRICS],
-        description=(
-            "Disables minimize and maximize window animations for "
-            "snappier window management."
-        ),
+        description=("Disables minimize and maximize window animations for snappier window management."),
         tags=["display", "animation", "performance", "visual"],
     ),
     TweakDef(
@@ -407,10 +384,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DESKTOP],
-        description=(
-            "Sets wallpaper JPEG import quality to 100%, preventing "
-            "Windows from compressing desktop wallpapers."
-        ),
+        description=("Sets wallpaper JPEG import quality to 100%, preventing Windows from compressing desktop wallpapers."),
         tags=["display", "wallpaper", "quality", "compression"],
     ),
     TweakDef(
@@ -423,10 +397,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_DWM],
-        description=(
-            "Shows the Windows accent colour on title bars and "
-            "window borders."
-        ),
+        description=("Shows the Windows accent colour on title bars and window borders."),
         tags=["display", "accent", "color", "titlebar", "dwm"],
     ),
     TweakDef(
@@ -439,10 +410,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_KEY_EDGE_UI],
-        description=(
-            "Disables the screen edge swipe gesture that opens the "
-            "Charms bar or Action Center on touch devices."
-        ),
+        description=("Disables the screen edge swipe gesture that opens the Charms bar or Action Center on touch devices."),
         tags=["display", "edge", "swipe", "gesture", "touch"],
     ),
     TweakDef(

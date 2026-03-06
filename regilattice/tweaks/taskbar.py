@@ -301,7 +301,7 @@ def _detect_disable_recent_search() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="taskbar-align-left",
+        id="tb-taskbar-align-left",
         label="Align Taskbar Left (Win11)",
         category="Taskbar",
         apply_fn=_apply_align_left,
@@ -314,7 +314,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "alignment", "win11"],
     ),
     TweakDef(
-        id="taskbar-small-icons",
+        id="tb-taskbar-small-icons",
         label="Use Small Taskbar Icons",
         category="Taskbar",
         apply_fn=_apply_small_icons,
@@ -327,7 +327,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "icons", "size"],
     ),
     TweakDef(
-        id="taskbar-hide-search",
+        id="tb-taskbar-hide-search",
         label="Hide Taskbar Search Box",
         category="Taskbar",
         apply_fn=_apply_hide_search,
@@ -342,7 +342,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "search", "declutter"],
     ),
     TweakDef(
-        id="taskbar-hide-task-view",
+        id="tb-taskbar-hide-task-view",
         label="Hide Task View Button",
         category="Taskbar",
         apply_fn=_apply_hide_task_view,
@@ -357,7 +357,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "task-view", "declutter"],
     ),
     TweakDef(
-        id="taskbar-hide-widgets",
+        id="tb-taskbar-hide-widgets",
         label="Hide Widgets (Policy)",
         category="Taskbar",
         apply_fn=_apply_hide_widgets,
@@ -374,7 +374,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "widgets", "policy", "performance"],
     ),
     TweakDef(
-        id="taskbar-hide-chat",
+        id="tb-taskbar-hide-chat",
         label="Hide Chat / Teams Icon",
         category="Taskbar",
         apply_fn=_apply_hide_chat,
@@ -387,7 +387,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "chat", "teams", "declutter"],
     ),
     TweakDef(
-        id="taskbar-hide-copilot",
+        id="tb-taskbar-hide-copilot",
         label="Hide Copilot Button",
         category="Taskbar",
         apply_fn=_apply_hide_copilot,
@@ -400,7 +400,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "copilot", "ai", "declutter"],
     ),
     TweakDef(
-        id="taskbar-never-combine",
+        id="tb-taskbar-never-combine",
         label="Never Combine Taskbar Buttons",
         category="Taskbar",
         apply_fn=_apply_never_combine,
@@ -417,7 +417,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "grouping", "buttons", "ux"],
     ),
     TweakDef(
-        id="taskbar-disable-badges",
+        id="tb-taskbar-disable-badges",
         label="Disable Notification Badges",
         category="Taskbar",
         apply_fn=_apply_disable_badges,
@@ -430,7 +430,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "badges", "notifications", "declutter"],
     ),
     TweakDef(
-        id="taskbar-disable-flashing",
+        id="tb-taskbar-disable-flashing",
         label="Disable Taskbar Button Flashing",
         category="Taskbar",
         apply_fn=_apply_disable_flashing,
@@ -443,7 +443,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "flashing", "focus", "ux"],
     ),
     TweakDef(
-        id="taskbar-end-task",
+        id="tb-taskbar-end-task",
         label="Enable End Task in Taskbar",
         category="Taskbar",
         apply_fn=_apply_end_task,
@@ -458,7 +458,7 @@ TWEAKS: list[TweakDef] = [
         tags=["taskbar", "end-task", "productivity"],
     ),
     TweakDef(
-        id="taskbar-disable-recent-search",
+        id="tb-taskbar-disable-recent-search",
         label="Disable Recent Searches in Taskbar",
         category="Taskbar",
         apply_fn=_apply_disable_recent_search,
@@ -522,7 +522,7 @@ def _detect_taskbar_disable_people() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="taskbar-disable-notification-badges",
+        id="tb-taskbar-disable-notification-badges",
         label="Disable Notification Badge Overlay",
         category="Taskbar",
         apply_fn=_apply_taskbar_disable_notification_badges,
@@ -535,7 +535,7 @@ TWEAKS += [
         tags=["taskbar", "badges", "notifications"],
     ),
     TweakDef(
-        id="taskbar-disable-people",
+        id="tb-taskbar-disable-people",
         label="Disable People Bar on Taskbar",
         category="Taskbar",
         apply_fn=_apply_taskbar_disable_people,

@@ -335,7 +335,7 @@ def _detect_chrome_disable_default_check() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-chrome-bg",
+        id="chrome-disable-chrome-bg",
         label="Disable Chrome Background Apps",
         category="Chrome",
         apply_fn=apply_disable_chrome_bg,
@@ -344,14 +344,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Prevents Chrome from running in the background after the "
-            "browser window is closed, saving memory and CPU."
-        ),
+        description=("Prevents Chrome from running in the background after the browser window is closed, saving memory and CPU."),
         tags=["chrome", "browser", "background"],
     ),
     TweakDef(
-        id="disable-chrome-telemetry",
+        id="chrome-disable-chrome-telemetry",
         label="Disable Chrome Telemetry",
         category="Chrome",
         apply_fn=apply_disable_chrome_telemetry,
@@ -360,14 +357,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Disables Chrome metrics, spell-check cloud, translate, "
-            "and extended safe-browsing reporting."
-        ),
+        description=("Disables Chrome metrics, spell-check cloud, translate, and extended safe-browsing reporting."),
         tags=["chrome", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-chrome-update",
+        id="chrome-disable-chrome-update",
         label="Disable Chrome Auto-Update",
         category="Chrome",
         apply_fn=apply_disable_chrome_update,
@@ -380,7 +374,7 @@ TWEAKS: list[TweakDef] = [
         tags=["chrome", "browser", "update"],
     ),
     TweakDef(
-        id="disable-chrome-hwaccel",
+        id="chrome-disable-chrome-hwaccel",
         label="Disable Chrome Hardware Acceleration",
         category="Chrome",
         apply_fn=apply_disable_chrome_hwaccel,
@@ -389,14 +383,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Forces Chrome to use software rendering instead of GPU, "
-            "useful for troubleshooting display issues."
-        ),
+        description=("Forces Chrome to use software rendering instead of GPU, useful for troubleshooting display issues."),
         tags=["chrome", "browser", "gpu"],
     ),
     TweakDef(
-        id="disable-chrome-signin",
+        id="chrome-disable-chrome-signin",
         label="Disable Chrome Sign-In & Sync",
         category="Chrome",
         apply_fn=apply_disable_chrome_signin,
@@ -457,10 +448,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Disables the cloud-based spell-check service in Chrome, "
-            "keeping only the local spell checker."
-        ),
+        description=("Disables the cloud-based spell-check service in Chrome, keeping only the local spell checker."),
         tags=["chrome", "browser", "spellcheck", "privacy"],
     ),
     TweakDef(
@@ -486,10 +474,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Disables the built-in Chrome password manager and autofill "
-            "for passwords via policy."
-        ),
+        description=("Disables the built-in Chrome password manager and autofill for passwords via policy."),
         tags=["chrome", "browser", "passwords", "autofill", "security"],
     ),
     TweakDef(
@@ -519,11 +504,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CHROME_POLICY],
-        description=(
-            "Prevents Chrome from running in the background after closing. "
-            "Frees memory and CPU. "
-            "Default: Enabled. Recommended: Disabled."
-        ),
+        description=("Prevents Chrome from running in the background after closing. Frees memory and CPU. Default: Enabled. Recommended: Disabled."),
         tags=["chrome", "background", "performance", "memory"],
     ),
     TweakDef(

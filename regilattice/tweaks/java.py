@@ -251,7 +251,7 @@ def _detect_high_perf_graphics() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-java-update",
+        id="java-disable-java-update",
         label="Disable Java Auto-Update",
         category="Java",
         apply_fn=_apply_disable_update,
@@ -264,7 +264,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "update"],
     ),
     TweakDef(
-        id="disable-java-web-plugin",
+        id="java-disable-java-web-plugin",
         label="Disable Java Web Plugin",
         category="Java",
         apply_fn=_apply_disable_web,
@@ -277,7 +277,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "security", "web"],
     ),
     TweakDef(
-        id="disable-java-tracking",
+        id="java-disable-java-tracking",
         label="Disable Java Usage Tracking",
         category="Java",
         apply_fn=_apply_disable_tracking,
@@ -303,7 +303,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "display", "dpi"],
     ),
     TweakDef(
-        id="disable-java-sponsor",
+        id="java-disable-java-sponsor",
         label="Disable Java Sponsor Offers",
         category="Java",
         apply_fn=_apply_disable_sponsor,
@@ -329,7 +329,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "security"],
     ),
     TweakDef(
-        id="disable-java-error-reporting",
+        id="java-disable-java-error-reporting",
         label="Disable Java Error Reporting",
         category="Java",
         apply_fn=_apply_disable_error_reporting,
@@ -342,7 +342,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "telemetry", "errors"],
     ),
     TweakDef(
-        id="disable-java-tip-of-day",
+        id="java-disable-java-tip-of-day",
         label="Disable Java Tip of the Day",
         category="Java",
         apply_fn=_apply_disable_java_tip,
@@ -355,7 +355,7 @@ TWEAKS: list[TweakDef] = [
         tags=["java", "ui", "annoyance"],
     ),
     TweakDef(
-        id="disable-java-cert-revoke",
+        id="java-disable-java-cert-revoke",
         label="Disable Java Certificate Revocation Check",
         category="Java",
         apply_fn=_apply_disable_cert_revoke,
@@ -486,10 +486,7 @@ def _remove_java_disable_update_scheduler(*, require_admin: bool = True) -> None
 
 
 def _detect_java_disable_update_scheduler() -> bool:
-    return (
-        SESSION.read_dword(_JAVA_UPDATE, "NotifyDownload") == 0
-        and SESSION.read_dword(_JAVA_UPDATE, "NotifyInstall") == 0
-    )
+    return SESSION.read_dword(_JAVA_UPDATE, "NotifyDownload") == 0 and SESSION.read_dword(_JAVA_UPDATE, "NotifyInstall") == 0
 
 
 # -- 15. Set Java Security Level to Very High ─────────────────────────────────

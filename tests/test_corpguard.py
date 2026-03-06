@@ -21,6 +21,7 @@ from regilattice.corpguard import (
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
+
 def _completed(stdout: str = "", returncode: int = 0) -> subprocess.CompletedProcess:
     """Build a fake CompletedProcess."""
     return subprocess.CompletedProcess(args=[], returncode=returncode, stdout=stdout, stderr="")
@@ -39,7 +40,9 @@ class TestIsDomainJoined:
     @patch("regilattice.corpguard.is_windows", return_value=True)
     @patch("regilattice.corpguard.subprocess.run")
     def test_ctypes_domain_detected(
-        self, mock_run: MagicMock, _win: MagicMock,
+        self,
+        mock_run: MagicMock,
+        _win: MagicMock,
     ) -> None:
         # The ctypes path uses advapi32.GetComputerNameExW which may not be
         # available on all Windows versions. The code has a try/except that
@@ -51,14 +54,18 @@ class TestIsDomainJoined:
     @patch("regilattice.corpguard.is_windows", return_value=True)
     @patch("regilattice.corpguard.subprocess.run", return_value=_completed("True\n"))
     def test_wmi_fallback_true(
-        self, mock_run: MagicMock, _win: MagicMock,
+        self,
+        mock_run: MagicMock,
+        _win: MagicMock,
     ) -> None:
         assert _is_domain_joined() is True
 
     @patch("regilattice.corpguard.is_windows", return_value=True)
     @patch("regilattice.corpguard.subprocess.run", return_value=_completed("False\n"))
     def test_no_domain(
-        self, mock_run: MagicMock, _win: MagicMock,
+        self,
+        mock_run: MagicMock,
+        _win: MagicMock,
     ) -> None:
         assert _is_domain_joined() is False
 

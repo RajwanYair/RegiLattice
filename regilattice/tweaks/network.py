@@ -412,7 +412,7 @@ def _detect_rss_enable() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="increase-irpstack",
+        id="net-increase-irpstack",
         label="Increase IRPStackSize",
         category="Network",
         apply_fn=_apply_irpstack,
@@ -421,30 +421,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_LANMAN],
-        description=(
-            "Increases the I/O Request Packet stack size to 32 for "
-            "better network/file-sharing throughput."
-        ),
+        description=("Increases the I/O Request Packet stack size to 32 for better network/file-sharing throughput."),
         tags=["network", "performance", "smb"],
     ),
     TweakDef(
-        id="disable-nagle",
-        label="Disable Nagle Algorithm (Low Latency)",
-        category="Network",
-        apply_fn=_apply_disable_nagle,
-        remove_fn=_remove_disable_nagle,
-        detect_fn=_detect_disable_nagle,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_TCPIP],
-        description=(
-            "Disables TCP Nagle algorithm (TcpAckFrequency=1, TCPNoDelay=1) "
-            "for lower latency in games and remote sessions."
-        ),
-        tags=["network", "latency", "gaming"],
-    ),
-    TweakDef(
-        id="disable-network-throttle",
+        id="net-disable-network-throttle",
         label="Disable Network Throttling",
         category="Network",
         apply_fn=_apply_disable_throttle,
@@ -453,14 +434,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_THROTTLE],
-        description=(
-            "Removes the multimedia network throttling index, allowing "
-            "full bandwidth usage during media playback."
-        ),
+        description=("Removes the multimedia network throttling index, allowing full bandwidth usage during media playback."),
         tags=["network", "performance", "bandwidth"],
     ),
     TweakDef(
-        id="enable-rdp",
+        id="net-enable-rdp",
         label="Enable Remote Desktop",
         category="Network",
         apply_fn=_apply_enable_rdp,
@@ -473,7 +451,7 @@ TWEAKS: list[TweakDef] = [
         tags=["network", "remote", "rdp"],
     ),
     TweakDef(
-        id="enable-dns-over-https",
+        id="net-enable-dns-over-https",
         label="Enable DNS-over-HTTPS",
         category="Network",
         apply_fn=_apply_doh,
@@ -482,14 +460,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_DNS_CLIENT],
-        description=(
-            "Enables automatic DNS-over-HTTPS (DoH) for encrypted DNS "
-            "resolution."
-        ),
+        description=("Enables automatic DNS-over-HTTPS (DoH) for encrypted DNS resolution."),
         tags=["network", "privacy", "dns", "security"],
     ),
     TweakDef(
-        id="increase-max-tcp",
+        id="net-increase-max-tcp",
         label="Increase Max TCP Connections",
         category="Network",
         apply_fn=_apply_max_connections,
@@ -498,14 +473,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_TCPIP, _AFD],
-        description=(
-            "Increases the max user port to 65534, reduces TIME_WAIT "
-            "delay, and enlarges default socket buffer sizes."
-        ),
+        description=("Increases the max user port to 65534, reduces TIME_WAIT delay, and enlarges default socket buffer sizes."),
         tags=["network", "performance", "tcp"],
     ),
     TweakDef(
-        id="disable-wifi-sense",
+        id="net-disable-wifi-sense",
         label="Disable Wi-Fi Sense",
         category="Network",
         apply_fn=_apply_disable_wifi_sense,
@@ -518,7 +490,7 @@ TWEAKS: list[TweakDef] = [
         tags=["network", "wifi", "privacy", "security"],
     ),
     TweakDef(
-        id="disable-netbios",
+        id="net-disable-netbios",
         label="Disable NetBIOS over TCP/IP",
         category="Network",
         apply_fn=_apply_disable_netbios,
@@ -531,7 +503,7 @@ TWEAKS: list[TweakDef] = [
         tags=["network", "security", "netbios"],
     ),
     TweakDef(
-        id="disable-llmnr",
+        id="net-disable-llmnr",
         label="Disable LLMNR",
         category="Network",
         apply_fn=_apply_disable_llmnr,
@@ -540,14 +512,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_LLMNR],
-        description=(
-            "Disables Link-Local Multicast Name Resolution. "
-            "Mitigates LLMNR poisoning attacks on enterprise networks."
-        ),
+        description=("Disables Link-Local Multicast Name Resolution. Mitigates LLMNR poisoning attacks on enterprise networks."),
         tags=["network", "security", "llmnr", "enterprise"],
     ),
     TweakDef(
-        id="disable-wpad",
+        id="net-disable-wpad",
         label="Disable WPAD Auto-Proxy",
         category="Network",
         apply_fn=_apply_disable_wpad,
@@ -556,14 +525,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_WPAD],
-        description=(
-            "Disables Web Proxy Auto-Discovery (WPAD). "
-            "Prevents rogue WPAD attacks on untrusted networks."
-        ),
+        description=("Disables Web Proxy Auto-Discovery (WPAD). Prevents rogue WPAD attacks on untrusted networks."),
         tags=["network", "security", "proxy", "wpad"],
     ),
     TweakDef(
-        id="enable-ecn",
+        id="net-enable-ecn",
         label="Enable TCP ECN",
         category="Network",
         apply_fn=_apply_enable_ecn,
@@ -572,14 +538,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_TCPIP],
-        description=(
-            "Enables Explicit Congestion Notification for smarter "
-            "TCP congestion control without packet loss."
-        ),
+        description=("Enables Explicit Congestion Notification for smarter TCP congestion control without packet loss."),
         tags=["network", "performance", "ecn", "tcp"],
     ),
     TweakDef(
-        id="disable-smbv1",
+        id="net-disable-smbv1",
         label="Disable SMBv1 Client",
         category="Network",
         apply_fn=_apply_disable_smbv1,
@@ -588,14 +551,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SMB1],
-        description=(
-            "Disables the legacy and insecure SMBv1 protocol. "
-            "Protects against EternalBlue and similar exploits."
-        ),
+        description=("Disables the legacy and insecure SMBv1 protocol. Protects against EternalBlue and similar exploits."),
         tags=["network", "security", "smb", "enterprise"],
     ),
     TweakDef(
-        id="increase-dns-cache",
+        id="net-increase-dns-cache",
         label="Increase DNS Cache TTL (24h)",
         category="Network",
         apply_fn=_apply_increase_dns_cache,
@@ -604,10 +564,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_DNS_CLIENT],
-        description=(
-            "Increases the DNS cache TTL to 24 hours and reduces negative "
-            "cache to 5 seconds for faster repeat lookups."
-        ),
+        description=("Increases the DNS cache TTL to 24 hours and reduces negative cache to 5 seconds for faster repeat lookups."),
         tags=["network", "performance", "dns", "cache"],
     ),
     TweakDef(
@@ -857,10 +814,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_TEREDO],
-        description=(
-            "Disables Teredo IPv6 tunneling which is rarely used and can be a "
-            "security risk. Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables Teredo IPv6 tunneling which is rarely used and can be a security risk. Default: enabled. Recommended: disabled."),
         tags=["network", "teredo", "ipv6", "tunneling", "security"],
     ),
     TweakDef(
@@ -890,10 +844,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_ISATAP],
-        description=(
-            "Disables the ISATAP IPv6 transition adapter. Removes an unnecessary "
-            "virtual adapter. Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables the ISATAP IPv6 transition adapter. Removes an unnecessary virtual adapter. Default: enabled. Recommended: disabled."),
         tags=["network", "isatap", "ipv6", "adapter", "security"],
     ),
     TweakDef(
@@ -953,10 +904,7 @@ def _remove_dns_cache_optimization(*, require_admin: bool = True) -> None:
 
 
 def _detect_dns_cache_optimization() -> bool:
-    return (
-        SESSION.read_dword(_DNS_CLIENT, "MaxCacheTtl") == 86400
-        and SESSION.read_dword(_DNS_CLIENT, "MaxNegativeCacheTtl") == 5
-    )
+    return SESSION.read_dword(_DNS_CLIENT, "MaxCacheTtl") == 86400 and SESSION.read_dword(_DNS_CLIENT, "MaxNegativeCacheTtl") == 5
 
 
 TWEAKS += [

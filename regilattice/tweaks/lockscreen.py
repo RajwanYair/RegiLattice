@@ -12,15 +12,9 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-_PERSONALIZE = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-)
-_LOGON = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
-_LOCK_SCREEN = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-)
+_PERSONALIZE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
+_LOGON = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+_LOCK_SCREEN = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"
 _CONTENT_DELIVERY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows"
     r"\CurrentVersion\ContentDeliveryManager"
@@ -33,12 +27,8 @@ _WINLOGON = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT"
     r"\CurrentVersion\Winlogon"
 )
-_LOCK_NET = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
-)
-_CAMERA = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Camera"
-)
+_LOCK_NET = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+_CAMERA = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Camera"
 _FUS = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\Policies\System"
@@ -287,10 +277,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_CONTENT_DELIVERY],
-        description=(
-            "Disables Spotlight tips and rotating overlay ads on the "
-            "lock screen. Default: enabled. Recommended: disabled."
-        ),
+        description=("Disables Spotlight tips and rotating overlay ads on the lock screen. Default: enabled. Recommended: disabled."),
         tags=["lockscreen", "ads", "spotlight", "tips"],
     ),
     TweakDef(
@@ -304,9 +291,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[_PERSONALIZE],
         description=(
-            "Completely disables the lock screen, going straight to "
-            "the password/PIN prompt. "
-            "Default: enabled. Recommended: disabled (home PCs)."
+            "Completely disables the lock screen, going straight to the password/PIN prompt. Default: enabled. Recommended: disabled (home PCs)."
         ),
         tags=["lockscreen", "disable", "bypass", "login"],
     ),
@@ -337,11 +322,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_LOCK_NET],
-        description=(
-            "Hides the network selection UI on the lock screen. "
-            "Prevents unauthorized Wi-Fi changes. "
-            "Default: shown. Recommended: hidden."
-        ),
+        description=("Hides the network selection UI on the lock screen. Prevents unauthorized Wi-Fi changes. Default: shown. Recommended: hidden."),
         tags=["lockscreen", "network", "wifi", "security"],
     ),
     TweakDef(
@@ -354,10 +335,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CAMERA],
-        description=(
-            "Disables camera access from the lock screen. "
-            "Default: allowed. Recommended: 0 (disabled)."
-        ),
+        description=("Disables camera access from the lock screen. Default: allowed. Recommended: 0 (disabled)."),
         tags=["lockscreen", "camera", "privacy", "security"],
     ),
     TweakDef(
@@ -388,9 +366,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[r"HKEY_CURRENT_USER\Control Panel\Desktop"],
         description=(
-            "Sets screen saver timeout to 600 seconds with secure "
-            "lock enabled. Ensures idle lock for security. "
-            "Default: disabled. Recommended: 600s."
+            "Sets screen saver timeout to 600 seconds with secure lock enabled. Ensures idle lock for security. Default: disabled. Recommended: 600s."
         ),
         tags=["lockscreen", "timeout", "security", "idle"],
     ),
@@ -456,9 +432,7 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_LOGON],
         description=(
-            "Shows detailed status messages during logon/logoff "
-            "instead of generic 'Please wait'. "
-            "Default: not set. Recommended: 1 (verbose)."
+            "Shows detailed status messages during logon/logoff instead of generic 'Please wait'. Default: not set. Recommended: 1 (verbose)."
         ),
         tags=["lockscreen", "verbose", "status", "login", "debug"],
     ),

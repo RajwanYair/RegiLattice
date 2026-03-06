@@ -137,11 +137,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--profile",
         choices=["business", "gaming"],
-        help=(
-            "Apply a machine-purpose profile. "
-            "'business' disables gaming/GPU tweaks; "
-            "'gaming' disables Office/Communication/OneDrive tweaks."
-        ),
+        help=("Apply a machine-purpose profile. 'business' disables gaming/GPU tweaks; 'gaming' disables Office/Communication/OneDrive tweaks."),
     )
     parser.add_argument(
         "--dry-run",
@@ -250,9 +246,7 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"❌ Unknown tweak '{args.tweak}'.")
                 return 2
             return 0
-        return _run_action(
-            args.mode, args.tweak, assume_yes=args.assume_yes, force=args.force
-        )
+        return _run_action(args.mode, args.tweak, assume_yes=args.assume_yes, force=args.force)
 
     # Interactive menu
     if not is_windows():

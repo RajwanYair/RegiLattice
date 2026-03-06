@@ -338,7 +338,7 @@ def _detect_disable_sysmain_svc() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-diagtrack-service",
+        id="svc-disable-diagtrack-service",
         label="Disable DiagTrack Service Startup",
         category="Services",
         apply_fn=_apply_disable_diagtrack,
@@ -351,7 +351,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-wsearch",
+        id="svc-disable-wsearch",
         label="Disable Windows Search Indexer",
         category="Services",
         apply_fn=_apply_disable_wsearch,
@@ -364,7 +364,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "performance", "disk"],
     ),
     TweakDef(
-        id="disable-wer",
+        id="svc-disable-wer",
         label="Disable Windows Error Reporting",
         category="Services",
         apply_fn=_apply_disable_wer,
@@ -377,20 +377,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-print-spooler",
-        label="Disable Print Spooler Service",
-        category="Services",
-        apply_fn=_apply_disable_spooler,
-        remove_fn=_remove_disable_spooler,
-        detect_fn=_detect_disable_spooler,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_SPOOLER],
-        description=("Disables the Print Spooler service — reduces attack surface on machines that don't use local printers."),
-        tags=["services", "security", "printer"],
-    ),
-    TweakDef(
-        id="disable-sysmain-service",
+        id="svc-disable-sysmain-service",
         label="Disable SysMain (Superfetch)",
         category="Services",
         apply_fn=_apply_disable_sysmain,
@@ -403,7 +390,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "performance", "ssd"],
     ),
     TweakDef(
-        id="disable-diagsvc",
+        id="svc-disable-diagsvc",
         label="Disable Diagnostic Service",
         category="Services",
         apply_fn=_apply_disable_diagsvc,
@@ -416,7 +403,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "telemetry", "diagnostics"],
     ),
     TweakDef(
-        id="disable-wbiosrvc",
+        id="svc-disable-wbiosrvc",
         label="Disable Biometric Service",
         category="Services",
         apply_fn=_apply_disable_biometric,
@@ -429,20 +416,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "biometric", "security"],
     ),
     TweakDef(
-        id="disable-fax",
-        label="Disable Fax Service",
-        category="Services",
-        apply_fn=_apply_disable_fax,
-        remove_fn=_remove_disable_fax,
-        detect_fn=_detect_disable_fax,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_FAX],
-        description="Disables the legacy Windows Fax Service.",
-        tags=["services", "legacy", "fax"],
-    ),
-    TweakDef(
-        id="disable-remote-registry",
+        id="svc-disable-remote-registry",
         label="Disable Remote Registry",
         category="Services",
         apply_fn=_apply_disable_remote_registry,
@@ -455,7 +429,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "security", "remote"],
     ),
     TweakDef(
-        id="disable-xbox-live-services",
+        id="svc-disable-xbox-live-services",
         label="Disable Xbox Live Services",
         category="Services",
         apply_fn=_apply_disable_xbox_services,
@@ -468,7 +442,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "xbox", "gaming", "cleanup"],
     ),
     TweakDef(
-        id="disable-geolocation-service",
+        id="svc-disable-geolocation-service",
         label="Disable Geolocation Service",
         category="Services",
         apply_fn=_apply_disable_geolocation,
@@ -481,7 +455,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "privacy", "location"],
     ),
     TweakDef(
-        id="disable-delivery-optimization-svc",
+        id="svc-disable-delivery-optimization-svc",
         label="Disable Delivery Optimization",
         category="Services",
         apply_fn=_apply_disable_delivery_opt,
@@ -494,7 +468,7 @@ TWEAKS: list[TweakDef] = [
         tags=["services", "update", "bandwidth", "privacy"],
     ),
     TweakDef(
-        id="disable-alljoyn",
+        id="svc-disable-alljoyn",
         label="Disable AllJoyn Router",
         category="Services",
         apply_fn=_apply_disable_alljoyn,

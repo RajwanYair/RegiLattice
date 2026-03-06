@@ -270,7 +270,7 @@ def _detect_reduce_bandwidth() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-onedrive-autostart",
+        id="od-disable-onedrive-autostart",
         label="Disable OneDrive Auto-Start",
         category="OneDrive",
         apply_fn=_apply_disable_autostart,
@@ -283,7 +283,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "autostart", "startup"],
     ),
     TweakDef(
-        id="disable-onedrive-fod",
+        id="od-disable-onedrive-fod",
         label="Disable OneDrive Files On-Demand",
         category="OneDrive",
         apply_fn=_apply_disable_fod,
@@ -292,14 +292,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_OD],
-        description=(
-            "Disables Files On-Demand — all files are downloaded locally "
-            "instead of being cloud-only placeholders."
-        ),
+        description=("Disables Files On-Demand — all files are downloaded locally instead of being cloud-only placeholders."),
         tags=["onedrive", "sync", "disk"],
     ),
     TweakDef(
-        id="disable-onedrive-ads",
+        id="od-disable-onedrive-ads",
         label="Disable OneDrive Ads / Upsell",
         category="OneDrive",
         apply_fn=_apply_disable_ads,
@@ -312,7 +309,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "privacy", "ads"],
     ),
     TweakDef(
-        id="onedrive-upload-throttle",
+        id="od-onedrive-upload-throttle",
         label="Throttle OneDrive Upload (1 MB/s)",
         category="OneDrive",
         apply_fn=_apply_throttle,
@@ -321,14 +318,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_OD],
-        description=(
-            "Limits OneDrive upload bandwidth to 1000 KB/s to prevent "
-            "saturating your connection."
-        ),
+        description=("Limits OneDrive upload bandwidth to 1000 KB/s to prevent saturating your connection."),
         tags=["onedrive", "bandwidth", "network"],
     ),
     TweakDef(
-        id="disable-onedrive-personal-sync",
+        id="od-disable-onedrive-personal-sync",
         label="Disable OneDrive Personal Sync",
         category="OneDrive",
         apply_fn=_apply_disable_personal,
@@ -341,7 +335,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "sync", "policy"],
     ),
     TweakDef(
-        id="disable-onedrive-kfm",
+        id="od-disable-onedrive-kfm",
         label="Block OneDrive Known Folder Move",
         category="OneDrive",
         apply_fn=_apply_disable_kfm,
@@ -354,7 +348,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "kfm", "folders"],
     ),
     TweakDef(
-        id="onedrive-disable-personal",
+        id="od-onedrive-disable-personal",
         label="Disable OneDrive Personal Account Sign-In",
         category="OneDrive",
         apply_fn=_apply_disable_personal_signin,
@@ -367,7 +361,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "personal", "signin", "policy"],
     ),
     TweakDef(
-        id="onedrive-max-upload-rate",
+        id="od-onedrive-max-upload-rate",
         label="Limit OneDrive Upload Rate (125 KB/s)",
         category="OneDrive",
         apply_fn=_apply_max_upload_rate,
@@ -380,7 +374,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "bandwidth", "upload", "network"],
     ),
     TweakDef(
-        id="onedrive-max-download-rate",
+        id="od-onedrive-max-download-rate",
         label="Limit OneDrive Download Rate (1000 KB/s)",
         category="OneDrive",
         apply_fn=_apply_max_download_rate,
@@ -393,7 +387,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "bandwidth", "download", "network"],
     ),
     TweakDef(
-        id="onedrive-disable-office-collab",
+        id="od-onedrive-disable-office-collab",
         label="Disable Office Collaboration via OneDrive",
         category="OneDrive",
         apply_fn=_apply_disable_office_collab,
@@ -406,7 +400,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "office", "collaboration", "sync"],
     ),
     TweakDef(
-        id="onedrive-silent-config",
+        id="od-onedrive-silent-config",
         label="Enable Silent OneDrive Account Configuration",
         category="OneDrive",
         apply_fn=_apply_silent_config,
@@ -419,7 +413,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "silent", "config", "policy"],
     ),
     TweakDef(
-        id="onedrive-disable-files-on-demand",
+        id="od-onedrive-disable-files-on-demand",
         label="Disable OneDrive Files On-Demand",
         category="OneDrive",
         apply_fn=_apply_disable_fod_policy,
@@ -436,7 +430,7 @@ TWEAKS: list[TweakDef] = [
         tags=["onedrive", "files-on-demand", "offline", "sync"],
     ),
     TweakDef(
-        id="onedrive-reduce-bandwidth",
+        id="od-onedrive-reduce-bandwidth",
         label="OneDrive Reduce Sync Traffic",
         category="OneDrive",
         apply_fn=_apply_reduce_bandwidth,
@@ -497,7 +491,7 @@ def _detect_disable_personal_sync_ngsc() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="onedrive-disable-fod-global",
+        id="od-onedrive-disable-fod-global",
         label="Disable OneDrive Files On-Demand (Global)",
         category="OneDrive",
         apply_fn=_apply_disable_fod_global,
@@ -514,7 +508,7 @@ TWEAKS += [
         tags=["onedrive", "files-on-demand", "policy", "offline"],
     ),
     TweakDef(
-        id="onedrive-disable-personal-sync",
+        id="od-onedrive-disable-personal-sync",
         label="Disable Personal OneDrive Sync",
         category="OneDrive",
         apply_fn=_apply_disable_personal_sync_ngsc,

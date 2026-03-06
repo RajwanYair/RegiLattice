@@ -397,7 +397,7 @@ def _detect_unpark_cpu_cores() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="performance",
+        id="perf-performance",
         label="Performance Tweaks (Visual Effects)",
         category="Performance",
         apply_fn=apply_performance,
@@ -410,7 +410,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "startup", "network"],
     ),
     TweakDef(
-        id="svchost-split",
+        id="perf-svchost-split",
         label="Optimize SvcHost Split (RAM-based)",
         category="Performance",
         apply_fn=apply_svchost_split,
@@ -423,7 +423,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "memory", "svchost"],
     ),
     TweakDef(
-        id="disable-last-access",
+        id="perf-disable-ntfs-last-access",
         label="Disable NTFS Last Access Timestamp",
         category="Performance",
         apply_fn=apply_disable_last_access,
@@ -436,7 +436,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "ntfs", "disk"],
     ),
     TweakDef(
-        id="disable-transparency",
+        id="perf-disable-transparency",
         label="Disable Transparency Effects",
         category="Performance",
         apply_fn=_apply_disable_transparency,
@@ -453,7 +453,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "visual", "transparency"],
     ),
     TweakDef(
-        id="disable-background-apps",
+        id="perf-disable-background-apps",
         label="Disable Background UWP Apps",
         category="Performance",
         apply_fn=_apply_disable_bg_apps,
@@ -470,7 +470,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "uwp", "background"],
     ),
     TweakDef(
-        id="disable-window-animations",
+        id="perf-disable-window-animations",
         label="Disable Window Animations",
         category="Performance",
         apply_fn=_apply_disable_animations,
@@ -483,7 +483,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "visual", "animations"],
     ),
     TweakDef(
-        id="menu-show-delay",
+        id="perf-menu-show-delay",
         label="Reduce Menu Show Delay",
         category="Performance",
         apply_fn=_apply_menu_delay,
@@ -496,7 +496,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "menu", "ux", "responsiveness"],
     ),
     TweakDef(
-        id="disable-search-protocol-host",
+        id="perf-disable-search-protocol-host",
         label="Disable SearchProtocolHost Priority Boost",
         category="Performance",
         apply_fn=_apply_disable_search_protocol_host,
@@ -522,7 +522,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "memory", "cache"],
     ),
     TweakDef(
-        id="disable-paging-executive",
+        id="perf-disable-paging-executive",
         label="Disable Paging of Kernel to Disk",
         category="Performance",
         apply_fn=_apply_disable_paging_executive,
@@ -535,7 +535,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "memory", "kernel", "paging"],
     ),
     TweakDef(
-        id="optimize-processor-scheduling",
+        id="perf-optimize-processor-scheduling",
         label="Optimize for Programs (Not Services)",
         category="Performance",
         apply_fn=_apply_optimize_processor_scheduling,
@@ -553,7 +553,7 @@ TWEAKS: list[TweakDef] = [
         tags=["performance", "cpu", "scheduling", "responsiveness", "priority", "foreground", "quantum"],
     ),
     TweakDef(
-        id="disable-ntfs-encryption",
+        id="perf-disable-ntfs-encryption",
         label="Disable NTFS Encryption (EFS) Service",
         category="Performance",
         apply_fn=_apply_disable_ntfs_encryption,

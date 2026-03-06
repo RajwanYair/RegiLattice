@@ -16,7 +16,7 @@ class TestListFlag:
             rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out
-        assert "show-file-extensions" in out or "disable-telemetry" in out
+        assert "explorer-show-file-extensions" in out or "telem-disable" in out
 
     def test_list_shows_header(self, capsys) -> None:
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
@@ -37,7 +37,7 @@ class TestVersion:
 class TestAbortByUser:
     def test_abort_returns_1(self, capsys) -> None:
         with patch("regilattice.cli.assert_not_corporate"), patch("builtins.input", return_value="n"):
-            rc = main(["apply", "show-file-extensions"])
+            rc = main(["apply", "explorer-show-file-extensions"])
         assert rc == 1
         assert "Aborted" in capsys.readouterr().out
 
@@ -46,10 +46,13 @@ class TestSnapshotFlag:
     def test_snapshot_creates_file(self, tmp_path, capsys) -> None:
         path = tmp_path / "snap.json"
         with patch("regilattice.tweaks.save_snapshot") as mock_save:
+
             def _save(p):
                 import json
+
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(json.dumps({"test": "applied"}))
+
             mock_save.side_effect = _save
             rc = main(["--snapshot", str(path)])
         assert rc == 0

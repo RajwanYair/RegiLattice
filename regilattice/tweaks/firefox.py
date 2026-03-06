@@ -323,7 +323,7 @@ def _detect_ff_disable_profile_import() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-firefox-telemetry",
+        id="firefox-disable-firefox-telemetry",
         label="Disable Firefox Telemetry & Studies",
         category="Firefox",
         apply_fn=apply_disable_ff_telemetry,
@@ -332,14 +332,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=False,
         registry_keys=_FF_KEYS,
-        description=(
-            "Disables Firefox telemetry, Shield studies, and the "
-            "Default Browser Agent background task."
-        ),
+        description=("Disables Firefox telemetry, Shield studies, and the Default Browser Agent background task."),
         tags=["firefox", "browser", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="disable-firefox-pocket",
+        id="firefox-disable-firefox-pocket",
         label="Disable Firefox Pocket",
         category="Firefox",
         apply_fn=apply_disable_ff_pocket,
@@ -352,7 +349,7 @@ TWEAKS: list[TweakDef] = [
         tags=["firefox", "browser", "pocket"],
     ),
     TweakDef(
-        id="disable-firefox-update",
+        id="firefox-disable-firefox-update",
         label="Disable Firefox Auto-Update",
         category="Firefox",
         apply_fn=apply_disable_ff_update,
@@ -365,7 +362,7 @@ TWEAKS: list[TweakDef] = [
         tags=["firefox", "browser", "update"],
     ),
     TweakDef(
-        id="disable-firefox-crash-reporter",
+        id="firefox-disable-firefox-crash-reporter",
         label="Disable Firefox Crash Reporter",
         category="Firefox",
         apply_fn=_apply_disable_ff_crash,
@@ -378,7 +375,7 @@ TWEAKS: list[TweakDef] = [
         tags=["firefox", "browser", "crash"],
     ),
     TweakDef(
-        id="disable-firefox-default-check",
+        id="firefox-disable-firefox-default-check",
         label="Disable Firefox Default Browser Check",
         category="Firefox",
         apply_fn=_apply_disable_ff_default_check,
@@ -439,9 +436,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_FF_DOH],
-        description=(
-            "Enables DNS-over-HTTPS in Firefox using the Cloudflare resolver."
-        ),
+        description=("Enables DNS-over-HTTPS in Firefox using the Cloudflare resolver."),
         tags=["firefox", "browser", "dns", "privacy", "security"],
     ),
     TweakDef(
@@ -676,7 +671,7 @@ def _detect_ff_safe_mode_off() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="ff-disable-password-autosave",
+        id="firefox-ff-disable-password-autosave",
         label="Disable Firefox Password Auto-Save",
         category="Firefox",
         apply_fn=_apply_ff_password_autosave_off,
@@ -693,7 +688,7 @@ TWEAKS += [
         tags=["firefox", "passwords", "autosave", "policy", "security"],
     ),
     TweakDef(
-        id="ff-disable-screenshots",
+        id="firefox-ff-disable-screenshots",
         label="Disable Firefox Screenshots",
         category="Firefox",
         apply_fn=_apply_ff_screenshots_off,
@@ -710,7 +705,7 @@ TWEAKS += [
         tags=["firefox", "screenshots", "policy", "feature"],
     ),
     TweakDef(
-        id="ff-disable-safe-mode",
+        id="firefox-ff-disable-safe-mode",
         label="Disable Firefox Safe Mode",
         category="Firefox",
         apply_fn=_apply_ff_safe_mode_off,

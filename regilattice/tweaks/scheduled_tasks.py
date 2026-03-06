@@ -12,18 +12,10 @@ from regilattice.tweaks import TweakDef
 
 # ── Key paths ────────────────────────────────────────────────────────────────
 
-_CEIP = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"
-)
-_APP_COMPAT = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
-)
-_DEFRAG = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
-)
-_DEFRAG_SCHED = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Defrag"
-)
+_CEIP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"
+_APP_COMPAT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"
+_DEFRAG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"
+_DEFRAG_SCHED = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Defrag"
 _WER_POLICY = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows"
     r"\Windows Error Reporting"
@@ -44,19 +36,13 @@ _AUTO_LOGGER = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
     r"\WMI\Autologger\AutoLogger-Diagtrack-Listener"
 )
-_TELEMETRY_SVC = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"
-)
-_DMWAPPUSH = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice"
-)
+_TELEMETRY_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"
+_DMWAPPUSH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice"
 _CONSOLID = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows"
     r"\CurrentVersion\Policies\DataCollection"
 )
-_MAPS = (
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps"
-)
+_MAPS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps"
 _DISK_DIAG = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI"
     r"\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}"
@@ -284,7 +270,7 @@ def _detect_disable_disk_diag() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="task-disable-ceip",
+        id="schtask-task-disable-ceip",
         label="Disable Customer Experience Improvement Program",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_ceip,
@@ -294,14 +280,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_CEIP],
         description=(
-            "Disables the Windows CEIP data collection task. "
-            "Stops sending usage data to Microsoft. "
-            "Default: enabled. Recommended: 0 (disabled)."
+            "Disables the Windows CEIP data collection task. Stops sending usage data to Microsoft. Default: enabled. Recommended: 0 (disabled)."
         ),
         tags=["tasks", "ceip", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="task-disable-appcompat",
+        id="schtask-task-disable-appcompat",
         label="Disable Application Compatibility Assistant",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_appcompat,
@@ -318,7 +302,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "appcompat", "performance", "pca"],
     ),
     TweakDef(
-        id="task-disable-scheduled-defrag",
+        id="schtask-task-disable-scheduled-defrag",
         label="Disable Scheduled Defragmentation",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_sched_defrag,
@@ -335,7 +319,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "defrag", "disk", "ssd", "performance"],
     ),
     TweakDef(
-        id="task-disable-wer",
+        id="schtask-task-disable-wer",
         label="Disable Windows Error Reporting Tasks",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_wer_tasks,
@@ -352,7 +336,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "wer", "error", "crash", "privacy"],
     ),
     TweakDef(
-        id="task-disable-maintenance-wakeup",
+        id="schtask-task-disable-maintenance-wakeup",
         label="Disable Maintenance Wakeup Timer",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_maint_wakeup,
@@ -361,14 +345,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_MAINT],
-        description=(
-            "Prevents automatic maintenance from waking the PC at night. "
-            "Default: 1 (wake up). Recommended: 0 (no wake)."
-        ),
+        description=("Prevents automatic maintenance from waking the PC at night. Default: 1 (wake up). Recommended: 0 (no wake)."),
         tags=["tasks", "maintenance", "wakeup", "power", "sleep"],
     ),
     TweakDef(
-        id="task-disable-scheduled-diagnostics",
+        id="schtask-task-disable-scheduled-diagnostics",
         label="Disable Scheduled Diagnostics",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_sched_diag,
@@ -377,14 +358,11 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_DIAG_POLICY],
-        description=(
-            "Disables the scheduled diagnostic data collection task. "
-            "Default: enabled. Recommended: 0 (disabled)."
-        ),
+        description=("Disables the scheduled diagnostic data collection task. Default: enabled. Recommended: 0 (disabled)."),
         tags=["tasks", "diagnostics", "telemetry", "privacy"],
     ),
     TweakDef(
-        id="task-disable-diagtrack-autologger",
+        id="schtask-task-disable-diagtrack-autologger",
         label="Disable DiagTrack Autologger",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_diagtrack_logger,
@@ -401,7 +379,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "diagtrack", "etw", "telemetry", "boot"],
     ),
     TweakDef(
-        id="task-disable-diagtrack-service",
+        id="schtask-task-disable-diagtrack-service",
         label="Disable DiagTrack Service",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_diagtrack_svc,
@@ -411,14 +389,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=False,
         registry_keys=[_TELEMETRY_SVC],
         description=(
-            "Disables the Connected User Experiences and Telemetry "
-            "(DiagTrack) service entirely. "
-            "Default: 2 (automatic). Recommended: 4 (disabled)."
+            "Disables the Connected User Experiences and Telemetry (DiagTrack) service entirely. Default: 2 (automatic). Recommended: 4 (disabled)."
         ),
         tags=["tasks", "diagtrack", "service", "telemetry"],
     ),
     TweakDef(
-        id="task-disable-dmwappush",
+        id="schtask-task-disable-dmwappush",
         label="Disable WAP Push Service (dmwappushsvc)",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_dmwappush,
@@ -435,7 +411,7 @@ TWEAKS: list[TweakDef] = [
         tags=["tasks", "wappush", "telemetry", "service"],
     ),
     TweakDef(
-        id="task-disable-maps-update",
+        id="schtask-task-disable-maps-update",
         label="Disable Offline Maps Auto-Update",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_maps_update,
@@ -445,14 +421,12 @@ TWEAKS: list[TweakDef] = [
         corp_safe=True,
         registry_keys=[_MAPS],
         description=(
-            "Disables automatic download and update of offline maps data. "
-            "Saves bandwidth and storage. "
-            "Default: enabled. Recommended: 0 (disabled)."
+            "Disables automatic download and update of offline maps data. Saves bandwidth and storage. Default: enabled. Recommended: 0 (disabled)."
         ),
         tags=["tasks", "maps", "bandwidth", "storage"],
     ),
     TweakDef(
-        id="task-disable-disk-diagnostics",
+        id="schtask-task-disable-disk-diagnostics",
         label="Disable Disk Diagnostics Data Collection",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_disk_diag,
@@ -461,10 +435,7 @@ TWEAKS: list[TweakDef] = [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_DISK_DIAG],
-        description=(
-            "Disables the disk diagnostic data collector scheduled task. "
-            "Default: enabled. Recommended: 0 (disabled)."
-        ),
+        description=("Disables the disk diagnostic data collector scheduled task. Default: enabled. Recommended: 0 (disabled)."),
         tags=["tasks", "disk", "diagnostics", "telemetry"],
     ),
 ]
@@ -510,7 +481,7 @@ def _detect_disable_auto_maint() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="task-disable-compat-appraiser",
+        id="schtask-task-disable-compat-appraiser",
         label="Disable Compatibility Appraiser",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_compat_appr,
@@ -526,7 +497,7 @@ TWEAKS += [
         tags=["tasks", "compatibility", "appraiser", "telemetry"],
     ),
     TweakDef(
-        id="task-disable-maintenance",
+        id="schtask-task-disable-maintenance",
         label="Disable Automatic Maintenance",
         category="Scheduled Tasks",
         apply_fn=_apply_disable_auto_maint,

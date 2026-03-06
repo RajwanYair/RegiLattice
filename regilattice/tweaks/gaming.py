@@ -304,7 +304,7 @@ def _detect_game_mode_priority() -> bool:
 
 TWEAKS: list[TweakDef] = [
     TweakDef(
-        id="disable-gamedvr",
+        id="game-disable-gamedvr",
         label="Disable Game DVR / Game Bar",
         category="Gaming",
         apply_fn=apply_disable_gamedvr,
@@ -317,7 +317,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "performance", "dvr"],
     ),
     TweakDef(
-        id="disable-game-mode",
+        id="game-disable-game-mode",
         label="Disable Windows Game Mode",
         category="Gaming",
         apply_fn=_apply_disable_game_mode,
@@ -330,7 +330,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "performance", "game-mode"],
     ),
     TweakDef(
-        id="disable-fullscreen-optimizations",
+        id="game-disable-fullscreen-optimizations",
         label="Disable Fullscreen Optimizations",
         category="Gaming",
         apply_fn=_apply_disable_fso,
@@ -343,7 +343,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "performance", "fullscreen"],
     ),
     TweakDef(
-        id="disable-xbox-services",
+        id="game-disable-xbox-services",
         label="Disable Xbox Background Services",
         category="Gaming",
         apply_fn=_apply_disable_xbox_services,
@@ -377,20 +377,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "performance", "priority", "scheduling"],
     ),
     TweakDef(
-        id="disable-game-bar-tips",
-        label="Disable Game Bar Tips/Notifications",
-        category="Gaming",
-        apply_fn=_apply_disable_game_bar_tips,
-        remove_fn=_remove_disable_game_bar_tips,
-        detect_fn=_detect_disable_game_bar_tips,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_GAMEBAR_TIPS],
-        description="Disables the Game Bar startup tips and notification panels.",
-        tags=["gaming", "gamebar", "notifications"],
-    ),
-    TweakDef(
-        id="disable-game-input-redirect",
+        id="game-disable-game-input-redirect",
         label="Disable Game Input Redirection",
         category="Gaming",
         apply_fn=_apply_disable_game_input_redirect,
@@ -403,7 +390,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "input", "services"],
     ),
     TweakDef(
-        id="gpu-scheduling",
+        id="game-gpu-scheduling",
         label="Enable Hardware-Accelerated GPU Scheduling",
         category="Gaming",
         apply_fn=_apply_gpu_scheduling,
@@ -416,7 +403,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "performance", "gpu", "hags"],
     ),
     TweakDef(
-        id="disable-xbox-game-monitoring",
+        id="game-disable-xbox-game-monitoring",
         label="Disable Xbox Game Monitoring Service",
         category="Gaming",
         apply_fn=_apply_disable_xbox_game_monitoring,
@@ -429,7 +416,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "xbox", "services", "performance"],
     ),
     TweakDef(
-        id="network-throttling-off",
+        id="game-network-throttling-off",
         label="Disable Network Throttling Index (Gaming)",
         category="Gaming",
         apply_fn=_apply_network_throttling_off,
@@ -442,7 +429,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "network", "performance", "latency"],
     ),
     TweakDef(
-        id="disable-nagles-algorithm",
+        id="game-disable-nagles-algorithm",
         label="Disable Nagle's Algorithm (Low Latency)",
         category="Gaming",
         apply_fn=_apply_disable_nagles_algorithm,
@@ -455,7 +442,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "network", "latency", "tcp"],
     ),
     TweakDef(
-        id="gaming-disable-dvr-background",
+        id="game-gaming-disable-dvr-background",
         label="Disable Game DVR Background Recording",
         category="Gaming",
         apply_fn=_apply_disable_dvr_background,
@@ -472,7 +459,7 @@ TWEAKS: list[TweakDef] = [
         tags=["gaming", "dvr", "recording", "performance"],
     ),
     TweakDef(
-        id="gaming-mode-priority",
+        id="game-gaming-mode-priority",
         label="Enable Game Mode Priority",
         category="Gaming",
         apply_fn=_apply_game_mode_priority,
