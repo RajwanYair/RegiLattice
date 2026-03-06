@@ -9,14 +9,21 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from regilattice.registry import is_windows
+
 from regilattice.corpguard import (
     CorporateNetworkError,
+    _derive_policy_path,
+    _has_group_policy,
+    _has_management_agent,
     _has_vpn_adapter,
     _is_azure_ad_joined,
     _is_domain_joined,
+    _split_hive,
     assert_not_corporate,
     corp_guard_status,
     is_corporate_network,
+    is_gpo_managed,
 )
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -278,3 +285,109 @@ class TestCorpGuardStatus:
         assert isinstance(status, str)
         assert "domain" in status.lower()
         assert "VPN" in status
+
+
+# ── _has_management_agent ────────────────────────────────────────────────────
+
+
+class TestHasManagementAgent:
+    """Test SCCM/Intune management agent detection."""
+
+    @patch("regilattice.corpguard.is_windows", return_value=False)
+    def test_non_windows_returns_false(self, _mock: MagicMock) -> None:
+        assert _has_management_agent() is False
+
+    @patch("regilattice.corpguard.is_windows", return_value=True)
+    @patch("regilattice.corpguard.subprocess.run", return_value=_completed("5.00.9096.1000\n", 0))
+    def test_sccm_detected(self, _run: MagicMock, _win: MagicMock) -> None:
+        assert _has_management_agent() is True
+
+    @patch("regilattice.corpguard.is_windows", return_value=True)
+    @patch("regilattice.corpguard.subprocess.run", return_value=_completed("", 1))
+    def test_no_sccm_falls_through(self, _run: MagicMock, _win: MagicMock) -> None:
+        # No SCCM, and no winreg Intune key → False
+        assert _has_management_agent() is False
+
+
+# ── _has_group_policy ────────────────────────────────────────────────────────
+
+
+class TestHasGroupPolicy:
+    """Test Group Policy detection."""
+
+    @patch("regilattice.corpguard.is_windows", return_value=False)
+    def test_non_windows_returns_false(self, _mock: MagicMock) -> None:
+        assert _has_group_policy() is False
+
+
+# ── _split_hive / _derive_policy_path (Windows only) ────────────────────────
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestSplitHive:
+    """Test _split_hive registry hive parsing."""
+
+    def test_hklm(self) -> None:
+        import winreg
+
+        hive, sub = _split_hive(r"HKEY_LOCAL_MACHINE\SOFTWARE\Test")
+        assert hive == winreg.HKEY_LOCAL_MACHINE
+        assert sub == r"SOFTWARE\Test"
+
+    def test_hklm_short(self) -> None:
+        import winreg
+
+        hive, sub = _split_hive(r"HKLM\SOFTWARE\Test")
+        assert hive == winreg.HKEY_LOCAL_MACHINE
+        assert sub == r"SOFTWARE\Test"
+
+    def test_hkcu(self) -> None:
+        import winreg
+
+        hive, sub = _split_hive(r"HKEY_CURRENT_USER\Software\Test")
+        assert hive == winreg.HKEY_CURRENT_USER
+        assert sub == r"Software\Test"
+
+    def test_hkcu_short(self) -> None:
+        import winreg
+
+        hive, sub = _split_hive(r"HKCU\Software\Test")
+        assert hive == winreg.HKEY_CURRENT_USER
+        assert sub == r"Software\Test"
+
+    def test_unknown_hive(self) -> None:
+        hive, sub = _split_hive(r"BOGUS\Test")
+        assert hive is None
+        assert sub == r"BOGUS\Test"
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestDerivePolicyPath:
+    """Test _derive_policy_path conversion."""
+
+    def test_hklm_software(self) -> None:
+        result = _derive_policy_path(r"HKLM\SOFTWARE\Microsoft\Edge\Setting")
+        assert result == r"HKLM\SOFTWARE\Policies\Microsoft\Edge\Setting"
+
+    def test_hkcu_software(self) -> None:
+        result = _derive_policy_path(r"HKCU\Software\Microsoft\Office\16.0")
+        assert result == r"HKCU\Software\Policies\Microsoft\Office\16.0"
+
+    def test_non_software_returns_none(self) -> None:
+        result = _derive_policy_path(r"HKLM\SYSTEM\CurrentControlSet\Test")
+        assert result is None
+
+    def test_full_hklm_prefix(self) -> None:
+        result = _derive_policy_path(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Test")
+        assert result == r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Test"
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestIsGpoManaged:
+    """Test is_gpo_managed registry check."""
+
+    def test_empty_keys(self) -> None:
+        assert is_gpo_managed([]) is False
+
+    def test_nonexistent_policy_key(self) -> None:
+        assert is_gpo_managed([r"HKLM\SOFTWARE\__RegiLattice_Test_Missing__\Foo"]) is False

@@ -6,12 +6,14 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from regilattice.registry import AdminRequirementError, RegistrySession, _split_root, assert_admin, is_windows, platform_summary
+from regilattice.registry import (AdminRequirementError, RegistrySession,
+                                  _split_root, assert_admin, is_windows,
+                                  platform_summary)
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 
@@ -65,6 +67,27 @@ class TestDryRun:
         session = RegistrySession(base_dir=tmp_path, _dry_run=True)
         session.delete_value("HKLM\\Software\\Test", "val")
         assert "[DRY-RUN]" in session.log_path.read_text(encoding="utf-8")
+
+    def test_set_dword_dry_run(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        session.set_dword("HKLM\\Software\\Test", "val", 42)
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "[DRY-RUN]" in log
+        assert "42" in log
+
+    def test_set_string_dry_run(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        session.set_string("HKLM\\Software\\Test", "name", "hello")
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "[DRY-RUN]" in log
+        assert "hello" in log
+
+    def test_restore_backup_dry_run(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        result = session.restore_backup(tmp_path / "fake_backup")
+        assert result is True
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "[DRY-RUN]" in log
 
 
 # ── Path splitting ──────────────────────────────────────────────────────────
@@ -121,6 +144,16 @@ class TestBackup:
         assert "TestLabel" in path.name
         mock_run.assert_called_once()
 
+    def test_backup_fallback_no_onedrive(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        with (
+            patch.dict(os.environ, {"ONEDRIVE": ""}, clear=False),
+            patch("subprocess.run") as mock_run,
+        ):
+            mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0)
+            path = session.backup(["HKEY_CURRENT_USER\\Test"], "TestNoOD")
+        assert path.exists()
+
 
 # ── Admin assertion ─────────────────────────────────────────────────────────
 
@@ -147,3 +180,25 @@ class TestUtilities:
         s = platform_summary()
         assert isinstance(s, str)
         assert len(s) > 0
+
+
+# ── RegistrySession read helpers (dry-run / non-Windows) ────────────────────
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestRegistryReads:
+    """Test read helpers return None for missing keys."""
+
+    def test_read_dword_missing(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.read_dword(r"HKEY_CURRENT_USER\Software\__RegiLattice_Test_Missing__", "nope")
+        assert result is None
+
+    def test_read_string_missing(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.read_string(r"HKEY_CURRENT_USER\Software\__RegiLattice_Test_Missing__", "nope")
+        assert result is None
+
+    def test_key_exists_missing(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        assert session.key_exists(r"HKEY_CURRENT_USER\Software\__RegiLattice_Test_Missing__") is False
