@@ -350,8 +350,13 @@ def _derive_policy_path(key: str) -> str | None:
 # ── Public API ───────────────────────────────────────────────────────────────
 
 
+_corp_cache: bool | None = None
+
+
 def is_corporate_network() -> bool:
     """Return True when the machine appears to be on a corporate network.
+
+    Result is cached for the process lifetime after the first call.
 
     Checks:
     1. Active Directory domain membership
@@ -360,6 +365,9 @@ def is_corporate_network() -> bool:
     4. SCCM / Intune management agent
     5. Group Policy enforcement
     """
+    global _corp_cache
+    if _corp_cache is not None:
+        return _corp_cache
     checks = [
         ("domain-join", _is_domain_joined),
         ("azure-ad", _is_azure_ad_joined),
@@ -370,11 +378,13 @@ def is_corporate_network() -> bool:
     for name, fn in checks:
         try:
             if fn():
+                _corp_cache = True
                 return True
         except Exception as exc:
             SESSION.log(f"Corp-guard: {name} check failed: {exc}")
 
     SESSION.log("Corp-guard: no corporate indicators found")
+    _corp_cache = False
     return False
 
 

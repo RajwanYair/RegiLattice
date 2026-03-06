@@ -16,6 +16,7 @@ Features:
 from __future__ import annotations
 
 import contextlib
+import json
 import sys
 import threading
 import tkinter as tk
@@ -75,6 +76,10 @@ _FONT_XS_BOLD = theme.FONT_XS_BOLD
 _FONT_TITLE = theme.FONT_TITLE
 _FONT_CAT = theme.FONT_CAT
 
+# ── Config persistence ───────────────────────────────────────────────────────
+_CONFIG_DIR = Path.home() / ".regilattice"
+_GEOMETRY_FILE = _CONFIG_DIR / "window.json"
+
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
 
@@ -83,9 +88,10 @@ class RegiLatticeGUI:
     """Plugin-driven main application window with collapsible category sections."""
 
     def __init__(self) -> None:
+        self._enable_dpi_awareness()
         self._root = tk.Tk()
         self._root.title(f"RegiLattice  v{__version__}")
-        self._root.geometry("900x940")
+        self._root.geometry(self._load_geometry() or "900x940")
         self._root.minsize(700, 600)
         self._root.configure(bg=_BG)
         self._root.resizable(True, True)
@@ -98,6 +104,7 @@ class RegiLatticeGUI:
 
         self._corp_blocked = False  # checked asynchronously after window shows
         self._tweak_rows: list[TweakRow] = []
+        self._row_by_id: dict[str, TweakRow] = {}
         self._category_sections: list[CategorySection] = []
         self._cached_statuses: dict[str, TweakResult] = {}
         self._cached_rec_count: int | None = None  # computed once (static)
@@ -108,8 +115,26 @@ class RegiLatticeGUI:
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
+        self._root.protocol("WM_DELETE_WINDOW", self._on_close)
         # Defer heavy work (corp check + row creation) so the window appears instantly
         self._root.after(50, self._deferred_init)
+
+    # ── DPI awareness ──────────────────────────────────────────────────
+
+    @staticmethod
+    def _enable_dpi_awareness() -> None:
+        """Tell Windows this process is DPI-aware (per-monitor v2 → system → fallback)."""
+        try:
+            import ctypes
+
+            # Prefer Per-Monitor v2 (Windows 10 1703+)
+            awareness = ctypes.c_int(2)  # PROCESS_PER_MONITOR_DPI_AWARE_V2
+            result = ctypes.windll.shcore.SetProcessDpiAwarenessContext(ctypes.byref(awareness))
+            if result == 0:
+                # Fall back to system-level DPI awareness
+                ctypes.windll.shcore.SetProcessDpiAwareness(1)  # PROCESS_SYSTEM_DPI_AWARE
+        except (ImportError, OSError, AttributeError):
+            pass  # non-Windows or unsupported
 
     # ── Windows 11 dark title bar ────────────────────────────────────────
 
@@ -578,6 +603,7 @@ class RegiLatticeGUI:
                     defer_widgets=True,
                 )
                 self._tweak_rows.append(row)
+                self._row_by_id[td.id] = row
                 cat_rows.append(row)
             section = CategorySection(self._inner, cat_name, cat_rows)
             section.set_on_batch(self._batch_category)
@@ -636,19 +662,48 @@ class RegiLatticeGUI:
                 section.toggle()
 
     def _filter_rows(self) -> None:
-        """Show/hide rows based on search query, status filter, AND scope filter."""
+        """Show/hide rows based on search query, status filter, AND scope filter.
+
+        Supports prefix operators in the search bar:
+          tag:<keyword>   — match tweaks whose tags contain keyword
+          cat:<name>      — match tweaks whose category contains name
+          scope:<u|m|b>   — match user / machine / both
+          admin:yes|no    — match tweaks requiring (or not requiring) admin
+        Multiple prefixes can be combined with plain text, e.g. "tag:privacy disable telemetry".
+        """
         if self._loading:
             return
-        query = self._search_var.get().strip()
+        raw_query = self._search_var.get().strip()
         status_filter = self._status_filter_var.get()
         scope_filter = self._scope_filter_var.get()
         _filter_status = {"Applied": TweakResult.APPLIED, "Default": TweakResult.NOT_APPLIED, "Unknown": TweakResult.UNKNOWN}
         _filter_scope = {"User Only": "user", "Machine Only": "machine", "Both": "both"}
 
+        # Parse prefix operators out of the query
+        text_parts: list[str] = []
+        tag_filters: list[str] = []
+        cat_filters: list[str] = []
+        scope_op: str = ""
+        admin_op: bool | None = None
+        for token in raw_query.split():
+            low = token.lower()
+            if low.startswith("tag:") and len(low) > 4:
+                tag_filters.append(low[4:])
+            elif low.startswith("cat:") and len(low) > 4:
+                cat_filters.append(low[4:])
+            elif low.startswith("scope:") and len(low) > 6:
+                scope_op = {"u": "user", "m": "machine", "b": "both", "user": "user", "machine": "machine", "both": "both"}.get(low[6:], "")
+            elif low.startswith("admin:"):
+                admin_op = low[6:] in ("yes", "true", "1")
+            else:
+                text_parts.append(token)
+
+        text_query = " ".join(text_parts)
+
         # Use search_tweaks() for indexed text matching (faster on large tweak sets)
         matching_ids: set[str] | None = None
-        if query:
-            matching_ids = {td.id for td in search_tweaks(query)}
+        if text_query:
+            matching_ids = {td.id for td in search_tweaks(text_query)}
 
         for section in self._category_sections:
             visible = False
@@ -659,7 +714,12 @@ class RegiLatticeGUI:
                 text_match = matching_ids is None or td.id in matching_ids
                 status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
                 scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
-                if text_match and status_match and scope_match:
+                # Prefix operator checks
+                tag_match = all(any(tf in t.lower() for t in td.tags) for tf in tag_filters)
+                cat_match = all(cf in td.category.lower() for cf in cat_filters)
+                scope_op_match = not scope_op or tweak_scope(td) == scope_op
+                admin_match = admin_op is None or td.needs_admin == admin_op
+                if text_match and status_match and scope_match and tag_match and cat_match and scope_op_match and admin_match:
                     row.pack_row()
                     visible = True
                 else:
@@ -821,12 +881,14 @@ class RegiLatticeGUI:
         threading.Thread(target=_worker, daemon=True).start()
 
     def _refresh_status_all(self) -> None:
-        """Re-detect every tweak and update dots, labels, counts, and stats.
+        """Re-detect every tweak in a background thread and update the UI."""
+        self._set_status("Refreshing tweak states\u2026", _WARN_YELLOW)
 
-        Uses parallel detection via thread-pool for faster refresh.
-        """
-        statuses = status_map(parallel=True, max_workers=8)
-        self._apply_statuses(statuses)
+        def _worker() -> None:
+            statuses = status_map(parallel=True, max_workers=8)
+            self._root.after(0, lambda: self._apply_statuses(statuses))
+
+        threading.Thread(target=_worker, daemon=True).start()
 
     def _apply_statuses(self, statuses: dict[str, TweakResult]) -> None:
         """Push a pre-computed status dict into every UI row and update counters."""
@@ -947,14 +1009,20 @@ class RegiLatticeGUI:
     # ── Theme switching ──────────────────────────────────────────────────
 
     def _switch_theme(self, name: str) -> None:
-        """Apply a new colour theme and reconfigure core UI elements."""
-        # Update module-level theme
+        """Apply a new colour theme and reconfigure all UI elements."""
         theme.set_theme(name)
-        # Re-read into local aliases used by _setup_styles and widget creation
         self._reload_theme_aliases()
         self._setup_styles()
-        self._root.configure(bg=theme.BG)
-        self._set_status(f"Theme \u2192 {name}", theme.ACCENT)
+        self._root.configure(bg=_BG)
+        # Re-render all tweak rows and category sections with new colours
+        for row in self._tweak_rows:
+            row.apply_theme()
+        for section in self._category_sections:
+            section.apply_theme()
+        # Re-apply cached statuses so row colours match the new theme
+        if self._cached_statuses:
+            self._apply_statuses(self._cached_statuses)
+        self._set_status(f"Theme \u2192 {name}", _ACCENT)
 
     @staticmethod
     def _reload_theme_aliases() -> None:
@@ -1101,6 +1169,10 @@ class RegiLatticeGUI:
             except (OSError, RuntimeError, ValueError) as exc:
                 errors.append(f"{td.label}: {exc}")
                 SESSION.log(f"[GUI] Error ({mode}) {td.label}: {exc}")
+            # Immediately update the individual row status on the UI thread
+            row = self._row_by_id.get(td.id)
+            if row is not None:
+                self._root.after(0, row.refresh_status)
         else:
             # Only show full summary if not cancelled
             ok_count = total - len(errors)
@@ -1140,6 +1212,34 @@ class RegiLatticeGUI:
             err_msg = str(exc)
             self._root.after(0, lambda: messagebox.showerror("Error", err_msg))
             self._root.after(0, self._set_status, f"Restore point error: {err_msg}", _ERR_RED)
+
+    # ── Window geometry persistence ────────────────────────────────────
+
+    @staticmethod
+    def _load_geometry() -> str | None:
+        """Return saved geometry string (WxH+X+Y), or None if unavailable."""
+        try:
+            data = json.loads(_GEOMETRY_FILE.read_text(encoding="utf-8"))
+            geo = data.get("geometry", "")
+            if isinstance(geo, str) and geo:
+                return geo
+        except (OSError, ValueError, KeyError):
+            pass
+        return None
+
+    def _save_geometry(self) -> None:
+        """Persist current window geometry to disk."""
+        try:
+            _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            data: dict[str, str] = {"geometry": self._root.geometry()}
+            _GEOMETRY_FILE.write_text(json.dumps(data), encoding="utf-8")
+        except OSError:
+            pass
+
+    def _on_close(self) -> None:
+        """Handle WM_DELETE_WINDOW: save geometry then destroy."""
+        self._save_geometry()
+        self._root.destroy()
 
     # ── Entry point ──────────────────────────────────────────────────────
 

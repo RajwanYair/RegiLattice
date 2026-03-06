@@ -186,13 +186,23 @@ class TweakRow:
         """Highlight row background on hover."""
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
-                w.configure(bg=_CARD_HOVER)
+                w.configure(bg=theme.CARD_HOVER)
 
     def _on_leave(self, _: tk.Event[tk.Misc]) -> None:
         """Restore row background on leave."""
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
-                w.configure(bg=_CARD_BG)
+                w.configure(bg=theme.CARD_BG)
+
+    def apply_theme(self) -> None:
+        """Re-apply current theme colours to all child widgets."""
+        if self.frame is None:
+            return
+        for w in self.frame.winfo_children():
+            if isinstance(w, tk.Label):
+                w.configure(bg=theme.CARD_BG)
+        if not self.disabled_by_corp:
+            self.toggle_btn.configure(bg=theme.CARD_BG)
 
     def on_toggle_click(self) -> None:
         if self._on_toggle:
@@ -428,3 +438,12 @@ class CategorySection:
             self.header.pack_forget()
             self.content_frame.pack_forget()
         return visible
+
+    def apply_theme(self) -> None:
+        """Re-apply current theme colours to all header widgets."""
+        self.header.configure(bg=theme.BG_SURFACE)
+        self._arrow.configure(fg=theme.ACCENT, bg=theme.BG_SURFACE)
+        self._title.configure(fg=theme.ACCENT, bg=theme.BG_SURFACE)
+        self._count_lbl.configure(bg=theme.BG_SURFACE)
+        self._btn_enable_all.configure(bg=theme.BG_SURFACE, fg=theme.OK_GREEN)
+        self._btn_disable_all.configure(bg=theme.BG_SURFACE, fg=theme.ERR_RED)
