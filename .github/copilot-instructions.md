@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-06-22 (v2.0.0, 1 231 tweaks, 64 categories, ~13 695 tests).
+> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 700 tests).
 
 ## Quick Facts
 
@@ -13,8 +13,8 @@
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
 | Test        | `pytest` in `tests/` (~13 695 tests)                                         |
-| GUI         | tkinter with Catppuccin Mocha dark theme (~1 432 lines)                      |
-| Version     | 2.0.0                                                                        |
+| GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)    |
+| Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
 
@@ -26,7 +26,11 @@ regilattice/
 ├── __main__.py          # entry: delegates to cli.main()
 ├── cli.py               # argparse CLI (apply/remove/list/gui/profile)
 ├── menu.py              # interactive numbered console menu
-├── gui.py               # tkinter GUI (~1 432 lines, Catppuccin Mocha theme)
+├── gui.py               # tkinter GUI main window (deferred loading, async corp check)
+├── gui_widgets.py       # TweakRow + CategorySection widgets
+├── gui_theme.py         # 4-theme support (Catppuccin Mocha/Latte, Nord, Dracula)
+├── gui_tooltip.py       # Tooltip widget + description metadata parser
+├── gui_dialogs.py       # Import JSON, Export PS1, Scoop Manager, About dialog
 ├── registry.py          # RegistrySession: winreg wrapper + backup + logging
 ├── corpguard.py         # corporate network detection (domain/AAD/VPN/GPO/SCCM)
 ├── elevation.py         # UAC elevation helpers (is_admin, request_elevation)
@@ -102,91 +106,87 @@ All tweak IDs follow the pattern: `{category_slug}-{descriptive-name}`
 
 Canonical category slugs:
 
-| Slug | Category | Slug | Category |
-| --- | --- | --- | --- |
-| `acc` | Accessibility | `lo` | LibreOffice |
-| `adobe` | Adobe | `lock` | Lock Screen & Login |
-| `ai` | AI / Copilot | `m365` | M365 Copilot |
-| `audio` | Audio | `maint` | Maintenance |
-| `backup` | Backup & Recovery | `media` | Multimedia |
-| `boot` | Boot | `msstore` | Microsoft Store |
-| `bt` | Bluetooth | `net` | Network |
-| `chrome` | Chrome | `notif` | Notifications |
-| `clip` | Clipboard & Drag-Drop | `od` | OneDrive |
-| `cloud` | Cloud Storage | `office` | Office |
-| `comm` | Communication | `perf` | Performance |
-| `cortana` | Cortana & Search | `pkg` | Package Management |
-| `crash` | Crash & Diagnostics | `power` | Power |
-| `ctx` | Context Menu | `printing` | Printing |
-| `dev` | Developer Tools | `priv` | Privacy |
-| `display` | Display | `rdp` | Remote Desktop |
-| `dns` | DNS & Networking Adv | `schtask` | Scheduled Tasks |
-| `edge` | Edge | `scoop` | Scoop Tools |
-| `explorer` | Explorer | `sec` | Security |
-| `firefox` | Firefox | `shell` | Shell |
-| `font` | Fonts | `snap` | Snap & Multitasking |
-| `fs` | File System | `ss` | Screensaver & Lock |
-| `game` | Gaming | `startup` | Startup |
-| `gpu` | GPU / Graphics | `stor` | Storage |
-| `idx` | Indexing & Search | `svc` | Services |
-| `input` | Input | `sys` | System |
-| `java` | Java | `tb` | Taskbar |
-| `telem` | Telemetry Advanced | `usb` | USB & Peripherals |
-| `term` | Windows Terminal | `virt` | Virtualization |
-| `vnc` | RealVNC | `vscode` | VS Code |
-| `w11` | Windows 11 | `widgets` | Widgets & News |
-| `wsl` | WSL | `wu` | Windows Update |
+| Slug       | Category              | Slug       | Category            |
+| ---------- | --------------------- | ---------- | ------------------- |
+| `acc`      | Accessibility         | `lo`       | LibreOffice         |
+| `adobe`    | Adobe                 | `lock`     | Lock Screen & Login |
+| `ai`       | AI / Copilot          | `m365`     | M365 Copilot        |
+| `audio`    | Audio                 | `maint`    | Maintenance         |
+| `backup`   | Backup & Recovery     | `media`    | Multimedia          |
+| `boot`     | Boot                  | `msstore`  | Microsoft Store     |
+| `bt`       | Bluetooth             | `net`      | Network             |
+| `chrome`   | Chrome                | `notif`    | Notifications       |
+| `clip`     | Clipboard & Drag-Drop | `od`       | OneDrive            |
+| `cloud`    | Cloud Storage         | `office`   | Office              |
+| `comm`     | Communication         | `perf`     | Performance         |
+| `cortana`  | Cortana & Search      | `pkg`      | Package Management  |
+| `crash`    | Crash & Diagnostics   | `power`    | Power               |
+| `ctx`      | Context Menu          | `printing` | Printing            |
+| `dev`      | Developer Tools       | `priv`     | Privacy             |
+| `display`  | Display               | `rdp`      | Remote Desktop      |
+| `dns`      | DNS & Networking Adv  | `schtask`  | Scheduled Tasks     |
+| `edge`     | Edge                  | `scoop`    | Scoop Tools         |
+| `explorer` | Explorer              | `sec`      | Security            |
+| `firefox`  | Firefox               | `shell`    | Shell               |
+| `font`     | Fonts                 | `snap`     | Snap & Multitasking |
+| `fs`       | File System           | `ss`       | Screensaver & Lock  |
+| `game`     | Gaming                | `startup`  | Startup             |
+| `gpu`      | GPU / Graphics        | `stor`     | Storage             |
+| `idx`      | Indexing & Search     | `svc`      | Services            |
+| `input`    | Input                 | `sys`      | System              |
+| `java`     | Java                  | `tb`       | Taskbar             |
+| `telem`    | Telemetry Advanced    | `usb`      | USB & Peripherals   |
+| `term`     | Windows Terminal      | `virt`     | Virtualization      |
+| `vnc`      | RealVNC               | `vscode`   | VS Code             |
+| `w11`      | Windows 11            | `widgets`  | Widgets & News      |
+| `wsl`      | WSL                   | `wu`       | Windows Update      |
 
-## Current Stats (1 231 tweaks, 64 categories, 64 modules)
+## Current Stats (1 233 tweaks, 64 categories, 64 modules)
 
 | Category              | Tweaks | Category            | Tweaks |
 | --------------------- | ------ | ------------------- | ------ |
-| Accessibility         | 18     | Lock Screen & Login | 13     |
-| Adobe                 | 17     | M365 Copilot        | 15     |
-| AI / Copilot          | 15     | Maintenance         | 15     |
-| Audio                 | 16     | Microsoft Store     | 12     |
-| Backup & Recovery     | 12     | Multimedia          | 12     |
-| Bluetooth             | 16     | Network             | 19     |
-| Boot                  | 18     | Notifications       | 13     |
-| Chrome                | 17     | Office              | 15     |
-| Clipboard & Drag-Drop | 12     | OneDrive            | 15     |
-| Cloud Storage         | 27     | Package Management  | 19     |
-| Communication         | 18     | Performance         | 18     |
-| Context Menu          | 12     | Power               | 19     |
-| Cortana & Search      | 17     | Printing            | 12     |
-| Crash & Diagnostics   | 13     | Privacy             | 14     |
-| Developer Tools       | 14     | RealVNC             | 12     |
-| Display               | 16     | Remote Desktop      | 13     |
-| DNS & Networking Adv  | 14     | Scheduled Tasks     | 13     |
-| Edge                  | 15     | Scoop Tools         | 22     |
-| Explorer              | 21     | Screensaver & Lock  | 13     |
-| File System           | 14     | Security            | 16     |
-| Firefox               | 17     | Services            | 17     |
-| Fonts                 | 16     | Shell               | 15     |
-| Gaming                | 15     | Snap & Multitasking | 14     |
-| GPU / Graphics        | 17     | Startup             | 14     |
-| Indexing & Search     | 13     | Storage             | 16     |
-| Input                 | 15     | System              | 14     |
-| Java                  | 13     | Taskbar             | 14     |
-| LibreOffice           | 15     | Telemetry Advanced  | 13     |
-|                       |        | USB & Peripherals   | 13     |
-|                       |        | Virtualization      | 12     |
-|                       |        | VS Code             | 16     |
-|                       |        | Widgets & News      | 12     |
-|                       |        | Windows 11          | 15     |
-|                       |        | Windows Terminal    | 13     |
-|                       |        | Windows Update      | 17     |
-|                       |        | WSL                 | 13     |
+| Accessibility         | 20     | Multimedia          | 15     |
+| Adobe                 | 20     | Network             | 24     |
+| AI / Copilot          | 22     | Notifications       | 16     |
+| Audio                 | 19     | Office              | 20     |
+| Backup & Recovery     | 15     | OneDrive            | 18     |
+| Bluetooth             | 19     | Package Management  | 22     |
+| Boot                  | 21     | Performance         | 20     |
+| Chrome                | 20     | Power               | 21     |
+| Clipboard & Drag-Drop | 15     | Printing            | 15     |
+| Cloud Storage         | 30     | Privacy             | 25     |
+| Communication         | 21     | RealVNC             | 15     |
+| Context Menu          | 15     | Remote Desktop      | 16     |
+| Cortana & Search      | 22     | Scheduled Tasks     | 16     |
+| Crash & Diagnostics   | 16     | Scoop Tools         | 25     |
+| Developer Tools       | 17     | Screensaver & Lock  | 16     |
+| Display               | 19     | Security            | 21     |
+| DNS & Networking Adv  | 17     | Services            | 21     |
+| Edge                  | 18     | Shell               | 20     |
+| Explorer              | 41     | Snap & Multitasking | 17     |
+| File System           | 17     | Startup             | 19     |
+| Firefox               | 20     | Storage             | 19     |
+| Fonts                 | 19     | System              | 24     |
+| Gaming                | 19     | Taskbar             | 19     |
+| GPU / Graphics        | 19     | Telemetry Advanced  | 16     |
+| Indexing & Search     | 16     | USB & Peripherals   | 16     |
+| Input                 | 18     | Virtualization      | 15     |
+| Java                  | 16     | VS Code             | 19     |
+| LibreOffice           | 18     | Widgets & News      | 15     |
+| Lock Screen & Login   | 16     | Windows 11          | 29     |
+| M365 Copilot          | 18     | Windows Terminal    | 16     |
+| Maintenance           | 17     | Windows Update      | 19     |
+| Microsoft Store       | 15     | WSL                 | 29     |
 
 ## 5 Profiles
 
-| Profile    | Description             | Apply Categories                                                                                        |
-| ---------- | ----------------------- | ------------------------------------------------------------------------------------------------------- |
-| `business` | Productivity & security | Cloud Storage, Office, Communication, OneDrive, Security, Network, Privacy, Printing, Backup & Recovery |
-| `gaming`   | GPU & performance       | Gaming, GPU, Performance, Display, Audio, Network, Power, Services                                      |
-| `privacy`  | Max privacy             | Privacy, Cortana & Search, AI / Copilot, Windows 11, Cloud Storage, Communication                       |
-| `minimal`  | Lightweight essentials  | Performance, Startup, Maintenance, Boot, Power, Services                                                |
-| `server`   | Server hardening        | Network, Power, Services, Security, Virtualization, Backup & Recovery                                   |
+| Profile    | Categories | Description                                           |
+| ---------- | ---------- | ----------------------------------------------------- |
+| `business` | 23         | Productivity, security, cloud & workflow (466 tweaks) |
+| `gaming`   | 20         | GPU, performance, low-latency, distraction-free (387) |
+| `privacy`  | 21         | Telemetry, tracking, cloud & browser data (429)       |
+| `minimal`  | 15         | Fast, clean system essentials (300)                   |
+| `server`   | 19         | Hardened, headless, uptime & remote mgmt (353)        |
 
 Profiles defined in `tweaks/__init__.py` → `_PROFILES` dict.
 Public API: `available_profiles()`, `profile_info(name)`, `tweaks_for_profile(name)`, `apply_profile(name)`.
@@ -204,27 +204,31 @@ Public API: `available_profiles()`, `profile_info(name)`, `tweaks_for_profile(na
 If corporate detected → tweaks with `corp_safe=False` are blocked.
 Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 
-## GUI Details (`gui.py`, ~1 432 lines)
+## GUI Details (split across `gui.py`, `gui_widgets.py`, `gui_theme.py`, `gui_tooltip.py`, `gui_dialogs.py`)
 
-- Catppuccin Mocha palette: `#1E1E2E` (base), `#89B4FA` (accent), etc.
+- 4 colour themes: Catppuccin Mocha (default), Catppuccin Latte, Nord, Dracula — switchable at runtime
+- Deferred loading: window appears instantly, categories loaded in batches of 4
+- Async corporate detection: corp check runs in background thread, never blocks UI
 - Collapsible category sections with tweak counts (applied/total)
 - **Scope badges**: USER (green) / MACHINE (blue) / BOTH (yellow) per tweak row
 - Search bar + status filter (All / Applied / Default / Unknown) + scope filter (User/Machine/Both)
 - Profile selector dropdown (Business / Gaming / Privacy / Minimal / Server)
+- Theme selector dropdown
 - Export PS1 button (generates PowerShell script from selected tweaks)
 - Import JSON button (load tweak ID list from file to select)
+- Scoop Tools Manager dialog (install/remove packages)
 - Threaded execution — never blocks UI thread
 - Live status badges via `detect_fn()` with parallel detection (`status_map(parallel=True)`)
 - Rich hover tooltips with description, current state, default/recommendation hints, tags, registry keys
 - Right-click context menu on tweak rows (Enable/Disable, Copy ID, Copy Registry Key, Select category)
 - Recommendation badges (teal "REC" tag) for tweaks with recommendations in description
 - Summary stats bar: Applied / Default / Unknown / Recommended / GPO counts
-- Per-category Enable All / Disable All buttons
+- Per-category Enable All / Disable All buttons with risk/scope/profile badges
 - Toggleable log viewer panel (shows session log inline)
 - About dialog with system info and shortcut reference
 - Invert Selection button
 - Keyboard shortcuts: Ctrl+A/D/F/E/I/L/R, Esc
-- `_parse_description_metadata()` extracts `Default:` and `Recommended:` from description text
+- `parse_description_metadata()` extracts `Default:` and `Recommended:` from description text
 - `functools.lru_cache` on description parsing for performance
 - `tweak_scope()` classifies tweaks as user/machine/both from registry keys
 
@@ -262,7 +266,11 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 | `__main__.py`         | Entry point       | delegates to `cli.main()`                                                                                                                                                                         |
 | `cli.py`              | argparse CLI      | `main()`                                                                                                                                                                                          |
 | `menu.py`             | Console menu      | `Menu` class                                                                                                                                                                                      |
-| `gui.py`              | Tkinter GUI       | `RegiLatticeGUI` class                                                                                                                                                                            |
+| `gui.py`              | Tkinter GUI       | `RegiLatticeGUI` class, `launch()`                                                                                                                                                                |
+| `gui_widgets.py`      | Row/section widgets | `TweakRow`, `CategorySection`                                                                                                                                                                    |
+| `gui_theme.py`        | Theme engine      | `set_theme()`, `available_themes()`, `current_theme()`, colour & font constants                                                                                                                   |
+| `gui_tooltip.py`      | Tooltips          | `Tooltip`, `build_tooltip_text()`, `has_recommendation()`, `parse_description_metadata()`                                                                                                         |
+| `gui_dialogs.py`      | Dialogs           | `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`                                                                                                          |
 | `registry.py`         | Registry wrapper  | `SESSION`, `RegistrySession`, `assert_admin`, `is_windows`, `platform_summary`                                                                                                                    |
 | `corpguard.py`        | Corp detection    | `is_corporate_network()`, `assert_not_corporate()`, `corp_guard_status()`, `CorporateNetworkError`                                                                                                |
 | `elevation.py`        | UAC helpers       | `is_admin()`, `request_elevation()`                                                                                                                                                               |

@@ -14,7 +14,6 @@ from .tweaks import TweakDef, TweakResult, category_info, tweak_scope, tweak_sta
 # ── Theme aliases ────────────────────────────────────────────────────────────
 
 _ACCENT = theme.ACCENT
-_BG = theme.BG
 _BG_SURFACE = theme.BG_SURFACE
 _FG = theme.FG
 _FG_DIM = theme.FG_DIM
@@ -28,12 +27,10 @@ _GPO_ORANGE = theme.GPO_ORANGE
 _TEAL = theme.TEAL
 
 _STATUS_APPLIED = theme.STATUS_APPLIED
-_STATUS_NOT_APPLIED = theme.STATUS_NOT_APPLIED
 _STATUS_UNKNOWN = theme.STATUS_UNKNOWN
 _STATUS_CORP_BLOCKED = theme.STATUS_CORP_BLOCKED
 _STATUS_DEFAULT = theme.STATUS_DEFAULT
 
-_FONT = theme.FONT
 _FONT_XS = theme.FONT_XS
 _FONT_XS_BOLD = theme.FONT_XS_BOLD
 _FONT_CAT = theme.FONT_CAT
@@ -52,6 +49,7 @@ class TweakRow:
         *,
         corp_blocked: bool,
         on_toggle: Callable[[TweakRow], None] | None = None,
+        defer_widgets: bool = False,
     ) -> None:
         self.td = td
         self.var = tk.BooleanVar(value=False)
@@ -59,8 +57,21 @@ class TweakRow:
         self._on_toggle = on_toggle
         self.disabled_by_corp = corp_blocked and not td.corp_safe
 
+        # Placeholder attributes — populated by build_widgets()
+        self.frame: ttk.Frame = None  # type: ignore[assignment]
+        self.status_dot: tk.Label = None  # type: ignore[assignment]
+        self.status_text: tk.Label = None  # type: ignore[assignment]
+        self.cb: ttk.Checkbutton = None  # type: ignore[assignment]
+        self.toggle_btn: tk.Button = None  # type: ignore[assignment]
+        self.tooltip: Tooltip = None  # type: ignore[assignment]
+
+        if not defer_widgets:
+            self.build_widgets(parent)
+
+    def build_widgets(self, parent: ttk.Frame) -> None:
+        """Create (or recreate) all child widgets under *parent*."""
         self.frame = ttk.Frame(parent, style="Card.TFrame")
-        # Don't pack yet — the CategorySection controls packing
+        td = self.td
 
         # Status dot
         self.status_dot = tk.Label(
@@ -186,6 +197,20 @@ class TweakRow:
     def on_toggle_click(self) -> None:
         if self._on_toggle:
             self._on_toggle(self)
+
+    def mark_corp_blocked(self) -> None:
+        """Retroactively disable this row when corporate detection completes after row creation."""
+        self.disabled_by_corp = True
+        self._corp_blocked = True
+        self.var.set(False)
+        if self.cb is not None:
+            self.cb.configure(state="disabled")
+        if self.toggle_btn is not None:
+            self.toggle_btn.configure(text="BLOCKED", bg=_CARD_BG, fg=_ERR_RED, state="disabled")
+        if self.status_dot is not None:
+            self.status_dot.configure(fg=_STATUS_CORP_BLOCKED)
+        if self.status_text is not None:
+            self.status_text.configure(text="BLOCKED", fg=_STATUS_CORP_BLOCKED)
 
     def pack_row(self) -> None:
         """Pack the row frame into its parent."""
@@ -338,122 +363,12 @@ class CategorySection:
         self.content_frame = ttk.Frame(parent, style="TFrame")
         self.content_frame.pack(fill="x")
 
-        # Re-parent each row frame into the content_frame and show
+        # Build (or re-parent) each row's widgets inside content_frame
         for row in self.rows:
-            row.frame.destroy()
-            row.frame = ttk.Frame(self.content_frame, style="Card.TFrame")
-            self._rebuild_row_widgets(row)
+            if row.frame is not None:
+                row.frame.destroy()
+            row.build_widgets(self.content_frame)
             row.pack_row()
-
-    def _rebuild_row_widgets(self, row: TweakRow) -> None:
-        """Reconstruct row widgets inside the new parent frame."""
-        td = row.td
-        disabled = row.disabled_by_corp
-
-        # Status dot
-        row.status_dot = tk.Label(
-            row.frame,
-            text="\u25cf",
-            fg=_STATUS_UNKNOWN,
-            bg=_CARD_BG,
-            font=("Segoe UI", 12),
-            width=2,
-        )
-        row.status_dot.pack(side="left", padx=(6, 0))
-
-        # Status text
-        row.status_text = tk.Label(
-            row.frame,
-            text="\u2026",
-            fg=_STATUS_UNKNOWN,
-            bg=_CARD_BG,
-            font=_FONT_XS_BOLD,
-            width=10,
-            anchor="w",
-        )
-        row.status_text.pack(side="left", padx=(2, 4))
-
-        # Checkbox
-        state = "disabled" if disabled else "normal"
-        row.cb = ttk.Checkbutton(
-            row.frame,
-            text=td.label,
-            variable=row.var,
-            state=state,
-        )
-        row.cb.pack(side="left", padx=(4, 4), pady=2)
-
-        # Toggle button
-        row.toggle_btn = tk.Button(
-            row.frame,
-            text="\u23f3",
-            font=_FONT_XS_BOLD,
-            width=9,
-            relief="flat",
-            cursor="hand2",
-            bd=0,
-            padx=6,
-            pady=1,
-        )
-        if disabled:
-            row.toggle_btn.configure(
-                text="BLOCKED",
-                bg=_CARD_BG,
-                fg=_ERR_RED,
-                state="disabled",
-            )
-        else:
-            row.toggle_btn.configure(command=row.on_toggle_click)
-        row.toggle_btn.pack(side="right", padx=(4, 8))
-
-        # Tags
-        if disabled:
-            tk.Label(
-                row.frame,
-                text="CORP",
-                fg=_ERR_RED,
-                bg=_CARD_BG,
-                font=("Segoe UI", 7, "bold"),
-            ).pack(side="right", padx=(0, 4))
-        if td.registry_keys and is_gpo_managed(td.registry_keys):
-            tk.Label(
-                row.frame,
-                text="GPO",
-                fg=_GPO_ORANGE,
-                bg=_CARD_BG,
-                font=("Segoe UI", 7, "bold"),
-            ).pack(side="right", padx=(0, 4))
-        if td.needs_admin:
-            tk.Label(
-                row.frame,
-                text="ADMIN",
-                fg=_FG_DIM,
-                bg=_CARD_BG,
-                font=("Segoe UI", 7),
-            ).pack(side="right", padx=(0, 4))
-        if has_recommendation(td):
-            tk.Label(
-                row.frame,
-                text="\u2605 REC",
-                fg=_TEAL,
-                bg=_CARD_BG,
-                font=("Segoe UI", 7, "bold"),
-            ).pack(side="right", padx=(0, 4))
-
-        # Scope badge (USER / MACHINE / BOTH)
-        scope = tweak_scope(td)
-        _scope_cfg = {"user": ("USER", _OK_GREEN), "machine": ("MACHINE", _ACCENT), "both": ("BOTH", _WARN_YELLOW)}
-        _s_text, _s_color = _scope_cfg.get(scope, ("?", _FG_DIM))
-        tk.Label(
-            row.frame,
-            text=_s_text,
-            fg=_s_color,
-            bg=_CARD_BG,
-            font=("Segoe UI", 7, "bold"),
-        ).pack(side="right", padx=(0, 4))
-
-        # Tooltip
-        row.tooltip = Tooltip(row.frame, build_tooltip_text(td, TweakResult.UNKNOWN))
 
     def toggle(self, _: tk.Event[tk.Misc] | None = None) -> None:
         self.expanded = not self.expanded

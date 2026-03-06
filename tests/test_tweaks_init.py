@@ -666,7 +666,10 @@ class TestTweakScope:
         assert tweak_scope(td) == "user"
 
     def test_hkcr_is_machine(self) -> None:
-        td = TweakDef(id="scope.cr", label="CR", category="C", apply_fn=lambda: None, remove_fn=lambda: None, registry_keys=[r"HKEY_CLASSES_ROOT\Test"])
+        td = TweakDef(
+            id="scope.cr", label="CR", category="C", apply_fn=lambda: None,
+            remove_fn=lambda: None, registry_keys=[r"HKEY_CLASSES_ROOT\Test"],
+        )
         assert tweak_scope(td) == "machine"
 
     def test_real_tweaks_have_scope(self, all_tweaks_list: list[TweakDef]) -> None:

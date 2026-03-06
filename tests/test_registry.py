@@ -6,14 +6,12 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from regilattice.registry import (AdminRequirementError, RegistrySession,
-                                  _split_root, assert_admin, is_windows,
-                                  platform_summary)
+from regilattice.registry import AdminRequirementError, RegistrySession, _split_root, assert_admin, is_windows, platform_summary
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 

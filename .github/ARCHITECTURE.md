@@ -1,7 +1,7 @@
 # RegiLattice -- Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2026-03-05 (v2.0.0, 578 tweaks, 43 categories, ~5 927 tests).
+> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 700 tests).
 
 ---
 
@@ -22,9 +22,9 @@
          +----------+-----------+
          |                      |
     TweakDef list          _PROFILES dict
-    (578 tweaks)           (5 profiles)
+    (1 233 tweaks)         (5 profiles)
          |
-    tweaks/*.py               <-- 43 modules, auto-discovered
+    tweaks/*.py               <-- 64 modules, auto-discovered
          |
     +----+----+
     |         |
@@ -48,7 +48,11 @@ regilattice/
                            +---> registry.py
                            +---> corpguard.py
                            +---> tweaks/maintenance.py (create_restore_point)
-  gui.py  ----------------+---> tweaks/__init__.py
+  gui.py  ----------------+---> gui_widgets.py (TweakRow, CategorySection)
+                           +---> gui_theme.py (set_theme, colour constants)
+                           +---> gui_tooltip.py (Tooltip, build_tooltip_text)
+                           +---> gui_dialogs.py (import/export/scoop/about)
+                           +---> tweaks/__init__.py
                            +---> registry.py
                            +---> corpguard.py
                            +---> tweaks/maintenance.py (create_restore_point)
@@ -145,72 +149,56 @@ tweak_status(td) -> "applied" | "not applied" | "unknown"
 ## 5  GUI Architecture
 
 ```
-RegiLatticeGUI (gui.py, ~1 192 lines)
+RegiLatticeGUI (gui.py)
   |
-  +-- _root: tk.Tk (main window)
+  +-- _root: tk.Tk (main window, DWM dark title bar on Win11)
   |
   +-- Toolbar
   |     +-- Search entry (StringVar, traces to _filter_rows)
   |     +-- Status filter dropdown (All/Applied/Default/Unknown)
+  |     +-- Scope filter dropdown (All/User Only/Machine Only/Both)
   |     +-- Profile selector dropdown (Business/Gaming/Privacy/Minimal/Server)
+  |     +-- Theme selector dropdown (Catppuccin Mocha/Latte, Nord, Dracula)
   |     +-- Force checkbox (bypass corp guard)
   |     +-- Selection counter ("N selected")
   |
   +-- Legend bar
-  |     +-- Colour key: Applied / Default / Unknown / Corp Blocked
+  |     +-- Colour key: Applied / Default / Unknown / Corp Blocked / GPO
   |     +-- Keyboard shortcut hints
   |
   +-- Scrollable frame (canvas + scrollbar)
-  |     +-- _CategorySection (collapsible, per category)
-  |           +-- Header: arrow + title + count badge + Enable All / Disable All
-  |           +-- _TweakRow instances:
+  |     +-- CategorySection (gui_widgets.py, collapsible)
+  |           +-- Header: arrow + title + count + risk/scope/profile badges + Enable All / Disable All
+  |           +-- TweakRow instances (gui_widgets.py):
   |                 +-- Status dot (colour) + status text (APPLIED/DEFAULT/UNKNOWN)
   |                 +-- Checkbox (batch selection)
   |                 +-- Toggle button (individual enable/disable)
-  |                 +-- Badges: ADMIN, CORP, REC (recommendation)
-  |                 +-- _Tooltip (hover: description, status, default/rec, tags, keys)
+  |                 +-- Badges: SCOPE, ADMIN, CORP, GPO, REC
+  |                 +-- Tooltip (gui_tooltip.py: description, status, default/rec, tags, keys)
   |
   +-- Action bar (row 1: Apply Selected / Remove Selected)
   +-- Action bar (row 2: Save Snapshot / Restore Snapshot / Restore Point / Export PS1)
+  +-- Action bar (row 3: Import JSON / Scoop Manager / Toggle Log / About)
   |
-  +-- Summary stats bar: Applied / Default / Unknown / Recommended / Blocked
+  +-- Summary stats bar: Applied / Default / Unknown / Recommended / GPO / Blocked
   +-- Progress bar + status label
+  +-- Log viewer panel (hidden by default)
 ```
 
-**Key GUI classes:**
-- `_Tooltip` - hover tooltip following mouse with `update_text()` support
-- `_TweakRow` - single tweak row widget with status dot, text, checkbox, toggle, badges
-- `_CategorySection` - collapsible section with header, count badge, batch buttons
-- `RegiLatticeGUI` - main application window
-
-**GUI helper functions:**
-- `_parse_description_metadata(description)` - extracts `Default:` / `Recommended:` hints (cached via `lru_cache`)
-- `_has_recommendation(td)` - checks if description contains recommendation
-- `_build_tooltip_text(td, status)` - builds rich tooltip with all metadata
+**GUI modules:**
+- `gui.py` — Main window, deferred init, batch loading, threading dispatch
+- `gui_widgets.py` — `TweakRow` (status, checkbox, toggle, badges, tooltip) + `CategorySection` (collapsible header, count badge, batch buttons)
+- `gui_theme.py` — 4-theme support: Catppuccin Mocha/Latte, Nord, Dracula. `set_theme()` updates all module-level constants at runtime.
+- `gui_tooltip.py` — `Tooltip` (follow-cursor Toplevel), `parse_description_metadata()` (LRU-cached), `has_recommendation()`, `build_tooltip_text()`
+- `gui_dialogs.py` — `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`
 
 **Threading model:**
+- Deferred init: window appears instantly, corp check runs in background thread
+- Category rows loaded in batches of 4 via `after()` scheduling
 - All tweak operations (apply/remove/scan) run in daemon threads
 - UI updates posted via `self._root.after(0, callback, ...)` (main thread only)
 - Status refresh uses `status_map(parallel=True, max_workers=8)` for bulk detection
 - Progress reported via callback functions passed to batch operations
-
-**Theme constants (Catppuccin Mocha):**
-
-| Variable | Hex | Name | Usage |
-|---|---|---|---|
-| `_BG` | `#1E1E2E` | Base | Main background |
-| `_BG_SURFACE` | `#24273A` | Surface0 | Category headers |
-| `_CARD_BG` | `#313244` | Surface1 | Tweak row background |
-| `_CARD_HOVER` | `#45475A` | Surface2 | Hover state |
-| `_FG` | `#CDD6F4` | Text | Primary text |
-| `_FG_DIM` | `#6C7086` | Overlay0 | Secondary text |
-| `_ACCENT` | `#89B4FA` | Blue | Links, active items |
-| `_OK_GREEN` | `#A6E3A1` | Green | Applied status |
-| `_WARN_YELLOW` | `#F9E2AF` | Yellow | Unknown status |
-| `_ERR_RED` | `#F38BA8` | Red | Error / Corp blocked |
-| `_PURPLE` | `#CBA6F7` | Mauve | Restore buttons |
-| `_TEAL` | `#94E2D5` | Teal | Recommendation badges |
-| `_STATUS_DEFAULT` | `#89DCEB` | Sky | Default (not applied) |
 
 ## 6  Profile System
 
@@ -293,7 +281,7 @@ tests/
     +-- Auto-parametrized over all_tweaks_list
     +-- Tests: apply_fn signature, remove_fn signature, detect_fn callable
     +-- Tests: ID format (kebab-case), ID uniqueness, required fields
-    +-- ~10 tests x 578 tweaks = ~5 780 parametrized tests
+    +-- ~10 tests x 1 233 tweaks = ~12 330 parametrized tests
   |
   test_tweaks_init.py
     +-- Plugin loader: module count, tweak count
@@ -320,10 +308,11 @@ tests/
 | **`require_admin` kwarg** | Uniform API contract; allows testing with `require_admin=False` in CI |
 | **`_dry_run` mode** | Tests can validate tweak logic without touching the real registry |
 | **Corporate guard** | Prevents accidental damage on managed machines; legal/compliance safety |
-| **Catppuccin Mocha** | Modern dark theme with excellent contrast ratios; consistent palette |
-| **Parallel status detection** | Thread-pool `status_map()` for fast GUI refresh across 578 tweaks |
+| **Catppuccin Mocha + 3 themes** | Modern dark theme with switchable alternatives (Latte, Nord, Dracula) |
+| **Parallel status detection** | Thread-pool `status_map()` for fast GUI refresh across 1 233 tweaks |
 | **`lru_cache` tooltip parsing** | Avoids re-parsing description metadata on every tooltip render |
 | **Recommendation badges** | Visual indicator for tweaks with `Recommended:` in description |
+| **Deferred loading** | Window appears instantly; categories loaded in batches of 4; corp check async |
 | **Threaded GUI ops** | Prevents UI freeze during long batch operations |
 | **Backup before write** | Every mutation is preceded by `reg.exe` export; enables manual rollback |
 | **frozenset profiles** | Immutable category sets; hashable for caching |

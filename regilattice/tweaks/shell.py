@@ -730,3 +730,179 @@ TWEAKS += [
         tags=["shell", "ink", "workspace", "pen"],
     ),
 ]
+
+
+# -- Disable Windows Store App Execution Aliases for Python ---------------------
+
+_APP_ALIAS_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths"
+_PYTHON_ALIASES = ("python.exe", "python3.exe")
+
+
+def _apply_shell_disable_python_store_alias(*, require_admin: bool = False) -> None:
+    """Disable Windows Store python/python3 app execution aliases."""
+    SESSION.log("Shell: disabling Windows Store Python app aliases")
+    import os
+    import pathlib
+
+    apps_dir = pathlib.Path(os.environ.get("LOCALAPPDATA", "")) / "Microsoft" / "WindowsApps"
+    for alias in _PYTHON_ALIASES:
+        alias_path = apps_dir / alias
+        if alias_path.exists():
+            try:
+                alias_path.rename(alias_path.with_suffix(".exe.bak"))
+                SESSION.log(f"Shell: renamed {alias_path} → .bak")
+            except OSError as exc:
+                SESSION.log(f"Shell: could not rename {alias_path}: {exc}")
+    # Also set App Paths so 'python' resolves to the real interpreter
+    import shutil
+
+    real_python = shutil.which("python")
+    if real_python and "WindowsApps" not in real_python:
+        SESSION.set_string(rf"{_APP_ALIAS_KEY}\python.exe", "", real_python)
+        SESSION.log(f"Shell: App Paths\\python.exe → {real_python}")
+
+
+def _remove_shell_disable_python_store_alias(*, require_admin: bool = False) -> None:
+    """Restore Windows Store python aliases."""
+    import os
+    import pathlib
+
+    apps_dir = pathlib.Path(os.environ.get("LOCALAPPDATA", "")) / "Microsoft" / "WindowsApps"
+    for alias in _PYTHON_ALIASES:
+        bak_path = apps_dir / f"{alias}.bak"
+        if bak_path.exists():
+            try:
+                bak_path.rename(bak_path.with_suffix(""))
+                SESSION.log(f"Shell: restored {bak_path.with_suffix('')}")
+            except OSError as exc:
+                SESSION.log(f"Shell: could not restore {alias}: {exc}")
+    SESSION.delete_value(rf"{_APP_ALIAS_KEY}\python.exe", "")
+
+
+def _detect_shell_disable_python_store_alias() -> bool:
+    import os
+    import pathlib
+
+    apps_dir = pathlib.Path(os.environ.get("LOCALAPPDATA", "")) / "Microsoft" / "WindowsApps"
+    # Alias disabled if the .exe files don't exist (renamed or removed)
+    return all(not (apps_dir / alias).exists() for alias in _PYTHON_ALIASES)
+
+
+# -- Add Python to User PATH ---------------------------------------------------
+
+_ENV_KEY = r"HKEY_CURRENT_USER\Environment"
+
+
+def _apply_shell_add_python_to_path(*, require_admin: bool = False) -> None:
+    """Add Python and Scripts directories to the user PATH."""
+    import shutil
+
+    python_exe = shutil.which("python") or shutil.which("py")
+    if not python_exe:
+        msg = "Cannot find python.exe or py.exe on PATH"
+        raise RuntimeError(msg)
+    import pathlib
+
+    python_dir = str(pathlib.Path(python_exe).parent)
+    scripts_dir = str(pathlib.Path(python_exe).parent / "Scripts")
+
+    SESSION.log(f"Shell: adding Python dirs to PATH: {python_dir}, {scripts_dir}")
+    SESSION.backup([_ENV_KEY], "PythonPath")
+
+    current = SESSION.read_string(_ENV_KEY, "Path") or ""
+    dirs = [d.strip() for d in current.split(";") if d.strip()]
+    dirs_lower = [d.lower() for d in dirs]
+
+    changed = False
+    for d in (python_dir, scripts_dir):
+        if d.lower() not in dirs_lower:
+            dirs.append(d)
+            changed = True
+
+    if changed:
+        SESSION.set_string(_ENV_KEY, "Path", ";".join(dirs))
+        # Broadcast environment change so new processes pick it up
+        try:
+            import ctypes
+
+            HWND_BROADCAST = 0xFFFF
+            WM_SETTINGCHANGE = 0x001A
+            ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0, "Environment", 2, 5000, None)
+        except Exception:
+            pass
+    SESSION.log("Shell: Python added to user PATH")
+
+
+def _remove_shell_add_python_to_path(*, require_admin: bool = False) -> None:
+    """Remove Python directories from user PATH."""
+    import shutil
+
+    python_exe = shutil.which("python") or shutil.which("py")
+    if not python_exe:
+        return
+    import pathlib
+
+    python_dir = str(pathlib.Path(python_exe).parent).lower()
+    scripts_dir = str(pathlib.Path(python_exe).parent / "Scripts").lower()
+
+    current = SESSION.read_string(_ENV_KEY, "Path") or ""
+    dirs = [d.strip() for d in current.split(";") if d.strip()]
+    dirs = [d for d in dirs if d.lower() not in (python_dir, scripts_dir)]
+    SESSION.set_string(_ENV_KEY, "Path", ";".join(dirs))
+    try:
+        import ctypes
+
+        ctypes.windll.user32.SendMessageTimeoutW(0xFFFF, 0x001A, 0, "Environment", 2, 5000, None)
+    except Exception:
+        pass
+
+
+def _detect_shell_add_python_to_path() -> bool:
+    import shutil
+
+    python_exe = shutil.which("python") or shutil.which("py")
+    if not python_exe:
+        return False
+    import pathlib
+
+    python_dir = str(pathlib.Path(python_exe).parent).lower()
+    current = SESSION.read_string(_ENV_KEY, "Path") or ""
+    dirs_lower = [d.strip().lower() for d in current.split(";")]
+    return python_dir in dirs_lower
+
+
+TWEAKS += [
+    TweakDef(
+        id="shell-disable-python-store-alias",
+        label="Disable Windows Store Python Aliases",
+        category="Shell",
+        apply_fn=_apply_shell_disable_python_store_alias,
+        remove_fn=_remove_shell_disable_python_store_alias,
+        detect_fn=_detect_shell_disable_python_store_alias,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_APP_ALIAS_KEY],
+        description=(
+            "Disables the Windows Store 'python' and 'python3' app execution aliases that redirect to the Store. "
+            "Ensures the real Python interpreter is used. Default: Enabled (Store aliases active). Recommended: Disabled."
+        ),
+        tags=["shell", "python", "alias", "store", "developer"],
+    ),
+    TweakDef(
+        id="shell-add-python-to-path",
+        label="Add Python to User PATH",
+        category="Shell",
+        apply_fn=_apply_shell_add_python_to_path,
+        remove_fn=_remove_shell_add_python_to_path,
+        detect_fn=_detect_shell_add_python_to_path,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ENV_KEY],
+        description=(
+            "Adds the Python installation directory and Scripts folder to the user PATH environment variable. "
+            "Makes python.exe, pip.exe, and py.exe available in all command prompts. "
+            "Default: Not in PATH. Recommended: Enabled for developers."
+        ),
+        tags=["shell", "python", "path", "environment", "developer", "pip"],
+    ),
+]
