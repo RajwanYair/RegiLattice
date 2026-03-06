@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 import subprocess
 from types import ModuleType
 from unittest.mock import MagicMock, patch
@@ -229,3 +230,74 @@ class TestMissingSentinel:
             if not attr.startswith("__"):
                 with pytest.raises(ImportError):
                     getattr(s, attr)
+
+
+# ── Additional edge-case tests ───────────────────────────────────────────────
+
+
+class TestPipInstallExtra:
+    """Additional edge cases for _pip_install."""
+
+    @patch("regilattice.deps.subprocess.run", side_effect=OSError("broken"))
+    def test_oserror(self, _mock: MagicMock) -> None:
+        assert _pip_install("pkg") is False
+
+
+class TestInstallPackageExtra:
+    """Additional edge cases for install_package."""
+
+    @patch("regilattice.deps._ensure_pip", return_value=True)
+    @patch("regilattice.deps._pip_install", side_effect=[False, False, False, True])
+    def test_strategy3_system_fallback(self, mock_pip: MagicMock, _ep: MagicMock) -> None:
+        """After ensurepip, if user install fails, system install should be tried."""
+        assert install_package("pkg") is True
+        assert mock_pip.call_count == 4
+
+
+class TestLazyImportExtra:
+    """Additional edge cases for lazy_import."""
+
+    def test_import_succeeds_on_second_try(self) -> None:
+        """After install_package succeeds, the re-import should work."""
+        _original_import = importlib.import_module
+        call_count = 0
+
+        def _import_side_effect(name: str):
+            nonlocal call_count
+            # Only intercept our fake package
+            if name == "__fake_pkg__":
+                call_count += 1
+                if call_count == 1:
+                    raise ImportError("first fail")
+                return MagicMock(spec=ModuleType)
+            return _original_import(name)
+
+        with (
+            patch("importlib.import_module", side_effect=_import_side_effect),
+            patch("regilattice.deps.install_package", return_value=True),
+        ):
+            result = lazy_import("__fake_pkg__")
+        assert not isinstance(result, _MissingSentinel)
+
+    def test_install_succeeds_reimport_fails(self) -> None:
+        """If install succeeds but re-import still fails, return sentinel."""
+        _original_import = importlib.import_module
+
+        def _import_side_effect(name: str):
+            if name == "__fake_pkg__":
+                raise ImportError("still missing")
+            return _original_import(name)
+
+        with (
+            patch("importlib.import_module", side_effect=_import_side_effect),
+            patch("regilattice.deps.install_package", return_value=True),
+        ):
+            result = lazy_import("__fake_pkg__")
+        assert isinstance(result, _MissingSentinel)
+
+
+class TestRequireExtra:
+    """Additional edge cases for require."""
+
+    def test_empty_args(self) -> None:
+        require()  # no packages — should be a no-op

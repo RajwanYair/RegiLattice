@@ -103,6 +103,103 @@ def _run_action(
         return 3
 
 
+def _format_reg_value(val: object, typ: int) -> str:
+    """Format a single registry value for .reg file output."""
+    import winreg as _wr
+
+    _NUL2 = b"\x00\x00"
+
+    if typ == _wr.REG_DWORD:
+        return f"dword:{int(val) & 0xFFFFFFFF:08x}"
+    if typ == _wr.REG_SZ:
+        escaped = str(val).replace("\\", "\\\\").replace('"', '\\"')
+        return f'"{escaped}"'
+    if typ == _wr.REG_EXPAND_SZ:
+        raw = str(val).encode("utf-16-le") + _NUL2
+        hex_str = ",".join(f"{b:02x}" for b in raw)
+        return f"hex(2):{hex_str}"
+    if typ == _wr.REG_BINARY:
+        data = bytes(val) if isinstance(val, (bytes, bytearray)) else b""
+        hex_str = ",".join(f"{b:02x}" for b in data)
+        return f"hex:{hex_str}"
+    if typ == _wr.REG_MULTI_SZ:
+        parts = list(val) if isinstance(val, list) else [str(val)]
+        combined = "\0".join(parts) + "\0"
+        raw = combined.encode("utf-16-le") + _NUL2
+        hex_str = ",".join(f"{b:02x}" for b in raw)
+        return f"hex(7):{hex_str}"
+    if typ == _wr.REG_QWORD:
+        v = int(val) & 0xFFFFFFFFFFFFFFFF
+        raw = v.to_bytes(8, "little")
+        hex_str = ",".join(f"{b:02x}" for b in raw)
+        return f"hex(b):{hex_str}"
+    return f"hex({typ:x}):"
+
+
+def _export_reg(dest: Path) -> int:
+    """Export current registry state for all tweak keys to a .reg file."""
+    if not is_windows():
+        print("❌ --export-reg requires Windows.")
+        return 4
+
+    import winreg as _wr
+
+    tweaks = all_tweaks()
+    seen_keys: set[str] = set()
+    lines: list[str] = ["Windows Registry Editor Version 5.00", ""]
+
+    for td in tweaks:
+        key_lines: list[str] = []
+        for key_path in td.registry_keys:
+            if key_path in seen_keys:
+                continue
+            seen_keys.add(key_path)
+            try:
+                root, subkey = _split_root_for_reg(key_path)
+                with _wr.OpenKey(root, subkey, 0, _wr.KEY_READ) as handle:
+                    key_lines.append(f"[{key_path}]")
+                    idx = 0
+                    while True:
+                        try:
+                            name, val, typ = _wr.EnumValue(handle, idx)
+                            formatted = _format_reg_value(val, typ)
+                            display_name = f'"{name}"' if name else "@"
+                            key_lines.append(f"{display_name}={formatted}")
+                            idx += 1
+                        except OSError:
+                            break
+                    key_lines.append("")
+            except (FileNotFoundError, OSError, ValueError):
+                continue
+
+        if key_lines:
+            lines.append(f"; Tweak: {td.label} ({td.id})")
+            lines.extend(key_lines)
+
+    dest.write_text("\n".join(lines), encoding="utf-16-le")
+    key_count = sum(1 for ln in lines if ln.startswith("["))
+    print(f"✅ Exported {key_count} registry keys from {len(tweaks)} tweaks to {dest}")
+    return 0
+
+
+def _split_root_for_reg(path: str) -> tuple[int, str]:
+    """Split a registry path for _export_reg (same logic as registry._split_root)."""
+    import winreg as _wr
+
+    roots: dict[str, int] = {
+        "HKEY_CLASSES_ROOT": _wr.HKEY_CLASSES_ROOT,
+        "HKCR": _wr.HKEY_CLASSES_ROOT,
+        "HKEY_CURRENT_USER": _wr.HKEY_CURRENT_USER,
+        "HKCU": _wr.HKEY_CURRENT_USER,
+        "HKEY_LOCAL_MACHINE": _wr.HKEY_LOCAL_MACHINE,
+        "HKLM": _wr.HKEY_LOCAL_MACHINE,
+    }
+    for prefix, root in roots.items():
+        if path.upper().startswith(prefix.upper() + "\\"):
+            return root, path[len(prefix) + 1 :]
+    raise ValueError(f"Unsupported registry path: {path}")
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="regilattice",
@@ -216,6 +313,11 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="List all unique tags with usage counts.",
     )
+    parser.add_argument(
+        "--export-reg",
+        metavar="PATH",
+        help="Export current registry state for all tweak keys to a .reg file.",
+    )
     return parser
 
 
@@ -284,6 +386,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{tag:<25} {cnt}")
         print(f"\n{len(counts)} unique tags across {sum(counts.values())} tag usages.")
         return 0
+
+    if args.export_reg:
+        return _export_reg(Path(args.export_reg))
 
     if args.list:
         tweaks = all_tweaks()
