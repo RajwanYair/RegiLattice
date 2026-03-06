@@ -463,6 +463,55 @@ class TestImportJson:
         assert rc == 1
 
 
+# ── --export-reg ─────────────────────────────────────────────────────────────
+
+
+class TestExportReg:
+    def test_non_windows_returns_4(self, capsys) -> None:
+        with patch("regilattice.cli.is_windows", return_value=False):
+            rc = main(["--export-reg", "out.reg"])
+        assert rc == 4
+        assert "requires Windows" in capsys.readouterr().out
+
+    def test_exports_file_on_windows(self, tmp_path, capsys) -> None:
+        """Mock winreg to verify .reg file generation."""
+        dest = tmp_path / "export.reg"
+        mock_handle = MagicMock()
+        mock_handle.__enter__ = MagicMock(return_value=mock_handle)
+        mock_handle.__exit__ = MagicMock(return_value=False)
+
+        def fake_enum(handle, idx):
+            if idx == 0:
+                return ("TestVal", 1, 4)  # REG_DWORD = 4
+            raise OSError("no more")
+
+        with (
+            patch("regilattice.cli.is_windows", return_value=True),
+            patch("regilattice.cli._split_root_for_reg", return_value=(0x80000001, "Software\\Test")),
+            patch("regilattice.cli._format_reg_value", return_value="dword:00000001"),
+        ):
+            import regilattice.cli as _cli_mod
+
+            _wr_mock = MagicMock()
+            _wr_mock.OpenKey.return_value = mock_handle
+            _wr_mock.EnumValue = fake_enum
+            _wr_mock.KEY_READ = 0x20019
+
+            with patch.dict("sys.modules", {"winreg": _wr_mock}):
+                # Directly call _export_reg to avoid parser issues with winreg import
+                rc = _cli_mod._export_reg(dest)
+
+        assert rc == 0
+        assert dest.exists()
+        content = dest.read_text(encoding="utf-16-le")
+        assert "Windows Registry Editor Version 5.00" in content
+
+    def test_parser_has_export_reg(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--export-reg", "test.reg"])
+        assert ns.export_reg == "test.reg"
+
+
 # ── Interactive menu fallback ────────────────────────────────────────────────
 
 

@@ -7,7 +7,7 @@ A comprehensive Windows registry tweak toolkit with **1 233 tweaks** across **64
 - **1 233 tweaks** across 64 categories — each fully reversible with apply + remove
 - **Plugin architecture** — auto-discovers tweaks from `regilattice/tweaks/`, no registration needed
 - **3 interfaces** — interactive console menu, CLI with flags, and tkinter GUI
-- **GUI** — Catppuccin Mocha dark theme, per-row toggle buttons, collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation badges, rich hover tooltips, live search with status/scope filters
+- **GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), menu bar (File/Edit/View/Help), zebra-striped rows, collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation badges, rich hover tooltips, live search with status/scope filters
 - **5 machine profiles** — business, gaming, privacy, minimal, server
 - **Dry-run mode** — preview changes without touching the registry (`--dry-run`)
 - **Snapshot & diff** — save/restore tweak state (JSON), compare snapshots (`--snapshot-diff`)
@@ -18,7 +18,7 @@ A comprehensive Windows registry tweak toolkit with **1 233 tweaks** across **64
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up before changes with rollback on error
 - **Export PowerShell** — generate `.ps1` scripts from selected tweaks for portable deployment
-- **~13 700 tests** across 8 test files — full smoke, CLI, GUI, and engine coverage
+- **~16 400 tests** across 8 test files — full smoke, CLI, GUI, and engine coverage
 
 ## Architecture
 
@@ -106,7 +106,7 @@ graph LR
 ```bash
 python -m regilattice --gui
 ```
-Dark-themed tkinter window (Catppuccin Mocha) with per-category grouping, live search bar, scope badges (USER/MACHINE/BOTH), recommendation badges, per-row toggle buttons showing ENABLED/DISABLED status, and batch operations.
+Tkinter window with 4 themes (Catppuccin Mocha default), menu bar, zebra-striped rows, per-category grouping, live search bar, scope badges (USER/MACHINE/BOTH), recommendation badges, per-row toggle buttons, and batch operations.
 
 ### Console Menu
 ```bash
@@ -123,6 +123,9 @@ python -m regilattice --dry-run apply all
 python -m regilattice --snapshot state.json
 python -m regilattice --restore state.json
 python -m regilattice --snapshot-diff before.json after.json
+python -m regilattice --list-profiles
+python -m regilattice --categories
+python -m regilattice --tags
 ```
 
 ### Machine Profiles
@@ -179,7 +182,7 @@ RegiLattice/
 │       ├── accessibility.py         # Accessibility (18 tweaks)
 │       ├── ...                      # 62 more category modules, auto-discovered
 │       └── wsl.py                   # WSL (13 tweaks)
-├── tests/                           # pytest suites (~13 700 tests)
+├── tests/                           # pytest suites (~16 400 tests)
 │   ├── conftest.py                  # dry_session fixture, all_tweaks_list
 │   ├── test_tweaks_smoke.py         # Auto-parametrized over all tweaks
 │   ├── test_tweaks_init.py          # Plugin loader, profiles, batch ops
