@@ -113,8 +113,9 @@ def export_powershell(selected: list[TweakDef], set_status: Callable[..., None])
         for key in td.registry_keys:
             ps_key = key.replace("HKEY_LOCAL_MACHINE", "HKLM:")
             ps_key = ps_key.replace("HKEY_CURRENT_USER", "HKCU:")
-            lines.append(f"# Registry key: {ps_key}")
-        lines.append(f"Write-Host 'Applying: {td.label}...'")
+            lines.append(f"# Ensure key exists: {ps_key}")
+            lines.append(f"if (-not (Test-Path '{ps_key}')) {{ New-Item -Path '{ps_key}' -Force | Out-Null }}")
+        lines.append(f"Write-Host 'Applied: {td.label}' -ForegroundColor Cyan")
         lines.append("")
     lines.append("Write-Host 'Done! All tweaks applied.' -ForegroundColor Green")
     try:

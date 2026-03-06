@@ -28,6 +28,14 @@ from regilattice.registry import is_windows
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
+@pytest.fixture(autouse=True)
+def _reset_corp_cache() -> None:
+    """Clear the corp detection cache before each test."""
+    import regilattice.corpguard as _cg
+
+    _cg._corp_cache = None  # noqa: SLF001
+
+
 def _completed(stdout: str = "", returncode: int = 0) -> subprocess.CompletedProcess:
     """Build a fake CompletedProcess."""
     return subprocess.CompletedProcess(args=[], returncode=returncode, stdout=stdout, stderr="")

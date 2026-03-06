@@ -11,6 +11,7 @@ import concurrent.futures
 import importlib
 import json
 import pkgutil
+import warnings
 from collections import OrderedDict, deque
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -136,7 +137,11 @@ def _load_plugins() -> None:
     for _finder, name, _ispkg in pkgutil.iter_modules(package.__path__):
         if name.startswith("_"):
             continue  # skip _template and other private helpers
-        mod = importlib.import_module(f"{__package__}.{name}")
+        try:
+            mod = importlib.import_module(f"{__package__}.{name}")
+        except Exception as exc:
+            warnings.warn(f"Failed to load tweak module {name!r}: {exc}", stacklevel=2)
+            continue
         tweaks_list: list[TweakDef] = getattr(mod, "TWEAKS", [])
         for td in tweaks_list:
             if td.id in seen_ids:

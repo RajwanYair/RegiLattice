@@ -20,7 +20,19 @@ from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import TweakResult, all_tweaks, apply_all, apply_profile, available_profiles, get_tweak, remove_all, tweak_status, tweaks_for_profile
+from .tweaks import (
+    TweakResult,
+    all_tweaks,
+    apply_all,
+    apply_profile,
+    available_profiles,
+    get_tweak,
+    remove_all,
+    search_tweaks,
+    tweak_status,
+    tweaks_by_category,
+    tweaks_for_profile,
+)
 
 
 def _confirm(prompt: str) -> bool:
@@ -159,6 +171,21 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Verify dev dependencies (pytest, ruff, mypy) and auto-install missing ones.",
     )
+    parser.add_argument(
+        "--search",
+        metavar="QUERY",
+        help="Search tweaks by keyword (id, label, category, tags) and print matches.",
+    )
+    parser.add_argument(
+        "--category",
+        metavar="NAME",
+        help="Apply or remove all tweaks in a specific category (use with apply/remove mode).",
+    )
+    parser.add_argument(
+        "--export-json",
+        metavar="PATH",
+        help="Export all tweak definitions (id, label, category, status, tags) to JSON file.",
+    )
     return parser
 
 
@@ -200,6 +227,41 @@ def main(argv: list[str] | None = None) -> int:
         for td in tweaks:
             st = tweak_status(td)
             print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
+        return 0
+
+    if args.search:
+        results = search_tweaks(args.search)
+        if not results:
+            print(f"No tweaks matching '{args.search}'.")
+            return 0
+        print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
+        print("-" * 80)
+        for td in results:
+            st = tweak_status(td)
+            print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
+        print(f"\n{len(results)} tweak(s) found.")
+        return 0
+
+    if args.export_json:
+        import json
+
+        tweaks = all_tweaks()
+        data = [
+            {
+                "id": td.id,
+                "label": td.label,
+                "category": td.category,
+                "status": tweak_status(td),
+                "needs_admin": td.needs_admin,
+                "corp_safe": td.corp_safe,
+                "tags": td.tags,
+                "registry_keys": td.registry_keys,
+                "description": td.description,
+            }
+            for td in tweaks
+        ]
+        Path(args.export_json).write_text(json.dumps(data, indent=2), encoding="utf-8")
+        print(f"\u2705 Exported {len(data)} tweaks to {args.export_json}")
         return 0
 
     if args.snapshot:
@@ -247,6 +309,33 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
         for tid, res in results.items():
             print(f"  {tid}: {res}")
+        return 0
+
+    if args.category and args.mode in ("apply", "remove"):
+        cat_tweaks = tweaks_by_category().get(args.category, [])
+        if not cat_tweaks:
+            print(f"\u274c Unknown category '{args.category}'. Use --list to see categories.")
+            return 2
+        try:
+            assert_not_corporate(force=args.force)
+        except CorporateNetworkError as exc:
+            print(f"\U0001f6d1 {exc}")
+            return 6
+        label = f"{args.mode.title()} {len(cat_tweaks)} tweaks in '{args.category}'"
+        if not args.assume_yes and not _confirm(label):
+            print("\u2139\ufe0f  Aborted by user.")
+            return 1
+        errors: list[str] = []
+        for td in cat_tweaks:
+            fn = td.apply_fn if args.mode == "apply" else td.remove_fn
+            try:
+                fn()
+            except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
+                errors.append(f"{td.label}: {exc}")
+        ok = len(cat_tweaks) - len(errors)
+        print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
+        for e in errors:
+            print(f"  \u274c {e}")
         return 0
 
     if args.gui:
