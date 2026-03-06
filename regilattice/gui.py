@@ -79,6 +79,7 @@ _FONT_CAT = theme.FONT_CAT
 # ── Config persistence ───────────────────────────────────────────────────────
 _CONFIG_DIR = Path.home() / ".regilattice"
 _GEOMETRY_FILE = _CONFIG_DIR / "window.json"
+_COLLAPSE_FILE = _CONFIG_DIR / "collapsed.json"
 
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
@@ -112,6 +113,8 @@ class RegiLatticeGUI:
         self._running = False  # True while a batch operation is active
         self._cancel = threading.Event()  # set to request cancellation
         self._loading = True  # True while progressive loading is in progress
+        self._undo_stack: list[tuple[str, list[TweakDef]]] = []  # (mode, tweaks)
+        self._last_clicked_row_idx: int | None = None  # for Shift+Click range select
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
@@ -205,6 +208,7 @@ class RegiLatticeGUI:
         self._root.bind("<Control-r>", lambda _: self._refresh_status_all())
         self._root.bind("<Control-i>", lambda _: self._invert_selection())
         self._root.bind("<Control-l>", lambda _: self._toggle_log_panel())
+        self._root.bind("<Control-z>", lambda _: self._undo_last())
         self._root.bind("<Escape>", lambda _: self._clear_search())
         self._root.bind("<Down>", lambda _: self._navigate_rows(1))
         self._root.bind("<Up>", lambda _: self._navigate_rows(-1))
@@ -456,6 +460,15 @@ class RegiLatticeGUI:
         )
         self._btn_remove.pack(side="left", padx=(0, 6), expand=True, fill="x")
 
+        self._btn_undo = ttk.Button(
+            btn_frame,
+            text="\u21b6  Undo Last",
+            style="Snap.TButton",
+            command=self._undo_last,
+        )
+        self._btn_undo.pack(side="left", padx=(0, 6), expand=True, fill="x")
+        self._btn_undo.state(["disabled"])  # type: ignore[no-untyped-call]
+
         # Action buttons (row 2: snapshot / restore / restore-point)
         btn2 = ttk.Frame(self._root)
         btn2.pack(fill="x", padx=16, pady=(0, 4))
@@ -504,6 +517,12 @@ class RegiLatticeGUI:
             fill="x",
         )
         ttk.Button(btn3, text="\U0001f4dc  Toggle Log", command=self._toggle_log_panel).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
+        )
+        ttk.Button(btn3, text="\U0001f4be  Export Log", command=self._export_log).pack(
             side="left",
             padx=(0, 6),
             expand=True,
@@ -637,6 +656,7 @@ class RegiLatticeGUI:
                 cat_rows.append(row)
             section = CategorySection(self._inner, cat_name, cat_rows)
             section.set_on_batch(self._batch_category)
+            section._on_collapse_change = self._on_category_collapse_change
             self._category_sections.append(section)
 
         pct = min(100, int(end / len(self._grouped_items) * 100))
@@ -651,9 +671,11 @@ class RegiLatticeGUI:
     def _finish_loading(self) -> None:
         """Wire up bindings and kick off status detection after all rows are created."""
         self._loading = False
-        # Wire checkbox → selection counter
-        for row in self._tweak_rows:
+        # Wire checkbox → selection counter + Shift+Click range select
+        for i, row in enumerate(self._tweak_rows):
             row.var.trace_add("write", lambda *_: self._update_selection_count())
+            row.cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))
+            row.cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)
         # Right-click context menu
         for row in self._tweak_rows:
             row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
@@ -665,6 +687,8 @@ class RegiLatticeGUI:
         )
         # Clean up temporary data
         del self._grouped_items
+        # Restore collapsed categories from previous session
+        self._restore_collapse_state()
         # Kick off status detection
         self._initial_refresh()
 
@@ -773,6 +797,27 @@ class RegiLatticeGUI:
     def _selected_tweaks(self) -> list[TweakDef]:
         return [r.td for r in self._tweak_rows if r.var.get()]
 
+    # ── Shift+Click range select ─────────────────────────────────────────
+
+    def _on_row_click(self, idx: int) -> None:
+        """Track last-clicked row index for Shift+Click range selection."""
+        self._last_clicked_row_idx = idx
+
+    def _on_shift_click(self, idx: int) -> str:
+        """Select range of rows between last click and current Shift+Click."""
+        anchor = self._last_clicked_row_idx
+        if anchor is None:
+            self._last_clicked_row_idx = idx
+            return ""
+        lo, hi = sorted((anchor, idx))
+        for i in range(lo, hi + 1):
+            row = self._tweak_rows[i]
+            if not row.disabled_by_corp:
+                row.var.set(True)
+        self._last_clicked_row_idx = idx
+        self._update_selection_count()
+        return "break"  # prevent default checkbox toggle
+
     # ── Invert selection ─────────────────────────────────────────────────
 
     def _invert_selection(self) -> None:
@@ -815,6 +860,28 @@ class RegiLatticeGUI:
         if self._log_visible:
             self._refresh_log()
             self._root.after(2000, self._auto_refresh_log)
+
+    def _export_log(self) -> None:
+        """Save the session log to a user-chosen location."""
+        from tkinter import filedialog
+
+        path = filedialog.asksaveasfilename(
+            title="Export Session Log",
+            defaultextension=".log",
+            filetypes=[("Log files", "*.log"), ("Text files", "*.txt"), ("All files", "*.*")],
+            initialfile="RegiLattice_session.log",
+        )
+        if not path:
+            return
+        try:
+            import shutil
+
+            shutil.copy2(SESSION.log_path, path)
+            self._set_status(f"Log exported to {Path(path).name}", _OK_GREEN)
+        except OSError as exc:
+            from tkinter import messagebox
+
+            messagebox.showerror("Export Error", str(exc))
 
     # ── Right-click context menu ─────────────────────────────────────────
 
@@ -1223,6 +1290,11 @@ class RegiLatticeGUI:
         self._root.after(0, self._refresh_status_all)
         self._root.after(0, self._set_running, False)
 
+        # Push to undo stack so the user can reverse this batch
+        if items:
+            self._undo_stack.append((mode, list(items)))
+            self._root.after(0, lambda: self._btn_undo.state(["!disabled"]))  # type: ignore[no-untyped-call]
+
         if errors:
             err_text = "\n".join(errors)
             ok_count = total - len(errors)
@@ -1231,6 +1303,22 @@ class RegiLatticeGUI:
                 0,
                 lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
             )
+
+    def _undo_last(self) -> None:
+        """Reverse the last batch operation by running the opposite mode."""
+        if self._running or not self._undo_stack:
+            return
+        mode, items = self._undo_stack.pop()
+        reverse = "remove" if mode == "apply" else "apply"
+        if not self._undo_stack:
+            self._btn_undo.state(["disabled"])  # type: ignore[no-untyped-call]
+        self._set_status(f"Undoing: {mode} \u2192 {reverse} ({len(items)} tweaks)...", _ACCENT)
+        self._dispatch_raw(items, reverse)
+
+    def _dispatch_raw(self, items: list[TweakDef], mode: str) -> None:
+        """Run a batch of tweaks in a background thread (used by undo)."""
+        self._set_running(True)
+        threading.Thread(target=self._run_tweaks, args=(items, mode), daemon=True).start()
 
     def _run_restore_point(self) -> None:
         try:
@@ -1276,7 +1364,40 @@ class RegiLatticeGUI:
     def _on_close(self) -> None:
         """Handle WM_DELETE_WINDOW: save geometry then destroy."""
         self._save_geometry()
+        self._save_collapse_state()
         self._root.destroy()
+
+    # ── Category collapse persistence ──────────────────────────────────
+
+    def _save_collapse_state(self) -> None:
+        """Persist which categories are collapsed to disk."""
+        collapsed = [s.name for s in self._category_sections if not s.expanded]
+        if not collapsed:
+            with contextlib.suppress(OSError):
+                _COLLAPSE_FILE.unlink(missing_ok=True)
+            return
+        try:
+            _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            _COLLAPSE_FILE.write_text(json.dumps(collapsed), encoding="utf-8")
+        except OSError:
+            pass
+
+    def _restore_collapse_state(self) -> None:
+        """Restore collapsed categories from previous session."""
+        try:
+            data = json.loads(_COLLAPSE_FILE.read_text(encoding="utf-8"))
+            if not isinstance(data, list):
+                return
+            collapsed_set = set(data)
+            for section in self._category_sections:
+                if section.name in collapsed_set and section.expanded:
+                    section.toggle()
+        except (OSError, ValueError):
+            pass
+
+    def _on_category_collapse_change(self, _section: CategorySection) -> None:
+        """Called when a category section is toggled — saves state to disk."""
+        self._save_collapse_state()
 
     # ── Entry point ──────────────────────────────────────────────────────
 

@@ -121,3 +121,46 @@ class TestRunElevated:
         mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
         run_elevated(["cmd", "/c", "echo"], timeout=30)
         assert mock_run.call_args.kwargs["timeout"] == 30
+
+    @patch("regilattice.elevation.is_admin", return_value=False)
+    @patch("regilattice.elevation.subprocess.run")
+    def test_non_admin_timeout(self, mock_run: MagicMock, _admin: MagicMock) -> None:
+        mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        run_elevated(["reg", "query", "HKCU"], timeout=60)
+        assert mock_run.call_args.kwargs["timeout"] == 60
+
+
+# ── ensure_admin_or_elevate ──────────────────────────────────────────────────
+
+
+class TestEnsureAdminOrElevate:
+    """Test the ensure_admin_or_elevate convenience function."""
+
+    @patch("regilattice.elevation.is_admin", return_value=True)
+    def test_already_admin_no_exit(self, _mock: MagicMock) -> None:
+        from regilattice.elevation import ensure_admin_or_elevate
+
+        # Should return without calling sys.exit
+        ensure_admin_or_elevate()
+
+    @patch("regilattice.elevation.is_admin", return_value=False)
+    @patch("regilattice.elevation.request_elevation", return_value=0)
+    def test_not_admin_exits(self, _req: MagicMock, _admin: MagicMock) -> None:
+        import pytest
+
+        from regilattice.elevation import ensure_admin_or_elevate
+
+        with pytest.raises(SystemExit) as exc_info:
+            ensure_admin_or_elevate()
+        assert exc_info.value.code == 0
+
+    @patch("regilattice.elevation.is_admin", return_value=False)
+    @patch("regilattice.elevation.request_elevation", return_value=5)
+    def test_elevation_failure_exit_code(self, _req: MagicMock, _admin: MagicMock) -> None:
+        import pytest
+
+        from regilattice.elevation import ensure_admin_or_elevate
+
+        with pytest.raises(SystemExit) as exc_info:
+            ensure_admin_or_elevate()
+        assert exc_info.value.code == 5

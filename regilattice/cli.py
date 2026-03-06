@@ -196,6 +196,11 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Export all tweak definitions (id, label, category, status, tags) to JSON file.",
     )
+    parser.add_argument(
+        "--import-json",
+        metavar="PATH",
+        help="Import tweak IDs from JSON file and apply/remove them (use with apply/remove mode).",
+    )
     return parser
 
 
@@ -357,6 +362,56 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
         for e in errors:
+            print(f"  \u274c {e}")
+        return 0
+
+    if args.import_json and args.mode in ("apply", "remove"):
+        import json as _json
+
+        try:
+            assert_not_corporate(force=args.force)
+        except CorporateNetworkError as exc:
+            print(f"\U0001f6d1 {exc}")
+            return 6
+        try:
+            data = _json.loads(Path(args.import_json).read_text(encoding="utf-8"))
+        except (OSError, _json.JSONDecodeError) as exc:
+            print(f"\u274c Failed to read JSON: {exc}")
+            return 3
+        if isinstance(data, dict):
+            ids = list(data.get("tweaks", []))
+        elif isinstance(data, list):
+            ids = list(data)
+        else:
+            print("\u274c Expected a JSON list of tweak IDs or {\"tweaks\": [...]}.")
+            return 3
+        targets = []
+        for tid in ids:
+            td = get_tweak(tid)
+            if td is None:
+                print(f"\u26a0\ufe0f  Skipping unknown tweak '{tid}'")
+            else:
+                targets.append(td)
+        if not targets:
+            print("No valid tweaks found in JSON.")
+            return 2
+        label = f"{args.mode.title()} {len(targets)} tweaks from {Path(args.import_json).name}"
+        if not args.assume_yes and not _confirm(label):
+            print("\u2139\ufe0f  Aborted by user.")
+            return 1
+        errors_list: list[str] = []
+        for td in targets:
+            fn = td.apply_fn if args.mode == "apply" else td.remove_fn
+            try:
+                fn()
+            except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
+                errors_list.append(f"{td.label}: {exc}")
+        ok = len(targets) - len(errors_list)
+        if SESSION._dry_run:
+            print(f"\U0001f50d Dry-run: {ok}/{len(targets)} tweaks from JSON ({SESSION._dry_ops} registry ops skipped).")
+        else:
+            print(f"\u2705 {ok}/{len(targets)} tweaks processed from JSON.")
+        for e in errors_list:
             print(f"  \u274c {e}")
         return 0
 

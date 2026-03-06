@@ -279,6 +279,150 @@ class TestConfigFlag:
         assert rc == 0
 
 
+# ── --search ─────────────────────────────────────────────────────────────────
+
+
+class TestSearchFlag:
+    def test_search_finds_tweaks(self, capsys) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--search", "explorer"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "tweak(s) found" in out
+
+    def test_search_no_results(self, capsys) -> None:
+        with patch("regilattice.cli.search_tweaks", return_value=[]):
+            rc = main(["--search", "xyznonexistent999"])
+        assert rc == 0
+        assert "No tweaks matching" in capsys.readouterr().out
+
+
+# ── --category ───────────────────────────────────────────────────────────────
+
+
+class TestCategoryFlag:
+    def test_category_apply(self, capsys) -> None:
+        with (
+            patch("regilattice.cli.assert_not_corporate"),
+            patch("regilattice.cli.tweaks_by_category", return_value={"Explorer": [MagicMock()]}),
+            patch("builtins.input", return_value="y"),
+        ):
+            rc = main(["apply", "all", "--category", "Explorer"])
+        assert rc == 0
+
+    def test_category_unknown(self, capsys) -> None:
+        with patch("regilattice.cli.assert_not_corporate"):
+            rc = main(["apply", "all", "--category", "NON_EXISTENT_CAT_999"])
+        assert rc == 2
+        assert "Unknown category" in capsys.readouterr().out
+
+    def test_category_abort(self, capsys) -> None:
+        with (
+            patch("regilattice.cli.assert_not_corporate"),
+            patch("regilattice.cli.tweaks_by_category", return_value={"Explorer": [MagicMock()]}),
+            patch("builtins.input", return_value="n"),
+        ):
+            rc = main(["apply", "all", "--category", "Explorer"])
+        assert rc == 1
+
+    def test_category_corp_blocked(self, capsys) -> None:
+        from regilattice.corpguard import CorporateNetworkError
+
+        with (
+            patch("regilattice.cli.assert_not_corporate", side_effect=CorporateNetworkError("blocked")),
+            patch("regilattice.cli.tweaks_by_category", return_value={"Explorer": [MagicMock()]}),
+        ):
+            rc = main(["apply", "all", "--category", "Explorer"])
+        assert rc == 6
+
+
+# ── --export-json ────────────────────────────────────────────────────────────
+
+
+class TestExportJson:
+    def test_export_writes_file(self, tmp_path, capsys) -> None:
+        out_path = tmp_path / "export.json"
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--export-json", str(out_path)])
+        assert rc == 0
+        assert out_path.exists()
+        data = json.loads(out_path.read_text(encoding="utf-8"))
+        assert isinstance(data, list)
+        assert len(data) > 0
+        assert "id" in data[0]
+        assert "category" in data[0]
+
+
+# ── --check-deps ─────────────────────────────────────────────────────────────
+
+
+class TestCheckDeps:
+    def test_check_deps_all_present(self, capsys) -> None:
+        rc = main(["--check-deps"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "pytest" in out
+
+
+# ── --import-json ────────────────────────────────────────────────────────────
+
+
+class TestImportJson:
+    def test_import_applies_tweaks(self, tmp_path, capsys) -> None:
+        from regilattice.tweaks import all_tweaks
+
+        first = all_tweaks()[0]
+        jfile = tmp_path / "ids.json"
+        jfile.write_text(json.dumps([first.id]), encoding="utf-8")
+        with (
+            patch("regilattice.cli.assert_not_corporate"),
+            patch.object(type(first), "apply_fn", new_callable=lambda: property(lambda self: MagicMock())),
+        ):
+            rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
+        assert rc == 0
+
+    def test_import_dict_format(self, tmp_path, capsys) -> None:
+        from regilattice.tweaks import all_tweaks
+
+        first = all_tweaks()[0]
+        jfile = tmp_path / "ids.json"
+        jfile.write_text(json.dumps({"tweaks": [first.id]}), encoding="utf-8")
+        with (
+            patch("regilattice.cli.assert_not_corporate"),
+            patch.object(type(first), "apply_fn", new_callable=lambda: property(lambda self: MagicMock())),
+        ):
+            rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
+        assert rc == 0
+
+    def test_import_unknown_ids(self, tmp_path, capsys) -> None:
+        jfile = tmp_path / "ids.json"
+        jfile.write_text(json.dumps(["nonexistent-zzz-999"]), encoding="utf-8")
+        with patch("regilattice.cli.assert_not_corporate"):
+            rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
+        assert rc == 2
+        assert "No valid tweaks" in capsys.readouterr().out
+
+    def test_import_bad_json(self, tmp_path, capsys) -> None:
+        jfile = tmp_path / "bad.json"
+        jfile.write_text("{bad", encoding="utf-8")
+        with patch("regilattice.cli.assert_not_corporate"):
+            rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
+        assert rc == 3
+
+    def test_import_abort(self, tmp_path, capsys) -> None:
+        from regilattice.tweaks import all_tweaks
+
+        first = all_tweaks()[0]
+        jfile = tmp_path / "ids.json"
+        jfile.write_text(json.dumps([first.id]), encoding="utf-8")
+        with (
+            patch("regilattice.cli.assert_not_corporate"),
+            patch("builtins.input", return_value="n"),
+        ):
+            rc = main(["apply", "dummy", "--import-json", str(jfile)])
+        assert rc == 1
+
+
 # ── Interactive menu fallback ────────────────────────────────────────────────
 
 
