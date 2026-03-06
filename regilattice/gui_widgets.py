@@ -276,6 +276,7 @@ class CategorySection:
         self.rows = rows
         self.expanded = True
         self._parent = parent
+        self._on_collapse_change: Callable[[CategorySection], None] | None = None
 
         # Header bar — clickable to expand/collapse
         self.header = tk.Frame(parent, bg=_BG_SURFACE, cursor="hand2")
@@ -388,6 +389,8 @@ class CategorySection:
         else:
             self._arrow.configure(text="\u25b6")
             self._hide_rows()
+        if self._on_collapse_change is not None:
+            self._on_collapse_change(self)
 
     def _show_rows(self) -> None:
         self.content_frame.pack(fill="x")
