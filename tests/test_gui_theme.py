@@ -43,8 +43,8 @@ class TestSetTheme:
                 assert theme.current_theme() == name
                 # All colour attributes must be non-empty strings
                 for attr in ("ACCENT", "BG", "BG_SURFACE", "FG", "FG_DIM", "CARD_BG",
-                             "CARD_HOVER", "OK_GREEN", "WARN_YELLOW", "ERR_RED", "PURPLE",
-                             "HEADER_BG", "DIM_BG", "TEAL", "GPO_ORANGE"):
+                             "CARD_BG_ALT", "CARD_HOVER", "OK_GREEN", "WARN_YELLOW", "ERR_RED",
+                             "PURPLE", "HEADER_BG", "DIM_BG", "TEAL", "GPO_ORANGE"):
                     val = getattr(theme, attr)
                     assert isinstance(val, str) and val, f"{attr} empty after set_theme({name!r})"
         finally:
@@ -91,3 +91,51 @@ class TestFonts:
             assert len(val) >= 2
             assert isinstance(val[0], str)
             assert isinstance(val[1], int)
+
+
+class TestCardBgAlt:
+    """Verify the zebra-striping CARD_BG_ALT colour exists and differs from CARD_BG."""
+
+    def test_alt_differs_per_theme(self) -> None:
+        original = theme.current_theme()
+        try:
+            for name in theme.available_themes():
+                theme.set_theme(name)
+                assert theme.CARD_BG_ALT != theme.CARD_BG, f"{name}: CARD_BG_ALT == CARD_BG"
+        finally:
+            theme.set_theme(original)
+
+    def test_alt_in_theme_dicts(self) -> None:
+        for name, d in theme._THEMES.items():
+            assert "card_bg_alt" in d, f"{name} missing card_bg_alt"
+
+    def test_alt_is_hex(self) -> None:
+        import re
+        hex_re = re.compile(r"^#[0-9A-Fa-f]{6}$")
+        for name, d in theme._THEMES.items():
+            assert hex_re.match(d["card_bg_alt"]), f"{name}.card_bg_alt invalid"
+
+
+class TestThemeSwitchIdempotent:
+    """Switching to the same theme twice should be harmless."""
+
+    def test_double_switch(self) -> None:
+        original = theme.current_theme()
+        try:
+            theme.set_theme("Nord")
+            accent1 = theme.ACCENT
+            theme.set_theme("Nord")
+            assert accent1 == theme.ACCENT
+        finally:
+            theme.set_theme(original)
+
+    def test_switch_preserves_status_aliases(self) -> None:
+        original = theme.current_theme()
+        try:
+            for name in theme.available_themes():
+                theme.set_theme(name)
+                assert theme.STATUS_APPLIED == theme.OK_GREEN
+                assert theme.STATUS_CORP_BLOCKED == theme.ERR_RED
+                assert theme._THEMES[name]["status_default"] == theme.STATUS_DEFAULT
+        finally:
+            theme.set_theme(original)

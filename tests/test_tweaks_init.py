@@ -934,3 +934,67 @@ class TestSnapshotRoundTrip:
         result = restore_snapshot(snap, force_corp=True)
         assert result["rt1"] == TweakResult.APPLIED
         apply_fn.assert_called_once()
+
+
+# ── Additional coverage: profiles, search, tags ──────────────────────────────
+
+
+class TestAllProfilesCoverage:
+    """Ensure every profile yields non-empty tweak lists and consistent categories."""
+
+    def test_all_profiles_return_tweaks(self) -> None:
+        for name in available_profiles():
+            tds = tweaks_for_profile(name)
+            assert len(tds) > 0, f"Profile {name!r} returned 0 tweaks"
+
+    def test_profile_categories_match_info(self) -> None:
+        for name in available_profiles():
+            pi = profile_info(name)
+            assert pi is not None
+            tds = tweaks_for_profile(name)
+            cats = {td.category for td in tds}
+            for cat in pi.apply_categories:
+                assert cat in cats or cat not in categories(), f"Profile {name!r}: {cat!r} not in tweaks"
+
+    def test_excluded_and_included_no_overlap(self) -> None:
+        for name in available_profiles():
+            included_ids = {td.id for td in tweaks_for_profile(name)}
+            excluded_ids = {td.id for td in tweaks_excluded_by_profile(name)}
+            assert included_ids & excluded_ids == set(), f"Profile {name!r}: overlap"
+
+
+class TestSearchEdgeCases:
+    """Test edge cases in search_tweaks."""
+
+    def test_case_insensitive(self) -> None:
+        results_lower = search_tweaks("explorer")
+        results_upper = search_tweaks("EXPLORER")
+        assert {r.id for r in results_lower} == {r.id for r in results_upper}
+
+    def test_partial_match(self) -> None:
+        results = search_tweaks("explor")
+        assert len(results) > 0
+
+    def test_special_chars_no_crash(self) -> None:
+        search_tweaks("[.*+?")
+        search_tweaks("\\")
+
+
+class TestTagIntegrity:
+    """Verify tag data integrity across all tweaks."""
+
+    def test_all_tags_are_strings(self, all_tweaks_list: list[TweakDef]) -> None:
+        for td in all_tweaks_list:
+            assert isinstance(td.tags, list), f"{td.id}: tags not a list"
+            for tag in td.tags:
+                assert isinstance(tag, str) and tag, f"{td.id}: empty or non-str tag"
+
+    def test_all_tags_are_ascii(self, all_tweaks_list: list[TweakDef]) -> None:
+        for td in all_tweaks_list:
+            for tag in td.tags:
+                assert tag.isascii(), f"{td.id}: tag {tag!r} contains non-ASCII"
+
+    def test_no_whitespace_in_tags(self, all_tweaks_list: list[TweakDef]) -> None:
+        for td in all_tweaks_list:
+            for tag in td.tags:
+                assert tag.strip() == tag, f"{td.id}: tag {tag!r} has whitespace"

@@ -169,6 +169,7 @@ class RegiLatticeGUI:
         style.configure("TFrame", background=_BG)
         style.configure("Header.TFrame", background=_HEADER_BG)
         style.configure("Card.TFrame", background=_CARD_BG)
+        style.configure("CardAlt.TFrame", background=theme.CARD_BG_ALT)
         style.configure(
             "TCheckbutton",
             background=_CARD_BG,
@@ -179,6 +180,18 @@ class RegiLatticeGUI:
         style.map(
             "TCheckbutton",
             background=[("active", _CARD_BG), ("disabled", _CARD_BG)],
+            foreground=[("active", _FG), ("disabled", _DIM_BG)],
+        )
+        style.configure(
+            "Alt.TCheckbutton",
+            background=theme.CARD_BG_ALT,
+            foreground=_FG,
+            font=_FONT,
+            indicatorsize=16,
+        )
+        style.map(
+            "Alt.TCheckbutton",
+            background=[("active", theme.CARD_BG_ALT), ("disabled", theme.CARD_BG_ALT)],
             foreground=[("active", _FG), ("disabled", _DIM_BG)],
         )
         style.configure("TButton", padding=(14, 6), font=_FONT_BOLD)
@@ -254,6 +267,38 @@ class RegiLatticeGUI:
     def _build_ui(self) -> None:
         total_tweaks = len(all_tweaks())
         total_cats = len(tweaks_by_category())
+
+        # ── Menu bar ────────────────────────────────────────────────────
+        menubar = tk.Menu(self._root, tearoff=False)
+
+        file_menu = tk.Menu(menubar, tearoff=False)
+        file_menu.add_command(label="Import JSON\u2026", command=self._import_json_selection, accelerator="")
+        file_menu.add_command(label="Export PowerShell\u2026", command=self._export_powershell)
+        file_menu.add_command(label="Export Log\u2026", command=self._export_log)
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=self._on_close, accelerator="Alt+F4")
+        menubar.add_cascade(label="File", menu=file_menu)
+
+        edit_menu = tk.Menu(menubar, tearoff=False)
+        edit_menu.add_command(label="Select All", command=self._select_all, accelerator="Ctrl+A")
+        edit_menu.add_command(label="Deselect All", command=self._deselect_all, accelerator="Ctrl+D")
+        edit_menu.add_command(label="Invert Selection", command=self._invert_selection, accelerator="Ctrl+I")
+        edit_menu.add_separator()
+        edit_menu.add_command(label="Undo Last", command=self._undo_last, accelerator="Ctrl+Z")
+        menubar.add_cascade(label="Edit", menu=edit_menu)
+
+        view_menu = tk.Menu(menubar, tearoff=False)
+        view_menu.add_command(label="Expand All", command=self._expand_all, accelerator="Ctrl+E")
+        view_menu.add_command(label="Collapse All", command=self._collapse_all, accelerator="Ctrl+Shift+E")
+        view_menu.add_command(label="Toggle Log Panel", command=self._toggle_log_panel, accelerator="Ctrl+L")
+        view_menu.add_command(label="Refresh Status", command=self._refresh_status_all, accelerator="Ctrl+R")
+        menubar.add_cascade(label="View", menu=view_menu)
+
+        help_menu = tk.Menu(menubar, tearoff=False)
+        help_menu.add_command(label="About", command=self._show_about)
+        menubar.add_cascade(label="Help", menu=help_menu)
+
+        self._root.config(menu=menubar)
 
         # Header
         header = ttk.Frame(self._root, style="Header.TFrame")
@@ -1235,6 +1280,9 @@ class RegiLatticeGUI:
             return
 
         confirm_msg = f"{'Apply' if mode == 'apply' else 'Remove'} {len(selected)} selected tweak(s)?"
+        admin_count = sum(1 for td in selected if td.needs_admin)
+        if admin_count:
+            confirm_msg += f"\n\n\u26a0 {admin_count} tweak(s) require admin privileges."
         if not messagebox.askyesno("Confirm", confirm_msg):
             return
 

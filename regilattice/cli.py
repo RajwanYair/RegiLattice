@@ -201,6 +201,21 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Import tweak IDs from JSON file and apply/remove them (use with apply/remove mode).",
     )
+    parser.add_argument(
+        "--list-profiles",
+        action="store_true",
+        help="List available profiles with descriptions and tweak counts.",
+    )
+    parser.add_argument(
+        "--categories",
+        action="store_true",
+        help="List all tweak categories with tweak counts.",
+    )
+    parser.add_argument(
+        "--tags",
+        action="store_true",
+        help="List all unique tags with usage counts.",
+    )
     return parser
 
 
@@ -233,6 +248,41 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  \u2705 {pkg}")
             except ImportError:
                 print(f"  \u274c {pkg} \u2014 could not install")
+        return 0
+
+    if args.list_profiles:
+        from .tweaks import profile_info
+
+        print(f"{'Profile':<12} {'Tweaks':<8} Description")
+        print("-" * 60)
+        for name in available_profiles():
+            info = profile_info(name)
+            count = len(tweaks_for_profile(name)) if info else 0
+            desc = info.description if info else ""
+            print(f"{name:<12} {count:<8} {desc}")
+        return 0
+
+    if args.categories:
+        by_cat = tweaks_by_category()
+        print(f"{'Category':<25} Tweaks")
+        print("-" * 35)
+        for cat_name in sorted(by_cat):
+            print(f"{cat_name:<25} {len(by_cat[cat_name])}")
+        print(f"\n{len(by_cat)} categories, {sum(len(v) for v in by_cat.values())} tweaks total.")
+        return 0
+
+    if args.tags:
+        from collections import Counter
+
+        counts: Counter[str] = Counter()
+        for td in all_tweaks():
+            for tag in td.tags:
+                counts[tag] += 1
+        print(f"{'Tag':<25} Tweaks")
+        print("-" * 35)
+        for tag, cnt in sorted(counts.items()):
+            print(f"{tag:<25} {cnt}")
+        print(f"\n{len(counts)} unique tags across {sum(counts.values())} tag usages.")
         return 0
 
     if args.list:

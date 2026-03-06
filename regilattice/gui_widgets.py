@@ -17,8 +17,6 @@ _ACCENT = theme.ACCENT
 _BG_SURFACE = theme.BG_SURFACE
 _FG = theme.FG
 _FG_DIM = theme.FG_DIM
-_CARD_BG = theme.CARD_BG
-_CARD_HOVER = theme.CARD_HOVER
 _OK_GREEN = theme.OK_GREEN
 _WARN_YELLOW = theme.WARN_YELLOW
 _ERR_RED = theme.ERR_RED
@@ -56,6 +54,7 @@ class TweakRow:
         self._corp_blocked = corp_blocked
         self._on_toggle = on_toggle
         self.disabled_by_corp = corp_blocked and not td.corp_safe
+        self._odd = False  # Set by CategorySection for zebra striping
 
         # Placeholder attributes — populated by build_widgets()
         self.frame: ttk.Frame = None  # type: ignore[assignment]
@@ -68,17 +67,23 @@ class TweakRow:
         if not defer_widgets:
             self.build_widgets(parent)
 
+    def _row_bg(self) -> str:
+        """Return the current background colour for this row (zebra-aware)."""
+        return theme.CARD_BG_ALT if self._odd else theme.CARD_BG
+
     def build_widgets(self, parent: ttk.Frame) -> None:
         """Create (or recreate) all child widgets under *parent*."""
-        self.frame = ttk.Frame(parent, style="Card.TFrame")
+        _frame_style = "CardAlt.TFrame" if self._odd else "Card.TFrame"
+        self.frame = ttk.Frame(parent, style=_frame_style)
         td = self.td
+        _bg = self._row_bg()
 
         # Status dot
         self.status_dot = tk.Label(
             self.frame,
             text="\u25cf",
             fg=_STATUS_UNKNOWN,
-            bg=_CARD_BG,
+            bg=_bg,
             font=("Segoe UI", 12),
             width=2,
         )
@@ -89,7 +94,7 @@ class TweakRow:
             self.frame,
             text="\u2026",
             fg=_STATUS_UNKNOWN,
-            bg=_CARD_BG,
+            bg=_bg,
             font=_FONT_XS_BOLD,
             width=10,
             anchor="w",
@@ -98,11 +103,13 @@ class TweakRow:
 
         # Checkbox for batch selection
         state = "disabled" if self.disabled_by_corp else "normal"
+        _cb_style = "Alt.TCheckbutton" if self._odd else "TCheckbutton"
         self.cb = ttk.Checkbutton(
             self.frame,
             text=td.label,
             variable=self.var,
             state=state,
+            style=_cb_style,
         )
         self.cb.pack(side="left", padx=(4, 4), pady=2)
 
@@ -121,7 +128,7 @@ class TweakRow:
         if self.disabled_by_corp:
             self.toggle_btn.configure(
                 text="BLOCKED",
-                bg=_CARD_BG,
+                bg=_bg,
                 fg=_ERR_RED,
                 state="disabled",
             )
@@ -135,7 +142,7 @@ class TweakRow:
                 self.frame,
                 text="CORP",
                 fg=_ERR_RED,
-                bg=_CARD_BG,
+                bg=_bg,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.registry_keys and is_gpo_managed(td.registry_keys):
@@ -143,7 +150,7 @@ class TweakRow:
                 self.frame,
                 text="GPO",
                 fg=_GPO_ORANGE,
-                bg=_CARD_BG,
+                bg=_bg,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
         if td.needs_admin:
@@ -151,7 +158,7 @@ class TweakRow:
                 self.frame,
                 text="ADMIN",
                 fg=_FG_DIM,
-                bg=_CARD_BG,
+                bg=_bg,
                 font=("Segoe UI", 7),
             ).pack(side="right", padx=(0, 4))
         if has_recommendation(td):
@@ -159,7 +166,7 @@ class TweakRow:
                 self.frame,
                 text="\u2605 REC",
                 fg=_TEAL,
-                bg=_CARD_BG,
+                bg=_bg,
                 font=("Segoe UI", 7, "bold"),
             ).pack(side="right", padx=(0, 4))
 
@@ -171,7 +178,7 @@ class TweakRow:
             self.frame,
             text=_s_text,
             fg=_s_color,
-            bg=_CARD_BG,
+            bg=_bg,
             font=("Segoe UI", 7, "bold"),
         ).pack(side="right", padx=(0, 4))
 
@@ -190,19 +197,21 @@ class TweakRow:
 
     def _on_leave(self, _: tk.Event[tk.Misc]) -> None:
         """Restore row background on leave."""
+        bg = self._row_bg()
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
-                w.configure(bg=theme.CARD_BG)
+                w.configure(bg=bg)
 
     def apply_theme(self) -> None:
         """Re-apply current theme colours to all child widgets."""
         if self.frame is None:
             return
+        bg = self._row_bg()
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
-                w.configure(bg=theme.CARD_BG)
+                w.configure(bg=bg)
         if not self.disabled_by_corp:
-            self.toggle_btn.configure(bg=theme.CARD_BG)
+            self.toggle_btn.configure(bg=bg)
 
     def on_toggle_click(self) -> None:
         if self._on_toggle:
@@ -216,7 +225,7 @@ class TweakRow:
         if self.cb is not None:
             self.cb.configure(state="disabled")
         if self.toggle_btn is not None:
-            self.toggle_btn.configure(text="BLOCKED", bg=_CARD_BG, fg=_ERR_RED, state="disabled")
+            self.toggle_btn.configure(text="BLOCKED", bg=self._row_bg(), fg=_ERR_RED, state="disabled")
         if self.status_dot is not None:
             self.status_dot.configure(fg=_STATUS_CORP_BLOCKED)
         if self.status_text is not None:
@@ -237,7 +246,7 @@ class TweakRow:
             colour = _STATUS_CORP_BLOCKED
             text = "BLOCKED"
             btn_text = "BLOCKED"
-            btn_bg = _CARD_BG
+            btn_bg = self._row_bg()
             btn_fg = _ERR_RED
         elif st == TweakResult.APPLIED:
             colour = _STATUS_APPLIED
@@ -375,7 +384,8 @@ class CategorySection:
         self.content_frame.pack(fill="x")
 
         # Build (or re-parent) each row's widgets inside content_frame
-        for row in self.rows:
+        for i, row in enumerate(self.rows):
+            row._odd = bool(i % 2)
             if row.frame is not None:
                 row.frame.destroy()
             row.build_widgets(self.content_frame)

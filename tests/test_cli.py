@@ -364,6 +364,46 @@ class TestCheckDeps:
         assert "pytest" in out
 
 
+# ── --list-profiles ──────────────────────────────────────────────────────────
+
+
+class TestListProfiles:
+    def test_list_profiles(self, capsys) -> None:
+        rc = main(["--list-profiles"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "business" in out
+        assert "gaming" in out
+        assert "privacy" in out
+        assert "Profile" in out
+
+
+# ── --categories ─────────────────────────────────────────────────────────────
+
+
+class TestCategoriesFlag:
+    def test_categories_lists_all(self, capsys) -> None:
+        rc = main(["--categories"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "Explorer" in out
+        assert "categories" in out
+
+
+# ── --tags ───────────────────────────────────────────────────────────────────
+
+
+class TestTagsFlag:
+    def test_tags_lists_all(self, capsys) -> None:
+        rc = main(["--tags"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "Tag" in out
+        assert "unique tags" in out
+        # Tags always include common ones like "explorer" or "privacy"
+        assert "explorer" in out or "privacy" in out
+
+
 # ── --import-json ────────────────────────────────────────────────────────────
 
 
