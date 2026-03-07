@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 900 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 233 tweaks, 64 categories, ~16 400 tests).
 
 ## Quick Facts
 
@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~13 900 tests)                                         |
+| Test        | `pytest` in `tests/` (~16 400 tests across 14 test files)                     |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -32,8 +32,9 @@ regilattice/
 ├── gui_tooltip.py       # Tooltip widget + description metadata parser
 ├── gui_dialogs.py       # Import JSON, Export PS1, Scoop Manager, About dialog
 ├── registry.py          # RegistrySession: winreg wrapper + backup + logging
+├── config.py            # user config via ~/.regilattice.toml (AppConfig)
 ├── corpguard.py         # corporate network detection (domain/AAD/VPN/GPO/SCCM)
-├── elevation.py         # UAC elevation helpers (is_admin, request_elevation)
+├── elevation.py         # UAC elevation helpers (is_admin, request_elevation, run_elevated)
 ├── deps.py              # lazy-import + auto-install for optional packages
 └── tweaks/
     ├── __init__.py      # TweakDef dataclass, plugin loader, profiles, batch ops
@@ -124,7 +125,7 @@ Canonical category slugs:
 | `ctx`      | Context Menu          | `printing` | Printing            |
 | `dev`      | Developer Tools       | `priv`     | Privacy             |
 | `display`  | Display               | `rdp`      | Remote Desktop      |
-| `dns`      | DNS & Networking Adv  | `schtask`  | Scheduled Tasks     |
+| `dns`      | DNS & Networking Advanced | `schtask`  | Scheduled Tasks     |
 | `edge`     | Edge                  | `scoop`    | Scoop Tools         |
 | `explorer` | Explorer              | `sec`      | Security            |
 | `firefox`  | Firefox               | `shell`    | Shell               |
@@ -161,7 +162,7 @@ Canonical category slugs:
 | Crash & Diagnostics   | 16     | Scoop Tools         | 25     |
 | Developer Tools       | 17     | Screensaver & Lock  | 16     |
 | Display               | 19     | Security            | 21     |
-| DNS & Networking Adv  | 17     | Services            | 21     |
+| DNS & Networking Advanced | 17  | Services            | 21     |
 | Edge                  | 18     | Shell               | 20     |
 | Explorer              | 41     | Snap & Multitasking | 17     |
 | File System           | 17     | Startup             | 19     |
@@ -245,6 +246,13 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 - `tests/test_gui_tooltip.py`: tooltip text building, metadata parsing, recommendation detection
 - `tests/test_gui_widgets.py`: tweak scope classification
 - `tests/test_gui_dialogs.py`: PS1 export, JSON import, about dialog
+- `tests/test_cli.py`: CLI argument parsing and commands
+- `tests/test_config.py`: AppConfig loading
+- `tests/test_deps.py`: lazy_import, install_package, require
+- `tests/test_elevation.py`: is_admin, request_elevation, run_elevated
+- `tests/test_menu.py`: interactive console menu
+- `tests/test_registry.py`: RegistrySession helpers and backup
+- `tests/test_corpguard.py`: corporate network detection
 - Known: `test_registry.py::TestBackup::test_backup_creates_directory` may fail with WinError 6 (handle issue, environment-specific)
 
 ## Adding a New Tweak — Checklist
@@ -279,9 +287,10 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 | `gui_theme.py`        | Theme engine        | `set_theme()`, `available_themes()`, `current_theme()`, colour & font constants                                                                                                                   |
 | `gui_tooltip.py`      | Tooltips            | `Tooltip`, `build_tooltip_text()`, `has_recommendation()`, `parse_description_metadata()`                                                                                                         |
 | `gui_dialogs.py`      | Dialogs             | `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`                                                                                                          |
+| `config.py`           | User config         | `AppConfig`, `load_config()`                                                                                                                                                                      |
 | `registry.py`         | Registry wrapper    | `SESSION`, `RegistrySession`, `assert_admin`, `is_windows`, `platform_summary`                                                                                                                    |
 | `corpguard.py`        | Corp detection      | `is_corporate_network()`, `assert_not_corporate()`, `corp_guard_status()`, `CorporateNetworkError`                                                                                                |
-| `elevation.py`        | UAC helpers         | `is_admin()`, `request_elevation()`                                                                                                                                                               |
-| `deps.py`             | Lazy imports        | `lazy_import()`                                                                                                                                                                                   |
+| `elevation.py`        | UAC helpers         | `is_admin()`, `request_elevation()`, `run_elevated()`, `ensure_admin_or_elevate()`                                                                                                                |
+| `deps.py`             | Lazy imports        | `lazy_import()`, `install_package()`, `require()`                                                                                                                                                 |
 | `tweaks/__init__.py`  | Core engine         | `TweakDef`, `all_tweaks()`, `get_tweak()`, `categories()`, `tweaks_by_category()`, `search_tweaks()`, `apply_profile()`, `status_map()`, `tweak_scope()`, `save_snapshot()`, `restore_snapshot()` |
 | `tweaks/_template.py` | Contributor guide   | (not loaded)                                                                                                                                                                                      |

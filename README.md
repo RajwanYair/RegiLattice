@@ -18,7 +18,7 @@ A comprehensive Windows registry tweak toolkit with **1 233 tweaks** across **64
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up before changes with rollback on error
 - **Export PowerShell** — generate `.ps1` scripts from selected tweaks for portable deployment
-- **~16 400 tests** across 8 test files — full smoke, CLI, GUI, and engine coverage
+- **~16 400 tests** across 14 test files — full smoke, CLI, GUI, and engine coverage
 
 ## Architecture
 
@@ -77,7 +77,7 @@ graph LR
 | Crash & Diagnostics   | 16 | Scoop Tools           | 25 |
 | Developer Tools       | 17 | Screensaver & Lock    | 16 |
 | Display               | 19 | Security              | 21 |
-| DNS & Networking Adv  | 17 | Services              | 21 |
+| DNS & Networking Advanced | 17 | Services           | 21 |
 | Edge                  | 18 | Shell                 | 20 |
 | Explorer              | 41 | Snap & Multitasking   | 17 |
 | File System           | 17 | Startup               | 19 |
@@ -166,7 +166,7 @@ RegiLattice/
 │   ├── __main__.py                  # python -m regilattice -> cli.main()
 │   ├── cli.py                       # argparse CLI entry point
 │   ├── menu.py                      # Interactive console menu
-│   ├── gui.py                       # tkinter GUI (Catppuccin Mocha, ~1 432 lines)
+│   ├── gui.py                       # tkinter GUI (Catppuccin Mocha, ~1 281 lines)
 │   ├── gui_theme.py                 # Theme constants (colours, fonts)
 │   ├── gui_tooltip.py               # Tooltip widget + description metadata parser
 │   ├── gui_widgets.py               # TweakRow + CategorySection widgets
@@ -179,16 +179,24 @@ RegiLattice/
 │   └── tweaks/                      # Plugin-based tweak registry (64 modules)
 │       ├── __init__.py              # TweakDef, TweakExecutor, ProfileDef, plugin loader
 │       ├── _template.py             # Contributor guide -- copy to add a new tweak
-│       ├── accessibility.py         # Accessibility (18 tweaks)
+│       ├── accessibility.py         # Accessibility (20 tweaks)
 │       ├── ...                      # 62 more category modules, auto-discovered
-│       └── wsl.py                   # WSL (13 tweaks)
-├── tests/                           # pytest suites (~16 400 tests)
+│       └── wsl.py                   # WSL (29 tweaks)
+├── tests/                           # pytest suites (~16 400 tests across 14 files)
 │   ├── conftest.py                  # dry_session fixture, all_tweaks_list
 │   ├── test_tweaks_smoke.py         # Auto-parametrized over all tweaks
 │   ├── test_tweaks_init.py          # Plugin loader, profiles, batch ops
 │   ├── test_cli.py                  # CLI argument parsing and commands
-│   ├── test_registry.py             # RegistrySession helpers
-│   └── ...                          # corpguard, deps, elevation, menu tests
+│   ├── test_config.py               # AppConfig loading
+│   ├── test_corpguard.py            # Corporate network detection
+│   ├── test_deps.py                 # lazy_import, install_package, require
+│   ├── test_elevation.py            # UAC elevation helpers
+│   ├── test_gui_dialogs.py          # PS1 export, JSON import, about dialog
+│   ├── test_gui_theme.py            # Theme switching, colour validation
+│   ├── test_gui_tooltip.py          # Tooltip text, metadata parsing
+│   ├── test_gui_widgets.py          # Tweak scope classification
+│   ├── test_menu.py                 # Interactive console menu
+│   └── test_registry.py             # RegistrySession helpers and backup
 ├── .github/                         # CI, templates, architecture docs
 └── .vscode/                         # Workspace settings
 ```
