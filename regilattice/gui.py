@@ -22,6 +22,7 @@ import threading
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
+from types import ModuleType
 
 from . import __version__
 from . import gui_dialogs as dialogs
@@ -82,7 +83,19 @@ _GEOMETRY_FILE = _CONFIG_DIR / "window.json"
 _COLLAPSE_FILE = _CONFIG_DIR / "collapsed.json"
 _PREFS_FILE = _CONFIG_DIR / "preferences.json"
 _SEARCH_HISTORY_FILE = _CONFIG_DIR / "search_history.json"
+_CATEGORY_ORDER_FILE = _CONFIG_DIR / "category_order.json"
 _MAX_SEARCH_HISTORY = 20
+
+
+# ── Optional system-tray deps ───────────────────────────────────────────────
+
+def _try_import(module: str) -> ModuleType | None:
+    """Import *module* returning ``None`` on failure (no auto-install)."""
+    try:
+        import importlib
+        return importlib.import_module(module)
+    except ImportError:
+        return None
 
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
@@ -119,9 +132,12 @@ class RegiLatticeGUI:
         self._undo_stack: list[tuple[str, list[TweakDef]]] = []  # (mode, tweaks)
         self._session_changed: set[str] = set()  # tweak IDs modified this session
         self._last_clicked_row_idx: int | None = None  # for Shift+Click range select
+        self._tray_icon: object | None = None  # pystray.Icon if available
+        self._tray_available = False
         self._setup_styles()
         self._build_ui()
         self._bind_shortcuts()
+        self._setup_tray()
         self._root.protocol("WM_DELETE_WINDOW", self._on_close)
         # Defer heavy work (corp check + row creation) so the window appears instantly
         self._root.after(50, self._deferred_init)
@@ -281,7 +297,8 @@ class RegiLatticeGUI:
         file_menu.add_command(label="Export PowerShell\u2026", command=self._export_powershell)
         file_menu.add_command(label="Export Log\u2026", command=self._export_log)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", command=self._on_close, accelerator="Alt+F4")
+        file_menu.add_command(label="Minimize to Tray", command=self._minimize_to_tray)
+        file_menu.add_command(label="Exit", command=self._quit, accelerator="Alt+F4")
         menubar.add_cascade(label="File", menu=file_menu)
 
         edit_menu = tk.Menu(menubar, tearoff=False)
@@ -664,6 +681,11 @@ class RegiLatticeGUI:
 
         grouped = tweaks_by_category()
         self._grouped_items = list(grouped.items())
+        # Apply user-saved category order if present
+        saved_order = self._load_category_order()
+        if saved_order:
+            order_map = {name: idx for idx, name in enumerate(saved_order)}
+            self._grouped_items.sort(key=lambda item: order_map.get(item[0], len(saved_order)))
         self._populate_batch(0)
 
     def _corp_check_worker(self) -> None:
@@ -715,6 +737,7 @@ class RegiLatticeGUI:
                 cat_rows.append(row)
             section = CategorySection(self._inner, cat_name, cat_rows)
             section.set_on_batch(self._batch_category)
+            section.set_on_reorder(self._reorder_category)
             section._on_collapse_change = self._on_category_collapse_change
             self._category_sections.append(section)
 
@@ -1487,12 +1510,89 @@ class RegiLatticeGUI:
             pass
 
     def _on_close(self) -> None:
-        """Handle WM_DELETE_WINDOW: save geometry then destroy."""
+        """Handle WM_DELETE_WINDOW: minimize to tray if available, else quit."""
+        if self._tray_available:
+            self._minimize_to_tray()
+            return
+        self._quit()
+
+    def _quit(self) -> None:
+        """Save state, stop tray icon, and destroy the window."""
         self._save_geometry()
         self._save_collapse_state()
         self._save_preferences()
         self._save_search_history()
+        self._stop_tray()
         self._root.destroy()
+
+    # ── System tray ────────────────────────────────────────────────────
+
+    def _setup_tray(self) -> None:
+        """Initialise system tray icon if pystray + PIL are available."""
+        pystray = _try_import("pystray")
+        pil_image = _try_import("PIL.Image")
+        pil_draw = _try_import("PIL.ImageDraw")
+        if pystray is None or pil_image is None or pil_draw is None:
+            return
+        self._pystray = pystray
+        self._pil_image = pil_image
+        self._pil_draw = pil_draw
+        self._tray_available = True
+
+    def _create_tray_icon(self) -> object:
+        """Build a pystray.Icon with a right-click menu."""
+        pystray = self._pystray
+        MenuItem = pystray.MenuItem
+        Menu = pystray.Menu
+
+        profile_items = [
+            MenuItem(
+                p.title(),
+                lambda _, name=p: self._root.after(0, self._apply_profile_selection, name.title()),
+            )
+            for p in available_profiles()
+        ]
+
+        menu = Menu(
+            MenuItem("Show Window", lambda _icon, _item: self._root.after(0, self._restore_from_tray)),
+            Menu.SEPARATOR,
+            MenuItem("Apply Profile", Menu(*profile_items)),
+            MenuItem("Refresh Status", lambda _icon, _item: self._root.after(0, self._refresh_status_all)),
+            Menu.SEPARATOR,
+            MenuItem("Exit", lambda _icon, _item: self._root.after(0, self._quit)),
+        )
+
+        img = self._pil_image.new("RGB", (64, 64), color="#89b4fa")
+        draw = self._pil_draw.Draw(img)
+        draw.rectangle([16, 16, 48, 48], fill="#1e1e2e")
+        draw.text((22, 20), "R", fill="#89b4fa")
+
+        icon = pystray.Icon("RegiLattice", img, "RegiLattice", menu)
+        icon.default = menu.items[0]  # double-click → Show Window
+        return icon
+
+    def _minimize_to_tray(self) -> None:
+        """Withdraw the window and show a system-tray icon."""
+        if not self._tray_available:
+            return
+        self._save_geometry()
+        self._root.withdraw()
+        if self._tray_icon is None:
+            self._tray_icon = self._create_tray_icon()
+            threading.Thread(target=self._tray_icon.run, daemon=True).start()  # type: ignore[union-attr]
+
+    def _restore_from_tray(self) -> None:
+        """Restore the window from the system tray."""
+        self._root.deiconify()
+        self._root.lift()
+        self._root.focus_force()
+
+    def _stop_tray(self) -> None:
+        """Stop the tray icon if running."""
+        if self._tray_icon is not None:
+            with contextlib.suppress(Exception):
+                self._tray_icon.stop()  # type: ignore[union-attr]
+            self._tray_icon = None
 
     # ── Category collapse persistence ──────────────────────────────────
 
@@ -1525,6 +1625,50 @@ class RegiLatticeGUI:
     def _on_category_collapse_change(self, _section: CategorySection) -> None:
         """Called when a category section is toggled — saves state to disk."""
         self._save_collapse_state()
+
+    # ── Category reorder ───────────────────────────────────────────────
+
+    def _reorder_category(self, section: CategorySection, direction: str) -> None:
+        """Move a category section up or down and repack all sections."""
+        idx = self._category_sections.index(section)
+        if direction == "up" and idx == 0:
+            return
+        if direction == "down" and idx == len(self._category_sections) - 1:
+            return
+        swap = idx - 1 if direction == "up" else idx + 1
+        self._category_sections[idx], self._category_sections[swap] = (
+            self._category_sections[swap],
+            self._category_sections[idx],
+        )
+        # Repack all headers and content frames in the new order
+        for s in self._category_sections:
+            s.header.pack_forget()
+            s.content_frame.pack_forget()
+        for s in self._category_sections:
+            s.header.pack(fill="x", pady=(8, 0), padx=4)
+            if s.expanded:
+                s.content_frame.pack(fill="x")
+        self._save_category_order()
+
+    def _save_category_order(self) -> None:
+        """Persist current category order to disk."""
+        order = [s.name for s in self._category_sections]
+        try:
+            _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            _CATEGORY_ORDER_FILE.write_text(json.dumps(order), encoding="utf-8")
+        except OSError:
+            pass
+
+    @staticmethod
+    def _load_category_order() -> list[str]:
+        """Load saved category order from disk."""
+        try:
+            data = json.loads(_CATEGORY_ORDER_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                return [str(x) for x in data]
+        except (OSError, ValueError, json.JSONDecodeError):
+            pass
+        return []
 
     # ── Search history persistence ─────────────────────────────────────
 
