@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+PackageIdentifier: RegiLattice.RegiLattice
+PackageVersion: 1.0.0
+PackageLocale: en-US
+Publisher: RegiLattice Contributors
+PublisherUrl: https://github.com/regilattice/regilattice
+PackageName: RegiLattice
+PackageUrl: https://github.com/regilattice/regilattice
+License: MIT
+LicenseUrl: https://github.com/regilattice/regilattice/blob/main/LICENSE
+ShortDescription: Windows registry tweak toolkit with 1200+ tweaks, GUI, CLI, and profiles.
+Description: >-
+  RegiLattice is a Python-based Windows registry tweak manager featuring
+  1228 tweaks across 64 categories. It provides a tkinter GUI with themes
+  (Catppuccin Mocha/Latte, Nord, Dracula), an interactive CLI, profile
+  presets (Business, Gaming, Privacy, Minimal, Server), snapshot & diff,
+  corporate network detection, and dry-run safety. Requires Python 3.10+.
+Tags:
+  - registry
+  - windows
+  - tweaks
+  - privacy
+  - performance
+  - python
+  - gui
+  - cli
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0
