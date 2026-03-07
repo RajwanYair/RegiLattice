@@ -528,18 +528,34 @@ def tweak_status(td: TweakDef) -> TweakResult:
         return TweakResult.UNKNOWN
 
 
-def status_map(*, parallel: bool = False, max_workers: int = 8) -> dict[str, TweakResult]:
+def status_map(
+    *,
+    parallel: bool = False,
+    max_workers: int = 8,
+    progress_fn: Callable[[int, int], None] | None = None,
+) -> dict[str, TweakResult]:
     """Return ``{tweak_id: TweakResult}`` for every registered tweak.
 
     With ``parallel=True`` the detection runs in a thread-pool for faster GUI refresh.
+    *progress_fn(done, total)* is called after each tweak completes (thread-safe).
     """
+    total = len(_ALL_TWEAKS)
     if not parallel:
-        return {td.id: tweak_status(td) for td in _ALL_TWEAKS}
-    results: dict[str, TweakResult] = {}
+        results: dict[str, TweakResult] = {}
+        for i, td in enumerate(_ALL_TWEAKS):
+            results[td.id] = tweak_status(td)
+            if progress_fn is not None:
+                progress_fn(i + 1, total)
+        return results
+    results = {}
+    done = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
         for fut in concurrent.futures.as_completed(futures):
             results[futures[fut]] = fut.result()
+            done += 1
+            if progress_fn is not None:
+                progress_fn(done, total)
     return results
 
 
