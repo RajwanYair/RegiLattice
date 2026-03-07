@@ -1,5 +1,12 @@
 # ⚡ RegiLattice
 
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-17%2C200%2B%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen)
+![Ruff](https://img.shields.io/badge/linter-ruff-blue)
+![mypy](https://img.shields.io/badge/type--check-mypy%20strict-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 A comprehensive Windows registry tweak toolkit with **1 228 tweaks** across **64 categories**, a **zero-wiring plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI** (Catppuccin Mocha dark theme). Designed for power users who want fine-grained control over Windows 10/11 performance, privacy, usability, and application behaviour.
 
 ## Highlights

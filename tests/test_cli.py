@@ -134,6 +134,95 @@ class TestSnapshotFlag:
         out = capsys.readouterr().out
         assert "1 tweak(s) differ" in out
 
+    def test_snapshot_diff_html_output(self, tmp_path, capsys) -> None:
+        a = tmp_path / "a.json"
+        b = tmp_path / "b.json"
+        html_out = tmp_path / "diff.html"
+        a.write_text(json.dumps({"x": "applied"}))
+        b.write_text(json.dumps({"x": "not applied"}))
+        diffs = {"x": ("applied", "not applied")}
+        with patch("regilattice.tweaks.diff_snapshots", return_value=diffs):
+            rc = main(["--snapshot-diff", str(a), str(b), "--html", str(html_out)])
+        assert rc == 0
+        assert html_out.exists()
+        content = html_out.read_text(encoding="utf-8")
+        assert "RegiLattice" in content
+        assert "applied" in content
+        assert "<table>" in content
+
+
+# ── Snapshot diff helpers ────────────────────────────────────────────────────
+
+
+class TestDiffHelpers:
+    def test_state_colour_applied(self) -> None:
+        from regilattice.cli import _state_colour
+
+        result = _state_colour("applied")
+        assert "applied" in result
+        assert "\033[32m" in result  # green
+
+    def test_state_colour_not_applied(self) -> None:
+        from regilattice.cli import _state_colour
+
+        result = _state_colour("not applied")
+        assert "not applied" in result
+        assert "\033[31m" in result  # red
+
+    def test_state_colour_absent(self) -> None:
+        from regilattice.cli import _state_colour
+
+        result = _state_colour("(absent)")
+        assert "(absent)" in result
+        assert "\033[2m" in result  # dim
+
+    def test_state_colour_unknown(self) -> None:
+        from regilattice.cli import _state_colour
+
+        result = _state_colour("unknown")
+        assert "unknown" in result
+        assert "\033[33m" in result  # yellow
+
+    def test_print_diff_coloured(self, capsys) -> None:
+        from regilattice.cli import _print_diff_coloured
+
+        diffs = {
+            "tweak-a": ("applied", "not applied"),
+            "tweak-b": ("(absent)", "applied"),
+            "tweak-c": ("applied", "(absent)"),
+        }
+        _print_diff_coloured(diffs, "before.json", "after.json")
+        out = capsys.readouterr().out
+        assert "3 tweak(s) differ" in out
+        assert "tweak-a" in out
+        assert "+1 added" in out
+        assert "-1 removed" in out
+        assert "~1 changed" in out
+
+    def test_write_diff_html(self, tmp_path) -> None:
+        from regilattice.cli import _write_diff_html
+
+        dest = tmp_path / "report.html"
+        diffs = {"tweak-x": ("applied", "not applied")}
+        _write_diff_html(diffs, dest, "snap_a.json", "snap_b.json")
+        assert dest.exists()
+        content = dest.read_text(encoding="utf-8")
+        assert "<!DOCTYPE html>" in content
+        assert "tweak-x" in content
+        assert "snap_a.json" in content
+        assert "snap_b.json" in content
+        assert "1 difference(s)" in content
+
+    def test_write_diff_html_escapes_special_chars(self, tmp_path) -> None:
+        from regilattice.cli import _write_diff_html
+
+        dest = tmp_path / "report.html"
+        diffs = {"tweak-<script>": ("<b>applied</b>", "not applied")}
+        _write_diff_html(diffs, dest, "a.json", "b.json")
+        content = dest.read_text(encoding="utf-8")
+        assert "<script>" not in content
+        assert "&lt;script&gt;" in content
+
 
 # ── --dry-run ────────────────────────────────────────────────────────────────
 
