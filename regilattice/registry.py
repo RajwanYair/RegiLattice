@@ -108,6 +108,10 @@ class RegistrySession:
 
         Prefers *OneDrive/RegistryBackups*; falls back to *~/Documents*.
         """
+        if self._dry_run:
+            self._dry_ops += 1
+            self.log(f"[DRY-RUN] backup {label}")
+            return self.base_dir / f"backup_{label}"
         _ensure_windows()
         ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         onedrive = os.environ.get("ONEDRIVE", "")
