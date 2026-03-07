@@ -1,10 +1,10 @@
 # ⚡ RegiLattice
 
-A comprehensive Windows registry tweak toolkit with **1 233 tweaks** across **64 categories**, a **zero-wiring plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI** (Catppuccin Mocha dark theme). Designed for power users who want fine-grained control over Windows 10/11 performance, privacy, usability, and application behaviour.
+A comprehensive Windows registry tweak toolkit with **1 228 tweaks** across **64 categories**, a **zero-wiring plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI** (Catppuccin Mocha dark theme). Designed for power users who want fine-grained control over Windows 10/11 performance, privacy, usability, and application behaviour.
 
 ## Highlights
 
-- **1 233 tweaks** across 64 categories — each fully reversible with apply + remove
+- **1 228 tweaks** across 64 categories — each fully reversible with apply + remove
 - **Plugin architecture** — auto-discovers tweaks from `regilattice/tweaks/`, no registration needed
 - **3 interfaces** — interactive console menu, CLI with flags, and tkinter GUI
 - **GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), menu bar (File/Edit/View/Help), zebra-striped rows, collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation badges, rich hover tooltips, live search with status/scope filters
@@ -62,11 +62,11 @@ graph LR
 | Category              | #  | Category              | #  |
 |-----------------------|----|-----------------------|----|
 | Accessibility         | 20 | Multimedia            | 15 |
-| Adobe                 | 20 | Network               | 24 |
+| Adobe                 | 20 | Network               | 22 |
 | AI / Copilot          | 22 | Notifications         | 16 |
 | Audio                 | 19 | Office                | 20 |
 | Backup & Recovery     | 15 | OneDrive              | 18 |
-| Bluetooth             | 19 | Package Management    | 22 |
+| Bluetooth             | 19 | Package Management    | 21 |
 | Boot                  | 21 | Performance           | 20 |
 | Chrome                | 20 | Power                 | 21 |
 | Clipboard & Drag-Drop | 15 | Printing              | 15 |
@@ -77,7 +77,7 @@ graph LR
 | Crash & Diagnostics   | 16 | Scoop Tools           | 25 |
 | Developer Tools       | 17 | Screensaver & Lock    | 16 |
 | Display               | 19 | Security              | 21 |
-| DNS & Networking Advanced | 17 | Services           | 21 |
+| DNS & Networking Advanced | 16 | Services           | 21 |
 | Edge                  | 18 | Shell                 | 20 |
 | Explorer              | 41 | Snap & Multitasking   | 17 |
 | File System           | 17 | Startup               | 19 |
@@ -91,7 +91,7 @@ graph LR
 | LibreOffice           | 18 | Widgets & News        | 15 |
 | Lock Screen & Login   | 16 | Windows 11            | 29 |
 | M365 Copilot          | 18 | Windows Terminal       | 16 |
-| Maintenance           | 17 | Windows Update        | 19 |
+| Maintenance           | 17 | Windows Update        | 18 |
 | Microsoft Store       | 15 | WSL                   | 29 |
 
 ## Requirements

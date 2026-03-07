@@ -6,7 +6,7 @@ All notable changes to RegiLattice are documented in this file.
 
 ### Added
 
-- **1 233 registry tweaks** across 64 categories covering Windows 11, privacy,
+- **1 228 registry tweaks** across 64 categories covering Windows 11, privacy,
   performance, networking, browsers, developer tools, and more.
 - **5 machine-purpose profiles**: Business, Gaming, Privacy, Minimal, Server —
   each pre-selects a curated set of categories.

@@ -254,27 +254,6 @@ def _detect_target_release() -> bool:
     return SESSION.read_dword(_WU, "TargetReleaseVersion") == 1
 
 
-# ── Disable Windows Store Auto-Update ─────────────────────────────────────────
-
-_STORE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"
-
-
-def _apply_disable_store_updates(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Windows Update: disable Store app auto-updates")
-    SESSION.backup([_STORE], "StoreUpdate")
-    SESSION.set_dword(_STORE, "AutoDownload", 2)  # 2 = Always off
-
-
-def _remove_disable_store_updates(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_STORE, "AutoDownload")
-
-
-def _detect_disable_store_updates() -> bool:
-    return SESSION.read_dword(_STORE, "AutoDownload") == 2
-
-
 # ── Disable Update Restart Notifications ──────────────────────────────────────
 
 
@@ -467,19 +446,6 @@ TWEAKS: list[TweakDef] = [
         registry_keys=[_WU],
         description="Pins the device to Windows 11 24H2 to prevent unwanted feature updates.",
         tags=["update", "feature", "pin", "24H2"],
-    ),
-    TweakDef(
-        id="wu-disable-store-auto-update",
-        label="Disable Store App Auto-Updates",
-        category="Windows Update",
-        apply_fn=_apply_disable_store_updates,
-        remove_fn=_remove_disable_store_updates,
-        detect_fn=_detect_disable_store_updates,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_STORE],
-        description="Disables automatic app updates from the Microsoft Store.",
-        tags=["update", "store", "apps"],
     ),
     TweakDef(
         id="wu-disable-update-notifications",

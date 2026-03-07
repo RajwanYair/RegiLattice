@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-07 (v1.0.0, 1 233 tweaks, 64 categories, ~16 400 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~16 400 tests).
 
 ## Quick Facts
 
@@ -142,16 +142,16 @@ Canonical category slugs:
 | `w11`      | Windows 11                | `widgets`  | Widgets & News      |
 | `wsl`      | WSL                       | `wu`       | Windows Update      |
 
-## Current Stats (1 233 tweaks, 64 categories, 64 modules)
+## Current Stats (1 228 tweaks, 64 categories, 64 modules)
 
 | Category                  | Tweaks | Category            | Tweaks |
 | ------------------------- | ------ | ------------------- | ------ |
 | Accessibility             | 20     | Multimedia          | 15     |
-| Adobe                     | 20     | Network             | 24     |
+| Adobe                     | 20     | Network             | 22     |
 | AI / Copilot              | 22     | Notifications       | 16     |
 | Audio                     | 19     | Office              | 20     |
 | Backup & Recovery         | 15     | OneDrive            | 18     |
-| Bluetooth                 | 19     | Package Management  | 22     |
+| Bluetooth                 | 19     | Package Management  | 21     |
 | Boot                      | 21     | Performance         | 20     |
 | Chrome                    | 20     | Power               | 21     |
 | Clipboard & Drag-Drop     | 15     | Printing            | 15     |
@@ -162,7 +162,7 @@ Canonical category slugs:
 | Crash & Diagnostics       | 16     | Scoop Tools         | 25     |
 | Developer Tools           | 17     | Screensaver & Lock  | 16     |
 | Display                   | 19     | Security            | 21     |
-| DNS & Networking Advanced | 17     | Services            | 21     |
+| DNS & Networking Advanced | 16     | Services            | 21     |
 | Edge                      | 18     | Shell               | 20     |
 | Explorer                  | 41     | Snap & Multitasking | 17     |
 | File System               | 17     | Startup             | 19     |
@@ -176,7 +176,7 @@ Canonical category slugs:
 | LibreOffice               | 18     | Widgets & News      | 15     |
 | Lock Screen & Login       | 16     | Windows 11          | 29     |
 | M365 Copilot              | 18     | Windows Terminal    | 16     |
-| Maintenance               | 17     | Windows Update      | 19     |
+| Maintenance               | 17     | Windows Update      | 18     |
 | Microsoft Store           | 15     | WSL                 | 29     |
 
 ## 5 Profiles
