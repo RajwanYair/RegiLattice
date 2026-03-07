@@ -33,6 +33,7 @@ Desktop.ini
 
 # ── Test / coverage artifacts ────────────────────────────────
 .pytest_cache/
+.hypothesis/
 htmlcov/
 .coverage
 coverage.xml

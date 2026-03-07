@@ -150,6 +150,20 @@ Launch-RegiLattice.ps1              # auto-detects Python, passes CLI args
 Launch-RegiLattice.ps1 --gui        # launch GUI directly
 ```
 
+## Screenshots
+
+> Place screenshot images in `docs/screenshots/` and reference them here.
+
+| View | Description |
+|------|-------------|
+| **GUI — Catppuccin Mocha** | Main window with collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation tags, and search bar |
+| **GUI — Nord Theme** | Same layout with the Nord colour palette |
+| **Tooltip Hover** | Rich tooltip showing description, current state, default/recommendation hints, tags, and registry keys |
+| **Snapshot Diff (Terminal)** | Coloured terminal output comparing two snapshot files with added/removed/changed counts |
+| **Snapshot Diff (HTML)** | HTML report with Catppuccin-themed table |
+| **CLI — --list** | Terminal showing tweak list with categories, status badges, and descriptions |
+| **Profile Selector** | GUI dropdown showing Business / Gaming / Privacy / Minimal / Server profiles |
+
 ## Corporate Network Safety
 
 Automatically detects corporate environments and **blocks non-safe tweaks** to prevent policy violations:

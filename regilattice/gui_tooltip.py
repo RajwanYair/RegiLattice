@@ -158,6 +158,10 @@ def build_tooltip_text(td: TweakDef, status: str | TweakResult) -> str:
     if td.depends_on:
         parts.append(f"Depends on: {', '.join(td.depends_on)}")
 
+    # Side effects
+    if td.side_effects:
+        parts.append(f"\u26a0 Side effects: {td.side_effects}")
+
     # Registry keys hint
     if td.registry_keys:
         parts.append(f"\nRegistry: {td.registry_keys[0]}")

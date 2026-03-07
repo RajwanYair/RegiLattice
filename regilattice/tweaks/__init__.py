@@ -56,6 +56,7 @@ class TweakDef:
     tags: list[str] = field(default_factory=list)
     depends_on: list[str] = field(default_factory=list)
     min_build: int = 0  # 0 = any Windows version, e.g. 22000 = Win 11 21H2+
+    side_effects: str = ""  # describes what may break when applied
 
 
 # ── Category metadata ────────────────────────────────────────────────────────
