@@ -154,6 +154,10 @@ def build_tooltip_text(td: TweakDef, status: str | TweakResult) -> str:
     if td.tags:
         parts.append(f"Tags: {', '.join(td.tags)}")
 
+    # Dependencies
+    if td.depends_on:
+        parts.append(f"Depends on: {', '.join(td.depends_on)}")
+
     # Registry keys hint
     if td.registry_keys:
         parts.append(f"\nRegistry: {td.registry_keys[0]}")

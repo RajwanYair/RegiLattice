@@ -81,6 +81,8 @@ _CONFIG_DIR = Path.home() / ".regilattice"
 _GEOMETRY_FILE = _CONFIG_DIR / "window.json"
 _COLLAPSE_FILE = _CONFIG_DIR / "collapsed.json"
 _PREFS_FILE = _CONFIG_DIR / "preferences.json"
+_SEARCH_HISTORY_FILE = _CONFIG_DIR / "search_history.json"
+_MAX_SEARCH_HISTORY = 20
 
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
@@ -455,14 +457,16 @@ class RegiLatticeGUI:
             font=("Segoe UI", 7),
         ).pack(side="right", padx=(10, 0))
 
-        # Search bar
+        # Search bar with history dropdown
         search_frame = ttk.Frame(self._root)
         search_frame.pack(fill="x", padx=16, pady=(6, 0))
         ttk.Label(search_frame, text="🔍", style="TLabel").pack(side="left", padx=(0, 4))
         self._search_var = tk.StringVar()
         self._search_var.trace_add("write", lambda *_: self._filter_rows())
-        self._search_entry = ttk.Entry(search_frame, textvariable=self._search_var, font=_FONT)
+        self._search_history: list[str] = self._load_search_history()
+        self._search_entry = ttk.Combobox(search_frame, textvariable=self._search_var, font=_FONT, values=self._search_history)
         self._search_entry.pack(side="left", fill="x", expand=True)
+        self._search_entry.bind("<Return>", lambda _: self._commit_search())
         ttk.Button(search_frame, text="✕", width=3, command=lambda: self._search_var.set("")).pack(
             side="left",
             padx=(4, 0),
@@ -971,6 +975,11 @@ class RegiLatticeGUI:
         )
         self._ctx_menu.add_command(label="Select all in category", command=lambda: self._select_category(td.category))
 
+        if td.depends_on:
+            deps = ", ".join(td.depends_on)
+            self._ctx_menu.add_separator()
+            self._ctx_menu.add_command(label=f"Depends on: {deps}", state="disabled")
+
         try:
             self._ctx_menu.tk_popup(event.x_root, event.y_root)
         finally:
@@ -1467,6 +1476,7 @@ class RegiLatticeGUI:
         self._save_geometry()
         self._save_collapse_state()
         self._save_preferences()
+        self._save_search_history()
         self._root.destroy()
 
     # ── Category collapse persistence ──────────────────────────────────
@@ -1500,6 +1510,40 @@ class RegiLatticeGUI:
     def _on_category_collapse_change(self, _section: CategorySection) -> None:
         """Called when a category section is toggled — saves state to disk."""
         self._save_collapse_state()
+
+    # ── Search history persistence ─────────────────────────────────────
+
+    @staticmethod
+    def _load_search_history() -> list[str]:
+        """Load recent search queries from disk."""
+        try:
+            data = json.loads(_SEARCH_HISTORY_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                return [s for s in data if isinstance(s, str)][:_MAX_SEARCH_HISTORY]
+        except (OSError, ValueError):
+            pass
+        return []
+
+    def _commit_search(self) -> None:
+        """Add current search query to history on Enter key press."""
+        query = self._search_var.get().strip()
+        if not query:
+            return
+        # Move to top if already present, otherwise prepend
+        if query in self._search_history:
+            self._search_history.remove(query)
+        self._search_history.insert(0, query)
+        self._search_history = self._search_history[:_MAX_SEARCH_HISTORY]
+        self._search_entry.configure(values=self._search_history)
+        self._save_search_history()
+
+    def _save_search_history(self) -> None:
+        """Persist search history to disk."""
+        try:
+            _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            _SEARCH_HISTORY_FILE.write_text(json.dumps(self._search_history), encoding="utf-8")
+        except OSError:
+            pass
 
     # ── GUI preferences persistence ────────────────────────────────────
 
