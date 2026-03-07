@@ -10,6 +10,7 @@ import os
 import platform
 import re
 import subprocess
+import time
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -41,6 +42,21 @@ if winreg is not None:
 def _ensure_windows() -> None:
     if os.name != "nt":  # pragma: no cover — platform guard
         raise OSError("Registry tweaks require Windows.")
+
+
+# Transient WinError codes that merit a single retry
+_TRANSIENT_WINERRORS = {5, 6}  # ERROR_ACCESS_DENIED, ERROR_INVALID_HANDLE
+
+
+def _retry_on_transient(fn: object, *args: object, **kwargs: object) -> object:
+    """Call *fn* once; on transient OSError, wait 0.2 s and retry once."""
+    try:
+        return fn(*args, **kwargs)  # type: ignore[operator]
+    except OSError as exc:
+        if getattr(exc, "winerror", None) not in _TRANSIENT_WINERRORS:
+            raise
+        time.sleep(0.2)
+        return fn(*args, **kwargs)  # type: ignore[operator]
 
 
 def _split_root(path: str) -> tuple[int, str]:
@@ -156,8 +172,12 @@ class RegistrySession:
             self.log(f"[DRY-RUN] set_value {path} {name!r} = {value!r}")
             return
         root, subkey = _split_root(path)
-        with winreg.CreateKey(root, subkey) as handle:
-            winreg.SetValueEx(handle, name or "", 0, reg_type, value)  # type: ignore[call-overload]
+
+        def _do_write() -> None:
+            with winreg.CreateKey(root, subkey) as handle:
+                winreg.SetValueEx(handle, name or "", 0, reg_type, value)  # type: ignore[call-overload]
+
+        _retry_on_transient(_do_write)
 
     def set_dword(self, path: str, name: str, value: int) -> None:
         self.set_value(path, name, value, winreg.REG_DWORD)
@@ -206,9 +226,13 @@ class RegistrySession:
             self.log(f"[DRY-RUN] delete_value {path} {name!r}")
             return
         root, subkey = _split_root(path)
-        try:
+
+        def _do_delete() -> None:
             with winreg.OpenKey(root, subkey, 0, winreg.KEY_SET_VALUE) as handle:
                 winreg.DeleteValue(handle, name)
+
+        try:
+            _retry_on_transient(_do_delete)
         except FileNotFoundError:
             return
         except OSError:
