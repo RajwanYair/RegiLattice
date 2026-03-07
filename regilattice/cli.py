@@ -96,6 +96,8 @@ def _run_action(
         return 0
     except AdminRequirementError as exc:
         print(f"❌ {exc}")
+        print("   Hint: run as Administrator — right-click terminal → 'Run as administrator',")
+        print("   or use: python -m regilattice --gui  (the GUI can auto-elevate via UAC).")
         return 5
     except Exception as exc:  # pragma: no cover — defensive
         SESSION.log(f"Error running {action_label}: {exc}")

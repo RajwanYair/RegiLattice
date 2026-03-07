@@ -200,3 +200,63 @@ class TestRegistryReads:
     def test_key_exists_missing(self, tmp_path: Path) -> None:
         session = RegistrySession(base_dir=tmp_path)
         assert session.key_exists(r"HKEY_CURRENT_USER\Software\__RegiLattice_Test_Missing__") is False
+
+
+# ── Retry logic ──────────────────────────────────────────────────────────────
+
+
+class TestRetryOnTransient:
+    """Test the _retry_on_transient helper."""
+
+    def test_success_no_retry(self) -> None:
+        from regilattice.registry import _retry_on_transient
+
+        calls: list[int] = []
+
+        def fn() -> str:
+            calls.append(1)
+            return "ok"
+
+        assert _retry_on_transient(fn) == "ok"
+        assert len(calls) == 1
+
+    def test_transient_winerror_retries(self) -> None:
+        from regilattice.registry import _retry_on_transient
+
+        calls: list[int] = []
+
+        def fn() -> str:
+            calls.append(1)
+            if len(calls) == 1:
+                exc = OSError("handle error")
+                exc.winerror = 6  # type: ignore[attr-defined]
+                raise exc
+            return "ok"
+
+        with patch("regilattice.registry.time.sleep"):
+            assert _retry_on_transient(fn) == "ok"
+        assert len(calls) == 2
+
+    def test_non_transient_raises_immediately(self) -> None:
+        from regilattice.registry import _retry_on_transient
+
+        calls: list[int] = []
+
+        def fn() -> str:
+            calls.append(1)
+            raise OSError("permanent")
+
+        with pytest.raises(OSError, match="permanent"):
+            _retry_on_transient(fn)
+        assert len(calls) == 1
+
+    def test_transient_fails_twice_raises(self) -> None:
+        from regilattice.registry import _retry_on_transient
+
+        def fn() -> str:
+            exc = OSError("access denied")
+            exc.winerror = 5  # type: ignore[attr-defined]
+            raise exc
+
+        with patch("regilattice.registry.time.sleep"), pytest.raises(OSError, match="access denied"):
+            _retry_on_transient(fn)
