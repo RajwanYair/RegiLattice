@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.12
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.16.0
+    hooks:
+      - id: mypy
+        args: [--strict]
+        additional_dependencies: []
+        files: ^regilattice/
+  - repo: local
+    hooks:
+      - id: pytest-smoke
+        name: pytest smoke (fast subset)
+        entry: python -m pytest tests/test_tweaks_smoke.py tests/test_tweaks_init.py -x --tb=line -q
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

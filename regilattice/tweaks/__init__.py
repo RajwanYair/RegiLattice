@@ -11,6 +11,7 @@ import concurrent.futures
 import importlib
 import json
 import pkgutil
+import platform
 import warnings
 from collections import OrderedDict, deque
 from collections.abc import Callable
@@ -31,6 +32,7 @@ class TweakResult(str, Enum):
     UNCHANGED = "unchanged"
     SKIPPED_CORP = "skipped (corp)"
     SKIPPED_ADMIN = "skipped (admin)"
+    SKIPPED_BUILD = "skipped (build)"
     ERROR = "error"
 
 
@@ -53,6 +55,7 @@ class TweakDef:
     description: str = ""
     tags: list[str] = field(default_factory=list)
     depends_on: list[str] = field(default_factory=list)
+    min_build: int = 0  # 0 = any Windows version, e.g. 22000 = Win 11 21H2+
 
 
 # ── Category metadata ────────────────────────────────────────────────────────
@@ -653,14 +656,40 @@ def _topo_sort(tweaks: list[TweakDef]) -> list[TweakDef]:
     return ordered
 
 
+# ── Windows build detection ──────────────────────────────────────────────────
+
+_CACHED_BUILD: int | None = None
+
+
+def _windows_build() -> int:
+    """Return the Windows build number (e.g. 22631 for Win 11 23H2).
+
+    Returns 0 on non-Windows platforms or if detection fails.
+    """
+    global _CACHED_BUILD
+    if _CACHED_BUILD is not None:
+        return _CACHED_BUILD
+    try:
+        _CACHED_BUILD = int(platform.version().split(".")[-1])
+    except (ValueError, AttributeError):
+        _CACHED_BUILD = 0
+    return _CACHED_BUILD
+
+
+def windows_build() -> int:
+    """Public accessor for the current Windows build number."""
+    return _windows_build()
+
+
 # ── Tweak executor ───────────────────────────────────────────────────────────
 
 
 class TweakExecutor:
     """Centralised pipeline for applying / removing a single tweak.
 
-    Corp-guard check, function call, and exception→TweakResult mapping
-    happen here so that CLI, GUI, menu, and batch helpers all share one path.
+    Corp-guard check, build-version gate, function call, and
+    exception→TweakResult mapping happen here so that CLI, GUI, menu,
+    and batch helpers all share one path.
     """
 
     __slots__ = ("force_corp", "require_admin")
@@ -679,6 +708,10 @@ class TweakExecutor:
 
         return is_corporate_network()
 
+    def _is_build_blocked(self, td: TweakDef) -> bool:
+        """Return True if the current Windows build is below *td.min_build*."""
+        return td.min_build > 0 and _windows_build() < td.min_build
+
     def apply_one(self, td: TweakDef) -> TweakResult:
         """Apply a single tweak, returning a typed result.
 
@@ -686,6 +719,8 @@ class TweakExecutor:
         """
         if self._is_blocked(td):
             return TweakResult.SKIPPED_CORP
+        if self._is_build_blocked(td):
+            return TweakResult.SKIPPED_BUILD
         try:
             td.apply_fn(require_admin=self.require_admin)
             return TweakResult.APPLIED
@@ -702,6 +737,8 @@ class TweakExecutor:
         """
         if self._is_blocked(td):
             return TweakResult.SKIPPED_CORP
+        if self._is_build_blocked(td):
+            return TweakResult.SKIPPED_BUILD
         try:
             td.remove_fn(require_admin=self.require_admin)
             return TweakResult.REMOVED

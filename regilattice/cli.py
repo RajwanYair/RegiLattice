@@ -42,6 +42,116 @@ def _confirm(prompt: str) -> bool:
         return False
 
 
+# ── Snapshot diff helpers ────────────────────────────────────────────────────
+
+_ANSI_RESET = "\033[0m"
+_ANSI_GREEN = "\033[32m"
+_ANSI_RED = "\033[31m"
+_ANSI_YELLOW = "\033[33m"
+_ANSI_CYAN = "\033[36m"
+_ANSI_BOLD = "\033[1m"
+_ANSI_DIM = "\033[2m"
+
+
+def _state_colour(state: str) -> str:
+    """Return ANSI-coloured state string."""
+    if state in ("applied", "APPLIED"):
+        return f"{_ANSI_GREEN}{state}{_ANSI_RESET}"
+    if state in ("not applied", "NOT_APPLIED", "removed", "REMOVED"):
+        return f"{_ANSI_RED}{state}{_ANSI_RESET}"
+    if state == "(absent)":
+        return f"{_ANSI_DIM}{state}{_ANSI_RESET}"
+    return f"{_ANSI_YELLOW}{state}{_ANSI_RESET}"
+
+
+def _print_diff_coloured(
+    diffs: dict[str, tuple[str, str]],
+    name_a: str,
+    name_b: str,
+) -> None:
+    """Print coloured snapshot diff table to terminal."""
+    header = f"{_ANSI_BOLD}{'Tweak ID':<40} {name_a:<20} {name_b:<20}{_ANSI_RESET}"
+    print(header)
+    print(f"{_ANSI_DIM}{'─' * 80}{_ANSI_RESET}")
+
+    added = removed = changed = 0
+    for tid, (sa, sb) in diffs.items():
+        col_a = _state_colour(sa)
+        col_b = _state_colour(sb)
+        arrow = f"{_ANSI_CYAN}→{_ANSI_RESET}"
+        print(f"  {tid:<38} {col_a:<32} {arrow} {col_b}")
+        if sa == "(absent)":
+            added += 1
+        elif sb == "(absent)":
+            removed += 1
+        else:
+            changed += 1
+
+    print(f"\n{_ANSI_BOLD}{len(diffs)} tweak(s) differ{_ANSI_RESET}", end="")
+    parts: list[str] = []
+    if added:
+        parts.append(f"{_ANSI_GREEN}+{added} added{_ANSI_RESET}")
+    if removed:
+        parts.append(f"{_ANSI_RED}-{removed} removed{_ANSI_RESET}")
+    if changed:
+        parts.append(f"{_ANSI_YELLOW}~{changed} changed{_ANSI_RESET}")
+    if parts:
+        print(f"  ({', '.join(parts)})")
+    else:
+        print()
+
+
+def _write_diff_html(
+    diffs: dict[str, tuple[str, str]],
+    dest: Path,
+    name_a: str,
+    name_b: str,
+) -> None:
+    """Write an HTML diff report to *dest*."""
+    from html import escape
+
+    rows: list[str] = []
+    for tid, (sa, sb) in diffs.items():
+        cls_a = "applied" if sa in ("applied", "APPLIED") else "removed" if sa in ("not applied", "NOT_APPLIED", "removed") else "absent"
+        cls_b = "applied" if sb in ("applied", "APPLIED") else "removed" if sb in ("not applied", "NOT_APPLIED", "removed") else "absent"
+        rows.append(
+            f'<tr><td class="tid">{escape(tid)}</td>'
+            f'<td class="{cls_a}">{escape(sa)}</td>'
+            f'<td class="{cls_b}">{escape(sb)}</td></tr>'
+        )
+
+    html = f"""\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RegiLattice Snapshot Diff</title>
+<style>
+  body {{ font-family: 'Segoe UI', system-ui, sans-serif; margin: 2rem; background: #1e1e2e; color: #cdd6f4; }}
+  h1 {{ color: #89b4fa; font-size: 1.4rem; }}
+  table {{ border-collapse: collapse; width: 100%; margin-top: 1rem; }}
+  th {{ background: #313244; color: #cdd6f4; padding: 8px 12px; text-align: left; border-bottom: 2px solid #45475a; }}
+  td {{ padding: 6px 12px; border-bottom: 1px solid #313244; }}
+  .tid {{ font-family: 'Cascadia Code', monospace; color: #89dceb; }}
+  .applied {{ color: #a6e3a1; font-weight: 600; }}
+  .removed {{ color: #f38ba8; }}
+  .absent {{ color: #6c7086; font-style: italic; }}
+  .summary {{ margin-top: 1rem; color: #a6adc8; }}
+</style>
+</head>
+<body>
+<h1>RegiLattice &mdash; Snapshot Diff</h1>
+<p class="summary">Comparing <b>{escape(name_a)}</b> vs <b>{escape(name_b)}</b> &mdash; {len(diffs)} difference(s)</p>
+<table>
+<tr><th>Tweak ID</th><th>{escape(name_a)}</th><th>{escape(name_b)}</th></tr>
+{''.join(rows)}
+</table>
+</body>
+</html>"""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(html, encoding="utf-8")
+
+
 def _run_action(
     mode: str,
     tweak_id: str,
@@ -254,6 +364,11 @@ def _build_parser() -> argparse.ArgumentParser:
         nargs=2,
         metavar=("FILE_A", "FILE_B"),
         help="Compare two snapshot files and show differences.",
+    )
+    parser.add_argument(
+        "--html",
+        metavar="PATH",
+        help="With --snapshot-diff, write an HTML report to PATH instead of terminal output.",
     )
     parser.add_argument(
         "--profile",
@@ -514,12 +629,12 @@ def main(argv: list[str] | None = None) -> int:
         diffs = diff_snapshots(Path(args.snapshot_diff[0]), Path(args.snapshot_diff[1]))
         if not diffs:
             print("No differences found.")
+            return 0
+        if getattr(args, "html", None):
+            _write_diff_html(diffs, Path(args.html), args.snapshot_diff[0], args.snapshot_diff[1])
+            print(f"✅ HTML diff report written to {args.html}")
         else:
-            print(f"{'Tweak ID':<35} {'File A':<18} {'File B':<18}")
-            print("-" * 71)
-            for tid, (sa, sb) in diffs.items():
-                print(f"{tid:<35} {sa:<18} {sb:<18}")
-            print(f"\n{len(diffs)} tweak(s) differ.")
+            _print_diff_coloured(diffs, args.snapshot_diff[0], args.snapshot_diff[1])
         return 0
 
     if args.profile:
