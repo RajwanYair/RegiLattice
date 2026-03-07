@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~16 400 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~17 266 tests).
 
 ## Quick Facts
 
@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~16 400 tests across 14 test files)                    |
+| Test        | `pytest` in `tests/` (~17 266 tests across 20 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -36,6 +36,10 @@ regilattice/
 ├── corpguard.py         # corporate network detection (domain/AAD/VPN/GPO/SCCM)
 ├── elevation.py         # UAC elevation helpers (is_admin, request_elevation, run_elevated)
 ├── deps.py              # lazy-import + auto-install for optional packages
+├── analytics.py         # local-only usage analytics (applies, removes, sessions)
+├── ratings.py           # local tweak rating system (1-5 stars + notes)
+├── locale.py            # i18n string table for UI labels
+├── marketplace.py       # third-party plugin discovery & loading
 └── tweaks/
     ├── __init__.py      # TweakDef dataclass, plugin loader, profiles, batch ops
     ├── _template.py     # contributor guide (not loaded by plugin loader)
@@ -66,6 +70,9 @@ class TweakDef:
     registry_keys: list[str]                   # paths touched (backup/tooltip)
     description: str = ""                      # tooltip / --list text
     tags: list[str]                            # search keywords
+    depends_on: list[str]                      # IDs this tweak depends on
+    min_build: int = 0                         # minimum Windows build (0 = any)
+    side_effects: str = ""                     # what may break when applied
 ```
 
 ### Function Triplet Pattern
@@ -253,6 +260,15 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 - `tests/test_menu.py`: interactive console menu
 - `tests/test_registry.py`: RegistrySession helpers and backup
 - `tests/test_corpguard.py`: corporate network detection
+- `tests/test_analytics.py`: usage analytics (record, stats, reset)
+- `tests/test_ratings.py`: tweak rating system (rate, retrieve, remove)
+- `tests/test_locale.py`: i18n string table (translate, locale switch, file load)
+- `tests/test_marketplace.py`: plugin discovery, loading, version check
+- `tests/test_integration.py`: end-to-end CLI and batch operation tests
+- `tests/test_property.py`: hypothesis property-based tests
+- `tests/test_benchmarks.py`: performance benchmarks for core operations
+- `tests/test_registry.py`: RegistrySession helpers and backup
+- `tests/test_corpguard.py`: corporate network detection
 - Known: `test_registry.py::TestBackup::test_backup_creates_directory` may fail with WinError 6 (handle issue, environment-specific)
 
 ## Adding a New Tweak — Checklist
@@ -292,5 +308,9 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 | `corpguard.py`        | Corp detection      | `is_corporate_network()`, `assert_not_corporate()`, `corp_guard_status()`, `CorporateNetworkError`                                                                                                |
 | `elevation.py`        | UAC helpers         | `is_admin()`, `request_elevation()`, `run_elevated()`, `ensure_admin_or_elevate()`                                                                                                                |
 | `deps.py`             | Lazy imports        | `lazy_import()`, `install_package()`, `require()`                                                                                                                                                 |
+| `analytics.py`        | Usage analytics     | `record_apply()`, `record_remove()`, `record_session()`, `get_stats()`, `top_tweaks()`                                                                                                            |
+| `ratings.py`          | Rating system       | `rate_tweak()`, `get_rating()`, `all_ratings()`, `remove_rating()`, `top_rated()`                                                                                                                  |
+| `locale.py`           | i18n string table   | `t()`, `set_locale()`, `load_locale_file()`, `current_locale()`, `available_keys()`                                                                                                                |
+| `marketplace.py`      | Plugin marketplace  | `discover_plugins()`, `load_plugin()`, `loaded_plugins()`, `unload_plugin()`, `PluginMeta`                                                                                                         |
 | `tweaks/__init__.py`  | Core engine         | `TweakDef`, `all_tweaks()`, `get_tweak()`, `categories()`, `tweaks_by_category()`, `search_tweaks()`, `apply_profile()`, `status_map()`, `tweak_scope()`, `save_snapshot()`, `restore_snapshot()` |
 | `tweaks/_template.py` | Contributor guide   | (not loaded)                                                                                                                                                                                      |
