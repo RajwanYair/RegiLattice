@@ -512,6 +512,84 @@ class TestExportReg:
         assert ns.export_reg == "test.reg"
 
 
+# ── --check flag ─────────────────────────────────────────────────────────────
+
+
+class TestCheckFlag:
+    def test_check_shows_summary(self, capsys) -> None:
+        fake_map = {
+            "tweak-a": TweakResult.APPLIED,
+            "tweak-b": TweakResult.NOT_APPLIED,
+            "tweak-c": TweakResult.UNKNOWN,
+        }
+        with patch("regilattice.tweaks.status_map", return_value=fake_map):
+            rc = main(["--check"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "Applied" in out
+        assert "Default" in out
+        assert "Unknown" in out
+        assert "1" in out  # at least 1 applied
+
+    def test_check_lists_applied_tweaks(self, capsys) -> None:
+        td = MagicMock()
+        td.label = "Test Tweak"
+        fake_map = {"tweak-applied": TweakResult.APPLIED}
+        with (
+            patch("regilattice.tweaks.status_map", return_value=fake_map),
+            patch("regilattice.cli.get_tweak", return_value=td),
+        ):
+            rc = main(["--check"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "tweak-applied" in out
+        assert "Test Tweak" in out
+
+    def test_parser_has_check(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--check"])
+        assert ns.check is True
+
+
+# ── --diff flag ──────────────────────────────────────────────────────────────
+
+
+class TestDiffFlag:
+    def test_diff_no_changes(self, capsys) -> None:
+        td = MagicMock()
+        td.id = "tweak-a"
+        fake_map = {"tweak-a": TweakResult.APPLIED}
+        with (
+            patch("regilattice.cli.tweaks_for_profile", return_value=[td]),
+            patch("regilattice.tweaks.status_map", return_value=fake_map),
+        ):
+            rc = main(["--diff", "minimal"])
+        assert rc == 0
+        assert "no changes needed" in capsys.readouterr().out
+
+    def test_diff_shows_delta(self, capsys) -> None:
+        td = MagicMock()
+        td.id = "tweak-a"
+        td.label = "Tweak A"
+        fake_map = {"tweak-a": TweakResult.NOT_APPLIED, "tweak-extra": TweakResult.APPLIED}
+        with (
+            patch("regilattice.cli.tweaks_for_profile", return_value=[td]),
+            patch("regilattice.tweaks.status_map", return_value=fake_map),
+            patch("regilattice.cli.get_tweak", return_value=td),
+        ):
+            rc = main(["--diff", "minimal"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "APPLY" in out
+        assert "tweak-a" in out
+        assert "tweak-extra" in out
+
+    def test_parser_has_diff(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--diff", "gaming"])
+        assert ns.diff == "gaming"
+
+
 # ── Interactive menu fallback ────────────────────────────────────────────────
 
 
