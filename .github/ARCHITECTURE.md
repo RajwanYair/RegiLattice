@@ -1,7 +1,7 @@
 # RegiLattice -- Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2025-06-22 (v1.0.0, 1 233 tweaks, 64 categories, ~13 700 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 233 tweaks, 64 categories, ~16 400 tests).
 
 ---
 
@@ -281,7 +281,7 @@ tests/
     +-- Auto-parametrized over all_tweaks_list
     +-- Tests: apply_fn signature, remove_fn signature, detect_fn callable
     +-- Tests: ID format (kebab-case), ID uniqueness, required fields
-    +-- ~10 tests x 1 233 tweaks = ~12 330 parametrized tests
+    +-- ~13 tests x 1 233 tweaks = ~16 000 parametrized tests
   |
   test_tweaks_init.py
     +-- Plugin loader: module count, tweak count
@@ -291,9 +291,14 @@ tests/
     +-- Batch: apply_all/remove_all with dry_run
   |
   test_cli.py          # argparse, --list, --profile, apply/remove dispatch
+  test_config.py       # AppConfig loading/defaults
   test_corpguard.py    # mocked probes, force override
-  test_deps.py         # lazy_import, fallback stubs
-  test_elevation.py    # is_admin(), request_elevation()
+  test_deps.py         # lazy_import, install_package, require
+  test_elevation.py    # is_admin(), request_elevation(), run_elevated()
+  test_gui_dialogs.py  # PS1 export, JSON import, about dialog
+  test_gui_theme.py    # theme switching, colour attribute validation
+  test_gui_tooltip.py  # tooltip text building, metadata parsing
+  test_gui_widgets.py  # tweak scope classification
   test_menu.py         # Menu class, banner, selection
   test_registry.py     # set/read/delete, backup, logging, path parsing
 ```
