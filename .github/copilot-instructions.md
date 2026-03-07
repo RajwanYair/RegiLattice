@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~16 400 tests across 14 test files)                     |
+| Test        | `pytest` in `tests/` (~16 400 tests across 14 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -107,77 +107,77 @@ All tweak IDs follow the pattern: `{category_slug}-{descriptive-name}`
 
 Canonical category slugs:
 
-| Slug       | Category              | Slug       | Category            |
-| ---------- | --------------------- | ---------- | ------------------- |
-| `acc`      | Accessibility         | `lo`       | LibreOffice         |
-| `adobe`    | Adobe                 | `lock`     | Lock Screen & Login |
-| `ai`       | AI / Copilot          | `m365`     | M365 Copilot        |
-| `audio`    | Audio                 | `maint`    | Maintenance         |
-| `backup`   | Backup & Recovery     | `media`    | Multimedia          |
-| `boot`     | Boot                  | `msstore`  | Microsoft Store     |
-| `bt`       | Bluetooth             | `net`      | Network             |
-| `chrome`   | Chrome                | `notif`    | Notifications       |
-| `clip`     | Clipboard & Drag-Drop | `od`       | OneDrive            |
-| `cloud`    | Cloud Storage         | `office`   | Office              |
-| `comm`     | Communication         | `perf`     | Performance         |
-| `cortana`  | Cortana & Search      | `pkg`      | Package Management  |
-| `crash`    | Crash & Diagnostics   | `power`    | Power               |
-| `ctx`      | Context Menu          | `printing` | Printing            |
-| `dev`      | Developer Tools       | `priv`     | Privacy             |
-| `display`  | Display               | `rdp`      | Remote Desktop      |
+| Slug       | Category                  | Slug       | Category            |
+| ---------- | ------------------------- | ---------- | ------------------- |
+| `acc`      | Accessibility             | `lo`       | LibreOffice         |
+| `adobe`    | Adobe                     | `lock`     | Lock Screen & Login |
+| `ai`       | AI / Copilot              | `m365`     | M365 Copilot        |
+| `audio`    | Audio                     | `maint`    | Maintenance         |
+| `backup`   | Backup & Recovery         | `media`    | Multimedia          |
+| `boot`     | Boot                      | `msstore`  | Microsoft Store     |
+| `bt`       | Bluetooth                 | `net`      | Network             |
+| `chrome`   | Chrome                    | `notif`    | Notifications       |
+| `clip`     | Clipboard & Drag-Drop     | `od`       | OneDrive            |
+| `cloud`    | Cloud Storage             | `office`   | Office              |
+| `comm`     | Communication             | `perf`     | Performance         |
+| `cortana`  | Cortana & Search          | `pkg`      | Package Management  |
+| `crash`    | Crash & Diagnostics       | `power`    | Power               |
+| `ctx`      | Context Menu              | `printing` | Printing            |
+| `dev`      | Developer Tools           | `priv`     | Privacy             |
+| `display`  | Display                   | `rdp`      | Remote Desktop      |
 | `dns`      | DNS & Networking Advanced | `schtask`  | Scheduled Tasks     |
-| `edge`     | Edge                  | `scoop`    | Scoop Tools         |
-| `explorer` | Explorer              | `sec`      | Security            |
-| `firefox`  | Firefox               | `shell`    | Shell               |
-| `font`     | Fonts                 | `snap`     | Snap & Multitasking |
-| `fs`       | File System           | `ss`       | Screensaver & Lock  |
-| `game`     | Gaming                | `startup`  | Startup             |
-| `gpu`      | GPU / Graphics        | `stor`     | Storage             |
-| `idx`      | Indexing & Search     | `svc`      | Services            |
-| `input`    | Input                 | `sys`      | System              |
-| `java`     | Java                  | `tb`       | Taskbar             |
-| `telem`    | Telemetry Advanced    | `usb`      | USB & Peripherals   |
-| `term`     | Windows Terminal      | `virt`     | Virtualization      |
-| `vnc`      | RealVNC               | `vscode`   | VS Code             |
-| `w11`      | Windows 11            | `widgets`  | Widgets & News      |
-| `wsl`      | WSL                   | `wu`       | Windows Update      |
+| `edge`     | Edge                      | `scoop`    | Scoop Tools         |
+| `explorer` | Explorer                  | `sec`      | Security            |
+| `firefox`  | Firefox                   | `shell`    | Shell               |
+| `font`     | Fonts                     | `snap`     | Snap & Multitasking |
+| `fs`       | File System               | `ss`       | Screensaver & Lock  |
+| `game`     | Gaming                    | `startup`  | Startup             |
+| `gpu`      | GPU / Graphics            | `stor`     | Storage             |
+| `idx`      | Indexing & Search         | `svc`      | Services            |
+| `input`    | Input                     | `sys`      | System              |
+| `java`     | Java                      | `tb`       | Taskbar             |
+| `telem`    | Telemetry Advanced        | `usb`      | USB & Peripherals   |
+| `term`     | Windows Terminal          | `virt`     | Virtualization      |
+| `vnc`      | RealVNC                   | `vscode`   | VS Code             |
+| `w11`      | Windows 11                | `widgets`  | Widgets & News      |
+| `wsl`      | WSL                       | `wu`       | Windows Update      |
 
 ## Current Stats (1 233 tweaks, 64 categories, 64 modules)
 
-| Category              | Tweaks | Category            | Tweaks |
-| --------------------- | ------ | ------------------- | ------ |
-| Accessibility         | 20     | Multimedia          | 15     |
-| Adobe                 | 20     | Network             | 24     |
-| AI / Copilot          | 22     | Notifications       | 16     |
-| Audio                 | 19     | Office              | 20     |
-| Backup & Recovery     | 15     | OneDrive            | 18     |
-| Bluetooth             | 19     | Package Management  | 22     |
-| Boot                  | 21     | Performance         | 20     |
-| Chrome                | 20     | Power               | 21     |
-| Clipboard & Drag-Drop | 15     | Printing            | 15     |
-| Cloud Storage         | 30     | Privacy             | 25     |
-| Communication         | 21     | RealVNC             | 15     |
-| Context Menu          | 15     | Remote Desktop      | 16     |
-| Cortana & Search      | 22     | Scheduled Tasks     | 16     |
-| Crash & Diagnostics   | 16     | Scoop Tools         | 25     |
-| Developer Tools       | 17     | Screensaver & Lock  | 16     |
-| Display               | 19     | Security            | 21     |
-| DNS & Networking Advanced | 17  | Services            | 21     |
-| Edge                  | 18     | Shell               | 20     |
-| Explorer              | 41     | Snap & Multitasking | 17     |
-| File System           | 17     | Startup             | 19     |
-| Firefox               | 20     | Storage             | 19     |
-| Fonts                 | 19     | System              | 24     |
-| Gaming                | 19     | Taskbar             | 19     |
-| GPU / Graphics        | 19     | Telemetry Advanced  | 16     |
-| Indexing & Search     | 16     | USB & Peripherals   | 16     |
-| Input                 | 18     | Virtualization      | 15     |
-| Java                  | 16     | VS Code             | 19     |
-| LibreOffice           | 18     | Widgets & News      | 15     |
-| Lock Screen & Login   | 16     | Windows 11          | 29     |
-| M365 Copilot          | 18     | Windows Terminal    | 16     |
-| Maintenance           | 17     | Windows Update      | 19     |
-| Microsoft Store       | 15     | WSL                 | 29     |
+| Category                  | Tweaks | Category            | Tweaks |
+| ------------------------- | ------ | ------------------- | ------ |
+| Accessibility             | 20     | Multimedia          | 15     |
+| Adobe                     | 20     | Network             | 24     |
+| AI / Copilot              | 22     | Notifications       | 16     |
+| Audio                     | 19     | Office              | 20     |
+| Backup & Recovery         | 15     | OneDrive            | 18     |
+| Bluetooth                 | 19     | Package Management  | 22     |
+| Boot                      | 21     | Performance         | 20     |
+| Chrome                    | 20     | Power               | 21     |
+| Clipboard & Drag-Drop     | 15     | Printing            | 15     |
+| Cloud Storage             | 30     | Privacy             | 25     |
+| Communication             | 21     | RealVNC             | 15     |
+| Context Menu              | 15     | Remote Desktop      | 16     |
+| Cortana & Search          | 22     | Scheduled Tasks     | 16     |
+| Crash & Diagnostics       | 16     | Scoop Tools         | 25     |
+| Developer Tools           | 17     | Screensaver & Lock  | 16     |
+| Display                   | 19     | Security            | 21     |
+| DNS & Networking Advanced | 17     | Services            | 21     |
+| Edge                      | 18     | Shell               | 20     |
+| Explorer                  | 41     | Snap & Multitasking | 17     |
+| File System               | 17     | Startup             | 19     |
+| Firefox                   | 20     | Storage             | 19     |
+| Fonts                     | 19     | System              | 24     |
+| Gaming                    | 19     | Taskbar             | 19     |
+| GPU / Graphics            | 19     | Telemetry Advanced  | 16     |
+| Indexing & Search         | 16     | USB & Peripherals   | 16     |
+| Input                     | 18     | Virtualization      | 15     |
+| Java                      | 16     | VS Code             | 19     |
+| LibreOffice               | 18     | Widgets & News      | 15     |
+| Lock Screen & Login       | 16     | Windows 11          | 29     |
+| M365 Copilot              | 18     | Windows Terminal    | 16     |
+| Maintenance               | 17     | Windows Update      | 19     |
+| Microsoft Store           | 15     | WSL                 | 29     |
 
 ## 5 Profiles
 
