@@ -7,7 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from regilattice.gui_dialogs import export_powershell, import_json_selection, show_about
+from regilattice.gui_dialogs import export_json_selection, export_powershell, import_json_selection, show_about
 from regilattice.tweaks import TweakDef
 
 
@@ -150,6 +150,62 @@ class TestImportJsonSelection:
             fdlg.askopenfilename.return_value = str(jf)
             import_json_selection(MagicMock(), [], MagicMock(), MagicMock(), MagicMock())
             mbox.showerror.assert_called_once()
+
+
+# ── export_json_selection tests ──────────────────────────────────────────────
+
+
+class TestExportJsonSelection:
+    def test_empty_selection_shows_info(self) -> None:
+        with patch("regilattice.gui_dialogs.messagebox") as mbox:
+            export_json_selection([], MagicMock())
+            mbox.showinfo.assert_called_once()
+
+    def test_cancel_dialog_does_nothing(self) -> None:
+        td = _make_td()
+        with patch("regilattice.gui_dialogs.filedialog") as fdlg:
+            fdlg.asksaveasfilename.return_value = ""
+            status = MagicMock()
+            export_json_selection([td], status)
+            status.assert_not_called()
+
+    def test_writes_json_file(self, tmp_path: Path) -> None:
+        td = _make_td(id="sec-example", label="Example Tweak")
+        out = tmp_path / "out.json"
+        with patch("regilattice.gui_dialogs.filedialog") as fdlg:
+            fdlg.asksaveasfilename.return_value = str(out)
+            status = MagicMock()
+            export_json_selection([td], status)
+        data = json.loads(out.read_text(encoding="utf-8"))
+        assert data["tweaks"] == ["sec-example"]
+        assert "version" in data
+        status.assert_called_once()
+
+    def test_multiple_tweaks_ids_in_order(self, tmp_path: Path) -> None:
+        tweaks = [
+            _make_td(id="a-first", label="First"),
+            _make_td(id="b-second", label="Second"),
+        ]
+        out = tmp_path / "multi.json"
+        with patch("regilattice.gui_dialogs.filedialog") as fdlg:
+            fdlg.asksaveasfilename.return_value = str(out)
+            export_json_selection(tweaks, MagicMock())
+        data = json.loads(out.read_text(encoding="utf-8"))
+        assert data["tweaks"] == ["a-first", "b-second"]
+
+    def test_roundtrip_with_import(self, tmp_path: Path) -> None:
+        """An exported JSON file can be reimported successfully."""
+        td = _make_td(id="roundtrip-tweak")
+        out = tmp_path / "roundtrip.json"
+        with patch("regilattice.gui_dialogs.filedialog") as fdlg:
+            fdlg.asksaveasfilename.return_value = str(out)
+            export_json_selection([td], MagicMock())
+
+        row = SimpleNamespace(td=SimpleNamespace(id="roundtrip-tweak"), var=MagicMock(), disabled_by_corp=False)
+        with patch("regilattice.gui_dialogs.filedialog") as fdlg:
+            fdlg.askopenfilename.return_value = str(out)
+            import_json_selection(MagicMock(), [row], MagicMock(), MagicMock(), MagicMock())
+        row.var.set.assert_called_once_with(True)
 
 
 # ── show_about tests ─────────────────────────────────────────────────────────
