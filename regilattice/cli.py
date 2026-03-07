@@ -318,6 +318,17 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Export current registry state for all tweak keys to a .reg file.",
     )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Non-destructive audit: show which tweaks are applied, default, or unknown.",
+    )
+    parser.add_argument(
+        "--diff",
+        metavar="PROFILE",
+        choices=list(available_profiles()),
+        help="Compare current state against a profile and show which tweaks need changes.",
+    )
     return parser
 
 
@@ -389,6 +400,52 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.export_reg:
         return _export_reg(Path(args.export_reg))
+
+    if args.check:
+        from .tweaks import status_map
+
+        smap = status_map()
+        applied = [tid for tid, st in smap.items() if st == TweakResult.APPLIED]
+        default = [tid for tid, st in smap.items() if st == TweakResult.NOT_APPLIED]
+        unknown = [tid for tid, st in smap.items() if st == TweakResult.UNKNOWN]
+        print(f"{'Status':<14} {'Count':<8}")
+        print("-" * 22)
+        print(f"{'Applied':<14} {len(applied):<8}")
+        print(f"{'Default':<14} {len(default):<8}")
+        print(f"{'Unknown':<14} {len(unknown):<8}")
+        print(f"{'Total':<14} {len(smap):<8}")
+        if applied:
+            print(f"\nApplied tweaks ({len(applied)}):")
+            for tid in sorted(applied):
+                td = get_tweak(tid)
+                label = td.label if td else tid
+                print(f"  \u2713 {tid:<35} {label}")
+        return 0
+
+    if args.diff:
+        from .tweaks import status_map
+
+        profile_tweaks = {td.id for td in tweaks_for_profile(args.diff)}
+        smap = status_map()
+        to_apply = sorted(tid for tid in profile_tweaks if smap.get(tid) != TweakResult.APPLIED)
+        to_remove = sorted(tid for tid in smap if tid not in profile_tweaks and smap[tid] == TweakResult.APPLIED)
+        if not to_apply and not to_remove:
+            print(f"System matches '{args.diff}' profile \u2014 no changes needed.")
+            return 0
+        if to_apply:
+            print(f"Tweaks to APPLY for '{args.diff}' profile ({len(to_apply)}):")
+            for tid in to_apply:
+                td = get_tweak(tid)
+                label = td.label if td else tid
+                print(f"  + {tid:<35} {label}")
+        if to_remove:
+            print(f"\nApplied tweaks NOT in '{args.diff}' profile ({len(to_remove)}):")
+            for tid in to_remove:
+                td = get_tweak(tid)
+                label = td.label if td else tid
+                print(f"  - {tid:<35} {label}")
+        print(f"\nSummary: {len(to_apply)} to apply, {len(to_remove)} extra applied.")
+        return 0
 
     if args.list:
         tweaks = all_tweaks()
