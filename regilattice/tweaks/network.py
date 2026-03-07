@@ -342,25 +342,6 @@ def _detect_throttling_index() -> bool:
     return val is not None and val in (0xFFFFFFFF, -1)
 
 
-# ── Enable DNS Over HTTPS ────────────────────────────────────────────────────
-
-
-def _apply_dns_over_https(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: enable DNS over HTTPS (DoH)")
-    SESSION.backup([_DNS_CLIENT], "DnsOverHttps")
-    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 2)
-
-
-def _remove_dns_over_https(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 0)
-
-
-def _detect_dns_over_https() -> bool:
-    return SESSION.read_dword(_DNS_CLIENT, "EnableAutoDoh") == 2
-
-
 # ── Increase ARP Cache Size ────────────────────────────────────────────────
 
 
@@ -583,24 +564,6 @@ TWEAKS: list[TweakDef] = [
             "Default: 10. Recommended: 0xFFFFFFFF (disabled)."
         ),
         tags=["network", "throttling", "performance", "bandwidth"],
-    ),
-    TweakDef(
-        id="net-dns-over-https",
-        label="Enable DNS Over HTTPS",
-        category="Network",
-        apply_fn=_apply_dns_over_https,
-        remove_fn=_remove_dns_over_https,
-        detect_fn=_detect_dns_over_https,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_DNS_CLIENT],
-        description=(
-            "Enables DNS over HTTPS (DoH) automatic upgrade for "
-            "supported resolvers. Encrypts DNS queries for privacy. "
-            "Options: 0=Off, 1=Automatic, 2=Force. Default: 0. "
-            "Recommended: 2."
-        ),
-        tags=["network", "dns", "doh", "privacy", "security"],
     ),
     TweakDef(
         id="net-increase-arp-cache",
@@ -886,27 +849,6 @@ def _detect_tcp_autotune_restricted() -> bool:
     return SESSION.read_dword(_TCPIP, "EnableAutoTuning") == 0
 
 
-# ── Enable DNS Client Cache Optimization ─────────────────────────────────────
-
-
-def _apply_dns_cache_optimization(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: enable DNS client cache optimization")
-    SESSION.backup([_DNS_CLIENT], "DNSCacheOpt")
-    SESSION.set_dword(_DNS_CLIENT, "MaxCacheTtl", 86400)
-    SESSION.set_dword(_DNS_CLIENT, "MaxNegativeCacheTtl", 5)
-
-
-def _remove_dns_cache_optimization(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_DNS_CLIENT, "MaxCacheTtl")
-    SESSION.delete_value(_DNS_CLIENT, "MaxNegativeCacheTtl")
-
-
-def _detect_dns_cache_optimization() -> bool:
-    return SESSION.read_dword(_DNS_CLIENT, "MaxCacheTtl") == 86400 and SESSION.read_dword(_DNS_CLIENT, "MaxNegativeCacheTtl") == 5
-
-
 TWEAKS += [
     TweakDef(
         id="net-tcp-autotune-restricted",
@@ -924,22 +866,5 @@ TWEAKS += [
             "Default: normal. Recommended: restricted for problematic networks."
         ),
         tags=["network", "tcp", "autotune", "window", "restricted"],
-    ),
-    TweakDef(
-        id="net-dns-cache-optimization",
-        label="Enable DNS Client Cache Optimization",
-        category="Network",
-        apply_fn=_apply_dns_cache_optimization,
-        remove_fn=_remove_dns_cache_optimization,
-        detect_fn=_detect_dns_cache_optimization,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_DNS_CLIENT],
-        description=(
-            "Optimizes DNS client cache by setting MaxCacheTtl to 86400s and "
-            "MaxNegativeCacheTtl to 5s. Improves DNS resolution performance. "
-            "Default: system defaults. Recommended: optimized values."
-        ),
-        tags=["network", "dns", "cache", "optimization", "performance"],
     ),
 ]

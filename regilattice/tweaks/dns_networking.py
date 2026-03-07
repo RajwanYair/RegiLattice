@@ -600,25 +600,6 @@ def _detect_dns_timeout() -> bool:
     return SESSION.read_dword(_DNS_CLIENT, "QueryAdapterTimeout") == 2000
 
 
-# ── Enable DNS-over-HTTPS (Auto) ─────────────────────────────────────────────
-
-
-def _apply_enable_doh_auto(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("DNS: enable automatic DNS-over-HTTPS")
-    SESSION.backup([_DNS_CLIENT], "DohAuto")
-    SESSION.set_dword(_DNS_CLIENT, "EnableAutoDoh", 2)  # 2 = automatic
-
-
-def _remove_enable_doh_auto(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_DNS_CLIENT, "EnableAutoDoh")
-
-
-def _detect_enable_doh_auto() -> bool:
-    return SESSION.read_dword(_DNS_CLIENT, "EnableAutoDoh") == 2
-
-
 # ── Disable WPAD Auto-Discovery ──────────────────────────────────────────────
 
 
@@ -653,23 +634,6 @@ TWEAKS += [
             "Reduces DNS query adapter timeout to 2000 ms for faster failover to alternate DNS servers. Default: 5000 ms. Recommended: 2000 ms."
         ),
         tags=["dns", "timeout", "failover", "performance", "network"],
-    ),
-    TweakDef(
-        id="dns-enable-doh-auto",
-        label="Enable DNS-over-HTTPS (Automatic)",
-        category="DNS & Networking Advanced",
-        apply_fn=_apply_enable_doh_auto,
-        remove_fn=_remove_enable_doh_auto,
-        detect_fn=_detect_enable_doh_auto,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_DNS_CLIENT],
-        description=(
-            "Enables automatic DNS-over-HTTPS at the system resolver level "
-            "(EnableAutoDoh=2). Attempts DoH if server supports it. "
-            "Default: Disabled. Recommended: Enabled for privacy."
-        ),
-        tags=["dns", "doh", "https", "encryption", "privacy"],
     ),
     TweakDef(
         id="dns-disable-wpad",

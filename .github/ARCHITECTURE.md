@@ -1,7 +1,7 @@
 # RegiLattice -- Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2026-03-07 (v1.0.0, 1 233 tweaks, 64 categories, ~16 400 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~16 400 tests).
 
 ---
 
@@ -22,7 +22,7 @@
          +----------+-----------+
          |                      |
     TweakDef list          _PROFILES dict
-    (1 233 tweaks)         (5 profiles)
+    (1 228 tweaks)         (5 profiles)
          |
     tweaks/*.py               <-- 64 modules, auto-discovered
          |
@@ -281,7 +281,7 @@ tests/
     +-- Auto-parametrized over all_tweaks_list
     +-- Tests: apply_fn signature, remove_fn signature, detect_fn callable
     +-- Tests: ID format (kebab-case), ID uniqueness, required fields
-    +-- ~13 tests x 1 233 tweaks = ~16 000 parametrized tests
+    +-- ~13 tests x 1 228 tweaks = ~16 000 parametrized tests
   |
   test_tweaks_init.py
     +-- Plugin loader: module count, tweak count
@@ -314,7 +314,7 @@ tests/
 | **`_dry_run` mode** | Tests can validate tweak logic without touching the real registry |
 | **Corporate guard** | Prevents accidental damage on managed machines; legal/compliance safety |
 | **Catppuccin Mocha + 3 themes** | Modern dark theme with switchable alternatives (Latte, Nord, Dracula) |
-| **Parallel status detection** | Thread-pool `status_map()` for fast GUI refresh across 1 233 tweaks |
+| **Parallel status detection** | Thread-pool `status_map()` for fast GUI refresh across 1 228 tweaks |
 | **`lru_cache` tooltip parsing** | Avoids re-parsing description metadata on every tooltip render |
 | **Recommendation badges** | Visual indicator for tweaks with `Recommended:` in description |
 | **Deferred loading** | Window appears instantly; categories loaded in batches of 4; corp check async |

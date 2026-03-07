@@ -688,29 +688,6 @@ TWEAKS: list[TweakDef] = [
 ]
 
 
-# -- Disable Store Auto-Download -----------------------------------------------
-
-_STORE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"
-
-
-def _apply_pkg_disable_store_auto_download(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Pkg: disabling Store auto-download")
-    SESSION.backup([_STORE_POLICY], "StoreAutoDownload")
-    SESSION.set_dword(_STORE_POLICY, "AutoDownload", 2)
-    SESSION.log("Pkg: Store auto-download disabled")
-
-
-def _remove_pkg_disable_store_auto_download(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_STORE_POLICY], "StoreAutoDownload_Remove")
-    SESSION.delete_value(_STORE_POLICY, "AutoDownload")
-
-
-def _detect_pkg_disable_store_auto_download() -> bool:
-    return SESSION.read_dword(_STORE_POLICY, "AutoDownload") == 2
-
-
 # -- Disable Suggested Apps ----------------------------------------------------
 
 _CDM = (
@@ -738,19 +715,6 @@ def _detect_pkg_disable_suggested_apps() -> bool:
 
 
 TWEAKS += [
-    TweakDef(
-        id="pkg-disable-store-auto-download",
-        label="Disable Store Auto-Download",
-        category="Package Management",
-        apply_fn=_apply_pkg_disable_store_auto_download,
-        remove_fn=_remove_pkg_disable_store_auto_download,
-        detect_fn=_detect_pkg_disable_store_auto_download,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_STORE_POLICY],
-        description=("Prevents Microsoft Store from auto-downloading apps. Default: Enabled. Recommended: Disabled."),
-        tags=["packages", "store", "auto-download"],
-    ),
     TweakDef(
         id="pkg-disable-suggested-apps",
         label="Disable Suggested App Installations",
