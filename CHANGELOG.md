@@ -2,7 +2,7 @@
 
 All notable changes to RegiLattice are documented in this file.
 
-## [1.0.0] — 2025-06-22
+## [1.0.0] — 2026-03-07
 
 ### Added
 
@@ -41,6 +41,6 @@ All notable changes to RegiLattice are documented in this file.
 - **Category metadata** — risk level, scope, and profile badges on section headers.
 - **User config** via `~/.regilattice.toml` (force_corp, max_workers, backup
   directory, auto_backup).
-- **Test suite** — ~13 900 tests (pytest) covering tweaks, CLI, GUI themes,
+- **Test suite** — ~16 400 tests (pytest) covering tweaks, CLI, GUI themes,
   tooltips, widgets, corpguard, elevation, deps, registry, and more.
 - **Lint / type-check** — ruff + mypy --strict, zero warnings.
