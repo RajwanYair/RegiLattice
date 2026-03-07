@@ -375,6 +375,18 @@ class CategorySection:
         )
         self._btn_enable_all.pack(side="right", padx=(2, 0))
 
+        # Reorder buttons (wired by gui.py via set_on_reorder)
+        self._btn_down = tk.Button(
+            self.header, text="\u25bc", font=("Segoe UI", 7), relief="flat",
+            bg=_BG_SURFACE, fg=_FG_DIM, cursor="hand2", bd=0, padx=2,
+        )
+        self._btn_down.pack(side="right", padx=(2, 0))
+        self._btn_up = tk.Button(
+            self.header, text="\u25b2", font=("Segoe UI", 7), relief="flat",
+            bg=_BG_SURFACE, fg=_FG_DIM, cursor="hand2", bd=0, padx=2,
+        )
+        self._btn_up.pack(side="right", padx=(6, 0))
+
         # Bind click on all header widgets
         for w in (self.header, self._arrow, self._title, self._count_lbl):
             w.bind("<Button-1>", self.toggle)
@@ -429,6 +441,11 @@ class CategorySection:
         """Wire the per-category Enable All / Disable All buttons."""
         self._btn_enable_all.configure(command=lambda: callback(self, "apply"))
         self._btn_disable_all.configure(command=lambda: callback(self, "remove"))
+
+    def set_on_reorder(self, callback: Callable[[CategorySection, str], None]) -> None:
+        """Wire the ↑/↓ reorder buttons.  *direction* is ``'up'`` or ``'down'``."""
+        self._btn_up.configure(command=lambda: callback(self, "up"))
+        self._btn_down.configure(command=lambda: callback(self, "down"))
 
     def filter_rows(self, query: str) -> bool:
         """Show/hide rows matching query.  Returns True if any row is visible."""
