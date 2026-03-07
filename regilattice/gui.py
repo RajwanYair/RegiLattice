@@ -1352,6 +1352,7 @@ class RegiLatticeGUI:
         total = len(items)
         errors: list[str] = []
         succeeded: list[str] = []
+        succeeded_defs: list[TweakDef] = []
         for i, td in enumerate(items, 1):
             if self._cancel.is_set():
                 self._root.after(0, self._set_status, f"Cancelled after {i - 1}/{total}", _WARN_YELLOW)
@@ -1368,6 +1369,7 @@ class RegiLatticeGUI:
                 fn = td.apply_fn if mode == "apply" else td.remove_fn
                 fn()
                 succeeded.append(td.label)
+                succeeded_defs.append(td)
                 self._session_changed.add(td.id)
             except AdminRequirementError:
                 errors.append(f"{td.label}: requires admin elevation")
@@ -1396,10 +1398,16 @@ class RegiLatticeGUI:
             self._undo_stack.append((mode, list(items)))
             self._root.after(0, lambda: self._btn_undo.state(["!disabled"]))  # type: ignore[no-untyped-call]
 
-        if errors:
+        if errors and succeeded_defs:
+            # Offer rollback of succeeded tweaks when batch had partial failures
             err_text = "\n".join(errors)
-            ok_count = total - len(errors)
+            ok_count = len(succeeded)
             summary = f"{'Applied' if mode == 'apply' else 'Removed'} {ok_count}/{total} tweaks  •  {len(errors)} error(s)"
+            msg = f"{summary}\n\n{err_text}\n\nRollback the {ok_count} successful tweak(s)?"
+            self._root.after(0, lambda: self._offer_rollback(msg, succeeded_defs, mode))
+        elif errors:
+            err_text = "\n".join(errors)
+            summary = f"{'Applied' if mode == 'apply' else 'Removed'} 0/{total} tweaks  •  {len(errors)} error(s)"
             self._root.after(
                 0,
                 lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
@@ -1413,6 +1421,13 @@ class RegiLatticeGUI:
                 0,
                 lambda: messagebox.showinfo("What Changed", f"{action} {len(succeeded)} tweak(s):\n\n{detail}"),
             )
+
+    def _offer_rollback(self, msg: str, succeeded_defs: list[TweakDef], mode: str) -> None:
+        """Show a dialog offering to rollback succeeded tweaks after partial failure."""
+        if messagebox.askyesno("Partial Failure — Rollback?", msg):
+            reverse = "remove" if mode == "apply" else "apply"
+            self._set_status(f"Rolling back {len(succeeded_defs)} tweaks...", _WARN_YELLOW)
+            self._dispatch_raw(succeeded_defs, reverse)
 
     def _undo_last(self) -> None:
         """Reverse the last batch operation by running the opposite mode."""

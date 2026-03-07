@@ -14,17 +14,18 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
       - name: Install dependencies
         run: pip install -e ".[dev]"
       - name: Lint (ruff)
         run: python -m ruff check regilattice/ tests/
       - name: Type check (mypy)
         run: python -m mypy regilattice/
-      - name: Test (pytest)
-        run: python -m pytest tests/ -x --tb=short
+      - name: Test (pytest + coverage)
+        run: python -m pytest tests/ -x --tb=short --cov=regilattice --cov-report=term-missing
