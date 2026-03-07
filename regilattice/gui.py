@@ -359,7 +359,7 @@ class RegiLatticeGUI:
             font=_FONT_XS,
         ).pack(side="left", padx=(0, 4))
         self._theme_var = tk.StringVar(value=theme.current_theme())
-        theme_names = theme.available_themes()
+        theme_names = ["Auto", *theme.available_themes()]
         ttk.OptionMenu(
             theme_frame,
             self._theme_var,
@@ -1021,20 +1021,28 @@ class RegiLatticeGUI:
 
     def _initial_refresh(self) -> None:
         """Kick off status detection in a background thread so the window shows immediately."""
-        self._set_status("Detecting tweak states\u2026", _WARN_YELLOW)
+        self._set_status("Detecting tweak states\u2026 0 %", _WARN_YELLOW)
+
+        def _on_progress(done: int, total: int) -> None:
+            pct = done * 100 // total if total else 100
+            self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))
 
         def _worker() -> None:
-            statuses = status_map(parallel=True, max_workers=8)
+            statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
             self._root.after(0, lambda: self._apply_statuses(statuses))
 
         threading.Thread(target=_worker, daemon=True).start()
 
     def _refresh_status_all(self) -> None:
         """Re-detect every tweak in a background thread and update the UI."""
-        self._set_status("Refreshing tweak states\u2026", _WARN_YELLOW)
+        self._set_status("Refreshing tweak states\u2026 0 %", _WARN_YELLOW)
+
+        def _on_progress(done: int, total: int) -> None:
+            pct = done * 100 // total if total else 100
+            self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))
 
         def _worker() -> None:
-            statuses = status_map(parallel=True, max_workers=8)
+            statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
             self._root.after(0, lambda: self._apply_statuses(statuses))
 
         threading.Thread(target=_worker, daemon=True).start()
@@ -1159,7 +1167,8 @@ class RegiLatticeGUI:
 
     def _switch_theme(self, name: str) -> None:
         """Apply a new colour theme and reconfigure all UI elements."""
-        theme.set_theme(name)
+        resolved = theme.detect_system_theme() if name == "Auto" else name
+        theme.set_theme(resolved)
         self._reload_theme_aliases()
         self._setup_styles()
         self._root.configure(bg=_BG)

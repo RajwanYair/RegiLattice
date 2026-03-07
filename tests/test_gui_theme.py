@@ -139,3 +139,48 @@ class TestThemeSwitchIdempotent:
                 assert theme._THEMES[name]["status_default"] == theme.STATUS_DEFAULT
         finally:
             theme.set_theme(original)
+
+
+class TestDetectSystemTheme:
+    """Test the system theme detection helper."""
+
+    def test_returns_valid_theme(self) -> None:
+        result = theme.detect_system_theme()
+        assert result in theme.available_themes()
+
+    def test_light_theme_on_light_mode(self) -> None:
+        from unittest.mock import MagicMock, patch
+
+        mock_key = MagicMock()
+        mock_key.__enter__ = MagicMock(return_value=mock_key)
+        mock_key.__exit__ = MagicMock(return_value=False)
+
+        with patch("regilattice.gui_theme.winreg") as mock_wr:
+            mock_wr.HKEY_CURRENT_USER = 0x80000001
+            mock_wr.KEY_READ = 0x20019
+            mock_wr.OpenKey.return_value = mock_key
+            mock_wr.QueryValueEx.return_value = (1, 4)
+            assert theme.detect_system_theme() == "Catppuccin Latte"
+
+    def test_dark_theme_on_dark_mode(self) -> None:
+        from unittest.mock import MagicMock, patch
+
+        mock_key = MagicMock()
+        mock_key.__enter__ = MagicMock(return_value=mock_key)
+        mock_key.__exit__ = MagicMock(return_value=False)
+
+        with patch("regilattice.gui_theme.winreg") as mock_wr:
+            mock_wr.HKEY_CURRENT_USER = 0x80000001
+            mock_wr.KEY_READ = 0x20019
+            mock_wr.OpenKey.return_value = mock_key
+            mock_wr.QueryValueEx.return_value = (0, 4)
+            assert theme.detect_system_theme() == "Catppuccin Mocha"
+
+    def test_fallback_on_error(self) -> None:
+        from unittest.mock import patch
+
+        with patch("regilattice.gui_theme.winreg") as mock_wr:
+            mock_wr.HKEY_CURRENT_USER = 0x80000001
+            mock_wr.KEY_READ = 0x20019
+            mock_wr.OpenKey.side_effect = OSError("no key")
+            assert theme.detect_system_theme() == "Catppuccin Mocha"

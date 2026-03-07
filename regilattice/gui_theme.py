@@ -210,3 +210,24 @@ def set_theme(name: str) -> None:
     STATUS_UNKNOWN = WARN_YELLOW
     STATUS_CORP_BLOCKED = ERR_RED
     STATUS_DEFAULT = t["status_default"]
+
+
+def detect_system_theme() -> str:
+    """Detect Windows light/dark preference and return matching theme name.
+
+    Reads ``AppsUseLightTheme`` from the registry.  Returns ``"Catppuccin Latte"``
+    for light mode and ``"Catppuccin Mocha"`` for dark (or fallback).
+    """
+    try:
+        import winreg
+
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+            0,
+            winreg.KEY_READ,
+        ) as key:
+            val, _ = winreg.QueryValueEx(key, "AppsUseLightTheme")
+            return "Catppuccin Latte" if val == 1 else "Catppuccin Mocha"
+    except Exception:
+        return "Catppuccin Mocha"
