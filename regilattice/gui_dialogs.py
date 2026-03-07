@@ -79,6 +79,34 @@ def import_json_selection(
     set_status(f"Imported {count} tweaks from {Path(path).name}", _OK_GREEN)
 
 
+# ── Export JSON ──────────────────────────────────────────────────────────────
+
+
+def export_json_selection(selected: list[TweakDef], set_status: Callable[..., None]) -> None:
+    """Export selected tweak IDs as a JSON file for sharing/reimporting."""
+    if not selected:
+        messagebox.showinfo("Nothing Selected", "Select at least one tweak to export.")
+        return
+    path = filedialog.asksaveasfilename(
+        title="Export Tweak Selection",
+        defaultextension=".json",
+        filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+        initialfile="regilattice_selection.json",
+    )
+    if not path:
+        return
+    data = {
+        "version": __version__,
+        "tweaks": [td.id for td in selected],
+    }
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+        set_status(f"Exported {len(selected)} tweak IDs \u2192 {Path(path).name}", _OK_GREEN)
+    except OSError as exc:
+        messagebox.showerror("Export Error", str(exc))
+
+
 # ── Export PowerShell ────────────────────────────────────────────────────────
 
 

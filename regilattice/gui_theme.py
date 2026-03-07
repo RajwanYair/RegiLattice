@@ -8,7 +8,13 @@ new values after a refresh.
 
 from __future__ import annotations
 
+import sys
 from typing import TypedDict
+
+if sys.platform == "win32":
+    import winreg
+else:
+    winreg = None  # type: ignore[assignment]
 
 # ── Theme data structure ─────────────────────────────────────────────────────
 
@@ -219,8 +225,8 @@ def detect_system_theme() -> str:
     for light mode and ``"Catppuccin Mocha"`` for dark (or fallback).
     """
     try:
-        import winreg
-
+        if winreg is None:
+            return "Catppuccin Mocha"
         with winreg.OpenKey(
             winreg.HKEY_CURRENT_USER,
             r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",

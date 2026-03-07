@@ -80,6 +80,7 @@ _FONT_CAT = theme.FONT_CAT
 _CONFIG_DIR = Path.home() / ".regilattice"
 _GEOMETRY_FILE = _CONFIG_DIR / "window.json"
 _COLLAPSE_FILE = _CONFIG_DIR / "collapsed.json"
+_PREFS_FILE = _CONFIG_DIR / "preferences.json"
 
 
 # ── Main GUI ─────────────────────────────────────────────────────────────────
@@ -114,6 +115,7 @@ class RegiLatticeGUI:
         self._cancel = threading.Event()  # set to request cancellation
         self._loading = True  # True while progressive loading is in progress
         self._undo_stack: list[tuple[str, list[TweakDef]]] = []  # (mode, tweaks)
+        self._session_changed: set[str] = set()  # tweak IDs modified this session
         self._last_clicked_row_idx: int | None = None  # for Shift+Click range select
         self._setup_styles()
         self._build_ui()
@@ -273,6 +275,7 @@ class RegiLatticeGUI:
 
         file_menu = tk.Menu(menubar, tearoff=False)
         file_menu.add_command(label="Import JSON\u2026", command=self._import_json_selection, accelerator="")
+        file_menu.add_command(label="Export JSON\u2026", command=self._export_json_selection)
         file_menu.add_command(label="Export PowerShell\u2026", command=self._export_powershell)
         file_menu.add_command(label="Export Log\u2026", command=self._export_log)
         file_menu.add_separator()
@@ -410,6 +413,7 @@ class RegiLatticeGUI:
             "Applied",
             "Default",
             "Unknown",
+            "Changed",
             command=lambda _: self._filter_rows(),
         )
         filter_menu.pack(side="left")
@@ -550,6 +554,12 @@ class RegiLatticeGUI:
         btn3.pack(fill="x", padx=16, pady=(0, 4))
 
         ttk.Button(btn3, text="\U0001f4c2  Import JSON", command=self._import_json_selection).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
+        )
+        ttk.Button(btn3, text="\U0001f4e4  Export JSON", command=self._export_json_selection).pack(
             side="left",
             padx=(0, 6),
             expand=True,
@@ -734,6 +744,8 @@ class RegiLatticeGUI:
         del self._grouped_items
         # Restore collapsed categories from previous session
         self._restore_collapse_state()
+        # Restore saved preferences (theme, profile, filters)
+        self._restore_preferences()
         # Kick off status detection
         self._initial_refresh()
 
@@ -811,7 +823,10 @@ class RegiLatticeGUI:
             for row in section.rows:
                 td = row.td
                 text_match = matching_ids is None or td.id in matching_ids
-                status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
+                if status_filter == "Changed":
+                    status_match = td.id in self._session_changed
+                else:
+                    status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
                 scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
                 # Prefix operator checks
                 tag_match = all(any(tf in t.lower() for t in td.tags) for tf in tag_filters)
@@ -1213,6 +1228,12 @@ class RegiLatticeGUI:
         """Export selected tweaks as a .ps1 script showing the registry changes."""
         dialogs.export_powershell(self._selected_tweaks(), self._set_status)
 
+    # ── Export as JSON ───────────────────────────────────────────────────
+
+    def _export_json_selection(self) -> None:
+        """Export selected tweak IDs as a JSON file for sharing/reimporting."""
+        dialogs.export_json_selection(self._selected_tweaks(), self._set_status)
+
     # ── Snapshot ─────────────────────────────────────────────────────────
 
     def _save_snapshot(self) -> None:
@@ -1288,10 +1309,21 @@ class RegiLatticeGUI:
             messagebox.showinfo("Nothing Selected", "Select at least one tweak.")
             return
 
-        confirm_msg = f"{'Apply' if mode == 'apply' else 'Remove'} {len(selected)} selected tweak(s)?"
+        action = "Apply" if mode == "apply" else "Remove"
         admin_count = sum(1 for td in selected if td.needs_admin)
+        user_count = sum(1 for td in selected if not td.needs_admin)
+        reg_keys = sum(len(td.registry_keys) for td in selected)
+        cats = sorted({td.category for td in selected})
+
+        summary_lines = [f"{action} {len(selected)} selected tweak(s)?"]
+        summary_lines.append(f"\n  \u2022 {admin_count} admin  /  {user_count} user-level")
+        summary_lines.append(f"  \u2022 {reg_keys} registry key(s) affected")
+        summary_lines.append(f"  \u2022 {len(cats)} categor{'y' if len(cats) == 1 else 'ies'}: {', '.join(cats[:5])}")
+        if len(cats) > 5:
+            summary_lines.append(f"    \u2026 and {len(cats) - 5} more")
         if admin_count:
-            confirm_msg += f"\n\n\u26a0 {admin_count} tweak(s) require admin privileges."
+            summary_lines.append(f"\n\u26a0 {admin_count} tweak(s) require admin privileges.")
+        confirm_msg = "\n".join(summary_lines)
         if not messagebox.askyesno("Confirm", confirm_msg):
             return
 
@@ -1310,6 +1342,7 @@ class RegiLatticeGUI:
     def _run_tweaks(self, items: list[TweakDef], mode: str) -> None:
         total = len(items)
         errors: list[str] = []
+        succeeded: list[str] = []
         for i, td in enumerate(items, 1):
             if self._cancel.is_set():
                 self._root.after(0, self._set_status, f"Cancelled after {i - 1}/{total}", _WARN_YELLOW)
@@ -1325,6 +1358,8 @@ class RegiLatticeGUI:
             try:
                 fn = td.apply_fn if mode == "apply" else td.remove_fn
                 fn()
+                succeeded.append(td.label)
+                self._session_changed.add(td.id)
             except AdminRequirementError:
                 errors.append(f"{td.label}: requires admin elevation")
             except (OSError, RuntimeError, ValueError) as exc:
@@ -1359,6 +1394,15 @@ class RegiLatticeGUI:
             self._root.after(
                 0,
                 lambda: messagebox.showwarning("Completed with Errors", f"{summary}\n\n{err_text}"),
+            )
+        elif succeeded:
+            action = "Applied" if mode == "apply" else "Removed"
+            detail = "\n".join(f"  \u2714 {name}" for name in succeeded[:20])
+            if len(succeeded) > 20:
+                detail += f"\n  \u2026 and {len(succeeded) - 20} more"
+            self._root.after(
+                0,
+                lambda: messagebox.showinfo("What Changed", f"{action} {len(succeeded)} tweak(s):\n\n{detail}"),
             )
 
     def _undo_last(self) -> None:
@@ -1422,6 +1466,7 @@ class RegiLatticeGUI:
         """Handle WM_DELETE_WINDOW: save geometry then destroy."""
         self._save_geometry()
         self._save_collapse_state()
+        self._save_preferences()
         self._root.destroy()
 
     # ── Category collapse persistence ──────────────────────────────────
@@ -1455,6 +1500,51 @@ class RegiLatticeGUI:
     def _on_category_collapse_change(self, _section: CategorySection) -> None:
         """Called when a category section is toggled — saves state to disk."""
         self._save_collapse_state()
+
+    # ── GUI preferences persistence ────────────────────────────────────
+
+    def _save_preferences(self) -> None:
+        """Persist theme, profile, status filter, and scope filter to disk."""
+        prefs = {
+            "theme": self._theme_var.get(),
+            "profile": self._profile_var.get(),
+            "status_filter": self._status_filter_var.get(),
+            "scope_filter": self._scope_filter_var.get(),
+        }
+        try:
+            _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+            _PREFS_FILE.write_text(json.dumps(prefs), encoding="utf-8")
+        except OSError:
+            pass
+
+    def _restore_preferences(self) -> None:
+        """Restore saved preferences from previous session."""
+        try:
+            data = json.loads(_PREFS_FILE.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                return
+        except (OSError, ValueError):
+            return
+
+        if isinstance(data.get("theme"), str):
+            saved_theme = data["theme"]
+            valid = {"Auto", *theme.available_themes()}
+            if saved_theme in valid:
+                self._theme_var.set(saved_theme)
+                self._switch_theme(saved_theme)
+
+        if isinstance(data.get("profile"), str):
+            self._profile_var.set(data["profile"])
+
+        if isinstance(data.get("status_filter"), str):
+            valid_filters = {"All", "Applied", "Default", "Unknown", "Changed"}
+            if data["status_filter"] in valid_filters:
+                self._status_filter_var.set(data["status_filter"])
+
+        if isinstance(data.get("scope_filter"), str):
+            valid_scopes = {"All", "User Only", "Machine Only", "Both"}
+            if data["scope_filter"] in valid_scopes:
+                self._scope_filter_var.set(data["scope_filter"])
 
     # ── Entry point ──────────────────────────────────────────────────────
 
