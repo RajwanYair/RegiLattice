@@ -27,12 +27,14 @@ __all__ = [
     "HWProfile",
     "MemoryInfo",
     "clear_caches",
+    "detect_battery",
     "detect_cpu",
     "detect_disk",
     "detect_gpus",
     "detect_hardware",
     "detect_hyperv",
     "detect_memory",
+    "detect_network_type",
     "detect_secure_boot",
     "detect_tpm",
     "detect_wsl",
@@ -91,6 +93,8 @@ class HWProfile:
     has_wsl: bool = False
     has_tpm: bool = False
     has_secure_boot: bool = False
+    has_battery: bool = False
+    network_type: str = "unknown"
     windows_build: int = 0
     optimal_workers: int = 4
     gui_batch_size: int = 4
@@ -301,6 +305,56 @@ def detect_secure_boot() -> bool:
     return raw.strip().lower() == "true"
 
 
+@functools.lru_cache(maxsize=1)
+def detect_battery() -> bool:
+    """Return True when the machine has a battery (laptop/tablet).
+
+    Uses WMI ``Win32_Battery`` — returns False on desktops and servers.
+    """
+    if os.name != "nt":
+        return False
+    raw = _run_ps("(Get-CimInstance Win32_Battery -ErrorAction SilentlyContinue | Measure-Object).Count")
+    with contextlib.suppress(ValueError):
+        return int(raw.strip()) > 0
+    return False
+
+
+@functools.lru_cache(maxsize=1)
+def detect_network_type() -> str:
+    """Detect the primary active network connection type.
+
+    Returns one of:
+    - ``'vpn'``      — a VPN-named adapter is active
+    - ``'wifi'``     — a 802.11 (Wi-Fi) adapter is active
+    - ``'ethernet'`` — a wired Ethernet adapter is active
+    - ``'unknown'``  — no active adapter matched the above
+    """
+    if os.name != "nt":
+        return "unknown"
+    # Query adapter type for all Status=Up adapters in one PS call
+    raw = _run_ps(
+        "Get-NetAdapter | Where-Object Status -eq Up "
+        "| Select-Object -ExpandProperty InterfaceDescription",
+        timeout=8,
+    )
+    _VPN_KW = ("vpn", "cisco", "anyconnect", "pulse", "globalprotect", "forticlient", "zscaler", "wireguard", "openvpn")
+    has_wifi = False
+    has_ethernet = False
+    for line in raw.splitlines():
+        desc = line.strip().lower()
+        if any(k in desc for k in _VPN_KW):
+            return "vpn"
+        if "wi-fi" in desc or "wireless" in desc or "802.11" in desc:
+            has_wifi = True
+        elif "ethernet" in desc or "realtek" in desc or "intel" in desc or "ndis" in desc:
+            has_ethernet = True
+    if has_wifi:
+        return "wifi"
+    if has_ethernet:
+        return "ethernet"
+    return "unknown"
+
+
 # ── Composite profile ───────────────────────────────────────────────────────
 
 
@@ -338,16 +392,20 @@ def detect_hardware() -> HWProfile:
     disk = detect_disk()
 
     # Run independent probes in parallel (each is a separate subprocess)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         f_hyperv = pool.submit(detect_hyperv)
         f_wsl = pool.submit(detect_wsl)
         f_tpm = pool.submit(detect_tpm)
         f_secboot = pool.submit(detect_secure_boot)
+        f_battery = pool.submit(detect_battery)
+        f_nettype = pool.submit(detect_network_type)
 
         has_hyperv = f_hyperv.result(timeout=15)
         has_wsl = f_wsl.result(timeout=15)
         has_tpm = f_tpm.result(timeout=15)
         has_secboot = f_secboot.result(timeout=15)
+        has_bat = f_battery.result(timeout=15)
+        net_type = f_nettype.result(timeout=15)
 
     build = 0
     with contextlib.suppress(ValueError, AttributeError):
@@ -362,6 +420,8 @@ def detect_hardware() -> HWProfile:
         has_wsl=has_wsl,
         has_tpm=has_tpm,
         has_secure_boot=has_secboot,
+        has_battery=has_bat,
+        network_type=net_type,
         windows_build=build,
         optimal_workers=_compute_optimal_workers(cpu, mem),
         gui_batch_size=_compute_batch_size(cpu, mem),
@@ -376,7 +436,12 @@ def clear_caches() -> None:
     global _CIM_CACHE
     with _CIM_LOCK:
         _CIM_CACHE = None
-    for fn in (detect_cpu, detect_gpus, detect_memory, detect_disk, detect_hyperv, detect_wsl, detect_tpm, detect_secure_boot, detect_hardware):
+    _probes = (
+        detect_cpu, detect_gpus, detect_memory, detect_disk,
+        detect_hyperv, detect_wsl, detect_tpm, detect_secure_boot,
+        detect_battery, detect_network_type, detect_hardware,
+    )
+    for fn in _probes:
         fn.cache_clear()
 
 
@@ -439,5 +504,8 @@ def hardware_summary(hw: HWProfile | None = None) -> str:
     if caps:
         lines.append(f"Caps: {', '.join(caps)}")
 
+    lines.append(f"Network: {hw.network_type}")
+    if hw.has_battery:
+        lines.append("Battery: detected (laptop/tablet)")
     lines.append(f"Tuning: {hw.optimal_workers} workers, batch {hw.gui_batch_size}")
     return "\n".join(lines)
