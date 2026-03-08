@@ -295,3 +295,82 @@ class TestReadCacheContext:
             from regilattice.registry import _ReadCacheContext
 
             assert isinstance(ctx, _ReadCacheContext)
+
+
+# ── New C7 method tests (dry-run / non-Windows) ────────────────────────────
+
+
+class TestNewReadWriteMethods:
+    """Tests for read_binary, read_qword, set_binary, set_qword in dry-run mode."""
+
+    def test_set_binary_logs_dry_run(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        session.set_binary(r"HKLM\Software\Test", "blob", b"\xde\xad\xbe\xef")
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "[DRY-RUN]" in log
+
+    def test_set_qword_logs_dry_run(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        session.set_qword(r"HKLM\Software\Test", "big", 2**40)
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "[DRY-RUN]" in log
+
+    def test_set_binary_and_set_qword_are_logged_with_key(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        session.set_binary(r"HKLM\Software\BinTest", "data", b"\x00\xff")
+        session.set_qword(r"HKLM\Software\QTest", "q", 123456789)
+        log = session.log_path.read_text(encoding="utf-8")
+        assert "BinTest" in log
+        assert "QTest" in log
+
+    @pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+    def test_read_binary_missing_returns_none(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.read_binary(r"HKEY_CURRENT_USER\Software\__RL_Missing__", "blob")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+    def test_read_qword_missing_returns_none(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.read_qword(r"HKEY_CURRENT_USER\Software\__RL_Missing__", "q")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+    def test_list_values_missing_returns_empty(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.list_values(r"HKEY_CURRENT_USER\Software\__RL_NoSuchKey__")
+        assert result == []
+
+    @pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+    def test_list_keys_missing_returns_empty(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        result = session.list_keys(r"HKEY_CURRENT_USER\Software\__RL_NoSuchKey__")
+        assert result == []
+
+
+# ── _split_root cache coherence ──────────────────────────────────────────────
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestSplitRootCache:
+    """Verify _split_root is stable and consistent."""
+
+    def test_same_result_on_repeated_calls(self) -> None:
+        path = r"HKEY_LOCAL_MACHINE\SOFTWARE\TestRepeat"
+        r1 = _split_root(path)
+        r2 = _split_root(path)
+        assert r1 == r2
+
+    def test_case_insensitive_root_resolution(self) -> None:
+        """Both casings resolve to the same root handle (subkey preserves original case)."""
+        r1_root, _ = _split_root(r"HKEY_LOCAL_MACHINE\SOFTWARE\X")
+        r2_root, _ = _split_root(r"hkey_local_machine\SOFTWARE\X")
+        assert r1_root == r2_root
+
+    def test_prefix_list_sorted_longest_first(self) -> None:
+        from regilattice.registry import _PREFIX_LIST
+
+        if not _PREFIX_LIST:
+            pytest.skip("_PREFIX_LIST empty (non-Windows CI)")
+        for i in range(len(_PREFIX_LIST) - 1):
+            assert len(_PREFIX_LIST[i][0]) >= len(_PREFIX_LIST[i + 1][0])
