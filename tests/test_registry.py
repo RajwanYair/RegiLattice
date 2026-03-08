@@ -6,7 +6,7 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -374,3 +374,138 @@ class TestSplitRootCache:
             pytest.skip("_PREFIX_LIST empty (non-Windows CI)")
         for i in range(len(_PREFIX_LIST) - 1):
             assert len(_PREFIX_LIST[i][0]) >= len(_PREFIX_LIST[i + 1][0])
+
+
+# ── C11 Phase 43: list_values / list_keys with mocked winreg ─────────────────
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestListValuesWithMock:
+    """Verify list_values() correctly maps winreg.EnumValue tuples."""
+
+    def test_list_values_returns_name_value_type_tuples(self, tmp_path: Path) -> None:
+        import winreg
+
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        enum_responses: list[object] = [
+            ("MyDword", 42, winreg.REG_DWORD),
+            ("MyStr", "hello", winreg.REG_SZ),
+            OSError("no more"),
+        ]
+
+        session = RegistrySession(base_dir=tmp_path)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.EnumValue", side_effect=enum_responses),
+        ):
+            result = session.list_values(r"HKEY_CURRENT_USER\Software\TestListVal")
+
+        assert len(result) == 2
+        assert result[0] == ("MyDword", 42, winreg.REG_DWORD)
+        assert result[1] == ("MyStr", "hello", winreg.REG_SZ)
+
+    def test_list_values_empty_key_returns_empty(self, tmp_path: Path) -> None:
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        session = RegistrySession(base_dir=tmp_path)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.EnumValue", side_effect=[OSError("empty")]),
+        ):
+            result = session.list_values(r"HKEY_CURRENT_USER\Software\TestEmpty")
+
+        assert result == []
+
+    def test_list_values_openkey_fails_returns_empty(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        with patch("regilattice.registry.winreg.OpenKey", side_effect=FileNotFoundError("no key")):
+            result = session.list_values(r"HKEY_CURRENT_USER\Software\NoSuchKey999")
+        assert result == []
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestListKeysWithMock:
+    """Verify list_keys() correctly maps winreg.EnumKey results."""
+
+    def test_list_keys_returns_subkey_names(self, tmp_path: Path) -> None:
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        enum_responses: list[object] = ["SubA", "SubB", OSError("no more")]
+
+        session = RegistrySession(base_dir=tmp_path)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.EnumKey", side_effect=enum_responses),
+        ):
+            result = session.list_keys(r"HKEY_CURRENT_USER\Software\TestListKeys")
+
+        assert result == ["SubA", "SubB"]
+
+    def test_list_keys_empty_key_returns_empty(self, tmp_path: Path) -> None:
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        session = RegistrySession(base_dir=tmp_path)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.EnumKey", side_effect=[OSError("empty")]),
+        ):
+            result = session.list_keys(r"HKEY_CURRENT_USER\Software\TestEmpty2")
+
+        assert result == []
+
+
+# ── C11 Phase 44: set_binary / set_qword call winreg.SetValueEx ──────────────
+
+
+@pytest.mark.skipif(not is_windows(), reason="winreg unavailable")
+class TestSetBinaryQwordCallsWinreg:
+    """Verify set_binary / set_qword call SetValueEx with correct type constants."""
+
+    def test_set_binary_uses_reg_binary_type(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx") as mock_set,
+        ):
+            session.set_binary(r"HKEY_CURRENT_USER\Software\BinTest", "blob", b"\xde\xad\xbe\xef")
+
+        mock_set.assert_called_once()
+        _handle, name, _zero, reg_type, value = mock_set.call_args.args
+        assert reg_type == winreg.REG_BINARY
+        assert name == "blob"
+        assert value == b"\xde\xad\xbe\xef"
+
+    def test_set_qword_uses_reg_qword_type(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx") as mock_set,
+        ):
+            session.set_qword(r"HKEY_CURRENT_USER\Software\QTest", "bignum", 2**40)
+
+        mock_set.assert_called_once()
+        _handle, name, _zero, reg_type, value = mock_set.call_args.args
+        assert reg_type == winreg.REG_QWORD
+        assert name == "bignum"
+        assert value == 2**40

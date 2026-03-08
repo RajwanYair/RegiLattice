@@ -1231,3 +1231,120 @@ class TestTweaksByIdsAndTag:
             pytest.skip("No tweaks with tags")
         tag = tagged[0].tags[0]
         assert tweaks_by_tag(tag.lower()) == tweaks_by_tag(tag.upper())
+
+
+# ── C11 Phase 45: status_map parallel + progress_fn edge cases ───────────────
+
+
+class TestStatusMapParallelAndProgress:
+    """Edge cases for status_map with parallel=True and progress_fn tracking."""
+
+    def test_status_map_parallel_ids_subset(self, all_tweaks_list: list[TweakDef]) -> None:
+        """parallel=True + ids= restriction returns only the requested IDs."""
+        subset = [all_tweaks_list[0].id, all_tweaks_list[1].id]
+        result = status_map(ids=subset, parallel=True)
+        assert set(result.keys()) == set(subset)
+
+    def test_status_map_parallel_returns_tweak_results(self, all_tweaks_list: list[TweakDef]) -> None:
+        """All values are TweakResult instances."""
+        ids = [td.id for td in all_tweaks_list[:3]]
+        result = status_map(ids=ids, parallel=True)
+        assert all(isinstance(v, TweakResult) for v in result.values())
+
+    def test_status_map_progress_fn_called_exact_times(self, all_tweaks_list: list[TweakDef]) -> None:
+        """progress_fn(done, total) is invoked once per tweak (sequential)."""
+        ids = [td.id for td in all_tweaks_list[:4]]
+        calls: list[tuple[int, int]] = []
+        status_map(ids=ids, parallel=False, progress_fn=lambda d, t: calls.append((d, t)))
+        assert len(calls) == 4
+        # done increments 1..N
+        assert [d for d, _ in calls] == [1, 2, 3, 4]
+        # total is always the same
+        assert all(t == 4 for _, t in calls)
+
+    def test_status_map_progress_fn_parallel(self, all_tweaks_list: list[TweakDef]) -> None:
+        """progress_fn is called for each tweak in parallel mode too."""
+        ids = [td.id for td in all_tweaks_list[:3]]
+        call_count: list[int] = []
+        status_map(ids=ids, parallel=True, progress_fn=lambda d, t: call_count.append(d))
+        assert len(call_count) == 3
+
+    def test_status_map_empty_ids_returns_empty(self) -> None:
+        """status_map(ids=[]) returns empty dict."""
+        result = status_map(ids=[])
+        assert result == {}
+
+    def test_status_map_unknown_ids_skipped(self) -> None:
+        """Unknown IDs are silently excluded from results."""
+        result = status_map(ids=["zzz_no_exist_xyz_99999"])
+        assert result == {}
+
+
+# ── C11 Phase 46: apply_tweaks(include_deps=True) pulls in dependencies ──────
+
+
+class TestApplyTweaksIncludeDeps:
+    """Verify that apply_tweaks resolves and includes dependency tweaks."""
+
+    @patch("regilattice.tweaks._TWEAK_INDEX")
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    def test_include_deps_calls_dep_apply_fn(self, mock_all: list, mock_index: MagicMock) -> None:
+        """When include_deps=True, dependency apply_fn is called before the main tweak."""
+        dep_fn = MagicMock()
+        main_fn = MagicMock()
+
+        dep_td = TweakDef(id="dep.one", label="Dep", category="C", apply_fn=dep_fn, remove_fn=MagicMock(), corp_safe=True)
+        main_td = TweakDef(id="main.one", label="Main", category="C", apply_fn=main_fn, remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.one"])
+
+        mock_all.extend([dep_td, main_td])
+        mock_index.__getitem__ = MagicMock(side_effect=lambda k: {"dep.one": dep_td, "main.one": main_td}[k])
+        mock_index.__contains__ = MagicMock(side_effect=lambda k: k in {"dep.one", "main.one"})
+        mock_index.get = MagicMock(side_effect=lambda k, default=None: {"dep.one": dep_td, "main.one": main_td}.get(k, default))
+
+        with patch("regilattice.tweaks.tweaks_by_ids", return_value=[main_td]):
+            result = apply_tweaks(["main.one"], force_corp=True, include_deps=True)
+
+        dep_fn.assert_called_once()
+        main_fn.assert_called_once()
+        assert result.get("main.one") == TweakResult.APPLIED
+
+    @patch("regilattice.tweaks._TWEAK_INDEX")
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    def test_include_deps_false_does_not_call_dep_fn(self, mock_all: list, mock_index: MagicMock) -> None:
+        """When include_deps=False, dependency apply_fn is NOT called."""
+        dep_fn = MagicMock()
+        main_fn = MagicMock()
+
+        dep_td = TweakDef(id="dep.two", label="Dep2", category="C", apply_fn=dep_fn, remove_fn=MagicMock(), corp_safe=True)
+        main_td = TweakDef(
+            id="main.two", label="Main2", category="C",
+            apply_fn=main_fn, remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.two"],
+        )
+
+        mock_all.extend([dep_td, main_td])
+        mock_index.__getitem__ = MagicMock(side_effect=lambda k: {"dep.two": dep_td, "main.two": main_td}[k])
+        mock_index.__contains__ = MagicMock(side_effect=lambda k: k in {"dep.two", "main.two"})
+        mock_index.get = MagicMock(side_effect=lambda k, default=None: {"dep.two": dep_td, "main.two": main_td}.get(k, default))
+
+        with patch("regilattice.tweaks.tweaks_by_ids", return_value=[main_td]):
+            apply_tweaks(["main.two"], force_corp=True, include_deps=False)
+
+        dep_fn.assert_not_called()
+        main_fn.assert_called_once()
+
+    def test_apply_tweaks_unknown_dep_silently_skipped(self) -> None:
+        """If a dependency ID doesn't exist in the index, apply still runs main tweak."""
+        fn = MagicMock()
+        td = TweakDef(
+            id="orphan.main",
+            label="Orphan",
+            category="C",
+            apply_fn=fn,
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            depends_on=["does.not.exist.zzz"],
+        )
+        with patch("regilattice.tweaks.tweaks_by_ids", return_value=[td]):
+            result = apply_tweaks(["orphan.main"], force_corp=True, include_deps=True)
+        fn.assert_called_once()
+        assert result.get("orphan.main") == TweakResult.APPLIED
