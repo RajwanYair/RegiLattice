@@ -22,6 +22,16 @@ if os.name == "nt":
 else:  # pragma: no cover — guard for non-Windows CI
     winreg = None  # type: ignore[assignment]
 
+__all__ = [
+    "BASE_DIR",
+    "SESSION",
+    "AdminRequirementError",
+    "RegistrySession",
+    "assert_admin",
+    "is_windows",
+    "platform_summary",
+]
+
 # ── Root-hive mapping ────────────────────────────────────────────────────────
 
 _ROOTS: dict[str, int | None] = {}

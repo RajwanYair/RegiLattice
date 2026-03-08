@@ -20,6 +20,26 @@ import subprocess
 import threading
 from dataclasses import dataclass, field
 
+__all__ = [
+    "CPUInfo",
+    "DiskInfo",
+    "GPUInfo",
+    "HWProfile",
+    "MemoryInfo",
+    "clear_caches",
+    "detect_cpu",
+    "detect_disk",
+    "detect_gpus",
+    "detect_hardware",
+    "detect_hyperv",
+    "detect_memory",
+    "detect_secure_boot",
+    "detect_tpm",
+    "detect_wsl",
+    "hardware_summary",
+    "suggest_profile",
+]
+
 # ── Dataclasses ──────────────────────────────────────────────────────────────
 
 
