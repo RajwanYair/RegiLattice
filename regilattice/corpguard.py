@@ -10,6 +10,7 @@ import concurrent.futures
 import functools
 import re
 import subprocess
+import threading
 from collections.abc import Callable
 
 from .registry import SESSION, is_windows
@@ -363,6 +364,7 @@ def _derive_policy_path(key: str) -> str | None:
 
 _corp_cache: bool | None = None
 _corp_reasons: list[str] = []
+_corp_lock = threading.Lock()
 
 _CHECK_NAMES: list[tuple[str, str, str]] = [
     ("domain-join", "AD domain-joined", "_is_domain_joined"),
@@ -380,8 +382,13 @@ def _run_corp_checks() -> tuple[bool, list[str]]:
     reducing worst-case time from ~50s sequential to ~10s parallel.
     """
     global _corp_cache, _corp_reasons
+    # Fast path without lock (already populated)
     if _corp_cache is not None:
         return _corp_cache, list(_corp_reasons)
+    with _corp_lock:
+        # Double-checked locking inside the lock
+        if _corp_cache is not None:
+            return _corp_cache, list(_corp_reasons)
 
     import sys
 
@@ -407,8 +414,9 @@ def _run_corp_checks() -> tuple[bool, list[str]]:
     if not is_corp:
         SESSION.log("Corp-guard: no corporate indicators found")
 
-    _corp_cache = is_corp
-    _corp_reasons = reasons
+    with _corp_lock:
+        _corp_cache = is_corp
+        _corp_reasons = reasons
     return is_corp, reasons
 
 

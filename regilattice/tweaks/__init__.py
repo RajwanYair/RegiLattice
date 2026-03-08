@@ -14,6 +14,7 @@ import json
 import os
 import pkgutil
 import platform
+import threading
 import warnings
 from collections import OrderedDict, deque
 from collections.abc import Callable
@@ -182,12 +183,14 @@ def all_tweaks() -> list[TweakDef]:
 
 # Scope cache — avoids repeated upper() + startswith() per tweak row
 _SCOPE_CACHE: dict[str, str] = {}
+_SCOPE_LOCK = threading.Lock()
 
 
 def tweak_scope(td: TweakDef) -> str:
     """Return ``'user'``, ``'machine'``, or ``'both'`` based on registry keys.
 
     Results are cached by tweak id for fast GUI lookups.
+    Thread-safe: multiple threads can compute scope concurrently.
     """
     cached = _SCOPE_CACHE.get(td.id)
     if cached is not None:
@@ -203,7 +206,9 @@ def tweak_scope(td: TweakDef) -> str:
             result = "user"
         else:
             result = "machine"
-    _SCOPE_CACHE[td.id] = result
+    # Harmless race: two threads computing the same idempotent value; use lock only for write
+    with _SCOPE_LOCK:
+        _SCOPE_CACHE[td.id] = result
     return result
 
 
@@ -214,8 +219,10 @@ def get_tweak(tweak_id: str) -> TweakDef | None:
 
 def reload_plugins() -> None:
     """Re-scan sub-modules (useful after hot-adding a plugin)."""
-    _SCOPE_CACHE.clear()
-    _SEARCH_INDEX.clear()
+    with _SCOPE_LOCK:
+        _SCOPE_CACHE.clear()
+    with _SEARCH_LOCK:
+        _SEARCH_INDEX.clear()
     _load_plugins()
     _build_category_info()
 
@@ -241,6 +248,7 @@ def search_tweaks(query: str) -> list[TweakDef]:
 
 # Pre-built search index for fast full-text scanning
 _SEARCH_INDEX: dict[str, str] = {}
+_SEARCH_LOCK = threading.Lock()
 
 
 def _get_search_index(td: TweakDef) -> str:
@@ -250,7 +258,8 @@ def _get_search_index(td: TweakDef) -> str:
         return cached
     sep = "\0"
     result = sep.join([td.id, td.label, td.category, td.description, *td.tags]).lower()
-    _SEARCH_INDEX[td.id] = result
+    with _SEARCH_LOCK:
+        _SEARCH_INDEX[td.id] = result
     return result
 
 

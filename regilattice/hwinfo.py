@@ -17,6 +17,7 @@ import os
 import platform
 import re
 import subprocess
+import threading
 from dataclasses import dataclass, field
 
 # ── Dataclasses ──────────────────────────────────────────────────────────────
@@ -113,16 +114,23 @@ foreach ($g in $gpus) { "GPU:" + $g.Name + "|" + $g.DriverVersion + "|" + $g.Ada
 """
 
 _CIM_CACHE: dict[str, str] | None = None
+_CIM_LOCK = threading.Lock()
 
 
 def _run_composite_cim() -> dict[str, str]:
     """Execute one PowerShell process for all CIM probes and return parsed results.
 
     Returns a dict like ``{"CPU_NAME": "...", "GPU:0": "NVIDIA...|31...|bytes", ...}``.
+    Thread-safe: only one PowerShell process is launched even under concurrency.
     """
     global _CIM_CACHE
+    # Fast path without lock (already populated)
     if _CIM_CACHE is not None:
         return _CIM_CACHE
+    with _CIM_LOCK:
+        # Double-checked locking — re-check inside the lock
+        if _CIM_CACHE is not None:
+            return _CIM_CACHE
 
     raw = _run_ps(_COMPOSITE_PS, timeout=12)
     result: dict[str, str] = {}
@@ -138,7 +146,8 @@ def _run_composite_cim() -> dict[str, str]:
             key, _, val = line.partition(":")
             result[key.strip()] = val.strip()
     result["GPU_COUNT"] = str(gpu_idx)
-    _CIM_CACHE = result
+    with _CIM_LOCK:
+        _CIM_CACHE = result
     return result
 
 
@@ -345,7 +354,8 @@ def detect_hardware() -> HWProfile:
 def clear_caches() -> None:
     """Reset all hardware detection caches — useful for testing."""
     global _CIM_CACHE
-    _CIM_CACHE = None
+    with _CIM_LOCK:
+        _CIM_CACHE = None
     for fn in (detect_cpu, detect_gpus, detect_memory, detect_disk, detect_hyperv, detect_wsl, detect_tpm, detect_secure_boot, detect_hardware):
         fn.cache_clear()
 
