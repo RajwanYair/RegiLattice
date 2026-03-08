@@ -4,18 +4,27 @@
   "extraPaths": [
     "."
   ],
+  // ── Justified suppressions (architectural / platform reasons) ──────
+  // mypy uses `# type: ignore` for ctypes.windll; Pyright doesn't need them.
   "reportUnnecessaryTypeIgnoreComment": false,
+  // winreg module source unavailable in stubs on non-Windows CI.
   "reportMissingModuleSource": false,
+  // require_admin kwarg is part of TweakDef API contract (unused in HKCU tweaks).
   "reportUnusedParameter": false,
+  // tkinter widget methods return values we intentionally discard.
   "reportUnusedCallResult": false,
-  "reportGeneralTypeIssues": false,
-  "reportCallIssue": false,
-  "reportReturnType": false,
+  // ctypes.windll and tkinter internal attributes lack type stubs.
   "reportAttributeAccessIssue": false,
-  "reportAssignmentType": false,
-  "reportUntypedFunctionDecorator": false,
-  "reportOptionalMemberAccess": false,
+  // Tests validate private members (_dry_run, _apply_*, etc.).
+  "reportPrivateUsage": false,
+  // Handled by ruff RUF rules.
   "reportImplicitStringConcatenation": false,
+  // ctypes/tkinter dynamic members lack full type information.
   "reportUnknownMemberType": false,
-  "reportPrivateUsage": false
+  // @patch and custom decorators lack type stubs.
+  "reportUntypedFunctionDecorator": false,
+  // @patch decorator stacks lose return-type narrowing for Optional results.
+  "reportOptionalMemberAccess": false,
+  // @patch decorator stacks lose type narrowing for membership/containment tests.
+  "reportGeneralTypeIssues": false
 }

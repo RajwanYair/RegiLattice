@@ -11,7 +11,9 @@ from unittest.mock import patch
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from regilattice.registry import AdminRequirementError, RegistrySession, _split_root, assert_admin, is_windows, platform_summary
+from regilattice.registry import (AdminRequirementError, RegistrySession,
+                                  _split_root, assert_admin, is_windows,
+                                  platform_summary)
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 
@@ -260,3 +262,38 @@ class TestRetryOnTransient:
 
         with patch("regilattice.registry.time.sleep"), pytest.raises(OSError, match="access denied"):
             _retry_on_transient(fn)
+
+
+# ── ReadCacheContext tests ───────────────────────────────────────────────────
+
+
+class TestReadCacheContext:
+    """Tests for the read_cache() context manager."""
+
+    def test_context_enables_cache(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        assert not session._read_cache_enabled
+        with session.read_cache():
+            assert session._read_cache_enabled
+        assert not session._read_cache_enabled
+
+    def test_context_clears_on_exit(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        with session.read_cache():
+            session._read_cache[("p", "n", "dword")] = 42
+        assert len(session._read_cache) == 0
+
+    def test_context_clears_on_exception(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        with pytest.raises(ValueError, match="boom"):
+            with session.read_cache():
+                session._read_cache[("p", "n", "dword")] = 1
+                raise ValueError("boom")
+        assert not session._read_cache_enabled
+        assert len(session._read_cache) == 0
+
+    def test_context_returns_self(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path, _dry_run=True)
+        with session.read_cache() as ctx:
+            from regilattice.registry import _ReadCacheContext
+            assert isinstance(ctx, _ReadCacheContext)

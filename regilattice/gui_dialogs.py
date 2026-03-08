@@ -311,7 +311,7 @@ def open_scoop_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> N
 # ── About dialog ─────────────────────────────────────────────────────────────
 
 
-def show_about(corp_blocked: bool) -> None:
+def show_about(corp_blocked: bool, hw_summary: str = "") -> None:
     """Show an About dialog with system and project info."""
     total = len(all_tweaks())
     cats = len(tweaks_by_category())
@@ -323,6 +323,10 @@ def show_about(corp_blocked: bool) -> None:
         f"Platform: {platform_summary()}",
         f"Corporate: {corp}",
         f"Python: {sys.version.split()[0]}",
+    ]
+    if hw_summary:
+        info_lines += ["", "─── Hardware ───", hw_summary]
+    info_lines += [
         "",
         f"Log: {SESSION.log_path}",
         "",

@@ -11,6 +11,7 @@ import concurrent.futures
 import functools
 import importlib
 import json
+import os
 import pkgutil
 import platform
 import warnings
@@ -277,14 +278,24 @@ def _register_profiles() -> None:
             description="Business workstation — productivity, security, cloud & workflow tweaks",
             apply_categories=frozenset(
                 {
+                    "Adobe",
                     "Backup & Recovery",
+                    "Boot",
+                    "Chrome",
+                    "Clipboard & Drag-Drop",
                     "Cloud Storage",
                     "Communication",
+                    "Context Menu",
                     "Cortana & Search",
+                    "Crash & Diagnostics",
+                    "Developer Tools",
                     "Display",
                     "Edge",
                     "Explorer",
+                    "File System",
+                    "Fonts",
                     "Indexing & Search",
+                    "Lock Screen & Login",
                     "M365 Copilot",
                     "Maintenance",
                     "Network",
@@ -292,13 +303,19 @@ def _register_profiles() -> None:
                     "Office",
                     "OneDrive",
                     "Performance",
+                    "Power",
                     "Printing",
                     "Privacy",
                     "Scheduled Tasks",
                     "Security",
+                    "Services",
+                    "Shell",
                     "Snap & Multitasking",
                     "Startup",
+                    "System",
                     "Taskbar",
+                    "Telemetry Advanced",
+                    "Windows 11",
                     "Windows Update",
                 }
             ),
@@ -310,8 +327,14 @@ def _register_profiles() -> None:
             apply_categories=frozenset(
                 {
                     "Audio",
+                    "Bluetooth",
                     "Boot",
+                    "Context Menu",
+                    "Crash & Diagnostics",
                     "Display",
+                    "DNS & Networking Advanced",
+                    "Explorer",
+                    "File System",
                     "Gaming",
                     "GPU / Graphics",
                     "Indexing & Search",
@@ -322,9 +345,14 @@ def _register_profiles() -> None:
                     "Performance",
                     "Power",
                     "Privacy",
+                    "Scheduled Tasks",
+                    "Screensaver & Lock",
                     "Services",
+                    "Shell",
                     "Startup",
                     "Storage",
+                    "System",
+                    "Taskbar",
                     "Telemetry Advanced",
                     "USB & Peripherals",
                     "Widgets & News",
@@ -350,6 +378,7 @@ def _register_profiles() -> None:
             description="Maximum privacy — disables telemetry, tracking, cloud & browser data collection",
             apply_categories=frozenset(
                 {
+                    "Adobe",
                     "AI / Copilot",
                     "Chrome",
                     "Cloud Storage",
@@ -362,11 +391,20 @@ def _register_profiles() -> None:
                     "Indexing & Search",
                     "Lock Screen & Login",
                     "M365 Copilot",
+                    "Maintenance",
                     "Microsoft Store",
+                    "Network",
                     "Notifications",
+                    "Office",
                     "OneDrive",
+                    "Performance",
                     "Privacy",
                     "Scheduled Tasks",
+                    "Screensaver & Lock",
+                    "Security",
+                    "Services",
+                    "Startup",
+                    "System",
                     "Telemetry Advanced",
                     "Widgets & News",
                     "Windows 11",
@@ -381,17 +419,24 @@ def _register_profiles() -> None:
                 {
                     "Boot",
                     "Context Menu",
+                    "Crash & Diagnostics",
                     "Explorer",
+                    "File System",
                     "Indexing & Search",
+                    "Lock Screen & Login",
                     "Maintenance",
                     "Notifications",
                     "Performance",
                     "Power",
+                    "Privacy",
                     "Scheduled Tasks",
+                    "Security",
                     "Services",
+                    "Shell",
                     "Startup",
                     "Storage",
                     "System",
+                    "Telemetry Advanced",
                     "Widgets & News",
                     "Windows Update",
                 }
@@ -404,23 +449,32 @@ def _register_profiles() -> None:
                 {
                     "Backup & Recovery",
                     "Boot",
+                    "Context Menu",
                     "Crash & Diagnostics",
                     "DNS & Networking Advanced",
+                    "Explorer",
+                    "File System",
                     "Indexing & Search",
                     "Lock Screen & Login",
                     "Maintenance",
                     "Network",
+                    "Notifications",
+                    "Package Management",
                     "Performance",
                     "Power",
+                    "Privacy",
                     "Remote Desktop",
                     "Scheduled Tasks",
                     "Security",
                     "Services",
+                    "Shell",
                     "Startup",
                     "Storage",
                     "System",
+                    "Telemetry Advanced",
                     "Virtualization",
                     "Windows Update",
+                    "WSL",
                 }
             ),
             skip_categories=frozenset(
@@ -536,32 +590,46 @@ def tweak_status(td: TweakDef) -> TweakResult:
 def status_map(
     *,
     parallel: bool = False,
-    max_workers: int = 8,
+    max_workers: int = 0,
     progress_fn: Callable[[int, int], None] | None = None,
 ) -> dict[str, TweakResult]:
     """Return ``{tweak_id: TweakResult}`` for every registered tweak.
 
     With ``parallel=True`` the detection runs in a thread-pool for faster GUI refresh.
     *progress_fn(done, total)* is called after each tweak completes (thread-safe).
+    *max_workers* defaults to ``min(8, cpu_count)`` when 0.
     """
+    from regilattice.registry import SESSION
+
+    if max_workers <= 0:
+        try:
+            from regilattice.hwinfo import detect_hardware
+            max_workers = detect_hardware().optimal_workers
+        except Exception:
+            max_workers = min(8, os.cpu_count() or 4)
     total = len(_ALL_TWEAKS)
-    if not parallel:
-        results: dict[str, TweakResult] = {}
-        for i, td in enumerate(_ALL_TWEAKS):
-            results[td.id] = tweak_status(td)
-            if progress_fn is not None:
-                progress_fn(i + 1, total)
+    with SESSION.read_cache():
+        if not parallel:
+            results: dict[str, TweakResult] = {}
+            for i, td in enumerate(_ALL_TWEAKS):
+                results[td.id] = tweak_status(td)
+                if progress_fn is not None:
+                    progress_fn(i + 1, total)
+            return results
+        results = {}
+        done = 0
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
+            futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
+            for fut in concurrent.futures.as_completed(futures, timeout=120):
+                tid = futures[fut]
+                try:
+                    results[tid] = fut.result(timeout=10)
+                except Exception:
+                    results[tid] = TweakResult.UNKNOWN
+                done += 1
+                if progress_fn is not None:
+                    progress_fn(done, total)
         return results
-    results = {}
-    done = 0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
-        for fut in concurrent.futures.as_completed(futures):
-            results[futures[fut]] = fut.result()
-            done += 1
-            if progress_fn is not None:
-                progress_fn(done, total)
-    return results
 
 
 # ── Snapshot / Undo ──────────────────────────────────────────────────────────
@@ -774,8 +842,12 @@ class TweakExecutor:
         if parallel:
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
                 futures = {pool.submit(_do, td): td for td in ordered}
-                for fut in concurrent.futures.as_completed(futures):
-                    tid, res = fut.result()
+                for fut in concurrent.futures.as_completed(futures, timeout=300):
+                    tid_key = futures[fut]
+                    try:
+                        tid, res = fut.result(timeout=30)
+                    except Exception:
+                        tid, res = tid_key.id, TweakResult.ERROR
                     results[tid] = res
                     if progress_cb:
                         progress_cb(tid, res)

@@ -6,9 +6,11 @@ VPN-connected, Group-Policy-managed, or otherwise managed machines.
 
 from __future__ import annotations
 
+import concurrent.futures
 import functools
 import re
 import subprocess
+from collections.abc import Callable
 
 from .registry import SESSION, is_windows
 
@@ -360,6 +362,57 @@ def _derive_policy_path(key: str) -> str | None:
 
 
 _corp_cache: bool | None = None
+_corp_reasons: list[str] = []
+
+_CHECK_NAMES: list[tuple[str, str, str]] = [
+    ("domain-join", "AD domain-joined", "_is_domain_joined"),
+    ("azure-ad", "Azure AD joined", "_is_azure_ad_joined"),
+    ("vpn-adapter", "VPN connected", "_has_vpn_adapter"),
+    ("mgmt-agent", "Managed (SCCM/Intune)", "_has_management_agent"),
+    ("group-policy", "Group Policy active", "_has_group_policy"),
+]
+
+
+def _run_corp_checks() -> tuple[bool, list[str]]:
+    """Run all corporate detection checks in parallel, returning (is_corp, reasons).
+
+    Each check is independent so they run concurrently in a thread pool,
+    reducing worst-case time from ~50s sequential to ~10s parallel.
+    """
+    global _corp_cache, _corp_reasons  # noqa: PLW0603
+    if _corp_cache is not None:
+        return _corp_cache, list(_corp_reasons)
+
+    import sys
+
+    _this = sys.modules[__name__]
+    reasons: list[str] = []
+
+    def _run_single(name: str, label: str, fn_name: str) -> tuple[str, str, bool]:
+        try:
+            fn: Callable[[], bool] = getattr(_this, fn_name)
+            return name, label, fn()
+        except Exception as exc:
+            SESSION.log(f"Corp-guard: {name} check failed: {exc}")
+            return name, label, False
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+        futures = [
+            pool.submit(_run_single, name, label, fn_name)
+            for name, label, fn_name in _CHECK_NAMES
+        ]
+        for future in concurrent.futures.as_completed(futures, timeout=30):
+            _name, label, detected = future.result(timeout=15)
+            if detected:
+                reasons.append(label)
+
+    is_corp = bool(reasons)
+    if not is_corp:
+        SESSION.log("Corp-guard: no corporate indicators found")
+
+    _corp_cache = is_corp
+    _corp_reasons = reasons
+    return is_corp, reasons
 
 
 def is_corporate_network() -> bool:
@@ -374,27 +427,7 @@ def is_corporate_network() -> bool:
     4. SCCM / Intune management agent
     5. Group Policy enforcement
     """
-    global _corp_cache
-    if _corp_cache is not None:
-        return _corp_cache
-    checks = [
-        ("domain-join", _is_domain_joined),
-        ("azure-ad", _is_azure_ad_joined),
-        ("vpn-adapter", _has_vpn_adapter),
-        ("mgmt-agent", _has_management_agent),
-        ("group-policy", _has_group_policy),
-    ]
-    for name, fn in checks:
-        try:
-            if fn():
-                _corp_cache = True
-                return True
-        except Exception as exc:
-            SESSION.log(f"Corp-guard: {name} check failed: {exc}")
-
-    SESSION.log("Corp-guard: no corporate indicators found")
-    _corp_cache = False
-    return False
+    return _run_corp_checks()[0]
 
 
 def assert_not_corporate(*, force: bool = False) -> None:
@@ -418,20 +451,13 @@ def assert_not_corporate(*, force: bool = False) -> None:
 
 
 def corp_guard_status() -> str | None:
-    """Return a human-readable status string, or None if not corporate."""
+    """Return a human-readable status string, or None if not corporate.
+
+    Uses the same cached results as :func:`is_corporate_network` to avoid
+    redundant subprocess calls.
+    """
     if not is_windows():
         return None
 
-    reasons: list[str] = []
-    if _is_domain_joined():
-        reasons.append("AD domain-joined")
-    if _is_azure_ad_joined():
-        reasons.append("Azure AD joined")
-    if _has_vpn_adapter():
-        reasons.append("VPN connected")
-    if _has_management_agent():
-        reasons.append("Managed (SCCM/Intune)")
-    if _has_group_policy():
-        reasons.append("Group Policy active")
-
-    return ", ".join(reasons) if reasons else None
+    is_corp, reasons = _run_corp_checks()
+    return ", ".join(reasons) if is_corp else None

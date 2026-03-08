@@ -1,46 +1,45 @@
 # Changelog
 
-All notable changes to RegiLattice are documented in this file.
+All notable changes to RegiLattice are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [1.0.0] — 2026-03-07
 
 ### Added
 
-- **1 228 registry tweaks** across 64 categories covering Windows 11, privacy,
-  performance, networking, browsers, developer tools, and more.
-- **5 machine-purpose profiles**: Business, Gaming, Privacy, Minimal, Server —
-  each pre-selects a curated set of categories.
-- **Tkinter GUI** with 4 colour themes (Catppuccin Mocha/Latte, Nord, Dracula),
-  deferred loading, threaded execution, collapsible category sections, search bar
-  with prefix operators (`tag:`, `cat:`, `scope:`, `admin:`), status/scope filters,
-  profile & theme selectors, Export PS1, Import JSON, Scoop Tools Manager, About
-  dialog, keyboard shortcuts, right-click context menu, and toggleable log viewer.
-- **DPI / scaling awareness** — Per-Monitor v2 DPI with system-level fallback.
-- **Window geometry persistence** — size and position saved to
-  `~/.regilattice/window.json` across sessions.
-- **Per-row status updates** during batch apply/remove operations.
-- **Corporate network guard** — detects AD domain, Azure AD/Entra ID, VPN,
-  GPO, and SCCM/Intune; blocks non-corp-safe tweaks with `--force` override.
-  Detection result cached for the process lifetime.
-- **Plugin loader** — auto-discovers tweak modules from `regilattice/tweaks/`;
-  errors in individual modules are isolated with `warnings.warn()` instead of
-  crashing the entire loader.
-- **CLI flags**: `--list`, `--gui`, `--profile`, `--snapshot`, `--restore`,
-  `--snapshot-diff`, `--dry-run`, `--force`, `--check-deps`, `--config`,
-  `--search`, `--category`, `--export-json`.
-- **Interactive console menu** with numbered tweak selection.
-- **Registry session** — winreg wrapper with backup/restore, dry-run mode, and
-  structured logging.
-- **Snapshot system** — save, restore, and diff tweak states as JSON files.
-- **Topological sort** — respects `depends_on` ordering during batch operations.
-- **Rich hover tooltips** with description, current state, default/recommendation
-  hints, tags, and registry keys.
-- **Summary stats bar** — Applied / Default / Unknown / Recommended / GPO counts.
-- **Scope badges** — USER (green) / MACHINE (blue) / BOTH (yellow) per row.
-- **Recommendation badges** — teal "REC" tag for tweaks with recommendations.
-- **Category metadata** — risk level, scope, and profile badges on section headers.
-- **User config** via `~/.regilattice.toml` (force_corp, max_workers, backup
-  directory, auto_backup).
-- **Test suite** — ~16 400 tests (pytest) covering tweaks, CLI, GUI themes,
-  tooltips, widgets, corpguard, elevation, deps, registry, and more.
-- **Lint / type-check** — ruff + mypy --strict, zero warnings.
+- **1 228 registry tweaks** across 64 categories (Accessibility, Adobe, AI/Copilot,
+  Audio, Backup, Bluetooth, Boot, Chrome, Clipboard, Cloud Storage, Communication,
+  Context Menu, Cortana, Crash & Diagnostics, Developer Tools, Display, DNS,
+  Edge, Explorer, File System, Firefox, Fonts, Gaming, GPU, Indexing, Input, Java,
+  LibreOffice, Lock Screen, M365 Copilot, Maintenance, Microsoft Store, Multimedia,
+  Network, Notifications, Office, OneDrive, Package Management, Performance, Power,
+  Printing, Privacy, RealVNC, Remote Desktop, Scheduled Tasks, Scoop Tools,
+  Screensaver, Security, Services, Shell, Snap, Startup, Storage, System, Taskbar,
+  Telemetry, Terminal, USB, Virtualization, VS Code, Widgets, Windows 11,
+  Windows Update, WSL).
+- **Zero-wiring plugin loader** — drop a `.py` in `tweaks/` and it auto-discovers.
+- **TweakDef dataclass** with `apply_fn`, `remove_fn`, `detect_fn` triplet pattern.
+- **5 profiles**: Business, Gaming, Privacy, Minimal, Server.
+- **Tkinter GUI** with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula), deferred
+  loading, collapsible categories, search/filter, scope badges, tooltips, and
+  keyboard navigation.
+- **argparse CLI** with `apply`, `remove`, `list`, `gui`, `profile` commands.
+- **Interactive console menu** for guided tweak management.
+- **RegistrySession** wrapping `winreg` with backup, logging, and dry-run support.
+- **Corporate guard** detecting AD/AAD/VPN/GPO/SCCM environments.
+- **UAC elevation helpers** (`is_admin`, `request_elevation`, `run_elevated`).
+- **AppConfig** via `~/.regilattice.toml` for user preferences.
+- **Local analytics** (applies, removes, sessions) and **rating system** (1–5 stars).
+- **i18n string table** and **plugin marketplace** (third-party discovery).
+- **Export PS1** and **Import JSON** dialogs, **Scoop Manager**, **About** dialog.
+- **GitHub Actions CI** (matrix Python 3.10–3.14, ruff, mypy, pytest+coverage).
+- **17 266 tests** across 20 test files (smoke, unit, integration, property, benchmarks).
+
+### Infrastructure
+
+- Build: `hatchling` via `pyproject.toml`.
+- Lint: `ruff` (E, F, W, I, UP, B, SIM, RUF; 150-char lines; ARG002 ignored).
+- Type-check: `mypy --strict` and Pyright/Pylance standard mode.
+- Test: `pytest` with `pytest-cov`, `hypothesis` property tests, benchmarks.
+- VS Code workspace: settings, tasks, launch configs, recommended extensions.

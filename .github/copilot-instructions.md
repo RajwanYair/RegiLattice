@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~17 266 tests).
+> Last verified: 2026-03-07 (v1.0.0, 1 292 tweaks, 69 categories, ~17 266 tests).
 
 ## Quick Facts
 
@@ -12,7 +12,7 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~17 266 tests across 20 test files)                    |
+| Test        | `pytest` in `tests/` (~17 300 tests across 21 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.0                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
@@ -39,11 +39,12 @@ regilattice/
 ├── analytics.py         # local-only usage analytics (applies, removes, sessions)
 ├── ratings.py           # local tweak rating system (1-5 stars + notes)
 ├── locale.py            # i18n string table for UI labels
+├── hwinfo.py            # hardware detection (CPU/GPU/RAM/disk), adaptive config
 ├── marketplace.py       # third-party plugin discovery & loading
 └── tweaks/
     ├── __init__.py      # TweakDef dataclass, plugin loader, profiles, batch ops
     ├── _template.py     # contributor guide (not loaded by plugin loader)
-    ├── accessibility.py # 64 category modules ...
+    ├── accessibility.py # 69 category modules ...
     ├── ...              # each exports TWEAKS: list[TweakDef]
     └── wsl.py
 ```
@@ -114,87 +115,93 @@ All tweak IDs follow the pattern: `{category_slug}-{descriptive-name}`
 
 Canonical category slugs:
 
-| Slug       | Category                  | Slug       | Category            |
-| ---------- | ------------------------- | ---------- | ------------------- |
-| `acc`      | Accessibility             | `lo`       | LibreOffice         |
-| `adobe`    | Adobe                     | `lock`     | Lock Screen & Login |
-| `ai`       | AI / Copilot              | `m365`     | M365 Copilot        |
-| `audio`    | Audio                     | `maint`    | Maintenance         |
-| `backup`   | Backup & Recovery         | `media`    | Multimedia          |
-| `boot`     | Boot                      | `msstore`  | Microsoft Store     |
-| `bt`       | Bluetooth                 | `net`      | Network             |
-| `chrome`   | Chrome                    | `notif`    | Notifications       |
-| `clip`     | Clipboard & Drag-Drop     | `od`       | OneDrive            |
-| `cloud`    | Cloud Storage             | `office`   | Office              |
-| `comm`     | Communication             | `perf`     | Performance         |
-| `cortana`  | Cortana & Search          | `pkg`      | Package Management  |
-| `crash`    | Crash & Diagnostics       | `power`    | Power               |
-| `ctx`      | Context Menu              | `printing` | Printing            |
-| `dev`      | Developer Tools           | `priv`     | Privacy             |
-| `display`  | Display                   | `rdp`      | Remote Desktop      |
-| `dns`      | DNS & Networking Advanced | `schtask`  | Scheduled Tasks     |
-| `edge`     | Edge                      | `scoop`    | Scoop Tools         |
-| `explorer` | Explorer                  | `sec`      | Security            |
-| `firefox`  | Firefox                   | `shell`    | Shell               |
-| `font`     | Fonts                     | `snap`     | Snap & Multitasking |
-| `fs`       | File System               | `ss`       | Screensaver & Lock  |
-| `game`     | Gaming                    | `startup`  | Startup             |
-| `gpu`      | GPU / Graphics            | `stor`     | Storage             |
-| `idx`      | Indexing & Search         | `svc`      | Services            |
-| `input`    | Input                     | `sys`      | System              |
-| `java`     | Java                      | `tb`       | Taskbar             |
-| `telem`    | Telemetry Advanced        | `usb`      | USB & Peripherals   |
-| `term`     | Windows Terminal          | `virt`     | Virtualization      |
-| `vnc`      | RealVNC                   | `vscode`   | VS Code             |
-| `w11`      | Windows 11                | `widgets`  | Widgets & News      |
-| `wsl`      | WSL                       | `wu`       | Windows Update      |
+| Slug       | Category                    | Slug       | Category              |
+| ---------- | --------------------------- | ---------- | --------------------- |
+| `acc`      | Accessibility               | `lo`       | LibreOffice           |
+| `adobe`    | Adobe                       | `lock`     | Lock Screen & Login   |
+| `ai`       | AI / Copilot                | `m365`     | M365 Copilot          |
+| `audio`    | Audio                       | `maint`    | Maintenance           |
+| `backup`   | Backup & Recovery           | `media`    | Multimedia            |
+| `boot`     | Boot                        | `msstore`  | Microsoft Store       |
+| `bt`       | Bluetooth                   | `net`      | Network               |
+| `chrome`   | Chrome                      | `night`    | Night Light & Display |
+| `clip`     | Clipboard & Drag-Drop       | `notif`    | Notifications         |
+| `cloud`    | Cloud Storage               | `od`       | OneDrive              |
+| `comm`     | Communication               | `office`   | Office                |
+| `cortana`  | Cortana & Search            | `perf`     | Performance           |
+| `crash`    | Crash & Diagnostics         | `phone`    | Phone Link            |
+| `ctx`      | Context Menu                | `pkg`      | Package Management    |
+| `dev`      | Dev Drive / Developer Tools | `power`    | Power                 |
+| `display`  | Display                     | `printing` | Printing              |
+| `dns`      | DNS & Networking Advanced   | `priv`     | Privacy               |
+| `edge`     | Edge                        | `rdp`      | Remote Desktop        |
+| `explorer` | Explorer                    | `schtask`  | Scheduled Tasks       |
+| `firefox`  | Firefox                     | `scoop`    | Scoop Tools           |
+| `font`     | Fonts                       | `sec`      | Security              |
+| `fs`       | File System                 | `shell`    | Shell                 |
+| `game`     | Gaming                      | `snap`     | Snap & Multitasking   |
+| `gpu`      | GPU / Graphics              | `speech`   | Voice Access & Speech |
+| `idx`      | Indexing & Search           | `ss`       | Screensaver & Lock    |
+| `input`    | Input                       | `startup`  | Startup               |
+| `java`     | Java                        | `stor`     | Storage               |
+| `svc`      | Services                    | `sys`      | System                |
+| `tb`       | Taskbar                     | `telem`    | Telemetry Advanced    |
+| `term`     | Windows Terminal            | `touch`    | Touch & Pen           |
+| `usb`      | USB & Peripherals           | `virt`     | Virtualization        |
+| `vnc`      | RealVNC                     | `vscode`   | VS Code               |
+| `w11`      | Windows 11                  | `widgets`  | Widgets & News        |
+| `wsl`      | WSL                         | `wu`       | Windows Update        |
 
-## Current Stats (1 228 tweaks, 64 categories, 64 modules)
+## Current Stats (1 292 tweaks, 69 categories, 69 modules)
 
-| Category                  | Tweaks | Category            | Tweaks |
-| ------------------------- | ------ | ------------------- | ------ |
-| Accessibility             | 20     | Multimedia          | 15     |
-| Adobe                     | 20     | Network             | 22     |
-| AI / Copilot              | 22     | Notifications       | 16     |
-| Audio                     | 19     | Office              | 20     |
-| Backup & Recovery         | 15     | OneDrive            | 18     |
-| Bluetooth                 | 19     | Package Management  | 21     |
-| Boot                      | 21     | Performance         | 20     |
-| Chrome                    | 20     | Power               | 21     |
-| Clipboard & Drag-Drop     | 15     | Printing            | 15     |
-| Cloud Storage             | 30     | Privacy             | 25     |
-| Communication             | 21     | RealVNC             | 15     |
-| Context Menu              | 15     | Remote Desktop      | 16     |
-| Cortana & Search          | 22     | Scheduled Tasks     | 16     |
-| Crash & Diagnostics       | 16     | Scoop Tools         | 25     |
-| Developer Tools           | 17     | Screensaver & Lock  | 16     |
-| Display                   | 19     | Security            | 21     |
-| DNS & Networking Advanced | 16     | Services            | 21     |
-| Edge                      | 18     | Shell               | 20     |
-| Explorer                  | 41     | Snap & Multitasking | 17     |
-| File System               | 17     | Startup             | 19     |
-| Firefox                   | 20     | Storage             | 19     |
-| Fonts                     | 19     | System              | 24     |
-| Gaming                    | 19     | Taskbar             | 19     |
-| GPU / Graphics            | 19     | Telemetry Advanced  | 16     |
-| Indexing & Search         | 16     | USB & Peripherals   | 16     |
-| Input                     | 18     | Virtualization      | 15     |
-| Java                      | 16     | VS Code             | 19     |
-| LibreOffice               | 18     | Widgets & News      | 15     |
-| Lock Screen & Login       | 16     | Windows 11          | 29     |
-| M365 Copilot              | 18     | Windows Terminal    | 16     |
-| Maintenance               | 17     | Windows Update      | 18     |
-| Microsoft Store           | 15     | WSL                 | 29     |
+| Category                  | Tweaks | Category              | Tweaks |
+| ------------------------- | ------ | --------------------- | ------ |
+| Accessibility             | 20     | Multimedia            | 15     |
+| Adobe                     | 20     | Network               | 22     |
+| AI / Copilot              | 22     | Night Light & Display | 12     |
+| Audio                     | 19     | Notifications         | 16     |
+| Backup & Recovery         | 15     | Office                | 20     |
+| Bluetooth                 | 19     | OneDrive              | 18     |
+| Boot                      | 21     | Package Management    | 21     |
+| Chrome                    | 20     | Performance           | 20     |
+| Clipboard & Drag-Drop     | 15     | Phone Link            | 14     |
+| Cloud Storage             | 30     | Power                 | 21     |
+| Communication             | 21     | Printing              | 15     |
+| Context Menu              | 15     | Privacy               | 25     |
+| Cortana & Search          | 22     | RealVNC               | 15     |
+| Crash & Diagnostics       | 16     | Remote Desktop        | 16     |
+| Dev Drive                 | 12     | Scheduled Tasks       | 16     |
+| Developer Tools           | 17     | Scoop Tools           | 25     |
+| Display                   | 19     | Screensaver & Lock    | 16     |
+| DNS & Networking Advanced | 16     | Security              | 21     |
+| Edge                      | 18     | Services              | 21     |
+| Explorer                  | 41     | Shell                 | 20     |
+| File System               | 17     | Snap & Multitasking   | 17     |
+| Firefox                   | 20     | Startup               | 19     |
+| Fonts                     | 19     | Storage               | 19     |
+| Gaming                    | 19     | System                | 24     |
+| GPU / Graphics            | 19     | Taskbar               | 19     |
+| Indexing & Search         | 16     | Telemetry Advanced    | 16     |
+| Input                     | 18     | Touch & Pen           | 13     |
+| Java                      | 16     | USB & Peripherals     | 16     |
+| LibreOffice               | 18     | Virtualization        | 15     |
+| Lock Screen & Login       | 16     | VS Code               | 19     |
+| M365 Copilot              | 18     | Voice Access & Speech | 13     |
+| Maintenance               | 17     | Widgets & News        | 15     |
+| Microsoft Store           | 15     | Windows 11            | 29     |
+| Multimedia                | 15     | Windows Terminal      | 16     |
+|                           |        | Windows Update        | 18     |
+|                           |        | WSL                   | 29     |
 
 ## 5 Profiles
 
 | Profile    | Categories | Description                                           |
 | ---------- | ---------- | ----------------------------------------------------- |
-| `business` | 23         | Productivity, security, cloud & workflow (466 tweaks) |
-| `gaming`   | 20         | GPU, performance, low-latency, distraction-free (387) |
-| `privacy`  | 21         | Telemetry, tracking, cloud & browser data (429)       |
-| `minimal`  | 15         | Fast, clean system essentials (300)                   |
-| `server`   | 19         | Hardened, headless, uptime & remote mgmt (353)        |
+| `business` | 39         | Productivity, security, cloud & workflow (770 tweaks) |
+| `gaming`   | 31         | GPU, performance, low-latency, distraction-free (604) |
+| `privacy`  | 31         | Telemetry, tracking, cloud & browser data (628)       |
+| `minimal`  | 22         | Fast, clean system essentials (430)                   |
+| `server`   | 28         | Hardened, headless, uptime & remote mgmt (549)        |
 
 Profiles defined in `tweaks/__init__.py` → `_PROFILES` dict.
 Public API: `available_profiles()`, `profile_info(name)`, `tweaks_for_profile(name)`, `apply_profile(name)`.
@@ -267,6 +274,7 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 - `tests/test_integration.py`: end-to-end CLI and batch operation tests
 - `tests/test_property.py`: hypothesis property-based tests
 - `tests/test_benchmarks.py`: performance benchmarks for core operations
+- `tests/test_hwinfo.py`: hardware detection probes, adaptive workers/batch, profile suggestion, summary
 - `tests/test_registry.py`: RegistrySession helpers and backup
 - `tests/test_corpguard.py`: corporate network detection
 - Known: `test_registry.py::TestBackup::test_backup_creates_directory` may fail with WinError 6 (handle issue, environment-specific)
@@ -311,6 +319,7 @@ Override: `--force` CLI flag or GUI "Force" checkbox (logged).
 | `analytics.py`        | Usage analytics     | `record_apply()`, `record_remove()`, `record_session()`, `get_stats()`, `top_tweaks()`                                                                                                            |
 | `ratings.py`          | Rating system       | `rate_tweak()`, `get_rating()`, `all_ratings()`, `remove_rating()`, `top_rated()`                                                                                                                 |
 | `locale.py`           | i18n string table   | `t()`, `set_locale()`, `load_locale_file()`, `current_locale()`, `available_keys()`                                                                                                               |
+| `hwinfo.py`           | Hardware detection  | `detect_hardware()`, `detect_cpu()`, `detect_gpus()`, `detect_memory()`, `detect_disk()`, `suggest_profile()`, `hardware_summary()`, `HWProfile`                                                  |
 | `marketplace.py`      | Plugin marketplace  | `discover_plugins()`, `load_plugin()`, `loaded_plugins()`, `unload_plugin()`, `PluginMeta`                                                                                                        |
 | `tweaks/__init__.py`  | Core engine         | `TweakDef`, `all_tweaks()`, `get_tweak()`, `categories()`, `tweaks_by_category()`, `search_tweaks()`, `apply_profile()`, `status_map()`, `tweak_scope()`, `save_snapshot()`, `restore_snapshot()` |
 | `tweaks/_template.py` | Contributor guide   | (not loaded)                                                                                                                                                                                      |

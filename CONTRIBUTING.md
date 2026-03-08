@@ -1,5 +1,89 @@
 # Contributing to RegiLattice
 
+Thank you for considering a contribution! This document covers the tooling,
+conventions, and workflow you need to get started.
+
+## Prerequisites
+
+- **Python 3.10+** (tested through 3.14)
+- **Windows** (registry operations require `winreg`)
+- Recommended editor: **VS Code** with the extensions listed in
+  `.vscode/extensions.json`.
+
+## Setup
+
+```bash
+# Clone and install in editable mode with dev dependencies
+git clone <repo-url> && cd RegiLattice
+pip install -e ".[dev]"
+```
+
+## Development Workflow
+
+| Task              | Command                                          |
+| ----------------- | ------------------------------------------------ |
+| Lint              | `python -m ruff check regilattice/ tests/`       |
+| Format            | `python -m ruff format regilattice/ tests/`      |
+| Type-check (mypy) | `python -m mypy regilattice/`                    |
+| Test              | `python -m pytest tests/ -v --tb=short`          |
+| Test + coverage   | `python -m pytest tests/ --cov=regilattice`      |
+| Run GUI           | `python -m regilattice --gui`                    |
+| List tweaks       | `python -m regilattice --list`                   |
+
+VS Code tasks (`Ctrl+Shift+B`) mirror these commands — see `.vscode/tasks.json`.
+
+## Adding a New Tweak
+
+1. Create or edit `regilattice/tweaks/<category>.py`.
+2. Define registry key constants at module top: `_KEY = r"HKEY_..."`.
+3. Implement the function triplet:
+
+   ```python
+   def _apply_my_tweak(*, require_admin: bool = True) -> None: ...
+   def _remove_my_tweak(*, require_admin: bool = True) -> None: ...
+   def _detect_my_tweak() -> bool: ...
+   ```
+
+4. Append a `TweakDef(...)` to the module-level `TWEAKS` list.
+5. Ensure the `id` is **globally unique**, kebab-case, prefixed with the
+   category slug (see `.github/copilot-instructions.md` for the full slug table).
+6. Run the smoke tests: `python -m pytest tests/test_tweaks_smoke.py -x --tb=short`.
+7. Run the linter: `python -m ruff check regilattice/ tests/`.
+
+**No imports or registration needed** — the plugin loader auto-discovers every
+`.py` in `tweaks/` that isn't `_`-prefixed.
+
+## Code Style
+
+- **Line length**: 150 characters (configured in `pyproject.toml`).
+- **Formatter**: ruff format (runs on save in VS Code).
+- **Linter**: ruff check + pylint (config in `pyproject.toml`).
+- **Type-check**: mypy `--strict` and Pyright standard mode.
+- **`require_admin`**: mandatory keyword-only parameter on all triplet functions,
+  even when unused (ruff ARG002 and pylint W0613 are suppressed for this pattern).
+
+## Commit Messages
+
+Use concise, imperative-mood subject lines. Examples:
+
+- `Add bluetooth-disable-handsfree tweak`
+- `Fix detect_fn for explorer-show-extensions`
+- `Update Privacy category descriptions`
+
+## Testing
+
+- All tweaks are auto-parametrized in `test_tweaks_smoke.py` — adding a tweak
+  automatically generates tests for its triplet signatures, ID uniqueness, and
+  `detect_fn` callability.
+- Use `dry_session` fixture (from `conftest.py`) for tests that touch
+  `RegistrySession` — it sets `_dry_run=True` so no real registry writes occur.
+
+## Corporate Safety
+
+Tweaks with `corp_safe=False` are blocked on corporate networks (detected via
+AD, AAD, VPN, GPO, SCCM indicators). If your tweak only touches `HKCU` and
+poses no enterprise risk, set `corp_safe=True`.
+
 Thank you for your interest in contributing! This guide covers everything from
 environment setup to submitting a PR.
 
@@ -9,22 +93,28 @@ environment setup to submitting a PR.
 
 1. **Fork & clone** the repository.
 2. **Install** in editable mode:
+
    ```bash
    pip install -e ".[dev]"
    ```
+
 3. **Copy the template** to create a new tweak module:
+
    ```bash
    cp regilattice/tweaks/_template.py regilattice/tweaks/myapp.py
    ```
+
 4. **Edit** `myapp.py` -- define registry key paths, implement the
    `_apply_*` / `_remove_*` / `_detect_*` triplet, and register a `TweakDef`
    in the `TWEAKS` list.
 5. **Validate** your work:
+
    ```bash
    python -m ruff check regilattice/ tests/
    python -m mypy regilattice/
    python -m pytest tests/test_tweaks_smoke.py -x --tb=short
    ```
+
 6. **Commit** with a conventional message and open a PR.
 
 ---
@@ -269,10 +359,10 @@ description="Disables X. Default: Enabled. Recommended: Disabled for privacy."
 
 ---
 
-## Testing
+## Running Tests
 
 ```bash
-# Full suite (~13 700 tests)
+# Full suite (~17 266 tests)
 python -m pytest tests/ -v --tb=short
 
 # Smoke tests only (fastest, covers all tweaks)

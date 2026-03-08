@@ -34,6 +34,7 @@ def _reset_corp_cache() -> None:
     import regilattice.corpguard as _cg
 
     _cg._corp_cache = None
+    _cg._corp_reasons = []
 
 
 def _completed(stdout: str = "", returncode: int = 0) -> subprocess.CompletedProcess:
@@ -288,11 +289,11 @@ class TestCorpGuardStatus:
     @patch("regilattice.corpguard._is_domain_joined", return_value=True)
     @patch("regilattice.corpguard.is_windows", return_value=True)
     def test_returns_reasons_string(self, *_mocks: MagicMock) -> None:
-        status = corp_guard_status()
-        assert status is not None
-        status_str: str = status
-        assert "domain" in status_str.lower()
-        assert "VPN" in status_str
+        result = corp_guard_status()
+        assert result is not None
+        status = str(result)
+        assert "domain" in status.lower()
+        assert "VPN" in status
 
 
 # ── _has_management_agent ────────────────────────────────────────────────────
