@@ -18,9 +18,11 @@ from .registry import SESSION, is_windows
 __all__ = [
     "CorporateNetworkError",
     "assert_not_corporate",
+    "corp_guard_reasons",
     "corp_guard_status",
     "is_corporate_network",
     "is_gpo_managed",
+    "reset_corp_cache",
 ]
 
 # ── Detection helpers ────────────────────────────────────────────────────────
@@ -474,3 +476,29 @@ def corp_guard_status() -> str | None:
 
     is_corp, reasons = _run_corp_checks()
     return ", ".join(reasons) if is_corp else None
+
+
+def corp_guard_reasons() -> list[str]:
+    """Return the list of reasons why the machine was flagged as corporate.
+
+    Returns an empty list when no corporate indicators were found.
+    Triggers the detection checks on first call (same cached result as
+    :func:`is_corporate_network`).
+    """
+    if not is_windows():
+        return []
+    _, reasons = _run_corp_checks()
+    return list(reasons)
+
+
+def reset_corp_cache() -> None:
+    """Clear the corporate-network detection result cache.
+
+    Forces :func:`is_corporate_network` to re-run all checks on the next
+    call.  Primarily useful for testing and for GUI refresh after the user
+    disconnects from a VPN.
+    """
+    global _corp_cache, _corp_reasons
+    with _corp_lock:
+        _corp_cache = None
+        _corp_reasons = []
