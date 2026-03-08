@@ -632,7 +632,6 @@ class TestMultiSzMethods:
 
     @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
     def test_read_multi_sz_returns_none_on_type_mismatch(self, tmp_path: Path) -> None:
-        import winreg
 
         session = RegistrySession(base_dir=tmp_path)
         fake_key = MagicMock()
@@ -680,7 +679,6 @@ class TestCacheInvalidationExtended:
 
     @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
     def test_invalidate_clears_binary_cache(self, tmp_path: Path) -> None:
-        import winreg
 
         session = RegistrySession(base_dir=tmp_path)
         path = r"HKEY_CURRENT_USER\Software\InvalTest"
@@ -700,7 +698,6 @@ class TestCacheInvalidationExtended:
 
     @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
     def test_invalidate_clears_qword_cache(self, tmp_path: Path) -> None:
-        import winreg
 
         session = RegistrySession(base_dir=tmp_path)
         path = r"HKEY_CURRENT_USER\Software\InvalTest"

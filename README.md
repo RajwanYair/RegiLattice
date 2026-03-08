@@ -1,7 +1,7 @@
 # ⚡ RegiLattice
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-17%2C378%2B%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-17%2C511%2B%20passing-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen)
 ![Ruff](https://img.shields.io/badge/linter-ruff-blue)
 ![mypy](https://img.shields.io/badge/type--check-mypy%20strict-blue)
@@ -29,7 +29,7 @@ A comprehensive Windows registry tweak toolkit with **1 292 tweaks** across **69
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up before changes with rollback on error
 - **Export PowerShell** — generate `.ps1` scripts from selected tweaks for portable deployment
-- **~17 378 tests** across 21 test files — full smoke, CLI, GUI, and engine coverage
+- **~17 511 tests** across 21 test files — full smoke, CLI, GUI, and engine coverage
 
 ## Architecture
 

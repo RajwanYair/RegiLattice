@@ -4,6 +4,55 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 8 refactor (C13–C23, 2026-03)
+
+### Added
+
+- **`RegistrySession.set_expand_string` / `read_expand_string`** — read/write `REG_EXPAND_SZ` values with lru_cache.
+- **`RegistrySession.set_multi_sz` / `read_multi_sz`** — read/write `REG_MULTI_SZ` (list-of-strings) values with lru_cache.
+- **`corp_guard_reasons()`** — returns a copy of the reason-list that triggered corporate detection; thread-safe.
+- **`reset_corp_cache()`** — clears the corporate detection cache for testing and hot-reload scenarios.
+- **`detect_battery()`** — `@lru_cache` probe returning `True` when a battery/UPS is detected.
+- **`detect_network_type()`** — `@lru_cache` probe returning `"vpn"`, `"wifi"`, `"ethernet"`, or `"unknown"`.
+- **`HWProfile.has_battery`** and **`HWProfile.network_type`** fields populated by the new probes.
+- **`analytics.record_error_for(tweak_id)`** — track per-tweak error counts.
+- **`analytics.error_stats()`** — return `dict[str, int]` of per-tweak error counts.
+- **`ratings.average_rating()`** — mean star rating across all rated tweaks (`None` when empty).
+- **`ratings.rated_count()`** — number of tweaks that have been rated.
+- **`tweaks_by_scope(scope)`** — return tweaks matching a specific scope string.
+- **`tweaks_above_build(build)`** — return tweaks whose `min_build` is `<= build`.
+- **`tweak_risk_level(td)`** — classify a tweak as `"low"`, `"medium"`, or `"high"` risk.
+- **`tweak_count_by_scope()`** — `dict[str, int]` counts per scope key (`user/machine/both`).
+- **`category_counts()`** — `dict[str, int]` mapping category name to tweak count.
+- **`AppConfig.theme`** — new field (default `"system"`) loaded from `[general] theme` in TOML.
+- **`AppConfig.locale`** — new field (default `"en"`) loaded from `[general] locale` in TOML.
+- **CLI `--scope {user,machine,both}`** — filter `--list` / `--search` output by registry scope.
+- **CLI `--min-build N`** — filter `--list` / `--search` output by minimum Windows build.
+- **CLI `--corp-safe`** — filter `--list` / `--search` to HKCU-only tweaks.
+- **CLI `--needs-admin`** — filter `--list` / `--search` to admin-required tweaks.
+- **133 new tests** across 9 test files (C16–C23 additions).
+
+### Changed / Fixed
+
+- **`_invalidate_cache_for` bugfix** — previously only cleared `dword`/`string`/`exists` suffixes; now clears
+  all 6: `dword`, `string`, `binary`, `qword`, `expand`, `multi_sz`.
+- **`filter_tweaks()` early-exit** — adds `if not pool: return pool` after each filter step, avoiding
+  unnecessary work when the result pool drains early.
+- **`status_map()` detect-free skip** — tweaks with `detect_fn=None` are assigned `TweakResult.UNKNOWN`
+  directly without being submitted to the thread pool.
+- **`_split_root()` memoization** — decorated with `@functools.lru_cache(maxsize=256)`; repeated registry
+  path splitting is now O(1) on cache hit.
+- **`detect_hardware()` workers raised to 6** — runs `detect_battery` and `detect_network_type` in the
+  parallel probe pool alongside the existing 4 probes.
+- **`_SCOPE_CACHE` / `_SCOPE_LOCK` ordering fix** — moved definitions to before the `_load_plugins()`
+  function to eliminate `NameError` at import time.
+- **Scope pre-warm** — `_load_plugins()` now pre-populates `_SCOPE_CACHE` for all tweaks at import.
+
+### Infrastructure
+
+- **17 511 tests** across 21 test files after C13–C23 additions (was 17 378 at Sprint 7).
+- ruff: all checks pass; mypy `--strict`: 0 issues.
+
 ## [Unreleased] — Sprint 7 refactor (C2–C11, 2026-03)
 
 ### Added

@@ -853,13 +853,12 @@ class TestListScopeFilter:
 
     def test_scope_invalid_rejected(self) -> None:
         """argparse should reject invalid --scope values."""
-        import sys
         with pytest.raises(SystemExit) as exc_info:
             _build_parser().parse_args(["--list", "--scope", "invalid"])
         assert exc_info.value.code != 0
 
     def test_scope_user_json_only_user_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
-        from regilattice.tweaks import tweak_scope, all_tweaks
+        from regilattice.tweaks import all_tweaks, tweak_scope
 
         rc = main(["--list", "--scope", "user", "--output", "json"])
         assert rc == 0
@@ -869,7 +868,7 @@ class TestListScopeFilter:
             assert item["id"] in all_user_ids
 
     def test_scope_machine_json_only_machine_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
-        from regilattice.tweaks import tweak_scope, all_tweaks
+        from regilattice.tweaks import all_tweaks, tweak_scope
 
         rc = main(["--list", "--scope", "machine", "--output", "json"])
         assert rc == 0

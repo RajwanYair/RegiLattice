@@ -71,6 +71,11 @@ class TweakResult(str, Enum):
 | `remove_tweaks(ids, ...)` | `→ dict[str, TweakResult]` | Batch remove by ID list |
 | `tweaks_by_ids(ids)` | `→ list[TweakDef]` | Resolve IDs to TweakDef objects (unknown IDs silently skipped) |
 | `tweaks_by_tag(tag)` | `→ list[TweakDef]` | All tweaks carrying the given tag (case-insensitive) |
+| `tweaks_by_scope(scope)` | `→ list[TweakDef]` | All tweaks matching `"user"`, `"machine"`, or `"both"` |
+| `tweaks_above_build(build)` | `→ list[TweakDef]` | Tweaks with `min_build <= build` |
+| `tweak_risk_level(td)` | `→ str` | `"low"`, `"medium"`, or `"high"` risk classification |
+| `tweak_count_by_scope()` | `→ dict[str, int]` | Counts per scope key (`user/machine/both`) |
+| `category_counts()` | `→ dict[str, int]` | Tweak count per category name |
 
 ---
 
@@ -87,11 +92,15 @@ SESSION.set_dword(path, name, value)       # REG_DWORD
 SESSION.set_string(path, name, value)      # REG_SZ
 SESSION.set_binary(path, name, data)       # REG_BINARY
 SESSION.set_qword(path, name, value)       # REG_QWORD (64-bit int)
+SESSION.set_expand_string(path, name, v)   # REG_EXPAND_SZ
+SESSION.set_multi_sz(path, name, values)   # REG_MULTI_SZ (list[str])
 SESSION.set_value(path, name, val, type)   # any type
 SESSION.read_dword(path, name) → int|None
 SESSION.read_string(path, name) → str|None
 SESSION.read_binary(path, name) → bytes|None
 SESSION.read_qword(path, name) → int|None
+SESSION.read_expand_string(path, name) → str|None
+SESSION.read_multi_sz(path, name) → list[str]|None
 SESSION.list_values(path) → list[tuple[str, object, int]]
 SESSION.list_keys(path) → list[str]
 SESSION.key_exists(path) → bool
@@ -136,6 +145,11 @@ python -m regilattice --diff gaming                    # delta vs profile
 python -m regilattice --dry-run --list                 # dry-run mode
 python -m regilattice --search "telemetry"             # search tweaks
 python -m regilattice --search "telemetry" --output json  # search as JSON
+python -m regilattice --list --scope user                  # filter by registry scope
+python -m regilattice --list --scope machine               # machine-scope tweaks only
+python -m regilattice --list --min-build 22621             # Win 11 22H2+ tweaks only
+python -m regilattice --list --corp-safe                   # HKCU-only tweaks
+python -m regilattice --list --needs-admin                 # admin-required tweaks
 python -m regilattice --export-json out.json           # export as JSON
 python -m regilattice --import-json in.json            # import selection
 python -m regilattice --export-reg out.reg             # export registry
@@ -153,6 +167,8 @@ config.force_corp      # bool — bypass corporate check
 config.max_workers     # int — thread pool size
 config.backup_dir      # Path — backup directory
 config.auto_backup     # bool — automatic backups
+config.theme           # str — UI theme ("system" | "mocha" | "latte" | "nord" | "dracula")
+config.locale          # str — UI language tag (default "en")
 ```
 
 ---
@@ -165,8 +181,8 @@ Corporate network detection.
 |----------|-------------|
 | `is_corporate_network()` | `→ bool` — True if corp environment detected |
 | `assert_not_corporate(force=False)` | Raises `CorporateNetworkError` if corp |
-| `corp_guard_status()` | `→ dict` — Detailed detection results |
-
+| `corp_guard_status()` | `→ dict` — Detailed detection results || `corp_guard_reasons()` | `→ list[str]` — Copy of reasons list from last detection |
+| `reset_corp_cache()` | Clear cached detection result (useful in tests/hot-reload) |
 ---
 
 ### `regilattice.elevation`
@@ -190,15 +206,29 @@ Local-only usage analytics (no data sent anywhere).
 |----------|-------------|
 | `record_apply(tweak_id)` | Record a successful apply |
 | `record_remove(tweak_id)` | Record a successful remove |
-| `record_error()` | Record an error |
+| `record_error()` | Record a generic error |
+| `record_error_for(tweak_id)` | Record a per-tweak error (increments both global and per-ID counters) |
 | `record_session()` | Record session start |
 | `get_stats()` | `→ AnalyticsData` |
+| `error_stats()` | `→ dict[str, int]` — per-tweak error counts |
 | `top_tweaks(n=10)` | `→ list[tuple[str, int]]` — most applied |
 | `reset()` | Clear all analytics |
 
----
+### `regilattice.ratings`
 
-## GUI Modules
+Local tweak rating system (1–5 stars + optional notes).
+
+| Function | Description |
+|----------|-----------|
+| `rate_tweak(tweak_id, stars, note="")` | Set rating for a tweak (1–5 stars) |
+| `get_rating(tweak_id)` | `→ RatingEntry \| None` — retrieve stored rating |
+| `all_ratings()` | `→ dict[str, RatingEntry]` — all rated tweaks |
+| `remove_rating(tweak_id)` | Delete rating for a tweak |
+| `top_rated(n=10)` | `→ list[tuple[str, int]]` — highest-rated tweaks |
+| `average_rating()` | `→ float \| None` — mean stars across all rated tweaks |
+| `rated_count()` | `→ int` — number of tweaks that have been rated |
+
+---
 
 | Module | Key Exports |
 |--------|-------------|
