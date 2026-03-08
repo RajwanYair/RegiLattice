@@ -77,3 +77,43 @@ class TestLoadConfig:
         f.write_bytes(b"[general]\nforce_corp = true\nunknown_key = 42\n[other]\nfoo = 1\n")
         cfg = load_config(f)
         assert cfg.force_corp is True
+
+
+# ── C22 Phase 89: theme + locale fields ──────────────────────────────────────
+
+
+class TestAppConfigThemeLocale:
+    """Tests for new theme and locale fields on AppConfig."""
+
+    def test_default_theme(self) -> None:
+        assert AppConfig().theme == "system"
+
+    def test_default_locale(self) -> None:
+        assert AppConfig().locale == "en"
+
+    def test_theme_loaded_from_toml(self, tmp_path: Path) -> None:
+        f = tmp_path / "cfg.toml"
+        f.write_bytes(b'[general]\ntheme = "nord"\n')
+        assert load_config(f).theme == "nord"
+
+    def test_locale_loaded_from_toml(self, tmp_path: Path) -> None:
+        f = tmp_path / "cfg.toml"
+        f.write_bytes(b'[general]\nlocale = "fr"\n')
+        assert load_config(f).locale == "fr"
+
+    def test_theme_invalid_type_ignored(self, tmp_path: Path) -> None:
+        f = tmp_path / "cfg.toml"
+        f.write_bytes(b"[general]\ntheme = 42\n")
+        assert load_config(f).theme == "system"
+
+    def test_locale_invalid_type_ignored(self, tmp_path: Path) -> None:
+        f = tmp_path / "cfg.toml"
+        f.write_bytes(b"[general]\nlocale = 99\n")
+        assert load_config(f).locale == "en"
+
+    def test_both_theme_and_locale_loaded(self, tmp_path: Path) -> None:
+        f = tmp_path / "cfg.toml"
+        f.write_bytes(b'[general]\ntheme = "dracula"\nlocale = "de"\n')
+        cfg = load_config(f)
+        assert cfg.theme == "dracula"
+        assert cfg.locale == "de"
