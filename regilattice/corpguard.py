@@ -379,7 +379,7 @@ def _run_corp_checks() -> tuple[bool, list[str]]:
     Each check is independent so they run concurrently in a thread pool,
     reducing worst-case time from ~50s sequential to ~10s parallel.
     """
-    global _corp_cache, _corp_reasons  # noqa: PLW0603
+    global _corp_cache, _corp_reasons
     if _corp_cache is not None:
         return _corp_cache, list(_corp_reasons)
 
@@ -397,10 +397,7 @@ def _run_corp_checks() -> tuple[bool, list[str]]:
             return name, label, False
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
-        futures = [
-            pool.submit(_run_single, name, label, fn_name)
-            for name, label, fn_name in _CHECK_NAMES
-        ]
+        futures = [pool.submit(_run_single, name, label, fn_name) for name, label, fn_name in _CHECK_NAMES]
         for future in concurrent.futures.as_completed(futures, timeout=30):
             _name, label, detected = future.result(timeout=15)
             if detected:

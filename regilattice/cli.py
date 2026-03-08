@@ -21,11 +21,20 @@ from typing import Any
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
-from .registry import (SESSION, AdminRequirementError, is_windows,
-                       platform_summary)
-from .tweaks import (TweakResult, all_tweaks, apply_all, apply_profile,
-                     available_profiles, get_tweak, remove_all, search_tweaks,
-                     tweak_status, tweaks_by_category, tweaks_for_profile)
+from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
+from .tweaks import (
+    TweakResult,
+    all_tweaks,
+    apply_all,
+    apply_profile,
+    available_profiles,
+    get_tweak,
+    remove_all,
+    search_tweaks,
+    tweak_status,
+    tweaks_by_category,
+    tweaks_for_profile,
+)
 
 
 def _confirm(prompt: str) -> bool:
@@ -107,11 +116,7 @@ def _write_diff_html(
     for tid, (sa, sb) in diffs.items():
         cls_a = "applied" if sa in ("applied", "APPLIED") else "removed" if sa in ("not applied", "NOT_APPLIED", "removed") else "absent"
         cls_b = "applied" if sb in ("applied", "APPLIED") else "removed" if sb in ("not applied", "NOT_APPLIED", "removed") else "absent"
-        rows.append(
-            f'<tr><td class="tid">{escape(tid)}</td>'
-            f'<td class="{cls_a}">{escape(sa)}</td>'
-            f'<td class="{cls_b}">{escape(sb)}</td></tr>'
-        )
+        rows.append(f'<tr><td class="tid">{escape(tid)}</td><td class="{cls_a}">{escape(sa)}</td><td class="{cls_b}">{escape(sb)}</td></tr>')
 
     html = f"""\
 <!DOCTYPE html>
@@ -137,7 +142,7 @@ def _write_diff_html(
 <p class="summary">Comparing <b>{escape(name_a)}</b> vs <b>{escape(name_b)}</b> &mdash; {len(diffs)} difference(s)</p>
 <table>
 <tr><th>Tweak ID</th><th>{escape(name_a)}</th><th>{escape(name_b)}</th></tr>
-{''.join(rows)}
+{"".join(rows)}
 </table>
 </body>
 </html>"""
@@ -449,8 +454,9 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """Entry-point for both ``python -m regilattice`` and the console_script."""
+
     # Graceful shutdown on Ctrl-C or SIGTERM
-    def _handle_shutdown(signum: int, frame: object) -> None:  # noqa: ARG002
+    def _handle_shutdown(signum: int, frame: object) -> None:
         print("\nShutting down gracefully\u2026")
         sys.exit(128 + signum)
 
@@ -667,8 +673,7 @@ def main(argv: list[str] | None = None) -> int:
         ok = sum(1 for v in results.values() if v == TweakResult.APPLIED)
         if SESSION.dry_run:
             print(
-                f"\U0001f50d Dry-run profile '{args.profile}': {ok}/{len(results)} tweaks would be applied"
-                f" ({SESSION.dry_ops} registry ops skipped)."
+                f"\U0001f50d Dry-run profile '{args.profile}': {ok}/{len(results)} tweaks would be applied ({SESSION.dry_ops} registry ops skipped)."
             )
         else:
             print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
@@ -700,8 +705,7 @@ def main(argv: list[str] | None = None) -> int:
         ok = len(cat_tweaks) - len(errors)
         if SESSION.dry_run:
             print(
-                f"\U0001f50d Dry-run: {ok}/{len(cat_tweaks)} tweaks would be processed in '{args.category}'"
-                f" ({SESSION.dry_ops} registry ops skipped)."
+                f"\U0001f50d Dry-run: {ok}/{len(cat_tweaks)} tweaks would be processed in '{args.category}' ({SESSION.dry_ops} registry ops skipped)."
             )
         else:
             print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
@@ -727,7 +731,7 @@ def main(argv: list[str] | None = None) -> int:
         elif isinstance(data, list):
             ids = [str(x) for x in data]
         else:
-            print("\u274c Expected a JSON list of tweak IDs or {\"tweaks\": [...]}.")
+            print('\u274c Expected a JSON list of tweak IDs or {"tweaks": [...]}.')
             return 3
         targets = []
         for tid in ids:

@@ -69,11 +69,7 @@ def get_rating(tweak_id: str) -> TweakRating | None:
 def all_ratings() -> dict[str, TweakRating]:
     """Return all ratings."""
     data = _load_all()
-    return {
-        tid: _to_rating(entry)
-        for tid, entry in data.items()
-        if isinstance(entry, dict)
-    }
+    return {tid: _to_rating(entry) for tid, entry in data.items() if isinstance(entry, dict)}
 
 
 def remove_rating(tweak_id: str) -> bool:

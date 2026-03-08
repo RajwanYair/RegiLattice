@@ -120,7 +120,7 @@ def _run_composite_cim() -> dict[str, str]:
 
     Returns a dict like ``{"CPU_NAME": "...", "GPU:0": "NVIDIA...|31...|bytes", ...}``.
     """
-    global _CIM_CACHE  # noqa: PLW0603
+    global _CIM_CACHE
     if _CIM_CACHE is not None:
         return _CIM_CACHE
 
@@ -222,8 +222,8 @@ def detect_disk() -> DiskInfo:
     is_ssd = "SSD" in cim.get("DISK_MEDIA", "").upper()
 
     return DiskInfo(
-        total_gb=total_bytes // (1024 ** 3),
-        free_gb=free_bytes // (1024 ** 3),
+        total_gb=total_bytes // (1024**3),
+        free_gb=free_bytes // (1024**3),
         is_ssd=is_ssd,
     )
 
@@ -344,7 +344,7 @@ def detect_hardware() -> HWProfile:
 
 def clear_caches() -> None:
     """Reset all hardware detection caches — useful for testing."""
-    global _CIM_CACHE  # noqa: PLW0603
+    global _CIM_CACHE
     _CIM_CACHE = None
     for fn in (detect_cpu, detect_gpus, detect_memory, detect_disk, detect_hyperv, detect_wsl, detect_tpm, detect_secure_boot, detect_hardware):
         fn.cache_clear()
@@ -359,14 +359,10 @@ def suggest_profile(hw: HWProfile | None = None) -> str:
         hw = detect_hardware()
 
     has_dgpu = any(
-        g.adapter_ram_mb >= 1024
-        and not re.search(r"Microsoft|Basic|Remote|Virtual|Intel.*UHD|Intel.*HD", g.name, re.IGNORECASE)
-        for g in hw.gpus
+        g.adapter_ram_mb >= 1024 and not re.search(r"Microsoft|Basic|Remote|Virtual|Intel.*UHD|Intel.*HD", g.name, re.IGNORECASE) for g in hw.gpus
     )
     low_ram = hw.memory.total_mb > 0 and hw.memory.total_mb < 8192
-    is_server_build = hw.windows_build > 0 and (
-        hw.has_hyperv and hw.cpu.cores_logical >= 8 and not has_dgpu
-    )
+    is_server_build = hw.windows_build > 0 and (hw.has_hyperv and hw.cpu.cores_logical >= 8 and not has_dgpu)
 
     if is_server_build:
         return "server"

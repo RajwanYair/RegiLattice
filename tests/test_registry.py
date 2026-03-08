@@ -11,9 +11,7 @@ from unittest.mock import patch
 import pytest
 
 # Always importable — the module guards non-Windows imports.
-from regilattice.registry import (AdminRequirementError, RegistrySession,
-                                  _split_root, assert_admin, is_windows,
-                                  platform_summary)
+from regilattice.registry import AdminRequirementError, RegistrySession, _split_root, assert_admin, is_windows, platform_summary
 
 # ── RegistrySession tests ───────────────────────────────────────────────────
 
@@ -285,10 +283,9 @@ class TestReadCacheContext:
 
     def test_context_clears_on_exception(self, tmp_path: Path) -> None:
         session = RegistrySession(base_dir=tmp_path, _dry_run=True)
-        with pytest.raises(ValueError, match="boom"):
-            with session.read_cache():
-                session._read_cache[("p", "n", "dword")] = 1
-                raise ValueError("boom")
+        with pytest.raises(ValueError, match="boom"), session.read_cache():
+            session._read_cache[("p", "n", "dword")] = 1
+            raise ValueError("boom")
         assert not session._read_cache_enabled
         assert len(session._read_cache) == 0
 
@@ -296,4 +293,5 @@ class TestReadCacheContext:
         session = RegistrySession(base_dir=tmp_path, _dry_run=True)
         with session.read_cache() as ctx:
             from regilattice.registry import _ReadCacheContext
+
             assert isinstance(ctx, _ReadCacheContext)
