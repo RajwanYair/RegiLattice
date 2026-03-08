@@ -6,6 +6,7 @@ applied from Python with proper backup, logging, and error handling.
 
 from __future__ import annotations
 
+import functools
 import os
 import platform
 import re
@@ -78,6 +79,7 @@ def _retry_on_transient(fn: object, *args: object, **kwargs: object) -> object:
         return fn(*args, **kwargs)  # type: ignore[operator]
 
 
+@functools.lru_cache(maxsize=256)
 def _split_root(path: str) -> tuple[int, str]:
     """Split a registry path into (root-handle, subkey)."""
     _ensure_windows()
