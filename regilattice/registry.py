@@ -395,6 +395,95 @@ class RegistrySession:
                 self._read_cache[cache_key] = result
         return result
 
+    def read_binary(self, path: str, name: str) -> bytes | None:
+        """Return a REG_BINARY value as bytes, or None if missing."""
+        _ensure_windows()
+        cache_key = (path, name, "binary")
+        with self._read_cache_lock:
+            if self._read_cache_enabled and cache_key in self._read_cache:
+                return self._read_cache[cache_key]  # type: ignore[return-value]
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                val, typ = winreg.QueryValueEx(handle, name)
+                result = bytes(val) if typ == winreg.REG_BINARY else None
+        except (FileNotFoundError, OSError):
+            result = None
+        with self._read_cache_lock:
+            if self._read_cache_enabled:
+                self._read_cache[cache_key] = result
+        return result
+
+    def read_qword(self, path: str, name: str) -> int | None:
+        """Return a REG_QWORD (64-bit int) value, or None if missing."""
+        _ensure_windows()
+        cache_key = (path, name, "qword")
+        with self._read_cache_lock:
+            if self._read_cache_enabled and cache_key in self._read_cache:
+                return self._read_cache[cache_key]  # type: ignore[return-value]
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                val, typ = winreg.QueryValueEx(handle, name)
+                result = int(val) if typ == winreg.REG_QWORD else None
+        except (FileNotFoundError, OSError):
+            result = None
+        with self._read_cache_lock:
+            if self._read_cache_enabled:
+                self._read_cache[cache_key] = result
+        return result
+
+    def set_binary(self, path: str, name: str, data: bytes) -> None:
+        """Write a REG_BINARY value."""
+        self.set_value(path, name, data, winreg.REG_BINARY)
+
+    def set_qword(self, path: str, name: str, value: int) -> None:
+        """Write a REG_QWORD (64-bit integer) value."""
+        self.set_value(path, name, value, winreg.REG_QWORD)
+
+    def list_values(self, path: str) -> list[tuple[str, object, int]]:
+        """Enumerate all (name, value, type) triples in a key.
+
+        Returns an empty list when the key does not exist.
+        """
+        _ensure_windows()
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                result: list[tuple[str, object, int]] = []
+                idx = 0
+                while True:
+                    try:
+                        name, val, typ = winreg.EnumValue(handle, idx)
+                        result.append((name, val, typ))
+                        idx += 1
+                    except OSError:
+                        break
+                return result
+        except (FileNotFoundError, OSError, ValueError):
+            return []
+
+    def list_keys(self, path: str) -> list[str]:
+        """Enumerate child key names immediately under *path*.
+
+        Returns an empty list when the key does not exist.
+        """
+        _ensure_windows()
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                result: list[str] = []
+                idx = 0
+                while True:
+                    try:
+                        result.append(winreg.EnumKey(handle, idx))
+                        idx += 1
+                    except OSError:
+                        break
+                return result
+        except (FileNotFoundError, OSError, ValueError):
+            return []
+
 
 # ── Admin check ──────────────────────────────────────────────────────────────
 
