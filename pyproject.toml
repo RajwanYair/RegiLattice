@@ -46,7 +46,14 @@ Changelog = "https://github.com/RajwanYair/RegiLattice/blob/main/CHANGELOG.md"
 regilattice = "regilattice.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<9", "pytest-cov>=7,<8", "mypy>=1.5,<2", "ruff>=0.4,<1"]
+dev = [
+    "pytest>=8,<9",
+    "pytest-cov>=7,<8",
+    "pytest-mock>=3.14,<4",
+    "hypothesis>=6.100,<7",
+    "mypy>=1.5,<2",
+    "ruff>=0.4,<1",
+]
 
 # ── Tool configuration ──────────────────────────────────────────────────────────
 

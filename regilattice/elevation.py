@@ -13,6 +13,13 @@ import os
 import subprocess
 import sys
 
+__all__ = [
+    "ensure_admin_or_elevate",
+    "is_admin",
+    "request_elevation",
+    "run_elevated",
+]
+
 from .registry import SESSION
 
 
