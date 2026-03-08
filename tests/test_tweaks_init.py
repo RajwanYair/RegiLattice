@@ -24,6 +24,7 @@ from regilattice.tweaks import (
     categories,
     categories_by_risk,
     categories_by_scope,
+    category_counts,
     category_info,
     diff_snapshots,
     get_tweak,
@@ -35,9 +36,13 @@ from regilattice.tweaks import (
     save_snapshot,
     search_tweaks,
     status_map,
+    tweak_risk_level,
     tweak_scope,
     tweak_status,
+    tweak_count_by_scope,
+    tweaks_above_build,
     tweaks_by_category,
+    tweaks_by_scope,
     tweaks_excluded_by_profile,
     tweaks_for_profile,
 )
@@ -1007,14 +1012,7 @@ class TestTagIntegrity:
 # ── C8 engine additions ───────────────────────────────────────────────────────
 
 
-from regilattice.tweaks import (  # noqa: E402
-    apply_tweaks,
-    filter_tweaks,
-    remove_tweaks,
-    tweak_dependencies,
-    tweaks_by_ids,
-    tweaks_by_tag,
-)
+from regilattice.tweaks import apply_tweaks, filter_tweaks, remove_tweaks, tweak_dependencies, tweaks_by_ids, tweaks_by_tag  # noqa: E402
 
 
 class TestFilterTweaks:
@@ -1348,3 +1346,132 @@ class TestApplyTweaksIncludeDeps:
             result = apply_tweaks(["orphan.main"], force_corp=True, include_deps=True)
         fn.assert_called_once()
         assert result.get("orphan.main") == TweakResult.APPLIED
+
+
+# ── Scope / build / risk / count helpers ────────────────────────────────────
+
+
+class TestTweaksByScope:
+    """Tests for tweaks_by_scope()."""
+
+    def test_returns_list(self) -> None:
+        result = tweaks_by_scope("user")
+        assert isinstance(result, list)
+
+    def test_all_scopes_non_negative(self) -> None:
+        for scope in ("user", "machine", "both"):
+            result = tweaks_by_scope(scope)
+            assert len(result) >= 0
+
+    def test_user_machine_both_partition(self) -> None:
+        """user + machine + both should sum to all tweaks count."""
+        u = tweaks_by_scope("user")
+        m = tweaks_by_scope("machine")
+        b = tweaks_by_scope("both")
+        assert len(u) + len(m) + len(b) == len(all_tweaks())
+
+    def test_each_result_matches_requested_scope(self) -> None:
+        for scope in ("user", "machine", "both"):
+            for td in tweaks_by_scope(scope):
+                assert tweak_scope(td) == scope
+
+    def test_unknown_scope_returns_empty(self) -> None:
+        result = tweaks_by_scope("invalid_scope")
+        assert result == []
+
+
+class TestTweaksAboveBuild:
+    """Tests for tweaks_above_build()."""
+
+    def test_build_zero_includes_all(self) -> None:
+        result = tweaks_above_build(0)
+        assert len(result) == len(all_tweaks())
+
+    def test_large_build_still_has_results(self) -> None:
+        """min_build=0 tweaks should always be included regardless of build."""
+        result = tweaks_above_build(99999)
+        # All tweaks with min_build=0 must be in the result
+        zero_tweaks = [td for td in all_tweaks() if td.min_build == 0]
+        for td in zero_tweaks:
+            assert td in result
+
+    def test_result_is_subset_of_all_tweaks(self) -> None:
+        full = set(td.id for td in all_tweaks())
+        for td in tweaks_above_build(22000):
+            assert td.id in full
+
+    def test_min_build_constraint_respected(self) -> None:
+        build = 22000
+        for td in tweaks_above_build(build):
+            assert td.min_build <= build
+
+
+class TestTweakRiskLevel:
+    """Tests for tweak_risk_level()."""
+
+    def test_returns_known_risk_string(self) -> None:
+        valid = {"low", "medium", "high"}
+        for td in all_tweaks():
+            assert tweak_risk_level(td) in valid
+
+    def test_all_tweaks_have_risk(self) -> None:
+        """No tweak should return an unexpected string."""
+        for td in all_tweaks():
+            level = tweak_risk_level(td)
+            assert isinstance(level, str) and len(level) > 0
+
+
+class TestTweakCountByScope:
+    """Tests for tweak_count_by_scope()."""
+
+    def test_returns_dict(self) -> None:
+        result = tweak_count_by_scope()
+        assert isinstance(result, dict)
+
+    def test_has_all_three_scopes(self) -> None:
+        result = tweak_count_by_scope()
+        for scope in ("user", "machine", "both"):
+            assert scope in result
+
+    def test_counts_are_non_negative(self) -> None:
+        for count in tweak_count_by_scope().values():
+            assert count >= 0
+
+    def test_total_matches_all_tweaks(self) -> None:
+        total = sum(tweak_count_by_scope().values())
+        assert total == len(all_tweaks())
+
+
+class TestCategoryCounts:
+    """Tests for category_counts()."""
+
+    def test_returns_dict(self) -> None:
+        assert isinstance(category_counts(), dict)
+
+    def test_has_explorer_category(self) -> None:
+        assert "Explorer" in category_counts()
+
+    def test_counts_match_tweaks_by_category(self) -> None:
+        cc = category_counts()
+        for cat, tds in tweaks_by_category().items():
+            assert cc[cat] == len(tds)
+
+    def test_total_matches_all_tweaks(self) -> None:
+        assert sum(category_counts().values()) == len(all_tweaks())
+
+
+class TestScopeCachePrewarmed:
+    """Verify that scope cache is pre-warmed at import time."""
+
+    def test_scope_cache_populated_for_all_tweaks(self) -> None:
+        from regilattice.tweaks import _SCOPE_CACHE
+
+        for td in all_tweaks():
+            assert td.id in _SCOPE_CACHE
+
+    def test_scope_cache_values_are_valid(self) -> None:
+        from regilattice.tweaks import _SCOPE_CACHE
+
+        valid = {"user", "machine", "both"}
+        for val in _SCOPE_CACHE.values():
+            assert val in valid
