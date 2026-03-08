@@ -1475,3 +1475,92 @@ class TestScopeCachePrewarmed:
         valid = {"user", "machine", "both"}
         for val in _SCOPE_CACHE.values():
             assert val in valid
+
+
+# ── C22 Phase 87-88: filter_tweaks early-exit + status_map detect-free ───────
+
+
+class TestFilterTweaksEarlyExit:
+    """Verify filter_tweaks returns early when pool is drained after a filter step."""
+
+    def test_nonexistent_category_returns_empty(self) -> None:
+        result = filter_tweaks(category="__NO_SUCH_CATEGORY_xyz9999__")
+        assert result == []
+
+    def test_impossible_corp_and_admin_combo_returns_list(self) -> None:
+        # corp_safe=True tweaks are HKCU-only (usually needs_admin=False)
+        # Either way, impossible combo should return a list (possibly empty)
+        result = filter_tweaks(corp_safe=True, needs_admin=True)
+        assert isinstance(result, list)
+
+    def test_early_exit_does_not_skip_valid_tweaks(self, all_tweaks_list: list[TweakDef]) -> None:
+        cat = categories()[0]
+        # min_build=99999 keeps everything since all tweaks have min_build<=99999
+        result_combined = filter_tweaks(category=cat, min_build=99999)
+        result_category = filter_tweaks(category=cat)
+        assert len(result_combined) == len(result_category)
+
+    def test_fake_category_plus_scope_still_empty(self) -> None:
+        result = filter_tweaks(category="__FAKE__", scope="user")
+        assert result == []
+
+    def test_empty_no_criteria_returns_all(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks()
+        assert len(result) == len(all_tweaks_list)
+
+
+class TestStatusMapDetectFree:
+    """Verify status_map assigns UNKNOWN directly for tweaks with no detect_fn."""
+
+    def test_sequential_detect_free_gets_unknown(self) -> None:
+        no_detect = TweakDef(id="__sm_seq_nd__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_seq_nd__": no_detect}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [no_detect]),
+        ):
+            result = status_map(parallel=False, ids=["__sm_seq_nd__"])
+        assert result["__sm_seq_nd__"] == TweakResult.UNKNOWN
+
+    def test_parallel_detect_free_gets_unknown(self) -> None:
+        no_detect = TweakDef(id="__sm_par_nd__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_par_nd__": no_detect}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [no_detect]),
+        ):
+            result = status_map(parallel=True, max_workers=1, ids=["__sm_par_nd__"])
+        assert result["__sm_par_nd__"] == TweakResult.UNKNOWN
+
+    def test_progress_fn_called_for_detect_free_parallel(self) -> None:
+        calls: list[tuple[int, int]] = []
+        no_detect = TweakDef(id="__sm_prog_nd__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_prog_nd__": no_detect}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [no_detect]),
+        ):
+            status_map(parallel=True, max_workers=1, progress_fn=lambda d, t: calls.append((d, t)), ids=["__sm_prog_nd__"])
+        assert calls != []
+        assert calls[-1][0] == 1
+
+    def test_detect_fn_present_executed_sequentially(self) -> None:
+        detect_fn = MagicMock(return_value=True)
+        with_detect = TweakDef(id="__sm_seq_det__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn)
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_seq_det__": with_detect}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [with_detect]),
+        ):
+            result = status_map(parallel=False, ids=["__sm_seq_det__"])
+        assert result["__sm_seq_det__"] == TweakResult.APPLIED
+        detect_fn.assert_called_once()
+
+    def test_mixed_sequential_detect_and_no_detect(self) -> None:
+        detect_fn = MagicMock(return_value=False)
+        td_with = TweakDef(id="__sm_mix_det__", label="W", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn)
+        td_without = TweakDef(id="__sm_mix_nd__", label="X", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        index = {"__sm_mix_det__": td_with, "__sm_mix_nd__": td_without}
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", index),
+            patch("regilattice.tweaks._ALL_TWEAKS", [td_with, td_without]),
+        ):
+            result = status_map(parallel=False)
+        assert result["__sm_mix_det__"] == TweakResult.NOT_APPLIED
+        assert result["__sm_mix_nd__"] == TweakResult.UNKNOWN
