@@ -15,6 +15,14 @@ from collections.abc import Callable
 
 from .registry import SESSION, is_windows
 
+__all__ = [
+    "CorporateNetworkError",
+    "assert_not_corporate",
+    "corp_guard_status",
+    "is_corporate_network",
+    "is_gpo_managed",
+]
+
 # ── Detection helpers ────────────────────────────────────────────────────────
 
 _VPN_KEYWORDS: tuple[str, ...] = (

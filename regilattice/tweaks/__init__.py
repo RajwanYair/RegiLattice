@@ -22,6 +22,40 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
+__all__ = [
+    "CategoryInfo",
+    "ProfileDef",
+    "TweakDef",
+    "TweakResult",
+    "all_category_info",
+    "all_tweaks",
+    "apply_all",
+    "apply_profile",
+    "available_profiles",
+    "categories",
+    "categories_by_risk",
+    "categories_by_scope",
+    "category_info",
+    "diff_snapshots",
+    "get_tweak",
+    "load_snapshot",
+    "profile_info",
+    "reload_plugins",
+    "remove_all",
+    "restore_snapshot",
+    "save_snapshot",
+    "search_tweaks",
+    "status_map",
+    "tweak_scope",
+    "tweak_status",
+    "tweaks_by_category",
+    "tweaks_by_ids",
+    "tweaks_by_tag",
+    "tweaks_excluded_by_profile",
+    "tweaks_for_profile",
+    "windows_build",
+]
+
 # ── Tweak result enum ────────────────────────────────────────────────────────
 
 
