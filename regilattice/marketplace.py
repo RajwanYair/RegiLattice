@@ -43,6 +43,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from types import ModuleType
 
+__all__ = [
+    "PluginMeta",
+    "discover_plugins",
+    "load_plugin",
+    "loaded_plugins",
+    "plugins_dir",
+    "unload_plugin",
+]
+
 from . import __version__
 from .tweaks import TweakDef
 

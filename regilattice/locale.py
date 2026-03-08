@@ -17,6 +17,14 @@ import json
 from pathlib import Path
 from typing import Any
 
+__all__ = [
+    "available_keys",
+    "current_locale",
+    "load_locale_file",
+    "set_locale",
+    "t",
+]
+
 # ── Built-in English strings ────────────────────────────────────────────────
 
 _EN: dict[str, str] = {

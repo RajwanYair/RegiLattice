@@ -23,6 +23,12 @@ import subprocess
 import sys
 from types import ModuleType
 
+__all__ = [
+    "install_package",
+    "lazy_import",
+    "require",
+]
+
 log = logging.getLogger(__name__)
 
 

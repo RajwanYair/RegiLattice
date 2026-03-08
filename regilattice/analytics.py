@@ -11,6 +11,19 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+__all__ = [
+    "AnalyticsData",
+    "error_stats",
+    "get_stats",
+    "record_apply",
+    "record_error",
+    "record_error_for",
+    "record_remove",
+    "record_session",
+    "reset",
+    "top_tweaks",
+]
+
 _ANALYTICS_DIR = Path.home() / ".regilattice"
 _ANALYTICS_FILE = _ANALYTICS_DIR / "analytics.json"
 
