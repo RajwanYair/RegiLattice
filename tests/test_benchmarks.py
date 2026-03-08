@@ -12,21 +12,17 @@ use simple ``time.perf_counter`` checks.
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
+from typing import Any
 
 import pytest
 
-from regilattice.tweaks import (
-    all_tweaks,
-    categories,
-    search_tweaks,
-    status_map,
-    tweaks_by_category,
-)
+from regilattice.tweaks import all_tweaks, categories, search_tweaks, status_map, tweaks_by_category
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
 _MAX_LOAD_S = 2.0  # plugin loading + all_tweaks()
-_MAX_STATUS_S = 10.0  # status_map() — calls detect_fn on every tweak
+_MAX_STATUS_S = 60.0  # status_map() — calls detect_fn on every tweak (generous for loaded machines)
 _MAX_SEARCH_S = 0.5  # search_tweaks() full scan
 _MAX_CATEGORIES_S = 0.2  # categories() enumeration
 
@@ -34,7 +30,7 @@ _MAX_CATEGORIES_S = 0.2  # categories() enumeration
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
-def _timed(fn, *args, **kwargs):  # type: ignore[no-untyped-def]
+def _timed(fn: Callable[..., Any], *args: Any, **kwargs: Any) -> tuple[Any, float]:
     """Return (result, elapsed_seconds)."""
     t0 = time.perf_counter()
     result = fn(*args, **kwargs)

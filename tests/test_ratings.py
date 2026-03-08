@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Generator
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -10,7 +12,7 @@ from regilattice import ratings
 
 
 @pytest.fixture(autouse=True)
-def _isolated_ratings(tmp_path):
+def _isolated_ratings(tmp_path: Path) -> Generator[None]:
     """Redirect ratings to a temp dir for test isolation."""
     with (
         patch.object(ratings, "_RATINGS_DIR", tmp_path),
@@ -79,6 +81,6 @@ class TestTopRated:
 
 
 class TestCorruptFile:
-    def test_corrupt_returns_empty(self, tmp_path) -> None:
+    def test_corrupt_returns_empty(self, tmp_path: Path) -> None:
         (tmp_path / "ratings.json").write_text("{invalid", encoding="utf-8")
         assert ratings.all_ratings() == {}

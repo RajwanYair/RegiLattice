@@ -403,6 +403,10 @@ class CategorySection:
             row.build_widgets(self.content_frame)
             row.pack_row()
 
+    def set_on_collapse_change(self, callback: Callable[[CategorySection], None]) -> None:
+        """Register a callback invoked when the section is expanded or collapsed."""
+        self._on_collapse_change = callback
+
     def toggle(self, _: tk.Event[tk.Misc] | None = None) -> None:
         self.expanded = not self.expanded
         if self.expanded:

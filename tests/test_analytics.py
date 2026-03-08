@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Generator
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -10,7 +12,7 @@ from regilattice import analytics
 
 
 @pytest.fixture(autouse=True)
-def _isolated_analytics(tmp_path):
+def _isolated_analytics(tmp_path: Path) -> Generator[None]:
     """Redirect analytics to a temp dir for test isolation."""
     with (
         patch.object(analytics, "_ANALYTICS_DIR", tmp_path),
@@ -87,7 +89,7 @@ class TestReset:
 
 
 class TestLoadCorrupt:
-    def test_corrupt_json_returns_defaults(self, tmp_path) -> None:
+    def test_corrupt_json_returns_defaults(self, tmp_path: Path) -> None:
         (tmp_path / "analytics.json").write_text("not json{{{", encoding="utf-8")
         data = analytics.get_stats()
         assert data.total_applies == 0

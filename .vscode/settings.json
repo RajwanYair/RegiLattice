@@ -1,12 +1,7 @@
 {
   // ── Python ──────────────────────────────────────────────────────────
   "python.defaultInterpreterPath": "C:/Users/ryair/AppData/Local/Python/bin/python.exe",
-  "python.analysis.typeCheckingMode": "standard",
-  "python.analysis.pythonVersion": "3.10",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.extraPaths": [
-    "."
-  ],
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "tests",
@@ -37,11 +32,6 @@
   "editor.rulers": [
     150
   ],
-  // ── Disable built-in linting in favor of ruff ────────────────────────
-  "python.linting.flake8Enabled": false,
-  "python.linting.pylintEnabled": false,
-  "python.linting.mypyEnabled": false,
-  "python.linting.enabled": false,
   "editor.renderWhitespace": "boundary",
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -95,22 +85,6 @@
   },
   // ── Pylint (suppress architectural require_admin pattern) ───────────
   "pylint.args": [
-    "--disable=W0613,W0718,W1510,W1404,W0201"
-  ],
-  // ── Pylance additional suppressions ──────────────────────────────────
-  "python.analysis.diagnosticSeverityOverrides": {
-    "reportMissingModuleSource": "none",
-    "reportUnusedParameter": "none",
-    "reportUnusedCallResult": "none",
-    "reportGeneralTypeIssues": "none",
-    "reportCallIssue": "none",
-    "reportReturnType": "none",
-    "reportAttributeAccessIssue": "none",
-    "reportAssignmentType": "none",
-    "reportUntypedFunctionDecorator": "none",
-    "reportOptionalMemberAccess": "none",
-    "reportImplicitStringConcatenation": "none",
-    "reportUnnecessaryTypeIgnoreComment": "none",
-    "reportUnknownMemberType": "none"
-  }
+    "--disable=W0613,W0718,W1510,W1404,W0201,W0603,W0212,W0621"
+  ]
 }

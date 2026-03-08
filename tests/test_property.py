@@ -15,14 +15,7 @@ import string
 import hypothesis.strategies as st
 from hypothesis import HealthCheck, given, settings
 
-from regilattice.tweaks import (
-    TweakDef,
-    all_tweaks,
-    categories,
-    get_tweak,
-    search_tweaks,
-    tweaks_by_category,
-)
+from regilattice.tweaks import TweakDef, all_tweaks, categories, get_tweak, search_tweaks, tweaks_by_category
 
 # ── Strategies ───────────────────────────────────────────────────────────────
 

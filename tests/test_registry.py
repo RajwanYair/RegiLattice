@@ -229,7 +229,7 @@ class TestRetryOnTransient:
             calls.append(1)
             if len(calls) == 1:
                 exc = OSError("handle error")
-                exc.winerror = 6  # type: ignore[attr-defined]
+                exc.winerror = 6  # attr set dynamically on Windows
                 raise exc
             return "ok"
 
@@ -255,7 +255,7 @@ class TestRetryOnTransient:
 
         def fn() -> str:
             exc = OSError("access denied")
-            exc.winerror = 5  # type: ignore[attr-defined]
+            exc.winerror = 5  # attr set dynamically on Windows
             raise exc
 
         with patch("regilattice.registry.time.sleep"), pytest.raises(OSError, match="access denied"):

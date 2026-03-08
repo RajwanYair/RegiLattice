@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from regilattice.menu import Menu
 
 
@@ -40,7 +42,7 @@ class TestMenuConstruction:
 
 
 class TestMenuHeader:
-    def test_header_prints(self, capsys) -> None:
+    def test_header_prints(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"):
             menu._header("Test Subtitle")
@@ -48,7 +50,7 @@ class TestMenuHeader:
         assert "RegiLattice" in out
         assert "Test Subtitle" in out
 
-    def test_header_no_subtitle(self, capsys) -> None:
+    def test_header_no_subtitle(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"):
             menu._header()
@@ -57,19 +59,19 @@ class TestMenuHeader:
 
 
 class TestShowCategories:
-    def test_show_categories_exit(self, capsys) -> None:
+    def test_show_categories_exit(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"), patch("builtins.input", return_value="0"):
             choice = menu._show_categories()
         assert choice == "0"
 
-    def test_show_categories_eof(self, capsys) -> None:
+    def test_show_categories_eof(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"), patch("builtins.input", side_effect=EOFError):
             choice = menu._show_categories()
         assert choice == "0"
 
-    def test_show_categories_lists_all(self, capsys) -> None:
+    def test_show_categories_lists_all(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"), patch("builtins.input", return_value="0"):
             menu._show_categories()
@@ -81,7 +83,7 @@ class TestShowCategories:
 
 
 class TestShowTweaks:
-    def test_show_tweaks_back(self, capsys) -> None:
+    def test_show_tweaks_back(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         with (
@@ -91,13 +93,13 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_empty_category(self, capsys) -> None:
+    def test_show_tweaks_empty_category(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch.object(menu, "_clear"):
             menu._show_tweaks("NonexistentCategory12345")
         assert "No tweaks" in capsys.readouterr().out
 
-    def test_show_tweaks_toggle(self, capsys) -> None:
+    def test_show_tweaks_toggle(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         # First call returns "1" (toggle first tweak), second returns "0" (back)
@@ -110,7 +112,7 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_apply_all(self, capsys) -> None:
+    def test_show_tweaks_apply_all(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         with (
@@ -123,7 +125,7 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_remove_all(self, capsys) -> None:
+    def test_show_tweaks_remove_all(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         with (
@@ -136,7 +138,7 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_invalid_choice(self, capsys) -> None:
+    def test_show_tweaks_invalid_choice(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         with (
@@ -147,7 +149,7 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_out_of_range(self, capsys) -> None:
+    def test_show_tweaks_out_of_range(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         cat = menu._categories[0]
         with (
@@ -158,7 +160,7 @@ class TestShowTweaks:
         ):
             menu._show_tweaks(cat)
 
-    def test_show_tweaks_corp_blocked_apply_all(self, capsys) -> None:
+    def test_show_tweaks_corp_blocked_apply_all(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.corpguard import CorporateNetworkError
 
         menu = Menu()
@@ -174,7 +176,7 @@ class TestShowTweaks:
 
 
 class TestRunSingle:
-    def test_run_single_apply(self, capsys) -> None:
+    def test_run_single_apply(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         td = MagicMock()
         td.label = "Test Tweak"
@@ -183,7 +185,7 @@ class TestRunSingle:
             menu._run_single(td, "apply")
         td.apply_fn.assert_called_once()
 
-    def test_run_single_remove(self, capsys) -> None:
+    def test_run_single_remove(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         td = MagicMock()
         td.label = "Test Tweak"
@@ -192,7 +194,7 @@ class TestRunSingle:
             menu._run_single(td, "remove")
         td.remove_fn.assert_called_once()
 
-    def test_run_single_admin_error(self, capsys) -> None:
+    def test_run_single_admin_error(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.registry import AdminRequirementError
 
         menu = Menu()
@@ -202,7 +204,7 @@ class TestRunSingle:
         with patch("regilattice.menu.assert_not_corporate"):
             menu._run_single(td, "apply")
 
-    def test_run_single_general_error(self, capsys) -> None:
+    def test_run_single_general_error(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         td = MagicMock()
         td.label = "Test Tweak"
@@ -210,7 +212,7 @@ class TestRunSingle:
         with patch("regilattice.menu.assert_not_corporate"):
             menu._run_single(td, "apply")
 
-    def test_run_single_corp_blocked(self, capsys) -> None:
+    def test_run_single_corp_blocked(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.corpguard import CorporateNetworkError
 
         menu = Menu()
@@ -230,7 +232,7 @@ class TestMenuLoop:
         ):
             menu.loop()
 
-    def test_loop_non_windows(self, capsys) -> None:
+    def test_loop_non_windows(self, capsys: pytest.CaptureFixture[str]) -> None:
         menu = Menu()
         with patch("regilattice.menu.is_windows", return_value=False):
             menu.loop()

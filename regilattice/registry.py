@@ -96,6 +96,20 @@ class RegistrySession:
     def log_path(self) -> Path:
         return self._log_path
 
+    @property
+    def dry_run(self) -> bool:
+        """Whether the session is in dry-run mode (no actual registry writes)."""
+        return self._dry_run
+
+    @dry_run.setter
+    def dry_run(self, value: bool) -> None:
+        self._dry_run = value
+
+    @property
+    def dry_ops(self) -> int:
+        """Number of registry operations skipped in dry-run mode."""
+        return self._dry_ops
+
     def log(self, message: str) -> None:
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with self._log_path.open("a", encoding="utf-8") as fh:

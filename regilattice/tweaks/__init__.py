@@ -8,6 +8,7 @@ so that the GUI, CLI, and menu can iterate over a single flat list.
 from __future__ import annotations
 
 import concurrent.futures
+import functools
 import importlib
 import json
 import pkgutil
@@ -659,22 +660,17 @@ def _topo_sort(tweaks: list[TweakDef]) -> list[TweakDef]:
 
 # ── Windows build detection ──────────────────────────────────────────────────
 
-_CACHED_BUILD: int | None = None
 
-
+@functools.lru_cache(maxsize=1)
 def _windows_build() -> int:
     """Return the Windows build number (e.g. 22631 for Win 11 23H2).
 
     Returns 0 on non-Windows platforms or if detection fails.
     """
-    global _CACHED_BUILD
-    if _CACHED_BUILD is not None:
-        return _CACHED_BUILD
     try:
-        _CACHED_BUILD = int(platform.version().split(".")[-1])
+        return int(platform.version().split(".")[-1])
     except (ValueError, AttributeError):
-        _CACHED_BUILD = 0
-    return _CACHED_BUILD
+        return 0
 
 
 def windows_build() -> int:
@@ -708,6 +704,10 @@ class TweakExecutor:
         from regilattice.corpguard import is_corporate_network
 
         return is_corporate_network()
+
+    def is_blocked(self, td: TweakDef) -> bool:
+        """Public API: check if *td* would be blocked by corporate policy."""
+        return self._is_blocked(td)
 
     def _is_build_blocked(self, td: TweakDef) -> bool:
         """Return True if the current Windows build is below *td.min_build*."""

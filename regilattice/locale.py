@@ -74,7 +74,7 @@ _EN: dict[str, str] = {
 # ── Active locale state ─────────────────────────────────────────────────────
 
 _active: dict[str, str] = dict(_EN)
-_current_locale: str = "en"
+_state: dict[str, str] = {"locale": "en"}
 
 
 def set_locale(name: str, overrides: dict[str, str] | None = None) -> None:
@@ -84,8 +84,7 @@ def set_locale(name: str, overrides: dict[str, str] | None = None) -> None:
     *overrides* is an optional dict of key → translated string that patches
     the built-in English table.  Missing keys fall back to English.
     """
-    global _current_locale
-    _current_locale = name
+    _state["locale"] = name
     _active.clear()
     _active.update(_EN)
     if overrides:
@@ -105,7 +104,7 @@ def load_locale_file(path: str | Path) -> None:
 
 def current_locale() -> str:
     """Return the active locale tag."""
-    return _current_locale
+    return _state["locale"]
 
 
 def available_keys() -> list[str]:

@@ -80,7 +80,7 @@ class TestThemeDataIntegrity:
         hex_re = re.compile(r"^#[0-9A-Fa-f]{6}$")
         for name in theme.available_themes():
             for key, value in theme._THEMES[name].items():
-                assert hex_re.match(value), f"{name}.{key} = {value!r} is not a valid hex colour"
+                assert hex_re.match(str(value)), f"{name}.{key} = {value!r} is not a valid hex colour"
 
 
 class TestFonts:
