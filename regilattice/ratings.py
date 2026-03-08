@@ -86,3 +86,16 @@ def top_rated(n: int = 10) -> list[tuple[str, TweakRating]]:
     """Return the top *n* highest-rated tweaks."""
     ratings = all_ratings()
     return sorted(ratings.items(), key=lambda x: x[1].stars, reverse=True)[:n]
+
+
+def average_rating() -> float | None:
+    """Return the mean star value across all rated tweaks, or None if no ratings."""
+    ratings = all_ratings()
+    if not ratings:
+        return None
+    return sum(r.stars for r in ratings.values()) / len(ratings)
+
+
+def rated_count() -> int:
+    """Return the number of tweaks that have been rated."""
+    return len(_load_all())
