@@ -84,3 +84,81 @@ class TestCorruptFile:
     def test_corrupt_returns_empty(self, tmp_path: Path) -> None:
         (tmp_path / "ratings.json").write_text("{invalid", encoding="utf-8")
         assert ratings.all_ratings() == {}
+
+
+# ── average_rating + rated_count tests ──────────────────────────────────────
+
+
+class TestAverageRating:
+    """Tests for average_rating()."""
+
+    def test_returns_none_when_no_ratings(self) -> None:
+        ratings.rate_tweak("__clear__", 3)
+        ratings.remove_rating("__clear__")
+        # Ensure clean slate
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        assert ratings.average_rating() is None
+
+    def test_single_rating_equals_its_stars(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        ratings.rate_tweak("solo", 4)
+        assert ratings.average_rating() == 4.0
+        ratings.remove_rating("solo")
+
+    def test_average_of_multiple_ratings(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        ratings.rate_tweak("a", 2)
+        ratings.rate_tweak("b", 4)
+        avg = ratings.average_rating()
+        assert avg is not None
+        assert abs(avg - 3.0) < 0.001
+        ratings.remove_rating("a")
+        ratings.remove_rating("b")
+
+    def test_average_between_1_and_5(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        for i, stars in enumerate([1, 3, 5], 1):
+            ratings.rate_tweak(f"tw{i}", stars)
+        avg = ratings.average_rating()
+        assert avg is not None
+        assert 1.0 <= avg <= 5.0
+        for i in range(1, 4):
+            ratings.remove_rating(f"tw{i}")
+
+
+class TestRatedCount:
+    """Tests for rated_count()."""
+
+    def test_zero_when_empty(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        assert ratings.rated_count() == 0
+
+    def test_increments_with_each_rating(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        ratings.rate_tweak("r1", 3)
+        assert ratings.rated_count() == 1
+        ratings.rate_tweak("r2", 5)
+        assert ratings.rated_count() == 2
+        ratings.remove_rating("r1")
+        ratings.remove_rating("r2")
+
+    def test_decrements_on_remove(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        ratings.rate_tweak("temp", 4)
+        ratings.remove_rating("temp")
+        assert ratings.rated_count() == 0
+
+    def test_overwrite_does_not_increase_count(self) -> None:
+        for tid in list(ratings.all_ratings().keys()):
+            ratings.remove_rating(tid)
+        ratings.rate_tweak("overwrite", 3)
+        ratings.rate_tweak("overwrite", 5)  # overwrite same ID
+        assert ratings.rated_count() == 1
+        ratings.remove_rating("overwrite")
