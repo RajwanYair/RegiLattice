@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import threading
 import tkinter as tk
@@ -306,6 +307,221 @@ def open_scoop_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> N
         ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
 
     threading.Thread(target=_refresh_list, daemon=True).start()
+
+
+# ── PowerShell Modules Manager ───────────────────────────────────────────────
+
+
+def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> None:
+    """Open a PowerShell Modules manager dialog for listing, installing and removing modules."""
+    dlg = tk.Toplevel(root)
+    dlg.title("PowerShell Modules Manager")
+    dlg.geometry("720x580")
+    dlg.configure(bg=_BG)
+    dlg.transient(root)
+    dlg.grab_set()
+
+    # Header
+    tk.Label(dlg, text="\U0001f9e9  PowerShell Modules Manager", bg=_BG, fg=_FG, font=_FONT_TITLE).pack(
+        padx=16,
+        pady=(12, 4),
+        anchor="w",
+    )
+
+    # Scope selector (CurrentUser / AllUsers)
+    scope_var = tk.StringVar(value="CurrentUser")
+    scope_frame = tk.Frame(dlg, bg=_BG)
+    scope_frame.pack(fill="x", padx=16, pady=(0, 4))
+    tk.Label(scope_frame, text="Scope:", bg=_BG, fg=_FG_DIM, font=_FONT_SM).pack(side="left")
+    for scope in ("CurrentUser", "AllUsers"):
+        tk.Radiobutton(
+            scope_frame,
+            text=scope,
+            variable=scope_var,
+            value=scope,
+            bg=_BG,
+            fg=_FG,
+            selectcolor=_CARD_BG,
+            font=_FONT_SM,
+            activebackground=_BG,
+        ).pack(side="left", padx=(6, 0))
+
+    # Status label
+    status_lbl = tk.Label(dlg, text="Ready — click Refresh to list installed modules.", bg=_BG, fg=_FG_DIM, font=_FONT_SM)
+    status_lbl.pack(padx=16, pady=(0, 4), anchor="w")
+
+    # Module list
+    list_frame = tk.Frame(dlg, bg=_BG)
+    list_frame.pack(fill="both", expand=True, padx=16, pady=4)
+
+    listbox = tk.Listbox(
+        list_frame,
+        bg=_CARD_BG,
+        fg=_FG,
+        font=_FONT,
+        selectbackground=_ACCENT,
+        selectforeground="#1E1E2E",
+        relief="flat",
+        highlightthickness=0,
+    )
+    scroll = ttk.Scrollbar(list_frame, orient="vertical", command=listbox.yview)
+    listbox.configure(yscrollcommand=scroll.set)
+    listbox.pack(side="left", fill="both", expand=True)
+    scroll.pack(side="right", fill="y")
+
+    def _run_ps(command: str) -> str:
+        """Run a PowerShell command and return stdout. Raises RuntimeError on failure."""
+        result = subprocess.run(
+            ["powershell", "-NoProfile", "-NonInteractive", "-Command", command],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr.strip() or f"Exit code {result.returncode}")
+        return result.stdout.strip()
+
+    def _refresh_list() -> None:
+        status_lbl.configure(text="Scanning installed modules\u2026")
+        dlg.update()
+        listbox.delete(0, "end")
+        try:
+            scope = scope_var.get()
+            scope_flag = f"-Scope {scope}" if scope == "CurrentUser" else ""
+            raw = _run_ps(
+                f"Get-InstalledModule {scope_flag} | Sort-Object Name | "
+                "ForEach-Object {{ '{0}  v{1}' -f $_.Name, $_.Version }}"
+            )
+            lines = [ln for ln in raw.splitlines() if ln.strip()]
+            for ln in lines:
+                listbox.insert("end", ln)
+            status_lbl.configure(text=f"{len(lines)} module(s) installed ({scope})")
+        except (RuntimeError, FileNotFoundError) as exc:
+            status_lbl.configure(text=f"Error: {exc}")
+
+    # Install / Remove controls
+    ctrl = tk.Frame(dlg, bg=_BG)
+    ctrl.pack(fill="x", padx=16, pady=(4, 8))
+
+    install_var = tk.StringVar()
+    tk.Label(ctrl, text="Module:", bg=_BG, fg=_FG, font=_FONT_SM).pack(side="left")
+    entry = ttk.Entry(ctrl, textvariable=install_var, font=_FONT, width=24)
+    entry.pack(side="left", padx=(4, 4))
+
+    def _install_action() -> None:
+        name = install_var.get().strip()
+        if not name:
+            return
+        scope = scope_var.get()
+        status_lbl.configure(text=f"Installing {name}\u2026")
+        dlg.update()
+        try:
+            _run_ps(f"Install-Module -Name '{name}' -Scope {scope} -Force -AllowClobber")
+            status_lbl.configure(text=f"Installed {name} \u2714")
+            _refresh_list()
+            refresh_status_all()
+        except (RuntimeError, FileNotFoundError) as exc:
+            messagebox.showerror("Install Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Install failed.")
+
+    def _remove_action() -> None:
+        sel = listbox.curselection()  # type: ignore[no-untyped-call]
+        if not sel:
+            messagebox.showinfo("Select Module", "Select a module to remove.", parent=dlg)
+            return
+        name = listbox.get(sel[0]).split()[0]  # strip version from display string
+        if not messagebox.askyesno("Confirm Remove", f"Uninstall all versions of '{name}'?", parent=dlg):
+            return
+        status_lbl.configure(text=f"Removing {name}\u2026")
+        dlg.update()
+        try:
+            _run_ps(f"Uninstall-Module -Name '{name}' -AllVersions -Force")
+            status_lbl.configure(text=f"Removed {name} \u2714")
+            _refresh_list()
+            refresh_status_all()
+        except (RuntimeError, FileNotFoundError) as exc:
+            messagebox.showerror("Remove Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Remove failed.")
+
+    def _update_action() -> None:
+        sel = listbox.curselection()  # type: ignore[no-untyped-call]
+        if not sel:
+            messagebox.showinfo("Select Module", "Select a module to update.", parent=dlg)
+            return
+        name = listbox.get(sel[0]).split()[0]
+        scope = scope_var.get()
+        status_lbl.configure(text=f"Updating {name}\u2026")
+        dlg.update()
+        try:
+            _run_ps(f"Update-Module -Name '{name}' -Scope {scope} -Force")
+            status_lbl.configure(text=f"Updated {name} \u2714")
+            _refresh_list()
+        except (RuntimeError, FileNotFoundError) as exc:
+            messagebox.showerror("Update Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Update failed.")
+
+    tk.Button(
+        ctrl,
+        text="Install",
+        bg="#40A02B",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_install_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="Remove Selected",
+        bg="#E64A19",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_remove_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="Update Selected",
+        bg="#1E66F5",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_update_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="\u21bb Refresh",
+        bg=_CARD_BG,
+        fg=_FG,
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_refresh_list, daemon=True).start(),
+    ).pack(side="left", padx=2)
+
+    # Quick install popular PowerShell modules
+    pop_frame = tk.LabelFrame(dlg, text="Quick Install Popular Modules", bg=_BG, fg=_FG_DIM, font=_FONT_XS)
+    pop_frame.pack(fill="x", padx=16, pady=(0, 8))
+    popular_modules = [
+        "PSReadLine", "posh-git", "PowerShellGet", "Az",
+        "Microsoft.Graph", "Terminal-Icons", "oh-my-posh",
+        "PSScriptAnalyzer", "Pester", "SqlServer",
+    ]
+    for i, mod in enumerate(popular_modules):
+        tk.Button(
+            pop_frame,
+            text=mod,
+            bg=_CARD_BG,
+            fg=_ACCENT,
+            font=_FONT_XS,
+            relief="flat",
+            padx=4,
+            pady=1,
+            cursor="hand2",
+            command=lambda m=mod: install_var.set(m),  # type: ignore[misc]
+        ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
 
 
 # ── About dialog ─────────────────────────────────────────────────────────────

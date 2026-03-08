@@ -600,6 +600,12 @@ class RegiLatticeGUI:
             expand=True,
             fill="x",
         )
+        ttk.Button(btn3, text="\U0001f9e9  PS Modules", command=self._open_psmodule_manager).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
+        )
         ttk.Button(btn3, text="\U0001f4dc  Toggle Log", command=self._toggle_log_panel).pack(
             side="left",
             padx=(0, 6),
@@ -774,7 +780,7 @@ class RegiLatticeGUI:
                 self._tweak_rows.append(row)
                 self._row_by_id[td.id] = row
                 cat_rows.append(row)
-            section = CategorySection(self._inner, cat_name, cat_rows)
+            section = CategorySection(self._inner, cat_name, cat_rows, expanded=False)
             section.set_on_batch(self._batch_category)
             section.set_on_reorder(self._reorder_category)
             section.set_on_collapse_change(self._on_category_collapse_change)
@@ -1082,6 +1088,12 @@ class RegiLatticeGUI:
     def _open_scoop_manager(self) -> None:
         """Open a Scoop Tools manager dialog showing installed packages with install/remove."""
         dialogs.open_scoop_manager(self._root, self._refresh_status_all)
+
+    # ── PowerShell Modules Manager ──────────────────────────────────────
+
+    def _open_psmodule_manager(self) -> None:
+        """Open a PowerShell Modules manager dialog for listing, installing and removing modules."""
+        dialogs.open_psmodule_manager(self._root, self._refresh_status_all)
 
     # ── About dialog ─────────────────────────────────────────────────────
 
@@ -1646,28 +1658,28 @@ class RegiLatticeGUI:
     # ── Category collapse persistence ──────────────────────────────────
 
     def _save_collapse_state(self) -> None:
-        """Persist which categories are collapsed to disk."""
-        collapsed = [s.name for s in self._category_sections if not s.expanded]
-        if not collapsed:
+        """Persist which categories are expanded to disk (default state is collapsed)."""
+        expanded = [s.name for s in self._category_sections if s.expanded]
+        if not expanded:
             with contextlib.suppress(OSError):
                 _COLLAPSE_FILE.unlink(missing_ok=True)
             return
         try:
             _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-            _COLLAPSE_FILE.write_text(json.dumps(collapsed), encoding="utf-8")
+            _COLLAPSE_FILE.write_text(json.dumps(expanded), encoding="utf-8")
         except OSError:
             pass
 
     def _restore_collapse_state(self) -> None:
-        """Restore collapsed categories from previous session."""
+        """Restore expanded categories from previous session (sections start collapsed)."""
         try:
             data = json.loads(_COLLAPSE_FILE.read_text(encoding="utf-8"))
             if not isinstance(data, list):
                 return
-            collapsed_set = set(data)
+            expanded_set = set(data)
             for section in self._category_sections:
-                if section.name in collapsed_set and section.expanded:
-                    section.toggle()
+                if section.name in expanded_set and not section.expanded:
+                    section.toggle()  # re-expand previously-expanded sections
         except (OSError, ValueError):
             pass
 

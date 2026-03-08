@@ -42,7 +42,7 @@ The project requires a **non-alias** Python installation. On Windows, the
 Windows Store alias (`python.exe` in `WindowsApps`) does not support all
 registry operations.
 
-**Recommended path:** `C:\Users\<user>\AppData\Local\Python\bin\python.exe`
+**Recommended path:** `%LOCALAPPDATA%\Python\bin\python.exe`
 
 To find your Python:
 

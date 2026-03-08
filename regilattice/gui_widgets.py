@@ -280,10 +280,10 @@ class TweakRow:
 class CategorySection:
     """A collapsible category section with a clickable header and tweak count."""
 
-    def __init__(self, parent: ttk.Frame, name: str, rows: list[TweakRow]) -> None:
+    def __init__(self, parent: ttk.Frame, name: str, rows: list[TweakRow], *, expanded: bool = True) -> None:
         self.name = name
         self.rows = rows
-        self.expanded = True
+        self.expanded = True  # set False below if expanded=False
         self._parent = parent
         self._on_collapse_change: Callable[[CategorySection], None] | None = None
 
@@ -407,7 +407,6 @@ class CategorySection:
 
         # Content frame — holds the tweak rows
         self.content_frame = ttk.Frame(parent, style="TFrame")
-        self.content_frame.pack(fill="x")
 
         # Build (or re-parent) each row's widgets inside content_frame
         for i, row in enumerate(self.rows):
@@ -416,6 +415,15 @@ class CategorySection:
                 row.frame.destroy()
             row.build_widgets(self.content_frame)
             row.pack_row()
+
+        # Start expanded or collapsed depending on caller preference.
+        # Rows are always built; only the content_frame pack is conditional.
+        if expanded:
+            self.content_frame.pack(fill="x")
+        else:
+            self.expanded = False
+            self._arrow.configure(text="\u25b6")
+            # content_frame intentionally NOT packed — shown on first toggle
 
     def set_on_collapse_change(self, callback: Callable[[CategorySection], None]) -> None:
         """Register a callback invoked when the section is expanded or collapsed."""
@@ -492,6 +500,13 @@ class CategorySection:
         self.header.configure(bg=theme.BG_SURFACE)
         self._arrow.configure(fg=theme.ACCENT, bg=theme.BG_SURFACE)
         self._title.configure(fg=theme.ACCENT, bg=theme.BG_SURFACE)
-        self._count_lbl.configure(bg=theme.BG_SURFACE)
+        self._count_lbl.configure(fg=theme.FG_DIM, bg=theme.BG_SURFACE)
         self._btn_enable_all.configure(bg=theme.BG_SURFACE, fg=theme.OK_GREEN)
         self._btn_disable_all.configure(bg=theme.BG_SURFACE, fg=theme.ERR_RED)
+        self._btn_up.configure(bg=theme.BG_SURFACE, fg=theme.FG_DIM)
+        self._btn_down.configure(bg=theme.BG_SURFACE, fg=theme.FG_DIM)
+        # Sweep all remaining children (dynamic risk/scope/profile badge labels)
+        _fixed = {self._arrow, self._title, self._count_lbl, self._btn_enable_all, self._btn_disable_all, self._btn_up, self._btn_down}
+        for w in self.header.winfo_children():
+            if w not in _fixed and isinstance(w, (tk.Label, tk.Button)):
+                w.configure(bg=theme.BG_SURFACE)
