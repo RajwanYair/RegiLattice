@@ -31,6 +31,7 @@ from .tweaks import (
     get_tweak,
     remove_all,
     search_tweaks,
+    tweak_scope,
     tweak_status,
     tweaks_by_category,
     tweaks_for_profile,
@@ -449,6 +450,28 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=list(available_profiles()),
         help="Compare current state against a profile and show which tweaks need changes.",
     )
+    parser.add_argument(
+        "--output",
+        choices=["table", "json"],
+        default="table",
+        help="Output format for --list and --search (table or json). Default: table.",
+    )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate all TweakDef entries for consistency (duplicate IDs, missing fields, etc.).",
+    )
+    parser.add_argument(
+        "--stats",
+        action="store_true",
+        help="Show comprehensive statistics: tweaks by category, scope, corp-safety, admin requirement.",
+    )
+    parser.add_argument(
+        "--list-categories",
+        action="store_true",
+        dest="list_categories",
+        help="Alias for --categories: list all tweak categories with counts.",
+    )
     return parser
 
 
@@ -513,13 +536,76 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{name:<12} {count:<8} {desc}")
         return 0
 
-    if args.categories:
+    if args.validate:
+        tweaks = all_tweaks()
+        errors: list[str] = []
+        seen_ids: set[str] = set()
+        for td in tweaks:
+            if not td.id or not td.id.strip():
+                errors.append(f"[{td.label}] empty id")
+            elif td.id in seen_ids:
+                errors.append(f"Duplicate id: {td.id!r}")
+            seen_ids.add(td.id)
+            if not td.label or not td.label.strip():
+                errors.append(f"[{td.id}] empty label")
+            if not td.category or not td.category.strip():
+                errors.append(f"[{td.id}] empty category")
+            if td.apply_fn is None:
+                errors.append(f"[{td.id}] missing apply_fn")
+            if td.remove_fn is None:
+                errors.append(f"[{td.id}] missing remove_fn")
+        if errors:
+            print(f"\u274c Validation found {len(errors)} issue(s):")
+            for e in errors:
+                print(f"  \u2022 {e}")
+            return 1
+        print(f"\u2705 All {len(tweaks)} tweaks passed validation (no issues found).")
+        return 0
+
+    if args.stats:
+        tweaks = all_tweaks()
         by_cat = tweaks_by_category()
-        print(f"{'Category':<25} Tweaks")
-        print("-" * 35)
+        from collections import Counter
+
+        scope_counts: Counter[str] = Counter(tweak_scope(td) for td in tweaks)
+        print("── RegiLattice Stats ────────────────────")
+        print(f"  Total tweaks   : {len(tweaks)}")
+        print(f"  Categories     : {len(by_cat)}")
+        print(f"  Profiles       : {len(available_profiles())}")
+        print()
+        print("  Scope breakdown:")
+        for scope_name in ("user", "machine", "both"):
+            print(f"    {scope_name:<10} {scope_counts[scope_name]}")
+        corp_safe = sum(1 for td in tweaks if td.corp_safe)
+        needs_admin = sum(1 for td in tweaks if td.needs_admin)
+        has_detect = sum(1 for td in tweaks if td.detect_fn is not None)
+        has_desc = sum(1 for td in tweaks if td.description.strip())
+        has_deps = sum(1 for td in tweaks if td.depends_on)
+        print()
+        print(f"  Corp-safe      : {corp_safe}")
+        print(f"  Needs admin    : {needs_admin}")
+        print(f"  Has detect_fn  : {has_detect}")
+        print(f"  Has description: {has_desc}")
+        print(f"  Has depends_on : {has_deps}")
+        print()
+        print(f"{'Category':<30} Tweaks")
+        print("  " + "-" * 38)
         for cat_name in sorted(by_cat):
-            print(f"{cat_name:<25} {len(by_cat[cat_name])}")
-        print(f"\n{len(by_cat)} categories, {sum(len(v) for v in by_cat.values())} tweaks total.")
+            print(f"  {cat_name:<28} {len(by_cat[cat_name])}")
+        return 0
+
+    if args.categories or getattr(args, "list_categories", False):
+        by_cat = tweaks_by_category()
+        if getattr(args, "output", "table") == "json":
+            import json as _j
+
+            print(_j.dumps({cat: len(ts) for cat, ts in sorted(by_cat.items())}, indent=2))
+        else:
+            print(f"{'Category':<25} Tweaks")
+            print("-" * 35)
+            for cat_name in sorted(by_cat):
+                print(f"{cat_name:<25} {len(by_cat[cat_name])}")
+            print(f"\n{len(by_cat)} categories, {sum(len(v) for v in by_cat.values())} tweaks total.")
         return 0
 
     if args.tags:
@@ -587,11 +673,26 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.list:
         tweaks = all_tweaks()
-        print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
-        print("-" * 80)
-        for td in tweaks:
-            st = tweak_status(td)
-            print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
+        if args.category:
+            tweaks = [td for td in tweaks if td.category.lower() == args.category.lower()]
+            if not tweaks:
+                print(f"\u274c No tweaks found in category '{args.category}'.")
+                return 2
+        if getattr(args, "output", "table") == "json":
+            import json as _j
+
+            print(_j.dumps(
+                [{"id": td.id, "label": td.label, "category": td.category,
+                  "needs_admin": td.needs_admin, "corp_safe": td.corp_safe}
+                 for td in tweaks],
+                indent=2,
+            ))
+        else:
+            print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
+            print("-" * 80)
+            for td in tweaks:
+                st = tweak_status(td)
+                print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
         return 0
 
     if args.search:
@@ -599,12 +700,17 @@ def main(argv: list[str] | None = None) -> int:
         if not search_results:
             print(f"No tweaks matching '{args.search}'.")
             return 0
-        print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
-        print("-" * 80)
-        for td in search_results:
-            st = tweak_status(td)
-            print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
-        print(f"\n{len(search_results)} tweak(s) found.")
+        if getattr(args, "output", "table") == "json":
+            import json as _j
+
+            print(_j.dumps([{"id": td.id, "label": td.label, "category": td.category, "tags": td.tags} for td in search_results], indent=2))
+        else:
+            print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
+            print("-" * 80)
+            for td in search_results:
+                st = tweak_status(td)
+                print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
+            print(f"\n{len(search_results)} tweak(s) found.")
         return 0
 
     if args.export_json:
@@ -695,21 +801,21 @@ def main(argv: list[str] | None = None) -> int:
         if not args.assume_yes and not _confirm(label):
             print("\u2139\ufe0f  Aborted by user.")
             return 1
-        errors: list[str] = []
+        cat_errors: list[str] = []
         for td in cat_tweaks:
             fn = td.apply_fn if args.mode == "apply" else td.remove_fn
             try:
                 fn()
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
-                errors.append(f"{td.label}: {exc}")
-        ok = len(cat_tweaks) - len(errors)
+                cat_errors.append(f"{td.label}: {exc}")
+        ok = len(cat_tweaks) - len(cat_errors)
         if SESSION.dry_run:
             print(
                 f"\U0001f50d Dry-run: {ok}/{len(cat_tweaks)} tweaks would be processed in '{args.category}' ({SESSION.dry_ops} registry ops skipped)."
             )
         else:
             print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
-        for e in errors:
+        for e in cat_errors:
             print(f"  \u274c {e}")
         return 0
 
