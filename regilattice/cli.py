@@ -472,6 +472,33 @@ def _build_parser() -> argparse.ArgumentParser:
         dest="list_categories",
         help="Alias for --categories: list all tweak categories with counts.",
     )
+    parser.add_argument(
+        "--scope",
+        choices=["user", "machine", "both"],
+        metavar="SCOPE",
+        help="Filter tweaks by registry scope: user, machine, or both (use with --list/--search).",
+    )
+    parser.add_argument(
+        "--min-build",
+        type=int,
+        metavar="BUILD",
+        dest="min_build",
+        help="Filter tweaks compatible with this Windows build number (use with --list/--search).",
+    )
+    parser.add_argument(
+        "--corp-safe",
+        action="store_true",
+        default=False,
+        dest="corp_safe",
+        help="Show only tweaks safe to apply on corporate machines (use with --list/--search).",
+    )
+    parser.add_argument(
+        "--needs-admin",
+        action="store_true",
+        default=False,
+        dest="needs_admin",
+        help="Show only tweaks that require administrator rights (use with --list/--search).",
+    )
     return parser
 
 
@@ -678,6 +705,14 @@ def main(argv: list[str] | None = None) -> int:
             if not tweaks:
                 print(f"\u274c No tweaks found in category '{args.category}'.")
                 return 2
+        if getattr(args, "scope", None):
+            tweaks = [td for td in tweaks if tweak_scope(td) == args.scope]
+        if getattr(args, "min_build", None):
+            tweaks = [td for td in tweaks if td.min_build <= args.min_build]
+        if getattr(args, "corp_safe", False):
+            tweaks = [td for td in tweaks if td.corp_safe]
+        if getattr(args, "needs_admin", False):
+            tweaks = [td for td in tweaks if td.needs_admin]
         if getattr(args, "output", "table") == "json":
             import json as _j
 
@@ -700,6 +735,14 @@ def main(argv: list[str] | None = None) -> int:
         if not search_results:
             print(f"No tweaks matching '{args.search}'.")
             return 0
+        if getattr(args, "scope", None):
+            search_results = [td for td in search_results if tweak_scope(td) == args.scope]
+        if getattr(args, "min_build", None):
+            search_results = [td for td in search_results if td.min_build <= args.min_build]
+        if getattr(args, "corp_safe", False):
+            search_results = [td for td in search_results if td.corp_safe]
+        if getattr(args, "needs_admin", False):
+            search_results = [td for td in search_results if td.needs_admin]
         if getattr(args, "output", "table") == "json":
             import json as _j
 
