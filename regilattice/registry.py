@@ -26,6 +26,9 @@ else:  # pragma: no cover — guard for non-Windows CI
 
 _ROOTS: dict[str, int | None] = {}
 
+# Pre-sorted prefix list: longest prefix first so the first match is always correct
+_PREFIX_LIST: list[tuple[str, int]] = []  # (prefix_upper, root_handle) — built at import
+
 if winreg is not None:
     _ROOTS = {
         "HKEY_CLASSES_ROOT": winreg.HKEY_CLASSES_ROOT,
@@ -35,6 +38,11 @@ if winreg is not None:
         "HKEY_LOCAL_MACHINE": winreg.HKEY_LOCAL_MACHINE,
         "HKLM": winreg.HKEY_LOCAL_MACHINE,
     }
+    # Sort longest prefix first (“HKEY_CLASSES_ROOT” before “HKCR”) for unambiguous matching
+    _PREFIX_LIST = sorted(
+        ((p.upper(), r) for p, r in _ROOTS.items() if r is not None),
+        key=lambda t: -len(t[0]),
+    )
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────

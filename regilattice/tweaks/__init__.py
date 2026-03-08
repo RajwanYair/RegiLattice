@@ -17,7 +17,7 @@ import platform
 import threading
 import warnings
 from collections import OrderedDict, deque
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -223,7 +223,9 @@ def reload_plugins() -> None:
         _SCOPE_CACHE.clear()
     with _SEARCH_LOCK:
         _SEARCH_INDEX.clear()
+    _TAG_INDEX.clear()
     _load_plugins()
+    _prewarm_indexes()
     _build_category_info()
 
 
@@ -237,18 +239,40 @@ def tweaks_by_category() -> dict[str, list[TweakDef]]:
     return dict(_TWEAKS_BY_CAT)
 
 
+def tweaks_by_ids(ids: Iterable[str]) -> list[TweakDef]:
+    """Return TweakDef objects for multiple IDs in one O(k) pass via _TWEAK_INDEX."""
+    return [_TWEAK_INDEX[tid] for tid in ids if tid in _TWEAK_INDEX]
+
+
+def tweaks_by_tag(tag: str) -> list[TweakDef]:
+    """Return all tweaks that carry *tag* (case-insensitive, O(1) lookup)."""
+    return list(_TAG_INDEX.get(tag.lower(), []))
+
+
 def search_tweaks(query: str) -> list[TweakDef]:
     """Filter tweaks by a case-insensitive query matching id/label/category/tags.
 
     Uses pre-built search index for O(n) scanning with minimal allocations.
+    Single-tag queries (no spaces) additionally use the O(1) tag index for
+    an early-exit fast path when the query matches a known tag exactly.
     """
-    q = query.lower()
+    q = query.lower().strip()
+    if not q:
+        return list(_ALL_TWEAKS)
+    # Fast path: exact tag match
+    if " " not in q and q in _TAG_INDEX:
+        # Still verify the full search string (tag index is supplemental)
+        tag_set = {td.id for td in _TAG_INDEX[q]}
+        return [td for td in _ALL_TWEAKS if td.id in tag_set or q in _get_search_index(td)]
     return [td for td in _ALL_TWEAKS if q in _get_search_index(td)]
 
 
 # Pre-built search index for fast full-text scanning
 _SEARCH_INDEX: dict[str, str] = {}
 _SEARCH_LOCK = threading.Lock()
+
+# Tag index for O(1) tag-based filtering
+_TAG_INDEX: dict[str, list[TweakDef]] = {}
 
 
 def _get_search_index(td: TweakDef) -> str:
@@ -261,6 +285,23 @@ def _get_search_index(td: TweakDef) -> str:
     with _SEARCH_LOCK:
         _SEARCH_INDEX[td.id] = result
     return result
+
+
+def _prewarm_indexes() -> None:
+    """Eagerly populate _SEARCH_INDEX and _TAG_INDEX for all loaded tweaks.
+
+    Called once after _load_plugins() so that the first search is instant
+    rather than paying the O(n) deferred build cost at query time.
+    """
+    _TAG_INDEX.clear()
+    with _SEARCH_LOCK:
+        _SEARCH_INDEX.clear()
+        for td in _ALL_TWEAKS:
+            sep = "\0"
+            _SEARCH_INDEX[td.id] = sep.join([td.id, td.label, td.category, td.description, *td.tags]).lower()
+    for td in _ALL_TWEAKS:
+        for tag in td.tags:
+            _TAG_INDEX.setdefault(tag.lower(), []).append(td)
 
 
 # ── Machine profiles ─────────────────────────────────────────────────────────
@@ -516,6 +557,9 @@ _register_profiles()
 
 # Build category metadata now that both _ALL_TWEAKS and _PROFILES are ready
 _build_category_info()
+
+# Eagerly warm search + tag indexes so first search has zero lazy-build overhead
+_prewarm_indexes()
 
 
 def category_info(name: str) -> CategoryInfo | None:
