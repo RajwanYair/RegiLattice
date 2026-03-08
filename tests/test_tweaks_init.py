@@ -1002,3 +1002,232 @@ class TestTagIntegrity:
         for td in all_tweaks_list:
             for tag in td.tags:
                 assert tag.strip() == tag, f"{td.id}: tag {tag!r} has whitespace"
+
+
+# ── C8 engine additions ───────────────────────────────────────────────────────
+
+
+from regilattice.tweaks import (  # noqa: E402
+    apply_tweaks,
+    filter_tweaks,
+    remove_tweaks,
+    tweak_dependencies,
+    tweaks_by_ids,
+    tweaks_by_tag,
+)
+
+
+class TestFilterTweaks:
+    """Tests for filter_tweaks() composable filter."""
+
+    def test_no_criteria_returns_all(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks()
+        assert len(result) == len(all_tweaks_list)
+
+    def test_corp_safe_true(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(corp_safe=True)
+        assert all(td.corp_safe for td in result)
+
+    def test_corp_safe_false(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(corp_safe=False)
+        assert all(not td.corp_safe for td in result)
+
+    def test_needs_admin_true(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(needs_admin=True)
+        assert all(td.needs_admin for td in result)
+
+    def test_needs_admin_false(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(needs_admin=False)
+        assert all(not td.needs_admin for td in result)
+
+    def test_scope_user(self) -> None:
+        result = filter_tweaks(scope="user")
+        for td in result:
+            from regilattice.tweaks import tweak_scope
+            assert tweak_scope(td) == "user"
+
+    def test_scope_machine(self) -> None:
+        result = filter_tweaks(scope="machine")
+        for td in result:
+            from regilattice.tweaks import tweak_scope
+            assert tweak_scope(td) == "machine"
+
+    def test_category_filter(self, all_tweaks_list: list[TweakDef]) -> None:
+        cat = categories()[0]
+        result = filter_tweaks(category=cat)
+        assert all(td.category == cat for td in result)
+        assert len(result) > 0
+
+    def test_min_build_zero_includes_all(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(min_build=0)
+        # Only tweaks with min_build==0 (no requirement) are included
+        assert all(td.min_build <= 0 for td in result)
+
+    def test_min_build_large_includes_all(self, all_tweaks_list: list[TweakDef]) -> None:
+        result = filter_tweaks(min_build=99999)
+        assert len(result) == len(all_tweaks_list)
+
+    def test_query_filters_results(self) -> None:
+        result = filter_tweaks(query="zzz_completely_nonexistent_query_xyz999")
+        assert result == []
+
+    def test_tags_filter(self, all_tweaks_list: list[TweakDef]) -> None:
+        tagged = [td for td in all_tweaks_list if td.tags]
+        if not tagged:
+            pytest.skip("No tweaks with tags")
+        td0 = tagged[0]
+        result = filter_tweaks(tags=[td0.tags[0]])
+        assert any(td.id == td0.id for td in result)
+
+    def test_combined_criteria(self, all_tweaks_list: list[TweakDef]) -> None:
+        cat = categories()[0]
+        result = filter_tweaks(category=cat, needs_admin=True)
+        assert all(td.category == cat and td.needs_admin for td in result)
+
+    def test_empty_tags_list_returns_all(self, all_tweaks_list: list[TweakDef]) -> None:
+        # Empty tag list: every tweak has empty.issubset(...) == True
+        result = filter_tweaks(tags=[])
+        assert len(result) == len(all_tweaks_list)
+
+
+class TestTweakDependencies:
+    """Tests for tweak_dependencies() resolver."""
+
+    def test_no_deps_returns_empty(self, all_tweaks_list: list[TweakDef]) -> None:
+        td = next(t for t in all_tweaks_list if not t.depends_on)
+        assert tweak_dependencies(td) == []
+
+    def test_direct_only(self) -> None:
+        a = TweakDef(id="dep.a", label="A", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True)
+        b = TweakDef(id="dep.b", label="B", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.a"])
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"dep.a": a, "dep.b": b}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [a, b]),
+        ):
+            result = tweak_dependencies(b, transitive=False)
+        assert result == [a]
+
+    def test_transitive_chain(self) -> None:
+        a = TweakDef(id="dep.ta", label="A", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True)
+        b = TweakDef(id="dep.tb", label="B", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.ta"])
+        c = TweakDef(id="dep.tc", label="C", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.tb"])
+        with (
+            patch("regilattice.tweaks._TWEAK_INDEX", {"dep.ta": a, "dep.tb": b, "dep.tc": c}),
+            patch("regilattice.tweaks._ALL_TWEAKS", [a, b, c]),
+        ):
+            result = tweak_dependencies(c, transitive=True)
+        ids = [t.id for t in result]
+        assert "dep.ta" in ids
+        assert "dep.tb" in ids
+        assert ids.index("dep.ta") < ids.index("dep.tb")
+
+    def test_unknown_dep_silently_skipped(self) -> None:
+        td = TweakDef(id="dep.unk", label="U", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, depends_on=["missing.id"])
+        with patch("regilattice.tweaks._TWEAK_INDEX", {"dep.unk": td}):
+            result = tweak_dependencies(td, transitive=True)
+        assert result == []
+
+
+class TestPartialStatusMap:
+    """Tests for status_map(ids=...) partial evaluation."""
+
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.UNKNOWN)
+    def test_ids_restricts_output(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
+        ids = [all_tweaks_list[0].id, all_tweaks_list[1].id]
+        result = status_map(ids=ids)
+        assert set(result.keys()) == set(ids)
+
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.APPLIED)
+    def test_ids_none_returns_all(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
+        result = status_map(ids=None)
+        assert len(result) == len(all_tweaks_list)
+
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.UNKNOWN)
+    def test_unknown_ids_silently_skipped(self, _mock: MagicMock) -> None:
+        result = status_map(ids=["nonexistent.id.xyz"])
+        assert result == {}
+
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.APPLIED)
+    def test_parallel_ids_subset(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
+        ids = [all_tweaks_list[0].id]
+        result = status_map(ids=ids, parallel=True, max_workers=2)
+        assert set(result.keys()) == set(ids)
+
+    @patch("regilattice.tweaks.tweak_status", return_value=TweakResult.UNKNOWN)
+    def test_progress_fn_called_correct_times(self, _mock: MagicMock, all_tweaks_list: list[TweakDef]) -> None:
+        ids = [all_tweaks_list[0].id, all_tweaks_list[1].id]
+        calls: list[tuple[int, int]] = []
+        status_map(ids=ids, progress_fn=lambda done, total: calls.append((done, total)))
+        assert len(calls) == 2
+        assert calls[-1] == (2, 2)
+
+
+class TestApplyRemoveTweaks:
+    """Tests for apply_tweaks() and remove_tweaks() ID-based batch helpers."""
+
+    @patch("regilattice.tweaks._TWEAK_INDEX")
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    def test_apply_tweaks_calls_apply_fn(self, mock_all: list, mock_index: MagicMock) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="at1", label="AT", category="C", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+        mock_all.append(td)
+        mock_index.__getitem__ = MagicMock(return_value=td)
+        mock_index.__contains__ = MagicMock(return_value=True)
+        mock_index.get = MagicMock(return_value=td)
+        with patch("regilattice.tweaks.tweaks_by_ids", return_value=[td]):
+            result = apply_tweaks(["at1"], force_corp=True, include_deps=False)
+        fn.assert_called_once()
+        assert result["at1"] == TweakResult.APPLIED
+
+    @patch("regilattice.tweaks._TWEAK_INDEX")
+    @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
+    def test_remove_tweaks_calls_remove_fn(self, mock_all: list, mock_index: MagicMock) -> None:
+        fn = MagicMock()
+        td = TweakDef(id="rt1", label="RT", category="C", apply_fn=MagicMock(), remove_fn=fn, corp_safe=True)
+        mock_all.append(td)
+        with patch("regilattice.tweaks.tweaks_by_ids", return_value=[td]):
+            result = remove_tweaks(["rt1"], force_corp=True)
+        fn.assert_called_once()
+        assert result["rt1"] == TweakResult.REMOVED
+
+    def test_apply_tweaks_empty_ids(self) -> None:
+        result = apply_tweaks([], force_corp=True)
+        assert result == {}
+
+    def test_remove_tweaks_empty_ids(self) -> None:
+        result = remove_tweaks([], force_corp=True)
+        assert result == {}
+
+
+class TestTweaksByIdsAndTag:
+    """Tests for tweaks_by_ids() and tweaks_by_tag() helpers."""
+
+    def test_tweaks_by_ids_known(self, all_tweaks_list: list[TweakDef]) -> None:
+        ids = [all_tweaks_list[0].id, all_tweaks_list[1].id]
+        result = tweaks_by_ids(ids)
+        assert {td.id for td in result} == set(ids)
+
+    def test_tweaks_by_ids_unknown_silently_skipped(self) -> None:
+        result = tweaks_by_ids(["unknown.xyz.999"])
+        assert result == []
+
+    def test_tweaks_by_ids_empty(self) -> None:
+        assert tweaks_by_ids([]) == []
+
+    def test_tweaks_by_tag_known(self, all_tweaks_list: list[TweakDef]) -> None:
+        tagged = [td for td in all_tweaks_list if td.tags]
+        if not tagged:
+            pytest.skip("No tweaks with tags")
+        td0 = tagged[0]
+        result = tweaks_by_tag(td0.tags[0])
+        assert any(td.id == td0.id for td in result)
+
+    def test_tweaks_by_tag_unknown_returns_empty(self) -> None:
+        assert tweaks_by_tag("zzz_no_such_tag_xyz_9999") == []
+
+    def test_tweaks_by_tag_case_insensitive(self, all_tweaks_list: list[TweakDef]) -> None:
+        tagged = [td for td in all_tweaks_list if td.tags]
+        if not tagged:
+            pytest.skip("No tweaks with tags")
+        tag = tagged[0].tags[0]
+        assert tweaks_by_tag(tag.lower()) == tweaks_by_tag(tag.upper())
