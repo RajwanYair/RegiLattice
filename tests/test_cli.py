@@ -831,3 +831,118 @@ class TestListCategoryFilter:
         # --list-categories shares the same code path as --categories: dict output
         assert isinstance(data, dict)
         assert "Explorer" in data
+
+
+# ── --scope / --min-build / --corp-safe / --needs-admin filter tests ─────────
+
+
+class TestListScopeFilter:
+    """Tests for --scope filter on --list and --search."""
+
+    def test_scope_user_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--scope", "user"])
+        assert rc == 0
+
+    def test_scope_machine_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--scope", "machine"])
+        assert rc == 0
+
+    def test_scope_both_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--scope", "both"])
+        assert rc == 0
+
+    def test_scope_invalid_rejected(self) -> None:
+        """argparse should reject invalid --scope values."""
+        import sys
+        with pytest.raises(SystemExit) as exc_info:
+            _build_parser().parse_args(["--list", "--scope", "invalid"])
+        assert exc_info.value.code != 0
+
+    def test_scope_user_json_only_user_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
+        from regilattice.tweaks import tweak_scope, all_tweaks
+
+        rc = main(["--list", "--scope", "user", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        all_user_ids = {td.id for td in all_tweaks() if tweak_scope(td) == "user"}
+        for item in data:
+            assert item["id"] in all_user_ids
+
+    def test_scope_machine_json_only_machine_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
+        from regilattice.tweaks import tweak_scope, all_tweaks
+
+        rc = main(["--list", "--scope", "machine", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        all_machine_ids = {td.id for td in all_tweaks() if tweak_scope(td) == "machine"}
+        for item in data:
+            assert item["id"] in all_machine_ids
+
+    def test_search_with_scope_filter(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--search", "disable", "--scope", "machine"])
+        assert rc == 0
+
+
+class TestListMinBuildFilter:
+    """Tests for --min-build filter on --list."""
+
+    def test_min_build_zero_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--min-build", "0"])
+        assert rc == 0
+
+    def test_min_build_large_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """High build number should produce an empty (or small) list, not an error."""
+        rc = main(["--list", "--min-build", "99999"])
+        assert rc == 0
+
+    def test_min_build_filters_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
+        from regilattice.tweaks import all_tweaks
+
+        build = 22000
+        rc = main(["--list", "--min-build", str(build), "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        expected_ids = {td.id for td in all_tweaks() if td.min_build <= build}
+        for item in data:
+            assert item["id"] in expected_ids
+
+    def test_min_build_with_scope(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--scope", "user", "--min-build", "22000"])
+        assert rc == 0
+
+
+class TestListCorpAdminFilter:
+    """Tests for --corp-safe and --needs-admin filter flags."""
+
+    def test_corp_safe_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--corp-safe"])
+        assert rc == 0
+
+    def test_needs_admin_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--needs-admin"])
+        assert rc == 0
+
+    def test_corp_safe_json_all_corp_safe(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--corp-safe", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        assert all(item["corp_safe"] for item in data)
+
+    def test_needs_admin_json_all_need_admin(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--needs-admin", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        assert all(item["needs_admin"] for item in data)
+
+    def test_corp_safe_and_needs_admin_combined(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """Combined flags should intersect: corp_safe=True AND needs_admin=True."""
+        rc = main(["--list", "--corp-safe", "--needs-admin", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        for item in data:
+            assert item["corp_safe"]
+            assert item["needs_admin"]
+
+    def test_search_with_corp_safe_filter(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--search", "network", "--corp-safe"])
+        assert rc == 0
