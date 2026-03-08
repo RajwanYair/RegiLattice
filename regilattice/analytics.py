@@ -25,6 +25,7 @@ class AnalyticsData:
     total_sessions: int = 0
     most_applied: dict[str, int] = field(default_factory=dict)
     most_removed: dict[str, int] = field(default_factory=dict)
+    error_counts: dict[str, int] = field(default_factory=dict)
     last_session: float = 0.0
 
 
@@ -39,6 +40,7 @@ def _load() -> AnalyticsData:
             total_sessions=raw.get("total_sessions", 0),
             most_applied=raw.get("most_applied", {}),
             most_removed=raw.get("most_removed", {}),
+            error_counts=raw.get("error_counts", {}),
             last_session=raw.get("last_session", 0.0),
         )
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
@@ -55,6 +57,7 @@ def _save(data: AnalyticsData) -> None:
         "total_sessions": data.total_sessions,
         "most_applied": data.most_applied,
         "most_removed": data.most_removed,
+        "error_counts": data.error_counts,
         "last_session": data.last_session,
     }
     _ANALYTICS_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
@@ -77,10 +80,23 @@ def record_remove(tweak_id: str) -> None:
 
 
 def record_error() -> None:
-    """Record a tweak error."""
+    """Record a tweak error (global counter only)."""
     data = _load()
     data.total_errors += 1
     _save(data)
+
+
+def record_error_for(tweak_id: str) -> None:
+    """Record an error for a specific tweak ID and increment global counter."""
+    data = _load()
+    data.total_errors += 1
+    data.error_counts[tweak_id] = data.error_counts.get(tweak_id, 0) + 1
+    _save(data)
+
+
+def error_stats() -> dict[str, int]:
+    """Return per-tweak error counts. Keys are tweak IDs, values are counts."""
+    return dict(_load().error_counts)
 
 
 def record_session() -> None:
