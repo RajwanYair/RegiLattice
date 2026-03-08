@@ -15,6 +15,8 @@ from regilattice.hwinfo import (
     _compute_batch_size,
     _compute_optimal_workers,
     clear_caches,
+    detect_battery,
+    detect_network_type,
     hardware_summary,
     suggest_profile,
 )
@@ -466,3 +468,153 @@ class TestCompositeCIM:
         clear_caches()
         result = _run_composite_cim()
         assert result["GPU_COUNT"] == "0"
+
+
+# ── detect_battery tests ─────────────────────────────────────────────────────
+
+
+class TestDetectBattery:
+    """Tests for detect_battery()."""
+
+    def test_returns_bool(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="0"):
+            result = detect_battery()
+        assert isinstance(result, bool)
+
+    def test_no_battery_when_count_zero(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="0"):
+            assert detect_battery() is False
+
+    def test_battery_present_when_count_one(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="1"):
+            assert detect_battery() is True
+
+    def test_battery_present_when_count_two(self) -> None:
+        """Dual-battery machines (e.g. ThinkPad) should still return True."""
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="2"):
+            assert detect_battery() is True
+
+    def test_non_integer_response_returns_false(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="not_a_number"):
+            assert detect_battery() is False
+
+    def test_empty_response_returns_false(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value=""):
+            assert detect_battery() is False
+
+    def test_result_is_cached(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="1") as mock_ps:
+            detect_battery()
+            detect_battery()
+        assert mock_ps.call_count == 1
+
+
+# ── detect_network_type tests ────────────────────────────────────────────────
+
+
+class TestDetectNetworkType:
+    """Tests for detect_network_type()."""
+
+    def test_returns_str(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value=""):
+            result = detect_network_type()
+        assert isinstance(result, str)
+
+    def test_empty_adapter_list_returns_unknown(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value=""):
+            assert detect_network_type() == "unknown"
+
+    def test_wifi_adapter_detected(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="Intel Wireless-AC 9560"):
+            assert detect_network_type() == "wifi"
+
+    def test_802_11_suffix_detected_as_wifi(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="Broadcom 802.11ac Network Adapter"):
+            assert detect_network_type() == "wifi"
+
+    def test_ethernet_adapter_detected(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="Intel Ethernet Connection I219-V"):
+            assert detect_network_type() == "ethernet"
+
+    def test_vpn_takes_priority_over_wifi(self) -> None:
+        """When both VPN and Wi-Fi adapters present, VPN should win."""
+        clear_caches()
+        adapters = "Cisco AnyConnect Virtual Miniport Adapter\nIntel Wireless-AC 9560"
+        with patch("regilattice.hwinfo._run_ps", return_value=adapters):
+            assert detect_network_type() == "vpn"
+
+    def test_vpn_cisco_detected(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="Cisco VPN Adapter"):
+            assert detect_network_type() == "vpn"
+
+    def test_vpn_wireguard_detected(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="WireGuard Tunnel"):
+            assert detect_network_type() == "vpn"
+
+    def test_result_is_cached(self) -> None:
+        clear_caches()
+        with patch("regilattice.hwinfo._run_ps", return_value="Intel Ethernet Connection") as mock_ps:
+            detect_network_type()
+            detect_network_type()
+        assert mock_ps.call_count == 1
+
+    def test_valid_scope_values(self) -> None:
+        clear_caches()
+        valid = {"vpn", "wifi", "ethernet", "unknown"}
+        for resp in ("", "Cisco AnyConnect", "Intel Wireless-AC 9560 WiFi", "Realtek Ethernet"):
+            clear_caches()
+            with patch("regilattice.hwinfo._run_ps", return_value=resp):
+                assert detect_network_type() in valid
+
+
+# ── HWProfile new fields ─────────────────────────────────────────────────────
+
+
+class TestHWProfileNewFields:
+    """Tests for has_battery and network_type fields on HWProfile."""
+
+    def test_has_battery_default_false(self) -> None:
+        hw = HWProfile()
+        assert hw.has_battery is False
+
+    def test_network_type_default_unknown(self) -> None:
+        hw = HWProfile()
+        assert hw.network_type == "unknown"
+
+    def test_has_battery_set_true(self) -> None:
+        hw = HWProfile(has_battery=True)
+        assert hw.has_battery is True
+
+    def test_network_type_wifi(self) -> None:
+        hw = HWProfile(network_type="wifi")
+        assert hw.network_type == "wifi"
+
+    def test_hardware_summary_includes_network_type(self) -> None:
+        hw = HWProfile(network_type="ethernet")
+        summary = hardware_summary(hw)
+        assert "ethernet" in summary
+
+    def test_hardware_summary_includes_battery_when_present(self) -> None:
+        hw = HWProfile(has_battery=True, network_type="wifi")
+        summary = hardware_summary(hw)
+        assert "battery" in summary.lower() or "laptop" in summary.lower()
+
+    def test_hardware_summary_no_battery_line_when_absent(self) -> None:
+        hw = HWProfile(has_battery=False, network_type="ethernet")
+        summary = hardware_summary(hw)
+        # The word "battery" should not appear when has_battery=False
+        assert "battery" not in summary.lower()
