@@ -22,9 +22,9 @@
          +----------+-----------+
          |                      |
     TweakDef list          _PROFILES dict
-    (1 228 tweaks)         (5 profiles)
+    (1 292 tweaks)         (5 profiles)
          |
-    tweaks/*.py               <-- 64 modules, auto-discovered
+    tweaks/*.py               <-- 69 modules, auto-discovered
          |
     +----+----+
     |         |

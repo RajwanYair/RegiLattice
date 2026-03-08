@@ -9,7 +9,7 @@ description = "RegiLattice — Windows registry tweak toolkit with plugin archit
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-authors = [{ name = "aeger" }]
+authors = [{ name = "YairRajwan" }]
 keywords = [
     "windows",
     "registry",
@@ -37,10 +37,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/aeger/RegiLattice"
-Repository = "https://github.com/aeger/RegiLattice"
-"Bug Tracker" = "https://github.com/aeger/RegiLattice/issues"
-Changelog = "https://github.com/aeger/RegiLattice/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/RajwanYair/RegiLattice"
+Repository = "https://github.com/RajwanYair/RegiLattice"
+"Bug Tracker" = "https://github.com/RajwanYair/RegiLattice/issues"
+Changelog = "https://github.com/RajwanYair/RegiLattice/blob/main/CHANGELOG.md"
 
 [project.scripts]
 regilattice = "regilattice.cli:main"

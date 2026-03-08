@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-08 · v1.0.0 · 1 292 tweaks · 69 categories · 17 511 tests
+> Last updated: 2026-03-08 · v1.0.1 · 1 292 tweaks · 69 categories · ~17 511 tests
 
 ---
 
@@ -10,14 +10,15 @@
 | Metric | Value |
 |--------|-------|
 | Tweaks | 1 292 across 69 categories |
-| Tests | 17 511 (all passing) |
+| Tests | ~17 511 (all passing) |
 | Python | 3.10 – 3.14 |
 | Lint | ruff (E, F, W, I, UP, B, SIM, RUF) |
 | Type check | mypy --strict |
-| Coverage | ~high (target ≥ 90 %) |
-| GUI | tkinter + 4 themes |
+| Coverage | ≥ 90 % (target) |
+| GUI | tkinter + 4 themes (Catppuccin Mocha/Latte, Nord, Dracula) |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | Platforms | Windows (primary); Linux/WSL (partial) |
+| Repo | [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice) |
 
 ---
 
@@ -27,10 +28,11 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 - Zero-dependency runtime (stdlib-only at runtime)
 - Production-grade packaging distributed via pip, winget, and scoop
-- GUI that rivals dedicated Windows tools
-- Full corporate-environment safety
-- Extensible plugin marketplace
-- CI/CD on every commit, cross-platform where possible
+- GUI that rivals dedicated system administration tools
+- Full corporate-environment safety and detection
+- Extensible plugin marketplace with sandboxing
+- World-class CI/CD pipeline with cross-platform testing
+- Comprehensive documentation and developer experience
 
 ---
 
@@ -38,127 +40,137 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### Sprint 1 — Foundation & Hygiene ✅ (2026-03-08)
 
-| Theme | Goal |
-|-------|------|
-| Git hygiene | Fix lint, commit Sprint 8 pending changes |
-| Config cleanup | `.gitattributes`, formatter (ruff not black), remove `.flake8` |
-| CI | Consolidate duplicate workflows |
-| Docs | ROADMAP.md, move PROJECT_SPEC_PROMPT, update stale architecture stats |
+| Theme | Goal | Status |
+|-------|------|--------|
+| Git hygiene | Fix lint, commit Sprint 8 pending changes | ✅ |
+| Config cleanup | `.gitattributes`, formatter (ruff not black), remove `.flake8` | ✅ |
+| CI | Consolidate duplicate workflows into `ci.yml` | ✅ |
+| Docs | ROADMAP.md, move PROJECT_SPEC_PROMPT, update stale architecture stats | ✅ |
 
-### Sprint 2 — Documentation Deep-Dive (planned)
+### Sprint 2 — Repo Cleanup & Publishing ✅ (2026-03-08)
 
-| # | Task |
-|---|------|
-| 1 | Refresh stale stats in `architecture.md` (now 1 292/69) |
-| 2 | Update `README.md` badge for 17 511 tests |
-| 3 | Move Sprint 8 in `CHANGELOG.md` from `[Unreleased]` to `[1.0.1]` |
-| 4 | Add `docs/DEVELOPMENT.md` — local setup, Windows + WSL guide |
-| 5 | Review and update all issue templates in `.github/issue_template/` |
-| 6 | Add PR template checklist (tests, lint, docs) |
-| 7 | Refresh `CONTRIBUTING.md` with current workflow |
+| Theme | Goal | Status |
+|-------|------|--------|
+| GitHub registration | Create repo at RajwanYair/RegiLattice; push all history | ✅ |
+| Metadata correctness | Fix `pyproject.toml` URLs + author (aeger → RajwanYair) | ✅ |
+| Architecture docs | Fix stale ASCII diagram counts (1 228→1 292, 64→69) | ✅ |
+| VS Code hygiene | Remove hardcoded user-specific paths from `settings.json` | ✅ |
+| README | Add live CI badge linked to Actions | ✅ |
+| Roadmap | Consolidate all plans into this single document | ✅ |
 
-### Sprint 3 — Test Quality & Coverage (planned)
+### Sprint 3 — Documentation & Developer Experience (next)
 
-| # | Task |
-|---|------|
-| 1 | Measure current coverage per-module; identify gaps |
-| 2 | Add tests for `gui.py` (widget lifecycle, search, filter) |
-| 3 | Add tests for `menu.py` edge cases |
-| 4 | Add cross-platform stubs (Linux path handling) |
-| 5 | Add property-based tests for registry path splitting |
-| 6 | Add mutation-style tests for tweak apply/remove idempotency |
-| 7 | Push overall coverage ≥ 90 % on critical paths |
+| # | Task | Priority |
+|---|------|----------|
+| 1 | Add `docs/DEVELOPMENT.md` — local setup, Windows + WSL guide | P1 |
+| 2 | Refresh `CONTRIBUTING.md` with current workflow and PR checklist | P1 |
+| 3 | Add `hypothesis` + `pytest-mock` to `[dev]` dependencies in `pyproject.toml` | P1 |
+| 4 | Measure per-module coverage; document gaps in `docs/COVERAGE.md` | P1 |
+| 5 | Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py` | P2 |
+| 6 | Review and update all `.github/issue_template/` files for accuracy | P2 |
+| 7 | Add `SECURITY.md` policy (responsible disclosure, supported versions) | P2 |
 
-### Sprint 4 — Refactoring & Performance (planned)
+### Sprint 4 — Test Coverage Push (planned)
 
-| # | Task |
-|---|------|
-| 1 | Dead-code audit — remove unused functions/imports |
-| 2 | Refactor `tweaks/__init__.py` — split by concern (loader, profiles, engine) |
-| 3 | Profile startup time; identify and defer heavy imports |
-| 4 | Move to `src/` layout for better packaging isolation |
-| 5 | Add `__all__` to all public modules |
-| 6 | Harden `marketplace.py` — plugin signature check |
-| 7 | Audit all `subprocess` calls for command-injection safety |
+| # | Task | Priority |
+|---|------|----------|
+| 1 | Identify modules below 80 % coverage; add targeted tests | P1 |
+| 2 | Add tests for `gui.py` (widget lifecycle, search, filter) with `unittest.mock` | P1 |
+| 3 | Add tests for `menu.py` edge cases (empty list, invalid input, quit) | P1 |
+| 4 | Add property-based tests for registry path splitting and normalization | P2 |
+| 5 | Add mutation-style tests for tweak apply/remove idempotency | P2 |
+| 6 | Add cross-platform stubs (Linux path handling for WSL) | P2 |
+| 7 | Push overall coverage ≥ 95 % on all critical paths | P1 |
 
-### Sprint 5 — Production Readiness & Release (planned)
+### Sprint 5 — Refactoring & Performance (planned)
 
-| # | Task |
-|---|------|
-| 1 | Validate PyPI packaging (`hatch build`, `twine check`) |
-| 2 | WSL-compatibility pass (ensure all cross-platform tests pass) |
-| 3 | Verify pre-commit hooks work end-to-end |
-| 4 | Add GitHub Actions for coverage upload to Codecov/Coveralls |
-| 5 | Add `SECURITY.md` with responsible disclosure policy |
-| 6 | Tag and release v1.0.1 with all Sprint 1–4 improvements |
-| 7 | winget manifest update for v1.0.1 |
+| # | Task | Priority |
+|---|------|----------|
+| 1 | Dead-code audit — remove unused functions/imports | P1 |
+| 2 | Refactor `tweaks/__init__.py` — split by concern into loader/profiles/engine | P2 |
+| 3 | Profile startup time with `cProfile`; defer heavy imports | P2 |
+| 4 | Add `typing.TYPE_CHECKING` guards for expensive platform imports | P2 |
+| 5 | Add `__all__` to all public modules consistently | P2 |
+| 6 | Harden `marketplace.py` — plugin signature verification | P1 |
+| 7 | Audit all `subprocess` calls for command-injection safety (OWASP) | P1 |
+
+### Sprint 6 — Production Readiness & Release (planned)
+
+| # | Task | Priority |
+|---|------|----------|
+| 1 | Validate PyPI packaging (`hatch build`, `twine check`) | P1 |
+| 2 | WSL-compatibility pass — ensure all cross-platform tests pass on Ubuntu | P1 |
+| 3 | Verify pre-commit hooks work end-to-end (`pre-commit run --all-files`) | P1 |
+| 4 | Add Codecov integration to CI workflow | P2 |
+| 5 | Tag and publish v1.0.1 GitHub Release with generated notes | P1 |
+| 6 | Update winget manifest (`winget/`) for v1.0.1 | P2 |
+| 7 | Publish to Scoop bucket (personal) | P3 |
 
 ---
 
 ## Prioritized Backlog
 
-_~50 concrete tasks derived from the roadmap above, ordered by priority._
+_50 concrete tasks derived from the roadmap above, ordered by priority._
 
-### P0 — Critical / Immediate
+### P0 — Completed ✅
 
 - [x] Auto-fix ruff I001 import-sort issues
-- [x] Commit Sprint 8 pending changes
+- [x] Commit Sprint 8 new tweaks and test changes
 - [x] Fix `.gitattributes` header + add `*.py text eol=lf`
-- [x] Fix `.vscode/settings.json` — use ruff-format not black-formatter
-- [x] Remove redundant `.flake8`
+- [x] Fix `.vscode/settings.json` — use ruff, not black-formatter
+- [x] Remove redundant `.flake8` config file
 - [x] Add `[project.urls]` to `pyproject.toml`
-- [x] Move `PROJECT_SPEC_PROMPT.md` → `.github/docs/project-spec.md`
-- [ ] Consolidate `ci.yml` + `python.yml` into one canonical workflow
-- [ ] Update stale stats in `architecture.md` (1 228→1 292, 64→69)
-- [ ] Run mypy and fix any strict errors
+- [x] Move generic spec → `.github/docs/project-spec.md`
+- [x] Consolidate `ci.yml` workflow (removed duplicate `python.yml`)
+- [x] Register repo at `RajwanYair/RegiLattice` and push full history
+- [x] Fix `pyproject.toml` author + URLs (aeger → RajwanYair)
+- [x] Fix architecture.md ASCII diagram stale counts
+- [x] Remove hardcoded user paths from `.vscode/settings.json`
+- [x] Add live CI badge to README
 
-### P1 — High Value
+### P1 — High Value (Sprint 3–4)
 
-- [ ] Update `README.md` test-count badge (17 511)
-- [ ] Move `CHANGELOG.md [Unreleased]` → `[1.0.1]`
-- [ ] Add `docs/DEVELOPMENT.md` (setup, run, test, contribute)
-- [ ] Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py`
-- [ ] Review `pyrightconfig.json` — ensure it matches `pyproject.toml [tool.pyright]`
-- [ ] Add `coverage.xml` to `.gitattributes` (binary check — it's xml/text)
+- [ ] Add `docs/DEVELOPMENT.md` (setup, Windows + WSL, run, test, contribute)
+- [ ] Refresh `CONTRIBUTING.md` with current PR/issue/commit workflow
+- [ ] Add `SECURITY.md` with supported versions + disclosure policy
+- [ ] Add `hypothesis` + `pytest-mock` to `[project.optional-dependencies.dev]`
 - [ ] Measure per-module coverage; document gaps
-- [ ] Add `hypothesis` + `pytest-mock` to `[dev]` dependencies
+- [ ] Push gui.py test coverage ≥ 80 %
+- [ ] Add explicit `menu.py` edge-case tests
+- [ ] Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py`
+- [ ] Audit all `subprocess` calls — no user-input shell injection possible
+- [ ] Harden `marketplace.py` — verify plugin does not escape package dir
 
-### P2 — Medium Value
+### P2 — Medium Value (Sprint 5–6)
 
-- [ ] Add `docs/DEVELOPMENT.md` (Windows + WSL setup guide)
-- [ ] Refresh `CONTRIBUTING.md` — current PR/issue workflow
-- [ ] Review all `.github/issue_template/` files for accuracy
-- [ ] Add `Makefile` or `just` runner for common dev commands
-- [ ] Add `CODEOWNERS` rationale comment
-- [ ] Audit `gui.py` for thread-safety (tkinter + Background threads)
-- [ ] Add `typing.TYPE_CHECKING` guards for expensive imports
-- [ ] Profile `all_tweaks()` load time; add benchmark
-- [ ] Add `TweakDef.risk_level` field to complement `tweak_risk_level()`
-- [ ] Consolidate duplicate `_SCOPE_CACHE` logic into helper
+- [ ] Review `.github/issue_template/` files for accuracy against v1.0.1 API
+- [ ] Refactor `tweaks/__init__.py` — split loader/profiles/engine into sub-modules
+- [ ] Profile `all_tweaks()` load time; document in benchmarks
+- [ ] Add `typing.TYPE_CHECKING` guards for `winreg`, `ctypes.windll`
+- [ ] Add `TweakDef.source_url` field for KB article references
+- [ ] Add `Makefile` / `just` runner for common dev tasks (optional convenience)
+- [ ] Codecov integration in CI — track coverage regressions on PRs
+- [ ] Add GitHub Actions `powershell.yml` lint for `.psm1` / `.ps1`
+- [ ] GUI: audit tkinter background thread interactions for race conditions
+- [ ] Add CLI shell completion support (PowerShell + bash/zsh)
 
-### P3 — Nice to Have
+### P3 — Nice to Have / Long-term
 
-- [ ] `src/` layout migration
-- [ ] Pre-commit CI stage (lint + smoke tests on PR)
-- [ ] Add Codecov/Coveralls integration
-- [ ] Dark mode auto-detection for GUI (follows Windows system theme)
-- [ ] CLI completions (bash/zsh/PowerShell via argcomplete)
-- [ ] `regilattice export --format json/ps1/reg` unified export
+- [ ] `src/` layout migration for PEP 517 packaging isolation
+- [ ] Dark mode auto-detection for GUI (follow Windows system theme)
+- [ ] `regilattice export --format json/ps1/reg` unified export command
 - [ ] Plugin sandbox — limit filesystem/network access for third-party plugins
-- [ ] Scoop bucket publish for RegiLattice
-- [ ] winget manifest automated update via GitHub Actions
-- [ ] Add `logging` module integration (replace ad-hoc SESSION.log)
-- [ ] Localization: add 2nd locale (German or Spanish as proof-of-concept)
-- [ ] REST API layer (FastAPI) for remote management
+- [ ] Automated winget manifest PR via GitHub Actions on tag
+- [ ] Add `logging` module integration to replace ad-hoc `SESSION.log`
+- [ ] Localization: add German locale as proof-of-concept for i18n
+- [ ] REST API layer (FastAPI) for remote management scenarios
 - [ ] Web dashboard (read-only) for tweak status visualization
-- [ ] Benchmark suite in CI (track performance regressions)
-- [ ] Add tweak `changelog` field (last modified date)
-- [ ] Add tweak `source_url` field (docs/KB article reference)
-- [ ] Auto-generate per-category Markdown docs from `TweakDef` fields
-- [ ] Package for Chocolatey
-- [ ] `regilattice diff` — compare two snapshots in human-readable format
+- [ ] Auto-generate per-category Markdown docs from `TweakDef` metadata
+- [ ] `regilattice diff` — compare two snapshots side-by-side
 - [ ] `regilattice doctor` — sanity-check for common misconfigurations
-- [ ] Support for custom user-defined registry tweaks (TOML-based)
+- [ ] Support user-defined registry tweaks via TOML (no Python required)
+- [ ] Chocolatey package submission
+- [ ] Benchmark suite in CI with regression detection
 
 ---
 
@@ -166,8 +178,9 @@ _~50 concrete tasks derived from the roadmap above, ordered by priority._
 
 | Sprint | Dates | Tasks Planned | Tasks Done | Notes |
 |--------|-------|--------------|-----------|-------|
-| Sprint 1 | 2026-03-08 | 10 | 8 | Foundation & hygiene |
-| Sprint 2 | TBD | 7 | — | Documentation |
-| Sprint 3 | TBD | 7 | — | Test coverage |
-| Sprint 4 | TBD | 7 | — | Refactoring |
-| Sprint 5 | TBD | 7 | — | Production readiness |
+| Sprint 1 | 2026-03-08 | 10 | 10 | Foundation & hygiene |
+| Sprint 2 | 2026-03-08 | 6 | 6 | Repo publishing & metadata cleanup |
+| Sprint 3 | TBD | 7 | — | Documentation & developer experience |
+| Sprint 4 | TBD | 7 | — | Test coverage push |
+| Sprint 5 | TBD | 7 | — | Refactoring & performance |
+| Sprint 6 | TBD | 7 | — | Production readiness & v1.0.1 release |
