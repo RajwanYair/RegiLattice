@@ -120,4 +120,3 @@ _Nothing unreleased yet after v1.0.1-dev._
 - Type-check: `mypy --strict` and Pyright/Pylance standard mode.
 - Test: `pytest` with `pytest-cov`, `hypothesis` property tests, benchmarks.
 - VS Code workspace: settings, tasks, launch configs, recommended extensions.
-
