@@ -158,10 +158,11 @@ class RegistrySession:
         if not self._read_cache_enabled:
             return
         with self._read_cache_lock:
-            for suffix in ("dword", "string", "exists"):
+            for suffix in ("dword", "string", "binary", "qword", "expand", "multi_sz"):
                 self._read_cache.pop((path, name, suffix), None)
-            # Also invalidate key_exists for the path
+            # Also invalidate key_exists entries for this path and the bare-name key
             self._read_cache.pop((path, "", "exists"), None)
+            self._read_cache.pop((path, name, "exists"), None)
 
     # -- Logging --
 
@@ -440,6 +441,52 @@ class RegistrySession:
     def set_qword(self, path: str, name: str, value: int) -> None:
         """Write a REG_QWORD (64-bit integer) value."""
         self.set_value(path, name, value, winreg.REG_QWORD)
+
+    def set_expand_string(self, path: str, name: str | None, value: str) -> None:
+        """Write a REG_EXPAND_SZ value (string with %VAR% expansion placeholder)."""
+        self.set_value(path, name, value, winreg.REG_EXPAND_SZ)
+
+    def read_expand_string(self, path: str, name: str) -> str | None:
+        """Return a REG_EXPAND_SZ value as a string, or None if missing/wrong type."""
+        _ensure_windows()
+        cache_key = (path, name, "expand")
+        with self._read_cache_lock:
+            if self._read_cache_enabled and cache_key in self._read_cache:
+                return self._read_cache[cache_key]  # type: ignore[return-value]
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                val, typ = winreg.QueryValueEx(handle, name)
+                result = str(val) if typ == winreg.REG_EXPAND_SZ else None
+        except (FileNotFoundError, OSError):
+            result = None
+        with self._read_cache_lock:
+            if self._read_cache_enabled:
+                self._read_cache[cache_key] = result
+        return result
+
+    def set_multi_sz(self, path: str, name: str, values: list[str]) -> None:
+        """Write a REG_MULTI_SZ (null-separated multi-string) value."""
+        self.set_value(path, name, values, winreg.REG_MULTI_SZ)
+
+    def read_multi_sz(self, path: str, name: str) -> list[str] | None:
+        """Return a REG_MULTI_SZ value as a list of strings, or None if missing."""
+        _ensure_windows()
+        cache_key = (path, name, "multi_sz")
+        with self._read_cache_lock:
+            if self._read_cache_enabled and cache_key in self._read_cache:
+                return self._read_cache[cache_key]  # type: ignore[return-value]
+        try:
+            root, subkey = _split_root(path)
+            with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
+                val, typ = winreg.QueryValueEx(handle, name)
+                result = list(val) if typ == winreg.REG_MULTI_SZ else None
+        except (FileNotFoundError, OSError):
+            result = None
+        with self._read_cache_lock:
+            if self._read_cache_enabled:
+                self._read_cache[cache_key] = result
+        return result
 
     def list_values(self, path: str) -> list[tuple[str, object, int]]:
         """Enumerate all (name, value, type) triples in a key.
