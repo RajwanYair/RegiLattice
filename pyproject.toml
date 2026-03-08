@@ -36,6 +36,12 @@ classifiers = [
     "Topic :: System :: Systems Administration",
 ]
 
+[project.urls]
+Homepage = "https://github.com/aeger/RegiLattice"
+Repository = "https://github.com/aeger/RegiLattice"
+"Bug Tracker" = "https://github.com/aeger/RegiLattice/issues"
+Changelog = "https://github.com/aeger/RegiLattice/blob/main/CHANGELOG.md"
+
 [project.scripts]
 regilattice = "regilattice.cli:main"
 

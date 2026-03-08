@@ -1,57 +1,38 @@
-# Git Attributes for ExplorerLens.io
+# Git Attributes for RegiLattice (Python project)
 
-# Auto detect text files and perform LF normalization
+# Auto-detect text files and normalise to LF in the repo
 * text=auto
 
-# Source code
-*.cpp text eol=crlf
-*.h text eol=crlf
-*.c text eol=crlf
-*.hpp text eol=crlf
-*.cs text eol=crlf
-*.csx text eol=crlf
+# ── Python ───────────────────────────────────────────────────
+*.py text eol=lf
+*.pyi text eol=lf
 
-# Scripts
+# ── Shell / Scripts ──────────────────────────────────────────
+*.sh text eol=lf
 *.ps1 text eol=crlf
 *.bat text eol=crlf
 *.cmd text eol=crlf
-*.sh text eol=lf
+*.psm1 text eol=crlf
 
-# Configuration files
+# ── Config / Data ────────────────────────────────────────────
+*.toml text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
 *.json text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
-*.xml text eol=crlf
-*.config text eol=crlf
-*.props text eol=crlf
-*.targets text eol=crlf
 
-# Visual Studio files
-*.sln text eol=crlf
-*.csproj text eol=crlf
-*.vcxproj text eol=crlf
-*.vcxproj.filters text eol=crlf
-*.vcxproj.user text eol=crlf
-
-# Documentation
+# ── Documentation ────────────────────────────────────────────
 *.md text eol=lf
-*.txt text eol=crlf
-*.rtf text eol=crlf
+*.rst text eol=lf
+*.txt text eol=lf
 
-# Binary files
-*.dll binary
-*.exe binary
-*.lib binary
-*.obj binary
-*.pdb binary
-*.ilk binary
-*.exp binary
+# ── Binary ───────────────────────────────────────────────────
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.gif binary
 *.ico binary
 *.zip binary
-*.7z binary
-*.rar binary
 *.gz binary
+*.whl binary
