@@ -31,21 +31,25 @@ __all__ = [
     "all_tweaks",
     "apply_all",
     "apply_profile",
+    "apply_tweaks",
     "available_profiles",
     "categories",
     "categories_by_risk",
     "categories_by_scope",
     "category_info",
     "diff_snapshots",
+    "filter_tweaks",
     "get_tweak",
     "load_snapshot",
     "profile_info",
     "reload_plugins",
     "remove_all",
+    "remove_tweaks",
     "restore_snapshot",
     "save_snapshot",
     "search_tweaks",
     "status_map",
+    "tweak_dependencies",
     "tweak_scope",
     "tweak_status",
     "tweaks_by_category",
@@ -166,6 +170,12 @@ _ALL_TWEAKS: list[TweakDef] = []
 _TWEAK_INDEX: dict[str, TweakDef] = {}  # O(1) lookup by id
 _TWEAKS_BY_CAT: dict[str, list[TweakDef]] = {}  # O(1) category lookup
 
+# Module-level frozenset — avoids re-creating a tuple inside a tight loop
+_VALID_HIVE_PREFIXES: frozenset[str] = frozenset({
+    "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER", "HKEY_CLASSES_ROOT",
+    "HKEY_USERS", "HKLM", "HKCU", "HKCR", "HKU",
+})
+
 
 def _load_plugins() -> None:
     """Import every sibling module and collect TWEAKS lists."""
@@ -188,8 +198,6 @@ def _load_plugins() -> None:
             if td.id in seen_ids:
                 raise ValueError(f"Duplicate TweakDef id: {td.id!r}")
             seen_ids.add(td.id)
-            # Validate registry key paths start with a known hive prefix
-            _VALID_HIVE_PREFIXES = ("HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER", "HKEY_CLASSES_ROOT", "HKEY_USERS", "HKLM", "HKCU", "HKCR", "HKU")
             for key in td.registry_keys:
                 if not any(key.startswith(p) for p in _VALID_HIVE_PREFIXES):
                     warnings.warn(f"TweakDef {td.id!r}: invalid registry path {key!r}", stacklevel=2)
@@ -679,12 +687,15 @@ def status_map(
     parallel: bool = False,
     max_workers: int = 0,
     progress_fn: Callable[[int, int], None] | None = None,
+    ids: Iterable[str] | None = None,
 ) -> dict[str, TweakResult]:
-    """Return ``{tweak_id: TweakResult}`` for every registered tweak.
+    """Return ``{tweak_id: TweakResult}`` for registered tweaks.
 
     With ``parallel=True`` the detection runs in a thread-pool for faster GUI refresh.
     *progress_fn(done, total)* is called after each tweak completes (thread-safe).
     *max_workers* defaults to ``min(8, cpu_count)`` when 0.
+    *ids* restricts evaluation to the requested subset — useful for incremental
+    GUI refresh when only a few rows need updating.
     """
     from regilattice.registry import SESSION
 
@@ -695,11 +706,12 @@ def status_map(
             max_workers = detect_hardware().optimal_workers
         except Exception:
             max_workers = min(8, os.cpu_count() or 4)
-    total = len(_ALL_TWEAKS)
+    target_tweaks: list[TweakDef] = [_TWEAK_INDEX[i] for i in ids if i in _TWEAK_INDEX] if ids is not None else _ALL_TWEAKS
+    total = len(target_tweaks)
     with SESSION.read_cache():
         if not parallel:
             results: dict[str, TweakResult] = {}
-            for i, td in enumerate(_ALL_TWEAKS):
+            for i, td in enumerate(target_tweaks):
                 results[td.id] = tweak_status(td)
                 if progress_fn is not None:
                     progress_fn(i + 1, total)
@@ -707,7 +719,7 @@ def status_map(
         results = {}
         done = 0
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-            futures = {pool.submit(tweak_status, td): td.id for td in _ALL_TWEAKS}
+            futures = {pool.submit(tweak_status, td): td.id for td in target_tweaks}
             for fut in concurrent.futures.as_completed(futures, timeout=120):
                 tid = futures[fut]
                 try:
@@ -995,3 +1007,125 @@ def remove_all(
     """Remove every registered tweak, respecting corp-safe flags."""
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
     return exe.run_batch(list(_ALL_TWEAKS), "remove", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+
+
+def filter_tweaks(
+    *,
+    corp_safe: bool | None = None,
+    needs_admin: bool | None = None,
+    scope: str | None = None,
+    category: str | None = None,
+    min_build: int | None = None,
+    tags: Iterable[str] | None = None,
+    query: str | None = None,
+) -> list[TweakDef]:
+    """Return tweaks matching ALL supplied criteria (AND semantics).
+
+    Parameters
+    ----------
+    corp_safe:
+        If True, return only HKCU-safe tweaks; False returns only HKLM tweaks.
+    needs_admin:
+        Filter by the ``needs_admin`` flag.
+    scope:
+        ``'user'``, ``'machine'``, or ``'both'`` — matched via :func:`tweak_scope`.
+    category:
+        Exact category name match.
+    min_build:
+        Include only tweaks whose ``min_build`` is <= this value (i.e. compatible).
+    tags:
+        Tweaks that carry **all** of the supplied tags.
+    query:
+        Free-text search (delegated to :func:`search_tweaks`).
+    """
+    pool: list[TweakDef] = search_tweaks(query) if query else list(_ALL_TWEAKS)
+    if corp_safe is not None:
+        pool = [td for td in pool if td.corp_safe is corp_safe]
+    if needs_admin is not None:
+        pool = [td for td in pool if td.needs_admin is needs_admin]
+    if scope is not None:
+        pool = [td for td in pool if tweak_scope(td) == scope]
+    if category is not None:
+        pool = [td for td in pool if td.category == category]
+    if min_build is not None:
+        pool = [td for td in pool if td.min_build <= min_build]
+    if tags is not None:
+        tag_set = frozenset(t.lower() for t in tags)
+        pool = [td for td in pool if tag_set.issubset(t.lower() for t in td.tags)]
+    return pool
+
+
+def tweak_dependencies(td: TweakDef, *, transitive: bool = True) -> list[TweakDef]:
+    """Return the dependency chain for *td* in dependency-first (topological) order.
+
+    Parameters
+    ----------
+    transitive:
+        If True (default), recursively resolve the full dependency graph.
+        If False, return only direct (one-hop) dependencies.
+    """
+    if not td.depends_on:
+        return []
+    if not transitive:
+        return [_TWEAK_INDEX[dep] for dep in td.depends_on if dep in _TWEAK_INDEX]
+    visited: set[str] = set()
+    ordered: list[TweakDef] = []
+
+    def _visit(node_id: str) -> None:
+        if node_id in visited:
+            return
+        visited.add(node_id)
+        node = _TWEAK_INDEX.get(node_id)
+        if node is None:
+            return
+        for dep in node.depends_on:
+            _visit(dep)
+        ordered.append(node)
+
+    for dep in td.depends_on:
+        _visit(dep)
+    return ordered
+
+
+def apply_tweaks(
+    ids: Iterable[str],
+    *,
+    force_corp: bool = False,
+    require_admin: bool = True,
+    parallel: bool = False,
+    max_workers: int = 4,
+    include_deps: bool = True,
+    progress_cb: Callable[[str, TweakResult], None] | None = None,
+) -> dict[str, TweakResult]:
+    """Apply the tweaks identified by *ids*, resolving dependencies first.
+
+    Parameters
+    ----------
+    include_deps:
+        When True (default), prepend any unmet dependencies in topological order.
+    """
+    targets = tweaks_by_ids(ids)
+    if include_deps:
+        dep_ids: set[str] = set()
+        for td in targets:
+            for dep in tweak_dependencies(td):
+                dep_ids.add(dep.id)
+        extra = [_TWEAK_INDEX[d] for d in dep_ids if d not in {t.id for t in targets} and d in _TWEAK_INDEX]
+        targets = extra + targets
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
+    return exe.run_batch(targets, "apply", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+
+
+def remove_tweaks(
+    ids: Iterable[str],
+    *,
+    force_corp: bool = False,
+    require_admin: bool = True,
+    parallel: bool = False,
+    max_workers: int = 4,
+    progress_cb: Callable[[str, TweakResult], None] | None = None,
+) -> dict[str, TweakResult]:
+    """Remove the tweaks identified by *ids* (reverse of :func:`apply_tweaks`)."""
+    targets = tweaks_by_ids(ids)
+    exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
+    return exe.run_batch(targets, "remove", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
