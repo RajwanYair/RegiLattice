@@ -17,7 +17,8 @@ from typing import Any
 
 import pytest
 
-from regilattice.tweaks import all_tweaks, categories, search_tweaks, status_map, tweaks_by_category
+from regilattice.tweaks import (all_tweaks, categories, search_tweaks,
+                                status_map, tweaks_by_category)
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
@@ -70,7 +71,8 @@ class TestSearch:
 
 class TestStatusMap:
     def test_status_map_completes(self) -> None:
-        smap, elapsed = _timed(status_map)
+        # Pass max_workers explicitly to avoid PowerShell hwinfo probe overhead
+        smap, elapsed = _timed(status_map, max_workers=8)
         assert len(smap) > 1000
         assert elapsed < _MAX_STATUS_S, f"status_map() took {elapsed:.2f}s (limit {_MAX_STATUS_S}s)"
 

@@ -29,10 +29,28 @@ $PythonPaths = @(
 
 $Python = $null
 
-# Try PATH first
+# Try PATH first (prefer non-WindowsApps python.exe)
 $pythonCmd = Get-Command python -ErrorAction SilentlyContinue
 if ($pythonCmd -and $pythonCmd.Source -notmatch 'WindowsApps') {
     $Python = $pythonCmd.Source
+}
+
+# Try py.exe launcher (works with multiple Python versions)
+if (-not $Python) {
+    $pyCmd = Get-Command py -ErrorAction SilentlyContinue
+    if ($pyCmd) {
+        $Python = $pyCmd.Source
+        # py.exe needs -3 to ensure Python 3
+        $allArgs = @('-3', '-m', 'regilattice') + ($Arguments ?? @())
+        Write-Host "Starting RegiLattice with $Python (Python Launcher) ..." -ForegroundColor Cyan
+        & $Python @allArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host ''
+            Write-Host 'RegiLattice exited with errors. Check the log for details.' -ForegroundColor Yellow
+            Read-Host 'Press Enter to exit'
+        }
+        exit $LASTEXITCODE
+    }
 }
 
 # Fall back to known install locations

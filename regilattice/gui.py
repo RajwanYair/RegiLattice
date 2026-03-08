@@ -28,24 +28,18 @@ from typing import Any
 from . import __version__
 from . import gui_dialogs as dialogs
 from . import gui_theme as theme
-from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
+from .corpguard import (CorporateNetworkError, assert_not_corporate,
+                        corp_guard_status, is_corporate_network,
+                        is_gpo_managed)
 from .gui_tooltip import build_tooltip_text, has_recommendation
 from .gui_widgets import CategorySection, TweakRow
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakDef,
-    TweakResult,
-    all_tweaks,
-    available_profiles,
-    profile_info,
-    restore_snapshot,
-    save_snapshot,
-    search_tweaks,
-    status_map,
-    tweak_scope,
-    tweak_status,
-    tweaks_by_category,
-)
+from .hwinfo import detect_hardware
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakDef, TweakResult, all_tweaks, available_profiles,
+                     profile_info, restore_snapshot, save_snapshot,
+                     search_tweaks, status_map, tweak_scope, tweak_status,
+                     tweaks_by_category)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme aliases ────────────────────────────────────────────────────────────
@@ -133,6 +127,7 @@ class RegiLatticeGUI:
         self._undo_stack: list[tuple[str, list[TweakDef]]] = []  # (mode, tweaks)
         self._session_changed: set[str] = set()  # tweak IDs modified this session
         self._last_clicked_row_idx: int | None = None  # for Shift+Click range select
+        self._search_debounce_id: str | None = None  # after() id for search debounce
         self._tray_icon: Any = None  # pystray.Icon if available
         self._tray_available = False
         self._setup_styles()
@@ -336,6 +331,9 @@ class RegiLatticeGUI:
             text=f"v{__version__}  |  {platform_summary()}  |  {total_tweaks} tweaks · {total_cats} categories",
             style="Subtitle.TLabel",
         ).pack(side="left", padx=4, pady=(14, 2))
+        # Hardware info — populated async by _hw_detect_worker
+        self._hw_label = ttk.Label(header, text="", style="Subtitle.TLabel")
+        self._hw_label.pack(side="right", padx=16, pady=(14, 2))
 
         # Corp banner placeholder — populated after async corp check
         self._corp_banner_frame = tk.Frame(self._root, bg=_BG)
@@ -480,7 +478,7 @@ class RegiLatticeGUI:
         search_frame.pack(fill="x", padx=16, pady=(6, 0))
         ttk.Label(search_frame, text="🔍", style="TLabel").pack(side="left", padx=(0, 4))
         self._search_var = tk.StringVar()
-        self._search_var.trace_add("write", lambda *_: self._filter_rows())
+        self._search_var.trace_add("write", lambda *_: self._debounce_filter())
         self._search_history: list[str] = self._load_search_history()
         self._search_entry = ttk.Combobox(search_frame, textvariable=self._search_var, font=_FONT, values=self._search_history)
         self._search_entry.pack(side="left", fill="x", expand=True)
@@ -674,6 +672,9 @@ class RegiLatticeGUI:
         The corporate environment check runs in a background thread so it never
         blocks the UI — tweak loading starts immediately.
         """
+        # Detect hardware in background so batch size is set before row loading
+        threading.Thread(target=self._hw_detect_worker, daemon=True).start()
+
         # Start corp check in background — results applied via after() callback
         threading.Thread(target=self._corp_check_worker, daemon=True).start()
 
@@ -689,10 +690,37 @@ class RegiLatticeGUI:
             self._grouped_items.sort(key=lambda item: order_map.get(item[0], len(saved_order)))
         self._populate_batch(0)
 
+    def _hw_detect_worker(self) -> None:
+        """Background thread: detect hardware and push adaptive tuning to UI."""
+        try:
+            hw = detect_hardware()
+            self._root.after(0, self._apply_hw_result, hw)
+        except Exception:
+            pass  # keep default _BATCH_SIZE on failure
+
+    def _apply_hw_result(self, hw: object) -> None:
+        """Apply hardware detection on the main thread (update subtitle)."""
+        from .hwinfo import HWProfile
+        if not isinstance(hw, HWProfile):
+            return
+        # Store for About dialog
+        self._hw_profile = hw
+        # Update subtitle with hardware summary
+        cpu_short = hw.cpu.name.split("@")[0].strip() if "@" in hw.cpu.name else hw.cpu.name
+        if len(cpu_short) > 40:
+            cpu_short = cpu_short[:37] + "\u2026"
+        gpu_name = hw.gpus[0].name if hw.gpus else "No GPU"
+        if len(gpu_name) > 30:
+            gpu_name = gpu_name[:27] + "\u2026"
+        ram_gb = hw.memory.total_mb // 1024 if hw.memory.total_mb else "?"
+        hw_text = f"{cpu_short}  |  {gpu_name}  |  {ram_gb} GB RAM"
+        if hasattr(self, "_hw_label"):
+            self._hw_label.configure(text=hw_text)
+
     def _corp_check_worker(self) -> None:
         """Background thread: detect corporate environment and push result to UI."""
         is_corp = is_corporate_network()
-        corp_info = corp_guard_status() if is_corp else None
+        corp_info = corp_guard_status() if is_corp else None  # uses same cached results — no re-run
         self._root.after(0, self._apply_corp_result, is_corp, corp_info)
 
     def _apply_corp_result(self, is_corp: bool, corp_info: str | None) -> None:
@@ -718,7 +746,7 @@ class RegiLatticeGUI:
                 if not row.td.corp_safe:
                     row.mark_corp_blocked()
 
-    _BATCH_SIZE = 4  # categories per batch — keeps UI fluid
+    _BATCH_SIZE = 4  # default — overridden by hwinfo in _deferred_init
 
     def _populate_batch(self, idx: int) -> None:
         """Create tweak rows for a batch of categories, then schedule the next batch."""
@@ -800,6 +828,12 @@ class RegiLatticeGUI:
             if not section.expanded:
                 section.toggle()
 
+    def _debounce_filter(self, delay_ms: int = 200) -> None:
+        """Schedule _filter_rows after *delay_ms*, cancelling any pending call."""
+        if self._search_debounce_id is not None:
+            self._root.after_cancel(self._search_debounce_id)
+        self._search_debounce_id = self._root.after(delay_ms, self._filter_rows)
+
     def _filter_rows(self) -> None:
         """Show/hide rows based on search query, status filter, AND scope filter.
 
@@ -844,10 +878,13 @@ class RegiLatticeGUI:
         if text_query:
             matching_ids = {td.id for td in search_tweaks(text_query)}
 
+        target_status = _filter_status.get(status_filter)
+        target_scope = _filter_scope.get(scope_filter, "")
+        need_scope = scope_filter != "All"
+        need_scope_op = bool(scope_op)
+
         for section in self._category_sections:
             visible = False
-            target_status = _filter_status.get(status_filter)
-            target_scope = _filter_scope.get(scope_filter, "")
             for row in section.rows:
                 td = row.td
                 text_match = matching_ids is None or td.id in matching_ids
@@ -855,11 +892,11 @@ class RegiLatticeGUI:
                     status_match = td.id in self._session_changed
                 else:
                     status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
-                scope_match = scope_filter == "All" or tweak_scope(td) == target_scope
+                scope_match = not need_scope or tweak_scope(td) == target_scope
                 # Prefix operator checks
                 tag_match = all(any(tf in t.lower() for t in td.tags) for tf in tag_filters)
                 cat_match = all(cf in td.category.lower() for cf in cat_filters)
-                scope_op_match = not scope_op or tweak_scope(td) == scope_op
+                scope_op_match = not need_scope_op or tweak_scope(td) == scope_op
                 admin_match = admin_op is None or td.needs_admin == admin_op
                 if text_match and status_match and scope_match and tag_match and cat_match and scope_op_match and admin_match:
                     row.pack_row()
@@ -1040,7 +1077,11 @@ class RegiLatticeGUI:
 
     def _show_about(self) -> None:
         """Show an About dialog with system and project info."""
-        dialogs.show_about(self._corp_blocked)
+        from .hwinfo import hardware_summary
+        hw_text = ""
+        if hasattr(self, "_hw_profile") and self._hw_profile is not None:
+            hw_text = hardware_summary(self._hw_profile)
+        dialogs.show_about(self._corp_blocked, hw_summary=hw_text)
 
     # ── Category batch actions ───────────────────────────────────────────
 
@@ -1072,7 +1113,7 @@ class RegiLatticeGUI:
             self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
-            statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
+            statuses = status_map(parallel=True, progress_fn=_on_progress)
             self._root.after(0, lambda: self._apply_statuses(statuses))
 
         threading.Thread(target=_worker, daemon=True).start()
@@ -1086,7 +1127,7 @@ class RegiLatticeGUI:
             self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
-            statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
+            statuses = status_map(parallel=True, progress_fn=_on_progress)
             self._root.after(0, lambda: self._apply_statuses(statuses))
 
         threading.Thread(target=_worker, daemon=True).start()

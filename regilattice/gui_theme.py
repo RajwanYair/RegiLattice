@@ -20,6 +20,8 @@ else:
 
 
 class ThemeDict(TypedDict):
+    """Typed dictionary defining the colour palette for a GUI theme."""
+
     accent: str
     bg: str
     bg_surface: str

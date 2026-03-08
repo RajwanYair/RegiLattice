@@ -12,6 +12,7 @@ Usage examples::
 from __future__ import annotations
 
 import argparse
+import signal
 import sys
 from collections.abc import Callable
 from pathlib import Path
@@ -20,20 +21,11 @@ from typing import Any
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
 from .menu import Menu
-from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
-from .tweaks import (
-    TweakResult,
-    all_tweaks,
-    apply_all,
-    apply_profile,
-    available_profiles,
-    get_tweak,
-    remove_all,
-    search_tweaks,
-    tweak_status,
-    tweaks_by_category,
-    tweaks_for_profile,
-)
+from .registry import (SESSION, AdminRequirementError, is_windows,
+                       platform_summary)
+from .tweaks import (TweakResult, all_tweaks, apply_all, apply_profile,
+                     available_profiles, get_tweak, remove_all, search_tweaks,
+                     tweak_status, tweaks_by_category, tweaks_for_profile)
 
 
 def _confirm(prompt: str) -> bool:
@@ -397,6 +389,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Verify dev dependencies (pytest, ruff, mypy) and auto-install missing ones.",
     )
     parser.add_argument(
+        "--hwinfo",
+        action="store_true",
+        help="Detect and display hardware info (CPU, GPU, RAM, caps) and suggested profile.",
+    )
+    parser.add_argument(
         "--search",
         metavar="QUERY",
         help="Search tweaks by keyword (id, label, category, tags) and print matches.",
@@ -452,6 +449,14 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """Entry-point for both ``python -m regilattice`` and the console_script."""
+    # Graceful shutdown on Ctrl-C or SIGTERM
+    def _handle_shutdown(signum: int, frame: object) -> None:  # noqa: ARG002
+        print("\nShutting down gracefully\u2026")
+        sys.exit(128 + signum)
+
+    signal.signal(signal.SIGINT, _handle_shutdown)
+    signal.signal(signal.SIGTERM, _handle_shutdown)
+
     parser = _build_parser()
     args = parser.parse_args(argv)
 
@@ -479,6 +484,15 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  \u2705 {pkg}")
             except ImportError:
                 print(f"  \u274c {pkg} \u2014 could not install")
+        return 0
+
+    if args.hwinfo:
+        from .hwinfo import detect_hardware, hardware_summary, suggest_profile
+
+        print("Detecting hardware\u2026")
+        hw = detect_hardware()
+        print(hardware_summary(hw))
+        print(f"\nSuggested profile: {suggest_profile(hw)}")
         return 0
 
     if args.list_profiles:

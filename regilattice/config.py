@@ -27,7 +27,7 @@ if sys.version_info >= (3, 11):
     _tomllib = tomllib
 else:
     try:
-        import tomli
+        import tomli  # optional fallback for Python <3.11
 
         _tomllib = tomli
     except ModuleNotFoundError:

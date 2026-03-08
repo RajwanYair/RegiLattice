@@ -59,7 +59,17 @@ python_version = "3.10"
 strict = true
 warn_unused_configs = true
 
+[[tool.mypy.overrides]]
+module = "tomli"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "regilattice.gui"
+disallow_untyped_calls = false
+
 [tool.pyright]
+# Full Pyright/Pylance config lives in pyrightconfig.json (takes precedence).
+# These are kept in sync for tools that read pyproject.toml only.
 pythonVersion = "3.10"
 typeCheckingMode = "standard"
 reportUnnecessaryTypeIgnoreComment = false
@@ -78,7 +88,16 @@ omit = ["regilattice/__main__.py"]
 # W0718 / broad-exception-caught: intentional defensive patterns throughout.
 # W1510 / subprocess-run-check: we handle errors ourselves where appropriate.
 # W1404 / implicit-str-concat-in-sequence: used for long registry path strings.
-# W0201 / attribute-defined-outside-init: ctypes struct patterns.
+# W0201 / attribute-defined-outside-init: ctypes struct patterns & tkinter widgets.
+# W0603 / global-statement: used sparingly for module-level singleton patterns.
+# W0212 / protected-access: tests legitimately access private members for validation.
+# W0621 / redefined-outer-name: pytest fixtures shadow module-level names by design.
+# C0415 / import-outside-toplevel: intentional lazy imports in CLI for fast startup.
+# C0301 / line-too-long: handled by ruff with line-length=150.
+# C0114 / missing-module-docstring: tweak modules are auto-discovered plugins; a
+#   TWEAKS list export is sufficient documentation.
+# C0103 / invalid-name: short names like _K, _V used for registry key constants.
+# R0903 / too-few-public-methods: dataclass-like TypedDicts and config holders.
 disable = [
     "W0613",
     "unused-argument",
@@ -90,4 +109,63 @@ disable = [
     "implicit-str-concat",
     "W0201",
     "attribute-defined-outside-init",
+    "W0603",
+    "global-statement",
+    "W0212",
+    "protected-access",
+    "W0621",
+    "redefined-outer-name",
+    "C0415",
+    "import-outside-toplevel",
+    "C0301",
+    "line-too-long",
+    "C0114",
+    "missing-module-docstring",
+    "C0103",
+    "invalid-name",
+    "R0903",
+    "too-few-public-methods",
+]
+
+[tool.pylint.format]
+max-line-length = 150
+
+[tool.pylint.design]
+# CLI main() and GUI __init__ legitimately have many branches/statements.
+max-branches = 20
+max-statements = 80
+max-args = 10
+max-locals = 25
+
+# =============================================================================
+# HYPOTHESIS - Property-Based Testing
+# =============================================================================
+
+[tool.hypothesis]
+# Default profile for local dev - fast
+database = ".hypothesis/db"
+
+[tool.hypothesis.settings]
+max_examples = 100
+deadline = 5000
+suppress_health_check = ["too_slow", "data_too_large"]
+deriving = true
+# =============================================================================
+# BANDIT - Security Linting
+# =============================================================================
+
+[tool.bandit]
+exclude_dirs = [
+    "tests",
+    ".venv",
+    "venv",
+    "external",
+    "archive",
+    "build",
+    "dist",
+]
+skips = [
+    "B101", # assert_used - acceptable in tests
+    "B603", # subprocess_without_shell_equals_true - handled manually
+    "B607", # start_process_with_partial_path - handled manually
 ]

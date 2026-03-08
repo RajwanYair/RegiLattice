@@ -1,10 +1,10 @@
 # UNIVERSAL PROJECT ENHANCEMENT SPECIFICATION
 
-**Professional Software Development Methodology**  
+**Professional Software Development Methodology**
 *Transform any script or application into a production-ready, enterprise-grade solution*
 
-**Version: 12.0.0 - Complete Enhancement Framework**  
-**Updated: January 2026**
+**Version: 13.0.0 — Complete Enhancement Framework**
+**Updated: March 2026**
 
 ---
 
@@ -14,66 +14,63 @@
 2. [Core Philosophy & Principles](#core-philosophy--principles)
 3. [Critical Success Patterns](#critical-success-patterns)
 4. [Project Structure Template](#project-structure-template)
-5. [Universal Enhancement Categories](#universal-enhancement-categories)
-6. [Configuration Management](#configuration-management)
-7. [Implementation Methodology](#implementation-methodology)
-8. [Quality Assurance & Testing](#quality-assurance--testing)
-9. [Success Metrics & Validation](#success-metrics--validation)
-10. [Adaptation Guidelines](#adaptation-guidelines)
+5. [Build System & Packaging](#build-system--packaging)
+6. [Linting & Formatting](#linting--formatting)
+7. [Type Checking](#type-checking)
+8. [Testing Strategy](#testing-strategy)
+9. [IDE & Editor Configuration](#ide--editor-configuration)
+10. [Continuous Integration & Delivery](#continuous-integration--delivery)
+11. [Source Control & Git Practices](#source-control--git-practices)
+12. [Configuration Management](#configuration-management)
+13. [Implementation Methodology](#implementation-methodology)
+14. [Quality Assurance Checklist](#quality-assurance-checklist)
 
 ---
 
 ## WHAT IS THIS SPECIFICATION?
 
-This specification is a **comprehensive, universal framework** for transforming any software project into a production-ready, enterprise-grade solution ready for GitHub publication. The methodology consolidates proven patterns for code organization, naming consistency, cross-platform compatibility, and professional presentation based on real-world project transformations.
-
-Whether you're starting with a simple script or enhancing an existing application, this framework provides proven patterns and methodologies to achieve enterprise-level quality across any technology stack or domain.
+This specification is a **comprehensive, universal framework** for transforming
+any software project into a production-ready, enterprise-grade solution ready
+for GitHub publication. The methodology consolidates proven patterns for code
+organisation, naming consistency, cross-platform compatibility, and professional
+presentation based on real-world project transformations.
 
 ### Who Should Use This?
 
-**For AI Assistants**: Apply this specification systematically to any project enhancement request. Follow the phases and checklists to ensure comprehensive coverage.
-
-**For Developers**: Use this as a roadmap to professionalize your projects with industry best practices, enterprise features, and production-ready quality.
-
-**For Organizations**: Implement this framework to standardize development practices and achieve consistent, high-quality software across all projects.
-
-### Core Principles
-
-1. **Portability First** - No hardcoded paths (`Path(__file__).parent` only)
-2. **Single Entry Point** - One executable with command routing
-3. **Three Interfaces** - CLI + Desktop GUI + Web GUI (full feature parity)
-4. **Cross-Platform** - Windows, Linux, macOS, WSL tested
-5. **Configuration-Driven** - YAML with `${ENV_VAR:default}` substitution
-6. **Signal-Safe** - Graceful shutdown (SIGTERM/SIGINT) with cleanup
-7. **Progress Indicators** - tqdm/rich for CLI, callbacks for GUI
-8. **Zero Duplication** - One source of truth for everything
-9. **Professional Docs** - Comprehensive, portable, synchronized with code
-10. **GitHub Ready** - Clean structure, no artifacts or hardcoded values
+- **AI Assistants** — Apply this specification systematically to any project
+  enhancement request. Follow the phases and checklists to ensure comprehensive
+  coverage.
+- **Developers** — Use this as a roadmap to professionalise your projects with
+  industry best practices, enterprise features, and production-ready quality.
+- **Organisations** — Implement this framework to standardise development
+  practices and achieve consistent, high-quality software across all projects.
 
 ---
 
 ## CORE PHILOSOPHY & PRINCIPLES
 
-### Development Standards
+### Design Principles
 
-- **Python-First Development**: Prefer Python for cross-platform compatibility, maintainability, and robust error handling
-- **YAML-First Configuration**: Use YAML for human-readable, maintainable configuration over JSON
-- **Modular Architecture**: Self-contained components with clear interfaces and single responsibility
-- **Configuration-Driven Behavior**: External configuration controls all customizable aspects
-- **Security-First Design**: User-space execution by default with selective privilege escalation
-- **Package Manager Preference**: Prefer system package managers (APT, yum, brew) over language-specific installers
-- **No Virtual Environments by Default**: System-wide installations preferred unless explicitly configured
-- **Hardware-Aware Installation**: Detect hardware before installing drivers and hardware-specific packages
+1. **Portability First** — No hardcoded paths (`Path(__file__).parent` only).
+2. **Single Entry Point** — One executable with command routing.
+3. **Multiple Interfaces** — CLI + GUI (+ Web GUI if needed) with feature parity.
+4. **Configuration-Driven** — External config controls all customisable aspects.
+5. **Zero Duplication** — One source of truth for every setting and constant.
+6. **Signal-Safe** — Graceful shutdown with cleanup on SIGTERM/SIGINT.
+7. **Security-First** — User-space execution; selective privilege escalation only.
+8. **Graceful Degradation** — Provide fallback mechanisms when dependencies are
+   unavailable.
 
 ### Quality Standards
 
-- **Error-First Development**: Design comprehensive error handling before implementing happy paths
-- **Testing-Integrated Development**: Write tests alongside implementation, not as an afterthought
-- **Documentation-Driven Development**: Maintain comprehensive documentation at all levels
-- **Performance-Conscious Design**: Optimize for efficiency without sacrificing maintainability
-- **User-Centric Design**: Progressive disclosure of features with multiple interface options
-- **Graceful Degradation**: Always provide fallback mechanisms when dependencies are unavailable
-- **Signal-Safe Operations**: Handle SIGTERM, SIGINT gracefully with proper cleanup
+- **Error-First Development** — Design error handling before happy paths.
+- **Testing-Integrated** — Write tests alongside implementation, not as an
+  afterthought.
+- **Documentation-Driven** — Maintain docs at all levels (module, class,
+  function, README, CONTRIBUTING, CHANGELOG).
+- **Performance-Conscious** — Optimise for efficiency without sacrificing
+  maintainability.
+- **User-Centric** — Progressive disclosure; multiple interface options.
 
 ---
 
@@ -82,46 +79,41 @@ Whether you're starting with a simple script or enhancing an existing applicatio
 ### 1. Portability
 
 ```python
-# ✅ Good
+# GOOD — portable, works from any directory
 PROJECT_ROOT = Path(__file__).parent.resolve()
 config = PROJECT_ROOT / "config" / "default.yaml"
 
-# ❌ Bad  
-config = "C:\\Users\\name\\project\\config\\default.yaml"
+# BAD — hardcoded, won't work for anyone else
+config = "C:\\Users\\name\\project\\config.yaml"
 ```
 
-**Requirements**:
-- Use `Path(__file__).parent` everywhere
-- Generic placeholders in docs (`<username>`, not specific names)
-- Relative references in help (`./README.md`)
-- Works from any directory
+Requirements:
+- Use `Path(__file__).parent` everywhere.
+- Generic placeholders in docs (`<username>`, not specific names).
+- Relative references in help (`./README.md`).
+- Works from any directory and any user account.
 
 ### 2. Single Entry Point Consolidation
 
-**Problem**: Multiple entry points create confusion, maintenance overhead, and user experience issues
-
-**Solution**: Consolidate all functionality into one unified script with clear, consistent naming
-
-**Implementation**:
-- Remove duplicate scripts (`script-advanced.py`, `script-enhanced`, etc.)
-- Merge all functionality into the main project script
-- Update all documentation to reference single entry point
-- Eliminate intermediate import files and wrapper scripts
-- Name main executable after project (e.g., `project-name` without .py extension)
-- Create clear command routing system for all features
+Remove duplicate scripts. Merge all functionality into one main script.
+Create clear command routing:
 
 ```python
-def main():
-    parser = argparse.ArgumentParser()
-    mode = parser.add_mutually_exclusive_group()
-    mode.add_argument('--gui', '--web', '--cli')
-    
-    if args.web: start_web_gui()
-    elif args.cli: run_cli()
-    else: start_desktop_gui()
+def main() -> int:
+    parser = argparse.ArgumentParser(prog="my-tool")
+    sub = parser.add_subparsers(dest="command")
+    sub.add_parser("apply", help="Apply configuration")
+    sub.add_parser("remove", help="Remove configuration")
+    sub.add_parser("list", help="List available items")
+    sub.add_parser("gui", help="Launch graphical interface")
+    args = parser.parse_args()
+    # ... dispatch to appropriate handler
 ```
 
-### 3. Three Interfaces (Feature Parity)
+### 3. Interface Parity
+
+All interfaces (CLI, Desktop GUI, Web GUI) share a **common backend service
+layer**. Business logic lives in shared modules; interfaces are thin wrappers.
 
 ```
 Desktop GUI (Tkinter) ──┐
@@ -129,210 +121,51 @@ Web GUI (FastAPI)  ──────┼──> Shared Backend Services
 CLI (argparse)     ──────┘
 ```
 
-**Desktop GUI (Tkinter)**:
-- Standalone application for local desktop use
-- Professional styling with ttk themes
-- All CLI functionality accessible
-- Real-time progress indicators
-- Configuration management (load, save, apply, reset)
-- Cross-platform (Windows, Linux, macOS)
-- Keyboard shortcuts and accessibility
+### 4. Graceful Signal Handling
 
-**Web GUI (FastAPI/Flask)**:
-- Browser-based interface for remote/headless systems
-- Responsive design (desktop and mobile)
-- All CLI functionality accessible via web
-- Real-time updates (WebSockets/SSE)
-- REST API for programmatic access
-- Modern frameworks (Bootstrap, htmx)
-- Authentication-ready architecture
-
-**Shared Backend Layer**:
-- Service classes that both GUIs call
-- Identical functionality and behavior
-- Unified configuration management
-- Shared progress callback system
-- Common error handling and logging
-- Zero business logic duplication
-
-**Feature Parity Checklist**:
-- [ ] All commands accessible in desktop GUI
-- [ ] All commands accessible in web GUI
-- [ ] Configuration editing in both GUIs
-- [ ] Progress tracking in all interfaces
-- [ ] Help/documentation in all interfaces
-- [ ] Error messages consistent across interfaces
-
-### 4. Graceful Signal Handling and Shutdown
-
-**Signals to Handle**:
-- SIGTERM (termination request)
-- SIGINT (Ctrl+C)
-- SIGHUP (hang up, if applicable)
-
-**Implementation Pattern**:
 ```python
-import signal
-import atexit
-import sys
+import signal, atexit, sys
 
 class GracefulShutdown:
     def __init__(self):
         self.is_shutting_down = False
-        self.cleanup_handlers = []
-        
-        signal.signal(signal.SIGTERM, self.handle_shutdown)
-        signal.signal(signal.SIGINT, self.handle_shutdown)
-        atexit.register(self.cleanup)
-    
-    def handle_shutdown(self, signum, frame):
+        signal.signal(signal.SIGTERM, self._handle)
+        signal.signal(signal.SIGINT, self._handle)
+        atexit.register(self._cleanup)
+
+    def _handle(self, signum, frame):
         if self.is_shutting_down:
-            print("\nForce exit!")
-            sys.exit(1)
-        
+            sys.exit(1)  # Force exit on second signal
         self.is_shutting_down = True
-        print("\nShutting down gracefully...")
-        self.cleanup()
+        self._cleanup()
         sys.exit(0)
-    
-    def register_cleanup(self, handler):
-        self.cleanup_handlers.append(handler)
-    
-    def cleanup(self):
-        for handler in self.cleanup_handlers:
-            try:
-                handler()
-            except Exception as e:
-                print(f"Cleanup error: {e}")
+
+    def _cleanup(self):
+        # Close file handles, terminate threads, remove temp files,
+        # flush log buffers, release locks, save state.
+        ...
 ```
 
-**Cleanup Requirements**:
-- Close all file handles explicitly
-- Terminate or join all child threads/processes
-- Remove temporary files and directories
-- Flush logging buffers
-- Release network connections and locks
-- Save important application state
-- Implement timeout for cleanup (5-10 seconds max)
+### 5. Progress Indicators
 
-### 5. Progress Indicators and Status Reporting
+- **CLI**: Use `rich.progress` or `tqdm` for terminal progress bars.
+- **GUI**: Use callback functions (`callback(current, total, message)`).
+- Keep progress logic in the shared backend, not in the interface layer.
 
-**CLI Progress (rich)**:
-```python
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
+### 6. Package Management Strategy
 
-with Progress(
-    SpinnerColumn(),
-    TextColumn("[progress.description]{task.description}"),
-    BarColumn(),
-    TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-) as progress:
-    task = progress.add_task("Processing...", total=len(items))
-    for item in items:
-        process_single_item(item)
-        progress.update(task, advance=1)
-```
+Preference order:
+1. System package managers (APT, yum, brew, choco).
+2. Language-specific (pip, npm, cargo).
+3. Universal (Snap, Flatpak, Conda).
+4. Manual installation (last resort).
 
-**GUI Progress Integration**:
-```python
-def process_with_progress(items, callback=None):
-    for i, item in enumerate(items):
-        process(item)
-        if callback: callback(i+1, len(items), f"Processing {item}")
-```
+### 7. Proxy-Aware Networking
 
-### 6. Intelligent Package Management Strategy
-
-**Preference Order**:
-1. **System Package Managers** (APT, yum, brew, choco)
-2. **Language-Specific** (pip with `--break-system-packages`, npm, cargo)
-3. **Universal** (Snap, Flatpak, Conda)
-4. **Manual Installation** (last resort)
-
-```python
-def detect_package_managers():
-    """Detect available package managers"""
-    managers = {}
-    checks = {
-        'apt': ['apt', '--version'],
-        'yum': ['yum', '--version'],
-        'brew': ['brew', '--version'],
-        'pip': ['pip', '--version'],
-    }
-    for name, cmd in checks.items():
-        try:
-            subprocess.run(cmd, capture_output=True, timeout=5, check=True)
-            managers[name] = True
-        except (subprocess.SubprocessError, FileNotFoundError):
-            managers[name] = False
-    return managers
-```
-
-### 7. Proxy Handling (No Hardcoding)
-
-```yaml
-network:
-  proxy:
-    enabled: "${PROXY_ENABLED:false}"
-    http: "${HTTP_PROXY:}"
-    https: "${HTTPS_PROXY:}"
-    no_proxy: "${NO_PROXY:localhost,127.0.0.1}"
-  prefer_direct: true
-```
-
-**Strategy**:
-- Try direct connection first
-- Check environment variables
-- Read from configuration
-- Test & fallback
-- CLEANUP after use! Never hardcode proxy URLs
-
-### 8. Configuration Management
-
-**Hierarchy** (highest to lowest):
-1. Command-line arguments
-2. Environment variables
-3. User configuration file
-4. System configuration file
-5. Default configuration
-
-**Sample Configuration**:
-```yaml
-application:
-  name: "${APP_NAME:My Application}"
-  version: "1.0.0"
-  environment: "${ENVIRONMENT:development}"
-
-logging:
-  level: "${LOG_LEVEL:INFO}"
-  file: "${LOG_FILE:app.log}"
-  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-
-performance:
-  cache_size: "${CACHE_SIZE:1000}"
-  max_workers: "${MAX_WORKERS:4}"
-  timeout: "${TIMEOUT:30}"
-
-security:
-  user_space: true
-  privilege_escalation: "selective"
-  audit_enabled: "${AUDIT_ENABLED:false}"
-
-network:
-  proxy:
-    enabled: "${PROXY_ENABLED:false}"
-    url: "${PROXY_URL:}"
-  timeout: "${NETWORK_TIMEOUT:30}"
-  prefer_direct: true
-
-gui:
-  desktop:
-    theme: "${GUI_THEME:default}"
-    geometry: "${GUI_GEOMETRY:800x600}"
-  web:
-    host: "${WEB_HOST:127.0.0.1}"
-    port: "${WEB_PORT:8080}"
-```
+Never hard-code proxy URLs. Check in order:
+1. Environment variables (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`).
+2. Configuration file.
+3. Direct connection (fallback).
 
 ---
 
@@ -340,158 +173,895 @@ gui:
 
 ```
 project-root/
-├── project-name                  # Single entry point (no .py extension)
-├── README.md                     # Main documentation
-├── LICENSE                       # License (MIT recommended)
-├── VERSION                       # Version number
-├── requirements.txt              # Python dependencies
-├── apt-packages.txt              # System package dependencies
-├── pyproject.toml                # Modern Python config
-├── .gitignore                    # Git ignore rules
+├── pyproject.toml               # Build config, tool settings, metadata
+├── pyrightconfig.json           # Pyright/Pylance type-check config
+├── README.md                    # Main documentation
+├── CONTRIBUTING.md              # Contribution guidelines
+├── CHANGELOG.md                 # Release history (Keep a Changelog format)
+├── LICENSE                      # License file (MIT recommended)
+├── .gitignore                   # Git ignore rules
 │
-├── src/                          # Source code
-│   ├── __init__.py
-│   │
-│   ├── cli/                      # Command-line interface
-│   │   ├── __init__.py
-│   │   ├── main_cli.py
-│   │   ├── commands.py
-│   │   └── validators.py
-│   │
-│   ├── core/                     # Core business logic
-│   │   ├── __init__.py
-│   │   ├── business_logic.py
-│   │   ├── signal_handler.py
-│   │   ├── logging_framework.py
-│   │   └── performance.py
-│   │
-│   ├── utils/                    # Utilities
-│   │   ├── __init__.py
-│   │   ├── portable.py
-│   │   ├── config_manager.py
-│   │   ├── network_utils.py
-│   │   ├── file_utils.py
-│   │   └── progress.py
-│   │
-│   ├── integrations/             # External integrations
-│   │   ├── __init__.py
-│   │   ├── gui_tkinter.py
-│   │   ├── web_interface.py
-│   │   └── api.py
-│   │
-│   └── models/                   # Data models
-│       ├── __init__.py
-│       └── config_schema.py
+├── .github/
+│   ├── copilot-instructions.md  # AI assistant context (auto-loaded)
+│   └── workflows/
+│       ├── ci.yml               # Lint + type-check + test matrix
+│       └── release.yml          # Build + publish on tag push
 │
-├── config/                       # Configuration files (YAML)
-│   ├── default.yaml
-│   ├── production.yaml
-│   └── development.yaml
+├── .vscode/
+│   ├── settings.json            # Workspace editor + linter + formatter config
+│   ├── launch.json              # Debug configurations
+│   ├── tasks.json               # Build/test/lint task shortcuts
+│   └── extensions.json          # Recommended extensions list
 │
-├── tests/                        # Test suite
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_core.py
-│   ├── test_cli.py
-│   └── test_gui.py
+├── src/ (or package_name/)      # Source code
+│   ├── __init__.py              # Package version (__version__)
+│   ├── __main__.py              # python -m entry point
+│   ├── cli.py                   # argparse CLI
+│   ├── gui.py                   # Tkinter GUI (or other framework)
+│   ├── config.py                # Configuration loading (TOML/YAML/JSON)
+│   ├── registry.py              # Core domain logic
+│   └── plugins/                 # Auto-discovered plugin modules
+│       ├── __init__.py          # Plugin loader
+│       └── *.py                 # One module per plugin category
 │
-├── docs/                         # Documentation
-│   ├── README.md
-│   ├── QUICK_START.md
-│   ├── API.md
-│   ├── CONFIGURATION.md
-│   └── TROUBLESHOOTING.md
+├── tests/
+│   ├── conftest.py              # Shared fixtures (session, function scope)
+│   ├── test_<module>.py         # Unit tests per source module
+│   ├── test_integration.py      # End-to-end workflow tests
+│   ├── test_property.py         # Hypothesis property-based tests
+│   └── test_benchmarks.py       # Performance regression tests
 │
-├── scripts/                      # Utility scripts
-│   ├── install.py
-│   └── deploy.py
-│
-├── examples/                     # Usage examples
-│   └── basic_usage.py
-│
-└── archive/                      # Legacy files (optional)
-    └── ARCHIVE_MANIFEST.md
+└── docs/                        # Extended documentation (optional)
+    ├── QUICK_START.md
+    └── ARCHITECTURE.md
 ```
 
-**Root Directory Rule**: Only entry point, README, LICENSE, VERSION, requirements.txt, apt-packages.txt, pyproject.toml, .gitignore, and directories.
+### Root Directory Rules
+
+Keep the root clean. Only these files belong at top level:
+- `pyproject.toml`, `pyrightconfig.json`, `README.md`, `CONTRIBUTING.md`,
+  `CHANGELOG.md`, `LICENSE`, `.gitignore`, and directories (`.github/`,
+  `.vscode/`, `src/`, `tests/`, `docs/`).
+- No `.py` scripts at root (use `__main__.py` and `pyproject.toml [project.scripts]`).
 
 ---
 
-## UNIVERSAL ENHANCEMENT CATEGORIES
+## BUILD SYSTEM & PACKAGING
 
-### 1. User Interface Requirements
+### pyproject.toml — Single Source of Truth
 
-| Interface | Framework | Purpose |
-|-----------|-----------|---------|
-| Desktop GUI | Tkinter + ttk | Local desktop use |
-| Web GUI | FastAPI/Flask | Remote/headless access |
-| CLI | argparse + rich | Automation and scripting |
+`pyproject.toml` is the **one file** for build config, project metadata, and
+tool settings. Avoid maintaining separate `setup.py`, `setup.cfg`, `tox.ini`,
+`.pylintrc`, or `mypy.ini` files — consolidate everything here.
 
-### 2. Cross-Platform Support
+```toml
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-| Platform | Status |
-|----------|--------|
-| Windows 10/11 | Required |
-| WSL (Ubuntu) | Required |
-| Linux (Ubuntu/Debian) | Required |
-| macOS | Recommended |
+[project]
+name = "my-tool"
+version = "1.0.0"
+description = "One-line project description."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Author Name" }]
+keywords = ["keyword1", "keyword2"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 
-### 3. Error Handling & Logging
+[project.scripts]
+my-tool = "my_tool.cli:main"
 
-```python
-import logging
-from pathlib import Path
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-    handlers=[
-        logging.FileHandler(Path(__file__).parent / 'logs' / 'app.log'),
-        logging.StreamHandler()
-    ]
-)
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "pytest-cov>=7,<8", "mypy>=1.5,<2", "ruff>=0.4,<1"]
 ```
 
-### 4. Testing Framework
+### Version Management
 
-- **Unit Tests**: pytest, 90%+ coverage goal
-- **Integration Tests**: All feature workflows
-- **Cross-Platform Tests**: All target platforms
-- **Performance Tests**: Response time benchmarks
+- Store version in `__init__.py` (`__version__ = "1.0.0"`) and mirror it in
+  `pyproject.toml` `[project] version`.
+- Use semantic versioning: `MAJOR.MINOR.PATCH`.
+- Tag releases with `v` prefix: `v1.0.0`.
+
+---
+
+## LINTING & FORMATTING
+
+### Ruff — Primary Linter & Formatter
+
+Ruff replaces flake8, isort, pyflakes, pycodestyle, and most of pylint's
+style checks. Configure in `pyproject.toml`:
+
+```toml
+[tool.ruff]
+target-version = "py310"
+line-length = 150
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["ARG002"]  # Document why each ignore is needed
+```
+
+**Rule set explanation**:
+- `E` — pycodestyle errors
+- `F` — pyflakes
+- `W` — pycodestyle warnings
+- `I` — isort import sorting
+- `UP` — pyupgrade (modern Python syntax)
+- `B` — bugbear (common pitfalls)
+- `SIM` — simplify (code simplification)
+- `RUF` — ruff-specific rules (Unicode confusables, etc.)
+
+### Pylint — Supplementary Deep Analysis
+
+Pylint catches issues ruff doesn't: naming conventions, design complexity
+(too-many-branches, too-many-arguments), missing docstrings, and module
+structure problems.
+
+Configure in `pyproject.toml` under `[tool.pylint.*]`:
+
+```toml
+[tool.pylint."messages_control"]
+# Document EVERY suppression with the reason it's needed.
+# W0613 / unused-argument: require_admin kwarg is part of the TweakDef API
+#   contract — must be present even when unused.
+# C0301 / line-too-long: handled by ruff with line-length=150.
+# C0415 / import-outside-toplevel: intentional lazy imports for fast startup.
+disable = [
+    "W0613", "unused-argument",
+    "C0301", "line-too-long",
+    "C0415", "import-outside-toplevel",
+]
+
+[tool.pylint.format]
+max-line-length = 150  # Must match ruff line-length
+
+[tool.pylint.design]
+max-branches = 20     # CLI main() legitimately has many branches
+max-statements = 80
+max-args = 10
+max-locals = 25
+```
+
+### Suppression Best Practices
+
+1. **One source of truth** — Put all pylint suppressions in `pyproject.toml`.
+   Do NOT duplicate in VS Code `settings.json` `pylint.args`. Instead, use
+   `"pylint.args": ["--rcfile=pyproject.toml"]` in VS Code.
+2. **Document every suppression** — Add a comment explaining WHY the rule is
+   disabled, not just WHAT rule it is.
+3. **Prefer solving over suppressing** — Before disabling a rule, attempt to
+   fix the code. Only suppress when the rule conflicts with an architectural
+   decision.
+4. **Review periodically** — Re-enable suppressed rules when the underlying
+   reason no longer applies.
+
+---
+
+## TYPE CHECKING
+
+### Dual-Checker Strategy: mypy + Pyright/Pylance
+
+Use **mypy** for CI strictness and **Pyright/Pylance** for real-time IDE
+feedback. They complement each other: mypy is more conservative; Pyright has
+better type narrowing and editor integration.
+
+#### mypy Configuration
+
+```toml
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_configs = true
+```
+
+#### Pyright/Pylance Configuration
+
+Create `pyrightconfig.json` at the project root. This file takes precedence
+over `[tool.pyright]` in `pyproject.toml` when both exist.
+
+```jsonc
+{
+  "pythonVersion": "3.10",
+  "typeCheckingMode": "standard",
+  "extraPaths": ["."],
+
+  // Document every suppression with the architectural reason.
+  // mypy uses `# type: ignore`; Pyright doesn't always need them.
+  "reportUnnecessaryTypeIgnoreComment": false,
+  // Module sources unavailable in CI stubs (e.g., winreg on Linux).
+  "reportMissingModuleSource": false,
+  // API-contract parameters that are intentionally unused.
+  "reportUnusedParameter": false,
+  // GUI widget methods return values we intentionally discard.
+  "reportUnusedCallResult": false
+}
+```
+
+#### Handling Dual-Checker Conflicts
+
+The most common conflict: mypy needs `# type: ignore[attr-defined]` for
+dynamic attributes (e.g., `ctypes.windll`), but Pyright flags these as
+"Unused type: ignore comment" because Pyright knows about the attribute.
+
+**Resolution**: Set `reportUnnecessaryTypeIgnoreComment: false` in
+`pyrightconfig.json`. This lets mypy's `# type: ignore` comments coexist
+with Pyright without spurious warnings.
+
+**Important**: `python.analysis.diagnosticSeverityOverrides` in VS Code
+`settings.json` CANNOT be set when `pyrightconfig.json` exists. Put all
+Pyright settings in `pyrightconfig.json` only.
+
+#### Suppression Review Policy
+
+Periodically review all `report*: false` settings:
+- **Keep** suppressions for platform-specific attributes, test fixtures
+  accessing private members, and decorator-based patterns.
+- **Remove** overly broad suppressions (`reportReturnType`,
+  `reportAssignmentType`, `reportCallIssue`) and fix the real type errors
+  they were hiding.
+
+---
+
+## TESTING STRATEGY
+
+### Framework: pytest
+
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["my_tool"]
+omit = ["my_tool/__main__.py"]
+```
+
+### Test File Organisation
+
+| File | Purpose |
+| ---- | ------- |
+| `conftest.py` | Shared fixtures: session-scoped (e.g., `all_items_list`) and function-scoped (e.g., `dry_session` for safe testing). |
+| `test_<module>.py` | Unit tests for each source module. |
+| `test_smoke.py` | Auto-parametrised tests over ALL plugins/items (signature checks, ID uniqueness, callability). |
+| `test_integration.py` | End-to-end workflow tests (CLI commands, batch operations). |
+| `test_property.py` | Hypothesis property-based tests for invariant checking. |
+| `test_benchmarks.py` | Performance regression tests with assertions on execution time. |
+
+### Key Testing Patterns
+
+**Auto-parametrised smoke tests** — If your project has a plugin/tweak/module
+system, auto-discover all items and parametrise tests over them. Adding a new
+plugin automatically generates tests:
+
+```python
+@pytest.fixture(scope="session")
+def all_items():
+    return load_all_plugins()
+
+@pytest.mark.parametrize("item", all_items(), ids=lambda t: t.id)
+def test_has_valid_signature(item):
+    sig = inspect.signature(item.apply_fn)
+    assert "require_admin" in sig.parameters
+```
+
+**Dry-run fixtures** — For tests that touch external resources (registry,
+filesystem, network), provide a fixture that sets a dry-run flag:
+
+```python
+@pytest.fixture
+def dry_session(monkeypatch):
+    session = MySession()
+    monkeypatch.setattr(session, "_dry_run", True)
+    return session
+```
+
+**Coverage target**: 90%+ line coverage. Use `pragma: no cover` sparingly and
+only for genuinely untestable code (entry-point guards, platform-specific
+branches that can't run in CI).
+
+---
+
+## IDE & EDITOR CONFIGURATION
+
+### VS Code Workspace Settings
+
+Store IDE configuration in `.vscode/` (tracked in Git). This ensures every
+contributor has the same experience.
+
+#### `.vscode/settings.json`
+
+```jsonc
+{
+  // ── Python ─────────────────────────────────────────────────────────
+  "python.defaultInterpreterPath": "<path-to-python>",
+  "python.analysis.autoImportCompletions": true,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests", "-v", "--tb=short"],
+
+  // ── Ruff (linter + formatter) ──────────────────────────────────────
+  "ruff.lint.args": ["--config=pyproject.toml"],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // ── Editor defaults ────────────────────────────────────────────────
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.rulers": [150],
+  "editor.renderWhitespace": "boundary",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.stickyScroll.enabled": true,
+
+  // ── Files ──────────────────────────────────────────────────────────
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.mypy_cache": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/*.egg-info": true
+  },
+
+  // ── Search ─────────────────────────────────────────────────────────
+  "search.exclude": {
+    "**/__pycache__": true,
+    "**/.mypy_cache": true,
+    "**/.pytest_cache": true,
+    "**/dist": true,
+    "**/build": true
+  },
+
+  // ── Terminal ───────────────────────────────────────────────────────
+  "terminal.integrated.env.windows": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "${workspaceFolder}",
+    "PYTHONIOENCODING": "utf-8"
+  },
+
+  // ── Git ────────────────────────────────────────────────────────────
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+
+  // ── Markdown ───────────────────────────────────────────────────────
+  "markdownlint.config": {
+    "MD013": false,
+    "MD033": false,
+    "MD041": false
+  },
+
+  // ── Pylint ─────────────────────────────────────────────────────────
+  // Single source of truth: pyproject.toml. Do NOT duplicate disable list here.
+  "pylint.args": ["--rcfile=pyproject.toml"],
+
+  // ── YAML ───────────────────────────────────────────────────────────
+  // GitHub Actions validation requires network access to resolve `uses:` refs.
+  // Behind corporate proxies this fails with "Unable to resolve action".
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  }
+}
+```
+
+#### `.vscode/tasks.json`
+
+Define tasks for every common operation so developers can use `Ctrl+Shift+B`:
+
+```jsonc
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lint (Ruff)",
+      "type": "shell",
+      "command": "python -m ruff check src/ tests/",
+      "group": "build"
+    },
+    {
+      "label": "Format (Ruff)",
+      "type": "shell",
+      "command": "python -m ruff format src/ tests/",
+      "group": "build"
+    },
+    {
+      "label": "Type Check (mypy)",
+      "type": "shell",
+      "command": "python -m mypy src/",
+      "group": "build"
+    },
+    {
+      "label": "Test (pytest)",
+      "type": "shell",
+      "command": "python -m pytest tests/ -v --tb=short",
+      "group": { "kind": "test", "isDefault": true }
+    },
+    {
+      "label": "Test + Coverage",
+      "type": "shell",
+      "command": "python -m pytest tests/ -v --tb=short --cov=src --cov-report=term-missing",
+      "group": "test"
+    },
+    {
+      "label": "Install (editable)",
+      "type": "shell",
+      "command": "pip install -e .[dev]",
+      "group": "build"
+    }
+  ]
+}
+```
+
+#### `.vscode/launch.json`
+
+Debug configurations for common entry points:
+
+```jsonc
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "CLI (list)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "my_tool",
+      "args": ["--list"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "GUI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "my_tool",
+      "args": ["--gui"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v", "--tb=short"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}
+```
+
+#### `.vscode/extensions.json`
+
+Recommend extensions so contributors get the right tooling on first open:
+
+```jsonc
+{
+  "recommendations": [
+    "ms-python.python",        // Python language support
+    "ms-python.debugpy",       // Python debugger
+    "charliermarsh.ruff",      // Ruff linter + formatter
+    "tamasfe.even-better-toml",// TOML syntax
+    "redhat.vscode-yaml",      // YAML syntax + validation
+    "esbenp.prettier-vscode",  // Markdown / JSON formatter
+    "eamodio.gitlens",         // Git blame + history
+    "usernamehw.errorlens",    // Inline error display
+    "gruntfuggly.todo-tree"    // TODO/FIXME scanner
+  ]
+}
+```
+
+### AI Assistant Context: `.github/copilot-instructions.md`
+
+Create a `copilot-instructions.md` in `.github/` that GitHub Copilot auto-loads
+on every chat session. Include:
+
+- **Quick Facts** — Language, build tool, line length, test command, Python path.
+- **Architecture at a Glance** — File tree with one-line descriptions.
+- **Key Patterns** — Plugin loader, function signatures, API contracts.
+- **Common Pitfalls** — Duplicate IDs, Unicode confusables, path conventions.
+- **Checklist for Adding Items** — Step-by-step contributor guide.
+
+This file is the fastest path from "new contributor" to "productive contributor".
+
+---
+
+## CONTINUOUS INTEGRATION & DELIVERY
+
+### GitHub Actions: CI Workflow
+
+```yaml
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: windows-latest  # or ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Lint (ruff)
+        run: python -m ruff check src/ tests/
+      - name: Type check (mypy)
+        run: python -m mypy src/
+      - name: Test (pytest + coverage)
+        run: >-
+          python -m pytest tests/ -x --tb=short
+          --cov=src --cov-report=term-missing --cov-report=xml
+      - name: Upload coverage artifact
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+```
+
+### GitHub Actions: Release Workflow
+
+```yaml
+name: Release
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build sdist and wheel
+        run: |
+          pip install build
+          python -m build
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+```
+
+### CI Best Practices
+
+- **Matrix testing** — Test against all supported Python versions.
+- **Fail fast** — Use `-x` flag in pytest to stop on first failure.
+- **Permissions** — Use minimal permissions (`contents: read` for CI,
+  `contents: write` only for releases).
+- **Coverage artifacts** — Upload coverage reports for one Python version
+  to avoid redundant uploads.
+- **YAML validation note** — The `uses:` directives in workflow files require
+  network access to resolve. Behind corporate firewalls, the VS Code YAML
+  extension may show "Unable to resolve action" warnings. This is a network
+  issue, not a code problem. Configure `yaml.schemas` in `settings.json` to
+  use the GitHub workflow JSON schema from the schema store.
+
+---
+
+## SOURCE CONTROL & GIT PRACTICES
+
+### .gitignore — Comprehensive Template
+
+Organise by category with section headers:
+
+```gitignore
+# ── Build & packaging ────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.whl
+
+# ── Compiled / binary ────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.so
+
+# ── Temp files ────────────────────────────────────────────────
+*.tmp
+*.bak
+*.swp
+*~
+
+# ── IDE / editor ──────────────────────────────────────────────
+# NOTE: .vscode/ is intentionally NOT ignored — it contains
+# shared workspace settings that all contributors should use.
+.idea/
+*.code-workspace
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── OS cruft ──────────────────────────────────────────────────
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# ── Test & coverage artefacts ─────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ── Type checker caches ──────────────────────────────────────
+.mypy_cache/
+.pyright/
+
+# ── Linter caches ────────────────────────────────────────────
+.ruff_cache/
+```
+
+### .gitignore Key Decisions
+
+| Item | In `.gitignore`? | Reason |
+| ---- | ----------------- | ------ |
+| `.vscode/` | **No** | Shared workspace settings benefit all contributors. |
+| `__pycache__/` | Yes | Generated bytecode; never commit. |
+| `.mypy_cache/` | Yes | Type-checker cache; machine-specific. |
+| `dist/`, `build/` | Yes | Build artefacts; reproduced by `python -m build`. |
+| `*.egg-info/` | Yes | Editable install metadata. |
+| `.env` files | Yes | May contain secrets. |
+
+### Verifying No Tracked Ignored Files
+
+After updating `.gitignore`, verify no tracked files should be ignored:
+
+```bash
+git ls-files -ic --exclude-standard
+```
+
+If this outputs any files, remove them from tracking:
+
+```bash
+git rm --cached <file>
+```
+
+### Commit Messages
+
+Use imperative mood, concise subject lines:
+
+- `Add bluetooth-disable-handsfree tweak`
+- `Fix detect_fn for explorer-show-extensions`
+- `Update Privacy category descriptions`
+
+### Branching
+
+- `main` — Production-ready code. Protected branch.
+- Feature branches — `feature/<description>` or `fix/<description>`.
+- Release tags — `v1.0.0` format, triggers release workflow.
+
+---
+
+## CONFIGURATION MANAGEMENT
+
+### Hierarchy (highest to lowest precedence)
+
+1. Command-line arguments
+2. Environment variables
+3. User configuration file (`~/.myapp.toml`)
+4. System/project configuration file
+5. Hardcoded defaults
+
+### User Configuration Pattern
+
+```python
+@dataclass
+class AppConfig:
+    """User preferences loaded from ~/.myapp.toml."""
+    theme: str = "default"
+    log_level: str = "INFO"
+    auto_backup: bool = True
+
+def load_config() -> AppConfig:
+    path = Path.home() / ".myapp.toml"
+    if not path.exists():
+        return AppConfig()
+    data = tomllib.loads(path.read_text(encoding="utf-8"))
+    return AppConfig(**{k: v for k, v in data.items() if k in AppConfig.__dataclass_fields__})
+```
+
+### External Tool Configurations in pyproject.toml
+
+All tool settings should live in `pyproject.toml` to maintain a single source
+of truth:
+
+```toml
+# Build
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Ruff
+[tool.ruff]
+target-version = "py310"
+line-length = 150
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["ARG002"]
+
+# mypy
+[tool.mypy]
+python_version = "3.10"
+strict = true
+
+# Pyright (sync with pyrightconfig.json)
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "standard"
+
+# pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+# Coverage
+[tool.coverage.run]
+source = ["my_tool"]
+omit = ["my_tool/__main__.py"]
+
+# Pylint
+[tool.pylint."messages_control"]
+disable = ["W0613", "C0301"]
+
+[tool.pylint.format]
+max-line-length = 150
+
+[tool.pylint.design]
+max-branches = 20
+```
+
+**Exception**: `pyrightconfig.json` must be a separate file because
+Pyright/Pylance prioritises it over `[tool.pyright]` in `pyproject.toml`, and
+it supports JSONC comments for documenting each suppression.
 
 ---
 
 ## IMPLEMENTATION METHODOLOGY
 
-### Phase 1: Foundation (2-3 days)
-- Structure, entry point, config, logging, signals, portability
+### Phase 1: Foundation
 
-### Phase 2: CLI System (2-3 days)
-- CLI system, argparse, progress, help
+- Project structure, `pyproject.toml`, entry point, configuration loading.
+- `.gitignore`, `README.md`, `LICENSE`.
+- Logging framework, error handling patterns.
+- CI pipeline (GitHub Actions).
 
-### Phase 3: GUI Development (4-5 days)
-- Shared backend, Desktop GUI, Web GUI, feature parity
+### Phase 2: Core Logic
 
-### Phase 4: Testing & Quality (2-3 days)
-- Cross-platform tests, 90%+ coverage, benchmarks, security
+- Domain-specific business logic in shared backend modules.
+- Plugin/module auto-discovery if applicable.
+- CLI interface with argparse.
 
-### Phase 5: Production Prep (1-2 days)
-- Version/naming consistency, clean root, portability check, GitHub prep
+### Phase 3: Interfaces
+
+- Desktop GUI (Tkinter or other framework).
+- Feature parity with CLI.
+- Web GUI if needed.
+
+### Phase 4: Testing & Quality
+
+- Unit tests, integration tests, smoke tests.
+- Property-based tests (Hypothesis).
+- 90%+ coverage target.
+- Linting clean (ruff + pylint), type-check clean (mypy + Pyright).
+
+### Phase 5: Production Prep
+
+- `CHANGELOG.md` populated.
+- `CONTRIBUTING.md` with setup instructions.
+- `.github/copilot-instructions.md` for AI assistant context.
+- VS Code workspace fully configured.
+- Final portability check (no hardcoded paths).
+- Version consistency across `__init__.py`, `pyproject.toml`, `CHANGELOG.md`.
 
 ---
 
-## QUALITY ASSURANCE & TESTING
+## QUALITY ASSURANCE CHECKLIST
 
-### Quality Checklist
+### Code Quality
 
-#### Code
-- [ ] Single entry point, no duplicates
-- [ ] All paths relative (portable)
-- [ ] Clean root directory
+- [ ] Single entry point, no duplicate scripts at root.
+- [ ] All paths portable (`Path(__file__).parent`, no hardcoded paths).
+- [ ] Clean root directory (only config files and directories).
+- [ ] Version consistent across `__init__.py`, `pyproject.toml`, `CHANGELOG.md`.
+- [ ] No `# type: ignore` without a specific error code (e.g., `[attr-defined]`).
+- [ ] No bare `except:` — always catch specific exceptions.
+- [ ] All public functions and classes have docstrings.
+- [ ] Module-level docstrings on all source files.
+
+### Linting & Type Checking
+
+- [ ] `ruff check` passes with zero errors.
+- [ ] `mypy --strict` passes with zero errors.
+- [ ] Pyright/Pylance shows zero errors in VS Code problems pane.
+- [ ] All pylint suppressions documented with reasons in `pyproject.toml`.
+- [ ] All pyrightconfig.json suppressions documented with JSONC comments.
+- [ ] No suppression without a clear architectural justification.
+
+### Testing
+
+- [ ] `pytest` passes all tests.
+- [ ] Coverage >= 90%.
+- [ ] Smoke tests auto-parametrised over all plugins/modules.
+- [ ] Integration tests cover end-to-end workflows.
+- [ ] Property-based tests validate invariants.
+- [ ] Performance benchmarks prevent regressions.
+
+### IDE Configuration
+
+- [ ] `.vscode/settings.json` configures formatter, linter, test runner.
+- [ ] `.vscode/tasks.json` provides lint/format/test/install shortcuts.
+- [ ] `.vscode/launch.json` provides debug configurations.
+- [ ] `.vscode/extensions.json` lists recommended extensions.
+- [ ] Pylint args in VS Code point to `pyproject.toml` (single source of truth).
+- [ ] `pyrightconfig.json` at project root with documented suppressions.
+
+### CI/CD
+
+- [ ] GitHub Actions CI runs lint + type-check + test on every push/PR.
+- [ ] Matrix testing covers all supported Python versions.
+- [ ] Release workflow builds and publishes on tag push.
+- [ ] Minimal permissions (`contents: read` for CI).
+
+### Documentation
+
+- [ ] `README.md` with installation, usage, and architecture overview.
+- [ ] `CONTRIBUTING.md` with setup, workflow, and coding standards.
+- [ ] `CHANGELOG.md` with all released versions (Keep a Changelog format).
+- [ ] `LICENSE` file present.
+- [ ] `.github/copilot-instructions.md` with project context for AI assistants.
+
+### Source Control
+
+- [ ] `.gitignore` covers all build artefacts, caches, and OS-specific files.
+- [ ] `.vscode/` is tracked (shared workspace settings).
+- [ ] No tracked files that should be ignored (`git ls-files -ic --exclude-standard` is empty).
+- [ ] Commit messages use imperative mood.
+- [ ] Release tags follow `v{MAJOR}.{MINOR}.{PATCH}` format.
 - [ ] Consistent naming
 - [ ] No hardcoded values
 
 #### Functionality
+
 - [ ] Cross-platform tested
 - [ ] Config loading works
 - [ ] Error handling comprehensive
@@ -499,6 +1069,7 @@ logging.basicConfig(
 - [ ] Progress tracking working
 
 #### Interfaces
+
 - [ ] Desktop GUI launches
 - [ ] Web GUI accessible
 - [ ] CLI fully functional
@@ -506,6 +1077,7 @@ logging.basicConfig(
 - [ ] Config UI in both GUIs
 
 #### Portability
+
 - [ ] No hardcoded paths in code
 - [ ] Generic placeholders in docs
 - [ ] Relative paths in help
@@ -513,6 +1085,7 @@ logging.basicConfig(
 - [ ] Tested on multiple platforms
 
 #### Documentation
+
 - [ ] README comprehensive
 - [ ] QUICK-START complete
 - [ ] All docs use portable paths
@@ -520,6 +1093,7 @@ logging.basicConfig(
 - [ ] Examples tested
 
 #### Security
+
 - [ ] No hardcoded credentials/proxies
 - [ ] Proxy cleanup after use
 - [ ] Graceful shutdown
@@ -588,9 +1162,9 @@ This Universal Project Enhancement Specification represents proven methodologies
 
 ---
 
-**Framework Status**: ✅ Production Ready  
-**Validation**: ✅ Multi-Project Tested  
-**Applicability**: ✅ Universal  
-**Version**: 12.0.0  
-**Updated**: January 2026  
+**Framework Status**: ✅ Production Ready
+**Validation**: ✅ Multi-Project Tested
+**Applicability**: ✅ Universal
+**Version**: 12.0.0
+**Updated**: January 2026
 **License**: MIT

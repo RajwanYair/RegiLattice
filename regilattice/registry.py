@@ -79,6 +79,22 @@ def platform_summary() -> str:
 # ── Session ──────────────────────────────────────────────────────────────────
 
 
+class _ReadCacheContext:
+    """Context manager that enables/disables the read cache on a RegistrySession."""
+
+    __slots__ = ("_session",)
+
+    def __init__(self, session: RegistrySession) -> None:
+        self._session = session
+
+    def __enter__(self) -> _ReadCacheContext:
+        self._session.enable_read_cache()
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        self._session.disable_read_cache()
+
+
 @dataclass
 class RegistrySession:
     """Encapsulates backup, log, and registry-write operations."""
@@ -86,9 +102,43 @@ class RegistrySession:
     base_dir: Path
     _dry_run: bool = field(default=False, repr=False)
     _dry_ops: int = field(default=0, repr=False)
+    _read_cache_enabled: bool = field(default=False, repr=False)
+    _read_cache: dict[tuple[str, str, str], object] = field(default_factory=dict, repr=False)
 
     def __post_init__(self) -> None:
         self._log_path = self.base_dir / "RegiLattice.log"
+
+    # -- Read cache --
+
+    def enable_read_cache(self) -> None:
+        """Enable per-session read cache (use during detect cycles)."""
+        self._read_cache_enabled = True
+        self._read_cache.clear()
+
+    def disable_read_cache(self) -> None:
+        """Disable and clear the read cache."""
+        self._read_cache_enabled = False
+        self._read_cache.clear()
+
+    def read_cache(self) -> _ReadCacheContext:
+        """Context manager for scoped read cache.
+
+        Usage::
+
+            with SESSION.read_cache():
+                # all reads within this block are cached
+                val = SESSION.read_dword(path, name)
+        """
+        return _ReadCacheContext(self)
+
+    def _invalidate_cache_for(self, path: str, name: str) -> None:
+        """Remove cached entries for a specific path/name after a write."""
+        if not self._read_cache_enabled:
+            return
+        for suffix in ("dword", "string", "exists"):
+            self._read_cache.pop((path, name, suffix), None)
+        # Also invalidate key_exists for the path
+        self._read_cache.pop((path, "", "exists"), None)
 
     # -- Logging --
 
@@ -189,6 +239,8 @@ class RegistrySession:
             self._dry_ops += 1
             self.log(f"[DRY-RUN] set_value {path} {name!r} = {value!r}")
             return
+        # Invalidate read cache for this path/name
+        self._invalidate_cache_for(path, name or "")
         root, subkey = _split_root(path)
 
         def _do_write() -> None:
@@ -211,6 +263,11 @@ class RegistrySession:
             self._dry_ops += 1
             self.log(f"[DRY-RUN] delete_tree {path}")
             return
+        # Clear all cache entries under this path
+        if self._read_cache_enabled:
+            to_remove = [k for k in self._read_cache if k[0].startswith(path)]
+            for k in to_remove:
+                del self._read_cache[k]
         root, subkey = _split_root(path)
         self._delete_subkey_tree(root, subkey)
 
@@ -243,6 +300,7 @@ class RegistrySession:
             self._dry_ops += 1
             self.log(f"[DRY-RUN] delete_value {path} {name!r}")
             return
+        self._invalidate_cache_for(path, name)
         root, subkey = _split_root(path)
 
         def _do_delete() -> None:
@@ -261,34 +319,52 @@ class RegistrySession:
     def key_exists(self, path: str) -> bool:
         """Return True when the registry key exists."""
         _ensure_windows()
+        cache_key = (path, "", "exists")
+        if self._read_cache_enabled and cache_key in self._read_cache:
+            return self._read_cache[cache_key]  # type: ignore[return-value]
         try:
             root, subkey = _split_root(path)
             with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ):
-                return True
+                result = True
         except (FileNotFoundError, OSError):
-            return False
+            result = False
+        if self._read_cache_enabled:
+            self._read_cache[cache_key] = result
+        return result
 
     def read_dword(self, path: str, name: str) -> int | None:
         """Return a DWORD value or None if missing."""
         _ensure_windows()
+        cache_key = (path, name, "dword")
+        if self._read_cache_enabled and cache_key in self._read_cache:
+            return self._read_cache[cache_key]  # type: ignore[return-value]
         try:
             root, subkey = _split_root(path)
             with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
                 val, typ = winreg.QueryValueEx(handle, name)
-                return int(val) if typ == winreg.REG_DWORD else None
+                result = int(val) if typ == winreg.REG_DWORD else None
         except (FileNotFoundError, OSError):
-            return None
+            result = None
+        if self._read_cache_enabled:
+            self._read_cache[cache_key] = result
+        return result
 
     def read_string(self, path: str, name: str) -> str | None:
         """Return a REG_SZ value or None if missing."""
         _ensure_windows()
+        cache_key = (path, name, "string")
+        if self._read_cache_enabled and cache_key in self._read_cache:
+            return self._read_cache[cache_key]  # type: ignore[return-value]
         try:
             root, subkey = _split_root(path)
             with winreg.OpenKey(root, subkey, 0, winreg.KEY_READ) as handle:
                 val, typ = winreg.QueryValueEx(handle, name)
-                return str(val) if typ == winreg.REG_SZ else None
+                result = str(val) if typ == winreg.REG_SZ else None
         except (FileNotFoundError, OSError):
-            return None
+            result = None
+        if self._read_cache_enabled:
+            self._read_cache[cache_key] = result
+        return result
 
 
 # ── Admin check ──────────────────────────────────────────────────────────────

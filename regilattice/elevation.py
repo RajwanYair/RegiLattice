@@ -20,11 +20,11 @@ def is_admin() -> bool:
     """Return True if the current process has administrator privileges."""
     if os.name != "nt":
         _getuid = getattr(os, "getuid", None)
-        if callable(_getuid):
-            return _getuid() == 0  # type: ignore[no-any-return]
+        if _getuid is not None:
+            return bool(_getuid() == 0)
         return False
     try:
-        return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined]
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())
     except Exception:
         return False
 
@@ -58,7 +58,7 @@ def request_elevation(args: list[str] | None = None) -> int:
 
     try:
         # ShellExecuteW returns >32 on success
-        ret = ctypes.windll.shell32.ShellExecuteW(  # type: ignore[attr-defined]
+        ret = ctypes.windll.shell32.ShellExecuteW(
             None,
             "runas",
             exe,
