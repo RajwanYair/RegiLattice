@@ -1,7 +1,7 @@
 # RegiLattice -- Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2026-03-07 (v1.0.0, 1 228 tweaks, 64 categories, ~16 400 tests).
+> Last verified: 2026-03-08 (v1.0.1-dev, 1 292 tweaks, 69 categories, ~17 511 tests).
 
 ---
 
