@@ -36,10 +36,10 @@ from regilattice.tweaks import (
     save_snapshot,
     search_tweaks,
     status_map,
+    tweak_count_by_scope,
     tweak_risk_level,
     tweak_scope,
     tweak_status,
-    tweak_count_by_scope,
     tweaks_above_build,
     tweaks_by_category,
     tweaks_by_scope,
@@ -1532,7 +1532,10 @@ class TestStatusMapDetectFree:
 
     def test_progress_fn_called_for_detect_free_parallel(self) -> None:
         calls: list[tuple[int, int]] = []
-        no_detect = TweakDef(id="__sm_prog_nd__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        no_detect = TweakDef(
+            id="__sm_prog_nd__", label="T", category="C",
+            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None,
+        )
         with (
             patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_prog_nd__": no_detect}),
             patch("regilattice.tweaks._ALL_TWEAKS", [no_detect]),
@@ -1543,7 +1546,10 @@ class TestStatusMapDetectFree:
 
     def test_detect_fn_present_executed_sequentially(self) -> None:
         detect_fn = MagicMock(return_value=True)
-        with_detect = TweakDef(id="__sm_seq_det__", label="T", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn)
+        with_detect = TweakDef(
+            id="__sm_seq_det__", label="T", category="C",
+            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn,
+        )
         with (
             patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_seq_det__": with_detect}),
             patch("regilattice.tweaks._ALL_TWEAKS", [with_detect]),
@@ -1554,8 +1560,14 @@ class TestStatusMapDetectFree:
 
     def test_mixed_sequential_detect_and_no_detect(self) -> None:
         detect_fn = MagicMock(return_value=False)
-        td_with = TweakDef(id="__sm_mix_det__", label="W", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn)
-        td_without = TweakDef(id="__sm_mix_nd__", label="X", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None)
+        td_with = TweakDef(
+            id="__sm_mix_det__", label="W", category="C",
+            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn,
+        )
+        td_without = TweakDef(
+            id="__sm_mix_nd__", label="X", category="C",
+            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None,
+        )
         index = {"__sm_mix_det__": td_with, "__sm_mix_nd__": td_without}
         with (
             patch("regilattice.tweaks._TWEAK_INDEX", index),
