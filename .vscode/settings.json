@@ -8,10 +8,8 @@
     "tests"
   ],
   // ── Ruff (linter + formatter) ───────────────────────────────────────
-  "ruff.path": [],
-  "ruff.lint.args": [
-    "--config=pyproject.toml"
-  ],
+  // Native Ruff server (charliermarsh.ruff ≥ 2024) auto-detects pyproject.toml.
+  // ruff.path / ruff.lint.args are ruff-lsp legacy settings and no longer used.
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true,
@@ -76,11 +74,9 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   // ── Markdown ────────────────────────────────────────────────────────
-  "markdownlint.config": {
-    "MD013": false,
-    "MD033": false,
-    "MD041": false
-  },
+  // Config lives in .markdownlint.json (project root) — takes precedence over
+  // this settings block, so we omit the inline markdownlint.config to avoid
+  // VS Code trying to download the markdownlint JSON schema (blocked by proxy).
   // ── Pylint (reads pyproject.toml [tool.pylint] for disable list) ──────
   "pylint.args": [
     "--rcfile=pyproject.toml"
@@ -88,7 +84,10 @@
   // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────
   // GitHub Actions validation requires network access to resolve `uses:` refs.
   // Behind corporate proxies this fails with "Unable to resolve action".
-  // Disable action validation; structural schema validation still works.
+  // http.proxySupport "on" routes extension network calls via the system proxy
+  // (WinHTTP / $HTTPS_PROXY). Users behind non-standard proxies should set
+  // "http.proxy" in their VS Code USER settings (not workspace settings).
+  "http.proxySupport": "on",
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
   },
