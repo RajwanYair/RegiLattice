@@ -731,14 +731,26 @@ def status_map(
         if not parallel:
             results: dict[str, TweakResult] = {}
             for i, td in enumerate(target_tweaks):
-                results[td.id] = tweak_status(td)
+                if td.detect_fn is None:
+                    results[td.id] = TweakResult.UNKNOWN
+                else:
+                    results[td.id] = tweak_status(td)
                 if progress_fn is not None:
                     progress_fn(i + 1, total)
             return results
         results = {}
         done = 0
+        detect_tweaks: list[TweakDef] = []
+        for td in target_tweaks:
+            if td.detect_fn is None:
+                results[td.id] = TweakResult.UNKNOWN
+                done += 1
+                if progress_fn is not None:
+                    progress_fn(done, total)
+            else:
+                detect_tweaks.append(td)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-            futures = {pool.submit(tweak_status, td): td.id for td in target_tweaks}
+            futures = {pool.submit(tweak_status, td): td.id for td in detect_tweaks}
             for fut in concurrent.futures.as_completed(futures, timeout=120):
                 tid = futures[fut]
                 try:
@@ -1060,14 +1072,24 @@ def filter_tweaks(
     pool: list[TweakDef] = search_tweaks(query) if query else list(_ALL_TWEAKS)
     if corp_safe is not None:
         pool = [td for td in pool if td.corp_safe is corp_safe]
+        if not pool:
+            return pool
     if needs_admin is not None:
         pool = [td for td in pool if td.needs_admin is needs_admin]
+        if not pool:
+            return pool
     if scope is not None:
         pool = [td for td in pool if tweak_scope(td) == scope]
+        if not pool:
+            return pool
     if category is not None:
         pool = [td for td in pool if td.category == category]
+        if not pool:
+            return pool
     if min_build is not None:
         pool = [td for td in pool if td.min_build <= min_build]
+        if not pool:
+            return pool
     if tags is not None:
         tag_set = frozenset(t.lower() for t in tags)
         pool = [td for td in pool if tag_set.issubset(t.lower() for t in td.tags)]

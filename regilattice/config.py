@@ -44,6 +44,8 @@ class AppConfig:
     max_workers: int = 8
     backup_dir: str = ""
     auto_backup: bool = True
+    theme: str = "system"
+    locale: str = "en"
 
 
 def load_config(path: Path | None = None) -> AppConfig:
@@ -62,6 +64,10 @@ def load_config(path: Path | None = None) -> AppConfig:
             cfg.force_corp = general["force_corp"]
         if isinstance(general.get("max_workers"), int):
             cfg.max_workers = general["max_workers"]
+        if isinstance(general.get("theme"), str):
+            cfg.theme = general["theme"]
+        if isinstance(general.get("locale"), str):
+            cfg.locale = general["locale"]
     backups = data.get("backups", {})
     if isinstance(backups, dict):
         if isinstance(backups.get("directory"), str):
