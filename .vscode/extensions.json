@@ -11,5 +11,8 @@
     "eamodio.gitlens",
     "gruntfuggly.todo-tree",
     "usernamehw.errorlens"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.black-formatter"
   ]
 }

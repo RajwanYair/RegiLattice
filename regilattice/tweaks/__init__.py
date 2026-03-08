@@ -138,8 +138,15 @@ def _build_category_info() -> None:
         scopes: set[str] = set()
         for td in cat_tweaks:
             keys_upper = [k.upper() for k in td.registry_keys]
-            has_hkcu = any(k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper)
-            has_hklm = any(k.startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")) for k in keys_upper)
+            has_hkcu = any(
+                k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper
+            )
+            has_hklm = any(
+                k.startswith(
+                    ("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")
+                )
+                for k in keys_upper
+            )
             if has_hkcu:
                 scopes.add("user")
             if has_hklm:
@@ -152,8 +159,14 @@ def _build_category_info() -> None:
             info.scope = "mixed"
 
         # Infer risk from policy-key and admin ratios
-        policy_ratio = sum(1 for t in cat_tweaks if any("\\policies\\" in k.lower() for k in t.registry_keys)) / max(len(cat_tweaks), 1)
-        admin_ratio = sum(1 for t in cat_tweaks if t.needs_admin) / max(len(cat_tweaks), 1)
+        policy_ratio = sum(
+            1
+            for t in cat_tweaks
+            if any("\\policies\\" in k.lower() for k in t.registry_keys)
+        ) / max(len(cat_tweaks), 1)
+        admin_ratio = sum(1 for t in cat_tweaks if t.needs_admin) / max(
+            len(cat_tweaks), 1
+        )
         if policy_ratio > 0.5 or admin_ratio > 0.8:
             info.risk_level = "high"
         elif admin_ratio > 0.4:
@@ -180,10 +193,18 @@ _SCOPE_CACHE: dict[str, str] = {}
 _SCOPE_LOCK = threading.Lock()
 
 # Module-level frozenset — avoids re-creating a tuple inside a tight loop
-_VALID_HIVE_PREFIXES: frozenset[str] = frozenset({
-    "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER", "HKEY_CLASSES_ROOT",
-    "HKEY_USERS", "HKLM", "HKCU", "HKCR", "HKU",
-})
+_VALID_HIVE_PREFIXES: frozenset[str] = frozenset(
+    {
+        "HKEY_LOCAL_MACHINE",
+        "HKEY_CURRENT_USER",
+        "HKEY_CLASSES_ROOT",
+        "HKEY_USERS",
+        "HKLM",
+        "HKCU",
+        "HKCR",
+        "HKU",
+    }
+)
 
 
 def _load_plugins() -> None:
@@ -209,7 +230,10 @@ def _load_plugins() -> None:
             seen_ids.add(td.id)
             for key in td.registry_keys:
                 if not any(key.startswith(p) for p in _VALID_HIVE_PREFIXES):
-                    warnings.warn(f"TweakDef {td.id!r}: invalid registry path {key!r}", stacklevel=2)
+                    warnings.warn(
+                        f"TweakDef {td.id!r}: invalid registry path {key!r}",
+                        stacklevel=2,
+                    )
             _ALL_TWEAKS.append(td)
             _TWEAK_INDEX[td.id] = td
     # Validate depends_on references
@@ -227,8 +251,20 @@ def _load_plugins() -> None:
         for td in _ALL_TWEAKS:
             if td.id not in _SCOPE_CACHE:
                 keys_upper = [k.upper() for k in td.registry_keys]
-                has_user = any(k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper)
-                has_machine = any(k.startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")) for k in keys_upper)
+                has_user = any(
+                    k.startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in keys_upper
+                )
+                has_machine = any(
+                    k.startswith(
+                        (
+                            "HKLM\\",
+                            "HKEY_LOCAL_MACHINE\\",
+                            "HKCR\\",
+                            "HKEY_CLASSES_ROOT\\",
+                        )
+                    )
+                    for k in keys_upper
+                )
                 if has_user and has_machine:
                     _SCOPE_CACHE[td.id] = "both"
                 elif has_user:
@@ -259,8 +295,16 @@ def tweak_scope(td: TweakDef) -> str:
     if not td.registry_keys:
         result = "machine" if td.needs_admin else "user"
     else:
-        has_user = any(k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\")) for k in td.registry_keys)
-        has_machine = any(k.upper().startswith(("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")) for k in td.registry_keys)
+        has_user = any(
+            k.upper().startswith(("HKCU\\", "HKEY_CURRENT_USER\\"))
+            for k in td.registry_keys
+        )
+        has_machine = any(
+            k.upper().startswith(
+                ("HKLM\\", "HKEY_LOCAL_MACHINE\\", "HKCR\\", "HKEY_CLASSES_ROOT\\")
+            )
+            for k in td.registry_keys
+        )
         if has_user and has_machine:
             result = "both"
         elif has_user:
@@ -324,7 +368,9 @@ def search_tweaks(query: str) -> list[TweakDef]:
     if " " not in q and q in _TAG_INDEX:
         # Still verify the full search string (tag index is supplemental)
         tag_set = {td.id for td in _TAG_INDEX[q]}
-        return [td for td in _ALL_TWEAKS if td.id in tag_set or q in _get_search_index(td)]
+        return [
+            td for td in _ALL_TWEAKS if td.id in tag_set or q in _get_search_index(td)
+        ]
     return [td for td in _ALL_TWEAKS if q in _get_search_index(td)]
 
 
@@ -359,7 +405,9 @@ def _prewarm_indexes() -> None:
         _SEARCH_INDEX.clear()
         for td in _ALL_TWEAKS:
             sep = "\0"
-            _SEARCH_INDEX[td.id] = sep.join([td.id, td.label, td.category, td.description, *td.tags]).lower()
+            _SEARCH_INDEX[td.id] = sep.join(
+                [td.id, td.label, td.category, td.description, *td.tags]
+            ).lower()
     for td in _ALL_TWEAKS:
         for tag in td.tags:
             _TAG_INDEX.setdefault(tag.lower(), []).append(td)
@@ -430,7 +478,9 @@ def _register_profiles() -> None:
                     "Windows Update",
                 }
             ),
-            skip_categories=frozenset({"Gaming", "GPU / Graphics", "Virtualization", "WSL", "Scoop Tools"}),
+            skip_categories=frozenset(
+                {"Gaming", "GPU / Graphics", "Virtualization", "WSL", "Scoop Tools"}
+            ),
         ),
         ProfileDef(
             id="gaming",
@@ -657,7 +707,9 @@ def tweaks_for_profile(name: str) -> list[TweakDef]:
     """Return tweaks that a profile would *apply* (= disable those features)."""
     prof = _PROFILES.get(name)
     if prof is None:
-        raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
+        raise ValueError(
+            f"Unknown profile: {name!r}. Choose from {available_profiles()}"
+        )
     result: list[TweakDef] = []
     for cat in prof.apply_categories:
         result.extend(_TWEAKS_BY_CAT.get(cat, []))
@@ -668,7 +720,9 @@ def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:
     """Return tweaks that a profile would *hide / skip*."""
     prof = _PROFILES.get(name)
     if prof is None:
-        raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
+        raise ValueError(
+            f"Unknown profile: {name!r}. Choose from {available_profiles()}"
+        )
     result: list[TweakDef] = []
     for cat in prof.skip_categories:
         result.extend(_TWEAKS_BY_CAT.get(cat, []))
@@ -725,7 +779,11 @@ def status_map(
             max_workers = detect_hardware().optimal_workers
         except Exception:
             max_workers = min(8, os.cpu_count() or 4)
-    target_tweaks: list[TweakDef] = [_TWEAK_INDEX[i] for i in ids if i in _TWEAK_INDEX] if ids is not None else _ALL_TWEAKS
+    target_tweaks: list[TweakDef] = (
+        [_TWEAK_INDEX[i] for i in ids if i in _TWEAK_INDEX]
+        if ids is not None
+        else _ALL_TWEAKS
+    )
     total = len(target_tweaks)
     with SESSION.read_cache():
         if not parallel:
@@ -1024,7 +1082,13 @@ def apply_all(
         Optional callback ``(tweak_id, result)`` invoked after each tweak.
     """
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
-    return exe.run_batch(list(_ALL_TWEAKS), "apply", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+    return exe.run_batch(
+        list(_ALL_TWEAKS),
+        "apply",
+        parallel=parallel,
+        max_workers=max_workers,
+        progress_cb=progress_cb,
+    )
 
 
 def remove_all(
@@ -1037,7 +1101,13 @@ def remove_all(
 ) -> dict[str, TweakResult]:
     """Remove every registered tweak, respecting corp-safe flags."""
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
-    return exe.run_batch(list(_ALL_TWEAKS), "remove", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+    return exe.run_batch(
+        list(_ALL_TWEAKS),
+        "remove",
+        parallel=parallel,
+        max_workers=max_workers,
+        progress_cb=progress_cb,
+    )
 
 
 def filter_tweaks(
@@ -1151,10 +1221,20 @@ def apply_tweaks(
         for td in targets:
             for dep in tweak_dependencies(td):
                 dep_ids.add(dep.id)
-        extra = [_TWEAK_INDEX[d] for d in dep_ids if d not in {t.id for t in targets} and d in _TWEAK_INDEX]
+        extra = [
+            _TWEAK_INDEX[d]
+            for d in dep_ids
+            if d not in {t.id for t in targets} and d in _TWEAK_INDEX
+        ]
         targets = extra + targets
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
-    return exe.run_batch(targets, "apply", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+    return exe.run_batch(
+        targets,
+        "apply",
+        parallel=parallel,
+        max_workers=max_workers,
+        progress_cb=progress_cb,
+    )
 
 
 def remove_tweaks(
@@ -1169,7 +1249,13 @@ def remove_tweaks(
     """Remove the tweaks identified by *ids* (reverse of :func:`apply_tweaks`)."""
     targets = tweaks_by_ids(ids)
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
-    return exe.run_batch(targets, "remove", parallel=parallel, max_workers=max_workers, progress_cb=progress_cb)
+    return exe.run_batch(
+        targets,
+        "remove",
+        parallel=parallel,
+        max_workers=max_workers,
+        progress_cb=progress_cb,
+    )
 
 
 # ── Scope/build/risk helpers ─────────────────────────────────────────────────

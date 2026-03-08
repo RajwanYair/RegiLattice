@@ -53,7 +53,9 @@ def rate_tweak(tweak_id: str, stars: int, note: str = "") -> None:
 def _to_rating(entry: Any) -> TweakRating:
     """Convert a raw dict entry to a TweakRating."""
     if isinstance(entry, dict):
-        return TweakRating(stars=int(entry.get("stars", 3)), note=str(entry.get("note", "")))
+        return TweakRating(
+            stars=int(entry.get("stars", 3)), note=str(entry.get("note", ""))
+        )
     return TweakRating(stars=3)
 
 
@@ -69,7 +71,9 @@ def get_rating(tweak_id: str) -> TweakRating | None:
 def all_ratings() -> dict[str, TweakRating]:
     """Return all ratings."""
     data = _load_all()
-    return {tid: _to_rating(entry) for tid, entry in data.items() if isinstance(entry, dict)}
+    return {
+        tid: _to_rating(entry) for tid, entry in data.items() if isinstance(entry, dict)
+    }
 
 
 def remove_rating(tweak_id: str) -> bool:
