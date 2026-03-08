@@ -688,3 +688,146 @@ class TestInteractiveMenuFallback:
         with patch("regilattice.cli.is_windows", return_value=False):
             rc = main([])
         assert rc == 4
+
+
+# ── C6 enhancements: --validate, --stats, --output json, --list --category ───
+
+
+class TestValidateFlag:
+    """Tests for --validate non-destructive consistency check."""
+
+    def test_validate_clean_returns_0(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--validate"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "All" in out or "valid" in out.lower() or "OK" in out
+
+    def test_validate_output_contains_tweak_count(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--validate"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        # Should mention a numeric count
+        assert any(char.isdigit() for char in out)
+
+    def test_parser_has_validate(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--validate"])
+        assert ns.validate is True
+
+
+class TestStatsFlag:
+    """Tests for --stats breakdown."""
+
+    def test_stats_returns_0(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--stats"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert len(out) > 0
+
+    def test_stats_shows_categories(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--stats"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "categor" in out.lower()
+
+    def test_stats_shows_total(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--stats"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        # total tweak count somewhere
+        assert any(char.isdigit() for char in out)
+
+    def test_parser_has_stats(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--stats"])
+        assert ns.stats is True
+
+
+class TestOutputJson:
+    """Tests for --output json flag on --list and --search."""
+
+    def test_list_output_json(self, capsys: pytest.CaptureFixture[str]) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--list", "--output", "json"])
+        assert rc == 0
+        out = capsys.readouterr().out.strip()
+        data = json.loads(out)
+        assert isinstance(data, list)
+        assert len(data) > 0
+        assert "id" in data[0]
+
+    def test_list_json_has_expected_fields(self, capsys: pytest.CaptureFixture[str]) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            main(["--list", "--output", "json"])
+        out = capsys.readouterr().out.strip()
+        data = json.loads(out)
+        first = data[0]
+        assert "id" in first
+        assert "label" in first
+        assert "category" in first
+
+    def test_search_output_json(self, capsys: pytest.CaptureFixture[str]) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--search", "explorer", "--output", "json"])
+        assert rc == 0
+        out = capsys.readouterr().out.strip()
+        data = json.loads(out)
+        assert isinstance(data, list)
+        assert all("id" in item for item in data)
+
+    def test_categories_output_json(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--categories", "--output", "json"])
+        assert rc == 0
+        out = capsys.readouterr().out.strip()
+        data = json.loads(out)
+        # --categories outputs {"Category Name": count}
+        assert isinstance(data, dict)
+        assert "Explorer" in data
+
+    def test_parser_has_output_flag(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--list", "--output", "json"])
+        assert ns.output == "json"
+
+    def test_parser_output_default_is_table(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--list"])
+        assert ns.output == "table"
+
+
+class TestListCategoryFilter:
+    """Tests for --list --category filtering."""
+
+    def test_list_category_filters_results(self, capsys: pytest.CaptureFixture[str]) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--list", "--category", "Explorer"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "Explorer" in out
+
+    def test_list_category_unknown_returns_2(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list", "--category", "ZZZ_NONEXISTENT_CATEGORY_999"])
+        assert rc == 2
+        assert "No tweaks found" in capsys.readouterr().out
+
+    def test_list_category_json_output(self, capsys: pytest.CaptureFixture[str]) -> None:
+        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+            rc = main(["--list", "--category", "Explorer", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        assert all(item["category"] == "Explorer" for item in data)
+
+    def test_list_categories_flag(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """--list-categories should list category names."""
+        rc = main(["--list-categories"])
+        assert rc == 0
+        out = capsys.readouterr().out
+        assert "Explorer" in out
+
+    def test_list_categories_json(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--list-categories", "--output", "json"])
+        assert rc == 0
+        data = json.loads(capsys.readouterr().out.strip())
+        # --list-categories shares the same code path as --categories: dict output
+        assert isinstance(data, dict)
+        assert "Explorer" in data
