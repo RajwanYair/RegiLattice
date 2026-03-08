@@ -127,7 +127,7 @@ Use the non-WindowsApps Python. The Windows Store alias often fails silently.
 
 ```powershell
 # Correct (adjust version):
-C:\Users\<user>\AppData\Local\Python\bin\python.exe
+%LOCALAPPDATA%\Python\bin\python.exe
 
 # Or use py launcher:
 py -3.10
