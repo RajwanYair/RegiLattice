@@ -65,6 +65,12 @@ class TweakResult(str, Enum):
 | `diff_snapshots(a, b)` | `→ dict[str, tuple[str, str]]` | Compare two snapshots |
 | `windows_build()` | `→ int` | Current Windows build number |
 | `tweak_scope(td)` | `→ str` | "user", "machine", or "both" |
+| `filter_tweaks(...)` | `→ list[TweakDef]` | Composable multi-criterion filter (corp_safe, needs_admin, scope, category, min_build, tags, query) |
+| `tweak_dependencies(td, *, transitive)` | `→ list[TweakDef]` | Dependency chain in topological order |
+| `apply_tweaks(ids, *, include_deps, ...)` | `→ dict[str, TweakResult]` | Batch apply by ID list with auto dep resolution |
+| `remove_tweaks(ids, ...)` | `→ dict[str, TweakResult]` | Batch remove by ID list |
+| `tweaks_by_ids(ids)` | `→ list[TweakDef]` | Resolve IDs to TweakDef objects (unknown IDs silently skipped) |
+| `tweaks_by_tag(tag)` | `→ list[TweakDef]` | All tweaks carrying the given tag (case-insensitive) |
 
 ---
 
@@ -79,9 +85,15 @@ SESSION = RegistrySession()  # singleton
 
 SESSION.set_dword(path, name, value)       # REG_DWORD
 SESSION.set_string(path, name, value)      # REG_SZ
+SESSION.set_binary(path, name, data)       # REG_BINARY
+SESSION.set_qword(path, name, value)       # REG_QWORD (64-bit int)
 SESSION.set_value(path, name, val, type)   # any type
 SESSION.read_dword(path, name) → int|None
 SESSION.read_string(path, name) → str|None
+SESSION.read_binary(path, name) → bytes|None
+SESSION.read_qword(path, name) → int|None
+SESSION.list_values(path) → list[tuple[str, object, int]]
+SESSION.list_keys(path) → list[str]
 SESSION.key_exists(path) → bool
 SESSION.delete_value(path, name)
 SESSION.delete_tree(path)
@@ -104,23 +116,29 @@ SESSION.log(message)
 Command-line interface entry point.
 
 ```bash
-python -m regilattice                         # interactive menu
-python -m regilattice --list                  # list all tweaks
-python -m regilattice apply <id>              # apply a tweak
-python -m regilattice remove <id>             # remove a tweak
-python -m regilattice --gui                   # launch GUI
-python -m regilattice --profile gaming        # apply profile
-python -m regilattice --snapshot before.json  # save state
-python -m regilattice --restore before.json   # restore state
-python -m regilattice --snapshot-diff a.json b.json           # compare
-python -m regilattice --snapshot-diff a.json b.json --html r.html  # HTML report
-python -m regilattice --check                 # audit current state
-python -m regilattice --diff gaming           # delta vs profile
-python -m regilattice --dry-run --list        # dry-run mode
-python -m regilattice --search "telemetry"    # search tweaks
-python -m regilattice --export-json out.json  # export as JSON
-python -m regilattice --import-json in.json   # import selection
-python -m regilattice --export-reg out.reg    # export registry
+python -m regilattice                                  # interactive menu
+python -m regilattice --list                           # list all tweaks
+python -m regilattice --list --category Explorer       # filter by category
+python -m regilattice --list --output json             # machine-readable JSON
+python -m regilattice apply <id>                       # apply a tweak
+python -m regilattice remove <id>                      # remove a tweak
+python -m regilattice --gui                            # launch GUI
+python -m regilattice --profile gaming                 # apply profile
+python -m regilattice --validate                       # check TweakDef integrity
+python -m regilattice --stats                          # scope/admin/corp breakdown
+python -m regilattice --categories                     # list category names
+python -m regilattice --list-categories --output json  # categories as JSON
+python -m regilattice --snapshot before.json           # save state
+python -m regilattice --restore before.json            # restore state
+python -m regilattice --snapshot-diff a.json b.json    # compare snapshots
+python -m regilattice --check                          # audit current state
+python -m regilattice --diff gaming                    # delta vs profile
+python -m regilattice --dry-run --list                 # dry-run mode
+python -m regilattice --search "telemetry"             # search tweaks
+python -m regilattice --search "telemetry" --output json  # search as JSON
+python -m regilattice --export-json out.json           # export as JSON
+python -m regilattice --import-json in.json            # import selection
+python -m regilattice --export-reg out.reg             # export registry
 ```
 
 ---
