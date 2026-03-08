@@ -19,9 +19,11 @@ from regilattice.corpguard import (
     _is_domain_joined,
     _split_hive,
     assert_not_corporate,
+    corp_guard_reasons,
     corp_guard_status,
     is_corporate_network,
     is_gpo_managed,
+    reset_corp_cache,
 )
 from regilattice.registry import is_windows
 
@@ -400,3 +402,105 @@ class TestIsGpoManaged:
 
     def test_nonexistent_policy_key(self) -> None:
         assert is_gpo_managed([r"HKLM\SOFTWARE\__RegiLattice_Test_Missing__\Foo"]) is False
+
+
+# ── reset_corp_cache tests ───────────────────────────────────────────────────
+
+
+class TestResetCorpCache:
+    """Tests for reset_corp_cache()."""
+
+    def test_reset_clears_cache(self) -> None:
+        """After forcing a detection, resetting allows a fresh call."""
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=True),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            result1 = is_corporate_network()
+        # Reset and re-query — should call detection afresh
+        reset_corp_cache()
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=False),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            result2 = is_corporate_network()
+        assert result1 is True
+        assert result2 is False
+
+    def test_reset_is_idempotent(self) -> None:
+        """Calling reset_corp_cache twice should not raise."""
+        reset_corp_cache()
+        reset_corp_cache()
+
+    def test_reset_returns_none(self) -> None:
+        assert reset_corp_cache() is None
+
+
+# ── corp_guard_reasons tests ─────────────────────────────────────────────────
+
+
+class TestCorpGuardReasons:
+    """Tests for corp_guard_reasons()."""
+
+    def test_returns_list(self) -> None:
+        result = corp_guard_reasons()
+        assert isinstance(result, list)
+
+    def test_non_corp_returns_empty(self) -> None:
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=False),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            reset_corp_cache()
+            reasons = corp_guard_reasons()
+        assert reasons == []
+
+    def test_corp_domain_has_reason(self) -> None:
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=True),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            reset_corp_cache()
+            reasons = corp_guard_reasons()
+        assert len(reasons) >= 1
+        assert any("domain" in r.lower() for r in reasons)
+
+    def test_reasons_are_strings(self) -> None:
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=False),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            reset_corp_cache()
+            reasons = corp_guard_reasons()
+        for r in reasons:
+            assert isinstance(r, str)
+
+    def test_reasons_returns_copy(self) -> None:
+        """Mutating the returned list should not affect internal state."""
+        with (
+            patch("regilattice.corpguard._is_domain_joined", return_value=False),
+            patch("regilattice.corpguard._is_azure_ad_joined", return_value=False),
+            patch("regilattice.corpguard._has_vpn_adapter", return_value=False),
+            patch("regilattice.corpguard._has_group_policy", return_value=False),
+            patch("regilattice.corpguard._has_management_agent", return_value=False),
+        ):
+            reset_corp_cache()
+            r1 = corp_guard_reasons()
+            r1.append("injected")
+            r2 = corp_guard_reasons()
+        assert "injected" not in r2
