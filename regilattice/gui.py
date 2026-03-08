@@ -23,6 +23,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from types import ModuleType
+from typing import Any
 
 from . import __version__
 from . import gui_dialogs as dialogs
@@ -114,7 +115,7 @@ class RegiLatticeGUI:
         self._root.resizable(True, True)
 
         with contextlib.suppress(tk.TclError, OSError):
-            self._root.iconbitmap(default="")  # type: ignore[no-untyped-call]
+            self._root.iconbitmap(default="")
 
         # Windows 11: attempt DWM dark title bar
         self._apply_win11_dark_titlebar()
@@ -132,7 +133,7 @@ class RegiLatticeGUI:
         self._undo_stack: list[tuple[str, list[TweakDef]]] = []  # (mode, tweaks)
         self._session_changed: set[str] = set()  # tweak IDs modified this session
         self._last_clicked_row_idx: int | None = None  # for Shift+Click range select
-        self._tray_icon: object | None = None  # pystray.Icon if available
+        self._tray_icon: Any = None  # pystray.Icon if available
         self._tray_available = False
         self._setup_styles()
         self._build_ui()
@@ -537,7 +538,7 @@ class RegiLatticeGUI:
             command=self._undo_last,
         )
         self._btn_undo.pack(side="left", padx=(0, 6), expand=True, fill="x")
-        self._btn_undo.state(["disabled"])  # type: ignore[no-untyped-call]
+        self._btn_undo.state(["disabled"])
 
         # Action buttons (row 2: snapshot / restore / restore-point)
         btn2 = ttk.Frame(self._root)
@@ -738,7 +739,7 @@ class RegiLatticeGUI:
             section = CategorySection(self._inner, cat_name, cat_rows)
             section.set_on_batch(self._batch_category)
             section.set_on_reorder(self._reorder_category)
-            section._on_collapse_change = self._on_category_collapse_change
+            section.set_on_collapse_change(self._on_category_collapse_change)
             self._category_sections.append(section)
 
         pct = min(100, int(end / len(self._grouped_items) * 100))
@@ -755,9 +756,9 @@ class RegiLatticeGUI:
         self._loading = False
         # Wire checkbox → selection counter + Shift+Click range select
         for i, row in enumerate(self._tweak_rows):
-            row.var.trace_add("write", lambda *_: self._update_selection_count())
-            row.cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))
-            row.cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)
+            row.var.trace_add("write", lambda *_args: self._update_selection_count())
+            row.cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))  # type: ignore[misc]
+            row.cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)  # type: ignore[misc]
         # Right-click context menu
         for row in self._tweak_rows:
             row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
@@ -950,8 +951,6 @@ class RegiLatticeGUI:
 
     def _export_log(self) -> None:
         """Save the session log to a user-chosen location."""
-        from tkinter import filedialog
-
         path = filedialog.asksaveasfilename(
             title="Export Session Log",
             defaultextension=".log",
@@ -966,8 +965,6 @@ class RegiLatticeGUI:
             shutil.copy2(SESSION.log_path, path)
             self._set_status(f"Log exported to {Path(path).name}", _OK_GREEN)
         except OSError as exc:
-            from tkinter import messagebox
-
             messagebox.showerror("Export Error", str(exc))
 
     # ── Right-click context menu ─────────────────────────────────────────
@@ -1072,7 +1069,7 @@ class RegiLatticeGUI:
 
         def _on_progress(done: int, total: int) -> None:
             pct = done * 100 // total if total else 100
-            self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))
+            self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
             statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
@@ -1086,7 +1083,7 @@ class RegiLatticeGUI:
 
         def _on_progress(done: int, total: int) -> None:
             pct = done * 100 // total if total else 100
-            self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))
+            self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
             statuses = status_map(parallel=True, max_workers=8, progress_fn=_on_progress)
@@ -1366,8 +1363,8 @@ class RegiLatticeGUI:
         """Toggle UI lock during batch operations."""
         self._running = running
         state = "disabled" if running else "!disabled"
-        self._btn_apply.state([state])  # type: ignore[no-untyped-call]
-        self._btn_remove.state([state])  # type: ignore[no-untyped-call]
+        self._btn_apply.state([state])
+        self._btn_remove.state([state])
         if running:
             self._cancel.clear()
 
@@ -1419,7 +1416,7 @@ class RegiLatticeGUI:
         # Push to undo stack so the user can reverse this batch
         if items:
             self._undo_stack.append((mode, list(items)))
-            self._root.after(0, lambda: self._btn_undo.state(["!disabled"]))  # type: ignore[no-untyped-call]
+            self._root.after(0, lambda: self._btn_undo.state(["!disabled"]))
 
         if errors and succeeded_defs:
             # Offer rollback of succeeded tweaks when batch had partial failures
@@ -1459,7 +1456,7 @@ class RegiLatticeGUI:
         mode, items = self._undo_stack.pop()
         reverse = "remove" if mode == "apply" else "apply"
         if not self._undo_stack:
-            self._btn_undo.state(["disabled"])  # type: ignore[no-untyped-call]
+            self._btn_undo.state(["disabled"])
         self._set_status(f"Undoing: {mode} \u2192 {reverse} ({len(items)} tweaks)...", _ACCENT)
         self._dispatch_raw(items, reverse)
 
@@ -1539,7 +1536,7 @@ class RegiLatticeGUI:
         self._pil_draw = pil_draw
         self._tray_available = True
 
-    def _create_tray_icon(self) -> object:
+    def _create_tray_icon(self) -> Any:
         """Build a pystray.Icon with a right-click menu."""
         pystray = self._pystray
         MenuItem = pystray.MenuItem
@@ -1579,7 +1576,7 @@ class RegiLatticeGUI:
         self._root.withdraw()
         if self._tray_icon is None:
             self._tray_icon = self._create_tray_icon()
-            threading.Thread(target=self._tray_icon.run, daemon=True).start()  # type: ignore[union-attr]
+            threading.Thread(target=self._tray_icon.run, daemon=True).start()
 
     def _restore_from_tray(self) -> None:
         """Restore the window from the system tray."""
@@ -1591,7 +1588,7 @@ class RegiLatticeGUI:
         """Stop the tray icon if running."""
         if self._tray_icon is not None:
             with contextlib.suppress(Exception):
-                self._tray_icon.stop()  # type: ignore[union-attr]
+                self._tray_icon.stop()
             self._tray_icon = None
 
     # ── Category collapse persistence ──────────────────────────────────

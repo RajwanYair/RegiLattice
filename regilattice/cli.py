@@ -15,6 +15,7 @@ import argparse
 import sys
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 from . import __version__
 from .corpguard import CorporateNetworkError, assert_not_corporate
@@ -175,8 +176,8 @@ def _run_action(
         batch_fn = apply_all if mode == "apply" else remove_all
         results = batch_fn(force_corp=force)
         ok = sum(1 for v in results.values() if v in (TweakResult.APPLIED, TweakResult.REMOVED))
-        if SESSION._dry_run:
-            print(f"\U0001f50d Dry-run: {ok}/{len(results)} tweaks would be processed ({SESSION._dry_ops} registry ops skipped).")
+        if SESSION.dry_run:
+            print(f"\U0001f50d Dry-run: {ok}/{len(results)} tweaks would be processed ({SESSION.dry_ops} registry ops skipped).")
         else:
             print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
         return 0
@@ -195,8 +196,8 @@ def _run_action(
     try:
         fn: Callable[..., None] = td.apply_fn if mode == "apply" else td.remove_fn
         fn()
-        if SESSION._dry_run:
-            print(f"\U0001f50d Dry-run '{action_label}' — {SESSION._dry_ops} registry op(s) skipped.")
+        if SESSION.dry_run:
+            print(f"\U0001f50d Dry-run '{action_label}' \u2014 {SESSION.dry_ops} registry op(s) skipped.")
             if td.registry_keys:
                 print("  Registry keys that would be touched:")
                 for rk in td.registry_keys:
@@ -215,7 +216,7 @@ def _run_action(
         return 3
 
 
-def _format_reg_value(val: object, typ: int) -> str:
+def _format_reg_value(val: Any, typ: int) -> str:
     """Format a single registry value for .reg file output."""
     import winreg as _wr
 
@@ -464,7 +465,7 @@ def main(argv: list[str] | None = None) -> int:
         args.force = True
 
     if args.dry_run:
-        SESSION._dry_run = True
+        SESSION.dry_run = True
         print("\U0001f50d Dry-run mode \u2014 no registry changes will be made.")
 
     if args.check_deps:
@@ -534,8 +535,8 @@ def main(argv: list[str] | None = None) -> int:
         if applied:
             print(f"\nApplied tweaks ({len(applied)}):")
             for tid in sorted(applied):
-                td = get_tweak(tid)
-                label = td.label if td else tid
+                matching = get_tweak(tid)
+                label = matching.label if matching else tid
                 print(f"  \u2713 {tid:<35} {label}")
         return 0
 
@@ -552,14 +553,14 @@ def main(argv: list[str] | None = None) -> int:
         if to_apply:
             print(f"Tweaks to APPLY for '{args.diff}' profile ({len(to_apply)}):")
             for tid in to_apply:
-                td = get_tweak(tid)
-                label = td.label if td else tid
+                matching = get_tweak(tid)
+                label = matching.label if matching else tid
                 print(f"  + {tid:<35} {label}")
         if to_remove:
             print(f"\nApplied tweaks NOT in '{args.diff}' profile ({len(to_remove)}):")
             for tid in to_remove:
-                td = get_tweak(tid)
-                label = td.label if td else tid
+                matching = get_tweak(tid)
+                label = matching.label if matching else tid
                 print(f"  - {tid:<35} {label}")
         print(f"\nSummary: {len(to_apply)} to apply, {len(to_remove)} extra applied.")
         return 0
@@ -574,16 +575,16 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.search:
-        results = search_tweaks(args.search)
-        if not results:
+        search_results = search_tweaks(args.search)
+        if not search_results:
             print(f"No tweaks matching '{args.search}'.")
             return 0
         print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
         print("-" * 80)
-        for td in results:
+        for td in search_results:
             st = tweak_status(td)
             print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
-        print(f"\n{len(results)} tweak(s) found.")
+        print(f"\n{len(search_results)} tweak(s) found.")
         return 0
 
     if args.export_json:
@@ -650,10 +651,10 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         results = apply_profile(args.profile, force_corp=args.force)
         ok = sum(1 for v in results.values() if v == TweakResult.APPLIED)
-        if SESSION._dry_run:
+        if SESSION.dry_run:
             print(
                 f"\U0001f50d Dry-run profile '{args.profile}': {ok}/{len(results)} tweaks would be applied"
-                f" ({SESSION._dry_ops} registry ops skipped)."
+                f" ({SESSION.dry_ops} registry ops skipped)."
             )
         else:
             print(f"\u2705 Profile '{args.profile}': {ok}/{len(results)} tweaks applied.")
@@ -683,10 +684,10 @@ def main(argv: list[str] | None = None) -> int:
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
                 errors.append(f"{td.label}: {exc}")
         ok = len(cat_tweaks) - len(errors)
-        if SESSION._dry_run:
+        if SESSION.dry_run:
             print(
                 f"\U0001f50d Dry-run: {ok}/{len(cat_tweaks)} tweaks would be processed in '{args.category}'"
-                f" ({SESSION._dry_ops} registry ops skipped)."
+                f" ({SESSION.dry_ops} registry ops skipped)."
             )
         else:
             print(f"\u2705 {ok}/{len(cat_tweaks)} tweaks processed in '{args.category}'.")
@@ -708,19 +709,19 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\u274c Failed to read JSON: {exc}")
             return 3
         if isinstance(data, dict):
-            ids = list(data.get("tweaks", []))
+            ids: list[str] = [str(x) for x in data.get("tweaks", [])]
         elif isinstance(data, list):
-            ids = list(data)
+            ids = [str(x) for x in data]
         else:
             print("\u274c Expected a JSON list of tweak IDs or {\"tweaks\": [...]}.")
             return 3
         targets = []
         for tid in ids:
-            td = get_tweak(tid)
-            if td is None:
+            matching = get_tweak(tid)
+            if matching is None:
                 print(f"\u26a0\ufe0f  Skipping unknown tweak '{tid}'")
             else:
-                targets.append(td)
+                targets.append(matching)
         if not targets:
             print("No valid tweaks found in JSON.")
             return 2
@@ -736,8 +737,8 @@ def main(argv: list[str] | None = None) -> int:
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
                 errors_list.append(f"{td.label}: {exc}")
         ok = len(targets) - len(errors_list)
-        if SESSION._dry_run:
-            print(f"\U0001f50d Dry-run: {ok}/{len(targets)} tweaks from JSON ({SESSION._dry_ops} registry ops skipped).")
+        if SESSION.dry_run:
+            print(f"\U0001f50d Dry-run: {ok}/{len(targets)} tweaks from JSON ({SESSION.dry_ops} registry ops skipped).")
         else:
             print(f"\u2705 {ok}/{len(targets)} tweaks processed from JSON.")
         for e in errors_list:

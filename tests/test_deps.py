@@ -85,7 +85,7 @@ class TestEnsurePip:
     def test_pip_missing_ensurepip_succeeds(self) -> None:
         mock_ensurepip = MagicMock()
 
-        def _import_side_effect(name: str):
+        def _import_side_effect(name: str) -> MagicMock:
             if name == "pip":
                 raise ImportError("no pip")
             return MagicMock()  # Should not be reached
@@ -97,7 +97,7 @@ class TestEnsurePip:
             mock_ensurepip.bootstrap.assert_called_once()
 
     def test_pip_missing_ensurepip_fails(self) -> None:
-        def _import_side_effect(name: str):
+        def _import_side_effect(name: str) -> MagicMock:
             if name == "pip":
                 raise ImportError("no pip")
             return MagicMock()
@@ -195,7 +195,7 @@ class TestRequire:
         # Patch install_package first (before import_module mock breaks resolution)
         with patch("regilattice.deps.install_package", return_value=True):
 
-            def _import_side_effect(name: str):
+            def _import_side_effect(name: str) -> None:
                 raise ImportError(f"No module named '{name}'")
 
             with patch("importlib.import_module", side_effect=_import_side_effect):
@@ -262,7 +262,7 @@ class TestLazyImportExtra:
         _original_import = importlib.import_module
         call_count = 0
 
-        def _import_side_effect(name: str):
+        def _import_side_effect(name: str) -> MagicMock | ModuleType:
             nonlocal call_count
             # Only intercept our fake package
             if name == "__fake_pkg__":
@@ -283,7 +283,7 @@ class TestLazyImportExtra:
         """If install succeeds but re-import still fails, return sentinel."""
         _original_import = importlib.import_module
 
-        def _import_side_effect(name: str):
+        def _import_side_effect(name: str) -> ModuleType:
             if name == "__fake_pkg__":
                 raise ImportError("still missing")
             return _original_import(name)

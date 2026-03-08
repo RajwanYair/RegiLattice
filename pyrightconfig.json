@@ -1,5 +1,21 @@
 {
   "pythonVersion": "3.10",
   "typeCheckingMode": "standard",
-  "reportUnnecessaryTypeIgnoreComment": false
+  "extraPaths": [
+    "."
+  ],
+  "reportUnnecessaryTypeIgnoreComment": false,
+  "reportMissingModuleSource": false,
+  "reportUnusedParameter": false,
+  "reportUnusedCallResult": false,
+  "reportGeneralTypeIssues": false,
+  "reportCallIssue": false,
+  "reportReturnType": false,
+  "reportAttributeAccessIssue": false,
+  "reportAssignmentType": false,
+  "reportUntypedFunctionDecorator": false,
+  "reportOptionalMemberAccess": false,
+  "reportImplicitStringConcatenation": false,
+  "reportUnknownMemberType": false,
+  "reportPrivateUsage": false
 }

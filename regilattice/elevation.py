@@ -24,7 +24,7 @@ def is_admin() -> bool:
             return _getuid() == 0  # type: ignore[no-any-return]
         return False
     try:
-        return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined,unused-ignore]
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())  # type: ignore[attr-defined]
     except Exception:
         return False
 
@@ -58,7 +58,7 @@ def request_elevation(args: list[str] | None = None) -> int:
 
     try:
         # ShellExecuteW returns >32 on success
-        ret = ctypes.windll.shell32.ShellExecuteW(  # type: ignore[attr-defined,unused-ignore]
+        ret = ctypes.windll.shell32.ShellExecuteW(  # type: ignore[attr-defined]
             None,
             "runas",
             exe,

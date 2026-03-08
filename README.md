@@ -110,18 +110,23 @@ graph LR
 ## Quick Start
 
 ### GUI (Recommended)
+
 ```bash
 python -m regilattice --gui
 ```
+
 Tkinter window with 4 themes (Catppuccin Mocha default), menu bar, zebra-striped rows, per-category grouping, live search bar, scope badges (USER/MACHINE/BOTH), recommendation badges, per-row toggle buttons, and batch operations.
 
 ### Console Menu
+
 ```bash
 python -m regilattice
 ```
+
 Two-level interactive menu: browse categories, then select tweaks within each category.
 
 ### CLI
+
 ```bash
 python -m regilattice apply disable-telemetry -y
 python -m regilattice remove all --assume-yes
@@ -136,6 +141,7 @@ python -m regilattice --tags
 ```
 
 ### Machine Profiles
+
 ```bash
 python -m regilattice --profile business   # 23 categories — productivity, security, cloud & workflow
 python -m regilattice --profile gaming     # 20 categories — GPU, performance, low-latency, distraction-free
@@ -145,7 +151,8 @@ python -m regilattice --profile server     # 19 categories — hardened, headles
 ```
 
 ### Windows Launcher
-```
+
+```text
 Launch-RegiLattice.ps1              # auto-detects Python, passes CLI args
 Launch-RegiLattice.ps1 --gui        # launch GUI directly
 ```

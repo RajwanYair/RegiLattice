@@ -7,15 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from regilattice.marketplace import (
-    PluginMeta,
-    _parse_version,
-    _version_ok,
-    discover_plugins,
-    load_plugin,
-    loaded_plugins,
-    unload_plugin,
-)
+from regilattice.marketplace import PluginMeta, _parse_version, _version_ok, discover_plugins, load_plugin, loaded_plugins, unload_plugin
 
 # ── Fixtures ─────────────────────────────────────────────────────────────────
 

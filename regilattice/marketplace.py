@@ -148,7 +148,7 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
             continue
         mod: ModuleType = importlib.util.module_from_spec(spec)
         sys.modules[mod_name] = mod
-        spec.loader.exec_module(mod)  # type: ignore[union-attr]
+        spec.loader.exec_module(mod)
         mod_tweaks = getattr(mod, "TWEAKS", None)
         if isinstance(mod_tweaks, list):
             tweaks.extend(mod_tweaks)

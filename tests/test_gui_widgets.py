@@ -1,5 +1,6 @@
 """Tests for regilattice.gui_widgets — TweakRow logic (deferred, no tkinter window needed)."""
 
+
 from __future__ import annotations
 
 import pytest
@@ -47,7 +48,7 @@ except Exception:
 
 
 @pytest.fixture()
-def root() -> tk.Tk:  # type: ignore[name-defined]
+def root() -> tk.Tk:
     if not _tk_available:
         pytest.skip("tkinter not available or headless environment")
     assert _test_root is not None
@@ -101,7 +102,7 @@ class TestTweakRowDeferred:
 class TestTweakRowWidgets:
     """Test TweakRow with actual widget creation."""
 
-    def test_build_widgets(self, root: tk.Tk) -> None:  # type: ignore[name-defined]
+    def test_build_widgets(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow
@@ -116,7 +117,7 @@ class TestTweakRowWidgets:
         assert row.toggle_btn is not None
         assert row.tooltip is not None
 
-    def test_mark_corp_blocked(self, root: tk.Tk) -> None:  # type: ignore[name-defined]
+    def test_mark_corp_blocked(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow
@@ -130,7 +131,7 @@ class TestTweakRowWidgets:
         assert row.var.get() is False
         assert row.status_text.cget("text") == "BLOCKED"
 
-    def test_pack_unpack(self, root: tk.Tk) -> None:  # type: ignore[name-defined]
+    def test_pack_unpack(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow

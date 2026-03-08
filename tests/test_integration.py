@@ -214,4 +214,3 @@ class TestBackupIntegration:
                 backed_up += 1
         # At least some tweaks should call backup
         assert backed_up > 0, "No tweak called SESSION.backup during apply"
-

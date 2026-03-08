@@ -895,12 +895,12 @@ class TestTweakExecutor:
     def test_is_blocked_force_corp(self) -> None:
         td = TweakDef(id="bl1", label="BL", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=False)
         exe = TweakExecutor(force_corp=True)
-        assert exe._is_blocked(td) is False
+        assert exe.is_blocked(td) is False
 
     def test_is_blocked_corp_safe(self) -> None:
         td = TweakDef(id="bl2", label="BL", category="C", apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True)
         exe = TweakExecutor(force_corp=False)
-        assert exe._is_blocked(td) is False
+        assert exe.is_blocked(td) is False
 
 
 # ── Snapshot full round-trip ─────────────────────────────────────────────────

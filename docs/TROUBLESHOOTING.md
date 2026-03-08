@@ -68,6 +68,7 @@
 **Cause:** `pystray` and/or `Pillow` are not installed (optional dependencies).
 
 **Fix:**
+
 ```bash
 pip install pystray Pillow
 ```

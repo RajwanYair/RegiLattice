@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Generator
 from pathlib import Path
 
 import pytest
@@ -11,10 +12,10 @@ from regilattice.locale import available_keys, current_locale, load_locale_file,
 
 
 @pytest.fixture(autouse=True)
-def _reset_locale() -> None:  # type: ignore[misc]
+def _reset_locale() -> Generator[None]:
     """Reset locale to English before each test."""
     set_locale("en")
-    yield  # type: ignore[misc]
+    yield
     set_locale("en")
 
 

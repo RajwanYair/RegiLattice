@@ -289,9 +289,10 @@ class TestCorpGuardStatus:
     @patch("regilattice.corpguard.is_windows", return_value=True)
     def test_returns_reasons_string(self, *_mocks: MagicMock) -> None:
         status = corp_guard_status()
-        assert isinstance(status, str)
-        assert "domain" in status.lower()
-        assert "VPN" in status
+        assert status is not None
+        status_str: str = status
+        assert "domain" in status_str.lower()
+        assert "VPN" in status_str
 
 
 # ── _has_management_agent ────────────────────────────────────────────────────
