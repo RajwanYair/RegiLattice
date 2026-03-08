@@ -509,3 +509,247 @@ class TestSetBinaryQwordCallsWinreg:
         assert reg_type == winreg.REG_QWORD
         assert name == "bignum"
         assert value == 2**40
+
+
+# ── REG_EXPAND_SZ tests ─────────────────────────────────────────────────────
+
+
+class TestExpandStringMethods:
+    """Tests for set_expand_string and read_expand_string."""
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_set_expand_string_uses_reg_expand_sz(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx") as mock_set,
+        ):
+            session.set_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "TestVal", "%WINDIR%\\test")
+        mock_set.assert_called_once()
+        _h, _n, _z, reg_type, _v = mock_set.call_args.args
+        assert reg_type == winreg.REG_EXPAND_SZ
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_expand_string_returns_str_on_match(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=("%WINDIR%\\test", winreg.REG_EXPAND_SZ)),
+        ):
+            result = session.read_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "TestVal")
+        assert result == "%WINDIR%\\test"
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_expand_string_returns_none_on_type_mismatch(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=("value", winreg.REG_DWORD)),
+        ):
+            result = session.read_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "TestVal")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_expand_string_returns_none_on_missing(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        with patch("regilattice.registry.winreg.OpenKey", side_effect=FileNotFoundError):
+            result = session.read_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "Missing")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_expand_string_caches_result(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key) as mock_ok,
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=("%SYSTEMROOT%", winreg.REG_EXPAND_SZ)),
+        ):
+            with session._read_cache_lock:
+                session._read_cache_enabled = True
+            r1 = session.read_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "CachedVal")
+            r2 = session.read_expand_string(r"HKEY_CURRENT_USER\Software\ExpandTest", "CachedVal")
+        assert r1 == r2 == "%SYSTEMROOT%"
+        # Second call should have hit the cache — OpenKey called once only
+        assert mock_ok.call_count == 1
+
+
+# ── REG_MULTI_SZ tests ──────────────────────────────────────────────────────
+
+
+class TestMultiSzMethods:
+    """Tests for set_multi_sz and read_multi_sz."""
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_set_multi_sz_uses_reg_multi_sz(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx") as mock_set,
+        ):
+            session.set_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "TestMulti", ["alpha", "beta"])
+        mock_set.assert_called_once()
+        _h, _n, _z, reg_type, _v = mock_set.call_args.args
+        assert reg_type == winreg.REG_MULTI_SZ
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_multi_sz_returns_list_on_match(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=(["alpha", "beta"], winreg.REG_MULTI_SZ)),
+        ):
+            result = session.read_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "TestMulti")
+        assert result == ["alpha", "beta"]
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_multi_sz_returns_none_on_type_mismatch(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=("not_a_list", 1)),
+        ):
+            result = session.read_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "TestMulti")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_multi_sz_returns_none_on_missing(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        with patch("regilattice.registry.winreg.OpenKey", side_effect=FileNotFoundError):
+            result = session.read_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "Missing")
+        assert result is None
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_read_multi_sz_caches_result(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.OpenKey", return_value=fake_key) as mock_ok,
+            patch("regilattice.registry.winreg.QueryValueEx", return_value=(["x", "y"], winreg.REG_MULTI_SZ)),
+        ):
+            with session._read_cache_lock:
+                session._read_cache_enabled = True
+            r1 = session.read_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "CachedMulti")
+            r2 = session.read_multi_sz(r"HKEY_CURRENT_USER\Software\MultiTest", "CachedMulti")
+        assert r1 == r2 == ["x", "y"]
+        assert mock_ok.call_count == 1
+
+
+# ── Cache invalidation extended tests ───────────────────────────────────────
+
+
+class TestCacheInvalidationExtended:
+    """Verify _invalidate_cache_for clears binary, qword, expand, multi_sz entries."""
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_invalidate_clears_binary_cache(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        path = r"HKEY_CURRENT_USER\Software\InvalTest"
+        name = "BinVal"
+        with session._read_cache_lock:
+            session._read_cache_enabled = True
+            session._read_cache[(path, name, "binary")] = b"\x01\x02"
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx"),
+        ):
+            session.set_binary(path, name, b"\x03")
+        assert (path, name, "binary") not in session._read_cache
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_invalidate_clears_qword_cache(self, tmp_path: Path) -> None:
+        import winreg
+
+        session = RegistrySession(base_dir=tmp_path)
+        path = r"HKEY_CURRENT_USER\Software\InvalTest"
+        name = "QwVal"
+        with session._read_cache_lock:
+            session._read_cache_enabled = True
+            session._read_cache[(path, name, "qword")] = 12345
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx"),
+        ):
+            session.set_qword(path, name, 99999)
+        assert (path, name, "qword") not in session._read_cache
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_invalidate_clears_expand_cache(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        path = r"HKEY_CURRENT_USER\Software\InvalTest"
+        name = "ExpandVal"
+        with session._read_cache_lock:
+            session._read_cache_enabled = True
+            session._read_cache[(path, name, "expand")] = "%WINDIR%"
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx"),
+        ):
+            session.set_expand_string(path, name, "%SYSTEMROOT%")
+        assert (path, name, "expand") not in session._read_cache
+
+    @pytest.mark.skipif(not is_windows(), reason="registry requires Windows")
+    def test_invalidate_clears_multi_sz_cache(self, tmp_path: Path) -> None:
+        session = RegistrySession(base_dir=tmp_path)
+        path = r"HKEY_CURRENT_USER\Software\InvalTest"
+        name = "MultiVal"
+        with session._read_cache_lock:
+            session._read_cache_enabled = True
+            session._read_cache[(path, name, "multi_sz")] = ["old"]
+        fake_key = MagicMock()
+        fake_key.__enter__ = MagicMock(return_value=fake_key)
+        fake_key.__exit__ = MagicMock(return_value=False)
+        with (
+            patch("regilattice.registry.winreg.CreateKey", return_value=fake_key),
+            patch("regilattice.registry.winreg.SetValueEx"),
+        ):
+            session.set_multi_sz(path, name, ["new1", "new2"])
+        assert (path, name, "multi_sz") not in session._read_cache
