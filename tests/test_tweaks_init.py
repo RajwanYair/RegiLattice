@@ -667,8 +667,12 @@ class TestTweakScope:
 
     def test_hkcr_is_machine(self) -> None:
         td = TweakDef(
-            id="scope.cr", label="CR", category="C", apply_fn=lambda: None,
-            remove_fn=lambda: None, registry_keys=[r"HKEY_CLASSES_ROOT\Test"],
+            id="scope.cr",
+            label="CR",
+            category="C",
+            apply_fn=lambda: None,
+            remove_fn=lambda: None,
+            registry_keys=[r"HKEY_CLASSES_ROOT\Test"],
         )
         assert tweak_scope(td) == "machine"
 

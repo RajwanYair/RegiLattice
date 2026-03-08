@@ -604,6 +604,7 @@ def status_map(
     if max_workers <= 0:
         try:
             from regilattice.hwinfo import detect_hardware
+
             max_workers = detect_hardware().optimal_workers
         except Exception:
             max_workers = min(8, os.cpu_count() or 4)

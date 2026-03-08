@@ -377,13 +377,27 @@ class CategorySection:
 
         # Reorder buttons (wired by gui.py via set_on_reorder)
         self._btn_down = tk.Button(
-            self.header, text="\u25bc", font=("Segoe UI", 7), relief="flat",
-            bg=_BG_SURFACE, fg=_FG_DIM, cursor="hand2", bd=0, padx=2,
+            self.header,
+            text="\u25bc",
+            font=("Segoe UI", 7),
+            relief="flat",
+            bg=_BG_SURFACE,
+            fg=_FG_DIM,
+            cursor="hand2",
+            bd=0,
+            padx=2,
         )
         self._btn_down.pack(side="right", padx=(2, 0))
         self._btn_up = tk.Button(
-            self.header, text="\u25b2", font=("Segoe UI", 7), relief="flat",
-            bg=_BG_SURFACE, fg=_FG_DIM, cursor="hand2", bd=0, padx=2,
+            self.header,
+            text="\u25b2",
+            font=("Segoe UI", 7),
+            relief="flat",
+            bg=_BG_SURFACE,
+            fg=_FG_DIM,
+            cursor="hand2",
+            bd=0,
+            padx=2,
         )
         self._btn_up.pack(side="right", padx=(6, 0))
 

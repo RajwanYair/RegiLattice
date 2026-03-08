@@ -28,18 +28,25 @@ from typing import Any
 from . import __version__
 from . import gui_dialogs as dialogs
 from . import gui_theme as theme
-from .corpguard import (CorporateNetworkError, assert_not_corporate,
-                        corp_guard_status, is_corporate_network,
-                        is_gpo_managed)
+from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
 from .gui_tooltip import build_tooltip_text, has_recommendation
 from .gui_widgets import CategorySection, TweakRow
 from .hwinfo import detect_hardware
-from .registry import (SESSION, AdminRequirementError, is_windows,
-                       platform_summary)
-from .tweaks import (TweakDef, TweakResult, all_tweaks, available_profiles,
-                     profile_info, restore_snapshot, save_snapshot,
-                     search_tweaks, status_map, tweak_scope, tweak_status,
-                     tweaks_by_category)
+from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
+from .tweaks import (
+    TweakDef,
+    TweakResult,
+    all_tweaks,
+    available_profiles,
+    profile_info,
+    restore_snapshot,
+    save_snapshot,
+    search_tweaks,
+    status_map,
+    tweak_scope,
+    tweak_status,
+    tweaks_by_category,
+)
 from .tweaks.maintenance import create_restore_point
 
 # ── Theme aliases ────────────────────────────────────────────────────────────
@@ -84,10 +91,12 @@ _MAX_SEARCH_HISTORY = 20
 
 # ── Optional system-tray deps ───────────────────────────────────────────────
 
+
 def _try_import(module: str) -> ModuleType | None:
     """Import *module* returning ``None`` on failure (no auto-install)."""
     try:
         import importlib
+
         return importlib.import_module(module)
     except ImportError:
         return None
@@ -701,6 +710,7 @@ class RegiLatticeGUI:
     def _apply_hw_result(self, hw: object) -> None:
         """Apply hardware detection on the main thread (update subtitle)."""
         from .hwinfo import HWProfile
+
         if not isinstance(hw, HWProfile):
             return
         # Store for About dialog
@@ -1078,6 +1088,7 @@ class RegiLatticeGUI:
     def _show_about(self) -> None:
         """Show an About dialog with system and project info."""
         from .hwinfo import hardware_summary
+
         hw_text = ""
         if hasattr(self, "_hw_profile") and self._hw_profile is not None:
             hw_text = hardware_summary(self._hw_profile)

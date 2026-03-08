@@ -6,10 +6,18 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.hwinfo import (CPUInfo, DiskInfo, GPUInfo, HWProfile,
-                                MemoryInfo, _compute_batch_size,
-                                _compute_optimal_workers, clear_caches,
-                                hardware_summary, suggest_profile)
+from regilattice.hwinfo import (
+    CPUInfo,
+    DiskInfo,
+    GPUInfo,
+    HWProfile,
+    MemoryInfo,
+    _compute_batch_size,
+    _compute_optimal_workers,
+    clear_caches,
+    hardware_summary,
+    suggest_profile,
+)
 
 # ── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -258,10 +266,13 @@ class TestDetectGPUs:
         assert detect_gpus() == []
 
     @patch("regilattice.hwinfo.os.name", "nt")
-    @patch("regilattice.hwinfo._run_composite_cim", return_value={
-        "GPU:0": "NVIDIA RTX 4090|31.0.15.4601|25769803776",
-        "GPU_COUNT": "1",
-    })
+    @patch(
+        "regilattice.hwinfo._run_composite_cim",
+        return_value={
+            "GPU:0": "NVIDIA RTX 4090|31.0.15.4601|25769803776",
+            "GPU_COUNT": "1",
+        },
+    )
     def test_single_gpu_parsed(self, _mock_cim: MagicMock) -> None:
         from regilattice.hwinfo import detect_gpus
 
@@ -272,11 +283,14 @@ class TestDetectGPUs:
         assert gpus[0].adapter_ram_mb == 25769803776 // (1024 * 1024)
 
     @patch("regilattice.hwinfo.os.name", "nt")
-    @patch("regilattice.hwinfo._run_composite_cim", return_value={
-        "GPU:0": "GPU1|1.0|1073741824",
-        "GPU:1": "GPU2|2.0|2147483648",
-        "GPU_COUNT": "2",
-    })
+    @patch(
+        "regilattice.hwinfo._run_composite_cim",
+        return_value={
+            "GPU:0": "GPU1|1.0|1073741824",
+            "GPU:1": "GPU2|2.0|2147483648",
+            "GPU_COUNT": "2",
+        },
+    )
     def test_multiple_gpus(self, _mock_cim: MagicMock) -> None:
         from regilattice.hwinfo import detect_gpus
 
@@ -286,10 +300,13 @@ class TestDetectGPUs:
         assert gpus[1].name == "GPU2"
 
     @patch("regilattice.hwinfo.os.name", "nt")
-    @patch("regilattice.hwinfo._run_composite_cim", return_value={
-        "GPU:0": "MyGPU|1.0|notanumber",
-        "GPU_COUNT": "1",
-    })
+    @patch(
+        "regilattice.hwinfo._run_composite_cim",
+        return_value={
+            "GPU:0": "MyGPU|1.0|notanumber",
+            "GPU_COUNT": "1",
+        },
+    )
     def test_bad_ram_value_defaults_zero(self, _mock_cim: MagicMock) -> None:
         from regilattice.hwinfo import detect_gpus
 
@@ -308,10 +325,13 @@ class TestDetectMemory:
         assert mem.total_mb == 0
 
     @patch("regilattice.hwinfo.os.name", "nt")
-    @patch("regilattice.hwinfo._run_composite_cim", return_value={
-        "MEM_TOTAL": "16777216",
-        "MEM_FREE": "8388608",
-    })
+    @patch(
+        "regilattice.hwinfo._run_composite_cim",
+        return_value={
+            "MEM_TOTAL": "16777216",
+            "MEM_FREE": "8388608",
+        },
+    )
     def test_memory_parsed(self, _mock_cim: MagicMock) -> None:
         from regilattice.hwinfo import detect_memory
 
@@ -331,16 +351,19 @@ class TestDetectDisk:
         assert d.is_ssd is False
 
     @patch("regilattice.hwinfo.os.name", "nt")
-    @patch("regilattice.hwinfo._run_composite_cim", return_value={
-        "DISK_SIZE": "536870912000",
-        "DISK_FREE": "268435456000",
-        "DISK_MEDIA": "SSD",
-    })
+    @patch(
+        "regilattice.hwinfo._run_composite_cim",
+        return_value={
+            "DISK_SIZE": "536870912000",
+            "DISK_FREE": "268435456000",
+            "DISK_MEDIA": "SSD",
+        },
+    )
     def test_disk_with_ssd(self, _mock_cim: MagicMock) -> None:
         from regilattice.hwinfo import detect_disk
 
         d = detect_disk()
-        assert d.total_gb == 536870912000 // (1024 ** 3)
+        assert d.total_gb == 536870912000 // (1024**3)
         assert d.is_ssd is True
 
 
@@ -348,8 +371,7 @@ class TestDetectDisk:
 class TestDetectBooleans:
     @patch("regilattice.hwinfo.os.name", "posix")
     def test_non_windows_all_false(self) -> None:
-        from regilattice.hwinfo import (detect_hyperv, detect_secure_boot,
-                                        detect_tpm, detect_wsl)
+        from regilattice.hwinfo import detect_hyperv, detect_secure_boot, detect_tpm, detect_wsl
 
         assert detect_hyperv() is False
         assert detect_wsl() is False
@@ -417,12 +439,15 @@ class TestCompositeCIM:
         clear_caches()
         assert hwmod._CIM_CACHE is None
 
-    @patch("regilattice.hwinfo._run_ps", return_value=(
-        "CPU_NAME:Test CPU\nCPU_CORES:8\nHYPERV:True\n"
-        "MEM_TOTAL:16000000\nMEM_FREE:8000000\n"
-        "DISK_SIZE:500000000000\nDISK_FREE:250000000000\nDISK_MEDIA:SSD\n"
-        "GPU:NVIDIA Test|1.0|4294967296\n"
-    ))
+    @patch(
+        "regilattice.hwinfo._run_ps",
+        return_value=(
+            "CPU_NAME:Test CPU\nCPU_CORES:8\nHYPERV:True\n"
+            "MEM_TOTAL:16000000\nMEM_FREE:8000000\n"
+            "DISK_SIZE:500000000000\nDISK_FREE:250000000000\nDISK_MEDIA:SSD\n"
+            "GPU:NVIDIA Test|1.0|4294967296\n"
+        ),
+    )
     def test_composite_parse(self, _mock_ps: MagicMock) -> None:
         from regilattice.hwinfo import _run_composite_cim
 

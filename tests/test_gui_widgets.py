@@ -1,6 +1,5 @@
 """Tests for regilattice.gui_widgets — TweakRow logic (deferred, no tkinter window needed)."""
 
-
 from __future__ import annotations
 
 import pytest

@@ -363,7 +363,7 @@ class TestRunAction:
 class TestConfigFlag:
     def test_config_file_loaded(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         cfg_path = tmp_path / "test.toml"
-        cfg_path.write_text('[general]\nforce_corp = true\n')
+        cfg_path.write_text("[general]\nforce_corp = true\n")
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--config", str(cfg_path), "--list"])
         assert rc == 0

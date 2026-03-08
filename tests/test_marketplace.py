@@ -29,7 +29,7 @@ def _make_tweak_module(directory: Path, name: str, tweak_id: str) -> None:
         "from regilattice.tweaks import TweakDef\n"
         f'TWEAKS = [TweakDef(id="{tweak_id}", label="Test", category="Test", '
         "apply_fn=lambda **kw: None, remove_fn=lambda **kw: None, "
-        'registry_keys=[])]\n'
+        "registry_keys=[])]\n"
     )
     (directory / f"{name}.py").write_text(code, encoding="utf-8")
 

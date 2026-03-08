@@ -17,8 +17,7 @@ from typing import Any
 
 import pytest
 
-from regilattice.tweaks import (all_tweaks, categories, search_tweaks,
-                                status_map, tweaks_by_category)
+from regilattice.tweaks import all_tweaks, categories, search_tweaks, status_map, tweaks_by_category
 
 # ── Constants ────────────────────────────────────────────────────────────────
 

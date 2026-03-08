@@ -188,9 +188,7 @@ class TestRegistryKeyFormat:
     def test_all_keys_have_valid_prefix(self, _all_tweaks: list[TweakDef]) -> None:
         for td in _all_tweaks:
             for key in td.registry_keys:
-                assert any(
-                    key.startswith(p) for p in self._VALID_PREFIXES
-                ), f"{td.id}: invalid registry key prefix: {key!r}"
+                assert any(key.startswith(p) for p in self._VALID_PREFIXES), f"{td.id}: invalid registry key prefix: {key!r}"
 
 
 # ── Backup call integration ──────────────────────────────────────────────────

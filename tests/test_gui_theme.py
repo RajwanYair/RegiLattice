@@ -42,9 +42,24 @@ class TestSetTheme:
                 theme.set_theme(name)
                 assert theme.current_theme() == name
                 # All colour attributes must be non-empty strings
-                for attr in ("ACCENT", "BG", "BG_SURFACE", "FG", "FG_DIM", "CARD_BG",
-                             "CARD_BG_ALT", "CARD_HOVER", "OK_GREEN", "WARN_YELLOW", "ERR_RED",
-                             "PURPLE", "HEADER_BG", "DIM_BG", "TEAL", "GPO_ORANGE"):
+                for attr in (
+                    "ACCENT",
+                    "BG",
+                    "BG_SURFACE",
+                    "FG",
+                    "FG_DIM",
+                    "CARD_BG",
+                    "CARD_BG_ALT",
+                    "CARD_HOVER",
+                    "OK_GREEN",
+                    "WARN_YELLOW",
+                    "ERR_RED",
+                    "PURPLE",
+                    "HEADER_BG",
+                    "DIM_BG",
+                    "TEAL",
+                    "GPO_ORANGE",
+                ):
                     val = getattr(theme, attr)
                     assert isinstance(val, str) and val, f"{attr} empty after set_theme({name!r})"
         finally:
@@ -77,6 +92,7 @@ class TestThemeDataIntegrity:
 
     def test_all_values_are_hex_colours(self) -> None:
         import re
+
         hex_re = re.compile(r"^#[0-9A-Fa-f]{6}$")
         for name in theme.available_themes():
             for key, value in theme._THEMES[name].items():
@@ -111,6 +127,7 @@ class TestCardBgAlt:
 
     def test_alt_is_hex(self) -> None:
         import re
+
         hex_re = re.compile(r"^#[0-9A-Fa-f]{6}$")
         for name, d in theme._THEMES.items():
             assert hex_re.match(d["card_bg_alt"]), f"{name}.card_bg_alt invalid"

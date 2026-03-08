@@ -35,12 +35,14 @@ _category = st.text(
     max_size=40,
 )
 _tag = st.text(alphabet=string.ascii_lowercase + "-", min_size=1, max_size=20)
-_reg_key = st.sampled_from([
-    r"HKEY_LOCAL_MACHINE\SOFTWARE\TestKey",
-    r"HKEY_CURRENT_USER\SOFTWARE\TestKey",
-    r"HKEY_LOCAL_MACHINE\SYSTEM\TestKey",
-    r"HKEY_CURRENT_USER\Control Panel\TestKey",
-])
+_reg_key = st.sampled_from(
+    [
+        r"HKEY_LOCAL_MACHINE\SOFTWARE\TestKey",
+        r"HKEY_CURRENT_USER\SOFTWARE\TestKey",
+        r"HKEY_LOCAL_MACHINE\SYSTEM\TestKey",
+        r"HKEY_CURRENT_USER\Control Panel\TestKey",
+    ]
+)
 
 _tweak_def = st.builds(
     TweakDef,
@@ -173,6 +175,7 @@ class TestIDFormat:
 
     def test_ids_are_kebab(self) -> None:
         import re
+
         pattern = re.compile(r"^[a-z][a-z0-9\-]+$")
         for td in all_tweaks():
             assert pattern.match(td.id), f"ID {td.id!r} is not kebab-case"
