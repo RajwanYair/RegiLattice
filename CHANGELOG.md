@@ -4,6 +4,54 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 7 refactor (C2–C11, 2026-03)
+
+### Added
+
+- **`filter_tweaks()`** — composable multi-criterion filter (`corp_safe`, `needs_admin`,
+  `scope`, `category`, `min_build`, `tags`, `query`) in `tweaks/__init__.py`.
+- **`tweak_dependencies()`** — DFS-based transitive/one-hop dependency resolver returning
+  deps in topological order.
+- **`apply_tweaks()` / `remove_tweaks()`** — ID-list batch helpers with auto dep resolution
+  (`include_deps=True` by default).
+- **`status_map(ids=)`** — partial evaluation: pass an `Iterable[str]` to restrict detection
+  to a subset of tweaks (GUI incremental refresh).
+- **`RegistrySession.read_binary` / `read_qword`** — read `REG_BINARY` and `REG_QWORD` values.
+- **`RegistrySession.set_binary` / `set_qword`** — write `REG_BINARY` and `REG_QWORD` values.
+- **`RegistrySession.list_values`** — enumerate `(name, value, type)` triples in a key.
+- **`RegistrySession.list_keys`** — enumerate child key names.
+- **CLI `--validate`** — non-destructive consistency check across all `TweakDef` entries
+  (duplicate IDs, empty labels/categories, missing fn pointers).
+- **CLI `--stats`** — rich stats breakdown (total tweaks, categories, scope distribution,
+  corp-safe count, admin count, dependency depth).
+- **CLI `--output {table,json}`** — switch `--list`, `--search`, and `--categories` to
+  machine-readable JSON output.
+- **CLI `--list --category <name>`** — filter `--list` output to a single category;
+  returns exit code 2 for unknown categories.
+- **CLI `--list-categories`** — alias for `--categories` (more intuitive spelling).
+- **43 new tests** for registry edge cases (mocked `EnumValue`/`EnumKey`/`SetValueEx`,
+  `REG_BINARY`/`REG_QWORD` type constants verified), plus C6 CLI new-flag coverage.
+- **18 new CLI tests** covering `--validate`, `--stats`, `--output json`, `--list --category`,
+  and `--list-categories`.
+
+### Changed
+
+- **`_VALID_HIVE_PREFIXES`** promoted to module-level `frozenset` (was re-created per call).
+- **`_PREFIX_LIST`** pre-sorted longest-first for unambiguous `_split_root()` matching.
+- **Thread-safety** — `threading.Lock` guards added to all shared caches in `analytics.py`,
+  `config.py`, `corpguard.py`, `locale.py`, `marketplace.py`, and `tweaks/__init__.py`.
+- **Caching improvements** — `_split_root` result cache, `_TAG_INDEX` for O(1) tag lookup,
+  plugin-prewarm on first import.
+- **`__all__`** lists added / completed in 5 core modules
+  (`analytics`, `config`, `corpguard`, `locale`, `tweaks/__init__`).
+- **`typing.Final`** applied to 12 module-level constants.
+
+### Infrastructure
+
+- **17 378 tests** across 21 test files after C2–C11 additions (was 17 266 at 1.0.0).
+- ruff: all checks pass (`E`, `F`, `W`, `I`, `UP`, `B`, `SIM`, `RUF`; line-length 150).
+- mypy `--strict`: no issues in 90 source files.
+
 ## [1.0.0] — 2026-03-07
 
 ### Added
