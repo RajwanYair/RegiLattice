@@ -6,7 +6,25 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-_Nothing unreleased yet after v1.0.1-dev._
+### Added
+
+- **Force Kill button** (`⛔ Force Kill`) in the GUI toolbar — calls `os._exit(0)` for immediate process termination when the normal close path is unavailable.
+- **Instant GUI exit** — `_quit()` now calls `_root.withdraw()` first to hide the window immediately, then persists state (geometry, collapse, preferences, search history) in a background thread before `_root.destroy()`.  Alt+F4 / tray Quit now feel instant.
+- **`--doctor` CLI command** — 7-point health check: Python version, winreg availability, admin status, config validity, tweak count/duplicates, corp-guard, log-path write-ability.
+- **`TweakDef.source_url`** — optional KB article / documentation URL per tweak (defaults to `""`).
+- **Auto system-theme detection on first run** — when no `preferences.json` exists the GUI auto-detects dark/light mode and applies the matching Catppuccin variant.
+- **Path-traversal security guard in `marketplace.load_plugin()`** — plugin path must be inside `_PLUGINS_DIR`; loads from `../` are rejected with `RuntimeError`.
+
+### Changed / Fixed
+
+- `_MissingSentinel` now inherits `ModuleType` so `lazy_import()` has a clean return type without `# type: ignore`.
+- `TweakRow` widget attributes typed as `... | None` with explicit `None`-guards (`_on_enter`, `_on_leave`, `_refresh_row_bg`, `pack_row`, `unpack_row`, `refresh_status`).
+- Pre-commit: added `trailing-whitespace`, `end-of-file-fixer`, `check-yaml/toml/json`, `check-added-large-files`, `mixed-line-ending (lf)` hooks; ruff now uses `--exit-non-zero-on-fix`; mypy uses `--ignore-missing-imports`.
+
+### Infrastructure
+
+- Registry read-cache (`SESSION.read_cache()`) already wraps the full `status_map()` call — all registry reads during a refresh pass are served from an in-memory dict, eliminating redundant `winreg.OpenKey` round-trips.
+- Tests: +245 new tests (Sprint 5) including `TestDoctor`, marketplace path-traversal, and `source_url` coverage.
 
 ---
 

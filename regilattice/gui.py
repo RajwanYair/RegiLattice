@@ -266,11 +266,14 @@ class RegiLatticeGUI:
         new_idx = max(0, min(len(visible) - 1, current + direction))
         self._focused_row_idx = new_idx
         row = visible[new_idx]
-        row.frame.focus_set()
-        row.frame.event_generate("<Enter>")
+        frame = row.frame
+        if frame is None:
+            return
+        frame.focus_set()
+        frame.event_generate("<Enter>")
         # Scroll into view
-        row.frame.update_idletasks()
-        row.frame.winfo_toplevel()
+        frame.update_idletasks()
+        frame.winfo_toplevel()
 
     def _toggle_focused_row(self, event: tk.Event[tk.Misc]) -> None:
         """Toggle selection of the currently focused row via spacebar."""
@@ -625,6 +628,12 @@ class RegiLatticeGUI:
         )
         ttk.Button(btn3, text="\u2139  About", command=self._show_about).pack(
             side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
+        )
+        ttk.Button(btn3, text="\u26d4  Force Kill", command=self._force_kill, style="Remove.TButton").pack(
+            side="left",
             expand=True,
             fill="x",
         )
@@ -806,11 +815,15 @@ class RegiLatticeGUI:
         # Wire checkbox → selection counter + Shift+Click range select
         for i, row in enumerate(self._tweak_rows):
             row.var.trace_add("write", lambda *_args: self._update_selection_count())
-            row.cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))  # type: ignore[misc]
-            row.cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)  # type: ignore[misc]
+            cb = row.cb
+            if cb is not None:
+                cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))  # type: ignore[misc]
+                cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)  # type: ignore[misc]
         # Right-click context menu
         for row in self._tweak_rows:
-            row.frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
+            frame = row.frame
+            if frame is not None:
+                frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
         self._progress.configure(value=0)
         total_tweaks = len(self._tweak_rows)
         total_cats = len(self._category_sections)
@@ -1198,10 +1211,17 @@ class RegiLatticeGUI:
                 btn_bg = "#3B3830"
                 btn_fg = _WARN_YELLOW
                 unknown += 1
-            row.status_dot.configure(fg=colour)
-            row.status_text.configure(text=text, fg=colour)
-            row.toggle_btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
-            row.tooltip.update_text(build_tooltip_text(row.td, st))
+            dot = row.status_dot
+            text_lbl = row.status_text
+            btn = row.toggle_btn
+            tip = row.tooltip
+            if dot is None or text_lbl is None or btn is None:
+                continue
+            dot.configure(fg=colour)
+            text_lbl.configure(text=text, fg=colour)
+            btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
+            if tip is not None:
+                tip.update_text(build_tooltip_text(row.td, st))
         for section in self._category_sections:
             section.update_count(statuses)
         # Update summary stats (rec/gpo counts are static — compute once)
@@ -1234,7 +1254,10 @@ class RegiLatticeGUI:
         verb = "Disable" if action == "remove" else "Enable"
 
         self._set_status(f"{verb}: {td.label}…", _ACCENT)
-        row.toggle_btn.configure(text="⏳…", state="disabled")
+        toggle_btn = row.toggle_btn
+        if toggle_btn is None:
+            return
+        toggle_btn.configure(text="⏳…", state="disabled")
 
         def _worker() -> None:
             try:
@@ -1253,7 +1276,7 @@ class RegiLatticeGUI:
                 self._root.after(0, self._set_status, f"{td.label}: {exc}", _ERR_RED)
             finally:
                 self._root.after(0, row.refresh_status)
-                self._root.after(0, lambda: row.toggle_btn.configure(state="normal"))
+                self._root.after(0, lambda: row.toggle_btn.configure(state="normal") if row.toggle_btn is not None else None)
                 # Update the category count after toggling
                 for section in self._category_sections:
                     if section.name == td.category:
@@ -1587,13 +1610,29 @@ class RegiLatticeGUI:
         self._quit()
 
     def _quit(self) -> None:
-        """Save state, stop tray icon, and destroy the window."""
-        self._save_geometry()
-        self._save_collapse_state()
-        self._save_preferences()
-        self._save_search_history()
-        self._stop_tray()
-        self._root.destroy()
+        """Instant visual exit: hide window immediately, persist state in background."""
+        # Cancel any running background workers immediately
+        self._cancel.set()
+        # Hide the window at once so the user sees an immediate response
+        self._root.withdraw()
+
+        def _save_and_destroy() -> None:
+            try:
+                self._save_geometry()
+                self._save_collapse_state()
+                self._save_preferences()
+                self._save_search_history()
+            finally:
+                self._stop_tray()
+                self._root.after(0, self._root.destroy)
+
+        threading.Thread(target=_save_and_destroy, daemon=True).start()
+
+    def _force_kill(self) -> None:
+        """Emergency exit — terminates the process immediately with no cleanup."""
+        import os as _os
+
+        _os._exit(0)
 
     # ── System tray ────────────────────────────────────────────────────
 
