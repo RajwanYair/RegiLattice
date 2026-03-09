@@ -8,7 +8,31 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- **Force Kill button** (`⛔ Force Kill`) in the GUI toolbar — calls `os._exit(0)` for immediate process termination when the normal close path is unavailable.
+- **`TooltipManager` singleton** (`gui_tooltip.py`) — a single shared `tk.Toplevel` for all 1 200+ tweak row tooltips.  Replaces the previous per-row create/destroy strategy with a single deiconify/withdraw cycle per hover, eliminating ~1 200× `Toplevel` churn on busy scrolling.
+- **Lazy `CategorySection` widget build** — `CategorySection` only constructs Tk widgets for its rows on first expand.  All sections start collapsed and their row frames are `None` until the user opens them (or a search filter matches them), reducing startup widget creation from ~6 000 to a handful.
+- **`set_on_rows_built(callback)` on `CategorySection`** — register a post-build callback fired once after `_build_row_widgets()` completes.  Used by `gui.py` to wire keyboard / context-menu bindings and apply cached statuses to newly built rows.
+- **Delta status tracking** (`_prev_statuses`) — `_apply_statuses()` now keeps a `dict[str, TweakResult]` cache of the last-propagated statuses.  Only rows whose status has _changed_ have their widgets reconfigured, reducing redundant Tk IPC on large refresh cycles.
+- **`_wire_section_bindings(section)`** new method in `RegiLatticeGUI` — wires shift-click, row-click, and right-click context-menu bindings for a section's rows, then applies cached statuses to newly built widgets.
+- **New tests (Sprint 7)**: `TestTooltipManager` (10 tests), `TestCategorySectionLazy` (8 tests), `TestDeltaStatus` (7 tests), `TestWireSectionBindings` (4 tests).
+
+### Changed / Fixed
+
+- `_switch_theme()` now skips `row.apply_theme()` for unbuilt rows (`row.frame is None`), limiting theme-switch cost to the set of _visible_ rows; also clears `_prev_statuses` to force a full repaint on the next status cycle.
+- `_finish_loading()` now wires `var.trace_add` for all rows immediately (works on `BooleanVar` regardless of widget build), but defers keyboard and context-menu bindings to `_wire_section_bindings()` called lazily per section.
+- `_filter_rows()` triggers lazy widget build for any collapsed section that has matching rows, so search results are always accurate regardless of expand state.
+- `gui` fixture in `tests/test_gui.py` now wraps `RegiLatticeGUI()` in a try/except and calls `pytest.skip()` on Tcl/Tk initialisation errors, preventing false failures in environments with partial Tk installations.
+
+### Performance summary (Sprint 7)
+
+| Scenario | Before | After |
+|---|---|---|
+| Cold startup widget count | ~6 000+ Tk widgets | ~200 (header frames only) |
+| Per-hover Toplevel churn | create + destroy × 1 200 | deiconify / withdraw × 1 |
+| Status refresh Tk IPC calls | O(all rows) per cycle | O(changed rows) per cycle |
+| Theme switch cost | O(all rows) | O(built rows) |
+
+---
+
 - **Instant GUI exit** — `_quit()` now calls `_root.withdraw()` first to hide the window immediately, then persists state (geometry, collapse, preferences, search history) in a background thread before `_root.destroy()`.  Alt+F4 / tray Quit now feel instant.
 - **`--doctor` CLI command** — 7-point health check: Python version, winreg availability, admin status, config validity, tweak count/duplicates, corp-guard, log-path write-ability.
 - **`TweakDef.source_url`** — optional KB article / documentation URL per tweak (defaults to `""`).

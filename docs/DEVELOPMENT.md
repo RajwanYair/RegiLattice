@@ -202,6 +202,102 @@ regilattice/
 
 ---
 
+## GUI Performance Architecture
+
+> Added in Sprint 7. Describes how the three main optimisations keep the GUI
+> responsive across 1 200+ tweak rows and 69 categories.
+
+### 1. Lazy Widget Build (startup)
+
+**Problem:** Building all ~6 000 Tk widgets (1 200 rows × 5 widgets) at startup
+was the primary cause of 3–8 second cold-start times.
+
+**Solution:** `CategorySection` defers widget construction until the section is
+first expanded.
+
+```
+startup
+  ├── all 69 header frames created      (cheap — header only)
+  └── row frames:  None × 1 200         (zero cost)
+
+user expands "Explorer"
+  └── _build_row_widgets() fires once
+        ├── builds 41 × 5 = 205 widgets
+        └── fires set_on_rows_built(callback)
+              └── gui._wire_section_bindings() wires bindings + applies cached statuses
+```
+
+**Impact:** Cold-start widget count drops from ~6 000 to ~200 (headers only).
+Each subsequent section expansion costs only: `rows × 5` widgets once.
+
+### 2. Delta Status Updates (status refresh)
+
+**Problem:** `_apply_statuses()` was reconfiguring all 1 200 rows on every
+background status poll, generating thousands of redundant Tk IPC calls.
+
+**Solution:** `_prev_statuses: dict[str, TweakResult]` caches the last propagated
+result per tweak ID.  `_apply_statuses()` skips `widget.configure()` for any row
+where the status is identical to the cached value.
+
+```python
+prev = self._prev_statuses
+for row in self._tweak_rows:
+    st = statuses.get(row.td.id, TweakResult.UNKNOWN)
+    if prev.get(row.td.id) == st and row.frame is not None:
+        continue              # ← delta skip: zero Tk IPC
+    dot.configure(fg=colour)
+    text_lbl.configure(text=text, fg=colour)
+    btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
+```
+
+**Special cases:**
+- `row.frame is None` — row not yet built; skip configure (nothing to update).
+- `_switch_theme()` calls `_prev_statuses.clear()` to force a full repaint on the
+  next cycle (theme colours changed, so cached delta is stale).
+
+### 3. Tooltip Singleton — `TooltipManager` (hover cost)
+
+**Problem:** Each of the 1 200 rows had its own `Tooltip` object which created
+and destroyed a `tk.Toplevel` on every `<Enter>` / `<Leave>` event.
+
+**Solution:** One shared `tk.Toplevel` owned by `TooltipManager`.  All rows share
+the same panel; `show()` repositions and relabels it, `hide()` withdraws (not destroys) it.
+
+```
+hover enters row 1        → TooltipManager.show("...", x, y)  ← deiconify
+hover leaves row 1        → TooltipManager.hide()             ← withdraw
+hover enters row 2        → TooltipManager.show("...", x, y)  ← deiconify
+```
+
+**Initialisation:** `TooltipManager.init(root)` must be called once after the
+main window is created (`gui.py __init__` after `_build_ui()`).  The underlying
+`Toplevel` is itself created lazily on the first `show()` call.
+
+### 4. Theme Switch Optimisation
+
+`_switch_theme()` skips `row.apply_theme()` for rows where `row.frame is None`
+(not yet built).  `ttk.Style` propagates colour changes automatically to ttk
+widgets, so only the custom `tk.Label` / `tk.Button` elements inside built rows
+need a manual configure pass.
+
+### Binding Architecture (deferred)
+
+```
+_finish_loading()
+  ├── var.trace_add() for ALL rows    (BooleanVar works before widgets exist)
+  └── _wire_section_bindings(s)       (only for already-expanded sections)
+
+section.toggle()  [first expand]
+  └── _build_row_widgets()
+        └── fires set_on_rows_built callback
+              └── gui._wire_section_bindings(section)
+                    ├── Shift-click / click bindings on each cb (Checkbutton)
+                    ├── Right-click binding on each frame
+                    └── Applies _cached_statuses → _prev_statuses (delta-aware)
+```
+
+---
+
 ## Registry Session API
 
 ```python

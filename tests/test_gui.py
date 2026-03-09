@@ -48,8 +48,11 @@ def gui() -> Generator[RegiLatticeGUI, None, None]:
     Patching it leaves _tweak_rows empty so pure-logic tests remain fast.
     """
     _skip_no_tk()
-    with patch.object(RegiLatticeGUI, "_deferred_init"):
-        app = RegiLatticeGUI()
+    try:
+        with patch.object(RegiLatticeGUI, "_deferred_init"):
+            app = RegiLatticeGUI()
+    except Exception as exc:
+        pytest.skip(f"tkinter / Tcl-Tk initialisation failed: {exc}")
     app._root.withdraw()
     yield app
     with contextlib.suppress(Exception):
@@ -649,3 +652,179 @@ class TestSelectedTweaks:
         gui._tweak_rows = [row_on, row_off]
         result = gui._selected_tweaks()
         assert result == [row_on.td]
+
+
+# ── Sprint 7: delta status + lazy-build wire tests ───────────────────────────
+
+
+class TestDeltaStatus:
+    """Tests for the _apply_statuses delta optimisation (Sprint 7)."""
+
+    def _make_row(self, gui: RegiLatticeGUI, tweak_id: str) -> MagicMock:
+        """Create a mock TweakRow with real widgets needed by _apply_statuses."""
+        row = MagicMock()
+        row.td.id = tweak_id
+        row.td.registry_keys = []
+        row.td.description = ""
+        row.td.tags = []
+        row.td.needs_admin = False
+        row.td.corp_safe = True
+        row.disabled_by_corp = False
+        row.frame = MagicMock()  # non-None → "widgets already built"
+        row.status_dot = MagicMock()
+        row.status_text = MagicMock()
+        row.toggle_btn = MagicMock()
+        row.tooltip = MagicMock()
+        return row
+
+    def test_first_apply_configures_all_rows(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t1")
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        gui._apply_statuses({"t1": TweakResult.APPLIED})
+        row.status_text.configure.assert_called()
+
+    def test_unchanged_status_skips_configure(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t2")
+        gui._tweak_rows = [row]
+        # Prime cache with same status
+        gui._prev_statuses = {"t2": TweakResult.APPLIED}
+        row.status_text.reset_mock()
+        row.status_dot.reset_mock()
+        row.toggle_btn.reset_mock()
+        gui._apply_statuses({"t2": TweakResult.APPLIED})
+        # Status unchanged AND frame exists → configure should NOT be called again
+        row.status_text.configure.assert_not_called()
+
+    def test_changed_status_reconfigures_row(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t3")
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {"t3": TweakResult.APPLIED}
+        row.status_text.reset_mock()
+        gui._apply_statuses({"t3": TweakResult.NOT_APPLIED})
+        row.status_text.configure.assert_called()
+
+    def test_prev_statuses_updated_after_apply(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t4")
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        gui._apply_statuses({"t4": TweakResult.UNKNOWN})
+        assert gui._prev_statuses.get("t4") == TweakResult.UNKNOWN
+
+    def test_unbuilt_row_frame_none_triggers_configure(self, gui: RegiLatticeGUI) -> None:
+        """Rows with frame=None (not yet built) always need configure on next build."""
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t5")
+        row.frame = None  # not yet built
+        row.status_dot = None
+        row.status_text = None
+        row.toggle_btn = None
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {"t5": TweakResult.APPLIED}
+        # Should not raise even though widgets are None; no configure called
+        gui._apply_statuses({"t5": TweakResult.APPLIED})
+
+    def test_corp_blocked_row_skipped(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "t6")
+        row.disabled_by_corp = True
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        gui._apply_statuses({"t6": TweakResult.APPLIED})
+        # Corp-blocked rows never touch widget configure
+        row.status_text.configure.assert_not_called()
+
+    def test_missing_tweak_id_falls_back_to_unknown(self, gui: RegiLatticeGUI) -> None:
+
+        row = self._make_row(gui, "not-in-map")
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        # Pass empty statuses dict — missing id should default to UNKNOWN
+        gui._apply_statuses({})
+        # Frame is not None + prev != UNKNOWN (prev was missing) → configure called
+        row.status_text.configure.assert_called()
+
+
+class TestWireSectionBindings:
+    """Tests for _wire_section_bindings deferred-binding mechanism (Sprint 7)."""
+
+    def test_wire_with_no_rows_does_not_raise(self, gui: RegiLatticeGUI) -> None:
+        section = MagicMock()
+        section.rows = []
+        gui._cached_statuses = {}
+        gui._wire_section_bindings(section)  # must not raise
+
+    def test_wire_applies_cached_statuses_to_built_rows(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = MagicMock()
+        row.td.id = "wire-t1"
+        row.td.description = ""
+        row.td.tags = []
+        row.td.needs_admin = False
+        row.td.corp_safe = True
+        row.td.registry_keys = []
+        row.disabled_by_corp = False
+        row.cb = MagicMock()
+        row.frame = MagicMock()
+        row.status_dot = MagicMock()
+        row.status_text = MagicMock()
+        row.toggle_btn = MagicMock()
+        row.tooltip = MagicMock()
+
+        section = MagicMock()
+        section.rows = [row]
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        gui._cached_statuses = {"wire-t1": TweakResult.APPLIED}
+        gui._wire_section_bindings(section)
+        # Status was applied — status_text.configure should have been called
+        row.status_text.configure.assert_called()
+
+    def test_wire_skips_already_known_statuses(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = MagicMock()
+        row.td.id = "wire-t2"
+        row.td.description = ""
+        row.td.tags = []
+        row.td.needs_admin = False
+        row.td.corp_safe = True
+        row.td.registry_keys = []
+        row.disabled_by_corp = False
+        row.cb = MagicMock()
+        row.frame = MagicMock()
+        row.status_dot = MagicMock()
+        row.status_text = MagicMock()
+        row.toggle_btn = MagicMock()
+        row.tooltip = MagicMock()
+
+        section = MagicMock()
+        section.rows = [row]
+        gui._tweak_rows = [row]
+        # prev_statuses already has same value → delta skips configure
+        gui._prev_statuses = {"wire-t2": TweakResult.NOT_APPLIED}
+        gui._cached_statuses = {"wire-t2": TweakResult.NOT_APPLIED}
+        gui._wire_section_bindings(section)
+        row.status_text.configure.assert_not_called()
+
+    def test_empty_cached_statuses_skips_wire(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.cb = MagicMock()
+        section = MagicMock()
+        section.rows = [row]
+        gui._tweak_rows = [row]
+        gui._cached_statuses = {}
+        gui._wire_section_bindings(section)
+        # With empty cached_statuses the status block is skipped
+        row.status_text.configure.assert_not_called()

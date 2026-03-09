@@ -147,3 +147,155 @@ class TestBuildTooltipText:
         td = _make_td(desc="Tweak. Default: Enabled")
         text = build_tooltip_text(td, TweakResult.UNKNOWN)
         assert "Default:" in text
+
+
+# ── TooltipManager singleton tests ──────────────────────────────────────────
+
+# Try to import Tk — skip GUI tests if unavailable
+_tk_available = True
+try:
+    import tkinter as tk
+
+    _test_root: tk.Tk | None = tk.Tk()
+    assert _test_root is not None
+    _test_root.withdraw()
+except Exception:
+    _tk_available = False
+    _test_root = None
+
+
+import pytest
+
+
+@pytest.fixture()
+def root() -> tk.Tk:
+    if not _tk_available:
+        pytest.skip("tkinter not available or headless environment")
+    assert _test_root is not None
+    return _test_root
+
+
+@pytest.mark.skipif(not _tk_available, reason="tkinter not available")
+class TestTooltipManager:
+    """Tests for the shared TooltipManager singleton."""
+
+    def setup_method(self) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        TooltipManager.reset()
+
+    def teardown_method(self) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        TooltipManager.reset()
+
+    def test_get_returns_none_before_init(self) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        assert TooltipManager.get() is None
+
+    def test_init_creates_singleton(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        assert mgr is not None
+        assert TooltipManager.get() is mgr
+
+    def test_init_is_idempotent(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr1 = TooltipManager.init(root)
+        mgr2 = TooltipManager.init(root)
+        assert mgr1 is mgr2
+
+    def test_reset_clears_singleton(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        TooltipManager.init(root)
+        assert TooltipManager.get() is not None
+        TooltipManager.reset()
+        assert TooltipManager.get() is None
+
+    def test_panel_created_lazily_on_show(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        # No panel yet — _tip should be None before first show()
+        assert mgr._tip is None
+        mgr.show("Hello", 100, 100)
+        # Panel now created
+        assert mgr._tip is not None
+
+    def test_hide_withdraws_not_destroys(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        mgr.show("Test", 50, 50)
+        tip = mgr._tip
+        mgr.hide()
+        # Toplevel should still exist (just withdrawn)
+        assert mgr._tip is tip
+        assert mgr._visible is False
+
+    def test_show_updates_label_text(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        mgr.show("First text", 0, 0)
+        assert mgr._label is not None
+        assert mgr._label.cget("text") == "First text"
+        mgr.show("Second text", 0, 0)
+        assert mgr._label.cget("text") == "Second text"
+
+    def test_move_repositions_panel(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        mgr.show("Visible", 0, 0)
+        # move should not raise and panel should still exist
+        mgr.move(200, 300)
+        assert mgr._tip is not None
+
+    def test_hide_before_show_does_not_raise(self, root: tk.Tk) -> None:
+        from regilattice.gui_tooltip import TooltipManager
+
+        mgr = TooltipManager.init(root)
+        # hide() before any show() must not raise
+        mgr.hide()
+        assert mgr._visible is False
+
+    def test_tooltip_proxy_uses_manager(self, root: tk.Tk) -> None:
+        """Tooltip._show routes to the singleton manager when available."""
+        import tkinter as tk
+
+        from regilattice.gui_tooltip import Tooltip, TooltipManager
+
+        mgr = TooltipManager.init(root)
+        lbl = tk.Label(root, text="w")
+        lbl.pack()
+        tt = Tooltip(lbl, text="proxy test")
+        # Simulate <Enter> event
+        event = type("E", (), {"x_root": 10, "y_root": 10})()
+        tt._show(event)
+        assert mgr._visible is True
+        assert mgr._label is not None
+        assert mgr._label.cget("text") == "proxy test"
+
+    def test_tooltip_fallback_without_manager(self, root: tk.Tk) -> None:
+        """Tooltip falls back to its own Toplevel when manager is not initialised."""
+        import tkinter as tk
+
+        from regilattice.gui_tooltip import Tooltip, TooltipManager
+
+        # Ensure manager is cleared
+        TooltipManager.reset()
+        lbl = tk.Label(root, text="w2")
+        lbl.pack()
+        tt = Tooltip(lbl, text="fallback")
+        event = type("E", (), {"x_root": 5, "y_root": 5})()
+        tt._show(event)
+        # Should have created its own Toplevel
+        assert tt._tip is not None
+        # Clean up
+        tt._hide(event)
+        assert tt._tip is None
