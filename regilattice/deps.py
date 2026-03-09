@@ -104,13 +104,18 @@ def install_package(pip_name: str) -> bool:
 # ── Lazy import ──────────────────────────────────────────────────────────────
 
 
-class _MissingSentinel:
-    """Placeholder for a package that couldn't be imported or installed."""
+class _MissingSentinel(ModuleType):
+    """Placeholder for a package that couldn't be imported or installed.
+
+    Inherits from :class:`types.ModuleType` so the return type of
+    :func:`lazy_import` stays ``ModuleType`` without a ``type: ignore``.
+    """
 
     def __init__(self, name: str) -> None:
+        super().__init__(name)
         self._name = name
 
-    def __getattr__(self, item: str) -> None:
+    def __getattr__(self, item: str) -> object:
         raise ImportError(f"Optional dependency '{self._name}' is not available. Install it manually: pip install {self._name}")
 
 
@@ -152,7 +157,7 @@ def lazy_import(
 
     # Return a sentinel object so that downstream code can still reference
     # the name — it will raise a clear error when actually used.
-    return _MissingSentinel(module_name)  # type: ignore[return-value]
+    return _MissingSentinel(module_name)
 
 
 def require(*packages: str) -> None:

@@ -147,6 +147,15 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
         msg = f"Plugin {meta.name!r} requires RegiLattice >= {meta.min_regilattice} (have {__version__})"
         raise RuntimeError(msg)
 
+    # Security: ensure plugin path is within the plugins directory (prevent path traversal)
+    plugins_root = _PLUGINS_DIR.resolve()
+    plugin_path = meta.path.resolve()
+    try:
+        plugin_path.relative_to(plugins_root)
+    except ValueError:
+        msg = f"Plugin path {str(meta.path)!r} is outside the plugins directory {str(_PLUGINS_DIR)!r}"
+        raise RuntimeError(msg) from None
+
     tweaks: list[TweakDef] = []
     for py_file in sorted(meta.path.glob("*.py")):
         if py_file.name.startswith("_"):

@@ -125,3 +125,21 @@ class TestLoadPlugin:
         assert unload_plugin("removable") is True
         assert unload_plugin("removable") is False
         assert "removable" not in loaded_plugins()
+
+    def test_path_outside_plugins_raises(self, _isolated_plugins: Path, tmp_path: Path) -> None:
+        """Plugin path outside the plugins directory must raise RuntimeError (path traversal guard)."""
+        outside_dir = tmp_path / "outside"
+        outside_dir.mkdir()
+        _make_tweak_module(outside_dir, "tw", "evil-traversal-tweak")
+        meta = PluginMeta(name="evil", path=outside_dir)
+        with pytest.raises(RuntimeError, match="outside the plugins directory"):
+            load_plugin(meta)
+
+    def test_path_inside_plugins_loads_ok(self, _isolated_plugins: Path) -> None:
+        """Plugin whose path is inside the plugins directory should load normally."""
+        plugin_dir = _isolated_plugins / "safe_plugin"
+        _make_tweak_module(plugin_dir, "tw", "safe-inside-tweak")
+        meta = PluginMeta(name="safe_plugin", path=plugin_dir)
+        tweaks = load_plugin(meta)
+        assert len(tweaks) == 1
+        assert tweaks[0].id == "safe-inside-tweak"

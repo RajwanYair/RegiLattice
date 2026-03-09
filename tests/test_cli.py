@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.cli import _build_parser, _confirm, _run_action, main
+from regilattice.cli import _build_parser, _confirm, _run_action, _run_doctor, main
 from regilattice.tweaks import TweakResult
 
 # ── _confirm helper ──────────────────────────────────────────────────────────
@@ -96,9 +96,7 @@ class TestAbortByUser:
 
 
 class TestSnapshotFlag:
-    def test_snapshot_creates_file(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_snapshot_creates_file(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         path = tmp_path / "snap.json"
         with patch("regilattice.tweaks.save_snapshot") as mock_save:
 
@@ -111,21 +109,15 @@ class TestSnapshotFlag:
         assert rc == 0
         assert path.exists()
 
-    def test_restore_calls_restore_snapshot(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_restore_calls_restore_snapshot(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         snap = tmp_path / "snap.json"
         snap.write_text(json.dumps({"fake-id": "applied"}))
-        with patch(
-            "regilattice.tweaks.restore_snapshot", return_value={"fake-id": "applied"}
-        ) as mock_restore:
+        with patch("regilattice.tweaks.restore_snapshot", return_value={"fake-id": "applied"}) as mock_restore:
             rc = main(["--restore", str(snap)])
         assert rc == 0
         mock_restore.assert_called_once()
 
-    def test_snapshot_diff_no_differences(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_snapshot_diff_no_differences(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         a = tmp_path / "a.json"
         b = tmp_path / "b.json"
         a.write_text(json.dumps({"x": "applied"}))
@@ -135,9 +127,7 @@ class TestSnapshotFlag:
         assert rc == 0
         assert "No differences" in capsys.readouterr().out
 
-    def test_snapshot_diff_with_differences(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_snapshot_diff_with_differences(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         a = tmp_path / "a.json"
         b = tmp_path / "b.json"
         a.write_text(json.dumps({"x": "applied"}))
@@ -151,9 +141,7 @@ class TestSnapshotFlag:
         out = capsys.readouterr().out
         assert "1 tweak(s) differ" in out
 
-    def test_snapshot_diff_html_output(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_snapshot_diff_html_output(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         a = tmp_path / "a.json"
         b = tmp_path / "b.json"
         html_out = tmp_path / "diff.html"
@@ -392,9 +380,7 @@ class TestRunAction:
 
 
 class TestConfigFlag:
-    def test_config_file_loaded(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_config_file_loaded(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         cfg_path = tmp_path / "test.toml"
         cfg_path.write_text("[general]\nforce_corp = true\n")
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
@@ -475,9 +461,7 @@ class TestCategoryFlag:
 
 
 class TestExportJson:
-    def test_export_writes_file(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_export_writes_file(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         out_path = tmp_path / "export.json"
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--export-json", str(out_path)])
@@ -545,9 +529,7 @@ class TestTagsFlag:
 
 
 class TestImportJson:
-    def test_import_applies_tweaks(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_import_applies_tweaks(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.tweaks import all_tweaks
 
         first = all_tweaks()[0]
@@ -564,9 +546,7 @@ class TestImportJson:
             rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
         assert rc == 0
 
-    def test_import_dict_format(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_import_dict_format(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.tweaks import all_tweaks
 
         first = all_tweaks()[0]
@@ -583,9 +563,7 @@ class TestImportJson:
             rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
         assert rc == 0
 
-    def test_import_unknown_ids(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_import_unknown_ids(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         jfile = tmp_path / "ids.json"
         jfile.write_text(json.dumps(["nonexistent-zzz-999"]), encoding="utf-8")
         with patch("regilattice.cli.assert_not_corporate"):
@@ -593,18 +571,14 @@ class TestImportJson:
         assert rc == 2
         assert "No valid tweaks" in capsys.readouterr().out
 
-    def test_import_bad_json(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_import_bad_json(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         jfile = tmp_path / "bad.json"
         jfile.write_text("{bad", encoding="utf-8")
         with patch("regilattice.cli.assert_not_corporate"):
             rc = main(["apply", "dummy", "--import-json", str(jfile), "-y"])
         assert rc == 3
 
-    def test_import_abort(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_import_abort(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.tweaks import all_tweaks
 
         first = all_tweaks()[0]
@@ -628,9 +602,7 @@ class TestExportReg:
         assert rc == 4
         assert "requires Windows" in capsys.readouterr().out
 
-    def test_exports_file_on_windows(
-        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_exports_file_on_windows(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         """Mock winreg to verify .reg file generation."""
         dest = tmp_path / "export.reg"
         mock_handle = MagicMock()
@@ -691,9 +663,7 @@ class TestCheckFlag:
         assert "Unknown" in out
         assert "1" in out  # at least 1 applied
 
-    def test_check_lists_applied_tweaks(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_check_lists_applied_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
         td = MagicMock()
         td.label = "Test Tweak"
         fake_map = {"tweak-applied": TweakResult.APPLIED}
@@ -777,9 +747,7 @@ class TestValidateFlag:
         out = capsys.readouterr().out
         assert "All" in out or "valid" in out.lower() or "OK" in out
 
-    def test_validate_output_contains_tweak_count(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_validate_output_contains_tweak_count(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--validate"])
         assert rc == 0
         out = capsys.readouterr().out
@@ -833,9 +801,7 @@ class TestOutputJson:
         assert len(data) > 0
         assert "id" in data[0]
 
-    def test_list_json_has_expected_fields(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_list_json_has_expected_fields(self, capsys: pytest.CaptureFixture[str]) -> None:
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             main(["--list", "--output", "json"])
         out = capsys.readouterr().out.strip()
@@ -877,25 +843,19 @@ class TestOutputJson:
 class TestListCategoryFilter:
     """Tests for --list --category filtering."""
 
-    def test_list_category_filters_results(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_list_category_filters_results(self, capsys: pytest.CaptureFixture[str]) -> None:
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--list", "--category", "Explorer"])
         assert rc == 0
         out = capsys.readouterr().out
         assert "Explorer" in out
 
-    def test_list_category_unknown_returns_2(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_list_category_unknown_returns_2(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--list", "--category", "ZZZ_NONEXISTENT_CATEGORY_999"])
         assert rc == 2
         assert "No tweaks found" in capsys.readouterr().out
 
-    def test_list_category_json_output(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_list_category_json_output(self, capsys: pytest.CaptureFixture[str]) -> None:
         with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
             rc = main(["--list", "--category", "Explorer", "--output", "json"])
         assert rc == 0
@@ -942,9 +902,7 @@ class TestListScopeFilter:
             _build_parser().parse_args(["--list", "--scope", "invalid"])
         assert exc_info.value.code != 0
 
-    def test_scope_user_json_only_user_tweaks(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_scope_user_json_only_user_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.tweaks import all_tweaks, tweak_scope
 
         rc = main(["--list", "--scope", "user", "--output", "json"])
@@ -954,9 +912,7 @@ class TestListScopeFilter:
         for item in data:
             assert item["id"] in all_user_ids
 
-    def test_scope_machine_json_only_machine_tweaks(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_scope_machine_json_only_machine_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.tweaks import all_tweaks, tweak_scope
 
         rc = main(["--list", "--scope", "machine", "--output", "json"])
@@ -974,15 +930,11 @@ class TestListScopeFilter:
 class TestListMinBuildFilter:
     """Tests for --min-build filter on --list."""
 
-    def test_min_build_zero_exits_zero(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_min_build_zero_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--list", "--min-build", "0"])
         assert rc == 0
 
-    def test_min_build_large_exits_zero(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_min_build_large_exits_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
         """High build number should produce an empty (or small) list, not an error."""
         rc = main(["--list", "--min-build", "99999"])
         assert rc == 0
@@ -1014,25 +966,19 @@ class TestListCorpAdminFilter:
         rc = main(["--list", "--needs-admin"])
         assert rc == 0
 
-    def test_corp_safe_json_all_corp_safe(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_corp_safe_json_all_corp_safe(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--list", "--corp-safe", "--output", "json"])
         assert rc == 0
         data = json.loads(capsys.readouterr().out.strip())
         assert all(item["corp_safe"] for item in data)
 
-    def test_needs_admin_json_all_need_admin(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_needs_admin_json_all_need_admin(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--list", "--needs-admin", "--output", "json"])
         assert rc == 0
         data = json.loads(capsys.readouterr().out.strip())
         assert all(item["needs_admin"] for item in data)
 
-    def test_corp_safe_and_needs_admin_combined(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_corp_safe_and_needs_admin_combined(self, capsys: pytest.CaptureFixture[str]) -> None:
         """Combined flags should intersect: corp_safe=True AND needs_admin=True."""
         rc = main(["--list", "--corp-safe", "--needs-admin", "--output", "json"])
         assert rc == 0
@@ -1041,8 +987,43 @@ class TestListCorpAdminFilter:
             assert item["corp_safe"]
             assert item["needs_admin"]
 
-    def test_search_with_corp_safe_filter(
-        self, capsys: pytest.CaptureFixture[str]
-    ) -> None:
+    def test_search_with_corp_safe_filter(self, capsys: pytest.CaptureFixture[str]) -> None:
         rc = main(["--search", "network", "--corp-safe"])
         assert rc == 0
+
+
+# ── --doctor command ─────────────────────────────────────────────────────────
+
+
+class TestDoctor:
+    """Tests for the --doctor health-check command."""
+
+    def test_doctor_runs_without_error(self, capsys: pytest.CaptureFixture[str]) -> None:
+        rc = main(["--doctor"])
+        assert isinstance(rc, int)
+        assert rc in (0, 1)
+
+    def test_doctor_prints_header(self, capsys: pytest.CaptureFixture[str]) -> None:
+        main(["--doctor"])
+        out = capsys.readouterr().out
+        assert "RegiLattice Doctor" in out
+
+    def test_doctor_shows_python_check(self, capsys: pytest.CaptureFixture[str]) -> None:
+        main(["--doctor"])
+        out = capsys.readouterr().out
+        assert "Python >= 3.9" in out
+
+    def test_doctor_shows_tweaks_check(self, capsys: pytest.CaptureFixture[str]) -> None:
+        main(["--doctor"])
+        out = capsys.readouterr().out
+        assert "Tweaks registry" in out
+
+    def test_doctor_parser_flag(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--doctor"])
+        assert ns.doctor is True
+
+    def test_doctor_direct_returns_int(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """Calling _run_doctor() directly should return 0 or 1."""
+        rc = _run_doctor()
+        assert rc in (0, 1)

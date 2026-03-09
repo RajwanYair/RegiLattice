@@ -16,6 +16,42 @@ if sys.platform == "win32":
 else:
     winreg = None  # type: ignore[assignment]
 
+__all__ = [
+    "ACCENT",
+    "BG",
+    "BG_SURFACE",
+    "CARD_BG",
+    "CARD_BG_ALT",
+    "CARD_HOVER",
+    "DIM_BG",
+    "ERR_RED",
+    "FG",
+    "FG_DIM",
+    "FONT",
+    "FONT_BOLD",
+    "FONT_CAT",
+    "FONT_SM",
+    "FONT_TITLE",
+    "FONT_XS",
+    "FONT_XS_BOLD",
+    "GPO_ORANGE",
+    "HEADER_BG",
+    "OK_GREEN",
+    "PURPLE",
+    "STATUS_APPLIED",
+    "STATUS_CORP_BLOCKED",
+    "STATUS_DEFAULT",
+    "STATUS_NOT_APPLIED",
+    "STATUS_UNKNOWN",
+    "TEAL",
+    "WARN_YELLOW",
+    "ThemeDict",
+    "available_themes",
+    "current_theme",
+    "detect_system_theme",
+    "set_theme",
+]
+
 # ── Theme data structure ─────────────────────────────────────────────────────
 
 

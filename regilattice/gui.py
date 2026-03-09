@@ -49,6 +49,11 @@ from .tweaks import (
 )
 from .tweaks.maintenance import create_restore_point
 
+__all__ = [
+    "RegiLatticeGUI",
+    "launch",
+]
+
 # ── Theme aliases ────────────────────────────────────────────────────────────
 
 _ACCENT = theme.ACCENT
@@ -818,6 +823,10 @@ class RegiLatticeGUI:
         self._restore_collapse_state()
         # Restore saved preferences (theme, profile, filters)
         self._restore_preferences()
+        # If no saved preferences exist yet, apply auto-detected system dark/light theme
+        if not _PREFS_FILE.exists():
+            self._theme_var.set("Auto")
+            self._switch_theme("Auto")
         # Kick off status detection
         self._initial_refresh()
 
