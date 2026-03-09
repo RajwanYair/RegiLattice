@@ -139,7 +139,7 @@ def timed(label: str | None = None, threshold_ms: float = SLOW_THRESHOLD_MS) -> 
                 return fn(*args, **kwargs)
             finally:
                 elapsed_ms = (time.perf_counter() - t0) * 1000
-                msg = "[profiler] %-35s %7.1f ms" % (_label, elapsed_ms)
+                msg = f"[profiler] {_label:<35s} {elapsed_ms:7.1f} ms"
                 if elapsed_ms >= threshold_ms:
                     _LOG.warning(msg)
                 else:
@@ -175,7 +175,7 @@ class Stopwatch:
 
     def __exit__(self, *_: object) -> None:
         self.elapsed_ms = (time.perf_counter() - self._t0) * 1000
-        msg = "[profiler] %-35s %7.1f ms" % (self.label, self.elapsed_ms)
+        msg = f"[profiler] {self.label:<35s} {self.elapsed_ms:7.1f} ms"
         if self.elapsed_ms >= self.threshold_ms:
             _LOG.warning(msg)
         else:

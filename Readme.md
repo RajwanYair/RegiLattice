@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-17%2C511%2B%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-17%2C633%2B%20passing-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen)
 ![Ruff](https://img.shields.io/badge/linter-ruff-blue)
 ![mypy](https://img.shields.io/badge/type--check-mypy%20strict-blue)

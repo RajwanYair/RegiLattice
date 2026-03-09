@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-08 · v1.0.1 · 1 292 tweaks · 69 categories · ~17 511 tests
+> Last updated: 2026-03-09 · v1.0.1 · 1 292 tweaks · 69 categories · ~17 633 tests
 
 ---
 
@@ -10,7 +10,7 @@
 | Metric | Value |
 |--------|-------|
 | Tweaks | 1 292 across 69 categories |
-| Tests | ~17 511 (all passing) |
+| Tests | ~17 633 (all passing) |
 | Python | 3.10 – 3.14 |
 | Lint | ruff (E, F, W, I, UP, B, SIM, RUF) |
 | Type check | mypy --strict |
@@ -62,10 +62,10 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 | # | Task | Priority |
 |---|------|----------|
-| 1 | Add `docs/DEVELOPMENT.md` — local setup, Windows + WSL guide | P1 |
-| 2 | Refresh `CONTRIBUTING.md` with current workflow and PR checklist | P1 |
+| 1 | Add `docs/Development.md` — local setup, Windows + WSL guide | P1 |
+| 2 | Refresh `Contributing.md` with current workflow and PR checklist | P1 |
 | 3 | Add `hypothesis` + `pytest-mock` to `[dev]` dependencies in `pyproject.toml` | P1 |
-| 4 | Measure per-module coverage; document gaps in `docs/COVERAGE.md` | P1 |
+| 4 | Measure per-module coverage; document gaps in `docs/Coverage.md` | P1 |
 | 5 | Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py` | P2 |
 | 6 | Review and update all `.github/issue_template/` files for accuracy | P2 |
 | 7 | Add `SECURITY.md` policy (responsible disclosure, supported versions) | P2 |
@@ -130,11 +130,11 @@ _50 concrete tasks derived from the roadmap above, ordered by priority._
 
 ### P1 — High Value (Sprint 3–4)
 
-- [ ] Add `docs/DEVELOPMENT.md` (setup, Windows + WSL, run, test, contribute)
-- [ ] Refresh `CONTRIBUTING.md` with current PR/issue/commit workflow
-- [ ] Add `SECURITY.md` with supported versions + disclosure policy
-- [ ] Add `hypothesis` + `pytest-mock` to `[project.optional-dependencies.dev]`
-- [ ] Measure per-module coverage; document gaps
+- [x] Add `docs/Development.md` (setup, Windows + WSL, run, test, contribute)
+- [x] Refresh `Contributing.md` with current PR/issue/commit workflow
+- [x] Add `Security.md` with supported versions + disclosure policy
+- [x] Add `hypothesis` + `pytest-mock` to `[project.optional-dependencies.dev]`
+- [x] Measure per-module coverage; document gaps in `docs/Coverage.md`
 - [ ] Push gui.py test coverage ≥ 80 %
 - [ ] Add explicit `menu.py` edge-case tests
 - [ ] Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py`
@@ -184,3 +184,4 @@ _50 concrete tasks derived from the roadmap above, ordered by priority._
 | Sprint 4 | TBD | 7 | — | Test coverage push |
 | Sprint 5 | TBD | 7 | — | Refactoring & performance |
 | Sprint 6 | TBD | 7 | — | Production readiness & v1.0.1 release |
+| Sprint 9 | 2026-03-09 | 8 | 8 | Profiling infra, MD Title Case rename, perf guide, PS profile cleanup |
