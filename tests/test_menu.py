@@ -315,8 +315,86 @@ class TestMenuLoop:
         ):
             menu.loop()
 
+    def test_loop_corp_blocked_remove_all(self) -> None:
+        """Line 184-185: assert_not_corporate raises in loop() for 'R' choice."""
+        from regilattice.corpguard import CorporateNetworkError
 
-class TestMenuMain:
+        menu = Menu()
+        with (
+            patch("regilattice.menu.is_windows", return_value=True),
+            patch.object(menu, "_show_categories", side_effect=["R", "0"]),
+            patch.object(menu, "_pause"),
+            patch("regilattice.menu.assert_not_corporate", side_effect=CorporateNetworkError("corp remove blocked")),
+        ):
+            menu.loop()
+
+
+class TestMenuHelpers:
+    """Cover _clear, _pause, and status-tag branches not hit by loop tests."""
+
+    def test_clear_calls_os_system(self) -> None:
+        """Line 38: _clear() body — call without patching the whole method."""
+        with patch("regilattice.menu.os.system") as mock_sys:
+            Menu._clear()
+        mock_sys.assert_called_once()
+
+    def test_pause_with_input(self) -> None:
+        """Lines 42-43: _pause() body — call without patching the whole method."""
+        with patch("builtins.input", return_value=""):
+            Menu._pause()  # should not raise
+
+    def test_pause_suppresses_eof(self) -> None:
+        """Lines 42-43: _pause() suppresses EOFError from input."""
+        with patch("builtins.input", side_effect=EOFError):
+            Menu._pause()  # must not propagate EOFError
+
+    def test_show_tweaks_unknown_status_tag(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """Line 111: UNKNOWN status renders [???] tag — requires TweakResult.UNKNOWN."""
+        from regilattice.tweaks import TweakResult
+
+        menu = Menu()
+        cat = menu._categories[0]
+        with (
+            patch.object(menu, "_clear"),
+            patch.object(menu, "_pause"),
+            patch("regilattice.menu.tweak_status", return_value=TweakResult.UNKNOWN),
+            patch("builtins.input", return_value="0"),
+        ):
+            menu._show_tweaks(cat)
+        assert "[???]" in capsys.readouterr().out
+
+    def test_show_tweaks_eof_in_tweak_loop(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """Lines 119-120: EOFError/KeyboardInterrupt in tweak choice input breaks inner loop."""
+        from regilattice.tweaks import TweakResult
+
+        menu = Menu()
+        cat = menu._categories[0]
+        with (
+            patch.object(menu, "_clear"),
+            patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED),
+            patch("builtins.input", side_effect=EOFError),
+        ):
+            menu._show_tweaks(cat)  # should exit cleanly
+
+    def test_show_tweaks_corp_blocked_remove_all(self, capsys: pytest.CaptureFixture[str]) -> None:
+        """Lines 136-137: corp blocked for 'R' in _show_tweaks prints error."""
+        from regilattice.corpguard import CorporateNetworkError
+        from regilattice.tweaks import TweakResult
+
+        menu = Menu()
+        cat = menu._categories[0]
+        with (
+            patch.object(menu, "_clear"),
+            patch.object(menu, "_pause"),
+            patch("regilattice.menu.assert_not_corporate", side_effect=CorporateNetworkError("blocked")),
+            patch("regilattice.menu.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("builtins.input", side_effect=["R", "0"]),
+        ):
+            menu._show_tweaks(cat)
+        assert "blocked" in capsys.readouterr().out
+
+
+
     def test_main_function(self) -> None:
         from regilattice.menu import main as menu_main
 
