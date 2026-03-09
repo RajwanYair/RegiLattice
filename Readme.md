@@ -240,7 +240,7 @@ RegiLattice/
 ## Adding a Custom Tweak
 
 Copy `regilattice/tweaks/_template.py` to a new file and follow the numbered steps inside.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+See [Contributing.md](Contributing.md) for the full guide.
 
 **Quick version:** create a `.py` file in `regilattice/tweaks/` exporting a `TWEAKS` list:
 

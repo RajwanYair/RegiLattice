@@ -42,34 +42,35 @@ def _make_td(
 _tk_available = True
 try:
     import tkinter as tk
-
-    # Attempt to create a hidden root — may fail in headless CI
-    _test_root = tk.Tk()
-    _test_root.withdraw()
 except Exception:
     _tk_available = False
-    _test_root = None  # type: ignore[assignment]
 
 
 @pytest.fixture()
-def root() -> tk.Tk:
+def root():  # type: ignore[return]
+    """Create a hidden Tk root for the test; destroyed after each test."""
     if not _tk_available:
         pytest.skip("tkinter not available or headless environment")
-    assert _test_root is not None
-    return _test_root
+    import tkinter as tk
+
+    r = tk.Tk()
+    r.withdraw()
+    yield r
+    try:
+        r.destroy()
+    except Exception:
+        pass
 
 
 class TestTweakRowDeferred:
     """Test TweakRow creation with defer_widgets=True (no tkinter needed)."""
 
-    def test_deferred_row_no_widgets(self) -> None:
+    def test_deferred_row_no_widgets(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow
 
-        if not _tk_available:
-            pytest.skip("tkinter not available")
-        parent = ttk.Frame(_test_root)
+        parent = ttk.Frame(root)
         td = _make_td()
         row = TweakRow(parent, td, corp_blocked=False, defer_widgets=True)
         assert row.td is td
@@ -77,26 +78,22 @@ class TestTweakRowDeferred:
         assert row.var.get() is False
         assert row.disabled_by_corp is False
 
-    def test_deferred_corp_blocked(self) -> None:
+    def test_deferred_corp_blocked(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow
 
-        if not _tk_available:
-            pytest.skip("tkinter not available")
-        parent = ttk.Frame(_test_root)
+        parent = ttk.Frame(root)
         td = _make_td(corp_safe=False)
         row = TweakRow(parent, td, corp_blocked=True, defer_widgets=True)
         assert row.disabled_by_corp is True
 
-    def test_corp_safe_not_blocked(self) -> None:
+    def test_corp_safe_not_blocked(self, root: tk.Tk) -> None:
         from tkinter import ttk
 
         from regilattice.gui_widgets import TweakRow
 
-        if not _tk_available:
-            pytest.skip("tkinter not available")
-        parent = ttk.Frame(_test_root)
+        parent = ttk.Frame(root)
         td = _make_td(corp_safe=True)
         row = TweakRow(parent, td, corp_blocked=True, defer_widgets=True)
         assert row.disabled_by_corp is False
@@ -200,7 +197,6 @@ class TestCategorySectionLazy:
             assert row.frame is frm
 
     def test_on_rows_built_callback_fires(self, root: tk.Tk) -> None:
-        from regilattice.gui_widgets import CategorySection
 
         section, _ = self._make_section(root, expanded=False)
         fired: list[CategorySection] = []

@@ -24,10 +24,6 @@ from regilattice.gui import RegiLatticeGUI, launch
 _tk_available = True
 try:
     import tkinter as tk
-
-    _probe_root = tk.Tk()
-    _probe_root.withdraw()
-    _probe_root.destroy()
 except Exception:
     _tk_available = False
 
@@ -200,8 +196,9 @@ class TestLaunch:
     def test_exits_on_non_windows(self) -> None:
         with (
             patch("regilattice.gui.is_windows", return_value=False),
-            patch("sys.exit") as mock_exit,
+            patch("sys.exit", side_effect=SystemExit(1)) as mock_exit,
             patch("builtins.print"),
+            pytest.raises(SystemExit),
         ):
             launch()
         mock_exit.assert_called_once_with(1)
@@ -209,7 +206,8 @@ class TestLaunch:
     def test_prints_message_on_non_windows(self, capsys: pytest.CaptureFixture[str]) -> None:
         with (
             patch("regilattice.gui.is_windows", return_value=False),
-            patch("sys.exit"),
+            patch("sys.exit", side_effect=SystemExit(1)),
+            pytest.raises(SystemExit),
         ):
             launch()
         out = capsys.readouterr().out
@@ -485,8 +483,11 @@ class TestSaveCollapseState:
         section.name = "Explorer"
         gui._category_sections = [section]
         gui._save_collapse_state()
-        # No collapsed sections → file removed or not created
-        assert not (tmp_path / "collapsed.json").exists()
+        # Expanded sections saved → file IS created containing the expanded name
+        collapse_file = tmp_path / "collapsed.json"
+        assert collapse_file.exists()
+        data = json.loads(collapse_file.read_text(encoding="utf-8"))
+        assert "Explorer" in data
 
     def test_save_collapse_state_with_collapsed(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr("regilattice.gui._CONFIG_DIR", tmp_path)
@@ -497,9 +498,8 @@ class TestSaveCollapseState:
         section.name = "Privacy"
         gui._category_sections = [section]
         gui._save_collapse_state()
-        assert collapse_file.exists()
-        data = json.loads(collapse_file.read_text(encoding="utf-8"))
-        assert "Privacy" in data
+        # No expanded sections → file is deleted / not created
+        assert not collapse_file.exists()
 
 
 class TestSaveCategoryOrder:

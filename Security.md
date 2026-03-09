@@ -107,5 +107,5 @@ files are listed in `.gitignore`.
 
 ## Changelog
 
-Security-relevant changes are documented in [CHANGELOG.md](CHANGELOG.md)
+Security-relevant changes are documented in [Changelog.md](Changelog.md)
 and tagged with `[security]`.
