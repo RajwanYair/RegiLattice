@@ -245,6 +245,7 @@ class TestCategorySectionLazy:
 
 # ── Helper ─────────────────────────────────────────────────────────────────
 
+
 def _all_widgets(parent: tk.Misc) -> list[tk.Misc]:
     """Recursively collect all descendant widgets."""
     result: list[tk.Misc] = []
@@ -256,13 +257,16 @@ def _all_widgets(parent: tk.Misc) -> list[tk.Misc]:
 
 # ── TweakRow badge tests ────────────────────────────────────────────────────
 
+
 @pytest.mark.skipif(not _tk_available, reason="tkinter not available")
 class TestTweakRowBadges:
     """Test that optional badge labels appear based on TweakDef properties."""
 
     def _make_row(self, root: tk.Tk, **kwargs):  # type: ignore[no-untyped-def]
         from tkinter import ttk
+
         from regilattice.gui_widgets import TweakRow
+
         parent = ttk.Frame(root)
         parent.pack()
         td = _make_td(**kwargs)
@@ -296,8 +300,9 @@ class TestTweakRowBadges:
         assert not any("REC" in t for t in texts)
 
     def test_gpo_badge_shown(self, root: tk.Tk) -> None:
-        from unittest.mock import patch
         from tkinter import ttk
+        from unittest.mock import patch
+
         from regilattice.gui_widgets import TweakRow
 
         parent = ttk.Frame(root)
@@ -324,19 +329,23 @@ class TestTweakRowBadges:
 
 # ── TweakRow hover / apply_theme / refresh_status tests ────────────────────
 
+
 @pytest.mark.skipif(not _tk_available, reason="tkinter not available")
 class TestTweakRowInteraction:
     """Test hover effects, apply_theme, and refresh_status."""
 
     def _make_row(self, root: tk.Tk) -> TweakRow:
         from tkinter import ttk
+
         from regilattice.gui_widgets import TweakRow
+
         parent = ttk.Frame(root)
         parent.pack()
         return TweakRow(parent, _make_td(), corp_blocked=False)
 
     def test_on_enter_changes_bg(self, root: tk.Tk) -> None:
         from regilattice import gui_theme as theme
+
         row = self._make_row(root)
         assert row.frame is not None
         # Call _on_enter directly to avoid event-loop blocking
@@ -347,6 +356,7 @@ class TestTweakRowInteraction:
 
     def test_on_leave_restores_bg(self, root: tk.Tk) -> None:
         from regilattice import gui_theme as theme
+
         row = self._make_row(root)
         assert row.frame is not None
         row._on_enter(None)  # type: ignore[arg-type]
@@ -362,7 +372,9 @@ class TestTweakRowInteraction:
 
     def test_refresh_status_applied(self, root: tk.Tk) -> None:
         from unittest.mock import patch
+
         from regilattice.tweaks import TweakResult
+
         row = self._make_row(root)
         with patch("regilattice.gui_widgets.tweak_status", return_value=TweakResult.APPLIED):
             row.refresh_status()
@@ -371,7 +383,9 @@ class TestTweakRowInteraction:
 
     def test_refresh_status_default(self, root: tk.Tk) -> None:
         from unittest.mock import patch
+
         from regilattice.tweaks import TweakResult
+
         row = self._make_row(root)
         with patch("regilattice.gui_widgets.tweak_status", return_value=TweakResult.NOT_APPLIED):
             row.refresh_status()
@@ -380,7 +394,9 @@ class TestTweakRowInteraction:
 
     def test_refresh_status_unknown(self, root: tk.Tk) -> None:
         from unittest.mock import patch
+
         from regilattice.tweaks import TweakResult
+
         row = self._make_row(root)
         with patch("regilattice.gui_widgets.tweak_status", return_value=TweakResult.UNKNOWN):
             row.refresh_status()
@@ -389,7 +405,9 @@ class TestTweakRowInteraction:
 
     def test_on_toggle_click_fires_callback(self, root: tk.Tk) -> None:
         from tkinter import ttk
+
         from regilattice.gui_widgets import TweakRow
+
         parent = ttk.Frame(root)
         fired: list[TweakRow] = []
         td = _make_td()
@@ -405,13 +423,16 @@ class TestTweakRowInteraction:
 
 # ── CategorySection extra tests ─────────────────────────────────────────────
 
+
 @pytest.mark.skipif(not _tk_available, reason="tkinter not available")
 class TestCategorySectionExtra:
     """Extra CategorySection tests for coverage of callbacks, batch ops, filter_rows."""
 
     def _make_section(self, root: tk.Tk, *, expanded: bool = True, n: int = 2) -> tuple[CategorySection, list[TweakRow]]:
         from tkinter import ttk
+
         from regilattice.gui_widgets import CategorySection, TweakRow
+
         parent = ttk.Frame(root)
         parent.pack()
         rows = [TweakRow(parent, _make_td(tweak_id=f"ex-{i}", label=f"Tweak {i}"), corp_blocked=False, defer_widgets=True) for i in range(n)]
@@ -420,8 +441,9 @@ class TestCategorySectionExtra:
 
     def test_category_info_badges_rendered(self, root: tk.Tk) -> None:
         """CategoryInfo with risk/scope/profiles causes badge labels to be created."""
-        from unittest.mock import patch
         from tkinter import ttk
+        from unittest.mock import patch
+
         from regilattice.gui_widgets import CategorySection, TweakRow
         from regilattice.tweaks import CategoryInfo
 
@@ -479,14 +501,17 @@ class TestCategorySectionExtra:
     def test_update_count_with_statuses(self, root: tk.Tk) -> None:
         section, rows = self._make_section(root)
         from regilattice.tweaks import TweakResult
+
         statuses = {rows[0].td.id: TweakResult.APPLIED, rows[1].td.id: TweakResult.NOT_APPLIED}
         section.update_count(statuses=statuses)
         assert "1/2" in section._count_lbl.cget("text")
 
     def test_update_count_without_statuses(self, root: tk.Tk) -> None:
         from unittest.mock import patch
+
         from regilattice.tweaks import TweakResult
-        section, rows = self._make_section(root)
+
+        section, _ = self._make_section(root)
         with patch("regilattice.gui_widgets.tweak_status", return_value=TweakResult.NOT_APPLIED):
             section.update_count()
         assert "0/2" in section._count_lbl.cget("text")

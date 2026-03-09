@@ -57,6 +57,17 @@ def _all_widgets(parent: tk.Widget) -> list[tk.Widget]:
     return result
 
 
+def _find_install_buttons(dlg: tk.Widget) -> list[tk.Widget]:
+    """Return Install (non-Remove) buttons within a dialog."""
+    return [
+        w
+        for w in _all_widgets(dlg)
+        if w.winfo_class() == "Button"  # type: ignore[no-untyped-call]
+        and "Install" in str(w.cget("text"))
+        and "Remove" not in str(w.cget("text"))
+    ]
+
+
 class _SyncThread:
     """threading.Thread replacement that runs the target synchronously on .start()."""
 
@@ -517,7 +528,7 @@ class TestOpenScoopManagerWithScoop:
                 patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
                 patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
                 patch("tkinter.Toplevel.grab_set"),
-                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=[]) as mock_list,
+                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=[]),
                 patch("regilattice.tweaks.scoop_tools._install_scoop_app") as mock_install,
             ):
                 open_scoop_manager(root, MagicMock())
@@ -532,7 +543,7 @@ class TestOpenScoopManagerWithScoop:
                 entries[0].insert(0, "git")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
                     install_btns[0].invoke()  # type: ignore[no-untyped-call]
@@ -565,7 +576,7 @@ class TestOpenScoopManagerWithScoop:
                 entries[0].insert(0, "evil'; rm -rf /")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
                     install_btns[0].invoke()  # type: ignore[no-untyped-call]
@@ -699,7 +710,7 @@ class TestOpenPsModuleManager:
                 entries[0].insert(0, "PSReadLine")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
                     install_btns[0].invoke()  # type: ignore[no-untyped-call]
@@ -735,7 +746,7 @@ class TestOpenPsModuleManager:
                 entries[0].insert(0, "'; rm -rf /")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
                     install_btns[0].invoke()  # type: ignore[no-untyped-call]
@@ -821,7 +832,7 @@ class TestOpenPsModuleManager:
                 entries[0].insert(0, "PSReadLine")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
                     install_btns[0].invoke()  # type: ignore[no-untyped-call]

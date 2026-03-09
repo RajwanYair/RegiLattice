@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] — 2025-07-05
+
+### Security
+
+- **OWASP A03 Injection fix** (`maintenance.py`) — replace `subprocess.run(cmd, shell=True)` with a
+  hardened list-based invocation in `create_restore_point()`.
+- **PowerShell injection fix** (`gui_dialogs.py`) — all user-supplied and listbox-derived package /
+  module names now pass through `_validate_package_name()` (strict `[A-Za-z0-9._-]` allow-list)
+  before being interpolated into PowerShell command strings.  Covers `scoop install/remove` and
+  `Install-Module / Uninstall-Module / Update-Module` actions.
+
+### Testing
+
+- `test_gui_dialogs.py` coverage **41 % → 89 %** (22 → 53 tests).  New: `TestValidatePackageName`,
+  `TestRunPowershellCommand`, `TestOpenScoopManagerWithScoop`, `TestOpenPsModuleManager`.
+- `test_gui_widgets.py` coverage **65 % → 95 %** (14 → 40 tests).  New: `TestTweakRowBadges`,
+  `TestTweakRowInteraction`, `TestCategorySectionExtra`.
+
+### CI / Tooling
+
+- Add **Codecov** upload step to `ci.yml` (Python 3.12 matrix leg; `fail_ci_if_error: false`).
+
 ### Added
 
 - **`TooltipManager` singleton** (`gui_tooltip.py`) — a single shared `tk.Toplevel` for all 1 200+ tweak row tooltips.  Replaces the previous per-row create/destroy strategy with a single deiconify/withdraw cycle per hover, eliminating ~1 200× `Toplevel` churn on busy scrolling.
