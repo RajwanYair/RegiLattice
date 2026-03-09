@@ -3,14 +3,22 @@
 from __future__ import annotations
 
 import json
+import tkinter as tk
 from pathlib import Path
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from regilattice.gui_dialogs import export_json_selection, export_powershell, import_json_selection, show_about
 from regilattice.tweaks import TweakDef
+
+if TYPE_CHECKING:
+    pass
+
+
+# ── Test helpers ─────────────────────────────────────────────────────────────
 
 
 def _make_td(**overrides: object) -> TweakDef:
@@ -29,6 +37,44 @@ def _make_td(**overrides: object) -> TweakDef:
     }
     defaults.update(overrides)
     return TweakDef(**defaults)  # type: ignore[arg-type]
+
+
+def _try_create_root() -> tk.Tk:
+    """Create a hidden Tk root or skip the test if tkinter is unavailable."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        return root
+    except Exception:
+        pytest.skip("tkinter unavailable")
+
+
+def _all_widgets(parent: tk.Widget) -> list[tk.Widget]:
+    """Recursively collect all descendant widgets."""
+    result: list[tk.Widget] = [parent]
+    for child in parent.winfo_children():  # type: ignore[no-untyped-call]
+        result.extend(_all_widgets(child))
+    return result
+
+
+class _SyncThread:
+    """threading.Thread replacement that runs the target synchronously on .start()."""
+
+    def __init__(self, *, target, daemon: bool = True) -> None:  # type: ignore[no-untyped-def]
+        self._target = target
+
+    def start(self) -> None:
+        self._target()
+
+
+class _StubThread:
+    """threading.Thread replacement that captures targets but never runs them."""
+
+    def __init__(self, *, target, daemon: bool = True) -> None:  # type: ignore[no-untyped-def]
+        pass
+
+    def start(self) -> None:
+        pass
 
 
 # ── export_powershell tests ──────────────────────────────────────────────────
@@ -277,6 +323,122 @@ class TestOsErrorPaths:
         mbox.showerror.assert_called_once()
 
 
+# ── _validate_package_name tests ─────────────────────────────────────────────
+
+
+class TestValidatePackageName:
+    """Tests for the injection-prevention validator."""
+
+    def test_valid_simple_name(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        assert _validate_package_name("PSReadLine") == "PSReadLine"
+
+    def test_valid_name_with_hyphen(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        assert _validate_package_name("posh-git") == "posh-git"
+
+    def test_valid_name_with_dot(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        assert _validate_package_name("Microsoft.Graph") == "Microsoft.Graph"
+
+    def test_valid_name_with_underscore_and_version(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        assert _validate_package_name("My_Package-1.0") == "My_Package-1.0"
+
+    def test_empty_string_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("")
+
+    def test_semicolon_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("evil;cmd")
+
+    def test_single_quote_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("'; rm -rf /")
+
+    def test_space_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("foo bar")
+
+    def test_ampersand_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("foo&bar")
+
+    def test_backtick_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("`whoami`")
+
+    def test_pipe_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_package_name
+
+        with pytest.raises(ValueError):
+            _validate_package_name("x|y")
+
+
+# ── run_powershell_command tests ─────────────────────────────────────────────
+
+
+class TestRunPowershellCommand:
+    def test_success_returns_stdout(self) -> None:
+        from regilattice.gui_dialogs import run_powershell_command
+
+        with patch("regilattice.gui_dialogs.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout="output\n", stderr="")
+            result = run_powershell_command("Get-Date")
+        assert result == "output"
+
+    def test_nonzero_exit_raises_runtime_error(self) -> None:
+        from regilattice.gui_dialogs import run_powershell_command
+
+        with patch("regilattice.gui_dialogs.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=1, stdout="", stderr="Error!")
+            with pytest.raises(RuntimeError, match="Error!"):
+                run_powershell_command("bad-command")
+
+    def test_empty_stderr_uses_exit_code_message(self) -> None:
+        from regilattice.gui_dialogs import run_powershell_command
+
+        with patch("regilattice.gui_dialogs.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=2, stdout="", stderr="")
+            with pytest.raises(RuntimeError, match="Exit code 2"):
+                run_powershell_command("bad-command")
+
+    def test_custom_timeout_is_forwarded(self) -> None:
+        from regilattice.gui_dialogs import run_powershell_command
+
+        with patch("regilattice.gui_dialogs.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout="", stderr="")
+            run_powershell_command("cmd", timeout=120)
+            _, kwargs = mock_run.call_args
+            assert kwargs.get("timeout") == 120
+
+    def test_default_timeout_is_60(self) -> None:
+        from regilattice.gui_dialogs import run_powershell_command
+
+        with patch("regilattice.gui_dialogs.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout="", stderr="")
+            run_powershell_command("cmd")
+            _, kwargs = mock_run.call_args
+            assert kwargs.get("timeout") == 60
+
+
 # ── open_scoop_manager (no-scoop path) ───────────────────────────────────────
 
 
@@ -299,5 +461,445 @@ class TestOpenScoopManagerNoScoop:
                 patch("tkinter.Toplevel.grab_set"),
             ):
                 open_scoop_manager(root, MagicMock())
+        finally:
+            root.destroy()
+
+
+# ── open_scoop_manager (with-scoop path) ─────────────────────────────────────
+
+
+class TestOpenScoopManagerWithScoop:
+    def test_with_scoop_creates_dialog(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+            ):
+                open_scoop_manager(root, MagicMock())
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+        finally:
+            root.destroy()
+
+    def test_refresh_list_populates_listbox(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            apps = ["git", "ripgrep", "bat"]
+            # SyncThread so initial _refresh_list auto-run on dialog open is called
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
+                patch("regilattice.gui_dialogs.threading.Thread", _SyncThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=apps),
+            ):
+                open_scoop_manager(root, MagicMock())
+
+            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+            if dlg is None:
+                pytest.skip("dialog not found")
+            listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+            assert listboxes, "No listbox found in dialog"
+            assert listboxes[0].size() == 3
+        finally:
+            root.destroy()
+
+    def test_install_action_valid_name(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=[]) as mock_list,
+                patch("regilattice.tweaks.scoop_tools._install_scoop_app") as mock_install,
+            ):
+                open_scoop_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "git")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mock_install.assert_called_once_with("git")
+        finally:
+            root.destroy()
+
+    def test_install_action_invalid_name_shows_error(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=[]),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_scoop_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "evil'; rm -rf /")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showerror.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_remove_action_no_selection_shows_info(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=True),
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.tweaks.scoop_tools.list_installed_scoop_apps", return_value=[]),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_scoop_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not remove_btns:
+                        pytest.skip("remove button not found")
+                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showinfo.assert_called_once()
+        finally:
+            root.destroy()
+
+
+# ── open_psmodule_manager tests ───────────────────────────────────────────────
+
+
+class TestOpenPsModuleManager:
+    def test_creates_dialog(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+            ):
+                open_psmodule_manager(root, MagicMock())
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+        finally:
+            root.destroy()
+
+    def test_refresh_list_success(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value="PSReadLine  v2.3\nPester  v5.3"),
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    refresh_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Refresh" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not refresh_btns:
+                        pytest.skip("refresh button not found")
+                    refresh_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+                listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+                assert listboxes, "No listbox found"
+                assert listboxes[0].size() == 2
+        finally:
+            root.destroy()
+
+    def test_refresh_list_error_shows_status(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", side_effect=RuntimeError("PS error")),
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    refresh_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Refresh" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not refresh_btns:
+                        pytest.skip("refresh button not found")
+                    refresh_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+                labels = [w for w in _all_widgets(dlg) if isinstance(w, tk.Label)]
+                status_texts = [w.cget("text") for w in labels]
+                assert any("Error" in str(t) or "error" in str(t).lower() for t in status_texts)
+        finally:
+            root.destroy()
+
+    def test_install_action_valid_name(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value="") as mock_rpc,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "PSReadLine")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            assert mock_rpc.called
+            call_args_list = mock_rpc.call_args_list
+            ps_calls = [c.args[0] for c in call_args_list if "Install-Module" in c.args[0]]
+            assert ps_calls, "Install-Module not called"
+            assert "PSReadLine" in ps_calls[0]
+        finally:
+            root.destroy()
+
+    def test_install_action_invalid_name_shows_error(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value=""),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "'; rm -rf /")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showerror.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_remove_action_no_selection_shows_info(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value=""),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not remove_btns:
+                        pytest.skip("remove button not found")
+                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showinfo.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_update_action_no_selection_shows_info(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value=""),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not update_btns:
+                        pytest.skip("update button not found")
+                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showinfo.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_install_ps_error_shows_error_dialog(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", side_effect=RuntimeError("PS error")),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "PSReadLine")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Install" in str(w.cget("text")) and "Remove" not in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showerror.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_remove_action_with_selection_success(self) -> None:
+        """Remove a module when one is selected and confirm = Yes."""
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value="") as mock_rpc,
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                mbox.askyesno.return_value = True
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+                if not listboxes:
+                    pytest.skip("listbox not found")
+                listboxes[0].insert("end", "PSReadLine  v2.3")
+                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not remove_btns:
+                        pytest.skip("remove button not found")
+                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            call_args_list = mock_rpc.call_args_list
+            ps_calls = [c.args[0] for c in call_args_list if "Uninstall-Module" in c.args[0]]
+            assert ps_calls, "Uninstall-Module not called"
+            assert "PSReadLine" in ps_calls[0]
+        finally:
+            root.destroy()
+
+    def test_update_action_with_selection_success(self) -> None:
+        """Update a module when one is selected."""
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_psmodule_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.run_powershell_command", return_value="") as mock_rpc,
+            ):
+                open_psmodule_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+                if not listboxes:
+                    pytest.skip("listbox not found")
+                listboxes[0].insert("end", "Az  v10.0")
+                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not update_btns:
+                        pytest.skip("update button not found")
+                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            call_args_list = mock_rpc.call_args_list
+            ps_calls = [c.args[0] for c in call_args_list if "Update-Module" in c.args[0]]
+            assert ps_calls, "Update-Module not called"
+            assert "Az" in ps_calls[0]
         finally:
             root.destroy()
