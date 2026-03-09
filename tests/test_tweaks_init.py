@@ -10,19 +10,42 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from regilattice.tweaks import (CategoryInfo, TweakDef, TweakExecutor,
-                                TweakResult, _topo_sort, all_category_info,
-                                all_tweaks, apply_all, apply_profile,
-                                available_profiles, categories,
-                                categories_by_risk, categories_by_scope,
-                                category_counts, category_info, diff_snapshots,
-                                get_tweak, load_snapshot, profile_info,
-                                reload_plugins, remove_all, restore_snapshot,
-                                save_snapshot, search_tweaks, status_map,
-                                tweak_count_by_scope, tweak_risk_level,
-                                tweak_scope, tweak_status, tweaks_above_build,
-                                tweaks_by_category, tweaks_by_scope,
-                                tweaks_excluded_by_profile, tweaks_for_profile)
+from regilattice.tweaks import (
+    CategoryInfo,
+    TweakDef,
+    TweakExecutor,
+    TweakResult,
+    _topo_sort,
+    all_category_info,
+    all_tweaks,
+    apply_all,
+    apply_profile,
+    available_profiles,
+    categories,
+    categories_by_risk,
+    categories_by_scope,
+    category_counts,
+    category_info,
+    diff_snapshots,
+    get_tweak,
+    load_snapshot,
+    profile_info,
+    reload_plugins,
+    remove_all,
+    restore_snapshot,
+    save_snapshot,
+    search_tweaks,
+    status_map,
+    tweak_count_by_scope,
+    tweak_risk_level,
+    tweak_scope,
+    tweak_status,
+    tweaks_above_build,
+    tweaks_by_category,
+    tweaks_by_scope,
+    tweaks_excluded_by_profile,
+    tweaks_for_profile,
+)
 
 # ── TweakDef dataclass ──────────────────────────────────────────────────────
 
@@ -1010,9 +1033,7 @@ class TestTagIntegrity:
 # ── C8 engine additions ───────────────────────────────────────────────────────
 
 
-from regilattice.tweaks import (apply_tweaks, filter_tweaks,  # noqa: E402
-                                remove_tweaks, tweak_dependencies,
-                                tweaks_by_ids, tweaks_by_tag)
+from regilattice.tweaks import apply_tweaks, filter_tweaks, remove_tweaks, tweak_dependencies, tweaks_by_ids, tweaks_by_tag  # noqa: E402
 
 
 class TestFilterTweaks:
