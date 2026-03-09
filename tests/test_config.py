@@ -45,9 +45,7 @@ class TestLoadConfig:
 
     def test_full_config(self, tmp_path: Path) -> None:
         f = tmp_path / "test.toml"
-        f.write_bytes(
-            b'[general]\nforce_corp = true\nmax_workers = 4\n[backups]\ndirectory = "C:/Backup"\nauto_backup = true\n'
-        )
+        f.write_bytes(b'[general]\nforce_corp = true\nmax_workers = 4\n[backups]\ndirectory = "C:/Backup"\nauto_backup = true\n')
         cfg = load_config(f)
         assert cfg.force_corp is True
         assert cfg.max_workers == 4
@@ -76,9 +74,7 @@ class TestLoadConfig:
 
     def test_extra_keys_ignored(self, tmp_path: Path) -> None:
         f = tmp_path / "test.toml"
-        f.write_bytes(
-            b"[general]\nforce_corp = true\nunknown_key = 42\n[other]\nfoo = 1\n"
-        )
+        f.write_bytes(b"[general]\nforce_corp = true\nunknown_key = 42\n[other]\nfoo = 1\n")
         cfg = load_config(f)
         assert cfg.force_corp is True
 

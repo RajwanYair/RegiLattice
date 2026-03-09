@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-09 (v1.0.0, 1 292 tweaks, 69 categories, ~17 633 tests).
+> Last verified: 2026-03-09 (v1.0.1, 1 292 tweaks, 69 categories, ~17 640 tests).
 
 ## Quick Facts
 
@@ -14,7 +14,7 @@
 | Type-check  | `mypy --strict`                                                              |
 | Test        | `pytest` in `tests/` (~17 633 tests across 21 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
-| Version     | 1.0.0                                                                        |
+| Version     | 1.0.1                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
 
