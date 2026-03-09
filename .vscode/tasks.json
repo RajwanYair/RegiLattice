@@ -71,6 +71,17 @@
       }
     },
     {
+      "label": "Test (pytest parallel)",
+      "type": "shell",
+      "command": "python -m pytest tests/ -n auto --dist=worksteal --tb=short -q",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
       "label": "List Tweaks",
       "type": "shell",
       "command": "python -m regilattice --list",

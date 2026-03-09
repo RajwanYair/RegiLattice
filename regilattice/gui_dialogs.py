@@ -96,10 +96,14 @@ def import_json_selection(
 
     Parameters are kept generic to avoid circular imports with gui.py types.
     """
-    path = filedialog.askopenfilename(
-        title="Import Tweak Selection",
-        filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
-    )
+    try:
+        path = filedialog.askopenfilename(
+            parent=root,
+            title="Import Tweak Selection",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+        )
+    except tk.TclError:
+        return
     if not path:
         return
     try:
@@ -130,17 +134,21 @@ def import_json_selection(
 # ── Export JSON ──────────────────────────────────────────────────────────────
 
 
-def export_json_selection(selected: list[TweakDef], set_status: Callable[..., None]) -> None:
+def export_json_selection(selected: list[TweakDef], set_status: Callable[..., None], *, parent: tk.Misc | None = None) -> None:
     """Export selected tweak IDs as a JSON file for sharing/reimporting."""
     if not selected:
         messagebox.showinfo("Nothing Selected", "Select at least one tweak to export.")
         return
-    path = filedialog.asksaveasfilename(
-        title="Export Tweak Selection",
-        defaultextension=".json",
-        filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
-        initialfile="regilattice_selection.json",
-    )
+    try:
+        path = filedialog.asksaveasfilename(
+            parent=parent,
+            title="Export Tweak Selection",
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            initialfile="regilattice_selection.json",
+        )
+    except tk.TclError:
+        return
     if not path:
         return
     data = {
@@ -158,17 +166,21 @@ def export_json_selection(selected: list[TweakDef], set_status: Callable[..., No
 # ── Export PowerShell ────────────────────────────────────────────────────────
 
 
-def export_powershell(selected: list[TweakDef], set_status: Callable[..., None]) -> None:
+def export_powershell(selected: list[TweakDef], set_status: Callable[..., None], *, parent: tk.Misc | None = None) -> None:
     """Export selected tweaks as a .ps1 script showing the registry changes."""
     if not selected:
         messagebox.showinfo("Nothing Selected", "Select at least one tweak to export.")
         return
-    path = filedialog.asksaveasfilename(
-        title="Export PowerShell Script",
-        defaultextension=".ps1",
-        filetypes=[("PowerShell", "*.ps1"), ("All files", "*.*")],
-        initialfile="regilattice_tweaks.ps1",
-    )
+    try:
+        path = filedialog.asksaveasfilename(
+            parent=parent,
+            title="Export PowerShell Script",
+            defaultextension=".ps1",
+            filetypes=[("PowerShell", "*.ps1"), ("All files", "*.*")],
+            initialfile="regilattice_tweaks.ps1",
+        )
+    except tk.TclError:
+        return
     if not path:
         return
     lines = [
