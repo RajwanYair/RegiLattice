@@ -6,6 +6,34 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- **`_tkinter.TclError: Unspecified error` on Windows** — all `filedialog.asksaveasfilename` /
+  `askopenfilename` calls in `gui.py` and `gui_dialogs.py` now pass `parent=<root window>`.
+  Without an explicit parent HWND the Win32 common dialog returns `E_UNEXPECTED` on Python 3.14 / 64-bit.
+  Affected paths: _Export Log_, _Save Snapshot_, _Restore Snapshot_, _Export PowerShell_, _Export JSON_.
+  Each call is also wrapped in `except tk.TclError: return` so any remaining edge-case triggers
+  (headless CI, minimal Tk installs) are handled gracefully instead of crashing the callback.
+- `export_json_selection` and `export_powershell` in `gui_dialogs.py` now accept an optional
+  `parent: tk.Misc | None = None` keyword argument forwarded to the file dialog.
+
+### Performance
+
+- **`_wire_section_bindings` O(n²) → O(n)** — the binding loop formerly called `list.index(row)`
+  for every row (O(n) per row), scanning all ~1 292 rows per lookup.  Replaced with an `id()`-keyed
+  dict built once per call (O(n)), making per-row lookup O(1).  Wiring all 69 sections now takes
+  ~20× fewer comparisons total.
+
+### Tooling / DX
+
+- **`pytest-xdist 3.8`** added to `[project.optional-dependencies].dev`.  Run the full test suite
+  in parallel with `pytest -n auto --dist=worksteal` — 4–8× faster on machines with ≥ 4 cores.
+- **`addopts`** changed from `-v --tb=short` to `-q --tb=short` (quiet mode by default, reducing
+  output noise for 17 000+ parametrised smoke tests while keeping tracebacks on failure).
+- New VS Code task **"Test (pytest parallel)"** — `pytest -n auto --dist=worksteal --tb=short -q`.
+- Python runtime confirmed **64-bit** (CPython 3.14 AMD64); all dev dependencies resolved from
+  the 64-bit wheel index.
+
 ## [1.0.1] — 2025-07-05
 
 ### Security

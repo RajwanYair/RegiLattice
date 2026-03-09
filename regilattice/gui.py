@@ -850,10 +850,11 @@ class RegiLatticeGUI:
         that start expanded, or lazily via set_on_rows_built for the rest.
         """
         all_rows = self._tweak_rows
+        # O(n) dict so per-row lookup is O(1) instead of O(n) list.index()
+        _row_to_idx: dict[int, int] = {id(r): i for i, r in enumerate(all_rows)}
         for row in section.rows:
-            try:
-                idx = all_rows.index(row)
-            except ValueError:
+            idx = _row_to_idx.get(id(row))
+            if idx is None:
                 continue
             cb = row.cb
             if cb is not None:
@@ -1091,12 +1092,16 @@ class RegiLatticeGUI:
 
     def _export_log(self) -> None:
         """Save the session log to a user-chosen location."""
-        path = filedialog.asksaveasfilename(
-            title="Export Session Log",
-            defaultextension=".log",
-            filetypes=[("Log files", "*.log"), ("Text files", "*.txt"), ("All files", "*.*")],
-            initialfile="RegiLattice_session.log",
-        )
+        try:
+            path = filedialog.asksaveasfilename(
+                parent=self._root,
+                title="Export Session Log",
+                defaultextension=".log",
+                filetypes=[("Log files", "*.log"), ("Text files", "*.txt"), ("All files", "*.*")],
+                initialfile="RegiLattice_session.log",
+            )
+        except tk.TclError:
+            return
         if not path:
             return
         try:
@@ -1445,23 +1450,27 @@ class RegiLatticeGUI:
 
     def _export_powershell(self) -> None:
         """Export selected tweaks as a .ps1 script showing the registry changes."""
-        dialogs.export_powershell(self._selected_tweaks(), self._set_status)
+        dialogs.export_powershell(self._selected_tweaks(), self._set_status, parent=self._root)
 
     # ── Export as JSON ───────────────────────────────────────────────────
 
     def _export_json_selection(self) -> None:
         """Export selected tweak IDs as a JSON file for sharing/reimporting."""
-        dialogs.export_json_selection(self._selected_tweaks(), self._set_status)
+        dialogs.export_json_selection(self._selected_tweaks(), self._set_status, parent=self._root)
 
     # ── Snapshot ─────────────────────────────────────────────────────────
 
     def _save_snapshot(self) -> None:
-        path = filedialog.asksaveasfilename(
-            title="Save Tweak Snapshot",
-            defaultextension=".json",
-            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
-            initialfile="regilattice_snapshot.json",
-        )
+        try:
+            path = filedialog.asksaveasfilename(
+                parent=self._root,
+                title="Save Tweak Snapshot",
+                defaultextension=".json",
+                filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+                initialfile="regilattice_snapshot.json",
+            )
+        except tk.TclError:
+            return
         if not path:
             return
         try:
@@ -1471,10 +1480,14 @@ class RegiLatticeGUI:
             messagebox.showerror("Save Error", str(exc))
 
     def _restore_snapshot(self) -> None:
-        path = filedialog.askopenfilename(
-            title="Open Tweak Snapshot",
-            filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
-        )
+        try:
+            path = filedialog.askopenfilename(
+                parent=self._root,
+                title="Open Tweak Snapshot",
+                filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+            )
+        except tk.TclError:
+            return
         if not path:
             return
 
