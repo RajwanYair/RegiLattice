@@ -5,7 +5,8 @@
   "python.analysis.autoImportCompletions": true,
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
-    "tests"
+    "tests",
+    "--timeout=30"
   ],
   // ── Ruff (linter + formatter) ───────────────────────────────────────
   // Native Ruff server (charliermarsh.ruff ≥ 2024) auto-detects pyproject.toml.

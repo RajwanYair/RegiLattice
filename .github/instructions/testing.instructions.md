@@ -6,11 +6,30 @@ applyTo: "**/tests/**,**/conftest.py,**/*_test.py,**/test_*.py"
 
 ## Framework & Tools
 
-- **Primary**: pytest 7.0+
+- **Primary**: pytest 8.0+
 - **Coverage**: pytest-cov, targeting 90%+
+- **Timeouts**: pytest-timeout (default 30 s, configured in `pyproject.toml`)
 - **Property-based**: hypothesis for complex logic
 - **Mocking**: pytest-mock (prefer over unittest.mock directly)
 - **Async**: pytest-asyncio for async code
+- **Profiling**: pyinstrument or snakeviz+cProfile for slow test root-cause
+
+## Running Tests — VS Code / GitHub Copilot
+
+**Always use the VS Code `runTests` tool** (or the Testing panel) for running tests
+in VS Code and GitHub Copilot agent sessions. This uses the configured Python
+interpreter and pytest arguments from `.vscode/settings.json` and `pyproject.toml`.
+
+```
+# Correct in GitHub Copilot:  use the runTests tool
+# Correct in terminal:
+python -m pytest tests/                          # all tests
+python -m pytest tests/test_gui.py -x            # single file, stop on first fail
+python -m pytest tests/ --timeout=30            # explicit timeout
+```
+
+**Never** run `python -m pytest` inside a Copilot agent when the `runTests` tool is
+available — terminal output is truncated at 16 KB and coverage floods the buffer.
 
 ## Test Structure
 
@@ -104,3 +123,8 @@ def test_process_handles_any_valid_input(text: str, count: int) -> None:
 - Don't leave temporary files — use `tmp_path` fixture
 - Don't catch exceptions to silence test failures
 - Don't use `assert` on mutable defaults
+- **Don't run the actual GUI in tests** — always `withdraw()` windows and patch
+  `_deferred_init` to block background tweak loading. If a test must interact
+  with real Tkinter widgets, add `@pytest.mark.timeout(10)` and call
+  `root.after(100, root.destroy)` to ensure the event loop exits.
+- **Don't run tests via `python -m pytest` in Copilot agents** — use `runTests` tool.

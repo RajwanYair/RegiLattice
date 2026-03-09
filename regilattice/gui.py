@@ -32,6 +32,7 @@ from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_s
 from .gui_tooltip import TooltipManager, build_tooltip_text, has_recommendation
 from .gui_widgets import CategorySection, TweakRow
 from .hwinfo import detect_hardware
+from .profiler import timed
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
 from .tweaks import (
     TweakDef,
@@ -813,8 +814,8 @@ class RegiLatticeGUI:
         else:
             self._finish_loading()
 
+    @timed("gui._finish_loading")
     def _finish_loading(self) -> None:
-        """Wire up bindings and kick off status detection after all rows are created."""
         self._loading = False
         # Wire var traces (works regardless of whether widgets are built yet)
         for row in self._tweak_rows:
@@ -929,6 +930,7 @@ class RegiLatticeGUI:
             self._root.after_cancel(self._search_debounce_id)
         self._search_debounce_id = self._root.after(delay_ms, self._filter_rows)
 
+    @timed("gui._filter_rows")
     def _filter_rows(self) -> None:
         """Show/hide rows based on search query, status filter, AND scope filter.
 
@@ -1238,6 +1240,7 @@ class RegiLatticeGUI:
 
         threading.Thread(target=_worker, daemon=True).start()
 
+    @timed("gui._apply_statuses")
     def _apply_statuses(self, statuses: dict[str, TweakResult]) -> None:
         """Push a pre-computed status dict into every UI row and update counters.
 
@@ -1377,6 +1380,7 @@ class RegiLatticeGUI:
 
     # ── Theme switching ──────────────────────────────────────────────────
 
+    @timed("gui._switch_theme")
     def _switch_theme(self, name: str) -> None:
         """Apply a new colour theme and reconfigure all UI elements.
 

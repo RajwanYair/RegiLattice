@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "regilattice"
 version = "1.0.0"
 description = "RegiLattice — Windows registry tweak toolkit with plugin architecture, GUI, and corporate safety."
-readme = "README.md"
+readme = "Readme.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "YairRajwan" }]
@@ -40,7 +40,7 @@ classifiers = [
 Homepage = "https://github.com/RajwanYair/RegiLattice"
 Repository = "https://github.com/RajwanYair/RegiLattice"
 "Bug Tracker" = "https://github.com/RajwanYair/RegiLattice/issues"
-Changelog = "https://github.com/RajwanYair/RegiLattice/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/RajwanYair/RegiLattice/blob/main/Changelog.md"
 
 [project.scripts]
 regilattice = "regilattice.cli:main"
@@ -50,9 +50,12 @@ dev = [
     "pytest>=8,<9",
     "pytest-cov>=7,<8",
     "pytest-mock>=3.14,<4",
+    "pytest-timeout>=2.3,<3",
     "hypothesis>=6.100,<7",
     "mypy>=1.5,<2",
     "ruff>=0.4,<1",
+    "snakeviz>=2.2,<3",
+    "pyinstrument>=4.6,<5",
 ]
 
 # ── Tool configuration ──────────────────────────────────────────────────────────
@@ -90,6 +93,10 @@ reportUnnecessaryTypeIgnoreComment = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+# Default timeout for all tests (seconds). GUI tests that spawn Tk windows
+# may block indefinitely without a timeout in headless/CI environments.
+timeout = 30
+timeout_func_only = false
 
 [tool.coverage.run]
 source = ["regilattice"]

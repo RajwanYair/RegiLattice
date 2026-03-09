@@ -155,24 +155,27 @@ class TestBuildTooltipText:
 _tk_available = True
 try:
     import tkinter as tk
-
-    _test_root: tk.Tk | None = tk.Tk()
-    assert _test_root is not None
-    _test_root.withdraw()
 except Exception:
     _tk_available = False
-    _test_root = None
 
 
 import pytest
 
 
 @pytest.fixture()
-def root() -> tk.Tk:
+def root():  # type: ignore[return]
+    """Create a hidden Tk root for the test; destroyed after each test."""
     if not _tk_available:
         pytest.skip("tkinter not available or headless environment")
-    assert _test_root is not None
-    return _test_root
+    import tkinter as tk
+
+    r = tk.Tk()
+    r.withdraw()
+    yield r
+    try:
+        r.destroy()
+    except Exception:
+        pass
 
 
 @pytest.mark.skipif(not _tk_available, reason="tkinter not available")
