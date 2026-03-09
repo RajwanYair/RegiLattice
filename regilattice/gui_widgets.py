@@ -484,8 +484,8 @@ class CategorySection:
             row.pack_row()
 
     def _hide_rows(self) -> None:
-        for row in self.rows:
-            row.unpack_row()
+        # Hide the container only — rows remain packed inside and keep their
+        # filter state.  Avoids O(n_rows) pack_forget calls on collapse.
         self.content_frame.pack_forget()
 
     def update_count(self, statuses: dict[str, TweakResult] | None = None) -> None:

@@ -327,6 +327,7 @@ class TestDetectMemory:
         assert mem.total_mb == 0
 
     @patch("regilattice.hwinfo.os.name", "nt")
+    @patch("regilattice.hwinfo._ctypes_memory_mb", return_value=None)
     @patch(
         "regilattice.hwinfo._run_composite_cim",
         return_value={
@@ -334,7 +335,7 @@ class TestDetectMemory:
             "MEM_FREE": "8388608",
         },
     )
-    def test_memory_parsed(self, _mock_cim: MagicMock) -> None:
+    def test_memory_parsed(self, _mock_cim: MagicMock, _mock_ctypes: MagicMock) -> None:
         from regilattice.hwinfo import detect_memory
 
         mem = detect_memory()

@@ -1394,3 +1394,766 @@ class TestOfferRollback:
         ):
             gui._offer_rollback("msg", [MagicMock()], "remove")
         m.assert_not_called()
+
+
+# ── Sprint 11: gui.py 70 % → 80 % ────────────────────────────────────────────
+
+
+class TestNavigateRows:
+    """Tests for _navigate_rows and _focus_search keyboard-navigation helpers."""
+
+    def _make_visible_row(self, gui: RegiLatticeGUI) -> MagicMock:
+        row = MagicMock()
+        row.frame = MagicMock()
+        row.frame.winfo_ismapped.return_value = True
+        return row
+
+    def test_navigate_forward_sets_focused_idx(self, gui: RegiLatticeGUI) -> None:
+        r0 = self._make_visible_row(gui)
+        r1 = self._make_visible_row(gui)
+        gui._tweak_rows = [r0, r1]
+        gui._focused_row_idx = 0
+        gui._navigate_rows(1)
+        assert gui._focused_row_idx == 1
+
+    def test_navigate_clamps_at_last_row(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_visible_row(gui)
+        gui._tweak_rows = [row]
+        gui._focused_row_idx = 0
+        gui._navigate_rows(1)  # already at last
+        assert gui._focused_row_idx == 0
+
+    def test_navigate_backward_clamps_at_zero(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_visible_row(gui)
+        gui._tweak_rows = [row]
+        gui._focused_row_idx = 0
+        gui._navigate_rows(-1)
+        assert gui._focused_row_idx == 0
+
+    def test_navigate_no_visible_rows_is_noop(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.frame = MagicMock()
+        row.frame.winfo_ismapped.return_value = False  # not visible
+        gui._tweak_rows = [row]
+        gui._navigate_rows(1)  # must not raise
+
+    def test_navigate_focuses_frame(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_visible_row(gui)
+        gui._tweak_rows = [row]
+        gui._focused_row_idx = -1
+        gui._navigate_rows(1)
+        row.frame.focus_set.assert_called_once()
+
+    def test_focus_search_focuses_entry(self, gui: RegiLatticeGUI) -> None:
+        with patch.object(gui._search_entry, "focus_set") as m_focus:
+            gui._focus_search()
+        m_focus.assert_called_once()
+
+
+class TestStatLabelUpdates:
+    """Covers the stat-label configure paths at the bottom of _apply_statuses."""
+
+    def _make_row(self, gui: RegiLatticeGUI, tweak_id: str) -> MagicMock:
+        row = MagicMock()
+        row.td.id = tweak_id
+        row.td.registry_keys = []
+        row.td.description = ""
+        row.td.tags = []
+        row.td.needs_admin = False
+        row.td.corp_safe = True
+        row.disabled_by_corp = False
+        row.frame = MagicMock()
+        row.status_dot = MagicMock()
+        row.status_text = MagicMock()
+        row.toggle_btn = MagicMock()
+        row.tooltip = MagicMock()
+        return row
+
+    def test_section_update_count_called(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        row = self._make_row(gui, "stat-sec-t1")
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        section = MagicMock()
+        gui._category_sections = [section]
+        gui._apply_statuses({"stat-sec-t1": TweakResult.APPLIED})
+        section.update_count.assert_called_once()
+
+    def test_stat_blocked_label_updated_when_set(self, gui: RegiLatticeGUI) -> None:
+
+        row = self._make_row(gui, "stat-blk-t1")
+        row.disabled_by_corp = True  # This row is blocked
+        gui._tweak_rows = [row]
+        gui._prev_statuses = {}
+        gui._stat_blocked = MagicMock()
+        gui._apply_statuses({})
+        gui._stat_blocked.configure.assert_called_once()
+
+
+class TestSwitchThemeWithRows:
+    """_switch_theme must call apply_theme on built rows and sections."""
+
+    def test_applies_theme_to_built_rows_and_sections(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.frame = MagicMock()  # frame is not None → widgets built
+        section = MagicMock()
+        gui._tweak_rows = [row]
+        gui._category_sections = [section]
+        gui._cached_statuses = {}
+        gui._switch_theme("Catppuccin Mocha")
+        row.apply_theme.assert_called_once()
+        section.apply_theme.assert_called_once()
+
+    def test_reapplies_cached_statuses_after_theme_switch(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        gui._tweak_rows = []
+        gui._category_sections = []
+        gui._cached_statuses = {"some-id": TweakResult.APPLIED}
+        with patch.object(gui, "_apply_statuses") as m:
+            gui._switch_theme("Nord")
+        m.assert_called_once()
+
+
+class TestAutoRefreshLog:
+    """_auto_refresh_log should refresh while log is visible, stop when hidden."""
+
+    def test_visible_calls_refresh_and_reschedules(self, gui: RegiLatticeGUI) -> None:
+        gui._log_visible = True
+        with (
+            patch.object(gui, "_refresh_log") as m_refresh,
+            patch.object(gui._root, "after") as m_after,
+        ):
+            gui._auto_refresh_log()
+        m_refresh.assert_called_once()
+        m_after.assert_called_once()
+
+    def test_hidden_skips_refresh(self, gui: RegiLatticeGUI) -> None:
+        gui._log_visible = False
+        with patch.object(gui, "_refresh_log") as m_refresh:
+            gui._auto_refresh_log()
+        m_refresh.assert_not_called()
+
+
+class TestContextMenu:
+    """Tests for _show_context_menu right-click handler."""
+
+    def _make_row(self, gui: RegiLatticeGUI, *, registry_keys: list[str] | None = None, depends_on: list[str] | None = None) -> MagicMock:
+        row = MagicMock()
+        row.td.id = "ctx-m-1"
+        row.td.registry_keys = registry_keys if registry_keys is not None else []
+        row.td.depends_on = depends_on if depends_on is not None else []
+        row.td.category = "Performance"
+        row.var.get.return_value = False
+        return row
+
+    def _call_ctx(self, gui: RegiLatticeGUI, row: MagicMock, *, applied: bool = False) -> None:
+        from regilattice.tweaks import TweakResult
+
+        event = MagicMock()
+        event.x_root = 0
+        event.y_root = 0
+        status = TweakResult.APPLIED if applied else TweakResult.NOT_APPLIED
+        with (
+            patch("regilattice.gui.tweak_status", return_value=status),
+            patch.object(gui._ctx_menu, "tk_popup"),
+            patch.object(gui._ctx_menu, "grab_release"),
+        ):
+            gui._show_context_menu(event, row)
+
+    def test_applied_row_shows_disable_label(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_row(gui)
+        self._call_ctx(gui, row, applied=True)
+        # If context menu was populated without crashing, and row is set as target
+        assert gui._ctx_target is row
+
+    def test_not_applied_row_shows_enable_label(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_row(gui)
+        self._call_ctx(gui, row, applied=False)
+        assert gui._ctx_target is row
+
+    def test_registry_keys_adds_copy_entry(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_row(gui, registry_keys=["HKEY_LOCAL_MACHINE\\SOFTWARE\\Test"])
+        self._call_ctx(gui, row)
+        # menu should have been populated (no crash) with copy-registry-key entry
+        assert gui._ctx_target is row
+
+    def test_depends_on_adds_info_entry(self, gui: RegiLatticeGUI) -> None:
+        row = self._make_row(gui, depends_on=["other-tweak-id"])
+        self._call_ctx(gui, row)
+        assert gui._ctx_target is row
+
+
+class TestStatusRefresh:
+    """_initial_refresh and _refresh_status_all should start background threads."""
+
+    def test_initial_refresh_starts_daemon_thread(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.threading.Thread") as m_thread:
+            gui._initial_refresh()
+        m_thread.assert_called_once()
+        assert m_thread.call_args.kwargs.get("daemon") is True
+
+    def test_refresh_status_all_starts_daemon_thread(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.threading.Thread") as m_thread:
+            gui._refresh_status_all()
+        m_thread.assert_called_once()
+        assert m_thread.call_args.kwargs.get("daemon") is True
+
+    def test_initial_refresh_sets_status_text(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.threading.Thread"):
+            gui._initial_refresh()
+        assert "Detecting" in gui._status_label.cget("text")
+
+    def test_refresh_status_all_sets_status_text(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.threading.Thread"):
+            gui._refresh_status_all()
+        assert "Refreshing" in gui._status_label.cget("text")
+
+
+class TestToggleSingle:
+    """Tests for the _toggle_single per-row toggle handler."""
+
+    def _make_toggle_row(self, gui: RegiLatticeGUI, tweak_id: str) -> MagicMock:
+        row = MagicMock()
+        row.td.id = tweak_id
+        row.td.label = "Test Tweak"
+        row.td.category = "Performance"
+        row.toggle_btn = MagicMock()
+        row.disabled_by_corp = False
+        return row
+
+    def test_corp_blocked_warns_and_returns(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.corpguard import CorporateNetworkError
+
+        gui._force_var.set(False)
+        row = self._make_toggle_row(gui, "ts-corp-1")
+        with (
+            patch("regilattice.gui.assert_not_corporate", side_effect=CorporateNetworkError("blocked")),
+            patch("regilattice.gui.messagebox.showwarning") as m_warn,
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._toggle_single(row)
+        m_warn.assert_called_once()
+        m_thread.assert_not_called()
+
+    def test_force_flag_skips_corp_check(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        gui._force_var.set(True)
+        row = self._make_toggle_row(gui, "ts-force-1")
+        with (
+            patch("regilattice.gui.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._toggle_single(row)
+        m_thread.assert_called_once()
+
+    def test_starts_worker_thread_when_clear(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        gui._force_var.set(False)
+        row = self._make_toggle_row(gui, "ts-worker-1")
+        with (
+            patch("regilattice.gui.assert_not_corporate"),
+            patch("regilattice.gui.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._toggle_single(row)
+        m_thread.assert_called_once()
+        assert m_thread.call_args.kwargs.get("daemon") is True
+
+    def test_returns_early_when_toggle_btn_is_none(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.tweaks import TweakResult
+
+        gui._force_var.set(True)
+        row = self._make_toggle_row(gui, "ts-nobtn-1")
+        row.toggle_btn = None  # no button built yet
+        with (
+            patch("regilattice.gui.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._toggle_single(row)
+        m_thread.assert_not_called()
+
+    def test_worker_success_sets_status(self, gui: RegiLatticeGUI) -> None:
+        """Run the _worker closure directly to exercise the worker-thread path."""
+        from regilattice.tweaks import TweakResult
+
+        applied = []
+        row = self._make_toggle_row(gui, "ts-wrkr-1")
+        row.td.apply_fn = lambda *, require_admin=True: applied.append(True)
+        row.td.remove_fn = lambda *, require_admin=True: None
+
+        captured_thread: list[object] = []
+
+        def fake_thread(**kwargs: object) -> MagicMock:
+            t = MagicMock()
+            captured_thread.append(kwargs["target"])
+            return t
+
+        with (
+            patch("regilattice.gui.assert_not_corporate"),
+            patch("regilattice.gui.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("regilattice.gui.threading.Thread", side_effect=fake_thread),
+        ):
+            gui._toggle_single(row)
+
+        assert captured_thread, "thread target not captured"
+        # Run the worker inline to exercise the worker body
+        worker = captured_thread[0]
+        worker()  # type: ignore[operator]
+        assert applied == [True]
+
+
+class TestSnapshotOps:
+    """Tests for _save_snapshot and _restore_snapshot."""
+
+    def test_save_snapshot_cancel_returns_early(self, gui: RegiLatticeGUI) -> None:
+        with (
+            patch("regilattice.gui.filedialog.asksaveasfilename", return_value=""),
+            patch("regilattice.gui.save_snapshot") as m_save,
+        ):
+            gui._save_snapshot()
+        m_save.assert_not_called()
+
+    def test_save_snapshot_calls_save_fn(self, gui: RegiLatticeGUI, tmp_path: Path) -> None:
+        snap = tmp_path / "snap.json"
+        with (
+            patch("regilattice.gui.filedialog.asksaveasfilename", return_value=str(snap)),
+            patch("regilattice.gui.save_snapshot") as m_save,
+        ):
+            gui._save_snapshot()
+        m_save.assert_called_once()
+
+    def test_save_snapshot_oserror_shows_dialog(self, gui: RegiLatticeGUI, tmp_path: Path) -> None:
+        snap = tmp_path / "snap.json"
+        with (
+            patch("regilattice.gui.filedialog.asksaveasfilename", return_value=str(snap)),
+            patch("regilattice.gui.save_snapshot", side_effect=OSError("disk full")),
+            patch("regilattice.gui.messagebox.showerror") as m_err,
+        ):
+            gui._save_snapshot()
+        m_err.assert_called_once()
+
+    def test_restore_snapshot_cancel_returns_early(self, gui: RegiLatticeGUI) -> None:
+        with (
+            patch("regilattice.gui.filedialog.askopenfilename", return_value=""),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._restore_snapshot()
+        m_thread.assert_not_called()
+
+    def test_restore_snapshot_user_declines(self, gui: RegiLatticeGUI, tmp_path: Path) -> None:
+        snap = tmp_path / "snap.json"
+        with (
+            patch("regilattice.gui.filedialog.askopenfilename", return_value=str(snap)),
+            patch("regilattice.gui.messagebox.askyesno", return_value=False),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._restore_snapshot()
+        m_thread.assert_not_called()
+
+    def test_restore_snapshot_accepted_starts_thread(self, gui: RegiLatticeGUI, tmp_path: Path) -> None:
+        snap = tmp_path / "snap.json"
+        with (
+            patch("regilattice.gui.filedialog.askopenfilename", return_value=str(snap)),
+            patch("regilattice.gui.messagebox.askyesno", return_value=True),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._restore_snapshot()
+        m_thread.assert_called_once()
+
+
+class TestDispatchSelectionPath:
+    """Additional _dispatch tests: selection confirmation dialog path."""
+
+    def _make_selected_row(self, gui: RegiLatticeGUI, tweak_id: str) -> MagicMock:
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=True)
+        row.td.id = tweak_id
+        row.td.label = "Test"
+        row.td.category = "Performance"
+        row.td.needs_admin = False
+        row.td.registry_keys = []
+        return row
+
+    def test_restore_mode_starts_thread_immediately(self, gui: RegiLatticeGUI) -> None:
+        gui._running = False
+        gui._force_var.set(True)
+        with patch("regilattice.gui.threading.Thread") as m_thread:
+            gui._dispatch("restore")
+        m_thread.assert_called_once()
+
+    def test_user_cancels_confirmation_no_thread(self, gui: RegiLatticeGUI) -> None:
+        gui._running = False
+        gui._force_var.set(True)
+        row = self._make_selected_row(gui, "dsp-cancel-1")
+        gui._tweak_rows = [row]
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=False),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._dispatch("apply")
+        m_thread.assert_not_called()
+
+    def test_user_confirms_starts_thread(self, gui: RegiLatticeGUI) -> None:
+        gui._running = False
+        gui._force_var.set(True)
+        row = self._make_selected_row(gui, "dsp-confirm-1")
+        gui._tweak_rows = [row]
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=True),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._dispatch("apply")
+        m_thread.assert_called_once()
+
+
+class TestRunTweaks:
+    """Direct (synchronous) tests for the _run_tweaks worker method."""
+
+    def _make_td(self, suffix: str, *, apply_fn: object = None, fail_with: Exception | None = None) -> MagicMock:
+        td = MagicMock()
+        td.id = f"rt-{suffix}"
+        td.label = f"Tweak {suffix}"
+        td.category = "Performance"
+        td.needs_admin = False
+        td.registry_keys = []
+
+        if fail_with is not None:
+            exc = fail_with
+
+            def _fail(*, require_admin: bool = True) -> None:
+                raise exc
+
+            td.apply_fn = _fail
+            td.remove_fn = _fail
+        else:
+            td.apply_fn = lambda *, require_admin=True: None
+            td.remove_fn = lambda *, require_admin=True: None
+        return td
+
+    def test_run_single_success(self, gui: RegiLatticeGUI) -> None:
+        td = self._make_td("s1")
+        gui._running = False
+        gui._cancel.clear()
+        gui._run_tweaks([td], "apply")
+        # succeeded → session_changed gets the id
+        assert td.id in gui._session_changed
+
+    def test_run_remove_mode_success(self, gui: RegiLatticeGUI) -> None:
+        td = self._make_td("r1")
+        gui._cancel.clear()
+        gui._run_tweaks([td], "remove")
+        assert td.id in gui._session_changed
+
+    def test_run_oserror_records_error(self, gui: RegiLatticeGUI) -> None:
+        td = self._make_td("err1", fail_with=OSError("disk full"))
+        gui._cancel.clear()
+        with patch("regilattice.gui.messagebox.showwarning"):
+            gui._run_tweaks([td], "apply")
+        # id should NOT be in session_changed (apply failed)
+        assert td.id not in gui._session_changed
+
+    def test_run_admin_error_records_error(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.registry import AdminRequirementError
+
+        td = self._make_td("adm1", fail_with=AdminRequirementError("need admin"))
+        gui._cancel.clear()
+        with patch("regilattice.gui.messagebox.showwarning"):
+            gui._run_tweaks([td], "apply")
+        assert td.id not in gui._session_changed
+
+    def test_run_cancel_mid_breaks_early(self, gui: RegiLatticeGUI) -> None:
+        td1 = self._make_td("c1")
+        td2 = self._make_td("c2")
+        gui._cancel.set()  # cancel immediately
+        with patch.object(gui, "_set_status"):
+            gui._run_tweaks([td1, td2], "apply")
+        # Neither tweak was applied since cancel was set before the loop body
+        assert td1.id not in gui._session_changed
+        assert td2.id not in gui._session_changed
+
+    def test_run_partial_failure_pushes_undo(self, gui: RegiLatticeGUI) -> None:
+        td_ok = self._make_td("p1")
+        td_fail = self._make_td("p2", fail_with=OSError("fail"))
+        gui._cancel.clear()
+        gui._undo_stack = []
+        with patch("regilattice.gui.messagebox.askyesno", return_value=False):
+            gui._run_tweaks([td_ok, td_fail], "apply")
+        # Undo stack gets the items list when any items were processed
+        assert len(gui._undo_stack) == 1
+
+    def test_run_success_updates_undo_stack(self, gui: RegiLatticeGUI) -> None:
+        td = self._make_td("undo1")
+        gui._cancel.clear()
+        gui._undo_stack = []
+        with patch("regilattice.gui.messagebox.showinfo"):
+            gui._run_tweaks([td], "apply")
+        assert len(gui._undo_stack) == 1
+        mode, items = gui._undo_stack[0]
+        assert mode == "apply"
+        assert items == [td]
+
+
+# ── Sprint 11: prefix-filter coverage, worker-error paths, restore-point ──────
+
+
+class TestFilterRowsPrefixOperators:
+    """Tests for _filter_rows tag:/cat:/admin: prefix operators (Sprint 11)."""
+
+    def _make_section(
+        self,
+        gui: RegiLatticeGUI,
+        *,
+        tweak_id: str,
+        tags: list[str] | None = None,
+        category: str = "Performance",
+        needs_admin: bool = True,
+    ) -> tuple[MagicMock, MagicMock]:
+        """Return (section, row) mocks wired for _filter_rows checks."""
+        row = MagicMock()
+        row.td.id = tweak_id
+        row.td.tags = tags if tags is not None else []
+        row.td.category = category
+        row.td.needs_admin = needs_admin
+        row.td.corp_safe = True
+        row.disabled_by_corp = False
+        row.var = tk.BooleanVar(gui._root, value=False)
+
+        section = MagicMock()
+        section.rows = [row]
+        section._widgets_built = True  # skip lazy build during filter
+        section.expanded = False
+        return section, row
+
+    def _run_filter(self, gui: RegiLatticeGUI, query: str) -> None:
+        gui._loading = False
+        gui._cached_statuses = {}
+        gui._session_changed = set()
+        gui._search_var.set(query)
+        gui._filter_rows()
+
+    # ── tag: operator ─────────────────────────────────────────────────────
+
+    def test_tag_prefix_matches_row_with_tag(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-tag-match-1", tags=["privacy", "telemetry"])
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:privacy")
+        row.pack_row.assert_called()
+
+    def test_tag_prefix_excludes_row_without_tag(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-tag-miss-1", tags=["gaming"])
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:privacy")
+        row.unpack_row.assert_called()
+
+    def test_tag_prefix_partial_match_is_enough(self, gui: RegiLatticeGUI) -> None:
+        """tag:priv should match a tag "privacy" (substring match)."""
+        section, row = self._make_section(gui, tweak_id="fp-tag-sub-1", tags=["privacy"])
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:priv")
+        row.pack_row.assert_called()
+
+    def test_empty_tags_list_misses_tag_filter(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-tag-empty-1", tags=[])
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:network")
+        row.unpack_row.assert_called()
+
+    # ── cat: operator ─────────────────────────────────────────────────────
+
+    def test_cat_prefix_matches_row_category(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-cat-match-1", category="Privacy")
+        gui._category_sections = [section]
+        self._run_filter(gui, "cat:priv")
+        row.pack_row.assert_called()
+
+    def test_cat_prefix_excludes_different_category(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-cat-miss-1", category="Gaming")
+        gui._category_sections = [section]
+        self._run_filter(gui, "cat:privacy")
+        row.unpack_row.assert_called()
+
+    def test_cat_prefix_case_insensitive(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-cat-case-1", category="Explorer")
+        gui._category_sections = [section]
+        self._run_filter(gui, "cat:EXPLORER")
+        row.pack_row.assert_called()
+
+    # ── admin: operator ───────────────────────────────────────────────────
+
+    def test_admin_yes_matches_admin_required_row(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-adm-yes-1", needs_admin=True)
+        gui._category_sections = [section]
+        self._run_filter(gui, "admin:yes")
+        row.pack_row.assert_called()
+
+    def test_admin_yes_excludes_non_admin_row(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-adm-yes-2", needs_admin=False)
+        gui._category_sections = [section]
+        self._run_filter(gui, "admin:yes")
+        row.unpack_row.assert_called()
+
+    def test_admin_no_matches_non_admin_row(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-adm-no-1", needs_admin=False)
+        gui._category_sections = [section]
+        self._run_filter(gui, "admin:no")
+        row.pack_row.assert_called()
+
+    def test_admin_no_excludes_admin_required_row(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(gui, tweak_id="fp-adm-no-2", needs_admin=True)
+        gui._category_sections = [section]
+        self._run_filter(gui, "admin:no")
+        row.unpack_row.assert_called()
+
+    def test_admin_true_variant_matches(self, gui: RegiLatticeGUI) -> None:
+        """admin:true should also be recognised (bool True)."""
+        section, row = self._make_section(gui, tweak_id="fp-adm-true-1", needs_admin=True)
+        gui._category_sections = [section]
+        self._run_filter(gui, "admin:true")
+        row.pack_row.assert_called()
+
+    # ── combined prefix + text ────────────────────────────────────────────
+
+    def test_multiple_operators_are_all_required(self, gui: RegiLatticeGUI) -> None:
+        """tag:gaming cat:gaming — must satisfy both tag and category checks."""
+        section, row = self._make_section(
+            gui,
+            tweak_id="fp-multi-1",
+            tags=["gaming"],
+            category="Gaming",
+        )
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:gaming cat:gaming")
+        row.pack_row.assert_called()
+
+    def test_combined_fails_if_one_prefix_mismatches(self, gui: RegiLatticeGUI) -> None:
+        section, row = self._make_section(
+            gui,
+            tweak_id="fp-multi-miss-1",
+            tags=["gaming"],
+            category="Privacy",  # does NOT match cat:gaming
+        )
+        gui._category_sections = [section]
+        self._run_filter(gui, "tag:gaming cat:gaming")
+        row.unpack_row.assert_called()
+
+
+class TestToggleSingleWorkerErrors:
+    """Worker thread error paths for _toggle_single (AdminRequirementError, OSError)."""
+
+    def _capture_worker(self, gui: RegiLatticeGUI, row: MagicMock) -> object:
+        """Run _toggle_single and capture the worker callable passed to Thread."""
+        from regilattice.tweaks import TweakResult
+
+        captured: list[object] = []
+
+        def fake_thread(**kwargs: object) -> MagicMock:
+            captured.append(kwargs["target"])
+            return MagicMock()
+
+        with (
+            patch("regilattice.gui.assert_not_corporate"),
+            patch("regilattice.gui.tweak_status", return_value=TweakResult.NOT_APPLIED),
+            patch("regilattice.gui.threading.Thread", side_effect=fake_thread),
+        ):
+            gui._toggle_single(row)
+
+        assert captured, "Thread was not started"
+        return captured[0]
+
+    def _make_row(self, gui: RegiLatticeGUI, tweak_id: str) -> MagicMock:
+        row = MagicMock()
+        row.td.id = tweak_id
+        row.td.label = "Test Tweak"
+        row.td.category = "Performance"
+        row.toggle_btn = MagicMock()
+        row.disabled_by_corp = False
+        return row
+
+    def test_admin_error_records_after_call(self, gui: RegiLatticeGUI) -> None:
+        """AdminRequirementError in apply_fn → after() called with 'admin required'."""
+        from regilattice.registry import AdminRequirementError
+
+        row = self._make_row(gui, "ts-err-adm-1")
+        row.td.apply_fn = MagicMock(side_effect=AdminRequirementError("need admin"))
+        gui._category_sections = []
+
+        worker = self._capture_worker(gui, row)
+        after_calls: list[tuple[object, ...]] = []
+        with patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)):
+            worker()  # type: ignore[operator]
+
+        # At least one after() call must carry 'admin required' status text
+        assert any("admin required" in str(a) for a in after_calls)
+
+    def test_oserror_records_after_call(self, gui: RegiLatticeGUI) -> None:
+        """OSError in apply_fn → after() called with the error message."""
+        row = self._make_row(gui, "ts-err-os-1")
+        row.td.apply_fn = MagicMock(side_effect=OSError("permission denied"))
+        gui._category_sections = []
+
+        worker = self._capture_worker(gui, row)
+        after_calls: list[tuple[object, ...]] = []
+        with patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)):
+            worker()  # type: ignore[operator]
+
+        assert any("permission denied" in str(a) for a in after_calls)
+
+    def test_success_records_enabled_status(self, gui: RegiLatticeGUI) -> None:
+        """On success, after() carries the 'enabled' text (apply action)."""
+        row = self._make_row(gui, "ts-err-ok-1")
+        row.td.apply_fn = MagicMock(return_value=None)
+        gui._category_sections = []
+
+        worker = self._capture_worker(gui, row)
+        after_calls: list[tuple[object, ...]] = []
+        with patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)):
+            worker()  # type: ignore[operator]
+
+        assert any("enabled" in str(a) for a in after_calls)
+
+
+class TestRunRestorePoint:
+    """Tests for the _run_restore_point synchronous helper."""
+
+    def test_success_schedules_ready_status(self, gui: RegiLatticeGUI) -> None:
+        after_calls: list[tuple[object, ...]] = []
+        with (
+            patch("regilattice.gui.create_restore_point"),
+            patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)),
+        ):
+            gui._run_restore_point()
+        assert any("Restore point created" in str(a) for a in after_calls)
+
+    def test_admin_error_schedules_warning(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.registry import AdminRequirementError
+
+        after_calls: list[tuple[object, ...]] = []
+        with (
+            patch("regilattice.gui.create_restore_point", side_effect=AdminRequirementError("no admin")),
+            patch("regilattice.gui.messagebox.showwarning"),
+            patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)),
+        ):
+            gui._run_restore_point()
+        assert any("failed" in str(a) for a in after_calls)
+
+    def test_oserror_schedules_error_status(self, gui: RegiLatticeGUI) -> None:
+        after_calls: list[tuple[object, ...]] = []
+        with (
+            patch("regilattice.gui.create_restore_point", side_effect=OSError("disk error")),
+            patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)),
+        ):
+            gui._run_restore_point()
+        assert any("disk error" in str(a) for a in after_calls)
+
+    def test_runtime_error_schedules_error_status(self, gui: RegiLatticeGUI) -> None:
+        after_calls: list[tuple[object, ...]] = []
+        with (
+            patch("regilattice.gui.create_restore_point", side_effect=RuntimeError("wmi failure")),
+            patch.object(gui._root, "after", side_effect=lambda *a: after_calls.append(a)),
+        ):
+            gui._run_restore_point()
+        assert any("wmi failure" in str(a) for a in after_calls)

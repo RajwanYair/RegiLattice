@@ -918,11 +918,13 @@ class RegiLatticeGUI:
         for section in self._category_sections:
             if section.expanded:
                 section.toggle()
+        self._root.update_idletasks()
 
     def _expand_all(self) -> None:
         for section in self._category_sections:
             if not section.expanded:
                 section.toggle()
+        self._root.update_idletasks()
 
     def _debounce_filter(self, delay_ms: int = 200) -> None:
         """Schedule _filter_rows after *delay_ms*, cancelling any pending call."""
@@ -1218,7 +1220,8 @@ class RegiLatticeGUI:
 
         def _on_progress(done: int, total: int) -> None:
             pct = done * 100 // total if total else 100
-            self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
+            if pct < 100:  # skip 100 % — _apply_statuses will set the Ready status
+                self._root.after(0, lambda p=pct: self._set_status(f"Detecting tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
             statuses = status_map(parallel=True, progress_fn=_on_progress)
@@ -1232,7 +1235,8 @@ class RegiLatticeGUI:
 
         def _on_progress(done: int, total: int) -> None:
             pct = done * 100 // total if total else 100
-            self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
+            if pct < 100:  # skip 100 % — _apply_statuses will set the Ready status
+                self._root.after(0, lambda p=pct: self._set_status(f"Refreshing tweak states\u2026 {p} %", _WARN_YELLOW))  # type: ignore[misc]
 
         def _worker() -> None:
             statuses = status_map(parallel=True, progress_fn=_on_progress)
@@ -1311,6 +1315,9 @@ class RegiLatticeGUI:
         self._stat_gpo.configure(text=f"\u25cf {self._cached_gpo_count} GPO")
         if self._stat_blocked is not None:
             self._stat_blocked.configure(text=f"\u25cf {blocked} Blocked")
+        # Clear the detection progress message once all rows are updated
+        total_tweaks = applied + default + unknown + blocked
+        self._set_status(f"Ready  \u2022  {total_tweaks} tweaks  \u2022  {applied} applied / {default} default / {unknown} unknown")
 
     # ── Individual toggle ────────────────────────────────────────────────
 

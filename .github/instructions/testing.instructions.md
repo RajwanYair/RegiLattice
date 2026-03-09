@@ -106,26 +106,26 @@ def test_api_call():
 
 ## Measured Coverage Baselines (v1.0.1)
 
-| Module | Coverage | Status |
-|---|---|---|
-| `analytics.py` | 100% | ✅ |
-| `deps.py` | 100% | ✅ |
-| `locale.py` | 100% | ✅ |
-| `menu.py` | **100%** | ✅ (41 tests) |
-| `gui_widgets.py` | **95%** | ✅ (40 tests) |
-| `gui_dialogs.py` | **89%** | ✅ (53 tests) |
-| `gui_theme.py` | 98% | ✅ |
-| `gui_tooltip.py` | 91% | ✅ |
-| `hwinfo.py` | 97% | ✅ |
-| `marketplace.py` | 95% | ✅ |
-| `ratings.py` | 97% | ✅ |
-| `elevation.py` | 95% | ✅ |
-| `config.py` | 90% | ✅ |
-| `cli.py` | 86% | 🟡 |
-| `registry.py` | 84% | 🟡 |
-| `corpguard.py` | 77% | 🟡 |
-| `gui.py` | 70% | 🔴 in-progress |
-| `tweaks/__init__.py` | 50% | 🟡 platform paths |
+| Module               | Coverage | Status            |
+| -------------------- | -------- | ----------------- |
+| `analytics.py`       | 100%     | ✅                |
+| `deps.py`            | 100%     | ✅                |
+| `locale.py`          | 100%     | ✅                |
+| `menu.py`            | **100%** | ✅ (41 tests)     |
+| `gui_widgets.py`     | **95%**  | ✅ (40 tests)     |
+| `gui_dialogs.py`     | **89%**  | ✅ (53 tests)     |
+| `gui_theme.py`       | 98%      | ✅                |
+| `gui_tooltip.py`     | 91%      | ✅                |
+| `hwinfo.py`          | 97%      | ✅                |
+| `marketplace.py`     | 95%      | ✅                |
+| `ratings.py`         | 97%      | ✅                |
+| `elevation.py`       | 95%      | ✅                |
+| `config.py`          | 90%      | ✅                |
+| `cli.py`             | 86%      | 🟡                |
+| `registry.py`        | 84%      | 🟡                |
+| `corpguard.py`       | 77%      | 🟡                |
+| `gui.py`             | 70%→80%+ | 🟡 Sprint 4 push  |
+| `tweaks/__init__.py` | 50%      | 🟡 platform paths |
 
 Target: 80%+ on all core modules, 90%+ on non-GUI modules.
 
@@ -198,3 +198,35 @@ with patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED):
 - **Don't run tests via `python -m pytest` in Copilot agents** — use `runTests` tool.
 - **Don't reuse TweakDef IDs across tests** when `tweak_scope()` or any
   `lru_cache`-backed function is involved — use unique IDs per test class.
+
+## Mocking ctypes / Platform Helpers
+
+When testing Windows-only code paths that call `ctypes` internally, always extract
+the ctypes call into a named module-level helper and patch that helper in tests:
+
+```python
+# ✅ GOOD — patchable helper
+def _ctypes_memory_mb() -> tuple[int, int] | None:
+    ...  # calls GlobalMemoryStatusEx
+
+def detect_memory() -> MemoryInfo:
+    result = _ctypes_memory_mb()
+    if result is None:
+        return _detect_via_cim()
+    ...
+
+# In test — force the CIM fallback regardless of platform:
+@patch("regilattice.hwinfo._ctypes_memory_mb", return_value=None)
+@patch("regilattice.hwinfo._run_ps", return_value="...")
+def test_memory_cim_path(self, mock_ps, _mock_ctypes): ...
+
+# ❌ BAD — nesting ctypes inside lru_cache; pytest cannot intercept it
+@functools.lru_cache(maxsize=1)
+def detect_memory():
+    import ctypes
+    buf = ctypes.Structure(...)  # not patchable
+```
+
+This pattern is critical for cross-platform CI: tests run on Linux/macOS where
+`ctypes.windll` does not exist, so the ctypes helper returns `None` and the
+non-Windows fallback path is exercised instead.

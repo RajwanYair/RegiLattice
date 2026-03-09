@@ -120,12 +120,13 @@ def _run_ps(script: str, timeout: int = 8) -> str:
 # ── Composite CIM query (single PS process for CPU+GPU+RAM+Disk+HyperV) ────
 
 _COMPOSITE_PS = r"""
+$ErrorActionPreference = 'Continue'
 $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
 $gpus = Get-CimInstance Win32_VideoController
 $os = Get-CimInstance Win32_OperatingSystem
 $disk = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'"
 $cs = Get-CimInstance Win32_ComputerSystem
-$pd = Get-PhysicalDisk | Where-Object { $_.DeviceID -eq '0' } | Select-Object -First 1
+$pd = $null; try { $pd = Get-PhysicalDisk -ErrorAction Stop | Where-Object { $_.DeviceID -eq '0' } | Select-Object -First 1 } catch {}
 "CPU_NAME:" + $cpu.Name
 "CPU_CORES:" + $cpu.NumberOfCores
 "HYPERV:" + $cs.HypervisorPresent
@@ -133,8 +134,8 @@ $pd = Get-PhysicalDisk | Where-Object { $_.DeviceID -eq '0' } | Select-Object -F
 "MEM_FREE:" + $os.FreePhysicalMemory
 "DISK_SIZE:" + $disk.Size
 "DISK_FREE:" + $disk.FreeSpace
-"DISK_MEDIA:" + $pd.MediaType
-foreach ($g in $gpus) { "GPU:" + $g.Name + "|" + $g.DriverVersion + "|" + $g.AdapterRAM }
+"DISK_MEDIA:" + $(if ($pd) { $pd.MediaType } else { "Unknown" })
+foreach ($g in $gpus) { "GPU:" + $g.Name + "|" + $g.DriverVersion + "|" + $([string]($g.AdapterRAM)) }
 """
 
 _CIM_CACHE: dict[str, str] | None = None
@@ -224,11 +225,49 @@ def detect_gpus() -> list[GPUInfo]:
     return gpus
 
 
+def _ctypes_memory_mb() -> tuple[int, int] | None:
+    """Return ``(total_mb, available_mb)`` via ``GlobalMemoryStatusEx``, or ``None`` on failure.
+
+    Extracted as a named helper so tests can patch ``regilattice.hwinfo._ctypes_memory_mb``
+    to force CIM fallback without touching the real ctypes call.
+    """
+    with contextlib.suppress(Exception):
+        import ctypes
+
+        class _MEMSTATEX(ctypes.Structure):
+            _fields_ = [
+                ("dwLength", ctypes.c_ulong),
+                ("dwMemoryLoad", ctypes.c_ulong),
+                ("ullTotalPhys", ctypes.c_ulonglong),
+                ("ullAvailPhys", ctypes.c_ulonglong),
+                ("ullTotalPageFile", ctypes.c_ulonglong),
+                ("ullAvailPageFile", ctypes.c_ulonglong),
+                ("ullTotalVirtual", ctypes.c_ulonglong),
+                ("ullAvailVirtual", ctypes.c_ulonglong),
+                ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+            ]
+
+        stat = _MEMSTATEX()
+        stat.dwLength = ctypes.sizeof(stat)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat)) and stat.ullTotalPhys > 0:
+            return stat.ullTotalPhys // (1024 * 1024), stat.ullAvailPhys // (1024 * 1024)
+    return None
+
+
 @functools.lru_cache(maxsize=1)
 def detect_memory() -> MemoryInfo:
-    """Detect total and available system RAM in MB."""
+    """Detect total and available system RAM in MB.
+
+    Uses :func:`_ctypes_memory_mb` (``GlobalMemoryStatusEx``) as the primary path
+    — fast, no subprocess, always accurate.  Falls back to the composite CIM
+    query when ctypes is unavailable.
+    """
     if os.name != "nt":
         return MemoryInfo()
+    result = _ctypes_memory_mb()
+    if result is not None:
+        return MemoryInfo(total_mb=result[0], available_mb=result[1])
+    # Fallback: composite CIM query
     cim = _run_composite_cim()
     total_kb = 0
     avail_kb = 0

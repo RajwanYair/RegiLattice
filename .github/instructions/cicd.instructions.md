@@ -116,7 +116,7 @@ Always include a `pre-commit` step in CI to enforce hooks consistently:
 - name: Run pre-commit hooks
   uses: pre-commit/action@v3.0.1
   with:
-    extra_args: --all-files
+      extra_args: --all-files
 ```
 
 Or invoke directly after installing deps:
@@ -124,8 +124,8 @@ Or invoke directly after installing deps:
 ```yaml
 - name: Pre-commit checks
   run: |
-    pip install pre-commit
-    pre-commit run --all-files
+      pip install pre-commit
+      pre-commit run --all-files
 ```
 
 ## Security Best Practices in Workflows
