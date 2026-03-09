@@ -9,6 +9,13 @@ from . import gui_theme as theme
 from .corpguard import is_gpo_managed
 from .tweaks import TweakDef, TweakResult
 
+__all__ = [
+    "Tooltip",
+    "build_tooltip_text",
+    "has_recommendation",
+    "parse_description_metadata",
+]
+
 # ── Theme aliases ────────────────────────────────────────────────────────────
 
 _CARD_HOVER = theme.CARD_HOVER

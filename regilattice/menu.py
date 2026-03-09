@@ -11,6 +11,8 @@ from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_s
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
 from .tweaks import TweakDef, TweakResult, apply_all, categories, remove_all, tweak_status, tweaks_by_category
 
+__all__ = ["Menu", "main"]
+
 # ANSI colour shortcuts
 _RST = "\033[0m"
 _CYAN = "\033[96m"

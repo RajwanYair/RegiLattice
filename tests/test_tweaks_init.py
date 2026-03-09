@@ -79,6 +79,27 @@ class TestTweakDef:
         assert td.registry_keys == []
         assert td.description == ""
         assert td.tags == []
+        assert td.source_url == ""  # Sprint 5: new optional KB/docs URL field
+
+    def test_source_url_optional(self) -> None:
+        """source_url defaults to empty string and accepts any URL string."""
+        td_no_url = TweakDef(id="t2", label="L", category="C", apply_fn=lambda: None, remove_fn=lambda: None)
+        assert td_no_url.source_url == ""
+        td_with_url = TweakDef(
+            id="t3",
+            label="L",
+            category="C",
+            apply_fn=lambda: None,
+            remove_fn=lambda: None,
+            source_url="https://docs.microsoft.com/en-us/example",
+        )
+        assert td_with_url.source_url == "https://docs.microsoft.com/en-us/example"
+
+    def test_source_url_present_on_all_tweaks(self) -> None:
+        """Every loaded tweak must have a source_url attribute (may be empty)."""
+        for td in all_tweaks():
+            assert hasattr(td, "source_url"), f"{td.id} is missing source_url attribute"
+            assert isinstance(td.source_url, str), f"{td.id}.source_url must be str"
 
     def test_repr_contains_id(self) -> None:
         td = TweakDef(
@@ -1012,7 +1033,14 @@ class TestTagIntegrity:
 # ── C8 engine additions ───────────────────────────────────────────────────────
 
 
-from regilattice.tweaks import apply_tweaks, filter_tweaks, remove_tweaks, tweak_dependencies, tweaks_by_ids, tweaks_by_tag  # noqa: E402
+from regilattice.tweaks import (
+    apply_tweaks,
+    filter_tweaks,  # noqa: E402
+    remove_tweaks,
+    tweak_dependencies,
+    tweaks_by_ids,
+    tweaks_by_tag,
+)
 
 
 class TestFilterTweaks:
@@ -1042,12 +1070,14 @@ class TestFilterTweaks:
         result = filter_tweaks(scope="user")
         for td in result:
             from regilattice.tweaks import tweak_scope
+
             assert tweak_scope(td) == "user"
 
     def test_scope_machine(self) -> None:
         result = filter_tweaks(scope="machine")
         for td in result:
             from regilattice.tweaks import tweak_scope
+
             assert tweak_scope(td) == "machine"
 
     def test_category_filter(self, all_tweaks_list: list[TweakDef]) -> None:
@@ -1315,8 +1345,13 @@ class TestApplyTweaksIncludeDeps:
 
         dep_td = TweakDef(id="dep.two", label="Dep2", category="C", apply_fn=dep_fn, remove_fn=MagicMock(), corp_safe=True)
         main_td = TweakDef(
-            id="main.two", label="Main2", category="C",
-            apply_fn=main_fn, remove_fn=MagicMock(), corp_safe=True, depends_on=["dep.two"],
+            id="main.two",
+            label="Main2",
+            category="C",
+            apply_fn=main_fn,
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            depends_on=["dep.two"],
         )
 
         mock_all.extend([dep_td, main_td])
@@ -1533,8 +1568,13 @@ class TestStatusMapDetectFree:
     def test_progress_fn_called_for_detect_free_parallel(self) -> None:
         calls: list[tuple[int, int]] = []
         no_detect = TweakDef(
-            id="__sm_prog_nd__", label="T", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None,
+            id="__sm_prog_nd__",
+            label="T",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            detect_fn=None,
         )
         with (
             patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_prog_nd__": no_detect}),
@@ -1547,8 +1587,13 @@ class TestStatusMapDetectFree:
     def test_detect_fn_present_executed_sequentially(self) -> None:
         detect_fn = MagicMock(return_value=True)
         with_detect = TweakDef(
-            id="__sm_seq_det__", label="T", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn,
+            id="__sm_seq_det__",
+            label="T",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            detect_fn=detect_fn,
         )
         with (
             patch("regilattice.tweaks._TWEAK_INDEX", {"__sm_seq_det__": with_detect}),
@@ -1561,12 +1606,22 @@ class TestStatusMapDetectFree:
     def test_mixed_sequential_detect_and_no_detect(self) -> None:
         detect_fn = MagicMock(return_value=False)
         td_with = TweakDef(
-            id="__sm_mix_det__", label="W", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=detect_fn,
+            id="__sm_mix_det__",
+            label="W",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            detect_fn=detect_fn,
         )
         td_without = TweakDef(
-            id="__sm_mix_nd__", label="X", category="C",
-            apply_fn=MagicMock(), remove_fn=MagicMock(), corp_safe=True, detect_fn=None,
+            id="__sm_mix_nd__",
+            label="X",
+            category="C",
+            apply_fn=MagicMock(),
+            remove_fn=MagicMock(),
+            corp_safe=True,
+            detect_fn=None,
         )
         index = {"__sm_mix_det__": td_with, "__sm_mix_nd__": td_without}
         with (

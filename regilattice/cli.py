@@ -37,6 +37,8 @@ from .tweaks import (
     tweaks_for_profile,
 )
 
+__all__ = ["main"]
+
 
 def _confirm(prompt: str) -> bool:
     try:
@@ -311,6 +313,96 @@ def _split_root_for_reg(path: str) -> tuple[int, str]:
     raise ValueError(f"Unsupported registry path: {path}")
 
 
+def _run_doctor() -> int:
+    """Comprehensive system health check — prints a report and returns exit code."""
+    import platform
+
+    checks: list[tuple[str, bool, str]] = []  # (label, passed, detail)
+
+    # 1. Python version
+    vi = sys.version_info
+    py_ok = (vi.major, vi.minor) >= (3, 9)
+    checks.append(("Python >= 3.9", py_ok, f"{vi.major}.{vi.minor}.{vi.micro}"))
+
+    # 2. winreg availability
+    win_ok = is_windows()
+    checks.append(("Windows / winreg", win_ok, platform.system()))
+
+    # 3. Admin status
+    from .elevation import is_admin
+
+    admin_ok = is_admin()
+    checks.append(("Running as admin", admin_ok, "yes" if admin_ok else "no (some tweaks unavailable)"))
+
+    # 4. Config file validity
+    config_detail = "OK"
+    try:
+        from .config import load_config
+
+        load_config(None)
+        cfg_ok = True
+    except Exception as exc:
+        cfg_ok = False
+        config_detail = str(exc)[:80]
+    checks.append(("Config file", cfg_ok, config_detail))
+
+    # 5. Tweaks load cleanly
+    tweak_detail = "OK"
+    try:
+        from .tweaks import all_tweaks
+
+        all_tweaks_list = all_tweaks()
+        ids = [td.id for td in all_tweaks_list]
+        dup_ids = {tid for tid in ids if ids.count(tid) > 1}
+        tweaks_ok = len(dup_ids) == 0
+        tweak_detail = f"{len(all_tweaks_list)} tweaks loaded" if tweaks_ok else f"Duplicate IDs: {', '.join(sorted(dup_ids))}"
+    except Exception as exc:
+        tweaks_ok = False
+        tweak_detail = str(exc)[:80]
+    checks.append(("Tweaks registry", tweaks_ok, tweak_detail))
+
+    # 6. Corporate guard
+    corp_detail = "not detected"
+    try:
+        from .corpguard import corp_guard_status, is_corporate_network
+
+        if is_corporate_network():
+            corp_detail = corp_guard_status() or "corporate network detected"
+        corp_ok = True  # detecting is not a failure; just informational
+    except Exception as exc:
+        corp_ok = False
+        corp_detail = str(exc)[:80]
+    checks.append(("Corp guard", corp_ok, corp_detail))
+
+    # 7. Session log writable
+    try:
+        SESSION.log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_ok = True
+        log_detail = str(SESSION.log_path)
+    except Exception as exc:
+        log_ok = False
+        log_detail = str(exc)[:80]
+    checks.append(("Log path writable", log_ok, log_detail))
+
+    # ── Report ────────────────────────────────────────────────────────────────
+    _W = 30
+    print(f"\n  {'RegiLattice Doctor':^{_W + 20}}")
+    print(f"  {platform_summary()}")
+    print()
+    all_ok = True
+    for label, passed, detail in checks:
+        icon = "\u2705" if passed else "\u274c"
+        all_ok = all_ok and passed
+        print(f"  {icon}  {label:<{_W}}  {detail}")
+    print()
+    if all_ok:
+        print("  All checks passed \u2014 RegiLattice is healthy.")
+    else:
+        print("  \u26a0\ufe0f  Some checks failed. Review the items marked with \u274c above.")
+    print()
+    return 0 if all_ok else 1
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="regilattice",
@@ -499,6 +591,11 @@ def _build_parser() -> argparse.ArgumentParser:
         dest="needs_admin",
         help="Show only tweaks that require administrator rights (use with --list/--search).",
     )
+    parser.add_argument(
+        "--doctor",
+        action="store_true",
+        help="Run a comprehensive system health check: Python version, winreg, admin, config, tweaks.",
+    )
     return parser
 
 
@@ -541,6 +638,9 @@ def main(argv: list[str] | None = None) -> int:
             except ImportError:
                 print(f"  \u274c {pkg} \u2014 could not install")
         return 0
+
+    if args.doctor:
+        return _run_doctor()
 
     if args.hwinfo:
         from .hwinfo import detect_hardware, hardware_summary, suggest_profile
@@ -716,12 +816,15 @@ def main(argv: list[str] | None = None) -> int:
         if getattr(args, "output", "table") == "json":
             import json as _j
 
-            print(_j.dumps(
-                [{"id": td.id, "label": td.label, "category": td.category,
-                  "needs_admin": td.needs_admin, "corp_safe": td.corp_safe}
-                 for td in tweaks],
-                indent=2,
-            ))
+            print(
+                _j.dumps(
+                    [
+                        {"id": td.id, "label": td.label, "category": td.category, "needs_admin": td.needs_admin, "corp_safe": td.corp_safe}
+                        for td in tweaks
+                    ],
+                    indent=2,
+                )
+            )
         else:
             print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
             print("-" * 80)

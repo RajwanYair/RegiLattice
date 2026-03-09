@@ -13,7 +13,7 @@ import re
 import subprocess
 import threading
 import time
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -38,9 +38,7 @@ __all__ = [
 _ROOTS: dict[str, int | None] = {}
 
 # Pre-sorted prefix list: longest prefix first so the first match is always correct
-_PREFIX_LIST: list[tuple[str, int]] = (
-    []
-)  # (prefix_upper, root_handle) — built at import
+_PREFIX_LIST: list[tuple[str, int]] = []  # (prefix_upper, root_handle) — built at import
 
 if winreg is not None:
     _ROOTS = {
@@ -70,15 +68,15 @@ def _ensure_windows() -> None:
 _TRANSIENT_WINERRORS = {5, 6}  # ERROR_ACCESS_DENIED, ERROR_INVALID_HANDLE
 
 
-def _retry_on_transient(fn: object, *args: object, **kwargs: object) -> object:
+def _retry_on_transient(fn: Callable[..., object], *args: object, **kwargs: object) -> object:
     """Call *fn* once; on transient OSError, wait 0.2 s and retry once."""
     try:
-        return fn(*args, **kwargs)  # type: ignore[operator]
+        return fn(*args, **kwargs)
     except OSError as exc:
         if getattr(exc, "winerror", None) not in _TRANSIENT_WINERRORS:
             raise
         time.sleep(0.2)
-        return fn(*args, **kwargs)  # type: ignore[operator]
+        return fn(*args, **kwargs)
 
 
 @functools.lru_cache(maxsize=256)
@@ -126,9 +124,7 @@ class RegistrySession:
     _dry_run: bool = field(default=False, repr=False)
     _dry_ops: int = field(default=0, repr=False)
     _read_cache_enabled: bool = field(default=False, repr=False)
-    _read_cache: dict[tuple[str, str, str], object] = field(
-        default_factory=dict, repr=False
-    )
+    _read_cache: dict[tuple[str, str, str], object] = field(default_factory=dict, repr=False)
     _read_cache_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     def __post_init__(self) -> None:
@@ -209,11 +205,7 @@ class RegistrySession:
         _ensure_windows()
         ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         onedrive = os.environ.get("ONEDRIVE", "")
-        backup_root = (
-            Path(onedrive) / "RegistryBackups"
-            if onedrive and Path(onedrive).is_dir()
-            else Path.home() / "Documents" / "RegistryBackups"
-        )
+        backup_root = Path(onedrive) / "RegistryBackups" if onedrive and Path(onedrive).is_dir() else Path.home() / "Documents" / "RegistryBackups"
         backup_path = backup_root / f"{label}_{ts}"
         backup_path.mkdir(parents=True, exist_ok=True)
 
@@ -557,9 +549,7 @@ def assert_admin(required: bool = True) -> None:
     import ctypes
 
     if not bool(ctypes.windll.shell32.IsUserAnAdmin()):
-        raise AdminRequirementError(
-            "Administrator privileges are required for this operation."
-        )
+        raise AdminRequirementError("Administrator privileges are required for this operation.")
 
 
 # ── Module-level singleton ───────────────────────────────────────────────────

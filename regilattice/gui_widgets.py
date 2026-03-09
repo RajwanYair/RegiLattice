@@ -11,6 +11,11 @@ from .corpguard import is_gpo_managed
 from .gui_tooltip import Tooltip, build_tooltip_text, has_recommendation
 from .tweaks import TweakDef, TweakResult, category_info, tweak_scope, tweak_status
 
+__all__ = [
+    "CategorySection",
+    "TweakRow",
+]
+
 # ── Theme aliases ────────────────────────────────────────────────────────────
 
 _ACCENT = theme.ACCENT
@@ -57,12 +62,12 @@ class TweakRow:
         self._odd = False  # Set by CategorySection for zebra striping
 
         # Placeholder attributes — populated by build_widgets()
-        self.frame: ttk.Frame = None  # type: ignore[assignment]
-        self.status_dot: tk.Label = None  # type: ignore[assignment]
-        self.status_text: tk.Label = None  # type: ignore[assignment]
-        self.cb: ttk.Checkbutton = None  # type: ignore[assignment]
-        self.toggle_btn: tk.Button = None  # type: ignore[assignment]
-        self.tooltip: Tooltip = None  # type: ignore[assignment]
+        self.frame: ttk.Frame | None = None
+        self.status_dot: tk.Label | None = None
+        self.status_text: tk.Label | None = None
+        self.cb: ttk.Checkbutton | None = None
+        self.toggle_btn: tk.Button | None = None
+        self.tooltip: Tooltip | None = None
 
         if not defer_widgets:
             self.build_widgets(parent)
@@ -191,12 +196,16 @@ class TweakRow:
 
     def _on_enter(self, _: tk.Event[tk.Misc]) -> None:
         """Highlight row background on hover."""
+        if self.frame is None:
+            return
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
                 w.configure(bg=theme.CARD_HOVER)
 
     def _on_leave(self, _: tk.Event[tk.Misc]) -> None:
         """Restore row background on leave."""
+        if self.frame is None:
+            return
         bg = self._row_bg()
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
@@ -210,7 +219,7 @@ class TweakRow:
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
                 w.configure(bg=bg)
-        if not self.disabled_by_corp:
+        if not self.disabled_by_corp and self.toggle_btn is not None:
             self.toggle_btn.configure(bg=bg)
 
     def on_toggle_click(self) -> None:
@@ -233,14 +242,22 @@ class TweakRow:
 
     def pack_row(self) -> None:
         """Pack the row frame into its parent."""
+        if self.frame is None:
+            return
         self.frame.pack(fill="x", padx=4, pady=2, ipady=3)
 
     def unpack_row(self) -> None:
         """Remove from display."""
+        if self.frame is None:
+            return
         self.frame.pack_forget()
 
     def refresh_status(self) -> None:
         """Update the status dot, text label, toggle button, and tooltip."""
+        assert self.status_dot is not None
+        assert self.status_text is not None
+        assert self.toggle_btn is not None
+        assert self.tooltip is not None
         st = tweak_status(self.td)
         if self.disabled_by_corp:
             colour = _STATUS_CORP_BLOCKED

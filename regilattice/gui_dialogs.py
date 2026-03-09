@@ -17,6 +17,15 @@ from . import gui_theme as theme
 from .registry import SESSION, platform_summary
 from .tweaks import TweakDef, all_tweaks, tweaks_by_category
 
+__all__ = [
+    "export_json_selection",
+    "export_powershell",
+    "import_json_selection",
+    "open_psmodule_manager",
+    "open_scoop_manager",
+    "show_about",
+]
+
 # ── Theme aliases ────────────────────────────────────────────────────────────
 
 _ACCENT = theme.ACCENT
@@ -388,10 +397,7 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
         try:
             scope = scope_var.get()
             scope_flag = f"-Scope {scope}" if scope == "CurrentUser" else ""
-            raw = _run_ps(
-                f"Get-InstalledModule {scope_flag} | Sort-Object Name | "
-                "ForEach-Object {{ '{0}  v{1}' -f $_.Name, $_.Version }}"
-            )
+            raw = _run_ps(f"Get-InstalledModule {scope_flag} | Sort-Object Name | ForEach-Object {{{{ '{{0}}  v{{1}}' -f $_.Name, $_.Version }}}}")
             lines = [ln for ln in raw.splitlines() if ln.strip()]
             for ln in lines:
                 listbox.insert("end", ln)
@@ -505,9 +511,16 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
     pop_frame = tk.LabelFrame(dlg, text="Quick Install Popular Modules", bg=_BG, fg=_FG_DIM, font=_FONT_XS)
     pop_frame.pack(fill="x", padx=16, pady=(0, 8))
     popular_modules = [
-        "PSReadLine", "posh-git", "PowerShellGet", "Az",
-        "Microsoft.Graph", "Terminal-Icons", "oh-my-posh",
-        "PSScriptAnalyzer", "Pester", "SqlServer",
+        "PSReadLine",
+        "posh-git",
+        "PowerShellGet",
+        "Az",
+        "Microsoft.Graph",
+        "Terminal-Icons",
+        "oh-my-posh",
+        "PSScriptAnalyzer",
+        "Pester",
+        "SqlServer",
     ]
     for i, mod in enumerate(popular_modules):
         tk.Button(
