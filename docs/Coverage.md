@@ -1,6 +1,6 @@
 # RegiLattice — Coverage Report
 
-> Per-module test coverage baseline. Last measured: 2026-03-08 · v1.0.1
+> Per-module test coverage baseline. Last measured: 2026-03-09 · v1.0.0
 > Command: `python -m pytest tests/ --cov=regilattice --cov-report=term-missing`
 
 ---
@@ -9,7 +9,7 @@
 
 | Scope | Coverage |
 |---|---|
-| **Core modules (non-tweak)** | ~81 % average |
+| **Core modules (non-tweak)** | ~88 % average |
 | **Tweak modules (apply/remove/detect fns)** | ~49 % average (intentionally limited — registry calls are not exercised in CI) |
 | **Overall total** | ~51 % |
 
@@ -26,23 +26,24 @@ IDs, and `detect_fn` callability are verified via `test_tweaks_smoke.py`.
 |---|---|---|---|---|
 | `__init__.py` | 5 | 0 | **100 %** | ✅ |
 | `analytics.py` | 61 | 0 | **100 %** | ✅ |
+| `cli.py` | 641 | 90 | **86 %** | `--gui`, admin-only, export edge cases |
 | `config.py` | 50 | 5 | **90 %** | tomllib fallback path (Python < 3.11) |
-| `corpguard.py` | 252 | 62 | **75 %** | VPN / SCCM detection paths |
-| `deps.py` | 73 | 0 | **100 %** | ✅ |
+| `corpguard.py` | 252 | 58 | **77 %** | VPN/SCCM detection paths (Windows-only) |
+| `deps.py` | 74 | 0 | **100 %** | ✅ |
 | `elevation.py` | 44 | 2 | **95 %** | Non-Windows uid path |
-| `gui.py` | 1096 | 955 | **13 %** | 🔴 Highest priority — needs GUI test harness |
-| `gui_dialogs.py` | 171 | 76 | **56 %** | Dialog show/interact paths |
-| `gui_theme.py` | 97 | 2 | **98 %** | ✅ |
-| `gui_tooltip.py` | 97 | 25 | **74 %** | `Tooltip.show()` visual paths |
-| `gui_widgets.py` | 241 | 138 | **43 %** | 🔴 Widget event handlers |
-| `hwinfo.py` | 280 | 5 | **98 %** | ✅ |
+| `gui.py` | 1193 | 511 | **57 %** | 🔴 Priority — GUI test harness needed |
+| `gui_dialogs.py` | 279 | 181 | **35 %** | 🔴 Dialog show/interact paths |
+| `gui_theme.py` | 98 | 2 | **98 %** | ✅ |
+| `gui_tooltip.py` | 159 | 15 | **91 %** | ✅ |
+| `gui_widgets.py` | (see test_gui_widgets.py) | — | — | Covered via TweakRow/CategorySection tests |
+| `hwinfo.py` | 280 | 9 | **97 %** | ✅ |
 | `locale.py` | 28 | 0 | **100 %** | ✅ |
-| `marketplace.py` | 75 | 4 | **95 %** | ✅ |
-| `menu.py` | 166 | 11 | **93 %** | ✅ |
+| `marketplace.py` | 82 | 4 | **95 %** | ✅ |
+| `menu.py` | 167 | 11 | **93 %** | ✅ |
+| `profiler.py` | — | — | — | Covered via test_benchmarks.py |
 | `ratings.py` | 60 | 2 | **97 %** | ✅ |
-| `registry.py` | 361 | 56 | **84 %** | Backup dir / edge cases |
-| `cli.py` | 572 | 77 | **87 %** | `--gui`, export edge cases |
-| `tweaks/__init__.py` | ~800 | ~80 | **~90 %** | ✅ Core engine well-covered |
+| `registry.py` | 361 | 56 | **84 %** | Backup dir create / HKLM write edge cases |
+| `tweaks/__init__.py` | 507 | 256 | **50 %** | Engine covered; platform-only paths skipped in CI |
 
 ---
 
@@ -70,13 +71,13 @@ The low coverage in tweak modules is **by design**:
 
 | Target | Current | Goal | Priority |
 |---|---|---|---|
-| `gui.py` | 13 % | ≥ 80 % | 🔴 P1 (Sprint 4) |
-| `gui_widgets.py` | 43 % | ≥ 80 % | 🔴 P1 (Sprint 4) |
-| `gui_dialogs.py` | 56 % | ≥ 80 % | 🟡 P2 (Sprint 4) |
-| `corpguard.py` | 75 % | ≥ 90 % | 🟡 P2 (Sprint 4) |
-| `registry.py` | 84 % | ≥ 95 % | 🟡 P2 (Sprint 4) |
-| `gui_tooltip.py` | 74 % | ≥ 90 % | 🟡 P2 (Sprint 4) |
-| Overall (non-tweak) | ~81 % | ≥ 95 % | P1 |
+| `gui.py` | 57 % | ≥ 80 % | 🔴 P1 |
+| `gui_dialogs.py` | 35 % | ≥ 80 % | 🔴 P1 |
+| `corpguard.py` | 77 % | ≥ 90 % | 🟡 P2 |
+| `registry.py` | 84 % | ≥ 95 % | 🟡 P2 |
+| `tweaks/__init__.py` | 50 % | ≥ 80 % | 🟡 P2 |
+| `cli.py` | 86 % | ≥ 95 % | 🟡 P2 |
+| Overall (non-tweak) | ~88 % | ≥ 95 % | P1 |
 
 ---
 
