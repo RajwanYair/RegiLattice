@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import functools
 import tkinter as tk
+from collections.abc import Callable
 
 from . import gui_theme as theme
 from .corpguard import is_gpo_managed
@@ -11,6 +12,7 @@ from .tweaks import TweakDef, TweakResult
 
 __all__ = [
     "Tooltip",
+    "TooltipManager",
     "build_tooltip_text",
     "has_recommendation",
     "parse_description_metadata",
@@ -23,20 +25,109 @@ _FG = theme.FG
 _FONT_SM = theme.FONT_SM
 
 
-# ── Tooltip widget ───────────────────────────────────────────────────────────
+# ── Tooltip singleton (shared Toplevel — avoids create/destroy per hover) ────
+
+
+class TooltipManager:
+    """Application-wide singleton tooltip panel.
+
+    All 1 200+ tweak rows bind to this single manager instead of each
+    creating/destroying their own ``tk.Toplevel`` on every hover event.
+    The panel is created once (lazily) and merely repositioned + updated
+    on each ``show()`` call — eliminating the per-hover Tk widget churn.
+    """
+
+    _instance: TooltipManager | None = None
+
+    def __init__(self, root: tk.Tk) -> None:
+        self._root = root
+        self._tip: tk.Toplevel | None = None
+        self._label: tk.Label | None = None
+        self._visible = False
+
+    @classmethod
+    def get(cls) -> TooltipManager | None:
+        """Return the global instance, or None if not yet initialised."""
+        return cls._instance
+
+    @classmethod
+    def init(cls, root: tk.Tk) -> TooltipManager:
+        """Create (idempotent) and return the global instance."""
+        if cls._instance is None:
+            cls._instance = cls(root)
+        return cls._instance
+
+    @classmethod
+    def reset(cls) -> None:
+        """Destroy the singleton (for testing)."""
+        if cls._instance is not None:
+            try:
+                if cls._instance._tip is not None:
+                    cls._instance._tip.destroy()
+            except Exception:
+                pass
+            cls._instance = None
+
+    def _ensure_panel(self) -> None:
+        """Lazily create the shared Toplevel panel."""
+        if self._tip is not None:
+            return
+        self._tip = tk.Toplevel(self._root)
+        self._tip.wm_overrideredirect(True)
+        self._tip.wm_attributes("-topmost", True)
+        self._tip.withdraw()  # hidden until first show()
+        self._label = tk.Label(
+            self._tip,
+            text="",
+            bg=theme.CARD_HOVER,
+            fg=theme.FG,
+            font=theme.FONT_SM,
+            padx=10,
+            pady=6,
+            wraplength=440,
+            justify="left",
+        )
+        self._label.pack()
+
+    def show(self, text: str, x: int, y: int) -> None:
+        """Display the tooltip panel with *text* at screen position (*x*, *y*)."""
+        self._ensure_panel()
+        assert self._tip is not None
+        assert self._label is not None
+        self._label.configure(text=text, bg=theme.CARD_HOVER, fg=theme.FG)
+        self._tip.wm_geometry(f"+{x + 14}+{y + 10}")
+        self._tip.deiconify()
+        self._visible = True
+
+    def move(self, x: int, y: int) -> None:
+        """Reposition the visible panel."""
+        if self._tip is not None and self._visible:
+            self._tip.wm_geometry(f"+{x + 14}+{y + 10}")
+
+    def hide(self) -> None:
+        """Hide the panel without destroying it."""
+        if self._tip is not None:
+            self._tip.withdraw()
+        self._visible = False
+
+
+# ── Tooltip proxy ─────────────────────────────────────────────────────────────
 
 
 class Tooltip:
-    """Hover tooltip that follows the mouse cursor and supports text updates.
+    """Lightweight per-row tooltip proxy backed by the shared ``TooltipManager``.
 
     Accepts either a text string or a callable that returns text.
     When a callable is provided, the text is computed lazily on first hover.
+    Falls back to creating its own ``tk.Toplevel`` when the manager is not
+    initialised (e.g. in unit tests).
     """
 
-    def __init__(self, widget: tk.Widget, text: str | None = None, *, text_fn: object = None) -> None:
+    def __init__(self, widget: tk.Widget, text: str | None = None, *, text_fn: Callable[[], str] | None = None) -> None:
         self._widget = widget
         self._text = text or ""
-        self._text_fn = text_fn  # Callable[[], str] | None
+        self._text_fn = text_fn
+        # Fallback private Toplevel — only used when manager not available
         self._tip: tk.Toplevel | None = None
         widget.bind("<Enter>", self._show)
         widget.bind("<Leave>", self._hide)
@@ -44,15 +135,21 @@ class Tooltip:
 
     def update_text(self, text: str) -> None:
         self._text = text
-        self._text_fn = None  # clear lazy source on explicit update
+        self._text_fn = None
 
     def _resolve_text(self) -> str:
-        if self._text_fn is not None and callable(self._text_fn):
+        if self._text_fn is not None:
             self._text = self._text_fn()
             self._text_fn = None
         return self._text
 
     def _show(self, event: tk.Event[tk.Misc]) -> None:
+        text = self._resolve_text()
+        mgr = TooltipManager.get()
+        if mgr is not None:
+            mgr.show(text, event.x_root, event.y_root)
+            return
+        # Fallback: own Toplevel (test / standalone use)
         if self._tip:
             return
         x = event.x_root + 14
@@ -61,9 +158,9 @@ class Tooltip:
         tw.wm_overrideredirect(True)
         tw.wm_geometry(f"+{x}+{y}")
         tw.wm_attributes("-topmost", True)
-        lbl = tk.Label(
+        tk.Label(
             tw,
-            text=self._resolve_text(),
+            text=text,
             bg=_CARD_HOVER,
             fg=_FG,
             font=_FONT_SM,
@@ -71,14 +168,21 @@ class Tooltip:
             pady=6,
             wraplength=440,
             justify="left",
-        )
-        lbl.pack()
+        ).pack()
 
     def _move(self, event: tk.Event[tk.Misc]) -> None:
+        mgr = TooltipManager.get()
+        if mgr is not None:
+            mgr.move(event.x_root, event.y_root)
+            return
         if self._tip:
             self._tip.wm_geometry(f"+{event.x_root + 14}+{event.y_root + 10}")
 
     def _hide(self, _: tk.Event[tk.Misc]) -> None:
+        mgr = TooltipManager.get()
+        if mgr is not None:
+            mgr.hide()
+            return
         if self._tip:
             self._tip.destroy()
             self._tip = None

@@ -29,7 +29,7 @@ from . import __version__
 from . import gui_dialogs as dialogs
 from . import gui_theme as theme
 from .corpguard import CorporateNetworkError, assert_not_corporate, corp_guard_status, is_corporate_network, is_gpo_managed
-from .gui_tooltip import build_tooltip_text, has_recommendation
+from .gui_tooltip import TooltipManager, build_tooltip_text, has_recommendation
 from .gui_widgets import CategorySection, TweakRow
 from .hwinfo import detect_hardware
 from .registry import SESSION, AdminRequirementError, is_windows, platform_summary
@@ -133,6 +133,7 @@ class RegiLatticeGUI:
         self._row_by_id: dict[str, TweakRow] = {}
         self._category_sections: list[CategorySection] = []
         self._cached_statuses: dict[str, TweakResult] = {}
+        self._prev_statuses: dict[str, TweakResult] = {}  # delta tracking for _apply_statuses
         self._cached_rec_count: int | None = None  # computed once (static)
         self._cached_gpo_count: int | None = None  # computed once per session
         self._running = False  # True while a batch operation is active
@@ -146,6 +147,8 @@ class RegiLatticeGUI:
         self._tray_available = False
         self._setup_styles()
         self._build_ui()
+        # Initialise shared tooltip panel (one Toplevel for all 1200+ rows)
+        TooltipManager.init(self._root)
         self._bind_shortcuts()
         self._setup_tray()
         self._root.protocol("WM_DELETE_WINDOW", self._on_close)
@@ -798,6 +801,7 @@ class RegiLatticeGUI:
             section.set_on_batch(self._batch_category)
             section.set_on_reorder(self._reorder_category)
             section.set_on_collapse_change(self._on_category_collapse_change)
+            section.set_on_rows_built(self._wire_section_bindings)
             self._category_sections.append(section)
 
         pct = min(100, int(end / len(self._grouped_items) * 100))
@@ -812,18 +816,13 @@ class RegiLatticeGUI:
     def _finish_loading(self) -> None:
         """Wire up bindings and kick off status detection after all rows are created."""
         self._loading = False
-        # Wire checkbox → selection counter + Shift+Click range select
-        for i, row in enumerate(self._tweak_rows):
-            row.var.trace_add("write", lambda *_args: self._update_selection_count())
-            cb = row.cb
-            if cb is not None:
-                cb.bind("<Shift-Button-1>", lambda e, idx=i: self._on_shift_click(idx))  # type: ignore[misc]
-                cb.bind("<Button-1>", lambda e, idx=i: self._on_row_click(idx), add=True)  # type: ignore[misc]
-        # Right-click context menu
+        # Wire var traces (works regardless of whether widgets are built yet)
         for row in self._tweak_rows:
-            frame = row.frame
-            if frame is not None:
-                frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
+            row.var.trace_add("write", lambda *_args: self._update_selection_count())
+        # Wire keyboard/context-menu bindings only for sections that start expanded
+        for section in self._category_sections:
+            if section._widgets_built:
+                self._wire_section_bindings(section)
         self._progress.configure(value=0)
         total_tweaks = len(self._tweak_rows)
         total_cats = len(self._category_sections)
@@ -842,6 +841,64 @@ class RegiLatticeGUI:
             self._switch_theme("Auto")
         # Kick off status detection
         self._initial_refresh()
+
+    def _wire_section_bindings(self, section: CategorySection) -> None:
+        """Wire keyboard + context-menu bindings for rows in *section*.
+
+        Called once per section: immediately at finish_loading for sections
+        that start expanded, or lazily via set_on_rows_built for the rest.
+        """
+        all_rows = self._tweak_rows
+        for row in section.rows:
+            try:
+                idx = all_rows.index(row)
+            except ValueError:
+                continue
+            cb = row.cb
+            if cb is not None:
+                cb.bind("<Shift-Button-1>", lambda e, i=idx: self._on_shift_click(i))  # type: ignore[misc]
+                cb.bind("<Button-1>", lambda e, i=idx: self._on_row_click(i), add=True)  # type: ignore[misc]
+            frame = row.frame
+            if frame is not None:
+                frame.bind("<Button-3>", lambda e, r=row: self._show_context_menu(e, r))  # type: ignore[misc]
+        # Apply current cached statuses to newly built rows
+        if self._cached_statuses:
+            prev = self._prev_statuses
+            for row in section.rows:
+                if row.disabled_by_corp:
+                    continue
+                st = self._cached_statuses.get(row.td.id, TweakResult.UNKNOWN)
+                if prev.get(row.td.id) == st:
+                    continue
+                dot = row.status_dot
+                text_lbl = row.status_text
+                btn = row.toggle_btn
+                tip = row.tooltip
+                if dot is None or text_lbl is None or btn is None:
+                    continue
+                if st == TweakResult.APPLIED:
+                    colour = _STATUS_APPLIED
+                    text = "APPLIED"
+                    btn_text = "Disable \u2715"
+                    btn_bg = "#40543F"
+                    btn_fg = _OK_GREEN
+                elif st == TweakResult.NOT_APPLIED:
+                    colour = _STATUS_DEFAULT
+                    text = "DEFAULT"
+                    btn_text = "Enable \u2713"
+                    btn_bg = "#3B3552"
+                    btn_fg = _ACCENT
+                else:
+                    colour = _STATUS_UNKNOWN
+                    text = "UNKNOWN"
+                    btn_text = "Enable \u2713"
+                    btn_bg = "#3B3830"
+                    btn_fg = _WARN_YELLOW
+                dot.configure(fg=colour)
+                text_lbl.configure(text=text, fg=colour)
+                btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
+                if tip is not None:
+                    tip.update_text(build_tooltip_text(row.td, st))
 
     # ── Selection helpers ────────────────────────────────────────────────
 
@@ -937,6 +994,10 @@ class RegiLatticeGUI:
                 scope_op_match = not need_scope_op or tweak_scope(td) == scope_op
                 admin_match = admin_op is None or td.needs_admin == admin_op
                 if text_match and status_match and scope_match and tag_match and cat_match and scope_op_match and admin_match:
+                    # Build widgets lazily before first pack
+                    if not section._widgets_built:
+                        section._build_row_widgets()
+                        self._wire_section_bindings(section)
                     row.pack_row()
                     visible = True
                 else:
@@ -1178,50 +1239,61 @@ class RegiLatticeGUI:
         threading.Thread(target=_worker, daemon=True).start()
 
     def _apply_statuses(self, statuses: dict[str, TweakResult]) -> None:
-        """Push a pre-computed status dict into every UI row and update counters."""
+        """Push a pre-computed status dict into every UI row and update counters.
+
+        Only rows whose status has *changed* since the last call have their
+        widgets reconfigured, reducing redundant Tk IPC on large refresh cycles.
+        """
         self._cached_statuses = statuses
         applied = 0
         default = 0
         unknown = 0
         blocked = 0
+        prev = self._prev_statuses
         for row in self._tweak_rows:
             if row.disabled_by_corp:
                 blocked += 1
                 continue
             st = statuses.get(row.td.id, TweakResult.UNKNOWN)
-            # Update row directly from the cached status
             if st == TweakResult.APPLIED:
-                colour = _STATUS_APPLIED
-                text = "APPLIED"
-                btn_text = "Disable \u2715"
-                btn_bg = "#40543F"
-                btn_fg = _OK_GREEN
                 applied += 1
             elif st == TweakResult.NOT_APPLIED:
-                colour = _STATUS_DEFAULT
-                text = "DEFAULT"
-                btn_text = "Enable \u2713"
-                btn_bg = "#3B3552"
-                btn_fg = _ACCENT
                 default += 1
             else:
-                colour = _STATUS_UNKNOWN
-                text = "UNKNOWN"
-                btn_text = "Enable \u2713"
-                btn_bg = "#3B3830"
-                btn_fg = _WARN_YELLOW
                 unknown += 1
+            # Skip widget update when status is unchanged (delta optimisation)
+            if prev.get(row.td.id) == st and row.frame is not None:
+                continue
             dot = row.status_dot
             text_lbl = row.status_text
             btn = row.toggle_btn
             tip = row.tooltip
             if dot is None or text_lbl is None or btn is None:
                 continue
+            if st == TweakResult.APPLIED:
+                colour = _STATUS_APPLIED
+                text = "APPLIED"
+                btn_text = "Disable \u2715"
+                btn_bg = "#40543F"
+                btn_fg = _OK_GREEN
+            elif st == TweakResult.NOT_APPLIED:
+                colour = _STATUS_DEFAULT
+                text = "DEFAULT"
+                btn_text = "Enable \u2713"
+                btn_bg = "#3B3552"
+                btn_fg = _ACCENT
+            else:
+                colour = _STATUS_UNKNOWN
+                text = "UNKNOWN"
+                btn_text = "Enable \u2713"
+                btn_bg = "#3B3830"
+                btn_fg = _WARN_YELLOW
             dot.configure(fg=colour)
             text_lbl.configure(text=text, fg=colour)
             btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
             if tip is not None:
                 tip.update_text(build_tooltip_text(row.td, st))
+        self._prev_statuses = dict(statuses)
         for section in self._category_sections:
             section.update_count(statuses)
         # Update summary stats (rec/gpo counts are static — compute once)
@@ -1306,17 +1378,28 @@ class RegiLatticeGUI:
     # ── Theme switching ──────────────────────────────────────────────────
 
     def _switch_theme(self, name: str) -> None:
-        """Apply a new colour theme and reconfigure all UI elements."""
+        """Apply a new colour theme and reconfigure all UI elements.
+
+        Performance strategy:
+        - ``ttk.Style`` propagates automatically to all ttk widgets (zero per-row cost).
+        - Only ``tk.Label`` backgrounds in *built* rows need explicit updates; unbuilt
+          (collapsed) rows update themselves when first expanded via ``_build_row_widgets``.
+        - Cached statuses are re-applied only for built rows — others adopt correct
+          colours when expanded.
+        """
         resolved = theme.detect_system_theme() if name == "Auto" else name
         theme.set_theme(resolved)
         self._reload_theme_aliases()
         self._setup_styles()
         self._root.configure(bg=_BG)
-        # Re-render all tweak rows and category sections with new colours
+        # Re-render only rows whose widgets have already been built
         for row in self._tweak_rows:
-            row.apply_theme()
+            if row.frame is not None:
+                row.apply_theme()
         for section in self._category_sections:
             section.apply_theme()
+        # Clear delta cache so next status refresh re-paints all built rows
+        self._prev_statuses.clear()
         # Re-apply cached statuses so row colours match the new theme
         if self._cached_statuses:
             self._apply_statuses(self._cached_statuses)

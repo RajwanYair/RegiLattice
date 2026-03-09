@@ -303,6 +303,7 @@ class CategorySection:
         self.expanded = True  # set False below if expanded=False
         self._parent = parent
         self._on_collapse_change: Callable[[CategorySection], None] | None = None
+        self._on_rows_built: Callable[[CategorySection], None] | None = None
 
         # Header bar — clickable to expand/collapse
         self.header = tk.Frame(parent, bg=_BG_SURFACE, cursor="hand2")
@@ -425,22 +426,41 @@ class CategorySection:
         # Content frame — holds the tweak rows
         self.content_frame = ttk.Frame(parent, style="TFrame")
 
-        # Build (or re-parent) each row's widgets inside content_frame
+        # Track whether widgets have been built yet (lazy build on first expand).
+        self._widgets_built = False
+
+        # Start expanded or collapsed depending on caller preference.
+        if expanded:
+            self._build_row_widgets()  # build immediately if starting expanded
+            self.content_frame.pack(fill="x")
+        else:
+            self.expanded = False
+            self._arrow.configure(text="\u25b6")
+            # content_frame and row widgets built lazily on first toggle
+
+    def _build_row_widgets(self) -> None:
+        """Build all row widgets into content_frame (idempotent).
+
+        Called on first expand so that collapsed sections never create Tk widgets,
+        keeping startup time and memory proportional to the number of *visible* rows.
+        After building, fires the registered post-build callback so callers (gui.py)
+        can wire keyboard bindings and context menus for the newly created widgets.
+        """
+        if self._widgets_built:
+            return
         for i, row in enumerate(self.rows):
             row._odd = bool(i % 2)
             if row.frame is not None:
                 row.frame.destroy()
             row.build_widgets(self.content_frame)
             row.pack_row()
+        self._widgets_built = True
+        if self._on_rows_built is not None:
+            self._on_rows_built(self)
 
-        # Start expanded or collapsed depending on caller preference.
-        # Rows are always built; only the content_frame pack is conditional.
-        if expanded:
-            self.content_frame.pack(fill="x")
-        else:
-            self.expanded = False
-            self._arrow.configure(text="\u25b6")
-            # content_frame intentionally NOT packed — shown on first toggle
+    def set_on_rows_built(self, callback: Callable[[CategorySection], None]) -> None:
+        """Register a callback fired once after *_build_row_widgets* completes."""
+        self._on_rows_built = callback
 
     def set_on_collapse_change(self, callback: Callable[[CategorySection], None]) -> None:
         """Register a callback invoked when the section is expanded or collapsed."""
@@ -450,6 +470,7 @@ class CategorySection:
         self.expanded = not self.expanded
         if self.expanded:
             self._arrow.configure(text="\u25bc")
+            self._build_row_widgets()  # lazy: no-op after first expand
             self._show_rows()
         else:
             self._arrow.configure(text="\u25b6")
@@ -498,6 +519,9 @@ class CategorySection:
             td = row.td
             match = not q or any(q in f.lower() for f in [td.id, td.label, td.category, td.description, *td.tags])
             if match:
+                # Ensure widgets exist before trying to pack them
+                if not self._widgets_built:
+                    self._build_row_widgets()
                 row.pack_row()
                 visible = True
             else:
