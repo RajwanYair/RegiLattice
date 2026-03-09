@@ -7,6 +7,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from regilattice.gui_dialogs import export_json_selection, export_powershell, import_json_selection, show_about
 from regilattice.tweaks import TweakDef
 
@@ -225,3 +227,77 @@ class TestShowAbout:
             show_about(corp_blocked=True)
             _, body = mbox.showinfo.call_args.args
             assert "Corporate: Yes" in body
+
+    def test_with_hw_summary(self) -> None:
+        with patch("regilattice.gui_dialogs.messagebox") as mbox:
+            show_about(corp_blocked=False, hw_summary="Intel i9 | RTX 4090 | 32 GB RAM")
+        _, body = mbox.showinfo.call_args.args
+        assert "Hardware" in body
+        assert "Intel i9" in body
+
+
+# ── OSError paths ────────────────────────────────────────────────────────────
+
+
+class TestOsErrorPaths:
+    def test_export_powershell_write_oserror(self, tmp_path: Path) -> None:
+        td = _make_td()
+        out = tmp_path / "out.ps1"
+        with (
+            patch("regilattice.gui_dialogs.filedialog") as fdlg,
+            patch("regilattice.gui_dialogs.messagebox") as mbox,
+            patch("builtins.open", side_effect=OSError("no space")),
+        ):
+            fdlg.asksaveasfilename.return_value = str(out)
+            export_powershell([td], MagicMock())
+        mbox.showerror.assert_called_once()
+
+    def test_export_json_write_oserror(self, tmp_path: Path) -> None:
+        td = _make_td()
+        out = tmp_path / "out.json"
+        with (
+            patch("regilattice.gui_dialogs.filedialog") as fdlg,
+            patch("regilattice.gui_dialogs.messagebox") as mbox,
+            patch("builtins.open", side_effect=OSError("no space")),
+        ):
+            fdlg.asksaveasfilename.return_value = str(out)
+            export_json_selection([td], MagicMock())
+        mbox.showerror.assert_called_once()
+
+    def test_import_json_read_oserror(self, tmp_path: Path) -> None:
+        jf = tmp_path / "sel.json"
+        jf.write_text("[]", encoding="utf-8")
+        with (
+            patch("regilattice.gui_dialogs.filedialog") as fdlg,
+            patch("regilattice.gui_dialogs.messagebox") as mbox,
+            patch("builtins.open", side_effect=OSError("permission denied")),
+        ):
+            fdlg.askopenfilename.return_value = str(jf)
+            import_json_selection(MagicMock(), [], MagicMock(), MagicMock(), MagicMock())
+        mbox.showerror.assert_called_once()
+
+
+# ── open_scoop_manager (no-scoop path) ───────────────────────────────────────
+
+
+class TestOpenScoopManagerNoScoop:
+    def test_no_scoop_shows_error_label(self) -> None:
+        """When scoop is not installed the dialog shows an error label and returns early."""
+        import tkinter as tk
+
+        try:
+            root = tk.Tk()
+            root.withdraw()
+        except Exception:
+            pytest.skip("tkinter unavailable")
+
+        try:
+            from regilattice.gui_dialogs import open_scoop_manager
+
+            with (
+                patch("regilattice.tweaks.scoop_tools._scoop_installed", return_value=False),
+                patch("tkinter.Toplevel.grab_set"),
+            ):
+                open_scoop_manager(root, MagicMock())
+        finally:
+            root.destroy()

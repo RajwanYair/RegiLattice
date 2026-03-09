@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import threading
@@ -23,6 +24,7 @@ __all__ = [
     "import_json_selection",
     "open_psmodule_manager",
     "open_scoop_manager",
+    "run_powershell_command",
     "show_about",
 ]
 
@@ -42,6 +44,42 @@ _FONT_XS = theme.FONT_XS
 _FONT_XS_BOLD = theme.FONT_XS_BOLD
 _FONT_BOLD = theme.FONT_BOLD
 _FONT_TITLE = theme.FONT_TITLE
+
+# ── Validation helpers ───────────────────────────────────────────────────────
+
+# Only allow alphanumeric, hyphens, dots, underscores (covers all valid PS module / scoop app names)
+_SAFE_PACKAGE_RE = re.compile(r"^[A-Za-z0-9._\-]+$")
+
+
+def _validate_package_name(name: str) -> str:
+    """Raise ValueError if *name* contains characters that could enable injection.
+
+    Returns the validated name unchanged if safe.
+    """
+    if not name or not _SAFE_PACKAGE_RE.match(name):
+        msg = f"Invalid package name {name!r}: only letters, digits, '.', '_', '-' allowed."
+        raise ValueError(msg)
+    return name
+
+
+def run_powershell_command(command: str, *, timeout: int = 60) -> str:
+    """Run a PowerShell command string and return stdout.
+
+    The *command* string must **not** contain user-supplied data — callers are
+    responsible for validating any runtime values (e.g. via :func:`_validate_package_name`)
+    before interpolating them into the command string.
+
+    Raises :class:`RuntimeError` on non-zero exit.
+    """
+    result = subprocess.run(
+        ["powershell", "-NoProfile", "-NonInteractive", "-Command", command],
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or f"Exit code {result.returncode}")
+    return result.stdout.strip()
 
 
 # ── Import JSON ──────────────────────────────────────────────────────────────
@@ -238,8 +276,13 @@ def open_scoop_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> N
     entry.pack(side="left", padx=(4, 4))
 
     def _install_action() -> None:
-        name = install_var.get().strip()
-        if not name:
+        raw_name = install_var.get().strip()
+        if not raw_name:
+            return
+        try:
+            name = _validate_package_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
             return
         status_lbl.configure(text=f"Installing {name}...")
         dlg.update()
@@ -249,22 +292,31 @@ def open_scoop_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> N
             _refresh_list()
             refresh_status_all()
         except RuntimeError as exc:
-            messagebox.showerror("Install Error", str(exc))
+            messagebox.showerror("Install Error", str(exc), parent=dlg)
 
     def _remove_action() -> None:
         sel = listbox.curselection()  # type: ignore[no-untyped-call]
         if not sel:
-            messagebox.showinfo("Select Package", "Select a package to remove.")
+            messagebox.showinfo("Select Package", "Select a package to remove.", parent=dlg)
             return
-        name = listbox.get(sel[0])
-        if not messagebox.askyesno("Confirm Remove", f"Remove '{name}'?"):
+        raw_name = listbox.get(sel[0])
+        try:
+            name = _validate_package_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
+        if not messagebox.askyesno("Confirm Remove", f"Remove '{name}'?", parent=dlg):
             return
         status_lbl.configure(text=f"Removing {name}...")
         dlg.update()
-        _remove_scoop_app(name)
-        status_lbl.configure(text=f"Removed {name} \u2714")
-        _refresh_list()
-        refresh_status_all()
+        try:
+            _remove_scoop_app(name)
+            status_lbl.configure(text=f"Removed {name} \u2714")
+            _refresh_list()
+            refresh_status_all()
+        except RuntimeError as exc:
+            messagebox.showerror("Remove Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Remove failed.")
 
     tk.Button(
         ctrl,
@@ -380,15 +432,7 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
 
     def _run_ps(command: str) -> str:
         """Run a PowerShell command and return stdout. Raises RuntimeError on failure."""
-        result = subprocess.run(
-            ["powershell", "-NoProfile", "-NonInteractive", "-Command", command],
-            capture_output=True,
-            text=True,
-            timeout=60,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr.strip() or f"Exit code {result.returncode}")
-        return result.stdout.strip()
+        return run_powershell_command(command)
 
     def _refresh_list() -> None:
         status_lbl.configure(text="Scanning installed modules\u2026")
@@ -415,8 +459,13 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
     entry.pack(side="left", padx=(4, 4))
 
     def _install_action() -> None:
-        name = install_var.get().strip()
-        if not name:
+        raw_name = install_var.get().strip()
+        if not raw_name:
+            return
+        try:
+            name = _validate_package_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
             return
         scope = scope_var.get()
         status_lbl.configure(text=f"Installing {name}\u2026")
@@ -435,7 +484,12 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
         if not sel:
             messagebox.showinfo("Select Module", "Select a module to remove.", parent=dlg)
             return
-        name = listbox.get(sel[0]).split()[0]  # strip version from display string
+        raw_name = listbox.get(sel[0]).split()[0]  # strip version from display string
+        try:
+            name = _validate_package_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
         if not messagebox.askyesno("Confirm Remove", f"Uninstall all versions of '{name}'?", parent=dlg):
             return
         status_lbl.configure(text=f"Removing {name}\u2026")
@@ -454,7 +508,12 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
         if not sel:
             messagebox.showinfo("Select Module", "Select a module to update.", parent=dlg)
             return
-        name = listbox.get(sel[0]).split()[0]
+        raw_name = listbox.get(sel[0]).split()[0]
+        try:
+            name = _validate_package_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
         scope = scope_var.get()
         status_lbl.configure(text=f"Updating {name}\u2026")
         dlg.update()
