@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING
 
 import pytest
@@ -56,10 +57,8 @@ def root():  # type: ignore[return]
     r = tk.Tk()
     r.withdraw()
     yield r
-    try:
+    with contextlib.suppress(Exception):
         r.destroy()
-    except Exception:
-        pass
 
 
 class TestTweakRowDeferred:
@@ -192,7 +191,7 @@ class TestCategorySectionLazy:
         first_frames = [row.frame for row in rows]
         section.toggle()  # collapse
         section.toggle()  # expand again
-        for row, frm in zip(rows, first_frames):
+        for row, frm in zip(rows, first_frames, strict=False):
             # Same frame object — was not recreated
             assert row.frame is frm
 

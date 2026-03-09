@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import contextlib
+
 from regilattice.gui_tooltip import build_tooltip_text, has_recommendation, parse_description_metadata
 from regilattice.tweaks import TweakDef, TweakResult
 
@@ -159,7 +161,7 @@ except Exception:
     _tk_available = False
 
 
-import pytest
+import pytest  # noqa: E402
 
 
 @pytest.fixture()
@@ -172,10 +174,8 @@ def root():  # type: ignore[return]
     r = tk.Tk()
     r.withdraw()
     yield r
-    try:
+    with contextlib.suppress(Exception):
         r.destroy()
-    except Exception:
-        pass
 
 
 @pytest.mark.skipif(not _tk_available, reason="tkinter not available")
