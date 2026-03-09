@@ -433,7 +433,7 @@ No ticket/issue references are required for routine changes.
 
 1. Bump version in `regilattice/__init__.py`, `pyproject.toml`, `winget/*.yaml`
 2. Update `CHANGELOG.md` (Keep-a-Changelog format)
-3. Update `ROADMAP.md` velocity table
+3. Update `docs/Roadmap.md` velocity table
 4. Run full test suite: `python -m pytest tests/ --tb=short`
 5. Run linter: `python -m ruff check regilattice/ tests/`
 6. Run type-check: `python -m mypy regilattice/`

@@ -1,11 +1,11 @@
 # RegiLattice — Roadmap
 
-> Living document — updated after every sprint.
-> Last updated: 2026-03-09 · v1.0.1 · 1 292 tweaks · 69 categories · ~17 633 tests
+> Living document — updated after every sprint. Moved from root to `docs/` 2026-03-09.
+> Last updated: 2026-03-09 · v1.0.0 · 1 292 tweaks · 69 categories · ~17 633 tests
 
 ---
 
-## Current State (as of 2026-03-08)
+## Current State (as of 2026-03-09)
 
 | Metric | Value |
 |--------|-------|
@@ -58,17 +58,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | README | Add live CI badge linked to Actions | ✅ |
 | Roadmap | Consolidate all plans into this single document | ✅ |
 
-### Sprint 3 — Documentation & Developer Experience (next)
+### Sprint 3 — Documentation & Developer Experience ✅ (2026-03-08, retroactively completed)
 
 | # | Task | Priority |
 |---|------|----------|
-| 1 | Add `docs/Development.md` — local setup, Windows + WSL guide | P1 |
-| 2 | Refresh `Contributing.md` with current workflow and PR checklist | P1 |
-| 3 | Add `hypothesis` + `pytest-mock` to `[dev]` dependencies in `pyproject.toml` | P1 |
-| 4 | Measure per-module coverage; document gaps in `docs/Coverage.md` | P1 |
-| 5 | Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py` | P2 |
-| 6 | Review and update all `.github/issue_template/` files for accuracy | P2 |
-| 7 | Add `SECURITY.md` policy (responsible disclosure, supported versions) | P2 |
+| 1 | Add `docs/Development.md` — local setup, Windows + WSL guide | P1 ✅ |
+| 2 | Refresh `Contributing.md` with current workflow and PR checklist | P1 ✅ |
+| 3 | Add `hypothesis` + `pytest-mock` to `[dev]` dependencies in `pyproject.toml` | P1 ✅ |
+| 4 | Measure per-module coverage; document gaps in `docs/Coverage.md` | P1 ✅ |
+| 5 | Add `__all__` to `registry.py`, `tweaks/__init__.py`, `config.py` | P2 ✅ |
+| 6 | Review and update all `.github/issue_template/` files for accuracy | P2 ✅ |
+| 7 | Add `Security.md` policy (responsible disclosure, supported versions) | P2 ✅ |
 
 ### Sprint 4 — Test Coverage Push (planned)
 
@@ -105,6 +105,18 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 5 | Tag and publish v1.0.1 GitHub Release with generated notes | P1 |
 | 6 | Update winget manifest (`winget/`) for v1.0.1 | P2 |
 | 7 | Publish to Scoop bucket (personal) | P3 |
+
+### Sprint 10 — Production Quality (2026-03-09, in progress)
+
+| # | Task | Priority |
+|---|------|----------|
+| 1 | Fix ruff I001 import-sort in `test_tweaks_init.py` | P0 ✅ |
+| 2 | Remove generic `.github/contributing.md` / `.github/security.md` (superseded by root) | P1 ✅ |
+| 3 | Move `Roadmap.md` → `docs/Roadmap.md`; update all cross-references | P1 ✅ |
+| 4 | Update `docs/Coverage.md` with current measured coverage numbers (2026-03-09) | P1 ✅ |
+| 5 | Push `gui.py` coverage from 57 % toward ≥ 80 % | P1 |
+| 6 | Push `gui_dialogs.py` coverage from 35 % toward ≥ 80 % | P1 |
+| 7 | Audit all `subprocess` calls for command-injection safety (OWASP) | P1 |
 
 ---
 
@@ -180,8 +192,9 @@ _50 concrete tasks derived from the roadmap above, ordered by priority._
 |--------|-------|--------------|-----------|-------|
 | Sprint 1 | 2026-03-08 | 10 | 10 | Foundation & hygiene |
 | Sprint 2 | 2026-03-08 | 6 | 6 | Repo publishing & metadata cleanup |
-| Sprint 3 | TBD | 7 | — | Documentation & developer experience |
+| Sprint 3 | 2026-03-08 | 7 | 7 | Documentation & developer experience (retroactively completed) |
 | Sprint 4 | TBD | 7 | — | Test coverage push |
 | Sprint 5 | TBD | 7 | — | Refactoring & performance |
 | Sprint 6 | TBD | 7 | — | Production readiness & v1.0.1 release |
 | Sprint 9 | 2026-03-09 | 8 | 8 | Profiling infra, MD Title Case rename, perf guide, PS profile cleanup |
+| Sprint 10 | 2026-03-09 | 7 | — | Doc consolidation, coverage push, security audit |

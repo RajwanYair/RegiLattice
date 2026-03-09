@@ -91,7 +91,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **CLI `--output {table,json}`** — machine-readable JSON output for `--list`, `--search`, `--categories`.
 - **CLI `--list --category <name>`** — filter `--list` to a single category; returns exit code 2 for unknown categories.
 - **CLI `--list-categories`** — alias for `--categories`.
-- **ROADMAP.md** — 5-sprint roadmap, 50-item backlog, velocity tracking.
+- **`docs/Roadmap.md`** — 5-sprint roadmap, 50-item backlog, velocity tracking.
 - **`.github/docs/project-spec.md`** — relocated from repo root.
 
 ### Changed / Fixed
