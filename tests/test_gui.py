@@ -828,3 +828,569 @@ class TestWireSectionBindings:
         gui._wire_section_bindings(section)
         # With empty cached_statuses the status block is skipped
         row.status_text.configure.assert_not_called()
+
+
+# ── Sprint 10: additional coverage ───────────────────────────────────────────
+
+
+class TestCopyToClipboard:
+    def test_copies_text_to_clipboard(self, gui: RegiLatticeGUI) -> None:
+        gui._copy_to_clipboard("explorer-hide-ribbon")
+        assert gui._root.clipboard_get() == "explorer-hide-ribbon"
+
+    def test_updates_status_with_text(self, gui: RegiLatticeGUI) -> None:
+        gui._copy_to_clipboard("my-id")
+        assert "my-id" in gui._status_label.cget("text")
+
+
+class TestSelectCategory:
+    def test_selects_matching_category(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=False)
+        row.td.category = "Explorer"
+        row.disabled_by_corp = False
+        gui._tweak_rows = [row]
+        gui._select_category("Explorer")
+        assert row.var.get() is True
+
+    def test_skips_different_category(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=False)
+        row.td.category = "Privacy"
+        row.disabled_by_corp = False
+        gui._tweak_rows = [row]
+        gui._select_category("Explorer")
+        assert row.var.get() is False
+
+    def test_skips_corp_blocked_row(self, gui: RegiLatticeGUI) -> None:
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=False)
+        row.td.category = "Explorer"
+        row.disabled_by_corp = True
+        gui._tweak_rows = [row]
+        gui._select_category("Explorer")
+        assert row.var.get() is False
+
+
+class TestDelegateDialogs:
+    """Thin wrappers on gui.py that delegate to dialogs module."""
+
+    def test_export_powershell_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.export_powershell") as m:
+            gui._export_powershell()
+            m.assert_called_once()
+
+    def test_export_json_selection_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.export_json_selection") as m:
+            gui._export_json_selection()
+            m.assert_called_once()
+
+    def test_import_json_selection_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.import_json_selection") as m:
+            gui._import_json_selection()
+            m.assert_called_once()
+
+    def test_open_scoop_manager_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.open_scoop_manager") as m:
+            gui._open_scoop_manager()
+            m.assert_called_once()
+
+    def test_open_psmodule_manager_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.open_psmodule_manager") as m:
+            gui._open_psmodule_manager()
+            m.assert_called_once()
+
+    def test_show_about_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.show_about") as m:
+            gui._show_about()
+            m.assert_called_once()
+
+    def test_show_about_passes_hw_profile(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.hwinfo import CPUInfo, DiskInfo, GPUInfo, HWProfile, MemoryInfo
+
+        gui._hw_profile = HWProfile(
+            cpu=CPUInfo(name="Intel i9", cores_physical=8, cores_logical=16),
+            gpus=[GPUInfo(name="RTX 4090")],
+            memory=MemoryInfo(total_mb=32768, available_mb=16000),
+            disk=DiskInfo(total_gb=1000, free_gb=400),
+        )
+        with patch("regilattice.gui.dialogs.show_about") as m:
+            gui._show_about()
+            _args, kwargs = m.call_args
+            # hw_summary keyword should be a non-empty string
+            assert isinstance(kwargs.get("hw_summary"), str)
+            assert len(kwargs["hw_summary"]) > 0
+
+
+class TestBatchCategory:
+    def _make_section(self, gui: RegiLatticeGUI, *, all_corp: bool = False) -> MagicMock:
+        row = MagicMock()
+        row.disabled_by_corp = all_corp
+        row.td = MagicMock()
+        section = MagicMock()
+        section.rows = [row]
+        section.name = "Explorer"
+        return section
+
+    def test_empty_non_corp_tweaks_is_noop(self, gui: RegiLatticeGUI) -> None:
+        section = self._make_section(gui, all_corp=True)  # all rows corp-blocked → tweaks=[]
+        with patch("regilattice.gui.messagebox.askyesno") as m:
+            gui._batch_category(section, "apply")
+            m.assert_not_called()
+
+    def test_user_cancels_no_thread(self, gui: RegiLatticeGUI) -> None:
+        section = self._make_section(gui)
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=False),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._batch_category(section, "apply")
+            m_thread.assert_not_called()
+
+    def test_user_confirms_starts_thread(self, gui: RegiLatticeGUI) -> None:
+        section = self._make_section(gui)
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=True),
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._batch_category(section, "remove")
+            m_thread.assert_called_once()
+
+
+class TestOnRowClick:
+    def test_tracks_last_clicked_index(self, gui: RegiLatticeGUI) -> None:
+        gui._on_row_click(7)
+        assert gui._last_clicked_row_idx == 7
+
+    def test_overrides_previous_index(self, gui: RegiLatticeGUI) -> None:
+        gui._on_row_click(3)
+        gui._on_row_click(10)
+        assert gui._last_clicked_row_idx == 10
+
+
+class TestOnShiftClick:
+    def _make_rows(self, gui: RegiLatticeGUI, n: int) -> list[MagicMock]:
+        rows = []
+        for _ in range(n):
+            r = MagicMock()
+            r.var = tk.BooleanVar(gui._root, value=False)
+            r.disabled_by_corp = False
+            rows.append(r)
+        return rows
+
+    def test_selects_range_forward(self, gui: RegiLatticeGUI) -> None:
+        rows = self._make_rows(gui, 5)
+        gui._tweak_rows = rows
+        gui._last_clicked_row_idx = 1
+        result = gui._on_shift_click(3)
+        assert result == "break"
+        assert rows[0].var.get() is False
+        for i in range(1, 4):
+            assert rows[i].var.get() is True
+        assert rows[4].var.get() is False
+
+    def test_selects_range_backward(self, gui: RegiLatticeGUI) -> None:
+        rows = self._make_rows(gui, 5)
+        gui._tweak_rows = rows
+        gui._last_clicked_row_idx = 4
+        gui._on_shift_click(2)
+        for i in range(2, 5):
+            assert rows[i].var.get() is True
+
+    def test_no_anchor_sets_anchor(self, gui: RegiLatticeGUI) -> None:
+        rows = self._make_rows(gui, 3)
+        gui._tweak_rows = rows
+        gui._last_clicked_row_idx = None
+        result = gui._on_shift_click(2)
+        assert result == ""
+        assert gui._last_clicked_row_idx == 2
+
+    def test_skips_corp_blocked_rows(self, gui: RegiLatticeGUI) -> None:
+        rows = self._make_rows(gui, 3)
+        rows[1].disabled_by_corp = True
+        gui._tweak_rows = rows
+        gui._last_clicked_row_idx = 0
+        gui._on_shift_click(2)
+        assert rows[1].var.get() is False  # corp-blocked stays unchecked
+
+
+class TestSetRunning:
+    def test_set_running_true_disables_apply_remove(self, gui: RegiLatticeGUI) -> None:
+        with (
+            patch.object(gui._btn_apply, "state") as m_apply,
+            patch.object(gui._btn_remove, "state") as m_remove,
+        ):
+            gui._set_running(True)
+        m_apply.assert_called_with(["disabled"])
+        m_remove.assert_called_with(["disabled"])
+        assert gui._running is True
+
+    def test_set_running_false_enables_buttons(self, gui: RegiLatticeGUI) -> None:
+        gui._running = True
+        with (
+            patch.object(gui._btn_apply, "state") as m_apply,
+            patch.object(gui._btn_remove, "state") as m_remove,
+        ):
+            gui._set_running(False)
+        m_apply.assert_called_with(["!disabled"])
+        m_remove.assert_called_with(["!disabled"])
+        assert gui._running is False
+
+    def test_set_running_true_clears_cancel(self, gui: RegiLatticeGUI) -> None:
+        gui._cancel.set()
+        with (
+            patch.object(gui._btn_apply, "state"),
+            patch.object(gui._btn_remove, "state"),
+        ):
+            gui._set_running(True)
+        assert not gui._cancel.is_set()
+
+
+class TestUndoLast:
+    def test_empty_stack_is_noop(self, gui: RegiLatticeGUI) -> None:
+        gui._undo_stack = []
+        gui._undo_last()  # must not raise
+
+    def test_running_prevents_undo(self, gui: RegiLatticeGUI) -> None:
+        gui._running = True
+        gui._undo_stack = [("apply", [MagicMock()])]
+        gui._undo_last()
+        assert len(gui._undo_stack) == 1  # unchanged
+
+    def test_undo_apply_dispatches_remove(self, gui: RegiLatticeGUI) -> None:
+        td = MagicMock()
+        gui._undo_stack = [("apply", [td])]
+        gui._running = False
+        with patch.object(gui, "_dispatch_raw") as m:
+            gui._undo_last()
+        m.assert_called_once_with([td], "remove")
+
+    def test_undo_remove_dispatches_apply(self, gui: RegiLatticeGUI) -> None:
+        td = MagicMock()
+        gui._undo_stack = [("remove", [td])]
+        gui._running = False
+        with patch.object(gui, "_dispatch_raw") as m:
+            gui._undo_last()
+        m.assert_called_once_with([td], "apply")
+
+    def test_undo_disables_btn_when_stack_empty(self, gui: RegiLatticeGUI) -> None:
+        td = MagicMock()
+        gui._undo_stack = [("apply", [td])]
+        gui._running = False
+        with (
+            patch.object(gui, "_dispatch_raw"),
+            patch.object(gui._btn_undo, "state") as m_state,
+        ):
+            gui._undo_last()
+        m_state.assert_called_with(["disabled"])
+
+
+class TestDispatchRaw:
+    def test_sets_running_and_starts_thread(self, gui: RegiLatticeGUI) -> None:
+        with (
+            patch.object(gui, "_set_running") as m_run,
+            patch("regilattice.gui.threading.Thread") as m_thread,
+        ):
+            gui._dispatch_raw([MagicMock()], "apply")
+        m_run.assert_called_once_with(True)
+        m_thread.assert_called_once()
+
+
+class TestSavePreferences:
+    def test_writes_prefs_to_file(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("regilattice.gui._CONFIG_DIR", tmp_path)
+        prefs_file = tmp_path / "preferences.json"
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        gui._save_preferences()
+        data = json.loads(prefs_file.read_text(encoding="utf-8"))
+        assert "theme" in data
+        assert "profile" in data
+        assert "status_filter" in data
+        assert "scope_filter" in data
+
+
+class TestRestorePreferences:
+    def test_restores_valid_theme(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        from regilattice.gui_theme import available_themes
+
+        themes = available_themes()
+        if not themes:
+            pytest.skip("no themes")
+        prefs = {"theme": themes[0], "profile": "(none)", "status_filter": "All", "scope_filter": "All"}
+        prefs_file = tmp_path / "prefs.json"
+        prefs_file.write_text(json.dumps(prefs), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        with patch.object(gui, "_switch_theme") as m:
+            gui._restore_preferences()
+        m.assert_called_once_with(themes[0])
+
+    def test_invalid_theme_not_applied(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        prefs = {"theme": "____nonexistent____"}
+        prefs_file = tmp_path / "prefs.json"
+        prefs_file.write_text(json.dumps(prefs), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        with patch.object(gui, "_switch_theme") as m:
+            gui._restore_preferences()
+        m.assert_not_called()
+
+    def test_non_dict_json_is_ignored(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        prefs_file = tmp_path / "prefs.json"
+        prefs_file.write_text("42", encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        gui._restore_preferences()  # must not raise
+
+    def test_restores_status_filter(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        prefs = {"theme": "Auto", "status_filter": "Applied", "scope_filter": "All"}
+        prefs_file = tmp_path / "prefs.json"
+        prefs_file.write_text(json.dumps(prefs), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        with patch.object(gui, "_switch_theme"):
+            gui._restore_preferences()
+        assert gui._status_filter_var.get() == "Applied"
+
+    def test_restores_scope_filter(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        prefs = {"theme": "Auto", "status_filter": "All", "scope_filter": "User Only"}
+        prefs_file = tmp_path / "prefs.json"
+        prefs_file.write_text(json.dumps(prefs), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", prefs_file)
+        with patch.object(gui, "_switch_theme"):
+            gui._restore_preferences()
+        assert gui._scope_filter_var.get() == "User Only"
+
+    def test_missing_file_is_ignored(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("regilattice.gui._PREFS_FILE", tmp_path / "missing.json")
+        gui._restore_preferences()  # must not raise
+
+
+class TestSaveSearchHistory:
+    def test_writes_history_to_file(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("regilattice.gui._CONFIG_DIR", tmp_path)
+        hist_file = tmp_path / "search_history.json"
+        monkeypatch.setattr("regilattice.gui._SEARCH_HISTORY_FILE", hist_file)
+        gui._search_history = ["privacy", "telemetry", "gaming"]
+        gui._save_search_history()
+        data = json.loads(hist_file.read_text(encoding="utf-8"))
+        assert data == ["privacy", "telemetry", "gaming"]
+
+
+class TestReorderCategory:
+    def _make_sections(self, names: list[str]) -> list[MagicMock]:
+        sections = []
+        for name in names:
+            s = MagicMock()
+            s.name = name
+            s.expanded = False
+            sections.append(s)
+        return sections
+
+    def test_move_second_up(self, gui: RegiLatticeGUI) -> None:
+        s1, s2 = self._make_sections(["A", "B"])
+        gui._category_sections = [s1, s2]
+        with patch.object(gui, "_save_category_order"):
+            gui._reorder_category(s2, "up")
+        assert gui._category_sections[0].name == "B"
+        assert gui._category_sections[1].name == "A"
+
+    def test_move_first_up_is_noop(self, gui: RegiLatticeGUI) -> None:
+        s1, s2 = self._make_sections(["A", "B"])
+        gui._category_sections = [s1, s2]
+        with patch.object(gui, "_save_category_order") as m_save:
+            gui._reorder_category(s1, "up")
+        m_save.assert_not_called()
+        assert gui._category_sections[0].name == "A"
+
+    def test_move_last_down_is_noop(self, gui: RegiLatticeGUI) -> None:
+        s1, s2 = self._make_sections(["A", "B"])
+        gui._category_sections = [s1, s2]
+        with patch.object(gui, "_save_category_order") as m_save:
+            gui._reorder_category(s2, "down")
+        m_save.assert_not_called()
+
+    def test_move_first_down(self, gui: RegiLatticeGUI) -> None:
+        s1, s2 = self._make_sections(["A", "B"])
+        gui._category_sections = [s1, s2]
+        with patch.object(gui, "_save_category_order"):
+            gui._reorder_category(s1, "down")
+        assert gui._category_sections[0].name == "B"
+        assert gui._category_sections[1].name == "A"
+
+
+class TestOnCategoryCollapseChange:
+    def test_calls_save_collapse_state(self, gui: RegiLatticeGUI) -> None:
+        with patch.object(gui, "_save_collapse_state") as m:
+            gui._on_category_collapse_change(MagicMock())
+        m.assert_called_once()
+
+
+class TestRestoreCollapseState:
+    def test_expands_saved_sections(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        collapse_file = tmp_path / "collapsed.json"
+        collapse_file.write_text(json.dumps(["Explorer", "Privacy"]), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._COLLAPSE_FILE", collapse_file)
+        s1, s2, s3 = MagicMock(), MagicMock(), MagicMock()
+        s1.name, s2.name, s3.name = "Explorer", "Privacy", "Audio"
+        s1.expanded = s2.expanded = s3.expanded = False
+        gui._category_sections = [s1, s2, s3]
+        gui._restore_collapse_state()
+        s1.toggle.assert_called_once()
+        s2.toggle.assert_called_once()
+        s3.toggle.assert_not_called()
+
+    def test_skips_already_expanded(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        collapse_file = tmp_path / "collapsed.json"
+        collapse_file.write_text(json.dumps(["Explorer"]), encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._COLLAPSE_FILE", collapse_file)
+        section = MagicMock()
+        section.name = "Explorer"
+        section.expanded = True  # already expanded
+        gui._category_sections = [section]
+        gui._restore_collapse_state()
+        section.toggle.assert_not_called()
+
+    def test_missing_file_ignored(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("regilattice.gui._COLLAPSE_FILE", tmp_path / "missing.json")
+        gui._restore_collapse_state()  # must not raise
+
+    def test_invalid_json_ignored(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        collapse_file = tmp_path / "collapsed.json"
+        collapse_file.write_text("!!!bad json!!!", encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui._COLLAPSE_FILE", collapse_file)
+        gui._restore_collapse_state()  # must not raise
+
+
+class TestRefreshLog:
+    def test_loads_log_content(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        log_file = tmp_path / "session.log"
+        log_file.write_text("line1\nline2\n", encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui.SESSION", MagicMock(log_path=log_file))
+        gui._refresh_log()
+        content = gui._log_text.get("1.0", "end")
+        assert "line1" in content
+
+    def test_missing_log_shows_fallback(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("regilattice.gui.SESSION", MagicMock(log_path=tmp_path / "missing.log"))
+        gui._refresh_log()  # must not raise; shows fallback message
+        content = gui._log_text.get("1.0", "end")
+        assert "Could not read" in content
+
+
+class TestExportLog:
+    def test_cancel_dialog_does_nothing(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.filedialog.asksaveasfilename", return_value=""):
+            gui._export_log()  # no copy, no crash
+
+    def test_copies_log_file(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        src = tmp_path / "session.log"
+        src.write_text("session log content", encoding="utf-8")
+        dst = tmp_path / "exported.log"
+        monkeypatch.setattr("regilattice.gui.SESSION", MagicMock(log_path=src))
+        with patch("regilattice.gui.filedialog.asksaveasfilename", return_value=str(dst)):
+            gui._export_log()
+        assert dst.exists()
+        assert dst.read_text() == "session log content"
+
+    def test_oserror_shows_dialog(self, gui: RegiLatticeGUI, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        src = tmp_path / "session.log"
+        src.write_text("x", encoding="utf-8")
+        monkeypatch.setattr("regilattice.gui.SESSION", MagicMock(log_path=src))
+        with (
+            patch("regilattice.gui.filedialog.asksaveasfilename", return_value=str(tmp_path / "dst.log")),
+            patch("shutil.copy2", side_effect=OSError("disk full")),
+            patch("regilattice.gui.messagebox.showerror") as m_err,
+        ):
+            gui._export_log()
+        m_err.assert_called_once()
+
+
+class TestReloadThemeAliases:
+    def test_runs_without_error(self, gui: RegiLatticeGUI) -> None:
+        gui._reload_theme_aliases()  # must not raise
+
+    def test_updates_module_globals(self, gui: RegiLatticeGUI) -> None:
+        import regilattice.gui as gui_mod
+        import regilattice.gui_theme as theme_mod
+
+        gui._reload_theme_aliases()
+        assert gui_mod._ACCENT == theme_mod.ACCENT
+        assert gui_mod._BG == theme_mod.BG
+
+
+class TestToggleFocusedRow:
+    def test_search_widget_focus_skipped(self, gui: RegiLatticeGUI) -> None:
+        event = MagicMock()
+        event.widget = gui._search_entry
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=False)
+        row.disabled_by_corp = False
+        row.frame = MagicMock()
+        row.frame.winfo_ismapped.return_value = True
+        gui._tweak_rows = [row]
+        gui._focused_row_idx = 0
+        gui._toggle_focused_row(event)
+        # The space bar was pressed while search is focused — should NOT toggle
+        assert row.var.get() is False
+
+    def test_toggles_focused_row(self, gui: RegiLatticeGUI) -> None:
+        event = MagicMock()
+        event.widget = gui._root  # not the search entry
+        row = MagicMock()
+        row.var = tk.BooleanVar(gui._root, value=False)
+        row.disabled_by_corp = False
+        row.frame = MagicMock()
+        row.frame.winfo_ismapped.return_value = True
+        gui._tweak_rows = [row]
+        gui._focused_row_idx = 0
+        gui._toggle_focused_row(event)
+        assert row.var.get() is True
+
+
+class TestDispatch:
+    def test_cancel_while_running(self, gui: RegiLatticeGUI) -> None:
+        """Calling _dispatch when _running == True sets the cancel flag."""
+        gui._running = True
+        gui._cancel.clear()
+        with patch.object(gui, "_set_status") as m_status:
+            gui._dispatch("apply")
+        assert gui._cancel.is_set()
+        m_status.assert_called()
+
+    def test_no_selection_shows_info(self, gui: RegiLatticeGUI) -> None:
+        gui._running = False
+        gui._tweak_rows = []
+        with (
+            patch("regilattice.gui.assert_not_corporate"),
+            patch("regilattice.gui.messagebox.showinfo") as m_info,
+        ):
+            gui._dispatch("apply")
+        m_info.assert_called_once()
+
+    def test_corp_network_blocks_dispatch(self, gui: RegiLatticeGUI) -> None:
+        from regilattice.corpguard import CorporateNetworkError
+
+        gui._running = False
+        gui._force_var.set(False)
+        with (
+            patch("regilattice.gui.assert_not_corporate", side_effect=CorporateNetworkError("corp")),
+            patch("regilattice.gui.messagebox.showwarning") as m_warn,
+        ):
+            gui._dispatch("apply")
+        m_warn.assert_called_once()
+
+
+class TestOfferRollback:
+    def test_rollback_accepted_dispatches_reverse(self, gui: RegiLatticeGUI) -> None:
+        td = MagicMock()
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=True),
+            patch.object(gui, "_dispatch_raw") as m,
+        ):
+            gui._offer_rollback("partial failure?", [td], "apply")
+        m.assert_called_once_with([td], "remove")
+
+    def test_rollback_declined_does_nothing(self, gui: RegiLatticeGUI) -> None:
+        with (
+            patch("regilattice.gui.messagebox.askyesno", return_value=False),
+            patch.object(gui, "_dispatch_raw") as m,
+        ):
+            gui._offer_rollback("msg", [MagicMock()], "remove")
+        m.assert_not_called()

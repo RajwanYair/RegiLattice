@@ -86,8 +86,18 @@ def create_restore_point(*, require_admin: bool = True) -> None:
     """Create a Windows System Restore checkpoint via PowerShell."""
     assert_admin(require_admin)
     SESSION.log("Creating system restore point")
-    cmd = "powershell -NoProfile -Command \"Checkpoint-Computer -Description 'RegiLattice' -RestorePointType 'MODIFY_SETTINGS'\""
-    subprocess.run(cmd, shell=True, check=False)
+    subprocess.run(
+        [
+            "powershell",
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            "Checkpoint-Computer -Description 'RegiLattice' -RestorePointType 'MODIFY_SETTINGS'",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
     SESSION.log("Restore point created")
 
 
