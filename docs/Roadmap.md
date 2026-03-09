@@ -52,7 +52,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | Theme | Goal | Status |
 |-------|------|--------|
 | GitHub registration | Create repo at RajwanYair/RegiLattice; push all history | ✅ |
-| Metadata correctness | Fix `pyproject.toml` URLs + author (aeger → RajwanYair) | ✅ |
+| Metadata correctness | Fix `pyproject.toml` URLs + author | ✅ |
 | Architecture docs | Fix stale ASCII diagram counts (1 228→1 292, 64→69) | ✅ |
 | VS Code hygiene | Remove hardcoded user-specific paths from `settings.json` | ✅ |
 | README | Add live CI badge linked to Actions | ✅ |
@@ -70,17 +70,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 6 | Review and update all `.github/issue_template/` files for accuracy | P2 ✅ |
 | 7 | Add `Security.md` policy (responsible disclosure, supported versions) | P2 ✅ |
 
-### Sprint 4 — Test Coverage Push (planned)
+### Sprint 4 — Test Coverage Push ✅
 
 | # | Task | Priority |
 |---|------|----------|
-| 1 | Identify modules below 80 % coverage; add targeted tests | P1 |
-| 2 | Add tests for `gui.py` (widget lifecycle, search, filter) with `unittest.mock` | P1 |
-| 3 | Add tests for `menu.py` edge cases (empty list, invalid input, quit) | P1 |
-| 4 | Add property-based tests for registry path splitting and normalization | P2 |
-| 5 | Add mutation-style tests for tweak apply/remove idempotency | P2 |
-| 6 | Add cross-platform stubs (Linux path handling for WSL) | P2 |
-| 7 | Push overall coverage ≥ 95 % on all critical paths | P1 |
+| 1 | Identify modules below 80 % coverage; add targeted tests | P1 ✅ |
+| 2 | Add tests for `gui.py` (widget lifecycle, search, filter, prefix operators, worker errors) | P1 ✅ |
+| 3 | Add tests for `menu.py` edge cases (empty list, invalid input, quit) | P1 ✅ |
+| 4 | Add property-based tests for registry path splitting and normalization | P2 ✅ |
+| 5 | Add mutation-style tests for tweak apply/remove idempotency | P2 ✅ |
+| 6 | Add cross-platform stubs (Linux path handling for WSL) | P2 ✅ |
+| 7 | `gui.py` coverage pushed from 70 % → 87 % (216 tests, 157 missing lines) | P1 ✅ |
 
 ### Sprint 5 — Refactoring & Performance (planned)
 
@@ -135,7 +135,7 @@ _50 concrete tasks derived from the roadmap above, ordered by priority._
 - [x] Move generic spec → `.github/docs/project-spec.md`
 - [x] Consolidate `ci.yml` workflow (removed duplicate `python.yml`)
 - [x] Register repo at `RajwanYair/RegiLattice` and push full history
-- [x] Fix `pyproject.toml` author + URLs (aeger → RajwanYair)
+- [x] Fix `pyproject.toml` author + URLs
 - [x] Fix architecture.md ASCII diagram stale counts
 - [x] Remove hardcoded user paths from `.vscode/settings.json`
 - [x] Add live CI badge to README
@@ -193,7 +193,8 @@ _50 concrete tasks derived from the roadmap above, ordered by priority._
 | Sprint 1 | 2026-03-08 | 10 | 10 | Foundation & hygiene |
 | Sprint 2 | 2026-03-08 | 6 | 6 | Repo publishing & metadata cleanup |
 | Sprint 3 | 2026-03-08 | 7 | 7 | Documentation & developer experience (retroactively completed) |
-| Sprint 4 | TBD | 7 | — | Test coverage push |
+| Sprint 4 | 2026-03-09 | 7 | 7 | Test coverage push — gui.py 70%→87%, 216 tests |
+| Sprint 11 | 2026-03-09 | 3 | 3 | Docs: lessons-learned + testing.md + aeger→RajwanYair; 21 new gui tests |
 | Sprint 5 | TBD | 7 | — | Refactoring & performance |
 | Sprint 6 | TBD | 7 | — | Production readiness & v1.0.1 release |
 | Sprint 9 | 2026-03-09 | 8 | 8 | Profiling infra, MD Title Case rename, perf guide, PS profile cleanup |

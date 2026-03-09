@@ -106,11 +106,11 @@ with patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED):
 
 All three fixed vulnerabilities in recent security audit:
 
-| Location | Before (❌) | After (✅) |
-|---|---|---|
-| `tweaks/maintenance.py` | `subprocess.run(cmd, shell=True)` | `subprocess.run(["cmd.exe", "/c", "wmic", ...])` |
-| `gui_dialogs.py` (PS export) | `subprocess.run(f"powershell ... {path}", shell=True)` | `subprocess.run(["powershell.exe", "-File", str(path)])` |
-| `gui_dialogs.py` (Scoop) | `subprocess.run(f"scoop {action} {pkg}", shell=True)` | `subprocess.run(["powershell.exe", "-Command", "scoop", action, pkg])` |
+| Location                     | Before (❌)                                            | After (✅)                                                             |
+| ---------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------- |
+| `tweaks/maintenance.py`      | `subprocess.run(cmd, shell=True)`                      | `subprocess.run(["cmd.exe", "/c", "wmic", ...])`                       |
+| `gui_dialogs.py` (PS export) | `subprocess.run(f"powershell ... {path}", shell=True)` | `subprocess.run(["powershell.exe", "-File", str(path)])`               |
+| `gui_dialogs.py` (Scoop)     | `subprocess.run(f"scoop {action} {pkg}", shell=True)`  | `subprocess.run(["powershell.exe", "-Command", "scoop", action, pkg])` |
 
 ---
 
@@ -124,13 +124,13 @@ It is faster, atomic per-replacement, and produces a single summary.
 
 ## Test File Lint Pitfalls (ruff)
 
-| Code | Problem | Fix |
-|---|---|---|
-| `F841` | `with patch(...) as mock_list:` where `mock_list` is unused | Remove `as mock_list` |
-| `E501` | Inline list comprehension longer than 150 chars | Extract to `_helper()` function |
-| `RUF059` | `section, rows = fn()` where `rows` unused | Change to `section, _ = fn()` |
-| `I001` | Unsorted imports | Run `ruff --fix` |
-| `RUF001` | En-dash or smart quote in string | Replace with plain ASCII `--` or `"` |
+| Code     | Problem                                                     | Fix                                  |
+| -------- | ----------------------------------------------------------- | ------------------------------------ |
+| `F841`   | `with patch(...) as mock_list:` where `mock_list` is unused | Remove `as mock_list`                |
+| `E501`   | Inline list comprehension longer than 150 chars             | Extract to `_helper()` function      |
+| `RUF059` | `section, rows = fn()` where `rows` unused                  | Change to `section, _ = fn()`        |
+| `I001`   | Unsorted imports                                            | Run `ruff --fix`                     |
+| `RUF001` | En-dash or smart quote in string                            | Replace with plain ASCII `--` or `"` |
 
 ---
 
@@ -156,6 +156,101 @@ It is faster, atomic per-replacement, and produces a single summary.
 ## GitHub Username is RajwanYair
 
 All references to the GitHub account must use `RajwanYair` (not `aeger`):
+
 - `CODEOWNERS`: `@RajwanYair` ✅ (verified 2026-03-09)
 - `pyproject.toml` URLs: `https://github.com/RajwanYair/RegiLattice` ✅
-- Historical `aeger → RajwanYair` migration notes in `docs/Roadmap.md` are ✅ completed items
+- Historical `aeger → RajwanYair` migration notes in `docs/Roadmap.md` are ✅ completed and cleaned (2026-03-09)
+
+---
+
+## hwinfo.py — Mockable ctypes Helper Pattern
+
+Extract platform-specific `ctypes` calls into a named module-level function so tests can patch them without affecting the real implementation:
+
+```python
+# ✅ GOOD — named helper, fully patchable
+def _ctypes_memory_mb() -> tuple[int, int] | None:
+    with contextlib.suppress(Exception):
+        import ctypes
+        ...
+    return None
+
+# In test:
+@patch("regilattice.hwinfo._ctypes_memory_mb", return_value=None)
+def test_memory_cim_fallback(self, _mock_ctypes, _mock_cim): ...
+
+# ❌ BAD — inline ctypes inside a cached function; test cannot mock it
+@functools.lru_cache(maxsize=1)
+def detect_memory():
+    with contextlib.suppress(Exception):
+        import ctypes
+        ...  # unpatchable
+```
+
+---
+
+## Tkinter Collapse/Expand — O(1) Container Hide Pattern
+
+`_hide_rows()` must hide only the container frame, not unpack each individual row:
+
+```python
+# ✅ O(1) — hide container; child rows stay packed inside
+def _hide_rows(self) -> None:
+    self.content_frame.pack_forget()
+
+# ❌ O(n_rows) — expensive per-row unpack on every collapse
+def _hide_rows(self) -> None:
+    for row in self.rows:
+        row.unpack_row()
+    self.content_frame.pack_forget()
+```
+
+This matters with 1 200+ rows — collapse/expand was noticeably slow before the fix.
+
+---
+
+## Status Messages — Skip 100% Progress, Set Ready in Completion Handler
+
+The async status-update pattern: block the 100% "Detecting… 100%" flash (it would flicker before `_apply_statuses` resets it) and let the completion handler write the final Ready message:
+
+```python
+# In _on_progress:
+if pct < 100:  # skip 100 % — _apply_statuses sets Ready status
+    self._root.after(0, lambda p=pct: self._set_status(f"Detecting… {p} %", _WARN_YELLOW))
+
+# At the end of _apply_statuses:
+self._set_status(f"Ready  •  {total_tweaks} tweaks  •  {applied} applied / {default} default / {unknown} unknown")
+```
+
+Without the `< 100` guard the status bar would show "Detecting… 100%" momentarily before snapping to "Ready", which looks like a stuck counter.
+
+---
+
+## PowerShell Composite Scripts — Always Add `$ErrorActionPreference`
+
+Every `_COMPOSITE_PS` style multi-cmdlet script must suppress non-fatal errors and protect unreliable cmdlets:
+
+```powershell
+# ✅ Add at the top of every composite PS script
+$ErrorActionPreference = 'Continue'
+
+# Wrap cmdlets that may be absent on some SKUs
+try { $pd = Get-PhysicalDisk -ErrorAction Stop | ... } catch { $pd = @() }
+
+# Protect potentially-null properties with explicit string cast
+"$([string]($prop.NullableValue))"
+```
+
+---
+
+## Tkinter Long Operations — Always Call `update_idletasks()` After Batch Loops
+
+After iterating over all category sections (expand/collapse), call `update_idletasks()` once to flush pending geometry recalculations. Without it the window freezes until the event loop resumes:
+
+```python
+def _expand_all(self) -> None:
+    for section in self._category_sections:
+        if not section.expanded:
+            section.toggle()
+    self._root.update_idletasks()  # flush all pending geometry work at once
+```
