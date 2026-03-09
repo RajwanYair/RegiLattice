@@ -6,7 +6,7 @@ applyTo: "**/*.py"
 
 ## Style & Formatting
 
-- **Line length**: 100 characters (enforced by ruff/black)
+- **Line length**: 150 characters (enforced by ruff; set in `pyproject.toml` `[tool.ruff] line-length = 150`)
 - **Quotes**: double quotes for strings
 - **Imports**: grouped (stdlib → third-party → local), sorted by ruff/isort
 - **Trailing commas**: always on multi-line collections
@@ -26,6 +26,41 @@ def transform(items, max_count=10):
 ```
 
 Use `from __future__ import annotations` for forward references on Python <3.10.
+
+## Performance-First Method Choices
+
+When multiple equivalent approaches exist, prefer the faster/safer one:
+
+```python
+# ✅ Prefer multi_replace_string_in_file over sequential replace calls (agent)
+# ✅ Prefer pathlib.Path over os.path (faster, safer, cross-platform)
+# ✅ Prefer list comprehensions over map/filter for readability
+# ✅ Prefer functools.lru_cache for pure deterministic lookups
+# ✅ Prefer pytest-mock mocker.patch over unittest.mock.patch directly
+```
+
+## Subprocess — Prefer List Args, Never shell=True with Input
+
+Always use list form; add `check=True` unless you handle non-zero exits yourself:
+
+```python
+# ✅ Best — list args, check=True, explicit encoding
+result = subprocess.run(
+    ["git", "log", "--oneline", "-10"],
+    capture_output=True,
+    text=True,
+    encoding="utf-8",
+    check=True,
+)
+
+# ✅ Also OK — capture and inspect returncode manually
+result = subprocess.run(["winget", "install", pkg], capture_output=True, text=True)
+if result.returncode != 0:
+    raise RuntimeError(result.stderr)
+
+# ❌ Never — shell injection risk, slow, platform-dependent
+result = subprocess.run(f"git log {branch}", shell=True)
+```
 
 ## Pathlib Over os.path
 

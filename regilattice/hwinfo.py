@@ -333,8 +333,7 @@ def detect_network_type() -> str:
         return "unknown"
     # Query adapter type for all Status=Up adapters in one PS call
     raw = _run_ps(
-        "Get-NetAdapter | Where-Object Status -eq Up "
-        "| Select-Object -ExpandProperty InterfaceDescription",
+        "Get-NetAdapter | Where-Object Status -eq Up | Select-Object -ExpandProperty InterfaceDescription",
         timeout=8,
     )
     _VPN_KW = ("vpn", "cisco", "anyconnect", "pulse", "globalprotect", "forticlient", "zscaler", "wireguard", "openvpn")
@@ -437,9 +436,17 @@ def clear_caches() -> None:
     with _CIM_LOCK:
         _CIM_CACHE = None
     _probes = (
-        detect_cpu, detect_gpus, detect_memory, detect_disk,
-        detect_hyperv, detect_wsl, detect_tpm, detect_secure_boot,
-        detect_battery, detect_network_type, detect_hardware,
+        detect_cpu,
+        detect_gpus,
+        detect_memory,
+        detect_disk,
+        detect_hyperv,
+        detect_wsl,
+        detect_tpm,
+        detect_secure_boot,
+        detect_battery,
+        detect_network_type,
+        detect_hardware,
     )
     for fn in _probes:
         fn.cache_clear()

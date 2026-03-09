@@ -58,6 +58,17 @@ class Test<Class>:
         ...
 ```
 
+## Tkinter / GUI Test Rules
+
+When writing tests for any `gui*.py` module:
+
+1. **Always `root.withdraw()`** — never let test windows appear
+2. **Patch `_deferred_init`** — prevents background thread loading tweaks
+3. **Call event handlers directly** — `widget._on_enter(None)` NOT `event_generate`
+4. **Use unique TweakDef IDs** per test — `lru_cache` in `tweak_scope()` causes cross-test pollution
+5. **Use real enum values** — `TweakResult.UNKNOWN` NOT `MagicMock()` for branch coverage
+6. **Add `@pytest.mark.timeout(10)`** — GUI tests can hang without it
+
 ## Naming Conventions
 
 - Test files: `test_<module>.py`

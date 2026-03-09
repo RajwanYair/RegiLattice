@@ -21,10 +21,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: ${{ runner.os }}-pip-${{ matrix.python-version }}-
       - name: Install dependencies
         run: pip install -e ".[dev]"
       - name: Lint (ruff)
         run: python -m ruff check regilattice/ tests/
+      - name: Format check (ruff)
+        run: python -m ruff format --check regilattice/ tests/
       - name: Type check (mypy)
         run: python -m mypy regilattice/
       - name: Test (pytest + coverage)
@@ -37,7 +45,7 @@ jobs:
           path: coverage.xml
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.12'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml

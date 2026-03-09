@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
 PackageIdentifier: RegiLattice.RegiLattice
-PackageVersion: 1.0.0
+PackageVersion: 1.0.1
 InstallerType: portable
 Commands:
   - regilattice
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/regilattice/regilattice/releases/download/v1.0.0/regilattice-1.0.0-py3-none-any.whl
+    InstallerUrl: https://github.com/RajwanYair/RegiLattice/releases/download/v1.0.1/regilattice-1.0.1-py3-none-any.whl
     InstallerSha256: # TODO: fill after release artifact is built
 ManifestType: installer
 ManifestVersion: 1.6.0

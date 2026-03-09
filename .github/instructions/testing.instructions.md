@@ -102,7 +102,32 @@ def test_api_call():
 
 - Minimum: 80% overall, 90% for core modules
 - Exclude: `__main__.py`, `**/gui*.py` display code, `TYPE_CHECKING` blocks
-- Run: `pytest --cov=src --cov-report=term-missing --cov-report=html`
+- Run: `pytest --cov=regilattice --cov-report=term-missing --cov-report=html`
+
+## Measured Coverage Baselines (v1.0.1)
+
+| Module | Coverage | Status |
+|---|---|---|
+| `analytics.py` | 100% | ✅ |
+| `deps.py` | 100% | ✅ |
+| `locale.py` | 100% | ✅ |
+| `menu.py` | **100%** | ✅ (41 tests) |
+| `gui_widgets.py` | **95%** | ✅ (40 tests) |
+| `gui_dialogs.py` | **89%** | ✅ (53 tests) |
+| `gui_theme.py` | 98% | ✅ |
+| `gui_tooltip.py` | 91% | ✅ |
+| `hwinfo.py` | 97% | ✅ |
+| `marketplace.py` | 95% | ✅ |
+| `ratings.py` | 97% | ✅ |
+| `elevation.py` | 95% | ✅ |
+| `config.py` | 90% | ✅ |
+| `cli.py` | 86% | 🟡 |
+| `registry.py` | 84% | 🟡 |
+| `corpguard.py` | 77% | 🟡 |
+| `gui.py` | 70% | 🔴 in-progress |
+| `tweaks/__init__.py` | 50% | 🟡 platform paths |
+
+Target: 80%+ on all core modules, 90%+ on non-GUI modules.
 
 ## Hypothesis — Property-Based Testing
 
@@ -114,6 +139,49 @@ from hypothesis import given, settings, strategies as st
 def test_process_handles_any_valid_input(text: str, count: int) -> None:
     result = process(text, count)
     assert result is not None
+```
+
+## Tkinter Widget Testing — Proven Patterns
+
+Lessons learned from RegiLattice GUI test coverage sprints:
+
+```python
+# ✅ Call widget event handlers DIRECTLY — never use event_generate + root.update()
+# event_generate causes pytest-timeout thread interrupts on Windows
+row._on_enter(None)   # correct — method accepts _: tk.Event[tk.Misc], never dereferences it
+row._on_leave(None)   # correct
+
+# ❌ BAD — can crash with fatal exception code 0x80000003 on Windows
+row.frame.event_generate("<Enter>")
+root.update()
+
+# ✅ Isolate cache-keyed singletons with unique IDs per test
+# tweaks/__init__.py _SCOPE_CACHE is keyed by td.id — reuse of the same id across
+# tests causes stale cache hits and wrong assertion results.
+TweakDef(id="scope-user-test-unique", ...)   # ✅ unique per test
+TweakDef(id="test-tweak", ...)               # ❌ shared id → cache collision
+
+# ✅ Always withdraw() + patch deferred loaders
+root = tk.Tk()
+root.withdraw()
+with patch("regilattice.gui.RegiLatticeGUI._deferred_init"):
+    gui = RegiLatticeGUI(root)
+```
+
+## Mocking Preference — Use pytest-mock Over unittest.mock
+
+```python
+# ✅ Preferred — pytest-mock mocker fixture (auto-reset, cleaner syntax)
+def test_thing(mocker: pytest.MockerFixture) -> None:
+    mocker.patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED)
+    ...
+
+# Also OK — contextmanager form for tests without mocker fixture
+with patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED):
+    ...
+
+# ❌ Avoid — unittest.mock.MagicMock() standing in for typed enums
+# Use the actual enum value (TweakResult.UNKNOWN) for accurate coverage
 ```
 
 ## What NOT to Do in Tests
@@ -128,3 +196,5 @@ def test_process_handles_any_valid_input(text: str, count: int) -> None:
   with real Tkinter widgets, add `@pytest.mark.timeout(10)` and call
   `root.after(100, root.destroy)` to ensure the event loop exits.
 - **Don't run tests via `python -m pytest` in Copilot agents** — use `runTests` tool.
+- **Don't reuse TweakDef IDs across tests** when `tweak_scope()` or any
+  `lru_cache`-backed function is involved — use unique IDs per test class.

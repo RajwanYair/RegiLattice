@@ -393,8 +393,6 @@ class TestMenuHelpers:
             menu._show_tweaks(cat)
         assert "blocked" in capsys.readouterr().out
 
-
-
     def test_main_function(self) -> None:
         from regilattice.menu import main as menu_main
 

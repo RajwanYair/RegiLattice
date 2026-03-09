@@ -239,9 +239,7 @@ def _has_group_policy() -> bool:
                         count += 1
                         idx += 1
                         if count >= 3:  # 3+ policy sub-keys = likely GP-managed
-                            SESSION.log(
-                                f"Corp-guard: {count}+ policy sub-keys under HKLM\\SOFTWARE\\Policies"
-                            )
+                            SESSION.log(f"Corp-guard: {count}+ policy sub-keys under HKLM\\SOFTWARE\\Policies")
                             return True
                     except OSError:
                         break
@@ -416,10 +414,7 @@ def _run_corp_checks() -> tuple[bool, list[str]]:
             return name, label, False
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
-        futures = [
-            pool.submit(_run_single, name, label, fn_name)
-            for name, label, fn_name in _CHECK_NAMES
-        ]
+        futures = [pool.submit(_run_single, name, label, fn_name) for name, label, fn_name in _CHECK_NAMES]
         for future in concurrent.futures.as_completed(futures, timeout=30):
             _name, label, detected = future.result(timeout=15)
             if detected:
