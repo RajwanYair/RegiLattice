@@ -111,16 +111,22 @@ def apply_wsl_feature(*, require_admin: bool = True) -> None:
     """Enable the 'Windows Subsystem for Linux' optional feature."""
     assert_admin(require_admin)
     SESSION.log("Starting Add-WSLFeature")
-    cmd = "dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart"
-    subprocess.run(cmd, shell=True, check=False, capture_output=True)
+    subprocess.run(
+        ["dism.exe", "/online", "/enable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/all", "/norestart"],
+        check=False,
+        capture_output=True,
+    )
     SESSION.log("Completed Add-WSLFeature")
 
 
 def remove_wsl_feature(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Starting Remove-WSLFeature")
-    cmd = "dism.exe /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux /norestart"
-    subprocess.run(cmd, shell=True, check=False, capture_output=True)
+    subprocess.run(
+        ["dism.exe", "/online", "/disable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/norestart"],
+        check=False,
+        capture_output=True,
+    )
     SESSION.log("Completed Remove-WSLFeature")
 
 
@@ -141,16 +147,22 @@ def apply_vmp_feature(*, require_admin: bool = True) -> None:
     """Enable Virtual Machine Platform (required for WSL 2)."""
     assert_admin(require_admin)
     SESSION.log("Starting Add-VMPlatform")
-    cmd = "dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart"
-    subprocess.run(cmd, shell=True, check=False, capture_output=True)
+    subprocess.run(
+        ["dism.exe", "/online", "/enable-feature", "/featurename:VirtualMachinePlatform", "/all", "/norestart"],
+        check=False,
+        capture_output=True,
+    )
     SESSION.log("Completed Add-VMPlatform")
 
 
 def remove_vmp_feature(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Starting Remove-VMPlatform")
-    cmd = "dism.exe /online /disable-feature /featurename:VirtualMachinePlatform /norestart"
-    subprocess.run(cmd, shell=True, check=False, capture_output=True)
+    subprocess.run(
+        ["dism.exe", "/online", "/disable-feature", "/featurename:VirtualMachinePlatform", "/norestart"],
+        check=False,
+        capture_output=True,
+    )
     SESSION.log("Completed Remove-VMPlatform")
 
 
@@ -587,9 +599,13 @@ def _detect_wsl_kernel_update() -> bool:
 def _apply_wsl_enable_systemd(*, require_admin: bool = True) -> None:
     """Enable systemd inside the default WSL distro by writing /etc/wsl.conf."""
     SESSION.log("WSL: enabling systemd in default distro")
-    cmd = "wsl -- sudo sh -c 'mkdir -p /etc && printf \"[boot]\\nsystemd=true\\n\" > /etc/wsl.conf'"
     try:
-        subprocess.run(cmd, shell=True, check=False, capture_output=True, timeout=30)
+        subprocess.run(
+            ["wsl", "--", "sudo", "sh", "-c", "mkdir -p /etc && printf '[boot]\\nsystemd=true\\n' > /etc/wsl.conf"],
+            check=False,
+            capture_output=True,
+            timeout=30,
+        )
         SESSION.log("WSL: systemd enabled — restart WSL to take effect")
     except (FileNotFoundError, subprocess.TimeoutExpired):
         SESSION.log("WSL: failed to set systemd — is WSL installed?")
@@ -597,9 +613,13 @@ def _apply_wsl_enable_systemd(*, require_admin: bool = True) -> None:
 
 def _remove_wsl_enable_systemd(*, require_admin: bool = True) -> None:
     SESSION.log("WSL: disabling systemd in default distro")
-    cmd = "wsl -- sudo sh -c 'sed -i 's/^systemd=true/systemd=false/' /etc/wsl.conf'"
     with contextlib.suppress(FileNotFoundError, subprocess.TimeoutExpired):
-        subprocess.run(cmd, shell=True, check=False, capture_output=True, timeout=30)
+        subprocess.run(
+            ["wsl", "--", "sudo", "sh", "-c", "sed -i 's/^systemd=true/systemd=false/' /etc/wsl.conf"],
+            check=False,
+            capture_output=True,
+            timeout=30,
+        )
 
 
 def _detect_wsl_enable_systemd() -> bool:

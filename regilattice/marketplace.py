@@ -15,6 +15,7 @@ Directory layout for a plugin pack::
             custom_privacy.py  # exports TWEAKS
             custom_network.py  # exports TWEAKS
             plugin.json        # metadata
+            checksums.json     # optional SHA-256 integrity manifest
 
 ``plugin.json`` schema::
 
@@ -26,6 +27,22 @@ Directory layout for a plugin pack::
       "min_regilattice": "1.0.0"
     }
 
+``checksums.json`` schema (optional but recommended)::
+
+    {
+      "sha256": {
+        "custom_privacy.py": "<hex-sha256>",
+        "custom_network.py": "<hex-sha256>"
+      }
+    }
+
+When ``checksums.json`` is present every listed ``.py`` file is verified
+before it is imported.  A hash mismatch raises :class:`RuntimeError`.
+Files absent from the manifest (but present in the directory) are loaded
+with a warning — add them to the manifest to silence the warning.  If
+``checksums.json`` is absent entirely, plugins are still loaded but a
+warning is emitted encouraging the author to add one.
+
 Usage::
 
     from regilattice.marketplace import discover_plugins, load_plugin, loaded_plugins
@@ -36,6 +53,7 @@ Usage::
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import logging
@@ -96,6 +114,51 @@ def _parse_version(v: str) -> tuple[int, ...]:
 def _version_ok(required: str) -> bool:
     """Return *True* if the current RegiLattice version satisfies *required*."""
     return _parse_version(__version__) >= _parse_version(required)
+
+
+# ── Checksum helpers ────────────────────────────────────────────────────────
+
+
+def _sha256_file(path: Path) -> str:
+    """Return the lowercase hex SHA-256 digest of *path*."""
+    h = hashlib.sha256()
+    h.update(path.read_bytes())
+    return h.hexdigest()
+
+
+def _verify_checksums(plugin_path: Path, name: str) -> None:
+    """Validate ``.py`` files in *plugin_path* against ``checksums.json``.
+
+    Behaviour
+    ---------
+    * ``checksums.json`` absent  → warning only (allow unsigned plugins).
+    * File listed + hash matches → OK.
+    * File listed + hash differs → :class:`RuntimeError` (tampering detected).
+    * File **not** listed in manifest → warning (encourage author to add it).
+    """
+    manifest_path = plugin_path / "checksums.json"
+    if not manifest_path.exists():
+        _log.warning("Plugin %r has no checksums.json — running unsigned; consider adding integrity hashes.", name)
+        return
+
+    try:
+        raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+        expected: dict[str, str] = raw.get("sha256", {})
+    except (json.JSONDecodeError, OSError) as exc:
+        raise RuntimeError(f"Plugin {name!r}: failed to read checksums.json: {exc}") from exc
+
+    for py_file in sorted(plugin_path.glob("*.py")):
+        if py_file.name.startswith("_"):
+            continue
+        actual = _sha256_file(py_file)
+        if py_file.name in expected:
+            if actual != expected[py_file.name].lower():
+                msg = f"Plugin {name!r}: checksum mismatch for {py_file.name!r} (expected {expected[py_file.name]!r}, got {actual!r})"
+                _log.error(msg)
+                raise RuntimeError(msg)
+            _log.debug("Plugin %r: %s checksum OK", name, py_file.name)
+        else:
+            _log.warning("Plugin %r: %s not listed in checksums.json — add it to suppress this warning.", name, py_file.name)
 
 
 # ── Discovery ────────────────────────────────────────────────────────────────
@@ -165,6 +228,9 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
         msg = f"Plugin path {str(meta.path)!r} is outside the plugins directory {str(_PLUGINS_DIR)!r}"
         _log.error("Path traversal attempt for plugin %r: %s", meta.name, msg)
         raise RuntimeError(msg) from None
+
+    # Security: verify SHA-256 checksums before importing any code
+    _verify_checksums(plugin_path, meta.name)
 
     tweaks: list[TweakDef] = []
     for py_file in sorted(meta.path.glob("*.py")):
