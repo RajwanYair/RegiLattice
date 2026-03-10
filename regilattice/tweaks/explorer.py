@@ -1724,8 +1724,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Shows empty removable drives (USB, optical) in This PC even without media. "
-            "Default: hidden (1). Recommended: shown when needed."
+            "Shows empty removable drives (USB, optical) in This PC even without media. Default: hidden (1). Recommended: shown when needed."
         ),
         tags=["explorer", "drives", "removable", "usb", "display"],
     ),

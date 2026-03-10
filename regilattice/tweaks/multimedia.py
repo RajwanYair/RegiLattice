@@ -724,8 +724,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_KEY_MENU_DELAY],
         description=(
-            "Sets MenuShowDelay to 0, making context menus and pop-up menus appear instantly. "
-            "Default: 400 ms. Recommended: 0 for power users."
+            "Sets MenuShowDelay to 0, making context menus and pop-up menus appear instantly. Default: 400 ms. Recommended: 0 for power users."
         ),
         tags=["multimedia", "menu", "delay", "performance", "ux"],
     ),
@@ -772,8 +771,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_KEY_TOOLTIP_DELAY],
         description=(
-            "Sets extended UI hover time to 0, making Explorer tooltips appear immediately. "
-            "Default: system default. Recommended: 0 for fast typists."
+            "Sets extended UI hover time to 0, making Explorer tooltips appear immediately. Default: system default. Recommended: 0 for fast typists."
         ),
         tags=["multimedia", "tooltip", "delay", "explorer", "ux"],
     ),

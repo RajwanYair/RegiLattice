@@ -552,5 +552,5 @@ class CategorySection:
         # Sweep all remaining children (dynamic risk/scope/profile badge labels)
         _fixed = {self._arrow, self._title, self._count_lbl, self._btn_enable_all, self._btn_disable_all, self._btn_up, self._btn_down}
         for w in self.header.winfo_children():
-            if w not in _fixed and isinstance(w, (tk.Label, tk.Button)):
+            if w not in _fixed and isinstance(w, tk.Label | tk.Button):
                 w.configure(bg=theme.BG_SURFACE)

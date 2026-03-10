@@ -793,8 +793,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_STARTUP_INK],
         description=(
-            "Hides the Windows Ink Workspace button from the taskbar. "
-            "Default: hidden on non-pen devices. Recommended: hidden for clean taskbar."
+            "Hides the Windows Ink Workspace button from the taskbar. Default: hidden on non-pen devices. Recommended: hidden for clean taskbar."
         ),
         tags=["startup", "ink", "pen", "taskbar", "ux"],
     ),

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+from typing import ClassVar
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
@@ -58,7 +59,7 @@ def apply_svchost_split(*, require_admin: bool = True) -> None:
     import ctypes
 
     class MEMORYSTATUSEX(ctypes.Structure):
-        _fields_ = [
+        _fields_: ClassVar[list[tuple[str, type]]] = [
             ("dwLength", ctypes.c_ulong),
             ("dwMemoryLoad", ctypes.c_ulong),
             ("ullTotalPhys", ctypes.c_ulonglong),
@@ -1085,6 +1086,7 @@ def _remove_perf_disable_thumbnail_net(*, require_admin: bool = False) -> None:
 
 def _detect_perf_disable_thumbnail_net() -> bool:
     return SESSION.read_dword(_EXPLORER_ADVANCED, "DisableThumbnailsOnNetworkFolders") == 1
+
 
 TWEAKS += [
     TweakDef(

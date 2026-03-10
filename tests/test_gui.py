@@ -745,7 +745,6 @@ class TestDeltaStatus:
         row.status_text.configure.assert_not_called()
 
     def test_missing_tweak_id_falls_back_to_unknown(self, gui: RegiLatticeGUI) -> None:
-
         row = self._make_row(gui, "not-in-map")
         gui._tweak_rows = [row]
         gui._prev_statuses = {}
@@ -1486,7 +1485,6 @@ class TestStatLabelUpdates:
         section.update_count.assert_called_once()
 
     def test_stat_blocked_label_updated_when_set(self, gui: RegiLatticeGUI) -> None:
-
         row = self._make_row(gui, "stat-blk-t1")
         row.disabled_by_corp = True  # This row is blocked
         gui._tweak_rows = [row]

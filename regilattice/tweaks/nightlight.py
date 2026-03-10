@@ -578,10 +578,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_VIVID_VIDEO],
-        description=(
-            "Sets the video colour profile to Vivid mode (UseHDR=2). "
-            "Increases saturation for SDR content on HDR displays. Default: Off."
-        ),
+        description=("Sets the video colour profile to Vivid mode (UseHDR=2). Increases saturation for SDR content on HDR displays. Default: Off."),
         tags=["night-light", "hdr", "vivid", "colour", "display"],
     ),
     TweakDef(

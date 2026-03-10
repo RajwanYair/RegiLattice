@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import sys
+from typing import IO
 
 __all__ = ["configure_logging", "get_logger"]
 
@@ -28,7 +29,7 @@ def configure_logging(
     level: str | int = logging.WARNING,
     *,
     simple: bool = False,
-    stream: object = None,
+    stream: IO[str] | None = None,
 ) -> None:
     """Configure the root ``regilattice`` logger.
 

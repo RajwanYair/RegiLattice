@@ -737,7 +737,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_BACKUP_CLIENT],
         description=(
-            "Suppresses the \"Set up Windows Backup\" balloon notification that "
+            'Suppresses the "Set up Windows Backup" balloon notification that '
             "appears in the system tray when no backup is configured. "
             "Default: shown. Recommended: suppressed."
         ),

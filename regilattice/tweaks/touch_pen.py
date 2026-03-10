@@ -547,10 +547,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_TOUCHPAD],
-        description=(
-            "Disables the two-finger pinch-to-zoom gesture on precision touchpads. "
-            "Prevents accidental zoom changes. Default: Enabled."
-        ),
+        description=("Disables the two-finger pinch-to-zoom gesture on precision touchpads. Prevents accidental zoom changes. Default: Enabled."),
         tags=["touch", "touchpad", "pinch", "zoom", "gesture"],
     ),
     TweakDef(
@@ -596,8 +593,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_PALM],
         description=(
-            "Disables touchpad palm rejection and cursor-leave detection. "
-            "Useful when palm rejection causes missed inputs. Default: Enabled."
+            "Disables touchpad palm rejection and cursor-leave detection. Useful when palm rejection causes missed inputs. Default: Enabled."
         ),
         tags=["touch", "touchpad", "palm", "rejection"],
     ),

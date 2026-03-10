@@ -758,10 +758,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_KEY_CURSOR_SHADOW],
-        description=(
-            "Removes the drop shadow rendered under the mouse cursor. "
-            "Very slightly reduces compositor workload. Default: Enabled."
-        ),
+        description=("Removes the drop shadow rendered under the mouse cursor. Very slightly reduces compositor workload. Default: Enabled."),
         tags=["display", "cursor", "shadow", "performance", "rendering"],
     ),
     TweakDef(
