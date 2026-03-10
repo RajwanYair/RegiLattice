@@ -254,3 +254,28 @@ def _expand_all(self) -> None:
             section.toggle()
     self._root.update_idletasks()  # flush all pending geometry work at once
 ```
+
+---
+
+## Terminal Commands — ALWAYS PowerShell (Never Unix)
+
+This workspace is on **Windows**. GitHub Copilot must NEVER emit Unix shell commands.
+Use PowerShell equivalents for every terminal operation:
+
+| ❌ NEVER use (Unix)   | ✅ Use instead (PowerShell)                     |
+| --------------------- | ----------------------------------------------- |
+| `tail -n N file`      | `Get-Content file \| Select-Object -Last N`     |
+| `grep pattern file`   | `Select-String -Pattern 'pattern' file`         |
+| `ls -la`              | `Get-ChildItem`                                 |
+| `cat file`            | `Get-Content file`                              |
+| `rm -rf dir`          | `Remove-Item -Recurse -Force dir`               |
+| `touch file`          | `New-Item file -ItemType File`                  |
+| `wc -l file`          | `(Get-Content file).Count`                      |
+| `which cmd`           | `Get-Command cmd`                               |
+| `export VAR=val`      | `$env:VAR = 'val'`                              |
+| `&&` chaining         | `;` or `if ($LASTEXITCODE -eq 0) { ... }`       |
+
+**Enforcement**: The full ban list is in `.github/copilot-instructions.md` under
+"MANDATORY: Terminal Commands — PowerShell ONLY". That section is auto-loaded
+every session — if a Unix command still appears, check that the file is saved
+and the workspace has been reloaded.
