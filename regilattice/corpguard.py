@@ -451,16 +451,16 @@ def is_corporate_network() -> bool:
     return _run_corp_checks()[0]
 
 
-def assert_not_corporate(*, force: bool = False) -> None:
+def assert_not_corporate(*, force_corp: bool = False) -> None:
     """Raise ``CorporateNetworkError`` when on a corp network.
 
     Parameters
     ----------
-    force:
+    force_corp:
         If True, skip the guard entirely (for IT pros who know the risk).
     """
-    if force:
-        SESSION.log("Corp-guard: bypassed with force=True")
+    if force_corp:
+        SESSION.log("Corp-guard: bypassed with force_corp=True")
         return
 
     if is_corporate_network():
