@@ -178,6 +178,10 @@ _TWEAKS_BY_CAT: dict[str, list[TweakDef]] = {}  # O(1) category lookup
 _SCOPE_CACHE: dict[str, str] = {}
 _SCOPE_LOCK = threading.Lock()
 
+# Pre-built scope index — O(1) for tweaks_by_scope() / tweak_count_by_scope()
+_TWEAKS_BY_SCOPE: dict[str, list[TweakDef]] = {}
+_SCOPE_COUNTS: dict[str, int] = {}
+
 # Module-level frozenset — avoids re-creating a tuple inside a tight loop
 _VALID_HIVE_PREFIXES: frozenset[str] = frozenset(
     {
@@ -261,6 +265,16 @@ def _load_plugins() -> None:
                     _SCOPE_CACHE[td.id] = "machine" if td.needs_admin else "user"
                 else:
                     _SCOPE_CACHE[td.id] = "machine"
+    # Build scope index — O(k) after scope cache is fully warmed
+    _TWEAKS_BY_SCOPE.clear()
+    for td in _ALL_TWEAKS:
+        s = _SCOPE_CACHE.get(td.id, "machine")
+        if s in _TWEAKS_BY_SCOPE:
+            _TWEAKS_BY_SCOPE[s].append(td)
+        else:
+            _TWEAKS_BY_SCOPE[s] = [td]
+    _SCOPE_COUNTS.clear()
+    _SCOPE_COUNTS.update({k: len(v) for k, v in _TWEAKS_BY_SCOPE.items()})
 
 
 _load_plugins()
@@ -310,6 +324,8 @@ def reload_plugins() -> None:
         _SEARCH_INDEX.clear()
     _TAG_INDEX.clear()
     _tweaks_for_profile_inner.cache_clear()
+    _TWEAKS_BY_SCOPE.clear()
+    _SCOPE_COUNTS.clear()
     _load_plugins()
     _prewarm_indexes()
     _build_category_info()
@@ -1224,7 +1240,8 @@ def apply_tweaks(
         for td in targets:
             for dep in tweak_dependencies(td):
                 dep_ids.add(dep.id)
-        extra = [_TWEAK_INDEX[d] for d in dep_ids if d not in {t.id for t in targets} and d in _TWEAK_INDEX]
+        target_ids = {t.id for t in targets}  # built once — avoids O(n) set rebuild per dependency
+        extra = [_TWEAK_INDEX[d] for d in dep_ids if d not in target_ids and d in _TWEAK_INDEX]
         targets = extra + targets
     exe = TweakExecutor(force_corp=force_corp, require_admin=require_admin)
     return exe.run_batch(
@@ -1263,11 +1280,10 @@ def remove_tweaks(
 def tweaks_by_scope(scope: str) -> list[TweakDef]:
     """Return all tweaks whose registry scope matches *scope* (user/machine/both).
 
-    Equivalent to ``filter_tweaks(scope=scope)`` but uses the pre-warmed
-    scope cache so the common GUI case (enumerate by scope) is O(n) with
-    minimal per-entry overhead.
+    Uses the pre-built ``_TWEAKS_BY_SCOPE`` index for O(1) lookup and
+    returns a shallow copy so callers cannot mutate the internal list.
     """
-    return [td for td in _ALL_TWEAKS if tweak_scope(td) == scope]
+    return list(_TWEAKS_BY_SCOPE.get(scope, []))
 
 
 def tweaks_above_build(build: int) -> list[TweakDef]:
@@ -1289,16 +1305,11 @@ def tweak_risk_level(td: TweakDef) -> str:
 
 
 def tweak_count_by_scope() -> dict[str, int]:
-    """Return ``{scope: count}`` for all registered tweaks.
+    """Return ``{scope: count}`` for all registered tweaks — O(1) from pre-built index.
 
-    Uses the pre-warmed scope cache for O(n) performance.
-    Useful for the GUI stats bar without re-computing scopes.
+    Useful for the GUI stats bar without re-iterating tweak lists.
     """
-    counts: dict[str, int] = {"user": 0, "machine": 0, "both": 0}
-    for td in _ALL_TWEAKS:
-        s = tweak_scope(td)
-        counts[s] = counts.get(s, 0) + 1
-    return counts
+    return dict(_SCOPE_COUNTS)
 
 
 def category_counts() -> dict[str, int]:

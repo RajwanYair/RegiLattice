@@ -6,10 +6,21 @@
       -Mode gui    — Tkinter graphical interface (default when no arguments given)
       -Mode menu   — Interactive terminal category menu
       -Mode cli    — Pass arbitrary CLI arguments (use with -Arguments)
+
+    Convenience switches (equivalent to -Mode <name>):
+      -Gui          same as -Mode gui
+      -Menu         same as -Mode menu
+      -Cli          same as -Mode cli
+
+    Linux-style flags are also accepted transparently:
+      --gui, --menu, --cli
+
     Any extra flags are forwarded to the Python module.
 .EXAMPLE
     .\Launch-RegiLattice.ps1                         # opens GUI
-    .\Launch-RegiLattice.ps1 -Mode gui               # opens GUI explicitly
+    .\Launch-RegiLattice.ps1 --gui                   # opens GUI (Linux-style flag)
+    .\Launch-RegiLattice.ps1 -Gui                    # opens GUI (switch form)
+    .\Launch-RegiLattice.ps1 -Mode gui               # opens GUI (explicit parameter)
     .\Launch-RegiLattice.ps1 -Mode menu              # opens interactive menu
     .\Launch-RegiLattice.ps1 -Mode cli --list        # list all tweaks
     .\Launch-RegiLattice.ps1 -Mode cli apply perf-win32-priority-sep
@@ -18,14 +29,46 @@
 #>
 [CmdletBinding()]
 param(
-    # Launch mode: gui (default), menu, or cli
-    [ValidateSet('gui', 'menu', 'cli')]
-    [string]$Mode = 'gui',
+    # Launch mode: gui (default), menu, or cli.
+    # ValidateSet intentionally omitted so that Linux-style --gui/--menu/--cli
+    # positional arguments are also accepted without a parameter binding error.
+    [string]$Mode = '',
+
+    # Convenience switches — equivalent to -Mode gui / -Mode menu / -Mode cli
+    [switch]$Gui,
+    [switch]$Menu,
+    [switch]$Cli,
 
     # Extra arguments forwarded to the Python module (used with -Mode cli)
     [Parameter(ValueFromRemainingArguments)]
     [string[]]$Arguments
 )
+
+# ── Resolve Mode ─────────────────────────────────────────────────────────────
+# Priority: explicit -Mode value > -Gui/-Menu/-Cli switches >
+#           --gui/--menu/--cli in remaining args > default 'gui'
+if ($Mode -eq '') {
+    if ($Gui)        { $Mode = 'gui' }
+    elseif ($Menu)   { $Mode = 'menu' }
+    elseif ($Cli)    { $Mode = 'cli' }
+    else {
+        # Handle Linux-style flags forwarded as positional values (e.g. --gui)
+        $modeFlag = $Arguments | Where-Object { $_ -in '--gui', '--menu', '--cli' } | Select-Object -First 1
+        if ($modeFlag) {
+            $Mode      = $modeFlag.TrimStart('-')
+            $Arguments = @($Arguments | Where-Object { $_ -ne $modeFlag })
+        } else {
+            $Mode = 'gui'  # default
+        }
+    }
+} elseif ($Mode -in '--gui', '--menu', '--cli') {
+    # User passed e.g. -Mode --gui (positional binding of Linux-style flag)
+    $Mode = $Mode.TrimStart('-')
+}
+
+if ($Mode -notin @('gui', 'menu', 'cli')) {
+    Write-Error "Invalid -Mode '$Mode'. Valid values: gui, menu, cli" -ErrorAction Stop
+}
 
 $ErrorActionPreference = 'Stop'
 
