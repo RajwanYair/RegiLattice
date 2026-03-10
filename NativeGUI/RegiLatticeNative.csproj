@@ -22,4 +22,11 @@
     <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Allow the xUnit test project to access internal types -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>NativeGUITests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

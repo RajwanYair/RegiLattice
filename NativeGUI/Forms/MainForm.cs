@@ -1,4 +1,6 @@
+using System.Text.Json;
 using RegiLattice.Native.Models;
+using RegiLattice.Native.PackageManagers;
 
 namespace RegiLattice.Native.Forms;
 
@@ -14,15 +16,15 @@ namespace RegiLattice.Native.Forms;
 /// </summary>
 public partial class MainForm : Form
 {
-    // ── Dark-theme palette (Catppuccin Mocha) ──────────────────────────────
-    private static readonly Color ThemeBg       = Color.FromArgb(30, 30, 46);
-    private static readonly Color ThemeSurface  = Color.FromArgb(49, 50, 68);
-    private static readonly Color ThemeFg       = Color.FromArgb(205, 214, 244);
-    private static readonly Color ThemeAccent   = Color.FromArgb(137, 180, 250);
-    private static readonly Color ThemeGreen    = Color.FromArgb(166, 227, 161);
-    private static readonly Color ThemeRed      = Color.FromArgb(243, 139, 168);
-    private static readonly Color ThemeYellow   = Color.FromArgb(249, 226, 175);
-    private static readonly Color ThemeOverlay  = Color.FromArgb(69, 71, 90);
+    // Use AppTheme shared palette
+    private static Color ThemeBg      => AppTheme.Bg;
+    private static Color ThemeSurface => AppTheme.Surface;
+    private static Color ThemeFg      => AppTheme.Fg;
+    private static Color ThemeAccent  => AppTheme.Accent;
+    private static Color ThemeGreen   => AppTheme.Green;
+    private static Color ThemeRed     => AppTheme.Red;
+    private static Color ThemeYellow  => AppTheme.Yellow;
+    private static Color ThemeOverlay => AppTheme.Overlay;
 
     // ── State ──────────────────────────────────────────────────────────────
     private PythonBridge?              _bridge;
@@ -93,9 +95,14 @@ public partial class MainForm : Form
         BackColor = ThemeBg;
         ForeColor = ThemeFg;
 
+        var renderer = new DarkToolStripRenderer();
         _toolStrip.BackColor = ThemeSurface;
         _toolStrip.ForeColor = ThemeFg;
-        _toolStrip.Renderer  = new DarkToolStripRenderer();
+        _toolStrip.Renderer  = renderer;
+
+        _menuStrip.BackColor = ThemeSurface;
+        _menuStrip.ForeColor = ThemeFg;
+        _menuStrip.Renderer  = renderer;
 
         _treeView.BackColor = ThemeBg;
         _treeView.ForeColor = ThemeFg;
@@ -111,6 +118,10 @@ public partial class MainForm : Form
 
         _searchBox.BackColor = ThemeOverlay;
         _searchBox.ForeColor = ThemeFg;
+
+        _listContextMenu.BackColor = ThemeSurface;
+        _listContextMenu.ForeColor = ThemeFg;
+        _listContextMenu.Renderer  = renderer;
     }
 
     // ── Owner-draw for dark ListView ───────────────────────────────────────
@@ -307,7 +318,8 @@ public partial class MainForm : Form
     private void PopulateList(string category)
     {
         string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
-        string search = _searchBox.Text.Trim();
+        string search    = _searchBox.Text.Trim();
+        string scopeSel  = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
 
         _listView.BeginUpdate();
         _listView.Items.Clear();
@@ -321,6 +333,16 @@ public partial class MainForm : Form
         IEnumerable<TweakInfo> filtered = tweaks;
         if (filter != "All")
             filtered = filtered.Where(t => string.Equals(t.Status, filter, StringComparison.OrdinalIgnoreCase));
+
+        if (scopeSel != "All Scopes")
+        {
+            bool wantUser    = scopeSel.StartsWith("User",    StringComparison.OrdinalIgnoreCase);
+            bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
+            filtered = filtered.Where(t =>
+                wantUser    ? t.ScopeBadge.Equals("USER",    StringComparison.OrdinalIgnoreCase) :
+                wantMachine ? t.ScopeBadge.Equals("MACHINE", StringComparison.OrdinalIgnoreCase) :
+                true);
+        }
 
         if (search.Length > 0)
             filtered = filtered.Where(t =>
@@ -367,6 +389,173 @@ public partial class MainForm : Form
             item.Checked = true;
     }
 
+    private void DeselectAllListItems()
+    {
+        foreach (ListViewItem item in _listView.Items)
+            item.Checked = false;
+    }
+
+    private void InvertListSelection()
+    {
+        foreach (ListViewItem item in _listView.Items)
+            item.Checked = !item.Checked;
+    }
+
+    private void ToggleLogPanel()
+    {
+        _logPanel.Visible = !_logPanel.Visible;
+    }
+
+    private void AppendLog(string message)
+    {
+        string line = $"[{DateTime.Now:HH:mm:ss}] {message}";
+        _logBox.AppendText(line + Environment.NewLine);
+        _logBox.ScrollToCaret();
+    }
+
+    private void CopySelectedId()
+    {
+        if (_listView.FocusedItem?.Tag is TweakInfo tw)
+            Clipboard.SetText(tw.Id);
+    }
+
+    private void CopySelectedRegistryKeys()
+    {
+        if (_listView.FocusedItem?.Tag is TweakInfo tw && tw.RegistryKeys.Count > 0)
+            Clipboard.SetText(string.Join(Environment.NewLine, tw.RegistryKeys));
+    }
+
+    // ── Export / Import ────────────────────────────────────────────────────
+    private Task OnExportPs1Async()
+    {
+        var tweaks = GetCheckedTweaks();
+        if (tweaks.Count == 0)
+        {
+            MessageBox.Show("No tweaks selected.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return Task.CompletedTask;
+        }
+        using var dlg = new SaveFileDialog
+        {
+            Title      = "Export as PowerShell Script",
+            Filter     = "PowerShell Script|*.ps1",
+            FileName   = "regilattice-tweaks.ps1",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("# RegiLattice — exported tweaks");
+        sb.AppendLine($"# Generated: {DateTime.Now:yyyy-MM-dd HH:mm}");
+        sb.AppendLine();
+        foreach (var tw in tweaks)
+        {
+            sb.AppendLine($"# {tw.Label} ({tw.Id})");
+            foreach (string key in tw.RegistryKeys)
+                sb.AppendLine($"# Registry: {key}");
+            sb.AppendLine($"# python -m regilattice apply {tw.Id} -y");
+            sb.AppendLine();
+        }
+        File.WriteAllText(dlg.FileName, sb.ToString(), System.Text.Encoding.UTF8);
+        AppendLog($"Exported {tweaks.Count} tweaks to {dlg.FileName}");
+        SetStatus($"Exported {tweaks.Count} tweak(s) to PS1.");
+        return Task.CompletedTask;
+    }
+
+    private Task OnExportJsonAsync()
+    {
+        var tweaks = GetCheckedTweaks();
+        if (tweaks.Count == 0)
+        {
+            MessageBox.Show("No tweaks selected.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return Task.CompletedTask;
+        }
+        using var dlg = new SaveFileDialog
+        {
+            Title    = "Export selected IDs as JSON",
+            Filter   = "JSON file|*.json",
+            FileName = "regilattice-selection.json",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
+
+        string json = JsonSerializer.Serialize(tweaks.Select(t => t.Id).ToList(),
+            new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(dlg.FileName, json, System.Text.Encoding.UTF8);
+        AppendLog($"Exported {tweaks.Count} IDs to {dlg.FileName}");
+        SetStatus($"Exported {tweaks.Count} ID(s) to JSON.");
+        return Task.CompletedTask;
+    }
+
+    private Task OnImportJsonAsync()
+    {
+        using var dlg = new OpenFileDialog
+        {
+            Title  = "Import tweak IDs from JSON",
+            Filter = "JSON file|*.json",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
+
+        List<string>? ids;
+        try
+        {
+            string raw = File.ReadAllText(dlg.FileName);
+            ids = JsonSerializer.Deserialize<List<string>>(raw);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to parse JSON:\n{ex.Message}", "Import Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return Task.CompletedTask;
+        }
+        if (ids is null || ids.Count == 0) { SetStatus("JSON contained no IDs."); return Task.CompletedTask; }
+
+        var idSet = new HashSet<string>(ids, StringComparer.OrdinalIgnoreCase);
+        int matched = 0;
+        foreach (ListViewItem item in _listView.Items)
+        {
+            if (item.Tag is TweakInfo tw && idSet.Contains(tw.Id))
+            {
+                item.Checked = true;
+                matched++;
+            }
+        }
+        AppendLog($"Imported: matched {matched}/{ids.Count} IDs.");
+        SetStatus($"Import complete: {matched}/{ids.Count} matched.");
+        return Task.CompletedTask;
+    }
+
+    // ── Package manager dialogs ────────────────────────────────────────────
+    private void OnOpenScoopManager()
+    {
+        using var dlg = new ScoopManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenPSModuleManager()
+    {
+        using var dlg = new PSModuleManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private Task OnOpenPipManagerAsync()
+    {
+        string pythonPath = _bridge is not null ? PythonBridge.FindPython() : "python";
+        using var dlg = new PipManagerDialog(pythonPath);
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+        return Task.CompletedTask;
+    }
+
+    private void OnAbout()
+    {
+        int tweakCount    = _allTweaks.Count;
+        int categoryCount = _tweaksByCategory.Count;
+        string pythonPath = _bridge is not null ? PythonBridge.FindPython() : "(bridge not initialised)";
+        bool isCorp       = false;  // TODO: wire to corpguard if exposed via CLI
+        using var dlg = new AboutDialog(tweakCount, categoryCount, pythonPath, isCorp);
+        dlg.ShowDialog(this);
+    }
+
     private void UpdateCounters()
     {
         int applied    = _allTweaks.Count(t => t.IsApplied);
@@ -376,7 +565,10 @@ public partial class MainForm : Form
     }
 
     private void SetStatus(string message)
-        => _progressLabel.Text = message;
+    {
+        _progressLabel.Text = message;
+        AppendLog(message);
+    }
 
     private void SetBusy(bool busy, string? message = null)
     {
@@ -412,6 +604,20 @@ public partial class MainForm : Form
 
     private void OnSearchTextChanged(object? sender, EventArgs e)
         => RefreshListView();
+
+    private void OnGlobalKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Control && e.KeyCode == Keys.Enter)  { OnApplyClicked(this, e);    e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.Delete) { OnRemoveClicked(this, e);   e.Handled = true; return; }
+        if (e.KeyCode == Keys.F5)                  { OnRefreshClicked(this, e);  e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.F)      { _searchBox.Focus();         e.Handled = true; return; }
+        if (e.KeyCode == Keys.Escape)              { _searchBox.Text = "";       e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.A)      { SelectAllListItems();       e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.D)      { DeselectAllListItems();     e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.I)      { InvertListSelection();      e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.L)      { ToggleLogPanel();           e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.E)      { _treeView.ExpandAll();      e.Handled = true; return; }
+    }
 
     // ── Dark ToolStrip Renderer ────────────────────────────────────────────
     private sealed class DarkToolStripRenderer : ToolStripProfessionalRenderer
