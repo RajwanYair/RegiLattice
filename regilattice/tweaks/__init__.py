@@ -309,6 +309,7 @@ def reload_plugins() -> None:
     with _SEARCH_LOCK:
         _SEARCH_INDEX.clear()
     _TAG_INDEX.clear()
+    _tweaks_for_profile_inner.cache_clear()
     _load_plugins()
     _prewarm_indexes()
     _build_category_info()
@@ -696,15 +697,21 @@ def profile_info(name: str) -> ProfileDef | None:
     return _PROFILES.get(name)
 
 
-def tweaks_for_profile(name: str) -> list[TweakDef]:
-    """Return tweaks that a profile would *apply* (= disable those features)."""
-    prof = _PROFILES.get(name)
-    if prof is None:
-        raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
+@functools.cache
+def _tweaks_for_profile_inner(name: str) -> tuple[TweakDef, ...]:
+    """Cached inner — returns immutable tuple so the cache entry cannot be mutated."""
+    prof = _PROFILES[name]  # KeyError if unknown (caller validates)
     result: list[TweakDef] = []
     for cat in prof.apply_categories:
         result.extend(_TWEAKS_BY_CAT.get(cat, []))
-    return result
+    return tuple(result)
+
+
+def tweaks_for_profile(name: str) -> list[TweakDef]:
+    """Return tweaks that a profile would *apply* (= disable those features)."""
+    if name not in _PROFILES:
+        raise ValueError(f"Unknown profile: {name!r}. Choose from {available_profiles()}")
+    return list(_tweaks_for_profile_inner(name))
 
 
 def tweaks_excluded_by_profile(name: str) -> list[TweakDef]:

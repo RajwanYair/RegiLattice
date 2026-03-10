@@ -176,14 +176,7 @@ def _run_action(
     assume_yes: bool,
     force: bool = False,
 ) -> int:
-    # Corporate network safety guard
-    try:
-        assert_not_corporate(force=force)
-    except CorporateNetworkError as exc:
-        print(f"🛑 {exc}")
-        return 6
-
-    # Batch operations
+    # Batch operations — TweakExecutor handles corp check per-tweak (respects corp_safe)
     if tweak_id == "all":
         label = f"{mode.title()} all tweaks"
         if not assume_yes and not _confirm(f"Proceed with '{label}'?"):
@@ -192,17 +185,28 @@ def _run_action(
         batch_fn = apply_all if mode == "apply" else remove_all
         results = batch_fn(force_corp=force)
         ok = sum(1 for v in results.values() if v in (TweakResult.APPLIED, TweakResult.REMOVED))
+        skipped_corp = sum(1 for v in results.values() if v == TweakResult.SKIPPED_CORP)
         if SESSION.dry_run:
             print(f"\U0001f50d Dry-run: {ok}/{len(results)} tweaks would be processed ({SESSION.dry_ops} registry ops skipped).")
         else:
             print(f"✅ {ok}/{len(results)} tweaks processed. Log: {SESSION.log_path}")
+        if skipped_corp:
+            print(f"   \u26a0\ufe0f  {skipped_corp} tweak(s) skipped \u2014 corporate network detected. Use --force to override.")
         return 0
 
-    # Single tweak
+    # Single tweak — look up TweakDef FIRST so corp_safe tweaks bypass the corp guard
     td = get_tweak(tweak_id)
     if td is None:
         print(f"❌ Unknown tweak '{tweak_id}'. Use --list to see available tweaks.")
         return 2
+
+    # Corp check — corp_safe tweaks are always allowed regardless of corporate network
+    if not td.corp_safe:
+        try:
+            assert_not_corporate(force=force)
+        except CorporateNetworkError as exc:
+            print(f"🛑 {exc}")
+            return 6
 
     action_label = f"{mode} {td.label}"
     if not assume_yes and not _confirm(f"Proceed with '{action_label}'?"):
@@ -211,7 +215,7 @@ def _run_action(
 
     try:
         fn: Callable[..., None] = td.apply_fn if mode == "apply" else td.remove_fn
-        fn()
+        fn(require_admin=td.needs_admin)  # respect TweakDef.needs_admin
         if SESSION.dry_run:
             print(f"\U0001f50d Dry-run '{action_label}' \u2014 {SESSION.dry_ops} registry op(s) skipped.")
             if td.registry_keys:
@@ -1054,7 +1058,7 @@ def main(argv: list[str] | None = None) -> int:
         for td in cat_tweaks:
             fn = td.apply_fn if args.mode == "apply" else td.remove_fn
             try:
-                fn()
+                fn(require_admin=td.needs_admin)
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
                 cat_errors.append(f"{td.label}: {exc}")
         ok = len(cat_tweaks) - len(cat_errors)
@@ -1106,7 +1110,7 @@ def main(argv: list[str] | None = None) -> int:
         for td in targets:
             fn = td.apply_fn if args.mode == "apply" else td.remove_fn
             try:
-                fn()
+                fn(require_admin=td.needs_admin)
             except (AdminRequirementError, OSError, RuntimeError, ValueError) as exc:
                 errors_list.append(f"{td.label}: {exc}")
         ok = len(targets) - len(errors_list)
