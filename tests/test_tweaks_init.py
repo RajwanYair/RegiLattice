@@ -810,13 +810,19 @@ class TestProfiles:
     @patch("regilattice.tweaks._ALL_TWEAKS", new_callable=list)
     @patch("regilattice.tweaks._TWEAKS_BY_CAT", new_callable=dict)
     def test_apply_profile(self, mock_cat: dict, mock_all: list) -> None:
-        fn = MagicMock()
-        td = TweakDef(id="ap1", label="AP", category="Cloud Storage", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
-        mock_all.append(td)
-        mock_cat["Cloud Storage"] = [td]
-        result = apply_profile("business", force_corp=True)
-        fn.assert_called_once()
-        assert result["ap1"] == TweakResult.APPLIED
+        from regilattice.tweaks import _tweaks_for_profile_inner
+
+        _tweaks_for_profile_inner.cache_clear()  # ensure patched _TWEAKS_BY_CAT is used
+        try:
+            fn = MagicMock()
+            td = TweakDef(id="ap1", label="AP", category="Cloud Storage", apply_fn=fn, remove_fn=MagicMock(), corp_safe=True)
+            mock_all.append(td)
+            mock_cat["Cloud Storage"] = [td]
+            result = apply_profile("business", force_corp=True)
+            fn.assert_called_once()
+            assert result["ap1"] == TweakResult.APPLIED
+        finally:
+            _tweaks_for_profile_inner.cache_clear()  # restore for subsequent tests
 
 
 # ── diff_snapshots ───────────────────────────────────────────────────────────

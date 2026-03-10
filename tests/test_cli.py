@@ -315,12 +315,35 @@ class TestRunAction:
     def test_corp_blocked(self, capsys: pytest.CaptureFixture[str]) -> None:
         from regilattice.corpguard import CorporateNetworkError
 
-        with patch(
-            "regilattice.cli.assert_not_corporate",
-            side_effect=CorporateNetworkError("blocked"),
+        td = MagicMock()
+        td.corp_safe = False
+        with (
+            patch("regilattice.cli.get_tweak", return_value=td),
+            patch(
+                "regilattice.cli.assert_not_corporate",
+                side_effect=CorporateNetworkError("blocked"),
+            ),
         ):
-            rc = _run_action("apply", "some-id", assume_yes=True)
+            rc = _run_action("apply", "corp-unsafe-tweak", assume_yes=True)
         assert rc == 6
+
+    def test_corp_safe_bypasses_guard(self, capsys: pytest.CaptureFixture[str]) -> None:
+        from regilattice.corpguard import CorporateNetworkError
+
+        td = MagicMock()
+        td.corp_safe = True
+        td.needs_admin = False
+        td.registry_keys = []
+        td.label = "Corp Safe Test"
+        with (
+            patch("regilattice.cli.get_tweak", return_value=td),
+            patch(
+                "regilattice.cli.assert_not_corporate",
+                side_effect=CorporateNetworkError("blocked"),
+            ),
+        ):
+            rc = _run_action("apply", "corp-safe-tweak", assume_yes=True)
+        assert rc == 0  # corp guard bypassed for corp_safe=True
 
     def test_unknown_tweak(self, capsys: pytest.CaptureFixture[str]) -> None:
         with patch("regilattice.cli.assert_not_corporate"):
