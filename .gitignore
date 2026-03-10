@@ -45,4 +45,11 @@ coverage.xml
 # ── Ruff ─────────────────────────────────────────────────────
 .ruff_cache/
 
+# ── .NET / NativeGUI build output ────────────────────────────
+NativeGUI/bin/
+NativeGUI/obj/
+
+# ── Profiling data ───────────────────────────────────────────
+*.dat
+
 .fake
