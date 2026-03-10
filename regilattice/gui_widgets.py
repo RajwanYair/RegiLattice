@@ -60,6 +60,7 @@ class TweakRow:
         self._on_toggle = on_toggle
         self.disabled_by_corp = corp_blocked and not td.corp_safe
         self._odd = False  # Set by CategorySection for zebra striping
+        self._packed = False  # Whether frame is currently visible in layout
 
         # Placeholder attributes — populated by build_widgets()
         self.frame: ttk.Frame | None = None
@@ -241,16 +242,18 @@ class TweakRow:
             self.status_text.configure(text="BLOCKED", fg=_STATUS_CORP_BLOCKED)
 
     def pack_row(self) -> None:
-        """Pack the row frame into its parent."""
-        if self.frame is None:
+        """Pack the row frame into its parent (no-op if already packed)."""
+        if self.frame is None or self._packed:
             return
         self.frame.pack(fill="x", padx=4, pady=2, ipady=3)
+        self._packed = True
 
     def unpack_row(self) -> None:
-        """Remove from display."""
-        if self.frame is None:
+        """Remove from display (no-op if already unpacked)."""
+        if self.frame is None or not self._packed:
             return
         self.frame.pack_forget()
+        self._packed = False
 
     def refresh_status(self) -> None:
         """Update the status dot, text label, toggle button, and tooltip."""

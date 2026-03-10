@@ -5,7 +5,9 @@
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "tests",
-    "--timeout=30"
+    "--timeout=30",
+    "--tb=short",
+    "--strict-markers"
   ],
   // ── Ruff (linter + formatter) ───────────────────────────────────────
   // Native Ruff server (charliermarsh.ruff ≥ 2024) auto-detects pyproject.toml.
@@ -80,10 +82,14 @@
   // Config lives in .markdownlint.json (project root) — takes precedence over
   // this settings block, so we omit the inline markdownlint.config to avoid
   // VS Code trying to download the markdownlint JSON schema (blocked by proxy).
-  // ── Pylint (reads pyproject.toml [tool.pylint] for disable list) ──────
-  "pylint.args": [
-    "--rcfile=pyproject.toml"
+  // ── Python analysis (Pylance/pyright) ─────────────────────────────────
+  // mypy --strict handles type checking in CI; use openFilesOnly here for speed.
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
   ],
+  "python.analysis.diagnosticMode": "openFilesOnly",
   // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────
   // GitHub Actions validation requires network access to resolve `uses:` refs.
   // Behind corporate proxies this fails with "Unable to resolve action".
