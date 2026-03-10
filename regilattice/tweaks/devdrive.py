@@ -488,29 +488,6 @@ def _detect_disable_search_svc() -> bool:
     return SESSION.read_dword(_SEARCH_SVC, "Start") == 4
 
 
-# ── Disable Prefetch for SSD Dev Machines ────────────────────────────────────
-
-_PREFETCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"
-
-
-def _apply_disable_prefetch(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Dev Drive: disable Prefetch (optimal for SSDs with build workloads)")
-    SESSION.backup([_PREFETCH], "Prefetch")
-    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 0)
-    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 0)
-
-
-def _remove_disable_prefetch(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 3)
-    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 3)
-
-
-def _detect_disable_prefetch() -> bool:
-    return SESSION.read_dword(_PREFETCH, "EnablePrefetcher") == 0
-
-
 # ── Enable NTFS Write Caching ─────────────────────────────────────────────────
 
 _DISK_CACHE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
@@ -581,8 +558,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_STOR_PORT],
         description=(
-            "Configures StorAHCI burst size for improved sequential write throughput on AHCI SSDs. "
-            "Can improve incremental build I/O performance."
+            "Configures StorAHCI burst size for improved sequential write throughput on AHCI SSDs. Can improve incremental build I/O performance."
         ),
         tags=["dev-drive", "ssd", "ahci", "cache", "performance"],
     ),
@@ -602,22 +578,6 @@ TWEAKS += [
             "Default: Automatic. Recommended: Disabled on build servers."
         ),
         tags=["dev-drive", "search", "indexing", "performance", "service"],
-    ),
-    TweakDef(
-        id="dev-disable-prefetch",
-        label="Disable Prefetch / Superfetch (SSD)",
-        category="Dev Drive",
-        apply_fn=_apply_disable_prefetch,
-        remove_fn=_remove_disable_prefetch,
-        detect_fn=_detect_disable_prefetch,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_PREFETCH],
-        description=(
-            "Disables Prefetch and Superfetch. Not needed on SSDs and can generate extra I/O during builds. "
-            "Default: Enabled (3). Recommended: Disabled for SSD-based dev VMs."
-        ),
-        tags=["dev-drive", "prefetch", "superfetch", "ssd", "performance"],
     ),
     TweakDef(
         id="dev-ntfs-write-cache",

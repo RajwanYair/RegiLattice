@@ -629,23 +629,6 @@ def _detect_disable_msa_cloud_search() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="idx-disable-bing-search",
-        label="Disable Bing Search in Start Menu",
-        category="Indexing & Search",
-        apply_fn=_apply_disable_bing_search,
-        remove_fn=_remove_disable_bing_search,
-        detect_fn=_detect_disable_bing_search,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_SEARCH_CU],
-        description=(
-            "Sets BingSearchEnabled=0 in user Search settings to prevent Bing web results "
-            "from appearing in Start menu search. "
-            "Default: enabled. Recommended: disabled for faster local search."
-        ),
-        tags=["search", "bing", "start", "web-results", "privacy"],
-    ),
-    TweakDef(
         id="idx-limit-indexer-threads",
         label="Limit Indexer CPU Threads",
         category="Indexing & Search",

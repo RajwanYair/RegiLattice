@@ -47,11 +47,6 @@ _WIFI_SENSE = (
     r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc"
     r"\wifinetworkmanager\config"
 )
-_NETBT = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services"
-    r"\NetBT\Parameters"
-)
-
 
 # ── Increase IRPStackSize ────────────────────────────────────────────────────
 
@@ -194,27 +189,6 @@ def _remove_disable_wifi_sense(*, require_admin: bool = True) -> None:
 
 def _detect_disable_wifi_sense() -> bool:
     return SESSION.read_dword(_WIFI_SENSE, "AutoConnectAllowedOEM") == 0
-
-
-# ── Disable NetBIOS over TCP/IP ────────────────────────────────────────────
-
-
-def _apply_disable_netbios(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: disable NetBIOS over TCP/IP")
-    SESSION.backup([_NETBT], "NetBIOS")
-    SESSION.set_dword(_NETBT, "NodeType", 2)  # 2 = P-node (no broadcast)
-    SESSION.set_dword(_NETBT, "EnableLMHOSTS", 0)
-
-
-def _remove_disable_netbios(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_NETBT, "NodeType")
-    SESSION.set_dword(_NETBT, "EnableLMHOSTS", 1)
-
-
-def _detect_disable_netbios() -> bool:
-    return SESSION.read_dword(_NETBT, "NodeType") == 2
 
 
 # ── Disable LLMNR (Link-Local Multicast Name Resolution) ─────────────────────
@@ -471,19 +445,6 @@ TWEAKS: list[TweakDef] = [
         tags=["network", "wifi", "privacy", "security"],
     ),
     TweakDef(
-        id="net-disable-netbios",
-        label="Disable NetBIOS over TCP/IP",
-        category="Network",
-        apply_fn=_apply_disable_netbios,
-        remove_fn=_remove_disable_netbios,
-        detect_fn=_detect_disable_netbios,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_NETBT],
-        description="Disables NetBIOS name resolution and LMHOSTS lookup for security.",
-        tags=["network", "security", "netbios"],
-    ),
-    TweakDef(
         id="net-disable-llmnr",
         label="Disable LLMNR",
         category="Network",
@@ -685,8 +646,6 @@ TWEAKS += [
 _TEREDO = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters"
 _TCPIP6 = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
 _ISATAP = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters"
-_LMHOSTS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"
-
 
 # -- Disable Teredo Tunneling ────────────────────────────────────────────
 
@@ -747,25 +706,6 @@ def _detect_disable_isatap() -> bool:
     return SESSION.read_string(_ISATAP, "State") == "Disabled"
 
 
-# -- Disable LMHOSTS Lookup ─────────────────────────────────────────────
-
-
-def _apply_disable_lmhosts(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: disable LMHOSTS lookup")
-    SESSION.backup([_LMHOSTS], "DisableLMHOSTS")
-    SESSION.set_dword(_LMHOSTS, "EnableLMHOSTS", 0)
-
-
-def _remove_disable_lmhosts(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_LMHOSTS, "EnableLMHOSTS", 1)
-
-
-def _detect_disable_lmhosts() -> bool:
-    return SESSION.read_dword(_LMHOSTS, "EnableLMHOSTS") == 0
-
-
 TWEAKS += [
     TweakDef(
         id="net-disable-teredo",
@@ -809,23 +749,6 @@ TWEAKS += [
         registry_keys=[_ISATAP],
         description=("Disables the ISATAP IPv6 transition adapter. Removes an unnecessary virtual adapter. Default: enabled. Recommended: disabled."),
         tags=["network", "isatap", "ipv6", "adapter", "security"],
-    ),
-    TweakDef(
-        id="net-disable-lmhosts",
-        label="Disable LMHOSTS Lookup",
-        category="Network",
-        apply_fn=_apply_disable_lmhosts,
-        remove_fn=_remove_disable_lmhosts,
-        detect_fn=_detect_disable_lmhosts,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_LMHOSTS],
-        description=(
-            "Disables LMHOSTS file lookup for NetBIOS name resolution. "
-            "Reduces legacy protocol attack surface. "
-            "Default: enabled. Recommended: disabled on modern networks."
-        ),
-        tags=["network", "lmhosts", "netbios", "security", "legacy"],
     ),
 ]
 
@@ -1223,28 +1146,6 @@ def _detect_net_disable_ipv6() -> bool:
     return SESSION.read_dword(_TCPIP6, "DisabledComponents") == 255
 
 
-# ── Disable Multicast DNS (mDNS) ──────────────────────────────────────────────
-
-_DNS_PARAMS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"
-
-
-def _apply_net_disable_mdns(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Network: disable multicast DNS (mDNS)")
-    SESSION.backup([_DNS_PARAMS], "DisableMDNS")
-    SESSION.set_dword(_DNS_PARAMS, "EnableMDNS", 0)
-
-
-def _remove_net_disable_mdns(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_DNS_PARAMS, "EnableMDNS")
-
-
-def _detect_net_disable_mdns() -> bool:
-    val = SESSION.read_dword(_DNS_PARAMS, "EnableMDNS")
-    return val is not None and val == 0
-
-
 # ── Disable Peer-to-Peer Networking Service ───────────────────────────────────
 
 _PNRP = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc"
@@ -1329,25 +1230,6 @@ TWEAKS += [
         tags=["network", "ipv6", "tunnel", "6to4", "isatap", "teredo", "security"],
         depends_on=[],
         side_effects="IPv6 connectivity is fully disabled.",
-    ),
-    TweakDef(
-        id="net-disable-mdns",
-        label="Disable Multicast DNS (mDNS)",
-        category="Network",
-        apply_fn=_apply_net_disable_mdns,
-        remove_fn=_remove_net_disable_mdns,
-        detect_fn=_detect_net_disable_mdns,
-        needs_admin=True,
-        corp_safe=False,
-        registry_keys=[_DNS_PARAMS],
-        description=(
-            "Disables the mDNS responder used for Bonjour/zero-config hostname resolution. "
-            "Eliminates local network name broadcast leakage. "
-            "Default: Enabled. Recommended: Disabled on managed networks."
-        ),
-        tags=["network", "mdns", "bonjour", "dns", "privacy", "security"],
-        depends_on=[],
-        side_effects="Local .local hostname resolution via mDNS will stop working.",
     ),
     TweakDef(
         id="net-disable-pnrp",

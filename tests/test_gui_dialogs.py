@@ -1,12 +1,13 @@
-"""Tests for regilattice.gui_dialogs — dialogs and export helpers."""
+﻿"""Tests for regilattice.gui_dialogs — dialogs and export helpers."""
 
 from __future__ import annotations
 
 import json
 import tkinter as tk
+import tkinter.ttk as ttk
 from pathlib import Path
 from types import SimpleNamespace
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -49,22 +50,34 @@ def _try_create_root() -> tk.Tk:
         pytest.skip("tkinter unavailable")
 
 
-def _all_widgets(parent: tk.Widget) -> list[tk.Widget]:
+def _all_widgets(parent: tk.Misc) -> list[tk.Misc]:
     """Recursively collect all descendant widgets."""
-    result: list[tk.Widget] = [parent]
-    for child in parent.winfo_children():  # type: ignore[no-untyped-call]
+    result: list[tk.Misc] = [parent]
+    for child in parent.winfo_children():
         result.extend(_all_widgets(child))
     return result
 
 
-def _find_install_buttons(dlg: tk.Widget) -> list[tk.Widget]:
+def _find_entries(parent: tk.Misc) -> list[ttk.Entry]:
+    """Return all ttk.Entry widgets (winfo_class == 'TEntry')."""
+    return [cast(ttk.Entry, w) for w in _all_widgets(parent) if w.winfo_class() == "TEntry"]
+
+
+def _find_buttons(parent: tk.Misc, text_contains: str = "") -> list[tk.Button]:
+    """Return all tk.Button widgets, optionally filtered by button text."""
+    btns = [cast(tk.Button, w) for w in _all_widgets(parent) if w.winfo_class() == "Button"]
+    if text_contains:
+        return [b for b in btns if text_contains in str(b.cget("text"))]
+    return btns
+
+
+def _find_install_buttons(dlg: tk.Misc) -> list[tk.Button]:
     """Return Install (non-Remove) buttons within a dialog."""
     return [
-        w
-        for w in _all_widgets(dlg)
-        if w.winfo_class() == "Button"  # type: ignore[no-untyped-call]
-        and "Install" in str(w.cget("text"))
-        and "Remove" not in str(w.cget("text"))
+        b
+        for b in _find_buttons(dlg)
+        if "Install" in str(b.cget("text"))
+        and "Remove" not in str(b.cget("text"))
     ]
 
 
@@ -491,7 +504,7 @@ class TestOpenScoopManagerWithScoop:
                 patch("tkinter.Toplevel.grab_set"),
             ):
                 open_scoop_manager(root, MagicMock())
-            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())
         finally:
             root.destroy()
 
@@ -510,7 +523,7 @@ class TestOpenScoopManagerWithScoop:
             ):
                 open_scoop_manager(root, MagicMock())
 
-            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
             if dlg is None:
                 pytest.skip("dialog not found")
             listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
@@ -533,11 +546,11 @@ class TestOpenScoopManagerWithScoop:
             ):
                 open_scoop_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "git")
@@ -546,7 +559,7 @@ class TestOpenScoopManagerWithScoop:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mock_install.assert_called_once_with("git")
         finally:
@@ -566,11 +579,11 @@ class TestOpenScoopManagerWithScoop:
             ):
                 open_scoop_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "evil'; rm -rf /")
@@ -579,7 +592,7 @@ class TestOpenScoopManagerWithScoop:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mbox.showerror.assert_called_once()
         finally:
@@ -599,15 +612,15 @@ class TestOpenScoopManagerWithScoop:
             ):
                 open_scoop_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    remove_btns = _find_buttons(dlg, "Remove")
                     if not remove_btns:
                         pytest.skip("remove button not found")
-                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    remove_btns[0].invoke()
 
             mbox.showinfo.assert_called_once()
         finally:
@@ -628,7 +641,7 @@ class TestOpenPsModuleManager:
                 patch("tkinter.Toplevel.grab_set"),
             ):
                 open_psmodule_manager(root, MagicMock())
-            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())
         finally:
             root.destroy()
 
@@ -644,15 +657,15 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    refresh_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Refresh" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    refresh_btns = _find_buttons(dlg, "Refresh")
                     if not refresh_btns:
                         pytest.skip("refresh button not found")
-                    refresh_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    refresh_btns[0].invoke()
 
                 listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
                 assert listboxes, "No listbox found"
@@ -672,15 +685,15 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    refresh_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Refresh" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    refresh_btns = _find_buttons(dlg, "Refresh")
                     if not refresh_btns:
                         pytest.skip("refresh button not found")
-                    refresh_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    refresh_btns[0].invoke()
 
                 labels = [w for w in _all_widgets(dlg) if isinstance(w, tk.Label)]
                 status_texts = [w.cget("text") for w in labels]
@@ -700,11 +713,11 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "PSReadLine")
@@ -713,7 +726,7 @@ class TestOpenPsModuleManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             assert mock_rpc.called
             call_args_list = mock_rpc.call_args_list
@@ -736,11 +749,11 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "'; rm -rf /")
@@ -749,7 +762,7 @@ class TestOpenPsModuleManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mbox.showerror.assert_called_once()
         finally:
@@ -768,15 +781,15 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    remove_btns = _find_buttons(dlg, "Remove")
                     if not remove_btns:
                         pytest.skip("remove button not found")
-                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    remove_btns[0].invoke()
 
             mbox.showinfo.assert_called_once()
         finally:
@@ -795,15 +808,15 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    update_btns = _find_buttons(dlg, "Update")
                     if not update_btns:
                         pytest.skip("update button not found")
-                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    update_btns[0].invoke()
 
             mbox.showinfo.assert_called_once()
         finally:
@@ -822,11 +835,11 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "PSReadLine")
@@ -835,7 +848,7 @@ class TestOpenPsModuleManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mbox.showerror.assert_called_once()
         finally:
@@ -856,7 +869,7 @@ class TestOpenPsModuleManager:
                 mbox.askyesno.return_value = True
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
@@ -864,13 +877,13 @@ class TestOpenPsModuleManager:
                 if not listboxes:
                     pytest.skip("listbox not found")
                 listboxes[0].insert("end", "PSReadLine  v2.3")
-                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+                listboxes[0].selection_set(0)
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    remove_btns = _find_buttons(dlg, "Remove")
                     if not remove_btns:
                         pytest.skip("remove button not found")
-                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    remove_btns[0].invoke()
 
             call_args_list = mock_rpc.call_args_list
             ps_calls = [c.args[0] for c in call_args_list if "Uninstall-Module" in c.args[0]]
@@ -892,7 +905,7 @@ class TestOpenPsModuleManager:
             ):
                 open_psmodule_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
@@ -900,13 +913,13 @@ class TestOpenPsModuleManager:
                 if not listboxes:
                     pytest.skip("listbox not found")
                 listboxes[0].insert("end", "Az  v10.0")
-                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+                listboxes[0].selection_set(0)
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    update_btns = _find_buttons(dlg, "Update")
                     if not update_btns:
                         pytest.skip("update button not found")
-                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    update_btns[0].invoke()
 
             call_args_list = mock_rpc.call_args_list
             ps_calls = [c.args[0] for c in call_args_list if "Update-Module" in c.args[0]]
@@ -930,7 +943,7 @@ class TestOpenPipManager:
                 patch("tkinter.Toplevel.grab_set"),
             ):
                 open_pip_manager(root, MagicMock())
-            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())
         finally:
             root.destroy()
 
@@ -948,7 +961,7 @@ class TestOpenPipManager:
                 mock_run.return_value = MagicMock(returncode=0, stdout=pip_json, stderr="")
                 open_pip_manager(root, MagicMock())
 
-            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
             if dlg is None:
                 pytest.skip("dialog not found")
             listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
@@ -970,11 +983,11 @@ class TestOpenPipManager:
                 mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "requests")
@@ -983,7 +996,7 @@ class TestOpenPipManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             calls = [str(c) for c in mock_run.call_args_list]
             assert any("install" in c and "requests" in c for c in calls)
@@ -1003,11 +1016,11 @@ class TestOpenPipManager:
                 mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "rich")
@@ -1016,7 +1029,7 @@ class TestOpenPipManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             for call in mock_run.call_args_list:
                 args = call.args[0] if call.args else call.kwargs.get("args", [])
@@ -1039,11 +1052,11 @@ class TestOpenPipManager:
             ):
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "evil'; rm -rf /")
@@ -1052,7 +1065,7 @@ class TestOpenPipManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mbox.showerror.assert_called_once()
         finally:
@@ -1071,15 +1084,15 @@ class TestOpenPipManager:
             ):
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    remove_btns = _find_buttons(dlg, "Remove")
                     if not remove_btns:
                         pytest.skip("remove button not found")
-                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    remove_btns[0].invoke()
 
             mbox.showinfo.assert_called_once()
         finally:
@@ -1100,7 +1113,7 @@ class TestOpenPipManager:
                 mbox.askyesno.return_value = True
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
@@ -1108,13 +1121,13 @@ class TestOpenPipManager:
                 if not listboxes:
                     pytest.skip("listbox not found")
                 listboxes[0].insert("end", "requests  v2.31.0")
-                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+                listboxes[0].selection_set(0)
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    remove_btns = _find_buttons(dlg, "Remove")
                     if not remove_btns:
                         pytest.skip("remove button not found")
-                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    remove_btns[0].invoke()
 
             for call in mock_run.call_args_list:
                 args = call.args[0] if call.args else call.kwargs.get("args", [])
@@ -1137,15 +1150,15 @@ class TestOpenPipManager:
             ):
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    update_btns = _find_buttons(dlg, "Update")
                     if not update_btns:
                         pytest.skip("update button not found")
-                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    update_btns[0].invoke()
 
             mbox.showinfo.assert_called_once()
         finally:
@@ -1164,7 +1177,7 @@ class TestOpenPipManager:
                 mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
@@ -1172,13 +1185,13 @@ class TestOpenPipManager:
                 if not listboxes:
                     pytest.skip("listbox not found")
                 listboxes[0].insert("end", "rich  v13.7.0")
-                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+                listboxes[0].selection_set(0)
 
                 with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
-                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    update_btns = _find_buttons(dlg, "Update")
                     if not update_btns:
                         pytest.skip("update button not found")
-                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    update_btns[0].invoke()
 
             for call in mock_run.call_args_list:
                 args = call.args[0] if call.args else call.kwargs.get("args", [])
@@ -1205,11 +1218,11 @@ class TestOpenPipManager:
                 mock_run.return_value = MagicMock(returncode=1, stdout="", stderr="No matching distribution found")
                 open_pip_manager(root, MagicMock())
 
-                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)
                 if dlg is None:
                     pytest.skip("dialog not found")
 
-                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                entries = _find_entries(dlg)
                 if not entries:
                     pytest.skip("entry not found")
                 entries[0].insert(0, "nonexistent-pkg-xyz")
@@ -1218,7 +1231,7 @@ class TestOpenPipManager:
                     install_btns = _find_install_buttons(dlg)
                     if not install_btns:
                         pytest.skip("install button not found")
-                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+                    install_btns[0].invoke()
 
             mbox.showerror.assert_called_once()
         finally:

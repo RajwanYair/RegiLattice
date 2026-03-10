@@ -169,16 +169,16 @@ def _apply_slack_autostart(*, require_admin: bool = False) -> None:
     SESSION.log("Slack: disable auto-start")
     SESSION.backup([_RUN], "SlackAutoStart")
     SESSION.delete_value(_RUN, "com.squirrel.slack.slack")
+    SESSION.set_dword(_SLACK, "DisableAutoStart", 1)
 
 
 def _remove_slack_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    # Re-enable would need Slack's actual path; just remove our block
-    SESSION.log("Slack: re-enable auto-start (manual Slack config may be needed)")
+    SESSION.delete_value(_SLACK, "DisableAutoStart")
 
 
 def _detect_slack_autostart() -> bool:
-    return SESSION.read_string(_RUN, "com.squirrel.slack.slack") is None
+    return SESSION.read_dword(_SLACK, "DisableAutoStart") == 1
 
 
 # ── Disable Zoom Background Video ────────────────────────────────────────────
@@ -443,7 +443,7 @@ TWEAKS: list[TweakDef] = [
         detect_fn=_detect_slack_autostart,
         needs_admin=False,
         corp_safe=True,
-        registry_keys=[_RUN],
+        registry_keys=[_RUN, _SLACK],
         description="Prevents Slack from starting automatically at login.",
         tags=["slack", "autostart", "startup"],
     ),

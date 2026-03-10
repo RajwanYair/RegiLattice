@@ -57,10 +57,10 @@ VS Code tasks (`Ctrl+Shift+B`) mirror these commands — see `.vscode/tasks.json
 
 - **Line length**: 150 characters (configured in `pyproject.toml`).
 - **Formatter**: ruff format (runs on save in VS Code).
-- **Linter**: ruff check + pylint (config in `pyproject.toml`).
+- **Linter**: ruff (sole linter — replaces flake8, isort, pyflakes, pycodestyle, and pylint).
 - **Type-check**: mypy `--strict` and Pyright standard mode.
 - **`require_admin`**: mandatory keyword-only parameter on all triplet functions,
-  even when unused (ruff ARG002 and pylint W0613 are suppressed for this pattern).
+  even when unused (ruff ARG002 is suppressed for this pattern).
 
 ## Commit Messages
 

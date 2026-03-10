@@ -15,11 +15,6 @@ from regilattice.tweaks import TweakDef
 
 _POWER = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
 _HIBERNATE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
-_PREFETCH = (
-    r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
-    r"\Session Manager\Memory Management\PrefetchParameters"
-)
-_SUPERFETCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"
 _PRIO_CTRL = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
 _MM = (
     r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"
@@ -78,29 +73,6 @@ def _remove_disable_hibernation(*, require_admin: bool = True) -> None:
 
 def _detect_disable_hibernation() -> bool:
     return SESSION.read_dword(_HIBERNATE, "HibernateEnabled") == 0
-
-
-# ── Disable Prefetch / Superfetch (SysMain) ──────────────────────────────────
-
-
-def _apply_disable_prefetch(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Power: disable Prefetch + Superfetch")
-    SESSION.backup([_PREFETCH, _SUPERFETCH], "Prefetch")
-    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 0)
-    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 0)
-    SESSION.set_dword(_SUPERFETCH, "Start", 4)  # 4 = Disabled
-
-
-def _remove_disable_prefetch(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 3)
-    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 3)
-    SESSION.set_dword(_SUPERFETCH, "Start", 2)  # 2 = Automatic
-
-
-def _detect_disable_prefetch() -> bool:
-    return SESSION.read_dword(_PREFETCH, "EnablePrefetcher") == 0
 
 
 # ── Optimize Processor Scheduling for Programs ──────────────────────────────
@@ -432,19 +404,6 @@ TWEAKS: list[TweakDef] = [
         registry_keys=[_HIBERNATE],
         description="Disables hibernation and removes the hiberfil.sys file.",
         tags=["power", "disk", "performance"],
-    ),
-    TweakDef(
-        id="power-disable-prefetch",
-        label="Disable Prefetch / Superfetch",
-        category="Power",
-        apply_fn=_apply_disable_prefetch,
-        remove_fn=_remove_disable_prefetch,
-        detect_fn=_detect_disable_prefetch,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_PREFETCH, _SUPERFETCH],
-        description=("Disables Prefetch and Superfetch (SysMain) services — beneficial on SSD-only systems."),
-        tags=["power", "performance", "ssd"],
     ),
     TweakDef(
         id="power-optimize-proc-scheduling",

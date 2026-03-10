@@ -385,6 +385,33 @@ python -m pytest tests/ --cov=regilattice --cov-report=html
 
 ---
 
+## PowerShell Conventions
+
+All shell examples in docs, CI scripts, and `.ps1` files must use native
+PowerShell cmdlets. Do **not** use Unix-only commands that are unavailable
+in Windows PowerShell.
+
+### ❌ Never use `tail` — it is not a PowerShell cmdlet
+
+| Unix command | PowerShell equivalent |
+|---|---|
+| `cmd 2>&1 \| tail -5` | `cmd 2>&1 \| Select-Object -Last 5` |
+| `tail -n 20 file.log` | `Get-Content file.log \| Select-Object -Last 20` |
+| `tail -f file.log` | `Get-Content file.log -Wait` |
+| `tail -f file.log \| grep pattern` | `Get-Content file.log -Wait \| Where-Object { $_ -match 'pattern' }` |
+
+### Other cross-platform gotchas
+
+| Unix | PowerShell |
+|---|---|
+| `grep pattern file` | `Select-String -Pattern 'pattern' file` |
+| `cat file` | `Get-Content file` |
+| `wc -l file` | `(Get-Content file).Count` |
+| `which cmd` | `(Get-Command cmd).Source` |
+| `export VAR=val` | `$env:VAR = 'val'` |
+
+---
+
 ## WSL / Linux Notes
 
 - Registry operations (`winreg`, `ctypes.windll`) are conditionally imported

@@ -546,3 +546,193 @@ TWEAKS += [
         tags=["crash", "dump", "kernel", "production", "disk"],
     ),
 ]
+
+
+# ══ Additional Crash & Diagnostics Tweaks ====================================
+
+_AEDEBUG_CRASH = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug"
+_WER_CONSENT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"
+
+
+# -- Disable JIT Debugger Auto-Attach -----------------------------------------
+
+
+def _apply_disable_jit_debugger(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: disable automatic JIT debugger attachment on crash")
+    SESSION.backup([_AEDEBUG_CRASH], "JITDebuggerAuto")
+    SESSION.set_string(_AEDEBUG_CRASH, "Auto", "0")
+
+
+def _remove_disable_jit_debugger(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_AEDEBUG_CRASH, "Auto", "1")
+
+
+def _detect_disable_jit_debugger() -> bool:
+    return SESSION.read_string(_AEDEBUG_CRASH, "Auto") == "0"
+
+
+# -- Don't Send Additional Crash Data -----------------------------------------
+
+
+def _apply_wer_no_additional_data(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: configure WER to not send additional data")
+    SESSION.backup([_WER], "WERNoAdditional")
+    SESSION.set_dword(_WER, "DontSendAdditionalData", 1)
+
+
+def _remove_wer_no_additional_data(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER, "DontSendAdditionalData")
+
+
+def _detect_wer_no_additional_data() -> bool:
+    return SESSION.read_dword(_WER, "DontSendAdditionalData") == 1
+
+
+# -- Disable WER Archive (stop storing reports on disk) -----------------------
+
+
+def _apply_wer_disable_archive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: disable WER report archive (stop storing crash reports)")
+    SESSION.backup([_WER], "WERArchive")
+    SESSION.set_dword(_WER, "DisableArchive", 1)
+
+
+def _remove_wer_disable_archive(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER, "DisableArchive")
+
+
+def _detect_wer_disable_archive() -> bool:
+    return SESSION.read_dword(_WER, "DisableArchive") == 1
+
+
+# -- Set WER Consent to Parameters Only ---------------------------------------
+
+
+def _apply_wer_min_consent(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: set WER consent to send parameters only (minimize data sharing)")
+    SESSION.backup([_WER_CONSENT], "WERConsent")
+    SESSION.set_dword(_WER_CONSENT, "DefaultConsent", 2)
+
+
+def _remove_wer_min_consent(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER_CONSENT, "DefaultConsent")
+
+
+def _detect_wer_min_consent() -> bool:
+    return SESSION.read_dword(_WER_CONSENT, "DefaultConsent") == 2
+
+
+# -- Suppress WER UI Popup for Current User -----------------------------------
+
+
+def _apply_suppress_crash_ui(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Crash: suppress Windows Error Reporting UI popup for current user")
+    SESSION.backup([_WER_CU], "WERNoUI")
+    SESSION.set_dword(_WER_CU, "DontShowUI", 1)
+
+
+def _remove_suppress_crash_ui(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER_CU, "DontShowUI")
+
+
+def _detect_suppress_crash_ui() -> bool:
+    return SESSION.read_dword(_WER_CU, "DontShowUI") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="crash-disable-jit-debugger",
+        label="Disable Auto-Attach of JIT Debugger",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_disable_jit_debugger,
+        remove_fn=_remove_disable_jit_debugger,
+        detect_fn=_detect_disable_jit_debugger,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AEDEBUG_CRASH],
+        description=(
+            "Prevents Windows from automatically launching a JIT debugger when "
+            "an application crashes. Suppresses the 'attach debugger?' dialog. "
+            "Default: 1 (auto-attach). Recommended: 0 on production machines."
+        ),
+        tags=["crash", "debugger", "jit", "aedebug", "dev"],
+    ),
+    TweakDef(
+        id="crash-wer-no-additional-data",
+        label="WER: Don't Send Additional Crash Data",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_wer_no_additional_data,
+        remove_fn=_remove_wer_no_additional_data,
+        detect_fn=_detect_wer_no_additional_data,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WER],
+        description=(
+            "Instructs Windows Error Reporting to not include supplemental data "
+            "(heap dumps, user-mode state) when submitting crash reports. "
+            "Default: sends all data. Recommended: disabled for privacy."
+        ),
+        tags=["crash", "wer", "privacy", "data", "telemetry"],
+    ),
+    TweakDef(
+        id="crash-wer-disable-archive",
+        label="WER: Disable Local Report Archive",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_wer_disable_archive,
+        remove_fn=_remove_wer_disable_archive,
+        detect_fn=_detect_wer_disable_archive,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WER],
+        description=(
+            "Stops Windows Error Reporting from maintaining a local archive of "
+            r"submitted crash reports in ProgramData\Microsoft\Windows\WER\ReportArchive. "
+            "Default: archive enabled. Recommended: disabled for disk space."
+        ),
+        tags=["crash", "wer", "archive", "disk", "privacy"],
+    ),
+    TweakDef(
+        id="crash-wer-min-consent",
+        label="WER: Send Parameters Only (Minimal Consent)",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_wer_min_consent,
+        remove_fn=_remove_wer_min_consent,
+        detect_fn=_detect_wer_min_consent,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WER_CONSENT],
+        description=(
+            "Sets WER DefaultConsent=2 (parameters only), limiting transmitted "
+            "crash data to exception codes and fault module, not executable images. "
+            "Default: varies (1=always ask, 4=send all). Recommended: 2 for privacy."
+        ),
+        tags=["crash", "wer", "consent", "privacy", "telemetry"],
+    ),
+    TweakDef(
+        id="crash-suppress-wer-ui",
+        label="Suppress WER Crash Popup for Current User",
+        category="Crash & Diagnostics",
+        apply_fn=_apply_suppress_crash_ui,
+        remove_fn=_remove_suppress_crash_ui,
+        detect_fn=_detect_suppress_crash_ui,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WER_CU],
+        description=(
+            "Hides the Windows Error Reporting dialog that appears after an "
+            "application crash, silently logging the report instead. "
+            "Default: show dialog. Recommended: suppress on developer workstations."
+        ),
+        tags=["crash", "wer", "ui", "popup", "dialog"],
+    ),
+]

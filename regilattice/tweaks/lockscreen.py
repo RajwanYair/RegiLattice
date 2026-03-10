@@ -615,3 +615,200 @@ TWEAKS += [
         tags=["lockscreen", "network", "selection", "security"],
     ),
 ]
+
+
+# ══ Additional Lock Screen & Login Tweaks ═══════════════════════════
+
+_CREDUI = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI"
+_FLYOUT = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings"
+
+
+# -- Require Ctrl+Alt+Del to Log In -------------------------------------------
+
+
+def _apply_require_ctrl_alt_del(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Lock Screen: require Ctrl+Alt+Del on login screen")
+    SESSION.backup([_WINLOGON], "RequireCAD")
+    SESSION.set_dword(_WINLOGON, "DisableCAD", 0)
+
+
+def _remove_require_ctrl_alt_del(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_WINLOGON, "DisableCAD", 1)  # restore default (CAD not required)
+
+
+def _detect_require_ctrl_alt_del() -> bool:
+    val = SESSION.read_dword(_WINLOGON, "DisableCAD")
+    return val is not None and val == 0
+
+
+# -- Disable Password Reveal Button on Login Screen ---------------------------
+
+
+def _apply_disable_password_reveal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Lock Screen: disable password reveal button on credential input")
+    SESSION.backup([_CREDUI], "PasswordReveal")
+    SESSION.set_dword(_CREDUI, "DisablePasswordReveal", 1)
+
+
+def _remove_disable_password_reveal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CREDUI, "DisablePasswordReveal")
+
+
+def _detect_disable_password_reveal() -> bool:
+    return SESSION.read_dword(_CREDUI, "DisablePasswordReveal") == 1
+
+
+# -- Hide Sleep Button from Lock Screen Power Menu ----------------------------
+
+
+def _apply_hide_sleep_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Lock Screen: hide Sleep option from Flyout power menu")
+    SESSION.backup([_FLYOUT], "SleepButton")
+    SESSION.set_dword(_FLYOUT, "ShowSleepOption", 0)
+
+
+def _remove_hide_sleep_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FLYOUT, "ShowSleepOption")
+
+
+def _detect_hide_sleep_button() -> bool:
+    val = SESSION.read_dword(_FLYOUT, "ShowSleepOption")
+    return val is not None and val == 0
+
+
+# -- Hide Hibernate Button from Lock Screen Power Menu -------------------------
+
+
+def _apply_hide_hibernate_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Lock Screen: hide Hibernate option from Flyout power menu")
+    SESSION.backup([_FLYOUT], "HibernateButton")
+    SESSION.set_dword(_FLYOUT, "ShowHibernateOption", 0)
+
+
+def _remove_hide_hibernate_button(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FLYOUT, "ShowHibernateOption")
+
+
+def _detect_hide_hibernate_button() -> bool:
+    val = SESSION.read_dword(_FLYOUT, "ShowHibernateOption")
+    return val is not None and val == 0
+
+
+# -- Clear Legal Notice Banner on Login Screen ---------------------------------
+
+
+def _apply_clear_legal_notice(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Lock Screen: clear legal notice caption and text on login screen")
+    SESSION.backup([_WINLOGON], "LegalNotice")
+    SESSION.set_string(_WINLOGON, "LegalNoticeCaption", "")
+    SESSION.set_string(_WINLOGON, "LegalNoticeText", "")
+
+
+def _remove_clear_legal_notice(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINLOGON, "LegalNoticeCaption")
+    SESSION.delete_value(_WINLOGON, "LegalNoticeText")
+
+
+def _detect_clear_legal_notice() -> bool:
+    cap = SESSION.read_string(_WINLOGON, "LegalNoticeCaption")
+    txt = SESSION.read_string(_WINLOGON, "LegalNoticeText")
+    return (cap is None or cap == "") and (txt is None or txt == "")
+
+
+TWEAKS += [
+    TweakDef(
+        id="lock-require-ctrl-alt-del",
+        label="Require Ctrl+Alt+Del on Login Screen",
+        category="Lock Screen & Login",
+        apply_fn=_apply_require_ctrl_alt_del,
+        remove_fn=_remove_require_ctrl_alt_del,
+        detect_fn=_detect_require_ctrl_alt_del,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_WINLOGON],
+        description=(
+            "Requires users to press Ctrl+Alt+Del before the login dialog appears. "
+            "Prevents keystroke loggers from intercepting credentials. "
+            "Default: not required. Recommended: required for high-security environments."
+        ),
+        tags=["lockscreen", "ctrl-alt-del", "security", "login", "credentials"],
+    ),
+    TweakDef(
+        id="lock-disable-password-reveal",
+        label="Disable Password Reveal Button",
+        category="Lock Screen & Login",
+        apply_fn=_apply_disable_password_reveal,
+        remove_fn=_remove_disable_password_reveal,
+        detect_fn=_detect_disable_password_reveal,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CREDUI],
+        description=(
+            "Hides the password reveal (eye) button from credential input fields "
+            "on the login screen and UAC prompts. Reduces shoulder-surfing risk. "
+            "Default: shown. Recommended: hidden for shared/kiosk machines."
+        ),
+        tags=["lockscreen", "password", "reveal", "security", "credential"],
+    ),
+    TweakDef(
+        id="lock-hide-sleep-button",
+        label="Hide Sleep Button from Lock Screen Power Menu",
+        category="Lock Screen & Login",
+        apply_fn=_apply_hide_sleep_button,
+        remove_fn=_remove_hide_sleep_button,
+        detect_fn=_detect_hide_sleep_button,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FLYOUT],
+        description=(
+            "Removes the Sleep option from the power flyout on the lock screen "
+            "and Start menu. Prevents accidental sleep on always-on machines. "
+            "Default: shown. Recommended: hidden for servers/kiosks."
+        ),
+        tags=["lockscreen", "sleep", "power", "flyout", "button"],
+    ),
+    TweakDef(
+        id="lock-hide-hibernate-button",
+        label="Hide Hibernate Button from Lock Screen Power Menu",
+        category="Lock Screen & Login",
+        apply_fn=_apply_hide_hibernate_button,
+        remove_fn=_remove_hide_hibernate_button,
+        detect_fn=_detect_hide_hibernate_button,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_FLYOUT],
+        description=(
+            "Removes the Hibernate option from the power flyout on the lock screen "
+            "and Start menu. Prevents accidental hibernation on desktop machines. "
+            "Default: shown (if hibernate enabled). Recommended: hidden for desktops."
+        ),
+        tags=["lockscreen", "hibernate", "power", "flyout", "button"],
+    ),
+    TweakDef(
+        id="lock-clear-legal-notice",
+        label="Clear Legal Notice Banner on Login Screen",
+        category="Lock Screen & Login",
+        apply_fn=_apply_clear_legal_notice,
+        remove_fn=_remove_clear_legal_notice,
+        detect_fn=_detect_clear_legal_notice,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WINLOGON],
+        description=(
+            "Clears the LegalNoticeCaption and LegalNoticeText values under Winlogon, "
+            "removing any corporate banner or EULA that appears before the login dialog. "
+            "Default: empty (home). Recommended: clear on personal machines."
+        ),
+        tags=["lockscreen", "legal-notice", "banner", "winlogon", "login"],
+    ),
+]

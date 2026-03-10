@@ -805,6 +805,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_ADV_CU],
+        min_build=22631,  # Win11 23H2+
         description=(
             "Adds an 'End Task' option to the taskbar right-click context menu "
             "for quickly killing unresponsive apps. Win11 23H2+. "
@@ -852,6 +853,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_CDP_POLICY],
+        min_build=26100,  # Win11 24H2+
         description=(
             "Disables Cross-Device Resume (CDP) which syncs activities across "
             "devices linked to the same Microsoft account. Win11 24H2+. "
@@ -882,6 +884,7 @@ TWEAKS += [
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_TASKBAR_CU],
+        min_build=22631,  # Win11 23H2+
         description=(
             "Sets taskbar to never combine app buttons, showing each window "
             "individually with its label. Win11 23H2+. "
@@ -899,6 +902,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_SETTINGS_PAGE],
+        min_build=26100,  # Win11 24H2+
         description=(
             "Hides the Windows Settings home page that shows recommendations "
             "and account promotions. Settings opens to System instead. Win11 24H2+. "

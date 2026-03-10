@@ -11,7 +11,7 @@ import tkinter as tk
 from collections.abc import Callable, Sequence
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
-from typing import Any
+from typing import Any, cast
 
 from . import __version__
 from . import gui_theme as theme
@@ -692,9 +692,7 @@ def open_pip_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> Non
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=False)
             if result.returncode != 0:
                 return []
-            import json as _json
-
-            data = _json.loads(result.stdout)
+            data = json.loads(result.stdout)
             return sorted((f"{p['name']}  v{p['version']}" for p in data), key=str.lower)
         except (FileNotFoundError, OSError, ValueError, KeyError):
             return []
@@ -912,7 +910,7 @@ def _run_standalone(tool: str) -> None:
     opener(root, lambda: None)
 
     # Bind the dialog's close button so it shuts down the app.
-    dialogs_open = [w for w in root.winfo_children() if isinstance(w, tk.Toplevel)]  # type: ignore[no-untyped-call]
+    dialogs_open = [cast(tk.Toplevel, w) for w in root.winfo_children() if isinstance(w, tk.Toplevel)]
     if dialogs_open:
         dialogs_open[0].protocol("WM_DELETE_WINDOW", _on_dialog_close)
 
