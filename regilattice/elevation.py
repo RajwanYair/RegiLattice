@@ -148,9 +148,17 @@ def run_elevated(command: list[str], *, timeout: int = 120) -> subprocess.Comple
     if is_admin():
         return subprocess.run(command, capture_output=True, text=True, timeout=timeout)
 
-    # Wrap in PowerShell Start-Process -Verb RunAs -Wait
+    # Wrap in PowerShell Start-Process -Verb RunAs -Wait.
+    # Single-quote each argument with PowerShell escaping (' → '').
+    def _ps_quote(s: str) -> str:
+        return s.replace("'", "''")
 
-    ps_cmd = f"Start-Process -FilePath '{command[0]}' -ArgumentList '{' '.join(command[1:])}' -Verb RunAs -Wait -PassThru"
+    exe_ps = _ps_quote(command[0])
+    if command[1:]:
+        args_ps = ", ".join(f"'{_ps_quote(a)}'" for a in command[1:])
+        ps_cmd = f"Start-Process -FilePath '{exe_ps}' -ArgumentList @({args_ps}) -Verb RunAs -Wait -PassThru"
+    else:
+        ps_cmd = f"Start-Process -FilePath '{exe_ps}' -Verb RunAs -Wait -PassThru"
     return subprocess.run(
         ["powershell", "-NoProfile", "-Command", ps_cmd],
         capture_output=True,
