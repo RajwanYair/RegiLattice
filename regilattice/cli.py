@@ -1131,7 +1131,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.menu:
         from .menu import Menu as _CliMenu
 
-        _CliMenu().loop()
+        _CliMenu(force_corp=args.force).loop()
         return 0
 
     if args.mode == "status":
@@ -1150,7 +1150,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"⚠️  This menu is intended for Windows. Detected: {platform_summary()}")
         return 4
 
-    menu = Menu()
+    menu = Menu(force_corp=args.force)
     menu.loop()
     return 0
 

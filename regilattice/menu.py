@@ -27,9 +27,10 @@ _BLU = "\033[94m"
 class Menu:
     """Interactive two-level menu: categories → tweaks within a category."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, force_corp: bool = False) -> None:
         self._categories = categories()
         self._by_cat = tweaks_by_category()
+        self._force_corp = force_corp
 
     # ── helpers ───────────────────────────────────────────────────────────
 
@@ -59,7 +60,7 @@ class Menu:
 
     def _run_single(self, td: TweakDef, mode: str) -> None:
         try:
-            assert_not_corporate()
+            assert_not_corporate(force=self._force_corp)
         except CorporateNetworkError as exc:
             print(f"\n  \U0001f6d1 {exc}")
             return
@@ -123,7 +124,7 @@ class Menu:
                 break
             elif choice.upper() == "A":
                 try:
-                    assert_not_corporate()
+                    assert_not_corporate(force=self._force_corp)
                 except CorporateNetworkError as exc:
                     print(f"\n  \U0001f6d1 {exc}")
                 else:
@@ -132,7 +133,7 @@ class Menu:
                 self._pause()
             elif choice.upper() == "R":
                 try:
-                    assert_not_corporate()
+                    assert_not_corporate(force=self._force_corp)
                 except CorporateNetworkError as exc:
                     print(f"\n  \U0001f6d1 {exc}")
                 else:
@@ -171,20 +172,20 @@ class Menu:
                 break
             elif choice.upper() == "A":
                 try:
-                    assert_not_corporate()
+                    assert_not_corporate(force=self._force_corp)
                 except CorporateNetworkError as exc:
                     print(f"\n  \U0001f6d1 {exc}")
                 else:
-                    apply_all()
+                    apply_all(force_corp=self._force_corp)
                     print("  \u2705 All tweaks applied.")
                 self._pause()
             elif choice.upper() == "R":
                 try:
-                    assert_not_corporate()
+                    assert_not_corporate(force=self._force_corp)
                 except CorporateNetworkError as exc:
                     print(f"\n  \U0001f6d1 {exc}")
                 else:
-                    remove_all()
+                    remove_all(force_corp=self._force_corp)
                     print("  \u2705 All tweaks removed.")
                 self._pause()
             elif choice.upper() == "G":
@@ -204,9 +205,9 @@ class Menu:
                     self._pause()
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, *, force_corp: bool = False) -> int:
     """Standalone entry point for the interactive menu."""
-    menu = Menu()
+    menu = Menu(force_corp=force_corp)
     menu.loop()
     return 0
 
