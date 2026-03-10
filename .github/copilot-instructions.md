@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-20 (v1.0.2, 1 450 tweaks, 69 categories, ~19 929 tests).
+> Last verified: 2025-07-20 (v1.0.2, 1 475 tweaks, 69 categories, ~20 254 tests).
 
 ## Quick Facts
 
@@ -12,13 +12,13 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~19 929 tests across 21 test files)                    |
+| Test        | `pytest` in `tests/` (~20 254 tests across 21 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
 | Version     | 1.0.2                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
-| Tweaks      | 1,450 across 69 categories                                                   |
-| Tests       | 19,929 passing                                                               |
+| Tweaks      | 1,475 across 69 categories                                                   |
+| Tests       | 20,254 passing                                                               |
 
 ## Architecture at a Glance
 
@@ -154,18 +154,18 @@ Canonical category slugs:
 | `w11`      | Windows 11                  | `widgets`  | Widgets & News        |
 | `wsl`      | WSL                         | `wu`       | Windows Update        |
 
-## Current Stats (1 450 tweaks, 69 categories, 69 modules)
+## Current Stats (1 475 tweaks, 69 categories, 69 modules)
 
 | Category                  | Tweaks | Category              | Tweaks |
 | ------------------------- | ------ | --------------------- | ------ |
 | Accessibility             | 20     | Multimedia            | 15     |
-| Adobe                     | 20     | Network               | 31     |
+| Adobe                     | 20     | Network               | 36     |
 | AI / Copilot              | 22     | Night Light & Display | 12     |
-| Audio                     | 19     | Notifications         | 21     |
+| Audio                     | 24     | Notifications         | 21     |
 | Backup & Recovery         | 15     | Office                | 20     |
 | Bluetooth                 | 19     | OneDrive              | 18     |
 | Boot                      | 26     | Package Management    | 21     |
-| Chrome                    | 20     | Performance           | 25     |
+| Chrome                    | 20     | Performance           | 30     |
 | Clipboard & Drag-Drop     | 15     | Phone Link            | 14     |
 | Cloud Storage             | 30     | Power                 | 26     |
 | Communication             | 21     | Printing              | 20     |
@@ -175,14 +175,14 @@ Canonical category slugs:
 | Dev Drive                 | 12     | Scheduled Tasks       | 21     |
 | Developer Tools           | 17     | Scoop Tools           | 25     |
 | Display                   | 19     | Screensaver & Lock    | 16     |
-| DNS & Networking Advanced | 16     | Security              | 29     |
+| DNS & Networking Advanced | 16     | Security              | 34     |
 | Edge                      | 18     | Services              | 21     |
 | Explorer                  | 46     | Shell                 | 20     |
 | File System               | 17     | Snap & Multitasking   | 17     |
 | Firefox                   | 20     | Startup               | 22     |
 | Fonts                     | 19     | Storage               | 19     |
 | Gaming                    | 24     | System                | 24     |
-| GPU / Graphics            | 19     | Taskbar               | 19     |
+| GPU / Graphics            | 19     | Taskbar               | 24     |
 | Indexing & Search         | 21     | Telemetry Advanced    | 21     |
 | Input                     | 18     | Touch & Pen           | 13     |
 | Java                      | 16     | USB & Peripherals     | 16     |
