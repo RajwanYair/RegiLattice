@@ -1027,3 +1027,83 @@ class TestDoctor:
         """Calling _run_doctor() directly should return 0 or 1."""
         rc = _run_doctor()
         assert rc in (0, 1)
+
+
+# ── --log-level flag ─────────────────────────────────────────────────────────
+
+
+class TestLogLevel:
+    """Tests for the --log-level CLI argument."""
+
+    def test_log_level_default_is_warning(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args([])
+        assert ns.log_level == "WARNING"
+
+    def test_log_level_debug(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--log-level", "DEBUG"])
+        assert ns.log_level == "DEBUG"
+
+    def test_log_level_info(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--log-level", "INFO"])
+        assert ns.log_level == "INFO"
+
+    def test_log_level_error(self) -> None:
+        parser = _build_parser()
+        ns = parser.parse_args(["--log-level", "ERROR"])
+        assert ns.log_level == "ERROR"
+
+    def test_log_level_invalid_rejected(self) -> None:
+        import pytest as _pytest
+
+        parser = _build_parser()
+        with _pytest.raises(SystemExit):
+            parser.parse_args(["--log-level", "VERBOSE"])
+
+    def test_log_level_passed_to_configure(self) -> None:
+        """main() should call configure_logging with the supplied level."""
+        # configure_logging is imported inside main(), so patch the source module
+        with patch("regilattice.logger.configure_logging") as mock_cfg, patch("regilattice.cli.tweak_status", return_value="unknown"):
+            main(["--log-level", "INFO", "--list"])
+        mock_cfg.assert_called_once_with("INFO")
+
+
+# ── logger module ─────────────────────────────────────────────────────────────
+
+
+class TestLoggerModule:
+    """Tests for regilattice.logger."""
+
+    def test_get_logger_returns_logger(self) -> None:
+        from regilattice.logger import get_logger
+
+        log = get_logger("regilattice.test_module")
+        import logging
+
+        assert isinstance(log, logging.Logger)
+
+    def test_get_logger_prefixed_with_regilattice(self) -> None:
+        from regilattice.logger import get_logger
+
+        log = get_logger("mymodule")
+        assert log.name.startswith("regilattice")
+
+    def test_configure_logging_sets_level(self) -> None:
+        import logging
+
+        from regilattice.logger import configure_logging
+
+        configure_logging("DEBUG")
+        root = logging.getLogger("regilattice")
+        assert root.level == logging.DEBUG
+
+    def test_configure_logging_accepts_int(self) -> None:
+        import logging
+
+        from regilattice.logger import configure_logging
+
+        configure_logging(logging.ERROR)
+        root = logging.getLogger("regilattice")
+        assert root.level == logging.ERROR

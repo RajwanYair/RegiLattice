@@ -49,23 +49,27 @@ class CorporateNetworkError(RuntimeError):
     """Raised when a corporate network is detected and tweaks are blocked."""
 
 
+def _ctypes_dns_domain() -> str:
+    """Return the DNS domain name via kernel32.GetComputerNameExW, or empty string."""
+    import ctypes
+    import ctypes.wintypes
+
+    buf = ctypes.create_unicode_buffer(256)
+    size = ctypes.wintypes.DWORD(256)
+    if ctypes.windll.kernel32.GetComputerNameExW(2, buf, ctypes.byref(size)):
+        return buf.value.strip()
+    return ""
+
+
 def _is_domain_joined() -> bool:
     """Check Win32_ComputerSystem.PartOfDomain via WMI."""
     if not is_windows():
         return False
     try:
-        import ctypes
-        import ctypes.wintypes
-
-        advapi32 = ctypes.windll.advapi32
-        buf = ctypes.create_unicode_buffer(256)
-        size = ctypes.wintypes.DWORD(256)
-        # GetComputerNameExW with NameDnsDomain (2)
-        if advapi32.GetComputerNameExW(2, buf, ctypes.byref(size)):
-            domain = buf.value.strip()
-            if domain:
-                SESSION.log(f"Corp-guard: domain detected: {domain}")
-                return True
+        domain = _ctypes_dns_domain()
+        if domain:
+            SESSION.log(f"Corp-guard: domain detected: {domain}")
+            return True
     except Exception as exc:
         SESSION.log(f"Corp-guard: domain check error: {exc}")
 
@@ -86,7 +90,8 @@ def _is_domain_joined() -> bool:
             SESSION.log("Corp-guard: WMI confirms domain-joined")
             return True
     except Exception as exc:
-        SESSION.log(f"Corp-guard: WMI fallback error: {exc}")
+        if getattr(exc, "winerror", None) != 50:  # 50 = ERROR_NOT_SUPPORTED — normal on some systems
+            SESSION.log(f"Corp-guard: WMI fallback error: {exc}")
 
     return False
 
@@ -137,7 +142,8 @@ def _has_vpn_adapter() -> bool:
                     SESSION.log(f"Corp-guard: VPN adapter: {line.strip()}")
                     return True
     except Exception as exc:
-        SESSION.log(f"Corp-guard: VPN check error: {exc}")
+        if getattr(exc, "winerror", None) != 50:  # 50 = ERROR_NOT_SUPPORTED — normal on some systems
+            SESSION.log(f"Corp-guard: VPN check error: {exc}")
     return False
 
 

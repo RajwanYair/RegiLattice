@@ -977,3 +977,109 @@ TWEAKS += [
         tags=["privacy", "notifications", "listener", "consent"],
     ),
 ]
+
+# ── Additional privacy tweaks ─────────────────────────────────────────────────
+
+_CONTACTS_CONSENT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"
+_CALENDAR_CONSENT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"
+_DOCS_CONSENT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"
+
+
+def _apply_priv_disable_contacts_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CONTACTS_CONSENT], "PrivContactsAccess")
+    SESSION.set_dword(_CONTACTS_CONSENT, "LetAppsAccessContacts", 2)
+
+
+def _remove_priv_disable_contacts_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CONTACTS_CONSENT], "PrivContactsAccess_Remove")
+    SESSION.delete_value(_CONTACTS_CONSENT, "LetAppsAccessContacts")
+
+
+def _detect_priv_disable_contacts_access() -> bool:
+    return SESSION.read_dword(_CONTACTS_CONSENT, "LetAppsAccessContacts") == 2
+
+
+def _apply_priv_disable_calendar_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CALENDAR_CONSENT], "PrivCalendarAccess")
+    SESSION.set_dword(_CALENDAR_CONSENT, "LetAppsAccessCalendar", 2)
+
+
+def _remove_priv_disable_calendar_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CALENDAR_CONSENT], "PrivCalendarAccess_Remove")
+    SESSION.delete_value(_CALENDAR_CONSENT, "LetAppsAccessCalendar")
+
+
+def _detect_priv_disable_calendar_access() -> bool:
+    return SESSION.read_dword(_CALENDAR_CONSENT, "LetAppsAccessCalendar") == 2
+
+
+def _apply_priv_disable_radios_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DOCS_CONSENT], "PrivRadiosAccess")
+    SESSION.set_dword(_DOCS_CONSENT, "LetAppsAccessRadios", 2)
+
+
+def _remove_priv_disable_radios_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_DOCS_CONSENT], "PrivRadiosAccess_Remove")
+    SESSION.delete_value(_DOCS_CONSENT, "LetAppsAccessRadios")
+
+
+def _detect_priv_disable_radios_access() -> bool:
+    return SESSION.read_dword(_DOCS_CONSENT, "LetAppsAccessRadios") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="priv-disable-contacts-access",
+        label="Block Apps from Accessing Contacts",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_contacts_access,
+        remove_fn=_remove_priv_disable_contacts_access,
+        detect_fn=_detect_priv_disable_contacts_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTACTS_CONSENT],
+        description=(
+            "Prevents apps from accessing your contacts list via the AppPrivacy policy. "
+            "Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "contacts", "appprivacy", "consent"],
+    ),
+    TweakDef(
+        id="priv-disable-calendar-access",
+        label="Block Apps from Accessing Calendar",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_calendar_access,
+        remove_fn=_remove_priv_disable_calendar_access,
+        detect_fn=_detect_priv_disable_calendar_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CALENDAR_CONSENT],
+        description=(
+            "Prevents apps from reading or modifying your calendar via the AppPrivacy policy. "
+            "Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "calendar", "appprivacy", "consent"],
+    ),
+    TweakDef(
+        id="priv-disable-radios-access",
+        label="Block Apps from Controlling Radios (Bluetooth/Wi-Fi)",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_radios_access,
+        remove_fn=_remove_priv_disable_radios_access,
+        detect_fn=_detect_priv_disable_radios_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DOCS_CONSENT],
+        description=(
+            "Prevents apps from toggling Bluetooth or Wi-Fi radios via the AppPrivacy policy. "
+            "Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "radios", "bluetooth", "wifi", "appprivacy", "consent"],
+    ),
+]

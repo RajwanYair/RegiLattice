@@ -594,3 +594,187 @@ TWEAKS += [
         tags=["multimedia", "drm", "wmdrm", "license", "privacy"],
     ),
 ]
+
+
+# ── Disable Game Bar (Policy) ─────────────────────────────────────────────────
+
+_KEY_GAMEBAR_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR"
+
+
+def _apply_disable_gamebar_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: disable Xbox Game Bar via policy")
+    SESSION.backup([_KEY_GAMEBAR_POLICY], "GameBarPolicy")
+    SESSION.set_dword(_KEY_GAMEBAR_POLICY, "AllowGameDVR", 0)
+
+
+def _remove_disable_gamebar_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_GAMEBAR_POLICY, "AllowGameDVR")
+
+
+def _detect_disable_gamebar_policy() -> bool:
+    return SESSION.read_dword(_KEY_GAMEBAR_POLICY, "AllowGameDVR") == 0
+
+
+# ── Instant Menu Show Delay ───────────────────────────────────────────────────
+
+_KEY_MENU_DELAY = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_menu_show_instant(*, require_admin: bool = False) -> None:
+    SESSION.log("Multimedia: set menu show delay to 0 (instant)")
+    SESSION.backup([_KEY_MENU_DELAY], "MenuDelay")
+    SESSION.set_string(_KEY_MENU_DELAY, "MenuShowDelay", "0")
+
+
+def _remove_menu_show_instant(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_KEY_MENU_DELAY, "MenuShowDelay", "400")
+
+
+def _detect_menu_show_instant() -> bool:
+    return SESSION.read_string(_KEY_MENU_DELAY, "MenuShowDelay") == "0"
+
+
+# ── Disable Logon User-Tile Animation ─────────────────────────────────────────
+
+_KEY_LOGON_ANIM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+
+
+def _apply_disable_logon_anim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Multimedia: disable first-logon animation")
+    SESSION.backup([_KEY_LOGON_ANIM], "LogonAnim")
+    SESSION.set_dword(_KEY_LOGON_ANIM, "EnableFirstLogonAnimation", 0)
+
+
+def _remove_disable_logon_anim(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KEY_LOGON_ANIM, "EnableFirstLogonAnimation", 1)
+
+
+def _detect_disable_logon_anim() -> bool:
+    return SESSION.read_dword(_KEY_LOGON_ANIM, "EnableFirstLogonAnimation") == 0
+
+
+# ── Disable Cursor Blink ─────────────────────────────────────────────────────
+
+_KEY_CURSOR_DESKTOP = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_disable_cursor_blink(*, require_admin: bool = False) -> None:
+    SESSION.log("Multimedia: disable text cursor blinking (-1 = no blink)")
+    SESSION.backup([_KEY_CURSOR_DESKTOP], "CursorBlink")
+    SESSION.set_string(_KEY_CURSOR_DESKTOP, "CursorBlinkRate", "-1")
+
+
+def _remove_disable_cursor_blink(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_KEY_CURSOR_DESKTOP, "CursorBlinkRate", "530")
+
+
+def _detect_disable_cursor_blink() -> bool:
+    return SESSION.read_string(_KEY_CURSOR_DESKTOP, "CursorBlinkRate") == "-1"
+
+
+# ── Reduce Tooltip Delay ─────────────────────────────────────────────────────
+
+_KEY_TOOLTIP_DELAY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_reduce_tooltip_delay(*, require_admin: bool = False) -> None:
+    SESSION.log("Multimedia: reduce tooltip popup delay to 0 ms")
+    SESSION.backup([_KEY_TOOLTIP_DELAY], "TooltipDelay")
+    SESSION.set_dword(_KEY_TOOLTIP_DELAY, "ExtendedUIHoverTime", 0)
+
+
+def _remove_reduce_tooltip_delay(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_KEY_TOOLTIP_DELAY, "ExtendedUIHoverTime")
+
+
+def _detect_reduce_tooltip_delay() -> bool:
+    return SESSION.read_dword(_KEY_TOOLTIP_DELAY, "ExtendedUIHoverTime") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="media-disable-gamebar-policy",
+        label="Disable Xbox Game Bar (Policy)",
+        category="Multimedia",
+        apply_fn=_apply_disable_gamebar_policy,
+        remove_fn=_remove_disable_gamebar_policy,
+        detect_fn=_detect_disable_gamebar_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_GAMEBAR_POLICY],
+        description=(
+            "Disables the Xbox Game Bar via Group Policy (AllowGameDVR=0). "
+            "Prevents Win+G from opening and removes the overlay entirely. "
+            "Default: Allowed. Recommended: Disabled for non-gaming workstations."
+        ),
+        tags=["multimedia", "gamebar", "xbox", "policy", "performance"],
+    ),
+    TweakDef(
+        id="media-menu-show-instant",
+        label="Instant Context Menu (0 ms Delay)",
+        category="Multimedia",
+        apply_fn=_apply_menu_show_instant,
+        remove_fn=_remove_menu_show_instant,
+        detect_fn=_detect_menu_show_instant,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_MENU_DELAY],
+        description=(
+            "Sets MenuShowDelay to 0, making context menus and pop-up menus appear instantly. "
+            "Default: 400 ms. Recommended: 0 for power users."
+        ),
+        tags=["multimedia", "menu", "delay", "performance", "ux"],
+    ),
+    TweakDef(
+        id="media-disable-logon-anim",
+        label="Disable First-Logon Animation",
+        category="Multimedia",
+        apply_fn=_apply_disable_logon_anim,
+        remove_fn=_remove_disable_logon_anim,
+        detect_fn=_detect_disable_logon_anim,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_LOGON_ANIM],
+        description=(
+            "Disables the animated user-tile / Getting Ready screen shown on first logon after updates. "
+            "Speeds up login for domain and managed devices. Default: Enabled."
+        ),
+        tags=["multimedia", "logon", "animation", "boot", "performance"],
+    ),
+    TweakDef(
+        id="media-disable-cursor-blink",
+        label="Disable Text Cursor Blinking",
+        category="Multimedia",
+        apply_fn=_apply_disable_cursor_blink,
+        remove_fn=_remove_disable_cursor_blink,
+        detect_fn=_detect_disable_cursor_blink,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_CURSOR_DESKTOP],
+        description=(
+            "Disables cursor blinking in text fields (CursorBlinkRate=-1). "
+            "Reduces visual distraction for users who find blinking cursors disruptive. Default: 530 ms."
+        ),
+        tags=["multimedia", "cursor", "blink", "accessibility", "ux"],
+    ),
+    TweakDef(
+        id="media-reduce-tooltip-delay",
+        label="Instant Tooltip Display (0 ms)",
+        category="Multimedia",
+        apply_fn=_apply_reduce_tooltip_delay,
+        remove_fn=_remove_reduce_tooltip_delay,
+        detect_fn=_detect_reduce_tooltip_delay,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_TOOLTIP_DELAY],
+        description=(
+            "Sets extended UI hover time to 0, making Explorer tooltips appear immediately. "
+            "Default: system default. Recommended: 0 for fast typists."
+        ),
+        tags=["multimedia", "tooltip", "delay", "explorer", "ux"],
+    ),
+]

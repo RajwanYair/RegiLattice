@@ -637,3 +637,174 @@ TWEAKS += [
         tags=["telemetry", "diagnostic", "log", "collection", "privacy"],
     ),
 ]
+
+# ── Extra telemetry controls ─────────────────────────────────────────────────
+
+_CEIP_SQM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient"
+_MRT_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"
+_SPEECH_UPD_POLICY = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Speech"
+_SPP_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SoftwareProtectionPlatform"
+_NCSI_KEY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator"
+
+
+def _apply_disable_sqm_upload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CEIP_SQM], "SQMUpload")
+    SESSION.set_dword(_CEIP_SQM, "CEIPEnable", 0)
+
+
+def _remove_disable_sqm_upload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CEIP_SQM, "CEIPEnable")
+
+
+def _detect_disable_sqm_upload() -> bool:
+    return SESSION.read_dword(_CEIP_SQM, "CEIPEnable") == 0
+
+
+def _apply_disable_mrt_report(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_MRT_KEY], "MRTReport")
+    SESSION.set_dword(_MRT_KEY, "DontReportInfectionInformation", 1)
+
+
+def _remove_disable_mrt_report(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MRT_KEY, "DontReportInfectionInformation")
+
+
+def _detect_disable_mrt_report() -> bool:
+    return SESSION.read_dword(_MRT_KEY, "DontReportInfectionInformation") == 1
+
+
+def _apply_disable_speech_model_update(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPEECH_UPD_POLICY], "SpeechModelUpdate")
+    SESSION.set_dword(_SPEECH_UPD_POLICY, "AllowSpeechModelUpdate", 0)
+
+
+def _remove_disable_speech_model_update(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPEECH_UPD_POLICY, "AllowSpeechModelUpdate")
+
+
+def _detect_disable_speech_model_update() -> bool:
+    return SESSION.read_dword(_SPEECH_UPD_POLICY, "AllowSpeechModelUpdate") == 0
+
+
+def _apply_disable_license_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPP_KEY], "LicenseTelemetry")
+    SESSION.set_dword(_SPP_KEY, "NoGenTicket", 1)
+
+
+def _remove_disable_license_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPP_KEY, "NoGenTicket")
+
+
+def _detect_disable_license_telemetry() -> bool:
+    return SESSION.read_dword(_SPP_KEY, "NoGenTicket") == 1
+
+
+def _apply_disable_ncsi_probing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NCSI_KEY], "NCSIProbing")
+    SESSION.set_dword(_NCSI_KEY, "NoActiveProbe", 1)
+
+
+def _remove_disable_ncsi_probing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NCSI_KEY, "NoActiveProbe")
+
+
+def _detect_disable_ncsi_probing() -> bool:
+    return SESSION.read_dword(_NCSI_KEY, "NoActiveProbe") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="telem-disable-sqm-upload",
+        label="Disable SQM Telemetry Upload",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_sqm_upload,
+        remove_fn=_remove_disable_sqm_upload,
+        detect_fn=_detect_disable_sqm_upload,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CEIP_SQM],
+        description=(
+            "Disables the Software Quality Metrics (SQM) CEIPEnable key, "
+            "preventing telemetry data from being uploaded to Microsoft. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["telemetry", "sqm", "ceip", "privacy"],
+    ),
+    TweakDef(
+        id="telem-disable-mrt-report",
+        label="Disable MRT Infection Reporting",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_mrt_report,
+        remove_fn=_remove_disable_mrt_report,
+        detect_fn=_detect_disable_mrt_report,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_MRT_KEY],
+        description=(
+            "Prevents the Malicious Software Removal Tool from reporting "
+            "infection information to Microsoft. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["telemetry", "mrt", "malware", "reporting", "privacy"],
+    ),
+    TweakDef(
+        id="telem-disable-speech-model-update",
+        label="Disable Speech Model Automatic Update",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_speech_model_update,
+        remove_fn=_remove_disable_speech_model_update,
+        detect_fn=_detect_disable_speech_model_update,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SPEECH_UPD_POLICY],
+        description=(
+            "Prevents Windows from automatically downloading updated speech recognition models. "
+            "Reduces background network activity. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["telemetry", "speech", "model", "update", "privacy"],
+    ),
+    TweakDef(
+        id="telem-disable-license-telemetry",
+        label="Disable License Telemetry (NoGenTicket)",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_license_telemetry,
+        remove_fn=_remove_disable_license_telemetry,
+        detect_fn=_detect_disable_license_telemetry,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPP_KEY],
+        description=(
+            "Sets NoGenTicket to prevent the Software Protection Platform "
+            "from sending licensing telemetry to Microsoft. "
+            "Default: Disabled. Recommended: Enabled for privacy."
+        ),
+        tags=["telemetry", "license", "spp", "privacy"],
+    ),
+    TweakDef(
+        id="telem-disable-ncsi-probing",
+        label="Disable NCSI Active Probe",
+        category="Telemetry Advanced",
+        apply_fn=_apply_disable_ncsi_probing,
+        remove_fn=_remove_disable_ncsi_probing,
+        detect_fn=_detect_disable_ncsi_probing,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_NCSI_KEY],
+        description=(
+            "Disables the Network Connectivity Status Indicator active probe "
+            "that contacts Microsoft servers to check internet connectivity on login. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["telemetry", "ncsi", "probe", "network", "privacy"],
+    ),
+]

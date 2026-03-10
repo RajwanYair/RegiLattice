@@ -242,6 +242,11 @@ class RegiLatticeGUI:
         style.configure("Subtitle.TLabel", background=_HEADER_BG, foreground=_FG_DIM, font=_FONT_SM)
         style.configure("Status.TLabel", background=_BG, foreground=_FG_DIM, font=_FONT_SM)
         style.configure("Category.TLabel", background=_BG, foreground=_ACCENT, font=_FONT_CAT)
+        # Search / combo entry — foreground must follow theme so text is visible on both dark and light
+        style.configure("TCombobox", foreground=_FG, fieldbackground=_CARD_BG, background=_CARD_BG, insertcolor=_FG)
+        style.map("TCombobox", foreground=[("readonly", _FG), ("disabled", _FG_DIM)], fieldbackground=[("readonly", _CARD_BG)])
+        style.configure("TEntry", foreground=_FG, fieldbackground=_CARD_BG, insertcolor=_FG)
+        style.map("TEntry", foreground=[("disabled", _FG_DIM)], fieldbackground=[("disabled", _DIM_BG)])
 
     # ── Keyboard shortcuts ──────────────────────────────────────────────
 
@@ -613,6 +618,12 @@ class RegiLatticeGUI:
             fill="x",
         )
         ttk.Button(btn3, text="\U0001f9e9  PS Modules", command=self._open_psmodule_manager).pack(
+            side="left",
+            padx=(0, 6),
+            expand=True,
+            fill="x",
+        )
+        ttk.Button(btn3, text="\U0001f40d  pip Manager", command=self._open_pip_manager).pack(
             side="left",
             padx=(0, 6),
             expand=True,
@@ -1187,6 +1198,12 @@ class RegiLatticeGUI:
         """Open a PowerShell Modules manager dialog for listing, installing and removing modules."""
         dialogs.open_psmodule_manager(self._root, self._refresh_status_all)
 
+    # ── pip Package Manager ─────────────────────────────────────────────
+
+    def _open_pip_manager(self) -> None:
+        """Open a pip Package Manager dialog for listing, installing, removing and updating packages."""
+        dialogs.open_pip_manager(self._root, self._refresh_status_all)
+
     # ── About dialog ─────────────────────────────────────────────────────
 
     def _show_about(self) -> None:
@@ -1731,7 +1748,8 @@ class RegiLatticeGUI:
                 self._save_search_history()
             finally:
                 self._stop_tray()
-                self._root.after(0, self._root.destroy)
+                with contextlib.suppress(RuntimeError):
+                    self._root.after(0, self._root.destroy)
 
         threading.Thread(target=_save_and_destroy, daemon=True).start()
 

@@ -6,9 +6,80 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Bug Fixes
+### Added
 
-- **`_tkinter.TclError: Unspecified error` on Windows** — all `filedialog.asksaveasfilename` /
+- **65 new tweaks across 13 categories** (1 360 → 1 425 total tweaks, 18 708 tests):
+  - `telemetry_advanced.py` +5: `telem-disable-sqm-upload`, `telem-disable-mrt-report`,
+    `telem-disable-speech-model-update`, `telem-disable-license-telemetry`,
+    `telem-disable-ncsi-probing`
+  - `remote_desktop.py` +5: `rdp-disable-wallpaper`, `rdp-enable-font-smoothing`,
+    `rdp-disable-audio-record`, `rdp-enable-compression`, `rdp-single-session`
+  - `windowsupdate.py` +5: `wu-disable-os-upgrade`, `wu-disable-safeguard-hold`,
+    `wu-disable-optional-updates`, `wu-exclude-drivers-quality`, `wu-disable-ux-access`
+  - `notifications.py` +5: `notif-disable-security-center`, `notif-disable-autoconnect`,
+    `notif-disable-account-notif`, `notif-disable-tips-soft-landing`,
+    `notif-disable-lock-screen-toasts`
+  - `scheduled_tasks.py` +5: `schtask-disable-mrt-update`, `schtask-disable-speech-download`,
+    `schtask-disable-power-diagnostics`, `schtask-disable-ngen-log`,
+    `schtask-disable-smartscreen`
+  - `printing.py` +5: `printing-copy-files-policy`, `printing-emf-despooling`,
+    `printing-disable-client-side-map`, `printing-disable-spooler-log`,
+    `printing-package-point-server-list`
+  - `virtualization.py` +5: `virt-vds-manual`, `virt-disable-rdv-policy`,
+    `virt-disable-containers-ext`, `virt-vmms-manual`, `virt-require-platform-security`
+  - `widgets_news.py` +5: `widgets-disable-machine-feeds`, `widgets-disable-third-party-suggestions`,
+    `widgets-disable-search-highlights`, `widgets-disable-spotlight-features`,
+    `widgets-disable-start-personalization`
+  - `power.py` +5: `power-no-password-on-resume`, `power-disable-throttling-policy`,
+    `power-disable-energy-estimation`, `power-disable-sleep-away`,
+    `power-standby-reserve-grace`
+  - `performance.py` +5: `perf-win32-priority-sep`, `perf-gpu-hw-scheduling`,
+    `perf-large-page-minimum`, `perf-games-io-priority`, `perf-reduce-hung-app-timeout`
+  - `defender.py` +5: `sec-disable-wdigest`, `sec-enable-cred-guard-policy`,
+    `sec-scan-not-idle-only`, `sec-block-exclusion-local-merge`,
+    `sec-enable-behavior-monitoring`
+  - `network.py` +5: `net-tcp-keepalive-5min`, `net-smb2-require-signing`,
+    `net-block-non-domain-wifi`, `net-tcp-syn-attack-protection`, `net-tcp-timestamps`
+  - `gaming.py` +5: `game-system-profile-games`, `game-disable-diagtrack-keyword`,
+    `game-force-exclusive-fullscreen`, `game-honor-fse-compat`, `game-irq8-realtime`
+- `regilattice/logger.py` — added `__all__` export list.
+
+## [1.0.2] — 2025-07-19
+
+### Added
+
+- **18 new tweaks across 5 modules** to bring the total tweak count from 1 292 to 1 361:
+  - `win11.py` +6: `w11-taskbar-never-combine`, `w11-disable-search-highlights`,
+    `w11-disable-spotlight-tips`, `w11-disable-copilot-taskbar-btn`,
+    `w11-disable-recall-ai`, `w11-show-this-pc-on-desktop`
+  - `privacy.py` +3: `priv-disable-contacts-access`, `priv-disable-calendar-access`,
+    `priv-disable-radios-access`
+  - `defender.py` +3: `sec-enable-spectre-mitigations`, `sec-uac-always-notify`,
+    `sec-restrict-ntlmv1`
+  - `startup.py` +3: `startup-disable-ink-workspace`, `startup-disable-gamebar-capture`,
+    `startup-disable-suggested-app-installs`
+  - `wsl.py` +6 (Sprint 12): `wsl-interop-off-policy`, `wsl-disable-binfmt-misc`,
+    `wsl-limit-processors`, `wsl-disable-crash-reporting`,
+    `wsl-enable-nested-virt-policy`, `wsl-disable-telemetry`
+- **`regilattice/logger.py`** — structured logging module (`configure_logging`,
+  `get_logger`) with `--log-level` CLI flag integration.
+- **`scripts/regilattice-completion.ps1`** — PowerShell tab-completion for all CLI
+  flags, modes, profiles, log levels, and dynamic tweak IDs.
+- **`docs/Security.md`** — subprocess call inventory and security audit reference
+  covering all 7 modules that invoke external processes.
+- **`regilattice/elevation.py`** — `_ALLOWED_ELEVATED_EXECUTABLES` allowlist;
+  `run_elevated()` now validates executables before spawning privileged processes.
+- **`regilattice/registry.py`** — `validate_registry_path()` function; rejects empty
+  paths, null bytes, unknown hive prefixes, and missing subkeys.
+
+### Changed
+
+- Version bumped from `1.0.1` → `1.0.2`.
+
+## [1.0.1] — 2025-07-05
+
+### Security
+
   `askopenfilename` calls in `gui.py` and `gui_dialogs.py` now pass `parent=<root window>`.
   Without an explicit parent HWND the Win32 common dialog returns `E_UNEXPECTED` on Python 3.14 / 64-bit.
   Affected paths: _Export Log_, _Save Snapshot_, _Restore Snapshot_, _Export PowerShell_, _Export JSON_.

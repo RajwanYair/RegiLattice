@@ -723,3 +723,113 @@ TWEAKS += [
         tags=["startup", "welcome", "experience", "updates", "nag"],
     ),
 ]
+
+# ── Additional startup tweaks ─────────────────────────────────────────────────
+
+_STARTUP_INK = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"
+_STARTUP_GAMEBAR = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR"
+_STARTUP_APPHOST = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_startup_disable_ink_workspace(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_INK], "StartupInkWorkspace")
+    SESSION.set_dword(_STARTUP_INK, "PenWorkspaceButtonDesiredVisibility", 0)
+
+
+def _remove_startup_disable_ink_workspace(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_INK], "StartupInkWorkspace_Remove")
+    SESSION.delete_value(_STARTUP_INK, "PenWorkspaceButtonDesiredVisibility")
+
+
+def _detect_startup_disable_ink_workspace() -> bool:
+    return SESSION.read_dword(_STARTUP_INK, "PenWorkspaceButtonDesiredVisibility") == 0
+
+
+def _apply_startup_disable_gamebar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_GAMEBAR], "StartupGameBar")
+    SESSION.set_dword(_STARTUP_GAMEBAR, "AppCaptureEnabled", 0)
+
+
+def _remove_startup_disable_gamebar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_GAMEBAR], "StartupGameBar_Remove")
+    SESSION.delete_value(_STARTUP_GAMEBAR, "AppCaptureEnabled")
+
+
+def _detect_startup_disable_gamebar() -> bool:
+    return SESSION.read_dword(_STARTUP_GAMEBAR, "AppCaptureEnabled") == 0
+
+
+def _apply_startup_disable_suggested_apps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_APPHOST], "StartupSuggestedApps")
+    SESSION.set_dword(_STARTUP_APPHOST, "EnableSmartScreen", 0)
+    SESSION.set_dword(_STARTUP_APPHOST, "DisableAppInstalls", 1)
+
+
+def _remove_startup_disable_suggested_apps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_STARTUP_APPHOST], "StartupSuggestedApps_Remove")
+    SESSION.delete_value(_STARTUP_APPHOST, "EnableSmartScreen")
+    SESSION.delete_value(_STARTUP_APPHOST, "DisableAppInstalls")
+
+
+def _detect_startup_disable_suggested_apps() -> bool:
+    return SESSION.read_dword(_STARTUP_APPHOST, "DisableAppInstalls") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="startup-disable-ink-workspace",
+        label="Hide Windows Ink Workspace Button",
+        category="Startup",
+        apply_fn=_apply_startup_disable_ink_workspace,
+        remove_fn=_remove_startup_disable_ink_workspace,
+        detect_fn=_detect_startup_disable_ink_workspace,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_STARTUP_INK],
+        description=(
+            "Hides the Windows Ink Workspace button from the taskbar. "
+            "Default: hidden on non-pen devices. Recommended: hidden for clean taskbar."
+        ),
+        tags=["startup", "ink", "pen", "taskbar", "ux"],
+    ),
+    TweakDef(
+        id="startup-disable-gamebar-capture",
+        label="Disable Xbox Game Bar App Capture",
+        category="Startup",
+        apply_fn=_apply_startup_disable_gamebar,
+        remove_fn=_remove_startup_disable_gamebar,
+        detect_fn=_detect_startup_disable_gamebar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_STARTUP_GAMEBAR],
+        description=(
+            "Disables Xbox Game Bar app capture (screen recording background task). "
+            "Reduces startup and background overhead for non-gaming machines. "
+            "Default: enabled. Recommended: disabled on non-gaming workstations."
+        ),
+        tags=["startup", "gamebar", "xbox", "capture", "performance"],
+    ),
+    TweakDef(
+        id="startup-disable-suggested-app-installs",
+        label="Disable Suggested App Install Prompts at Startup",
+        category="Startup",
+        apply_fn=_apply_startup_disable_suggested_apps,
+        remove_fn=_remove_startup_disable_suggested_apps,
+        detect_fn=_detect_startup_disable_suggested_apps,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_STARTUP_APPHOST],
+        description=(
+            "Disables automatic suggested app installation prompts on startup "
+            "via system policy. Prevents Store-pushed app suggestions. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["startup", "apps", "suggestions", "store", "bloatware"],
+    ),
+]

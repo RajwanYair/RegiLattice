@@ -577,3 +577,175 @@ TWEAKS += [
         tags=["printing", "point-and-print", "security", "printnightmare"],
     ),
 ]
+
+# ── Extra printing controls ───────────────────────────────────────────────────
+
+_SPOOLER_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+_PRINT_PDF = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing"
+_PRINT_EMF = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print"
+_PRINT_LEGACY_COMPAT = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+_PRINT_REDIR = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+
+
+def _apply_printing_no_downlevel_auth(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPOOLER_POLICY], "PrintNoDownlevel")
+    SESSION.set_dword(_SPOOLER_POLICY, "CopyFilesPolicy", 1)
+
+
+def _remove_printing_no_downlevel_auth(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPOOLER_POLICY, "CopyFilesPolicy")
+
+
+def _detect_printing_no_downlevel_auth() -> bool:
+    return SESSION.read_dword(_SPOOLER_POLICY, "CopyFilesPolicy") == 1
+
+
+def _apply_printing_emf_deskew(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_PRINT_EMF], "PrintEMFDeskew")
+    SESSION.set_dword(_PRINT_EMF, "EMFDespooling", 1)
+
+
+def _remove_printing_emf_deskew(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PRINT_EMF, "EMFDespooling")
+
+
+def _detect_printing_emf_deskew() -> bool:
+    return SESSION.read_dword(_PRINT_EMF, "EMFDespooling") == 1
+
+
+def _apply_printing_disable_redir_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_PRINT_REDIR], "PrintRedirPolicy")
+    SESSION.set_dword(_PRINT_REDIR, "fDisableCpm", 1)
+
+
+def _remove_printing_disable_redir_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PRINT_REDIR, "fDisableCpm")
+
+
+def _detect_printing_disable_redir_policy() -> bool:
+    return SESSION.read_dword(_PRINT_REDIR, "fDisableCpm") == 1
+
+
+def _apply_printing_audit_log(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPOOLER_POLICY], "PrintAudit")
+    SESSION.set_dword(_SPOOLER_POLICY, "LogAlways", 0)
+
+
+def _remove_printing_audit_log(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPOOLER_POLICY, "LogAlways")
+
+
+def _detect_printing_audit_log() -> bool:
+    return SESSION.read_dword(_SPOOLER_POLICY, "LogAlways") == 0
+
+
+def _apply_printing_warn_package_point(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_PRINT_LEGACY_COMPAT], "PrintPackageWarn")
+    SESSION.set_dword(_PRINT_LEGACY_COMPAT, "PackagePointAndPrintServerList", 1)
+
+
+def _remove_printing_warn_package_point(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PRINT_LEGACY_COMPAT, "PackagePointAndPrintServerList")
+
+
+def _detect_printing_warn_package_point() -> bool:
+    return SESSION.read_dword(_PRINT_LEGACY_COMPAT, "PackagePointAndPrintServerList") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="printing-copy-files-policy",
+        label="Restrict Printer Driver Copy Files (CVE-2021-34527 Fix)",
+        category="Printing",
+        apply_fn=_apply_printing_no_downlevel_auth,
+        remove_fn=_remove_printing_no_downlevel_auth,
+        detect_fn=_detect_printing_no_downlevel_auth,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPOOLER_POLICY],
+        description=(
+            "Enables CopyFilesPolicy=1 to restrict printer driver copy file operations. "
+            "Mitigates PrintNightmare attack vector CVE-2021-34527. "
+            "Default: Unrestricted. Recommended: Restricted."
+        ),
+        tags=["printing", "security", "printnightmare", "driver", "copy"],
+    ),
+    TweakDef(
+        id="printing-emf-despooling",
+        label="Enable EMF Direct Despooling",
+        category="Printing",
+        apply_fn=_apply_printing_emf_deskew,
+        remove_fn=_remove_printing_emf_deskew,
+        detect_fn=_detect_printing_emf_deskew,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PRINT_EMF],
+        description=(
+            "Enables direct EMF despooling to bypass spooler for local printers. "
+            "Can improve print speed for EMF print jobs. "
+            "Default: Disabled. Recommended: Enabled for performance."
+        ),
+        tags=["printing", "emf", "despooling", "performance", "local"],
+    ),
+    TweakDef(
+        id="printing-disable-client-side-map",
+        label="Disable Client-Port Printer Mapping in RDP",
+        category="Printing",
+        apply_fn=_apply_printing_disable_redir_policy,
+        remove_fn=_remove_printing_disable_redir_policy,
+        detect_fn=_detect_printing_disable_redir_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PRINT_REDIR],
+        description=(
+            "Disables client-side COM port mapping in RDP sessions. "
+            "Prevents COM port printer redirection from RDP clients. "
+            "Default: Enabled. Recommended: Disabled for security."
+        ),
+        tags=["printing", "rdp", "com-port", "redirect", "security"],
+    ),
+    TweakDef(
+        id="printing-disable-spooler-log",
+        label="Disable Spooler Always-On Logging",
+        category="Printing",
+        apply_fn=_apply_printing_audit_log,
+        remove_fn=_remove_printing_audit_log,
+        detect_fn=_detect_printing_audit_log,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SPOOLER_POLICY],
+        description=(
+            "Disables LogAlways verbose spooler logging. "
+            "Reduces log noise and disk writes from print subsystem. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["printing", "logging", "spooler", "performance"],
+    ),
+    TweakDef(
+        id="printing-package-point-server-list",
+        label="Restrict Package Point-and-Print to Server List",
+        category="Printing",
+        apply_fn=_apply_printing_warn_package_point,
+        remove_fn=_remove_printing_warn_package_point,
+        detect_fn=_detect_printing_warn_package_point,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_PRINT_LEGACY_COMPAT],
+        description=(
+            "Enables Package Point-and-Print server list restriction. "
+            "Limits which servers can silently install printer drivers. "
+            "Default: Unrestricted. Recommended: Restricted."
+        ),
+        tags=["printing", "package", "point-and-print", "server", "security"],
+    ),
+]

@@ -200,7 +200,7 @@ class TweakRow:
             return
         for w in self.frame.winfo_children():
             if isinstance(w, tk.Label):
-                w.configure(bg=theme.CARD_HOVER)
+                w.configure(bg=theme.CARD_HOVER, fg=theme.FG)
 
     def _on_leave(self, _: tk.Event[tk.Misc]) -> None:
         """Restore row background on leave."""
@@ -479,7 +479,7 @@ class CategorySection:
             self._on_collapse_change(self)
 
     def _show_rows(self) -> None:
-        self.content_frame.pack(fill="x")
+        self.content_frame.pack(fill="x", after=self.header)
         for row in self.rows:
             row.pack_row()
 

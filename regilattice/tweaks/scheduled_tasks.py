@@ -632,3 +632,174 @@ TWEAKS += [
         tags=["tasks", "disk", "diagnostics", "telemetry"],
     ),
 ]
+
+# ── Extra scheduled-task registry controls ────────────────────────────────────
+
+_MRT_TASK = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"
+_SPEECH_TASK = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech"
+_POWER_TASK = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{ffc42108-4920-4acf-a4fc-8abdcc68ada4}"
+_NGEN_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\.NETFramework"
+_SMARTSCREEN_UPDATE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_schtask_disable_mrt_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_MRT_TASK], "MRTTask")
+    SESSION.set_dword(_MRT_TASK, "DontOfferThroughWUAU", 1)
+
+
+def _remove_schtask_disable_mrt_update(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_MRT_TASK, "DontOfferThroughWUAU")
+
+
+def _detect_schtask_disable_mrt_update() -> bool:
+    return SESSION.read_dword(_MRT_TASK, "DontOfferThroughWUAU") == 1
+
+
+def _apply_schtask_disable_speech_dl(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPEECH_TASK], "SpeechTask")
+    SESSION.set_dword(_SPEECH_TASK, "AllowSpeechModelUpdate", 0)
+
+
+def _remove_schtask_disable_speech_dl(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPEECH_TASK, "AllowSpeechModelUpdate")
+
+
+def _detect_schtask_disable_speech_dl() -> bool:
+    return SESSION.read_dword(_SPEECH_TASK, "AllowSpeechModelUpdate") == 0
+
+
+def _apply_schtask_disable_power_diag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_POWER_TASK], "PowerDiag")
+    SESSION.set_dword(_POWER_TASK, "EnabledScenarioExecutionLevel", 0)
+
+
+def _remove_schtask_disable_power_diag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POWER_TASK, "EnabledScenarioExecutionLevel")
+
+
+def _detect_schtask_disable_power_diag() -> bool:
+    return SESSION.read_dword(_POWER_TASK, "EnabledScenarioExecutionLevel") == 0
+
+
+def _apply_schtask_disable_ngen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NGEN_POLICY], "NGENTask")
+    SESSION.set_dword(_NGEN_POLICY, "NoAsmBindingLog", 1)
+
+
+def _remove_schtask_disable_ngen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NGEN_POLICY, "NoAsmBindingLog")
+
+
+def _detect_schtask_disable_ngen() -> bool:
+    return SESSION.read_dword(_NGEN_POLICY, "NoAsmBindingLog") == 1
+
+
+def _apply_schtask_disable_smartscreen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SMARTSCREEN_UPDATE], "SmartScreenUpdate")
+    SESSION.set_dword(_SMARTSCREEN_UPDATE, "EnableSmartScreen", 0)
+
+
+def _remove_schtask_disable_smartscreen(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SMARTSCREEN_UPDATE, "EnableSmartScreen")
+
+
+def _detect_schtask_disable_smartscreen() -> bool:
+    return SESSION.read_dword(_SMARTSCREEN_UPDATE, "EnableSmartScreen") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="schtask-disable-mrt-update",
+        label="Disable MRT Automatic Update via WU",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_mrt_update,
+        remove_fn=_remove_schtask_disable_mrt_update,
+        detect_fn=_detect_schtask_disable_mrt_update,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_MRT_TASK],
+        description=(
+            "Prevents the Malicious Software Removal Tool from being offered "
+            "through Windows Update Automatic Updates. "
+            "Default: Offered. Recommended: Blocked for controlled environments."
+        ),
+        tags=["tasks", "mrt", "malware", "update", "wu"],
+    ),
+    TweakDef(
+        id="schtask-disable-speech-download",
+        label="Disable Speech Model Download Task",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_speech_dl,
+        remove_fn=_remove_schtask_disable_speech_dl,
+        detect_fn=_detect_schtask_disable_speech_dl,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SPEECH_TASK],
+        description=(
+            "Blocks automatic speech recognition model downloads via policy. "
+            "Reduces background network activity and unexpected downloads. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "speech", "model", "download", "telemetry"],
+    ),
+    TweakDef(
+        id="schtask-disable-power-diagnostics",
+        label="Disable Power Efficiency Diagnostics Task",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_power_diag,
+        remove_fn=_remove_schtask_disable_power_diag,
+        detect_fn=_detect_schtask_disable_power_diag,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POWER_TASK],
+        description=(
+            "Disables WDI power efficiency diagnostics scheduled task. "
+            "Prevents background power consumption analysis from running. "
+            "Default: Enabled. Recommended: Disabled on desktops."
+        ),
+        tags=["tasks", "power", "diagnostics", "wdi"],
+    ),
+    TweakDef(
+        id="schtask-disable-ngen-log",
+        label="Disable .NET NGEN Assembly Binding Log",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_ngen,
+        remove_fn=_remove_schtask_disable_ngen,
+        detect_fn=_detect_schtask_disable_ngen,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NGEN_POLICY],
+        description=(
+            "Disables .NET Framework assembly binding failure logging. "
+            "Reduces disk I/O from constant .NET load logging. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "dotnet", "ngen", "log", "performance"],
+    ),
+    TweakDef(
+        id="schtask-disable-smartscreen",
+        label="Disable SmartScreen Background Updates",
+        category="Scheduled Tasks",
+        apply_fn=_apply_schtask_disable_smartscreen,
+        remove_fn=_remove_schtask_disable_smartscreen,
+        detect_fn=_detect_schtask_disable_smartscreen,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SMARTSCREEN_UPDATE],
+        description=(
+            "Disables Windows SmartScreen via policy, stopping background filter data updates. "
+            "Reduces network calls for reputation checking. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["tasks", "smartscreen", "filter", "update", "privacy"],
+    ),
+]

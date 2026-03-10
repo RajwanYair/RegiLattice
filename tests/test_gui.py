@@ -900,6 +900,11 @@ class TestDelegateDialogs:
             gui._open_psmodule_manager()
             m.assert_called_once()
 
+    def test_open_pip_manager_delegates(self, gui: RegiLatticeGUI) -> None:
+        with patch("regilattice.gui.dialogs.open_pip_manager") as m:
+            gui._open_pip_manager()
+            m.assert_called_once()
+
     def test_show_about_delegates(self, gui: RegiLatticeGUI) -> None:
         with patch("regilattice.gui.dialogs.show_about") as m:
             gui._show_about()

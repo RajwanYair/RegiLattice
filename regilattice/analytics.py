@@ -15,6 +15,7 @@ __all__ = [
     "AnalyticsData",
     "error_stats",
     "get_stats",
+    "last_applied_at",
     "record_apply",
     "record_error",
     "record_error_for",
@@ -40,6 +41,7 @@ class AnalyticsData:
     most_removed: dict[str, int] = field(default_factory=dict)
     error_counts: dict[str, int] = field(default_factory=dict)
     last_session: float = 0.0
+    last_applied_ts: dict[str, float] = field(default_factory=dict)
 
 
 def _load() -> AnalyticsData:
@@ -55,6 +57,7 @@ def _load() -> AnalyticsData:
             most_removed=raw.get("most_removed", {}),
             error_counts=raw.get("error_counts", {}),
             last_session=raw.get("last_session", 0.0),
+            last_applied_ts=raw.get("last_applied_ts", {}),
         )
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
         return AnalyticsData()
@@ -72,6 +75,7 @@ def _save(data: AnalyticsData) -> None:
         "most_removed": data.most_removed,
         "error_counts": data.error_counts,
         "last_session": data.last_session,
+        "last_applied_ts": data.last_applied_ts,
     }
     _ANALYTICS_FILE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
@@ -81,7 +85,15 @@ def record_apply(tweak_id: str) -> None:
     data = _load()
     data.total_applies += 1
     data.most_applied[tweak_id] = data.most_applied.get(tweak_id, 0) + 1
+    data.last_applied_ts[tweak_id] = time.time()
     _save(data)
+
+
+def last_applied_at(tweak_id: str) -> float | None:
+    """Return the Unix timestamp of the last time *tweak_id* was applied, or ``None``."""
+    data = _load()
+    ts = data.last_applied_ts.get(tweak_id)
+    return ts if ts else None
 
 
 def record_remove(tweak_id: str) -> None:

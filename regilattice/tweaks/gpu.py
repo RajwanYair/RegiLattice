@@ -766,3 +766,158 @@ TWEAKS += [
         tags=["gpu", "pre-rendered", "frames", "input-lag", "gaming"],
     ),
 ]
+
+
+# ── Enable DirectX 12 Async Compute ─────────────────────────────────────────
+
+_DX12_ASYNC = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX"
+
+
+def _apply_enable_dx12_async(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: enable DirectX 12 asynchronous compute")
+    SESSION.backup([_DX12_ASYNC], "DX12Async")
+    SESSION.set_dword(_DX12_ASYNC, "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE", 1)
+
+
+def _remove_enable_dx12_async(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DX12_ASYNC, "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE")
+
+
+def _detect_enable_dx12_async() -> bool:
+    return SESSION.read_dword(_DX12_ASYNC, "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE") == 1
+
+
+# ── Increase GPU Priority ────────────────────────────────────────────────────
+
+_GPU_PRIORITY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
+
+
+def _apply_increase_gpu_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: increase GPU (DXGI) priority to 8")
+    SESSION.backup([_GPU_PRIORITY], "GpuPriority")
+    SESSION.set_dword(_GPU_PRIORITY, "Win32PrioritySeparation", 0x26)
+
+
+def _remove_increase_gpu_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_GPU_PRIORITY, "Win32PrioritySeparation", 0x02)
+
+
+def _detect_increase_gpu_priority() -> bool:
+    return SESSION.read_dword(_GPU_PRIORITY, "Win32PrioritySeparation") == 0x26
+
+
+# ── Disable GPU Shader Cache ─────────────────────────────────────────────────
+
+_SHADER_CACHE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX"
+
+
+def _apply_disable_shader_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: disable DirectX shader disk cache")
+    SESSION.backup([_SHADER_CACHE], "ShaderCache")
+    SESSION.set_dword(_SHADER_CACHE, "ShaderCachePath", 0)
+
+
+def _remove_disable_shader_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHADER_CACHE, "ShaderCachePath")
+
+
+def _detect_disable_shader_cache() -> bool:
+    return SESSION.read_dword(_SHADER_CACHE, "ShaderCachePath") == 0
+
+
+# ── Force WDDM 3 Mode ────────────────────────────────────────────────────────
+
+_WDDM3 = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"
+
+
+def _apply_force_wddm3(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("GPU: hint WDDM to use version 3 feature set")
+    SESSION.backup([_WDDM3], "WDDM3Mode")
+    SESSION.set_dword(_WDDM3, "PlatformSupportMiracast", 1)
+
+
+def _remove_force_wddm3(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WDDM3, "PlatformSupportMiracast")
+
+
+def _detect_force_wddm3() -> bool:
+    return SESSION.read_dword(_WDDM3, "PlatformSupportMiracast") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="gpu-enable-dx12-async",
+        label="Enable DirectX 12 Async Compute",
+        category="GPU / Graphics",
+        apply_fn=_apply_enable_dx12_async,
+        remove_fn=_remove_enable_dx12_async,
+        detect_fn=_detect_enable_dx12_async,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DX12_ASYNC],
+        description=(
+            "Enables D3D12 asynchronous command buffer reuse for improved GPU throughput. "
+            "Most beneficial in DirectX 12 games with async compute shaders. "
+            "Default: Not set. Recommended: Enabled for gaming."
+        ),
+        tags=["gpu", "directx12", "async", "compute", "gaming"],
+    ),
+    TweakDef(
+        id="gpu-increase-priority",
+        label="Increase GPU Thread Priority",
+        category="GPU / Graphics",
+        apply_fn=_apply_increase_gpu_priority,
+        remove_fn=_remove_increase_gpu_priority,
+        detect_fn=_detect_increase_gpu_priority,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_PRIORITY],
+        description=(
+            "Sets Win32PrioritySeparation to 0x26 (foreground boost), giving GPU-bound "
+            "applications more scheduling priority. "
+            "Default: 0x02. Recommended: 0x26 for gaming/performance."
+        ),
+        tags=["gpu", "priority", "scheduling", "performance", "gaming"],
+    ),
+    TweakDef(
+        id="gpu-disable-shader-cache",
+        label="Disable DirectX Shader Disk Cache",
+        category="GPU / Graphics",
+        apply_fn=_apply_disable_shader_cache,
+        remove_fn=_remove_disable_shader_cache,
+        detect_fn=_detect_disable_shader_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SHADER_CACHE],
+        description=(
+            "Disables the DirectX on-disk shader cache. "
+            "Reduces disk I/O; useful in scenarios where fresh shader compilation is preferred "
+            "or disk space is constrained. Default: Enabled."
+        ),
+        tags=["gpu", "shader", "cache", "disk", "directx"],
+    ),
+    TweakDef(
+        id="gpu-wddm3-miracast",
+        label="Enable WDDM 3 Miracast Support",
+        category="GPU / Graphics",
+        apply_fn=_apply_force_wddm3,
+        remove_fn=_remove_force_wddm3,
+        detect_fn=_detect_force_wddm3,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WDDM3],
+        description=(
+            "Sets PlatformSupportMiracast=1 in GraphicsDrivers to enable WDDM 3 Miracast display "
+            "projection features. Required for wireless display on some hardware. Default: Not set."
+        ),
+        tags=["gpu", "wddm3", "miracast", "display", "wireless"],
+    ),
+]

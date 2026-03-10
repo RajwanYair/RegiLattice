@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "regilattice"
-version = "1.0.1"
+version = "1.0.2"
 description = "RegiLattice — Windows registry tweak toolkit with plugin architecture, GUI, and corporate safety."
 readme = "Readme.md"
 license = { text = "MIT" }

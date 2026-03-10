@@ -821,3 +821,177 @@ TWEAKS += [
         tags=["performance", "memory", "compression", "page-combining"],
     ),
 ]
+
+# ── Extra performance controls ───────────────────────────────────────────────
+
+_FOREGROUND = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
+_GPU_SCHED = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"
+_IO_PRIORITY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
+_SPLIT_LARGE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
+
+
+def _apply_perf_win32_priority_sep(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FOREGROUND], "Win32PriSep")
+    SESSION.set_dword(_FOREGROUND, "Win32PrioritySeparation", 38)
+
+
+def _remove_perf_win32_priority_sep(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FOREGROUND, "Win32PrioritySeparation", 2)  # Windows default
+
+
+def _detect_perf_win32_priority_sep() -> bool:
+    return SESSION.read_dword(_FOREGROUND, "Win32PrioritySeparation") == 38
+
+
+def _apply_perf_gpu_hw_sched(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_GPU_SCHED], "GPUHWSched")
+    SESSION.set_dword(_GPU_SCHED, "HwSchMode", 2)
+
+
+def _remove_perf_gpu_hw_sched(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GPU_SCHED, "HwSchMode")
+
+
+def _detect_perf_gpu_hw_sched() -> bool:
+    return SESSION.read_dword(_GPU_SCHED, "HwSchMode") == 2
+
+
+def _apply_perf_disable_lock_pages(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPLIT_LARGE], "LockPagesInMemory")
+    SESSION.set_dword(_SPLIT_LARGE, "LargePageMinimum", 0)
+
+
+def _remove_perf_disable_lock_pages(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SPLIT_LARGE, "LargePageMinimum")
+
+
+def _detect_perf_disable_lock_pages() -> bool:
+    return SESSION.read_dword(_SPLIT_LARGE, "LargePageMinimum") == 0
+
+
+def _apply_perf_games_io_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_IO_PRIORITY], "GamesIOPriority")
+    SESSION.set_dword(_IO_PRIORITY, "Affinity", 0)
+    SESSION.set_dword(_IO_PRIORITY, "Background Only", 0)
+    SESSION.set_dword(_IO_PRIORITY, "Priority", 6)
+
+
+def _remove_perf_games_io_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_IO_PRIORITY, "Affinity")
+    SESSION.delete_value(_IO_PRIORITY, "Background Only")
+    SESSION.delete_value(_IO_PRIORITY, "Priority")
+
+
+def _detect_perf_games_io_priority() -> bool:
+    return SESSION.read_dword(_IO_PRIORITY, "Priority") == 6
+
+
+def _apply_perf_disable_hung_app_detection(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FOREGROUND], "HungAppDetect")
+    SESSION.set_dword(_FOREGROUND, "HungAppTimeout", 1000)
+
+
+def _remove_perf_disable_hung_app_detection(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_FOREGROUND, "HungAppTimeout", 5000)  # default 5s
+
+
+def _detect_perf_disable_hung_app_detection() -> bool:
+    return SESSION.read_dword(_FOREGROUND, "HungAppTimeout") == 1000
+
+
+TWEAKS += [
+    TweakDef(
+        id="perf-win32-priority-sep",
+        label="Optimize Win32 Priority Separation for Performance",
+        category="Performance",
+        apply_fn=_apply_perf_win32_priority_sep,
+        remove_fn=_remove_perf_win32_priority_sep,
+        detect_fn=_detect_perf_win32_priority_sep,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FOREGROUND],
+        description=(
+            "Sets Win32PrioritySeparation=38 (hex 26) to give foreground programs 6x more "
+            "CPU time than background processes. Maximises responsiveness. "
+            "Default: 2. Recommended: 38 for gaming/workstations."
+        ),
+        tags=["performance", "priority", "foreground", "cpu", "win32"],
+    ),
+    TweakDef(
+        id="perf-gpu-hw-scheduling",
+        label="Enable GPU Hardware Accelerated Scheduling",
+        category="Performance",
+        apply_fn=_apply_perf_gpu_hw_sched,
+        remove_fn=_remove_perf_gpu_hw_sched,
+        detect_fn=_detect_perf_gpu_hw_sched,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GPU_SCHED],
+        description=(
+            "Enables Hardware Accelerated GPU Scheduling (HAGS) mode 2. "
+            "Reduces GPU latency by allowing GPU to manage its own memory directly. "
+            "Default: Disabled. Recommended: Enabled on Win10 2004+ with supported GPU."
+        ),
+        tags=["performance", "gpu", "scheduling", "hags", "latency"],
+    ),
+    TweakDef(
+        id="perf-large-page-minimum",
+        label="Configure Large Page Minimum in Memory Manager",
+        category="Performance",
+        apply_fn=_apply_perf_disable_lock_pages,
+        remove_fn=_remove_perf_disable_lock_pages,
+        detect_fn=_detect_perf_disable_lock_pages,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SPLIT_LARGE],
+        description=(
+            "Sets LargePageMinimum=0 to allow applications to use large page memory when beneficial. "
+            "Can improve performance for large-memory workloads. Default: Not set. Recommended: 0."
+        ),
+        tags=["performance", "memory", "large-page", "allocation"],
+    ),
+    TweakDef(
+        id="perf-games-io-priority",
+        label="Set Highest IO Priority for Games Multimedia Profile",
+        category="Performance",
+        apply_fn=_apply_perf_games_io_priority,
+        remove_fn=_remove_perf_games_io_priority,
+        detect_fn=_detect_perf_games_io_priority,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_IO_PRIORITY],
+        description=(
+            "Sets the Games multimedia system profile to highest scheduling priority (6) "
+            "with no background-only restriction. Reduces stutter in games. "
+            "Default: 2. Recommended: 6 for gaming."
+        ),
+        tags=["performance", "gaming", "io", "priority", "multimedia"],
+    ),
+    TweakDef(
+        id="perf-reduce-hung-app-timeout",
+        label="Reduce Hung Application Detection Timeout",
+        category="Performance",
+        apply_fn=_apply_perf_disable_hung_app_detection,
+        remove_fn=_remove_perf_disable_hung_app_detection,
+        detect_fn=_detect_perf_disable_hung_app_detection,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_FOREGROUND],
+        description=(
+            "Reduces HungAppTimeout from 5000ms to 1000ms so Windows terminates "
+            "frozen applications faster. Improves system responsiveness on crashes. "
+            "Default: 5000ms. Recommended: 1000ms."
+        ),
+        tags=["performance", "hung-app", "timeout", "responsiveness"],
+    ),
+]

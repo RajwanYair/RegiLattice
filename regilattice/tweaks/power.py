@@ -846,3 +846,175 @@ TWEAKS += [
         tags=["power", "idle", "c-states", "processor", "latency"],
     ),
 ]
+
+# ── Extra power controls ─────────────────────────────────────────────────────
+
+_POWER_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings"
+_SYS_POWER = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"
+_POWER_THROTTLE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"
+_SLEEP_BUTTON = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\Power"
+_ENERGY_EST = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation"
+
+
+def _apply_power_disable_sleep_button(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SLEEP_BUTTON], "SleepButton")
+    SESSION.set_dword(_SLEEP_BUTTON, "PromptPasswordOnResume", 0)
+
+
+def _remove_power_disable_sleep_button(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SLEEP_BUTTON, "PromptPasswordOnResume")
+
+
+def _detect_power_disable_sleep_button() -> bool:
+    return SESSION.read_dword(_SLEEP_BUTTON, "PromptPasswordOnResume") == 0
+
+
+def _apply_power_disable_throttling_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_POWER_THROTTLE], "ThrottlePolicy")
+    SESSION.set_dword(_POWER_THROTTLE, "PowerThrottlingOff", 1)
+
+
+def _remove_power_disable_throttling_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POWER_THROTTLE, "PowerThrottlingOff")
+
+
+def _detect_power_disable_throttling_policy() -> bool:
+    return SESSION.read_dword(_POWER_THROTTLE, "PowerThrottlingOff") == 1
+
+
+def _apply_power_disable_energy_est(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_ENERGY_EST], "EnergyEst")
+    SESSION.set_dword(_ENERGY_EST, "Enabled", 0)
+
+
+def _remove_power_disable_energy_est(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ENERGY_EST, "Enabled")
+
+
+def _detect_power_disable_energy_est() -> bool:
+    return SESSION.read_dword(_ENERGY_EST, "Enabled") == 0
+
+
+def _apply_power_no_lock_on_resume(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SYS_POWER], "LockOnResume")
+    SESSION.set_dword(_SYS_POWER, "HiberbootEnabled", 0)
+    SESSION.set_dword(_SYS_POWER, "SleepAwayEnabled", 0)
+
+
+def _remove_power_no_lock_on_resume(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SYS_POWER, "HiberbootEnabled")
+    SESSION.delete_value(_SYS_POWER, "SleepAwayEnabled")
+
+
+def _detect_power_no_lock_on_resume() -> bool:
+    return SESSION.read_dword(_SYS_POWER, "HiberbootEnabled") == 0
+
+
+def _apply_power_ac_standby_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SYS_POWER], "ACStandby")
+    SESSION.set_dword(_SYS_POWER, "StandbyReserveGracePeriod", 120)
+
+
+def _remove_power_ac_standby_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SYS_POWER, "StandbyReserveGracePeriod")
+
+
+def _detect_power_ac_standby_timeout() -> bool:
+    return SESSION.read_dword(_SYS_POWER, "StandbyReserveGracePeriod") == 120
+
+
+TWEAKS += [
+    TweakDef(
+        id="power-no-password-on-resume",
+        label="Disable Password Prompt on Sleep Resume",
+        category="Power",
+        apply_fn=_apply_power_disable_sleep_button,
+        remove_fn=_remove_power_disable_sleep_button,
+        detect_fn=_detect_power_disable_sleep_button,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SLEEP_BUTTON],
+        description=(
+            "Disables the policy requiring a password when the system resumes from sleep. "
+            "Improves convenience on personal machines. "
+            "Default: Enabled. Recommended: Disabled on personal workstations."
+        ),
+        tags=["power", "sleep", "password", "resume", "lock"],
+    ),
+    TweakDef(
+        id="power-disable-throttling-policy",
+        label="Disable Power Throttling (Modern Standby)",
+        category="Power",
+        apply_fn=_apply_power_disable_throttling_policy,
+        remove_fn=_remove_power_disable_throttling_policy,
+        detect_fn=_detect_power_disable_throttling_policy,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_POWER_THROTTLE],
+        description=(
+            "Sets PowerThrottlingOff=1 to globally disable power throttling for all processes. "
+            "Prevents Windows from reducing background process CPU clocks. "
+            "Default: Enabled. Recommended: Disabled for performance."
+        ),
+        tags=["power", "throttling", "modern-standby", "performance"],
+    ),
+    TweakDef(
+        id="power-disable-energy-estimation",
+        label="Disable Energy Estimation Engine",
+        category="Power",
+        apply_fn=_apply_power_disable_energy_est,
+        remove_fn=_remove_power_disable_energy_est,
+        detect_fn=_detect_power_disable_energy_est,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_ENERGY_EST],
+        description=(
+            "Disables the Energy Estimation engine that continuously monitors power usage. "
+            "Reduces overhead on desktop systems. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["power", "energy", "estimation", "overhead"],
+    ),
+    TweakDef(
+        id="power-disable-sleep-away",
+        label="Disable Hibernate Boot and Sleep Away",
+        category="Power",
+        apply_fn=_apply_power_no_lock_on_resume,
+        remove_fn=_remove_power_no_lock_on_resume,
+        detect_fn=_detect_power_no_lock_on_resume,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SYS_POWER],
+        description=(
+            "Disables HiberBoot and SleepAway features that use disk-based sleep states. "
+            "Ensures clean cold boots each time. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["power", "hibernate", "hiberboot", "sleep-away", "boot"],
+    ),
+    TweakDef(
+        id="power-standby-reserve-grace",
+        label="Set Standby Reserve Grace Period",
+        category="Power",
+        apply_fn=_apply_power_ac_standby_timeout,
+        remove_fn=_remove_power_ac_standby_timeout,
+        detect_fn=_detect_power_ac_standby_timeout,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SYS_POWER],
+        description=(
+            "Sets the StandbyReserveGracePeriod to 120 seconds, giving more time "
+            "before the system enters deep standby. Prevents premature sleep interruptions. "
+            "Default: System defined. Recommended: 120s."
+        ),
+        tags=["power", "standby", "grace", "sleep", "timeout"],
+    ),
+]

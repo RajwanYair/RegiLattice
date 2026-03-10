@@ -579,3 +579,174 @@ TWEAKS += [
         tags=["widgets", "weather", "taskbar", "hide"],
     ),
 ]
+
+# ── Extra widgets / news controls ─────────────────────────────────────────────
+
+_FEEDS_MACHINE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"
+_TIPS_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+_WIN_TIPS = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+_SEARCH_HIGHLIGHTS = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"
+_START_FEEDS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_disable_machine_feeds(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_FEEDS_MACHINE], "MachineFeeds")
+    SESSION.set_dword(_FEEDS_MACHINE, "EnableFeeds", 0)
+
+
+def _remove_disable_machine_feeds(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_FEEDS_MACHINE, "EnableFeeds")
+
+
+def _detect_disable_machine_feeds() -> bool:
+    return SESSION.read_dword(_FEEDS_MACHINE, "EnableFeeds") == 0
+
+
+def _apply_disable_third_party_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WIN_TIPS], "ThirdPartySuggestions")
+    SESSION.set_dword(_WIN_TIPS, "ThirdPartySuggestionsEnabled", 0)
+
+
+def _remove_disable_third_party_suggestions(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIN_TIPS, "ThirdPartySuggestionsEnabled")
+
+
+def _detect_disable_third_party_suggestions() -> bool:
+    return SESSION.read_dword(_WIN_TIPS, "ThirdPartySuggestionsEnabled") == 0
+
+
+def _apply_disable_search_highlights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SEARCH_HIGHLIGHTS], "SearchHighlights")
+    SESSION.set_dword(_SEARCH_HIGHLIGHTS, "IsDynamicSearchBoxEnabled", 0)
+
+
+def _remove_disable_search_highlights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_HIGHLIGHTS, "IsDynamicSearchBoxEnabled")
+
+
+def _detect_disable_search_highlights() -> bool:
+    return SESSION.read_dword(_SEARCH_HIGHLIGHTS, "IsDynamicSearchBoxEnabled") == 0
+
+
+def _apply_disable_spotlight_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_TIPS_POLICY], "SpotlightSuggestions")
+    SESSION.set_dword(_TIPS_POLICY, "DisableWindowsSpotlightFeatures", 1)
+
+
+def _remove_disable_spotlight_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TIPS_POLICY, "DisableWindowsSpotlightFeatures")
+
+
+def _detect_disable_spotlight_suggestions() -> bool:
+    return SESSION.read_dword(_TIPS_POLICY, "DisableWindowsSpotlightFeatures") == 1
+
+
+def _apply_disable_start_feeds_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_START_FEEDS], "StartFeedsPolicy")
+    SESSION.set_dword(_START_FEEDS, "DisablePersonalization", 1)
+
+
+def _remove_disable_start_feeds_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_START_FEEDS, "DisablePersonalization")
+
+
+def _detect_disable_start_feeds_policy() -> bool:
+    return SESSION.read_dword(_START_FEEDS, "DisablePersonalization") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="widgets-disable-machine-feeds",
+        label="Disable Windows Feeds via Machine Policy",
+        category="Widgets & News",
+        apply_fn=_apply_disable_machine_feeds,
+        remove_fn=_remove_disable_machine_feeds,
+        detect_fn=_detect_disable_machine_feeds,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_FEEDS_MACHINE],
+        description=(
+            "Disables Windows Feeds (News and Interests) via machine-level policy, "
+            "applying to all users on the system. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["widgets", "feeds", "news", "policy", "machine"],
+    ),
+    TweakDef(
+        id="widgets-disable-third-party-suggestions",
+        label="Disable Third-Party App Suggestions",
+        category="Widgets & News",
+        apply_fn=_apply_disable_third_party_suggestions,
+        remove_fn=_remove_disable_third_party_suggestions,
+        detect_fn=_detect_disable_third_party_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WIN_TIPS],
+        description=(
+            "Disables Windows from showing suggestions for third-party apps in search and feeds. "
+            "Reduces promotional content. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["widgets", "suggestions", "third-party", "ads", "privacy"],
+    ),
+    TweakDef(
+        id="widgets-disable-search-highlights",
+        label="Disable Dynamic Search Box Highlights",
+        category="Widgets & News",
+        apply_fn=_apply_disable_search_highlights,
+        remove_fn=_remove_disable_search_highlights,
+        detect_fn=_detect_disable_search_highlights,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_HIGHLIGHTS],
+        description=(
+            "Disables the dynamic search box highlights that show trending topics. "
+            "Removes news and promotional content from the search interface. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["widgets", "search", "highlights", "news", "bing"],
+    ),
+    TweakDef(
+        id="widgets-disable-spotlight-features",
+        label="Disable Windows Spotlight Features (Policy)",
+        category="Widgets & News",
+        apply_fn=_apply_disable_spotlight_suggestions,
+        remove_fn=_remove_disable_spotlight_suggestions,
+        detect_fn=_detect_disable_spotlight_suggestions,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TIPS_POLICY],
+        description=(
+            "Disables all Windows Spotlight features via policy, including lock screen, "
+            "start menu, and Action Center Spotlight content. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["widgets", "spotlight", "lock-screen", "policy", "content"],
+    ),
+    TweakDef(
+        id="widgets-disable-start-personalization",
+        label="Disable Start Menu Personalization / Feeds",
+        category="Widgets & News",
+        apply_fn=_apply_disable_start_feeds_policy,
+        remove_fn=_remove_disable_start_feeds_policy,
+        detect_fn=_detect_disable_start_feeds_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_START_FEEDS],
+        description=(
+            "Disables Start menu personalization that shows recommended apps and ads. "
+            "Keeps the Start menu clean and static. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["widgets", "start", "personalization", "feeds", "privacy"],
+    ),
+]

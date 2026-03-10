@@ -669,3 +669,147 @@ TWEAKS += [
         tags=["display", "cleartype", "font", "gamma", "text"],
     ),
 ]
+
+
+# ── Disable Cursor Shadow ────────────────────────────────────────────────────
+
+_KEY_CURSOR_SHADOW = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_disable_cursor_shadow(*, require_admin: bool = False) -> None:
+    SESSION.log("Display: disable cursor drop shadow")
+    SESSION.backup([_KEY_CURSOR_SHADOW], "CursorShadow")
+    SESSION.set_dword(_KEY_CURSOR_SHADOW, "CursorShadow", 0)
+
+
+def _remove_disable_cursor_shadow(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_KEY_CURSOR_SHADOW, "CursorShadow", 1)
+
+
+def _detect_disable_cursor_shadow() -> bool:
+    return SESSION.read_dword(_KEY_CURSOR_SHADOW, "CursorShadow") == 0
+
+
+# ── Set DWM Blur Behind Intensity ────────────────────────────────────────────
+
+_KEY_DWM_BLUR = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
+
+
+def _apply_reduce_blur_intensity(*, require_admin: bool = False) -> None:
+    SESSION.log("Display: reduce DWM blur-behind intensity to 50%")
+    SESSION.backup([_KEY_DWM_BLUR], "BlurIntensity")
+    SESSION.set_dword(_KEY_DWM_BLUR, "BlurIntensity", 50)
+
+
+def _remove_reduce_blur_intensity(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_KEY_DWM_BLUR, "BlurIntensity")
+
+
+def _detect_reduce_blur_intensity() -> bool:
+    return SESSION.read_dword(_KEY_DWM_BLUR, "BlurIntensity") == 50
+
+
+# ── Disable Screen Saver via Display Settings ─────────────────────────────────
+
+_KEY_SS_DISPLAY = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop"
+
+
+def _apply_disable_screensaver_display(*, require_admin: bool = False) -> None:
+    SESSION.log("Display: disable screen saver via per-user policy")
+    SESSION.backup([_KEY_SS_DISPLAY], "ScreenSaverDisplay")
+    SESSION.set_string(_KEY_SS_DISPLAY, "ScreenSaveActive", "0")
+
+
+def _remove_disable_screensaver_display(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_KEY_SS_DISPLAY, "ScreenSaveActive", "1")
+
+
+def _detect_disable_screensaver_display() -> bool:
+    return SESSION.read_string(_KEY_SS_DISPLAY, "ScreenSaveActive") == "0"
+
+
+# ── Force Desktop Composition (Aero) ─────────────────────────────────────────
+
+_KEY_AERO = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"
+
+
+def _apply_force_aero(*, require_admin: bool = False) -> None:
+    SESSION.log("Display: ensure Desktop Composition (Aero/DWM) is not disabled")
+    SESSION.backup([_KEY_AERO], "ForceAero")
+    SESSION.set_dword(_KEY_AERO, "Composition", 1)
+
+
+def _remove_force_aero(*, require_admin: bool = False) -> None:
+    SESSION.delete_value(_KEY_AERO, "Composition")
+
+
+def _detect_force_aero() -> bool:
+    return SESSION.read_dword(_KEY_AERO, "Composition") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="display-disable-cursor-shadow",
+        label="Disable Cursor Drop Shadow",
+        category="Display",
+        apply_fn=_apply_disable_cursor_shadow,
+        remove_fn=_remove_disable_cursor_shadow,
+        detect_fn=_detect_disable_cursor_shadow,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_CURSOR_SHADOW],
+        description=(
+            "Removes the drop shadow rendered under the mouse cursor. "
+            "Very slightly reduces compositor workload. Default: Enabled."
+        ),
+        tags=["display", "cursor", "shadow", "performance", "rendering"],
+    ),
+    TweakDef(
+        id="display-reduce-blur-intensity",
+        label="Reduce DWM Blur Intensity (50%)",
+        category="Display",
+        apply_fn=_apply_reduce_blur_intensity,
+        remove_fn=_remove_reduce_blur_intensity,
+        detect_fn=_detect_reduce_blur_intensity,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_DWM_BLUR],
+        description=(
+            "Sets the DWM blur-behind intensity to 50. Reduces the visual weight of "
+            "frosted-glass Mica/Acrylic effects. Default: Not set (OS default full blur)."
+        ),
+        tags=["display", "dwm", "blur", "aero", "visual"],
+    ),
+    TweakDef(
+        id="display-disable-screensaver-policy",
+        label="Disable Screen Saver (Per-User Policy)",
+        category="Display",
+        apply_fn=_apply_disable_screensaver_display,
+        remove_fn=_remove_disable_screensaver_display,
+        detect_fn=_detect_disable_screensaver_display,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_SS_DISPLAY],
+        description=(
+            "Disables the screen saver through the per-user control panel policy. "
+            "Prevents screen saver from activating regardless of system setting. Default: Active."
+        ),
+        tags=["display", "screensaver", "policy", "power", "idle"],
+    ),
+    TweakDef(
+        id="display-force-aero-composition",
+        label="Force Desktop Composition (Aero)",
+        category="Display",
+        apply_fn=_apply_force_aero,
+        remove_fn=_remove_force_aero,
+        detect_fn=_detect_force_aero,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_KEY_AERO],
+        description=(
+            "Explicitly enables Desktop Window Manager composition (Aero). "
+            "Ensures DWM is active even on systems where it was manually disabled. Default: Enabled."
+        ),
+        tags=["display", "dwm", "aero", "composition", "visual"],
+    ),
+]

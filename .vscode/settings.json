@@ -1,7 +1,6 @@
 {
   // ── Python ──────────────────────────────────────────────────────────
-  // Note: python.defaultInterpreterPath is intentionally omitted — each
-  // contributor selects their local interpreter via the VS Code status bar.
+  "python.defaultInterpreterPath": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin\\python.exe",
   "python.analysis.autoImportCompletions": true,
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
@@ -65,7 +64,8 @@
   "terminal.integrated.env.windows": {
     "PYTHONDONTWRITEBYTECODE": "1",
     "PYTHONPATH": "${workspaceFolder}",
-    "PYTHONIOENCODING": "utf-8"
+    "PYTHONIOENCODING": "utf-8",
+    "PATH": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin;C:\\Users\\ryair\\AppData\\Local\\Python\\Scripts;${env:PATH}"
   },
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,

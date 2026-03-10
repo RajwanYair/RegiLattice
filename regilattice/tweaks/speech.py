@@ -443,3 +443,182 @@ TWEAKS: list[TweakDef] = [
         tags=["speech", "model", "telemetry", "privacy"],
     ),
 ]
+
+
+# ── Disable Windows Dictation (Win+H) ────────────────────────────────────────
+
+_DICTATION_KEY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\SpeechRecognition"
+
+
+def _apply_disable_dictation_shortcut(*, require_admin: bool = False) -> None:
+    SESSION.log("Speech: disable Windows dictation shortcut (Win+H)")
+    SESSION.backup([_DICTATION_KEY], "DictationShortcut")
+    SESSION.set_dword(_DICTATION_KEY, "Value", 0)
+
+
+def _remove_disable_dictation_shortcut(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_DICTATION_KEY, "Value", 1)
+
+
+def _detect_disable_dictation_shortcut() -> bool:
+    return SESSION.read_dword(_DICTATION_KEY, "Value") == 0
+
+
+# ── Disable Narrator Hints & Coaching ────────────────────────────────────────
+
+
+def _apply_disable_narrator_hints(*, require_admin: bool = False) -> None:
+    SESSION.log("Speech: disable Narrator hints and coaching messages")
+    SESSION.backup([_NARRATOR_NO_ROAM], "NarratorHints")
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "SpeakWindowsHints", 0)
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "DetailedFeedback", 0)
+
+
+def _remove_disable_narrator_hints(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "SpeakWindowsHints", 1)
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "DetailedFeedback", 1)
+
+
+def _detect_disable_narrator_hints() -> bool:
+    return SESSION.read_dword(_NARRATOR_NO_ROAM, "SpeakWindowsHints") == 0
+
+
+# ── Set Narrator Verbosity to Low ─────────────────────────────────────────────
+
+
+def _apply_narrator_verbosity_low(*, require_admin: bool = False) -> None:
+    SESSION.log("Speech: set Narrator verbosity to low (essential info only)")
+    SESSION.backup([_NARRATOR_NO_ROAM], "NarratorVerbosity")
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "VerbosityLevel", 1)  # 0=minimal, 1=some, 2=full
+
+
+def _remove_narrator_verbosity_low(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_NARRATOR_NO_ROAM, "VerbosityLevel", 2)
+
+
+def _detect_narrator_verbosity_low() -> bool:
+    return SESSION.read_dword(_NARRATOR_NO_ROAM, "VerbosityLevel") == 1
+
+
+# ── Disable Cortana Speech Permissions ───────────────────────────────────────
+
+_CORTANA_SPEECH = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\UserSpeechAuthorization"
+
+
+def _apply_disable_cortana_speech(*, require_admin: bool = False) -> None:
+    SESSION.log("Speech: revoke Cortana / assistant speech permissions")
+    SESSION.backup([_CORTANA_SPEECH], "CortanaSpeech")
+    SESSION.set_dword(_CORTANA_SPEECH, "Value", 0)
+
+
+def _remove_disable_cortana_speech(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CORTANA_SPEECH, "Value", 1)
+
+
+def _detect_disable_cortana_speech() -> bool:
+    return SESSION.read_dword(_CORTANA_SPEECH, "Value") == 0
+
+
+# ── Disable Automatic Language Detection ─────────────────────────────────────
+
+_LANG_DETECT = r"HKEY_CURRENT_USER\Control Panel\International\User Profile"
+
+
+def _apply_disable_lang_detect(*, require_admin: bool = False) -> None:
+    SESSION.log("Speech: disable automatic input language detection")
+    SESSION.backup([_LANG_DETECT], "LangDetect")
+    SESSION.set_dword(_LANG_DETECT, "HttpAcceptLanguageOptOut", 1)
+
+
+def _remove_disable_lang_detect(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_LANG_DETECT, "HttpAcceptLanguageOptOut", 0)
+
+
+def _detect_disable_lang_detect() -> bool:
+    return SESSION.read_dword(_LANG_DETECT, "HttpAcceptLanguageOptOut") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="speech-disable-dictation-shortcut",
+        label="Disable Dictation Shortcut (Win+H)",
+        category="Voice Access & Speech",
+        apply_fn=_apply_disable_dictation_shortcut,
+        remove_fn=_remove_disable_dictation_shortcut,
+        detect_fn=_detect_disable_dictation_shortcut,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DICTATION_KEY],
+        description=(
+            "Disables the Win+H keyboard shortcut that launches Windows speech dictation. "
+            "Prevents accidental activation during gaming or video playback. "
+            "Default: Enabled. Recommended: Disabled for non-dictation users."
+        ),
+        tags=["speech", "dictation", "shortcut", "win+h"],
+    ),
+    TweakDef(
+        id="speech-disable-narrator-hints",
+        label="Disable Narrator Hints & Coaching",
+        category="Voice Access & Speech",
+        apply_fn=_apply_disable_narrator_hints,
+        remove_fn=_remove_disable_narrator_hints,
+        detect_fn=_detect_disable_narrator_hints,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR_NO_ROAM],
+        description=(
+            "Turns off Narrator's spoken hints about keyboard shortcuts and coaching messages. "
+            "Reduces verbosity for experienced Narrator users. Default: Enabled."
+        ),
+        tags=["speech", "narrator", "hints", "coaching"],
+    ),
+    TweakDef(
+        id="speech-narrator-verbosity-low",
+        label="Set Narrator Verbosity to Low",
+        category="Voice Access & Speech",
+        apply_fn=_apply_narrator_verbosity_low,
+        remove_fn=_remove_narrator_verbosity_low,
+        detect_fn=_detect_narrator_verbosity_low,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NARRATOR_NO_ROAM],
+        description=(
+            "Sets Narrator to only announce essential information (level 1 of 3). "
+            "Reduces noise for power users of screen readers. Default: Level 2 (some)."
+        ),
+        tags=["speech", "narrator", "verbosity", "accessibility"],
+    ),
+    TweakDef(
+        id="speech-disable-cortana-speech",
+        label="Revoke Cortana Speech Permissions",
+        category="Voice Access & Speech",
+        apply_fn=_apply_disable_cortana_speech,
+        remove_fn=_remove_disable_cortana_speech,
+        detect_fn=_detect_disable_cortana_speech,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CORTANA_SPEECH],
+        description=(
+            "Removes Cortana and assistant speech authorisation. "
+            "Prevents Windows from using speech data for personalisation and assistant features. "
+            "Recommended: Disabled for privacy."
+        ),
+        tags=["speech", "cortana", "assistant", "privacy"],
+    ),
+    TweakDef(
+        id="speech-disable-lang-detect",
+        label="Disable Automatic Language Detection",
+        category="Voice Access & Speech",
+        apply_fn=_apply_disable_lang_detect,
+        remove_fn=_remove_disable_lang_detect,
+        detect_fn=_detect_disable_lang_detect,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_LANG_DETECT],
+        description=(
+            "Opts out of automatic input language detection sent via HTTP Accept-Language headers. "
+            "A minor privacy improvement for users with multiple input languages. Default: Opted in."
+        ),
+        tags=["speech", "language", "detection", "privacy"],
+    ),
+]

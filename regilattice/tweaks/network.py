@@ -868,3 +868,335 @@ TWEAKS += [
         tags=["network", "tcp", "autotune", "window", "restricted"],
     ),
 ]
+
+
+# ── Enable SMB Packet Signing ────────────────────────────────────────────────
+
+_SMB_PARAMS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
+
+
+def _apply_enable_smb_signing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: enable SMB packet signing for all connections")
+    SESSION.backup([_SMB_PARAMS], "SmbSigning")
+    SESSION.set_dword(_SMB_PARAMS, "RequireSecuritySignature", 1)
+    SESSION.set_dword(_SMB_PARAMS, "EnableSecuritySignature", 1)
+
+
+def _remove_enable_smb_signing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SMB_PARAMS, "RequireSecuritySignature", 0)
+    SESSION.set_dword(_SMB_PARAMS, "EnableSecuritySignature", 0)
+
+
+def _detect_enable_smb_signing() -> bool:
+    return SESSION.read_dword(_SMB_PARAMS, "RequireSecuritySignature") == 1
+
+
+# ── Disable Windows Network Location Wizard ──────────────────────────────────
+
+_NET_LOC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff"
+
+
+def _apply_disable_network_wizard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: suppress 'Set Network Location' wizard on new connections")
+    SESSION.backup([_NET_LOC], "NetworkWizard")
+    SESSION.set_dword(_NET_LOC, "(Default)", 0)
+
+
+def _remove_disable_network_wizard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NET_LOC, "(Default)")
+
+
+def _detect_disable_network_wizard() -> bool:
+    return SESSION.key_exists(_NET_LOC)
+
+
+# ── Increase TCP Initial Congestion Window ────────────────────────────────────
+
+_TCPIP_IFACE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
+
+
+def _apply_increase_initial_cwnd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: set TCP initial receive window to 64 KB")
+    SESSION.backup([r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"], "InitialCwnd")
+    SESSION.set_dword(r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TCPInitialRTT", 3)
+
+
+def _remove_increase_initial_cwnd(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TCPInitialRTT")
+
+
+def _detect_increase_initial_cwnd() -> bool:
+    return SESSION.read_dword(r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TCPInitialRTT") == 3
+
+
+# ── Disable Network Access to Named Pipes ────────────────────────────────────
+
+_RESTRICT_ANON = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+
+
+def _apply_restrict_anon_pipes(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: restrict anonymous access to named pipes and shares")
+    SESSION.backup([_RESTRICT_ANON], "RestrictAnon")
+    SESSION.set_dword(_RESTRICT_ANON, "RestrictAnonymous", 1)
+    SESSION.set_dword(_RESTRICT_ANON, "RestrictAnonymousSAM", 1)
+
+
+def _remove_restrict_anon_pipes(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_RESTRICT_ANON, "RestrictAnonymous", 0)
+    SESSION.set_dword(_RESTRICT_ANON, "RestrictAnonymousSAM", 0)
+
+
+def _detect_restrict_anon_pipes() -> bool:
+    return SESSION.read_dword(_RESTRICT_ANON, "RestrictAnonymous") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-enable-smb-signing",
+        label="Require SMB Packet Signing",
+        category="Network",
+        apply_fn=_apply_enable_smb_signing,
+        remove_fn=_remove_enable_smb_signing,
+        detect_fn=_detect_enable_smb_signing,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SMB_PARAMS],
+        description=(
+            "Enforces SMB packet signing on all server connections. "
+            "Protects against NTLM relay and man-in-the-middle attacks on file shares. "
+            "Default: Not required. Recommended: Enabled on corp networks."
+        ),
+        tags=["network", "smb", "signing", "security", "ntlm"],
+    ),
+    TweakDef(
+        id="net-disable-network-wizard",
+        label="Suppress Network Location Wizard",
+        category="Network",
+        apply_fn=_apply_disable_network_wizard,
+        remove_fn=_remove_disable_network_wizard,
+        detect_fn=_detect_disable_network_wizard,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NET_LOC],
+        description=(
+            "Suppresses the 'Set Network Location' dialog when connecting to a new network. "
+            "Useful on headless/server machines. Default: Enabled (dialog appears)."
+        ),
+        tags=["network", "wizard", "dialog", "location", "server"],
+    ),
+    TweakDef(
+        id="net-tcp-initial-rtt",
+        label="Reduce TCP Initial RTT Estimate",
+        category="Network",
+        apply_fn=_apply_increase_initial_cwnd,
+        remove_fn=_remove_increase_initial_cwnd,
+        detect_fn=_detect_increase_initial_cwnd,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+        description=(
+            "Sets TCPInitialRTT to 3 seconds, reducing the initial retransmission timeout "
+            "to speed up TCP connection setup on fast local networks. Default: 3 (Windows default varies)."
+        ),
+        tags=["network", "tcp", "rtt", "latency", "performance"],
+    ),
+    TweakDef(
+        id="net-restrict-anonymous",
+        label="Restrict Anonymous Network Access",
+        category="Network",
+        apply_fn=_apply_restrict_anon_pipes,
+        remove_fn=_remove_restrict_anon_pipes,
+        detect_fn=_detect_restrict_anon_pipes,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RESTRICT_ANON],
+        description=(
+            "Prevents anonymous users from enumerating SAM accounts, shares, and named pipes. "
+            "Security baseline hardening. Default: Off. Recommended: Enabled."
+        ),
+        tags=["network", "anonymous", "sam", "security", "hardening"],
+    ),
+]
+
+# ── Extra network controls ───────────────────────────────────────────────────
+
+_NET_KEEP = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
+_SMB2_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation"
+_WIFI_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\Local"
+_TCP_CHIMNEY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
+_NET_DEV = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"
+
+
+def _apply_net_increase_keepalive_time(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NET_KEEP], "KeepAliveTime")
+    SESSION.set_dword(_NET_KEEP, "KeepAliveTime", 300000)  # 5 minutes
+
+
+def _remove_net_increase_keepalive_time(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NET_KEEP, "KeepAliveTime")
+
+
+def _detect_net_increase_keepalive_time() -> bool:
+    return SESSION.read_dword(_NET_KEEP, "KeepAliveTime") == 300000
+
+
+def _apply_net_enable_smb2_signing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SMB2_POLICY], "SMB2Signing")
+    SESSION.set_dword(_SMB2_POLICY, "RequireSecuritySignature", 1)
+
+
+def _remove_net_enable_smb2_signing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SMB2_POLICY, "RequireSecuritySignature")
+
+
+def _detect_net_enable_smb2_signing() -> bool:
+    return SESSION.read_dword(_SMB2_POLICY, "RequireSecuritySignature") == 1
+
+
+def _apply_net_disable_wifi_pnp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WIFI_POLICY], "WifiPnP")
+    SESSION.set_dword(_WIFI_POLICY, "fBlockNonDomain", 1)
+
+
+def _remove_net_disable_wifi_pnp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WIFI_POLICY, "fBlockNonDomain")
+
+
+def _detect_net_disable_wifi_pnp() -> bool:
+    return SESSION.read_dword(_WIFI_POLICY, "fBlockNonDomain") == 1
+
+
+def _apply_net_disable_tcp_syn_attack(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_TCP_CHIMNEY], "SYNAttack")
+    SESSION.set_dword(_TCP_CHIMNEY, "TcpMaxHalfOpen", 100)
+    SESSION.set_dword(_TCP_CHIMNEY, "TcpMaxHalfOpenRetried", 80)
+    SESSION.set_dword(_TCP_CHIMNEY, "SynAttackProtect", 1)
+
+
+def _remove_net_disable_tcp_syn_attack(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCP_CHIMNEY, "TcpMaxHalfOpen")
+    SESSION.delete_value(_TCP_CHIMNEY, "TcpMaxHalfOpenRetried")
+    SESSION.delete_value(_TCP_CHIMNEY, "SynAttackProtect")
+
+
+def _detect_net_disable_tcp_syn_attack() -> bool:
+    return SESSION.read_dword(_TCP_CHIMNEY, "SynAttackProtect") == 1
+
+
+def _apply_net_enable_tcp_timestamps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NET_DEV], "TCPTimestamps")
+    SESSION.set_dword(_NET_DEV, "Tcp1323Opts", 1)
+
+
+def _remove_net_enable_tcp_timestamps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NET_DEV, "Tcp1323Opts")
+
+
+def _detect_net_enable_tcp_timestamps() -> bool:
+    return SESSION.read_dword(_NET_DEV, "Tcp1323Opts") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-tcp-keepalive-5min",
+        label="Set TCP Keep-Alive Time to 5 Minutes",
+        category="Network",
+        apply_fn=_apply_net_increase_keepalive_time,
+        remove_fn=_remove_net_increase_keepalive_time,
+        detect_fn=_detect_net_increase_keepalive_time,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NET_KEEP],
+        description=(
+            "Sets TCP keep-alive interval to 300,000ms (5 minutes) instead of the default 2 hours. "
+            "Helps detect dead connections faster in long-lived TCP sessions. "
+            "Default: 7,200,000ms. Recommended: 300,000ms."
+        ),
+        tags=["network", "tcp", "keepalive", "connection", "timeout"],
+    ),
+    TweakDef(
+        id="net-smb2-require-signing",
+        label="Require SMB2/3 Packet Signing (Workstation)",
+        category="Network",
+        apply_fn=_apply_net_enable_smb2_signing,
+        remove_fn=_remove_net_enable_smb2_signing,
+        detect_fn=_detect_net_enable_smb2_signing,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SMB2_POLICY],
+        description=(
+            "Requires SMB packet signing on the workstation side for all SMB2/3 connections. "
+            "Prevents SMB relay attacks. Default: Not required. Recommended: Required."
+        ),
+        tags=["network", "smb", "signing", "security", "relay"],
+    ),
+    TweakDef(
+        id="net-block-non-domain-wifi",
+        label="Block Non-Domain Wi-Fi Networks (Managed)",
+        category="Network",
+        apply_fn=_apply_net_disable_wifi_pnp,
+        remove_fn=_remove_net_disable_wifi_pnp,
+        detect_fn=_detect_net_disable_wifi_pnp,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WIFI_POLICY],
+        description=(
+            "Prevents Windows from connecting to non-domain Wi-Fi networks. "
+            "Enforces network boundary for domain-joined machines. "
+            "Default: Allowed. Recommended: Blocked on managed corporate devices."
+        ),
+        tags=["network", "wifi", "domain", "policy", "corporate"],
+    ),
+    TweakDef(
+        id="net-tcp-syn-attack-protection",
+        label="Enable TCP SYN Attack Protection",
+        category="Network",
+        apply_fn=_apply_net_disable_tcp_syn_attack,
+        remove_fn=_remove_net_disable_tcp_syn_attack,
+        detect_fn=_detect_net_disable_tcp_syn_attack,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TCP_CHIMNEY],
+        description=(
+            "Enables SYN attack protection with conservative half-open connection limits. "
+            "Mitigates SYN flood denial-of-service attacks on exposed systems. "
+            "Default: Disabled. Recommended: Enabled on exposed systems."
+        ),
+        tags=["network", "tcp", "syn", "attack", "security", "dos"],
+    ),
+    TweakDef(
+        id="net-tcp-timestamps",
+        label="Enable TCP Timestamps and Window Scaling",
+        category="Network",
+        apply_fn=_apply_net_enable_tcp_timestamps,
+        remove_fn=_remove_net_enable_tcp_timestamps,
+        detect_fn=_detect_net_enable_tcp_timestamps,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_NET_DEV],
+        description=(
+            "Enables TCP timestamps (RFC 1323) for more accurate RTT calculations. "
+            "Improves TCP performance on high-bandwidth connections. "
+            "Default: Not set. Recommended: Enabled."
+        ),
+        tags=["network", "tcp", "timestamps", "rfc1323", "performance"],
+    ),
+]

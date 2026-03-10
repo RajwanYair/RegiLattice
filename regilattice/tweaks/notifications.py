@@ -582,3 +582,177 @@ TWEAKS += [
         tags=["notifications", "banners", "toast", "policy"],
     ),
 ]
+
+# ── Extra notification controls ───────────────────────────────────────────────
+
+_FOCUS_ASSIST = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store"
+    r"\DefaultAccount\Current\default$windows.data.notifications.quiethourssettings"
+    r"\windows.data.notifications.quiethourssettings"
+)
+_NOTIF_SECURITY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance"
+_NOTIF_SYNC = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.AutoConnect"
+_NOTIF_ACCOUNT = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected"
+_NOTIF_TIPS_LOCK = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+
+
+def _apply_notif_disable_security_center(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NOTIF_SECURITY], "NotifSecCenter")
+    SESSION.set_dword(_NOTIF_SECURITY, "Enabled", 0)
+
+
+def _remove_notif_disable_security_center(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NOTIF_SECURITY, "Enabled")
+
+
+def _detect_notif_disable_security_center() -> bool:
+    return SESSION.read_dword(_NOTIF_SECURITY, "Enabled") == 0
+
+
+def _apply_notif_disable_autoconnect(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NOTIF_SYNC], "NotifAutoConnect")
+    SESSION.set_dword(_NOTIF_SYNC, "Enabled", 0)
+
+
+def _remove_notif_disable_autoconnect(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NOTIF_SYNC, "Enabled")
+
+
+def _detect_notif_disable_autoconnect() -> bool:
+    return SESSION.read_dword(_NOTIF_SYNC, "Enabled") == 0
+
+
+def _apply_notif_disable_account_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NOTIF_ACCOUNT], "NotifAccount")
+    SESSION.set_dword(_NOTIF_ACCOUNT, "Enabled", 0)
+
+
+def _remove_notif_disable_account_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_NOTIF_ACCOUNT, "Enabled")
+
+
+def _detect_notif_disable_account_notif() -> bool:
+    return SESSION.read_dword(_NOTIF_ACCOUNT, "Enabled") == 0
+
+
+def _apply_notif_disable_tips_lock(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NOTIF_TIPS_LOCK], "NotifTipsLock")
+    SESSION.set_dword(_NOTIF_TIPS_LOCK, "SoftLandingEnabled", 0)
+
+
+def _remove_notif_disable_tips_lock(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_NOTIF_TIPS_LOCK, "SoftLandingEnabled", 1)
+
+
+def _detect_notif_disable_tips_lock() -> bool:
+    return SESSION.read_dword(_NOTIF_TIPS_LOCK, "SoftLandingEnabled") == 0
+
+
+def _apply_notif_disable_roaming_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_PUSH_KEY], "NotifRoaming")
+    SESSION.set_dword(_PUSH_KEY, "NoToastApplicationNotificationOnLockScreen", 1)
+
+
+def _remove_notif_disable_roaming_notif(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_PUSH_KEY, "NoToastApplicationNotificationOnLockScreen")
+
+
+def _detect_notif_disable_roaming_notif() -> bool:
+    return SESSION.read_dword(_PUSH_KEY, "NoToastApplicationNotificationOnLockScreen") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="notif-disable-security-center",
+        label="Disable Windows Security Center Notifications",
+        category="Notifications",
+        apply_fn=_apply_notif_disable_security_center,
+        remove_fn=_remove_notif_disable_security_center,
+        detect_fn=_detect_notif_disable_security_center,
+        needs_admin=False,
+        corp_safe=False,
+        registry_keys=[_NOTIF_SECURITY],
+        description=(
+            "Disables toast notifications from the Windows Security and Maintenance center. "
+            "Reduces interruptions from security alerts. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["notifications", "security", "maintenance", "center"],
+    ),
+    TweakDef(
+        id="notif-disable-autoconnect",
+        label="Disable Auto Connect Network Notifications",
+        category="Notifications",
+        apply_fn=_apply_notif_disable_autoconnect,
+        remove_fn=_remove_notif_disable_autoconnect,
+        detect_fn=_detect_notif_disable_autoconnect,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_SYNC],
+        description=(
+            "Disables notifications from the AutoConnect (hotspot) system toast. "
+            "Reduces Wi-Fi connection prompt interruptions. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["notifications", "network", "autoconnect", "wifi"],
+    ),
+    TweakDef(
+        id="notif-disable-account-notif",
+        label="Disable Microsoft Account Connected Notifications",
+        category="Notifications",
+        apply_fn=_apply_notif_disable_account_notif,
+        remove_fn=_remove_notif_disable_account_notif,
+        detect_fn=_detect_notif_disable_account_notif,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_ACCOUNT],
+        description=(
+            "Disables notification toasts from Microsoft account connected services. "
+            "Stops account sync prompts and MSA-linked notifications. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["notifications", "account", "microsoft", "msa"],
+    ),
+    TweakDef(
+        id="notif-disable-tips-soft-landing",
+        label="Disable Windows Tips (Soft Landing) Notifications",
+        category="Notifications",
+        apply_fn=_apply_notif_disable_tips_lock,
+        remove_fn=_remove_notif_disable_tips_lock,
+        detect_fn=_detect_notif_disable_tips_lock,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NOTIF_TIPS_LOCK],
+        description=(
+            "Disables SoftLanding tips notifications that appear after Windows updates. "
+            "Stops 'What's new in Windows' promotional pop-ups. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["notifications", "tips", "soft-landing", "content-delivery"],
+    ),
+    TweakDef(
+        id="notif-disable-lock-screen-toasts",
+        label="Disable Notifications on Lock Screen",
+        category="Notifications",
+        apply_fn=_apply_notif_disable_roaming_notif,
+        remove_fn=_remove_notif_disable_roaming_notif,
+        detect_fn=_detect_notif_disable_roaming_notif,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PUSH_KEY],
+        description=(
+            "Prevents app toast notifications from displaying on the lock screen. "
+            "Protects notification content from shoulder-surfers. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["notifications", "lock-screen", "privacy", "toast"],
+    ),
+]

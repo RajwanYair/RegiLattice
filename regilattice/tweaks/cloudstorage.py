@@ -235,7 +235,9 @@ def _apply_disable_box_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_box_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: Box auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring Box Drive auto-start")
+    SESSION.set_expand_string(_RUN_CU, "Box", r'"%PROGRAMFILES%\Box\Box\Box.exe" /autorun')
+    SESSION.set_expand_string(_RUN_CU, "BoxDrive", r'"%PROGRAMFILES%\Box\Box\Box.exe" /autorun')
 
 
 def _detect_disable_box_autostart() -> bool:
@@ -254,7 +256,8 @@ def _apply_disable_mega_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_mega_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: MEGA auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring MEGA auto-start")
+    SESSION.set_expand_string(_RUN_CU, "MEGAsync", r'"%LOCALAPPDATA%\MEGAsync\MEGAsync.exe" /nointeraction')
 
 
 def _detect_disable_mega_autostart() -> bool:
@@ -273,7 +276,8 @@ def _apply_disable_pcloud_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_pcloud_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: pCloud auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring pCloud auto-start")
+    SESSION.set_expand_string(_RUN_CU, "pCloud Drive", r'"%LOCALAPPDATA%\pCloud Drive\pCloud.exe"')
 
 
 def _detect_disable_pcloud_autostart() -> bool:
@@ -292,7 +296,8 @@ def _apply_disable_nextcloud_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_nextcloud_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: Nextcloud auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring Nextcloud auto-start")
+    SESSION.set_expand_string(_RUN_CU, "Nextcloud", r'"%PROGRAMFILES%\Nextcloud\nextcloud.exe" --background')
 
 
 def _detect_disable_nextcloud_autostart() -> bool:
@@ -311,7 +316,8 @@ def _apply_disable_tresorit_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_tresorit_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: Tresorit auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring Tresorit auto-start")
+    SESSION.set_expand_string(_RUN_CU, "Tresorit", r'"%LOCALAPPDATA%\Programs\Tresorit\Tresorit.exe"')
 
 
 def _detect_disable_tresorit_autostart() -> bool:
@@ -330,7 +336,8 @@ def _apply_disable_synccom_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_synccom_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: Sync.com auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring Sync.com auto-start")
+    SESSION.set_expand_string(_RUN_CU, "Sync.com", r'"%PROGRAMFILES%\Sync.com\Sync\Sync.exe" /AUTORUN')
 
 
 def _detect_disable_synccom_autostart() -> bool:
@@ -349,7 +356,8 @@ def _apply_disable_spideroak_autostart(*, require_admin: bool = False) -> None:
 
 def _remove_disable_spideroak_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: SpiderOak auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring SpiderOak ONE auto-start")
+    SESSION.set_expand_string(_RUN_CU, "SpiderOakONE", r'"%PROGRAMFILES%\SpiderOakONE\SpiderOakONE.exe" /background')
 
 
 def _detect_disable_spideroak_autostart() -> bool:
@@ -368,7 +376,9 @@ def _apply_disable_amazondrive_autostart(*, require_admin: bool = False) -> None
 
 def _remove_disable_amazondrive_autostart(*, require_admin: bool = False) -> None:
     assert_admin(require_admin)
-    SESSION.log("Cloud Storage: Amazon Drive auto-start => manual re-enable needed")
+    SESSION.log("Cloud Storage: restoring Amazon Drive auto-start")
+    # Restore the typical Amazon Drive startup entry (uses EXPAND_SZ for %LOCALAPPDATA%)
+    SESSION.set_expand_string(_RUN_CU, "Amazon Drive", r'"%LOCALAPPDATA%\Amazon Drive\Amazon Drive.exe"')
 
 
 def _detect_disable_amazondrive_autostart() -> bool:

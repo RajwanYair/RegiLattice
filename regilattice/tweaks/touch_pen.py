@@ -431,3 +431,174 @@ TWEAKS: list[TweakDef] = [
         tags=["touch", "pen", "flicks", "gestures"],
     ),
 ]
+
+
+# ── Disable Touchpad Two-Finger Tap (Right-Click) ────────────────────────────
+
+
+def _apply_disable_2finger_tap(*, require_admin: bool = False) -> None:
+    SESSION.log("Touch & Pen: disable two-finger tap right-click gesture")
+    SESSION.backup([_TOUCHPAD], "TwoFingerTap")
+    SESSION.set_dword(_TOUCHPAD, "TwoFingerTapEnabled", 0)
+
+
+def _remove_disable_2finger_tap(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCHPAD, "TwoFingerTapEnabled", 1)
+
+
+def _detect_disable_2finger_tap() -> bool:
+    return SESSION.read_dword(_TOUCHPAD, "TwoFingerTapEnabled") == 0
+
+
+# ── Disable Touchpad Zoom Gesture ────────────────────────────────────────────
+
+
+def _apply_disable_pinch_zoom(*, require_admin: bool = False) -> None:
+    SESSION.log("Touch & Pen: disable touchpad pinch-to-zoom gesture")
+    SESSION.backup([_TOUCHPAD], "ZoomEnabled")
+    SESSION.set_dword(_TOUCHPAD, "ZoomEnabled", 0)
+
+
+def _remove_disable_pinch_zoom(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCHPAD, "ZoomEnabled", 1)
+
+
+def _detect_disable_pinch_zoom() -> bool:
+    return SESSION.read_dword(_TOUCHPAD, "ZoomEnabled") == 0
+
+
+# ── Enable Reverse Scrolling (Natural Scroll) ────────────────────────────────
+
+
+def _apply_reverse_scroll(*, require_admin: bool = False) -> None:
+    SESSION.log("Touch & Pen: enable reverse (natural) touchpad scrolling")
+    SESSION.backup([_TOUCHPAD], "ScrollDirection")
+    SESSION.set_dword(_TOUCHPAD, "ScrollDirection", 0)  # 0 = reversed (natural), 1 = traditional
+
+
+def _remove_reverse_scroll(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCHPAD, "ScrollDirection", 1)
+
+
+def _detect_reverse_scroll() -> bool:
+    return SESSION.read_dword(_TOUCHPAD, "ScrollDirection") == 0
+
+
+# ── Set Touchpad Sensitivity to High ─────────────────────────────────────────
+
+
+def _apply_touchpad_sensitivity_high(*, require_admin: bool = False) -> None:
+    SESSION.log("Touch & Pen: set touchpad sensitivity to high")
+    SESSION.backup([_TOUCHPAD], "TouchpadSensitivity")
+    SESSION.set_dword(_TOUCHPAD, "AAPThreshold", 0)  # 0=most sensitive
+
+
+def _remove_touchpad_sensitivity_high(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_TOUCHPAD, "AAPThreshold", 2)  # default
+
+
+def _detect_touchpad_sensitivity_high() -> bool:
+    return SESSION.read_dword(_TOUCHPAD, "AAPThreshold") == 0
+
+
+# ── Disable Palm Rejection ────────────────────────────────────────────────────
+
+_PALM = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"
+
+
+def _apply_disable_palm_rejection(*, require_admin: bool = False) -> None:
+    SESSION.log("Touch & Pen: disable palm rejection on touchpad")
+    SESSION.backup([_PALM], "PalmRejection")
+    SESSION.set_dword(_PALM, "LeaveOnEnabled", 0)  # 0 = disable palm+leave detection
+
+
+def _remove_disable_palm_rejection(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PALM, "LeaveOnEnabled", 1)
+
+
+def _detect_disable_palm_rejection() -> bool:
+    return SESSION.read_dword(_PALM, "LeaveOnEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="touch-disable-2finger-tap",
+        label="Disable Two-Finger Tap (Right-Click)",
+        category="Touch & Pen",
+        apply_fn=_apply_disable_2finger_tap,
+        remove_fn=_remove_disable_2finger_tap,
+        detect_fn=_detect_disable_2finger_tap,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCHPAD],
+        description=(
+            "Disables two-finger tap as a right-click gesture on precision touchpads. "
+            "Prevents accidental right-click menus while typing. Default: Enabled."
+        ),
+        tags=["touch", "touchpad", "two-finger", "right-click", "gesture"],
+    ),
+    TweakDef(
+        id="touch-disable-pinch-zoom",
+        label="Disable Touchpad Pinch-to-Zoom",
+        category="Touch & Pen",
+        apply_fn=_apply_disable_pinch_zoom,
+        remove_fn=_remove_disable_pinch_zoom,
+        detect_fn=_detect_disable_pinch_zoom,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCHPAD],
+        description=(
+            "Disables the two-finger pinch-to-zoom gesture on precision touchpads. "
+            "Prevents accidental zoom changes. Default: Enabled."
+        ),
+        tags=["touch", "touchpad", "pinch", "zoom", "gesture"],
+    ),
+    TweakDef(
+        id="touch-reverse-scroll",
+        label="Enable Reverse (Natural) Scrolling",
+        category="Touch & Pen",
+        apply_fn=_apply_reverse_scroll,
+        remove_fn=_remove_reverse_scroll,
+        detect_fn=_detect_reverse_scroll,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCHPAD],
+        description=(
+            "Reverses touchpad scroll direction so content moves in the same direction as your fingers "
+            "(natural/Mac-style scrolling). Default: Traditional."
+        ),
+        tags=["touch", "touchpad", "scroll", "direction", "natural"],
+    ),
+    TweakDef(
+        id="touch-sensitivity-high",
+        label="Set Touchpad Sensitivity to High",
+        category="Touch & Pen",
+        apply_fn=_apply_touchpad_sensitivity_high,
+        remove_fn=_remove_touchpad_sensitivity_high,
+        detect_fn=_detect_touchpad_sensitivity_high,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_TOUCHPAD],
+        description=(
+            "Sets precision touchpad sensitivity to maximum (AAPThreshold=0). "
+            "Registers even the lightest touch. Default: Medium (2). Recommended: High for light-touch users."
+        ),
+        tags=["touch", "touchpad", "sensitivity", "threshold"],
+    ),
+    TweakDef(
+        id="touch-disable-palm-rejection",
+        label="Disable Touchpad Palm Rejection",
+        category="Touch & Pen",
+        apply_fn=_apply_disable_palm_rejection,
+        remove_fn=_remove_disable_palm_rejection,
+        detect_fn=_detect_disable_palm_rejection,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PALM],
+        description=(
+            "Disables touchpad palm rejection and cursor-leave detection. "
+            "Useful when palm rejection causes missed inputs. Default: Enabled."
+        ),
+        tags=["touch", "touchpad", "palm", "rejection"],
+    ),
+]

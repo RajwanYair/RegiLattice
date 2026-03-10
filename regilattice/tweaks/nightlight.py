@@ -408,3 +408,229 @@ TWEAKS: list[TweakDef] = [
         tags=["night-light", "hdr", "dwm", "compositor", "policy"],
     ),
 ]
+
+
+# ── Disable ClearType ────────────────────────────────────────────────────────
+
+_CLEARTYPE = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_disable_cleartype(*, require_admin: bool = False) -> None:
+    SESSION.log("Night Light: disable ClearType font smoothing")
+    SESSION.backup([_CLEARTYPE], "ClearType")
+    SESSION.set_dword(_CLEARTYPE, "FontSmoothing", 0)
+
+
+def _remove_disable_cleartype(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CLEARTYPE, "FontSmoothing", 2)  # 2 = ClearType
+
+
+def _detect_disable_cleartype() -> bool:
+    return SESSION.read_dword(_CLEARTYPE, "FontSmoothing") == 0
+
+
+# ── Set Display Refresh Rate Policy ─────────────────────────────────────────
+
+_REFRESH_POLICY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"
+
+
+def _apply_force_60hz_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Night Light: disable dynamic refresh rate switching")
+    SESSION.backup([_REFRESH_POLICY], "DynamicRefresh")
+    SESSION.set_dword(_REFRESH_POLICY, "DpiMapIommuContiguous", 0)
+
+
+def _remove_force_60hz_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_REFRESH_POLICY, "DpiMapIommuContiguous")
+
+
+def _detect_force_60hz_policy() -> bool:
+    return SESSION.read_dword(_REFRESH_POLICY, "DpiMapIommuContiguous") == 0
+
+
+# ── Enable Vivid Colour Mode ─────────────────────────────────────────────────
+
+_VIVID_VIDEO = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"
+
+
+def _apply_enable_vivid_colour(*, require_admin: bool = False) -> None:
+    SESSION.log("Night Light: enable vivid display colour mode")
+    SESSION.backup([_VIVID_VIDEO], "VividColour")
+    SESSION.set_dword(_VIVID_VIDEO, "UseHDR", 2)  # 2 = Vivid
+
+
+def _remove_enable_vivid_colour(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_VIVID_VIDEO, "UseHDR", 0)
+
+
+def _detect_enable_vivid_colour() -> bool:
+    return SESSION.read_dword(_VIVID_VIDEO, "UseHDR") == 2
+
+
+# ── Disable Night Light Scheduling ──────────────────────────────────────────
+
+_NIGHT_SCHEDULE = (
+    r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store"
+    r"\DefaultAccount\Current\default$windows.data.bluelightreduction.settings"
+    r"\windows.data.bluelightreduction.settings"
+)
+
+
+def _apply_disable_night_schedule(*, require_admin: bool = False) -> None:
+    SESSION.log("Night Light: disable automatic night light schedule")
+    SESSION.backup([_NIGHT_SCHEDULE], "NightSchedule")
+    SESSION.set_dword(_NIGHT_SCHEDULE, "IsEnabled", 0)
+
+
+def _remove_disable_night_schedule(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_NIGHT_SCHEDULE, "IsEnabled", 1)
+
+
+def _detect_disable_night_schedule() -> bool:
+    return SESSION.read_dword(_NIGHT_SCHEDULE, "IsEnabled") == 0
+
+
+# ── Disable ICC Colour Profile Auto-Apply ────────────────────────────────────
+
+_ICC_AUTO = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM"
+
+
+def _apply_disable_icc_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Night Light: disable automatic ICC colour profile application")
+    SESSION.backup([_ICC_AUTO], "IccAuto")
+    SESSION.set_dword(_ICC_AUTO, "ICMSystemActivationEnabled", 0)
+
+
+def _remove_disable_icc_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ICC_AUTO, "ICMSystemActivationEnabled", 1)
+
+
+def _detect_disable_icc_auto() -> bool:
+    return SESSION.read_dword(_ICC_AUTO, "ICMSystemActivationEnabled") == 0
+
+
+# ── Disable GPU Scheduler (Hardware HWSCH) ───────────────────────────────────
+
+_HWSCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"
+
+
+def _apply_disable_hwsch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Night Light: disable Hardware GPU Scheduler (HWSCH)")
+    SESSION.backup([_HWSCH], "HWSCH")
+    SESSION.set_dword(_HWSCH, "HwSchMode", 1)  # 1 = disabled; 2 = enabled
+
+
+def _remove_disable_hwsch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_HWSCH, "HwSchMode", 2)
+
+
+def _detect_disable_hwsch() -> bool:
+    return SESSION.read_dword(_HWSCH, "HwSchMode") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="night-disable-cleartype",
+        label="Disable ClearType Font Smoothing",
+        category="Night Light & Display",
+        apply_fn=_apply_disable_cleartype,
+        remove_fn=_remove_disable_cleartype,
+        detect_fn=_detect_disable_cleartype,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLEARTYPE],
+        description=(
+            "Disables ClearType/anti-aliased font rendering. Reverts to standard aliased fonts. "
+            "Some users prefer sharper pixel-perfect text. Default: ClearType enabled (value 2)."
+        ),
+        tags=["night-light", "display", "cleartype", "fonts", "rendering"],
+    ),
+    TweakDef(
+        id="night-disable-dynamic-refresh",
+        label="Disable Dynamic Refresh Rate Switching",
+        category="Night Light & Display",
+        apply_fn=_apply_force_60hz_policy,
+        remove_fn=_remove_force_60hz_policy,
+        detect_fn=_detect_force_60hz_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_REFRESH_POLICY],
+        description=(
+            "Disables the GraphicsDrivers dynamic refresh rate switch. "
+            "Forces a static refresh rate, which can prevent flicker on some displays. "
+            "Default: Dynamic switching enabled."
+        ),
+        tags=["night-light", "display", "refresh-rate", "gpu", "graphics"],
+    ),
+    TweakDef(
+        id="night-enable-vivid-colour",
+        label="Enable Vivid Display Colour Mode",
+        category="Night Light & Display",
+        apply_fn=_apply_enable_vivid_colour,
+        remove_fn=_remove_enable_vivid_colour,
+        detect_fn=_detect_enable_vivid_colour,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VIVID_VIDEO],
+        description=(
+            "Sets the video colour profile to Vivid mode (UseHDR=2). "
+            "Increases saturation for SDR content on HDR displays. Default: Off."
+        ),
+        tags=["night-light", "hdr", "vivid", "colour", "display"],
+    ),
+    TweakDef(
+        id="night-disable-schedule",
+        label="Disable Night Light Auto Schedule",
+        category="Night Light & Display",
+        apply_fn=_apply_disable_night_schedule,
+        remove_fn=_remove_disable_night_schedule,
+        detect_fn=_detect_disable_night_schedule,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_NIGHT_SCHEDULE],
+        description=(
+            "Turns off the Night Light automatic schedule so it does not enable at sunset/sunrise. "
+            "Useful when Night Light was enabled but scheduling is unwanted. Default: Varies."
+        ),
+        tags=["night-light", "schedule", "display", "blue-light"],
+    ),
+    TweakDef(
+        id="night-disable-icc-auto",
+        label="Disable Auto ICC Colour Profile",
+        category="Night Light & Display",
+        apply_fn=_apply_disable_icc_auto,
+        remove_fn=_remove_disable_icc_auto,
+        detect_fn=_detect_disable_icc_auto,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_ICC_AUTO],
+        description=(
+            "Disables automatic ICC colour profile activation by Windows Colour Management. "
+            "Useful when custom calibration profiles cause unintended colour shifts. Default: Enabled."
+        ),
+        tags=["night-light", "icc", "colour", "calibration", "display"],
+    ),
+    TweakDef(
+        id="night-disable-hwsch",
+        label="Disable Hardware GPU Scheduler",
+        category="Night Light & Display",
+        apply_fn=_apply_disable_hwsch,
+        remove_fn=_remove_disable_hwsch,
+        detect_fn=_detect_disable_hwsch,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_HWSCH],
+        description=(
+            "Disables the Hardware-Accelerated GPU Scheduler (HWSCH). "
+            "Can resolve flickering or latency issues on some GPU models. "
+            "Default: Enabled (HwSchMode=2). Recommended: Disable if experiencing display artefacts."
+        ),
+        tags=["night-light", "gpu", "scheduler", "hwsch", "latency", "display"],
+    ),
+]
