@@ -995,3 +995,191 @@ TWEAKS += [
         tags=["performance", "hung-app", "timeout", "responsiveness"],
     ),
 ]
+
+
+# ── Additional Performance Tweaks ─────────────────────────────────────────────
+
+_EXPLORER_ADV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"
+_POLICIES_EXP_CU = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+
+
+def _apply_perf_disable_font_smoothing(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable font smoothing (ClearType)")
+    SESSION.backup([_DESKTOP_KEY], "FontSmoothing")
+    SESSION.set_string(_DESKTOP_KEY, "FontSmoothing", "0")
+
+
+def _remove_perf_disable_font_smoothing(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_DESKTOP_KEY, "FontSmoothing", "2")
+
+
+def _detect_perf_disable_font_smoothing() -> bool:
+    return SESSION.read_string(_DESKTOP_KEY, "FontSmoothing") == "0"
+
+
+def _apply_perf_always_unload_dll(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: always unload DLLs from memory on process exit")
+    SESSION.backup([_EXPLORER_ADV], "AlwaysUnloadDLL")
+    SESSION.set_dword(_EXPLORER_ADV, "AlwaysUnloadDLL", 1)
+
+
+def _remove_perf_always_unload_dll(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_ADV, "AlwaysUnloadDLL")
+
+
+def _detect_perf_always_unload_dll() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADV, "AlwaysUnloadDLL") == 1
+
+
+def _apply_perf_increase_icon_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: increase Explorer icon cache size to 4096")
+    SESSION.backup([_EXPLORER_ADV], "MaxIconCache")
+    SESSION.set_string(_EXPLORER_ADV, "Max Cached Icons", "4096")
+
+
+def _remove_perf_increase_icon_cache(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_ADV, "Max Cached Icons")
+
+
+def _detect_perf_increase_icon_cache() -> bool:
+    val = SESSION.read_string(_EXPLORER_ADV, "Max Cached Icons")
+    return val is not None and int(val) >= 2048
+
+
+def _apply_perf_clear_recent_docs_exit(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: clear recent documents on logoff")
+    SESSION.backup([_POLICIES_EXP_CU], "ClearRecentDocs")
+    SESSION.set_dword(_POLICIES_EXP_CU, "ClearRecentDocsOnExit", 1)
+
+
+def _remove_perf_clear_recent_docs_exit(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POLICIES_EXP_CU, "ClearRecentDocsOnExit")
+
+
+def _detect_perf_clear_recent_docs_exit() -> bool:
+    return SESSION.read_dword(_POLICIES_EXP_CU, "ClearRecentDocsOnExit") == 1
+
+
+_EXPLORER_ADVANCED = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+
+
+def _apply_perf_disable_thumbnail_net(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Performance: disable thumbnails on network folders")
+    SESSION.backup([_EXPLORER_ADVANCED], "NoThumbnailNet")
+    SESSION.set_dword(_EXPLORER_ADVANCED, "DisableThumbnailsOnNetworkFolders", 1)
+
+
+def _remove_perf_disable_thumbnail_net(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXPLORER_ADVANCED, "DisableThumbnailsOnNetworkFolders")
+
+
+def _detect_perf_disable_thumbnail_net() -> bool:
+    return SESSION.read_dword(_EXPLORER_ADVANCED, "DisableThumbnailsOnNetworkFolders") == 1
+
+TWEAKS += [
+    TweakDef(
+        id="perf-disable-font-smoothing",
+        label="Disable Font Smoothing (ClearType)",
+        category="Performance",
+        apply_fn=_apply_perf_disable_font_smoothing,
+        remove_fn=_remove_perf_disable_font_smoothing,
+        detect_fn=_detect_perf_disable_font_smoothing,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP_KEY],
+        description=(
+            "Disables ClearType font smoothing to reduce GPU rendering overhead. "
+            "Improves performance on low-end hardware. "
+            "Default: Enabled. Recommended: Disabled for maximum performance."
+        ),
+        tags=["performance", "font", "cleartype", "rendering", "ui"],
+        depends_on=[],
+        side_effects="Text will appear less smooth/anti-aliased.",
+    ),
+    TweakDef(
+        id="perf-always-unload-dll",
+        label="Always Unload DLLs on Process Exit",
+        category="Performance",
+        apply_fn=_apply_perf_always_unload_dll,
+        remove_fn=_remove_perf_always_unload_dll,
+        detect_fn=_detect_perf_always_unload_dll,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADV],
+        description=(
+            "Forces Windows to immediately unload unused DLLs from memory when processes exit. "
+            "Frees RAM faster and reduces memory fragmentation. "
+            "Default: Not set. Recommended: Enabled."
+        ),
+        tags=["performance", "dll", "memory", "unload", "ram"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="perf-increase-icon-cache",
+        label="Increase Explorer Icon Cache Size",
+        category="Performance",
+        apply_fn=_apply_perf_increase_icon_cache,
+        remove_fn=_remove_perf_increase_icon_cache,
+        detect_fn=_detect_perf_increase_icon_cache,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADV],
+        description=(
+            "Increases Explorer's icon cache to 4096 entries. "
+            "Reduces icon reloading delays when switching between folders with many files. "
+            "Default: 500. Recommended: 4096 for large libraries."
+        ),
+        tags=["performance", "explorer", "icon", "cache", "ui"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="perf-clear-recent-docs-exit",
+        label="Clear Recent Documents on Logoff",
+        category="Performance",
+        apply_fn=_apply_perf_clear_recent_docs_exit,
+        remove_fn=_remove_perf_clear_recent_docs_exit,
+        detect_fn=_detect_perf_clear_recent_docs_exit,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_POLICIES_EXP_CU],
+        description=(
+            "Clears the recent documents list when the user logs off. "
+            "Improves privacy and slightly speeds up logoff. "
+            "Default: Not cleared. Recommended: Enabled for shared machines."
+        ),
+        tags=["performance", "privacy", "recent-docs", "logoff", "explorer"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="perf-disable-thumbnails-network",
+        label="Disable Thumbnails on Network Folders",
+        category="Performance",
+        apply_fn=_apply_perf_disable_thumbnail_net,
+        remove_fn=_remove_perf_disable_thumbnail_net,
+        detect_fn=_detect_perf_disable_thumbnail_net,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_EXPLORER_ADVANCED],
+        description=(
+            "Disables thumbnail generation for files on network shares. "
+            "Eliminates Explorer hangs and delays when browsing slow network drives. "
+            "Default: Enabled. Recommended: Disabled on slow networks."
+        ),
+        tags=["performance", "explorer", "thumbnail", "network", "speed"],
+        depends_on=[],
+        side_effects="Network folder files will display generic icons instead of thumbnails.",
+    ),
+]

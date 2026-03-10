@@ -8,6 +8,31 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **25 new tweaks across 5 categories** (1 425 → 1 450 total tweaks, 19 929 tests):
+  - `contextmenu.py` +5: `ctx-add-wt-here`, `ctx-add-cmd-here`, `ctx-remove-defender-scan`,
+    `ctx-remove-wmp-context`, `ctx-add-copy-path`
+  - `indexing_search.py` +5: `idx-disable-bing-search`, `idx-limit-indexer-threads`,
+    `idx-disable-safe-search`, `idx-disable-network-index`, `idx-disable-msa-cloud-search`
+  - `boot.py` +5: `boot-reduce-service-timeout`, `boot-reduce-hung-app-timeout`,
+    `boot-reduce-wait-kill-app`, `boot-clear-pagefile`, `boot-disable-crash-dumps`
+  - `explorer.py` +5: `explorer-show-drive-letters-first`, `explorer-show-encrypted-color`,
+    `explorer-always-show-icons`, `explorer-show-empty-drives`, `explorer-disable-balloon-tips`
+  - `privacy.py` +5: `priv-disable-ink-workspace`, `priv-disable-call-history`,
+    `priv-disable-email-access`, `priv-disable-tasks-access`, `priv-disable-messaging-access`
+- `--menu` flag added to CLI for explicit terminal interactive menu launch
+- `regilattice-gui` and `regilattice-menu` console_scripts entry points registered
+- `.env.ps1` workspace bootstrap with `rgl`, `rgl-gui`, `rgl-menu` aliases
+- Per-manager `-Mode gui/menu/cli` parameter in `Launch-RegiLattice.ps1`
+
+### Fixed
+
+- Version fallback in `__init__.py` reads `pyproject.toml` when package is not installed
+- `gaming.py`: inline `_tasks_key`/`_ci` extracted to module-level `_GAME_TASKS`/`_GAME_DIAGTRACK`
+- `cli.py`: `--menu` import aliased as `_CliMenu` to fix `UnboundLocalError`; `if args.mode:` guard added to restore interactive menu reachability
+- Python bin + Scripts directory added to PATH in `.vscode/settings.json`
+
+---
+
 - **65 new tweaks across 13 categories** (1 360 → 1 425 total tweaks, 18 708 tests):
   - `telemetry_advanced.py` +5: `telem-disable-sqm-upload`, `telem-disable-mrt-report`,
     `telem-disable-speech-model-update`, `telem-disable-license-telemetry`,
