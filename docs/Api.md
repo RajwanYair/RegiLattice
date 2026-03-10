@@ -180,7 +180,7 @@ Corporate network detection.
 | Function | Description |
 |----------|-------------|
 | `is_corporate_network()` | `→ bool` — True if corp environment detected |
-| `assert_not_corporate(force=False)` | Raises `CorporateNetworkError` if corp |
+| `assert_not_corporate(force_corp=False)` | Raises `CorporateNetworkError` if corp |
 | `corp_guard_status()` | `→ dict` — Detailed detection results || `corp_guard_reasons()` | `→ list[str]` — Copy of reasons list from last detection |
 | `reset_corp_cache()` | Clear cached detection result (useful in tests/hot-reload) |
 

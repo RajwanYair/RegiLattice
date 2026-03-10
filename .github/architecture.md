@@ -114,7 +114,7 @@ User picks "apply <id>"
 get_tweak(id) -> TweakDef
   |
   v
-assert_not_corporate(force=flag)   # raises CorporateNetworkError
+assert_not_corporate(force_corp=flag)   # raises CorporateNetworkError
   |
   v
 td.apply_fn(require_admin=True)

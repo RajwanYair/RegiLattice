@@ -174,7 +174,7 @@ def _run_action(
     tweak_id: str,
     *,
     assume_yes: bool,
-    force: bool = False,
+    force_corp: bool = False,
 ) -> int:
     # Batch operations — TweakExecutor handles corp check per-tweak (respects corp_safe)
     if tweak_id == "all":
@@ -183,7 +183,7 @@ def _run_action(
             print("i️  Aborted by user.")
             return 1
         batch_fn = apply_all if mode == "apply" else remove_all
-        results = batch_fn(force_corp=force)
+        results = batch_fn(force_corp=force_corp)
         ok = sum(1 for v in results.values() if v in (TweakResult.APPLIED, TweakResult.REMOVED))
         skipped_corp = sum(1 for v in results.values() if v == TweakResult.SKIPPED_CORP)
         if SESSION.dry_run:
@@ -203,7 +203,7 @@ def _run_action(
     # Corp check — corp_safe tweaks are always allowed regardless of corporate network
     if not td.corp_safe:
         try:
-            assert_not_corporate(force=force)
+            assert_not_corporate(force_corp=force_corp)
         except CorporateNetworkError as exc:
             print(f"🛑 {exc}")
             return 6
@@ -1019,7 +1019,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.profile:
         try:
-            assert_not_corporate(force=args.force)
+            assert_not_corporate(force_corp=args.force)
         except CorporateNetworkError as exc:
             print(f"\U0001f6d1 {exc}")
             return 6
@@ -1046,7 +1046,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\u274c Unknown category '{args.category}'. Use --list to see categories.")
             return 2
         try:
-            assert_not_corporate(force=args.force)
+            assert_not_corporate(force_corp=args.force)
         except CorporateNetworkError as exc:
             print(f"\U0001f6d1 {exc}")
             return 6
@@ -1076,7 +1076,7 @@ def main(argv: list[str] | None = None) -> int:
         import json as _json
 
         try:
-            assert_not_corporate(force=args.force)
+            assert_not_corporate(force_corp=args.force)
         except CorporateNetworkError as exc:
             print(f"\U0001f6d1 {exc}")
             return 6
@@ -1143,7 +1143,7 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         return 0
     if args.mode:
-        return _run_action(args.mode, args.tweak, assume_yes=args.assume_yes, force=args.force)
+        return _run_action(args.mode, args.tweak, assume_yes=args.assume_yes, force_corp=args.force)
 
     # Interactive menu
     if not is_windows():

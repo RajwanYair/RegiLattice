@@ -20,6 +20,7 @@ import json
 import sys
 import threading
 import tkinter as tk
+from collections.abc import Callable
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from types import ModuleType
@@ -77,6 +78,13 @@ _STATUS_UNKNOWN = theme.STATUS_UNKNOWN
 _STATUS_CORP_BLOCKED = theme.STATUS_CORP_BLOCKED
 _STATUS_DEFAULT = theme.STATUS_DEFAULT
 
+# Pre-built per-status style tuples: (colour, text, btn_text, btn_bg, btn_fg)
+_STATUS_STYLES: dict[TweakResult, tuple[str, str, str, str, str]] = {
+    TweakResult.APPLIED: (_STATUS_APPLIED, "APPLIED", "Disable \u2715", "#40543F", _OK_GREEN),
+    TweakResult.NOT_APPLIED: (_STATUS_DEFAULT, "DEFAULT", "Enable \u2713", "#3B3552", _ACCENT),
+    TweakResult.UNKNOWN: (_STATUS_UNKNOWN, "UNKNOWN", "Enable \u2713", "#3B3830", _WARN_YELLOW),
+}
+
 _FONT = theme.FONT
 _FONT_BOLD = theme.FONT_BOLD
 _FONT_SM = theme.FONT_SM
@@ -132,6 +140,7 @@ class RegiLatticeGUI:
         self._corp_blocked = False  # checked asynchronously after window shows
         self._tweak_rows: list[TweakRow] = []
         self._row_by_id: dict[str, TweakRow] = {}
+        self._row_index: dict[int, int] = {}  # id(row) → list index, built once
         self._category_sections: list[CategorySection] = []
         self._cached_statuses: dict[str, TweakResult] = {}
         self._prev_statuses: dict[str, TweakResult] = {}  # delta tracking for _apply_statuses
@@ -828,6 +837,8 @@ class RegiLatticeGUI:
     @timed("gui._finish_loading")
     def _finish_loading(self) -> None:
         self._loading = False
+        # Build global row→index map once for O(1) shift-click lookups
+        self._row_index = {id(r): i for i, r in enumerate(self._tweak_rows)}
         # Wire var traces (works regardless of whether widgets are built yet)
         for row in self._tweak_rows:
             row.var.trace_add("write", lambda *_args: self._update_selection_count())
@@ -854,17 +865,24 @@ class RegiLatticeGUI:
         # Kick off status detection
         self._initial_refresh()
 
+    @staticmethod
+    def _lazy_tooltip_fn(td: TweakDef, st: TweakResult) -> Callable[[], str]:
+        """Return a zero-arg callable for deferred tooltip text generation."""
+
+        def _build() -> str:
+            return build_tooltip_text(td, st)
+
+        return _build
+
     def _wire_section_bindings(self, section: CategorySection) -> None:
         """Wire keyboard + context-menu bindings for rows in *section*.
 
         Called once per section: immediately at finish_loading for sections
         that start expanded, or lazily via set_on_rows_built for the rest.
         """
-        all_rows = self._tweak_rows
-        # O(n) dict so per-row lookup is O(1) instead of O(n) list.index()
-        _row_to_idx: dict[int, int] = {id(r): i for i, r in enumerate(all_rows)}
+        row_index = self._row_index
         for row in section.rows:
-            idx = _row_to_idx.get(id(row))
+            idx = row_index.get(id(row))
             if idx is None:
                 continue
             cb = row.cb
@@ -889,29 +907,12 @@ class RegiLatticeGUI:
                 tip = row.tooltip
                 if dot is None or text_lbl is None or btn is None:
                     continue
-                if st == TweakResult.APPLIED:
-                    colour = _STATUS_APPLIED
-                    text = "APPLIED"
-                    btn_text = "Disable \u2715"
-                    btn_bg = "#40543F"
-                    btn_fg = _OK_GREEN
-                elif st == TweakResult.NOT_APPLIED:
-                    colour = _STATUS_DEFAULT
-                    text = "DEFAULT"
-                    btn_text = "Enable \u2713"
-                    btn_bg = "#3B3552"
-                    btn_fg = _ACCENT
-                else:
-                    colour = _STATUS_UNKNOWN
-                    text = "UNKNOWN"
-                    btn_text = "Enable \u2713"
-                    btn_bg = "#3B3830"
-                    btn_fg = _WARN_YELLOW
+                colour, text, btn_text, btn_bg, btn_fg = _STATUS_STYLES.get(st, _STATUS_STYLES[TweakResult.UNKNOWN])
                 dot.configure(fg=colour)
                 text_lbl.configure(text=text, fg=colour)
                 btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
                 if tip is not None:
-                    tip.update_text(build_tooltip_text(row.td, st))
+                    tip.set_text_fn(self._lazy_tooltip_fn(row.td, st))
 
     # ── Selection helpers ────────────────────────────────────────────────
 
@@ -1305,29 +1306,12 @@ class RegiLatticeGUI:
             tip = row.tooltip
             if dot is None or text_lbl is None or btn is None:
                 continue
-            if st == TweakResult.APPLIED:
-                colour = _STATUS_APPLIED
-                text = "APPLIED"
-                btn_text = "Disable \u2715"
-                btn_bg = "#40543F"
-                btn_fg = _OK_GREEN
-            elif st == TweakResult.NOT_APPLIED:
-                colour = _STATUS_DEFAULT
-                text = "DEFAULT"
-                btn_text = "Enable \u2713"
-                btn_bg = "#3B3552"
-                btn_fg = _ACCENT
-            else:
-                colour = _STATUS_UNKNOWN
-                text = "UNKNOWN"
-                btn_text = "Enable \u2713"
-                btn_bg = "#3B3830"
-                btn_fg = _WARN_YELLOW
+            colour, text, btn_text, btn_bg, btn_fg = _STATUS_STYLES.get(st, _STATUS_STYLES[TweakResult.UNKNOWN])
             dot.configure(fg=colour)
             text_lbl.configure(text=text, fg=colour)
             btn.configure(text=btn_text, bg=btn_bg, fg=btn_fg)
             if tip is not None:
-                tip.update_text(build_tooltip_text(row.td, st))
+                tip.set_text_fn(self._lazy_tooltip_fn(row.td, st))
         self._prev_statuses = dict(statuses)
         for section in self._category_sections:
             section.update_count(statuses)
@@ -1351,12 +1335,11 @@ class RegiLatticeGUI:
 
     def _toggle_single(self, row: TweakRow) -> None:
         """Toggle a single tweak: apply if not applied, remove if applied."""
-        if not self._force_var.get():
-            try:
-                assert_not_corporate()
-            except CorporateNetworkError as exc:
-                messagebox.showwarning("Corporate Network", str(exc))
-                return
+        try:
+            assert_not_corporate(force_corp=self._force_var.get())
+        except CorporateNetworkError as exc:
+            messagebox.showwarning("Corporate Network", str(exc))
+            return
 
         td = row.td
         st = tweak_status(td)
@@ -1450,6 +1433,7 @@ class RegiLatticeGUI:
         global _ACCENT, _BG, _BG_SURFACE, _FG, _FG_DIM, _CARD_BG
         global _OK_GREEN, _WARN_YELLOW, _ERR_RED, _HEADER_BG, _DIM_BG, _TEAL, _GPO_ORANGE
         global _STATUS_APPLIED, _STATUS_NOT_APPLIED, _STATUS_UNKNOWN, _STATUS_CORP_BLOCKED, _STATUS_DEFAULT
+        global _STATUS_STYLES
         _ACCENT = theme.ACCENT
         _BG = theme.BG
         _BG_SURFACE = theme.BG_SURFACE
@@ -1468,6 +1452,9 @@ class RegiLatticeGUI:
         _STATUS_UNKNOWN = theme.STATUS_UNKNOWN
         _STATUS_CORP_BLOCKED = theme.STATUS_CORP_BLOCKED
         _STATUS_DEFAULT = theme.STATUS_DEFAULT
+        _STATUS_STYLES[TweakResult.APPLIED] = (_STATUS_APPLIED, "APPLIED", "Disable \u2715", "#40543F", _OK_GREEN)
+        _STATUS_STYLES[TweakResult.NOT_APPLIED] = (_STATUS_DEFAULT, "DEFAULT", "Enable \u2713", "#3B3552", _ACCENT)
+        _STATUS_STYLES[TweakResult.UNKNOWN] = (_STATUS_UNKNOWN, "UNKNOWN", "Enable \u2713", "#3B3830", _WARN_YELLOW)
 
     # ── Export as PowerShell ─────────────────────────────────────────────
 
@@ -1547,12 +1534,11 @@ class RegiLatticeGUI:
             self._set_status("Cancelling…", _WARN_YELLOW)
             return
 
-        if not self._force_var.get():
-            try:
-                assert_not_corporate()
-            except CorporateNetworkError as exc:
-                messagebox.showwarning("Corporate Network Detected", str(exc))
-                return
+        try:
+            assert_not_corporate(force_corp=self._force_var.get())
+        except CorporateNetworkError as exc:
+            messagebox.showwarning("Corporate Network Detected", str(exc))
+            return
 
         if mode == "restore":
             self._set_status("Creating restore point…", _WARN_YELLOW)

@@ -260,8 +260,8 @@ class TestAssertNotCorporate:
         assert_not_corporate()  # should not raise
 
     def test_force_bypasses_guard(self) -> None:
-        # force=True should never raise regardless of network
-        assert_not_corporate(force=True)
+        # force_corp=True should never raise regardless of network
+        assert_not_corporate(force_corp=True)
 
 
 # ── corp_guard_status ────────────────────────────────────────────────────────
