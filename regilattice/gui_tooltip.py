@@ -137,6 +137,10 @@ class Tooltip:
         self._text = text
         self._text_fn = None
 
+    def set_text_fn(self, text_fn: Callable[[], str]) -> None:
+        """Set a lazy text callable — computed on next hover, not now."""
+        self._text_fn = text_fn
+
     def _resolve_text(self) -> str:
         if self._text_fn is not None:
             self._text = self._text_fn()
