@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Generator
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -10,6 +11,13 @@ import pytest
 
 from regilattice.cli import _build_parser, _confirm, _run_action, _run_doctor, main
 from regilattice.tweaks import TweakResult
+
+
+@pytest.fixture(autouse=True)
+def _no_status_map_threads() -> Generator[None, None, None]:
+    """Prevent _status_map_with_progress from spawning a real thread pool."""
+    with patch("regilattice.cli._status_map_with_progress", return_value={}):
+        yield
 
 # ── _confirm helper ──────────────────────────────────────────────────────────
 
@@ -244,8 +252,7 @@ class TestDiffHelpers:
 
 class TestDryRun:
     def test_dry_run_sets_flag(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--dry-run", "--list"])
+        rc = main(["--dry-run", "--list"])
         assert rc == 0
         assert "Dry-run" in capsys.readouterr().out
 
@@ -414,8 +421,7 @@ class TestConfigFlag:
     def test_config_file_loaded(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         cfg_path = tmp_path / "test.toml"
         cfg_path.write_text("[general]\nforce_corp = true\n")
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--config", str(cfg_path), "--list"])
+        rc = main(["--config", str(cfg_path), "--list"])
         assert rc == 0
 
 
@@ -424,8 +430,7 @@ class TestConfigFlag:
 
 class TestSearchFlag:
     def test_search_finds_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--search", "explorer"])
+        rc = main(["--search", "explorer"])
         assert rc == 0
         out = capsys.readouterr().out
         assert "tweak(s) found" in out
@@ -685,7 +690,7 @@ class TestCheckFlag:
             "tweak-b": TweakResult.NOT_APPLIED,
             "tweak-c": TweakResult.UNKNOWN,
         }
-        with patch("regilattice.tweaks.status_map", return_value=fake_map):
+        with patch("regilattice.cli._status_map_with_progress", return_value=fake_map):
             rc = main(["--check"])
         assert rc == 0
         out = capsys.readouterr().out
@@ -699,7 +704,7 @@ class TestCheckFlag:
         td.label = "Test Tweak"
         fake_map = {"tweak-applied": TweakResult.APPLIED}
         with (
-            patch("regilattice.tweaks.status_map", return_value=fake_map),
+            patch("regilattice.cli._status_map_with_progress", return_value=fake_map),
             patch("regilattice.cli.get_tweak", return_value=td),
         ):
             rc = main(["--check"])
@@ -724,7 +729,7 @@ class TestDiffFlag:
         fake_map = {"tweak-a": TweakResult.APPLIED}
         with (
             patch("regilattice.cli.tweaks_for_profile", return_value=[td]),
-            patch("regilattice.tweaks.status_map", return_value=fake_map),
+            patch("regilattice.cli._status_map_with_progress", return_value=fake_map),
         ):
             rc = main(["--diff", "minimal"])
         assert rc == 0
@@ -740,7 +745,7 @@ class TestDiffFlag:
         }
         with (
             patch("regilattice.cli.tweaks_for_profile", return_value=[td]),
-            patch("regilattice.tweaks.status_map", return_value=fake_map),
+            patch("regilattice.cli._status_map_with_progress", return_value=fake_map),
             patch("regilattice.cli.get_tweak", return_value=td),
         ):
             rc = main(["--diff", "minimal"])
@@ -823,8 +828,7 @@ class TestOutputJson:
     """Tests for --output json flag on --list and --search."""
 
     def test_list_output_json(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--list", "--output", "json"])
+        rc = main(["--list", "--output", "json"])
         assert rc == 0
         out = capsys.readouterr().out.strip()
         data = json.loads(out)
@@ -833,8 +837,7 @@ class TestOutputJson:
         assert "id" in data[0]
 
     def test_list_json_has_expected_fields(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            main(["--list", "--output", "json"])
+        main(["--list", "--output", "json"])
         out = capsys.readouterr().out.strip()
         data = json.loads(out)
         first = data[0]
@@ -843,8 +846,7 @@ class TestOutputJson:
         assert "category" in first
 
     def test_search_output_json(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--search", "explorer", "--output", "json"])
+        rc = main(["--search", "explorer", "--output", "json"])
         assert rc == 0
         out = capsys.readouterr().out.strip()
         data = json.loads(out)
@@ -875,8 +877,7 @@ class TestListCategoryFilter:
     """Tests for --list --category filtering."""
 
     def test_list_category_filters_results(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--list", "--category", "Explorer"])
+        rc = main(["--list", "--category", "Explorer"])
         assert rc == 0
         out = capsys.readouterr().out
         assert "Explorer" in out
@@ -887,8 +888,7 @@ class TestListCategoryFilter:
         assert "No tweaks found" in capsys.readouterr().out
 
     def test_list_category_json_output(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
-            rc = main(["--list", "--category", "Explorer", "--output", "json"])
+        rc = main(["--list", "--category", "Explorer", "--output", "json"])
         assert rc == 0
         data = json.loads(capsys.readouterr().out.strip())
         assert all(item["category"] == "Explorer" for item in data)
@@ -1096,7 +1096,7 @@ class TestLogLevel:
     def test_log_level_passed_to_configure(self) -> None:
         """main() should call configure_logging with the supplied level."""
         # configure_logging is imported inside main(), so patch the source module
-        with patch("regilattice.logger.configure_logging") as mock_cfg, patch("regilattice.cli.tweak_status", return_value="unknown"):
+        with patch("regilattice.logger.configure_logging") as mock_cfg:
             main(["--log-level", "INFO", "--list"])
         mock_cfg.assert_called_once_with("INFO")
 

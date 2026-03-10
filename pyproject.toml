@@ -98,7 +98,7 @@ testpaths = ["tests"]
 # Default: quiet + short tracebacks.  Use -v to restore verbose output.
 # Parallel run (fastest): pytest -n auto --dist=worksteal
 # GUI tests are isolated per-process so xdist is safe here.
-addopts = "-q --tb=short"
+addopts = "-q --tb=short -p no:faulthandler"
 # Default timeout for all tests (seconds). GUI tests that spawn Tk windows
 # may block indefinitely without a timeout in headless/CI environments.
 timeout = 30

@@ -1039,9 +1039,9 @@ class TestTagIntegrity:
 # ── C8 engine additions ───────────────────────────────────────────────────────
 
 
-from regilattice.tweaks import (
+from regilattice.tweaks import (  # noqa: E402
     apply_tweaks,
-    filter_tweaks,  # noqa: E402
+    filter_tweaks,
     remove_tweaks,
     tweak_dependencies,
     tweaks_by_ids,
