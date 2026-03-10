@@ -571,3 +571,193 @@ TWEAKS += [
         tags=["backup", "schedule", "interval", "frequency"],
     ),
 ]
+
+
+# ══ Additional Backup & Recovery Tweaks ═════════════════════════════════
+
+_AEDEBUG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug"
+
+
+# -- Allow Frequent Restore Point Creation ------------------------------------
+
+
+def _apply_sr_frequency_unlimited(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: allow unlimited restore point creation frequency")
+    SESSION.backup([_SYSTEM_RESTORE], "SRFrequency")
+    SESSION.set_dword(_SYSTEM_RESTORE, "SystemRestorePointCreationFrequency", 0)
+
+
+def _remove_sr_frequency_unlimited(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SYSTEM_RESTORE, "SystemRestorePointCreationFrequency")
+
+
+def _detect_sr_frequency_unlimited() -> bool:
+    return SESSION.read_dword(_SYSTEM_RESTORE, "SystemRestorePointCreationFrequency") == 0
+
+
+# -- Set VSS Service to Automatic Start ----------------------------------------
+
+
+def _apply_vss_auto_start(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: set Volume Shadow Copy service to Automatic start")
+    SESSION.backup([_VSS], "VSSStart")
+    SESSION.set_dword(_VSS, "Start", 2)
+
+
+def _remove_vss_auto_start(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VSS, "Start", 3)  # restore Manual default
+
+
+def _detect_vss_auto_start() -> bool:
+    return SESSION.read_dword(_VSS, "Start") == 2
+
+
+# -- Reduce WER Queue Size to 1 ------------------------------------------------
+
+
+def _apply_wer_reduce_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: limit Windows Error Reporting queue to 1 report")
+    SESSION.backup([_WER], "WERQueue")
+    SESSION.set_dword(_WER, "MaxQueueCount", 1)
+
+
+def _remove_wer_reduce_queue(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WER, "MaxQueueCount")
+
+
+def _detect_wer_reduce_queue() -> bool:
+    val = SESSION.read_dword(_WER, "MaxQueueCount")
+    return val is not None and val <= 1
+
+
+# -- Suppress Backup Schedule Balloon Notifications ---------------------------
+
+
+def _apply_disable_backup_schedule_nag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: suppress backup schedule balloon notifications")
+    SESSION.backup([_BACKUP_CLIENT], "BackupNag")
+    SESSION.set_dword(_BACKUP_CLIENT, "NoBackupBalloonNotifications", 1)
+
+
+def _remove_disable_backup_schedule_nag(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_BACKUP_CLIENT, "NoBackupBalloonNotifications")
+
+
+def _detect_disable_backup_schedule_nag() -> bool:
+    return SESSION.read_dword(_BACKUP_CLIENT, "NoBackupBalloonNotifications") == 1
+
+
+# -- Disable JIT Debugger Auto-Attach on Crash --------------------------------
+
+
+def _apply_disable_aedebug_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Backup: disable automatic JIT debugger attachment on application crash")
+    SESSION.backup([_AEDEBUG], "AeDebugAuto")
+    SESSION.set_string(_AEDEBUG, "Auto", "0")
+
+
+def _remove_disable_aedebug_auto(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_AEDEBUG, "Auto", "1")  # restore default
+
+
+def _detect_disable_aedebug_auto() -> bool:
+    return SESSION.read_string(_AEDEBUG, "Auto") == "0"
+
+
+TWEAKS += [
+    TweakDef(
+        id="backup-sr-frequency-unlimited",
+        label="Allow Frequent System Restore Points",
+        category="Backup & Recovery",
+        apply_fn=_apply_sr_frequency_unlimited,
+        remove_fn=_remove_sr_frequency_unlimited,
+        detect_fn=_detect_sr_frequency_unlimited,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SYSTEM_RESTORE],
+        description=(
+            "Removes the built-in 24-hour cooldown for System Restore point creation. "
+            "Allows tools and scripts to create restore points at any time. "
+            "Default: 1440 min limit. Recommended: unlimited (0)."
+        ),
+        tags=["backup", "system-restore", "frequency", "vss"],
+    ),
+    TweakDef(
+        id="backup-vss-auto-start",
+        label="Set Volume Shadow Copy to Automatic Start",
+        category="Backup & Recovery",
+        apply_fn=_apply_vss_auto_start,
+        remove_fn=_remove_vss_auto_start,
+        detect_fn=_detect_vss_auto_start,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VSS],
+        description=(
+            "Sets the VSS (Volume Shadow Copy Service) start type to Automatic "
+            "so shadow copies are always available on boot. "
+            "Default: Manual. Recommended: Automatic on backup-heavy machines."
+        ),
+        tags=["backup", "vss", "shadow-copy", "service", "auto"],
+    ),
+    TweakDef(
+        id="backup-wer-reduce-queue",
+        label="Limit Windows Error Reporting Queue to 1",
+        category="Backup & Recovery",
+        apply_fn=_apply_wer_reduce_queue,
+        remove_fn=_remove_wer_reduce_queue,
+        detect_fn=_detect_wer_reduce_queue,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WER],
+        description=(
+            "Limits the Windows Error Reporting queue to 1 pending report, "
+            "reducing disk usage from accumulated crash reports. "
+            "Default: 50. Recommended: 1 for privacy."
+        ),
+        tags=["backup", "wer", "error-reporting", "queue", "privacy"],
+    ),
+    TweakDef(
+        id="backup-disable-backup-schedule-nag",
+        label="Suppress Backup Schedule Balloon Notification",
+        category="Backup & Recovery",
+        apply_fn=_apply_disable_backup_schedule_nag,
+        remove_fn=_remove_disable_backup_schedule_nag,
+        detect_fn=_detect_disable_backup_schedule_nag,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BACKUP_CLIENT],
+        description=(
+            "Suppresses the \"Set up Windows Backup\" balloon notification that "
+            "appears in the system tray when no backup is configured. "
+            "Default: shown. Recommended: suppressed."
+        ),
+        tags=["backup", "notification", "balloon", "tray"],
+    ),
+    TweakDef(
+        id="backup-disable-aedebug-auto",
+        label="Disable Auto-Attach of JIT Debugger on Crash",
+        category="Backup & Recovery",
+        apply_fn=_apply_disable_aedebug_auto,
+        remove_fn=_remove_disable_aedebug_auto,
+        detect_fn=_detect_disable_aedebug_auto,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_AEDEBUG],
+        description=(
+            "Prevents Windows from automatically launching a JIT (Just-In-Time) "
+            "debugger when an application crashes. Suppresses the debugger prompt. "
+            "Default: 1 (auto-attach). Recommended: 0 (no auto-attach)."
+        ),
+        tags=["backup", "crash", "debugger", "aedebug", "jit"],
+    ),
+]

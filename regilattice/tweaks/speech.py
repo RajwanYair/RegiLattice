@@ -59,25 +59,6 @@ def _detect_disable_speech_policy() -> bool:
     return SESSION.read_dword(_SPEECH_POLICY, "AllowSpeechModelUpdate") == 0
 
 
-# ── Disable Narrator ────────────────────────────────────────────────────────
-
-
-def _apply_disable_narrator(*, require_admin: bool = False) -> None:
-    SESSION.log("Speech: disable Narrator auto-start")
-    SESSION.backup([_NARRATOR], "Narrator")
-    SESSION.set_dword(_NARRATOR, "RunNarratorOnStart", 0)
-    SESSION.set_dword(_NARRATOR, "WinEnterLaunchEnabled", 0)
-
-
-def _remove_disable_narrator(*, require_admin: bool = False) -> None:
-    SESSION.delete_value(_NARRATOR, "RunNarratorOnStart")
-    SESSION.delete_value(_NARRATOR, "WinEnterLaunchEnabled")
-
-
-def _detect_disable_narrator() -> bool:
-    return SESSION.read_dword(_NARRATOR, "WinEnterLaunchEnabled") == 0
-
-
 # ── Mute Narrator Sounds ────────────────────────────────────────────────────
 
 
@@ -298,19 +279,6 @@ TWEAKS: list[TweakDef] = [
         registry_keys=[_SPEECH_POLICY],
         description="Blocks online speech model updates via Group Policy. Reduces background data usage.",
         tags=["speech", "policy", "privacy"],
-    ),
-    TweakDef(
-        id="speech-disable-narrator",
-        label="Disable Narrator Auto-Start",
-        category="Voice Access & Speech",
-        apply_fn=_apply_disable_narrator,
-        remove_fn=_remove_disable_narrator,
-        detect_fn=_detect_disable_narrator,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_NARRATOR],
-        description="Prevents Narrator from starting automatically and disables the Win+Enter shortcut.",
-        tags=["speech", "narrator", "accessibility"],
     ),
     TweakDef(
         id="speech-mute-narrator",

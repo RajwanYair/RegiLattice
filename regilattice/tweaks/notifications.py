@@ -32,11 +32,6 @@ _BG_ACCESS = (
     r"\Notifications\Settings\Windows.SystemToast.BackgroundAccess"
 )
 
-# -- AutoPlay Handlers ───────────────────────────────────────────────────────
-
-_AUTOPLAY = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"
-
-
 # ── 1. Disable Action Center ────────────────────────────────────────────────
 
 
@@ -247,27 +242,6 @@ def _detect_disable_startup_app_notif() -> bool:
     return SESSION.read_dword(_BG_ACCESS, "Enabled") == 0
 
 
-# ── 11. Disable AutoPlay Notifications ──────────────────────────────────────
-
-
-def _apply_disable_autoplay(*, require_admin: bool = False) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_AUTOPLAY], "AutoPlayNotif")
-    SESSION.set_dword(_AUTOPLAY, "DisableAutoplay", 1)
-    SESSION.log("Notifications: disabled AutoPlay notifications")
-
-
-def _remove_disable_autoplay(*, require_admin: bool = False) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_AUTOPLAY], "AutoPlayNotif_Remove")
-    SESSION.set_dword(_AUTOPLAY, "DisableAutoplay", 0)
-    SESSION.log("Notifications: re-enabled AutoPlay notifications")
-
-
-def _detect_disable_autoplay() -> bool:
-    return SESSION.read_dword(_AUTOPLAY, "DisableAutoplay") == 1
-
-
 # ── TWEAKS list ──────────────────────────────────────────────────────────────
 
 TWEAKS: list[TweakDef] = [
@@ -400,19 +374,6 @@ TWEAKS: list[TweakDef] = [
         registry_keys=[_BG_ACCESS],
         description=("Disables 'apps are running in the background' system toast notifications. Default: enabled. Recommended: disabled."),
         tags=["notifications", "background", "startup"],
-    ),
-    TweakDef(
-        id="notif-disable-autoplay",
-        label="Disable AutoPlay Notifications",
-        category="Notifications",
-        apply_fn=_apply_disable_autoplay,
-        remove_fn=_remove_disable_autoplay,
-        detect_fn=_detect_disable_autoplay,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_AUTOPLAY],
-        description=("Disables AutoPlay notifications when removable media is inserted. Default: enabled. Recommended: disabled."),
-        tags=["notifications", "autoplay", "media"],
     ),
 ]
 

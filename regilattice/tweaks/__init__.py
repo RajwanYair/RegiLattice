@@ -23,6 +23,11 @@ from enum import Enum
 from pathlib import Path
 
 __all__ = [
+    "WIN10_21H2",
+    "WIN11_21H2",
+    "WIN11_22H2",
+    "WIN11_23H2",
+    "WIN11_24H2",
     "CategoryInfo",
     "ProfileDef",
     "TweakDef",
@@ -877,6 +882,17 @@ def _topo_sort(tweaks: list[TweakDef]) -> list[TweakDef]:
     if len(ordered) != len(tweaks):
         raise ValueError("Cyclic dependency detected among tweaks")
     return ordered
+
+
+# ── Windows build number constants ─────────────────────────────────────────
+
+# Named build numbers for use in TweakDef.min_build.
+# All w11-* tweaks should be at least WIN11_21H2 (22000).
+WIN10_21H2: int = 19044  # Windows 10 21H2
+WIN11_21H2: int = 22000  # Windows 11 21H2
+WIN11_22H2: int = 22621  # Windows 11 22H2
+WIN11_23H2: int = 22631  # Windows 11 23H2
+WIN11_24H2: int = 26100  # Windows 11 24H2
 
 
 # ── Windows build detection ──────────────────────────────────────────────────

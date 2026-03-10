@@ -644,6 +644,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_COPILOT_RUNTIME],
+        min_build=26100,  # Win11 24H2+
         description=(
             "Disables the Copilot Runtime system app introduced in Windows 11 24H2. "
             "Uses the new AllowCopilotRuntime policy path. "
@@ -661,6 +662,7 @@ TWEAKS += [
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_BING_CHAT],
+        min_build=26100,  # Win11 24H2+
         description=(
             "Blocks Bing Chat / Copilot in Edge sidebar using the updated "
             "24H2 policy path (BingChat\\IsUserEligible). "

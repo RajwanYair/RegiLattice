@@ -529,3 +529,192 @@ TWEAKS += [
         tags=["store", "video", "autoplay", "media"],
     ),
 ]
+
+
+# ══ Additional Microsoft Store Tweaks ═════════════════════════════════
+
+
+# -- Disable OEM Pre-Installed Apps -------------------------------------------
+
+
+def _apply_oem_apps_disable(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable OEM pre-installed app delivery")
+    SESSION.backup([_CDM], "OEMApps")
+    SESSION.set_dword(_CDM, "OemPreInstalledAppsEnabled", 0)
+
+
+def _remove_oem_apps_disable(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDM, "OemPreInstalledAppsEnabled")
+
+
+def _detect_oem_apps_disable() -> bool:
+    return SESSION.read_dword(_CDM, "OemPreInstalledAppsEnabled") == 0
+
+
+# -- Disable ContentDeliveryManager Feature Management -----------------------
+
+
+def _apply_feature_mgmt_disable(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable ContentDelivery feature management experiments")
+    SESSION.backup([_CDM], "FeatureMgmt")
+    SESSION.set_dword(_CDM, "FeatureManagementEnabled", 0)
+
+
+def _remove_feature_mgmt_disable(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDM, "FeatureManagementEnabled")
+
+
+def _detect_feature_mgmt_disable() -> bool:
+    return SESSION.read_dword(_CDM, "FeatureManagementEnabled") == 0
+
+
+# -- Disable Post-Upgrade App Restoration -------------------------------------
+
+
+def _apply_disable_post_upgrade_apps(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable post-upgrade app restoration")
+    SESSION.backup([_CDM], "PostUpgradeApps")
+    SESSION.set_dword(_CDM, "WindowsPostUpgradeEnabled", 0)
+
+
+def _remove_disable_post_upgrade_apps(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDM, "WindowsPostUpgradeEnabled")
+
+
+def _detect_disable_post_upgrade_apps() -> bool:
+    return SESSION.read_dword(_CDM, "WindowsPostUpgradeEnabled") == 0
+
+
+# -- Disable Cortana / Bing Tips in Start (280810) ----------------------------
+
+
+def _apply_disable_start_tips_280810(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable Cortana/Bing tips content in Start (280810)")
+    SESSION.backup([_CDM], "StartTips280810")
+    SESSION.set_dword(_CDM, "SubscribedContent-280810Enabled", 0)
+
+
+def _remove_disable_start_tips_280810(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CDM, "SubscribedContent-280810Enabled")
+
+
+def _detect_disable_start_tips_280810() -> bool:
+    return SESSION.read_dword(_CDM, "SubscribedContent-280810Enabled") == 0
+
+
+# -- Disable Third-Party Suggestions (CloudContent policy) --------------------
+
+_CLOUD_CONTENT_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
+
+
+def _apply_disable_third_party_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Microsoft Store: disable third-party app suggestions via CloudContent policy")
+    SESSION.backup([_CLOUD_CONTENT_POLICY], "ThirdPartySuggestions")
+    SESSION.set_dword(_CLOUD_CONTENT_POLICY, "DisableThirdPartySuggestions", 1)
+
+
+def _remove_disable_third_party_suggestions(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CLOUD_CONTENT_POLICY, "DisableThirdPartySuggestions")
+
+
+def _detect_disable_third_party_suggestions() -> bool:
+    return SESSION.read_dword(_CLOUD_CONTENT_POLICY, "DisableThirdPartySuggestions") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="msstore-oem-apps-disable",
+        label="Disable OEM Pre-Installed App Delivery",
+        category="Microsoft Store",
+        apply_fn=_apply_oem_apps_disable,
+        remove_fn=_remove_oem_apps_disable,
+        detect_fn=_detect_oem_apps_disable,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Prevents ContentDeliveryManager from installing OEM-bundled apps "
+            "silently on new accounts or upgrades. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "oem", "preinstalled", "bloatware", "cdm"],
+    ),
+    TweakDef(
+        id="msstore-feature-mgmt-disable",
+        label="Disable Store Feature Management Experiments",
+        category="Microsoft Store",
+        apply_fn=_apply_feature_mgmt_disable,
+        remove_fn=_remove_feature_mgmt_disable,
+        detect_fn=_detect_feature_mgmt_disable,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables ContentDeliveryManager feature management, preventing "
+            "Microsoft from running A/B experiments that silently enable new "
+            "Store and content features. Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "feature-management", "experiments", "cdm", "privacy"],
+    ),
+    TweakDef(
+        id="msstore-disable-post-upgrade-apps",
+        label="Disable Post-Upgrade App Restoration",
+        category="Microsoft Store",
+        apply_fn=_apply_disable_post_upgrade_apps,
+        remove_fn=_remove_disable_post_upgrade_apps,
+        detect_fn=_detect_disable_post_upgrade_apps,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Prevents Windows from reinstalling Store apps after a feature "
+            "upgrade or clean install via ContentDeliveryManager. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "post-upgrade", "apps", "bloatware", "cdm"],
+    ),
+    TweakDef(
+        id="msstore-disable-start-tips",
+        label="Disable Cortana/Bing Tips in Start Menu",
+        category="Microsoft Store",
+        apply_fn=_apply_disable_start_tips_280810,
+        remove_fn=_remove_disable_start_tips_280810,
+        detect_fn=_detect_disable_start_tips_280810,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CDM],
+        description=(
+            "Disables SubscribedContent-280810 delivery which pushes Cortana "
+            "and Bing tips into the Start menu. "
+            "Default: enabled. Recommended: disabled."
+        ),
+        tags=["store", "cortana", "bing", "tips", "start", "cdm"],
+    ),
+    TweakDef(
+        id="msstore-disable-third-party-suggestions",
+        label="Disable Third-Party App Suggestions (Policy)",
+        category="Microsoft Store",
+        apply_fn=_apply_disable_third_party_suggestions,
+        remove_fn=_remove_disable_third_party_suggestions,
+        detect_fn=_detect_disable_third_party_suggestions,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CLOUD_CONTENT_POLICY],
+        description=(
+            "Blocks third-party app suggestions from appearing in Windows via "
+            "the CloudContent group policy key. Prevents promoted apps in "
+            "Start, Settings, and lock screen. Default: allowed. Recommended: blocked."
+        ),
+        tags=["store", "third-party", "suggestions", "cloud-content", "policy"],
+    ),
+]

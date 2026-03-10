@@ -332,28 +332,6 @@ def _detect_disable_defrag_boot() -> bool:
     return SESSION.read_string(_KEY_DFRG, "Enable") == "N"
 
 
-# -- 14. Increase NTFS Paged Pool Memory ----------------------------------------
-
-
-def _apply_increase_ntfs_memory(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("Storage: increase NTFS paged pool memory")
-    SESSION.backup([_KEY_FILESYSTEM], "NtfsPagedPool")
-    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsMemoryUsage", 2)
-    SESSION.log("Completed increase-ntfs-memory")
-
-
-def _remove_increase_ntfs_memory(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_KEY_FILESYSTEM], "NtfsPagedPool_Remove")
-    SESSION.set_dword(_KEY_FILESYSTEM, "NtfsMemoryUsage", 1)
-    SESSION.log("Restored NTFS memory usage to default (1)")
-
-
-def _detect_increase_ntfs_memory() -> bool:
-    return SESSION.read_dword(_KEY_FILESYSTEM, "NtfsMemoryUsage") == 2
-
-
 # -- TWEAKS export -------------------------------------------------------------
 
 TWEAKS: list[TweakDef] = [
@@ -577,23 +555,6 @@ TWEAKS: list[TweakDef] = [
             "Default: enabled (Y). Recommended: disabled (N) on SSDs."
         ),
         tags=["storage", "defrag", "boot", "ssd", "performance"],
-    ),
-    TweakDef(
-        id="stor-storage-increase-ntfs-memory",
-        label="Increase NTFS Paged Pool Memory",
-        category="Storage",
-        apply_fn=_apply_increase_ntfs_memory,
-        remove_fn=_remove_increase_ntfs_memory,
-        detect_fn=_detect_increase_ntfs_memory,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_KEY_FILESYSTEM],
-        description=(
-            "Increases NTFS paged pool memory allocation for improved file system "
-            "caching and metadata performance. Best on systems with 16 GB+ RAM. "
-            "Default: 1 (normal). Recommended: 2 (high)."
-        ),
-        tags=["storage", "ntfs", "memory", "paged-pool", "performance"],
     ),
 ]
 

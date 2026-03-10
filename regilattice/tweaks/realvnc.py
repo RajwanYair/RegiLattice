@@ -551,3 +551,193 @@ TWEAKS += [
         tags=["vnc", "auth", "system", "security"],
     ),
 ]
+
+
+# ══ Additional RealVNC Tweaks ════════════════════════════════════════════
+
+
+# -- Prompt User on Incoming VNC Connection -----------------------------------
+
+
+def _apply_vnc_query_on_connect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: enable user prompt on incoming connection (QueryConnect)")
+    SESSION.backup([_VNC_SERVER, _VNC_POLICY], "VNCQueryConnect")
+    SESSION.set_dword(_VNC_SERVER, "QueryConnect", 1)
+    SESSION.set_dword(_VNC_POLICY, "QueryConnect", 1)
+
+
+def _remove_vnc_query_on_connect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_SERVER, "QueryConnect")
+    SESSION.delete_value(_VNC_POLICY, "QueryConnect")
+
+
+def _detect_vnc_query_on_connect() -> bool:
+    return SESSION.read_dword(_VNC_SERVER, "QueryConnect") == 1
+
+
+# -- Lock Screen on VNC Disconnect --------------------------------------------
+
+
+def _apply_vnc_lock_on_disconnect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: lock screen when VNC session disconnects")
+    SESSION.backup([_VNC_SERVER], "VNCDisconnectAction")
+    SESSION.set_string(_VNC_SERVER, "DisconnectAction", "Lock")
+
+
+def _remove_vnc_lock_on_disconnect(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_VNC_SERVER, "DisconnectAction", "Nothing")
+
+
+def _detect_vnc_lock_on_disconnect() -> bool:
+    return SESSION.read_string(_VNC_SERVER, "DisconnectAction") == "Lock"
+
+
+# -- Lock Screen on Lost VNC Connection ----------------------------------------
+
+
+def _apply_vnc_lost_conn_lock(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: lock screen when VNC connection is unexpectedly lost")
+    SESSION.backup([_VNC_SERVER], "VNCLostConnAction")
+    SESSION.set_string(_VNC_SERVER, "LostConnAction", "Lock")
+
+
+def _remove_vnc_lost_conn_lock(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_VNC_SERVER, "LostConnAction", "Nothing")
+
+
+def _detect_vnc_lost_conn_lock() -> bool:
+    return SESSION.read_string(_VNC_SERVER, "LostConnAction") == "Lock"
+
+
+# -- VNC Viewer: Open in Fullscreen Mode by Default ----------------------------
+
+
+def _apply_vnc_viewer_fullscreen(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: set Viewer to open in fullscreen mode by default")
+    SESSION.backup([_VNC_VIEWER], "VNCViewerFullscreen")
+    SESSION.set_dword(_VNC_VIEWER, "FullScreen", 1)
+
+
+def _remove_vnc_viewer_fullscreen(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_VIEWER, "FullScreen")
+
+
+def _detect_vnc_viewer_fullscreen() -> bool:
+    return SESSION.read_dword(_VNC_VIEWER, "FullScreen") == 1
+
+
+# -- VNC Server: Disable Desktop Sharing (Exclusive Access) -------------------
+
+
+def _apply_vnc_disable_share_desktop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("RealVNC: disable desktop sharing (exclusive access mode)")
+    SESSION.backup([_VNC_SERVER], "VNCShareDesktop")
+    SESSION.set_dword(_VNC_SERVER, "ShareDesktop", 0)
+
+
+def _remove_vnc_disable_share_desktop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VNC_SERVER, "ShareDesktop")
+
+
+def _detect_vnc_disable_share_desktop() -> bool:
+    val = SESSION.read_dword(_VNC_SERVER, "ShareDesktop")
+    return val is not None and val == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="vnc-query-on-connect",
+        label="Prompt User on Incoming VNC Connection",
+        category="RealVNC",
+        apply_fn=_apply_vnc_query_on_connect,
+        remove_fn=_remove_vnc_query_on_connect,
+        detect_fn=_detect_vnc_query_on_connect,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER, _VNC_POLICY],
+        description=(
+            "Enables QueryConnect — shows a dialog on the physical machine asking "
+            "the logged-in user to accept or reject each incoming VNC connection. "
+            "Default: disabled. Recommended: enabled for attended machines."
+        ),
+        tags=["vnc", "security", "query", "connect", "prompt"],
+    ),
+    TweakDef(
+        id="vnc-lock-on-disconnect",
+        label="Lock Screen When VNC Session Ends",
+        category="RealVNC",
+        apply_fn=_apply_vnc_lock_on_disconnect,
+        remove_fn=_remove_vnc_lock_on_disconnect,
+        detect_fn=_detect_vnc_lock_on_disconnect,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Sets DisconnectAction=Lock so the screen locks when a VNC session "
+            "cleanly disconnects. Prevents leaving an unlocked desktop after remote access. "
+            "Default: Nothing. Recommended: Lock."
+        ),
+        tags=["vnc", "security", "disconnect", "lock", "session"],
+    ),
+    TweakDef(
+        id="vnc-lost-conn-lock",
+        label="Lock Screen When VNC Connection Drops",
+        category="RealVNC",
+        apply_fn=_apply_vnc_lost_conn_lock,
+        remove_fn=_remove_vnc_lost_conn_lock,
+        detect_fn=_detect_vnc_lost_conn_lock,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Sets LostConnAction=Lock so the screen locks when a VNC connection "
+            "is unexpectedly terminated (network drop, client crash). "
+            "Default: Nothing. Recommended: Lock."
+        ),
+        tags=["vnc", "security", "lost-connection", "lock", "network"],
+    ),
+    TweakDef(
+        id="vnc-viewer-fullscreen",
+        label="VNC Viewer: Open in Fullscreen by Default",
+        category="RealVNC",
+        apply_fn=_apply_vnc_viewer_fullscreen,
+        remove_fn=_remove_vnc_viewer_fullscreen,
+        detect_fn=_detect_vnc_viewer_fullscreen,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VNC_VIEWER],
+        description=(
+            "Configures RealVNC Viewer to open remote sessions in fullscreen mode "
+            "automatically, maximising the workspace for remote control. "
+            "Default: windowed. Recommended: fullscreen for power users."
+        ),
+        tags=["vnc", "viewer", "fullscreen", "ux"],
+    ),
+    TweakDef(
+        id="vnc-disable-share-desktop",
+        label="VNC: Disable Desktop Sharing (Exclusive Access)",
+        category="RealVNC",
+        apply_fn=_apply_vnc_disable_share_desktop,
+        remove_fn=_remove_vnc_disable_share_desktop,
+        detect_fn=_detect_vnc_disable_share_desktop,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VNC_SERVER],
+        description=(
+            "Disables desktop sharing so only one VNC viewer can connect at a time "
+            "(exclusive access). Prevents multiple simultaneous viewers from "
+            "watching a session. Default: shared. Recommended: exclusive."
+        ),
+        tags=["vnc", "security", "share", "exclusive", "access"],
+    ),
+]

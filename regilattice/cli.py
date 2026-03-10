@@ -329,6 +329,70 @@ def _split_root_for_reg(path: str) -> tuple[int, str]:
     raise ValueError(f"Unsupported registry path: {path}")
 
 
+def _run_report(args: argparse.Namespace) -> int:
+    """Print current enable/disable status of all tweaks grouped by category."""
+    cat_filter: str | None = getattr(args, "category", None)
+    only_enabled = getattr(args, "only_enabled", False)
+    only_disabled = getattr(args, "only_disabled", False)
+    output_fmt = getattr(args, "output", "table")
+
+    by_cat = tweaks_by_category()
+    if cat_filter:
+        by_cat = {k: v for k, v in by_cat.items() if k.lower() == cat_filter.lower()}
+        if not by_cat:
+            print(f"❌ Unknown category '{cat_filter}'. Use --categories to list categories.")
+            return 2
+
+    smap = _status_map_with_progress("Scanning")
+
+    if output_fmt == "json":
+        import json as _j
+
+        report: list[dict[str, object]] = []
+        for cat_name, cat_tweaks in sorted(by_cat.items()):
+            for td in cat_tweaks:
+                st = smap.get(td.id, TweakResult.UNKNOWN)
+                state = "enabled" if st == TweakResult.APPLIED else "disabled" if st == TweakResult.NOT_APPLIED else "unknown"
+                if only_enabled and state != "enabled":
+                    continue
+                if only_disabled and state != "disabled":
+                    continue
+                report.append({"category": cat_name, "id": td.id, "label": td.label, "status": state})
+        print(_j.dumps(report, indent=2))
+        return 0
+
+    for cat_name, cat_tweaks in sorted(by_cat.items()):
+        rows: list[tuple[str, str, str, str]] = []
+        for td in cat_tweaks:
+            st = smap.get(td.id, TweakResult.UNKNOWN)
+            if st == TweakResult.APPLIED:
+                icon, label_colour = "●", _ANSI_GREEN
+                state = "enabled"
+            elif st == TweakResult.NOT_APPLIED:
+                icon, label_colour = "○", _ANSI_DIM
+                state = "disabled"
+            else:
+                icon, label_colour = "?", _ANSI_YELLOW
+                state = "unknown"
+            if only_enabled and state != "enabled":
+                continue
+            if only_disabled and state != "disabled":
+                continue
+            rows.append((icon, label_colour, td.id, td.label))
+
+        if not rows:
+            continue
+        enabled_cnt = sum(1 for td in cat_tweaks if smap.get(td.id) == TweakResult.APPLIED)
+        print(f"\n{_ANSI_BOLD}{cat_name}{_ANSI_RESET}  {_ANSI_DIM}({enabled_cnt}/{len(cat_tweaks)} enabled){_ANSI_RESET}")
+        for icon, col, tid, lbl in rows:
+            print(f"  {col}{icon}{_ANSI_RESET} {tid:<38} {lbl}")
+
+    total_enabled = sum(1 for st in smap.values() if st == TweakResult.APPLIED)
+    total = sum(len(v) for v in by_cat.values())
+    print(f"\n{_ANSI_BOLD}Summary:{_ANSI_RESET} {total_enabled} enabled / {total - total_enabled} disabled / {total} total")
+    return 0
+
+
 def _run_doctor() -> int:
     """Comprehensive system health check — prints a report and returns exit code."""
     import platform
@@ -558,6 +622,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Non-destructive audit: show which tweaks are applied, default, or unknown.",
     )
     parser.add_argument(
+        "--report",
+        action="store_true",
+        help="Show current enable/disable status of all tweaks grouped by category.",
+    )
+    parser.add_argument(
         "--diff",
         metavar="PROFILE",
         choices=list(available_profiles()),
@@ -784,6 +853,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.export_reg:
         return _export_reg(Path(args.export_reg))
+
+    if args.report:
+        return _run_report(args)
 
     if args.check:
         smap = _status_map_with_progress("Checking")

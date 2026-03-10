@@ -96,4 +96,3 @@ if ($rc -ne 0) {
     if (-not $env:CI) { Read-Host 'Press Enter to exit' }
 }
 exit $rc
-

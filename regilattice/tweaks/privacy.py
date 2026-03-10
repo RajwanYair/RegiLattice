@@ -552,7 +552,6 @@ _CONTENT_DELIVERY = (
     r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion"
     r"\ContentDeliveryManager"
 )
-_FEEDBACK = r"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"
 _SETTINGS_PRIV = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SettingsSync"
 
 
@@ -592,23 +591,6 @@ def _remove_disable_tips(*, require_admin: bool = False) -> None:
 
 def _detect_disable_tips() -> bool:
     return SESSION.read_dword(_CONTENT_DELIVERY, "SoftLandingEnabled") == 0
-
-
-# -- Disable Feedback Prompts ────────────────────────────────────────────
-
-
-def _apply_disable_feedback(*, require_admin: bool = False) -> None:
-    SESSION.log("Privacy: disable feedback frequency prompts")
-    SESSION.backup([_FEEDBACK], "FeedbackPrompts")
-    SESSION.set_dword(_FEEDBACK, "NumberOfSIUFInPeriod", 0)
-
-
-def _remove_disable_feedback(*, require_admin: bool = False) -> None:
-    SESSION.delete_value(_FEEDBACK, "NumberOfSIUFInPeriod")
-
-
-def _detect_disable_feedback() -> bool:
-    return SESSION.read_dword(_FEEDBACK, "NumberOfSIUFInPeriod") == 0
 
 
 # -- Disable App Launch Tracking ─────────────────────────────────────────
@@ -685,23 +667,6 @@ TWEAKS += [
             "Default: enabled. Recommended: disabled."
         ),
         tags=["privacy", "tips", "suggestions", "content-delivery"],
-    ),
-    TweakDef(
-        id="priv-privacy-disable-feedback",
-        label="Disable Feedback Prompts",
-        category="Privacy",
-        apply_fn=_apply_disable_feedback,
-        remove_fn=_remove_disable_feedback,
-        detect_fn=_detect_disable_feedback,
-        needs_admin=False,
-        corp_safe=True,
-        registry_keys=[_FEEDBACK],
-        description=(
-            "Disables 'How likely are you to recommend Windows?' feedback "
-            "prompts from appearing periodically. "
-            "Default: occasional. Recommended: disabled."
-        ),
-        tags=["privacy", "feedback", "prompts", "telemetry"],
     ),
     TweakDef(
         id="priv-privacy-disable-app-launch-tracking",
