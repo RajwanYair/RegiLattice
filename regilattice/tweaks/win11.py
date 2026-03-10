@@ -1344,8 +1344,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_W11_DESKTOPICONS],
         description=(
-            "Shows the 'This PC' icon on the desktop (hidden by default in Windows 11). "
-            "Default: hidden. Recommended: shown for quick storage access."
+            "Shows the 'This PC' icon on the desktop (hidden by default in Windows 11). Default: hidden. Recommended: shown for quick storage access."
         ),
         tags=["win11", "desktop", "this-pc", "icons", "ux"],
     ),

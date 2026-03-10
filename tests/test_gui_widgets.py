@@ -196,7 +196,6 @@ class TestCategorySectionLazy:
             assert row.frame is frm
 
     def test_on_rows_built_callback_fires(self, root: tk.Tk) -> None:
-
         section, _ = self._make_section(root, expanded=False)
         fired: list[CategorySection] = []
         section.set_on_rows_built(fired.append)

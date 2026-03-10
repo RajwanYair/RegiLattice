@@ -248,7 +248,7 @@ def _format_reg_value(val: Any, typ: int) -> str:
         hex_str = ",".join(f"{b:02x}" for b in raw)
         return f"hex(2):{hex_str}"
     if typ == _wr.REG_BINARY:
-        data = bytes(val) if isinstance(val, (bytes, bytearray)) else b""
+        data = bytes(val) if isinstance(val, bytes | bytearray) else b""
         hex_str = ",".join(f"{b:02x}" for b in data)
         return f"hex:{hex_str}"
     if typ == _wr.REG_MULTI_SZ:

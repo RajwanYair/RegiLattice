@@ -882,8 +882,7 @@ TWEAKS += [
         corp_safe=True,
         registry_keys=[_ADV],
         description=(
-            "Locks the taskbar to prevent accidental resizing or repositioning. "
-            "Default: Unlocked. Recommended: Locked for stable work environments."
+            "Locks the taskbar to prevent accidental resizing or repositioning. Default: Unlocked. Recommended: Locked for stable work environments."
         ),
         tags=["taskbar", "lock", "resize", "position", "ui"],
         depends_on=[],

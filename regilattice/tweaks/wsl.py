@@ -1201,19 +1201,19 @@ _WSL_CRASH = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson"
 _WSL_CRASH_KEYS = [_WSL_CRASH]
 
 
-def _apply_wsl_disable_interop(*, require_admin: bool = True) -> None:
+def _apply_wsl_interop_off_policy(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.backup([_LXSS_INTEROP], "WSL_Interop")
     SESSION.set_dword(_LXSS_INTEROP, "EnableInterop", 0)
 
 
-def _remove_wsl_disable_interop(*, require_admin: bool = True) -> None:
+def _remove_wsl_interop_off_policy(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.backup([_LXSS_INTEROP], "WSL_Interop_Remove")
     SESSION.delete_value(_LXSS_INTEROP, "EnableInterop")
 
 
-def _detect_wsl_disable_interop() -> bool:
+def _detect_wsl_interop_off_policy() -> bool:
     return SESSION.read_dword(_LXSS_INTEROP, "EnableInterop") == 0
 
 
@@ -1311,9 +1311,9 @@ TWEAKS += [
         id="wsl-interop-off-policy",
         label="Disable WSL Windows Interop",
         category="WSL",
-        apply_fn=_apply_wsl_disable_interop,
-        remove_fn=_remove_wsl_disable_interop,
-        detect_fn=_detect_wsl_disable_interop,
+        apply_fn=_apply_wsl_interop_off_policy,
+        remove_fn=_remove_wsl_interop_off_policy,
+        detect_fn=_detect_wsl_interop_off_policy,
         needs_admin=True,
         corp_safe=False,
         registry_keys=[_LXSS_INTEROP],

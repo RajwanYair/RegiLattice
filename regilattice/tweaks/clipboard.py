@@ -586,19 +586,19 @@ def _detect_disable_clip_suggestions() -> bool:
 _DRAG_THRESHOLD = r"HKEY_CURRENT_USER\Control Panel\Desktop"
 
 
-def _apply_increase_drag_threshold(*, require_admin: bool = False) -> None:
+def _apply_drag_threshold_medium(*, require_admin: bool = False) -> None:
     SESSION.log("Clipboard: increase drag-drop minimum distance to 8px")
     SESSION.backup([_DRAG_THRESHOLD], "DragThreshold")
     SESSION.set_string(_DRAG_THRESHOLD, "DragWidth", "8")
     SESSION.set_string(_DRAG_THRESHOLD, "DragHeight", "8")
 
 
-def _remove_increase_drag_threshold(*, require_admin: bool = False) -> None:
+def _remove_drag_threshold_medium(*, require_admin: bool = False) -> None:
     SESSION.set_string(_DRAG_THRESHOLD, "DragWidth", "4")
     SESSION.set_string(_DRAG_THRESHOLD, "DragHeight", "4")
 
 
-def _detect_increase_drag_threshold() -> bool:
+def _detect_drag_threshold_medium() -> bool:
     return SESSION.read_string(_DRAG_THRESHOLD, "DragWidth") == "8"
 
 
@@ -607,19 +607,19 @@ def _detect_increase_drag_threshold() -> bool:
 _RDP_CLIP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
 
 
-def _apply_disable_rdp_clipboard(*, require_admin: bool = True) -> None:
+def _apply_disable_rdp_clipboard_policy(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.log("Clipboard: disable clipboard redirection in RDP sessions")
     SESSION.backup([_RDP_CLIP], "RdpClipboard")
     SESSION.set_dword(_RDP_CLIP, "DisableClipboardRedirection", 1)
 
 
-def _remove_disable_rdp_clipboard(*, require_admin: bool = True) -> None:
+def _remove_disable_rdp_clipboard_policy(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
     SESSION.set_dword(_RDP_CLIP, "DisableClipboardRedirection", 0)
 
 
-def _detect_disable_rdp_clipboard() -> bool:
+def _detect_disable_rdp_clipboard_policy() -> bool:
     return SESSION.read_dword(_RDP_CLIP, "DisableClipboardRedirection") == 1
 
 
@@ -683,9 +683,9 @@ TWEAKS += [
         id="clip-drag-threshold-medium",
         label="Set Drag-Drop Minimum Distance (8 px)",
         category="Clipboard & Drag-Drop",
-        apply_fn=_apply_increase_drag_threshold,
-        remove_fn=_remove_increase_drag_threshold,
-        detect_fn=_detect_increase_drag_threshold,
+        apply_fn=_apply_drag_threshold_medium,
+        remove_fn=_remove_drag_threshold_medium,
+        detect_fn=_detect_drag_threshold_medium,
         needs_admin=False,
         corp_safe=True,
         registry_keys=[_DRAG_THRESHOLD],
@@ -699,9 +699,9 @@ TWEAKS += [
         id="clip-rdp-policy-no-redirect",
         label="Disable Clipboard in RDP Sessions (Policy)",
         category="Clipboard & Drag-Drop",
-        apply_fn=_apply_disable_rdp_clipboard,
-        remove_fn=_remove_disable_rdp_clipboard,
-        detect_fn=_detect_disable_rdp_clipboard,
+        apply_fn=_apply_disable_rdp_clipboard_policy,
+        remove_fn=_remove_disable_rdp_clipboard_policy,
+        detect_fn=_detect_disable_rdp_clipboard_policy,
         needs_admin=True,
         corp_safe=True,
         registry_keys=[_RDP_CLIP],

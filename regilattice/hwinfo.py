@@ -19,6 +19,7 @@ import re
 import subprocess
 import threading
 from dataclasses import dataclass, field
+from typing import ClassVar
 
 __all__ = [
     "CPUInfo",
@@ -235,7 +236,7 @@ def _ctypes_memory_mb() -> tuple[int, int] | None:
         import ctypes
 
         class _MEMSTATEX(ctypes.Structure):
-            _fields_ = [
+            _fields_: ClassVar[list[tuple[str, type]]] = [
                 ("dwLength", ctypes.c_ulong),
                 ("dwMemoryLoad", ctypes.c_ulong),
                 ("ullTotalPhys", ctypes.c_ulonglong),

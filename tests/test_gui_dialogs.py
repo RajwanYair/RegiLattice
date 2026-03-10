@@ -1,4 +1,4 @@
-﻿"""Tests for regilattice.gui_dialogs — dialogs and export helpers."""
+"""Tests for regilattice.gui_dialogs — dialogs and export helpers."""
 
 from __future__ import annotations
 
@@ -73,12 +73,7 @@ def _find_buttons(parent: tk.Misc, text_contains: str = "") -> list[tk.Button]:
 
 def _find_install_buttons(dlg: tk.Misc) -> list[tk.Button]:
     """Return Install (non-Remove) buttons within a dialog."""
-    return [
-        b
-        for b in _find_buttons(dlg)
-        if "Install" in str(b.cget("text"))
-        and "Remove" not in str(b.cget("text"))
-    ]
+    return [b for b in _find_buttons(dlg) if "Install" in str(b.cget("text")) and "Remove" not in str(b.cget("text"))]
 
 
 class _SyncThread:
