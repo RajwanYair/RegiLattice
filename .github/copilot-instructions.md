@@ -4,6 +4,47 @@
 > Keep this file accurate — it is the fastest path to project understanding.
 > Last verified: 2025-07-20 (v1.0.2, 1 490 tweaks, 69 categories, ~20 254 tests).
 
+## ⛔ CRITICAL: PowerShell ONLY — NO Unix/Bash Commands
+
+**This is a Windows-only workspace. EVERY terminal command MUST use PowerShell syntax.**
+**Violation of this rule is a hard error. STOP and rewrite using PowerShell before executing.**
+
+Before running ANY terminal command, verify it does NOT contain: `tail`, `grep`,
+`cat`, `ls`, `rm`, `cp`, `mv`, `mkdir`, `touch`, `wc`, `which`, `find`, `diff`,
+`echo ... >>`, `export`, `&&`, `bash`, `sh`, `zsh`, `python3`, or any other
+Unix/POSIX utility.
+
+| BANNED (Unix/bash)               | REQUIRED (PowerShell)                                 |
+| -------------------------------- | ----------------------------------------------------- |
+| `tail -n 20 file`                | `Get-Content file \| Select-Object -Last 20`          |
+| `tail -f file`                   | `Get-Content file -Wait`                              |
+| `grep pattern file`              | `Select-String -Pattern 'pattern' file`               |
+| `grep -r pattern .`              | `Get-ChildItem -Recurse \| Select-String 'pattern'`   |
+| `ls -la` / `ls`                  | `Get-ChildItem` (or `gci`)                            |
+| `cat file`                       | `Get-Content file`                                    |
+| `rm -rf dir`                     | `Remove-Item -Recurse -Force dir`                     |
+| `cp src dst`                     | `Copy-Item src dst`                                   |
+| `mv src dst`                     | `Move-Item src dst`                                   |
+| `mkdir dir`                      | `New-Item dir -ItemType Directory`                    |
+| `touch file`                     | `New-Item file -ItemType File`                        |
+| `wc -l file`                     | `(Get-Content file).Count`                            |
+| `which cmd`                      | `Get-Command cmd`                                     |
+| `echo text >> file`              | `Add-Content file 'text'`                             |
+| `find . -name "*.py"`            | `Get-ChildItem -Recurse -Filter '*.py'`               |
+| `diff a b`                       | `Compare-Object (Get-Content a) (Get-Content b)`      |
+| `export VAR=val`                 | `$env:VAR = 'val'`                                    |
+| `&&` chaining                    | `;` or `if ($LASTEXITCODE -eq 0) { ... }`             |
+
+Rules:
+1. Every shell command MUST be valid PowerShell syntax — no exceptions.
+2. No `bash`, `sh`, `zsh`, `fish`, or Unix coreutil invocations.
+3. Use `python` or the full Python path — never `python3`.
+4. Use `pwsh` when invoking PowerShell scripts from the terminal.
+5. Path separators: use `\` or `Join-Path`.
+6. When piping to limit output, use `Select-Object -First N` or `-Last N`.
+
+---
+
 ## Quick Facts
 
 | Key         | Value                                                                        |
@@ -33,38 +74,6 @@ Run only affected tests with `pwsh scripts/test-changed.ps1` (maps changed
 source files to their test files via naming convention). Use `-Full` for the
 complete suite. This is the intended workflow for each Copilot chat session.
 
-## MANDATORY: Terminal Commands — PowerShell ONLY
-
-**This workspace runs on Windows. NEVER use Unix/bash commands in the terminal.**
-
-| NEVER use (Unix/bash)            | ALWAYS use instead (PowerShell)                       |
-| -------------------------------- | ----------------------------------------------------- |
-| `tail -n 20 file`                | `Get-Content file \| Select-Object -Last 20`          |
-| `tail -f file`                   | `Get-Content file -Wait`                              |
-| `grep pattern file`              | `Select-String -Pattern 'pattern' file`               |
-| `grep -r pattern .`              | `Get-ChildItem -Recurse \| Select-String 'pattern'`   |
-| `ls -la` / `ls`                  | `Get-ChildItem` (or `gci`)                            |
-| `cat file`                       | `Get-Content file`                                    |
-| `rm -rf dir`                     | `Remove-Item -Recurse -Force dir`                     |
-| `cp src dst`                     | `Copy-Item src dst`                                   |
-| `mv src dst`                     | `Move-Item src dst`                                   |
-| `mkdir dir`                      | `New-Item dir -ItemType Directory`                    |
-| `touch file`                     | `New-Item file -ItemType File`                        |
-| `wc -l file`                     | `(Get-Content file).Count`                            |
-| `which cmd`                      | `Get-Command cmd`                                     |
-| `echo text >> file`              | `Add-Content file 'text'`                             |
-| `find . -name "*.py"`            | `Get-ChildItem -Recurse -Filter '*.py'`               |
-| `diff a b`                       | `Compare-Object (Get-Content a) (Get-Content b)`      |
-| `export VAR=val`                 | `$env:VAR = 'val'`                                    |
-| `&&` chaining                    | `;` or `if ($LASTEXITCODE -eq 0) { ... }`             |
-
-Rules enforced by this instruction file:
-1. Every shell command in this chat MUST be valid PowerShell syntax.
-2. No `bash`, `sh`, `zsh`, `fish`, or Unix coreutil invocations.
-3. Use `python` or the full Python path — never `python3`.
-4. Use `pwsh` when invoking PowerShell scripts from the terminal.
-5. Path separators in commands: use `\` or join with `Join-Path`.
-
 ## Performance Notes (engine internals)
 
 - **Cold plugin load**: ~80–150ms for 1,490 tweaks (single-pass, pre-warmed)
@@ -75,6 +84,12 @@ Rules enforced by this instruction file:
 - **`TweakRow.pack_row/unpack_row()`**: tracks `_packed` state — skips
   redundant Tk calls when filter state is unchanged (huge win for search)
 - **`_filter_rows()`**: computes `tweak_scope(td)` once per row (not twice)
+- **`_row_index`**: built once in `_finish_loading()`, reused by `_wire_section_bindings()`
+  — eliminates O(n) dict rebuild per section expand
+- **`_STATUS_STYLES`**: pre-built per-status style tuple lookup — eliminates
+  if/elif/else branches in `_apply_statuses()` and `_wire_section_bindings()`
+- **Tooltip deferral**: `set_text_fn()` defers `build_tooltip_text()` to hover-time
+  — avoids ~1,490 string builds per status refresh cycle
 
 
 ## Architecture at a Glance
