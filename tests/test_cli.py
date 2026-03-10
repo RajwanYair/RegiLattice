@@ -53,14 +53,22 @@ class TestBuildParser:
 
 class TestListFlag:
     def test_list_prints_tweaks(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+        # Patch _status_map_with_progress to avoid spawning a 1 490-thread pool that
+        # times out and leaks threads contaminating subsequent tests.
+        from regilattice.tweaks import all_tweaks
+
+        fake_map = {td.id: TweakResult.UNKNOWN for td in all_tweaks()}
+        with patch("regilattice.cli._status_map_with_progress", return_value=fake_map):
             rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out
         assert "explorer-show-file-extensions" in out or "telem-disable" in out
 
     def test_list_shows_header(self, capsys: pytest.CaptureFixture[str]) -> None:
-        with patch("regilattice.cli.tweak_status", return_value=TweakResult.UNKNOWN):
+        from regilattice.tweaks import all_tweaks
+
+        fake_map = {td.id: TweakResult.UNKNOWN for td in all_tweaks()}
+        with patch("regilattice.cli._status_map_with_progress", return_value=fake_map):
             rc = main(["--list"])
         assert rc == 0
         out = capsys.readouterr().out
