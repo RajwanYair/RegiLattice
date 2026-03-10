@@ -52,18 +52,26 @@ internal sealed class PythonBridge : IDisposable
 
     /// <summary>
     /// Applies a single tweak, bypassing any interactive confirmation.
-    /// Calls: <c>python -m regilattice apply &lt;id&gt; -y</c>
+    /// Calls: <c>python -m regilattice apply &lt;id&gt; -y [--force]</c>
     /// </summary>
     /// <returns>Tuple of (exitCode, stderr).</returns>
-    public Task<(int ExitCode, string StdErr)> ApplyTweakAsync(string tweakId, CancellationToken ct = default)
-        => RunCapturedAsync(new[] { "-m", "regilattice", "apply", tweakId, "-y" }, ct);
+    public Task<(int ExitCode, string StdErr)> ApplyTweakAsync(string tweakId, CancellationToken ct = default, bool force = false)
+    {
+        var args = new List<string> { "-m", "regilattice", "apply", tweakId, "-y" };
+        if (force) args.Add("--force");
+        return RunCapturedAsync(args.ToArray(), ct);
+    }
 
     /// <summary>
     /// Removes a single tweak, bypassing any interactive confirmation.
-    /// Calls: <c>python -m regilattice remove &lt;id&gt; -y</c>
+    /// Calls: <c>python -m regilattice remove &lt;id&gt; -y [--force]</c>
     /// </summary>
-    public Task<(int ExitCode, string StdErr)> RemoveTweakAsync(string tweakId, CancellationToken ct = default)
-        => RunCapturedAsync(new[] { "-m", "regilattice", "remove", tweakId, "-y" }, ct);
+    public Task<(int ExitCode, string StdErr)> RemoveTweakAsync(string tweakId, CancellationToken ct = default, bool force = false)
+    {
+        var args = new List<string> { "-m", "regilattice", "remove", tweakId, "-y" };
+        if (force) args.Add("--force");
+        return RunCapturedAsync(args.ToArray(), ct);
+    }
 
     /// <summary>
     /// Queries the live status of a single tweak.
