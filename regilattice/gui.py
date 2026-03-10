@@ -1003,11 +1003,17 @@ class RegiLatticeGUI:
                     status_match = td.id in self._session_changed
                 else:
                     status_match = status_filter == "All" or self._cached_statuses.get(td.id, TweakResult.UNKNOWN) == target_status
-                scope_match = not need_scope or tweak_scope(td) == target_scope
+                # Compute scope once (tweak_scope is O(1) cached but call overhead adds up)
+                if need_scope or need_scope_op:
+                    td_scope = tweak_scope(td)
+                    scope_match = not need_scope or td_scope == target_scope
+                    scope_op_match = not need_scope_op or td_scope == scope_op
+                else:
+                    scope_match = True
+                    scope_op_match = True
                 # Prefix operator checks
                 tag_match = all(any(tf in t.lower() for t in td.tags) for tf in tag_filters)
                 cat_match = all(cf in td.category.lower() for cf in cat_filters)
-                scope_op_match = not need_scope_op or tweak_scope(td) == scope_op
                 admin_match = admin_op is None or td.needs_admin == admin_op
                 if text_match and status_match and scope_match and tag_match and cat_match and scope_op_match and admin_match:
                     # Build widgets lazily before first pack

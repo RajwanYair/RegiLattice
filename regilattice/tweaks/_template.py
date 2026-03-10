@@ -111,11 +111,60 @@ r"""Template: How to add a new tweak to RegiLattice.
 
  Q: My tweak doesn't appear in any profile.
  A: Profiles map by category name.  Check tweaks/__init__.py PROFILES dict.
+
+===========================================================================
+ STANDARD FILE STRUCTURE  (enforced by code review)
+===========================================================================
+
+ Every tweak module MUST follow this layout — top to bottom:
+
+   1. Module docstring (one paragraph summarising coverage)
+   2. Imports
+   3. # ── Key paths ── block (ALL registry paths for the whole module)
+   4. Repeated for each tweak group:
+       a. # ── Tweak Label ── block header
+       b. _apply_<name>(*, require_admin: bool = True) -> None
+       c. _remove_<name>(*, require_admin: bool = True) -> None
+       d. _detect_<name>() -> bool
+       e. TWEAKS += [TweakDef(...)]     <- immediately after the triplet
+
+ DECISION: keep TweakDef RIGHT after the triplet (not consolidated at end).
+ This keeps each group self-contained: if you edit a triplet, the
+ TweakDef binding is immediately visible without scrolling to the bottom.
+ Adding a new tweak = scroll to the end of its section, not the whole file.
+
+ Example:
+
+   # ── Key paths ────────────────────────────────────────────────────────────
+   _FOO_KEY = r"HKEY_LOCAL_MACHINE\..."
+   _BAR_KEY = r"HKEY_CURRENT_USER\..."
+
+   # ── Disable Foo ───────────────────────────────────────────────────────────
+   def _apply_disable_foo(*, require_admin: bool = True) -> None: ...
+   def _remove_disable_foo(*, require_admin: bool = True) -> None: ...
+   def _detect_disable_foo() -> bool: ...
+
+   TWEAKS += [
+       TweakDef(
+           id="mycat-disable-foo",
+           ...
+       ),
+   ]
+
+   # ── Enable Bar ────────────────────────────────────────────────────────────
+   def _apply_enable_bar(*, require_admin: bool = True) -> None: ...
+   ...
+   TWEAKS += [TweakDef(id="mycat-enable-bar", ...)]
+
+ Comment style:
+   - Block headers:  # ── Section Title ─[fill]──  (per-section, required)
+   - Inline values: SESSION.set_dword(KEY, "Name", 4)  # 4 = Disabled (allowed)
+   - No per-line prose comments — keep the code self-documenting
 """
 
 from __future__ import annotations
 
-# Step 1 — Import the required helpers.
+# Step 1 -- Import the required helpers.
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
 

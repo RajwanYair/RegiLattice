@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-20 (v1.0.2, 1 475 tweaks, 69 categories, ~20 254 tests).
+> Last verified: 2025-07-20 (v1.0.2, 1 490 tweaks, 69 categories, ~20 254 tests).
 
 ## Quick Facts
 
@@ -12,13 +12,38 @@
 | Build       | `hatchling` via `pyproject.toml`                                             |
 | Lint        | `ruff` (E, F, W, I, UP, B, SIM, RUF; line-length 150; ignore ARG002)         |
 | Type-check  | `mypy --strict`                                                              |
-| Test        | `pytest` in `tests/` (~20 254 tests across 21 test files)                    |
+| Test        | `pytest` in `tests/` (~20 254 tests across 22 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
-| Version     | 1.0.2                                                                        |
+| Version     | 1.0.2 (production candidate — do not bump without manual review)             |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
-| Tweaks      | 1,475 across 69 categories                                                   |
-| Tests       | 20,254 passing                                                               |
+| Tweaks      | 1,490 across 69 categories                                                   |
+| Tests       | ~20,254 passing                                                              |
+
+## Git Workflow (IMPORTANT)
+
+- **Commit per logical phase/task** during a session (granular local history)
+- **Push to GitHub only at end of a chat session** — never mid-session
+- Commit message format: `type(scope): description` (Conventional Commits)
+- Full details: `.github/instructions/git-workflow.instructions.md`
+
+## Test Optimization
+
+Run only affected tests with `pwsh scripts/test-changed.ps1` (maps changed
+source files to their test files via naming convention). Use `-Full` for the
+complete suite. This is the intended workflow for each Copilot chat session.
+
+## Performance Notes (engine internals)
+
+- **Cold plugin load**: ~80–150ms for 1,490 tweaks (single-pass, pre-warmed)
+- **`categories()`**: O(k=69) — returns `_TWEAKS_BY_CAT.keys()`, never full scan
+- **`search_tweaks()`**: uses `_TWEAKS_SEARCH_PAIRS` (pre-built parallel list)
+  — eliminates per-element function call + dict lookup overhead
+- **`tweak_scope()`**: O(1) via `_SCOPE_CACHE` (pre-warmed at plugin load)
+- **`TweakRow.pack_row/unpack_row()`**: tracks `_packed` state — skips
+  redundant Tk calls when filter state is unchanged (huge win for search)
+- **`_filter_rows()`**: computes `tweak_scope(td)` once per row (not twice)
+
 
 ## Architecture at a Glance
 

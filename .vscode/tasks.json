@@ -91,6 +91,17 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "Test: Changed Files Only",
+      "type": "shell",
+      "command": "pwsh -File scripts/test-changed.ps1",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }
