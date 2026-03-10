@@ -529,3 +529,188 @@ TWEAKS += [
         tags=["search", "indexer", "battery", "power", "laptop"],
     ),
 ]
+
+
+# ── Disable Bing Search in Start Menu ─────────────────────────────────────────
+
+
+def _apply_disable_bing_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: disable Bing search in Start menu")
+    SESSION.backup([_SEARCH_CU], "BingSearch")
+    SESSION.set_dword(_SEARCH_CU, "BingSearchEnabled", 0)
+
+
+def _remove_disable_bing_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "BingSearchEnabled")
+
+
+def _detect_disable_bing_search() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "BingSearchEnabled") == 0
+
+
+# ── Limit Indexer Worker Threads ──────────────────────────────────────────────
+
+
+def _apply_limit_indexer_threads(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: limit indexer CPU threads to 1")
+    SESSION.backup([_GATHER], "IndexerThreads")
+    SESSION.set_dword(_GATHER, "GatheringMaxServerThreadCount", 1)
+
+
+def _remove_limit_indexer_threads(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GATHER, "GatheringMaxServerThreadCount")
+
+
+def _detect_limit_indexer_threads() -> bool:
+    val = SESSION.read_dword(_GATHER, "GatheringMaxServerThreadCount")
+    return val is not None and val <= 1
+
+
+# ── Disable Safe Search ───────────────────────────────────────────────────────
+
+
+def _apply_disable_safe_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: disable SafeSearch filter")
+    SESSION.backup([_SEARCH_CU], "SafeSearch")
+    SESSION.set_dword(_SEARCH_CU, "SafeSearch", 0)
+
+
+def _remove_disable_safe_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "SafeSearch")
+
+
+def _detect_disable_safe_search() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "SafeSearch") == 0
+
+
+# ── Disable Indexing of Network Locations ─────────────────────────────────────
+
+
+def _apply_disable_network_index(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: disable indexing of network locations")
+    SESSION.backup([_SEARCH], "NetworkIndex")
+    SESSION.set_dword(_SEARCH, "PreventIndexingNetworkLocations", 1)
+
+
+def _remove_disable_network_index(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH, "PreventIndexingNetworkLocations")
+
+
+def _detect_disable_network_index() -> bool:
+    return SESSION.read_dword(_SEARCH, "PreventIndexingNetworkLocations") == 1
+
+
+# ── Disable Microsoft Account Cloud Search ────────────────────────────────────
+
+
+def _apply_disable_msa_cloud_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Indexing & Search: disable MSA cloud search integration")
+    SESSION.backup([_SEARCH_CU], "MSACloudSearch")
+    SESSION.set_dword(_SEARCH_CU, "IsMSACloudSearchEnabled", 0)
+
+
+def _remove_disable_msa_cloud_search(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEARCH_CU, "IsMSACloudSearchEnabled")
+
+
+def _detect_disable_msa_cloud_search() -> bool:
+    return SESSION.read_dword(_SEARCH_CU, "IsMSACloudSearchEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="idx-disable-bing-search",
+        label="Disable Bing Search in Start Menu",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_bing_search,
+        remove_fn=_remove_disable_bing_search,
+        detect_fn=_detect_disable_bing_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Sets BingSearchEnabled=0 in user Search settings to prevent Bing web results "
+            "from appearing in Start menu search. "
+            "Default: enabled. Recommended: disabled for faster local search."
+        ),
+        tags=["search", "bing", "start", "web-results", "privacy"],
+    ),
+    TweakDef(
+        id="idx-limit-indexer-threads",
+        label="Limit Indexer CPU Threads",
+        category="Indexing & Search",
+        apply_fn=_apply_limit_indexer_threads,
+        remove_fn=_remove_limit_indexer_threads,
+        detect_fn=_detect_limit_indexer_threads,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GATHER],
+        description=(
+            "Limits the Windows Search indexer to 1 worker thread via GatheringMaxServerThreadCount, "
+            "reducing CPU load during burst indexing. "
+            "Default: uncapped. Recommended: Apply on dual-core systems."
+        ),
+        tags=["search", "indexer", "cpu", "performance", "threads"],
+    ),
+    TweakDef(
+        id="idx-disable-safe-search",
+        label="Disable SafeSearch Filter",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_safe_search,
+        remove_fn=_remove_disable_safe_search,
+        detect_fn=_detect_disable_safe_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Sets SafeSearch=0 in Windows Search settings, disabling the content filter "
+            "that restricts explicit content in search results. "
+            "Default: moderate (1). Recommended: off for unrestricted results."
+        ),
+        tags=["search", "safe-search", "filter", "content"],
+    ),
+    TweakDef(
+        id="idx-disable-network-index",
+        label="Disable Indexing of Network Locations",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_network_index,
+        remove_fn=_remove_disable_network_index,
+        detect_fn=_detect_disable_network_index,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEARCH],
+        description=(
+            "Prevents Windows Search from indexing mapped network drives and UNC paths via policy. "
+            "Reduces indexer CPU and network load. "
+            "Default: allowed. Recommended: Disabled on slow or corporate networks."
+        ),
+        tags=["search", "network", "indexer", "policy", "performance"],
+    ),
+    TweakDef(
+        id="idx-disable-msa-cloud-search",
+        label="Disable Microsoft Account Cloud Search",
+        category="Indexing & Search",
+        apply_fn=_apply_disable_msa_cloud_search,
+        remove_fn=_remove_disable_msa_cloud_search,
+        detect_fn=_detect_disable_msa_cloud_search,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_SEARCH_CU],
+        description=(
+            "Disables Microsoft Account cloud search integration in Windows Search. "
+            "Prevents OneDrive and MSA content from appearing in local search results. "
+            "Default: enabled. Recommended: disabled for privacy."
+        ),
+        tags=["search", "cloud", "msa", "microsoft-account", "privacy"],
+    ),
+]

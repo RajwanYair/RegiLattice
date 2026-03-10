@@ -457,6 +457,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Launch the graphical (tkinter) interface.",
     )
     parser.add_argument(
+        "--menu",
+        action="store_true",
+        help="Launch the interactive terminal category menu.",
+    )
+    parser.add_argument(
         "--snapshot",
         metavar="PATH",
         help="Save current tweak state snapshot to file (JSON).",
@@ -1047,15 +1052,21 @@ def main(argv: list[str] | None = None) -> int:
         launch()
         return 0
 
-    if args.mode and args.tweak:
-        if args.mode == "status":
-            found = get_tweak(args.tweak)
-            if found:
-                print(f"{found.label}: {tweak_status(found)}")
-            else:
-                print(f"❌ Unknown tweak '{args.tweak}'.")
-                return 2
-            return 0
+    if args.menu:
+        from .menu import Menu as _CliMenu
+
+        _CliMenu().loop()
+        return 0
+
+    if args.mode == "status":
+        found = get_tweak(args.tweak)
+        if found:
+            print(f"{found.label}: {tweak_status(found)}")
+        else:
+            print(f"❌ Unknown tweak '{args.tweak}'.")
+            return 2
+        return 0
+    if args.mode:
         return _run_action(args.mode, args.tweak, assume_yes=args.assume_yes, force=args.force)
 
     # Interactive menu
