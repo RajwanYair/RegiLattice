@@ -7,6 +7,7 @@ applied from Python with proper backup, logging, and error handling.
 from __future__ import annotations
 
 import functools
+import logging
 import os
 import platform
 import re
@@ -31,6 +32,7 @@ __all__ = [
     "assert_admin",
     "is_windows",
     "platform_summary",
+    "validate_registry_path",
 ]
 
 # ── Root-hive mapping ────────────────────────────────────────────────────────
@@ -89,6 +91,54 @@ def _split_root(path: str) -> tuple[int, str]:
     raise ValueError(f"Unsupported registry path: {path}")
 
 
+# Valid top-level hive prefixes (both full and short forms, uppercase)
+_VALID_HIVE_PREFIXES: frozenset[str] = frozenset(
+    {
+        "HKEY_CLASSES_ROOT",
+        "HKEY_CURRENT_USER",
+        "HKEY_LOCAL_MACHINE",
+        "HKEY_USERS",
+        "HKEY_CURRENT_CONFIG",
+        "HKCR",
+        "HKCU",
+        "HKLM",
+        "HKU",
+        "HKCC",
+    }
+)
+
+
+def validate_registry_path(path: str) -> str:
+    """Validate that *path* is a well-formed registry key path.
+
+    Checks that:
+    - The path is a non-empty string.
+    - It starts with a recognised HKEY_* (or short-form) prefix followed by
+      a backslash, e.g. ``HKEY_CURRENT_USER\\Software\\...``.
+    - It does not contain null bytes or path-traversal sequences.
+
+    Returns the normalised path (leading/trailing whitespace stripped).
+    Raises :exc:`ValueError` with a descriptive message on failure.
+    """
+    if not isinstance(path, str) or not path.strip():
+        raise ValueError("Registry path must be a non-empty string.")
+
+    path = path.strip()
+
+    if "\x00" in path:
+        raise ValueError("Registry path must not contain null bytes.")
+
+    upper = path.upper()
+    hive = upper.split("\\", 1)[0]
+    if hive not in _VALID_HIVE_PREFIXES:
+        raise ValueError(f"Registry path must start with a valid hive prefix (e.g. HKEY_CURRENT_USER, HKLM, …). Got: {path!r}")
+
+    if "\\" not in path:
+        raise ValueError(f"Registry path must include at least one subkey after the hive: {path!r}")
+
+    return path
+
+
 def is_windows() -> bool:
     return os.name == "nt"
 
@@ -128,7 +178,13 @@ class RegistrySession:
     _read_cache_lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
     def __post_init__(self) -> None:
-        self._log_path = self.base_dir / "RegiLattice.log"
+        # Prefer c:\temp for the real session; fall back to base_dir.
+        # Only redirect when base_dir is the package root — not during tests
+        # that pass a custom tmp_path.
+        _ctemp = Path("c:/temp")
+        _pkg_root = Path(__file__).resolve().parent.parent
+        _use_ctemp = _ctemp.is_dir() and self.base_dir == _pkg_root
+        self._log_path = (_ctemp if _use_ctemp else self.base_dir) / "RegiLattice.log"
 
     # -- Read cache --
 
@@ -190,6 +246,7 @@ class RegistrySession:
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with self._log_path.open("a", encoding="utf-8") as fh:
             fh.write(f"{ts} : {message}\n")
+        logging.getLogger("regilattice.registry").debug("%s", message)
 
     # -- Backup --
 

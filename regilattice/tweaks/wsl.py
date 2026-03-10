@@ -1172,3 +1172,220 @@ TWEAKS += [
         tags=["wsl", "gpu", "cuda", "directml", "compute", "ml"],
     ),
 ]
+
+# ── New WSL tweaks ───────────────────────────────────────────────────────────
+
+_LXSS_INTEROP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"
+_WSL_KERN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LxssManager"
+_WSL_CRASH = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson"
+_WSL_CRASH_KEYS = [_WSL_CRASH]
+
+
+def _apply_wsl_disable_interop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_INTEROP], "WSL_Interop")
+    SESSION.set_dword(_LXSS_INTEROP, "EnableInterop", 0)
+
+
+def _remove_wsl_disable_interop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_INTEROP], "WSL_Interop_Remove")
+    SESSION.delete_value(_LXSS_INTEROP, "EnableInterop")
+
+
+def _detect_wsl_disable_interop() -> bool:
+    return SESSION.read_dword(_LXSS_INTEROP, "EnableInterop") == 0
+
+
+def _apply_wsl_disable_binfmt_misc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_INTEROP], "WSL_BinfmtMisc")
+    SESSION.set_dword(_LXSS_INTEROP, "EnableBinfmtMisc", 0)
+
+
+def _remove_wsl_disable_binfmt_misc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_INTEROP], "WSL_BinfmtMisc_Remove")
+    SESSION.delete_value(_LXSS_INTEROP, "EnableBinfmtMisc")
+
+
+def _detect_wsl_disable_binfmt_misc() -> bool:
+    return SESSION.read_dword(_LXSS_INTEROP, "EnableBinfmtMisc") == 0
+
+
+_LXSS_MEM = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"
+
+
+def _apply_wsl_limit_processors(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_MEM], "WSL_Processors")
+    SESSION.set_dword(_LXSS_MEM, "ProcessorCount", 4)
+
+
+def _remove_wsl_limit_processors(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_MEM], "WSL_Processors_Remove")
+    SESSION.delete_value(_LXSS_MEM, "ProcessorCount")
+
+
+def _detect_wsl_limit_processors() -> bool:
+    return SESSION.read_dword(_LXSS_MEM, "ProcessorCount") == 4
+
+
+def _apply_wsl_disable_crash_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup(_WSL_CRASH_KEYS, "WSL_CrashReport")
+    SESSION.set_dword(_WSL_CRASH, "CreateCrashDump", 0)
+
+
+def _remove_wsl_disable_crash_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup(_WSL_CRASH_KEYS, "WSL_CrashReport_Remove")
+    SESSION.delete_value(_WSL_CRASH, "CreateCrashDump")
+
+
+def _detect_wsl_disable_crash_reporting() -> bool:
+    return SESSION.read_dword(_WSL_CRASH, "CreateCrashDump") == 0
+
+
+_LXSS_PERF = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"
+
+
+def _apply_wsl_nested_virt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_PERF], "WSL_NestedVirt")
+    SESSION.set_dword(_LXSS_PERF, "EnableNestedVirtualization", 1)
+
+
+def _remove_wsl_nested_virt(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_PERF], "WSL_NestedVirt_Remove")
+    SESSION.delete_value(_LXSS_PERF, "EnableNestedVirtualization")
+
+
+def _detect_wsl_nested_virt() -> bool:
+    return SESSION.read_dword(_LXSS_PERF, "EnableNestedVirtualization") == 1
+
+
+_LXSS_DIAG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"
+
+
+def _apply_wsl_disable_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_DIAG], "WSL_Telemetry")
+    SESSION.set_dword(_LXSS_DIAG, "EnableTelemetry", 0)
+
+
+def _remove_wsl_disable_telemetry(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_LXSS_DIAG], "WSL_Telemetry_Remove")
+    SESSION.delete_value(_LXSS_DIAG, "EnableTelemetry")
+
+
+def _detect_wsl_disable_telemetry() -> bool:
+    return SESSION.read_dword(_LXSS_DIAG, "EnableTelemetry") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="wsl-interop-off-policy",
+        label="Disable WSL Windows Interop",
+        category="WSL",
+        apply_fn=_apply_wsl_disable_interop,
+        remove_fn=_remove_wsl_disable_interop,
+        detect_fn=_detect_wsl_disable_interop,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LXSS_INTEROP],
+        description=(
+            "Disables WSL interoperability with Windows (launching Windows .exe from WSL). "
+            "Reduces attack surface and eliminates Windows path leakage. "
+            "Default: enabled. Recommended: disabled for isolated/security workloads."
+        ),
+        tags=["wsl", "interop", "security", "isolation"],
+    ),
+    TweakDef(
+        id="wsl-disable-binfmt-misc",
+        label="Disable WSL Binfmt Misc Registration",
+        category="WSL",
+        apply_fn=_apply_wsl_disable_binfmt_misc,
+        remove_fn=_remove_wsl_disable_binfmt_misc,
+        detect_fn=_detect_wsl_disable_binfmt_misc,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LXSS_INTEROP],
+        description=(
+            "Disables binfmt_misc registration in WSL2, preventing the kernel from "
+            "automatically running Windows executables from Linux paths. "
+            "Default: enabled. Recommended: disabled for pure-Linux dev environments."
+        ),
+        tags=["wsl", "binfmt", "kernel", "interop", "isolation"],
+    ),
+    TweakDef(
+        id="wsl-limit-processors",
+        label="Limit WSL2 VM to 4 Processors",
+        category="WSL",
+        apply_fn=_apply_wsl_limit_processors,
+        remove_fn=_remove_wsl_limit_processors,
+        detect_fn=_detect_wsl_limit_processors,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_LXSS_MEM],
+        description=(
+            "Caps the number of logical processors available to the WSL2 VM to 4. "
+            "Prevents WSL from starving the host of CPU resources during builds. "
+            "Default: all host processors. Recommended: 4 for background dev use."
+        ),
+        tags=["wsl", "cpu", "performance", "vm", "resource"],
+    ),
+    TweakDef(
+        id="wsl-disable-crash-reporting",
+        label="Disable WSL Crash Dump Creation",
+        category="WSL",
+        apply_fn=_apply_wsl_disable_crash_reporting,
+        remove_fn=_remove_wsl_disable_crash_reporting,
+        detect_fn=_detect_wsl_disable_crash_reporting,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=_WSL_CRASH_KEYS,
+        description=(
+            "Prevents Watson (crash reporting) from creating crash dumps for WSL processes. "
+            "Frees disk space and avoids slow post-crash dump write. "
+            "Default: enabled. Recommended: disabled on developer machines."
+        ),
+        tags=["wsl", "crash", "dump", "telemetry", "disk"],
+    ),
+    TweakDef(
+        id="wsl-enable-nested-virt-policy",
+        label="Enable Nested Virtualisation in WSL2",
+        category="WSL",
+        apply_fn=_apply_wsl_nested_virt,
+        remove_fn=_remove_wsl_nested_virt,
+        detect_fn=_detect_wsl_nested_virt,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_LXSS_PERF],
+        description=(
+            "Enables nested virtualisation inside the WSL2 VM, allowing you to run "
+            "KVM/QEMU, Docker-in-Docker, or other hypervisors inside WSL. "
+            "Default: disabled. Recommended: enabled for platform/container engineers."
+        ),
+        tags=["wsl", "virtualisation", "kvm", "docker", "nested", "hypervisor"],
+    ),
+    TweakDef(
+        id="wsl-disable-telemetry",
+        label="Disable WSL Telemetry",
+        category="WSL",
+        apply_fn=_apply_wsl_disable_telemetry,
+        remove_fn=_remove_wsl_disable_telemetry,
+        detect_fn=_detect_wsl_disable_telemetry,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_LXSS_DIAG],
+        description=(
+            "Disables WSL subsystem telemetry data collection sent to Microsoft. "
+            "Default: enabled. Recommended: disabled for privacy-focused environments."
+        ),
+        tags=["wsl", "telemetry", "privacy", "microsoft"],
+    ),
+]

@@ -560,3 +560,187 @@ TWEAKS += [
         tags=["clipboard", "experience", "host", "memory", "minimal"],
     ),
 ]
+
+
+# ── Disable Clipboard Suggestions ────────────────────────────────────────────
+
+_CLIPBOARD_SUGGEST = r"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"
+
+
+def _apply_disable_clip_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.log("Clipboard: disable text suggestions in clipboard")
+    SESSION.backup([_CLIPBOARD_SUGGEST], "ClipSuggestions")
+    SESSION.set_dword(_CLIPBOARD_SUGGEST, "EnableClipboardTextSuggestions", 0)
+
+
+def _remove_disable_clip_suggestions(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CLIPBOARD_SUGGEST, "EnableClipboardTextSuggestions", 1)
+
+
+def _detect_disable_clip_suggestions() -> bool:
+    return SESSION.read_dword(_CLIPBOARD_SUGGEST, "EnableClipboardTextSuggestions") == 0
+
+
+# ── Set Drag-Drop Minimum Distance ────────────────────────────────────────────
+
+_DRAG_THRESHOLD = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_increase_drag_threshold(*, require_admin: bool = False) -> None:
+    SESSION.log("Clipboard: increase drag-drop minimum distance to 8px")
+    SESSION.backup([_DRAG_THRESHOLD], "DragThreshold")
+    SESSION.set_string(_DRAG_THRESHOLD, "DragWidth", "8")
+    SESSION.set_string(_DRAG_THRESHOLD, "DragHeight", "8")
+
+
+def _remove_increase_drag_threshold(*, require_admin: bool = False) -> None:
+    SESSION.set_string(_DRAG_THRESHOLD, "DragWidth", "4")
+    SESSION.set_string(_DRAG_THRESHOLD, "DragHeight", "4")
+
+
+def _detect_increase_drag_threshold() -> bool:
+    return SESSION.read_string(_DRAG_THRESHOLD, "DragWidth") == "8"
+
+
+# ── Disable Clipboard via RDP ─────────────────────────────────────────────────
+
+_RDP_CLIP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+
+
+def _apply_disable_rdp_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Clipboard: disable clipboard redirection in RDP sessions")
+    SESSION.backup([_RDP_CLIP], "RdpClipboard")
+    SESSION.set_dword(_RDP_CLIP, "DisableClipboardRedirection", 1)
+
+
+def _remove_disable_rdp_clipboard(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_RDP_CLIP, "DisableClipboardRedirection", 0)
+
+
+def _detect_disable_rdp_clipboard() -> bool:
+    return SESSION.read_dword(_RDP_CLIP, "DisableClipboardRedirection") == 1
+
+
+# ── Enable Clipboard Paste Format Selection ───────────────────────────────────
+
+_CLIP_FORMAT = r"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"
+
+
+def _apply_enable_paste_menu(*, require_admin: bool = False) -> None:
+    SESSION.log("Clipboard: enable smart paste menu for format selection")
+    SESSION.backup([_CLIP_FORMAT], "PasteMenu")
+    SESSION.set_dword(_CLIP_FORMAT, "EnableSmartCopyPaste", 1)
+
+
+def _remove_enable_paste_menu(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_CLIP_FORMAT, "EnableSmartCopyPaste", 0)
+
+
+def _detect_enable_paste_menu() -> bool:
+    return SESSION.read_dword(_CLIP_FORMAT, "EnableSmartCopyPaste") == 1
+
+
+# ── Disable Drop Shadows on Dragged Objects ───────────────────────────────────
+
+_VISUAL_FX = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
+
+
+def _apply_disable_drag_shadow(*, require_admin: bool = False) -> None:
+    SESSION.log("Clipboard: disable drop shadow on dragged items")
+    SESSION.backup([_VISUAL_FX], "DragShadow")
+    SESSION.set_dword(_VISUAL_FX, "VisualFXSetting", 2)  # 2 = custom, disables specific effects
+
+
+def _remove_disable_drag_shadow(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_VISUAL_FX, "VisualFXSetting", 0)  # 0 = let Windows choose
+
+
+def _detect_disable_drag_shadow() -> bool:
+    return SESSION.read_dword(_VISUAL_FX, "VisualFXSetting") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="clip-disable-suggestions",
+        label="Disable Clipboard Text Suggestions",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_clip_suggestions,
+        remove_fn=_remove_disable_clip_suggestions,
+        detect_fn=_detect_disable_clip_suggestions,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLIPBOARD_SUGGEST],
+        description=(
+            "Disables Windows 11 clipboard text suggestions (paste-and-go prompts). "
+            "Reduces clipboard latency and prevents analysis of clipboard content. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["clipboard", "suggestions", "text", "privacy", "ai"],
+    ),
+    TweakDef(
+        id="clip-drag-threshold-medium",
+        label="Set Drag-Drop Minimum Distance (8 px)",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_increase_drag_threshold,
+        remove_fn=_remove_increase_drag_threshold,
+        detect_fn=_detect_increase_drag_threshold,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DRAG_THRESHOLD],
+        description=(
+            "Increases the minimum mouse movement required to initiate a drag-drop operation "
+            "from 4 px to 8 px. Prevents accidental dragging. Default: 4 px."
+        ),
+        tags=["clipboard", "drag", "drop", "threshold", "mouse"],
+    ),
+    TweakDef(
+        id="clip-rdp-policy-no-redirect",
+        label="Disable Clipboard in RDP Sessions (Policy)",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_rdp_clipboard,
+        remove_fn=_remove_disable_rdp_clipboard,
+        detect_fn=_detect_disable_rdp_clipboard,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP_CLIP],
+        description=(
+            "Disables clipboard sharing between the RDP client and remote session via policy. "
+            "Security hardening measure for server environments. Default: Allowed."
+        ),
+        tags=["clipboard", "rdp", "remote-desktop", "security"],
+    ),
+    TweakDef(
+        id="clip-enable-smart-paste",
+        label="Enable Smart Paste Menu",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_enable_paste_menu,
+        remove_fn=_remove_enable_paste_menu,
+        detect_fn=_detect_enable_paste_menu,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CLIP_FORMAT],
+        description=(
+            "Enables the smart copy/paste menu that lets users choose paste format. "
+            "Useful in Office and Teams for paste-as-plain-text. Default: Disabled."
+        ),
+        tags=["clipboard", "paste", "format", "smart", "productivity"],
+    ),
+    TweakDef(
+        id="clip-disable-drag-shadow",
+        label="Disable Drop Shadow on Dragged Items",
+        category="Clipboard & Drag-Drop",
+        apply_fn=_apply_disable_drag_shadow,
+        remove_fn=_remove_disable_drag_shadow,
+        detect_fn=_detect_disable_drag_shadow,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_VISUAL_FX],
+        description=(
+            "Sets visual effects to custom mode which removes the drop shadow on dragged objects. "
+            "Improves drag-drop rendering performance on older GPUs. Default: Enabled."
+        ),
+        tags=["clipboard", "drag", "shadow", "visual", "performance"],
+    ),
+]

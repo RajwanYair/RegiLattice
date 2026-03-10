@@ -40,14 +40,30 @@ from .tweaks import (
 __all__ = ["main"]
 
 
+def _status_map_with_progress(label: str = "Scanning") -> dict[str, TweakResult]:
+    """Run status_map(parallel=True) while printing a live counter to stderr."""
+    from .tweaks import status_map
+
+    _done: list[int] = [0]
+
+    def _on_progress(done: int, _total: int) -> None:
+        _done[0] = done
+        print(f"\r{_ANSI_DIM}{label} {done}/{_total}…{_ANSI_RESET}", end="", flush=True, file=sys.stderr)
+
+    result = status_map(parallel=True, progress_fn=_on_progress)
+    print(f"\r{' ' * (len(label) + 20)}\r", end="", flush=True, file=sys.stderr)
+    return result
+
+
+# ── Snapshot diff helpers ────────────────────────────────────────────────────
+
+
 def _confirm(prompt: str) -> bool:
     try:
         return input(f"{prompt} [y/N]: ").strip().lower() in {"y", "yes"}
     except (EOFError, KeyboardInterrupt):
         return False
 
-
-# ── Snapshot diff helpers ────────────────────────────────────────────────────
 
 _ANSI_RESET = "\033[0m"
 _ANSI_GREEN = "\033[32m"
@@ -596,6 +612,13 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run a comprehensive system health check: Python version, winreg, admin, config, tweaks.",
     )
+    parser.add_argument(
+        "--log-level",
+        metavar="LEVEL",
+        default="WARNING",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Set logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL). Default: WARNING.",
+    )
     return parser
 
 
@@ -612,6 +635,11 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    # Configure logging as early as possible so all subsequent code can use it
+    from .logger import configure_logging
+
+    configure_logging(args.log_level)
 
     # Load user config (~/.regilattice.toml or --config path)
     from .config import load_config
@@ -753,9 +781,7 @@ def main(argv: list[str] | None = None) -> int:
         return _export_reg(Path(args.export_reg))
 
     if args.check:
-        from .tweaks import status_map
-
-        smap = status_map()
+        smap = _status_map_with_progress("Checking")
         applied = [tid for tid, st in smap.items() if st == TweakResult.APPLIED]
         default = [tid for tid, st in smap.items() if st == TweakResult.NOT_APPLIED]
         unknown = [tid for tid, st in smap.items() if st == TweakResult.UNKNOWN]
@@ -774,10 +800,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.diff:
-        from .tweaks import status_map
-
         profile_tweaks = {td.id for td in tweaks_for_profile(args.diff)}
-        smap = status_map()
+        smap = _status_map_with_progress("Diffing")
         to_apply = sorted(tid for tid in profile_tweaks if smap.get(tid) != TweakResult.APPLIED)
         to_remove = sorted(tid for tid in smap if tid not in profile_tweaks and smap[tid] == TweakResult.APPLIED)
         if not to_apply and not to_remove:
@@ -828,8 +852,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
             print("-" * 80)
+            smap = _status_map_with_progress("Listing")
             for td in tweaks:
-                st = tweak_status(td)
+                st = smap.get(td.id, TweakResult.UNKNOWN)
                 print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
         return 0
 
@@ -853,8 +878,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"{'ID':<30} {'Category':<14} {'Status':<14} Label")
             print("-" * 80)
+            smap_search = _status_map_with_progress("Searching")
             for td in search_results:
-                st = tweak_status(td)
+                st = smap_search.get(td.id, TweakResult.UNKNOWN)
                 print(f"{td.id:<30} {td.category:<14} {st:<14} {td.label}")
             print(f"\n{len(search_results)} tweak(s) found.")
         return 0

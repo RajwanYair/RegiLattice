@@ -563,33 +563,6 @@ TWEAKS += [
 ]
 
 
-# -- Set Active Hours 8AM-11PM ------------------------------------------------
-
-
-def _apply_set_active_hours(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.log("WU: setting active hours to 8AM-11PM")
-    SESSION.backup([_WU], "ActiveHours")
-    SESSION.set_dword(_WU, "SetActiveHours", 1)
-    SESSION.set_dword(_WU, "ActiveHoursStart", 8)
-    SESSION.set_dword(_WU, "ActiveHoursEnd", 23)
-
-
-def _remove_set_active_hours(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_WU, "SetActiveHours")
-    SESSION.delete_value(_WU, "ActiveHoursStart")
-    SESSION.delete_value(_WU, "ActiveHoursEnd")
-
-
-def _detect_set_active_hours() -> bool:
-    return (
-        SESSION.read_dword(_WU, "SetActiveHours") == 1
-        and SESSION.read_dword(_WU, "ActiveHoursStart") == 8
-        and SESSION.read_dword(_WU, "ActiveHoursEnd") == 23
-    )
-
-
 # -- Block Driver Search via Windows Update -----------------------------------
 
 _DRIVER_SEARCH = (
@@ -635,23 +608,6 @@ def _detect_defer_feature_365d() -> bool:
 
 TWEAKS += [
     TweakDef(
-        id="wu-set-active-hours",
-        label="Set Active Hours to 8AM-11PM",
-        category="Windows Update",
-        apply_fn=_apply_set_active_hours,
-        remove_fn=_remove_set_active_hours,
-        detect_fn=_detect_set_active_hours,
-        needs_admin=True,
-        corp_safe=True,
-        registry_keys=[_WU],
-        description=(
-            "Sets Windows Update active hours to 8AM-11PM to prevent "
-            "automatic restarts during working hours. "
-            "Default: auto-detected. Recommended: 8AM-11PM."
-        ),
-        tags=["update", "active-hours", "restart", "schedule"],
-    ),
-    TweakDef(
         id="wu-block-driver-search",
         label="Block Driver Search via Windows Update",
         category="Windows Update",
@@ -684,5 +640,175 @@ TWEAKS += [
             "Default: 0. Recommended: 365 for production stability."
         ),
         tags=["update", "defer", "feature", "delay", "365"],
+    ),
+]
+
+# ── Extra Windows Update policies ────────────────────────────────────────────
+
+_WU_UPGRADE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+_WU_SAFEGUARD = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\UpdatePolicy\Settings"
+_WU_OPTIONAL = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"
+
+
+def _apply_disable_os_upgrade(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU_UPGRADE], "OSUpgrade")
+    SESSION.set_dword(_WU_UPGRADE, "DisableOSUpgrade", 1)
+
+
+def _remove_disable_os_upgrade(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU_UPGRADE, "DisableOSUpgrade")
+
+
+def _detect_disable_os_upgrade() -> bool:
+    return SESSION.read_dword(_WU_UPGRADE, "DisableOSUpgrade") == 1
+
+
+def _apply_disable_safeguard_hold(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU_UPGRADE], "SafeguardHold")
+    SESSION.set_dword(_WU_UPGRADE, "DisableWUfBSafeguards", 1)
+
+
+def _remove_disable_safeguard_hold(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU_UPGRADE, "DisableWUfBSafeguards")
+
+
+def _detect_disable_safeguard_hold() -> bool:
+    return SESSION.read_dword(_WU_UPGRADE, "DisableWUfBSafeguards") == 1
+
+
+def _apply_disable_optional_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU_OPTIONAL], "OptionalUpdates")
+    SESSION.set_dword(_WU_OPTIONAL, "AutoInstallMinorUpdates", 0)
+
+
+def _remove_disable_optional_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU_OPTIONAL, "AutoInstallMinorUpdates")
+
+
+def _detect_disable_optional_updates() -> bool:
+    return SESSION.read_dword(_WU_OPTIONAL, "AutoInstallMinorUpdates") == 0
+
+
+def _apply_disable_seeker_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU_UPGRADE], "SeekerUpdates")
+    SESSION.set_dword(_WU_UPGRADE, "ExcludeWUDriversInQualityUpdate", 1)
+
+
+def _remove_disable_seeker_updates(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU_UPGRADE, "ExcludeWUDriversInQualityUpdate")
+
+
+def _detect_disable_seeker_updates() -> bool:
+    return SESSION.read_dword(_WU_UPGRADE, "ExcludeWUDriversInQualityUpdate") == 1
+
+
+def _apply_disable_update_share(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WU_UPGRADE], "UpdateShare")
+    SESSION.set_dword(_WU_UPGRADE, "SetDisableUXWUAccess", 1)
+
+
+def _remove_disable_update_share(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WU_UPGRADE, "SetDisableUXWUAccess")
+
+
+def _detect_disable_update_share() -> bool:
+    return SESSION.read_dword(_WU_UPGRADE, "SetDisableUXWUAccess") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="wu-disable-os-upgrade",
+        label="Disable Windows OS Upgrade via Update",
+        category="Windows Update",
+        apply_fn=_apply_disable_os_upgrade,
+        remove_fn=_remove_disable_os_upgrade,
+        detect_fn=_detect_disable_os_upgrade,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU_UPGRADE],
+        description=(
+            "Prevents Windows Update from offering or installing OS version upgrades. "
+            "Blocks W10 to W11 upgrades being pushed silently. "
+            "Default: Enabled. Recommended: Disabled for production stability."
+        ),
+        tags=["update", "upgrade", "os", "block"],
+    ),
+    TweakDef(
+        id="wu-disable-safeguard-hold",
+        label="Disable Windows Update Safeguard Holds",
+        category="Windows Update",
+        apply_fn=_apply_disable_safeguard_hold,
+        remove_fn=_remove_disable_safeguard_hold,
+        detect_fn=_detect_disable_safeguard_hold,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU_UPGRADE],
+        description=(
+            "Disables Microsoft's safeguard holds that block updates on incompatible hardware. "
+            "Use only if you understand the update risks for your system. "
+            "Default: Enabled. Recommended: Enabled (disable only if blocked)."
+        ),
+        tags=["update", "safeguard", "hold", "compatibility"],
+    ),
+    TweakDef(
+        id="wu-disable-optional-updates",
+        label="Disable Auto-Install of Optional Updates",
+        category="Windows Update",
+        apply_fn=_apply_disable_optional_updates,
+        remove_fn=_remove_disable_optional_updates,
+        detect_fn=_detect_disable_optional_updates,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU_OPTIONAL],
+        description=(
+            "Prevents Windows Update from automatically installing optional/minor updates. "
+            "Gives you manual control over optional update installations. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["update", "optional", "minor", "auto-install"],
+    ),
+    TweakDef(
+        id="wu-exclude-drivers-quality",
+        label="Exclude Drivers from Quality Updates",
+        category="Windows Update",
+        apply_fn=_apply_disable_seeker_updates,
+        remove_fn=_remove_disable_seeker_updates,
+        detect_fn=_detect_disable_seeker_updates,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU_UPGRADE],
+        description=(
+            "Excludes driver updates from Windows quality (monthly) updates. "
+            "Prevents driver rollouts via WU quality channel. "
+            "Default: Included. Recommended: Excluded for stability."
+        ),
+        tags=["update", "driver", "quality", "exclude"],
+    ),
+    TweakDef(
+        id="wu-disable-ux-access",
+        label="Disable Windows Update UX Access",
+        category="Windows Update",
+        apply_fn=_apply_disable_update_share,
+        remove_fn=_remove_disable_update_share,
+        detect_fn=_detect_disable_update_share,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WU_UPGRADE],
+        description=(
+            "Disables the Windows Update UX access, preventing users from interacting "
+            "with WU settings directly. Useful for managed environments. "
+            "Default: Enabled. Recommended: Disabled for managed systems."
+        ),
+        tags=["update", "ux", "policy", "access"],
     ),
 ]

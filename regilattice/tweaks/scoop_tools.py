@@ -7,10 +7,16 @@ individually through the GUI/CLI.
 
 from __future__ import annotations
 
+import re
 import subprocess
 
 from regilattice.registry import SESSION, assert_admin
 from regilattice.tweaks import TweakDef
+
+# Words that appear in scoop list headers — skip any line whose first token matches.
+_SCOOP_HEADER_WORDS: frozenset[str] = frozenset({"name", "version", "source", "updated", "info", "apps"})
+# Valid scoop package name: letters, digits, hyphen, dot, underscore (no leading dash).
+_SCOOP_NAME_RE: re.Pattern[str] = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._\-]*$")
 
 # ── Helpers ──────────────────────────────────────────────────────────────────────────────────
 
@@ -52,7 +58,11 @@ def _remove_scoop_app(app_name: str) -> None:
 
 
 def list_installed_scoop_apps() -> list[str]:
-    """Return list of currently installed scoop app names."""
+    """Return list of currently installed scoop app names.
+
+    Handles both legacy (``Installed apps: / appname version``) and modern
+    (table with ``Name  Version  Source  Updated  Info`` header) scoop output.
+    """
     try:
         r = subprocess.run(["scoop", "list"], capture_output=True, text=True, timeout=15, check=False)
         if r.returncode != 0:
@@ -60,11 +70,15 @@ def list_installed_scoop_apps() -> list[str]:
         apps: list[str] = []
         for line in r.stdout.strip().splitlines():
             parts = line.strip().split()
-            if parts and not parts[0].startswith("-") and not parts[0].startswith("Installed"):
-                # Scoop list output: "appname version source"
-                name = parts[0].strip()
-                if name and (name.isalnum() or "-" in name):
-                    apps.append(name)
+            if not parts:
+                continue
+            name = parts[0].rstrip(":")
+            # Skip separator lines (----...) and known header/keyword tokens.
+            if name.startswith("-") or name.lower() in _SCOOP_HEADER_WORDS:
+                continue
+            # Accept any valid package name: letters, digits, hyphen, dot, underscore.
+            if _SCOOP_NAME_RE.match(name):
+                apps.append(name)
         return sorted(apps)
     except (FileNotFoundError, OSError):
         return []

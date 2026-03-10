@@ -792,3 +792,288 @@ TWEAKS += [
         tags=["security", "lsa", "lsass", "ppl", "credential"],
     ),
 ]
+
+# ── Additional security tweaks ────────────────────────────────────────────────
+
+_SPECTRE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
+_UAC_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+_NTLM_POLICY = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+
+
+def _apply_sec_enable_spectre_mitigations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPECTRE], "SecSpectreMitigations")
+    SESSION.set_dword(_SPECTRE, "FeatureSettingsOverride", 0)
+    SESSION.set_dword(_SPECTRE, "FeatureSettingsOverrideMask", 3)
+
+
+def _remove_sec_enable_spectre_mitigations(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SPECTRE], "SecSpectreMitigations_Remove")
+    SESSION.delete_value(_SPECTRE, "FeatureSettingsOverride")
+    SESSION.delete_value(_SPECTRE, "FeatureSettingsOverrideMask")
+
+
+def _detect_sec_enable_spectre_mitigations() -> bool:
+    return SESSION.read_dword(_SPECTRE, "FeatureSettingsOverride") == 0 and SESSION.read_dword(_SPECTRE, "FeatureSettingsOverrideMask") == 3
+
+
+def _apply_sec_uac_always_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_UAC_POLICY], "SecUACAlwaysNotify")
+    SESSION.set_dword(_UAC_POLICY, "ConsentPromptBehaviorAdmin", 2)
+    SESSION.set_dword(_UAC_POLICY, "PromptOnSecureDesktop", 1)
+
+
+def _remove_sec_uac_always_notify(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_UAC_POLICY], "SecUACAlwaysNotify_Remove")
+    SESSION.set_dword(_UAC_POLICY, "ConsentPromptBehaviorAdmin", 5)
+    SESSION.set_dword(_UAC_POLICY, "PromptOnSecureDesktop", 1)
+
+
+def _detect_sec_uac_always_notify() -> bool:
+    return SESSION.read_dword(_UAC_POLICY, "ConsentPromptBehaviorAdmin") == 2
+
+
+def _apply_sec_restrict_ntlmv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NTLM_POLICY], "SecRestrictNtlmv1")
+    SESSION.set_dword(_NTLM_POLICY, "LmCompatibilityLevel", 5)
+
+
+def _remove_sec_restrict_ntlmv1(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_NTLM_POLICY], "SecRestrictNtlmv1_Remove")
+    SESSION.set_dword(_NTLM_POLICY, "LmCompatibilityLevel", 3)
+
+
+def _detect_sec_restrict_ntlmv1() -> bool:
+    return SESSION.read_dword(_NTLM_POLICY, "LmCompatibilityLevel") == 5
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-enable-spectre-mitigations",
+        label="Enable Spectre/Meltdown Mitigations",
+        category="Security",
+        apply_fn=_apply_sec_enable_spectre_mitigations,
+        remove_fn=_remove_sec_enable_spectre_mitigations,
+        detect_fn=_detect_sec_enable_spectre_mitigations,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SPECTRE],
+        description=(
+            "Ensures Spectre (variant 2) and Meltdown mitigations are enabled via "
+            "FeatureSettingsOverride. May reduce performance on older CPUs. "
+            "Default: usually enabled by Windows Update. Recommended: Enabled."
+        ),
+        tags=["security", "spectre", "meltdown", "cpu", "vulnerability", "mitigations"],
+    ),
+    TweakDef(
+        id="sec-uac-always-notify",
+        label="Set UAC to Always Notify (Highest Level)",
+        category="Security",
+        apply_fn=_apply_sec_uac_always_notify,
+        remove_fn=_remove_sec_uac_always_notify,
+        detect_fn=_detect_sec_uac_always_notify,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_UAC_POLICY],
+        description=(
+            "Sets UAC to 'Always notify' (ConsentPromptBehaviorAdmin=2) — prompts "
+            "for both Windows changes and other program elevation requests. "
+            "Default: notify only for app changes (5). Recommended: Always notify."
+        ),
+        tags=["security", "uac", "elevation", "prompt", "consent"],
+    ),
+    TweakDef(
+        id="sec-restrict-ntlmv1",
+        label="Require NTLMv2 (Block LM and NTLMv1)",
+        category="Security",
+        apply_fn=_apply_sec_restrict_ntlmv1,
+        remove_fn=_remove_sec_restrict_ntlmv1,
+        detect_fn=_detect_sec_restrict_ntlmv1,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_NTLM_POLICY],
+        description=(
+            "Sets LmCompatibilityLevel=5 to only use NTLMv2 and refuse LM/NTLMv1 "
+            "responses. Hardens network authentication. May break legacy devices. "
+            "Default: 3 (NTLMv2 only send). Recommended: 5 for hardened environments."
+        ),
+        tags=["security", "ntlm", "ntlmv1", "authentication", "network", "lm"],
+    ),
+]
+
+# ── Extra security controls ─────────────────────────────────────────────────
+
+_WDIGEST = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest"
+_SAM_HARDEN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+_SCRIPT_SCAN = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"
+_EXCLUSIONS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions"
+_BEHAVIOR_MON = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"
+
+
+def _apply_sec_disable_wdigest(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_WDIGEST], "WDigest")
+    SESSION.set_dword(_WDIGEST, "UseLogonCredential", 0)
+
+
+def _remove_sec_disable_wdigest(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WDIGEST, "UseLogonCredential")
+
+
+def _detect_sec_disable_wdigest() -> bool:
+    return SESSION.read_dword(_WDIGEST, "UseLogonCredential") == 0
+
+
+def _apply_sec_enable_cred_guard_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SAM_HARDEN], "CredGuardPolicy")
+    SESSION.set_dword(_SAM_HARDEN, "LsaCfgFlags", 1)
+
+
+def _remove_sec_enable_cred_guard_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SAM_HARDEN, "LsaCfgFlags")
+
+
+def _detect_sec_enable_cred_guard_policy() -> bool:
+    return SESSION.read_dword(_SAM_HARDEN, "LsaCfgFlags") == 1
+
+
+def _apply_sec_enable_startup_scan(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_SCRIPT_SCAN], "StartupScan")
+    SESSION.set_dword(_SCRIPT_SCAN, "ScanOnlyIfIdle", 0)
+
+
+def _remove_sec_enable_startup_scan(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SCRIPT_SCAN, "ScanOnlyIfIdle")
+
+
+def _detect_sec_enable_startup_scan() -> bool:
+    return SESSION.read_dword(_SCRIPT_SCAN, "ScanOnlyIfIdle") == 0
+
+
+def _apply_sec_block_exclusion_editing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_EXCLUSIONS], "ExclusionBlock")
+    SESSION.set_dword(_EXCLUSIONS, "DisableLocalAdminMerge", 1)
+
+
+def _remove_sec_block_exclusion_editing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_EXCLUSIONS, "DisableLocalAdminMerge")
+
+
+def _detect_sec_block_exclusion_editing() -> bool:
+    return SESSION.read_dword(_EXCLUSIONS, "DisableLocalAdminMerge") == 1
+
+
+def _apply_sec_enable_behavior_monitoring(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_BEHAVIOR_MON], "BehaviorMon")
+    SESSION.set_dword(_BEHAVIOR_MON, "DisableBehaviorMonitoring", 0)
+
+
+def _remove_sec_enable_behavior_monitoring(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_BEHAVIOR_MON, "DisableBehaviorMonitoring", 1)
+
+
+def _detect_sec_enable_behavior_monitoring() -> bool:
+    return SESSION.read_dword(_BEHAVIOR_MON, "DisableBehaviorMonitoring") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-disable-wdigest",
+        label="Disable WDigest Authentication (Credential Hardening)",
+        category="Security",
+        apply_fn=_apply_sec_disable_wdigest,
+        remove_fn=_remove_sec_disable_wdigest,
+        detect_fn=_detect_sec_disable_wdigest,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WDIGEST],
+        description=(
+            "Disables WDigest authentication to prevent plain-text password storage in LSASS. "
+            "Mitigates credential harvesting attacks via Mimikatz. "
+            "Default: Enabled on older systems. Recommended: Disabled."
+        ),
+        tags=["security", "wdigest", "lsass", "credential", "mimikatz"],
+    ),
+    TweakDef(
+        id="sec-enable-cred-guard-policy",
+        label="Enable Credential Guard via Policy",
+        category="Security",
+        apply_fn=_apply_sec_enable_cred_guard_policy,
+        remove_fn=_remove_sec_enable_cred_guard_policy,
+        detect_fn=_detect_sec_enable_cred_guard_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SAM_HARDEN],
+        description=(
+            "Enables Credential Guard via LsaCfgFlags=1, protecting LSASS credential secrets. "
+            "Requires TPM 2.0 and Secure Boot. "
+            "Default: Disabled. Recommended: Enabled on modern hardware."
+        ),
+        tags=["security", "credential-guard", "lsa", "tpm", "secureboot"],
+    ),
+    TweakDef(
+        id="sec-scan-not-idle-only",
+        label="Allow Defender Scans When System is Busy",
+        category="Security",
+        apply_fn=_apply_sec_enable_startup_scan,
+        remove_fn=_remove_sec_enable_startup_scan,
+        detect_fn=_detect_sec_enable_startup_scan,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SCRIPT_SCAN],
+        description=(
+            "Disables the ScanOnlyIfIdle requirement, allowing Defender scans "
+            "to run even when the system is in use. Ensures scans complete on time. "
+            "Default: Idle-only. Recommended: Always allow."
+        ),
+        tags=["security", "defender", "scan", "schedule", "idle"],
+    ),
+    TweakDef(
+        id="sec-block-exclusion-local-merge",
+        label="Block Local Admin from Adding Defender Exclusions",
+        category="Security",
+        apply_fn=_apply_sec_block_exclusion_editing,
+        remove_fn=_remove_sec_block_exclusion_editing,
+        detect_fn=_detect_sec_block_exclusion_editing,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_EXCLUSIONS],
+        description=(
+            "Prevents local admins from merging Defender exclusion lists with policy exclusions. "
+            "Ensures exclusion policy cannot be bypassed locally. "
+            "Default: Allowed. Recommended: Blocked in managed environments."
+        ),
+        tags=["security", "defender", "exclusions", "policy", "hardening"],
+    ),
+    TweakDef(
+        id="sec-enable-behavior-monitoring",
+        label="Enable Defender Behavior Monitoring",
+        category="Security",
+        apply_fn=_apply_sec_enable_behavior_monitoring,
+        remove_fn=_remove_sec_enable_behavior_monitoring,
+        detect_fn=_detect_sec_enable_behavior_monitoring,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_BEHAVIOR_MON],
+        description=(
+            "Enables Defender behavior monitoring, which watches processes for "
+            "suspicious activity patterns beyond signature-based detection. "
+            "Default: Enabled. Recommended: Enabled."
+        ),
+        tags=["security", "defender", "behavior", "monitoring", "heuristics"],
+    ),
+]

@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import logging
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -54,6 +55,8 @@ __all__ = [
 
 from . import __version__
 from .tweaks import TweakDef
+
+_log = logging.getLogger("regilattice.marketplace")
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
@@ -110,6 +113,7 @@ def discover_plugins() -> list[PluginMeta]:
     """Scan ``~/.regilattice/plugins/`` for plugin packs."""
     result: list[PluginMeta] = []
     root = plugins_dir()
+    _log.debug("Discovering plugins in %s", root)
     for child in sorted(root.iterdir()):
         if not child.is_dir() or child.name.startswith(("_", ".")):
             continue
@@ -127,13 +131,17 @@ def discover_plugins() -> list[PluginMeta]:
                         path=child,
                     )
                 )
+                _log.debug("Found plugin %r v%s", raw.get("name", child.name), raw.get("version", "0.0.0"))
             except (json.JSONDecodeError, OSError):
+                _log.warning("Failed to parse plugin.json in %s", child)
                 continue
         else:
             # Bare directory with .py files — treat as unnamed plugin
             py_files = list(child.glob("*.py"))
             if py_files:
                 result.append(PluginMeta(name=child.name, path=child))
+                _log.debug("Found bare plugin directory %r", child.name)
+    _log.info("Discovered %d plugin(s)", len(result))
     return result
 
 
@@ -145,6 +153,7 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
     """
     if not _version_ok(meta.min_regilattice):
         msg = f"Plugin {meta.name!r} requires RegiLattice >= {meta.min_regilattice} (have {__version__})"
+        _log.error("Version mismatch for plugin %r: %s", meta.name, msg)
         raise RuntimeError(msg)
 
     # Security: ensure plugin path is within the plugins directory (prevent path traversal)
@@ -154,6 +163,7 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
         plugin_path.relative_to(plugins_root)
     except ValueError:
         msg = f"Plugin path {str(meta.path)!r} is outside the plugins directory {str(_PLUGINS_DIR)!r}"
+        _log.error("Path traversal attempt for plugin %r: %s", meta.name, msg)
         raise RuntimeError(msg) from None
 
     tweaks: list[TweakDef] = []
@@ -170,8 +180,10 @@ def load_plugin(meta: PluginMeta) -> list[TweakDef]:
         mod_tweaks = getattr(mod, "TWEAKS", None)
         if isinstance(mod_tweaks, list):
             tweaks.extend(mod_tweaks)
+            _log.debug("Loaded %d tweak(s) from %s", len(mod_tweaks), py_file.name)
 
     _loaded[meta.name] = tweaks
+    _log.info("Loaded plugin %r with %d tweak(s)", meta.name, len(tweaks))
     return tweaks
 
 

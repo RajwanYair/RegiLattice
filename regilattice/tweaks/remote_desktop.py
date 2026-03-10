@@ -536,3 +536,168 @@ TWEAKS += [
         tags=["rdp", "session", "timeout", "security"],
     ),
 ]
+
+# ── Extra RDP hardening / comfort ───────────────────────────────────────────
+
+_RDP_DESKTOP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+
+
+def _apply_rdp_disable_wallpaper(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RDP_DESKTOP], "RDPWallpaper")
+    SESSION.set_dword(_RDP_DESKTOP, "fDisableWallpaper", 1)
+
+
+def _remove_rdp_disable_wallpaper(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RDP_DESKTOP, "fDisableWallpaper")
+
+
+def _detect_rdp_disable_wallpaper() -> bool:
+    return SESSION.read_dword(_RDP_DESKTOP, "fDisableWallpaper") == 1
+
+
+def _apply_rdp_enable_font_smoothing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RDP_DESKTOP], "RDPFontSmoothing")
+    SESSION.set_dword(_RDP_DESKTOP, "AllowFontAntiAlias", 1)
+
+
+def _remove_rdp_enable_font_smoothing(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RDP_DESKTOP, "AllowFontAntiAlias")
+
+
+def _detect_rdp_enable_font_smoothing() -> bool:
+    return SESSION.read_dword(_RDP_DESKTOP, "AllowFontAntiAlias") == 1
+
+
+def _apply_rdp_disable_audio_record(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_TS_POLICY], "RDPAudioRecord")
+    SESSION.set_dword(_TS_POLICY, "fDisableCcm", 1)
+
+
+def _remove_rdp_disable_audio_record(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TS_POLICY, "fDisableCcm")
+
+
+def _detect_rdp_disable_audio_record() -> bool:
+    return SESSION.read_dword(_TS_POLICY, "fDisableCcm") == 1
+
+
+def _apply_rdp_enable_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RDP_TCP], "RDPCompression")
+    SESSION.set_dword(_RDP_TCP, "CompressedData", 1)
+
+
+def _remove_rdp_enable_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RDP_TCP, "CompressedData")
+
+
+def _detect_rdp_enable_compression() -> bool:
+    return SESSION.read_dword(_RDP_TCP, "CompressedData") == 1
+
+
+def _apply_rdp_single_session(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_RDP], "RDPSingleSession")
+    SESSION.set_dword(_RDP, "fSingleSessionPerUser", 1)
+
+
+def _remove_rdp_single_session(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_RDP, "fSingleSessionPerUser")
+
+
+def _detect_rdp_single_session() -> bool:
+    return SESSION.read_dword(_RDP, "fSingleSessionPerUser") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="rdp-disable-wallpaper",
+        label="Disable Desktop Wallpaper in RDP Sessions",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_disable_wallpaper,
+        remove_fn=_remove_rdp_disable_wallpaper,
+        detect_fn=_detect_rdp_disable_wallpaper,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP_DESKTOP],
+        description=(
+            "Disables desktop wallpaper rendering in RDP sessions to reduce bandwidth. "
+            "Improves performance over slow connections. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["rdp", "wallpaper", "performance", "bandwidth"],
+    ),
+    TweakDef(
+        id="rdp-enable-font-smoothing",
+        label="Enable Font Anti-Aliasing in RDP Sessions",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_enable_font_smoothing,
+        remove_fn=_remove_rdp_enable_font_smoothing,
+        detect_fn=_detect_rdp_enable_font_smoothing,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP_DESKTOP],
+        description=(
+            "Allows ClearType / font anti-aliasing in Remote Desktop sessions. "
+            "Improves text readability at cost of slight bandwidth increase. "
+            "Default: Disabled. Recommended: Enabled for clarity."
+        ),
+        tags=["rdp", "font", "cleartype", "smoothing", "display"],
+    ),
+    TweakDef(
+        id="rdp-disable-audio-record",
+        label="Disable Audio Recording Redirection in RDP",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_disable_audio_record,
+        remove_fn=_remove_rdp_disable_audio_record,
+        detect_fn=_detect_rdp_disable_audio_record,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TS_POLICY],
+        description=(
+            "Disables audio capture/microphone redirection from the client to the RDP session. "
+            "Reduces attack surface and bandwidth. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["rdp", "audio", "microphone", "record", "security"],
+    ),
+    TweakDef(
+        id="rdp-enable-compression",
+        label="Enable RDP Data Compression",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_enable_compression,
+        remove_fn=_remove_rdp_enable_compression,
+        detect_fn=_detect_rdp_enable_compression,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP_TCP],
+        description=(
+            "Enables compression of RDP session data to reduce bandwidth usage. "
+            "Useful for connections over slower networks. Default: Disabled. Recommended: Enabled."
+        ),
+        tags=["rdp", "compression", "bandwidth", "performance"],
+    ),
+    TweakDef(
+        id="rdp-single-session",
+        label="Restrict to Single RDP Session Per User",
+        category="Remote Desktop",
+        apply_fn=_apply_rdp_single_session,
+        remove_fn=_remove_rdp_single_session,
+        detect_fn=_detect_rdp_single_session,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_RDP],
+        description=(
+            "Limits each user to a single concurrent RDP session, reconnecting "
+            "to an existing session rather than creating a new one. "
+            "Default: Multiple sessions. Recommended: Single session."
+        ),
+        tags=["rdp", "session", "single", "reconnect"],
+    ),
+]

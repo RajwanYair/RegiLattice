@@ -740,3 +740,186 @@ TWEAKS += [
         tags=["gaming", "dvr", "configstore", "recording", "user"],
     ),
 ]
+
+# ── Extra gaming controls ─────────────────────────────────────────────────────
+
+_GAME_PRIO = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"
+_GAME_GPU_PREF = r"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"
+_GAME_FSO = r"HKEY_CURRENT_USER\System\GameConfigStore"
+_GAME_HPET = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\Root\ACPI_HAL\0000\LogConf"
+_GAME_THREAD = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
+
+
+def _apply_game_system_games_tasks(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
+    SESSION.backup([_GAME_PRIO, _tasks_key], "GameSystemTasks")
+    SESSION.set_dword(_tasks_key, "GPU Priority", 8)
+    SESSION.set_dword(_tasks_key, "Priority", 6)
+    SESSION.set_dword(_tasks_key, "Scheduling Category", 2)
+
+
+def _remove_game_system_games_tasks(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
+    SESSION.delete_value(_tasks_key, "GPU Priority")
+    SESSION.delete_value(_tasks_key, "Priority")
+    SESSION.delete_value(_tasks_key, "Scheduling Category")
+
+
+def _detect_game_system_games_tasks() -> bool:
+    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
+    return SESSION.read_dword(_tasks_key, "GPU Priority") == 8
+
+
+def _apply_game_disable_core_isolation_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
+    SESSION.backup([_ci], "CIReport")
+    SESSION.set_dword(_ci, "DisableAutomaticTelemetryKeywordReporting", 1)
+
+
+def _remove_game_disable_core_isolation_reporting(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
+    SESSION.delete_value(_ci, "DisableAutomaticTelemetryKeywordReporting")
+
+
+def _detect_game_disable_core_isolation_reporting() -> bool:
+    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
+    return SESSION.read_dword(_ci, "DisableAutomaticTelemetryKeywordReporting") == 1
+
+
+def _apply_game_exclusive_fullscreen(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_GAME_FSO], "ExclusiveFullscreen")
+    SESSION.set_dword(_GAME_FSO, "GameDVR_FSEBehavior", 2)
+    SESSION.set_dword(_GAME_FSO, "GameDVR_DSEBehavior", 2)
+
+
+def _remove_game_exclusive_fullscreen(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GAME_FSO, "GameDVR_FSEBehavior")
+    SESSION.delete_value(_GAME_FSO, "GameDVR_DSEBehavior")
+
+
+def _detect_game_exclusive_fullscreen() -> bool:
+    return SESSION.read_dword(_GAME_FSO, "GameDVR_FSEBehavior") == 2
+
+
+def _apply_game_disable_allow_tearing(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_GAME_FSO], "AllowTearing")
+    SESSION.set_dword(_GAME_FSO, "GameDVR_DXGIHonorFSEWindowsCompatible", 1)
+
+
+def _remove_game_disable_allow_tearing(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GAME_FSO, "GameDVR_DXGIHonorFSEWindowsCompatible")
+
+
+def _detect_game_disable_allow_tearing() -> bool:
+    return SESSION.read_dword(_GAME_FSO, "GameDVR_DXGIHonorFSEWindowsCompatible") == 1
+
+
+def _apply_game_realtime_thread_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_GAME_THREAD], "RealtimeThreadPrio")
+    SESSION.set_dword(_GAME_THREAD, "IRQ8Priority", 1)
+
+
+def _remove_game_realtime_thread_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_GAME_THREAD, "IRQ8Priority")
+
+
+def _detect_game_realtime_thread_priority() -> bool:
+    return SESSION.read_dword(_GAME_THREAD, "IRQ8Priority") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="game-system-profile-games",
+        label="Optimize System Profile for Games (GPU+CPU Priority)",
+        category="Gaming",
+        apply_fn=_apply_game_system_games_tasks,
+        remove_fn=_remove_game_system_games_tasks,
+        detect_fn=_detect_game_system_games_tasks,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+        description=(
+            "Sets the Games task profile to highest GPU priority (8), CPU priority (6), "
+            "and High scheduling category for maximum gaming responsiveness. "
+            "Default: 8/2/Medium. Recommended: 8/6/High."
+        ),
+        tags=["gaming", "priority", "gpu", "cpu", "multimedia-profile"],
+    ),
+    TweakDef(
+        id="game-disable-diagtrack-keyword",
+        label="Disable DiagTrack Telemetry Keyword Reporting",
+        category="Gaming",
+        apply_fn=_apply_game_disable_core_isolation_reporting,
+        remove_fn=_remove_game_disable_core_isolation_reporting,
+        detect_fn=_detect_game_disable_core_isolation_reporting,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"],
+        description=(
+            "Disables DiagTrack automatic telemetry keyword reporting to reduce "
+            "background CPU usage during gameplay. Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["gaming", "telemetry", "diagtrack", "background", "performance"],
+    ),
+    TweakDef(
+        id="game-force-exclusive-fullscreen",
+        label="Force Exclusive Fullscreen Mode for Games",
+        category="Gaming",
+        apply_fn=_apply_game_exclusive_fullscreen,
+        remove_fn=_remove_game_exclusive_fullscreen,
+        detect_fn=_detect_game_exclusive_fullscreen,
+        needs_admin=False,
+        corp_safe=False,
+        registry_keys=[_GAME_FSO],
+        description=(
+            "Sets GameDVR FSE and DSE behavior to exclusive mode (2), "
+            "forcing games to use exclusive fullscreen for maximum performance. "
+            "Default: Mixed. Recommended: Exclusive mode."
+        ),
+        tags=["gaming", "fullscreen", "exclusive", "fso", "performance"],
+    ),
+    TweakDef(
+        id="game-honor-fse-compat",
+        label="Honor FSE Window Compatibility for DXGI",
+        category="Gaming",
+        apply_fn=_apply_game_disable_allow_tearing,
+        remove_fn=_remove_game_disable_allow_tearing,
+        detect_fn=_detect_game_disable_allow_tearing,
+        needs_admin=False,
+        corp_safe=False,
+        registry_keys=[_GAME_FSO],
+        description=(
+            "Enables DXGI to honor FSE window compatibility mode. "
+            "Helps older games that need true exclusive fullscreen. "
+            "Default: Disabled. Recommended: Enabled for FSE compatibility."
+        ),
+        tags=["gaming", "dxgi", "fullscreen", "fse", "compat"],
+    ),
+    TweakDef(
+        id="game-irq8-realtime",
+        label="Boost IRQ8 Real-Time Clock Priority",
+        category="Gaming",
+        apply_fn=_apply_game_realtime_thread_priority,
+        remove_fn=_remove_game_realtime_thread_priority,
+        detect_fn=_detect_game_realtime_thread_priority,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_GAME_THREAD],
+        description=(
+            "Sets IRQ8 (real-time clock) interrupt priority higher. "
+            "Can reduce timer jitter and improve frame timing consistency in games. "
+            "Default: Not set. Recommended: 1 for gaming."
+        ),
+        tags=["gaming", "irq", "timer", "rtc", "latency", "priority"],
+    ),
+]

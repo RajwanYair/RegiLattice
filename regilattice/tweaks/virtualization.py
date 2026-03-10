@@ -573,3 +573,175 @@ TWEAKS += [
         tags=["virtualization", "vm-platform", "wsl2", "hypervisor"],
     ),
 ]
+
+# ── Extra virtualization controls ─────────────────────────────────────────────
+
+_VDS_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vds"
+_VMWP_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV"
+_CONTAINER_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Containers"
+_HYPERV_DEBUG = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"
+_VMMS_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms"
+
+
+def _apply_virt_vds_manual(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VDS_SVC], "VDSManual")
+    SESSION.set_dword(_VDS_SVC, "Start", 3)  # 3 = Manual
+
+
+def _remove_virt_vds_manual(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VDS_SVC, "Start", 2)  # 2 = Auto
+
+
+def _detect_virt_vds_manual() -> bool:
+    return SESSION.read_dword(_VDS_SVC, "Start") == 3
+
+
+def _apply_virt_disable_rdv_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VMWP_POLICY], "RDVPolicy")
+    SESSION.set_dword(_VMWP_POLICY, "DisableRemoteDesktopVirtualization", 1)
+
+
+def _remove_virt_disable_rdv_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VMWP_POLICY, "DisableRemoteDesktopVirtualization")
+
+
+def _detect_virt_disable_rdv_policy() -> bool:
+    return SESSION.read_dword(_VMWP_POLICY, "DisableRemoteDesktopVirtualization") == 1
+
+
+def _apply_virt_disable_containers_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_CONTAINER_POLICY], "ContainersPolicy")
+    SESSION.set_dword(_CONTAINER_POLICY, "DisableContainerRuntimeExtension", 1)
+
+
+def _remove_virt_disable_containers_policy(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTAINER_POLICY, "DisableContainerRuntimeExtension")
+
+
+def _detect_virt_disable_containers_policy() -> bool:
+    return SESSION.read_dword(_CONTAINER_POLICY, "DisableContainerRuntimeExtension") == 1
+
+
+def _apply_virt_vmms_manual(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VMMS_SVC], "VMManual")
+    SESSION.set_dword(_VMMS_SVC, "Start", 3)  # Manual
+
+
+def _remove_virt_vmms_manual(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_VMMS_SVC, "Start", 2)  # Auto
+
+
+def _detect_virt_vmms_manual() -> bool:
+    return SESSION.read_dword(_VMMS_SVC, "Start") == 3
+
+
+def _apply_virt_enable_smep(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_VBS], "SMEPPolicy")
+    SESSION.set_dword(_VBS, "RequirePlatformSecurityFeatures", 1)
+
+
+def _remove_virt_enable_smep(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_VBS, "RequirePlatformSecurityFeatures")
+
+
+def _detect_virt_enable_smep() -> bool:
+    return SESSION.read_dword(_VBS, "RequirePlatformSecurityFeatures") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="virt-vds-manual",
+        label="Set Virtual Disk Service to Manual Start",
+        category="Virtualization",
+        apply_fn=_apply_virt_vds_manual,
+        remove_fn=_remove_virt_vds_manual,
+        detect_fn=_detect_virt_vds_manual,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VDS_SVC],
+        description=(
+            "Sets the Virtual Disk Service (VDS) to manual start, "
+            "reducing boot time overhead on systems not using disk management tools. "
+            "Default: Automatic. Recommended: Manual on workstations."
+        ),
+        tags=["virtualization", "vds", "service", "startup", "performance"],
+    ),
+    TweakDef(
+        id="virt-disable-rdv-policy",
+        label="Disable Remote Desktop Virtualization Policy",
+        category="Virtualization",
+        apply_fn=_apply_virt_disable_rdv_policy,
+        remove_fn=_remove_virt_disable_rdv_policy,
+        detect_fn=_detect_virt_disable_rdv_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VMWP_POLICY],
+        description=(
+            "Disables the Remote Desktop Virtualization (RDV) policy. "
+            "Prevents RD session host from using virtualization layer. "
+            "Default: Enabled. Recommended: Disabled for non-RDS systems."
+        ),
+        tags=["virtualization", "rdv", "rdp", "policy", "rds"],
+    ),
+    TweakDef(
+        id="virt-disable-containers-ext",
+        label="Disable Container Runtime Extension Policy",
+        category="Virtualization",
+        apply_fn=_apply_virt_disable_containers_policy,
+        remove_fn=_remove_virt_disable_containers_policy,
+        detect_fn=_detect_virt_disable_containers_policy,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTAINER_POLICY],
+        description=(
+            "Disables the Windows Container Runtime Extension via policy. "
+            "Reduces container isolation overhead on non-container workloads. "
+            "Default: Enabled. Recommended: Disabled if not using containers."
+        ),
+        tags=["virtualization", "containers", "docker", "policy"],
+    ),
+    TweakDef(
+        id="virt-vmms-manual",
+        label="Set Hyper-V Virtual Machine Management Service to Manual",
+        category="Virtualization",
+        apply_fn=_apply_virt_vmms_manual,
+        remove_fn=_remove_virt_vmms_manual,
+        detect_fn=_detect_virt_vmms_manual,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_VMMS_SVC],
+        description=(
+            "Sets the Hyper-V Virtual Machine Management Service (VMMS) to manual start. "
+            "Frees resources if Hyper-V VMs are not regularly used. "
+            "Default: Automatic. Recommended: Manual on non-VM hosts."
+        ),
+        tags=["virtualization", "vmms", "hyperv", "service", "startup"],
+    ),
+    TweakDef(
+        id="virt-require-platform-security",
+        label="Enable VBS Platform Security Features Requirement",
+        category="Virtualization",
+        apply_fn=_apply_virt_enable_smep,
+        remove_fn=_remove_virt_enable_smep,
+        detect_fn=_detect_virt_enable_smep,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_VBS],
+        description=(
+            "Sets RequirePlatformSecurityFeatures=1 for Virtualization-based Security. "
+            "Requires hardware security features (TPM, SecureBoot) for VBS. "
+            "Default: Not required. Recommended: Required on secure systems."
+        ),
+        tags=["virtualization", "vbs", "security", "tpm", "secureboot"],
+    ),
+]

@@ -61,10 +61,7 @@ class TestIsDomainJoined:
         mock_run: MagicMock,
         _win: MagicMock,
     ) -> None:
-        # The ctypes path uses advapi32.GetComputerNameExW which may not be
-        # available on all Windows versions. The code has a try/except that
-        # falls through to the WMI PowerShell fallback.
-        # Here we verify that the WMI fallback detects a domain.
+        # The WMI fallback returns True when the subprocess mock says True.
         mock_run.return_value = _completed("True\n")
         assert _is_domain_joined() is True
 
@@ -78,10 +75,12 @@ class TestIsDomainJoined:
         assert _is_domain_joined() is True
 
     @patch("regilattice.corpguard.is_windows", return_value=True)
+    @patch("regilattice.corpguard._ctypes_dns_domain", return_value="")
     @patch("regilattice.corpguard.subprocess.run", return_value=_completed("False\n"))
     def test_no_domain(
         self,
         mock_run: MagicMock,
+        _ctypes: MagicMock,
         _win: MagicMock,
     ) -> None:
         assert _is_domain_joined() is False

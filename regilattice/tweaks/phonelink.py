@@ -457,3 +457,151 @@ TWEAKS: list[TweakDef] = [
         tags=["phone-link", "bluetooth", "relay"],
     ),
 ]
+
+
+# ── Disable Phone Link Wi-Fi Direct ──────────────────────────────────────────
+
+_WIFI_DIRECT = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"
+
+
+def _apply_disable_wifidirect(*, require_admin: bool = False) -> None:
+    SESSION.log("PhoneLink: disable Wi-Fi Direct transport")
+    SESSION.backup([_WIFI_DIRECT], "WifiDirect")
+    SESSION.set_dword(_WIFI_DIRECT, "WifiDirectEnabled", 0)
+
+
+def _remove_disable_wifidirect(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_WIFI_DIRECT, "WifiDirectEnabled", 1)
+
+
+def _detect_disable_wifidirect() -> bool:
+    return SESSION.read_dword(_WIFI_DIRECT, "WifiDirectEnabled") == 0
+
+
+# ── Disable Windows Timeline Activity Upload ─────────────────────────────────
+
+_TIMELINE_POLICY = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"
+
+
+def _apply_disable_timeline(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("PhoneLink: disable Windows Timeline activity history")
+    SESSION.backup([_TIMELINE_POLICY], "Timeline")
+    SESSION.set_dword(_TIMELINE_POLICY, "EnableActivityFeed", 0)
+    SESSION.set_dword(_TIMELINE_POLICY, "AllowCrossDeviceClipboard", 0)
+
+
+def _remove_disable_timeline(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_TIMELINE_POLICY, "EnableActivityFeed", 1)
+    SESSION.set_dword(_TIMELINE_POLICY, "AllowCrossDeviceClipboard", 1)
+
+
+def _detect_disable_timeline() -> bool:
+    return SESSION.read_dword(_TIMELINE_POLICY, "EnableActivityFeed") == 0
+
+
+# ── Disable Phone Link Photos Auto-Sync ──────────────────────────────────────
+
+_PL_PHOTOS = r"HKEY_CURRENT_USER\Software\Microsoft\YourPhone"
+
+
+def _apply_disable_photos_sync(*, require_admin: bool = False) -> None:
+    SESSION.log("PhoneLink: disable automatic phone photos sync")
+    SESSION.backup([_PL_PHOTOS], "PhotosSync")
+    SESSION.set_dword(_PL_PHOTOS, "DisablePhotoSync", 1)
+
+
+def _remove_disable_photos_sync(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PL_PHOTOS, "DisablePhotoSync", 0)
+
+
+def _detect_disable_photos_sync() -> bool:
+    return SESSION.read_dword(_PL_PHOTOS, "DisablePhotoSync") == 1
+
+
+# ── Disable Phone Link App Notifications ─────────────────────────────────────
+
+_PL_NOTIF = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage"
+
+
+def _apply_disable_pl_notifications(*, require_admin: bool = False) -> None:
+    SESSION.log("PhoneLink: disable cross-device app notifications")
+    SESSION.backup([_PL_NOTIF], "PlNotifications")
+    SESSION.set_dword(_PL_NOTIF, "AppNotificationsEnabled", 0)
+
+
+def _remove_disable_pl_notifications(*, require_admin: bool = False) -> None:
+    SESSION.set_dword(_PL_NOTIF, "AppNotificationsEnabled", 1)
+
+
+def _detect_disable_pl_notifications() -> bool:
+    return SESSION.read_dword(_PL_NOTIF, "AppNotificationsEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="phone-disable-wifidirect",
+        label="Disable Phone Link Wi-Fi Direct",
+        category="Phone Link",
+        apply_fn=_apply_disable_wifidirect,
+        remove_fn=_remove_disable_wifidirect,
+        detect_fn=_detect_disable_wifidirect,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WIFI_DIRECT],
+        description=(
+            "Disables Wi-Fi Direct transport used by Phone Link for high-speed "
+            "cross-device data transfer. Reduces background radio use. Default: Enabled."
+        ),
+        tags=["phone-link", "wifi", "wifi-direct", "network", "privacy"],
+    ),
+    TweakDef(
+        id="phone-disable-timeline",
+        label="Disable Windows Timeline Activity Feed",
+        category="Phone Link",
+        apply_fn=_apply_disable_timeline,
+        remove_fn=_remove_disable_timeline,
+        detect_fn=_detect_disable_timeline,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_TIMELINE_POLICY],
+        description=(
+            "Disables Windows Timeline activity feed and cross-device clipboard via policy. "
+            "Stops syncing browsing and app activity to Microsoft cloud. Default: Enabled."
+        ),
+        tags=["phone-link", "timeline", "activity", "privacy", "cloud"],
+    ),
+    TweakDef(
+        id="phone-disable-photos-sync",
+        label="Disable Phone Photos Auto-Sync",
+        category="Phone Link",
+        apply_fn=_apply_disable_photos_sync,
+        remove_fn=_remove_disable_photos_sync,
+        detect_fn=_detect_disable_photos_sync,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PL_PHOTOS],
+        description=(
+            "Disables automatic phone photo synchronisation via the Phone Link app. "
+            "Prevents background syncing of photos to the PC. Default: Enabled."
+        ),
+        tags=["phone-link", "photos", "sync", "privacy", "storage"],
+    ),
+    TweakDef(
+        id="phone-disable-app-notifications",
+        label="Disable Phone Link App Notifications",
+        category="Phone Link",
+        apply_fn=_apply_disable_pl_notifications,
+        remove_fn=_remove_disable_pl_notifications,
+        detect_fn=_detect_disable_pl_notifications,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_PL_NOTIF],
+        description=(
+            "Disables cross-device app notifications relayed from mobile to PC via Phone Link. "
+            "Reduces notification noise and background connectivity. Default: Enabled."
+        ),
+        tags=["phone-link", "notifications", "apps", "privacy"],
+    ),
+]

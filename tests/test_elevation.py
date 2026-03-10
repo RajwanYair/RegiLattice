@@ -164,3 +164,52 @@ class TestEnsureAdminOrElevate:
         with pytest.raises(SystemExit) as exc_info:
             ensure_admin_or_elevate()
         assert exc_info.value.code == 5
+
+
+# ── allowlist validation ─────────────────────────────────────────────────────
+
+
+class TestRunElevatedAllowlist:
+    """Validate that run_elevated rejects disallowed executables."""
+
+    def test_empty_command_raises(self) -> None:
+        import pytest
+
+        from regilattice.elevation import run_elevated
+
+        with pytest.raises(ValueError, match="empty"):
+            run_elevated([])
+
+    def test_disallowed_exe_raises_value_error(self) -> None:
+        import pytest
+
+        from regilattice.elevation import run_elevated
+
+        with pytest.raises(ValueError, match="allowed-executables"):
+            run_elevated(["malware.exe", "--do-evil"])
+
+    def test_disallowed_abs_path_is_also_rejected(self) -> None:
+        import pytest
+
+        from regilattice.elevation import run_elevated
+
+        with pytest.raises(ValueError, match="allowed-executables"):
+            # Only the basename is checked; unknown basename must be rejected
+            run_elevated([r"C:\Users\attacker\evil.exe"])
+
+    @patch("regilattice.elevation.is_admin", return_value=True)
+    @patch("regilattice.elevation.subprocess.run")
+    def test_reg_exe_is_allowed(self, mock_run: MagicMock, _admin: MagicMock) -> None:
+        mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        from regilattice.elevation import run_elevated
+
+        # Should not raise
+        run_elevated(["reg.exe", "query", r"HKCU\Software"])
+
+    @patch("regilattice.elevation.is_admin", return_value=True)
+    @patch("regilattice.elevation.subprocess.run")
+    def test_powershell_is_allowed(self, mock_run: MagicMock, _admin: MagicMock) -> None:
+        mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        from regilattice.elevation import run_elevated
+
+        run_elevated(["powershell.exe", "-Command", "Get-Date"])

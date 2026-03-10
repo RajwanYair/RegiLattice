@@ -1140,3 +1140,209 @@ TWEAKS += [
         tags=["win11", "start-menu", "recent", "privacy", "tracking"],
     ),
 ]
+
+# ── New Windows 11 tweaks ────────────────────────────────────────────────────
+
+_W11_TASKBAR = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+_W11_SEARCH = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"
+_W11_TIPS = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
+_W11_COPILOT = r"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsCopilot"
+_W11_RECALL = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"
+_W11_DESKTOPICONS = r"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"
+
+
+def _apply_w11_taskbar_single_click(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_TASKBAR], "W11_TaskbarSingleClick")
+    SESSION.set_dword(_W11_TASKBAR, "TaskbarGlomLevel", 0)
+
+
+def _remove_w11_taskbar_single_click(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_TASKBAR], "W11_TaskbarSingleClick_Remove")
+    SESSION.delete_value(_W11_TASKBAR, "TaskbarGlomLevel")
+
+
+def _detect_w11_taskbar_single_click() -> bool:
+    return SESSION.read_dword(_W11_TASKBAR, "TaskbarGlomLevel") == 0
+
+
+def _apply_w11_disable_search_highlights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_SEARCH], "W11_SearchHighlights")
+    SESSION.set_dword(_W11_SEARCH, "SearchboxTaskbarMode", 0)
+
+
+def _remove_w11_disable_search_highlights(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_SEARCH], "W11_SearchHighlights_Remove")
+    SESSION.delete_value(_W11_SEARCH, "SearchboxTaskbarMode")
+
+
+def _detect_w11_disable_search_highlights() -> bool:
+    return SESSION.read_dword(_W11_SEARCH, "SearchboxTaskbarMode") == 0
+
+
+def _apply_w11_disable_spotlight_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_TIPS], "W11_SpotlightTips")
+    SESSION.set_dword(_W11_TIPS, "SubscribedContentEnabled", 0)
+
+
+def _remove_w11_disable_spotlight_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_TIPS], "W11_SpotlightTips_Remove")
+    SESSION.delete_value(_W11_TIPS, "SubscribedContentEnabled")
+
+
+def _detect_w11_disable_spotlight_tips() -> bool:
+    return SESSION.read_dword(_W11_TIPS, "SubscribedContentEnabled") == 0
+
+
+def _apply_w11_disable_copilot_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_COPILOT], "W11_CopilotTaskbar")
+    SESSION.set_dword(_W11_COPILOT, "TurnOffWindowsCopilot", 1)
+
+
+def _remove_w11_disable_copilot_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_COPILOT], "W11_CopilotTaskbar_Remove")
+    SESSION.delete_value(_W11_COPILOT, "TurnOffWindowsCopilot")
+
+
+def _detect_w11_disable_copilot_taskbar() -> bool:
+    return SESSION.read_dword(_W11_COPILOT, "TurnOffWindowsCopilot") == 1
+
+
+def _apply_w11_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_RECALL], "W11_Recall")
+    SESSION.set_dword(_W11_RECALL, "DisableAIDataAnalysis", 1)
+
+
+def _remove_w11_disable_recall(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_RECALL], "W11_Recall_Remove")
+    SESSION.delete_value(_W11_RECALL, "DisableAIDataAnalysis")
+
+
+def _detect_w11_disable_recall() -> bool:
+    return SESSION.read_dword(_W11_RECALL, "DisableAIDataAnalysis") == 1
+
+
+def _apply_w11_show_this_pc_desktopicon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_DESKTOPICONS], "W11_ThisPC")
+    SESSION.set_dword(_W11_DESKTOPICONS, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", 0)
+
+
+def _remove_w11_show_this_pc_desktopicon(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.backup([_W11_DESKTOPICONS], "W11_ThisPC_Remove")
+    SESSION.delete_value(_W11_DESKTOPICONS, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}")
+
+
+def _detect_w11_show_this_pc_desktopicon() -> bool:
+    return SESSION.read_dword(_W11_DESKTOPICONS, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="w11-taskbar-never-combine",
+        label="Never Combine Taskbar Buttons",
+        category="Windows 11",
+        apply_fn=_apply_w11_taskbar_single_click,
+        remove_fn=_remove_w11_taskbar_single_click,
+        detect_fn=_detect_w11_taskbar_single_click,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_W11_TASKBAR],
+        description=(
+            "Sets taskbar button combining to 'Never' (each window gets its own button). "
+            "Default: combine when taskbar is full. Recommended: Never for power users."
+        ),
+        tags=["win11", "taskbar", "combine", "ux", "windows"],
+    ),
+    TweakDef(
+        id="w11-disable-search-highlights",
+        label="Disable Search Box / Highlights on Taskbar",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_search_highlights,
+        remove_fn=_remove_w11_disable_search_highlights,
+        detect_fn=_detect_w11_disable_search_highlights,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_W11_SEARCH],
+        description=(
+            "Hides the Search box/icon on the taskbar and disables 'Search highlights' "
+            "(Bing-powered trending topics). Default: visible. Recommended: hidden for clean taskbar."
+        ),
+        tags=["win11", "search", "taskbar", "bing", "ux"],
+    ),
+    TweakDef(
+        id="w11-disable-spotlight-tips",
+        label="Disable Windows Spotlight Tips & Suggestions",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_spotlight_tips,
+        remove_fn=_remove_w11_disable_spotlight_tips,
+        detect_fn=_detect_w11_disable_spotlight_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_W11_TIPS],
+        description=(
+            "Disables content delivery (Spotlight tips, app suggestions, lock-screen ads). "
+            "Default: enabled. Recommended: disabled for privacy and clean experience."
+        ),
+        tags=["win11", "spotlight", "ads", "suggestions", "privacy"],
+    ),
+    TweakDef(
+        id="w11-disable-copilot-taskbar-btn",
+        label="Disable Copilot Button on Taskbar",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_copilot_taskbar,
+        remove_fn=_remove_w11_disable_copilot_taskbar,
+        detect_fn=_detect_w11_disable_copilot_taskbar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_W11_COPILOT],
+        description=(
+            "Hides the Copilot button from the Windows 11 taskbar via policy. "
+            "Default: shown (Win11 23H2+). Recommended: disabled if not using Copilot."
+        ),
+        tags=["win11", "copilot", "taskbar", "ai", "ux"],
+    ),
+    TweakDef(
+        id="w11-disable-recall-ai",
+        label="Disable Windows Recall AI (Snapshots)",
+        category="Windows 11",
+        apply_fn=_apply_w11_disable_recall,
+        remove_fn=_remove_w11_disable_recall,
+        detect_fn=_detect_w11_disable_recall,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_W11_RECALL],
+        description=(
+            "Disables Windows Recall (AI-powered screenshot indexing/analysis). "
+            "Prevents continuous screen capture and local AI indexing. "
+            "Default: may be enabled on Copilot+ PCs. Recommended: disabled for privacy."
+        ),
+        tags=["win11", "recall", "ai", "privacy", "snapshot", "copilot-plus"],
+    ),
+    TweakDef(
+        id="w11-show-this-pc-on-desktop",
+        label="Show This PC Icon on Desktop",
+        category="Windows 11",
+        apply_fn=_apply_w11_show_this_pc_desktopicon,
+        remove_fn=_remove_w11_show_this_pc_desktopicon,
+        detect_fn=_detect_w11_show_this_pc_desktopicon,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_W11_DESKTOPICONS],
+        description=(
+            "Shows the 'This PC' icon on the desktop (hidden by default in Windows 11). "
+            "Default: hidden. Recommended: shown for quick storage access."
+        ),
+        tags=["win11", "desktop", "this-pc", "icons", "ux"],
+    ),
+]

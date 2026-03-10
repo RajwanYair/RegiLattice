@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-09 (v1.0.1, 1 292 tweaks, 69 categories, ~17 640 tests).
+> Last verified: 2025-07-20 (v1.0.2, 1 425 tweaks, 69 categories, ~18 708 tests).
 
 ## Quick Facts
 
@@ -14,7 +14,7 @@
 | Type-check  | `mypy --strict`                                                              |
 | Test        | `pytest` in `tests/` (~17 633 tests across 21 test files)                    |
 | GUI         | tkinter with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)                |
-| Version     | 1.0.1                                                                        |
+| Version     | 1.0.2                                                                        |
 | Python path | `C:\Users\ryair\AppData\Local\Python\bin\python.exe` (NOT WindowsApps alias) |
 | Install     | `pip install -e ".[dev]"`                                                    |
 
@@ -152,46 +152,46 @@ Canonical category slugs:
 | `w11`      | Windows 11                  | `widgets`  | Widgets & News        |
 | `wsl`      | WSL                         | `wu`       | Windows Update        |
 
-## Current Stats (1 292 tweaks, 69 categories, 69 modules)
+## Current Stats (1 425 tweaks, 69 categories, 69 modules)
 
 | Category                  | Tweaks | Category              | Tweaks |
 | ------------------------- | ------ | --------------------- | ------ |
 | Accessibility             | 20     | Multimedia            | 15     |
-| Adobe                     | 20     | Network               | 22     |
+| Adobe                     | 20     | Network               | 31     |
 | AI / Copilot              | 22     | Night Light & Display | 12     |
-| Audio                     | 19     | Notifications         | 16     |
+| Audio                     | 19     | Notifications         | 21     |
 | Backup & Recovery         | 15     | Office                | 20     |
 | Bluetooth                 | 19     | OneDrive              | 18     |
 | Boot                      | 21     | Package Management    | 21     |
-| Chrome                    | 20     | Performance           | 20     |
+| Chrome                    | 20     | Performance           | 25     |
 | Clipboard & Drag-Drop     | 15     | Phone Link            | 14     |
-| Cloud Storage             | 30     | Power                 | 21     |
-| Communication             | 21     | Printing              | 15     |
-| Context Menu              | 15     | Privacy               | 25     |
+| Cloud Storage             | 30     | Power                 | 26     |
+| Communication             | 21     | Printing              | 20     |
+| Context Menu              | 15     | Privacy               | 28     |
 | Cortana & Search          | 22     | RealVNC               | 15     |
-| Crash & Diagnostics       | 16     | Remote Desktop        | 16     |
-| Dev Drive                 | 12     | Scheduled Tasks       | 16     |
+| Crash & Diagnostics       | 16     | Remote Desktop        | 21     |
+| Dev Drive                 | 12     | Scheduled Tasks       | 21     |
 | Developer Tools           | 17     | Scoop Tools           | 25     |
 | Display                   | 19     | Screensaver & Lock    | 16     |
-| DNS & Networking Advanced | 16     | Security              | 21     |
+| DNS & Networking Advanced | 16     | Security              | 29     |
 | Edge                      | 18     | Services              | 21     |
 | Explorer                  | 41     | Shell                 | 20     |
 | File System               | 17     | Snap & Multitasking   | 17     |
-| Firefox                   | 20     | Startup               | 19     |
+| Firefox                   | 20     | Startup               | 22     |
 | Fonts                     | 19     | Storage               | 19     |
-| Gaming                    | 19     | System                | 24     |
+| Gaming                    | 24     | System                | 24     |
 | GPU / Graphics            | 19     | Taskbar               | 19     |
-| Indexing & Search         | 16     | Telemetry Advanced    | 16     |
+| Indexing & Search         | 16     | Telemetry Advanced    | 21     |
 | Input                     | 18     | Touch & Pen           | 13     |
 | Java                      | 16     | USB & Peripherals     | 16     |
-| LibreOffice               | 18     | Virtualization        | 15     |
+| LibreOffice               | 18     | Virtualization        | 20     |
 | Lock Screen & Login       | 16     | VS Code               | 19     |
 | M365 Copilot              | 18     | Voice Access & Speech | 13     |
-| Maintenance               | 17     | Widgets & News        | 15     |
-| Microsoft Store           | 15     | Windows 11            | 29     |
+| Maintenance               | 17     | Widgets & News        | 20     |
+| Microsoft Store           | 15     | Windows 11            | 35     |
 | Multimedia                | 15     | Windows Terminal      | 16     |
-|                           |        | Windows Update        | 18     |
-|                           |        | WSL                   | 29     |
+|                           |        | Windows Update        | 22     |
+|                           |        | WSL                   | 35     |
 
 ## 5 Profiles
 

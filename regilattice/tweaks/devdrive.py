@@ -423,3 +423,233 @@ TWEAKS: list[TweakDef] = [
         tags=["dev-drive", "vbs", "performance", "security"],
     ),
 ]
+
+
+# ── Disable Memory Compression ───────────────────────────────────────────────
+
+_SYS_MEM = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
+
+
+def _apply_disable_memory_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: disable memory compression")
+    SESSION.backup([_SYS_MEM], "MemoryCompression")
+    SESSION.set_dword(_SYS_MEM, "DisablePagingExecutive", 1)
+
+
+def _remove_disable_memory_compression(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SYS_MEM, "DisablePagingExecutive", 0)
+
+
+def _detect_disable_memory_compression() -> bool:
+    return SESSION.read_dword(_SYS_MEM, "DisablePagingExecutive") == 1
+
+
+# ── Enable Dev Drive Host Caching ─────────────────────────────────────────────
+
+_STOR_PORT = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"
+
+
+def _apply_enable_host_caching(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: enable disk host cache write buffering")
+    SESSION.backup([_STOR_PORT], "HostCaching")
+    SESSION.set_dword(_STOR_PORT, "FirstBurstSize", 0x80000)  # 512 KB burst
+
+
+def _remove_enable_host_caching(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_STOR_PORT, "FirstBurstSize")
+
+
+def _detect_enable_host_caching() -> bool:
+    return SESSION.read_dword(_STOR_PORT, "FirstBurstSize") == 0x80000
+
+
+# ── Disable Windows File Indexing on Dev Volumes ─────────────────────────────
+
+_SEARCH_SVC = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"
+
+
+def _apply_disable_search_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: disable Windows Search / indexer service")
+    SESSION.backup([_SEARCH_SVC], "SearchSvc")
+    SESSION.set_dword(_SEARCH_SVC, "Start", 4)  # 4 = disabled
+
+
+def _remove_disable_search_svc(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_SEARCH_SVC, "Start", 2)  # 2 = automatic
+
+
+def _detect_disable_search_svc() -> bool:
+    return SESSION.read_dword(_SEARCH_SVC, "Start") == 4
+
+
+# ── Disable Prefetch for SSD Dev Machines ────────────────────────────────────
+
+_PREFETCH = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"
+
+
+def _apply_disable_prefetch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: disable Prefetch (optimal for SSDs with build workloads)")
+    SESSION.backup([_PREFETCH], "Prefetch")
+    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 0)
+    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 0)
+
+
+def _remove_disable_prefetch(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PREFETCH, "EnablePrefetcher", 3)
+    SESSION.set_dword(_PREFETCH, "EnableSuperfetch", 3)
+
+
+def _detect_disable_prefetch() -> bool:
+    return SESSION.read_dword(_PREFETCH, "EnablePrefetcher") == 0
+
+
+# ── Enable NTFS Write Caching ─────────────────────────────────────────────────
+
+_DISK_CACHE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"
+
+
+def _apply_enable_ntfs_write_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: enable NTFS write caching")
+    SESSION.backup([_DISK_CACHE], "NtfsWriteCache")
+    SESSION.set_dword(_DISK_CACHE, "IoPageLockLimit", 0x2000000)  # 32 MB I/O page lock
+
+
+def _remove_enable_ntfs_write_cache(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DISK_CACHE, "IoPageLockLimit")
+
+
+def _detect_enable_ntfs_write_cache() -> bool:
+    return SESSION.read_dword(_DISK_CACHE, "IoPageLockLimit") == 0x2000000
+
+
+# ── Set High Performance Power Plan for Dev ───────────────────────────────────
+
+_POWER_THROTTLE = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"
+
+
+def _apply_disable_power_throttle_dev(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Dev Drive: disable power throttling for all processes")
+    SESSION.backup([_POWER_THROTTLE], "PowerThrottleDev")
+    SESSION.set_dword(_POWER_THROTTLE, "PowerThrottlingOff", 1)
+
+
+def _remove_disable_power_throttle_dev(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_POWER_THROTTLE, "PowerThrottlingOff", 0)
+
+
+def _detect_disable_power_throttle_dev() -> bool:
+    return SESSION.read_dword(_POWER_THROTTLE, "PowerThrottlingOff") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="dev-disable-memory-compression",
+        label="Disable Paging Executive (Keep Code in RAM)",
+        category="Dev Drive",
+        apply_fn=_apply_disable_memory_compression,
+        remove_fn=_remove_disable_memory_compression,
+        detect_fn=_detect_disable_memory_compression,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SYS_MEM],
+        description=(
+            "Prevents Windows from paging out kernel and driver code to disk. "
+            "Improves compilation speed on systems with ≥16 GB RAM. Default: Disabled (0). Recommended: Enabled for dev."
+        ),
+        tags=["dev-drive", "memory", "paging", "performance"],
+    ),
+    TweakDef(
+        id="dev-enable-host-cache",
+        label="Enable SSD Write Buffer (StorAHCI)",
+        category="Dev Drive",
+        apply_fn=_apply_enable_host_caching,
+        remove_fn=_remove_enable_host_caching,
+        detect_fn=_detect_enable_host_caching,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_STOR_PORT],
+        description=(
+            "Configures StorAHCI burst size for improved sequential write throughput on AHCI SSDs. "
+            "Can improve incremental build I/O performance."
+        ),
+        tags=["dev-drive", "ssd", "ahci", "cache", "performance"],
+    ),
+    TweakDef(
+        id="dev-disable-search-svc",
+        label="Disable Windows Search Indexer",
+        category="Dev Drive",
+        apply_fn=_apply_disable_search_svc,
+        remove_fn=_remove_disable_search_svc,
+        detect_fn=_detect_disable_search_svc,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SEARCH_SVC],
+        description=(
+            "Stops the Windows Search service from indexing files. "
+            "Reduces I/O contention during builds in large repositories. "
+            "Default: Automatic. Recommended: Disabled on build servers."
+        ),
+        tags=["dev-drive", "search", "indexing", "performance", "service"],
+    ),
+    TweakDef(
+        id="dev-disable-prefetch",
+        label="Disable Prefetch / Superfetch (SSD)",
+        category="Dev Drive",
+        apply_fn=_apply_disable_prefetch,
+        remove_fn=_remove_disable_prefetch,
+        detect_fn=_detect_disable_prefetch,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PREFETCH],
+        description=(
+            "Disables Prefetch and Superfetch. Not needed on SSDs and can generate extra I/O during builds. "
+            "Default: Enabled (3). Recommended: Disabled for SSD-based dev VMs."
+        ),
+        tags=["dev-drive", "prefetch", "superfetch", "ssd", "performance"],
+    ),
+    TweakDef(
+        id="dev-ntfs-write-cache",
+        label="Expand NTFS I/O Page Lock (32 MB)",
+        category="Dev Drive",
+        apply_fn=_apply_enable_ntfs_write_cache,
+        remove_fn=_remove_enable_ntfs_write_cache,
+        detect_fn=_detect_enable_ntfs_write_cache,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_DISK_CACHE],
+        description=(
+            "Sets IoPageLockLimit to 32 MB for improved file I/O throughput during parallel builds. "
+            "Default: System managed. Recommended: 32 MB on systems with ≥8 GB RAM."
+        ),
+        tags=["dev-drive", "ntfs", "io", "cache", "performance"],
+    ),
+    TweakDef(
+        id="dev-disable-power-throttle",
+        label="Disable Power Throttling (All Processes)",
+        category="Dev Drive",
+        apply_fn=_apply_disable_power_throttle_dev,
+        remove_fn=_remove_disable_power_throttle_dev,
+        detect_fn=_detect_disable_power_throttle_dev,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POWER_THROTTLE],
+        description=(
+            "Disables Windows 10/11 power throttling for all processes globally. "
+            "Ensures build tools always run at full CPU frequency. "
+            "Default: Enabled. Recommended: Disabled for desktop dev machines."
+        ),
+        tags=["dev-drive", "power", "throttle", "performance", "cpu"],
+    ),
+]

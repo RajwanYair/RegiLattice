@@ -914,3 +914,429 @@ class TestOpenPsModuleManager:
             assert "Az" in ps_calls[0]
         finally:
             root.destroy()
+
+
+# ── open_pip_manager tests ────────────────────────────────────────────────────
+
+
+class TestOpenPipManager:
+    def test_creates_dialog(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+            ):
+                open_pip_manager(root, MagicMock())
+            assert any(isinstance(w, tk.Toplevel) for w in root.winfo_children())  # type: ignore[no-untyped-call]
+        finally:
+            root.destroy()
+
+    def test_refresh_list_populates_listbox(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            pip_json = '[{"name": "requests", "version": "2.31.0"}, {"name": "rich", "version": "13.7.0"}]'
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _SyncThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+            ):
+                mock_run.return_value = MagicMock(returncode=0, stdout=pip_json, stderr="")
+                open_pip_manager(root, MagicMock())
+
+            dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+            if dlg is None:
+                pytest.skip("dialog not found")
+            listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+            assert listboxes, "No listbox found in dialog"
+            assert listboxes[0].size() == 2
+        finally:
+            root.destroy()
+
+    def test_install_action_valid_name(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+            ):
+                mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "requests")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = _find_install_buttons(dlg)
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            calls = [str(c) for c in mock_run.call_args_list]
+            assert any("install" in c and "requests" in c for c in calls)
+        finally:
+            root.destroy()
+
+    def test_install_action_user_scope_adds_user_flag(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+            ):
+                mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "rich")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = _find_install_buttons(dlg)
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            for call in mock_run.call_args_list:
+                args = call.args[0] if call.args else call.kwargs.get("args", [])
+                if "install" in args and "rich" in args:
+                    assert "--user" in args, "--user flag expected for user scope"
+                    break
+        finally:
+            root.destroy()
+
+    def test_install_action_invalid_name_shows_error(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run", return_value=MagicMock(returncode=0, stdout="[]", stderr="")),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "evil'; rm -rf /")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = _find_install_buttons(dlg)
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showerror.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_remove_action_no_selection_shows_info(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run", return_value=MagicMock(returncode=0, stdout="[]", stderr="")),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not remove_btns:
+                        pytest.skip("remove button not found")
+                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showinfo.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_remove_action_with_selection_calls_pip_uninstall(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
+                mbox.askyesno.return_value = True
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+                if not listboxes:
+                    pytest.skip("listbox not found")
+                listboxes[0].insert("end", "requests  v2.31.0")
+                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    remove_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Remove" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not remove_btns:
+                        pytest.skip("remove button not found")
+                    remove_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            for call in mock_run.call_args_list:
+                args = call.args[0] if call.args else call.kwargs.get("args", [])
+                if "uninstall" in args and "requests" in args:
+                    assert "-y" in args
+                    break
+        finally:
+            root.destroy()
+
+    def test_update_action_no_selection_shows_info(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run", return_value=MagicMock(returncode=0, stdout="[]", stderr="")),
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not update_btns:
+                        pytest.skip("update button not found")
+                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showinfo.assert_called_once()
+        finally:
+            root.destroy()
+
+    def test_update_action_with_selection_calls_pip_upgrade(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+            ):
+                mock_run.return_value = MagicMock(returncode=0, stdout="[]", stderr="")
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                listboxes = [w for w in _all_widgets(dlg) if isinstance(w, tk.Listbox)]
+                if not listboxes:
+                    pytest.skip("listbox not found")
+                listboxes[0].insert("end", "rich  v13.7.0")
+                listboxes[0].selection_set(0)  # type: ignore[no-untyped-call]
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    update_btns = [w for w in _all_widgets(dlg) if w.winfo_class() == "Button" and "Update" in str(w.cget("text"))]  # type: ignore[no-untyped-call]
+                    if not update_btns:
+                        pytest.skip("update button not found")
+                    update_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            for call in mock_run.call_args_list:
+                args = call.args[0] if call.args else call.kwargs.get("args", [])
+                if "--upgrade" in args and "rich" in args:
+                    break
+            else:
+                pytest.fail("pip install --upgrade not called")
+        finally:
+            root.destroy()
+
+    def test_install_pip_error_shows_error_dialog(self) -> None:
+        root = _try_create_root()
+        try:
+            from regilattice.gui_dialogs import open_pip_manager
+
+            with (
+                patch("regilattice.gui_dialogs.threading.Thread", _StubThread),
+                patch("tkinter.Toplevel.grab_set"),
+                patch("regilattice.gui_dialogs.subprocess.run") as mock_run,
+                patch("regilattice.gui_dialogs.messagebox") as mbox,
+            ):
+                # Initial refresh is stubbed (never runs).
+                # When install button is clicked, the sole subprocess call is the pip install — which fails.
+                mock_run.return_value = MagicMock(returncode=1, stdout="", stderr="No matching distribution found")
+                open_pip_manager(root, MagicMock())
+
+                dlg = next((w for w in root.winfo_children() if isinstance(w, tk.Toplevel)), None)  # type: ignore[no-untyped-call]
+                if dlg is None:
+                    pytest.skip("dialog not found")
+
+                entries = [w for w in _all_widgets(dlg) if w.winfo_class() == "TEntry"]  # type: ignore[no-untyped-call]
+                if not entries:
+                    pytest.skip("entry not found")
+                entries[0].insert(0, "nonexistent-pkg-xyz")
+
+                with patch("regilattice.gui_dialogs.threading.Thread", _SyncThread):
+                    install_btns = _find_install_buttons(dlg)
+                    if not install_btns:
+                        pytest.skip("install button not found")
+                    install_btns[0].invoke()  # type: ignore[no-untyped-call]
+
+            mbox.showerror.assert_called_once()
+        finally:
+            root.destroy()
+
+
+# ── _validate_pip_name tests ──────────────────────────────────────────────────
+
+
+class TestValidatePipName:
+    def test_valid_simple_name(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        assert _validate_pip_name("requests") == "requests"
+
+    def test_valid_name_with_hyphen(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        assert _validate_pip_name("pydantic-settings") == "pydantic-settings"
+
+    def test_valid_name_with_dot(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        assert _validate_pip_name("zope.interface") == "zope.interface"
+
+    def test_valid_name_with_underscore(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        assert _validate_pip_name("my_package") == "my_package"
+
+    def test_empty_string_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        with pytest.raises(ValueError):
+            _validate_pip_name("")
+
+    def test_semicolon_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        with pytest.raises(ValueError):
+            _validate_pip_name("evil;cmd")
+
+    def test_single_quote_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        with pytest.raises(ValueError):
+            _validate_pip_name("'; rm -rf /")
+
+    def test_space_raises(self) -> None:
+        from regilattice.gui_dialogs import _validate_pip_name
+
+        with pytest.raises(ValueError):
+            _validate_pip_name("foo bar")
+
+
+# ── list_installed_scoop_apps parsing tests ───────────────────────────────────
+
+
+class TestListInstalledScoopApps:
+    def test_modern_output_skips_header_words(self) -> None:
+        from regilattice.tweaks.scoop_tools import list_installed_scoop_apps
+
+        modern_output = (
+            "Installed apps:\n\n"
+            "Name     Version  Source  Updated             Info\n"
+            "-------- -------- ------- ------------------- ----\n"
+            "7zip     22.01    main    2023-01-01 12:00:00 -\n"
+            "git      2.39.3   main    2023-01-02 12:00:00 -\n"
+        )
+        with patch("regilattice.tweaks.scoop_tools.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout=modern_output)
+            result = list_installed_scoop_apps()
+
+        assert "7zip" in result
+        assert "git" in result
+        for bad in ("Name", "Version", "Source", "Updated", "Info"):
+            assert bad not in result, f"Header word {bad!r} must not appear in results"
+
+    def test_package_with_dot_included(self) -> None:
+        from regilattice.tweaks.scoop_tools import list_installed_scoop_apps
+
+        dotted_output = (
+            "Name                      Version\n"
+            "------------------------- -------\n"
+            "Microsoft.WindowsTerminal 1.19.0\n"
+            "python3.11                3.11.0\n"
+        )
+        with patch("regilattice.tweaks.scoop_tools.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout=dotted_output)
+            result = list_installed_scoop_apps()
+
+        assert "Microsoft.WindowsTerminal" in result
+        assert "python3.11" in result
+
+    def test_empty_output_returns_empty_list(self) -> None:
+        from regilattice.tweaks.scoop_tools import list_installed_scoop_apps
+
+        with patch("regilattice.tweaks.scoop_tools.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout="")
+            result = list_installed_scoop_apps()
+
+        assert result == []
+
+    def test_nonzero_returncode_returns_empty(self) -> None:
+        from regilattice.tweaks.scoop_tools import list_installed_scoop_apps
+
+        with patch("regilattice.tweaks.scoop_tools.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=1, stdout="")
+            result = list_installed_scoop_apps()
+
+        assert result == []
+
+    def test_result_is_sorted(self) -> None:
+        from regilattice.tweaks.scoop_tools import list_installed_scoop_apps
+
+        output = "bat     0.24\naria2   1.36\n7zip    22.01\n"
+        with patch("regilattice.tweaks.scoop_tools.subprocess.run") as mock_run:
+            mock_run.return_value = MagicMock(returncode=0, stdout=output)
+            result = list_installed_scoop_apps()
+
+        assert result == sorted(result)

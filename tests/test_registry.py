@@ -750,3 +750,88 @@ class TestCacheInvalidationExtended:
         ):
             session.set_multi_sz(path, name, ["new1", "new2"])
         assert (path, name, "multi_sz") not in session._read_cache
+
+
+# ── validate_registry_path ───────────────────────────────────────────────────
+
+
+class TestValidateRegistryPath:
+    """Unit tests for the validate_registry_path() helper."""
+
+    def test_valid_hkcu_path(self) -> None:
+        from regilattice.registry import validate_registry_path
+
+        result = validate_registry_path(r"HKEY_CURRENT_USER\Software\Test")
+        assert result == r"HKEY_CURRENT_USER\Software\Test"
+
+    def test_valid_hklm_path(self) -> None:
+        from regilattice.registry import validate_registry_path
+
+        result = validate_registry_path(r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies")
+        assert result == r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies"
+
+    def test_short_form_hkcu(self) -> None:
+        from regilattice.registry import validate_registry_path
+
+        result = validate_registry_path(r"HKCU\Software\Test")
+        assert result == r"HKCU\Software\Test"
+
+    def test_short_form_hklm(self) -> None:
+        from regilattice.registry import validate_registry_path
+
+        result = validate_registry_path(r"HKLM\SOFTWARE\Test")
+        assert result == r"HKLM\SOFTWARE\Test"
+
+    def test_strips_whitespace(self) -> None:
+        from regilattice.registry import validate_registry_path
+
+        result = validate_registry_path(r"  HKCU\Software\Test  ")
+        assert result == r"HKCU\Software\Test"
+
+    def test_empty_string_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError, match="non-empty"):
+            validate_registry_path("")
+
+    def test_whitespace_only_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError, match="non-empty"):
+            validate_registry_path("   ")
+
+    def test_null_byte_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError, match="null bytes"):
+            validate_registry_path("HKCU\x00\\Software\\Test")
+
+    def test_no_subkey_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError, match="subkey"):
+            validate_registry_path("HKCU")
+
+    def test_invalid_prefix_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError, match="hive prefix"):
+            validate_registry_path(r"INVALID\Software\Test")
+
+    def test_non_string_raises(self) -> None:
+        import pytest
+
+        from regilattice.registry import validate_registry_path
+
+        with pytest.raises(ValueError):
+            validate_registry_path(42)  # type: ignore[arg-type]

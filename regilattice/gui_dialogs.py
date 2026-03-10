@@ -22,6 +22,7 @@ __all__ = [
     "export_json_selection",
     "export_powershell",
     "import_json_selection",
+    "open_pip_manager",
     "open_psmodule_manager",
     "open_scoop_manager",
     "run_powershell_command",
@@ -272,7 +273,6 @@ def open_scoop_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> N
     def _refresh_list() -> None:
         listbox.delete(0, "end")
         status_lbl.configure(text="Scanning installed packages...")
-        dlg.update()
         apps = list_installed_scoop_apps()
         for app in apps:
             listbox.insert("end", app)
@@ -420,7 +420,7 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
         ).pack(side="left", padx=(6, 0))
 
     # Status label
-    status_lbl = tk.Label(dlg, text="Ready — click Refresh to list installed modules.", bg=_BG, fg=_FG_DIM, font=_FONT_SM)
+    status_lbl = tk.Label(dlg, text="Loading installed modules...", bg=_BG, fg=_FG_DIM, font=_FONT_SM)
     status_lbl.pack(padx=16, pady=(0, 4), anchor="w")
 
     # Module list
@@ -448,7 +448,6 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
 
     def _refresh_list() -> None:
         status_lbl.configure(text="Scanning installed modules\u2026")
-        dlg.update()
         listbox.delete(0, "end")
         try:
             scope = scope_var.get()
@@ -457,7 +456,7 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
             lines = [ln for ln in raw.splitlines() if ln.strip()]
             for ln in lines:
                 listbox.insert("end", ln)
-            status_lbl.configure(text=f"{len(lines)} module(s) installed ({scope})")
+            status_lbl.configure(text=f"{len(lines)} module(s) installed ({scope_var.get()})")
         except (RuntimeError, FileNotFoundError) as exc:
             status_lbl.configure(text=f"Error: {exc}")
 
@@ -607,6 +606,318 @@ def open_psmodule_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -
             command=lambda m=mod: install_var.set(m),  # type: ignore[misc]
         ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
 
+    threading.Thread(target=_refresh_list, daemon=True).start()
+
+
+# ── pip Package Manager ──────────────────────────────────────────────────────
+
+# pip package name: letters, digits, hyphen, dot, underscore — no shell-special chars.
+_PIP_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._\-]*$")
+
+
+def _validate_pip_name(name: str) -> str:
+    """Raise ValueError if *name* is not a safe pip package name."""
+    if not name or not _PIP_NAME_RE.match(name):
+        msg = f"Invalid package name {name!r}: only letters, digits, '.', '_', '-' allowed."
+        raise ValueError(msg)
+    return name
+
+
+def open_pip_manager(root: tk.Tk, refresh_status_all: Callable[[], None]) -> None:
+    """Open a pip Package Manager dialog for listing, installing, removing and updating packages."""
+    dlg = tk.Toplevel(root)
+    dlg.title("pip Package Manager")
+    dlg.geometry("720x600")
+    dlg.configure(bg=_BG)
+    dlg.transient(root)
+    dlg.grab_set()
+
+    # Header
+    tk.Label(dlg, text="\U0001f40d  pip Package Manager", bg=_BG, fg=_FG, font=_FONT_TITLE).pack(
+        padx=16,
+        pady=(12, 4),
+        anchor="w",
+    )
+
+    # Scope selector (User / System)
+    scope_var = tk.StringVar(value="user")
+    scope_frame = tk.Frame(dlg, bg=_BG)
+    scope_frame.pack(fill="x", padx=16, pady=(0, 4))
+    tk.Label(scope_frame, text="Scope:", bg=_BG, fg=_FG_DIM, font=_FONT_SM).pack(side="left")
+    for scope_val, scope_label in (("user", "User  (--user)"), ("system", "System  (global, may need admin)")):
+        tk.Radiobutton(
+            scope_frame,
+            text=scope_label,
+            variable=scope_var,
+            value=scope_val,
+            bg=_BG,
+            fg=_FG,
+            selectcolor=_CARD_BG,
+            font=_FONT_SM,
+            activebackground=_BG,
+            command=lambda: threading.Thread(target=_refresh_list, daemon=True).start(),
+        ).pack(side="left", padx=(6, 0))
+
+    # Status label
+    status_lbl = tk.Label(dlg, text="Loading installed packages...", bg=_BG, fg=_FG_DIM, font=_FONT_SM)
+    status_lbl.pack(padx=16, pady=(0, 4), anchor="w")
+
+    # Package list with scrollbar
+    list_frame = tk.Frame(dlg, bg=_BG)
+    list_frame.pack(fill="both", expand=True, padx=16, pady=4)
+
+    listbox = tk.Listbox(
+        list_frame,
+        bg=_CARD_BG,
+        fg=_FG,
+        font=_FONT,
+        selectbackground=_ACCENT,
+        selectforeground="#1E1E2E",
+        relief="flat",
+        highlightthickness=0,
+    )
+    scroll = ttk.Scrollbar(list_frame, orient="vertical", command=listbox.yview)
+    listbox.configure(yscrollcommand=scroll.set)
+    listbox.pack(side="left", fill="both", expand=True)
+    scroll.pack(side="right", fill="y")
+
+    # ── helpers ──────────────────────────────────────────────────────────────
+
+    def _list_pip_packages(scope: str) -> list[str]:
+        """Return installed pip packages as 'name  version' strings for the given scope."""
+        try:
+            cmd = [sys.executable, "-m", "pip", "list", "--format=json"]
+            if scope == "user":
+                cmd.append("--user")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=False)
+            if result.returncode != 0:
+                return []
+            import json as _json
+
+            data = _json.loads(result.stdout)
+            return sorted((f"{p['name']}  v{p['version']}" for p in data), key=str.lower)
+        except (FileNotFoundError, OSError, ValueError, KeyError):
+            return []
+
+    def _refresh_list() -> None:
+        status_lbl.configure(text="Scanning installed packages...")
+        listbox.delete(0, "end")
+        pkgs = _list_pip_packages(scope_var.get())
+        for pkg in pkgs:
+            listbox.insert("end", pkg)
+        status_lbl.configure(text=f"{len(pkgs)} packages installed ({scope_var.get()})")
+
+    # ── install / remove / update controls ───────────────────────────────────
+
+    ctrl = tk.Frame(dlg, bg=_BG)
+    ctrl.pack(fill="x", padx=16, pady=(4, 8))
+
+    install_var = tk.StringVar()
+    tk.Label(ctrl, text="Package:", bg=_BG, fg=_FG, font=_FONT_SM).pack(side="left")
+    entry = ttk.Entry(ctrl, textvariable=install_var, font=_FONT, width=24)
+    entry.pack(side="left", padx=(4, 4))
+
+    def _install_action() -> None:
+        raw_name = install_var.get().strip()
+        if not raw_name:
+            return
+        try:
+            name = _validate_pip_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
+        scope = scope_var.get()
+        status_lbl.configure(text=f"Installing {name}\u2026")
+        try:
+            cmd = [sys.executable, "-m", "pip", "install", name]
+            if scope == "user":
+                cmd.append("--user")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=False)
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or f"pip install failed (exit {result.returncode})")
+            status_lbl.configure(text=f"Installed {name} \u2714")
+            _refresh_list()
+        except RuntimeError as exc:
+            messagebox.showerror("Install Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Install failed.")
+
+    def _remove_action() -> None:
+        sel = listbox.curselection()  # type: ignore[no-untyped-call]
+        if not sel:
+            messagebox.showinfo("Select Package", "Select a package to remove.", parent=dlg)
+            return
+        raw_name = listbox.get(sel[0]).split()[0]
+        try:
+            name = _validate_pip_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
+        if not messagebox.askyesno("Confirm Remove", f"Uninstall '{name}'?", parent=dlg):
+            return
+        status_lbl.configure(text=f"Removing {name}\u2026")
+        try:
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "uninstall", "-y", name],
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=False,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or "pip uninstall failed")
+            status_lbl.configure(text=f"Removed {name} \u2714")
+            _refresh_list()
+        except RuntimeError as exc:
+            messagebox.showerror("Remove Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Remove failed.")
+
+    def _update_action() -> None:
+        sel = listbox.curselection()  # type: ignore[no-untyped-call]
+        if not sel:
+            messagebox.showinfo("Select Package", "Select a package to update.", parent=dlg)
+            return
+        raw_name = listbox.get(sel[0]).split()[0]
+        try:
+            name = _validate_pip_name(raw_name)
+        except ValueError as exc:
+            messagebox.showerror("Invalid Name", str(exc), parent=dlg)
+            return
+        scope = scope_var.get()
+        status_lbl.configure(text=f"Updating {name}\u2026")
+        try:
+            cmd = [sys.executable, "-m", "pip", "install", "--upgrade", name]
+            if scope == "user":
+                cmd.append("--user")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, check=False)
+            if result.returncode != 0:
+                raise RuntimeError(result.stderr.strip() or "pip upgrade failed")
+            status_lbl.configure(text=f"Updated {name} \u2714")
+            _refresh_list()
+        except RuntimeError as exc:
+            messagebox.showerror("Update Error", str(exc), parent=dlg)
+            status_lbl.configure(text="Update failed.")
+
+    tk.Button(
+        ctrl,
+        text="Install",
+        bg="#40A02B",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_install_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="Remove Selected",
+        bg="#E64A19",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_remove_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="Update Selected",
+        bg="#1E66F5",
+        fg="white",
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_update_action, daemon=True).start(),
+    ).pack(side="left", padx=2)
+    tk.Button(
+        ctrl,
+        text="\u21bb Refresh",
+        bg=_CARD_BG,
+        fg=_FG,
+        font=_FONT_XS_BOLD,
+        relief="flat",
+        padx=8,
+        command=lambda: threading.Thread(target=_refresh_list, daemon=True).start(),
+    ).pack(side="left", padx=2)
+
+    # Quick install popular Python packages
+    pop_frame = tk.LabelFrame(dlg, text="Quick Install Popular Packages", bg=_BG, fg=_FG_DIM, font=_FONT_XS)
+    pop_frame.pack(fill="x", padx=16, pady=(0, 8))
+    popular_packages = [
+        "requests",
+        "rich",
+        "click",
+        "pydantic",
+        "httpx",
+        "pytest",
+        "ruff",
+        "mypy",
+        "black",
+        "ipython",
+    ]
+    for i, pkg in enumerate(popular_packages):
+        tk.Button(
+            pop_frame,
+            text=pkg,
+            bg=_CARD_BG,
+            fg=_ACCENT,
+            font=_FONT_XS,
+            relief="flat",
+            padx=4,
+            pady=1,
+            cursor="hand2",
+            command=lambda p=pkg: install_var.set(p),  # type: ignore[misc]
+        ).grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
+
+    threading.Thread(target=_refresh_list, daemon=True).start()
+
+
+# ── Standalone launcher ───────────────────────────────────────────────────────
+
+_STANDALONE_TOOLS: dict[str, tuple[str, Callable[..., None]]] = {}  # populated after defs
+
+
+def _run_standalone(tool: str) -> None:
+    """Open a single package-manager dialog as a standalone Tk application.
+
+    Usage::
+
+        python -m regilattice.gui_dialogs scoop
+        python -m regilattice.gui_dialogs psmodules
+        python -m regilattice.gui_dialogs pip
+    """
+    # Lazily populate the tool registry (avoids evaluate-time circular deps).
+    if not _STANDALONE_TOOLS:
+        _STANDALONE_TOOLS.update(
+            {
+                "scoop": ("Scoop Manager", open_scoop_manager),
+                "psmodules": ("PS Modules Manager", open_psmodule_manager),
+                "pip": ("pip Package Manager", open_pip_manager),
+            }
+        )
+
+    if tool not in _STANDALONE_TOOLS:
+        valid = ", ".join(sorted(_STANDALONE_TOOLS))
+        print(f"Unknown tool {tool!r}. Choose one of: {valid}", file=sys.stderr)
+        sys.exit(1)
+
+    title, opener = _STANDALONE_TOOLS[tool]
+
+    root = tk.Tk()
+    root.title(title)
+    root.withdraw()  # hide the bare root; the Toplevel dialog is the real window
+    root.configure(bg=_BG)
+
+    def _on_dialog_close() -> None:
+        root.destroy()
+
+    opener(root, lambda: None)
+
+    # Bind the dialog's close button so it shuts down the app.
+    dialogs_open = [w for w in root.winfo_children() if isinstance(w, tk.Toplevel)]  # type: ignore[no-untyped-call]
+    if dialogs_open:
+        dialogs_open[0].protocol("WM_DELETE_WINDOW", _on_dialog_close)
+
+    root.mainloop()
+
 
 # ── About dialog ─────────────────────────────────────────────────────────────
 
@@ -641,3 +952,19 @@ def show_about(corp_blocked: bool, hw_summary: str = "") -> None:
         "  Esc     Clear Search",
     ]
     messagebox.showinfo("About RegiLattice", "\n".join(info_lines))
+
+
+if __name__ == "__main__":
+    import argparse as _argparse
+
+    _parser = _argparse.ArgumentParser(
+        prog="python -m regilattice.gui_dialogs",
+        description="Run a RegiLattice package-manager tool as a standalone window.",
+    )
+    _parser.add_argument(
+        "tool",
+        choices=["scoop", "psmodules", "pip"],
+        help="Which manager to open: scoop | psmodules | pip",
+    )
+    _args = _parser.parse_args()
+    _run_standalone(_args.tool)
