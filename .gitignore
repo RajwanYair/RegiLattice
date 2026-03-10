@@ -37,6 +37,7 @@ Desktop.ini
 htmlcov/
 .coverage
 coverage.xml
+coverage.json
 *.cover
 
 # ── mypy ─────────────────────────────────────────────────────

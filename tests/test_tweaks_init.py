@@ -20,6 +20,7 @@ from regilattice.tweaks import (
     all_tweaks,
     apply_all,
     apply_profile,
+    apply_tweaks,
     available_profiles,
     categories,
     categories_by_risk,
@@ -27,22 +28,27 @@ from regilattice.tweaks import (
     category_counts,
     category_info,
     diff_snapshots,
+    filter_tweaks,
     get_tweak,
     load_snapshot,
     profile_info,
     reload_plugins,
     remove_all,
+    remove_tweaks,
     restore_snapshot,
     save_snapshot,
     search_tweaks,
     status_map,
     tweak_count_by_scope,
+    tweak_dependencies,
     tweak_risk_level,
     tweak_scope,
     tweak_status,
     tweaks_above_build,
     tweaks_by_category,
+    tweaks_by_ids,
     tweaks_by_scope,
+    tweaks_by_tag,
     tweaks_excluded_by_profile,
     tweaks_for_profile,
 )
@@ -1037,16 +1043,6 @@ class TestTagIntegrity:
 
 
 # ── C8 engine additions ───────────────────────────────────────────────────────
-
-
-from regilattice.tweaks import (  # noqa: E402
-    apply_tweaks,
-    filter_tweaks,
-    remove_tweaks,
-    tweak_dependencies,
-    tweaks_by_ids,
-    tweaks_by_tag,
-)
 
 
 class TestFilterTweaks:
