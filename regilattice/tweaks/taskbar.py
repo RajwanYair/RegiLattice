@@ -728,3 +728,184 @@ TWEAKS += [
         tags=["taskbar", "animations", "performance", "ui"],
     ),
 ]
+
+
+# ── Taskbar Jump Lists, Aero Peek & Tray Tweaks ───────────────────────────────
+
+
+def _apply_tb_disable_jump_lists(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disable jump lists and recent program tracking")
+    SESSION.backup([_ADV], "TBJumpLists")
+    SESSION.set_dword(_ADV, "Start_TrackProgs", 0)
+
+
+def _remove_tb_disable_jump_lists(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "Start_TrackProgs")
+
+
+def _detect_tb_disable_jump_lists() -> bool:
+    return SESSION.read_dword(_ADV, "Start_TrackProgs") == 0
+
+
+def _apply_tb_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disable recent documents tracking in jump lists")
+    SESSION.backup([_ADV], "TBRecentDocs")
+    SESSION.set_dword(_ADV, "Start_TrackDocs", 0)
+
+
+def _remove_tb_disable_recent_docs(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "Start_TrackDocs")
+
+
+def _detect_tb_disable_recent_docs() -> bool:
+    return SESSION.read_dword(_ADV, "Start_TrackDocs") == 0
+
+
+def _apply_tb_disable_aero_peek(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: disable Aero Peek on taskbar hover")
+    SESSION.backup([_ADV], "TBAeroPeek")
+    SESSION.set_dword(_ADV, "EnableAeroPeek", 0)
+
+
+def _remove_tb_disable_aero_peek(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "EnableAeroPeek")
+
+
+def _detect_tb_disable_aero_peek() -> bool:
+    return SESSION.read_dword(_ADV, "EnableAeroPeek") == 0
+
+
+def _apply_tb_lock_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: lock taskbar from being moved or resized")
+    SESSION.backup([_ADV], "TBLock")
+    SESSION.set_dword(_ADV, "TaskbarSizeMove", 0)
+
+
+def _remove_tb_lock_taskbar(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "TaskbarSizeMove")
+
+
+def _detect_tb_lock_taskbar() -> bool:
+    return SESSION.read_dword(_ADV, "TaskbarSizeMove") == 0
+
+
+def _apply_tb_show_all_tray_icons(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Taskbar: always show all system tray icons")
+    SESSION.backup([_ADV], "TBAllTrayIcons")
+    SESSION.set_dword(_ADV, "EnableAutoTray", 0)
+
+
+def _remove_tb_show_all_tray_icons(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_ADV, "EnableAutoTray")
+
+
+def _detect_tb_show_all_tray_icons() -> bool:
+    return SESSION.read_dword(_ADV, "EnableAutoTray") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="tb-disable-jump-lists",
+        label="Disable Taskbar Jump Lists",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_jump_lists,
+        remove_fn=_remove_tb_disable_jump_lists,
+        detect_fn=_detect_tb_disable_jump_lists,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables jump list and recent program tracking on the taskbar. "
+            "Prevents Windows from storing recently used file history in taskbar. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["taskbar", "jump-list", "recent", "privacy", "history"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="tb-disable-recent-docs",
+        label="Disable Recent Documents Tracking",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_recent_docs,
+        remove_fn=_remove_tb_disable_recent_docs,
+        detect_fn=_detect_tb_disable_recent_docs,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables Windows from tracking recently opened documents for taskbar jump lists. "
+            "Reduces filesystem activity and improves privacy. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["taskbar", "recent-docs", "privacy", "history", "tracking"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="tb-disable-aero-peek",
+        label="Disable Aero Peek Preview",
+        category="Taskbar",
+        apply_fn=_apply_tb_disable_aero_peek,
+        remove_fn=_remove_tb_disable_aero_peek,
+        detect_fn=_detect_tb_disable_aero_peek,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables the Aero Peek desktop preview when hovering over the Show Desktop button. "
+            "Eliminates accidental desktop reveals. "
+            "Default: Enabled. Recommended: Personal preference."
+        ),
+        tags=["taskbar", "aero-peek", "preview", "desktop", "ui"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="tb-lock-taskbar",
+        label="Lock Taskbar Position and Size",
+        category="Taskbar",
+        apply_fn=_apply_tb_lock_taskbar,
+        remove_fn=_remove_tb_lock_taskbar,
+        detect_fn=_detect_tb_lock_taskbar,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Locks the taskbar to prevent accidental resizing or repositioning. "
+            "Default: Unlocked. Recommended: Locked for stable work environments."
+        ),
+        tags=["taskbar", "lock", "resize", "position", "ui"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="tb-show-all-tray-icons",
+        label="Always Show All System Tray Icons",
+        category="Taskbar",
+        apply_fn=_apply_tb_show_all_tray_icons,
+        remove_fn=_remove_tb_show_all_tray_icons,
+        detect_fn=_detect_tb_show_all_tray_icons,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables the auto-hide feature for system tray icons. "
+            "All tray icons are always visible without clicking the expand arrow. "
+            "Default: Auto-hide. Recommended: Show all for quick access."
+        ),
+        tags=["taskbar", "tray", "icons", "notification-area", "ui"],
+        depends_on=[],
+        side_effects="",
+    ),
+]

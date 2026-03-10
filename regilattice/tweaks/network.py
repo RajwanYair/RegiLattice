@@ -1200,3 +1200,210 @@ TWEAKS += [
         tags=["network", "tcp", "timestamps", "rfc1323", "performance"],
     ),
 ]
+
+
+# ── Disable IPv6 Entirely ─────────────────────────────────────────────────────
+
+_TCPIP6 = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
+
+
+def _apply_net_disable_ipv6(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable all IPv6 tunneling components (DisabledComponents=255)")
+    SESSION.backup([_TCPIP6], "DisableIPv6")
+    SESSION.set_dword(_TCPIP6, "DisabledComponents", 255)
+
+
+def _remove_net_disable_ipv6(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_TCPIP6, "DisabledComponents")
+
+
+def _detect_net_disable_ipv6() -> bool:
+    return SESSION.read_dword(_TCPIP6, "DisabledComponents") == 255
+
+
+# ── Disable Multicast DNS (mDNS) ──────────────────────────────────────────────
+
+_DNS_PARAMS = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"
+
+
+def _apply_net_disable_mdns(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable multicast DNS (mDNS)")
+    SESSION.backup([_DNS_PARAMS], "DisableMDNS")
+    SESSION.set_dword(_DNS_PARAMS, "EnableMDNS", 0)
+
+
+def _remove_net_disable_mdns(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_DNS_PARAMS, "EnableMDNS")
+
+
+def _detect_net_disable_mdns() -> bool:
+    val = SESSION.read_dword(_DNS_PARAMS, "EnableMDNS")
+    return val is not None and val == 0
+
+
+# ── Disable Peer-to-Peer Networking Service ───────────────────────────────────
+
+_PNRP = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc"
+
+
+def _apply_net_disable_pnrp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable Peer Name Resolution Protocol (PNRP) service")
+    SESSION.backup([_PNRP], "PNRPStart")
+    SESSION.set_dword(_PNRP, "Start", 4)
+
+
+def _remove_net_disable_pnrp(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_PNRP, "Start", 3)
+
+
+def _detect_net_disable_pnrp() -> bool:
+    return SESSION.read_dword(_PNRP, "Start") == 4
+
+
+# ── Disable WCN (Windows Connect Now) ────────────────────────────────────────
+
+_WCN_POL = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCN\Registrars"
+
+
+def _apply_net_disable_wcn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable Windows Connect Now (WCN) registrar")
+    SESSION.backup([_WCN_POL], "DisableWCN")
+    SESSION.set_dword(_WCN_POL, "DisableWPDRegistrar", 1)
+    SESSION.set_dword(_WCN_POL, "EnableRegistrars", 0)
+
+
+def _remove_net_disable_wcn(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WCN_POL, "DisableWPDRegistrar")
+    SESSION.delete_value(_WCN_POL, "EnableRegistrars")
+
+
+def _detect_net_disable_wcn() -> bool:
+    return SESSION.read_dword(_WCN_POL, "EnableRegistrars") == 0
+
+
+# ── Disable TCP/IP Task Offload ───────────────────────────────────────────────
+
+_OFFLOAD = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters"
+
+
+def _apply_net_disable_task_offload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Network: disable TCP/IP task offload for compatibility")
+    SESSION.backup([_OFFLOAD], "TCPOffload")
+    SESSION.set_dword(_OFFLOAD, "DisableTaskOffload", 1)
+
+
+def _remove_net_disable_task_offload(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_OFFLOAD, "DisableTaskOffload")
+
+
+def _detect_net_disable_task_offload() -> bool:
+    return SESSION.read_dword(_OFFLOAD, "DisableTaskOffload") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="net-disable-ipv6",
+        label="Disable All IPv6 Tunneling Components",
+        category="Network",
+        apply_fn=_apply_net_disable_ipv6,
+        remove_fn=_remove_net_disable_ipv6,
+        detect_fn=_detect_net_disable_ipv6,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_TCPIP6],
+        description=(
+            "Sets DisabledComponents=255 to disable all IPv6 tunnel adapters "
+            "(6to4, ISATAP, Teredo, etc.) at once. Reduces attack surface on IPv4-only networks. "
+            "Default: Enabled. Recommended: Disabled on pure IPv4 networks."
+        ),
+        tags=["network", "ipv6", "tunnel", "6to4", "isatap", "teredo", "security"],
+        depends_on=[],
+        side_effects="IPv6 connectivity is fully disabled.",
+    ),
+    TweakDef(
+        id="net-disable-mdns",
+        label="Disable Multicast DNS (mDNS)",
+        category="Network",
+        apply_fn=_apply_net_disable_mdns,
+        remove_fn=_remove_net_disable_mdns,
+        detect_fn=_detect_net_disable_mdns,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_DNS_PARAMS],
+        description=(
+            "Disables the mDNS responder used for Bonjour/zero-config hostname resolution. "
+            "Eliminates local network name broadcast leakage. "
+            "Default: Enabled. Recommended: Disabled on managed networks."
+        ),
+        tags=["network", "mdns", "bonjour", "dns", "privacy", "security"],
+        depends_on=[],
+        side_effects="Local .local hostname resolution via mDNS will stop working.",
+    ),
+    TweakDef(
+        id="net-disable-pnrp",
+        label="Disable Peer Name Resolution Protocol",
+        category="Network",
+        apply_fn=_apply_net_disable_pnrp,
+        remove_fn=_remove_net_disable_pnrp,
+        detect_fn=_detect_net_disable_pnrp,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_PNRP],
+        description=(
+            "Disables the PNRP service used for peer-to-peer name resolution. "
+            "Eliminates an infrequently used network service. "
+            "Default: Manual. Recommended: Disabled."
+        ),
+        tags=["network", "pnrp", "p2p", "service", "security"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="net-disable-wcn",
+        label="Disable Windows Connect Now (WCN)",
+        category="Network",
+        apply_fn=_apply_net_disable_wcn,
+        remove_fn=_remove_net_disable_wcn,
+        detect_fn=_detect_net_disable_wcn,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WCN_POL],
+        description=(
+            "Disables Windows Connect Now which broadcasts Wi-Fi credentials over USB and NFC. "
+            "Policy-level control to prevent accidental credential sharing. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["network", "wcn", "wifi", "credentials", "policy", "security"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="net-disable-task-offload",
+        label="Disable TCP/IP Task Offload",
+        category="Network",
+        apply_fn=_apply_net_disable_task_offload,
+        remove_fn=_remove_net_disable_task_offload,
+        detect_fn=_detect_net_disable_task_offload,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_OFFLOAD],
+        description=(
+            "Disables TCP/IP task offloading to the NIC. Resolves connectivity issues "
+            "caused by buggy NIC firmware or driver offload bugs. "
+            "Default: Enabled. Recommended: Disabled for troubleshooting network issues."
+        ),
+        tags=["network", "tcp", "offload", "nic", "compatibility"],
+        depends_on=[],
+        side_effects="May slightly increase CPU usage for network processing.",
+    ),
+]

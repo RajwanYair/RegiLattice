@@ -1077,3 +1077,193 @@ TWEAKS += [
         tags=["security", "defender", "behavior", "monitoring", "heuristics"],
     ),
 ]
+
+
+# ── Additional Security Hardening Tweaks ──────────────────────────────────────
+
+_POLICIES_EXP = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+_REMOTE_ASSIST = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"
+_KERNEL_SES = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"
+_SEC_LANMAN = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"
+_WINLOGON = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+
+
+def _apply_sec_disable_autorun(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disable AutoRun/AutoPlay for all drive types")
+    SESSION.backup([_POLICIES_EXP], "DisableAutoRun")
+    SESSION.set_dword(_POLICIES_EXP, "NoDriveTypeAutoRun", 255)
+
+
+def _remove_sec_disable_autorun(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_POLICIES_EXP, "NoDriveTypeAutoRun")
+
+
+def _detect_sec_disable_autorun() -> bool:
+    return SESSION.read_dword(_POLICIES_EXP, "NoDriveTypeAutoRun") == 255
+
+
+def _apply_sec_disable_remote_assistance(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disable Windows Remote Assistance")
+    SESSION.backup([_REMOTE_ASSIST], "RemoteAssist")
+    SESSION.set_dword(_REMOTE_ASSIST, "fAllowToGetHelp", 0)
+
+
+def _remove_sec_disable_remote_assistance(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_REMOTE_ASSIST, "fAllowToGetHelp")
+
+
+def _detect_sec_disable_remote_assistance() -> bool:
+    val = SESSION.read_dword(_REMOTE_ASSIST, "fAllowToGetHelp")
+    return val is not None and val == 0
+
+
+def _apply_sec_enable_sehop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: enable SEHOP (Structured Exception Overwrite Protection)")
+    SESSION.backup([_KERNEL_SES], "SEHOP")
+    SESSION.set_dword(_KERNEL_SES, "DisableExceptionChainValidation", 0)
+
+
+def _remove_sec_enable_sehop(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_KERNEL_SES, "DisableExceptionChainValidation", 1)
+
+
+def _detect_sec_enable_sehop() -> bool:
+    val = SESSION.read_dword(_KERNEL_SES, "DisableExceptionChainValidation")
+    return val is not None and val == 0
+
+
+def _apply_sec_disable_admin_shares(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: disable automatic administrative shares (C$, ADMIN$)")
+    SESSION.backup([_SEC_LANMAN], "AdminShares")
+    SESSION.set_dword(_SEC_LANMAN, "AutoShareWks", 0)
+
+
+def _remove_sec_disable_admin_shares(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SEC_LANMAN, "AutoShareWks")
+
+
+def _detect_sec_disable_admin_shares() -> bool:
+    return SESSION.read_dword(_SEC_LANMAN, "AutoShareWks") == 0
+
+
+def _apply_sec_restrict_cd_rom(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Security: restrict CD-ROM access to locally logged-on user only")
+    SESSION.backup([_WINLOGON], "AllocateCDRoms")
+    SESSION.set_string(_WINLOGON, "AllocateCDRoms", "1")
+
+
+def _remove_sec_restrict_cd_rom(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_WINLOGON, "AllocateCDRoms")
+
+
+def _detect_sec_restrict_cd_rom() -> bool:
+    return SESSION.read_string(_WINLOGON, "AllocateCDRoms") == "1"
+
+
+TWEAKS += [
+    TweakDef(
+        id="sec-disable-autorun",
+        label="Disable AutoRun for All Drive Types",
+        category="Security",
+        apply_fn=_apply_sec_disable_autorun,
+        remove_fn=_remove_sec_disable_autorun,
+        detect_fn=_detect_sec_disable_autorun,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_POLICIES_EXP],
+        description=(
+            "Disables AutoRun/AutoPlay for all drive types via policy (NoDriveTypeAutoRun=255). "
+            "Prevents malware spread via USB drives and CD-ROMs. "
+            "Default: Partial. Recommended: Fully disabled."
+        ),
+        tags=["security", "autorun", "autoplay", "usb", "policy", "hardening"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="sec-disable-remote-assistance",
+        label="Disable Windows Remote Assistance",
+        category="Security",
+        apply_fn=_apply_sec_disable_remote_assistance,
+        remove_fn=_remove_sec_disable_remote_assistance,
+        detect_fn=_detect_sec_disable_remote_assistance,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_REMOTE_ASSIST],
+        description=(
+            "Disables Windows Remote Assistance (fAllowToGetHelp=0). "
+            "Eliminates a remote access vector not typically needed on workstations. "
+            "Default: Enabled. Recommended: Disabled."
+        ),
+        tags=["security", "remote-assistance", "rdp", "access", "hardening"],
+        depends_on=[],
+        side_effects="Windows Remote Assistance invitations cannot be sent or accepted.",
+    ),
+    TweakDef(
+        id="sec-enable-sehop",
+        label="Enable SEHOP (Exception Chain Validation)",
+        category="Security",
+        apply_fn=_apply_sec_enable_sehop,
+        remove_fn=_remove_sec_enable_sehop,
+        detect_fn=_detect_sec_enable_sehop,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KERNEL_SES],
+        description=(
+            "Enables Structured Exception Handler Overwrite Protection (SEHOP). "
+            "Protects against SEH-based exploitation techniques. "
+            "Default: Disabled (on client SKUs). Recommended: Enabled."
+        ),
+        tags=["security", "sehop", "exploit", "mitigation", "kernel", "hardening"],
+        depends_on=[],
+        side_effects="May break old 16-bit apps that mis-use SEH.",
+    ),
+    TweakDef(
+        id="sec-disable-admin-shares",
+        label="Disable Automatic Administrative Shares",
+        category="Security",
+        apply_fn=_apply_sec_disable_admin_shares,
+        remove_fn=_remove_sec_disable_admin_shares,
+        detect_fn=_detect_sec_disable_admin_shares,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SEC_LANMAN],
+        description=(
+            "Disables automatic C$ and ADMIN$ administrative shares. "
+            "Reduces lateral movement options for attackers on local networks. "
+            "Default: Enabled. Recommended: Disabled on non-managed workstations."
+        ),
+        tags=["security", "admin-shares", "smb", "lateral-movement", "hardening"],
+        depends_on=[],
+        side_effects="Remote admin tools relying on C$ or ADMIN$ will fail.",
+    ),
+    TweakDef(
+        id="sec-restrict-cd-rom",
+        label="Restrict CD-ROM to Logged-On User",
+        category="Security",
+        apply_fn=_apply_sec_restrict_cd_rom,
+        remove_fn=_remove_sec_restrict_cd_rom,
+        detect_fn=_detect_sec_restrict_cd_rom,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_WINLOGON],
+        description=(
+            "Restricts CD-ROM drive access to the currently logged-on user only. "
+            "Prevents remote users from accessing optical media on this machine. "
+            "Default: Not restricted. Recommended: Restricted."
+        ),
+        tags=["security", "cd-rom", "optical", "access-control", "winlogon"],
+        depends_on=[],
+        side_effects="",
+    ),
+]

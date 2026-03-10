@@ -711,3 +711,185 @@ TWEAKS += [
         tags=["audio", "gain", "microphone", "agc", "streaming"],
     ),
 ]
+
+
+# ── Audio Task Scheduling & Quality Tweaks ────────────────────────────────────
+
+
+def _apply_audio_sfio_normal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: set SFIO priority to Normal for Audio task")
+    SESSION.backup([_KEY_AUDIO_TASK], "AudioSfio")
+    SESSION.set_string(_KEY_AUDIO_TASK, "SFIO Priority", "Normal")
+
+
+def _remove_audio_sfio_normal(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_TASK, "SFIO Priority")
+
+
+def _detect_audio_sfio_normal() -> bool:
+    return SESSION.read_string(_KEY_AUDIO_TASK, "SFIO Priority") == "Normal"
+
+
+def _apply_audio_pro_scheduling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: set Audio task scheduling category to Pro Audio")
+    SESSION.backup([_KEY_AUDIO_TASK], "AudioSchedCat")
+    SESSION.set_string(_KEY_AUDIO_TASK, "Scheduling Category", "Pro Audio")
+
+
+def _remove_audio_pro_scheduling(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_KEY_AUDIO_TASK, "Scheduling Category", "Medium")
+
+
+def _detect_audio_pro_scheduling() -> bool:
+    return SESSION.read_string(_KEY_AUDIO_TASK, "Scheduling Category") == "Pro Audio"
+
+
+def _apply_audio_gpu_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: set GPU priority to 8 for Audio task")
+    SESSION.backup([_KEY_AUDIO_TASK], "AudioGpuPri")
+    SESSION.set_dword(_KEY_AUDIO_TASK, "GPU Priority", 8)
+
+
+def _remove_audio_gpu_priority(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_TASK, "GPU Priority")
+
+
+def _detect_audio_gpu_priority() -> bool:
+    return SESSION.read_dword(_KEY_AUDIO_TASK, "GPU Priority") == 8
+
+
+def _apply_audio_disable_dynamic_silence(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: disable dynamic silence detection")
+    SESSION.backup([_KEY_AUDIO_LATENCY], "DynSilence")
+    SESSION.set_dword(_KEY_AUDIO_LATENCY, "DynamicSilenceDetection", 0)
+
+
+def _remove_audio_disable_dynamic_silence(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_LATENCY, "DynamicSilenceDetection")
+
+
+def _detect_audio_disable_dynamic_silence() -> bool:
+    return SESSION.read_dword(_KEY_AUDIO_LATENCY, "DynamicSilenceDetection") == 0
+
+
+def _apply_audio_disable_app_capture(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Audio: disable audio application capture loopback")
+    SESSION.backup([_KEY_AUDIO_LATENCY], "DisableAudioAppCapture")
+    SESSION.set_dword(_KEY_AUDIO_LATENCY, "DisableAudioApplicationCapture", 1)
+
+
+def _remove_audio_disable_app_capture(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_KEY_AUDIO_LATENCY, "DisableAudioApplicationCapture")
+
+
+def _detect_audio_disable_app_capture() -> bool:
+    return SESSION.read_dword(_KEY_AUDIO_LATENCY, "DisableAudioApplicationCapture") == 1
+
+
+TWEAKS += [
+    TweakDef(
+        id="audio-set-sfio-high-priority",
+        label="Set Audio SFIO Priority to Normal",
+        category="Audio",
+        apply_fn=_apply_audio_sfio_normal,
+        remove_fn=_remove_audio_sfio_normal,
+        detect_fn=_detect_audio_sfio_normal,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_AUDIO_TASK],
+        description=(
+            "Sets SFIO (Synchronous File I/O) priority for the Audio task to Normal. "
+            "Prevents audio dropouts caused by competing I/O operations. "
+            "Default: Not set. Recommended: Normal for audio production."
+        ),
+        tags=["audio", "sfio", "priority", "latency", "production"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="audio-set-pro-audio-scheduling",
+        label="Set Audio Scheduling to Pro Audio",
+        category="Audio",
+        apply_fn=_apply_audio_pro_scheduling,
+        remove_fn=_remove_audio_pro_scheduling,
+        detect_fn=_detect_audio_pro_scheduling,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_AUDIO_TASK],
+        description=(
+            "Sets the Audio multimedia system profile scheduling category to 'Pro Audio'. "
+            "Allocates higher CPU time slices to audio processing threads. "
+            "Default: Medium. Recommended: Pro Audio for DAW use."
+        ),
+        tags=["audio", "scheduling", "pro-audio", "daw", "priority"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="audio-set-gpu-priority",
+        label="Raise GPU Priority for Audio Task",
+        category="Audio",
+        apply_fn=_apply_audio_gpu_priority,
+        remove_fn=_remove_audio_gpu_priority,
+        detect_fn=_detect_audio_gpu_priority,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_KEY_AUDIO_TASK],
+        description=(
+            "Sets GPU Priority to 8 for the Audio multimedia system profile task. "
+            "Reduces audio glitches when GPU is under heavy load. "
+            "Default: Not set. Recommended: 8 for content creation."
+        ),
+        tags=["audio", "gpu", "priority", "glitch", "production"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="audio-disable-dynamic-silence",
+        label="Disable Dynamic Silence Detection",
+        category="Audio",
+        apply_fn=_apply_audio_disable_dynamic_silence,
+        remove_fn=_remove_audio_disable_dynamic_silence,
+        detect_fn=_detect_audio_disable_dynamic_silence,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_AUDIO_LATENCY],
+        description=(
+            "Disables dynamic silence detection that may cut audio during quiet passages. "
+            "Prevents unintended audio cutoff during low-volume sections. "
+            "Default: Enabled. Recommended: Disabled for musicians."
+        ),
+        tags=["audio", "silence", "detection", "cutoff", "production"],
+        depends_on=[],
+        side_effects="",
+    ),
+    TweakDef(
+        id="audio-disable-app-capture",
+        label="Disable Audio Application Capture Loopback",
+        category="Audio",
+        apply_fn=_apply_audio_disable_app_capture,
+        remove_fn=_remove_audio_disable_app_capture,
+        detect_fn=_detect_audio_disable_app_capture,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_KEY_AUDIO_LATENCY],
+        description=(
+            "Disables audio application loopback capture. "
+            "Prevents applications from recording system audio output without permission. "
+            "Default: Enabled. Recommended: Disabled for privacy."
+        ),
+        tags=["audio", "capture", "loopback", "privacy", "recording"],
+        depends_on=[],
+        side_effects="",
+    ),
+]
