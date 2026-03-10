@@ -1565,3 +1565,185 @@ TWEAKS += [
         tags=["explorer", "process", "stability", "crash-recovery"],
     ),
 ]
+
+
+# ── Show Drive Letters Before Drive Names ─────────────────────────────────────
+
+
+def _apply_show_drive_letters_first(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: show drive letters before drive names")
+    SESSION.backup([_ADV], "DriveLettersFirst")
+    SESSION.set_dword(_ADV, "ShowDriveLettersFirst", 4)
+
+
+def _remove_show_drive_letters_first(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "ShowDriveLettersFirst", 0)
+
+
+def _detect_show_drive_letters_first() -> bool:
+    return SESSION.read_dword(_ADV, "ShowDriveLettersFirst") == 4
+
+
+# ── Show Encrypted/Compressed Files in Color ──────────────────────────────────
+
+
+def _apply_show_encrypted_color(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: show encrypted and compressed files in alternate color")
+    SESSION.backup([_ADV], "EncryptedColor")
+    SESSION.set_dword(_ADV, "ShowEncryptCompressedColor", 1)
+
+
+def _remove_show_encrypted_color(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "ShowEncryptCompressedColor", 0)
+
+
+def _detect_show_encrypted_color() -> bool:
+    return SESSION.read_dword(_ADV, "ShowEncryptCompressedColor") == 1
+
+
+# ── Always Show Icons (Disable Live Thumbnails) ───────────────────────────────
+
+
+def _apply_always_show_icons(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: always show file-type icons instead of thumbnails")
+    SESSION.backup([_ADV], "AlwaysShowIcons")
+    SESSION.set_dword(_ADV, "AlwaysShowIcons", 1)
+
+
+def _remove_always_show_icons(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "AlwaysShowIcons", 0)
+
+
+def _detect_always_show_icons() -> bool:
+    return SESSION.read_dword(_ADV, "AlwaysShowIcons") == 1
+
+
+# ── Show Empty Removable Drives ───────────────────────────────────────────────
+
+
+def _apply_show_empty_drives(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: show empty removable drives in This PC")
+    SESSION.backup([_ADV], "ShowEmptyDrives")
+    SESSION.set_dword(_ADV, "HideDrivesWithNoMedia", 0)
+
+
+def _remove_show_empty_drives(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "HideDrivesWithNoMedia", 1)
+
+
+def _detect_show_empty_drives() -> bool:
+    return SESSION.read_dword(_ADV, "HideDrivesWithNoMedia") == 0
+
+
+# ── Disable Notification Area Balloon Tips ────────────────────────────────────
+
+
+def _apply_disable_balloon_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Explorer: disable notification balloon tips in system tray")
+    SESSION.backup([_ADV], "BalloonTips")
+    SESSION.set_dword(_ADV, "EnableBalloonTips", 0)
+
+
+def _remove_disable_balloon_tips(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_ADV, "EnableBalloonTips", 1)
+
+
+def _detect_disable_balloon_tips() -> bool:
+    return SESSION.read_dword(_ADV, "EnableBalloonTips") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="explorer-show-drive-letters-first",
+        label="Show Drive Letters Before Drive Names",
+        category="Explorer",
+        apply_fn=_apply_show_drive_letters_first,
+        remove_fn=_remove_show_drive_letters_first,
+        detect_fn=_detect_show_drive_letters_first,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Displays drive letters (e.g. C:) before the drive name in Explorer. "
+            "Value 4 = drive letter first. Default: after name (0). Recommended: 4."
+        ),
+        tags=["explorer", "drives", "navigation", "display"],
+    ),
+    TweakDef(
+        id="explorer-show-encrypted-color",
+        label="Show Encrypted/Compressed Files in Color",
+        category="Explorer",
+        apply_fn=_apply_show_encrypted_color,
+        remove_fn=_remove_show_encrypted_color,
+        detect_fn=_detect_show_encrypted_color,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Colors encrypted files green and compressed files blue in Explorer. "
+            "Useful for quickly identifying EFS-encrypted or NTFS-compressed files. "
+            "Default: no color (0). Recommended: enabled for visibility."
+        ),
+        tags=["explorer", "encrypted", "compressed", "color", "display", "efs"],
+    ),
+    TweakDef(
+        id="explorer-always-show-icons",
+        label="Always Show File Icons (Disable Live Thumbnails)",
+        category="Explorer",
+        apply_fn=_apply_always_show_icons,
+        remove_fn=_remove_always_show_icons,
+        detect_fn=_detect_always_show_icons,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Forces Explorer to always display file type icons instead of thumbnail previews. "
+            "Improves performance on slow disks or network shares. "
+            "Default: thumbnails enabled (0). Recommended: icons-only on slow systems."
+        ),
+        tags=["explorer", "icons", "thumbnails", "performance", "display"],
+    ),
+    TweakDef(
+        id="explorer-show-empty-drives",
+        label="Show Empty Removable Drives in This PC",
+        category="Explorer",
+        apply_fn=_apply_show_empty_drives,
+        remove_fn=_remove_show_empty_drives,
+        detect_fn=_detect_show_empty_drives,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Shows empty removable drives (USB, optical) in This PC even without media. "
+            "Default: hidden (1). Recommended: shown when needed."
+        ),
+        tags=["explorer", "drives", "removable", "usb", "display"],
+    ),
+    TweakDef(
+        id="explorer-disable-balloon-tips",
+        label="Disable System Tray Balloon Tips",
+        category="Explorer",
+        apply_fn=_apply_disable_balloon_tips,
+        remove_fn=_remove_disable_balloon_tips,
+        detect_fn=_detect_disable_balloon_tips,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_ADV],
+        description=(
+            "Disables old-style popup balloon notifications in the system tray. "
+            "Modern toast notifications are unaffected. "
+            "Default: enabled (1). Recommended: disabled."
+        ),
+        tags=["explorer", "balloon", "tips", "notifications", "tray", "display"],
+    ),
+]

@@ -612,3 +612,202 @@ TWEAKS += [
         tags=["context-menu", "powershell", "terminal", "productivity"],
     ),
 ]
+
+
+# ── Open Windows Terminal Here ────────────────────────────────────────────────
+
+_WT_HERE = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\wt"
+_WT_HERE_CMD = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\wt\command"
+_CMD_HERE = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd"
+_CMD_HERE_CMD = r"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd\command"
+_DEFENDER_SCAN_CLSID = "{09A47860-11B0-4DA5-AFA5-26D86198A780}"
+_WMP_CLSID = "{CE3FB1D1-02AE-4a5f-A6E9-D9F1B4073E6C}"
+_COPY_PATH = r"HKEY_CURRENT_USER\Software\Classes\*\shell\CopyPath"
+_COPY_PATH_CMD = r"HKEY_CURRENT_USER\Software\Classes\*\shell\CopyPath\command"
+
+
+def _apply_wt_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: add Open Windows Terminal Here")
+    SESSION.backup([_WT_HERE], "WTHere")
+    SESSION.set_string(_WT_HERE, "", "Open Windows Terminal Here")
+    SESSION.set_string(_WT_HERE, "Icon", "wt.exe")
+    SESSION.set_string(_WT_HERE_CMD, "", 'wt.exe -d "%V"')
+
+
+def _remove_wt_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_tree(_WT_HERE)
+
+
+def _detect_wt_here() -> bool:
+    return SESSION.key_exists(_WT_HERE)
+
+
+# ── Open Command Prompt Here ──────────────────────────────────────────────────
+
+
+def _apply_cmd_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: add Open Command Prompt Here")
+    SESSION.backup([_CMD_HERE], "CmdHere")
+    SESSION.set_string(_CMD_HERE, "", "Open Command Prompt Here")
+    SESSION.set_string(_CMD_HERE, "Icon", "cmd.exe")
+    SESSION.set_string(_CMD_HERE_CMD, "", 'cmd.exe /k cd /d "%V"')
+
+
+def _remove_cmd_here(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_tree(_CMD_HERE)
+
+
+def _detect_cmd_here() -> bool:
+    return SESSION.key_exists(_CMD_HERE)
+
+
+# ── Remove Scan with Microsoft Defender ──────────────────────────────────────
+
+
+def _apply_remove_defender_scan(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: block Scan with Microsoft Defender shell extension")
+    SESSION.backup([_SHARE_KEY], "RemoveDefenderScan")
+    SESSION.set_string(_SHARE_KEY, _DEFENDER_SCAN_CLSID, "")
+
+
+def _remove_remove_defender_scan(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHARE_KEY, _DEFENDER_SCAN_CLSID)
+
+
+def _detect_remove_defender_scan() -> bool:
+    return SESSION.read_string(_SHARE_KEY, _DEFENDER_SCAN_CLSID) is not None
+
+
+# ── Remove Windows Media Player Context Menu ──────────────────────────────────
+
+
+def _apply_remove_wmp_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: block Windows Media Player shell extension")
+    SESSION.backup([_SHARE_KEY], "RemoveWMPContext")
+    SESSION.set_string(_SHARE_KEY, _WMP_CLSID, "")
+
+
+def _remove_remove_wmp_context(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_SHARE_KEY, _WMP_CLSID)
+
+
+def _detect_remove_wmp_context() -> bool:
+    return SESSION.read_string(_SHARE_KEY, _WMP_CLSID) is not None
+
+
+# ── Add Copy Path to File Context Menu ────────────────────────────────────────
+
+
+def _apply_copy_path(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Context Menu: add Copy Path to file right-click menu")
+    SESSION.backup([_COPY_PATH], "CopyPath")
+    SESSION.set_string(_COPY_PATH, "", "Copy Path")
+    SESSION.set_string(_COPY_PATH, "Icon", "shell32.dll,-265")
+    SESSION.set_string(_COPY_PATH_CMD, "", 'cmd.exe /c echo "%1"| clip')
+
+
+def _remove_copy_path(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_tree(_COPY_PATH)
+
+
+def _detect_copy_path() -> bool:
+    return SESSION.key_exists(_COPY_PATH)
+
+
+TWEAKS += [
+    TweakDef(
+        id="ctx-add-wt-here",
+        label="Add 'Open Windows Terminal Here' to Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_wt_here,
+        remove_fn=_remove_wt_here,
+        detect_fn=_detect_wt_here,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_WT_HERE, _WT_HERE_CMD],
+        description=(
+            "Adds 'Open Windows Terminal Here' to the folder background context menu. "
+            "Opens a new terminal window in the current directory. "
+            "Default: not present. Recommended: add for developer workflows."
+        ),
+        tags=["context-menu", "terminal", "wt", "developer", "shell"],
+    ),
+    TweakDef(
+        id="ctx-add-cmd-here",
+        label="Add 'Open Command Prompt Here' to Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_cmd_here,
+        remove_fn=_remove_cmd_here,
+        detect_fn=_detect_cmd_here,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_CMD_HERE, _CMD_HERE_CMD],
+        description=(
+            "Adds 'Open Command Prompt Here' to the folder background context menu. "
+            "Opens cmd.exe in the current directory. "
+            "Default: not present. Recommended: add for quick access."
+        ),
+        tags=["context-menu", "cmd", "command-prompt", "shell", "developer"],
+    ),
+    TweakDef(
+        id="ctx-remove-defender-scan",
+        label="Remove 'Scan with Microsoft Defender' from Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_remove_defender_scan,
+        remove_fn=_remove_remove_defender_scan,
+        detect_fn=_detect_remove_defender_scan,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_SHARE_KEY],
+        description=(
+            "Blocks the Windows Defender context menu shell extension. "
+            "Files can still be scanned via Security Center. "
+            "Default: shown. Recommended: hidden if context menu is cluttered."
+        ),
+        tags=["context-menu", "defender", "antivirus", "scan", "cleanup"],
+    ),
+    TweakDef(
+        id="ctx-remove-wmp-context",
+        label="Remove Windows Media Player from Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_remove_wmp_context,
+        remove_fn=_remove_remove_wmp_context,
+        detect_fn=_detect_remove_wmp_context,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_SHARE_KEY],
+        description=(
+            "Blocks the Windows Media Player shell extension from the context menu. "
+            "Removes 'Play with Windows Media Player' from media file menus. "
+            "Default: shown. Recommended: hidden if WMP is unused."
+        ),
+        tags=["context-menu", "wmp", "media-player", "cleanup"],
+    ),
+    TweakDef(
+        id="ctx-add-copy-path",
+        label="Add 'Copy Path' to File Context Menu",
+        category="Context Menu",
+        apply_fn=_apply_copy_path,
+        remove_fn=_remove_copy_path,
+        detect_fn=_detect_copy_path,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_COPY_PATH, _COPY_PATH_CMD],
+        description=(
+            "Adds a 'Copy Path' option to the right-click menu for all files. "
+            "Copies the full file path (with quotes) to the clipboard. "
+            "Default: not present. Recommended: add for power users."
+        ),
+        tags=["context-menu", "copy-path", "clipboard", "file", "productivity"],
+    ),
+]

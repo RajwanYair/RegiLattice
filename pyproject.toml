@@ -44,6 +44,8 @@ Changelog = "https://github.com/RajwanYair/RegiLattice/blob/main/Changelog.md"
 
 [project.scripts]
 regilattice = "regilattice.cli:main"
+regilattice-gui = "regilattice.gui:launch"
+regilattice-menu = "regilattice.menu:main"
 
 [project.optional-dependencies]
 dev = [

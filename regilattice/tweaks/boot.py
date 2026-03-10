@@ -926,3 +926,193 @@ TWEAKS += [
         tags=["boot", "paging", "kernel", "memory", "performance"],
     ),
 ]
+
+
+# ── Reduce Service Shutdown Timeout ──────────────────────────────────────────
+
+_DESKTOP_CU = r"HKEY_CURRENT_USER\Control Panel\Desktop"
+
+
+def _apply_reduce_service_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: reduce WaitToKillServiceTimeout to 2000 ms")
+    SESSION.backup([_BOOT_CTL], "ServiceTimeout")
+    SESSION.set_string(_BOOT_CTL, "WaitToKillServiceTimeout", "2000")
+
+
+def _remove_reduce_service_timeout(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_BOOT_CTL, "WaitToKillServiceTimeout", "20000")
+
+
+def _detect_reduce_service_timeout() -> bool:
+    val = SESSION.read_string(_BOOT_CTL, "WaitToKillServiceTimeout")
+    return val is not None and int(val) <= 2000
+
+
+# ── Reduce Hung Application Timeout ──────────────────────────────────────────
+
+
+def _apply_reduce_hung_app_timeout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: reduce HungAppTimeout to 1000 ms")
+    SESSION.backup([_DESKTOP_CU], "HungAppTimeout")
+    SESSION.set_string(_DESKTOP_CU, "HungAppTimeout", "1000")
+
+
+def _remove_reduce_hung_app_timeout(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_DESKTOP_CU, "HungAppTimeout", "5000")
+
+
+def _detect_reduce_hung_app_timeout() -> bool:
+    val = SESSION.read_string(_DESKTOP_CU, "HungAppTimeout")
+    return val is not None and int(val) <= 1000
+
+
+# ── Reduce Wait-to-Kill App Timeout ──────────────────────────────────────────
+
+
+def _apply_reduce_wait_kill_app(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: reduce WaitToKillAppTimeout to 2000 ms")
+    SESSION.backup([_DESKTOP_CU], "WaitKillApp")
+    SESSION.set_string(_DESKTOP_CU, "WaitToKillAppTimeout", "2000")
+
+
+def _remove_reduce_wait_kill_app(*, require_admin: bool = False) -> None:
+    assert_admin(require_admin)
+    SESSION.set_string(_DESKTOP_CU, "WaitToKillAppTimeout", "20000")
+
+
+def _detect_reduce_wait_kill_app() -> bool:
+    val = SESSION.read_string(_DESKTOP_CU, "WaitToKillAppTimeout")
+    return val is not None and int(val) <= 2000
+
+
+# ── Clear Pagefile at Shutdown ────────────────────────────────────────────────
+
+
+def _apply_clear_pagefile(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: enable pagefile clear at shutdown for security")
+    SESSION.backup([_MEM_MGMT], "ClearPagefile")
+    SESSION.set_dword(_MEM_MGMT, "ClearPageFileAtShutdown", 1)
+
+
+def _remove_clear_pagefile(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_MEM_MGMT, "ClearPageFileAtShutdown", 0)
+
+
+def _detect_clear_pagefile() -> bool:
+    return SESSION.read_dword(_MEM_MGMT, "ClearPageFileAtShutdown") == 1
+
+
+# ── Disable Crash Dump Creation ───────────────────────────────────────────────
+
+
+def _apply_disable_crash_dumps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Boot: disable crash dump file creation")
+    SESSION.backup([_CRASH_CTL], "CrashDumps")
+    SESSION.set_dword(_CRASH_CTL, "CrashDumpEnabled", 0)
+
+
+def _remove_disable_crash_dumps(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.set_dword(_CRASH_CTL, "CrashDumpEnabled", 7)
+
+
+def _detect_disable_crash_dumps() -> bool:
+    return SESSION.read_dword(_CRASH_CTL, "CrashDumpEnabled") == 0
+
+
+TWEAKS += [
+    TweakDef(
+        id="boot-reduce-service-timeout",
+        label="Reduce Service Shutdown Timeout",
+        category="Boot",
+        apply_fn=_apply_reduce_service_timeout,
+        remove_fn=_remove_reduce_service_timeout,
+        detect_fn=_detect_reduce_service_timeout,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_BOOT_CTL],
+        description=(
+            "Reduces WaitToKillServiceTimeout to 2 seconds (default: 20s). "
+            "Windows force-kills stuck services faster during shutdown. "
+            "Default: 20000 ms. Recommended: 2000 ms for fast shutdown."
+        ),
+        tags=["boot", "shutdown", "service", "timeout", "performance"],
+    ),
+    TweakDef(
+        id="boot-reduce-hung-app-timeout",
+        label="Reduce Hung Application Timeout",
+        category="Boot",
+        apply_fn=_apply_reduce_hung_app_timeout,
+        remove_fn=_remove_reduce_hung_app_timeout,
+        detect_fn=_detect_reduce_hung_app_timeout,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP_CU],
+        description=(
+            "Reduces HungAppTimeout to 1 second (default: 5s). "
+            "Non-responsive apps are flagged as hung sooner, showing the 'not responding' dialog faster. "
+            "Default: 5000 ms. Recommended: 1000 ms."
+        ),
+        tags=["boot", "shutdown", "application", "hung", "timeout", "performance"],
+    ),
+    TweakDef(
+        id="boot-reduce-wait-kill-app",
+        label="Reduce Wait-to-Kill App Timeout",
+        category="Boot",
+        apply_fn=_apply_reduce_wait_kill_app,
+        remove_fn=_remove_reduce_wait_kill_app,
+        detect_fn=_detect_reduce_wait_kill_app,
+        needs_admin=False,
+        corp_safe=True,
+        registry_keys=[_DESKTOP_CU],
+        description=(
+            "Reduces WaitToKillAppTimeout to 2 seconds (default: 20s). "
+            "Windows force-terminates unresponsive apps faster during shutdown. "
+            "Default: 20000 ms. Recommended: 2000 ms for fast shutdown."
+        ),
+        tags=["boot", "shutdown", "app", "timeout", "performance"],
+    ),
+    TweakDef(
+        id="boot-clear-pagefile",
+        label="Clear Pagefile at Shutdown",
+        category="Boot",
+        apply_fn=_apply_clear_pagefile,
+        remove_fn=_remove_clear_pagefile,
+        detect_fn=_detect_clear_pagefile,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_MEM_MGMT],
+        description=(
+            "Clears the virtual memory pagefile at every shutdown. "
+            "Prevents sensitive data from being recovered from pagefile.sys. "
+            "Note: significantly increases shutdown time on large systems. "
+            "Default: not cleared. Recommended: Apply on secure workstations."
+        ),
+        tags=["boot", "security", "pagefile", "shutdown", "privacy"],
+    ),
+    TweakDef(
+        id="boot-disable-crash-dumps",
+        label="Disable Crash Dump Creation",
+        category="Boot",
+        apply_fn=_apply_disable_crash_dumps,
+        remove_fn=_remove_disable_crash_dumps,
+        detect_fn=_detect_disable_crash_dumps,
+        needs_admin=True,
+        corp_safe=False,
+        registry_keys=[_CRASH_CTL],
+        description=(
+            "Disables creation of memory dump files on BSOD (CrashDumpEnabled=0). "
+            "Saves disk space and prevents sensitive memory data from being written to disk. "
+            "Default: Small memory dump (7). Recommended: Disabled on production systems."
+        ),
+        tags=["boot", "crash-dump", "bsod", "disk", "security"],
+    ),
+]

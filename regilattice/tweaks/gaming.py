@@ -744,50 +744,46 @@ TWEAKS += [
 # ── Extra gaming controls ─────────────────────────────────────────────────────
 
 _GAME_PRIO = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"
+_GAME_TASKS = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
 _GAME_GPU_PREF = r"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"
 _GAME_FSO = r"HKEY_CURRENT_USER\System\GameConfigStore"
 _GAME_HPET = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\Root\ACPI_HAL\0000\LogConf"
 _GAME_THREAD = r"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"
+_GAME_DIAGTRACK = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
 
 
 def _apply_game_system_games_tasks(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
-    SESSION.backup([_GAME_PRIO, _tasks_key], "GameSystemTasks")
-    SESSION.set_dword(_tasks_key, "GPU Priority", 8)
-    SESSION.set_dword(_tasks_key, "Priority", 6)
-    SESSION.set_dword(_tasks_key, "Scheduling Category", 2)
+    SESSION.backup([_GAME_PRIO, _GAME_TASKS], "GameSystemTasks")
+    SESSION.set_dword(_GAME_TASKS, "GPU Priority", 8)
+    SESSION.set_dword(_GAME_TASKS, "Priority", 6)
+    SESSION.set_dword(_GAME_TASKS, "Scheduling Category", 2)
 
 
 def _remove_game_system_games_tasks(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
-    SESSION.delete_value(_tasks_key, "GPU Priority")
-    SESSION.delete_value(_tasks_key, "Priority")
-    SESSION.delete_value(_tasks_key, "Scheduling Category")
+    SESSION.delete_value(_GAME_TASKS, "GPU Priority")
+    SESSION.delete_value(_GAME_TASKS, "Priority")
+    SESSION.delete_value(_GAME_TASKS, "Scheduling Category")
 
 
 def _detect_game_system_games_tasks() -> bool:
-    _tasks_key = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"
-    return SESSION.read_dword(_tasks_key, "GPU Priority") == 8
+    return SESSION.read_dword(_GAME_TASKS, "GPU Priority") == 8
 
 
 def _apply_game_disable_core_isolation_reporting(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
-    SESSION.backup([_ci], "CIReport")
-    SESSION.set_dword(_ci, "DisableAutomaticTelemetryKeywordReporting", 1)
+    SESSION.backup([_GAME_DIAGTRACK], "CIReport")
+    SESSION.set_dword(_GAME_DIAGTRACK, "DisableAutomaticTelemetryKeywordReporting", 1)
 
 
 def _remove_game_disable_core_isolation_reporting(*, require_admin: bool = True) -> None:
     assert_admin(require_admin)
-    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
-    SESSION.delete_value(_ci, "DisableAutomaticTelemetryKeywordReporting")
+    SESSION.delete_value(_GAME_DIAGTRACK, "DisableAutomaticTelemetryKeywordReporting")
 
 
 def _detect_game_disable_core_isolation_reporting() -> bool:
-    _ci = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"
-    return SESSION.read_dword(_ci, "DisableAutomaticTelemetryKeywordReporting") == 1
+    return SESSION.read_dword(_GAME_DIAGTRACK, "DisableAutomaticTelemetryKeywordReporting") == 1
 
 
 def _apply_game_exclusive_fullscreen(*, require_admin: bool = False) -> None:

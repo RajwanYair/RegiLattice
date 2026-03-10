@@ -1083,3 +1083,189 @@ TWEAKS += [
         tags=["privacy", "radios", "bluetooth", "wifi", "appprivacy", "consent"],
     ),
 ]
+
+
+# ── Disable Windows Ink Workspace ─────────────────────────────────────────────
+
+_INK_WORKSPACE = r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"
+
+
+def _apply_disable_ink_workspace(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: disable Windows Ink Workspace via policy")
+    SESSION.backup([_INK_WORKSPACE], "InkWorkspace")
+    SESSION.set_dword(_INK_WORKSPACE, "AllowWindowsInkWorkspace", 0)
+
+
+def _remove_disable_ink_workspace(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_INK_WORKSPACE, "AllowWindowsInkWorkspace")
+
+
+def _detect_disable_ink_workspace() -> bool:
+    return SESSION.read_dword(_INK_WORKSPACE, "AllowWindowsInkWorkspace") == 0
+
+
+# ── Block Apps from Accessing Call History ────────────────────────────────────
+
+
+def _apply_priv_disable_call_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: block apps from reading call history")
+    SESSION.backup([_CONTACTS_CONSENT], "CallHistory")
+    SESSION.set_dword(_CONTACTS_CONSENT, "LetAppsAccessCallHistory", 2)
+
+
+def _remove_priv_disable_call_history(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTACTS_CONSENT, "LetAppsAccessCallHistory")
+
+
+def _detect_priv_disable_call_history() -> bool:
+    return SESSION.read_dword(_CONTACTS_CONSENT, "LetAppsAccessCallHistory") == 2
+
+
+# ── Block Apps from Accessing Email ──────────────────────────────────────────
+
+
+def _apply_priv_disable_email_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: block apps from reading email")
+    SESSION.backup([_CONTACTS_CONSENT], "EmailAccess")
+    SESSION.set_dword(_CONTACTS_CONSENT, "LetAppsAccessEmail", 2)
+
+
+def _remove_priv_disable_email_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTACTS_CONSENT, "LetAppsAccessEmail")
+
+
+def _detect_priv_disable_email_access() -> bool:
+    return SESSION.read_dword(_CONTACTS_CONSENT, "LetAppsAccessEmail") == 2
+
+
+# ── Block Apps from Accessing Tasks ──────────────────────────────────────────
+
+
+def _apply_priv_disable_tasks_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: block apps from reading tasks/to-do list")
+    SESSION.backup([_CONTACTS_CONSENT], "TasksAccess")
+    SESSION.set_dword(_CONTACTS_CONSENT, "LetAppsAccessTasks", 2)
+
+
+def _remove_priv_disable_tasks_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTACTS_CONSENT, "LetAppsAccessTasks")
+
+
+def _detect_priv_disable_tasks_access() -> bool:
+    return SESSION.read_dword(_CONTACTS_CONSENT, "LetAppsAccessTasks") == 2
+
+
+# ── Block Apps from Accessing Messaging ──────────────────────────────────────
+
+
+def _apply_priv_disable_messaging_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.log("Privacy: block apps from reading SMS/MMS messages")
+    SESSION.backup([_CONTACTS_CONSENT], "MessagingAccess")
+    SESSION.set_dword(_CONTACTS_CONSENT, "LetAppsAccessMessaging", 2)
+
+
+def _remove_priv_disable_messaging_access(*, require_admin: bool = True) -> None:
+    assert_admin(require_admin)
+    SESSION.delete_value(_CONTACTS_CONSENT, "LetAppsAccessMessaging")
+
+
+def _detect_priv_disable_messaging_access() -> bool:
+    return SESSION.read_dword(_CONTACTS_CONSENT, "LetAppsAccessMessaging") == 2
+
+
+TWEAKS += [
+    TweakDef(
+        id="priv-disable-ink-workspace",
+        label="Disable Windows Ink Workspace",
+        category="Privacy",
+        apply_fn=_apply_disable_ink_workspace,
+        remove_fn=_remove_disable_ink_workspace,
+        detect_fn=_detect_disable_ink_workspace,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_INK_WORKSPACE],
+        description=(
+            "Disables the Windows Ink Workspace feature via policy. "
+            "Prevents the pen/stylus workspace from loading. "
+            "Default: Enabled. Recommended: Disabled on non-tablet devices."
+        ),
+        tags=["privacy", "ink", "workspace", "pen", "stylus", "policy"],
+    ),
+    TweakDef(
+        id="priv-disable-call-history",
+        label="Block Apps from Accessing Call History",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_call_history,
+        remove_fn=_remove_priv_disable_call_history,
+        detect_fn=_detect_priv_disable_call_history,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTACTS_CONSENT],
+        description=(
+            "Sets LetAppsAccessCallHistory=2 (Force Deny) via AppPrivacy policy. "
+            "Prevents all apps from reading your phone call history. "
+            "Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "call-history", "phone", "appprivacy", "policy"],
+    ),
+    TweakDef(
+        id="priv-disable-email-access",
+        label="Block Apps from Accessing Email",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_email_access,
+        remove_fn=_remove_priv_disable_email_access,
+        detect_fn=_detect_priv_disable_email_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTACTS_CONSENT],
+        description=(
+            "Sets LetAppsAccessEmail=2 (Force Deny) via AppPrivacy policy. "
+            "Prevents all UWP apps from reading your email accounts and messages. "
+            "Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "email", "mail", "appprivacy", "policy"],
+    ),
+    TweakDef(
+        id="priv-disable-tasks-access",
+        label="Block Apps from Accessing Tasks",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_tasks_access,
+        remove_fn=_remove_priv_disable_tasks_access,
+        detect_fn=_detect_priv_disable_tasks_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTACTS_CONSENT],
+        description=(
+            "Sets LetAppsAccessTasks=2 (Force Deny) via AppPrivacy policy. "
+            "Prevents all apps from reading or modifying your task/to-do lists. "
+            "Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "tasks", "todo", "appprivacy", "policy"],
+    ),
+    TweakDef(
+        id="priv-disable-messaging-access",
+        label="Block Apps from Accessing SMS/MMS Messages",
+        category="Privacy",
+        apply_fn=_apply_priv_disable_messaging_access,
+        remove_fn=_remove_priv_disable_messaging_access,
+        detect_fn=_detect_priv_disable_messaging_access,
+        needs_admin=True,
+        corp_safe=True,
+        registry_keys=[_CONTACTS_CONSENT],
+        description=(
+            "Sets LetAppsAccessMessaging=2 (Force Deny) via AppPrivacy policy. "
+            "Prevents all apps from reading or sending SMS/MMS messages. "
+            "Default: Allow (0). Recommended: Force Deny."
+        ),
+        tags=["privacy", "messaging", "sms", "mms", "appprivacy", "policy"],
+    ),
+]

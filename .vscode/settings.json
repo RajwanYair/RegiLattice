@@ -65,11 +65,13 @@
     "PYTHONDONTWRITEBYTECODE": "1",
     "PYTHONPATH": "${workspaceFolder}",
     "PYTHONIOENCODING": "utf-8",
-    "PATH": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin;C:\\Users\\ryair\\AppData\\Local\\Python\\Scripts;${env:PATH}"
+    "PATH": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin;C:\\Users\\ryair\\AppData\\Local\\Python\\pythoncore-3.14-64\\Scripts;C:\\Users\\ryair\\AppData\\Local\\Python\\Scripts;${env:PATH}"
   },
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.enablePersistentSessions": true,
+  // Ensure Copilot chat agent terminals also see Python — mirrors integrated env
+  "github.copilot.chat.terminalChatLocation": "terminal",
   // ── Git ─────────────────────────────────────────────────────────────
   "git.autofetch": true,
   "git.confirmSync": false,
