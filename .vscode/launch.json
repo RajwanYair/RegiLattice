@@ -56,6 +56,49 @@
       ],
       "console": "integratedTerminal",
       "justMyCode": false
+    },
+    {
+      "name": "NativeGUI: Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: NativeGUI",
+      "program": "${workspaceFolder}/NativeGUI/bin/Debug/net10.0-windows/RegiLatticeNative.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/NativeGUI",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "justMyCode": true
+    },
+    {
+      "name": "NativeGUI: Run (Release)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: NativeGUI (Release)",
+      "program": "${workspaceFolder}/NativeGUI/bin/Release/net10.0-windows/RegiLatticeNative.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/NativeGUI",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "justMyCode": true
+    },
+    {
+      "name": "NativeGUI Tests: Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: NativeGUITests",
+      "program": "${workspaceFolder}/NativeGUITests/bin/Debug/net10.0-windows/NativeGUITests.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/NativeGUITests",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "justMyCode": false
+    }
+  ],
+  "compounds": [
+    {
+      "name": "RegiLattice: Python GUI + NativeGUI (Parallel)",
+      "configurations": ["RegiLattice: GUI", "NativeGUI: Debug"],
+      "stopAll": true
     }
   ],
   "inputs": [

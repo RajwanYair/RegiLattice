@@ -102,6 +102,64 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "build: NativeGUI",
+      "type": "shell",
+      "command": "dotnet build NativeGUI/RegiLatticeNative.csproj -c Debug",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "build: NativeGUI (Release)",
+      "type": "shell",
+      "command": "dotnet build NativeGUI/RegiLatticeNative.csproj -c Release",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "build: NativeGUITests",
+      "type": "shell",
+      "command": "dotnet build NativeGUITests/NativeGUITests.csproj -c Debug",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "test: NativeGUITests",
+      "type": "shell",
+      "command": "dotnet test NativeGUITests/NativeGUITests.csproj --logger \"console;verbosity=normal\"",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "publish: NativeGUI (win-x64)",
+      "type": "shell",
+      "command": "dotnet publish NativeGUI/RegiLatticeNative.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }
