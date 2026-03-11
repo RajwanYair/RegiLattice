@@ -9,6 +9,7 @@
     <RootNamespace>RegiLattice.GUI.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <DisableAppDomain>true</DisableAppDomain>
   </PropertyGroup>
 
   <ItemGroup>
