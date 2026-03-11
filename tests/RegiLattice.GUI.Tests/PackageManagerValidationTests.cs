@@ -102,7 +102,7 @@ public sealed class PackageManagerValidationTests
     {
         var results = await ToolVersionChecker.CheckAllAsync();
         Assert.NotEmpty(results);
-        Assert.Equal(7, results.Count);
+        Assert.Equal(16, results.Count);
         Assert.All(results, r => Assert.NotNull(r.Name));
     }
 }
