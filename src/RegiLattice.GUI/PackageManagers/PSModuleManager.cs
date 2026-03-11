@@ -67,6 +67,29 @@ internal static partial class PSModuleManager
         return scope;
     }
 
+    internal static async Task<List<string>> ListOutdatedAsync(string scope = "CurrentUser", CancellationToken ct = default)
+    {
+        string scopeFilter = scope is "CurrentUser" or "AllUsers"
+            ? $"-Scope {scope}"
+            : string.Empty;
+        string script = $$"""
+            Get-InstalledModule {{scopeFilter}} | ForEach-Object {
+                $online = Find-Module -Name $_.Name -ErrorAction SilentlyContinue
+                if ($online -and $online.Version -gt $_.Version) {
+                    "$($_.Name) ($($_.Version) -> $($online.Version))"
+                }
+            }
+            """;
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct).ConfigureAwait(false);
+
+        return stdout
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(l => l.Trim())
+            .Where(l => l.Length > 0)
+            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
     internal static readonly string[] PopularModules =
         ["PSReadLine", "posh-git", "PowerShellGet", "Az", "Microsoft.Graph",
          "Terminal-Icons", "oh-my-posh", "PSScriptAnalyzer", "Pester", "SqlServer"];

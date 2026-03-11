@@ -55,6 +55,35 @@ internal static partial class ScoopManager
         return name;
     }
 
+    internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
+    {
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync("scoop status 2>&1", ct).ConfigureAwait(false);
+        return stdout
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(l => l.Trim())
+            .Where(l => l.Length > 0
+                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
+                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
+                        && !l.StartsWith("Updates", StringComparison.OrdinalIgnoreCase)
+                        && !l.StartsWith("Scoop", StringComparison.OrdinalIgnoreCase))
+            .Select(l =>
+            {
+                var parts = l.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                return parts.Length >= 3 ? $"{parts[0]} ({parts[1]} → {parts[2]})" : parts[0];
+            })
+            .Where(n => !string.IsNullOrEmpty(n))
+            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    internal static async Task UpgradeAsync(string name, CancellationToken ct = default)
+    {
+        ValidateName(name);
+        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync($"scoop update {name} 2>&1", ct).ConfigureAwait(false);
+        if (code != 0)
+            throw new InvalidOperationException($"scoop update failed: {stderr.Trim()}");
+    }
+
     internal static readonly string[] PopularTools =
         ["7zip", "git", "ripgrep", "fd", "bat", "fzf", "jq", "gsudo", "neovim", "starship"];
 }

@@ -76,6 +76,15 @@ internal static partial class WinGetManager
         return name;
     }
 
+    internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
+    {
+        var (_, stdout, _) = await ShellRunner.RunAsync(
+            "winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct)
+            .ConfigureAwait(false);
+
+        return ParseWinGetTable(stdout);
+    }
+
     internal static readonly string[] PopularPackages =
         ["7zip.7zip", "Git.Git", "Microsoft.VisualStudioCode", "Google.Chrome",
          "Mozilla.Firefox", "Notepad++.Notepad++", "VideoLAN.VLC", "WinSCP.WinSCP",

@@ -8,6 +8,7 @@ internal sealed class ChocolateyManagerDialog : Form
     private readonly ListBox _lstInstalled = new();
     private readonly TextBox _txtName = new();
     private readonly Label _lblStatus = new();
+    private readonly Label _lblOutdated = new();
     private readonly Button _btnRefresh = new();
     private readonly Button _btnInstall = new();
     private readonly Button _btnRemove = new();
@@ -17,7 +18,8 @@ internal sealed class ChocolateyManagerDialog : Form
 
     internal ChocolateyManagerDialog()
     {
-        Text = "Chocolatey Package Manager";
+        Text = "🍫 Chocolatey Package Manager";
+        Icon = SystemIcons.Application;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(560, 500);
@@ -50,6 +52,13 @@ internal sealed class ChocolateyManagerDialog : Form
         _lblStatus.Dock = DockStyle.Top;
         _lblStatus.Height = 24;
         _lblStatus.Padding = new Padding(8, 0, 0, 0);
+
+        _lblOutdated.Text = "";
+        _lblOutdated.ForeColor = AppTheme.Yellow;
+        _lblOutdated.Dock = DockStyle.Top;
+        _lblOutdated.Height = 22;
+        _lblOutdated.Padding = new Padding(8, 0, 0, 0);
+        _lblOutdated.Font = AppTheme.Regular;
 
         AppTheme.Apply(_lstInstalled);
         _lstInstalled.Dock = DockStyle.Fill;
@@ -124,7 +133,7 @@ internal sealed class ChocolateyManagerDialog : Form
             flowQuick.Controls.Add(btn);
         }
 
-        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, _lblStatus, lblTitle]);
+        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, _lblOutdated, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()
@@ -137,6 +146,7 @@ internal sealed class ChocolateyManagerDialog : Form
             foreach (var p in list) _lstInstalled.Items.Add(p);
             _lblStatus.Text = $"Chocolatey: {list.Count} package(s) installed";
             _lblStatus.ForeColor = AppTheme.Green;
+            _ = CheckOutdatedAsync();
         }
         catch (Exception ex)
         {
@@ -144,6 +154,22 @@ internal sealed class ChocolateyManagerDialog : Form
             _lblStatus.ForeColor = AppTheme.Red;
         }
         finally { SetBusy(false); }
+    }
+
+    private async Task CheckOutdatedAsync()
+    {
+        try
+        {
+            var outdated = await ChocolateyManager.ListOutdatedAsync(_cts.Token);
+            _lblOutdated.Text = outdated.Count > 0
+                ? $"\u26A0 {outdated.Count} update(s) available"
+                : "\u2714 All packages up to date";
+            _lblOutdated.ForeColor = outdated.Count > 0 ? AppTheme.Yellow : AppTheme.Green;
+        }
+        catch
+        {
+            _lblOutdated.Text = "";
+        }
     }
 
     private async Task InstallAsync()

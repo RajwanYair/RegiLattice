@@ -102,6 +102,30 @@ internal static partial class PipManager
         return name;
     }
 
+    internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
+    {
+        string python = FindPython() ?? "python";
+        var (_, stdout, _) = await ShellRunner.RunAsync(
+            python, ["-m", "pip", "list", "--outdated", "--format=json"], ct).ConfigureAwait(false);
+
+        var packages = new List<string>();
+        try
+        {
+            using var doc = JsonDocument.Parse(stdout);
+            foreach (var pkg in doc.RootElement.EnumerateArray())
+            {
+                string? name = pkg.GetProperty("name").GetString();
+                string? ver = pkg.GetProperty("version").GetString();
+                string? latest = pkg.GetProperty("latest_version").GetString();
+                if (name is not null)
+                    packages.Add($"{name} ({ver} → {latest})");
+            }
+        }
+        catch { /* parse failed — return empty */ }
+
+        return packages.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
     internal static readonly string[] PopularPackages =
         ["requests", "rich", "click", "pydantic", "httpx", "pytest", "ruff", "mypy", "black", "ipython"];
 }

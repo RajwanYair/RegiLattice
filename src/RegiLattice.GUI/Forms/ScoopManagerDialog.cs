@@ -8,15 +8,18 @@ internal sealed class ScoopManagerDialog : Form
     private readonly ListBox _lstInstalled = new();
     private readonly TextBox _txtName = new();
     private readonly Label _lblStatus = new();
+    private readonly Label _lblOutdated = new();
     private readonly Button _btnRefresh = new();
     private readonly Button _btnInstall = new();
     private readonly Button _btnRemove = new();
+    private readonly Button _btnUpgrade = new();
 
     private CancellationTokenSource _cts = new();
 
     internal ScoopManagerDialog()
     {
-        Text = "Scoop Package Manager";
+        Text = "🩣 Scoop Package Manager";
+        Icon = SystemIcons.Application;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(540, 500);
@@ -48,6 +51,13 @@ internal sealed class ScoopManagerDialog : Form
         _lblStatus.Dock = DockStyle.Top;
         _lblStatus.Height = 24;
         _lblStatus.Padding = new Padding(8, 0, 0, 0);
+
+        _lblOutdated.Text = "";
+        _lblOutdated.ForeColor = AppTheme.Yellow;
+        _lblOutdated.Dock = DockStyle.Top;
+        _lblOutdated.Height = 22;
+        _lblOutdated.Padding = new Padding(8, 0, 0, 0);
+        _lblOutdated.Font = AppTheme.Regular;
 
         AppTheme.Apply(_lstInstalled);
         _lstInstalled.Dock = DockStyle.Fill;
@@ -83,15 +93,23 @@ internal sealed class ScoopManagerDialog : Form
         _btnRemove.Size = new Size(75, 27);
         _btnRemove.Click += async (_, _) => await RemoveAsync();
 
+        _btnUpgrade.Text = "Upgrade";
+        _btnUpgrade.BackColor = AppTheme.Yellow;
+        _btnUpgrade.ForeColor = AppTheme.Bg;
+        _btnUpgrade.FlatStyle = FlatStyle.Flat;
+        _btnUpgrade.Location = new Point(376, 7);
+        _btnUpgrade.Size = new Size(75, 27);
+        _btnUpgrade.Click += async (_, _) => await UpgradeAsync();
+
         _btnRefresh.Text = "Refresh";
         _btnRefresh.BackColor = AppTheme.Accent;
         _btnRefresh.ForeColor = AppTheme.Bg;
         _btnRefresh.FlatStyle = FlatStyle.Flat;
-        _btnRefresh.Location = new Point(376, 7);
+        _btnRefresh.Location = new Point(456, 7);
         _btnRefresh.Size = new Size(75, 27);
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
 
-        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnRefresh]);
+        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpgrade, _btnRefresh]);
 
         var quickLabel = new Label
         {
@@ -127,7 +145,7 @@ internal sealed class ScoopManagerDialog : Form
             flowQuick.Controls.Add(btn);
         }
 
-        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, _lblStatus, lblTitle]);
+        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, _lblOutdated, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()
@@ -142,6 +160,7 @@ internal sealed class ScoopManagerDialog : Form
                 ? $"Scoop: installed - {list.Count} packages"
                 : "Scoop: installed - no packages";
             _lblStatus.ForeColor = AppTheme.Green;
+            _ = CheckOutdatedAsync();
         }
         catch (Exception ex)
         {
@@ -149,6 +168,22 @@ internal sealed class ScoopManagerDialog : Form
             _lblStatus.ForeColor = AppTheme.Red;
         }
         finally { SetBusy(false); }
+    }
+
+    private async Task CheckOutdatedAsync()
+    {
+        try
+        {
+            var outdated = await ScoopManager.ListOutdatedAsync(_cts.Token);
+            _lblOutdated.Text = outdated.Count > 0
+                ? $"\u26A0 {outdated.Count} update(s) available"
+                : "\u2714 All packages up to date";
+            _lblOutdated.ForeColor = outdated.Count > 0 ? AppTheme.Yellow : AppTheme.Green;
+        }
+        catch
+        {
+            _lblOutdated.Text = "";
+        }
     }
 
     private async Task InstallAsync()
@@ -187,10 +222,30 @@ internal sealed class ScoopManagerDialog : Form
         finally { SetBusy(false); }
     }
 
+    private async Task UpgradeAsync()
+    {
+        string name = (_lstInstalled.SelectedItem as string ?? _txtName.Text).Trim();
+        if (name.Length == 0) return;
+        SetBusy(true, $"Upgrading {name}...");
+        try
+        {
+            await ScoopManager.UpgradeAsync(name, _cts.Token);
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _lblStatus.Text = $"Error: {ex.Message}";
+            _lblStatus.ForeColor = AppTheme.Red;
+        }
+        finally { SetBusy(false); }
+    }
+
     private void SetBusy(bool busy, string? message = null)
     {
         _btnInstall.Enabled = !busy;
         _btnRemove.Enabled = !busy;
+        _btnUpgrade.Enabled = !busy;
+        _btnRefresh.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
         if (message is not null)
             _lblStatus.Text = message;
