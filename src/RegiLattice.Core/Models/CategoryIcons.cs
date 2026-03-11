@@ -162,12 +162,17 @@ public static class CategoryIcons
         _ => "\u2699\uFE0F",                        // ⚙️
     };
 
-    /// <summary>Get the Unicode symbol for a tweak kind (Registry/Command/FileConfig).</summary>
+    /// <summary>Get the Unicode symbol for a tweak kind.</summary>
     public static string GetKindSymbol(TweakKind kind) => kind switch
     {
-        TweakKind.Registry => "\U0001F5C3",   // 🗃 (registry)
-        TweakKind.Command => "\u25B6\uFE0F",  // ▶️ (command)
-        TweakKind.FileConfig => "\U0001F4C4", // 📄 (file config)
-        _ => "\u2699\uFE0F",                  // ⚙️
+        TweakKind.Registry => "\U0001F5C3",         // 🗃 (registry)
+        TweakKind.PowerShell => "\u25B6\uFE0F",     // ▶️ (powershell)
+        TweakKind.SystemCommand => "\U0001F4BB",     // 💻 (system command)
+        TweakKind.ServiceControl => "\u2699\uFE0F",  // ⚙️ (service)
+        TweakKind.ScheduledTask => "\u23F0",          // ⏰ (scheduled task)
+        TweakKind.FileConfig => "\U0001F4C4",         // 📄 (file config)
+        TweakKind.GroupPolicy => "\U0001F3DB\uFE0F",  // 🏛️ (group policy)
+        TweakKind.PackageManager => "\U0001F4E6",     // 📦 (package)
+        _ => "\u2699\uFE0F",                          // ⚙️
     };
 }
