@@ -144,6 +144,7 @@ internal static class NightLight
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", "SwapEffectUpgradeEnable=1;")],
         },
         new TweakDef
         {
@@ -183,6 +184,7 @@ internal static class NightLight
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile", "sRGB IEC61966-2.1")],
         },
         new TweakDef
         {

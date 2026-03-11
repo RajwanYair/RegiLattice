@@ -120,6 +120,7 @@ internal static class Office
                 RegOp.DeleteValue(@"sec", "VBAWarnings"),
                 RegOp.DeleteValue(@"sec", "AccessVBOM"),
             ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 1)],
         },
         new TweakDef
         {
@@ -139,6 +140,7 @@ internal static class Office
             [
                 RegOp.SetDword(@"opts", "SaveInterval", 10),
             ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Options", "SaveInterval", 2)],
         },
         new TweakDef
         {
