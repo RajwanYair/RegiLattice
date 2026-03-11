@@ -1,232 +1,197 @@
 ---
-applyTo: "**/tests/**,**/conftest.py,**/*_test.py,**/test_*.py"
+applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 ---
 
 # Testing Instructions
 
 ## Framework & Tools
 
-- **Primary**: pytest 8.0+
-- **Coverage**: pytest-cov, targeting 90%+
-- **Timeouts**: pytest-timeout (default 30 s, configured in `pyproject.toml`)
-- **Property-based**: hypothesis for complex logic
-- **Mocking**: pytest-mock (prefer over unittest.mock directly)
-- **Async**: pytest-asyncio for async code
-- **Profiling**: pyinstrument or snakeviz+cProfile for slow test root-cause
+- **Primary**: xUnit 2.9.2 (C# test projects)
+- **Runner**: Microsoft.NET.Test.Sdk 17.11.1
+- **Coverage**: coverlet.collector 6.0.2 + ReportGenerator
+- **Legacy Python**: pytest 8.0+ (for archived Python tests only)
 
-## Running Tests — VS Code / GitHub Copilot
+## Test Projects
 
-**Always use the VS Code `runTests` tool** (or the Testing panel) for running tests
-in VS Code and GitHub Copilot agent sessions. This uses the configured Python
-interpreter and pytest arguments from `.vscode/settings.json` and `pyproject.toml`.
+| Project | Tests | Covers |
+|---------|-------|--------|
+| `RegiLattice.Core.Tests` | 93 | TweakDef, TweakEngine, RegistrySession, Services |
+| `RegiLattice.GUI.Tests` | 36 | Theme, PackageManagerValidation |
+| **Total** | **129** | |
 
+## Running Tests
+
+```powershell
+# All tests
+dotnet test
+
+# Specific project
+dotnet test tests/RegiLattice.Core.Tests
+
+# With console output
+dotnet test --logger "console;verbosity=normal"
+
+# Filter by test name
+dotnet test --filter "FullyQualifiedName~TweakDef"
+
+# Filter by trait/category
+dotnet test --filter "Category=Unit"
+
+# With coverage
+dotnet test --collect:"XPlat Code Coverage"
 ```
-# Correct in GitHub Copilot:  use the runTests tool
-# Correct in terminal:
-python -m pytest tests/                          # all tests
-python -m pytest tests/test_gui.py -x            # single file, stop on first fail
-python -m pytest tests/ --timeout=30            # explicit timeout
-```
 
-**Never** run `python -m pytest` inside a Copilot agent when the `runTests` tool is
-available — terminal output is truncated at 16 KB and coverage floods the buffer.
+**In VS Code / GitHub Copilot**: Use the `runTests` tool or VS Code Testing panel.
+Do not run `dotnet test` in a Copilot agent terminal — output may be truncated.
 
-## Test Structure
+## Test File Structure
 
 ```
 tests/
-├── conftest.py           # Shared fixtures, markers
-├── unit/                 # Pure Python, no I/O
-│   ├── test_core.py
-│   └── test_utils.py
-├── integration/          # File/network/OS interaction
-│   └── test_integration.py
-└── fixtures/             # Test data files
+├── RegiLattice.Core.Tests/
+│   ├── TweakDefTests.cs         # TweakDef model, RegOp factories, scope computation
+│   ├── TweakEngineTests.cs      # Engine registration, lookup, search, profiles, batch
+│   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing
+│   └── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+└── RegiLattice.GUI.Tests/
+    ├── ThemeTests.cs             # Theme switching, colour attributes, all 4 themes
+    └── PackageManagerValidationTests.cs  # Package name validation
 ```
 
-## Naming Conventions
+## Naming Convention
 
-```python
-# Functions: test_<what>_<when>_<expected>
-def test_process_file_with_valid_input_returns_result():
-    ...
+```csharp
+// Pattern: MethodName_Scenario_ExpectedResult
+[Fact]
+public void GetTweak_WithValidId_ReturnsTweakDef() { ... }
 
-def test_process_file_with_missing_file_raises_file_not_found_error():
-    ...
+[Fact]
+public void GetTweak_WithInvalidId_ReturnsNull() { ... }
+
+[Fact]
+public void Register_DuplicateId_ThrowsArgumentException() { ... }
+
+// Theory for parameterized tests
+[Theory]
+[InlineData("perf-disable-animations", "Performance")]
+[InlineData("priv-disable-telemetry", "Privacy")]
+public void TweakDef_Category_MatchesExpected(string id, string expectedCat) { ... }
 ```
 
-## Fixtures Pattern
+## Test Patterns
 
-```python
-import pytest
-from pathlib import Path
+### Arrange-Act-Assert
 
-@pytest.fixture
-def temp_dir(tmp_path: Path) -> Path:
-    """Provide a temporary directory cleaned up after the test."""
-    return tmp_path
+```csharp
+[Fact]
+public void Search_WithQueryTerm_ReturnsMatchingTweaks()
+{
+    // Arrange
+    var engine = new TweakEngine();
+    engine.RegisterBuiltins();
 
-@pytest.fixture
-def sample_config(temp_dir: Path) -> Path:
-    """Create a minimal config file for testing."""
-    config = temp_dir / "config.yaml"
-    config.write_text("app:\n  debug: true\n")
-    return config
+    // Act
+    var results = engine.Search("telemetry");
+
+    // Assert
+    Assert.NotEmpty(results);
+    Assert.All(results, t =>
+        Assert.True(
+            t.Label.Contains("telemetry", StringComparison.OrdinalIgnoreCase) ||
+            t.Description.Contains("telemetry", StringComparison.OrdinalIgnoreCase) ||
+            t.Tags.Any(tag => tag.Contains("telemetry", StringComparison.OrdinalIgnoreCase))
+        ));
+}
 ```
 
-## Markers — Always Mark Your Tests
+### Testing Exceptions
 
-```python
-@pytest.mark.unit
-def test_pure_logic():
-    ...
-
-@pytest.mark.integration
-def test_with_filesystem(tmp_path):
-    ...
-
-@pytest.mark.slow
-def test_large_dataset():
-    ...
-
-@pytest.mark.windows
-def test_registry_operation():
-    ...
-
-@pytest.mark.network
-def test_api_call():
-    ...
+```csharp
+[Fact]
+public void Register_NullTweak_ThrowsArgumentNullException()
+{
+    var engine = new TweakEngine();
+    Assert.Throws<ArgumentNullException>(() => engine.Register(null!));
+}
 ```
 
-## Coverage Rules
+### Testing Collections
 
-- Minimum: 80% overall, 90% for core modules
-- Exclude: `__main__.py`, `**/gui*.py` display code, `TYPE_CHECKING` blocks
-- Run: `pytest --cov=regilattice --cov-report=term-missing --cov-report=html`
+```csharp
+[Fact]
+public void Categories_ReturnsAll69Categories()
+{
+    var engine = new TweakEngine();
+    engine.RegisterBuiltins();
 
-## Measured Coverage Baselines (v1.0.1)
+    var categories = engine.Categories();
 
-| Module               | Coverage | Status            |
-| -------------------- | -------- | ----------------- |
-| `analytics.py`       | 100%     | ✅                |
-| `deps.py`            | 100%     | ✅                |
-| `locale.py`          | 100%     | ✅                |
-| `menu.py`            | **100%** | ✅ (41 tests)     |
-| `gui_widgets.py`     | **95%**  | ✅ (40 tests)     |
-| `gui_dialogs.py`     | **89%**  | ✅ (53 tests)     |
-| `gui_theme.py`       | 98%      | ✅                |
-| `gui_tooltip.py`     | 91%      | ✅                |
-| `hwinfo.py`          | 97%      | ✅                |
-| `marketplace.py`     | 95%      | ✅                |
-| `ratings.py`         | 97%      | ✅                |
-| `elevation.py`       | 95%      | ✅                |
-| `config.py`          | 90%      | ✅                |
-| `cli.py`             | 86%      | 🟡                |
-| `registry.py`        | 84%      | 🟡                |
-| `corpguard.py`       | 77%      | 🟡                |
-| `gui.py`             | 70%→80%+ | 🟡 Sprint 4 push  |
-| `tweaks/__init__.py` | 50%      | 🟡 platform paths |
-
-Target: 80%+ on all core modules, 90%+ on non-GUI modules.
-
-## Hypothesis — Property-Based Testing
-
-```python
-from hypothesis import given, settings, strategies as st
-
-@given(st.text(min_size=1), st.integers(min_value=0))
-@settings(max_examples=100)
-def test_process_handles_any_valid_input(text: str, count: int) -> None:
-    result = process(text, count)
-    assert result is not None
+    Assert.Equal(69, categories.Count);
+    Assert.Contains("Privacy", categories);
+    Assert.Contains("Performance", categories);
+}
 ```
 
-## Tkinter Widget Testing — Proven Patterns
+### Testing RegOp Factories
 
-Lessons learned from RegiLattice GUI test coverage sprints:
+```csharp
+[Fact]
+public void SetDword_CreatesCorrectRegOp()
+{
+    var op = RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "Value", 1);
 
-```python
-# ✅ Call widget event handlers DIRECTLY — never use event_generate + root.update()
-# event_generate causes pytest-timeout thread interrupts on Windows
-row._on_enter(None)   # correct — method accepts _: tk.Event[tk.Misc], never dereferences it
-row._on_leave(None)   # correct
-
-# ❌ BAD — can crash with fatal exception code 0x80000003 on Windows
-row.frame.event_generate("<Enter>")
-root.update()
-
-# ✅ Isolate cache-keyed singletons with unique IDs per test
-# tweaks/__init__.py _SCOPE_CACHE is keyed by td.id — reuse of the same id across
-# tests causes stale cache hits and wrong assertion results.
-TweakDef(id="scope-user-test-unique", ...)   # ✅ unique per test
-TweakDef(id="test-tweak", ...)               # ❌ shared id → cache collision
-
-# ✅ Always withdraw() + patch deferred loaders
-root = tk.Tk()
-root.withdraw()
-with patch("regilattice.gui.RegiLatticeGUI._deferred_init"):
-    gui = RegiLatticeGUI(root)
+    Assert.Equal(RegOpKind.SetDword, op.Kind);
+    Assert.Equal(@"HKEY_CURRENT_USER\Software\Test", op.Path);
+    Assert.Equal("Value", op.Name);
+    Assert.Equal(1, op.DwordValue);
+}
 ```
 
-## Mocking Preference — Use pytest-mock Over unittest.mock
+### RegistrySession with DryRun
 
-```python
-# ✅ Preferred — pytest-mock mocker fixture (auto-reset, cleaner syntax)
-def test_thing(mocker: pytest.MockerFixture) -> None:
-    mocker.patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED)
-    ...
+```csharp
+[Fact]
+public void DryRun_DoesNotWriteToRegistry()
+{
+    var session = new RegistrySession { DryRun = true };
+    session.SetDword(@"HKEY_CURRENT_USER\Software\RegiLattice\Test", "Dry", 42);
 
-# Also OK — contextmanager form for tests without mocker fixture
-with patch("regilattice.menu.tweak_status", return_value=TweakResult.APPLIED):
-    ...
-
-# ❌ Avoid — unittest.mock.MagicMock() standing in for typed enums
-# Use the actual enum value (TweakResult.UNKNOWN) for accurate coverage
+    Assert.NotEmpty(session.DryOps);
+    Assert.Contains(session.DryOps, op => op.Name == "Dry");
+}
 ```
+
+## Coverage
+
+### Collecting Coverage
+
+```powershell
+# Collect coverage (generates Cobertura XML)
+dotnet test --collect:"XPlat Code Coverage"
+
+# Generate HTML report
+dotnet tool install -g dotnet-reportgenerator-globaltool
+reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -reporttypes:Html
+```
+
+### Coverage Targets
+
+| Component | Target | Notes |
+|-----------|--------|-------|
+| TweakDef model | 95%+ | Pure logic, fully testable |
+| TweakEngine | 90%+ | Core business logic |
+| RegistrySession | 80%+ | DryRun mode for safe testing |
+| Services | 85%+ | Mock P/Invoke and WMI |
+| GUI (Theme) | 90%+ | Theme records are pure data |
+| GUI (Forms) | 60%+ | WinForms hard to unit test |
 
 ## What NOT to Do in Tests
 
 - Don't test implementation details — test behaviour
-- Don't use `time.sleep()` — use mocks or events
-- Don't leave temporary files — use `tmp_path` fixture
+- Don't use `Thread.Sleep()` — use `Task.Delay` with async tests or mocks
+- Don't leave temporary files — use `Path.GetTempPath()` with cleanup
 - Don't catch exceptions to silence test failures
-- Don't use `assert` on mutable defaults
-- **Don't run the actual GUI in tests** — always `withdraw()` windows and patch
-  `_deferred_init` to block background tweak loading. If a test must interact
-  with real Tkinter widgets, add `@pytest.mark.timeout(10)` and call
-  `root.after(100, root.destroy)` to ensure the event loop exits.
-- **Don't run tests via `python -m pytest` in Copilot agents** — use `runTests` tool.
-- **Don't reuse TweakDef IDs across tests** when `tweak_scope()` or any
-  `lru_cache`-backed function is involved — use unique IDs per test class.
-
-## Mocking ctypes / Platform Helpers
-
-When testing Windows-only code paths that call `ctypes` internally, always extract
-the ctypes call into a named module-level helper and patch that helper in tests:
-
-```python
-# ✅ GOOD — patchable helper
-def _ctypes_memory_mb() -> tuple[int, int] | None:
-    ...  # calls GlobalMemoryStatusEx
-
-def detect_memory() -> MemoryInfo:
-    result = _ctypes_memory_mb()
-    if result is None:
-        return _detect_via_cim()
-    ...
-
-# In test — force the CIM fallback regardless of platform:
-@patch("regilattice.hwinfo._ctypes_memory_mb", return_value=None)
-@patch("regilattice.hwinfo._run_ps", return_value="...")
-def test_memory_cim_path(self, mock_ps, _mock_ctypes): ...
-
-# ❌ BAD — nesting ctypes inside lru_cache; pytest cannot intercept it
-@functools.lru_cache(maxsize=1)
-def detect_memory():
-    import ctypes
-    buf = ctypes.Structure(...)  # not patchable
-```
-
-This pattern is critical for cross-platform CI: tests run on Linux/macOS where
-`ctypes.windll` does not exist, so the ctypes helper returns `None` and the
-non-Windows fallback path is exercised instead.
+- Don't test private methods directly — test through public API
+- Don't create real registry keys in tests — use `DryRun = true` on RegistrySession
+- Don't create actual WinForms windows in CI — test data models and logic only
+- Don't use `Assert.True(condition)` when a specific assertion exists (e.g., `Assert.Equal`, `Assert.Contains`)

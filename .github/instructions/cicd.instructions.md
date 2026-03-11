@@ -8,85 +8,87 @@ applyTo: "**/*.yml,**/*.yaml,.github/**"
 
 - Pin action versions to a full SHA or semver tag (`@v4`, not `@main`)
 - Use `permissions: contents: read` (least privilege) as default
-- Cache pip dependencies to speed up runs
+- Cache NuGet packages to speed up runs
 - Run on both push to main and pull_request
-- Use matrix strategy for multi-platform and multi-Python-version testing
+- Windows-only project — run on `windows-latest`
 
-## Standard Python CI Workflow Pattern
+## Standard .NET CI Workflow Pattern
 
 ```yaml
 name: CI
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
-        strategy:
-            fail-fast: false
-            matrix:
-                os: [ubuntu-latest, windows-latest]
-                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+  build-and-test:
+    runs-on: windows-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - uses: actions/setup-python@v5
-              with:
-                  python-version: ${{ matrix.python-version }}
-                  allow-prereleases: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
 
-            - name: Cache pip
-              uses: actions/cache@v4
-              with:
-                  path: ~/.cache/pip
-                  key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml', '**/requirements*.txt') }}
-                  restore-keys: ${{ runner.os }}-pip-
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
-            - name: Install dependencies
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install -r requirements.txt
+      - name: Restore
+        run: dotnet restore RegiLattice.sln
 
-            - name: Lint (ruff)
-              run: python -m ruff check src/ tests/
+      - name: Build
+        run: dotnet build RegiLattice.sln -c Release --no-restore
 
-            - name: Format check (ruff)
-              run: python -m ruff format --check src/ tests/
+      - name: Test with coverage
+        run: dotnet test RegiLattice.sln -c Release --no-build --collect:"XPlat Code Coverage" --logger "console;verbosity=normal"
 
-            - name: Type check (mypy)
-              run: python -m mypy src/ --ignore-missing-imports
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: "**/coverage.cobertura.xml"
 
-            - name: Security scan (bandit)
-              run: python -m bandit -r src/ -ll
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: "**/coverage.cobertura.xml"
+          fail_ci_if_error: false
 
-            - name: Test (pytest + coverage)
-              run: python -m pytest tests/ -v --tb=short --cov=src --cov-report=xml
+  publish:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: windows-latest
 
-            - name: Ruff format check
-              run: python -m ruff format --check regilattice/ tests/
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Upload coverage artifact
-              if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
-              uses: actions/upload-artifact@v4
-              with:
-                  name: coverage-report
-                  path: coverage.xml
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
 
-            - name: Upload coverage to Codecov
-              if: matrix.python-version == '3.12' && matrix.os == 'ubuntu-latest'
-              uses: codecov/codecov-action@v5
-              with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
-                  files: coverage.xml
-                  fail_ci_if_error: false
+      - name: Publish (self-contained)
+        run: >-
+          dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RegiLattice-win-x64
+          path: src/RegiLattice.GUI/bin/Release/net10.0-windows/win-x64/publish/
 ```
 
 ## Commit Message Convention (Conventional Commits)
@@ -99,41 +101,42 @@ jobs:
 [optional footer(s)]
 ```
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`, `perf`, `security`
+### Types
 
-Examples:
+| Type       | When                                             |
+| ---------- | ------------------------------------------------ |
+| `feat`     | New tweak, feature, or capability                |
+| `fix`      | Bug fix                                          |
+| `perf`     | Performance improvement without behaviour change |
+| `refactor` | Code restructuring without behaviour change      |
+| `test`     | Add or update tests                              |
+| `docs`     | Documentation, comments, instructions            |
+| `chore`    | Dependency updates, CI, tooling, build files     |
+| `style`    | Formatting, lint fixes (no logic change)         |
 
-- `feat(cli): add --dry-run flag`
-- `fix(scanner): handle empty directories gracefully`
-- `ci: pin actions to SHA for security`
-- `security: sanitize user input in file path arguments`
+## NuGet Packages (keep up-to-date)
 
-## Pre-Commit Integration
+| Package | Current | Purpose |
+|---------|---------|---------|
+| System.Management | 9.0.3 | WMI queries (CorporateGuard, HardwareInfo) |
+| Microsoft.NET.Test.Sdk | 17.11.1 | Test host |
+| xunit | 2.9.2 | Test framework |
+| xunit.runner.visualstudio | 2.8.2 | VS test adapter |
+| coverlet.collector | 6.0.2 | Code coverage |
 
-Always include a `pre-commit` step in CI to enforce hooks consistently:
+## Release Workflow
 
-```yaml
-- name: Run pre-commit hooks
-  uses: pre-commit/action@v3.0.1
-  with:
-      extra_args: --all-files
-```
+1. Bump version in `.csproj` files + `CHANGELOG.md`
+2. Commit: `chore: bump version to v2.x.y`
+3. Tag: `git tag v2.x.y`
+4. Push tag: `git push --tags`
+5. GitHub Actions builds release artifact
+6. Create GitHub Release with artifact attached
 
-Or invoke directly after installing deps:
+## CI Best Practices
 
-```yaml
-- name: Pre-commit checks
-  run: |
-      pip install pre-commit
-      pre-commit run --all-files
-```
-
-## Security Best Practices in Workflows
-
-- Never log secrets or tokens
-- Use `${{ secrets.TOKEN }}` not hardcoded values
-- Set `permissions` explicitly on every job
-- Use `if: github.event_name == 'push'` to limit sensitive steps to main
-- Pin `codecov/codecov-action` to current major: `@v5`
-- Pin `softprops/action-gh-release` to current major: `@v2`
-- Always set `fail_ci_if_error: false` on Codecov upload (avoid CI failures for third-party outages)
+- **NuGet cache**: key on `.csproj` hash to invalidate on dependency changes
+- **Build once, test from build**: use `--no-build` in test step after `dotnet build`
+- **Codecov**: use `codecov-action@v5`; set `fail_ci_if_error: false`
+- **Windows-only**: no matrix needed — single `windows-latest` runner
+- **Self-contained publish**: `-r win-x64 --self-contained true -p:PublishSingleFile=true`

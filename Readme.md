@@ -1,168 +1,176 @@
 # ⚡ RegiLattice
 
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-17%2C633%2B%20passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-90%25%2B-brightgreen)
-![Ruff](https://img.shields.io/badge/linter-ruff-blue)
-![mypy](https://img.shields.io/badge/type--check-mypy%20strict-blue)
+![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-129%20passing-brightgreen)
+![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A comprehensive Windows registry tweak toolkit with **1 292 tweaks** across **69 categories**, a **zero-wiring plugin architecture**, a **Python CLI**, **interactive console menu**, and a **tkinter GUI** (Catppuccin Mocha dark theme). Designed for power users who want fine-grained control over Windows 10/11 performance, privacy, usability, and application behaviour.
+A comprehensive Windows registry tweak toolkit with **~1 490 tweaks** across **69 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Highlights
 
-- **1 292 tweaks** across 69 categories — each fully reversible with apply + remove
-- **Plugin architecture** — auto-discovers tweaks from `regilattice/tweaks/`, no registration needed
-- **3 interfaces** — interactive console menu, CLI with flags, and tkinter GUI
-- **GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), menu bar (File/Edit/View/Help), zebra-striped rows, collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation badges, rich hover tooltips, live search with status/scope filters
+- **~1 490 tweaks** across 69 categories — each fully reversible with apply + remove
+- **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
+- **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
+- **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
 - **5 machine profiles** — business, gaming, privacy, minimal, server
 - **Dry-run mode** — preview changes without touching the registry (`--dry-run`)
 - **Snapshot & diff** — save/restore tweak state (JSON), compare snapshots (`--snapshot-diff`)
 - **Validation & stats** — `--validate` checks all TweakDef integrity; `--stats` shows scope/admin/corp breakdown
-- **JSON output** — `--list`, `--search`, and `--categories` support `--output json` for scripting
-- **Composable filters** — `filter_tweaks()` engine API supports scope, category, min-build, tags, and free-text query
-- **Dependency resolver** — `tweak_dependencies()` returns transitive dep chain in topological order; `apply_tweaks()` auto-resolves deps
-- **Dependency graph** — tweaks can declare `depends_on` ordering; batch ops respect topological order
-- **Config file** — persistent defaults via `~/.regilattice.toml` (`--config`)
-- **Concurrent batch operations** — `ThreadPoolExecutor`-powered parallel apply/remove/detect
-- **UAC elevation** — automatic admin re-launch via `ctypes.ShellExecuteW`
+- **JSON export** — `--export-json` for scripting; `--export-reg` for .REG file generation
+- **Composable filters** — `Filter()` engine API supports scope, category, min-build, tags, corp-safe, and free-text query
+- **Dependency resolver** — topological ordering; `ApplyBatch()` auto-resolves deps
+- **Parallel detection** — `StatusMap(parallel: true)` for fast batch status checks
+- **UAC elevation** — automatic admin re-launch
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
-- **Automatic backups** — every registry mutation is backed up before changes with rollback on error
-- **Export PowerShell** — generate `.ps1` scripts from selected tweaks for portable deployment
-- **~17 511 tests** across 21 test files — full smoke, CLI, GUI, and engine coverage
+- **Automatic backups** — every registry mutation is backed up to JSON before changes
+- **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
+- **129 tests** across 6 test files — full engine, model, service, and GUI coverage (xUnit)
 
 ## Architecture
 
 ```mermaid
 graph LR
     subgraph Interfaces
-        CLI[cli.py]
-        Menu[menu.py]
-        GUI[gui.py]
+        CLI[RegiLattice.CLI<br/>Program.cs]
+        GUI[RegiLattice.GUI<br/>MainForm · Dialogs]
     end
 
-    subgraph Core
-        TI[tweaks/__init__.py<br/>TweakDef · TweakExecutor<br/>ProfileDef · _topo_sort]
-        REG[registry.py<br/>RegistrySession]
-        CFG[config.py<br/>AppConfig]
-        CG[corpguard.py]
+    subgraph Core["RegiLattice.Core"]
+        TE[TweakEngine<br/>Register · Apply · Search]
+        TD[TweakDef<br/>RegOp · Scope]
+        RS[RegistrySession<br/>Read · Write · Backup]
+        CG[CorporateGuard]
+        PD[ProfileDefinitions<br/>5 profiles]
+        SV[Services<br/>Analytics · Config · HW]
     end
 
-    subgraph Plugins
-        P1[performance.py]
-        P2[privacy.py]
-        P3[gaming.py]
-        PN[... 61 more]
+    subgraph Tweaks["68 Tweak Modules"]
+        T1[Performance.cs]
+        T2[Privacy.cs]
+        T3[Gaming.cs]
+        TN[... 65 more]
     end
 
-    CLI --> TI
-    Menu --> TI
-    GUI --> TI
-    TI --> REG
-    TI --> CG
-    CLI --> CFG
-    P1 --> TI
-    P2 --> TI
-    P3 --> TI
-    PN --> TI
-    REG -->|winreg / reg.exe| WR[(Windows Registry)]
+    CLI --> TE
+    GUI --> TE
+    TE --> RS
+    TE --> CG
+    TE --> PD
+    T1 --> TD
+    T2 --> TD
+    T3 --> TD
+    TN --> TD
+    RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
 
 ## Tweak Categories (69)
 
 | Category                    |  #  | Category                    |  #  |
 |-----------------------------|-----|-----------------------------|-----|
-| Accessibility               |  20 | Network                     |  22 |
+| Accessibility               |  20 | Network                     |  36 |
 | Adobe                       |  20 | Night Light & Display       |  12 |
-| AI / Copilot                |  22 | Notifications               |  16 |
-| Audio                       |  19 | Office                      |  20 |
+| AI / Copilot                |  22 | Notifications               |  21 |
+| Audio                       |  24 | Office                      |  20 |
 | Backup & Recovery           |  15 | OneDrive                    |  18 |
 | Bluetooth                   |  19 | Package Management          |  21 |
-| Boot                        |  21 | Performance                 |  20 |
+| Boot                        |  26 | Performance                 |  30 |
 | Chrome                      |  20 | Phone Link                  |  14 |
-| Clipboard & Drag-Drop       |  15 | Power                       |  21 |
-| Cloud Storage               |  30 | Printing                    |  15 |
-| Communication               |  21 | Privacy                     |  25 |
-| Context Menu                |  15 | RealVNC                     |  15 |
-| Cortana & Search            |  22 | Remote Desktop              |  16 |
-| Crash & Diagnostics         |  16 | Scheduled Tasks             |  16 |
+| Clipboard & Drag-Drop       |  15 | Power                       |  26 |
+| Cloud Storage               |  30 | Printing                    |  20 |
+| Communication               |  21 | Privacy                     |  33 |
+| Context Menu                |  20 | RealVNC                     |  15 |
+| Cortana & Search            |  22 | Remote Desktop              |  21 |
+| Crash & Diagnostics         |  16 | Scheduled Tasks             |  21 |
 | Dev Drive                   |  12 | Scoop Tools                 |  25 |
 | Developer Tools             |  17 | Screensaver & Lock          |  16 |
-| Display                     |  19 | Security                    |  21 |
+| Display                     |  19 | Security                    |  34 |
 | DNS & Networking Advanced   |  16 | Services                    |  21 |
 | Edge                        |  18 | Shell                       |  20 |
-| Explorer                    |  41 | Snap & Multitasking         |  17 |
-| File System                 |  17 | Startup                     |  19 |
+| Explorer                    |  46 | Snap & Multitasking         |  17 |
+| File System                 |  17 | Startup                     |  22 |
 | Firefox                     |  20 | Storage                     |  19 |
 | Fonts                       |  19 | System                      |  24 |
-| Gaming                      |  19 | Taskbar                     |  19 |
-| GPU / Graphics              |  19 | Telemetry Advanced          |  16 |
-| Indexing & Search           |  16 | Touch & Pen                 |  13 |
+| Gaming                      |  24 | Taskbar                     |  24 |
+| GPU / Graphics              |  19 | Telemetry Advanced          |  21 |
+| Indexing & Search           |  21 | Touch & Pen                 |  13 |
 | Input                       |  18 | USB & Peripherals           |  16 |
-| Java                        |  16 | Virtualization              |  15 |
+| Java                        |  16 | Virtualization              |  20 |
 | LibreOffice                 |  18 | Voice Access & Speech       |  13 |
 | Lock Screen & Login         |  16 | VS Code                     |  19 |
-| M365 Copilot                |  18 | Widgets & News              |  15 |
-| Maintenance                 |  17 | Windows 11                  |  29 |
+| M365 Copilot                |  18 | Widgets & News              |  20 |
+| Maintenance                 |  17 | Windows 11                  |  35 |
 | Microsoft Store             |  15 | Windows Terminal             |  16 |
-| Multimedia                  |  15 | Windows Update              |  18 |
-|                             |     | WSL                         |  29 |
+| Multimedia                  |  15 | Windows Update              |  22 |
+|                             |     | WSL                         |  35 |
 
 ## Requirements
 
-- **Windows 10/11** (tested on 22H2+)
-- **Python 3.10+** (3.14 recommended)
+- **Windows 10/11** (build 19041+)
+- **.NET 10 Runtime** (or build from source with .NET 10 SDK)
 - Administrator privileges for HKLM tweaks (auto-elevates via UAC prompt)
 
 ## Quick Start
 
+### Build from Source
+
+```powershell
+# Clone and build
+git clone https://github.com/RajwanYair/RegiLattice.git
+cd RegiLattice
+dotnet build RegiLattice.sln -c Release
+
+# Run tests
+dotnet test RegiLattice.sln
+```
+
 ### GUI (Recommended)
 
-```bash
-python -m regilattice --gui
+```powershell
+dotnet run --project src/RegiLattice.GUI
+# or after publishing:
+RegiLattice.GUI.exe
 ```
 
-Tkinter window with 4 themes (Catppuccin Mocha default), menu bar, zebra-striped rows, per-category grouping, live search bar, scope badges (USER/MACHINE/BOTH), recommendation badges, per-row toggle buttons, and batch operations.
-
-### Console Menu
-
-```bash
-python -m regilattice
-```
-
-Two-level interactive menu: browse categories, then select tweaks within each category.
+WinForms window with 4 themes (Catppuccin Mocha default), collapsible categories, scope badges (USER/MACHINE/BOTH), live search bar, status filters, profile selector, and package manager dialogs.
 
 ### CLI
 
-```bash
-python -m regilattice apply disable-telemetry -y
-python -m regilattice remove all --assume-yes
-python -m regilattice --list
-python -m regilattice --dry-run apply all
-python -m regilattice --snapshot state.json
-python -m regilattice --restore state.json
-python -m regilattice --snapshot-diff before.json after.json
-python -m regilattice --list-profiles
-python -m regilattice --categories
-python -m regilattice --tags
+```powershell
+dotnet run --project src/RegiLattice.CLI -- --list
+dotnet run --project src/RegiLattice.CLI -- apply disable-telemetry
+dotnet run --project src/RegiLattice.CLI -- remove disable-telemetry
+dotnet run --project src/RegiLattice.CLI -- status disable-telemetry
+dotnet run --project src/RegiLattice.CLI -- --profile gaming
+dotnet run --project src/RegiLattice.CLI -- --gui
+dotnet run --project src/RegiLattice.CLI -- --menu
+dotnet run --project src/RegiLattice.CLI -- --dry-run --list
+dotnet run --project src/RegiLattice.CLI -- --snapshot state.json
+dotnet run --project src/RegiLattice.CLI -- --restore state.json
+dotnet run --project src/RegiLattice.CLI -- --snapshot-diff before.json after.json
+dotnet run --project src/RegiLattice.CLI -- --export-json tweaks.json
+dotnet run --project src/RegiLattice.CLI -- --export-reg tweaks.reg
+dotnet run --project src/RegiLattice.CLI -- --doctor
+dotnet run --project src/RegiLattice.CLI -- --hwinfo
 ```
 
 ### Machine Profiles
 
-```bash
-python -m regilattice --profile business   # 39 categories — productivity, security, cloud & workflow
-python -m regilattice --profile gaming     # 31 categories — GPU, performance, low-latency, distraction-free
-python -m regilattice --profile privacy    # 31 categories — telemetry, tracking, cloud & browser data
-python -m regilattice --profile minimal    # 22 categories — fast, clean system operation essentials
-python -m regilattice --profile server     # 28 categories — hardened, headless, uptime & remote mgmt
+```powershell
+dotnet run --project src/RegiLattice.CLI -- --profile business   # 39 categories — productivity & security
+dotnet run --project src/RegiLattice.CLI -- --profile gaming     # 31 categories — GPU & low-latency
+dotnet run --project src/RegiLattice.CLI -- --profile privacy    # 31 categories — telemetry & tracking off
+dotnet run --project src/RegiLattice.CLI -- --profile minimal    # 22 categories — fast, clean essentials
+dotnet run --project src/RegiLattice.CLI -- --profile server     # 28 categories — hardened & headless
 ```
 
-### Windows Launcher
+### PowerShell Launcher
 
-```text
-Launch-RegiLattice.ps1              # auto-detects Python, passes CLI args
-Launch-RegiLattice.ps1 --gui        # launch GUI directly
+```powershell
+.\Launch-RegiLattice.ps1              # launch with defaults
+.\Launch-RegiLattice.ps1 --gui        # launch GUI directly
 ```
 
 ## Screenshots
@@ -171,19 +179,18 @@ Launch-RegiLattice.ps1 --gui        # launch GUI directly
 
 | View | Description |
 |------|-------------|
-| **GUI — Catppuccin Mocha** | Main window with collapsible categories, scope badges (USER/MACHINE/BOTH), recommendation tags, and search bar |
+| **GUI — Catppuccin Mocha** | Main window with collapsible categories, scope badges, and search bar |
 | **GUI — Nord Theme** | Same layout with the Nord colour palette |
-| **Tooltip Hover** | Rich tooltip showing description, current state, default/recommendation hints, tags, and registry keys |
-| **Snapshot Diff (Terminal)** | Coloured terminal output comparing two snapshot files with added/removed/changed counts |
-| **Snapshot Diff (HTML)** | HTML report with Catppuccin-themed table |
-| **CLI — --list** | Terminal showing tweak list with categories, status badges, and descriptions |
+| **CLI — --list** | Terminal output with categories, status badges, and descriptions |
+| **Snapshot Diff** | Coloured terminal or HTML diff comparing two snapshot files |
 | **Profile Selector** | GUI dropdown showing Business / Gaming / Privacy / Minimal / Server profiles |
+| **About Dialog** | System info, hardware detection, and version details |
 
 ## Corporate Network Safety
 
 Automatically detects corporate environments and **blocks non-safe tweaks** to prevent policy violations:
 
-- **Active Directory** domain membership (ctypes `GetComputerNameExW`)
+- **Active Directory** domain membership (P/Invoke `GetComputerNameExW`)
 - **Azure AD / Entra ID** join status (`dsregcmd /status`)
 - **VPN adapters** — Cisco AnyConnect, GlobalProtect, Zscaler, WireGuard, etc.
 - **Group Policy** registry indicators
@@ -195,91 +202,108 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 
 ```
 RegiLattice/
-├── pyproject.toml                   # Build config (hatchling)
-├── Launch-RegiLattice.ps1           # PowerShell launcher
-├── regilattice/                     # Python package
-│   ├── __init__.py                  # Package version
-│   ├── __main__.py                  # python -m regilattice -> cli.main()
-│   ├── cli.py                       # argparse CLI entry point
-│   ├── menu.py                      # Interactive console menu
-│   ├── gui.py                       # tkinter GUI (Catppuccin Mocha, ~1 281 lines)
-│   ├── gui_theme.py                 # Theme constants (colours, fonts)
-│   ├── gui_tooltip.py               # Tooltip widget + description metadata parser
-│   ├── gui_widgets.py               # TweakRow + CategorySection widgets
-│   ├── gui_dialogs.py               # Import/export/about dialogs
-│   ├── config.py                    # ~/.regilattice.toml support
-│   ├── deps.py                      # Smart dependency management
-│   ├── elevation.py                 # UAC elevation helpers
-│   ├── registry.py                  # RegistrySession: winreg wrapper + backup + logging
-│   ├── corpguard.py                 # Corporate network detection
-│   └── tweaks/                      # Plugin-based tweak registry (64 modules)
-│       ├── __init__.py              # TweakDef, TweakExecutor, ProfileDef, plugin loader
-│       ├── _template.py             # Contributor guide -- copy to add a new tweak
-│       ├── accessibility.py         # Accessibility (20 tweaks)
-│       ├── ...                      # 62 more category modules, auto-discovered
-│       └── wsl.py                   # WSL (29 tweaks)
-├── tests/                           # pytest suites (~17 200 tests across 20 files)
-│   ├── conftest.py                  # dry_session fixture, all_tweaks_list
-│   ├── test_tweaks_smoke.py         # Auto-parametrized over all tweaks
-│   ├── test_tweaks_init.py          # Plugin loader, profiles, batch ops
-│   ├── test_cli.py                  # CLI argument parsing and commands
-│   ├── test_config.py               # AppConfig loading
-│   ├── test_corpguard.py            # Corporate network detection
-│   ├── test_deps.py                 # lazy_import, install_package, require
-│   ├── test_elevation.py            # UAC elevation helpers
-│   ├── test_gui_dialogs.py          # PS1 export, JSON import, about dialog
-│   ├── test_gui_theme.py            # Theme switching, colour validation
-│   ├── test_gui_tooltip.py          # Tooltip text, metadata parsing
-│   ├── test_gui_widgets.py          # Tweak scope classification
-│   ├── test_menu.py                 # Interactive console menu
-│   └── test_registry.py             # RegistrySession helpers and backup
-├── .github/                         # CI, templates, architecture docs
-└── .vscode/                         # Workspace settings
+├── RegiLattice.sln                          # Visual Studio solution
+├── Launch-RegiLattice.ps1                   # PowerShell launcher
+├── src/
+│   ├── RegiLattice.Core/                    # Core library (netstandard/net10.0)
+│   │   ├── TweakEngine.cs                   # Central tweak manager
+│   │   ├── Models/
+│   │   │   ├── TweakDef.cs                  # Immutable tweak definition + RegOp
+│   │   │   ├── ProfileDef.cs                # Profile definition model
+│   │   │   └── ProfileDefinitions.cs        # 5 hardcoded profiles
+│   │   ├── Registry/
+│   │   │   └── RegistrySession.cs           # Registry read/write/backup wrapper
+│   │   ├── Services/
+│   │   │   ├── Analytics.cs                 # Local usage analytics
+│   │   │   ├── AppConfig.cs                 # Configuration management
+│   │   │   ├── CorporateGuard.cs            # Corporate network detection
+│   │   │   ├── Elevation.cs                 # UAC elevation helpers
+│   │   │   ├── HardwareInfo.cs              # Hardware detection + profile suggestion
+│   │   │   ├── Locale.cs                    # i18n string table
+│   │   │   └── Ratings.cs                   # Tweak rating system (1-5 stars)
+│   │   └── Tweaks/                          # 68 category modules
+│   │       ├── Accessibility.cs             # Accessibility (20 tweaks)
+│   │       ├── Performance.cs               # Performance (30 tweaks)
+│   │       ├── Privacy.cs                   # Privacy (33 tweaks)
+│   │       ├── ...                          # 65 more category modules
+│   │       └── Wsl.cs                       # WSL (35 tweaks)
+│   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
+│   │   ├── Program.cs                       # Entry point
+│   │   ├── Theme.cs                         # 4-theme engine
+│   │   └── Forms/
+│   │       ├── MainForm.cs                  # Main window
+│   │       ├── AboutDialog.cs               # About + hardware info
+│   │       ├── ScoopManagerDialog.cs        # Scoop package manager
+│   │       └── PSModuleManagerDialog.cs     # PowerShell module manager
+│   └── RegiLattice.CLI/                     # Console CLI (net10.0)
+│       └── Program.cs                       # 25+ commands
+├── tests/
+│   ├── RegiLattice.Core.Tests/              # xUnit tests (93 tests)
+│   │   ├── TweakDefTests.cs
+│   │   ├── TweakEngineTests.cs
+│   │   ├── RegistrySessionTests.cs
+│   │   └── ServicesTests.cs
+│   └── RegiLattice.GUI.Tests/              # xUnit tests (36 tests)
+│       ├── ThemeTests.cs
+│       └── PackageManagerValidationTests.cs
+├── winget/                                  # Winget package manifests
+├── docs/                                    # Documentation
+└── .vscode/                                 # VS Code workspace settings
 ```
 
 ## Adding a Custom Tweak
 
-Copy `regilattice/tweaks/_template.py` to a new file and follow the numbered steps inside.
-See [Contributing.md](Contributing.md) for the full guide.
+Create a new `.cs` file in `src/RegiLattice.Core/Tweaks/` and register it in `TweakEngine.RegisterBuiltins()`.
 
-**Quick version:** create a `.py` file in `regilattice/tweaks/` exporting a `TWEAKS` list:
+**Example — declarative RegOp pattern** (preferred for simple registry tweaks):
 
-```python
-from regilattice.registry import SESSION, assert_admin
-from regilattice.tweaks import TweakDef
+```csharp
+// src/RegiLattice.Core/Tweaks/MyCategory.cs
+using RegiLattice.Core.Models;
 
-_KEY = r"HKEY_CURRENT_USER\Software\MyApp"
+namespace RegiLattice.Core.Tweaks;
 
-def _apply(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.backup([_KEY], "FancyMode")
-    SESSION.set_dword(_KEY, "FancyMode", 1)
+public static class MyCategory
+{
+    private const string Key = @"HKEY_CURRENT_USER\Software\MyApp";
 
-def _remove(*, require_admin: bool = True) -> None:
-    assert_admin(require_admin)
-    SESSION.delete_value(_KEY, "FancyMode")
-
-def _detect() -> bool:
-    return SESSION.read_dword(_KEY, "FancyMode") == 1
-
-TWEAKS = [
-    TweakDef(
-        id="myapp-fancy-mode",
-        label="Enable Fancy Mode",
-        category="My App",
-        apply_fn=_apply,
-        remove_fn=_remove,
-        detect_fn=_detect,
-        needs_admin=False,
-        registry_keys=[_KEY],
-        description="Enables Fancy Mode in MyApp.",
-        tags=["myapp", "fancy", "ui"],
-    ),
-]
+    public static List<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "myapp-fancy-mode",
+            Label = "Enable Fancy Mode",
+            Category = "My App",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            Description = "Enables Fancy Mode in MyApp.",
+            Tags = ["myapp", "fancy", "ui"],
+            ApplyOps = [RegOp.SetDword(Key, "FancyMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "FancyMode")],
+            DetectOps = [RegOp.CheckDword(Key, "FancyMode", 1)],
+        },
+    ];
+}
 ```
 
-The plugin loader discovers it automatically -- no registration code needed.
+For complex tweaks that need custom logic, use `ApplyAction`/`RemoveAction`/`DetectAction` delegates instead:
+
+```csharp
+new TweakDef
+{
+    Id = "myapp-complex-tweak",
+    Label = "Complex Custom Logic",
+    Category = "My App",
+    RegistryKeys = [Key],
+    ApplyAction = (requireAdmin) => { /* custom apply logic */ },
+    RemoveAction = (requireAdmin) => { /* custom remove logic */ },
+    DetectAction = () => { /* return true if applied */ return false; },
+}
+```
+
+See [Contributing.md](Contributing.md) for the full guide.
 
 ## License
 
-MIT -- see [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE) for details.
