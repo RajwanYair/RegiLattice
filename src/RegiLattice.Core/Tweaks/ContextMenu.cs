@@ -270,5 +270,66 @@ internal static class ContextMenu
                 RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\*\shell\CopyPath"),
             ],
         },
+        new TweakDef
+        {
+            Id = "ctx-add-open-cmd-here",
+            Label = "Add Open Command Prompt Here",
+            Category = "Context Menu",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Adds an 'Open Command Prompt Here' option to the folder context menu. Default: removed in Win11.",
+            Tags = ["context-menu", "command-prompt", "cmd", "terminal"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here", "", "Open Command Prompt Here"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here", "Icon", "cmd.exe"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here\command", "", "cmd.exe /k cd /d \"%V\""),
+            ],
+            RemoveOps = [RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd_here", "", "Open Command Prompt Here")],
+        },
+        new TweakDef
+        {
+            Id = "ctx-remove-share-context-menu",
+            Label = "Remove Share Context Menu",
+            Category = "Context Menu",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Removes the 'Share' option from the right-click context menu. Default: visible.",
+            Tags = ["context-menu", "share", "remove"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{E2BF9676-5F8F-435C-97EB-11607A5BEDF7}", "")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{E2BF9676-5F8F-435C-97EB-11607A5BEDF7}")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{E2BF9676-5F8F-435C-97EB-11607A5BEDF7}", "")],
+        },
+        new TweakDef
+        {
+            Id = "ctx-remove-give-access-to",
+            Label = "Remove Give Access To Menu",
+            Category = "Context Menu",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Removes the 'Give access to' sharing option from the context menu. Default: visible.",
+            Tags = ["context-menu", "give-access", "sharing", "remove"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{F81E9010-6EA4-11CE-A7FF-00AA003CA9F6}", "")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{F81E9010-6EA4-11CE-A7FF-00AA003CA9F6}")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{F81E9010-6EA4-11CE-A7FF-00AA003CA9F6}", "")],
+        },
+        new TweakDef
+        {
+            Id = "ctx-remove-troubleshoot-compatibility",
+            Label = "Remove 'Troubleshoot Compatibility' from Context Menu",
+            Category = "Context Menu",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes the 'Troubleshoot compatibility' option from file context menus. Default: shown.",
+            Tags = ["context-menu", "troubleshoot", "compatibility", "remove"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{1d27f844-3a1f-4410-85ac-14651078412d}", "")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{1d27f844-3a1f-4410-85ac-14651078412d}")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked", "{1d27f844-3a1f-4410-85ac-14651078412d}", "")],
+        },
     ];
 }

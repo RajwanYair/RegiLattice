@@ -264,5 +264,47 @@ internal static class VsCode
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "gpu.acceleration", "on")],
         },
+        new TweakDef
+        {
+            Id = "vscode-disable-telemetry",
+            Label = "Disable VS Code Telemetry via Policy",
+            Category = "VS Code",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables VS Code telemetry collection via machine-wide policy. Default: enabled.",
+            Tags = ["vscode", "telemetry", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "telemetry.telemetryLevel", "off")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "telemetry.telemetryLevel")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "telemetry.telemetryLevel", "off")],
+        },
+        new TweakDef
+        {
+            Id = "vscode-disable-natural-language-search",
+            Label = "Disable VS Code Natural Language Search",
+            Category = "VS Code",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the natural language search feature in VS Code settings (prevents Bing queries). Default: enabled.",
+            Tags = ["vscode", "search", "bing", "natural-language"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "workbench.settings.enableNaturalLanguageSearch", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "workbench.settings.enableNaturalLanguageSearch")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "workbench.settings.enableNaturalLanguageSearch", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vscode-disable-extension-recommendations",
+            Label = "Disable VS Code Extension Recommendations",
+            Category = "VS Code",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables extension recommendations in VS Code via machine policy. Default: enabled.",
+            Tags = ["vscode", "extensions", "recommendations", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "extensions.showRecommendationsOnlyOnDemand", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "extensions.showRecommendationsOnlyOnDemand")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "extensions.showRecommendationsOnlyOnDemand", 1)],
+        },
     ];
 }

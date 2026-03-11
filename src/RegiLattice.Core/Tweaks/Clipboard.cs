@@ -331,5 +331,83 @@ internal static class Clipboard
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2)],
         },
+        new TweakDef
+        {
+            Id = "clip-disable-clipboard-history",
+            Label = "Disable Clipboard History",
+            Category = "Clipboard & Drag-Drop",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows clipboard history via Group Policy. Only the last copied item is kept. Default: user setting.",
+            Tags = ["clipboard", "history", "disable", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clip-increase-drag-sensitivity",
+            Label = "Increase Drag Sensitivity to 10px",
+            Category = "Clipboard & Drag-Drop",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases the drag threshold from 4 to 10 pixels. Prevents accidental drag-and-drop. Default: 4 pixels.",
+            Tags = ["clipboard", "drag", "sensitivity", "threshold"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "10"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "10"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "4"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "10")],
+        },
+        new TweakDef
+        {
+            Id = "clip-disable-drop-target-hovering",
+            Label = "Disable Drop Target Window Activation",
+            Category = "Clipboard & Drag-Drop",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents windows from coming to the foreground when hovering a drag item over a taskbar button. Default: enabled.",
+            Tags = ["clipboard", "drag-drop", "window", "activation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragFromMaximize", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragFromMaximize", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragFromMaximize", "0")],
+        },
+        new TweakDef
+        {
+            Id = "clip-disable-clipboard-history-roaming",
+            Label = "Disable Clipboard History Roaming",
+            Category = "Clipboard & Drag-Drop",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents clipboard history from roaming across devices signed into the same Microsoft account. Default: user-configurable.",
+            Tags = ["clipboard", "history", "roaming", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clip-set-drag-sensitivity-6",
+            Label = "Increase Drag Sensitivity to 6px",
+            Category = "Clipboard & Drag-Drop",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases the drag threshold to 6 pixels. Prevents accidental drag when clicking. Default: 4px.",
+            Tags = ["clipboard", "drag", "sensitivity", "threshold"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "6")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "6")],
+        },
     ];
 }

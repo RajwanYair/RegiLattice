@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -558,6 +558,62 @@ internal static class Privacy
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMessaging", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMessaging")],
             DetectOps = [RegOp.CheckDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMessaging", 2)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-settings-sync",
+            Label = "Disable Settings Sync to Microsoft Cloud",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables syncing Windows settings (theme, passwords, language) to Microsoft cloud. Default: enabled.",
+            Tags = ["privacy", "sync", "cloud", "settings"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync", "DisableSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync", "DisableSettingSync")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync", "DisableSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-input-personalization",
+            Label = "Disable Input Personalization (Inking & Typing)",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables online speech recognition, inking, and typing personalization. Prevents sending typing data to Microsoft. Default: enabled.",
+            Tags = ["privacy", "input", "inking", "typing", "personalization"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-feedback-notifications",
+            Label = "Disable Feedback Notifications",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets feedback frequency to never. Prevents Windows from asking for feedback. Default: automatic.",
+            Tags = ["privacy", "feedback", "notifications", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-tailored-experiences",
+            Label = "Disable Tailored Experiences",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables tailored experiences with diagnostic data. Prevents Microsoft from using your data to customize tips and recommendations. Default: enabled.",
+            Tags = ["privacy", "tailored", "experiences", "recommendations"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
         },
     ];
 }

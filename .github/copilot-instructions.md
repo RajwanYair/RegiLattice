@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-20 (v2.0.0, ~1 490 tweaks, 69 categories, 129 tests).
+> Last verified: 2025-07-20 (v2.0.0, ~1 828 tweaks, 72 categories, 129 tests).
 
 ## ⛔ CRITICAL: PowerShell ONLY — NO Unix/Bash Commands
 
@@ -55,7 +55,7 @@ Rules:
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 2.0.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | ~1 490 across 69 categories                                      |
+| Tweaks      | ~1 828 across 72 categories                                      |
 | Tests       | 129 passing (93 Core + 36 GUI)                                   |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
@@ -89,11 +89,11 @@ RegiLattice.sln
 │   │   │   ├── HardwareInfo.cs      # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs            # i18n string table
 │   │   │   └── Ratings.cs           # Tweak rating system (1-5 stars)
-│   │   └── Tweaks/                  # 68 category modules, ~1 490 tweaks total
+│   │   └── Tweaks/                  # 71 category modules, ~1 828 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
-│   │       ├── ...                  # 65 more
+│   │       ├── ...                  # 68 more
 │   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/            # WinForms application
 │   │   ├── Program.cs              # Entry point
@@ -289,10 +289,12 @@ Canonical category slugs:
 | `display`  | Display                     | `printing` | Printing              |
 | `dns`      | DNS & Networking Advanced   | `priv`     | Privacy               |
 | `edge`     | Edge                        | `rdp`      | Remote Desktop        |
+| `enc`      | Encryption                  | `recovery` | Recovery              |
 | `explorer` | Explorer                    | `schtask`  | Scheduled Tasks       |
 | `firefox`  | Firefox                     | `scoop`    | Scoop Tools           |
 | `font`     | Fonts                       | `sec`      | Security              |
 | `fs`       | File System                 | `shell`    | Shell                 |
+| `fw`       | Firewall                    |            |                       |
 | `game`     | Gaming                      | `snap`     | Snap & Multitasking   |
 | `gpu`      | GPU / Graphics              | `speech`   | Voice Access & Speech |
 | `idx`      | Indexing & Search           | `ss`       | Screensaver & Lock    |

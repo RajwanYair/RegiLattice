@@ -401,5 +401,67 @@ internal static class WindowsUpdate
             Tags = ["update", "ux", "policy", "access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
         },
+        new TweakDef
+        {
+            Id = "wu-set-active-hours-8-20",
+            Label = "Set Windows Update Active Hours (8 AM – 8 PM)",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets Windows Update active hours to 8 AM – 8 PM. No restart prompts during this window. Default: auto.",
+            Tags = ["update", "active-hours", "restart", "schedule"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings"],
+            ApplyOps = [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings", "ActiveHoursStart", 8),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings", "ActiveHoursEnd", 20),
+            ],
+            RemoveOps = [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings", "ActiveHoursStart"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings", "ActiveHoursEnd"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings", "ActiveHoursStart", 8)],
+        },
+        new TweakDef
+        {
+            Id = "wu-defer-quality-updates-7days",
+            Label = "Defer Quality Updates by 7 Days",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Defers quality (security/bug fix) updates by 7 days. Gives time for known issues to surface. Default: 0 days.",
+            Tags = ["update", "defer", "quality", "days"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays", 7)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays", 7)],
+        },
+        new TweakDef
+        {
+            Id = "wu-defer-feature-updates-90days",
+            Label = "Defer Feature Updates by 90 Days",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Defers feature updates (major releases) by 90 days. Ensures stability before adopting new builds. Default: 0 days.",
+            Tags = ["update", "defer", "feature", "days"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdatesPeriodInDays", 90)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdatesPeriodInDays")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdatesPeriodInDays", 90)],
+        },
+        new TweakDef
+        {
+            Id = "wu-disable-seeker-updates",
+            Label = "Disable Optional Update Seeker",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from seeking optional quality updates. Only mandatory updates are installed. Default: seeks all.",
+            Tags = ["update", "optional", "seeker", "quality"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetDisableUXWUAccess", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetDisableUXWUAccess")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetDisableUXWUAccess", 1)],
+        },
     ];
 }
