@@ -15,9 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project | Tests | Covers |
 |---------|-------|--------|
-| `RegiLattice.Core.Tests` | 93 | TweakDef, TweakEngine, RegistrySession, Services |
-| `RegiLattice.GUI.Tests` | 36 | Theme, PackageManagerValidation |
-| **Total** | **129** | |
+| `RegiLattice.Core.Tests` | 112 | TweakDef, TweakEngine, RegistrySession, Services |
+| `RegiLattice.CLI.Tests` | 52 | CLI argument parsing (ParseArgs, CliArgs) |
+| `RegiLattice.GUI.Tests` | 39 | Theme, PackageManagerValidation |
+| **Total** | **203** | |
 
 ## Running Tests
 
@@ -53,6 +54,8 @@ tests/
 │   ├── TweakEngineTests.cs      # Engine registration, lookup, search, profiles, batch
 │   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing
 │   └── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+├── RegiLattice.CLI.Tests/
+│   └── ParseArgsTests.cs        # CLI argument parsing, flags, options, scope, positional args
 └── RegiLattice.GUI.Tests/
     ├── ThemeTests.cs             # Theme switching, colour attributes, all 4 themes
     └── PackageManagerValidationTests.cs  # Package name validation

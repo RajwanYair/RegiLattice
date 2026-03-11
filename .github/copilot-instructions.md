@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-11 (v3.1.0, 1 360 tweaks, 72 categories, 129 tests).
+> Last verified: 2025-07-20 (v3.1.0, 1 360 tweaks, 72 categories, 203 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 129 tests across 6 test files                     |
+| Test        | xUnit 2.9.2 — 203 tests across 7 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.1.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 1 360 across 72 categories                                       |
-| Tests       | 129 passing (93 Core + 36 GUI)                                   |
+| Tests       | 203 passing (112 Core + 52 CLI + 39 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -132,12 +132,14 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/           # Console application
 │       └── Program.cs             # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 93 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 112 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   └── ServicesTests.cs
-│   └── RegiLattice.GUI.Tests/    # 36 xUnit tests
+│   ├── RegiLattice.CLI.Tests/     # 52 xUnit tests
+│   │   └── ParseArgsTests.cs
+│   └── RegiLattice.GUI.Tests/    # 39 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
 └── archive/python/               # Archived Python v1.x codebase
@@ -340,6 +342,7 @@ Canonical category slugs:
 - `tests/RegiLattice.Core.Tests/TweakEngineTests.cs` — engine registration, lookup, search, profiles, batch ops
 - `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing
 - `tests/RegiLattice.Core.Tests/ServicesTests.cs` — Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+- `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
 - `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes
 - `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation
 
