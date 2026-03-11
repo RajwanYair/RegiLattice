@@ -20,7 +20,7 @@ internal sealed class PSModuleManagerDialog : Form
     internal PSModuleManagerDialog()
     {
         Text = "⚡ PowerShell Modules Manager";
-        Icon = SystemIcons.Application;
+        Icon = AppIcons.PSModuleIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(560, 500);

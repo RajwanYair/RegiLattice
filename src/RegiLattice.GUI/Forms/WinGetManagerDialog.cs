@@ -20,7 +20,7 @@ internal sealed class WinGetManagerDialog : Form
     internal WinGetManagerDialog()
     {
         Text = "📦 WinGet Package Manager";
-        Icon = SystemIcons.Application;
+        Icon = AppIcons.WinGetIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(580, 520);

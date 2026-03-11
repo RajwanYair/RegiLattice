@@ -19,7 +19,7 @@ internal sealed class PipManagerDialog : Form
     internal PipManagerDialog()
     {
         Text = "🐍 pip Package Manager";
-        Icon = SystemIcons.Application;
+        Icon = AppIcons.PipIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(560, 500);

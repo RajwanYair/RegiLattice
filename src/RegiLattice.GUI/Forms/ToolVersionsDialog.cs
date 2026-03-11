@@ -1,3 +1,4 @@
+using RegiLattice.Core;
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;
@@ -8,20 +9,24 @@ internal sealed class ToolVersionsDialog : Form
     private readonly ListView _lstTools = new();
     private readonly Label _lblStatus = new();
     private readonly Button _btnRefresh = new();
+    private readonly CheckBox _chkUpdates = new();
+    private readonly bool _checkUpdates;
 
     private CancellationTokenSource _cts = new();
 
     internal ToolVersionsDialog()
     {
         Text = "🔧 External Tool Versions";
-        Icon = SystemIcons.Information;
+        Icon = AppIcons.ToolVersionsIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
-        MinimumSize = new Size(460, 360);
-        ClientSize = new Size(500, 420);
+        MinimumSize = new Size(560, 380);
+        ClientSize = new Size(620, 440);
         BackColor = AppTheme.Bg;
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
+
+        _checkUpdates = AppConfig.Load().CheckToolUpdates;
 
         BuildLayout();
         Load += async (_, _) => await RefreshAsync();
@@ -56,9 +61,10 @@ internal sealed class ToolVersionsDialog : Form
         _lstTools.ForeColor = AppTheme.Fg;
         _lstTools.Columns.AddRange(
         [
-            new ColumnHeader { Text = "Tool", Width = 140 },
-            new ColumnHeader { Text = "Version", Width = 160 },
-            new ColumnHeader { Text = "Status", Width = 140 },
+            new ColumnHeader { Text = "Tool", Width = 130 },
+            new ColumnHeader { Text = "Installed", Width = 120 },
+            new ColumnHeader { Text = "Latest", Width = 120 },
+            new ColumnHeader { Text = "Status", Width = 160 },
         ]);
 
         var ctrlPanel = new Panel { Dock = DockStyle.Bottom, Height = 42, BackColor = AppTheme.Surface };
@@ -69,33 +75,66 @@ internal sealed class ToolVersionsDialog : Form
         _btnRefresh.Location = new Point(8, 7);
         _btnRefresh.Size = new Size(90, 27);
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
-        ctrlPanel.Controls.Add(_btnRefresh);
 
+        _chkUpdates.Text = "Check for updates";
+        _chkUpdates.Checked = _checkUpdates;
+        _chkUpdates.ForeColor = AppTheme.FgDim;
+        _chkUpdates.Location = new Point(110, 10);
+        _chkUpdates.AutoSize = true;
+
+        ctrlPanel.Controls.AddRange([_btnRefresh, _chkUpdates]);
         Controls.AddRange([ctrlPanel, _lstTools, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()
     {
         _btnRefresh.Enabled = false;
-        _lblStatus.Text = "Checking tool versions...";
+        bool checkUpdates = _chkUpdates.Checked;
+        _lblStatus.Text = checkUpdates
+            ? "Checking tool versions and available updates..."
+            : "Checking tool versions...";
         _lblStatus.ForeColor = AppTheme.FgDim;
         _lstTools.Items.Clear();
 
         try
         {
-            var tools = await ToolVersionChecker.CheckAllAsync(_cts.Token);
+            var tools = checkUpdates
+                ? await ToolVersionChecker.CheckAllWithUpdatesAsync(_cts.Token)
+                : await ToolVersionChecker.CheckAllAsync(_cts.Token);
+
             _lstTools.Items.Clear();
+            int updateCount = 0;
             foreach (var tool in tools)
             {
                 var item = new ListViewItem(tool.Name);
                 item.SubItems.Add(tool.InstalledVersion ?? "—");
-                item.SubItems.Add(tool.IsInstalled ? "Installed" : "Not Found");
-                item.ForeColor = tool.IsInstalled ? AppTheme.Green : AppTheme.Red;
+                item.SubItems.Add(tool.LatestVersion ?? "—");
+
+                if (!tool.IsInstalled)
+                {
+                    item.SubItems.Add("Not Found");
+                    item.ForeColor = AppTheme.Red;
+                }
+                else if (tool.UpdateAvailable)
+                {
+                    item.SubItems.Add("⬆ Update Available");
+                    item.ForeColor = AppTheme.Yellow;
+                    updateCount++;
+                }
+                else
+                {
+                    item.SubItems.Add("✓ Up to Date");
+                    item.ForeColor = AppTheme.Green;
+                }
                 _lstTools.Items.Add(item);
             }
+
             int found = tools.Count(t => t.IsInstalled);
-            _lblStatus.Text = $"{found}/{tools.Count} tool(s) found";
-            _lblStatus.ForeColor = AppTheme.Fg;
+            string statusText = $"{found}/{tools.Count} tool(s) found";
+            if (checkUpdates && updateCount > 0)
+                statusText += $"  •  {updateCount} update(s) available";
+            _lblStatus.Text = statusText;
+            _lblStatus.ForeColor = updateCount > 0 ? AppTheme.Yellow : AppTheme.Fg;
         }
         catch (Exception ex)
         {

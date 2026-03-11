@@ -19,7 +19,7 @@ internal sealed class ChocolateyManagerDialog : Form
     internal ChocolateyManagerDialog()
     {
         Text = "🍫 Chocolatey Package Manager";
-        Icon = SystemIcons.Application;
+        Icon = AppIcons.ChocolateyIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(560, 500);
