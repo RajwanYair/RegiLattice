@@ -1,12 +1,12 @@
 // RegiLattice.Core — Services/Elevation.cs
-// Native UAC elevation helpers — replaces Python elevation.py.
+// UAC elevation helpers.
 
 using System.Diagnostics;
 using System.Security.Principal;
 
 namespace RegiLattice.Core;
 
-/// <summary>UAC privilege management using native .NET APIs.</summary>
+/// <summary>UAC privilege management using .NET APIs.</summary>
 public static class Elevation
 {
     /// <summary>Returns true if the current process has administrator privileges.</summary>

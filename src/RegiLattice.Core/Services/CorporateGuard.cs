@@ -1,6 +1,5 @@
 // RegiLattice.Core — Services/CorporateGuard.cs
-// Native corporate environment detection — replaces Python corpguard.py.
-// Uses native .NET APIs (registry, WMI, P/Invoke) — no subprocess.
+// Corporate environment detection using .NET APIs (registry, WMI, P/Invoke).
 
 using System.Management;
 using System.Runtime.InteropServices;

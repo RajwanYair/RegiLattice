@@ -24,8 +24,8 @@ internal static partial class ScoopManager
             .Select(l => l.Trim())
             .Where(l => l.Length > 0
                         && !l.StartsWith("Installed", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("Name",      StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("---",       StringComparison.OrdinalIgnoreCase))
+                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
+                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase))
             .Select(l => l.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0])
             .Where(n => !string.IsNullOrEmpty(n))
             .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)

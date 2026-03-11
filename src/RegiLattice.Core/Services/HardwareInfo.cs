@@ -1,5 +1,5 @@
 // RegiLattice.Core — Services/HardwareInfo.cs
-// Native hardware detection using WMI — replaces Python hwinfo.py.
+// Hardware detection using WMI and P/Invoke.
 
 using System.Management;
 using System.Runtime.InteropServices;
@@ -27,7 +27,7 @@ public sealed class HwProfile
     public int GuiBatchSize { get; init; }
 }
 
-/// <summary>Native hardware detection using WMI and P/Invoke.</summary>
+/// <summary>Hardware detection using WMI and P/Invoke.</summary>
 public static class HardwareInfo
 {
     private static HwProfile? _cached;

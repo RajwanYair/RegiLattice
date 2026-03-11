@@ -377,11 +377,14 @@ public sealed class TweakEngine
     {
         var list = _allTweaks.Select(t => new
         {
-            t.Id, t.Label, t.Category,
+            t.Id,
+            t.Label,
+            t.Category,
             status = DetectStatus(t).ToString().ToLowerInvariant(),
             needs_admin = t.NeedsAdmin,
             corp_safe = t.CorpSafe,
-            t.Tags, registry_keys = t.RegistryKeys,
+            t.Tags,
+            registry_keys = t.RegistryKeys,
             t.Description,
         }).ToList();
         var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });

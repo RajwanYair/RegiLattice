@@ -6,8 +6,8 @@ using RegiLattice.Core.Models;
 namespace RegiLattice.GUI.Forms;
 
 /// <summary>
-/// RegiLattice Native GUI — main window.
-/// Uses TweakEngine directly (no PythonBridge / shell forking).
+/// RegiLattice GUI — main window.
+/// Uses TweakEngine directly for all registry operations.
 /// </summary>
 public partial class MainForm : Form
 {
@@ -21,10 +21,17 @@ public partial class MainForm : Form
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
+        SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         InitializeComponent();
-        Text = "RegiLattice — Native GUI";
+        Text = "RegiLattice";
         Icon = SystemIcons.Application;
-        ApplyDarkTheme();
+
+        // Load saved theme from config
+        var cfg = AppConfig.Load();
+        AppTheme.SetTheme(cfg.Theme);
+        _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
+
+        ApplyTheme();
     }
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -40,20 +47,22 @@ public partial class MainForm : Form
         base.OnFormClosing(e);
     }
 
-    // ── Dark theme ─────────────────────────────────────────────────────────
-    private void ApplyDarkTheme()
+    // ── Theme ──────────────────────────────────────────────────────────────
+    private void ApplyTheme()
     {
+        SuspendLayout();
+
         BackColor = AppTheme.Bg;
         ForeColor = AppTheme.Fg;
 
         var renderer = new DarkToolStripRenderer();
         _toolStrip.BackColor = AppTheme.Surface;
         _toolStrip.ForeColor = AppTheme.Fg;
-        _toolStrip.Renderer  = renderer;
+        _toolStrip.Renderer = renderer;
 
         _menuStrip.BackColor = AppTheme.Surface;
         _menuStrip.ForeColor = AppTheme.Fg;
-        _menuStrip.Renderer  = renderer;
+        _menuStrip.Renderer = renderer;
 
         _treeView.BackColor = AppTheme.Bg;
         _treeView.ForeColor = AppTheme.Fg;
@@ -61,8 +70,10 @@ public partial class MainForm : Form
         _listView.BackColor = AppTheme.Surface;
         _listView.ForeColor = AppTheme.Fg;
         _listView.OwnerDraw = true;
+        _listView.DrawColumnHeader -= OnDrawColumnHeader;
+        _listView.DrawSubItem -= OnDrawSubItem;
         _listView.DrawColumnHeader += OnDrawColumnHeader;
-        _listView.DrawSubItem     += OnDrawSubItem;
+        _listView.DrawSubItem += OnDrawSubItem;
 
         _statusStrip.BackColor = AppTheme.Overlay;
         _statusStrip.ForeColor = AppTheme.Fg;
@@ -70,9 +81,19 @@ public partial class MainForm : Form
         _searchBox.BackColor = AppTheme.Overlay;
         _searchBox.ForeColor = AppTheme.Fg;
 
+        _logBox.BackColor = AppTheme.Bg;
+        _logBox.ForeColor = AppTheme.Green;
+
         _listContextMenu.BackColor = AppTheme.Surface;
         _listContextMenu.ForeColor = AppTheme.Fg;
-        _listContextMenu.Renderer  = renderer;
+        _listContextMenu.Renderer = renderer;
+
+        // Re-colour tree nodes
+        foreach (TreeNode node in _treeView.Nodes)
+            node.ForeColor = AppTheme.Fg;
+
+        ResumeLayout(true);
+        _listView.Invalidate();
     }
 
     // ── Owner-draw for dark ListView ───────────────────────────────────────
@@ -100,9 +121,9 @@ public partial class MainForm : Form
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
             fg = status switch
             {
-                TweakResult.Applied    => AppTheme.Green,
+                TweakResult.Applied => AppTheme.Green,
                 TweakResult.NotApplied => AppTheme.Red,
-                _                      => AppTheme.Yellow,
+                _ => AppTheme.Yellow,
             };
         }
 
@@ -232,9 +253,9 @@ public partial class MainForm : Form
             if (profileCats is not null && !profileCats.Contains(kvp.Key))
                 continue;
 
-            int count   = kvp.Value.Count;
+            int count = kvp.Value.Count;
             int applied = kvp.Value.Count(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied);
-            var node    = new TreeNode($"{kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
+            var node = new TreeNode($"{kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
             node.ForeColor = AppTheme.Fg;
             _treeView.Nodes.Add(node);
             if (kvp.Key == previousCat) selectNode = node;
@@ -255,8 +276,8 @@ public partial class MainForm : Form
 
     private void PopulateList(string category)
     {
-        string filter   = _filterCombo.SelectedItem?.ToString() ?? "All";
-        string search   = _searchBox.Text.Trim();
+        string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
+        string search = _searchBox.Text.Trim();
         string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
 
         _listView.BeginUpdate();
@@ -276,9 +297,9 @@ public partial class MainForm : Form
         {
             TweakResult target = filter switch
             {
-                "Applied"     => TweakResult.Applied,
+                "Applied" => TweakResult.Applied,
                 "Not Applied" => TweakResult.NotApplied,
-                _             => TweakResult.Unknown,
+                _ => TweakResult.Unknown,
             };
             filtered = filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
         }
@@ -286,10 +307,10 @@ public partial class MainForm : Form
         // Scope filter
         if (scopeSel != "All Scopes")
         {
-            bool wantUser    = scopeSel.StartsWith("User",    StringComparison.OrdinalIgnoreCase);
+            bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
             bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
             filtered = filtered.Where(t =>
-                wantUser    ? t.Scope == TweakScope.User :
+                wantUser ? t.Scope == TweakScope.User :
                 wantMachine ? t.Scope == TweakScope.Machine :
                 true);
         }
@@ -308,32 +329,32 @@ public partial class MainForm : Form
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
             string statusText = status switch
             {
-                TweakResult.Applied    => "Applied",
+                TweakResult.Applied => "Applied",
                 TweakResult.NotApplied => "Default",
-                TweakResult.Error      => "Error",
-                _                      => "Unknown",
+                TweakResult.Error => "Error",
+                _ => "Unknown",
             };
 
             var item = new ListViewItem(td.Label) { Tag = td, UseItemStyleForSubItems = false };
             Color statusColor = status switch
             {
-                TweakResult.Applied    => AppTheme.Green,
+                TweakResult.Applied => AppTheme.Green,
                 TweakResult.NotApplied => AppTheme.Red,
-                _                      => AppTheme.Yellow,
+                _ => AppTheme.Yellow,
             };
 
             string scopeBadge = td.Scope switch
             {
-                TweakScope.User    => "USER",
+                TweakScope.User => "USER",
                 TweakScope.Machine => "MACHINE",
-                TweakScope.Both    => "BOTH",
-                _                  => "?",
+                TweakScope.Both => "BOTH",
+                _ => "?",
             };
 
-            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, statusText)   { ForeColor = statusColor });
-            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, scopeBadge)    { ForeColor = AppTheme.Accent });
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, statusText) { ForeColor = statusColor });
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, scopeBadge) { ForeColor = AppTheme.Accent });
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.NeedsAdmin ? "Yes" : "No"));
-            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.CorpSafe   ? "Yes" : "No"));
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.CorpSafe ? "Yes" : "No"));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.Description));
             _listView.Items.Add(item);
         }
@@ -407,8 +428,8 @@ public partial class MainForm : Form
         }
         using var dlg = new SaveFileDialog
         {
-            Title    = "Export as PowerShell Script",
-            Filter   = "PowerShell Script|*.ps1",
+            Title = "Export as PowerShell Script",
+            Filter = "PowerShell Script|*.ps1",
             FileName = "regilattice-tweaks.ps1",
         };
         if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -439,8 +460,8 @@ public partial class MainForm : Form
         }
         using var dlg = new SaveFileDialog
         {
-            Title    = "Export selected IDs as JSON",
-            Filter   = "JSON file|*.json",
+            Title = "Export selected IDs as JSON",
+            Filter = "JSON file|*.json",
             FileName = "regilattice-selection.json",
         };
         if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -456,7 +477,7 @@ public partial class MainForm : Form
     {
         using var dlg = new OpenFileDialog
         {
-            Title  = "Import tweak IDs from JSON",
+            Title = "Import tweak IDs from JSON",
             Filter = "JSON file|*.json",
         };
         if (dlg.ShowDialog(this) != DialogResult.OK) return;
@@ -513,10 +534,10 @@ public partial class MainForm : Form
 
     private void UpdateCounters()
     {
-        int applied    = _statusCache.Values.Count(r => r == TweakResult.Applied);
+        int applied = _statusCache.Values.Count(r => r == TweakResult.Applied);
         int notApplied = _statusCache.Values.Count(r => r == TweakResult.NotApplied);
-        int unknown    = _statusCache.Values.Count(r => r == TweakResult.Unknown);
-        int error      = _statusCache.Values.Count(r => r == TweakResult.Error);
+        int unknown = _statusCache.Values.Count(r => r == TweakResult.Unknown);
+        int error = _statusCache.Values.Count(r => r == TweakResult.Error);
         _statusLabel.Text = $"Total: {_statusCache.Count} | Applied: {applied} | Default: {notApplied} | Unknown: {unknown} | Errors: {error}";
     }
 
@@ -529,10 +550,10 @@ public partial class MainForm : Form
     private void SetBusy(bool busy, string? message = null)
     {
         _progressBar.Visible = busy;
-        _progressBar.Style   = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
-        _btnApply.Enabled    = !busy;
-        _btnRemove.Enabled   = !busy;
-        _btnRefresh.Enabled  = !busy;
+        _progressBar.Style = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
+        _btnApply.Enabled = !busy;
+        _btnRemove.Enabled = !busy;
+        _btnRefresh.Enabled = !busy;
         if (message is not null) SetStatus(message);
     }
 
@@ -558,21 +579,34 @@ public partial class MainForm : Form
     private void OnProfileChanged(object? sender, EventArgs e)
         => PopulateTree();
 
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        if (_themeCombo.SelectedItem is not string name) return;
+        AppTheme.SetTheme(name);
+        ApplyTheme();
+        PopulateTree();
+
+        // Persist choice
+        var cfg = AppConfig.Load();
+        cfg.Theme = name;
+        cfg.Save();
+    }
+
     private void OnSearchTextChanged(object? sender, EventArgs e)
         => RefreshListView();
 
     private void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Control && e.KeyCode == Keys.Enter)  { OnApplyClicked(this, e);    e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.Delete) { OnRemoveClicked(this, e);   e.Handled = true; return; }
-        if (e.KeyCode == Keys.F5)                  { OnRefreshClicked(this, e);  e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.F)      { _searchBox.Focus();         e.Handled = true; return; }
-        if (e.KeyCode == Keys.Escape)              { _searchBox.Text = "";       e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.A)      { SelectAllListItems();       e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.D)      { DeselectAllListItems();     e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.I)      { InvertListSelection();      e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.L)      { ToggleLogPanel();           e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.E)      { _treeView.ExpandAll();      e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.Enter) { OnApplyClicked(this, e); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.Delete) { OnRemoveClicked(this, e); e.Handled = true; return; }
+        if (e.KeyCode == Keys.F5) { OnRefreshClicked(this, e); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.F) { _searchBox.Focus(); e.Handled = true; return; }
+        if (e.KeyCode == Keys.Escape) { _searchBox.Text = ""; e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.A) { SelectAllListItems(); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.D) { DeselectAllListItems(); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.I) { InvertListSelection(); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.L) { ToggleLogPanel(); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.E) { _treeView.ExpandAll(); e.Handled = true; return; }
     }
 
     // ── Dark ToolStrip Renderer ────────────────────────────────────────────

@@ -1,5 +1,5 @@
 // RegiLattice.Core — Registry/RegistrySession.cs
-// Native Windows registry wrapper using Microsoft.Win32.Registry.
+// Windows registry wrapper using Microsoft.Win32.Registry.
 // Replaces the Python RegistrySession entirely — zero subprocess, zero P/Invoke.
 
 using System.Text.Json;
@@ -10,7 +10,7 @@ namespace RegiLattice.Core.Registry;
 
 /// <summary>
 /// Thread-safe registry read/write/backup wrapper.
-/// All operations go through native <see cref="Microsoft.Win32.Registry"/> APIs.
+/// All operations go through <see cref="Microsoft.Win32.Registry"/> APIs.
 /// </summary>
 public sealed class RegistrySession
 {

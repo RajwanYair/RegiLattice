@@ -1,5 +1,5 @@
 // RegiLattice.CLI — Program.cs
-// Native command-line interface — replaces Python cli.py entirely.
+// RegiLattice command-line interface.
 // All features: apply, remove, list, status, search, profiles, snapshots, doctor, etc.
 
 using System.Runtime.InteropServices;
@@ -43,31 +43,31 @@ internal static class Program
     private static int Dispatch(CliArgs a)
     {
         // Standalone flags (order matters — first match wins)
-        if (a.Doctor)       return RunDoctor();
-        if (a.HwInfo)       return RunHwInfo();
+        if (a.Doctor) return RunDoctor();
+        if (a.HwInfo) return RunHwInfo();
         if (a.ListProfiles) return RunListProfiles();
-        if (a.Validate)     return RunValidate();
-        if (a.Stats)        return RunStats();
+        if (a.Validate) return RunValidate();
+        if (a.Stats) return RunStats();
         if (a.ShowCategories) return RunCategories(a);
-        if (a.ShowTags)     return RunTags();
+        if (a.ShowTags) return RunTags();
         if (a.ExportReg is not null) return RunExportReg(a.ExportReg);
-        if (a.Report)       return RunReport(a);
-        if (a.Check)        return RunCheck();
+        if (a.Report) return RunReport(a);
+        if (a.Check) return RunCheck();
         if (a.Diff is not null) return RunDiff(a.Diff);
-        if (a.ShowList)     return RunList(a);
+        if (a.ShowList) return RunList(a);
         if (a.Search is not null) return RunSearch(a);
         if (a.ExportJson is not null) return RunExportJson(a.ExportJson);
         if (a.Snapshot is not null) return RunSaveSnapshot(a.Snapshot);
-        if (a.Restore is not null)  return RunRestoreSnapshot(a.Restore, a.Force);
+        if (a.Restore is not null) return RunRestoreSnapshot(a.Restore, a.Force);
         if (a.SnapshotDiffA is not null && a.SnapshotDiffB is not null)
             return RunSnapshotDiff(a.SnapshotDiffA, a.SnapshotDiffB, a.HtmlPath);
-        if (a.Profile is not null)  return RunApplyProfile(a);
+        if (a.Profile is not null) return RunApplyProfile(a);
         if (a.Category is not null && a.Mode is "apply" or "remove")
             return RunCategoryAction(a);
         if (a.ImportJson is not null && a.Mode is "apply" or "remove")
             return RunImportJson(a);
-        if (a.Gui)          return RunGui();
-        if (a.Menu)         return RunMenu(a.Force);
+        if (a.Gui) return RunGui();
+        if (a.Menu) return RunMenu(a.Force);
 
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null) return RunStatus(a.Tweak);
@@ -899,7 +899,7 @@ internal static class Program
     private static void PrintHelp()
     {
         Console.WriteLine($"""
-            RegiLattice v{Version} — Native Windows registry tweak toolkit
+            RegiLattice v{Version} — Windows registry tweak toolkit
 
             Usage: regilattice [mode] [tweak] [options]
 
@@ -974,23 +974,23 @@ internal static class Program
                     Console.WriteLine($"regilattice {Version} ({PlatformSummaryStatic()})");
                     return null;
 
-                case "--list":          p.ShowList = true; break;
-                case "--force":         p.Force = true; break;
-                case "--gui":           p.Gui = true; break;
-                case "--menu":          p.Menu = true; break;
-                case "--dry-run":       p.DryRun = true; break;
+                case "--list": p.ShowList = true; break;
+                case "--force": p.Force = true; break;
+                case "--gui": p.Gui = true; break;
+                case "--menu": p.Menu = true; break;
+                case "--dry-run": p.DryRun = true; break;
                 case "-y" or "--assume-yes": p.AssumeYes = true; break;
-                case "--doctor":        p.Doctor = true; break;
-                case "--hwinfo":        p.HwInfo = true; break;
+                case "--doctor": p.Doctor = true; break;
+                case "--hwinfo": p.HwInfo = true; break;
                 case "--list-profiles": p.ListProfiles = true; break;
-                case "--validate":      p.Validate = true; break;
-                case "--stats":         p.Stats = true; break;
+                case "--validate": p.Validate = true; break;
+                case "--stats": p.Stats = true; break;
                 case "--categories" or "--list-categories": p.ShowCategories = true; break;
-                case "--tags":          p.ShowTags = true; break;
-                case "--report":        p.Report = true; break;
-                case "--check":         p.Check = true; break;
-                case "--corp-safe":     p.CorpSafe = true; break;
-                case "--needs-admin":   p.NeedsAdmin = true; break;
+                case "--tags": p.ShowTags = true; break;
+                case "--report": p.Report = true; break;
+                case "--check": p.Check = true; break;
+                case "--corp-safe": p.CorpSafe = true; break;
+                case "--needs-admin": p.NeedsAdmin = true; break;
 
                 case "--search":
                     if (++i < args.Length) p.Search = args[i];

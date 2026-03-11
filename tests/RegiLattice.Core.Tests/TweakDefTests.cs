@@ -10,9 +10,9 @@ public sealed class TweakDefTests
 {
     private static TweakDef Make(params string[] keys) => new()
     {
-        Id           = "test-id",
-        Label        = "Test Tweak",
-        Category     = "Test",
+        Id = "test-id",
+        Label = "Test Tweak",
+        Category = "Test",
         RegistryKeys = keys,
     };
 
