@@ -88,6 +88,9 @@ public partial class MainForm : Form
         _listContextMenu.ForeColor = AppTheme.Fg;
         _listContextMenu.Renderer = renderer;
 
+        _detailPanel.BackColor = AppTheme.Surface;
+        _detailLabel.ForeColor = AppTheme.FgDim;
+
         // Re-colour tree nodes
         foreach (TreeNode node in _treeView.Nodes)
             node.ForeColor = AppTheme.Fg;
@@ -114,9 +117,9 @@ public partial class MainForm : Form
         using var brush = new SolidBrush(bg);
         e.Graphics.FillRectangle(brush, e.Bounds);
 
-        // Status column (index 1) — coloured text
+        // Status column (index 2) — coloured text
         Color fg = AppTheme.Fg;
-        if (e.ColumnIndex == 1 && e.Item.Tag is TweakDef td)
+        if (e.ColumnIndex == 2 && e.Item.Tag is TweakDef td)
         {
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
             fg = status switch
@@ -255,7 +258,8 @@ public partial class MainForm : Form
 
             int count = kvp.Value.Count;
             int applied = kvp.Value.Count(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied);
-            var node = new TreeNode($"{kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
+            string icon = CategoryIcons.GetSymbol(CategoryIcons.GetIcon(kvp.Key));
+            var node = new TreeNode($"{icon} {kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
             node.ForeColor = AppTheme.Fg;
             _treeView.Nodes.Add(node);
             if (kvp.Key == previousCat) selectNode = node;
@@ -351,6 +355,8 @@ public partial class MainForm : Form
                 _ => "?",
             };
 
+            string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, kindSymbol) { ForeColor = AppTheme.Accent });
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, statusText) { ForeColor = statusColor });
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, scopeBadge) { ForeColor = AppTheme.Accent });
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.NeedsAdmin ? "Yes" : "No"));
@@ -525,6 +531,27 @@ public partial class MainForm : Form
         dlg.ShowDialog(this);
     }
 
+    private void OnOpenPipManager()
+    {
+        using var dlg = new PipManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenWinGetManager()
+    {
+        using var dlg = new WinGetManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenChocolateyManager()
+    {
+        using var dlg = new ChocolateyManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
     private void OnAbout()
     {
         bool isCorp = CorporateGuard.IsCorporateNetwork();
@@ -594,6 +621,36 @@ public partial class MainForm : Form
 
     private void OnSearchTextChanged(object? sender, EventArgs e)
         => RefreshListView();
+
+    private void OnListViewSelectionChanged(object? sender, EventArgs e)
+    {
+        if (_listView.FocusedItem?.Tag is TweakDef td)
+        {
+            var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
+            string statusStr = status switch
+            {
+                TweakResult.Applied => "Applied",
+                TweakResult.NotApplied => "Default",
+                TweakResult.Error => "Error",
+                _ => "Unknown",
+            };
+            string tags = td.Tags.Count > 0 ? string.Join(", ", td.Tags) : "—";
+            string keys = td.RegistryKeys.Count > 0
+                ? string.Join("; ", td.RegistryKeys.Take(3))
+                : (td.ApplyOps.Count > 0 ? "Registry operations" : "Command-based");
+            _detailLabel.Text =
+                $"ID: {td.Id}   |   Kind: {CategoryIcons.GetKindSymbol(td.Kind)} {td.Kind}   |   Status: {statusStr}   |   Scope: {td.Scope}\n" +
+                $"Tags: {tags}\n" +
+                $"Keys: {keys}" +
+                (td.SideEffects.Length > 0 ? $"\nSide Effects: {td.SideEffects}" : "");
+            _detailLabel.ForeColor = AppTheme.Fg;
+        }
+        else
+        {
+            _detailLabel.Text = "Select a tweak to see details.";
+            _detailLabel.ForeColor = AppTheme.FgDim;
+        }
+    }
 
     private void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
