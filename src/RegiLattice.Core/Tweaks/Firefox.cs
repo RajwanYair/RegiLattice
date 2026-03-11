@@ -138,5 +138,121 @@ internal static class Firefox
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.http.speculative-parallel-limit")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.http.speculative-parallel-limit", 0)],
         },
+        new TweakDef
+        {
+            Id = "firefox-disable-telemetry",
+            Label = "Disable Firefox Telemetry",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Firefox telemetry reporting via enterprise policy. Default: enabled.",
+            Tags = ["firefox", "telemetry", "privacy", "reporting"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableTelemetry", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableTelemetry")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableTelemetry", 1)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-disable-pocket",
+            Label = "Disable Firefox Pocket",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Pocket save-for-later service integration in Firefox. Default: enabled.",
+            Tags = ["firefox", "pocket", "service", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisablePocket", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisablePocket")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisablePocket", 1)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-disable-default-browser-check",
+            Label = "Disable Firefox Default Browser Check",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Firefox from prompting to set itself as default browser on launch. Default: prompts.",
+            Tags = ["firefox", "default-browser", "prompt", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DontCheckDefaultBrowser", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DontCheckDefaultBrowser")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DontCheckDefaultBrowser", 1)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-disable-crash-reporter",
+            Label = "Disable Firefox Crash Reporter",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Firefox crash reporter that sends crash data to Mozilla. Default: enabled.",
+            Tags = ["firefox", "crash", "reporter", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableCrashReporter", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableCrashReporter")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox", "DisableCrashReporter", 1)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-disable-password-manager",
+            Label = "Disable Firefox Password Manager",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the built-in Firefox password manager. Use a dedicated password manager. Default: enabled.",
+            Tags = ["firefox", "password", "manager", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "signon.rememberSignons", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "signon.rememberSignons")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "signon.rememberSignons", 0)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-enable-tracking-protection",
+            Label = "Enable Firefox Enhanced Tracking Protection (Strict)",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables strict Enhanced Tracking Protection in Firefox. Blocks trackers, cryptominers, fingerprinters. Default: standard.",
+            Tags = ["firefox", "tracking", "protection", "privacy", "strict"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.enabled", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.cryptomining.enabled", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.fingerprinting.enabled", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.enabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.cryptomining.enabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.fingerprinting.enabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "privacy.trackingprotection.enabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "firefox-disable-prefetch",
+            Label = "Disable Firefox Link Prefetching",
+            Category = "Firefox",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables link prefetching and DNS prefetching in Firefox. Saves bandwidth and improves privacy. Default: enabled.",
+            Tags = ["firefox", "prefetch", "bandwidth", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.prefetch-next", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.dns.disablePrefetch", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.prefetch-next"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.dns.disablePrefetch"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\Preferences", "network.prefetch-next", 0)],
+        },
     ];
 }

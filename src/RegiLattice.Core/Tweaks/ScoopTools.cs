@@ -1,5 +1,6 @@
 namespace RegiLattice.Core.Tweaks;
 
+using System.IO;
 using RegiLattice.Core.Models;
 
 internal static class ScoopTools
@@ -115,6 +116,89 @@ internal static class ScoopTools
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-virustotal-api-key",
+            Label = "Set Scoop VirusTotal API Key Variable",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the SCOOP_VIRUSTOTAL_API_KEY environment variable placeholder. Replace with your actual key for automatic malware scanning. Default: not set.",
+            Tags = ["scoop", "virustotal", "security", "scanning"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY", "YOUR_API_KEY_HERE")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY", "YOUR_API_KEY_HERE")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-disable-checkver",
+            Label = "Disable Scoop Auto-Version Check",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets SCOOP_NO_CHECKVER=1 to skip automatic version checks. Speeds up 'scoop status'. Default: checks versions.",
+            Tags = ["scoop", "checkver", "speed", "environment"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER", "1")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-add-extras-bucket",
+            Label = "Add Scoop Extras Bucket",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Adds the Scoop 'extras' bucket which contains popular GUI apps. Default: not added.",
+            Tags = ["scoop", "extras", "bucket", "apps"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop bucket add extras"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop bucket rm extras"),
+            DetectAction = () =>
+            {
+                var (exit, _, _) = ShellRunner.Run("scoop", ["bucket", "list"]);
+                return exit == 0;
+            },
+        },
+        new TweakDef
+        {
+            Id = "scoop-cleanup-all",
+            Label = "Clean Up All Scoop Caches",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Runs scoop cleanup * and scoop cache rm * to free disk space from old versions and downloads.",
+            Tags = ["scoop", "cleanup", "cache", "disk-space"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.RunPowerShell("scoop cleanup *");
+                ShellRunner.RunPowerShell("scoop cache rm *");
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "scoop-install-aria2",
+            Label = "Install Aria2 for Scoop Downloads",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs aria2 download manager for faster parallel Scoop downloads. Default: not installed.",
+            Tags = ["scoop", "aria2", "download", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install aria2"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall aria2"),
+            DetectAction = () =>
+            {
+                var scoopDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "scoop", "apps", "aria2");
+                return Directory.Exists(scoopDir);
+            },
         },
     ];
 }
