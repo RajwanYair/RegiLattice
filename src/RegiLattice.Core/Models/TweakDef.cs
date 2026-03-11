@@ -14,10 +14,20 @@ public enum TweakKind
 {
     /// <summary>Tweak modifies the Windows registry via RegOps.</summary>
     Registry,
-    /// <summary>Tweak runs an external command (e.g. bcdedit, wsl, powershell).</summary>
-    Command,
-    /// <summary>Tweak modifies a configuration file (e.g. JSON, INI).</summary>
+    /// <summary>Tweak runs a PowerShell cmdlet or script block.</summary>
+    PowerShell,
+    /// <summary>Tweak runs a system command (bcdedit, dism, netsh, etc.).</summary>
+    SystemCommand,
+    /// <summary>Tweak controls a Windows service (sc, Set-Service).</summary>
+    ServiceControl,
+    /// <summary>Tweak manages a scheduled task (schtasks, Register-ScheduledTask).</summary>
+    ScheduledTask,
+    /// <summary>Tweak modifies a configuration file (e.g. JSON, INI, .wslconfig).</summary>
     FileConfig,
+    /// <summary>Tweak modifies Group Policy via registry under Policies key.</summary>
+    GroupPolicy,
+    /// <summary>Tweak installs/configures a package manager tool.</summary>
+    PackageManager,
 }
 
 /// <summary>Standard icon identifier for a tweak category.</summary>
@@ -78,8 +88,11 @@ public sealed class TweakDef
     public Action<bool>? RemoveAction { get; init; }
     public Func<bool>? DetectAction { get; init; }
 
-    /// <summary>How this tweak performs its work (auto-detected if not set).</summary>
-    public TweakKind Kind => ApplyAction is not null ? TweakKind.Command : TweakKind.Registry;
+    /// <summary>Override the auto-detected TweakKind (set on tweaks with ApplyAction).</summary>
+    public TweakKind? KindHint { get; init; }
+
+    /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
+    public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
 
     /// <summary>Whether this tweak has any operations defined (not a stub).</summary>
     public bool HasOperations => ApplyOps.Count > 0 || ApplyAction is not null;
@@ -109,6 +122,16 @@ public sealed class TweakDef
     }
 
     public override string ToString() => $"{Id} [{Category}]";
+
+    private TweakKind DetectKindFromOps()
+    {
+        foreach (var op in ApplyOps)
+        {
+            if (op.Path.Contains(@"\Policies\", StringComparison.OrdinalIgnoreCase))
+                return TweakKind.GroupPolicy;
+        }
+        return TweakKind.Registry;
+    }
 }
 
 /// <summary>Single registry operation.</summary>
