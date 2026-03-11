@@ -62,8 +62,10 @@
   "git.enableSmartCommit": true,
   // ── Markdown ────────────────────────────────────────────────────────
   // Config lives in .markdownlint.json (project root) — takes precedence.
-  // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────
+  // ── Network / proxy (Intel corporate TLS inspection) ─────────────────
   "http.proxySupport": "on",
+  "http.proxyStrictSSL": false,
+  // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
   },
