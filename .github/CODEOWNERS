@@ -2,16 +2,26 @@
 
 * @RajwanYair
 
+# Core library (engine, models, registry, services)
+
+src/RegiLattice.Core/ @RajwanYair
+
 # Tweak modules
 
-regilattice/tweaks/ @RajwanYair
+src/RegiLattice.Core/Tweaks/ @RajwanYair
 
-# Core infrastructure
+# GUI application
 
-regilattice/registry.py @RajwanYair
-regilattice/gui.py @RajwanYair
-regilattice/tweaks/__init__.py @RajwanYair
+src/RegiLattice.GUI/ @RajwanYair
 
-# CI and documentation
+# CLI application
+
+src/RegiLattice.CLI/ @RajwanYair
+
+# Tests
+
+tests/ @RajwanYair
+
+# CI, documentation, and Copilot configuration
 
 .github/ @RajwanYair
