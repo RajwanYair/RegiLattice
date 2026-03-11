@@ -12,15 +12,36 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - uses: actions/setup-dotnet@v4
         with:
-          python-version: "3.12"
-      - name: Install build tools
-        run: pip install build
-      - name: Build sdist and wheel
-        run: python -m build
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore RegiLattice.sln
+
+      - name: Build Release
+        run: dotnet build RegiLattice.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test RegiLattice.sln -c Release --no-build --logger "console;verbosity=normal"
+
+      - name: Publish GUI (self-contained)
+        run: >-
+          dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Publish CLI (self-contained)
+        run: >-
+          dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            src/RegiLattice.GUI/bin/Release/net10.0-windows/win-x64/publish/*
+            src/RegiLattice.CLI/bin/Release/net10.0-windows/win-x64/publish/*
           generate_release_notes: true

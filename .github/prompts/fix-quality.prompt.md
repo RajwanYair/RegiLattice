@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: "Fix linting, type errors, and security issues in the current file"
+description: "Fix build warnings, nullable issues, and code quality problems in the current file"
 ---
 
 # Fix Quality Issues
@@ -9,60 +9,60 @@ Fix all quality issues in: `${file}`
 
 ## What to Fix
 
-Run through these checks and fix all issues found:
+### 1. Nullable Reference Warnings
 
-### 1. Ruff Lint Fixes
+Add proper nullable annotations or null checks:
+```csharp
+// Before
+public string GetValue() { return dict[key]; }
 
-Apply all ruff auto-fixable rules:
-- Remove unused imports (`F401`)
-- Fix import order (`I` rules)
-- Apply pyupgrade modernizations (`UP` rules)
-- Fix bugbear issues (`B` rules)
-- Simplify expressions (`SIM` rules)
-
-### 2. Type Annotation Gaps
-
-Add missing type hints to all function signatures:
-```python
-# Before
-def process(items, verbose=False):
-
-# After
-def process(items: list[str], verbose: bool = False) -> list[ProcessResult]:
+// After
+public string? GetValue() { return dict.GetValueOrDefault(key); }
 ```
 
-### 3. Exception Handling
+### 2. Sealed Classes
 
-Replace bare excepts with specific types:
-```python
-# Before
-try: ...
-except: pass
+Add `sealed` to all classes without inheritance:
+```csharp
+// Before
+public class MyService { ... }
 
-# After
-try: ...
-except (ValueError, RuntimeError) as err:
-    logger.error("Context: %s", err)
+// After
+public sealed class MyService { ... }
 ```
 
-### 4. Path Modernization
+### 3. Collection Expressions (C# 13)
 
-Replace `os.path` with `pathlib`:
-```python
-# Before
-import os
-path = os.path.join(os.path.dirname(__file__), "config")
+Replace verbose collection syntax:
+```csharp
+// Before
+Tags = new List<string> { "a", "b" };
 
-# After
-from pathlib import Path
-path = Path(__file__).parent / "config"
+// After
+Tags = ["a", "b"];
+```
+
+### 4. Exception Handling
+
+Replace bare catches with specific types:
+```csharp
+// Before
+try { ... } catch { return null; }
+
+// After
+try { ... }
+catch (InvalidOperationException ex)
+{
+    _session.WriteLog($"Error: {ex.Message}");
+    return null;
+}
 ```
 
 ### 5. Security Issues
 
-- Replace `shell=True` subprocess calls with list form
-- Replace hardcoded secrets with `os.environ.get()` or `keyring`
-- Validate user input before use
+- Replace `Process.Start` with raw strings → use `ArgumentList`
+- Remove hardcoded paths → use `Environment.GetFolderPath`
+- Ensure all registry access goes through `RegistrySession`
 
 ## Constraints
 

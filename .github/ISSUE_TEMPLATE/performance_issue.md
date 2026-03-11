@@ -12,11 +12,11 @@ Brief description of the performance issue.
 
 ## Component
 
-Which operation is slow? (e.g., `all_tweaks()` load, `status_map()` detection, GUI startup, `--list`)
+Which operation is slow? (e.g., `AllTweaks()` load, `StatusMap()` detection, GUI startup, `--list`)
 
 ## Observed Performance
 
-- **Operation:** (e.g., `status_map()` over 1 292 tweaks)
+- **Operation:** (e.g., `StatusMap()` over 1 360 tweaks)
 - **Time taken:** (e.g., 12 seconds)
 - **Expected time:** (e.g., ~2 seconds)
 - **Memory used:** (e.g., 150 MB peak)
@@ -27,8 +27,8 @@ Which operation is slow? (e.g., `all_tweaks()` load, `status_map()` detection, G
 <summary>Profile output (optional)</summary>
 
 ```
-# Run: python -m cProfile -s cumtime -m regilattice --list
-Paste cProfile / line_profiler output here
+# Use dotnet-trace or Visual Studio profiler
+Paste profiler output here
 ```
 
 </details>
@@ -36,7 +36,7 @@ Paste cProfile / line_profiler output here
 ## Benchmark Result
 
 ```powershell
-# Run: python -m pytest tests/test_benchmarks.py -v
+# Run: dotnet test --filter "Category=Performance"
 Paste benchmark output here
 ```
 
@@ -45,8 +45,8 @@ Paste benchmark output here
 - **OS:** Windows 11 (build ...)
 - **CPU:** (e.g., Intel Core i7-12700K)
 - **RAM:** (e.g., 32 GB)
-- **Python:** (`python -m regilattice --version` / `python --version`)
-- **RegiLattice:** (version from `--version`)
+- **Runtime:** .NET 10.0
+- **RegiLattice:** (version 3.x.x)
 - **Tweaks loaded:** (number from `--stats`)
 
 ## Additional Context

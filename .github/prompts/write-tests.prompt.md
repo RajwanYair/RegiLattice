@@ -1,11 +1,11 @@
 ---
 mode: agent
-description: "Generate comprehensive pytest tests for the selected code following workspace testing standards"
+description: "Generate comprehensive xUnit tests for the selected code following workspace testing standards"
 ---
 
 # Write Tests
 
-Generate comprehensive pytest tests for the selected/specified code.
+Generate comprehensive xUnit tests for the selected/specified code.
 
 ## Context
 
@@ -16,64 +16,68 @@ Selected code: `${selection}`
 
 Follow `.github/instructions/testing.instructions.md`. Generate tests that:
 
-1. **Cover all public functions/methods** — happy path, edge cases, error paths
-2. **Use proper pytest fixtures** — defined in `conftest.py`
-3. **Apply markers** — `@pytest.mark.unit`, `@pytest.mark.integration`, `@pytest.mark.slow`
-4. **Mock external dependencies** — filesystem, network, subprocess calls
-5. **Include property-based tests** using Hypothesis for data transformation functions
-6. **Target 90%+ coverage** for the code under test
+1. **Cover all public methods** — happy path, edge cases, error paths
+2. **Use Arrange-Act-Assert** pattern
+3. **Use `[Fact]` and `[Theory]`** with `[InlineData]` for parameterized tests
+4. **Mock external dependencies** — use `RegistrySession { DryRun = true }` for registry tests
+5. **Target 90%+ coverage** for the code under test
+6. **Follow naming convention**: `MethodName_Scenario_ExpectedResult`
 
 ## Test Structure
 
-```python
-"""Tests for <module>."""
-from __future__ import annotations
+```csharp
+using Xunit;
+using RegiLattice.Core;
+using RegiLattice.Core.Models;
 
-import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
+namespace RegiLattice.Core.Tests;
 
-# Import the module under test
-from src.<module> import <Class>
+public sealed class Test_ClassName
+{
+    [Fact]
+    public void Method_HappyPath_ReturnsExpected()
+    {
+        // Arrange
+        var engine = new TweakEngine(new RegistrySession { DryRun = true });
 
+        // Act
+        var result = engine.Method();
 
-class Test<Class>:
-    """Tests for <Class>."""
+        // Assert
+        Assert.NotNull(result);
+    }
 
-    @pytest.mark.unit
-    def test_<method>_happy_path(self, ...):
-        ...
+    [Theory]
+    [InlineData("valid-id", true)]
+    [InlineData("", false)]
+    public void Method_WithVariousInputs_ReturnsCorrectly(string input, bool expected)
+    {
+        // ...
+    }
 
-    @pytest.mark.unit
-    def test_<method>_edge_case_empty_input(self, ...):
-        ...
-
-    @pytest.mark.unit
-    def test_<method>_raises_on_invalid_input(self, ...):
-        with pytest.raises(ValueError, match="expected message"):
-            ...
-
-    @pytest.mark.integration
-    def test_<method>_with_real_filesystem(self, tmp_path: Path):
-        ...
+    [Fact]
+    public void Method_InvalidInput_ThrowsArgumentException()
+    {
+        var engine = new TweakEngine();
+        Assert.Throws<ArgumentException>(() => engine.Method(null!));
+    }
+}
 ```
 
-## Tkinter / GUI Test Rules
+## WinForms Test Rules
 
-When writing tests for any `gui*.py` module:
+When writing tests for GUI code:
 
-1. **Always `root.withdraw()`** — never let test windows appear
-2. **Patch `_deferred_init`** — prevents background thread loading tweaks
-3. **Call event handlers directly** — `widget._on_enter(None)` NOT `event_generate`
-4. **Use unique TweakDef IDs** per test — `lru_cache` in `tweak_scope()` causes cross-test pollution
-5. **Use real enum values** — `TweakResult.UNKNOWN` NOT `MagicMock()` for branch coverage
-6. **Add `@pytest.mark.timeout(10)`** — GUI tests can hang without it
+1. **Never create actual Form instances** — they hang in headless CI
+2. **Test ThemeDef records and data models** — pure data, no UI dependency
+3. **Test package name validation** — regex patterns and edge cases
+4. **Test CategoryIcons mappings** — static data lookups
 
 ## Naming Conventions
 
-- Test files: `test_<module>.py`
-- Test classes: `Test<ClassName>`
-- Test functions: `test_<method>_<scenario>`
+- Test files: `<ClassName>Tests.cs`
+- Test classes: `sealed class <ClassName>Tests`
+- Test methods: `MethodName_Scenario_ExpectedResult`
 
 ## Generate
 

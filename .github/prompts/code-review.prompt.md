@@ -17,35 +17,36 @@ Selection: `${selection}`
 ### Security (OWASP Top 10)
 
 - [ ] No hardcoded credentials, tokens, or API keys
-- [ ] No `shell=True` with user-controlled input (command injection)
+- [ ] No `Process.Start` with unsanitized user input (command injection)
 - [ ] No SQL/template injection vectors
 - [ ] Input validated at system boundaries
 - [ ] Sensitive data not logged in plaintext
 - [ ] No SSRF vectors (external URLs not constructed from user input)
+- [ ] Registry access via `RegistrySession` only — no raw `Registry.SetValue`
 
-### Python Quality
+### C# Quality
 
-- [ ] Type hints on all function signatures
-- [ ] No bare `except:` clauses — use specific exception types
-- [ ] No mutable default arguments (`def f(items=[])`)
-- [ ] No `print()` in library/core code — use `logging` or `rich.console`
-- [ ] `pathlib.Path` used instead of `os.path` string manipulation
-- [ ] Context managers (`with`) used for all file/resource operations
-- [ ] No hardcoded absolute paths
+- [ ] `sealed` on all classes unless inheritance is explicit
+- [ ] `#nullable enable` — no nullable warnings
+- [ ] No bare `catch` clauses — use specific exception types
+- [ ] `IReadOnlyList<T>` for all public collection properties
+- [ ] `init` or `private set` on properties — no mutable public fields
+- [ ] C# 13 collection expressions `[]` instead of `new List<T>()`
+- [ ] No `Console.WriteLine` in library code
 
 ### Architecture
 
-- [ ] Single responsibility — functions do one thing
-- [ ] Dataclasses used for structured data (not raw dicts)
+- [ ] Single responsibility — methods do one thing
+- [ ] Immutable models (`sealed record` or `sealed class` with `required init`)
 - [ ] Enums used for constants (not magic strings/numbers)
-- [ ] Signal handlers implemented (SIGTERM/SIGINT)
-- [ ] Configuration loaded from YAML/env, not hardcoded
+- [ ] Configuration loaded from JSON/env, not hardcoded
+- [ ] P/Invoke minimized — only 2 allowed calls in codebase
 
 ### Testing
 
-- [ ] New code has corresponding tests
+- [ ] New code has corresponding xUnit tests
 - [ ] Error paths tested (not just happy path)
-- [ ] No test bypasses or `# pragma: no cover` without justification
+- [ ] `RegistrySession.DryRun = true` in all registry tests
 
 ## Output Format
 
