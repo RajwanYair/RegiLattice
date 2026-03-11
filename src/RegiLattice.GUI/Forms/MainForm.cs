@@ -24,7 +24,7 @@ public partial class MainForm : Form
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         InitializeComponent();
         Text = "RegiLattice";
-        Icon = SystemIcons.Application;
+        Icon = SystemIcons.Shield;
 
         // Load saved theme from config
         var cfg = AppConfig.Load();
@@ -370,8 +370,69 @@ public partial class MainForm : Form
 
     private void RefreshListView()
     {
-        if (_treeView.SelectedNode is { Tag: string cat })
+        string search = _searchBox.Text.Trim();
+        if (search.Length > 0)
+        {
+            // Cross-category search: show matching tweaks from ALL categories
+            PopulateSearchResults(search);
+        }
+        else if (_treeView.SelectedNode is { Tag: string cat })
+        {
             PopulateList(cat);
+        }
+    }
+
+    private void PopulateSearchResults(string search)
+    {
+        string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
+        string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
+
+        _listView.BeginUpdate();
+        _listView.Items.Clear();
+
+        IEnumerable<TweakDef> all = _engine.Search(search);
+
+        // Status filter
+        if (filter != "All")
+        {
+            TweakResult target = filter switch
+            {
+                "Applied" => TweakResult.Applied,
+                "Not Applied" => TweakResult.NotApplied,
+                _ => TweakResult.Unknown,
+            };
+            all = all.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
+        }
+
+        // Scope filter
+        if (scopeSel != "All Scopes")
+        {
+            bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
+            bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
+            all = all.Where(t =>
+                wantUser ? t.Scope == TweakScope.User :
+                wantMachine ? t.Scope == TweakScope.Machine :
+                true);
+        }
+
+        foreach (var td in all)
+        {
+            var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
+            string statusText = status switch
+            {
+                TweakResult.Applied => "Applied",
+                TweakResult.NotApplied => "Default",
+                TweakResult.Error => "Error",
+                _ => "Unknown",
+            };
+            string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
+            var item = new ListViewItem(td.Label);
+            item.SubItems.AddRange([kindSymbol, statusText, td.Scope.ToString(), td.NeedsAdmin ? "Yes" : "No", td.CorpSafe ? "Yes" : "No", $"[{td.Category}] {td.Description}"]);
+            item.Tag = td;
+            _listView.Items.Add(item);
+        }
+
+        _listView.EndUpdate();
     }
 
     // ── Helpers / Utilities ────────────────────────────────────────────────
@@ -548,6 +609,13 @@ public partial class MainForm : Form
     private void OnOpenChocolateyManager()
     {
         using var dlg = new ChocolateyManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenToolVersions()
+    {
+        using var dlg = new ToolVersionsDialog();
         AppTheme.Apply(dlg);
         dlg.ShowDialog(this);
     }

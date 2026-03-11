@@ -26,6 +26,9 @@ public sealed class AppConfig
     [JsonPropertyName("locale")]
     public string Locale { get; set; } = "en";
 
+    [JsonPropertyName("check_tool_updates")]
+    public bool CheckToolUpdates { get; set; } = true;
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
