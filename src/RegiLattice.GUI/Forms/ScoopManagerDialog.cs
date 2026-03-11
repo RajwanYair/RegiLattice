@@ -19,7 +19,7 @@ internal sealed class ScoopManagerDialog : Form
     internal ScoopManagerDialog()
     {
         Text = "🩣 Scoop Package Manager";
-        Icon = SystemIcons.Application;
+        Icon = AppIcons.ScoopIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(540, 500);

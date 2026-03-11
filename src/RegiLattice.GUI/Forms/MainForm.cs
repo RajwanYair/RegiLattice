@@ -24,7 +24,7 @@ public partial class MainForm : Form
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         InitializeComponent();
         Text = "RegiLattice";
-        Icon = SystemIcons.Shield;
+        Icon = AppIcons.AppIcon;
 
         // Load saved theme from config
         var cfg = AppConfig.Load();
@@ -375,6 +375,7 @@ public partial class MainForm : Form
         {
             // Cross-category search: show matching tweaks from ALL categories
             PopulateSearchResults(search);
+            SetStatus($"Search: \"{search}\" — {_listView.Items.Count} result(s) across all categories.");
         }
         else if (_treeView.SelectedNode is { Tag: string cat })
         {
@@ -678,6 +679,8 @@ public partial class MainForm : Form
     {
         if (_themeCombo.SelectedItem is not string name) return;
         AppTheme.SetTheme(name);
+        AppIcons.InvalidateCache();
+        Icon = AppIcons.AppIcon;
         ApplyTheme();
         PopulateTree();
 
