@@ -49,17 +49,6 @@ internal static class Communication
         },
         new TweakDef
         {
-            Id = "comm-disable-zoom-autoupdate",
-            Label = "Disable Zoom Auto-Update",
-            Category = "Communication",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Zoom's automatic update mechanism.",
-            Tags = ["zoom", "update"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Zoom\Zoom\General", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Zoom\Zoom\General"],
-        },
-        new TweakDef
-        {
             Id = "comm-disable-discord-autostart",
             Label = "Disable Discord Auto-Start",
             Category = "Communication",
@@ -164,17 +153,6 @@ internal static class Communication
         },
         new TweakDef
         {
-            Id = "comm-disable-zoom-auto-video",
-            Label = "Disable Zoom Auto-Start Video",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Zoom from automatically enabling video when joining meetings.",
-            Tags = ["zoom", "video", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Zoom\Zoom\General"],
-        },
-        new TweakDef
-        {
             Id = "comm-disable-teams-telemetry",
             Label = "Disable Teams Telemetry",
             Category = "Communication",
@@ -192,17 +170,6 @@ internal static class Communication
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Teams", "disableTelemetry"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Teams", "disableTelemetry", 1)],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-zoom-chat-notify",
-            Label = "Mute Zoom Chat Notifications",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Mutes persistent chat notifications in Zoom.",
-            Tags = ["zoom", "chat", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Zoom\Zoom\General"],
         },
         new TweakDef
         {
@@ -307,17 +274,6 @@ internal static class Communication
         },
         new TweakDef
         {
-            Id = "comm-prevent-teams-first-launch",
-            Label = "Prevent Teams Auto-Start After Install",
-            Category = "Communication",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevents Microsoft Teams from automatically launching after Office installation via policy. Default: Auto-launch. Recommended: Disabled.",
-            Tags = ["communication", "teams", "autostart", "office", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Teams"],
-        },
-        new TweakDef
-        {
             Id = "comm-disable-skype-telemetry-user",
             Label = "Disable Skype Telemetry (User)",
             Category = "Communication",
@@ -335,39 +291,6 @@ internal static class Communication
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry", 1)],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-teams-background",
-            Label = "Disable Teams Background Activity on Login",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Microsoft Teams from running hidden in the background on login by setting OpenAsHidden to 0. Default: Enabled. Recommended: Disabled.",
-            Tags = ["communication", "teams", "background", "login", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Teams"],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-skype-feedback",
-            Label = "Disable Skype Feedback Survey Prompts",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Skype feedback survey prompts and data collection at the user level. Default: Enabled. Recommended: Disabled.",
-            Tags = ["communication", "skype", "feedback", "privacy", "survey"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Skype\Feedback"],
-        },
-        new TweakDef
-        {
-            Id = "comm-block-zoom-auto-update",
-            Label = "Block Zoom Auto-Update (Policy)",
-            Category = "Communication",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Blocks Zoom desktop client from automatically updating via machine-level group policy. Default: Auto-update enabled. Recommended: Disabled for managed environments.",
-            Tags = ["communication", "zoom", "update", "policy", "managed"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Zoom\Zoom\General"],
         },
         new TweakDef
         {

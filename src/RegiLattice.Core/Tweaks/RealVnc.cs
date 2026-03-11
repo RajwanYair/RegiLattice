@@ -69,39 +69,6 @@ internal static class RealVnc
         },
         new TweakDef
         {
-            Id = "vnc-hide-tray",
-            Label = "VNC: Hide Server Tray Icon",
-            Category = "RealVNC",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Hides the VNC Server tray icon and disables connection notifications.",
-            Tags = ["vnc", "ui"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-        },
-        new TweakDef
-        {
-            Id = "vnc-viewer-recent",
-            Label = "VNC Viewer: Remember Connections",
-            Category = "RealVNC",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables recent connections list (up to 20) in VNC Viewer.",
-            Tags = ["vnc", "viewer", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer"],
-        },
-        new TweakDef
-        {
-            Id = "vnc-viewer-fitwindow",
-            Label = "VNC Viewer: Fit-to-Window Scaling",
-            Category = "RealVNC",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the default VNC Viewer scaling mode to 'Fit Window'.",
-            Tags = ["vnc", "viewer", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer"],
-        },
-        new TweakDef
-        {
             Id = "vnc-blank-screen",
             Label = "VNC: Blank Screen When Connected",
             Category = "RealVNC",

@@ -1,16 +1,16 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-20 · v2.0.0 · ~1 828 tweaks · 72 categories · 129 tests
+> Last updated: 2025-07-20 · v3.0.0 · 1 360 tweaks · 72 categories · 129 tests
 
 ---
 
-## Current State (as of v2.0.0)
+## Current State (as of v3.0.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | ~1 828 across 72 categories |
+| Tweaks | 1 360 verified across 72 categories |
 | Tests | 129 (93 Core + 36 GUI), all passing |
 | GUI | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula) |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
@@ -55,6 +55,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | Services: Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ✅ |
 | Documentation overhaul (all docs updated for C#) | ✅ |
 
+### v3.0.0 — Quality Audit (completed)
+
+| Deliverable | Status |
+|-------------|--------|
+| Remove 468 non-functional tweak stubs (no ApplyOps/ApplyAction) | ✅ |
+| Add TweakKind + CategoryIcon enums | ✅ |
+| Add CategoryIcons mapping class for CLI/GUI display | ✅ |
+| TweakEngine no-op guard in Register() | ✅ |
+| Fix CS0067 warning (RegistrySession.LogWritten) | ✅ |
+| 0 errors, 0 warnings Release build | ✅ |
+
 ---
 
 ## Planned Sprints
@@ -97,7 +108,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | # | Task | Priority |
 |---|------|----------|
 | 1 | Self-contained single-file publish for CLI + GUI | P0 |
-| 2 | Update winget manifest for v2.0.0 | P1 |
+| 2 | Update winget manifest for v3.0.0 | P1 |
 | 3 | Create Scoop bucket entry | P2 |
 | 4 | GitHub Releases with auto-generated release notes | P1 |
 | 5 | Automated build pipeline (build → test → publish on tag) | P1 |
@@ -131,7 +142,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [ ] DPI-aware GUI scaling
 - [ ] Profile `RegisterBuiltins()` performance
 - [ ] Parallel `StatusMap()` optimization
-- [ ] winget manifest v2.0.0
+- [ ] winget manifest v3.0.0
 - [ ] GitHub Releases automation
 
 ### P2 — Medium Value

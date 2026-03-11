@@ -68,17 +68,6 @@ internal static class Screensaver
         },
         new TweakDef
         {
-            Id = "ss-require-password",
-            Label = "Require Password After Screensaver",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Require login password when resuming from screensaver. Default: not required. Recommended: enabled.",
-            Tags = ["screensaver", "password", "lock", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-        },
-        new TweakDef
-        {
             Id = "ss-blank-screensaver",
             Label = "Set Blank (Black) Screensaver",
             Category = "Screensaver & Lock",
@@ -95,28 +84,6 @@ internal static class Screensaver
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE"),
             ],
-        },
-        new TweakDef
-        {
-            Id = "ss-force-policy",
-            Label = "Force Screensaver (Policy, 10 min)",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Force screensaver with 10-min timeout and password via machine policy. Default: not set.",
-            Tags = ["screensaver", "policy", "force", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
-        },
-        new TweakDef
-        {
-            Id = "ss-disable-user-policy",
-            Label = "Disable Screensaver (User Policy)",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disable screensaver via user-level policy key. Default: not set.",
-            Tags = ["screensaver", "policy", "user", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop"],
         },
         new TweakDef
         {
@@ -160,17 +127,6 @@ internal static class Screensaver
         },
         new TweakDef
         {
-            Id = "ss-prevent-screensaver-change",
-            Label = "Prevent Screensaver Change",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevent users from changing screensaver settings. Default: allowed.",
-            Tags = ["screensaver", "policy", "restrict", "kiosk"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System"],
-        },
-        new TweakDef
-        {
             Id = "ss-enable-transparency",
             Label = "Enable Transparency Effects",
             Category = "Screensaver & Lock",
@@ -188,28 +144,6 @@ internal static class Screensaver
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ss-set-timeout-15min",
-            Label = "Set Screensaver Timeout to 15 Minutes",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the screensaver activation timeout to 15 minutes (900 seconds). Default: 600. Recommended: 900 for balanced security and convenience.",
-            Tags = ["screensaver", "timeout", "15min", "lock"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-        },
-        new TweakDef
-        {
-            Id = "ss-set-timeout-30min",
-            Label = "Set Screensaver Timeout to 30 Minutes",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the screensaver activation timeout to 30 minutes (1800 seconds). Default: 600. Recommended: 1800 for extended-focus workflows.",
-            Tags = ["screensaver", "timeout", "30min", "lock"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
         },
         new TweakDef
         {
@@ -232,17 +166,6 @@ internal static class Screensaver
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
-        },
-        new TweakDef
-        {
-            Id = "ss-scr-password-on-resume",
-            Label = "Require Password on Resume (Policy)",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires password entry when resuming from screensaver via policy. Enforces lock screen security. Default: varies. Recommended: enabled.",
-            Tags = ["screensaver", "password", "resume", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
         },
         new TweakDef
         {

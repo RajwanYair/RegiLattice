@@ -8,39 +8,6 @@ internal static class OneDrive
     [
         new TweakDef
         {
-            Id = "od-disable-onedrive-autostart",
-            Label = "Disable OneDrive Auto-Start",
-            Category = "OneDrive",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents OneDrive from starting automatically at login.",
-            Tags = ["onedrive", "autostart", "startup"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
-        },
-        new TweakDef
-        {
-            Id = "od-disable-onedrive-fod",
-            Label = "Disable OneDrive Files On-Demand",
-            Category = "OneDrive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Files On-Demand — all files are downloaded locally instead of being cloud-only placeholders.",
-            Tags = ["onedrive", "sync", "disk"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-        },
-        new TweakDef
-        {
-            Id = "od-disable-onedrive-ads",
-            Label = "Disable OneDrive Ads / Upsell",
-            Category = "OneDrive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Hides OneDrive promotional and upsell notifications.",
-            Tags = ["onedrive", "privacy", "ads"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-        },
-        new TweakDef
-        {
             Id = "od-onedrive-upload-throttle",
             Label = "Throttle OneDrive Upload (1 MB/s)",
             Category = "OneDrive",
@@ -57,28 +24,6 @@ internal static class OneDrive
             [
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit"),
             ],
-        },
-        new TweakDef
-        {
-            Id = "od-disable-onedrive-personal-sync",
-            Label = "Disable OneDrive Personal Sync",
-            Category = "OneDrive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks OneDrive consumer (personal) account sync via policy.",
-            Tags = ["onedrive", "sync", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-        },
-        new TweakDef
-        {
-            Id = "od-disable-onedrive-kfm",
-            Label = "Block OneDrive Known Folder Move",
-            Category = "OneDrive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents OneDrive from prompting to move Desktop, Documents & Pictures.",
-            Tags = ["onedrive", "kfm", "folders"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
         },
         new TweakDef
         {
@@ -179,17 +124,6 @@ internal static class OneDrive
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "SilentAccountConfig"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "SilentAccountConfig", 1)],
-        },
-        new TweakDef
-        {
-            Id = "od-onedrive-disable-files-on-demand",
-            Label = "Disable OneDrive Files On-Demand",
-            Category = "OneDrive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables OneDrive Files On-Demand (cloud-only placeholders). All files will be downloaded locally. Default: Enabled. Recommended: Disabled for offline reliability.",
-            Tags = ["onedrive", "files-on-demand", "offline", "sync"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
         },
         new TweakDef
         {

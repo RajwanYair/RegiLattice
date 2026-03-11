@@ -28,28 +28,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-recall-snapshots",
-            Label = "Disable Recall (AI Snapshots)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Recall (AI-powered activity snapshots) which periodically screenshots your activity. Privacy-critical.",
-            Tags = ["ai", "recall", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WindowsAI", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-ai-suggestions",
-            Label = "Disable AI Tips in Settings/Start",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables AI-powered suggestions and tips in the Start menu and Settings.",
-            Tags = ["ai", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-edge-copilot",
             Label = "Disable Copilot in Edge Browser",
             Category = "AI / Copilot",
@@ -391,28 +369,6 @@ internal static class Copilot
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-taskbar-search-ai",
-            Label = "Disable Copilot in Taskbar Search",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables AI-powered suggestions in the taskbar search box via user-level Explorer policy. Default: Enabled. Recommended: Disabled for focused search.",
-            Tags = ["ai", "copilot", "taskbar", "search", "suggestions"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"],
-        },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-tips-notifications",
-            Label = "Disable Tips & Suggestions Notifications",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows tips, suggestions, and soft-landing notification prompts from ContentDeliveryManager. Default: Enabled. Recommended: Disabled.",
-            Tags = ["ai", "copilot", "tips", "suggestions", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
         },
         new TweakDef
         {

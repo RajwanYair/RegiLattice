@@ -210,17 +210,6 @@ internal static class CloudStorage
         },
         new TweakDef
         {
-            Id = "cloud-overlay-optimise",
-            Label = "Optimise Shell Overlay Icons (Cloud)",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Windows only supports 15 shell overlay icons. When Dropbox, Google Drive, OneDrive, and Box are all installed the limit overflows and icons break. This tweak prioritises system defaults so cloud sync icons display correctly.",
-            Tags = ["cloud", "overlay", "icons", "explorer"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers"],
-        },
-        new TweakDef
-        {
             Id = "cloud-disable-nextcloud-autostart",
             Label = "Disable Nextcloud Auto-Start",
             Category = "Cloud Storage",
@@ -435,17 +424,6 @@ internal static class CloudStorage
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Inc.\Internet Services", "iCloudDriveDisabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Apple Inc.\Internet Services", "iCloudDriveDisabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "cloud-disable-suggestions",
-            Label = "Disable Cloud Content Suggestions",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables cloud-optimized content and suggestions. Prevents Windows from downloading promotional content. Default: Enabled. Recommended: Disabled.",
-            Tags = ["cloud", "content", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
         },
         new TweakDef
         {

@@ -8,17 +8,6 @@ internal static class Input
     [
         new TweakDef
         {
-            Id = "input-disable-mouse-accel",
-            Label = "Disable Mouse Acceleration",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets MouseSpeed/Threshold to zero for raw 1:1 input.",
-            Tags = ["input", "mouse", "gaming"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-        },
-        new TweakDef
-        {
             Id = "input-fast-keyboard-repeat",
             Label = "Maximize Keyboard Repeat Rate",
             Category = "Input",
@@ -141,17 +130,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-enhanced-pointer-precision",
-            Label = "Disable Enhanced Pointer Precision",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables mouse smoothing for raw 1:1 pointer input.",
-            Tags = ["input", "mouse", "gaming"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-        },
-        new TweakDef
-        {
             Id = "input-mouse-scroll-lines",
             Label = "Set Mouse Scroll to 5 Lines",
             Category = "Input",
@@ -189,17 +167,6 @@ internal static class Input
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-        },
-        new TweakDef
-        {
-            Id = "input-touch-keyboard-disable",
-            Label = "Disable Touch Keyboard Auto-Launch",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic touch keyboard launch via Group Policy.",
-            Tags = ["input", "touch", "keyboard"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC"],
         },
         new TweakDef
         {

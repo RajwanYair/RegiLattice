@@ -52,72 +52,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-task-disable-scheduled-defrag",
-            Label = "Disable Scheduled Defragmentation",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the scheduled disk defragmentation task. Recommended for SSD-only systems where defrag is unnecessary. Default: enabled. Recommended: disabled (SSD).",
-            Tags = ["tasks", "defrag", "disk", "ssd", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Defrag"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-wer",
-            Label = "Disable Windows Error Reporting Tasks",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables WER crash report collection and upload tasks. Prevents sending crash data to Microsoft. Default: enabled. Recommended: disabled.",
-            Tags = ["tasks", "wer", "error", "crash", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-maintenance-wakeup",
-            Label = "Disable Maintenance Wakeup Timer",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents automatic maintenance from waking the PC at night. Default: 1 (wake up). Recommended: 0 (no wake).",
-            Tags = ["tasks", "maintenance", "wakeup", "power", "sleep"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-scheduled-diagnostics",
-            Label = "Disable Scheduled Diagnostics",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the scheduled diagnostic data collection task. Default: enabled. Recommended: 0 (disabled).",
-            Tags = ["tasks", "diagnostics", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScheduledDiagnostics"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-diagtrack-autologger",
-            Label = "Disable DiagTrack Autologger",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the DiagTrack ETW autologger at boot. Stops telemetry trace collection before login. Default: 1 (enabled). Recommended: 0 (disabled).",
-            Tags = ["tasks", "diagtrack", "etw", "telemetry", "boot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-diagtrack-service",
-            Label = "Disable DiagTrack Service",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Connected User Experiences and Telemetry (DiagTrack) service entirely. Default: 2 (automatic). Recommended: 4 (disabled).",
-            Tags = ["tasks", "diagtrack", "service", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"],
-        },
-        new TweakDef
-        {
             Id = "schtask-task-disable-dmwappush",
             Label = "Disable WAP Push Service (dmwappushsvc)",
             Category = "Scheduled Tasks",
@@ -200,17 +134,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-task-disable-maintenance",
-            Label = "Disable Automatic Maintenance",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows automatic maintenance scheduler. Prevents background maintenance tasks. Default: Enabled. Recommended: Disabled for full user control.",
-            Tags = ["tasks", "maintenance", "scheduler", "background"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-        },
-        new TweakDef
-        {
             Id = "schtask-disable-ceip",
             Label = "Disable CEIP Data Collection (Policy)",
             Category = "Scheduled Tasks",
@@ -290,39 +213,6 @@ internal static class ScheduledTasks
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontOfferThroughWUAU"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontOfferThroughWUAU", 1)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-speech-download",
-            Label = "Disable Speech Model Download Task",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks automatic speech recognition model downloads via policy. Reduces background network activity and unexpected downloads. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "speech", "model", "download", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-power-diagnostics",
-            Label = "Disable Power Efficiency Diagnostics Task",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables WDI power efficiency diagnostics scheduled task. Prevents background power consumption analysis from running. Default: Enabled. Recommended: Disabled on desktops.",
-            Tags = ["tasks", "power", "diagnostics", "wdi"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{ffc42108-4920-4acf-a4fc-8abdcc68ada4}"],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-ngen-log",
-            Label = "Disable .NET NGEN Assembly Binding Log",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables .NET Framework assembly binding failure logging. Reduces disk I/O from constant .NET load logging. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "dotnet", "ngen", "log", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\.NETFramework"],
         },
         new TweakDef
         {

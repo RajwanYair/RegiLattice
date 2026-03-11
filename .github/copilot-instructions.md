@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-20 (v2.0.0, ~1 828 tweaks, 72 categories, 129 tests).
+> Last verified: 2025-07-20 (v3.0.0, 1 360 tweaks, 72 categories, 129 tests).
 
 ## ⛔ CRITICAL: PowerShell ONLY — NO Unix/Bash Commands
 
@@ -53,9 +53,9 @@ Rules:
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
 | Test        | xUnit 2.9.2 — 129 tests across 6 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
-| Version     | 2.0.0                                                            |
+| Version     | 3.0.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | ~1 828 across 72 categories                                      |
+| Tweaks      | 1 360 across 72 categories                                       |
 | Tests       | 129 passing (93 Core + 36 GUI)                                   |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
@@ -89,7 +89,7 @@ RegiLattice.sln
 │   │   │   ├── HardwareInfo.cs      # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs            # i18n string table
 │   │   │   └── Ratings.cs           # Tweak rating system (1-5 stars)
-│   │   └── Tweaks/                  # 71 category modules, ~1 828 tweaks total
+│   │   └── Tweaks/                  # 71 category modules, 1 360 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs

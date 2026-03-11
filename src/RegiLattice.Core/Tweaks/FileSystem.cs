@@ -268,21 +268,6 @@ internal static class FileSystem
         },
         new TweakDef
         {
-            Id = "fs-disable-last-access-update",
-            Label = "Disable NTFS Last Access Time Updates",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables updating the last-access timestamp on every file read. Significant NTFS performance improvement for I/O-heavy workloads. Default: 0 (system managed). Recommended: 0x80000003 (user-disabled, system-managed).",
-            Tags = ["filesystem", "ntfs", "last-access", "performance", "io"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate"),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fs-increase-ntfs-memory",
             Label = "Increase NTFS Memory Usage",
             Category = "File System",

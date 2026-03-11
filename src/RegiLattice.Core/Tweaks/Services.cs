@@ -152,17 +152,6 @@ internal static class Services
         },
         new TweakDef
         {
-            Id = "svc-disable-xbox-live-services",
-            Label = "Disable Xbox Live Services",
-            Category = "Services",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Xbox Live Auth, Game Save, and Networking services.",
-            Tags = ["services", "xbox", "gaming", "cleanup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc"],
-        },
-        new TweakDef
-        {
             Id = "svc-disable-geolocation-service",
             Label = "Disable Geolocation Service",
             Category = "Services",

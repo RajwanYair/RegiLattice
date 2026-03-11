@@ -8,17 +8,6 @@ internal static class TouchPen
     [
         new TweakDef
         {
-            Id = "touch-disable-visual-feedback",
-            Label = "Disable Touch Visual Feedback",
-            Category = "Touch & Pen",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the ripple animation when touching the screen. Reduces visual clutter on touch devices.",
-            Tags = ["touch", "pen", "visual", "feedback"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Touch"],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
             Category = "Touch & Pen",

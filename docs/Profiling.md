@@ -1,7 +1,7 @@
 # RegiLattice — Profiling Guide
 
 > Performance measurement and optimization for the C# codebase.
-> Last updated: 2025-07-20 · v2.0.0
+> Last updated: 2025-07-20 · v3.0.0
 
 ---
 

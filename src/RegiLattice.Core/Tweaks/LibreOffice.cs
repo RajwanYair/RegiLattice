@@ -8,28 +8,6 @@ internal static class LibreOffice
     [
         new TweakDef
         {
-            Id = "lo-disable-libreoffice-autoupdate",
-            Label = "Disable LibreOffice Auto-Update",
-            Category = "LibreOffice",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the LibreOffice / OpenOffice maintenance service auto-update mechanism.",
-            Tags = ["libreoffice", "openoffice", "update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice\MaintenanceService", @"HKEY_LOCAL_MACHINE\SOFTWARE\OpenOffice.org\MaintenanceService"],
-        },
-        new TweakDef
-        {
-            Id = "lo-disable-libreoffice-crash-reporter",
-            Label = "Disable LibreOffice Crash Reporter",
-            Category = "LibreOffice",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the LibreOffice crash reporter and auto-submit.",
-            Tags = ["libreoffice", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\LibreOffice\CrashReport"],
-        },
-        new TweakDef
-        {
             Id = "lo-libreoffice-default-ooxml",
             Label = "Default Save as OOXML (docx/xlsx)",
             Category = "LibreOffice",
@@ -51,39 +29,6 @@ internal static class LibreOffice
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\LibreOffice\DefaultFormat", "Impress"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\LibreOffice\DefaultFormat", "Writer", "MS Word 2007 XML")],
-        },
-        new TweakDef
-        {
-            Id = "lo-libreoffice-default-handler",
-            Label = "Set LibreOffice as Default Handler",
-            Category = "LibreOffice",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Registers LibreOffice as the default handler for common document formats (.doc, .docx, .xls, .xlsx, .ppt, .odt, etc.).",
-            Tags = ["libreoffice", "file-association", "default"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts"],
-        },
-        new TweakDef
-        {
-            Id = "lo-disable-libreoffice-recovery",
-            Label = "Disable LibreOffice Recovery",
-            Category = "LibreOffice",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables LibreOffice crash recovery and auto-save dialogs.",
-            Tags = ["libreoffice", "recovery", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\LibreOffice\Recovery"],
-        },
-        new TweakDef
-        {
-            Id = "lo-disable-libreoffice-startcenter",
-            Label = "Disable LibreOffice Start Center",
-            Category = "LibreOffice",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Opens LibreOffice directly to a new document instead of the Start Center.",
-            Tags = ["libreoffice", "startcenter", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\LibreOffice\StartCenter"],
         },
         new TweakDef
         {
@@ -249,17 +194,6 @@ internal static class LibreOffice
         },
         new TweakDef
         {
-            Id = "lo-libreoffice-disable-macro-exec",
-            Label = "Disable LibreOffice Macro Execution",
-            Category = "LibreOffice",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets LibreOffice macro security level to Very High (3) via policy. Only trusted signed macros will execute. Default: 1 (Medium). Recommended: 3 (Very High) for security.",
-            Tags = ["libreoffice", "macros", "security", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\Security\Scripting"],
-        },
-        new TweakDef
-        {
             Id = "lo-disable-crash-recovery",
             Label = "Disable LibreOffice Crash Recovery Prompt",
             Category = "LibreOffice",
@@ -279,17 +213,6 @@ internal static class LibreOffice
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\LibreOffice\CrashReport", "AutoSubmit"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\LibreOffice\CrashReport", "Enable", 0)],
-        },
-        new TweakDef
-        {
-            Id = "lo-enable-hw-acceleration",
-            Label = "Enable LibreOffice Hardware Acceleration",
-            Category = "LibreOffice",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables OpenGL hardware acceleration in LibreOffice via policy. Default: Disabled. Recommended: Enabled.",
-            Tags = ["libreoffice", "hardware", "acceleration", "opengl", "gpu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\VCL"],
         },
         new TweakDef
         {

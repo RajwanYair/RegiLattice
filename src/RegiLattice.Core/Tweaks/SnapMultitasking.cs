@@ -128,17 +128,6 @@ internal static class SnapMultitasking
         },
         new TweakDef
         {
-            Id = "snap-disable-vd-edge-swipe",
-            Label = "Disable Virtual Desktop Edge Swipe",
-            Category = "Snap & Multitasking",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable edge swipe to switch virtual desktops (policy). Default: enabled.",
-            Tags = ["virtual-desktop", "edge", "swipe", "gesture"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI"],
-        },
-        new TweakDef
-        {
             Id = "snap-vd-all-monitors",
             Label = "Show Desktops on All Monitors",
             Category = "Snap & Multitasking",
@@ -260,17 +249,6 @@ internal static class SnapMultitasking
         },
         new TweakDef
         {
-            Id = "snap-disable-desktop-peek",
-            Label = "Disable Desktop Peek",
-            Category = "Snap & Multitasking",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Aero Peek / desktop preview when hovering over the Show Desktop button. Default: Enabled.",
-            Tags = ["snap", "peek", "desktop", "aero"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-        },
-        new TweakDef
-        {
             Id = "snap-disable-flyout",
             Label = "Disable Snap Fly-Out Overlay",
             Category = "Snap & Multitasking",
@@ -288,17 +266,6 @@ internal static class SnapMultitasking
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableSnapBar"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableSnapBar", 0)],
-        },
-        new TweakDef
-        {
-            Id = "snap-vd-switch-anim-speed",
-            Label = "Set Virtual Desktop Switch Animation to Fast",
-            Category = "Snap & Multitasking",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets virtual desktop switch animation speed to 100ms (fast). Reduces perceived lag when switching desktops. Default: 200. Recommended: 100.",
-            Tags = ["snap", "virtual-desktop", "animation", "speed"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
         },
         new TweakDef
         {

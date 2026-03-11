@@ -8,50 +8,6 @@ internal static class Adobe
     [
         new TweakDef
         {
-            Id = "adobe-disable-adobe-update",
-            Label = "Disable Adobe Auto-Update",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic updates for Adobe Reader and Acrobat DC.",
-            Tags = ["adobe", "update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Adobe Acrobat\DC\FeatureLockDown"],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-adobe-telemetry",
-            Label = "Disable Adobe Telemetry",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Adobe usage data collection and suppresses upsell prompts.",
-            Tags = ["adobe", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-adobe-javascript",
-            Label = "Disable Adobe PDF JavaScript",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables JavaScript execution in PDF documents — major security hardening.",
-            Tags = ["adobe", "security", "javascript"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown"],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-adobe-welcome",
-            Label = "Disable Adobe Welcome Screen",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Suppresses the Adobe Reader welcome / start screen on launch.",
-            Tags = ["adobe", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"],
-        },
-        new TweakDef
-        {
             Id = "adobe-enable-adobe-protected-mode",
             Label = "Enable Adobe Protected Mode",
             Category = "Adobe",
@@ -71,17 +27,6 @@ internal static class Adobe
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "iProtectedView"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bProtectedMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-adobe-cloud",
-            Label = "Disable Adobe Cloud Services",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Adobe Document Cloud file storage integration.",
-            Tags = ["adobe", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"],
         },
         new TweakDef
         {
@@ -253,17 +198,6 @@ internal static class Adobe
         },
         new TweakDef
         {
-            Id = "adobe-disable-analytics",
-            Label = "Disable Adobe Analytics",
-            Category = "Adobe",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Adobe analytics and telemetry data collection by opting out of usage tracking.",
-            Tags = ["adobe", "analytics", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\Usage"],
-        },
-        new TweakDef
-        {
             Id = "adobe-disable-cloud-sync",
             Label = "Disable Adobe Creative Cloud Sync",
             Category = "Adobe",
@@ -283,17 +217,6 @@ internal static class Adobe
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bUpdatesHidden"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1)],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-cef-subprocess",
-            Label = "Disable Adobe CEF Helper",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Adobe CEF (Chromium Embedded Framework) helper processes via policy. Reduces memory and CPU usage. Default: Enabled. Recommended: Disabled.",
-            Tags = ["adobe", "cef", "helper", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeApp"],
         },
         new TweakDef
         {

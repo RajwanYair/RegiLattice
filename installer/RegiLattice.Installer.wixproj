@@ -1,0 +1,9 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <GuiPublishDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\publish\gui\'))</GuiPublishDir>
+    <CliPublishDir>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\publish\cli\'))</CliPublishDir>
+    <DefineConstants>GuiPublishDir=$(GuiPublishDir);CliPublishDir=$(CliPublishDir)</DefineConstants>
+  </PropertyGroup>
+</Project>

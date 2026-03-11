@@ -142,17 +142,6 @@ internal static class Office
         },
         new TweakDef
         {
-            Id = "office-disable-office-linkedin",
-            Label = "Disable LinkedIn Integration",
-            Category = "Office",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables LinkedIn resume assistant and profile features in Office.",
-            Tags = ["office", "linkedin", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\LinkedIn"],
-        },
-        new TweakDef
-        {
             Id = "office-disable-office-animations",
             Label = "Disable Office UI Animations",
             Category = "Office",
@@ -170,28 +159,6 @@ internal static class Office
                 RegOp.DeleteValue(@"graphics", "DisableAnimations"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Graphics", "DisableAnimations", 1)],
-        },
-        new TweakDef
-        {
-            Id = "office-disable-office-recent-docs",
-            Label = "Disable Office Recent Documents",
-            Category = "Office",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the recent documents list in Office apps for tidier startup.",
-            Tags = ["office", "privacy", "recent"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Place MRU"],
-        },
-        new TweakDef
-        {
-            Id = "office-disable-office-cloud-save",
-            Label = "Default Save to Local (Not Cloud)",
-            Category = "Office",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Office default save location to local disk instead of prompting for OneDrive/SharePoint.",
-            Tags = ["office", "save", "cloud", "onedrive"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General"],
         },
         new TweakDef
         {
@@ -236,17 +203,6 @@ internal static class Office
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "HideEnableDisableUpdates"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "EnableAutomaticUpdates", 0)],
-        },
-        new TweakDef
-        {
-            Id = "office-relax-office-protected-view",
-            Label = "Relax Office Protected View",
-            Category = "Office",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description = "Disables Protected View for files from the internet and Outlook attachments. Speeds up opening but reduces security.",
-            Tags = ["office", "security", "protected-view"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView"],
         },
         new TweakDef
         {

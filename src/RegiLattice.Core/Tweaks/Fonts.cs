@@ -28,17 +28,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-enable-smoothing",
-            Label = "Enable Font Smoothing",
-            Category = "Fonts",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Activates font smoothing at the system level so all text benefits from anti-aliased rendering.",
-            Tags = ["fonts", "smoothing", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-        },
-        new TweakDef
-        {
             Id = "font-disable-antialiasing",
             Label = "Disable Font Antialiasing (Performance)",
             Category = "Fonts",
@@ -84,32 +73,6 @@ internal static class Fonts
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Bold Italic (TrueType)"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI (TrueType)", "segoeui.ttf")],
-        },
-        new TweakDef
-        {
-            Id = "font-disable-download-edge",
-            Label = "Disable Font Download in Edge",
-            Category = "Fonts",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Microsoft Edge from downloading web fonts via the DefaultFontDownloadSetting policy (value 2 = block).",
-            Tags = ["fonts", "edge", "download", "policy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-        },
-        new TweakDef
-        {
-            Id = "font-block-untrusted",
-            Label = "Block Untrusted Font Loading",
-            Category = "Fonts",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks loading of untrusted fonts from user-writable locations via the kernel MitigationOptions flag — hardens the system against font-based exploits.",
-            Tags = ["fonts", "untrusted", "security", "mitigation", "kernel"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions"),
-            ],
         },
         new TweakDef
         {
@@ -210,39 +173,6 @@ internal static class Fonts
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
-        },
-        new TweakDef
-        {
-            Id = "font-block-ie-zone-download",
-            Label = "Block Font Downloads in Internet Zone",
-            Category = "Fonts",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks downloading of fonts in the Internet security zone (Zone 3) via the 1604 policy value — prevents drive-by font-based exploits in legacy applications.",
-            Tags = ["fonts", "internet", "zone", "download", "security", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3"],
-        },
-        new TweakDef
-        {
-            Id = "font-fonts-disable-streaming",
-            Label = "Disable Font Streaming",
-            Category = "Fonts",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables cloud font streaming from Microsoft. Prevents background font downloads. Reduces network traffic. Default: Enabled. Recommended: Disabled.",
-            Tags = ["fonts", "streaming", "network", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-        },
-        new TweakDef
-        {
-            Id = "font-fonts-cleartype-performance",
-            Label = "Set ClearType Gamma",
-            Category = "Fonts",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Optimizes ClearType font rendering gamma to 2200 for better readability on LCD displays. Default: 1800. Recommended: 2200.",
-            Tags = ["fonts", "cleartype", "rendering", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1"],
         },
         new TweakDef
         {

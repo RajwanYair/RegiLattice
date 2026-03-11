@@ -70,39 +70,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables large system cache, dedicating more RAM for file caching (beneficial with 16 GB+ RAM).",
-            Tags = ["power", "performance", "memory"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-power-throttling",
-            Label = "Disable Power Throttling",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables CPU power throttling for maximum sustained performance.",
-            Tags = ["power", "performance", "cpu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-ntfs-last-access",
-            Label = "Disable NTFS Last Access Timestamp",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Stops NTFS from updating last-access timestamps, reducing disk I/O.",
-            Tags = ["power", "performance", "disk", "ntfs"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-        },
-        new TweakDef
-        {
             Id = "power-disable-connected-standby",
             Label = "Disable Connected Standby",
             Category = "Power",
@@ -140,17 +107,6 @@ internal static class Power
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583", "ValueMax"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583", "ValueMax", 0)],
-        },
-        new TweakDef
-        {
-            Id = "power-max-processor-turbo",
-            Label = "Set Max Processor State to 100%",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Ensures the CPU is allowed to reach its maximum turbo frequency.",
-            Tags = ["power", "cpu", "turbo", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7"],
         },
         new TweakDef
         {
@@ -254,49 +210,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-high-performance-plan",
-            Label = "Set High Performance Power Plan",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets the active power plan to High Performance (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c). Maximizes CPU frequency and disables power-saving features. Remove reverts to Balanced plan.",
-            Tags = ["power", "plan", "high-performance", "cpu"],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-usb-power-save",
-            Label = "Disable USB Power Saving",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables USB selective suspend globally to prevent USB device disconnects. Keeps all USB ports powered at all times. Default: Enabled. Recommended: Disabled for desktop PCs.",
-            Tags = ["power", "usb", "suspend", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-pci-express-pm",
-            Label = "Disable Connected Standby",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Connected Standby (Modern Standby) which manages PCI Express link state power. Prevents low-power idle states that can cause wake issues. Default: Enabled. Recommended: Disabled for desktops.",
-            Tags = ["power", "connected-standby", "pci-express", "idle"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-        },
-        new TweakDef
-        {
-            Id = "power-pwr-disable-usb-selective-suspend",
-            Label = "Disable USB 3.0 Selective Suspend",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables selective suspend on USB 3.0 hubs (USBHUB3 driver). Prevents USB 3.0 device disconnects during idle. Default: Enabled. Recommended: Disabled for desktop PCs.",
-            Tags = ["power", "usb", "selective-suspend", "usb3"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBHUB3\Parameters"],
-        },
-        new TweakDef
-        {
             Id = "power-pwr-pcie-link-pm-off",
             Label = "Disable PCI Express Link State Power Management",
             Category = "Power",
@@ -339,17 +252,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-no-password-on-resume",
-            Label = "Disable Password Prompt on Sleep Resume",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the policy requiring a password when the system resumes from sleep. Improves convenience on personal machines. Default: Enabled. Recommended: Disabled on personal workstations.",
-            Tags = ["power", "sleep", "password", "resume", "lock"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\Power"],
-        },
-        new TweakDef
-        {
             Id = "power-disable-throttling-policy",
             Label = "Disable Power Throttling (Modern Standby)",
             Category = "Power",
@@ -370,17 +272,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-energy-estimation",
-            Label = "Disable Energy Estimation Engine",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Energy Estimation engine that continuously monitors power usage. Reduces overhead on desktop systems. Default: Enabled. Recommended: Disabled.",
-            Tags = ["power", "energy", "estimation", "overhead"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation"],
-        },
-        new TweakDef
-        {
             Id = "power-disable-sleep-away",
             Label = "Disable Hibernate Boot and Sleep Away",
             Category = "Power",
@@ -398,17 +289,6 @@ internal static class Power
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\29f6c1db-86da-48c5-9fdb-f2b67b1f44da", "ValueMax", 1800),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\29f6c1db-86da-48c5-9fdb-f2b67b1f44da", "ValueMax", 0)],
-        },
-        new TweakDef
-        {
-            Id = "power-standby-reserve-grace",
-            Label = "Set Standby Reserve Grace Period",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the StandbyReserveGracePeriod to 120 seconds, giving more time before the system enters deep standby. Prevents premature sleep interruptions. Default: System defined. Recommended: 120s.",
-            Tags = ["power", "standby", "grace", "sleep", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
         },
         new TweakDef
         {

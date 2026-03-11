@@ -28,28 +28,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-disable-negative-cache",
-            Label = "Disable DNS Negative Cache",
-            Category = "DNS & Networking Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets MaxNegativeCacheTtl=0 so failed DNS lookups are not cached. Useful when DNS records change frequently. Default: 5 seconds. Recommended: 0.",
-            Tags = ["dns", "cache", "network", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-        },
-        new TweakDef
-        {
-            Id = "dns-increase-cache-entry-ttl",
-            Label = "Increase DNS Cache Entry TTL",
-            Category = "DNS & Networking Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the maximum cache entry TTL to 24 hours (86400s) for faster repeat lookups. Reduces SOA cache to 300s. Default: 86400. Recommended: 86400.",
-            Tags = ["dns", "cache", "performance", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-        },
-        new TweakDef
-        {
             Id = "dns-disable-mdns",
             Label = "Disable Multicast DNS (mDNS)",
             Category = "DNS & Networking Advanced",
@@ -172,21 +150,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-disable-ipv6-transition",
-            Label = "Disable IPv6 Transition Technologies",
-            Category = "DNS & Networking Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables 6to4, ISATAP, and Teredo IPv6 tunneling adapters. Reduces attack surface from legacy transition mechanisms. Default: 0. Recommended: 0xFF (all disabled).",
-            Tags = ["dns", "ipv6", "security", "network", "tunnel"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "dns-tcp-keepalive-tuning",
             Label = "Tune TCP Keep-Alive Intervals",
             Category = "DNS & Networking Advanced",
@@ -266,17 +229,6 @@ internal static class DnsNetworking
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
-            Id = "dns-reduce-query-timeout",
-            Label = "Reduce DNS Query Timeout",
-            Category = "DNS & Networking Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Reduces DNS query adapter timeout to 2000 ms for faster failover to alternate DNS servers. Default: 5000 ms. Recommended: 2000 ms.",
-            Tags = ["dns", "timeout", "failover", "performance", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
         },
         new TweakDef
         {

@@ -8,17 +8,6 @@ internal static class WindowsUpdate
     [
         new TweakDef
         {
-            Id = "wu-disable-delivery-optimization",
-            Label = "Disable Delivery Optimization (P2P)",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables peer-to-peer update sharing, forcing updates to download only from Microsoft servers.",
-            Tags = ["update", "network", "p2p"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-        },
-        new TweakDef
-        {
             Id = "wu-defer-quality-updates",
             Label = "Defer Quality Updates (30 days)",
             Category = "Windows Update",
@@ -105,28 +94,6 @@ internal static class WindowsUpdate
         },
         new TweakDef
         {
-            Id = "wu-disable-wus-medic",
-            Label = "Disable WaaS Medic Service",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows Update Medic Service that re-enables disabled updates.",
-            Tags = ["update", "service", "medic"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc"],
-        },
-        new TweakDef
-        {
-            Id = "wu-disable-update-orchestrator",
-            Label = "Disable Update Orchestrator Service",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Update Orchestrator Service (UsoSvc) that manages update scans.",
-            Tags = ["update", "service", "orchestrator"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc"],
-        },
-        new TweakDef
-        {
             Id = "wu-set-active-hours-au",
             Label = "Set Active Hours (8 AM - 11 PM)",
             Category = "Windows Update",
@@ -195,17 +162,6 @@ internal static class WindowsUpdate
         },
         new TweakDef
         {
-            Id = "wu-disable-update-notifications",
-            Label = "Suppress Update Restart Notifications",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Suppresses the nagging restart-required notifications from Windows Update.",
-            Tags = ["update", "notifications", "restart"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
-        },
-        new TweakDef
-        {
             Id = "wu-disable-do-upload",
             Label = "Disable Delivery Optimization Upload",
             Category = "Windows Update",
@@ -223,17 +179,6 @@ internal static class WindowsUpdate
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wu-disable-auto-restart",
-            Label = "Disable Windows Update Auto-Restart",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows Update from automatically restarting the PC while users are logged on. Stops unexpected reboots during work. Default: Auto-restart. Recommended: Disabled.",
-            Tags = ["update", "restart", "reboot", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
         },
         new TweakDef
         {
@@ -378,28 +323,6 @@ internal static class WindowsUpdate
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AutoInstallMinorUpdates"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AutoInstallMinorUpdates", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wu-exclude-drivers-quality",
-            Label = "Exclude Drivers from Quality Updates",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Excludes driver updates from Windows quality (monthly) updates. Prevents driver rollouts via WU quality channel. Default: Included. Recommended: Excluded for stability.",
-            Tags = ["update", "driver", "quality", "exclude"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-        },
-        new TweakDef
-        {
-            Id = "wu-disable-ux-access",
-            Label = "Disable Windows Update UX Access",
-            Category = "Windows Update",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Update UX access, preventing users from interacting with WU settings directly. Useful for managed environments. Default: Enabled. Recommended: Disabled for managed systems.",
-            Tags = ["update", "ux", "policy", "access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
         },
         new TweakDef
         {

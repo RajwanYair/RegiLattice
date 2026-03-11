@@ -8,72 +8,6 @@ internal static class Shell
     [
         new TweakDef
         {
-            Id = "shell-take-ownership",
-            Label = "Take Ownership Context Menu",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds a 'Take Ownership' entry to the right-click context menu for files, folders, and drives.",
-            Tags = ["shell", "context-menu", "ownership"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\*\shell\TakeOwnership", @"HKEY_CLASSES_ROOT\*\shell\TakeOwnership\command", @"HKEY_CLASSES_ROOT\Directory\shell\TakeOwnership", @"HKEY_CLASSES_ROOT\Directory\shell\TakeOwnership\command", @"HKEY_CLASSES_ROOT\Drive\shell\TakeOwnership", @"HKEY_CLASSES_ROOT\Drive\shell\TakeOwnership\command"],
-        },
-        new TweakDef
-        {
-            Id = "shell-open-cmd-here",
-            Label = "'Open CMD Here' Context Menu",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds 'Open Command Prompt Here' to the folder background context menu.",
-            Tags = ["shell", "context-menu", "cmd"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\Directory\Background\shell\cmd_here", @"HKEY_CLASSES_ROOT\Directory\Background\shell\cmd_here\command"],
-        },
-        new TweakDef
-        {
-            Id = "shell-file-hash-context",
-            Label = "'Get File Hash' Context Menu",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds 'Get File Hash (SHA256)' to the right-click menu for any file.",
-            Tags = ["shell", "context-menu", "hash", "security"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\*\shell\GetFileHash", @"HKEY_CLASSES_ROOT\*\shell\GetFileHash\command"],
-        },
-        new TweakDef
-        {
-            Id = "shell-open-ps-here",
-            Label = "'Open PowerShell Here' Context Menu",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds 'Open PowerShell Here' to the folder background context menu.",
-            Tags = ["shell", "context-menu", "powershell"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\Directory\Background\shell\powershell_here", @"HKEY_CLASSES_ROOT\Directory\Background\shell\powershell_here\command"],
-        },
-        new TweakDef
-        {
-            Id = "shell-open-wt-here",
-            Label = "'Open Terminal Here' Context Menu",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds 'Open Terminal Here' to the folder background right-click menu. Requires Windows Terminal to be installed.",
-            Tags = ["shell", "context-menu", "terminal", "wt"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\Directory\Background\shell\wt_here"],
-        },
-        new TweakDef
-        {
-            Id = "shell-classic-context-menu",
-            Label = "Restore Classic Context Menu (Win11)",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Restores the full Windows 10-style right-click context menu on Windows 11 by disabling the modern truncated menu.",
-            Tags = ["shell", "context-menu", "win11", "classic"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"],
-        },
-        new TweakDef
-        {
             Id = "shell-disable-recent-files",
             Label = "Disable Recent Files in Quick Access",
             Category = "Shell",
@@ -254,40 +188,6 @@ internal static class Shell
         },
         new TweakDef
         {
-            Id = "shell-disable-autoplay",
-            Label = "Disable AutoPlay for All Media",
-            Category = "Shell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables AutoPlay for all drive types (USB, CD, network). Prevents automatic execution of media content. Default: Enabled. Recommended: Disabled.",
-            Tags = ["shell", "autoplay", "autorun", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 0)],
-        },
-        new TweakDef
-        {
-            Id = "shell-cmd-autocomplete",
-            Label = "Enable Command Prompt Tab Auto-Complete",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables Tab key auto-completion for file and path names in cmd.exe. Sets CompletionChar and PathCompletionChar to Tab (0x9). Default: Disabled. Recommended: Enabled.",
-            Tags = ["shell", "cmd", "autocomplete", "productivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Command Processor"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Command Processor", "CompletionChar"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Command Processor", "PathCompletionChar"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Command Processor", "CompletionChar", 0)],
-        },
-        new TweakDef
-        {
             Id = "shell-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
             Category = "Shell",
@@ -305,28 +205,6 @@ internal static class Shell
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-python-store-alias",
-            Label = "Disable Windows Store Python Aliases",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Windows Store 'python' and 'python3' app execution aliases that redirect to the Store. Ensures the real Python interpreter is used. Default: Enabled (Store aliases active). Recommended: Disabled.",
-            Tags = ["shell", "python", "alias", "store", "developer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths"],
-        },
-        new TweakDef
-        {
-            Id = "shell-add-python-to-path",
-            Label = "Add Python to User PATH",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Adds the Python installation directory and Scripts folder to the user PATH environment variable. Makes python.exe, pip.exe, and py.exe available in all command prompts. Default: Not in PATH. Recommended: Enabled for developers.",
-            Tags = ["shell", "python", "path", "environment", "developer", "pip"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
         },
         new TweakDef
         {

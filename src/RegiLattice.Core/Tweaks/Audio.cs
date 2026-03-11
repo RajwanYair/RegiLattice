@@ -8,17 +8,6 @@ internal static class Audio
     [
         new TweakDef
         {
-            Id = "audio-disable-system-sounds",
-            Label = "Disable System Sounds",
-            Category = "Audio",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the Windows sound scheme to .None, silencing all system event sounds (alerts, notifications, asterisks, etc.).",
-            Tags = ["audio", "sounds", "scheme", "silence"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes"],
-        },
-        new TweakDef
-        {
             Id = "audio-disable-startup-sound",
             Label = "Disable Startup Sound",
             Category = "Audio",
@@ -36,17 +25,6 @@ internal static class Audio
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
-        },
-        new TweakDef
-        {
-            Id = "audio-disable-comm-ducking",
-            Label = "Disable Communication Auto-Reduction",
-            Category = "Audio",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from automatically reducing the volume of other sounds during voice/video calls (UserDuckingPreference=3).",
-            Tags = ["audio", "ducking", "communication", "volume"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
         },
         new TweakDef
         {
@@ -87,17 +65,6 @@ internal static class Audio
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio", 0)],
-        },
-        new TweakDef
-        {
-            Id = "audio-disable-notification-sounds",
-            Label = "Disable Notification Sounds",
-            Category = "Audio",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Silences all notification sounds while keeping toast notifications visible.",
-            Tags = ["audio", "notifications", "sounds", "toast"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
         },
         new TweakDef
         {
@@ -263,28 +230,6 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-disable-absolute-volume",
-            Label = "Disable Bluetooth Absolute Volume",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Bluetooth absolute volume control. Allows independent volume adjustment for BT and system. Default: Enabled. Recommended: Disabled for BT headphones.",
-            Tags = ["audio", "bluetooth", "absolute-volume", "headphones"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Bluetooth\Audio\AVRCP\CT"],
-        },
-        new TweakDef
-        {
-            Id = "audio-reduce-audio-latency",
-            Label = "Reduce Audio Latency",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables low-latency audio mode by reducing the audio buffer size. Improves real-time audio responsiveness. Default: Disabled. Recommended: Enabled for music production.",
-            Tags = ["audio", "latency", "buffer", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-        },
-        new TweakDef
-        {
             Id = "audio-disable-loudness-eq",
             Label = "Disable Loudness Equalization",
             Category = "Audio",
@@ -342,39 +287,6 @@ internal static class Audio
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl", 0)],
-        },
-        new TweakDef
-        {
-            Id = "audio-set-sfio-high-priority",
-            Label = "Set Audio SFIO Priority to Normal",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets SFIO (Synchronous File I/O) priority for the Audio task to Normal. Prevents audio dropouts caused by competing I/O operations. Default: Not set. Recommended: Normal for audio production.",
-            Tags = ["audio", "sfio", "priority", "latency", "production"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-        },
-        new TweakDef
-        {
-            Id = "audio-set-pro-audio-scheduling",
-            Label = "Set Audio Scheduling to Pro Audio",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets the Audio multimedia system profile scheduling category to 'Pro Audio'. Allocates higher CPU time slices to audio processing threads. Default: Medium. Recommended: Pro Audio for DAW use.",
-            Tags = ["audio", "scheduling", "pro-audio", "daw", "priority"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-        },
-        new TweakDef
-        {
-            Id = "audio-set-gpu-priority",
-            Label = "Raise GPU Priority for Audio Task",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets GPU Priority to 8 for the Audio multimedia system profile task. Reduces audio glitches when GPU is under heavy load. Default: Not set. Recommended: 8 for content creation.",
-            Tags = ["audio", "gpu", "priority", "glitch", "production"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
         },
         new TweakDef
         {

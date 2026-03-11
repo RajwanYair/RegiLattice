@@ -72,17 +72,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-disable-default-mgmt",
-            Label = "Disable Windows Default Printer Management",
-            Category = "Printing",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops Windows from automatically setting the default printer to the last one used. Keeps your chosen default printer fixed.",
-            Tags = ["printing", "default", "management"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"],
-        },
-        new TweakDef
-        {
             Id = "printing-disable-xps-writer",
             Label = "Disable XPS Document Writer",
             Category = "Printing",
@@ -100,17 +89,6 @@ internal static class Printing
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableXPSDocumentWriter"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableXPSDocumentWriter", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-publishing",
-            Label = "Disable Network Printer Publishing",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents shared printers from being published in Active Directory. Reduces AD clutter on enterprise networks.",
-            Tags = ["printing", "network", "activedirectory", "enterprise"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
         },
         new TweakDef
         {
@@ -256,17 +234,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-print-default-paper-a4",
-            Label = "Set Default Paper Size to A4",
-            Category = "Printing",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the default paper size to A4 (paper ID 9) for all printers. Default: Letter (US). Recommended: A4 outside North America.",
-            Tags = ["printing", "paper", "a4", "international"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"],
-        },
-        new TweakDef
-        {
             Id = "printing-print-point-and-print-restrict",
             Label = "Enable Point and Print Restrictions",
             Category = "Printing",
@@ -292,61 +259,6 @@ internal static class Printing
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "UpdatePromptSettings"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "Restricted", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-copy-files-policy",
-            Label = "Restrict Printer Driver Copy Files (CVE-2021-34527 Fix)",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables CopyFilesPolicy=1 to restrict printer driver copy file operations. Mitigates PrintNightmare attack vector CVE-2021-34527. Default: Unrestricted. Recommended: Restricted.",
-            Tags = ["printing", "security", "printnightmare", "driver", "copy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-        },
-        new TweakDef
-        {
-            Id = "printing-emf-despooling",
-            Label = "Enable EMF Direct Despooling",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables direct EMF despooling to bypass spooler for local printers. Can improve print speed for EMF print jobs. Default: Disabled. Recommended: Enabled for performance.",
-            Tags = ["printing", "emf", "despooling", "performance", "local"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print"],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-client-side-map",
-            Label = "Disable Client-Port Printer Mapping in RDP",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables client-side COM port mapping in RDP sessions. Prevents COM port printer redirection from RDP clients. Default: Enabled. Recommended: Disabled for security.",
-            Tags = ["printing", "rdp", "com-port", "redirect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-spooler-log",
-            Label = "Disable Spooler Always-On Logging",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables LogAlways verbose spooler logging. Reduces log noise and disk writes from print subsystem. Default: Enabled. Recommended: Disabled.",
-            Tags = ["printing", "logging", "spooler", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-        },
-        new TweakDef
-        {
-            Id = "printing-package-point-server-list",
-            Label = "Restrict Package Point-and-Print to Server List",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Package Point-and-Print server list restriction. Limits which servers can silently install printer drivers. Default: Unrestricted. Recommended: Restricted.",
-            Tags = ["printing", "package", "point-and-print", "server", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
         },
         new TweakDef
         {

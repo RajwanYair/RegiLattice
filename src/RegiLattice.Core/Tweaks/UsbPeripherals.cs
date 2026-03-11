@@ -8,17 +8,6 @@ internal static class UsbPeripherals
     [
         new TweakDef
         {
-            Id = "usb-disable-selective-suspend",
-            Label = "Disable USB Selective Suspend",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevent USB devices from entering low-power suspend. Fixes disconnect issues. Default: enabled. Recommended: disabled.",
-            Tags = ["usb", "suspend", "power", "disconnect"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-        },
-        new TweakDef
-        {
             Id = "usb-disable-autoplay",
             Label = "Disable AutoPlay (User)",
             Category = "USB & Peripherals",
@@ -56,17 +45,6 @@ internal static class UsbPeripherals
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1)],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-mass-storage",
-            Label = "Disable USB Mass Storage Driver",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevent USB flash drives from being mounted. Security hardening. Default: enabled (Start=3).",
-            Tags = ["usb", "storage", "security", "block"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR"],
         },
         new TweakDef
         {
@@ -189,61 +167,6 @@ internal static class UsbPeripherals
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoAutorun"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoAutorun", 1)],
-        },
-        new TweakDef
-        {
-            Id = "usb-force-safe-removal",
-            Label = "Force Safe Removal Notification",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Always show 'Safe to Remove Hardware' notification. Default: conditional.",
-            Tags = ["safe-remove", "eject", "notification"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AutoplayHandlers"],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-usb3-power-save",
-            Label = "Disable USB 3.0 Link Power Management",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables USB 3.0 enhanced power management / link power management. Improves USB stability at cost of power. Default: Enabled. Recommended: Disabled for desktops.",
-            Tags = ["usb", "usb3", "power", "lpm", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB"],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-removable-write",
-            Label = "Disable Write to Removable Storage",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables write protection on all removable storage devices. Prevents data exfiltration via USB drives. Default: Disabled. Recommended: Enabled for secure envs.",
-            Tags = ["usb", "removable", "write-protect", "security", "dlp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies"],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-hub-power-saving",
-            Label = "Disable USB Hub Power Saving",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables selective suspend on USB hubs to prevent device disconnects. Default: Enabled. Recommended: Disabled for desktops.",
-            Tags = ["usb", "hub", "power", "suspend", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\usbhub\HubG"],
-        },
-        new TweakDef
-        {
-            Id = "usb-turbo-transfer-mode",
-            Label = "Set USB Transfer Mode to Turbo (Write Cache)",
-            Category = "USB & Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables write caching on USB storage for faster transfers. Requires safe removal. Default: Disabled. Recommended: Enabled.",
-            Tags = ["usb", "transfer", "turbo", "write-cache", "speed"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR"],
         },
         new TweakDef
         {

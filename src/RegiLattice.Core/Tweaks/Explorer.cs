@@ -8,17 +8,6 @@ internal static class Explorer
     [
         new TweakDef
         {
-            Id = "explorer-show-file-extensions",
-            Label = "Show File Extensions",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Always shows file extensions (.txt, .exe, etc.) in Explorer.",
-            Tags = ["explorer", "files", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-        },
-        new TweakDef
-        {
             Id = "explorer-show-hidden-files",
             Label = "Show Hidden Files",
             Category = "Explorer",
@@ -138,21 +127,6 @@ internal static class Explorer
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-recent-places",
-            Label = "Recent Folders in Quick Access",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Adds a 'Recent Places' virtual folder to Quick Access.",
-            Tags = ["explorer", "navigation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}", @"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}\ShellFolder", @"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}", @"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}\ShellFolder"],
-            RemoveOps =
-            [
-                RegOp.DeleteTree(@"key"),
-            ],
         },
         new TweakDef
         {
@@ -322,17 +296,6 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-ps-here",
-            Label = "'Open PowerShell Here' in Explorer",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adds 'Open PowerShell Here' to the context menu when right-clicking a folder or the folder background in Explorer.",
-            Tags = ["explorer", "powershell", "context-menu", "terminal"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\Directory\shell\OpenPowerShellHere", @"HKEY_CLASSES_ROOT\Directory\Background\shell\OpenPowerShellHere"],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-recent-docs",
             Label = "Disable Recent Documents History",
             Category = "Explorer",
@@ -373,17 +336,6 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-launch-to-this-pc",
-            Label = "Open Explorer to This PC",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets File Explorer to open to This PC instead of Quick Access or Home. Provides direct access to drives. Default: Quick Access. Recommended: This PC.",
-            Tags = ["explorer", "this-pc", "launch", "navigation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-quick-access",
             Label = "Disable Quick Access Recent Files",
             Category = "Explorer",
@@ -402,127 +354,6 @@ internal static class Explorer
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1),
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "explorer-pdf-thumbnail",
-            Label = "Enable PDF Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for PDF thumbnail previews in File Explorer. Requires a PDF viewer with thumbnail support (e.g., Adobe Acrobat, Sumatra PDF). Default: no preview. Recommended: enabled.",
-            Tags = ["explorer", "thumbnail", "pdf", "preview", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.pdf\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-svg-thumbnail",
-            Label = "Enable SVG Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for SVG vector image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled.",
-            Tags = ["explorer", "thumbnail", "svg", "preview", "vector", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.svg\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-webp-thumbnail",
-            Label = "Enable WebP Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for WebP image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled.",
-            Tags = ["explorer", "thumbnail", "webp", "preview", "image", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.webp\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-stl-thumbnail",
-            Label = "Enable STL/3D File Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for STL and other 3D file thumbnail previews in File Explorer. Default: no preview. Recommended: enabled for 3D workflows.",
-            Tags = ["explorer", "thumbnail", "stl", "3d", "preview", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.stl\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-raw-thumbnail",
-            Label = "Enable RAW Image Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers Windows Imaging Component (WIC) handler for RAW camera image thumbnails (CR2, NEF, ARW, DNG, ORF) in File Explorer. Default: no preview. Recommended: enabled for photographers.",
-            Tags = ["explorer", "thumbnail", "raw", "camera", "preview", "photography", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.dng\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-font-thumbnail",
-            Label = "Enable Font File Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for font file (TTF, OTF, WOFF) thumbnail previews showing sample glyphs in File Explorer. Default: no preview. Recommended: enabled for designers.",
-            Tags = ["explorer", "thumbnail", "font", "ttf", "otf", "preview", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.ttf\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-heic-thumbnail",
-            Label = "Enable HEIC/HEIF Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers Windows Imaging Component (WIC) handler for HEIC/HEIF image thumbnail previews in File Explorer. Requires the HEIF Image Extensions from the Microsoft Store. Default: no preview. Recommended: enabled for Apple photo imports.",
-            Tags = ["explorer", "thumbnail", "heic", "heif", "preview", "apple", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.heic\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-avif-thumbnail",
-            Label = "Enable AVIF Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers Windows Imaging Component (WIC) handler for AVIF image thumbnail previews in File Explorer. Requires the AV1 Video Extension from the Microsoft Store. Default: no preview. Recommended: enabled for modern web images.",
-            Tags = ["explorer", "thumbnail", "avif", "preview", "av1", "image", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.avif\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-psd-thumbnail",
-            Label = "Enable PSD (Photoshop) Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for Adobe Photoshop (PSD) file thumbnail previews in File Explorer. May require a third-party codec or SageThumbs for full support. Default: no preview. Recommended: enabled for designers.",
-            Tags = ["explorer", "thumbnail", "psd", "photoshop", "adobe", "preview", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.psd\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-ai-thumbnail",
-            Label = "Enable AI (Illustrator) Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for Adobe Illustrator (AI) file thumbnail previews in File Explorer. Modern AI files contain an embedded PDF/SVG that compatible handlers can render. Default: no preview. Recommended: enabled for designers.",
-            Tags = ["explorer", "thumbnail", "ai", "illustrator", "adobe", "vector", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.ai\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
-        },
-        new TweakDef
-        {
-            Id = "explorer-eps-thumbnail",
-            Label = "Enable EPS Thumbnail Previews",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Registers a shell extension handler for Encapsulated PostScript (EPS) file thumbnail previews in File Explorer. Best with a PS-compatible handler like Ghostscript or SageThumbs installed. Default: no preview. Recommended: enabled for print/design workflows.",
-            Tags = ["explorer", "thumbnail", "eps", "postscript", "preview", "print", "file-format"],
-            RegistryKeys = [@"HKEY_CLASSES_ROOT\.eps\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
         },
         new TweakDef
         {

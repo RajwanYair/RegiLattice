@@ -268,17 +268,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-access-disable-magnifier",
-            Label = "Disable Magnifier Lens Mode",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Magnifier to docked mode (least intrusive). Prevents fullscreen magnification from activating accidentally. Default: Fullscreen (2). Recommended: Docked (0).",
-            Tags = ["accessibility", "magnifier", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier"],
-        },
-        new TweakDef
-        {
             Id = "acc-disable-filter-keys",
             Label = "Disable Filter Keys Shortcut",
             Category = "Accessibility",
@@ -338,17 +327,6 @@ internal static class Accessibility
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "RunNarratorAtLogon"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "acc-disable-mouse-keys",
-            Label = "Disable Mouse Keys",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Mouse Keys accessibility feature that allows the numeric keypad to control the mouse pointer. Default: Enabled. Recommended: Disabled for gamers.",
-            Tags = ["accessibility", "mouse-keys", "keyboard", "numpad"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys"],
         },
         new TweakDef
         {

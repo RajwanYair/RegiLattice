@@ -271,17 +271,6 @@ internal static class MsStore
         },
         new TweakDef
         {
-            Id = "msstore-store-disable-app-recommendations",
-            Label = "Disable Store App Recommendations",
-            Category = "Microsoft Store",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables app recommendation content via SubscribedContent policies. Prevents promoted app suggestions in Start and Settings. Default: enabled. Recommended: disabled.",
-            Tags = ["store", "recommendations", "subscribed", "content", "ads"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-        },
-        new TweakDef
-        {
             Id = "msstore-store-disable-video-autoplay",
             Label = "Disable Store Video Autoplay",
             Category = "Microsoft Store",
