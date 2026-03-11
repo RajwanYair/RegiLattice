@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
@@ -455,6 +457,119 @@ internal static class Wsl
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 0)],
+        },
+
+        // ── Command-based WSL tweaks ───────────────────────────────────────
+        new TweakDef
+        {
+            Id = "wsl-enable-feature",
+            Label = "Enable WSL Windows Feature (DISM)",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the Microsoft-Windows-Subsystem-Linux optional feature via DISM. Requires reboot.",
+            Tags = ["wsl", "feature", "dism", "install"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated("dism",
+                    ["/online", "/enable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/norestart"]);
+                if (code != 0 && !stderr.Contains("already enabled", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException($"DISM enable WSL feature failed: {stderr}");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("dism",
+                    ["/online", "/disable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/norestart"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = Elevation.RunElevated("dism",
+                    ["/online", "/get-featureinfo", "/featurename:Microsoft-Windows-Subsystem-Linux"]);
+                return code == 0 && stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-vmplatform",
+            Label = "Enable Virtual Machine Platform (DISM)",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the VirtualMachinePlatform feature required for WSL2. Requires reboot.",
+            Tags = ["wsl", "vm", "platform", "dism", "install"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated("dism",
+                    ["/online", "/enable-feature", "/featurename:VirtualMachinePlatform", "/norestart"]);
+                if (code != 0 && !stderr.Contains("already enabled", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException($"DISM enable VirtualMachinePlatform failed: {stderr}");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("dism",
+                    ["/online", "/disable-feature", "/featurename:VirtualMachinePlatform", "/norestart"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = Elevation.RunElevated("dism",
+                    ["/online", "/get-featureinfo", "/featurename:VirtualMachinePlatform"]);
+                return code == 0 && stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-compact-vhd",
+            Label = "Compact WSL2 VHD Disks",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Terminates running WSL instances and compacts all .vhdx virtual disk files to reclaim unused space. One-time action.",
+            Tags = ["wsl", "vhd", "compact", "disk", "storage"],
+            KindHint = TweakKind.PowerShell,
+            SideEffects = "Shuts down all running WSL2 instances.",
+            ApplyAction = (_) =>
+            {
+                // Shut down WSL
+                ShellRunner.Run("wsl", ["--shutdown"]);
+
+                // Find and compact all .vhdx files under the WSL Lxss directory
+                string lxssPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Packages");
+                if (!Directory.Exists(lxssPath)) return;
+
+                foreach (var vhdx in Directory.EnumerateFiles(lxssPath, "ext4.vhdx", SearchOption.AllDirectories))
+                {
+                    ShellRunner.RunPowerShell(
+                        $"Optimize-VHD -Path '{vhdx.Replace("'", "''")}' -Mode Full");
+                }
+            },
+            DetectAction = () => false, // One-time action, always shows as "not applied"
+        },
+        new TweakDef
+        {
+            Id = "wsl-shutdown",
+            Label = "Shutdown All WSL2 Instances",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Immediately terminates all running WSL2 distributions and the lightweight utility VM. Frees memory and CPU resources.",
+            Tags = ["wsl", "shutdown", "memory", "resource"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "All running WSL sessions will be terminated.",
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--shutdown"]);
+            },
+            DetectAction = () => false,
         },
     ];
 }

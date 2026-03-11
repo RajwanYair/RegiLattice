@@ -1,5 +1,6 @@
 namespace RegiLattice.Core.Tweaks;
 
+using System.IO;
 using RegiLattice.Core.Models;
 
 internal static class PackageManagement
@@ -155,6 +156,81 @@ internal static class PackageManagement
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
+        },
+
+        // ── Command-based package management tweaks ────────────────────────
+        new TweakDef
+        {
+            Id = "pkg-trust-psgallery",
+            Label = "Trust PSGallery Repository",
+            Category = "Package Management",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the PowerShell Gallery as a trusted repository, eliminating installation prompts for modules.",
+            Tags = ["package", "powershell", "psgallery", "trust", "module"],
+            KindHint = TweakKind.PowerShell,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Trusted");
+            },
+            RemoveAction = (_) =>
+            {
+                ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted");
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-PSRepository -Name PSGallery).InstallationPolicy");
+                return code == 0 && stdout.Trim().Equals("Trusted", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-install-scoop",
+            Label = "Install Scoop Package Manager",
+            Category = "Package Management",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Installs Scoop — a CLI package manager for Windows. Scoop installs apps to ~/scoop by default and requires no admin.",
+            Tags = ["package", "scoop", "install", "cli"],
+            KindHint = TweakKind.PackageManager,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell(
+                    "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; " +
+                    "Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression");
+            },
+            DetectAction = () =>
+            {
+                string path = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "scoop", "shims", "scoop.ps1");
+                return File.Exists(path);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-update-powershellget",
+            Label = "Update PowerShellGet to Latest",
+            Category = "Package Management",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Updates PowerShellGet module to the latest version for improved module management.",
+            Tags = ["package", "powershell", "powershellget", "update"],
+            KindHint = TweakKind.PackageManager,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell(
+                    "Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser");
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-Module -ListAvailable PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1).Version.ToString()");
+                if (code != 0) return false;
+                // If version >= 2.2.5, consider "applied"
+                return Version.TryParse(stdout.Trim(), out var ver) && ver >= new Version(2, 2, 5);
+            },
         },
     ];
 }

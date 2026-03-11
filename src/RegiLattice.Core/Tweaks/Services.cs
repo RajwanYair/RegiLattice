@@ -480,5 +480,68 @@ internal static class Services
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
         },
+
+        // ── Command-based service tweaks (sc.exe) ──────────────────────────
+        new TweakDef
+        {
+            Id = "svc-stop-xbox-services",
+            Label = "Stop & Disable All Xbox Services (sc)",
+            Category = "Services",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Stops and disables all Xbox-related services (XblAuthManager, XblGameSave, XboxGipSvc, XboxNetApiSvc) to free resources.",
+            Tags = ["services", "xbox", "disable", "gaming", "resources"],
+            KindHint = TweakKind.ServiceControl,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                foreach (var svc in new[] { "XblAuthManager", "XblGameSave", "XboxGipSvc", "XboxNetApiSvc" })
+                {
+                    Elevation.RunElevated("sc", ["stop", svc]);
+                    Elevation.RunElevated("sc", ["config", svc, "start=", "disabled"]);
+                }
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                foreach (var svc in new[] { "XblAuthManager", "XblGameSave", "XboxGipSvc", "XboxNetApiSvc" })
+                {
+                    Elevation.RunElevated("sc", ["config", svc, "start=", "demand"]);
+                }
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("sc", ["qc", "XblAuthManager"]);
+                return stdout.Contains("DISABLED", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "svc-stop-connected-devices",
+            Label = "Stop & Disable Connected Devices Platform Service (sc)",
+            Category = "Services",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Connected Devices Platform (CDP) service used for cross-device experiences, Timeline, and nearby sharing.",
+            Tags = ["services", "cdp", "connected", "devices", "cross-device"],
+            KindHint = TweakKind.ServiceControl,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("sc", ["stop", "CDPSvc"]);
+                Elevation.RunElevated("sc", ["config", "CDPSvc", "start=", "disabled"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("sc", ["config", "CDPSvc", "start=", "auto"]);
+                Elevation.RunElevated("sc", ["start", "CDPSvc"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("sc", ["qc", "CDPSvc"]);
+                return stdout.Contains("DISABLED", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }
