@@ -228,5 +228,247 @@ internal static class Edge
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillCreditCardEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillCreditCardEnabled", 0)],
         },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-startup-boost",
+            Label = "Disable Edge Startup Boost (Background Mode)",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Edge from pre-launching at login and running background processes, saving memory and CPU for users who don't use Edge as primary browser.",
+            Tags = ["edge", "browser", "startup", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-sidebar",
+            Label = "Disable Edge Sidebar & Shopping",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge sidebar (Discover), shopping assistant, and collections panel for a cleaner browsing experience.",
+            Tags = ["edge", "browser", "sidebar", "shopping"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-telemetry",
+            Label = "Disable Edge Telemetry",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Edge metrics, diagnostics, personalisation reporting, follow, spotlight and recommendation features.",
+            Tags = ["edge", "browser", "telemetry", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MetricsReportingEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SpotlightExperiencesAndRecommendationsEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PersonalizationReportingEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MetricsReportingEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SpotlightExperiencesAndRecommendationsEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PersonalizationReportingEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MetricsReportingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-update",
+            Label = "Disable Edge Auto-Update",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Edge from auto-updating. Useful for controlled environments or when pinning to a specific version.",
+            Tags = ["edge", "browser", "update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate", "UpdateDefault", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate", "AutoUpdateCheckPeriodMinutes", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate", "UpdateDefault"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate", "AutoUpdateCheckPeriodMinutes"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate", "UpdateDefault", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-first-run",
+            Label = "Disable Edge First-Run Experience",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Skips Edge first-run wizard and hides default top sites on new tab.",
+            Tags = ["edge", "browser", "ux", "first-run"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "NewTabPageHideDefaultTopSites", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "NewTabPageHideDefaultTopSites"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "NewTabPageHideDefaultTopSites", 1)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-password-manager",
+            Label = "Disable Edge Password Manager & Autofill",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge built-in password manager and address autofill via policy.",
+            Tags = ["edge", "browser", "password", "security", "autofill"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PasswordManagerEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PasswordManagerEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-shopping",
+            Label = "Disable Edge Shopping Features",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Edge shopping assistant, price tracking, and coupons. Reduces CPU and network usage.",
+            Tags = ["edge", "shopping", "performance", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-rewards",
+            Label = "Disable Microsoft Rewards Prompts",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Microsoft Rewards prompts in Edge via policy.",
+            Tags = ["edge", "browser", "rewards"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowMicrosoftRewards", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-sidebar-hub",
+            Label = "Disable Edge Sidebar Hub",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge sidebar (Hubs) panel via enterprise policy. Removes the sidebar icon and panel.",
+            Tags = ["edge", "sidebar", "hubs", "ux", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SideSearchEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SideSearchEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SideSearchEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-first-run",
+            Label = "Disable Edge First Run & Default Browser Check",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Hides the Edge first run experience and default browser prompt via enterprise policy.",
+            Tags = ["edge", "first-run", "welcome", "policy", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultBrowserSettingEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultBrowserSettingEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultBrowserSettingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-workspaces",
+            Label = "Disable Edge Workspaces",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Workspaces feature for shared browsing sessions via enterprise policy. Reduces background sync overhead.",
+            Tags = ["edge", "workspaces", "collaboration", "policy", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeWorkspacesEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeWorkspacesEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeWorkspacesEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-drop",
+            Label = "Disable Edge Drop",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Drop feature used for cross-device file sharing via enterprise policy. Reduces cloud sync and network usage.",
+            Tags = ["edge", "drop", "file-sharing", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeEDropEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeEDropEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeEDropEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-discover",
+            Label = "Disable Edge Discover Button",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Discover (compass) button and page context features via enterprise policy. Reduces Copilot integration.",
+            Tags = ["edge", "discover", "copilot", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiscoverPageContextEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiscoverPageContextEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiscoverPageContextEnabled", 0)],
+        },
     ];
 }

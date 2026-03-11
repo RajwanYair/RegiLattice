@@ -7,7 +7,7 @@ namespace RegiLattice.Core.Models;
 public enum TweakScope { User, Machine, Both }
 
 /// <summary>Result of an apply/remove/detect operation.</summary>
-public enum TweakResult { Applied, NotApplied, Unknown, Error, SkippedCorp, SkippedBuild }
+public enum TweakResult { Applied, NotApplied, Unknown, Error, SkippedCorp, SkippedBuild, SkippedHw }
 
 /// <summary>How a tweak performs its work.</summary>
 public enum TweakKind
@@ -90,6 +90,16 @@ public sealed class TweakDef
 
     /// <summary>Override the auto-detected TweakKind (set on tweaks with ApplyAction).</summary>
     public TweakKind? KindHint { get; init; }
+
+    /// <summary>
+    /// Optional predicate that returns false when this tweak is not applicable
+    /// to the current hardware (e.g. NVIDIA tweaks on a non-NVIDIA machine).
+    /// Evaluated lazily and cached.
+    /// </summary>
+    public Func<bool>? IsApplicable { get; init; }
+
+    /// <summary>Human-readable reason when <see cref="IsApplicable"/> returns false.</summary>
+    public string ApplicabilityNote { get; init; } = "";
 
     /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
     public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());

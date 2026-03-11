@@ -443,5 +443,303 @@ internal static class Boot
                     || stdout.Contains("not loaded", StringComparison.OrdinalIgnoreCase);
             },
         },
+
+        // ── Restored stubs with real operations ──────────────────
+
+        new TweakDef
+        {
+            Id = "boot-disable-auto-repair",
+            Label = "Disable Automatic Startup Repair",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Windows from launching Automatic Repair after consecutive boot failures. Use with caution.",
+            Tags = ["boot", "auto-repair", "recovery", "bcdedit"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "System will not auto-recover from boot failures.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "bootstatuspolicy", "IgnoreAllFailures"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/deletevalue", "{current}", "bootstatuspolicy"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("bootstatuspolicy", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("IgnoreAllFailures", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-boot-logo",
+            Label = "Disable Boot Logo (bcdedit)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Windows boot logo via bcdedit for a minimalist boot screen.",
+            Tags = ["boot", "logo", "bcdedit", "ux"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "quietboot", "yes"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/deletevalue", "{current}", "quietboot"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-driver-verifier",
+            Label = "Disable Driver Verifier Flags",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Clears Driver Verifier flags in the registry. Useful after debugging when verifier causes boot loops.",
+            Tags = ["boot", "verifier", "driver", "registry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-hiberfile",
+            Label = "Disable Hibernation File (hiberfil.sys)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables hibernation, deleting hiberfil.sys and freeing disk space equal to RAM size.",
+            Tags = ["boot", "hibernation", "disk-space", "power"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
+            SideEffects = "Disables hibernate and may disable Fast Startup.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-logo",
+            Label = "Disable OEM Boot Logo",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the OEM manufacturer logo during boot via bcdedit nologo option.",
+            Tags = ["boot", "logo", "oem", "bcdedit"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{globalsettings}", "custom:16000067", "true"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/deletevalue", "{globalsettings}", "custom:16000067"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{globalsettings}"]);
+                return stdout.Contains("16000067", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-startup-sound",
+            Label = "Disable Windows Startup Sound",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Windows startup sound that plays at login. Default: enabled.",
+            Tags = ["boot", "sound", "startup", "audio"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-winre",
+            Label = "Disable WinRE Partition",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Windows Recovery Environment. Frees recovery partition but removes repair tools.",
+            Tags = ["boot", "winre", "recovery", "disk-space"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Removes access to Windows Recovery tools.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("reagentc", ["/disable"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("reagentc", ["/enable"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("reagentc", ["/info"]);
+                return stdout.Contains("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-fast-boot-timeout",
+            Label = "Set Boot Timeout to 0 Seconds",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets BCD boot menu timeout to 0 seconds for instant boot-through. No OS selection screen shown.",
+            Tags = ["boot", "timeout", "bcdedit", "fast"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "0"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "30"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("0", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-ignore-boot-failures",
+            Label = "Ignore All Boot Failures",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Configures Windows to ignore all boot failures and skip the recovery screen. Use on stable systems only.",
+            Tags = ["boot", "failures", "policy", "server"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            SideEffects = "Boot failures will not trigger automatic repair.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-log",
+            Label = "Enable Boot Logging (ntbtlog.txt)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables boot logging via bcdedit. Writes driver load info to %%SystemRoot%%\\ntbtlog.txt.",
+            Tags = ["boot", "logging", "bcdedit", "diagnostic"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "bootlog", "yes"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "bootlog", "no"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("bootlog", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-max-proc-count",
+            Label = "Use All CPU Cores at Boot",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Configures msconfig-equivalent setting to use all processor cores during boot.",
+            Tags = ["boot", "cpu", "cores", "performance", "bcdedit"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/deletevalue", "{current}", "numproc"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return !stdout.Contains("numproc", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-menu-timeout",
+            Label = "Set Boot Menu Timeout to 10s",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the boot menu display timeout to 10 seconds. Useful for dual-boot systems.",
+            Tags = ["boot", "timeout", "menu", "dual-boot", "bcdedit"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "10"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "30"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("10", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-verbose-boot",
+            Label = "Enable Verbose Boot Messages",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Shows detailed status messages during boot instead of the logo. Useful for debugging slow boot.",
+            Tags = ["boot", "verbose", "diagnostic", "bcdedit"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "sos", "on"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "sos", "off"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("sos", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

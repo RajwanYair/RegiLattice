@@ -228,6 +228,33 @@ public sealed class TweakEngine
         return new Dictionary<string, TweakResult>(result);
     }
 
+    // ── Hardware applicability ─────────────────────────────────────────
+
+    /// <summary>
+    /// Returns true if the tweak is applicable to the current machine.
+    /// Checks the custom <see cref="TweakDef.IsApplicable"/> predicate first,
+    /// then auto-detects from category and tags.
+    /// </summary>
+    public static bool IsApplicableOnHardware(TweakDef td)
+    {
+        // Custom predicate takes priority
+        if (td.IsApplicable is not null)
+            return td.IsApplicable();
+
+        // Auto-detect from category
+        if (td.Category.Equals("WSL", StringComparison.OrdinalIgnoreCase))
+            return HardwareInfo.HasWslInstalled();
+
+        if (td.Category.Equals("Virtualization", StringComparison.OrdinalIgnoreCase))
+            return HardwareInfo.HasHyperVAvailable();
+
+        // Auto-detect from tags
+        if (td.Tags.Contains("nvidia", StringComparer.OrdinalIgnoreCase))
+            return HardwareInfo.HasNvidiaGpu();
+
+        return true;
+    }
+
     // ── Apply / Remove ──────────────────────────────────────────────────
 
     public TweakResult Apply(TweakDef td, bool requireAdmin = true, bool forceCorp = false)
@@ -236,6 +263,8 @@ public sealed class TweakEngine
             return TweakResult.SkippedCorp;
         if (td.MinBuild > 0 && td.MinBuild > WindowsBuild())
             return TweakResult.SkippedBuild;
+        if (!IsApplicableOnHardware(td))
+            return TweakResult.SkippedHw;
 
         try
         {

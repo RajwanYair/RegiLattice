@@ -478,5 +478,19 @@ internal static class CrashDiagnostics
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
         },
+        new TweakDef
+        {
+            Id = "crash-suppress-wer-ui",
+            Label = "Suppress WER Error Dialog",
+            Category = "Crash & Diagnostics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses the Windows Error Reporting UI dialog when applications crash. Errors are logged silently without user interruption. Default: shown.",
+            Tags = ["crash", "wer", "dialog", "suppress"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
+        },
     ];
 }

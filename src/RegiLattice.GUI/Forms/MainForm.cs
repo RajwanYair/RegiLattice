@@ -18,6 +18,9 @@ public partial class MainForm : Form
     // Cached status per tweak ID — refreshed on demand.
     private Dictionary<string, TweakResult> _statusCache = [];
 
+    // Tweaks that are not applicable to the current hardware.
+    private readonly HashSet<string> _inapplicableIds = new(StringComparer.Ordinal);
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -117,17 +120,26 @@ public partial class MainForm : Form
         using var brush = new SolidBrush(bg);
         e.Graphics.FillRectangle(brush, e.Bounds);
 
+        bool applicable = e.Item.Tag is TweakDef tda && !_inapplicableIds.Contains(tda.Id);
+
         // Status column (index 2) — coloured text
-        Color fg = AppTheme.Fg;
+        Color fg = applicable ? AppTheme.Fg : AppTheme.FgDim;
         if (e.ColumnIndex == 2 && e.Item.Tag is TweakDef td)
         {
-            var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            fg = status switch
+            if (!applicable)
             {
-                TweakResult.Applied => AppTheme.Green,
-                TweakResult.NotApplied => AppTheme.Red,
-                _ => AppTheme.Yellow,
-            };
+                fg = AppTheme.FgDim;
+            }
+            else
+            {
+                var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
+                fg = status switch
+                {
+                    TweakResult.Applied => AppTheme.Green,
+                    TweakResult.NotApplied => AppTheme.Red,
+                    _ => AppTheme.Yellow,
+                };
+            }
         }
 
         TextRenderer.DrawText(e.Graphics, e.SubItem?.Text ?? "", Font, e.Bounds, fg,
@@ -142,6 +154,17 @@ public partial class MainForm : Form
         {
             await Task.Run(() => _engine.RegisterBuiltins(), _cts.Token);
             SetStatus($"Loaded {_engine.TweakCount} tweaks across {_engine.CategoryCount} categories.");
+
+            // Evaluate hardware applicability (cached, runs once)
+            await Task.Run(() =>
+            {
+                foreach (var td in _engine.AllTweaks())
+                {
+                    if (!TweakEngine.IsApplicableOnHardware(td))
+                        _inapplicableIds.Add(td.Id);
+                }
+            }, _cts.Token);
+
             await RefreshStatusAsync();
         }
         catch (OperationCanceledException) { }
@@ -330,8 +353,9 @@ public partial class MainForm : Form
 
         foreach (var td in filtered)
         {
+            bool applicable = !_inapplicableIds.Contains(td.Id);
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusText = status switch
+            string statusText = !applicable ? "N/A" : status switch
             {
                 TweakResult.Applied => "Applied",
                 TweakResult.NotApplied => "Default",
@@ -339,8 +363,9 @@ public partial class MainForm : Form
                 _ => "Unknown",
             };
 
-            var item = new ListViewItem(td.Label) { Tag = td, UseItemStyleForSubItems = false };
-            Color statusColor = status switch
+            Color itemFg = applicable ? AppTheme.Fg : AppTheme.FgDim;
+            var item = new ListViewItem(td.Label) { Tag = td, UseItemStyleForSubItems = false, ForeColor = itemFg };
+            Color statusColor = !applicable ? AppTheme.FgDim : status switch
             {
                 TweakResult.Applied => AppTheme.Green,
                 TweakResult.NotApplied => AppTheme.Red,
@@ -418,16 +443,18 @@ public partial class MainForm : Form
 
         foreach (var td in all)
         {
+            bool applicable = !_inapplicableIds.Contains(td.Id);
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusText = status switch
+            string statusText = !applicable ? "N/A" : status switch
             {
                 TweakResult.Applied => "Applied",
                 TweakResult.NotApplied => "Default",
                 TweakResult.Error => "Error",
                 _ => "Unknown",
             };
+            Color itemFg = applicable ? AppTheme.Fg : AppTheme.FgDim;
             string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
-            var item = new ListViewItem(td.Label);
+            var item = new ListViewItem(td.Label) { ForeColor = itemFg };
             item.SubItems.AddRange([kindSymbol, statusText, td.Scope.ToString(), td.NeedsAdmin ? "Yes" : "No", td.CorpSafe ? "Yes" : "No", $"[{td.Category}] {td.Description}"]);
             item.Tag = td;
             _listView.Items.Add(item);
@@ -578,48 +605,20 @@ public partial class MainForm : Form
         SetStatus($"Import complete: {matched}/{ids.Count} matched.");
     }
 
-    // ── Package manager dialogs ────────────────────────────────────────────
-    private void OnOpenScoopManager()
+    // ── Package manager dialogs (non-modal so the main GUI stays responsive) ──
+    private static void ShowManagerDialog(Form dlg)
     {
-        using var dlg = new ScoopManagerDialog();
         AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
+        dlg.FormClosed += (_, _) => dlg.Dispose();
+        dlg.Show();
     }
 
-    private void OnOpenPSModuleManager()
-    {
-        using var dlg = new PSModuleManagerDialog();
-        AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
-    }
-
-    private void OnOpenPipManager()
-    {
-        using var dlg = new PipManagerDialog();
-        AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
-    }
-
-    private void OnOpenWinGetManager()
-    {
-        using var dlg = new WinGetManagerDialog();
-        AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
-    }
-
-    private void OnOpenChocolateyManager()
-    {
-        using var dlg = new ChocolateyManagerDialog();
-        AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
-    }
-
-    private void OnOpenToolVersions()
-    {
-        using var dlg = new ToolVersionsDialog();
-        AppTheme.Apply(dlg);
-        dlg.ShowDialog(this);
-    }
+    private void OnOpenScoopManager() => ShowManagerDialog(new ScoopManagerDialog());
+    private void OnOpenPSModuleManager() => ShowManagerDialog(new PSModuleManagerDialog());
+    private void OnOpenPipManager() => ShowManagerDialog(new PipManagerDialog());
+    private void OnOpenWinGetManager() => ShowManagerDialog(new WinGetManagerDialog());
+    private void OnOpenChocolateyManager() => ShowManagerDialog(new ChocolateyManagerDialog());
+    private void OnOpenToolVersions() => ShowManagerDialog(new ToolVersionsDialog());
 
     private void OnAbout()
     {

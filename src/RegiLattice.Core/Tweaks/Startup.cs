@@ -463,5 +463,33 @@ internal static class Startup
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLogonBackgroundImage")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLogonBackgroundImage", 1)],
         },
+        new TweakDef
+        {
+            Id = "startup-disable-gamebar-capture",
+            Label = "Disable Game Bar Startup Capture",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Game Bar background capture service from running at startup. Saves CPU and memory if game recording is not needed. Default: enabled.",
+            Tags = ["startup", "gamebar", "capture", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-suggested-app-installs",
+            Label = "Disable Suggested App Auto-Installs",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from silently installing suggested apps from the Microsoft Store. Stops bloatware from appearing after updates. Default: enabled.",
+            Tags = ["startup", "suggested", "apps", "bloatware"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+        },
     ];
 }

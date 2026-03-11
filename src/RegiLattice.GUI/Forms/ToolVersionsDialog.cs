@@ -83,7 +83,7 @@ internal sealed class ToolVersionsDialog : Form
         _chkUpdates.AutoSize = true;
 
         ctrlPanel.Controls.AddRange([_btnRefresh, _chkUpdates]);
-        Controls.AddRange([ctrlPanel, _lstTools, _lblStatus, lblTitle]);
+        Controls.AddRange([_lstTools, ctrlPanel, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()

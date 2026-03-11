@@ -400,5 +400,33 @@ internal static class PhoneLink
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 0)],
         },
+        new TweakDef
+        {
+            Id = "phone-disable-app-notifications",
+            Label = "Disable Phone Link Notifications",
+            Category = "Phone Link",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables notification mirroring from Phone Link. Prevents phone notifications from appearing on the PC. Default: enabled.",
+            Tags = ["phone-link", "notifications", "mirror", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications", 0)],
+        },
+        new TweakDef
+        {
+            Id = "phone-disable-suggestions",
+            Label = "Disable Phone Link Suggestions",
+            Category = "Phone Link",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Phone Link from showing app suggestions and promotions. Default: enabled.",
+            Tags = ["phone-link", "suggestions", "promotions", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
+        },
     ];
 }

@@ -503,5 +503,33 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
         },
+        new TweakDef
+        {
+            Id = "tb-disable-weather-widget",
+            Label = "Disable Weather Widget on Taskbar",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the weather and news widget on the Windows taskbar. Reduces visual clutter and background data usage. Default: enabled.",
+            Tags = ["taskbar", "weather", "widget", "feeds"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
+        },
+        new TweakDef
+        {
+            Id = "tb-set-button-grouping",
+            Label = "Never Group Taskbar Buttons",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents the taskbar from grouping similar windows together. Each window gets its own button. Default: always combine.",
+            Tags = ["taskbar", "grouping", "buttons", "combine"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
+        },
     ];
 }

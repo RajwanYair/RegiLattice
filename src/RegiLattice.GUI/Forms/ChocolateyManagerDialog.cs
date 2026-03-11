@@ -133,7 +133,7 @@ internal sealed class ChocolateyManagerDialog : Form
             flowQuick.Controls.Add(btn);
         }
 
-        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, _lblOutdated, _lblStatus, lblTitle]);
+        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, _lblOutdated, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()

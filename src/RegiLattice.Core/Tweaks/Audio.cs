@@ -398,5 +398,133 @@ internal static class Audio
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DefaultSampleRate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DefaultSampleRate", 48000)],
         },
+        new TweakDef
+        {
+            Id = "audio-disable-absolute-volume",
+            Label = "Disable Bluetooth Absolute Volume",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Bluetooth absolute volume control. Separates Bluetooth device volume from system volume. Default: enabled.",
+            Tags = ["audio", "bluetooth", "volume", "absolute"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-comm-ducking",
+            Label = "Disable Communication Ducking",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables automatic audio ducking when communications are detected (e.g., calls). Prevents volume reduction during voice calls. Default: reduce 80%.",
+            Tags = ["audio", "ducking", "communication", "volume"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 3)],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-notification-sounds",
+            Label = "Disable Notification Sounds",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables all notification sounds. Toast and system notifications appear silently. Default: enabled.",
+            Tags = ["audio", "notifications", "sounds", "quiet"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-system-sounds",
+            Label = "Disable System Sounds Scheme",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the sound scheme to 'No Sounds'. Disables all Windows event sounds (startup, navigation, errors). Default: Windows Default.",
+            Tags = ["audio", "sounds", "scheme", "quiet"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".Default")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
+        },
+        new TweakDef
+        {
+            Id = "audio-reduce-audio-latency",
+            Label = "Reduce Audio Latency (MMCSS)",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the MMCSS Audio task to high priority and low latency scheduling. Reduces audio glitches and pops. Default: Normal scheduling.",
+            Tags = ["audio", "latency", "mmcss", "priority"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "High"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 2),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "Medium"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-gpu-priority",
+            Label = "Set Audio GPU Priority to 8",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the GPU priority for the Audio MMCSS task to 8 (high). Ensures audio-related GPU operations are not delayed. Default: 8.",
+            Tags = ["audio", "gpu", "priority", "mmcss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority", 8)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority", 8)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-pro-audio-scheduling",
+            Label = "Set Pro Audio Scheduling Category",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the Pro Audio MMCSS task scheduling category to High. Optimises CPU scheduling for pro audio workloads. Default: High.",
+            Tags = ["audio", "pro-audio", "scheduling", "mmcss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 6),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Scheduling Category", "High"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 1),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Scheduling Category", "High"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 6)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-sfio-high-priority",
+            Label = "Set SFIO Priority to High",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the Scheduled File I/O (SFIO) priority for audio playback to High. Ensures audio stream buffers are filled with minimal delay. Default: Normal.",
+            Tags = ["audio", "sfio", "priority", "io"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "High")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "Normal")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "High")],
+        },
     ];
 }

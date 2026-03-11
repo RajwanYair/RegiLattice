@@ -380,5 +380,55 @@ internal static class Input
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "SnapToDefaultButton", "0")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "SnapToDefaultButton", "0")],
         },
+        new TweakDef
+        {
+            Id = "input-disable-mouse-accel",
+            Label = "Disable Mouse Acceleration",
+            Category = "Input",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables mouse acceleration (enhanced pointer precision). Provides 1:1 mouse movement for gaming and precision work. Default: acceleration enabled.",
+            Tags = ["input", "mouse", "acceleration", "gaming"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
+            ApplyOps = [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold1", "0"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold2", "0"),
+            ],
+            RemoveOps = [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "1"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold1", "6"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold2", "10"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
+        },
+        new TweakDef
+        {
+            Id = "input-enhanced-pointer-precision",
+            Label = "Disable Enhanced Pointer Precision",
+            Category = "Input",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Windows Enhanced Pointer Precision feature. Provides raw unfiltered mouse input for consistent cursor movement. Default: enabled.",
+            Tags = ["input", "pointer", "precision", "raw"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
+        },
+        new TweakDef
+        {
+            Id = "input-touch-keyboard-disable",
+            Label = "Disable Touch Keyboard Auto-Launch",
+            Category = "Input",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the touch keyboard from auto-launching when tapping text fields on non-tablet devices. Default: auto-launch on touch devices.",
+            Tags = ["input", "touch", "keyboard", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
+        },
     ];
 }

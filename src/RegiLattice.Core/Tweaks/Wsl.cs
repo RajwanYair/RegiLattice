@@ -571,5 +571,268 @@ internal static class Wsl
             },
             DetectAction = () => false,
         },
+
+        // ── Restored tweaks ───────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "wsl-autostart",
+            Label = "Auto-Start WSL2 at Logon",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Adds a Run key to pre-boot the WSL2 lightweight VM at logon, eliminating cold-start latency for the first wsl.exe invocation.",
+            Tags = ["wsl", "startup", "performance", "boot"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap", @"wsl.exe --exec /bin/true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap", @"wsl.exe --exec /bin/true")],
+        },
+        new TweakDef
+        {
+            Id = "wsl-compact-disk",
+            Label = "Enable WSL Automatic Disk Compaction",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables automatic compaction of WSL2 virtual disks to reclaim unused space without manual intervention. Win11 22H2+.",
+            Tags = ["wsl", "disk", "compact", "storage", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-default-v2",
+            Label = "Set Default WSL Version to 2 (CLI)",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the default WSL version to 2 via the wsl.exe CLI. WSL2 uses a full Linux kernel with better I/O and syscall compatibility.",
+            Tags = ["wsl", "version", "wsl2", "default", "cli"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--set-default-version", "2"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.Run("wsl", ["--status"]);
+                return code == 0 && stdout.Contains("Default Version: 2", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-default-version-2",
+            Label = "Set Default WSL Version to 2 (User Registry)",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the default WSL version to 2 via the user-level Lxss registry key. New distro installations will use WSL2.",
+            Tags = ["wsl", "version", "wsl2", "default", "registry"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-auto-update",
+            Label = "Disable WSL Auto-Update",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents WSL from automatically checking for and installing kernel/runtime updates. Useful for controlled environments.",
+            Tags = ["wsl", "update", "auto-update", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-nested-virt",
+            Label = "Disable WSL Nested Virtualisation",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Explicitly disables nested virtualisation for WSL2 guests. Reduces attack surface when Docker/KVM inside WSL is not needed.",
+            Tags = ["wsl", "virtualisation", "security", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-dns-tunneling",
+            Label = "Enable WSL DNS Tunneling",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables DNS tunneling in WSL2 so DNS requests are routed through the Windows host. Improves name resolution behind VPNs/proxies.",
+            Tags = ["wsl", "dns", "tunneling", "networking", "vpn"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-localhost-forward",
+            Label = "Enable WSL Localhost Forwarding",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables automatic forwarding of WSL2 ports to localhost on the Windows host, allowing access to WSL services via 127.0.0.1.",
+            Tags = ["wsl", "localhost", "forwarding", "networking", "port"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-nested-virt-policy",
+            Label = "Enable Nested Virtualisation (Hyper-V Policy)",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables nested virtualisation via Hyper-V Group Policy. Required by some organisations before the per-VM Lxss setting takes effect.",
+            Tags = ["wsl", "virtualisation", "policy", "hyperv", "nested"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-systemd",
+            Label = "Enable Systemd (User Registry)",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables systemd as the default init system for WSL2 via the user-level Lxss key. Services like snap, Docker, and journald require systemd.",
+            Tags = ["wsl", "systemd", "init", "services", "user"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-feature",
+            Label = "Enable WSL Feature (PowerShell)",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the Microsoft-Windows-Subsystem-Linux optional feature via PowerShell cmdlet. Requires reboot. Alternative to DISM approach.",
+            Tags = ["wsl", "feature", "install", "powershell"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart");
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _2) = ShellRunner.RunPowerShell("(Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux).State");
+                return stdout.Trim().Equals("Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-kernel-update",
+            Label = "Update WSL Kernel to Latest",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Runs wsl --update to download and install the latest WSL kernel and runtime. One-time action.",
+            Tags = ["wsl", "kernel", "update", "maintenance"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--update"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "wsl-memory-reclaim",
+            Label = "Enable WSL Auto Memory Reclaim",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables automatic memory reclaim so WSL2 returns unused cached memory to Windows. Reduces host memory pressure. Win11 22H2+.",
+            Tags = ["wsl", "memory", "reclaim", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-mirrored-network",
+            Label = "Enable WSL Mirrored Networking",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Switches WSL2 to mirrored networking mode. WSL shares the host network stack for full LAN visibility and IPv6 support. Win11 23H2+.",
+            Tags = ["wsl", "network", "mirrored", "networking"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-update-distro",
+            Label = "Update WSL Distributions (Web Download)",
+            Category = "WSL",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Runs wsl --update --web-download to update WSL components directly from the web. One-time action.",
+            Tags = ["wsl", "update", "distro", "maintenance"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--update", "--web-download"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "wsl-vm-platform",
+            Label = "Enable VM Platform (PowerShell)",
+            Category = "WSL",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the VirtualMachinePlatform optional feature via PowerShell cmdlet. Required for WSL2. Requires reboot. Alternative to DISM approach.",
+            Tags = ["wsl", "vm", "platform", "install", "powershell"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Disable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart");
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _2) = ShellRunner.RunPowerShell("(Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State");
+                return stdout.Trim().Equals("Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

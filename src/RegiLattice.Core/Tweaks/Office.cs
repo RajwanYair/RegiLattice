@@ -440,5 +440,61 @@ internal static class Office
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Toolbars", "QuickAccessToolbarStyle", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Toolbars", "QuickAccessToolbarStyle")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Toolbars", "QuickAccessToolbarStyle", 0)],
-        },    ];
+        },    new TweakDef
+        {
+            Id = "office-disable-office-cloud-save",
+            Label = "Disable Office Cloud Save Prompt",
+            Category = "Office",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Office default-to-cloud save prompt. Files save locally by default instead of OneDrive. Default: cloud save prompt.",
+            Tags = ["office", "cloud", "save", "onedrive"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "PreferCloudSaveLocations", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "PreferCloudSaveLocations")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "PreferCloudSaveLocations", 0)],
+        },
+        new TweakDef
+        {
+            Id = "office-disable-office-linkedin",
+            Label = "Disable Office LinkedIn Integration",
+            Category = "Office",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables LinkedIn integration in Microsoft Office applications. Removes LinkedIn profile cards and Resume Assistant. Default: enabled.",
+            Tags = ["office", "linkedin", "integration", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\LinkedIn"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\LinkedIn", "OfficeLinkedIn", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\LinkedIn", "OfficeLinkedIn")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\LinkedIn", "OfficeLinkedIn", 0)],
+        },
+        new TweakDef
+        {
+            Id = "office-disable-office-recent-docs",
+            Label = "Disable Office Recent Documents",
+            Category = "Office",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the recent documents list in Office applications. Enhances privacy by not tracking opened files. Default: enabled.",
+            Tags = ["office", "recent", "documents", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableMRU", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableMRU")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableMRU", 1)],
+        },
+        new TweakDef
+        {
+            Id = "office-relax-office-protected-view",
+            Label = "Relax Office Protected View",
+            Category = "Office",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description = "Disables Protected View for files from the internet in Word. Documents open directly without sandbox. Security risk — use cautiously. Default: protected.",
+            Tags = ["office", "protected-view", "security", "relax"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1)],
+        },
+    ];
 }

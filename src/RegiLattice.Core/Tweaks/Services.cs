@@ -543,5 +543,19 @@ internal static class Services
                 return stdout.Contains("DISABLED", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "svc-disable-xbox-live-services",
+            Label = "Disable Xbox Live Services",
+            Category = "Services",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Xbox Live Auth Manager and Xbox Live Game Save services. Saves resources if Xbox features are not used. Default: manual start.",
+            Tags = ["services", "xbox", "live", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
+        },
     ];
 }

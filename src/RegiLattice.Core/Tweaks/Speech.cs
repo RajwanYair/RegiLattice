@@ -370,5 +370,33 @@ internal static class Speech
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
         },
+        new TweakDef
+        {
+            Id = "speech-disable-policy",
+            Label = "Disable Online Speech Recognition via Policy",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables online speech recognition services via Group Policy. Forces offline-only speech processing. Default: allowed.",
+            Tags = ["speech", "recognition", "online", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-narrator-fast-speed",
+            Label = "Set Narrator to Fast Speed",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases Narrator reading speed for faster text-to-speech output. Sets the speed boost for improved productivity. Default: normal speed.",
+            Tags = ["speech", "narrator", "speed", "fast"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "RateBoost", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "RateBoost")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "RateBoost", 1)],
+        },
     ];
 }
