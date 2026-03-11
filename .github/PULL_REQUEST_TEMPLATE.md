@@ -13,23 +13,25 @@ Brief description of what this PR does.
 
 ## Changes
 
-- Added/modified `regilattice/tweaks/xxx.py`: ...
+- Added/modified `src/RegiLattice.Core/Tweaks/xxx.cs`: ...
 - ...
 
 ## Checklist
 
-- [ ] `python -m ruff check regilattice/ tests/` passes
-- [ ] `python -m pytest tests/ -x --tb=short` passes
-- [ ] `python -m mypy regilattice/` passes (or no regressions)
+- [ ] `dotnet build RegiLattice.sln` succeeds with no warnings
+- [ ] `dotnet test` passes (all 129+ tests green)
 - [ ] New tweak IDs are globally unique kebab-case
-- [ ] New tweaks have all three functions: apply, remove, detect
-- [ ] `corp_safe` and `needs_admin` flags are set correctly
-- [ ] No Unicode confusables (en-dashes, smart quotes) -- ASCII only
+- [ ] New tweaks have `ApplyOps`, `RemoveOps`, `DetectOps` (or custom delegates)
+- [ ] `CorpSafe` and `NeedsAdmin` flags are set correctly
+- [ ] All new classes are `sealed` unless inheritance is explicit
+- [ ] `#nullable enable` — no nullable warnings
+- [ ] `IReadOnlyList<T>` for all public collection properties
+- [ ] No Unicode confusables (en-dashes, smart quotes) — ASCII only
 - [ ] Commit messages follow Conventional Commits format
 
 ## Testing
 
-How did you test this? (e.g., ran smoke tests, tested on Windows 11 build XXXXX)
+How did you test this? (e.g., ran xUnit tests, tested on Windows 11 build XXXXX)
 
 ## Screenshots (if applicable)
 

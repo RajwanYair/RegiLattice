@@ -10,7 +10,7 @@ assignees: ''
 
 - **ID (kebab-case):** `category-disable-feature`  (prefix must match a slug in `copilot-instructions.md`)
 - **Label:** Disable Feature
-- **Category:** (must be one of the 69 existing categories, or propose a new one)
+- **Category:** (must be one of the 72 existing categories, or propose a new one)
 - **Needs admin:** Yes / No  (HKLM = Yes, HKCU-only = No)
 - **Corp safe:** Yes / No  (HKCU-only and non-policy = Yes)
 - **Min build:** 0 (or specific Windows build, e.g. 22000 for Windows 11)
@@ -31,20 +31,20 @@ Include `Default: 0. Recommended: 1.` in the description field.
 
 ## Apply Logic
 
-```python
-SESSION.set_dword(r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName", 1)
+```csharp
+ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName", 1)]
 ```
 
 ## Remove Logic (revert to default)
 
-```python
-SESSION.delete_value(r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName")
+```csharp
+RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName")]
 ```
 
 ## Detect Logic
 
-```python
-SESSION.read_dword(r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName") == 1
+```csharp
+DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName", 1)]
 ```
 
 ## References
@@ -58,7 +58,7 @@ SESSION.read_dword(r"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName") == 
 - [ ] Registry path verified on a clean Windows install
 - [ ] Tested apply + remove manually (`reg add` / `reg delete` or `regedit`)
 - [ ] Tweak is reversible — remove restores exact default state
-- [ ] ID is globally unique: `python -m regilattice --list` shows no conflicts
-- [ ] Smoke test passes: `python -m pytest tests/test_tweaks_smoke.py -x --tb=short`
-- [ ] Lint passes: `python -m ruff check regilattice/ tests/`
-- [ ] Validate passes: `python -m regilattice --validate`
+- [ ] ID is globally unique: `dotnet run --project src/RegiLattice.CLI -- --list` shows no conflicts
+- [ ] Tests pass: `dotnet test`
+- [ ] Build clean: `dotnet build RegiLattice.sln -c Release` with no warnings
+- [ ] Validate passes: `dotnet run --project src/RegiLattice.CLI -- --validate`

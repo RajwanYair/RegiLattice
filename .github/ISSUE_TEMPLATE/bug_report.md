@@ -12,8 +12,8 @@ A clear description of the bug.
 
 ## Steps to Reproduce
 
-1. Run `python -m regilattice ...`
-2. Select tweak "..."
+1. Launch `RegiLattice.GUI.exe` (or run `dotnet run --project src/RegiLattice.CLI -- ...`)
+2. Navigate to / select tweak "..."
 3. See error
 
 ## Expected Behaviour
@@ -27,8 +27,8 @@ What actually happens.
 ## Environment
 
 - **OS:** Windows 11 (build ...)
-- **Python:** 3.x.x
-- **RegiLattice version:** (`python -m regilattice --version`)
+- **Runtime:** .NET 10.0
+- **RegiLattice version:** 3.x.x
 - **Admin:** Yes / No
 - **Corporate network:** Yes / No
 
@@ -44,4 +44,4 @@ Paste relevant log lines here
 
 ## Additional Context
 
-Any other info (screenshots, registry export, error traceback).
+Any other info (screenshots, registry export, error stack trace).
