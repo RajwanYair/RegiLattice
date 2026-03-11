@@ -305,5 +305,83 @@ internal static class DevDrive
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
         },
+        new TweakDef
+        {
+            Id = "dev-enable-long-paths",
+            Label = "Enable Win32 Long Paths",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Win32 long path support (>260 chars). Essential for deep node_modules. Default: disabled.",
+            Tags = ["dev", "long-paths", "260", "node"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-developer-mode",
+            Label = "Enable Developer Mode",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables Windows Developer Mode. Allows sideloading apps and access to dev features. Default: disabled.",
+            Tags = ["dev", "developer-mode", "sideload", "apps"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAllTrustedApps", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAllTrustedApps")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAllTrustedApps", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-utf8-codepage",
+            Label = "Enable UTF-8 System Codepage",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the system default codepage to UTF-8 (65001). Improves compatibility with international text. Default: system locale.",
+            Tags = ["dev", "utf8", "codepage", "unicode"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "ACP", "65001"),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "OEMCP", "65001"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "ACP", "1252"),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "OEMCP", "437"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage", "ACP", "65001")],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-realtime-protection-devdrive",
+            Label = "Exclude Dev Drive from Realtime Scan",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Configures Defender to trust Dev Drive volumes for performance. Build times improve 10-30%. Default: scanned.",
+            Tags = ["dev", "defender", "realtime", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-show-file-extensions",
+            Label = "Show File Extensions in Explorer",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows file extensions for all file types in Windows Explorer. Essential for developers. Default: hidden.",
+            Tags = ["dev", "explorer", "file-extensions", "visibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
+        },
     ];
 }

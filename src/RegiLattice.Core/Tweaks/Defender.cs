@@ -621,5 +621,83 @@ internal static class Defender
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms", "1")],
         },
+        new TweakDef
+        {
+            Id = "sec-block-untrusted-fonts",
+            Label = "Block Untrusted Fonts",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Blocks processing of untrusted fonts loaded from the network. Mitigates font-based exploits. Default: allowed.",
+            Tags = ["security", "fonts", "untrusted", "exploit-mitigation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
+            ApplyOps = [RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-exploit-protection-dep",
+            Label = "Enable DEP for All Programs",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Data Execution Prevention for all programs, not just essential Windows services. Default: opt-in only.",
+            Tags = ["security", "dep", "exploit", "mitigation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-credential-guard",
+            Label = "Enable Credential Guard",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Windows Defender Credential Guard to isolate secrets using virtualization-based security. Requires Hyper-V. Default: disabled.",
+            Tags = ["security", "credential-guard", "vbs", "isolation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-smartscreen-for-edge",
+            Label = "Disable SmartScreen Filter for Edge",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the SmartScreen filter specifically for Microsoft Edge. Reduces download scan delays. Default: enabled.",
+            Tags = ["security", "smartscreen", "edge", "filter"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-audit-process-creation",
+            Label = "Enable Audit Process Creation Events",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Includes command-line data in process creation audit events (Event ID 4688). Aids forensic analysis. Default: disabled.",
+            Tags = ["security", "audit", "process", "forensics"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled", 1)],
+        },
     ];
 }

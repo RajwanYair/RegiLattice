@@ -7,11 +7,11 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A comprehensive Windows registry tweak toolkit with **~1 490 tweaks** across **69 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **~1 828 tweaks** across **72 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Highlights
 
-- **~1 490 tweaks** across 69 categories — each fully reversible with apply + remove
+- **~1 828 tweaks** across 72 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
@@ -51,7 +51,7 @@ graph LR
         T1[Performance.cs]
         T2[Privacy.cs]
         T3[Gaming.cs]
-        TN[... 65 more]
+        TN[... 68 more]
     end
 
     CLI --> TE
@@ -221,11 +221,11 @@ RegiLattice/
 │   │   │   ├── HardwareInfo.cs              # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs                    # i18n string table
 │   │   │   └── Ratings.cs                   # Tweak rating system (1-5 stars)
-│   │   └── Tweaks/                          # 68 category modules
+│   │   └── Tweaks/                          # 71 category modules
 │   │       ├── Accessibility.cs             # Accessibility (20 tweaks)
 │   │       ├── Performance.cs               # Performance (30 tweaks)
 │   │       ├── Privacy.cs                   # Privacy (33 tweaks)
-│   │       ├── ...                          # 65 more category modules
+│   │       ├── ...                          # 68 more category modules
 │   │       └── Wsl.cs                       # WSL (35 tweaks)
 │   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
 │   │   ├── Program.cs                       # Entry point

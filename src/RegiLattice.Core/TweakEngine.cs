@@ -91,8 +91,10 @@ public sealed class TweakEngine
         Register(Tweaks.Display.Tweaks);
         Register(Tweaks.DnsNetworking.Tweaks);
         Register(Tweaks.Edge.Tweaks);
+        Register(Tweaks.Encryption.Tweaks);
         Register(Tweaks.Explorer.Tweaks);
         Register(Tweaks.FileSystem.Tweaks);
+        Register(Tweaks.Firewall.Tweaks);
         Register(Tweaks.Firefox.Tweaks);
         Register(Tweaks.Fonts.Tweaks);
         Register(Tweaks.Gaming.Tweaks);
@@ -118,6 +120,7 @@ public sealed class TweakEngine
         Register(Tweaks.Printing.Tweaks);
         Register(Tweaks.Privacy.Tweaks);
         Register(Tweaks.RealVnc.Tweaks);
+        Register(Tweaks.Recovery.Tweaks);
         Register(Tweaks.RemoteDesktop.Tweaks);
         Register(Tweaks.ScheduledTasks.Tweaks);
         Register(Tweaks.ScoopTools.Tweaks);

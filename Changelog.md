@@ -21,13 +21,13 @@ C#/.NET 10 (WinForms, Microsoft.Win32.Registry). This is a clean-break major ver
   dialogs, collapsible categories, and scope badges
 - **RegiLattice.CLI** — console application with 25+ commands (apply, remove, status,
   list, search, profile, snapshot, diff, doctor, hwinfo, export, import, etc.)
-- **68 tweak category modules** — each exports `static List<TweakDef> Tweaks`
+- **71 tweak category modules** — each exports `static List<TweakDef> Tweaks`
 - **Declarative RegOp pattern** — ~95% of tweaks defined as data (ApplyOps/RemoveOps/DetectOps)
   instead of imperative code; remaining ~5% use Action/Func delegates
 
 ### Added
 
-- **~1 490 tweaks** across 69 categories (migrated from Python with all registry logic preserved)
+- **~1 828 tweaks** across 72 categories (migrated from Python with all registry logic preserved)
 - **WinForms GUI** replacing tkinter — native Windows look, double-buffered rendering,
   4 themes (Catppuccin Mocha/Latte, Nord, Dracula) with runtime switching and persistence
 - **TweakDef.RegOp** — 12 factory methods (SetDword, SetString, SetExpandString, SetQword,
