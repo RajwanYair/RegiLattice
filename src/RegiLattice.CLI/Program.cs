@@ -956,7 +956,7 @@ internal static class Program
 
     // ── Argument parsing ────────────────────────────────────────────────
 
-    private static CliArgs? ParseArgs(string[] args)
+    internal static CliArgs? ParseArgs(string[] args)
     {
         var p = new CliArgs();
         int i = 0;
@@ -1067,7 +1067,7 @@ internal static class Program
 
     // ── Parsed arguments ────────────────────────────────────────────────
 
-    private sealed class CliArgs
+    internal sealed class CliArgs
     {
         public string? Mode { get; set; }
         public string? Tweak { get; set; }
