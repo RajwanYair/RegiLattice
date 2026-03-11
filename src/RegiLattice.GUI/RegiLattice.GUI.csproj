@@ -12,7 +12,7 @@
     <ApplicationIcon />
     <StartupObject>RegiLattice.GUI.Program</StartupObject>
     <Version>2.0.0</Version>
-    <Description>RegiLattice — Native WinForms GUI</Description>
+    <Description>RegiLattice — WinForms GUI</Description>
   </PropertyGroup>
 
   <ItemGroup>

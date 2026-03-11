@@ -16,13 +16,13 @@ internal static class ShellRunner
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName               = fileName,
+                FileName = fileName,
                 RedirectStandardOutput = true,
-                RedirectStandardError  = true,
-                UseShellExecute        = false,
-                CreateNoWindow         = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
                 StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding  = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
             },
         };
         foreach (var arg in args)

@@ -1,5 +1,5 @@
 // RegiLattice.Core — Models/TweakDef.cs
-// Native C# tweak definition — replaces Python TweakDef dataclass.
+// C# tweak definition model.
 
 namespace RegiLattice.Core.Models;
 
@@ -77,40 +77,40 @@ public sealed class RegOp
 
     // ── Factory methods ─────────────────────────────────────────────────
     public static RegOp SetDword(string path, string name, int value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
 
     public static RegOp SetString(string path, string name, string value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.String };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.String };
 
     public static RegOp SetExpandString(string path, string name, string value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.ExpandString };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.ExpandString };
 
     public static RegOp SetQword(string path, string name, long value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.QWord };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.QWord };
 
     public static RegOp SetBinary(string path, string name, byte[] value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.Binary };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.Binary };
 
     public static RegOp SetMultiSz(string path, string name, string[] value) => new()
-        { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.MultiString };
+    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.MultiString };
 
     public static RegOp DeleteValue(string path, string name) => new()
-        { Kind = RegOpKind.DeleteValue, Path = path, Name = name };
+    { Kind = RegOpKind.DeleteValue, Path = path, Name = name };
 
     public static RegOp DeleteTree(string path) => new()
-        { Kind = RegOpKind.DeleteTree, Path = path };
+    { Kind = RegOpKind.DeleteTree, Path = path };
 
     public static RegOp CheckDword(string path, string name, int expected) => new()
-        { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
+    { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
 
     public static RegOp CheckString(string path, string name, string expected) => new()
-        { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.String };
+    { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.String };
 
     public static RegOp CheckMissing(string path, string name) => new()
-        { Kind = RegOpKind.CheckMissing, Path = path, Name = name };
+    { Kind = RegOpKind.CheckMissing, Path = path, Name = name };
 
     public static RegOp CheckKeyMissing(string path) => new()
-        { Kind = RegOpKind.CheckKeyMissing, Path = path };
+    { Kind = RegOpKind.CheckKeyMissing, Path = path };
 }
 
 public enum RegOpKind

@@ -16,12 +16,12 @@ public sealed class TweakEngineTests
 
     private static TweakDef MakeTweak(string id, string category = "Test", string label = "Tweak") => new()
     {
-        Id           = id,
-        Label        = label,
-        Category     = category,
+        Id = id,
+        Label = label,
+        Category = category,
         RegistryKeys = [$@"HKCU\Software\{id}"],
-        Description  = $"Description for {id}",
-        Tags         = ["test", category.ToLowerInvariant()],
+        Description = $"Description for {id}",
+        Tags = ["test", category.ToLowerInvariant()],
     };
 
     // ── Registration ────────────────────────────────────────────────────
@@ -114,7 +114,9 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var td = new TweakDef
         {
-            Id = "tag-tweak", Label = "Tag", Category = "X",
+            Id = "tag-tweak",
+            Label = "Tag",
+            Category = "X",
             Tags = ["unique-tag-xyz"],
         };
         engine.Register([td]);
@@ -190,7 +192,9 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var td = new TweakDef
         {
-            Id = "detect-action", Label = "D", Category = "X",
+            Id = "detect-action",
+            Label = "D",
+            Category = "X",
             DetectAction = () => true,
         };
         engine.Register([td]);
@@ -204,7 +208,9 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var td = new TweakDef
         {
-            Id = "apply-1", Label = "A", Category = "X",
+            Id = "apply-1",
+            Label = "A",
+            Category = "X",
             CorpSafe = true,
             RegistryKeys = [@"HKCU\Software\Test"],
             ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "Val", 1)],
@@ -219,7 +225,9 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var td = new TweakDef
         {
-            Id = "remove-1", Label = "R", Category = "X",
+            Id = "remove-1",
+            Label = "R",
+            Category = "X",
             CorpSafe = true,
             RegistryKeys = [@"HKCU\Software\Test"],
             RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Test", "Val")],
