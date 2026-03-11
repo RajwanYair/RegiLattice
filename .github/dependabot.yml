@@ -1,11 +1,10 @@
 # Dependabot Configuration
-# Automated dependency updates for RegiLattice.
+# Automated dependency updates for RegiLattice (.NET 10 / C# 13).
 
 version: 2
 updates:
-  # ── Python dev dependencies ─────────────────────────────────────────────────
-  # Runtime has zero dependencies (stdlib only). Only dev-time tools appear here.
-  - package-ecosystem: "pip"
+  # ── NuGet (.NET) ────────────────────────────────────────────────────────────
+  - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -15,22 +14,19 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
-      - "python"
+      - "nuget"
     commit-message:
       prefix: "chore(deps)"
       include: "scope"
     groups:
-      dev-tools:
+      testing:
         patterns:
-          - "pytest*"
-          - "pytest-cov*"
-          - "mypy*"
-          - "ruff*"
-          - "hypothesis*"
-          - "pytest-mock*"
-          - "build"
-          - "hatchling*"
-          - "twine*"
+          - "xunit*"
+          - "Microsoft.NET.Test.Sdk*"
+          - "coverlet*"
+      runtime:
+        patterns:
+          - "System.*"
 
   # ── GitHub Actions ──────────────────────────────────────────────────────────
   - package-ecosystem: "github-actions"

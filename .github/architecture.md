@@ -1,106 +1,118 @@
-# RegiLattice -- Architecture
+# RegiLattice — Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2026-03-09 (v1.0.1, 1 292 tweaks, 69 categories, ~17 640 tests).
+> Last verified: 2026-03-11 (v3.0.0, 1 360 tweaks, 72 categories, 129 tests).
+> C# 13 / .NET 10.0-windows (x64).
 
 ---
 
 ## 1  High-Level Data Flow
 
 ```
-                   User
-                    |
-         +----------+-----------+
-         |          |           |
-       CLI       Menu        GUI
-    (cli.py)   (menu.py)   (gui.py)
-         |          |           |
-         +----------+-----------+
-                    |
-            tweaks/__init__.py        <-- plugin loader, profiles, batch ops
-                    |
-         +----------+-----------+
-         |                      |
-    TweakDef list          _PROFILES dict
-    (1 292 tweaks)         (5 profiles)
-         |
-    tweaks/*.py               <-- 69 modules, auto-discovered
-         |
-    +----+----+
-    |         |
-registry.py  corpguard.py
-    |              |
-  winreg      ctypes / subprocess
-  reg.exe     dsregcmd, Get-NetAdapter
+                      User
+                       |
+            +----------+-----------+
+            |          |           |
+          CLI        Menu        GUI
+     (Program.cs) (interactive) (MainForm.cs)
+            |          |           |
+            +----------+-----------+
+                       |
+                 TweakEngine.cs        ← central tweak manager
+                       |
+            +----------+-----------+
+            |                      |
+       TweakDef list         ProfileDefinitions
+       (1 360 tweaks)        (5 profiles)
+            |
+       Tweaks/*.cs                 ← 72 category modules
+            |
+       +----+----+
+       |         |
+RegistrySession  CorporateGuard
+       |              |
+Microsoft.Win32   P/Invoke + WMI
+  .Registry      (GetComputerNameExW,
+                  System.Management)
 ```
 
-## 2  Module Dependency Graph
+## 2  Project Dependency Graph
 
 ```
-regilattice/
-  __init__.py             # standalone (importlib.metadata)
-  __main__.py  ----------> cli.py
-  cli.py  ----------------+---> tweaks/__init__.py
-                           +---> registry.py
-                           +---> corpguard.py
-                           +---> menu.py
-  menu.py  ---------------+---> tweaks/__init__.py
-                           +---> registry.py
-                           +---> corpguard.py
-                           +---> tweaks/maintenance.py (create_restore_point)
-  gui.py  ----------------+---> gui_widgets.py (TweakRow, CategorySection)
-                           +---> gui_theme.py (set_theme, colour constants)
-                           +---> gui_tooltip.py (Tooltip, build_tooltip_text)
-                           +---> gui_dialogs.py (import/export/scoop/about)
-                           +---> tweaks/__init__.py
-                           +---> registry.py
-                           +---> corpguard.py
-                           +---> tweaks/maintenance.py (create_restore_point)
-  elevation.py  ----------+---> registry.py
-  deps.py                  # standalone (subprocess, importlib)
-  corpguard.py  ----------+---> registry.py
-  registry.py              # standalone (winreg, subprocess, pathlib)
-  tweaks/__init__.py  -----+---> (auto-imports all tweaks/*.py modules)
-  tweaks/*.py  ------------+---> registry.py (SESSION, assert_admin)
-                            +---> tweaks/__init__.py (TweakDef only)
+RegiLattice.sln
+│
+├── src/RegiLattice.Core/               ← Class library (no UI dependencies)
+│     ├── TweakEngine.cs                ← register, search, filter, apply, profiles
+│     ├── Models/
+│     │     ├── TweakDef.cs             ← immutable tweak definition + RegOp + TweakScope
+│     │     ├── ProfileDef.cs           ← profile record type
+│     │     └── ProfileDefinitions.cs   ← 5 hardcoded profiles
+│     ├── Registry/
+│     │     └── RegistrySession.cs      ← registry read/write/backup/execute wrapper
+│     ├── Services/
+│     │     ├── Analytics.cs            ← local usage analytics
+│     │     ├── AppConfig.cs            ← configuration management
+│     │     ├── CorporateGuard.cs       ← corp network detection (P/Invoke + WMI)
+│     │     ├── Elevation.cs            ← UAC elevation helpers
+│     │     ├── HardwareInfo.cs         ← hardware detection + profile suggestion
+│     │     ├── Locale.cs               ← i18n string table
+│     │     └── Ratings.cs              ← tweak rating system (1-5 stars)
+│     └── Tweaks/                       ← 72 category modules, 1 360 tweaks
+│           ├── Accessibility.cs
+│           ├── Performance.cs
+│           ├── Privacy.cs
+│           └── ... (69 more)
+│
+├── src/RegiLattice.GUI/ ──────────────► depends on RegiLattice.Core
+│     ├── Program.cs                    ← WinForms entry point
+│     ├── Theme.cs                      ← 4-theme engine (ThemeDef record)
+│     └── Forms/
+│           ├── MainForm.cs             ← main window (categories, search, filters)
+│           ├── AboutDialog.cs          ← about + hardware info
+│           ├── ScoopManagerDialog.cs   ← Scoop package manager
+│           └── PSModuleManagerDialog.cs
+│
+├── src/RegiLattice.CLI/ ──────────────► depends on RegiLattice.Core
+│     └── Program.cs                    ← 25+ commands via args parsing
+│
+├── tests/RegiLattice.Core.Tests/ ─────► depends on RegiLattice.Core
+│     ├── TweakDefTests.cs              ← model, RegOp factories, scope computation
+│     ├── TweakEngineTests.cs           ← engine registration, search, profiles
+│     ├── RegistrySessionTests.cs       ← session helpers, dry-run, path parsing
+│     └── ServicesTests.cs              ← Analytics, Config, CorporateGuard, etc.
+│
+└── tests/RegiLattice.GUI.Tests/ ──────► depends on RegiLattice.GUI + Core
+      ├── ThemeTests.cs                 ← theme switching, colour attributes
+      └── PackageManagerValidationTests.cs
 ```
 
-**Key rule:** No circular imports. Tweak modules import only from
-`registry.py` (for SESSION/assert_admin) and `tweaks/__init__.py` (for TweakDef).
+**Key rule:** No circular references. GUI and CLI depend on Core. Core has zero
+project references — only one NuGet dependency (`System.Management 9.0.3`).
 
-## 3  Plugin Loader Sequence
+## 3  Tweak Registration Sequence
 
 ```
 Application starts
-  |
-  v
-tweaks/__init__.py is imported
-  |
-  v
-_load_plugins() runs automatically at module scope
-  |
-  v
-pkgutil.iter_modules(tweaks.__path__)
-  |
-  v
-For each .py file (skip _-prefixed):
-  |
-  +---> importlib.import_module("regilattice.tweaks.<name>")
-  |       |
-  |       v
-  |     Module executes, defining TWEAKS: list[TweakDef]
-  |
-  +---> Collect getattr(mod, "TWEAKS", [])
-  |
-  +---> Check for duplicate IDs (ValueError if found)
-  |
-  +---> Append to _ALL_TWEAKS, index in _TWEAK_INDEX
-  |
-  v
-Sort _ALL_TWEAKS by (category.lower(), label.lower())
-  |
-  v
-Ready -- all_tweaks() returns the sorted list
+  │
+  ▼
+TweakEngine.RegisterBuiltins()
+  │
+  ▼
+For each category module (72 modules):
+  │
+  ├──► Module exposes: public static IReadOnlyList<TweakDef> Tweaks { get; }
+  │
+  ├──► TweakEngine.Register(tweaks) iterates each TweakDef:
+  │       │
+  │       ├──► Checks HasOperations (ApplyOps/ApplyAction defined)
+  │       │       Skip silently if no-op stub
+  │       │
+  │       ├──► Checks Id uniqueness (throws ArgumentException on duplicate)
+  │       │
+  │       └──► Indexes into _allTweaks, _tweakIndex, _tweaksByCategory
+  │
+  ▼
+Ready — AllTweaks() returns the immutable sorted list
 ```
 
 ## 4  Tweak Execution Flow
@@ -109,215 +121,208 @@ Ready -- all_tweaks() returns the sorted list
 
 ```
 User picks "apply <id>"
-  |
-  v
-get_tweak(id) -> TweakDef
-  |
-  v
-assert_not_corporate(force_corp=flag)   # raises CorporateNetworkError
-  |
-  v
-td.apply_fn(require_admin=True)
-  |
-  v
-  _apply_<name>()
-    |
-    +---> assert_admin(require_admin)   # raises AdminRequirementError
-    +---> SESSION.backup([keys], label) # reg.exe export to .reg file
-    +---> SESSION.set_dword(...)        # winreg write
-    +---> SESSION.log(message)          # append to RegiLattice.log
+  │
+  ▼
+TweakEngine.GetTweak(id) → TweakDef?
+  │
+  ▼
+CorporateGuard.IsCorporateNetwork() check
+  │  CorpSafe=false + corporate detected → blocked (unless --force)
+  │
+  ▼
+RegistrySession.Backup(keys, label)     ← JSON backup to %LOCALAPPDATA%
+  │
+  ▼
+Declarative path (95%):                 Custom path (5%):
+  RegistrySession.Execute(ApplyOps)       td.ApplyAction(dryRun)
+  │  SetDword / SetString / DeleteValue     │  custom logic
+  │  respects DryRun mode                   │  may use RegistrySession
+  │                                         │
+  ▼                                         ▼
+TweakResult.Applied / Error             TweakResult.Applied / Error
 ```
 
 ### Detect
 
 ```
-GUI refresh / status_map()
-  |
-  v
-For each TweakDef:
-  |
-  v
-td.detect_fn()  (if not None)
-  |
-  v
-Returns True (applied), False (default), or None triggers "unknown"
-  |
-  v
-tweak_status(td) -> "applied" | "not applied" | "unknown"
+GUI refresh / TweakEngine.StatusMap(parallel: true)
+  │
+  ▼
+For each TweakDef (parallel via Task.Run):
+  │
+  ▼
+Declarative path:                       Custom path:
+  RegistrySession.Evaluate(DetectOps)     td.DetectAction()
+  │  CheckDword / CheckString / etc.      │  returns bool
+  │  All ops must pass → true             │
+  │                                       │
+  ▼                                       ▼
+TweakResult.Applied / NotApplied / Unknown
 ```
 
 ## 5  GUI Architecture
 
 ```
-RegiLatticeGUI (gui.py)
-  |
-  +-- _root: tk.Tk (main window, DWM dark title bar on Win11)
-  |
-  +-- Toolbar
-  |     +-- Search entry (StringVar, traces to _filter_rows)
-  |     +-- Status filter dropdown (All/Applied/Default/Unknown)
-  |     +-- Scope filter dropdown (All/User Only/Machine Only/Both)
-  |     +-- Profile selector dropdown (Business/Gaming/Privacy/Minimal/Server)
-  |     +-- Theme selector dropdown (Catppuccin Mocha/Latte, Nord, Dracula)
-  |     +-- Force checkbox (bypass corp guard)
-  |     +-- Selection counter ("N selected")
-  |
-  +-- Legend bar
-  |     +-- Colour key: Applied / Default / Unknown / Corp Blocked / GPO
-  |     +-- Keyboard shortcut hints
-  |
-  +-- Scrollable frame (canvas + scrollbar)
-  |     +-- CategorySection (gui_widgets.py, collapsible)
-  |           +-- Header: arrow + title + count + risk/scope/profile badges + Enable All / Disable All
-  |           +-- TweakRow instances (gui_widgets.py):
-  |                 +-- Status dot (colour) + status text (APPLIED/DEFAULT/UNKNOWN)
-  |                 +-- Checkbox (batch selection)
-  |                 +-- Toggle button (individual enable/disable)
-  |                 +-- Badges: SCOPE, ADMIN, CORP, GPO, REC
-  |                 +-- Tooltip (gui_tooltip.py: description, status, default/rec, tags, keys)
-  |
-  +-- Action bar (row 1: Apply Selected / Remove Selected)
-  +-- Action bar (row 2: Save Snapshot / Restore Snapshot / Restore Point / Export PS1)
-  +-- Action bar (row 3: Import JSON / Scoop Manager / Toggle Log / About)
-  |
-  +-- Summary stats bar: Applied / Default / Unknown / Recommended / GPO / Blocked
-  +-- Progress bar + status label
-  +-- Log viewer panel (hidden by default)
+MainForm (Forms/MainForm.cs)
+  │
+  ├── Toolbar
+  │     ├── Search TextBox (incremental filter)
+  │     ├── Status filter ComboBox (All/Applied/Default/Unknown)
+  │     ├── Scope filter ComboBox (All/User/Machine/Both)
+  │     ├── Profile selector ComboBox (Business/Gaming/Privacy/Minimal/Server)
+  │     ├── Theme selector ComboBox (Catppuccin Mocha/Latte, Nord, Dracula)
+  │     └── Force checkbox (bypass corporate guard)
+  │
+  ├── Scrollable panel (double-buffered, SuspendLayout for bulk updates)
+  │     ├── CategorySection (collapsible)
+  │     │     ├── Header: arrow + title + count + scope/profile badges
+  │     │     └── TweakRow instances:
+  │     │           ├── Status indicator (Applied/Default/Unknown)
+  │     │           ├── Checkbox (batch selection)
+  │     │           ├── Toggle button (individual enable/disable)
+  │     │           └── Badges: SCOPE (User/Machine/Both), ADMIN, CORP
+  │     └── ... (72 category sections)
+  │
+  ├── Action bar: Apply/Remove Selected, Snapshot Save/Restore, Export
+  ├── Summary stats bar: Applied / Default / Unknown counts
+  └── Progress bar + status label
 ```
-
-**GUI modules:**
-- `gui.py` — Main window, deferred init, batch loading, threading dispatch
-- `gui_widgets.py` — `TweakRow` (status, checkbox, toggle, badges, tooltip) + `CategorySection` (collapsible header, count badge, batch buttons)
-- `gui_theme.py` — 4-theme support: Catppuccin Mocha/Latte, Nord, Dracula. `set_theme()` updates all module-level constants at runtime.
-- `gui_tooltip.py` — `Tooltip` (follow-cursor Toplevel), `parse_description_metadata()` (LRU-cached), `has_recommendation()`, `build_tooltip_text()`
-- `gui_dialogs.py` — `import_json_selection()`, `export_powershell()`, `open_scoop_manager()`, `show_about()`
 
 **Threading model:**
-- Deferred init: window appears instantly, corp check runs in background thread
-- Category rows loaded in batches of 4 via `after()` scheduling
-- All tweak operations (apply/remove/scan) run in daemon threads
-- UI updates posted via `self._root.after(0, callback, ...)` (main thread only)
-- Status refresh uses `status_map(parallel=True, max_workers=8)` for bulk detection
-- Progress reported via callback functions passed to batch operations
+- Heavy operations (`StatusMap`, `ApplyBatch`) run via `Task.Run`
+- UI updates dispatched via `Invoke` / `BeginInvoke` (WinForms thread safety)
+- Status refresh uses `StatusMap(parallel: true)` for bulk detection
 
-## 6  Profile System
+## 6  Theme System
 
-```python
-_PROFILES: dict[str, dict[str, object]] = {
-    "business": {
-        "description": "...",
-        "apply_categories": frozenset({...}),   # categories to apply
-        "skip_categories": frozenset({...}),    # categories to hide
-    },
-    ...
-}
+```csharp
+public record ThemeDef(
+    string Name,
+    Color Background, Color Surface, Color Overlay,
+    Color Foreground, Color SubText,
+    Color Accent, Color Success, Color Warning, Color Error,
+    Color HeaderBg, Color HeaderFg,
+    Color RowBg, Color RowAltBg, Color RowHoverBg,
+    Color ButtonBg, Color ButtonFg, Color ButtonHoverBg,
+    Color InputBg, Color InputFg, Color InputBorder,
+    Color ScrollBg, Color ScrollThumb
+);
 ```
 
-`apply_profile(name)` iterates `tweaks_for_profile(name)` and calls each
-`TweakDef.apply_fn()`, respecting corp-safe flags. Returns
-`{tweak_id: "applied" | "skipped (corp)" | "error: ..."}`.
+4 themes: Catppuccin Mocha (default), Catppuccin Latte, Nord, Dracula.
+`Theme.SetTheme(name)` updates all form controls at runtime.
 
-## 7  Corporate Guard Decision Tree
+## 7  Profile System
 
-```
-is_corporate_network()
-  |
-  +---> _is_domain_joined()          AD domain membership
-  |       True? -> return True
-  |
-  +---> _is_azure_ad_joined()        dsregcmd /status
-  |       True? -> return True
-  |
-  +---> _has_vpn_adapter()           Get-NetAdapter vs 13 vendor keywords
-  |       True? -> return True
-  |
-  +---> _has_gpo_indicators()        HKLM\..\Policies registry check
-  |       True? -> return True
-  |
-  +---> _is_managed_device()         SCCM/Intune enrollment
-  |       True? -> return True
-  |
-  +---> return False                  Not corporate
+```csharp
+public record ProfileDef(
+    string Name,
+    string Description,
+    IReadOnlyList<string> ApplyCategories,
+    IReadOnlyList<string> SkipCategories
+);
 ```
 
-When corporate is detected and a tweak has `corp_safe=False`:
-- CLI: prints error, exits 6
-- GUI: grays out the tweak
-- Override: `--force` flag (CLI) or force checkbox (GUI)
+| Profile    | Categories | Description                                     |
+| ---------- | ---------- | ----------------------------------------------- |
+| `business` | 39         | Productivity, security, cloud & workflow        |
+| `gaming`   | 31         | GPU, performance, low-latency, distraction-free |
+| `privacy`  | 31         | Telemetry, tracking, cloud & browser data       |
+| `minimal`  | 22         | Fast, clean system essentials                   |
+| `server`   | 28         | Hardened, headless, uptime & remote mgmt        |
 
-## 8  Registry Session Internals
+`TweakEngine.ApplyProfile(name)` iterates `TweaksForProfile(name)` and calls
+`Apply()` for each, respecting corporate guard flags.
 
-```
-RegistrySession (registry.py)
-  |
-  +-- _dry_run: bool          # True in tests (no actual reg writes)
-  +-- base_dir: Path          # backup directory root
-  +-- log_path: Path          # RegiLattice.log location
-  |
-  +-- _split_root(path)       # "HKLM\...\Key" -> (HKEY_LOCAL_MACHINE, "...\Key")
-  +-- set_dword()             # winreg.CreateKeyEx + SetValueEx(REG_DWORD)
-  +-- set_string()            # winreg.CreateKeyEx + SetValueEx(REG_SZ)
-  +-- read_dword()            # winreg.OpenKeyEx + QueryValueEx -> int|None
-  +-- read_string()           # winreg.OpenKeyEx + QueryValueEx -> str|None
-  +-- key_exists()            # winreg.OpenKeyEx try/except
-  +-- delete_value()          # winreg.OpenKeyEx + DeleteValue
-  +-- delete_tree()           # recursive key deletion
-  +-- backup()                # subprocess.run(["reg", "export", ...])
-  +-- log()                   # append timestamped message to log file
-```
-
-Path parsing: `_ROOTS` maps `HKEY_LOCAL_MACHINE`, `HKLM`, `HKEY_CURRENT_USER`, `HKCU`,
-`HKEY_CLASSES_ROOT`, `HKCR` to winreg handles.
-
-## 9  Test Architecture
+## 8  Corporate Guard Decision Tree
 
 ```
-tests/
-  conftest.py
-    +-- dry_session fixture      # RegistrySession(_dry_run=True, base_dir=tmp_path)
-    +-- all_tweaks_list fixture  # session-scoped, cached list of all TweakDef
-  |
-  test_tweaks_smoke.py
-    +-- Auto-parametrized over all_tweaks_list
-    +-- Tests: apply_fn signature, remove_fn signature, detect_fn callable
-    +-- Tests: ID format (kebab-case), ID uniqueness, required fields
-    +-- ~13 tests x 1 228 tweaks = ~16 000 parametrized tests
-  |
-  test_tweaks_init.py
-    +-- Plugin loader: module count, tweak count
-    +-- Categories: sorted, non-empty
-    +-- Profiles: all 5 profiles valid, apply/skip categories exist
-    +-- Search: query matching across fields
-    +-- Batch: apply_all/remove_all with dry_run
-  |
-  test_cli.py          # argparse, --list, --profile, apply/remove dispatch
-  test_config.py       # AppConfig loading/defaults
-  test_corpguard.py    # mocked probes, force override
-  test_deps.py         # lazy_import, install_package, require
-  test_elevation.py    # is_admin(), request_elevation(), run_elevated()
-  test_gui_dialogs.py  # PS1 export, JSON import, about dialog
-  test_gui_theme.py    # theme switching, colour attribute validation
-  test_gui_tooltip.py  # tooltip text building, metadata parsing
-  test_gui_widgets.py  # tweak scope classification
-  test_menu.py         # Menu class, banner, selection
-  test_registry.py     # set/read/delete, backup, logging, path parsing
+CorporateGuard.IsCorporateNetwork()
+  │
+  ├──► _isDomainJoined()              AD domain (GetComputerNameExW P/Invoke)
+  │       True? → return True
+  │
+  ├──► _isAzureAdJoined()             Azure AD / Entra ID registry check
+  │       True? → return True
+  │
+  ├──► _hasGpoIndicators()            HKLM\...\Policies registry check
+  │       True? → return True
+  │
+  ├──► _isManagedDevice()             SCCM/Intune WMI query (System.Management)
+  │       True? → return True
+  │
+  └──► return False                   Not corporate
 ```
 
-## 10  Design Decisions
+When corporate is detected and a tweak has `CorpSafe = false`:
+- CLI: prints error message
+- GUI: grays out the tweak row
+- Override: `--force` CLI flag or Force checkbox in GUI
+
+## 9  Registry Session Internals
+
+```
+RegistrySession
+  │
+  ├── DryRun : bool                   ← When true, captures ops without writing
+  ├── DryOps : List<RegOp>            ← Captured ops during dry-run
+  ├── Log : List<string>              ← Structured log entries
+  │
+  ├── Execute(IReadOnlyList<RegOp>)   ← Write: processes SetDword, DeleteValue, etc.
+  ├── Evaluate(IReadOnlyList<RegOp>)  ← Read: processes CheckDword, CheckString, etc.
+  │
+  ├── Backup(keys, label)             ← JSON backup to %LOCALAPPDATA%\RegiLattice\backups\
+  │
+  ├── Write methods:
+  │     SetDword, SetString, SetExpandString, SetQword,
+  │     SetBinary, SetMultiSz, SetValue, DeleteValue, DeleteTree
+  │
+  ├── Read methods:
+  │     ReadDword, ReadString, ReadQword, ReadBinary,
+  │     ReadMultiSz, ReadValue
+  │
+  └── Check methods:
+        KeyExists, ValueExists, ListSubKeys, ListValueNames
+```
+
+All registry access flows through `RegistrySession`. Direct `Microsoft.Win32.Registry`
+calls are never used elsewhere. This enables:
+- **DryRun mode**: preview all changes without writes
+- **JSON backups**: automatic before destructive operations
+- **Structured logging**: every operation recorded
+- **Testability**: `DryRun = true` in unit tests
+
+## 10  Configuration Hierarchy
+
+Priority order (highest → lowest):
+
+1. **Command-line arguments** — `--dry-run`, `--force`, `--config path`
+2. **Environment variables** — `REGILATTICE_*`
+3. **User config file** — `%LOCALAPPDATA%\RegiLattice\config.json`
+4. **Default values** — hardcoded in `AppConfig`
+
+`AppConfig.Load()` merges all layers. Properties include:
+- `Theme` — UI theme name
+- `Locale` — i18n locale
+- `ForceCorpGuard` — bypass corporate guard
+- `DryRun` — preview mode
+
+## 11  Design Decisions
 
 | Decision | Rationale |
 |---|---|
-| **Plugin auto-discovery** | Zero-friction contributor experience; no central registration file to conflict on |
-| **stdlib-only runtime** | Installs anywhere without pip; works in restricted environments |
-| **TweakDef dataclass** | Single source of truth; enables parametrized testing, GUI rendering, CLI listing |
-| **`require_admin` kwarg** | Uniform API contract; allows testing with `require_admin=False` in CI |
-| **`_dry_run` mode** | Tests can validate tweak logic without touching the real registry |
+| **Sealed classes by default** | JIT devirtualisation; prevents unintended inheritance |
+| **Immutable TweakDef** | Single source of truth; enables safe parallel detection, GUI rendering, CLI listing |
+| **Declarative RegOp pattern** | 95% of tweaks need zero custom code; just `ApplyOps`/`RemoveOps`/`DetectOps` |
+| **RegistrySession wrapper** | DryRun mode, JSON backups, structured logging, testability |
+| **DryRun mode** | Tests validate tweak logic without touching the real registry |
 | **Corporate guard** | Prevents accidental damage on managed machines; legal/compliance safety |
 | **Catppuccin Mocha + 3 themes** | Modern dark theme with switchable alternatives (Latte, Nord, Dracula) |
-| **Parallel status detection** | Thread-pool `status_map()` for fast GUI refresh across 1 228 tweaks |
-| **`lru_cache` tooltip parsing** | Avoids re-parsing description metadata on every tooltip render |
-| **Recommendation badges** | Visual indicator for tweaks with `Recommended:` in description |
-| **Deferred loading** | Window appears instantly; categories loaded in batches of 4; corp check async |
-| **Threaded GUI ops** | Prevents UI freeze during long batch operations |
-| **Backup before write** | Every mutation is preceded by `reg.exe` export; enables manual rollback |
+| **Parallel status detection** | `StatusMap(parallel: true)` via Task.Run for fast GUI refresh across 1 360 tweaks |
+| **IReadOnlyList everywhere** | Immutable public contracts; prevents caller mutation |
+| **Collection expressions** | C# 13 `[]` syntax for concise, readable tweak definitions |
+| **SuspendLayout pattern** | O(1) layout recalculation during bulk control updates |
+| **Task.Run for heavy work** | Keeps WinForms UI responsive during batch operations |
+| **JSON backup before write** | Every mutation is preceded by JSON export; enables programmatic rollback |
+| **Only 2 P/Invoke calls** | Minimise unsafe code surface; prefer managed APIs |
 | **frozenset profiles** | Immutable category sets; hashable for caching |

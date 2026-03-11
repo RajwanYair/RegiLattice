@@ -9,8 +9,9 @@ report security vulnerabilities responsibly.
 
 | Version | Supported |
 |---------|-----------|
-| 1.0.x (latest) | ✅ Active security fixes |
-| < 1.0 | ❌ No longer supported |
+| 3.x (latest) | ✅ Active security fixes |
+| 2.x | ❌ No longer supported |
+| 1.x (Python) | ❌ Archived — no fixes |
 
 ---
 
@@ -40,12 +41,21 @@ within **7 days**.
 RegiLattice modifies the Windows registry. This carries inherent risk:
 
 | Risk | Mitigation |
-|------|-----------|
-| Irreversible registry changes | `RegistrySession.backup()` called before every write |
-| Privilege escalation | UAC prompt shown before any HKLM write; `assert_admin()` gate |
-| Corporate policy violations | `corpguard.py` detects domain/AAD/VPN/GPO/Intune; `corp_safe` flag per tweak |
-| Plugin code execution | Plugins loaded from `~/.regilattice/plugins/` only; path escapes rejected |
-| Supply-chain injection | Zero runtime dependencies; stdlib only |
+|------|------------|
+| Irreversible registry changes | `RegistrySession.Backup()` creates JSON backup before every write |
+| Privilege escalation | UAC prompt shown before any HKLM write; `Elevation.IsAdmin()` gate |
+| Corporate policy violations | `CorporateGuard` detects domain/AAD/GPO/Intune; `CorpSafe` flag per tweak |
+| Supply-chain injection | Minimal NuGet dependencies: `System.Management` (Microsoft-published) only |
+| Preview mode | `DryRun` mode captures all operations without writing to the registry |
+
+---
+
+## Dependencies
+
+| Package | Version | Publisher | Purpose |
+|---------|---------|-----------|---------|
+| System.Management | 9.0.3 | Microsoft | WMI queries (CorporateGuard, HardwareInfo) |
+| Microsoft.Win32.Registry | (framework) | Microsoft | Registry access via RegistrySession |
 
 ---
 
@@ -56,33 +66,42 @@ All contributors are expected to follow these practices:
 ### No Hardcoded Credentials
 
 Never commit passwords, API keys, tokens, or proxy credentials. Use environment
-variables or the system keyring.
+variables or `%LOCALAPPDATA%`.
 
 ### No Hardcoded Paths
 
-Use `Path(__file__).parent.resolve()` or `Path.home()` for all paths.
+Use `Environment.GetFolderPath()` for all paths.
 Never hardcode `C:\Users\...`.
 
 ### Input Validation
 
 Validate all user-supplied tweak IDs, registry paths, and file paths at
-the entry points (`cli.py`, `gui.py`). Reject inputs with `..` path
+the entry points (`Program.cs` in CLI and GUI). Reject inputs with `..` path
 traversal sequences.
 
-### Parameterised Commands
+### Registry Access via RegistrySession
 
-Never concatenate user input into shell command strings. All `subprocess`
-calls use list arguments, not `shell=True`.
+Never use raw `Microsoft.Win32.Registry` calls. All registry access flows
+through `RegistrySession`, which enforces DryRun mode, JSON backups,
+and structured logging.
+
+### P/Invoke Minimised
+
+Only 2 P/Invoke calls in the entire codebase:
+
+- `GetComputerNameExW` — AD domain detection (CorporateGuard)
+- `GlobalMemoryStatusEx` — RAM detection (HardwareInfo)
 
 ### Least Privilege
 
 - Request admin (UAC) only when performing HKLM writes.
-- `corp_safe=True` tweaks touch only `HKCU` — no admin required.
+- `CorpSafe = true` tweaks touch only `HKCU` — no admin required.
+- Sealed classes by default to prevent unintended inheritance.
 - Never request `SeDebugPrivilege` or `SeTcbPrivilege`.
 
 ### No Secrets in Version Control
 
-`.env` files, `.regilattice.toml` with credentials, and all `*.key` / `*.pem`
+`.env` files, config files with credentials, and all `*.key` / `*.pem`
 files are listed in `.gitignore`.
 
 ---
@@ -91,21 +110,21 @@ files are listed in `.gitignore`.
 
 | OWASP Category | Status |
 |---|---|
-| Broken Access Control | ✅ `assert_admin()` + `corp_guard()` gates |
+| Broken Access Control | ✅ `Elevation.IsAdmin()` + `CorporateGuard` gates |
 | Cryptographic Failures | ✅ No encryption used; no secrets stored |
-| Injection (command) | ✅ All subprocess calls use list args |
-| Injection (path traversal) | ✅ Plugin paths validated; no `..` allowed |
-| Insecure Design | ✅ Backup-before-write, dry-run mode |
+| Injection (command) | ✅ No `Process.Start` with user input; registry via RegistrySession |
+| Injection (path traversal) | ✅ Paths validated at entry points; no `..` allowed |
+| Insecure Design | ✅ Backup-before-write, DryRun mode |
 | Security Misconfiguration | ✅ No external services; no default credentials |
-| Vulnerable Components | ✅ Zero runtime deps; Dependabot enabled |
+| Vulnerable Components | ✅ Minimal NuGet deps (Microsoft-published); Dependabot enabled |
 | Authentication Failures | N/A — local desktop tool, no auth |
-| Software Integrity Failures | ✅ Hatchling build; pinned CI actions |
-| Security Logging | ✅ `RegistrySession.log()` records all writes |
+| Software Integrity Failures | ✅ MSBuild/dotnet build; pinned CI actions |
+| Security Logging | ✅ `RegistrySession.Log` records all writes |
 | SSRF | N/A — no outbound HTTP at runtime |
 
 ---
 
 ## Changelog
 
-Security-relevant changes are documented in [Changelog.md](Changelog.md)
+Security-relevant changes are documented in [CHANGELOG.md](CHANGELOG.md)
 and tagged with `[security]`.
