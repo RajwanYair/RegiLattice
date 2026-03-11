@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 2.0.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 3.0.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -31,7 +31,7 @@ RegiLattice.sln
 │   │   ├── Registry/            # RegistrySession wrapper
 │   │   ├── Services/            # Analytics, AppConfig, CorporateGuard, Elevation,
 │   │   │                        #   HardwareInfo, Locale, Ratings
-│   │   └── Tweaks/              # 71 category modules, ~1,828 tweaks
+│   │   └── Tweaks/              # 71 category modules, ~1,360 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── Theme.cs             # 4-theme engine

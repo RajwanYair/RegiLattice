@@ -313,17 +313,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-disable-animation-effects",
-            Label = "Disable Minimize/Maximize Animation",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables minimize and maximize window animations via WindowMetrics. Makes window switching feel instant. Default: Enabled. Recommended: Disabled for responsiveness.",
-            Tags = ["display", "animation", "minimize", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-        },
-        new TweakDef
-        {
             Id = "display-force-gpu-scaling",
             Label = "Force GPU Scaling Mode",
             Category = "Display",
@@ -364,17 +353,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-set-font-smoothing-gamma",
-            Label = "Set ClearType Font Smoothing Gamma",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets ClearType font smoothing gamma to 1200 for optimal text contrast on LCD displays. Default: Not set. Recommended: 1200 for standard LCD.",
-            Tags = ["display", "cleartype", "font", "gamma", "text"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-        },
-        new TweakDef
-        {
             Id = "display-disable-cursor-shadow",
             Label = "Disable Cursor Drop Shadow",
             Category = "Display",
@@ -412,17 +390,6 @@ internal static class Display
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity", 50)],
-        },
-        new TweakDef
-        {
-            Id = "display-disable-screensaver-policy",
-            Label = "Disable Screen Saver (Per-User Policy)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the screen saver through the per-user control panel policy. Prevents screen saver from activating regardless of system setting. Default: Active.",
-            Tags = ["display", "screensaver", "policy", "power", "idle"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Control Panel\Desktop"],
         },
         new TweakDef
         {

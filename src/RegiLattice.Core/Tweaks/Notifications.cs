@@ -248,17 +248,6 @@ internal static class Notifications
         },
         new TweakDef
         {
-            Id = "notif-silence-global-sounds",
-            Label = "Silence Global Notification Sounds",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables notification sounds via the global NOC sound setting. Default: Enabled. Recommended: Disabled.",
-            Tags = ["notifications", "sounds", "audio", "focus", "global"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
-        },
-        new TweakDef
-        {
             Id = "notif-display-time-3s",
             Label = "Set Notification Display Time to 3 Seconds",
             Category = "Notifications",
@@ -276,17 +265,6 @@ internal static class Notifications
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", 5),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", 3)],
-        },
-        new TweakDef
-        {
-            Id = "notif-disable-banners",
-            Label = "Disable Notification Banners",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables toast notification banners (pop-ups) via policy. Notifications still appear in Action Center. Default: Enabled. Recommended: Disabled for focus.",
-            Tags = ["notifications", "banners", "toast", "policy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"],
         },
         new TweakDef
         {
@@ -347,17 +325,6 @@ internal static class Notifications
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected", "Enabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected", "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "notif-disable-tips-soft-landing",
-            Label = "Disable Windows Tips (Soft Landing) Notifications",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables SoftLanding tips notifications that appear after Windows updates. Stops 'What's new in Windows' promotional pop-ups. Default: Enabled. Recommended: Disabled.",
-            Tags = ["notifications", "tips", "soft-landing", "content-delivery"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
         },
         new TweakDef
         {

@@ -8,61 +8,6 @@ internal static class Java
     [
         new TweakDef
         {
-            Id = "java-disable-java-update",
-            Label = "Disable Java Auto-Update",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Java automatic update scheduler (both 32-bit and 64-bit).",
-            Tags = ["java", "update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy"],
-        },
-        new TweakDef
-        {
-            Id = "java-disable-java-web-plugin",
-            Label = "Disable Java Web Plugin",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Java browser web plugin for better security.",
-            Tags = ["java", "security", "web"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
-        },
-        new TweakDef
-        {
-            Id = "java-disable-java-tracking",
-            Label = "Disable Java Usage Tracking",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Java's built-in usage tracking and telemetry reporting.",
-            Tags = ["java", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
-        },
-        new TweakDef
-        {
-            Id = "java-high-dpi",
-            Label = "Java: Enable High DPI Scaling",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Marks the Java runtime as DPI-aware to fix blurry rendering on high-DPI displays.",
-            Tags = ["java", "display", "dpi"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"],
-        },
-        new TweakDef
-        {
-            Id = "java-disable-java-sponsor",
-            Label = "Disable Java Sponsor Offers",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents third-party sponsor offer pop-ups during Java installations and updates.",
-            Tags = ["java", "sponsor", "bloat"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy"],
-        },
-        new TweakDef
-        {
             Id = "java-security-high",
             Label = "Java: Set Security Level to Very High",
             Category = "Java",
@@ -83,17 +28,6 @@ internal static class Java
         },
         new TweakDef
         {
-            Id = "java-disable-java-error-reporting",
-            Label = "Disable Java Error Reporting",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Suppresses Java exception dialog pop-ups and error reporting.",
-            Tags = ["java", "telemetry", "errors"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
-        },
-        new TweakDef
-        {
             Id = "java-disable-java-tip-of-day",
             Label = "Disable Java Tip of the Day",
             Category = "Java",
@@ -111,17 +45,6 @@ internal static class Java
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day", "false")],
-        },
-        new TweakDef
-        {
-            Id = "java-disable-java-cert-revoke",
-            Label = "Disable Java Certificate Revocation Check",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables OCSP certificate revocation checks for faster Java app startup (less secure).",
-            Tags = ["java", "security", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
         },
         new TweakDef
         {
@@ -166,17 +89,6 @@ internal static class Java
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration", 1)],
-        },
-        new TweakDef
-        {
-            Id = "java-disable-auto-update",
-            Label = "Disable Java Auto-Update",
-            Category = "Java",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Java automatic update checks. Default: Enabled. Recommended: Disabled for managed environments.",
-            Tags = ["java", "auto-update", "update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
         },
         new TweakDef
         {

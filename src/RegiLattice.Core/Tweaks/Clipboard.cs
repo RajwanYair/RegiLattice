@@ -8,39 +8,6 @@ internal static class Clipboard
     [
         new TweakDef
         {
-            Id = "clip-disable-history-policy",
-            Label = "Disable Clipboard History (Policy)",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables clipboard history via Group Policy. Win+V clipboard panel will be unavailable. Default: not configured. Recommended: 0 (disabled) for privacy.",
-            Tags = ["clipboard", "history", "privacy", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-        },
-        new TweakDef
-        {
-            Id = "clip-enable-history-user",
-            Label = "Enable Clipboard History (Win+V)",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables clipboard history (Win+V) for the current user. Stores last 25 copied items. Default: 0 (off). Recommended: 1 (enabled).",
-            Tags = ["clipboard", "history", "productivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-cloud-sync",
-            Label = "Disable Clipboard Cloud Sync",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables cross-device clipboard sync via Microsoft account. Prevents clipboard data from leaving the device. Default: allowed. Recommended: 0 (disabled) for privacy.",
-            Tags = ["clipboard", "cloud", "sync", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-        },
-        new TweakDef
-        {
             Id = "clip-increase-drag-threshold",
             Label = "Increase Drag-Drop Threshold (10 px)",
             Category = "Clipboard & Drag-Drop",
@@ -105,17 +72,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-disable-roaming",
-            Label = "Disable Clipboard Roaming",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables automatic clipboard upload to Microsoft account for cross-device roaming. Default: enabled. Recommended: 0 (disabled) for privacy.",
-            Tags = ["clipboard", "roaming", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
-        },
-        new TweakDef
-        {
             Id = "clip-instant-drag-delay",
             Label = "Set Instant Drag Delay (0 ms)",
             Category = "Clipboard & Drag-Drop",
@@ -153,17 +109,6 @@ internal static class Clipboard
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableClipboardSuggestedActions"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableClipboardSuggestedActions", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-text-suggestions",
-            Label = "Disable Clipboard Text Suggestions",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables text prediction suggestions in the clipboard panel. Default: enabled. Recommended: 0 (disabled).",
-            Tags = ["clipboard", "suggestions", "text", "panel"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
         },
         new TweakDef
         {
@@ -247,28 +192,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-disable-clipboard-experience",
-            Label = "Disable Clipboard Experience Host",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the clipboard experience host process that manages rich clipboard UI and suggestions. Saves memory and CPU. Default: Enabled. Recommended: Disabled for minimal setups.",
-            Tags = ["clipboard", "experience", "host", "memory", "minimal"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-suggestions",
-            Label = "Disable Clipboard Text Suggestions",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows 11 clipboard text suggestions (paste-and-go prompts). Reduces clipboard latency and prevents analysis of clipboard content. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["clipboard", "suggestions", "text", "privacy", "ai"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
-        },
-        new TweakDef
-        {
             Id = "clip-drag-threshold-medium",
             Label = "Set Drag-Drop Minimum Distance (8 px)",
             Category = "Clipboard & Drag-Drop",
@@ -288,28 +211,6 @@ internal static class Clipboard
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "4"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "8")],
-        },
-        new TweakDef
-        {
-            Id = "clip-rdp-policy-no-redirect",
-            Label = "Disable Clipboard in RDP Sessions (Policy)",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables clipboard sharing between the RDP client and remote session via policy. Security hardening measure for server environments. Default: Allowed.",
-            Tags = ["clipboard", "rdp", "remote-desktop", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "clip-enable-smart-paste",
-            Label = "Enable Smart Paste Menu",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables the smart copy/paste menu that lets users choose paste format. Useful in Office and Teams for paste-as-plain-text. Default: Disabled.",
-            Tags = ["clipboard", "paste", "format", "smart", "productivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
         },
         new TweakDef
         {

@@ -8,17 +8,6 @@ internal static class Gaming
     [
         new TweakDef
         {
-            Id = "game-disable-gamedvr",
-            Label = "Disable Game DVR / Game Bar",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Game DVR, Game Bar overlay, and background recording for better gaming and benchmarking performance.",
-            Tags = ["gaming", "performance", "dvr"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", @"HKEY_CURRENT_USER\System\GameConfigStore", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR"],
-        },
-        new TweakDef
-        {
             Id = "game-disable-game-mode",
             Label = "Disable Windows Game Mode",
             Category = "Gaming",
@@ -41,17 +30,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-disable-fullscreen-optimizations",
-            Label = "Disable Fullscreen Optimizations",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows fullscreen optimizations (DX flip model) which can cause input lag in older games.",
-            Tags = ["gaming", "performance", "fullscreen"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-        },
-        new TweakDef
-        {
             Id = "game-disable-xbox-services",
             Label = "Disable Xbox Background Services",
             Category = "Gaming",
@@ -71,17 +49,6 @@ internal static class Gaming
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 3),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "game-priority-high",
-            Label = "Set Game Task Priority to High (Perf)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Elevates scheduling priority for game processes. Improves frame times by giving games higher CPU/GPU priority. Default: Normal priority. Recommended: High for gaming PCs.",
-            Tags = ["gaming", "performance", "priority", "scheduling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
         },
         new TweakDef
         {
@@ -145,22 +112,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-network-throttling-off",
-            Label = "Disable Network Throttling Index (Gaming)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets NetworkThrottlingIndex to 0xFFFFFFFF to disable network throttling, reducing latency for online gaming.",
-            Tags = ["gaming", "network", "performance", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 10),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 0)],
-        },
-        new TweakDef
-        {
             Id = "game-disable-nagles-algorithm",
             Label = "Disable Nagle's Algorithm (Low Latency)",
             Category = "Gaming",
@@ -200,17 +151,6 @@ internal static class Gaming
                 RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-gaming-mode-priority",
-            Label = "Enable Game Mode Priority",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets game threads to highest scheduling priority. Reduces input lag and frame time variance during gameplay. Default: Medium. Recommended: High.",
-            Tags = ["gaming", "priority", "performance", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
         },
         new TweakDef
         {
@@ -274,17 +214,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-set-system-responsiveness",
-            Label = "Set System Responsiveness for Gaming",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets SystemResponsiveness to 0, allocating maximum CPU cycles to foreground games instead of background services. Default: 20 (%). Recommended: 0 for dedicated gaming PCs.",
-            Tags = ["gaming", "cpu", "responsiveness", "priority", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-        },
-        new TweakDef
-        {
             Id = "game-enable-timer-resolution",
             Label = "Enable Global Timer Resolution Requests",
             Category = "Gaming",
@@ -342,61 +271,6 @@ internal static class Gaming
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-system-profile-games",
-            Label = "Optimize System Profile for Games (GPU+CPU Priority)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets the Games task profile to highest GPU priority (8), CPU priority (6), and High scheduling category for maximum gaming responsiveness. Default: 8/2/Medium. Recommended: 8/6/High.",
-            Tags = ["gaming", "priority", "gpu", "cpu", "multimedia-profile"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-diagtrack-keyword",
-            Label = "Disable DiagTrack Telemetry Keyword Reporting",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables DiagTrack automatic telemetry keyword reporting to reduce background CPU usage during gameplay. Default: Enabled. Recommended: Disabled.",
-            Tags = ["gaming", "telemetry", "diagtrack", "background", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack"],
-        },
-        new TweakDef
-        {
-            Id = "game-force-exclusive-fullscreen",
-            Label = "Force Exclusive Fullscreen Mode for Games",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description = "Sets GameDVR FSE and DSE behavior to exclusive mode (2), forcing games to use exclusive fullscreen for maximum performance. Default: Mixed. Recommended: Exclusive mode.",
-            Tags = ["gaming", "fullscreen", "exclusive", "fso", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-        },
-        new TweakDef
-        {
-            Id = "game-honor-fse-compat",
-            Label = "Honor FSE Window Compatibility for DXGI",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description = "Enables DXGI to honor FSE window compatibility mode. Helps older games that need true exclusive fullscreen. Default: Disabled. Recommended: Enabled for FSE compatibility.",
-            Tags = ["gaming", "dxgi", "fullscreen", "fse", "compat"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-        },
-        new TweakDef
-        {
-            Id = "game-irq8-realtime",
-            Label = "Boost IRQ8 Real-Time Clock Priority",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets IRQ8 (real-time clock) interrupt priority higher. Can reduce timer jitter and improve frame timing consistency in games. Default: Not set. Recommended: 1 for gaming.",
-            Tags = ["gaming", "irq", "timer", "rtc", "latency", "priority"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
         },
         new TweakDef
         {

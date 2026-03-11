@@ -260,6 +260,7 @@ public sealed class RegistrySession
     {
         var entry = $"[{DateTime.Now:HH:mm:ss}] {message}";
         lock (_logLock) { _log.Add(entry); }
+        LogWritten?.Invoke(entry);
     }
 
     public event Action<string>? LogWritten;

@@ -8,17 +8,6 @@ internal static class SystemTweaks
     [
         new TweakDef
         {
-            Id = "sys-enable-long-paths",
-            Label = "Enable Win32 Long Paths",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Allows Win32 applications to use paths longer than 260 chars.",
-            Tags = ["system", "filesystem", "long-paths"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-        },
-        new TweakDef
-        {
             Id = "sys-disable-reserved-storage",
             Label = "Disable Reserved Storage (~7 GB)",
             Category = "System",
@@ -282,17 +271,6 @@ internal static class SystemTweaks
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-verbose-logon",
-            Label = "Enable Verbose Logon Messages",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shows detailed status messages during logon, logoff, startup, and shutdown (e.g., 'Applying Group Policy'). Default: disabled. Recommended: enabled for troubleshooting.",
-            Tags = ["system", "verbose", "logon", "boot", "diagnostic"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
         },
         new TweakDef
         {

@@ -90,17 +90,6 @@ internal static class Backup
         },
         new TweakDef
         {
-            Id = "backup-disable-notifications",
-            Label = "Disable Backup Reminder Notifications",
-            Category = "Backup & Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables all Windows Backup reminder notifications. Stops nagging popups about configuring backup to disk, network, or optical.",
-            Tags = ["backup", "notifications", "nag", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Client"],
-        },
-        new TweakDef
-        {
             Id = "backup-disable-previous-versions",
             Label = "Disable Previous Versions Tab",
             Category = "Backup & Recovery",

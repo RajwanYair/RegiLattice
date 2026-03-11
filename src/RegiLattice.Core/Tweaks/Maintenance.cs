@@ -8,17 +8,6 @@ internal static class Maintenance
     [
         new TweakDef
         {
-            Id = "maint-registry-autobackup",
-            Label = "Enable Registry Auto-Backup",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = @"Enables Windows nightly registry hive backup to C:\Windows\System32\config\RegBack.",
-            Tags = ["maintenance", "backup", "registry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager"],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-defrag-boot-optimize",
             Label = "Disable Scheduled Defragmentation",
             Category = "Maintenance",
@@ -36,17 +25,6 @@ internal static class Maintenance
                 RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-crash-dumps",
-            Label = "Disable Crash Memory Dumps",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables crash memory dump files to save disk space and avoid large MEMORY.DMP writes.",
-            Tags = ["maintenance", "disk", "cleanup", "crash"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
         },
         new TweakDef
         {
@@ -231,17 +209,6 @@ internal static class Maintenance
                 RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y"),
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-prefetch",
-            Label = "Disable Prefetch/Superfetch",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables both Prefetch and Superfetch/SysMain services. Reduces disk I/O overhead on SSD-based systems. Default: 3 (enabled). Recommended: 0 (disabled) for SSDs.",
-            Tags = ["maintenance", "prefetch", "superfetch", "ssd", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
         },
         new TweakDef
         {

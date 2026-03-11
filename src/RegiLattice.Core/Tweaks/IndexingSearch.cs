@@ -188,17 +188,6 @@ internal static class IndexingSearch
         },
         new TweakDef
         {
-            Id = "idx-disable-cloud-accounts",
-            Label = "Disable Cloud Account Search",
-            Category = "Indexing & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disable AAD/MSA cloud account search integration. Default: enabled.",
-            Tags = ["cloud", "aad", "msa", "account"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-        },
-        new TweakDef
-        {
             Id = "idx-disable-search-location",
             Label = "Disable Location for Search",
             Category = "Indexing & Search",

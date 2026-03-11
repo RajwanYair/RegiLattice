@@ -1,7 +1,7 @@
 # RegiLattice — Coverage Report
 
 > Test coverage baseline for the C# codebase.
-> Last verified: 2025-07-20 · v2.0.0
+> Last verified: 2025-07-20 · v3.0.0
 > Command: `dotnet test --collect:"XPlat Code Coverage"`
 
 ---

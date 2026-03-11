@@ -8,21 +8,6 @@ internal static class NightLight
     [
         new TweakDef
         {
-            Id = "night-enable-night-light",
-            Label = "Enable Night Light (Blue Light Filter)",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables Windows Night Light to reduce blue light emission. Schedule can be configured in Windows Settings.",
-            Tags = ["night-light", "blue-light", "display", "eye-strain"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate", "Data"),
-            ],
-        },
-        new TweakDef
-        {
             Id = "night-enable-hdr",
             Label = "Enable HDR Video Playback",
             Category = "Night Light & Display",
@@ -182,17 +167,6 @@ internal static class NightLight
         },
         new TweakDef
         {
-            Id = "night-keep-hdr-battery",
-            Label = "Keep HDR on Battery Power",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from automatically disabling HDR when running on battery. May reduce battery life.",
-            Tags = ["night-light", "hdr", "battery", "laptop"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-        },
-        new TweakDef
-        {
             Id = "night-srgb-default",
             Label = "Set Default Colour Profile to sRGB",
             Category = "Night Light & Display",
@@ -252,17 +226,6 @@ internal static class NightLight
         },
         new TweakDef
         {
-            Id = "night-disable-dynamic-refresh",
-            Label = "Disable Dynamic Refresh Rate Switching",
-            Category = "Night Light & Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the GraphicsDrivers dynamic refresh rate switch. Forces a static refresh rate, which can prevent flicker on some displays. Default: Dynamic switching enabled.",
-            Tags = ["night-light", "display", "refresh-rate", "gpu", "graphics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-        },
-        new TweakDef
-        {
             Id = "night-enable-vivid-colour",
             Label = "Enable Vivid Display Colour Mode",
             Category = "Night Light & Display",
@@ -280,17 +243,6 @@ internal static class NightLight
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 2)],
-        },
-        new TweakDef
-        {
-            Id = "night-disable-schedule",
-            Label = "Disable Night Light Auto Schedule",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Turns off the Night Light automatic schedule so it does not enable at sunset/sunrise. Useful when Night Light was enabled but scheduling is unwanted. Default: Varies.",
-            Tags = ["night-light", "schedule", "display", "blue-light"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings"],
         },
         new TweakDef
         {

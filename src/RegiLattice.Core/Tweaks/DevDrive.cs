@@ -8,17 +8,6 @@ internal static class DevDrive
     [
         new TweakDef
         {
-            Id = "dev-disable-last-access",
-            Label = "Disable Last Access Time Update",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables NTFS last access timestamp updates. Reduces I/O for build-heavy workflows. Default: Enabled (volume managed).",
-            Tags = ["dev-drive", "ntfs", "performance", "build"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-        },
-        new TweakDef
-        {
             Id = "dev-disable-8dot3",
             Label = "Disable 8.3 Short Name Creation",
             Category = "Dev Drive",
@@ -36,28 +25,6 @@ internal static class DevDrive
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-        },
-        new TweakDef
-        {
-            Id = "dev-win32-long-paths",
-            Label = "Enable Win32 Long Paths (>260 chars)",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables paths longer than 260 characters in Win32 applications. Essential for deep node_modules and cargo trees. Recommended.",
-            Tags = ["dev-drive", "long-paths", "node", "development"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-        },
-        new TweakDef
-        {
-            Id = "dev-exclude-build-tools",
-            Label = "Exclude Build Tools from Defender",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Excludes common build processes (devenv, msbuild, node, python, cargo, rustc) from Defender real-time scanning. Can improve build times 10-30%. Recommended: Enabled for dev machines.",
-            Tags = ["dev-drive", "defender", "build", "performance", "exclusion"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\Processes"],
         },
         new TweakDef
         {
@@ -240,17 +207,6 @@ internal static class DevDrive
         },
         new TweakDef
         {
-            Id = "dev-enable-host-cache",
-            Label = "Enable SSD Write Buffer (StorAHCI)",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Configures StorAHCI burst size for improved sequential write throughput on AHCI SSDs. Can improve incremental build I/O performance.",
-            Tags = ["dev-drive", "ssd", "ahci", "cache", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
-        },
-        new TweakDef
-        {
             Id = "dev-disable-search-svc",
             Label = "Disable Windows Search Indexer",
             Category = "Dev Drive",
@@ -268,22 +224,6 @@ internal static class DevDrive
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "dev-ntfs-write-cache",
-            Label = "Expand NTFS I/O Page Lock (32 MB)",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets IoPageLockLimit to 32 MB for improved file I/O throughput during parallel builds. Default: System managed. Recommended: 32 MB on systems with ≥8 GB RAM.",
-            Tags = ["dev-drive", "ntfs", "io", "cache", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 0)],
         },
         new TweakDef
         {

@@ -39,6 +39,10 @@ public sealed class TweakEngine
     {
         foreach (var td in tweaks)
         {
+            // Skip stub tweaks that have no operations — they would silently no-op.
+            if (!td.HasOperations)
+                continue;
+
             if (_tweakById.ContainsKey(td.Id))
                 throw new InvalidOperationException($"Duplicate tweak ID: {td.Id}");
 

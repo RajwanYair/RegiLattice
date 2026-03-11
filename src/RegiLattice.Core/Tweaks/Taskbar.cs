@@ -289,17 +289,6 @@ internal static class Taskbar
         },
         new TweakDef
         {
-            Id = "tb-disable-weather-widget",
-            Label = "Disable Taskbar Weather Widget",
-            Category = "Taskbar",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the News and Interests weather widget on the taskbar via group policy. Default: Enabled. Recommended: Disabled.",
-            Tags = ["taskbar", "weather", "widget", "feeds", "news"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"],
-        },
-        new TweakDef
-        {
             Id = "tb-disable-meet-now",
             Label = "Disable Meet Now Icon",
             Category = "Taskbar",
@@ -317,17 +306,6 @@ internal static class Taskbar
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideSCAMeetNow"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideSCAMeetNow", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-set-button-grouping",
-            Label = "Set Taskbar Button Grouping (Never Combine)",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets taskbar buttons to never combine, showing full labels for each window. Default: Always combine (0). Recommended: Never combine (2).",
-            Tags = ["taskbar", "grouping", "combine", "buttons", "labels"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
         },
         new TweakDef
         {

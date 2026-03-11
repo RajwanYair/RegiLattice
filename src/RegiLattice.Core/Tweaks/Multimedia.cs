@@ -170,17 +170,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-disable-sound-scheme",
-            Label = "Disable System Sound Scheme",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the system sound scheme to None, silencing all Windows event sounds. Default: .Default. Recommended: .None for quiet operation.",
-            Tags = ["multimedia", "sounds", "scheme", "quiet"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes"],
-        },
-        new TweakDef
-        {
             Id = "media-disable-startup-sound",
             Label = "Disable Windows Startup Sound",
             Category = "Multimedia",
@@ -240,17 +229,6 @@ internal static class Multimedia
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-wmp-network-sharing",
-            Label = "Disable WMP Network Sharing Service",
-            Category = "Multimedia",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows Media Player Network Sharing Service (Start=4). Prevents DLNA/UPnP media streaming entirely. Default: manual (3). Recommended: disabled (4) for security.",
-            Tags = ["multimedia", "wmp", "network", "sharing", "dlna"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc"],
         },
         new TweakDef
         {

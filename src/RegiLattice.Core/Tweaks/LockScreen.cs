@@ -8,17 +8,6 @@ internal static class LockScreen
     [
         new TweakDef
         {
-            Id = "lock-disable-ads",
-            Label = "Disable Lock Screen Ads & Tips",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Spotlight tips and rotating overlay ads on the lock screen. Default: enabled. Recommended: disabled.",
-            Tags = ["lockscreen", "ads", "spotlight", "tips"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-        },
-        new TweakDef
-        {
             Id = "lock-disable-lock-screen",
             Label = "Disable Lock Screen Entirely",
             Category = "Lock Screen & Login",
@@ -56,50 +45,6 @@ internal static class LockScreen
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableAcrylicBackgroundOnLogon"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableAcrylicBackgroundOnLogon", 1)],
-        },
-        new TweakDef
-        {
-            Id = "lock-hide-network-icon",
-            Label = "Hide Network Icon on Lock Screen",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Hides the network selection UI on the lock screen. Prevents unauthorized Wi-Fi changes. Default: shown. Recommended: hidden.",
-            Tags = ["lockscreen", "network", "wifi", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-        },
-        new TweakDef
-        {
-            Id = "lock-disable-camera",
-            Label = "Disable Lock Screen Camera Access",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables camera access from the lock screen. Default: allowed. Recommended: 0 (disabled).",
-            Tags = ["lockscreen", "camera", "privacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Camera"],
-        },
-        new TweakDef
-        {
-            Id = "lock-disable-fast-user-switching",
-            Label = "Disable Fast User Switching",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Hides the Fast User Switching button on the login screen. Useful for single-user or kiosk systems. Default: shown. Recommended: hidden (single user).",
-            Tags = ["lockscreen", "user", "switching", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-        },
-        new TweakDef
-        {
-            Id = "lock-auto-lock-10min",
-            Label = "Auto-Lock After 10 Minutes",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets screen saver timeout to 600 seconds with secure lock enabled. Ensures idle lock for security. Default: disabled. Recommended: 600s.",
-            Tags = ["lockscreen", "timeout", "security", "idle"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
         },
         new TweakDef
         {
@@ -143,17 +88,6 @@ internal static class LockScreen
         },
         new TweakDef
         {
-            Id = "lock-auto-restart-signon",
-            Label = "Enable Auto Restart Sign-On (ARSO)",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables automatic sign-on after Windows Update restarts. Re-opens your apps after reboot. Default: not configured. Recommended: 1 (enabled).",
-            Tags = ["lockscreen", "arso", "restart", "autologon"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-        },
-        new TweakDef
-        {
             Id = "lock-verbose-login-messages",
             Label = "Enable Verbose Logon Status Messages",
             Category = "Lock Screen & Login",
@@ -194,17 +128,6 @@ internal static class LockScreen
         },
         new TweakDef
         {
-            Id = "lock-disable-sign-in-animation",
-            Label = "Disable First Sign-In Animation",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the first sign-in animation after new user setup. Speeds up login. Default: Enabled. Recommended: Disabled.",
-            Tags = ["lockscreen", "animation", "first-logon", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-        },
-        new TweakDef
-        {
             Id = "lock-disable-tips",
             Label = "Disable Lock Screen Content Tips",
             Category = "Lock Screen & Login",
@@ -223,17 +146,6 @@ internal static class LockScreen
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338387Enabled", 1),
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "lock-auto-lock-5min",
-            Label = "Set Lock Timeout to 5 Minutes",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets machine inactivity timeout to 300 seconds (5 minutes). Default: no timeout. Recommended: 5 min.",
-            Tags = ["lockscreen", "timeout", "inactivity", "lock", "5min"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
         },
         new TweakDef
         {
@@ -330,22 +242,6 @@ internal static class LockScreen
             RemoveOps =
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowHibernateOption"),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "lock-clear-legal-notice",
-            Label = "Clear Legal Notice Banner on Login Screen",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Clears the LegalNoticeCaption and LegalNoticeText values under Winlogon, removing any corporate banner or EULA that appears before the login dialog. Default: empty (home). Recommended: clear on personal machines.",
-            Tags = ["lockscreen", "legal-notice", "banner", "winlogon", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "LegalNoticeCaption"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "LegalNoticeText"),
             ],
         },
         new TweakDef

@@ -406,28 +406,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-gamebar-capture",
-            Label = "Disable Xbox Game Bar App Capture",
-            Category = "Startup",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Xbox Game Bar app capture (screen recording background task). Reduces startup and background overhead for non-gaming machines. Default: enabled. Recommended: disabled on non-gaming workstations.",
-            Tags = ["startup", "gamebar", "xbox", "capture", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR"],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-suggested-app-installs",
-            Label = "Disable Suggested App Install Prompts at Startup",
-            Category = "Startup",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic suggested app installation prompts on startup via system policy. Prevents Store-pushed app suggestions. Default: enabled. Recommended: disabled.",
-            Tags = ["startup", "apps", "suggestions", "store", "bloatware"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-auto-restart-apps",
             Label = "Disable Auto Restart of Apps After Sign-In",
             Category = "Startup",

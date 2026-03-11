@@ -8,17 +8,6 @@ internal static class RemoteDesktop
     [
         new TweakDef
         {
-            Id = "rdp-enable-remote-desktop",
-            Label = "Enable Remote Desktop",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Allow incoming Remote Desktop connections. Default: disabled. Recommended: enable if needed.",
-            Tags = ["rdp", "remote", "desktop", "connect"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server"],
-        },
-        new TweakDef
-        {
             Id = "rdp-require-nla",
             Label = "Require NLA for RDP",
             Category = "Remote Desktop",
@@ -56,83 +45,6 @@ internal static class RemoteDesktop
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "MinEncryptionLevel", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "MinEncryptionLevel", 3)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-enable-keepalive",
-            Label = "Enable RDP Keep-Alive",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Send keep-alive packets every minute to prevent RDP disconnects. Default: disabled.",
-            Tags = ["rdp", "keepalive", "disconnect", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-bitmap-caching",
-            Label = "Enable Persistent Bitmap Caching",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Cache bitmaps on disk for better RDP performance. Default: not set.",
-            Tags = ["rdp", "bitmap", "cache", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-change-port-3390",
-            Label = "Change RDP Port to 3390",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Move RDP to port 3390 to reduce automated scanning. Default: 3389.",
-            Tags = ["rdp", "port", "security", "scan"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-clipboard-redirect",
-            Label = "Disable RDP Clipboard Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Block clipboard sharing between RDP host and client. DLP measure. Default: allowed.",
-            Tags = ["rdp", "clipboard", "dlp", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-drive-redirect",
-            Label = "Disable RDP Drive Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Block drive mapping in RDP sessions. Security measure. Default: allowed.",
-            Tags = ["rdp", "drive", "redirect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-printer-redirect",
-            Label = "Disable RDP Printer Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Block printer redirection in RDP sessions. Default: allowed.",
-            Tags = ["rdp", "printer", "redirect"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-        },
-        new TweakDef
-        {
-            Id = "rdp-idle-timeout-15m",
-            Label = "Set RDP Idle Timeout (15 min)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disconnect idle RDP sessions after 15 minutes. Default: no timeout.",
-            Tags = ["rdp", "idle", "timeout", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
         },
         new TweakDef
         {
@@ -196,17 +108,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-security-layer-ssl",
-            Label = "Set RDP Security Layer to SSL/TLS",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the RDP security layer to SSL/TLS (level 2) for encrypted connections. Prevents legacy RDP security negotiation. Default: Negotiate. Recommended: SSL.",
-            Tags = ["rdp", "ssl", "tls", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
-        },
-        new TweakDef
-        {
             Id = "rdp-disable-printer-policy",
             Label = "Disable RDP Printer Redirection (Policy + WinStation)",
             Category = "Remote Desktop",
@@ -226,23 +127,6 @@ internal static class RemoteDesktop
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "fDisableCpm", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-session-timeout-30m",
-            Label = "Set RDP Session Timeout (30 min)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disconnects idle/disconnected RDP sessions after 30 minutes. Frees resources and improves security. Default: no timeout. Recommended: 30 min.",
-            Tags = ["rdp", "session", "timeout", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime", 1)],
         },
         new TweakDef
         {

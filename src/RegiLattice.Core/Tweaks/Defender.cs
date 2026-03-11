@@ -8,17 +8,6 @@ internal static class Defender
     [
         new TweakDef
         {
-            Id = "sec-disable-defender-cloud-samples",
-            Label = "Disable Defender Sample Submission",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevents Windows Defender from automatically uploading file samples to Microsoft for analysis.",
-            Tags = ["defender", "privacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet"],
-        },
-        new TweakDef
-        {
             Id = "sec-enable-pua-protection",
             Label = "Enable PUA / Adware Protection",
             Category = "Security",
@@ -101,28 +90,6 @@ internal static class Defender
         },
         new TweakDef
         {
-            Id = "sec-disable-defender-notifications",
-            Label = "Disable Defender Notifications",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Suppresses non-critical Defender notification toasts.",
-            Tags = ["defender", "notifications", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting"],
-        },
-        new TweakDef
-        {
-            Id = "sec-defender-dev-exclusions",
-            Label = "Add Developer Folder Exclusions",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Excludes common dev folders (source/repos, .cargo, .rustup, go, node_modules) from real-time Defender scans.",
-            Tags = ["defender", "developer", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths"],
-        },
-        new TweakDef
-        {
             Id = "sec-enable-controlled-folder-access",
             Label = "Enable Controlled Folder Access",
             Category = "Security",
@@ -180,17 +147,6 @@ internal static class Defender
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR", "ExploitGuard_ASR_Rules", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR", "ExploitGuard_ASR_Rules", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-defender-realtime",
-            Label = "Disable Real-Time Protection",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Defender real-time, behavior, and on-access monitoring for maximum performance. USE WITH CAUTION.",
-            Tags = ["defender", "performance", "realtime"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"],
         },
         new TweakDef
         {
@@ -311,28 +267,6 @@ internal static class Defender
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-scan-schedule-weekly",
-            Label = "Set Defender Scan Schedule to Weekly",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets Windows Defender scheduled scan to run weekly on Sunday instead of daily. Reduces system overhead. Default: Daily. Recommended: Weekly for low-risk environments.",
-            Tags = ["security", "defender", "scan", "schedule", "weekly"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-auto-sample-submission",
-            Label = "Disable Automatic Sample Submission",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables automatic submission of file samples to Microsoft for cloud-based analysis (SubmitSamplesConsent=2). Default: Safe samples. Recommended: Disabled for privacy.",
-            Tags = ["security", "defender", "samples", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet"],
         },
         new TweakDef
         {
@@ -477,28 +411,6 @@ internal static class Defender
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-scan-not-idle-only",
-            Label = "Allow Defender Scans When System is Busy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the ScanOnlyIfIdle requirement, allowing Defender scans to run even when the system is in use. Ensures scans complete on time. Default: Idle-only. Recommended: Always allow.",
-            Tags = ["security", "defender", "scan", "schedule", "idle"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
-        },
-        new TweakDef
-        {
-            Id = "sec-block-exclusion-local-merge",
-            Label = "Block Local Admin from Adding Defender Exclusions",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents local admins from merging Defender exclusion lists with policy exclusions. Ensures exclusion policy cannot be bypassed locally. Default: Allowed. Recommended: Blocked in managed environments.",
-            Tags = ["security", "defender", "exclusions", "policy", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions"],
         },
         new TweakDef
         {

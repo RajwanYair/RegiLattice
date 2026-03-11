@@ -28,28 +28,6 @@ internal static class Bluetooth
         },
         new TweakDef
         {
-            Id = "bt-manual-start",
-            Label = "Bluetooth Service to Manual",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets Bluetooth support service to manual start — saves resources on machines that rarely use Bluetooth.",
-            Tags = ["bluetooth", "services", "startup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFSrv"],
-        },
-        new TweakDef
-        {
-            Id = "bt-high-quality-audio",
-            Label = "Bluetooth A2DP High-Quality Audio",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the A2DP SBC bitpool range for higher-fidelity Bluetooth audio streaming.",
-            Tags = ["bluetooth", "audio", "quality"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters"],
-        },
-        new TweakDef
-        {
             Id = "bt-disable-bt-discoverable",
             Label = "Disable Bluetooth Discoverability",
             Category = "Bluetooth",
@@ -67,17 +45,6 @@ internal static class Bluetooth
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery", 0)],
-        },
-        new TweakDef
-        {
-            Id = "bt-low-latency",
-            Label = "Bluetooth LE Low-Latency Mode",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Tightens BLE connection intervals for lower latency with peripherals.",
-            Tags = ["bluetooth", "performance", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum\Parameters"],
         },
         new TweakDef
         {
@@ -261,39 +228,6 @@ internal static class Bluetooth
         },
         new TweakDef
         {
-            Id = "bt-disable-auto-pair",
-            Label = "Disable Bluetooth Auto-Pairing",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables automatic Bluetooth device pairing. Devices must be paired manually for better security control. Default: Enabled. Recommended: Disabled for security.",
-            Tags = ["bluetooth", "auto-pair", "security", "pairing"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Bluetooth"],
-        },
-        new TweakDef
-        {
-            Id = "bt-disable-advertising",
-            Label = "Disable Bluetooth Advertising (Policy)",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Bluetooth advertising via Microsoft policy. Prevents the device from broadcasting its presence. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["bluetooth", "advertising", "privacy", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
-        },
-        new TweakDef
-        {
-            Id = "bt-disable-le-scan",
-            Label = "Disable Bluetooth LE Scanning",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Bluetooth Low Energy background scanning. Reduces power consumption and radio interference. Default: Enabled. Recommended: Disabled for battery life.",
-            Tags = ["bluetooth", "le", "scanning", "power", "battery"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum\Parameters"],
-        },
-        new TweakDef
-        {
             Id = "bt-page-timeout",
             Label = "Set Bluetooth Page Timeout",
             Category = "Bluetooth",
@@ -311,17 +245,6 @@ internal static class Bluetooth
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 16384)],
-        },
-        new TweakDef
-        {
-            Id = "bt-disable-audio-gateway",
-            Label = "Disable Bluetooth Audio Gateway",
-            Category = "Bluetooth",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Bluetooth Audio Gateway service driver. Prevents phone call audio routing through the PC. Default: Enabled. Recommended: Disabled if unused.",
-            Tags = ["bluetooth", "audio-gateway", "telephony", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAGAudio"],
         },
         new TweakDef
         {

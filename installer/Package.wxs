@@ -1,0 +1,79 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package
+        Name="RegiLattice"
+        Manufacturer="YairRajwan"
+        Version="3.0.0"
+        UpgradeCode="AC51EAE9-CC0B-4A17-92E0-070A64E83988"
+        Compressed="yes"
+        InstallerVersion="500">
+
+        <MajorUpgrade
+            DowngradeErrorMessage="A newer version of RegiLattice is already installed." />
+
+        <MediaTemplate EmbedCab="yes" />
+
+        <!-- Install directory -->
+        <StandardDirectory Id="ProgramFiles6432Folder">
+            <Directory Id="INSTALLFOLDER" Name="RegiLattice">
+                <Directory Id="GUI_FOLDER" Name="GUI" />
+                <Directory Id="CLI_FOLDER" Name="CLI" />
+            </Directory>
+        </StandardDirectory>
+
+        <!-- GUI component -->
+        <ComponentGroup Id="GUIComponents" Directory="GUI_FOLDER">
+            <Component Id="GuiExe" Guid="B22B984D-C5AD-4953-B783-60B611345CF3" Bitness="always64">
+                <File Id="RegiLattice.GUI.exe"
+                      Source="$(var.GuiPublishDir)\RegiLattice.GUI.exe"
+                      KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
+
+        <!-- CLI component -->
+        <ComponentGroup Id="CLIComponents" Directory="CLI_FOLDER">
+            <Component Id="CliExe" Guid="85465343-90C0-4F50-B68A-EED8429ACF1E" Bitness="always64">
+                <File Id="RegiLattice.exe"
+                      Source="$(var.CliPublishDir)\RegiLattice.exe"
+                      KeyPath="yes" />
+                <!-- Add CLI to PATH -->
+                <Environment Id="PATH_CLI"
+                             Name="PATH"
+                             Value="[CLI_FOLDER]"
+                             Permanent="no"
+                             Part="last"
+                             Action="set"
+                             System="yes" />
+            </Component>
+        </ComponentGroup>
+
+        <!-- Start menu shortcut -->
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Component Id="StartMenuShortcut" Guid="*">
+                <Shortcut Id="RegiLatticeShortcut"
+                          Name="RegiLattice"
+                          Description="Windows Registry Tweak Toolkit"
+                          Target="[GUI_FOLDER]RegiLattice.GUI.exe"
+                          WorkingDirectory="GUI_FOLDER" />
+                <RegistryValue Root="HKCU"
+                               Key="Software\RegiLattice"
+                               Name="Installed"
+                               Type="integer"
+                               Value="1"
+                               KeyPath="yes" />
+                <RemoveFolder Id="RemoveStartMenu" On="uninstall" />
+            </Component>
+        </StandardDirectory>
+
+        <!-- Feature tree -->
+        <Feature Id="Complete" Title="RegiLattice" Level="1">
+            <Feature Id="GUIFeature" Title="GUI Application" Level="1">
+                <ComponentGroupRef Id="GUIComponents" />
+                <ComponentRef Id="StartMenuShortcut" />
+            </Feature>
+            <Feature Id="CLIFeature" Title="CLI Application" Level="1">
+                <ComponentGroupRef Id="CLIComponents" />
+            </Feature>
+        </Feature>
+
+    </Package>
+</Wix>

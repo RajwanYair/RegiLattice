@@ -28,17 +28,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-policy",
-            Label = "Disable Speech Recognition (Policy)",
-            Category = "Voice Access & Speech",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks online speech model updates via Group Policy. Reduces background data usage.",
-            Tags = ["speech", "policy", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech"],
-        },
-        new TweakDef
-        {
             Id = "speech-mute-narrator",
             Label = "Mute Narrator Navigation Sounds",
             Category = "Voice Access & Speech",
@@ -140,17 +129,6 @@ internal static class Speech
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2)],
-        },
-        new TweakDef
-        {
-            Id = "speech-narrator-fast-speed",
-            Label = "Set Narrator Speed to Fast",
-            Category = "Voice Access & Speech",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Narrator reading speed to fast (8/10) for power users who rely on screen readers.",
-            Tags = ["speech", "narrator", "speed"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam"],
         },
         new TweakDef
         {

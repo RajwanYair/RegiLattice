@@ -22,6 +22,9 @@ public sealed class TweakEngineTests
         RegistryKeys = [$@"HKCU\Software\{id}"],
         Description = $"Description for {id}",
         Tags = ["test", category.ToLowerInvariant()],
+        ApplyOps = [RegOp.SetDword($@"HKCU\Software\{id}", "Enabled", 1)],
+        RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\{id}", "Enabled")],
+        DetectOps = [RegOp.CheckDword($@"HKCU\Software\{id}", "Enabled", 1)],
     };
 
     // ── Registration ────────────────────────────────────────────────────
@@ -118,6 +121,7 @@ public sealed class TweakEngineTests
             Label = "Tag",
             Category = "X",
             Tags = ["unique-tag-xyz"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\tag-tweak", "Enabled", 1)],
         };
         engine.Register([td]);
         var results = engine.Search("unique-tag-xyz");
@@ -147,8 +151,8 @@ public sealed class TweakEngineTests
     public void Filter_ByScope()
     {
         var engine = CreateEngine();
-        var hkcu = new TweakDef { Id = "scope-u", Label = "U", Category = "X", RegistryKeys = [@"HKCU\Test"] };
-        var hklm = new TweakDef { Id = "scope-m", Label = "M", Category = "X", RegistryKeys = [@"HKLM\Test"] };
+        var hkcu = new TweakDef { Id = "scope-u", Label = "U", Category = "X", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] };
+        var hklm = new TweakDef { Id = "scope-m", Label = "M", Category = "X", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] };
         engine.Register([hkcu, hklm]);
         var results = engine.Filter(scope: TweakScope.User);
         Assert.Single(results);
@@ -181,7 +185,13 @@ public sealed class TweakEngineTests
     public void DetectStatus_NoDetectOps_ReturnsUnknown()
     {
         var engine = CreateEngine();
-        var td = MakeTweak("detect-unk");
+        var td = new TweakDef
+        {
+            Id = "detect-unk",
+            Label = "Tweak",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\detect-unk", "Enabled", 1)],
+        };
         engine.Register([td]);
         Assert.Equal(TweakResult.Unknown, engine.DetectStatus(td));
     }
@@ -195,6 +205,7 @@ public sealed class TweakEngineTests
             Id = "detect-action",
             Label = "D",
             Category = "X",
+            ApplyAction = (_) => { },
             DetectAction = () => true,
         };
         engine.Register([td]);
@@ -230,6 +241,7 @@ public sealed class TweakEngineTests
             Category = "X",
             CorpSafe = true,
             RegistryKeys = [@"HKCU\Software\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "Val", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Test", "Val")],
         };
         engine.Register([td]);
@@ -284,8 +296,8 @@ public sealed class TweakEngineTests
     {
         var engine = CreateEngine();
         engine.Register([
-            new TweakDef { Id = "u1", Label = "U", Category = "C", RegistryKeys = [@"HKCU\Test"] },
-            new TweakDef { Id = "m1", Label = "M", Category = "C", RegistryKeys = [@"HKLM\Test"] },
+            new TweakDef { Id = "u1", Label = "U", Category = "C", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] },
+            new TweakDef { Id = "m1", Label = "M", Category = "C", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] },
         ]);
         var counts = engine.ScopeCounts();
         Assert.Equal(1, counts[TweakScope.User]);

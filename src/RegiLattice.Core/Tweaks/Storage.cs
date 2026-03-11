@@ -170,18 +170,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-storage-disable-last-access",
-            Label = "Disable NTFS Last Access Timestamp",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables updating the last access timestamp on NTFS files and directories. Reduces disk writes and improves I/O performance on busy volumes. Default: system-managed (0x80000002). Recommended: disabled (0x80000003) on SSDs.",
-            Tags = ["storage", "ntfs", "last-access", "timestamp", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 0)],
-        },
-        new TweakDef
-        {
             Id = "stor-storage-disable-8dot3",
             Label = "Disable 8.3 Short Filename Creation",
             Category = "Storage",

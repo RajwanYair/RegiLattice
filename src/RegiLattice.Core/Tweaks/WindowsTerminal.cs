@@ -8,17 +8,6 @@ internal static class WindowsTerminal
     [
         new TweakDef
         {
-            Id = "term-default-windows-terminal",
-            Label = "Set Windows Terminal as Default",
-            Category = "Windows Terminal",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Windows Terminal as the default terminal application for cmd.exe and PowerShell. Requires Windows Terminal installed. Default: Windows Console Host. Recommended: Windows Terminal.",
-            Tags = ["terminal", "windows-terminal", "default", "console"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console\%%Startup"],
-        },
-        new TweakDef
-        {
             Id = "term-enable-console-v2",
             Label = "Enable Console V2 Host",
             Category = "Windows Terminal",
@@ -96,17 +85,6 @@ internal static class WindowsTerminal
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "InsertMode", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "InsertMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "term-large-buffer",
-            Label = "Set Large Screen Buffer (9999 Lines)",
-            Category = "Windows Terminal",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the console screen buffer to 9999 lines for longer scrollback history. Default: 300 lines. Recommended: 9999.",
-            Tags = ["terminal", "buffer", "scrollback", "history"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
         },
         new TweakDef
         {
@@ -196,28 +174,6 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-campbell-color-scheme",
-            Label = "Set Campbell Color Scheme",
-            Category = "Windows Terminal",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Applies the modern Campbell color scheme to the classic console. Darker background, improved contrast. Default: legacy colors. Recommended: Campbell.",
-            Tags = ["terminal", "colors", "theme", "campbell", "appearance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-        },
-        new TweakDef
-        {
-            Id = "term-set-cursor-block",
-            Label = "Set Console Cursor to Block",
-            Category = "Windows Terminal",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the console cursor to full block style for better visibility. Default: 25 (line). Recommended: 100 (block).",
-            Tags = ["terminal", "cursor", "block", "appearance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-        },
-        new TweakDef
-        {
             Id = "term-set-window-opacity",
             Label = "Set Console Window Opacity (95%)",
             Category = "Windows Terminal",
@@ -276,17 +232,6 @@ internal static class WindowsTerminal
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableSplashScreen"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableSplashScreen", 1)],
-        },
-        new TweakDef
-        {
-            Id = "term-enable-always-on-top",
-            Label = "Enable Terminal Always-on-Top",
-            Category = "Windows Terminal",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables always-on-top mode for Windows Terminal via policy. Keeps the terminal window above all other windows. Default: Disabled. Recommended: Enabled for dev workflows.",
-            Tags = ["terminal", "always-on-top", "pin", "window"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"],
         },
         new TweakDef
         {

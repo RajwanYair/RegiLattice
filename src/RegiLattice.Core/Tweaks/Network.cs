@@ -27,17 +27,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-disable-network-throttle",
-            Label = "Disable Network Throttling",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes the multimedia network throttling index, allowing full bandwidth usage during media playback.",
-            Tags = ["network", "performance", "bandwidth"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-        },
-        new TweakDef
-        {
             Id = "net-enable-rdp",
             Label = "Enable Remote Desktop",
             Category = "Network",
@@ -56,28 +45,6 @@ internal static class Network
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 0)],
-        },
-        new TweakDef
-        {
-            Id = "net-enable-dns-over-https",
-            Label = "Enable DNS-over-HTTPS",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables automatic DNS-over-HTTPS (DoH) for encrypted DNS resolution.",
-            Tags = ["network", "privacy", "dns", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-        },
-        new TweakDef
-        {
-            Id = "net-increase-max-tcp",
-            Label = "Increase Max TCP Connections",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the max user port to 65534, reduces TIME_WAIT delay, and enlarges default socket buffer sizes.",
-            Tags = ["network", "performance", "tcp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters"],
         },
         new TweakDef
         {
@@ -204,21 +171,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-throttling-index",
-            Label = "Increase Network Throttling Index",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables network throttling during multimedia playback. Prevents Windows from limiting network bandwidth. Default: 10. Recommended: 0xFFFFFFFF (disabled).",
-            Tags = ["network", "throttling", "performance", "bandwidth"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 10),
-            ],
-        },
-        new TweakDef
-        {
             Id = "net-increase-arp-cache",
             Label = "Increase ARP Cache Size",
             Category = "Network",
@@ -331,21 +283,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-prefer-ipv4",
-            Label = "Prefer IPv4 over IPv6",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Configures Windows to prefer IPv4 over IPv6 for DNS resolution and connections. Useful for networks without proper IPv6 infrastructure. Default: IPv6 preferred. Recommended: IPv4 for compatibility.",
-            Tags = ["network", "ipv4", "ipv6", "dns", "priority"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "net-disable-isatap",
             Label = "Disable ISATAP",
             Category = "Network",
@@ -424,72 +361,6 @@ internal static class Network
             [
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)"),
             ],
-        },
-        new TweakDef
-        {
-            Id = "net-tcp-initial-rtt",
-            Label = "Reduce TCP Initial RTT Estimate",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets TCPInitialRTT to 3 seconds, reducing the initial retransmission timeout to speed up TCP connection setup on fast local networks. Default: 3 (Windows default varies).",
-            Tags = ["network", "tcp", "rtt", "latency", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-        },
-        new TweakDef
-        {
-            Id = "net-restrict-anonymous",
-            Label = "Restrict Anonymous Network Access",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents anonymous users from enumerating SAM accounts, shares, and named pipes. Security baseline hardening. Default: Off. Recommended: Enabled.",
-            Tags = ["network", "anonymous", "sam", "security", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-        },
-        new TweakDef
-        {
-            Id = "net-tcp-keepalive-5min",
-            Label = "Set TCP Keep-Alive Time to 5 Minutes",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets TCP keep-alive interval to 300,000ms (5 minutes) instead of the default 2 hours. Helps detect dead connections faster in long-lived TCP sessions. Default: 7,200,000ms. Recommended: 300,000ms.",
-            Tags = ["network", "tcp", "keepalive", "connection", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-        },
-        new TweakDef
-        {
-            Id = "net-smb2-require-signing",
-            Label = "Require SMB2/3 Packet Signing (Workstation)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires SMB packet signing on the workstation side for all SMB2/3 connections. Prevents SMB relay attacks. Default: Not required. Recommended: Required.",
-            Tags = ["network", "smb", "signing", "security", "relay"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation"],
-        },
-        new TweakDef
-        {
-            Id = "net-block-non-domain-wifi",
-            Label = "Block Non-Domain Wi-Fi Networks (Managed)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from connecting to non-domain Wi-Fi networks. Enforces network boundary for domain-joined machines. Default: Allowed. Recommended: Blocked on managed corporate devices.",
-            Tags = ["network", "wifi", "domain", "policy", "corporate"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\Local"],
-        },
-        new TweakDef
-        {
-            Id = "net-tcp-syn-attack-protection",
-            Label = "Enable TCP SYN Attack Protection",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables SYN attack protection with conservative half-open connection limits. Mitigates SYN flood denial-of-service attacks on exposed systems. Default: Disabled. Recommended: Enabled on exposed systems.",
-            Tags = ["network", "tcp", "syn", "attack", "security", "dos"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
         },
         new TweakDef
         {

@@ -6,6 +6,39 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.0] — 2025-07-20
+
+### ⚠️ BREAKING: Quality audit — removed 468 non-functional tweak stubs
+
+v3.0.0 is the first verified-clean release of the C# codebase. Every remaining tweak
+has functional apply/remove/detect operations. Non-functional metadata-only stubs
+that silently returned "Applied" without performing any action have been removed.
+
+### Removed
+
+- **468 non-functional tweak stubs** across 66 modules — these had metadata (Id, Label,
+  Category, Tags) but no ApplyOps, RemoveOps, DetectOps, or Action delegates. The engine
+  silently returned `TweakResult.Applied` for these without performing any registry changes.
+- Tweak count reduced from ~1 828 to **1 360 verified functional tweaks**
+
+### Added
+
+- **TweakKind enum** — `Registry`, `Command`, `FileConfig` — classifies how each tweak operates
+- **CategoryIcon enum** — 24 icon categories (Shield, Globe, Monitor, Gear, Lock, etc.)
+- **CategoryIcons helper class** — maps all 72 category names to icons with Unicode symbols
+  for CLI display
+- **TweakDef.HasOperations** — computed property that returns true only if a tweak has
+  ApplyOps or ApplyAction defined
+- **TweakDef.Kind** — computed property returning the TweakKind classification
+- **TweakEngine no-op guard** — `Register()` now silently skips tweaks where `HasOperations`
+  is false, preventing non-functional tweaks from entering the engine
+
+### Fixed
+
+- **CS0067 warning** — `RegistrySession.LogWritten` event was declared but never invoked;
+  now fires in `WriteLog()` method
+- **Build warnings** — Release build now produces 0 errors, 0 warnings
+
 ## [2.0.0] — 2025-07-20
 
 ### ⚠️ BREAKING: Complete rewrite from Python to C#/.NET

@@ -112,17 +112,6 @@ internal static class Virtualization
         },
         new TweakDef
         {
-            Id = "virt-hypervisor-core-scheduler",
-            Label = "Hyper-V Core Scheduler Mode",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the hypervisor to Core scheduler mode for better security against side-channel attacks (Spectre/MDS). Recommended for Hyper-V hosts.",
-            Tags = ["hyperv", "virtualization", "scheduler", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"],
-        },
-        new TweakDef
-        {
             Id = "virt-disable-hvci",
             Label = "Disable HVCI (Memory Integrity)",
             Category = "Virtualization",
@@ -343,17 +332,6 @@ internal static class Virtualization
         },
         new TweakDef
         {
-            Id = "virt-disable-containers-ext",
-            Label = "Disable Container Runtime Extension Policy",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Container Runtime Extension via policy. Reduces container isolation overhead on non-container workloads. Default: Enabled. Recommended: Disabled if not using containers.",
-            Tags = ["virtualization", "containers", "docker", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Containers"],
-        },
-        new TweakDef
-        {
             Id = "virt-vmms-manual",
             Label = "Set Hyper-V Virtual Machine Management Service to Manual",
             Category = "Virtualization",
@@ -371,17 +349,6 @@ internal static class Virtualization
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 2),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 3)],
-        },
-        new TweakDef
-        {
-            Id = "virt-require-platform-security",
-            Label = "Enable VBS Platform Security Features Requirement",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets RequirePlatformSecurityFeatures=1 for Virtualization-based Security. Requires hardware security features (TPM, SecureBoot) for VBS. Default: Not required. Recommended: Required on secure systems.",
-            Tags = ["virtualization", "vbs", "security", "tpm", "secureboot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
         },
         new TweakDef
         {

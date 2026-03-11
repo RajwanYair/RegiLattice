@@ -186,17 +186,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-news-disable-cloud-consumer-features",
-            Label = "Disable Cloud Consumer Features (Policy)",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables all Windows consumer features via Group Policy: cloud-optimized content, soft landing, and consumer features. Default: enabled. Recommended: disabled.",
-            Tags = ["widgets", "cloud", "consumer", "policy", "bloat"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-        },
-        new TweakDef
-        {
             Id = "widgets-news-disable-finish-setup",
             Label = "Disable 'Finish Setting Up' Reminder",
             Category = "Widgets & News",
@@ -239,17 +228,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-news-disable-subscribed-content",
-            Label = "Disable Subscribed Content in Start (338388)",
-            Category = "Widgets & News",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables SubscribedContent-338388 in the Start menu. Removes suggested content and app recommendations from Start. Default: enabled. Recommended: disabled.",
-            Tags = ["widgets", "start", "subscribed", "content", "suggestions"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-        },
-        new TweakDef
-        {
             Id = "widgets-widget-disable-news-feed",
             Label = "Disable News Feed Content",
             Category = "Widgets & News",
@@ -269,17 +247,6 @@ internal static class Widgets
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
-        },
-        new TweakDef
-        {
-            Id = "widgets-widget-disable-bg-updates",
-            Label = "Disable Widget Background Updates",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevents widgets from updating content in the background. Reduces network and CPU usage from the Widgets host process. Default: enabled. Recommended: disabled.",
-            Tags = ["widgets", "background", "updates", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh"],
         },
         new TweakDef
         {
@@ -384,17 +351,6 @@ internal static class Widgets
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenOverlayEnabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1)],
-        },
-        new TweakDef
-        {
-            Id = "widgets-disable-start-personalization",
-            Label = "Disable Start Menu Personalization / Feeds",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Start menu personalization that shows recommended apps and ads. Keeps the Start menu clean and static. Default: Enabled. Recommended: Disabled.",
-            Tags = ["widgets", "start", "personalization", "feeds", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
         },
         new TweakDef
         {

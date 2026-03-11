@@ -6,7 +6,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 
 > Accumulated hard-won insights from the Python → C# migration and iterative test coverage sprints.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-11 (v2.0.0, C# 13 / .NET 10.0-windows)
+> Last updated: 2025-07-20 (v3.0.0, C# 13 / .NET 10.0-windows)
 
 ---
 
@@ -209,6 +209,6 @@ All references to the GitHub account must use `RajwanYair`:
 
 ## Version & Metadata
 
-- Version lives in `.csproj` files — `<Version>2.0.0</Version>`
+- Version lives in `.csproj` files — `<Version>3.0.0</Version>`
 - Do not duplicate version strings — single source of truth per project
 - GitHub URLs: `https://github.com/RajwanYair/RegiLattice`

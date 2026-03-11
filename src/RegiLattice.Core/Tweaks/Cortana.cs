@@ -110,17 +110,6 @@ internal static class Cortana
         },
         new TweakDef
         {
-            Id = "cortana-disable-cloud-content-search",
-            Label = "Disable Cloud Content Search",
-            Category = "Cortana & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables cloud content and location-based results in Windows search.",
-            Tags = ["search", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-        },
-        new TweakDef
-        {
             Id = "cortana-disable-search-indexing",
             Label = "Disable Windows Search Indexing Service",
             Category = "Cortana & Search",
@@ -304,39 +293,6 @@ internal static class Cortana
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-block-bing-in-start",
-            Label = "Disable Bing Integration in Start",
-            Category = "Cortana & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Bing web search integration in Start menu and connected search features including metered connections. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "bing", "start", "connected-search", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-searchbox-suggestions",
-            Label = "Disable Search Box Suggestions",
-            Category = "Cortana & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables search box taskbar suggestions and location-based search results. Only shows local results. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "suggestions", "taskbar", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-        },
-        new TweakDef
-        {
-            Id = "cortana-block-web-results-policy",
-            Label = "Disable Web Results in Search (Policy)",
-            Category = "Cortana & Search",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables web results in Windows Search via HKLM group policy. Only local results are returned. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "web", "policy", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
         },
         new TweakDef
         {

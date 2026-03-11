@@ -8,17 +8,6 @@ internal static class Gpu
     [
         new TweakDef
         {
-            Id = "gpu-hw-scheduling",
-            Label = "Hardware-Accelerated GPU Scheduling",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Hardware-Accelerated GPU Scheduling (HwSchMode=2). Reduces latency by letting the GPU manage its own memory scheduling. Requires Windows 10 2004+ and a supported GPU driver. Options: 1=Off, 2=On. Default: 1 (Off). Recommended: 2 (On).",
-            Tags = ["gpu", "performance", "scheduling", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-        },
-        new TweakDef
-        {
             Id = "gpu-disable-mpo",
             Label = "Disable Multi-Plane Overlay (MPO)",
             Category = "GPU / Graphics",
@@ -106,28 +95,6 @@ internal static class Gpu
         },
         new TweakDef
         {
-            Id = "gpu-preemption-disable",
-            Label = "Disable GPU Preemption (Lower Latency)",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables GPU preemption to reduce render latency. Can improve frame times in games but may affect multi-tasking. Default: Enabled. Recommended: Disabled for gaming.",
-            Tags = ["gpu", "performance", "latency", "gaming"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler"],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-fullscreen-optimizations-global",
-            Label = "Disable Fullscreen Optimizations Globally",
-            Category = "GPU / Graphics",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables fullscreen optimizations globally via GameDVR_FSEBehaviorMode=2. Prevents Windows from applying borderless windowed mode to fullscreen apps. Can improve frame pacing and reduce input lag in games. Default: 0 (Enabled). Recommended: 2 (Disabled).",
-            Tags = ["gpu", "gaming", "fullscreen", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-        },
-        new TweakDef
-        {
             Id = "gpu-disable-game-bar-overlay",
             Label = "Disable Game Bar Overlay for GPU",
             Category = "GPU / Graphics",
@@ -188,17 +155,6 @@ internal static class Gpu
         },
         new TweakDef
         {
-            Id = "gpu-multiplane-overlay-disable",
-            Label = "Disable Multi-Plane Overlay (Anti-Stutter)",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Multi-Plane Overlay via OverlayTestMode=5 under the HKLM DWM key. Fixes stuttering, flickering, and black screen issues on some hardware. Removal deletes the value. Default: Enabled. Recommended: Disabled.",
-            Tags = ["gpu", "display", "stutter", "mpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
-        },
-        new TweakDef
-        {
             Id = "gpu-force-dx12-ultimate",
             Label = "Force DirectX 12 Ultimate",
             Category = "GPU / Graphics",
@@ -216,17 +172,6 @@ internal static class Gpu
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12", 1)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-igpu-powersave",
-            Label = "Disable Integrated GPU Power Saving",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables platform clock constant TSC for GPU scheduling. Provides more consistent GPU timer resolution, reducing frame time variance. Default: Not set. Recommended: Enabled.",
-            Tags = ["gpu", "clock", "tsc", "performance", "frame-time"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
         },
         new TweakDef
         {
@@ -294,28 +239,6 @@ internal static class Gpu
         },
         new TweakDef
         {
-            Id = "gpu-disable-power-throttle",
-            Label = "Disable GPU Power Throttling",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables GPU power throttling in the graphics driver scheduler. Prevents the GPU from downclocking during sustained workloads. Default: Enabled. Recommended: Disabled for compute workloads.",
-            Tags = ["gpu", "power", "throttle", "performance", "compute"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-        },
-        new TweakDef
-        {
-            Id = "gpu-force-software-cursor",
-            Label = "Force Software Cursor",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Forces DWM to use software cursor rendering instead of hardware. Can reduce perceived input lag on some GPU/driver combinations. Default: Hardware cursor. Recommended: Software for low-latency.",
-            Tags = ["gpu", "cursor", "input-lag", "dwm", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
-        },
-        new TweakDef
-        {
             Id = "gpu-max-prerendered-frames",
             Label = "Set Max Pre-Rendered Frames to 1",
             Category = "GPU / Graphics",
@@ -356,17 +279,6 @@ internal static class Gpu
         },
         new TweakDef
         {
-            Id = "gpu-increase-priority",
-            Label = "Increase GPU Thread Priority",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets Win32PrioritySeparation to 0x26 (foreground boost), giving GPU-bound applications more scheduling priority. Default: 0x02. Recommended: 0x26 for gaming/performance.",
-            Tags = ["gpu", "priority", "scheduling", "performance", "gaming"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-        },
-        new TweakDef
-        {
             Id = "gpu-disable-shader-cache",
             Label = "Disable DirectX Shader Disk Cache",
             Category = "GPU / Graphics",
@@ -384,17 +296,6 @@ internal static class Gpu
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath", 0)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-wddm3-miracast",
-            Label = "Enable WDDM 3 Miracast Support",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets PlatformSupportMiracast=1 in GraphicsDrivers to enable WDDM 3 Miracast display projection features. Required for wireless display on some hardware. Default: Not set.",
-            Tags = ["gpu", "wddm3", "miracast", "display", "wireless"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
         },
         new TweakDef
         {

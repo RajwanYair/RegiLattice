@@ -8,38 +8,6 @@ internal static class Performance
     [
         new TweakDef
         {
-            Id = "perf-performance",
-            Label = "Performance Tweaks (Visual Effects)",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Removes startup delay, lowers system responsiveness timer, and disables network throttling for snappier performance.",
-            Tags = ["performance", "startup", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-        },
-        new TweakDef
-        {
-            Id = "perf-svchost-split",
-            Label = "Optimize SvcHost Split (RAM-based)",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Raises the SvcHost split threshold to match installed RAM, reducing the number of svchost.exe processes.",
-            Tags = ["performance", "memory", "svchost"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-ntfs-last-access",
-            Label = "Disable NTFS Last Access Timestamp",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables NTFS last-access timestamp updates to reduce disk I/O overhead.",
-            Tags = ["performance", "ntfs", "disk"],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-transparency",
             Label = "Disable Transparency Effects",
             Category = "Performance",
@@ -57,39 +25,6 @@ internal static class Performance
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-background-apps",
-            Label = "Disable Background UWP Apps",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Store/UWP apps from running in the background. Frees CPU, memory, and network resources used by idle Store apps. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["performance", "uwp", "background"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications"],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-window-animations",
-            Label = "Disable Window Animations",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables window minimize/maximize animations and taskbar animations for snappier window management.",
-            Tags = ["performance", "visual", "animations"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-        },
-        new TweakDef
-        {
-            Id = "perf-menu-show-delay",
-            Label = "Reduce Menu Show Delay",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the delay before menus appear from 400ms to 50ms. Makes context menus and Start menu feel instant.",
-            Tags = ["performance", "menu", "ux", "responsiveness"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
         },
         new TweakDef
         {
@@ -379,28 +314,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-gpu-hw-scheduling",
-            Label = "Enable GPU Hardware Accelerated Scheduling",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Hardware Accelerated GPU Scheduling (HAGS) mode 2. Reduces GPU latency by allowing GPU to manage its own memory directly. Default: Disabled. Recommended: Enabled on Win10 2004+ with supported GPU.",
-            Tags = ["performance", "gpu", "scheduling", "hags", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-        },
-        new TweakDef
-        {
-            Id = "perf-large-page-minimum",
-            Label = "Configure Large Page Minimum in Memory Manager",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets LargePageMinimum=0 to allow applications to use large page memory when beneficial. Can improve performance for large-memory workloads. Default: Not set. Recommended: 0.",
-            Tags = ["performance", "memory", "large-page", "allocation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-        },
-        new TweakDef
-        {
             Id = "perf-games-io-priority",
             Label = "Set Highest IO Priority for Games Multimedia Profile",
             Category = "Performance",
@@ -422,17 +335,6 @@ internal static class Performance
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Priority"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Priority", 6)],
-        },
-        new TweakDef
-        {
-            Id = "perf-reduce-hung-app-timeout",
-            Label = "Reduce Hung Application Detection Timeout",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Reduces HungAppTimeout from 5000ms to 1000ms so Windows terminates frozen applications faster. Improves system responsiveness on crashes. Default: 5000ms. Recommended: 1000ms.",
-            Tags = ["performance", "hung-app", "timeout", "responsiveness"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
         },
         new TweakDef
         {
@@ -513,18 +415,6 @@ internal static class Performance
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-thumbnails-network",
-            Label = "Disable Thumbnails on Network Folders",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables thumbnail generation for files on network shares. Eliminates Explorer hangs and delays when browsing slow network drives. Default: Enabled. Recommended: Disabled on slow networks.",
-            Tags = ["performance", "explorer", "thumbnail", "network", "speed"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            SideEffects = "Network folder files will display generic icons instead of thumbnails.",
         },
         new TweakDef
         {

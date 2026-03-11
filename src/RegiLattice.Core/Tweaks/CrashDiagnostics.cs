@@ -410,17 +410,6 @@ internal static class CrashDiagnostics
         },
         new TweakDef
         {
-            Id = "crash-suppress-wer-ui",
-            Label = "Suppress WER Crash Popup for Current User",
-            Category = "Crash & Diagnostics",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Windows Error Reporting dialog that appears after an application crash, silently logging the report instead. Default: show dialog. Recommended: suppress on developer workstations.",
-            Tags = ["crash", "wer", "ui", "popup", "dialog"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Windows Error Reporting"],
-        },
-        new TweakDef
-        {
             Id = "crash-disable-online-crash-analysis",
             Label = "Disable Online Crash Analysis",
             Category = "Crash & Diagnostics",

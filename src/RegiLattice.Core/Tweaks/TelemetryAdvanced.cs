@@ -8,17 +8,6 @@ internal static class TelemetryAdvanced
     [
         new TweakDef
         {
-            Id = "telem-security-only",
-            Label = "Set Telemetry to Security Only (0)",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets AllowTelemetry=0 (Security level, Enterprise/Education only). On Home/Pro this sets Required level minimum. Default: 3 (Full). Recommended: 0.",
-            Tags = ["telemetry", "privacy", "security", "diagnostic"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-diag-optin",
             Label = "Block Diagnostic Data Settings Changes",
             Category = "Telemetry Advanced",
@@ -85,17 +74,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-advertising-id",
-            Label = "Disable Advertising ID",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the per-user advertising ID used for cross-app ad targeting. Sets both user and policy values. Default: enabled. Recommended: disabled.",
-            Tags = ["telemetry", "advertising", "privacy", "ads"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-feedback",
             Label = "Disable Feedback Notifications",
             Category = "Telemetry Advanced",
@@ -136,28 +114,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-type-personalization",
-            Label = "Disable Inking & Typing Personalization",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables inking and typing personalization that learns from your writing patterns. Default: 1 (enabled). Recommended: 0 (disabled).",
-            Tags = ["telemetry", "inking", "typing", "personalization"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\InkingAndTypingPersonalization"],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-diagtrack-autologger",
-            Label = "Disable DiagTrack ETW Autologger",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the DiagTrack ETW autologger that starts at boot. Stops kernel-level telemetry trace collection. Default: 1 (enabled). Recommended: 0 (disabled).",
-            Tags = ["telemetry", "diagtrack", "etw", "boot", "trace"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener"],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-tailored-experiences",
             Label = "Disable Tailored Experiences",
             Category = "Telemetry Advanced",
@@ -178,28 +134,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-usage-tracking",
-            Label = "Disable Start Menu Usage Tracking",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables app launch tracking used for Start menu 'Most Used' list and personalization. Default: 1 (track). Recommended: 0 (disabled).",
-            Tags = ["telemetry", "start-menu", "usage", "tracking", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-win-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Error Reporting (WER). Prevents sending crash data to Microsoft. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["telemetry", "wer", "error-reporting", "crash", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-inventory-collector",
             Label = "Disable Inventory Collector",
             Category = "Telemetry Advanced",
@@ -217,39 +151,6 @@ internal static class TelemetryAdvanced
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
-        },
-        new TweakDef
-        {
-            Id = "telem-telemetry-disable-connected-user",
-            Label = "Disable Connected User Experiences",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Connected User Experiences and Telemetry proxy. Prevents cloud-based notifications and data sync. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["telemetry", "connected-ux", "push", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"],
-        },
-        new TweakDef
-        {
-            Id = "telem-telemetry-set-max-size",
-            Label = "Limit Telemetry Cache / Dump Collection",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Limits telemetry dump collection to reduce disk usage and data sent to Microsoft. Default: Unlimited. Recommended: Limited.",
-            Tags = ["telemetry", "cache", "dump", "size", "limit"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-        },
-        new TweakDef
-        {
-            Id = "telem-telemetry-disable-diagnostic-log",
-            Label = "Disable Diagnostic Log Collection",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables diagnostic log collection via LimitDiagnosticLogCollection policy. Reduces telemetry data stored locally. Default: Enabled. Recommended: Disabled.",
-            Tags = ["telemetry", "diagnostic", "log", "collection", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
         },
         new TweakDef
         {

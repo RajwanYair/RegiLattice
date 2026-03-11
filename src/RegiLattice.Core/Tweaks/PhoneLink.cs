@@ -250,17 +250,6 @@ internal static class PhoneLink
         },
         new TweakDef
         {
-            Id = "phone-disable-suggestions",
-            Label = "Disable Phone Link Suggestions",
-            Category = "Phone Link",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Phone Link promotional suggestions and tips in Windows. Default: Enabled.",
-            Tags = ["phone-link", "suggestions", "ads"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PhoneLink"],
-        },
-        new TweakDef
-        {
             Id = "phone-disable-bt-relay",
             Label = "Disable Bluetooth Phone Relay",
             Category = "Phone Link",
@@ -340,17 +329,6 @@ internal static class PhoneLink
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\YourPhone", "DisablePhotoSync", 0),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\YourPhone", "DisablePhotoSync", 1)],
-        },
-        new TweakDef
-        {
-            Id = "phone-disable-app-notifications",
-            Label = "Disable Phone Link App Notifications",
-            Category = "Phone Link",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables cross-device app notifications relayed from mobile to PC via Phone Link. Reduces notification noise and background connectivity. Default: Enabled.",
-            Tags = ["phone-link", "notifications", "apps", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage"],
         },
         new TweakDef
         {

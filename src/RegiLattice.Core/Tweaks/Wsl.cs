@@ -8,28 +8,6 @@ internal static class Wsl
     [
         new TweakDef
         {
-            Id = "wsl-default-v2",
-            Label = "WSL Default Version 2",
-            Category = "WSL",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets new WSL distributions to install as version 2 by default.",
-            Tags = ["wsl", "linux", "virtualisation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-autostart",
-            Label = "WSL Auto-Start Service",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets LxssManager to automatic start so WSL is ready instantly.",
-            Tags = ["wsl", "service", "startup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LxssManager"],
-        },
-        new TweakDef
-        {
             Id = "wsl-nested-virt",
             Label = "WSL Nested Virtualisation",
             Category = "WSL",
@@ -50,94 +28,6 @@ internal static class Wsl
         },
         new TweakDef
         {
-            Id = "wsl-feature",
-            Label = "Enable WSL Feature",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables the Windows Subsystem for Linux optional feature via DISM.",
-            Tags = ["wsl", "feature", "linux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Notifications\OptionalFeatures\Microsoft-Windows-Subsystem-Linux"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-vm-platform",
-            Label = "Enable VM Platform",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables the Virtual Machine Platform feature (required for WSL 2).",
-            Tags = ["wsl", "virtualisation", "feature"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Notifications\OptionalFeatures\VirtualMachinePlatform"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-mirrored-network",
-            Label = "WSL Mirrored Networking",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Switches WSL 2 networking to mirrored mode so localhost forwarding and host-network access work transparently.",
-            Tags = ["wsl", "network", "localhost"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-memory-reclaim",
-            Label = "WSL Memory Reclaim",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables WSL 2 memory reclaim so unused VM memory is returned to the host.",
-            Tags = ["wsl", "memory", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-dns-tunneling",
-            Label = "WSL DNS Tunneling",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables DNS tunneling in WSL 2 for better VPN and proxy compatibility.",
-            Tags = ["wsl", "dns", "vpn"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-disable-auto-update",
-            Label = "Disable WSL Automatic Updates",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic WSL kernel updates. Updates must be applied manually. Default: Enabled. Recommended: Disabled for controlled environments.",
-            Tags = ["wsl", "update", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForLinux"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-disable-nested-virt",
-            Label = "Disable WSL Nested Virtualization",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables nested virtualization support in WSL2. Reduces CPU overhead if you don't run VMs inside WSL. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["wsl", "virtualization", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-default-version-2",
-            Label = "Set WSL Default Version to 2",
-            Category = "WSL",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the default WSL version to WSL2 for new distributions. WSL2 uses a real Linux kernel. Default: 1. Recommended: 2.",
-            Tags = ["wsl", "version", "linux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
             Id = "wsl-disable-interop",
             Label = "Disable WSL Windows Interop",
             Category = "WSL",
@@ -155,57 +45,6 @@ internal static class Wsl
                 RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "WslInterop", 1),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "WslInterop", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsl-enable-localhost-forward",
-            Label = "Enable WSL2 Localhost Forwarding",
-            Category = "WSL",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables localhost forwarding so WSL2 services are accessible from Windows via localhost. Default: Disabled. Recommended: Enabled for development.",
-            Tags = ["wsl", "localhost", "forwarding", "networking"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-update-distro",
-            Label = "Update Default WSL Distro Packages",
-            Category = "WSL",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enters the default WSL distro and runs 'apt-get update && apt-get upgrade' to bring all packages up to date. One-time action. Default: not applied. Recommended: run periodically.",
-            Tags = ["wsl", "update", "apt", "distro", "packages"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-kernel-update",
-            Label = "Update WSL Kernel",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Runs 'wsl --update' to install the latest WSL kernel. Remove action rolls back with 'wsl --update --rollback'. Default: not applied. Recommended: run periodically.",
-            Tags = ["wsl", "kernel", "update"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-enable-systemd",
-            Label = "Enable Systemd in WSL",
-            Category = "WSL",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Writes 'systemd=true' to /etc/wsl.conf inside the default distro. Enables systemd as PID 1 for services like Docker, snap, etc. Requires WSL restart. Default: disabled. Recommended: enabled.",
-            Tags = ["wsl", "systemd", "init", "services"],
-        },
-        new TweakDef
-        {
-            Id = "wsl-compact-disk",
-            Label = "Compact WSL Virtual Disks",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shuts down WSL and compacts all ext4.vhdx files to reclaim unused disk space. One-time action. Default: not applied. Recommended: run periodically.",
-            Tags = ["wsl", "disk", "compact", "vhd", "storage"],
         },
         new TweakDef
         {
@@ -526,17 +365,6 @@ internal static class Wsl
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson", "CreateCrashDump"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson", "CreateCrashDump", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsl-enable-nested-virt-policy",
-            Label = "Enable Nested Virtualisation in WSL2",
-            Category = "WSL",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables nested virtualisation inside the WSL2 VM, allowing you to run KVM/QEMU, Docker-in-Docker, or other hypervisors inside WSL. Default: disabled. Recommended: enabled for platform/container engineers.",
-            Tags = ["wsl", "virtualisation", "kvm", "docker", "nested", "hypervisor"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
         },
         new TweakDef
         {
