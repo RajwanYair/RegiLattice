@@ -24,6 +24,7 @@ internal static class ContextMenu
             [
                 RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\PowerShellHere"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\PowerShellHere", "Icon", "powershell.exe")],
         },
         new TweakDef
         {
@@ -43,6 +44,7 @@ internal static class ContextMenu
             [
                 RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\wt"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\wt", "Icon", "wt.exe")],
         },
         new TweakDef
         {
@@ -62,6 +64,7 @@ internal static class ContextMenu
             [
                 RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\cmd", "Icon", "cmd.exe")],
         },
         new TweakDef
         {
@@ -81,6 +84,7 @@ internal static class ContextMenu
             [
                 RegOp.DeleteTree(@"HKEY_CURRENT_USER\Software\Classes\*\shell\CopyPath"),
             ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\*\shell\CopyPath", "Icon", "shell32.dll,-265")],
         },
         new TweakDef
         {

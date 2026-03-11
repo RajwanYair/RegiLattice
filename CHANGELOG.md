@@ -6,6 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.1.5] — 2025-07-20
+
+### Added
+
+- **49 DetectOps additions** across 18 tweak modules — every registry-based tweak now has
+  detection logic (CheckDword, CheckString, or CheckMissing) so `StatusMap()` and the GUI
+  status column report accurate applied/not-applied state
+  - Backup (1), Boot (3), ContextMenu (4), Defender (2), DevDrive (1), Explorer (1),
+    GPU (1), IndexingSearch (2), LockScreen (4), MsStore (1), Network (2), NightLight (2),
+    Office (2), OneDrive (1), Performance (1), RealVnc (2), Screensaver (1),
+    CloudStorage (14), Startup (3)
+
+### Fixed
+
+- **16 broken TweakDef headers** restored after multi-edit consumed `new TweakDef` openers
+  — all 1 360 tweaks register correctly again
+- **Build clean** — 0 warnings, 0 errors with `-warnaserror`
+
+### Changed
+
+- Version bump to 3.1.5 across csproj, winget manifests, and WiX installer
+
 ## [3.0.0] — 2025-07-20
 
 ### ⚠️ BREAKING: Quality audit — removed 468 non-functional tweak stubs

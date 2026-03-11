@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-20 · v3.1.0 · 1 360 tweaks · 72 categories · 203 tests
+> Last updated: 2025-07-20 · v3.1.5 · 1 360 tweaks · 72 categories · 203 tests
 
 ---
 
