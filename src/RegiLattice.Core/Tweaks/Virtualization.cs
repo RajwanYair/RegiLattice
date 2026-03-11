@@ -420,5 +420,47 @@ internal static class Virtualization
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "DisableDynamicMemory")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "DisableDynamicMemory", 1)],
         },
+        new TweakDef
+        {
+            Id = "virt-disable-containers-ext",
+            Label = "Disable Windows Containers Extension",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Containers feature extension. Reduces attack surface if containers are not used. Default: varies.",
+            Tags = ["virtualization", "containers", "windows", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Containers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Containers", "ContainersOff", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Containers", "ContainersOff")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Containers", "ContainersOff", 1)],
+        },
+        new TweakDef
+        {
+            Id = "virt-hypervisor-core-scheduler",
+            Label = "Enable Hypervisor Core Scheduler",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables the hypervisor core scheduler for improved VM performance and security isolation. Mitigates side-channel attacks. Default: root scheduler.",
+            Tags = ["virtualization", "hypervisor", "scheduler", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "HvpScheduler", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "HvpScheduler")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "HvpScheduler", 2)],
+        },
+        new TweakDef
+        {
+            Id = "virt-require-platform-security",
+            Label = "Require Virtualization Platform Security",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Requires UEFI Secure Boot and TPM for Hyper-V platform security features. Enforces hardware-backed isolation. Default: not required.",
+            Tags = ["virtualization", "platform", "security", "tpm"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures", 3)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures", 3)],
+        },
     ];
 }

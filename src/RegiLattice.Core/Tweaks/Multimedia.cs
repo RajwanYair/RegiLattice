@@ -442,5 +442,33 @@ internal static class Multimedia
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoCDBurning")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoCDBurning", 1)],
         },
+        new TweakDef
+        {
+            Id = "media-disable-sound-scheme",
+            Label = "Disable System Sound Scheme",
+            Category = "Multimedia",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the Windows sound scheme to None, disabling all system sounds. Creates a silent desktop experience. Default: Windows Default.",
+            Tags = ["multimedia", "sound", "scheme", "silent"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".Default")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-wmp-network-sharing",
+            Label = "Disable WMP Network Sharing",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Media Player network sharing service. Prevents media library from being shared across the network. Default: enabled.",
+            Tags = ["multimedia", "wmp", "sharing", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
+        },
     ];
 }

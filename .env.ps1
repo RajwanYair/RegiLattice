@@ -10,6 +10,7 @@
 #
 # Idempotent — safe to source multiple times in the same session.
 # ─────────────────────────────────────────────────────────────────────────────
+#$env:REGILATTICE_ENV_LOADED = '1'
 
 # Guard: only run once per session
 if ($env:REGILATTICE_ENV_LOADED -eq '1') { return }

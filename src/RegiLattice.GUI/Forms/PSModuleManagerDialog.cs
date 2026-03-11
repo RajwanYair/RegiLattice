@@ -142,7 +142,7 @@ internal sealed class PSModuleManagerDialog : Form
             flowQuick.Controls.Add(btn);
         }
 
-        Controls.AddRange([ctrlPanel, flowQuick, quickLabel, _lstInstalled, scopePanel, _lblOutdated, _lblStatus, lblTitle]);
+        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, scopePanel, _lblOutdated, _lblStatus, lblTitle]);
     }
 
     private async Task RefreshAsync()

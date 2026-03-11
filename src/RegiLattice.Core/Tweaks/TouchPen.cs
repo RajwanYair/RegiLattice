@@ -422,5 +422,19 @@ internal static class TouchPen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
         },
+        new TweakDef
+        {
+            Id = "touch-disable-visual-feedback",
+            Label = "Disable Touch Visual Feedback",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the visual feedback animations shown when touching the screen. Removes the touch ripple effects. Default: enabled.",
+            Tags = ["touch", "visual", "feedback", "animation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
+        },
     ];
 }

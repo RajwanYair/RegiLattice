@@ -524,5 +524,33 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
         },
+        new TweakDef
+        {
+            Id = "sys-enable-long-paths",
+            Label = "Enable Win32 Long Paths (Policy)",
+            Category = "System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Win32 long path support via Group Policy. Allows applications to use paths longer than 260 characters. Default: disabled.",
+            Tags = ["system", "long-paths", "260", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sys-verbose-logon",
+            Label = "Enable Verbose Logon Messages",
+            Category = "System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Displays detailed status messages during Windows logon and logoff. Shows service startup progress instead of generic messages. Default: standard messages.",
+            Tags = ["system", "logon", "verbose", "status"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
+        },
     ];
 }

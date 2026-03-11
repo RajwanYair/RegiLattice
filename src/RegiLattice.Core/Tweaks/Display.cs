@@ -481,5 +481,47 @@ internal static class Display
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SideBySide", "PreferExternalManifest")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SideBySide", "PreferExternalManifest", 1)],
         },
+        new TweakDef
+        {
+            Id = "display-disable-animation-effects",
+            Label = "Disable Window Animation Effects",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables window minimize/maximize and transition animation effects. Snappier window management. Default: animated.",
+            Tags = ["display", "animation", "effects", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
+        },
+        new TweakDef
+        {
+            Id = "display-disable-screensaver-policy",
+            Label = "Disable Screen Saver via Policy",
+            Category = "Display",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables screen saver activation via Group Policy. Prevents screen saver from interrupting work. Default: user-controlled.",
+            Tags = ["display", "screensaver", "policy", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "0")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "display-set-font-smoothing-gamma",
+            Label = "Set Font Smoothing Gamma",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the ClearType font smoothing gamma correction to optimal value. Improves text rendering contrast on LCD displays. Default: system default.",
+            Tags = ["display", "font", "gamma", "cleartype"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],
+        },
     ];
 }

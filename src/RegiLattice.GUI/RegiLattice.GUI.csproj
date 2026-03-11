@@ -9,7 +9,7 @@
     <Platforms>x64</Platforms>
     <RootNamespace>RegiLattice.GUI</RootNamespace>
     <AssemblyName>RegiLattice.GUI</AssemblyName>
-    <ApplicationIcon />
+    <ApplicationIcon>app.ico</ApplicationIcon>
     <StartupObject>RegiLattice.GUI.Program</StartupObject>
     <Version>3.1.5</Version>
     <Description>RegiLattice — WinForms GUI</Description>

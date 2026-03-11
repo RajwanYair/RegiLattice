@@ -418,5 +418,19 @@ internal static class Storage
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEnableCompression")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEnableCompression", 1)],
         },
+        new TweakDef
+        {
+            Id = "stor-storage-disable-last-access",
+            Label = "Disable NTFS Last Access Timestamp",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the NTFS last access timestamp update. Reduces disk I/O on every file read, beneficial for SSDs. Default: system managed.",
+            Tags = ["storage", "ntfs", "last-access", "ssd"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+        },
     ];
 }

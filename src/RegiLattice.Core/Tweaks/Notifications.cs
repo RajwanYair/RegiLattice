@@ -416,5 +416,47 @@ internal static class Notifications
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1)],
         },
+        new TweakDef
+        {
+            Id = "notif-disable-banners",
+            Label = "Disable Notification Banners",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables notification banner popups on the desktop. Notifications go silently to Action Center only. Default: banners shown.",
+            Tags = ["notifications", "banners", "toast", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications", "ToastEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications", "ToastEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications", "ToastEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-tips-soft-landing",
+            Label = "Disable Windows Tips Notifications",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Windows tips, tricks, and suggestion notifications. Reduces interruptions from Microsoft feature promotions. Default: enabled.",
+            Tags = ["notifications", "tips", "suggestions", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-silence-global-sounds",
+            Label = "Silence All Notification Sounds",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Silences all Windows notification sounds globally. Visual notifications still appear but without audio. Default: sounds enabled.",
+            Tags = ["notifications", "sounds", "silence", "mute"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
+        },
     ];
 }

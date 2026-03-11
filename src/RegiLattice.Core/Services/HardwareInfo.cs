@@ -77,6 +77,27 @@ public static class HardwareInfo
         return _cached;
     }
 
+    // ── Quick applicability checks (for TweakDef.IsApplicable) ─────────
+
+    /// <summary>Returns true if an NVIDIA GPU is detected.</summary>
+    public static bool HasNvidiaGpu() =>
+        DetectHardware().Gpus.Any(g => g.Name.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>Returns true if an AMD/Radeon GPU is detected.</summary>
+    public static bool HasAmdGpu() =>
+        DetectHardware().Gpus.Any(g =>
+            g.Name.Contains("Radeon", StringComparison.OrdinalIgnoreCase) ||
+            g.Name.Contains("AMD", StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>Returns true if WSL is installed.</summary>
+    public static bool HasWslInstalled() => DetectHardware().HasWsl;
+
+    /// <summary>Returns true if the device has a battery (laptop).</summary>
+    public static bool HasBatteryPresent() => DetectHardware().HasBattery;
+
+    /// <summary>Returns true if Hyper-V is available.</summary>
+    public static bool HasHyperVAvailable() => DetectHardware().HasHyperV;
+
     public static CpuInfo DetectCpu()
     {
         var name = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown";

@@ -430,5 +430,47 @@ internal static class RealVnc
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600)],
         },
+        new TweakDef
+        {
+            Id = "vnc-hide-tray",
+            Label = "Hide VNC Server Tray Icon",
+            Category = "RealVNC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Hides the VNC Server system tray icon. Keeps VNC running without a visible indicator. Useful for kiosk or embedded scenarios. Default: shown.",
+            Tags = ["vnc", "tray", "icon", "hide"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShowTrayIcon", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShowTrayIcon", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShowTrayIcon", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vnc-viewer-fitwindow",
+            Label = "VNC Viewer Fit to Window",
+            Category = "RealVNC",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Configures VNC Viewer to automatically scale the remote desktop to fit the client window. Default: native resolution.",
+            Tags = ["vnc", "viewer", "scaling", "fitwindow"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "Scaling", "FitWindow")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "Scaling")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "Scaling", "FitWindow")],
+        },
+        new TweakDef
+        {
+            Id = "vnc-viewer-recent",
+            Label = "Disable VNC Viewer Recent Connections",
+            Category = "RealVNC",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables VNC Viewer from storing recent connection history. Enhances privacy by not recording server addresses. Default: stored.",
+            Tags = ["vnc", "viewer", "recent", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "RememberConnections", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "RememberConnections")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "RememberConnections", 0)],
+        },
     ];
 }

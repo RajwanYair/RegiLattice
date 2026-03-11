@@ -10,16 +10,17 @@ internal static partial class PSModuleManager
 
     internal static async Task<List<string>> ListInstalledAsync(string scope = "CurrentUser", CancellationToken ct = default)
     {
-        string scopeFilter = scope is "CurrentUser" or "AllUsers"
-            ? $"-Scope {scope}"
-            : string.Empty;
-        string script = $"Get-InstalledModule {scopeFilter} | Select-Object -ExpandProperty Name 2>&1";
+        // Get-Module -ListAvailable shows all installed modules (not just PSGallery ones)
+        string script = scope == "AllUsers"
+            ? "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique | Sort-Object"
+            : "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Where-Object { $_.ModuleBase -like \"$($env:USERPROFILE)*\" -or $_.ModuleBase -like \"$($env:HOME)*\" } | Select-Object -ExpandProperty Name -Unique | Sort-Object";
         var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct).ConfigureAwait(false);
 
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
-            .Where(l => l.Length > 0)
+            .Where(l => l.Length > 0 && !l.StartsWith("WARNING", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
