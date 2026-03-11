@@ -15,6 +15,7 @@ public sealed class AppConfigTests
         Assert.True(cfg.AutoBackup);
         Assert.Equal("catppuccin-mocha", cfg.Theme);
         Assert.Equal("en", cfg.Locale);
+        Assert.True(cfg.CheckToolUpdates);
     }
 
     [Fact]

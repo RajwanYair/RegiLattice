@@ -77,4 +77,32 @@ public sealed class PackageManagerValidationTests
     [Fact]
     public void PSModulePopularModules_NotEmpty()
         => Assert.NotEmpty(PSModuleManager.PopularModules);
+
+    // ── ToolVersionChecker.ToolInfo ────────────────────────────────────
+
+    [Fact]
+    public void ToolInfo_Installed_HasVersion()
+    {
+        var info = new ToolVersionChecker.ToolInfo("Test", "1.2.3", true);
+        Assert.Equal("Test", info.Name);
+        Assert.Equal("1.2.3", info.InstalledVersion);
+        Assert.True(info.IsInstalled);
+    }
+
+    [Fact]
+    public void ToolInfo_NotInstalled_NullVersion()
+    {
+        var info = new ToolVersionChecker.ToolInfo("Missing", null, false);
+        Assert.Null(info.InstalledVersion);
+        Assert.False(info.IsInstalled);
+    }
+
+    [Fact]
+    public async Task ToolVersionChecker_CheckAll_ReturnsResults()
+    {
+        var results = await ToolVersionChecker.CheckAllAsync();
+        Assert.NotEmpty(results);
+        Assert.Equal(7, results.Count);
+        Assert.All(results, r => Assert.NotNull(r.Name));
+    }
 }
