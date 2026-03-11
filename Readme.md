@@ -302,7 +302,7 @@ new TweakDef
 }
 ```
 
-See [Contributing.md](Contributing.md) for the full guide.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ## License
 

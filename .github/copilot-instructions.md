@@ -2,7 +2,33 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-20 (v3.0.0, 1 360 tweaks, 72 categories, 129 tests).
+> Last verified: 2026-03-11 (v3.1.0, 1 360 tweaks, 72 categories, 129 tests).
+
+## Companion Instruction Files
+
+All files below are auto-loaded into every Copilot chat session via `.vscode/settings.json`:
+
+| File | Scope | Purpose |
+|------|-------|---------|
+| `.github/copilot-instructions.md` | `**` | This file — project overview and shell rules |
+| `.github/instructions/workspace.instructions.md` | `**` | Solution structure, architecture, build commands |
+| `.github/instructions/csharp.instructions.md` | `**/*.cs` | C# 13 coding standards and patterns |
+| `.github/instructions/testing.instructions.md` | `**/tests/**` | xUnit test patterns, coverage targets |
+| `.github/instructions/git-workflow.instructions.md` | `**` | Commit/push strategy, conventional commits |
+| `.github/instructions/lessons-learned.instructions.md` | `**/*.cs` | Hard-won migration insights, common pitfalls |
+| `.github/instructions/cicd.instructions.md` | `**/*.yml` | GitHub Actions, release workflow |
+
+### Environment Bootstrap
+
+Dot-source `.env.ps1` at the project root to ensure **all** CLI tools are on PATH:
+
+```powershell
+. .\.env.ps1
+```
+
+This is auto-loaded by the default VS Code terminal profile (`RegiLattice Dev`).
+See `Win11_tools.engineer‑friendly.tool.md` and `SCOOP.engineer‑friendly.tool.md`
+in the repo root for the full tool reference.
 
 ## ⛔ CRITICAL: PowerShell ONLY — NO Unix/Bash Commands
 
@@ -53,7 +79,7 @@ Rules:
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
 | Test        | xUnit 2.9.2 — 129 tests across 6 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
-| Version     | 3.0.0                                                            |
+| Version     | 3.1.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 1 360 across 72 categories                                       |
 | Tests       | 129 passing (93 Core + 36 GUI)                                   |
