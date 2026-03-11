@@ -31,6 +31,10 @@ partial class MainForm
     private TreeView _treeView = null!;
     private ListView _listView = null!;
 
+    // ── Detail panel fields ───────────────────────────────────────────────
+    private Panel _detailPanel = null!;
+    private Label _detailLabel = null!;
+
     // ── Log panel ──────────────────────────────────────────────────────────
     private Panel _logPanel = null!;
     private RichTextBox _logBox = null!;
@@ -73,6 +77,9 @@ partial class MainForm
 
         var mnuScoopMgr = new ToolStripMenuItem("Scoop Manager...");
         var mnuPsMgr = new ToolStripMenuItem("PowerShell Modules...");
+        var mnuPipMgr = new ToolStripMenuItem("pip Manager...");
+        var mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...");
+        var mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...");
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -81,7 +88,7 @@ partial class MainForm
         var mnuTools = new ToolStripMenuItem("&Tools");
         mnuTools.DropDownItems.AddRange(new ToolStripItem[]
         {
-            mnuScoopMgr, mnuPsMgr,
+            mnuScoopMgr, mnuPsMgr, mnuPipMgr, mnuWinGetMgr, mnuChocoMgr,
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
@@ -108,6 +115,9 @@ partial class MainForm
         mnuExit.Click += (_, _) => Close();
         mnuScoopMgr.Click += (_, _) => OnOpenScoopManager();
         mnuPsMgr.Click += (_, _) => OnOpenPSModuleManager();
+        mnuPipMgr.Click += (_, _) => OnOpenPipManager();
+        mnuWinGetMgr.Click += (_, _) => OnOpenWinGetManager();
+        mnuChocoMgr.Click += (_, _) => OnOpenChocolateyManager();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
@@ -206,8 +216,9 @@ partial class MainForm
         };
         _listView.Columns.AddRange(new[]
         {
-            new ColumnHeader { Text = "Label",       Width = 260 },
-            new ColumnHeader { Text = "Status",      Width =  90 },
+            new ColumnHeader { Text = "Label",       Width = 250 },
+            new ColumnHeader { Text = "Kind",        Width =  50 },
+            new ColumnHeader { Text = "Status",      Width =  80 },
             new ColumnHeader { Text = "Scope",       Width =  70 },
             new ColumnHeader { Text = "Admin",       Width =  55 },
             new ColumnHeader { Text = "Corp Safe",   Width =  75 },
@@ -241,7 +252,31 @@ partial class MainForm
         // ── SplitContainer ─────────────────────────────────────────────────
         _split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
         _split.Panel1.Controls.Add(_treeView);
+
+        // ── Detail panel (bottom of Panel2) ────────────────────────────────
+        _detailLabel = new Label
+        {
+            Dock = DockStyle.Fill,
+            ForeColor = AppTheme.FgDim,
+            Font = AppTheme.Regular,
+            Padding = new Padding(8, 4, 8, 4),
+            AutoSize = false,
+            TextAlign = ContentAlignment.TopLeft,
+            Text = "Select a tweak to see details.",
+        };
+        _detailPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 90,
+            BackColor = AppTheme.Surface,
+            BorderStyle = BorderStyle.None,
+            Padding = new Padding(4),
+        };
+        _detailPanel.Controls.Add(_detailLabel);
+
         _split.Panel2.Controls.Add(_listView);
+        _split.Panel2.Controls.Add(_detailPanel);
+        _listView.SelectedIndexChanged += OnListViewSelectionChanged;
 
         // ── Log panel (bottom, collapsed by default) ───────────────────────
         _logBox = new RichTextBox
