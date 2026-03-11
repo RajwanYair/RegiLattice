@@ -1,3 +1,4 @@
+using System.Text.Json;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using RegiLattice.Core.Registry;
@@ -328,5 +329,251 @@ public sealed class TweakEngineTests
     public void WindowsBuild_ReturnsPositive()
     {
         Assert.True(TweakEngine.WindowsBuild() > 0);
+    }
+
+    // ── TweaksByIds ─────────────────────────────────────────────────────
+    [Fact]
+    public void TweaksByIds_ReturnsMatchingTweaks()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("ids-1"), MakeTweak("ids-2"), MakeTweak("ids-3")]);
+        var results = engine.TweaksByIds(["ids-1", "ids-3"]);
+        Assert.Equal(2, results.Count);
+        Assert.Contains(results, t => t.Id == "ids-1");
+        Assert.Contains(results, t => t.Id == "ids-3");
+    }
+
+    [Fact]
+    public void TweaksByIds_IgnoresUnknownIds()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("known-1")]);
+        var results = engine.TweaksByIds(["known-1", "unknown-99"]);
+        Assert.Single(results);
+        Assert.Equal("known-1", results[0].Id);
+    }
+
+    // ── TweaksByTag ─────────────────────────────────────────────────────
+    [Fact]
+    public void TweaksByTag_ReturnsMatchingTweaks()
+    {
+        var engine = CreateEngine();
+        var td = new TweakDef { Id = "tag-1", Label = "Tag", Category = "X", Tags = ["special-tag"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\tag-1", "V", 1)] };
+        engine.Register([td, MakeTweak("notag-1")]);
+        var results = engine.TweaksByTag("special-tag");
+        Assert.Single(results);
+        Assert.Equal("tag-1", results[0].Id);
+    }
+
+    [Fact]
+    public void TweaksByTag_CaseInsensitive()
+    {
+        var engine = CreateEngine();
+        var td = new TweakDef { Id = "tagci-1", Label = "T", Category = "X", Tags = ["MyTag"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\tagci-1", "V", 1)] };
+        engine.Register([td]);
+        Assert.Single(engine.TweaksByTag("mytag"));
+        Assert.Single(engine.TweaksByTag("MYTAG"));
+    }
+
+    // ── TweaksByScope ───────────────────────────────────────────────────
+    [Fact]
+    public void TweaksByScope_FiltersCorrectly()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef { Id = "scp-u", Label = "U", Category = "C", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] },
+            new TweakDef { Id = "scp-m", Label = "M", Category = "C", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] },
+        ]);
+        var user = engine.TweaksByScope(TweakScope.User);
+        var machine = engine.TweaksByScope(TweakScope.Machine);
+        Assert.Single(user);
+        Assert.Equal("scp-u", user[0].Id);
+        Assert.Single(machine);
+        Assert.Equal("scp-m", machine[0].Id);
+    }
+
+    // ── Filter (additional parameters) ──────────────────────────────────
+    [Fact]
+    public void Filter_ByCorpSafe()
+    {
+        var engine = CreateEngine();
+        var safe = new TweakDef { Id = "f-safe", Label = "S", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-safe", "V", 1)] };
+        var risky = new TweakDef { Id = "f-risky", Label = "R", Category = "X", CorpSafe = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-risky", "V", 1)] };
+        engine.Register([safe, risky]);
+        var results = engine.Filter(corpSafe: true);
+        Assert.Single(results);
+        Assert.Equal("f-safe", results[0].Id);
+    }
+
+    [Fact]
+    public void Filter_ByNeedsAdmin()
+    {
+        var engine = CreateEngine();
+        var admin = new TweakDef { Id = "f-admin", Label = "A", Category = "X", NeedsAdmin = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-admin", "V", 1)] };
+        var noAdmin = new TweakDef { Id = "f-noadmin", Label = "N", Category = "X", NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-noadmin", "V", 1)] };
+        engine.Register([admin, noAdmin]);
+        var results = engine.Filter(needsAdmin: false);
+        Assert.Single(results);
+        Assert.Equal("f-noadmin", results[0].Id);
+    }
+
+    [Fact]
+    public void Filter_ByMinBuild()
+    {
+        var engine = CreateEngine();
+        var old = new TweakDef { Id = "f-old", Label = "O", Category = "X", MinBuild = 19041, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-old", "V", 1)] };
+        var fresh = new TweakDef { Id = "f-fresh", Label = "F", Category = "X", MinBuild = 22631, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-fresh", "V", 1)] };
+        engine.Register([old, fresh]);
+        var results = engine.Filter(minBuild: 20000);
+        Assert.Single(results);
+        Assert.Equal("f-old", results[0].Id);
+    }
+
+    [Fact]
+    public void Filter_MultipleParams_CombinesAnd()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef { Id = "fm-1", Label = "A", Category = "CatA", CorpSafe = true, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-1", "V", 1)] },
+            new TweakDef { Id = "fm-2", Label = "B", Category = "CatA", CorpSafe = false, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-2", "V", 1)] },
+            new TweakDef { Id = "fm-3", Label = "C", Category = "CatB", CorpSafe = true, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-3", "V", 1)] },
+        ]);
+        var results = engine.Filter(corpSafe: true, category: "CatA");
+        Assert.Single(results);
+        Assert.Equal("fm-1", results[0].Id);
+    }
+
+    // ── ApplyBatch / RemoveBatch ────────────────────────────────────────
+    [Fact]
+    public void ApplyBatch_ReturnsResultPerTweak()
+    {
+        var engine = CreateEngine();
+        var tweaks = new[]
+        {
+            new TweakDef { Id = "ab-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-1", "V", 1)] },
+            new TweakDef { Id = "ab-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-2", "V", 1)] },
+        };
+        engine.Register(tweaks);
+        var results = engine.ApplyBatch(tweaks);
+        Assert.Equal(2, results.Count);
+        Assert.All(results.Values, r => Assert.Equal(TweakResult.Applied, r));
+    }
+
+    [Fact]
+    public void ApplyBatch_Parallel_ReturnsResultPerTweak()
+    {
+        var engine = CreateEngine();
+        var tweaks = new[]
+        {
+            new TweakDef { Id = "abp-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-1", "V", 1)] },
+            new TweakDef { Id = "abp-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-2", "V", 1)] },
+        };
+        engine.Register(tweaks);
+        var results = engine.ApplyBatch(tweaks, parallel: true);
+        Assert.Equal(2, results.Count);
+        Assert.All(results.Values, r => Assert.Equal(TweakResult.Applied, r));
+    }
+
+    [Fact]
+    public void RemoveBatch_ReturnsResultPerTweak()
+    {
+        var engine = CreateEngine();
+        var tweaks = new[]
+        {
+            new TweakDef { Id = "rb-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-1", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-1", "V")] },
+            new TweakDef { Id = "rb-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-2", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-2", "V")] },
+        };
+        engine.Register(tweaks);
+        var results = engine.RemoveBatch(tweaks);
+        Assert.Equal(2, results.Count);
+        Assert.All(results.Values, r => Assert.Equal(TweakResult.NotApplied, r));
+    }
+
+    // ── TweaksForProfile / ApplyProfile ─────────────────────────────────
+    [Fact]
+    public void TweaksForProfile_UnknownProfile_ReturnsEmpty()
+    {
+        var engine = CreateEngine();
+        engine.RegisterBuiltins();
+        Assert.Empty(engine.TweaksForProfile("nonexistent"));
+    }
+
+    [Fact]
+    public void TweaksForProfile_Business_ReturnsNonEmpty()
+    {
+        var engine = CreateEngine();
+        engine.RegisterBuiltins();
+        var tweaks = engine.TweaksForProfile("business");
+        Assert.NotEmpty(tweaks);
+        Assert.True(tweaks.Count > 100, $"Expected >100 tweaks for business profile, got {tweaks.Count}");
+    }
+
+    [Fact]
+    public void ApplyProfile_UnknownProfile_ReturnsEmpty()
+    {
+        var engine = CreateEngine();
+        engine.RegisterBuiltins();
+        Assert.Empty(engine.ApplyProfile("nonexistent"));
+    }
+
+    // ── SaveSnapshot / LoadSnapshot round-trip ──────────────────────────
+    [Fact]
+    public void SaveSnapshot_LoadSnapshot_RoundTrips()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("snap-1"), MakeTweak("snap-2")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.SaveSnapshot(path);
+            Assert.True(File.Exists(path));
+            var loaded = engine.LoadSnapshot(path);
+            Assert.Equal(2, loaded.Count);
+            Assert.True(loaded.ContainsKey("snap-1"));
+            Assert.True(loaded.ContainsKey("snap-2"));
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    // ── ExportJson ──────────────────────────────────────────────────────
+    [Fact]
+    public void ExportJson_WritesValidJson()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("exp-1"), MakeTweak("exp-2")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-export-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.ExportJson(path);
+            Assert.True(File.Exists(path));
+            var json = File.ReadAllText(path);
+            var docs = JsonSerializer.Deserialize<JsonElement>(json);
+            Assert.Equal(JsonValueKind.Array, docs.ValueKind);
+            Assert.Equal(2, docs.GetArrayLength());
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    // ── Property counts ─────────────────────────────────────────────────
+    [Fact]
+    public void TweakCount_MatchesAllTweaks()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("cnt-1"), MakeTweak("cnt-2"), MakeTweak("cnt-3")]);
+        Assert.Equal(engine.AllTweaks().Count, engine.TweakCount);
+    }
+
+    [Fact]
+    public void CategoryCount_MatchesCategories()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("cat-1", "A"), MakeTweak("cat-2", "B"), MakeTweak("cat-3", "C")]);
+        Assert.Equal(engine.Categories().Count, engine.CategoryCount);
     }
 }
