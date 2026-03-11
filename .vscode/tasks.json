@@ -29,7 +29,7 @@
     {
       "label": "test: All",
       "type": "shell",
-      "command": "dotnet test RegiLattice.sln --logger \"console;verbosity=normal\"",
+      "command": "dotnet test RegiLattice.sln --logger \"console;verbosity=normal\" --blame-hang-timeout 60s",
       "group": {
         "kind": "test",
         "isDefault": true
@@ -43,7 +43,7 @@
     {
       "label": "test: Core",
       "type": "shell",
-      "command": "dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --logger \"console;verbosity=normal\"",
+      "command": "dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --logger \"console;verbosity=normal\" --blame-hang-timeout 60s",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -54,7 +54,7 @@
     {
       "label": "test: GUI",
       "type": "shell",
-      "command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --logger \"console;verbosity=normal\"",
+      "command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --logger \"console;verbosity=normal\" --blame-hang-timeout 60s",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {

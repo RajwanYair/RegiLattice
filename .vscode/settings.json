@@ -39,7 +39,17 @@
     "**/archive": true
   },
   // ── Terminal (best shell integration) ────────────────────────────────
-  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.defaultProfile.windows": "RegiLattice Dev",
+  "terminal.integrated.profiles.windows": {
+    "RegiLattice Dev": {
+      "source": "PowerShell",
+      "args": ["-NoExit", "-Command", ". '${workspaceFolder}\\.env.ps1'"],
+      "icon": "terminal-powershell"
+    },
+    "PowerShell": {
+      "source": "PowerShell"
+    }
+  },
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,
@@ -57,5 +67,18 @@
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
   },
-  "github-actions.workflows.pinned.enabled": false
+  "github-actions.workflows.pinned.enabled": false,
+  "github-actions.workflows.pinned.refresh.enabled": false,
+  // ── GitHub Copilot ──────────────────────────────────────────────────
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "file": ".github/copilot-instructions.md" },
+    { "file": ".github/instructions/workspace.instructions.md" },
+    { "file": ".github/instructions/csharp.instructions.md" },
+    { "file": ".github/instructions/testing.instructions.md" },
+    { "file": ".github/instructions/git-workflow.instructions.md" },
+    { "file": ".github/instructions/lessons-learned.instructions.md" },
+    { "file": ".github/instructions/cicd.instructions.md" }
+  ],
+  "chat.promptFiles": true,
+  "chat.agent.enabled": true
 }

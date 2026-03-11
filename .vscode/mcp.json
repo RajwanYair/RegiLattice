@@ -1,11 +1,19 @@
 {
-  "inputs": [],
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github-token",
+      "description": "GitHub Personal Access Token for MCP server",
+      "password": true
+    }
+  ],
   "servers": {
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}",
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
       }
     },
     "filesystem": {
@@ -14,7 +22,10 @@
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "${workspaceFolder}"
-      ]
+      ],
+      "env": {
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
+      }
     }
   }
 }
