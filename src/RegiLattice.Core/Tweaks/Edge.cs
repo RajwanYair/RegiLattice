@@ -1,0 +1,226 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class Edge
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "edge-disable-edge-startup-boost",
+            Label = "Disable Edge Startup Boost",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Edge from pre-launching at login, saving memory and CPU for users who don't use Edge as primary browser.",
+            Tags = ["edge", "browser", "startup"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-sidebar",
+            Label = "Disable Edge Sidebar & Shopping",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge sidebar (Discover), shopping assistant, and collections panel for a cleaner browsing experience.",
+            Tags = ["edge", "browser", "sidebar"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-telemetry",
+            Label = "Disable Edge Telemetry",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Edge metrics, diagnostics, personalisation reporting, follow, spotlight and recommendation features.",
+            Tags = ["edge", "browser", "telemetry", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-update",
+            Label = "Disable Edge Auto-Update",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Edge from auto-updating. Useful for controlled environments or when pinning to a specific version.",
+            Tags = ["edge", "browser", "update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-first-run",
+            Label = "Disable Edge First-Run Experience",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Skips Edge first-run wizard and hides default top sites on new tab.",
+            Tags = ["edge", "browser", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-edge-password-manager",
+            Label = "Disable Edge Password Manager",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge built-in password manager via policy.",
+            Tags = ["edge", "browser", "password", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-sync",
+            Label = "Disable Edge Sync",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Edge profile sync via policy.",
+            Tags = ["edge", "browser", "sync", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-sidebar",
+            Label = "Disable Edge Sidebar",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge sidebar (Bing Copilot, games, tools panel). Reduces memory usage and distractions. Default: Enabled. Recommended: Disabled.",
+            Tags = ["edge", "sidebar", "performance", "copilot"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-shopping",
+            Label = "Disable Edge Shopping Features",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Edge shopping assistant, price tracking, and coupons. Reduces CPU and network usage. Default: Enabled. Recommended: Disabled.",
+            Tags = ["edge", "shopping", "performance", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-rewards",
+            Label = "Disable Microsoft Rewards Prompts",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Microsoft Rewards prompts in Edge via policy.",
+            Tags = ["edge", "browser", "rewards"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-block-third-party-cookies",
+            Label = "Block Edge Third-Party Cookies",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Blocks third-party cookies in Edge via policy.",
+            Tags = ["edge", "browser", "cookies", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-collections",
+            Label = "Disable Edge Collections",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge Collections feature used for organizing web content. Reduces UI clutter and memory usage. Default: Enabled. Recommended: Disabled if not used.",
+            Tags = ["edge", "collections", "ux", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-mini-menu",
+            Label = "Disable Edge Mini Context Menu",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the mini context menu that appears on text selection in Edge. Removes the floating toolbar with search/copy/etc. Default: Enabled. Recommended: Disabled for cleaner UX.",
+            Tags = ["edge", "mini-menu", "context-menu", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-sidebar-hub",
+            Label = "Disable Edge Sidebar Hub",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge sidebar (Hubs) panel via enterprise policy. Removes the sidebar icon and panel. Default: Enabled. Recommended: Disabled for cleaner UX.",
+            Tags = ["edge", "sidebar", "hubs", "ux", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-first-run",
+            Label = "Disable Edge First Run Experience",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Hides the Edge first run experience and welcome page via enterprise policy. Default: Shown. Recommended: Hidden for managed deployments.",
+            Tags = ["edge", "first-run", "welcome", "policy", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-workspaces",
+            Label = "Disable Edge Workspaces",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Workspaces feature for shared browsing sessions via enterprise policy. Reduces background sync overhead. Default: Enabled. Recommended: Disabled if not used.",
+            Tags = ["edge", "workspaces", "collaboration", "policy", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-drop",
+            Label = "Disable Edge Drop",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Drop feature used for cross-device file sharing via enterprise policy. Reduces cloud sync and network usage. Default: Enabled. Recommended: Disabled for managed environments.",
+            Tags = ["edge", "drop", "file-sharing", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+        new TweakDef
+        {
+            Id = "edge-disable-discover",
+            Label = "Disable Edge Discover Button",
+            Category = "Edge",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Edge Discover (compass) button and page context features via enterprise policy. Reduces Copilot integration. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["edge", "discover", "copilot", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
+        },
+    ];
+}

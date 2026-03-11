@@ -46,9 +46,9 @@ coverage.json
 # ── Ruff ─────────────────────────────────────────────────────
 .ruff_cache/
 
-# ── .NET / NativeGUI build output ────────────────────────────
-NativeGUI/bin/
-NativeGUI/obj/
+# ── .NET build output ─────────────────────────────────────────
+**/bin/
+**/obj/
 
 # ── Profiling data ───────────────────────────────────────────
 *.dat

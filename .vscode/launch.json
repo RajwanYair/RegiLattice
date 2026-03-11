@@ -2,110 +2,71 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "RegiLattice: GUI (Debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "${workspaceFolder}/src/RegiLattice.GUI/bin/x64/Debug/net10.0-windows/RegiLattice.GUI.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "justMyCode": true
+    },
+    {
+      "name": "RegiLattice: GUI (Release)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: Solution (Release)",
+      "program": "${workspaceFolder}/src/RegiLattice.GUI/bin/x64/Release/net10.0-windows/RegiLattice.GUI.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "justMyCode": true
+    },
+    {
       "name": "RegiLattice: CLI (list)",
-      "type": "debugpy",
+      "type": "coreclr",
       "request": "launch",
-      "module": "regilattice",
-      "args": [
-        "--list"
-      ],
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "${workspaceFolder}/src/RegiLattice.CLI/bin/x64/Debug/net10.0-windows/RegiLattice.dll",
+      "args": ["list"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
       "console": "integratedTerminal",
       "justMyCode": true
     },
     {
-      "name": "RegiLattice: GUI",
-      "type": "debugpy",
+      "name": "RegiLattice: CLI (apply tweak)",
+      "type": "coreclr",
       "request": "launch",
-      "module": "regilattice",
-      "args": [
-        "--gui"
-      ],
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "${workspaceFolder}/src/RegiLattice.CLI/bin/x64/Debug/net10.0-windows/RegiLattice.dll",
+      "args": ["apply", "${input:tweakId}", "--yes"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
       "console": "integratedTerminal",
       "justMyCode": true
     },
     {
-      "name": "RegiLattice: Interactive Menu",
-      "type": "debugpy",
+      "name": "Tests: Debug All",
+      "type": "coreclr",
       "request": "launch",
-      "module": "regilattice",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    },
-    {
-      "name": "RegiLattice: Apply Tweak",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "regilattice",
-      "args": [
-        "apply",
-        "${input:tweakId}",
-        "-y"
-      ],
-      "console": "integratedTerminal",
-      "justMyCode": true
-    },
-    {
-      "name": "pytest",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "pytest",
-      "args": [
-        "tests",
-        "-v",
-        "--tb=short"
-      ],
+      "preLaunchTask": "build: Solution (Debug)",
+      "program": "dotnet",
+      "args": ["test", "RegiLattice.sln", "--no-build"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
       "console": "integratedTerminal",
       "justMyCode": false
-    },
-    {
-      "name": "NativeGUI: Debug",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build: NativeGUI",
-      "program": "${workspaceFolder}/NativeGUI/bin/Debug/net10.0-windows/RegiLatticeNative.exe",
-      "args": [],
-      "cwd": "${workspaceFolder}/NativeGUI",
-      "stopAtEntry": false,
-      "console": "internalConsole",
-      "justMyCode": true
-    },
-    {
-      "name": "NativeGUI: Run (Release)",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build: NativeGUI (Release)",
-      "program": "${workspaceFolder}/NativeGUI/bin/Release/net10.0-windows/RegiLatticeNative.exe",
-      "args": [],
-      "cwd": "${workspaceFolder}/NativeGUI",
-      "stopAtEntry": false,
-      "console": "internalConsole",
-      "justMyCode": true
-    },
-    {
-      "name": "NativeGUI Tests: Debug",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build: NativeGUITests",
-      "program": "${workspaceFolder}/NativeGUITests/bin/Debug/net10.0-windows/NativeGUITests.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/NativeGUITests",
-      "stopAtEntry": false,
-      "console": "internalConsole",
-      "justMyCode": false
-    }
-  ],
-  "compounds": [
-    {
-      "name": "RegiLattice: Python GUI + NativeGUI (Parallel)",
-      "configurations": ["RegiLattice: GUI", "NativeGUI: Debug"],
-      "stopAll": true
     }
   ],
   "inputs": [
     {
       "id": "tweakId",
       "type": "promptString",
-      "description": "Tweak ID to apply (e.g. disable-telemetry, disable-copilot)"
+      "description": "Tweak ID to apply (e.g. priv-disable-telemetry, ai-disable-copilot)"
     }
   ]
 }

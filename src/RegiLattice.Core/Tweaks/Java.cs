@@ -1,0 +1,268 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class Java
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "java-disable-java-update",
+            Label = "Disable Java Auto-Update",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Java automatic update scheduler (both 32-bit and 64-bit).",
+            Tags = ["java", "update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-web-plugin",
+            Label = "Disable Java Web Plugin",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Java browser web plugin for better security.",
+            Tags = ["java", "security", "web"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-tracking",
+            Label = "Disable Java Usage Tracking",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java's built-in usage tracking and telemetry reporting.",
+            Tags = ["java", "telemetry", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+        },
+        new TweakDef
+        {
+            Id = "java-high-dpi",
+            Label = "Java: Enable High DPI Scaling",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Marks the Java runtime as DPI-aware to fix blurry rendering on high-DPI displays.",
+            Tags = ["java", "display", "dpi"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-sponsor",
+            Label = "Disable Java Sponsor Offers",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents third-party sponsor offer pop-ups during Java installations and updates.",
+            Tags = ["java", "sponsor", "bloat"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy"],
+        },
+        new TweakDef
+        {
+            Id = "java-security-high",
+            Label = "Java: Set Security Level to Very High",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Raises the Java security level to VERY_HIGH, blocking unsigned applets.",
+            Tags = ["java", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-error-reporting",
+            Label = "Disable Java Error Reporting",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses Java exception dialog pop-ups and error reporting.",
+            Tags = ["java", "telemetry", "errors"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-tip-of-day",
+            Label = "Disable Java Tip of the Day",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the 'Tip of the Day' pop-up dialog in Java Control Panel.",
+            Tags = ["java", "ui", "annoyance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day", "false"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day", "false")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-cert-revoke",
+            Label = "Disable Java Certificate Revocation Check",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables OCSP certificate revocation checks for faster Java app startup (less secure).",
+            Tags = ["java", "security", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-update-check",
+            Label = "Disable Java Auto-Update Check",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java's automatic update check at startup. Reduces background network traffic. Default: Enabled. Recommended: Disabled for managed environments.",
+            Tags = ["java", "update", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-high-perf-graphics",
+            Label = "Java High Performance Graphics",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables hardware graphics acceleration for Java/JavaFX applications. Improves rendering performance. Default: Software. Recommended: Hardware.",
+            Tags = ["java", "graphics", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration", 1)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-auto-update",
+            Label = "Disable Java Auto-Update",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java automatic update checks. Default: Enabled. Recommended: Disabled for managed environments.",
+            Tags = ["java", "auto-update", "update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-sponsor-offers",
+            Label = "Disable Java Sponsor Offers",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables sponsor/adware offers bundled with Java updates. Default: Enabled. Recommended: Disabled.",
+            Tags = ["java", "sponsor", "adware", "offers"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-update-scheduler",
+            Label = "Disable Java Update Scheduler Notifications",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java update scheduler download/install notifications. Default: Enabled. Recommended: Disabled.",
+            Tags = ["java", "update", "scheduler", "notifications"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-security-veryhigh",
+            Label = "Set Java Security Level to Very High",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets Java deployment security level to VERY_HIGH via policy. Default: HIGH. Recommended: VERY_HIGH.",
+            Tags = ["java", "security", "deployment", "veryhigh"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "HIGH"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-usage-tracking",
+            Label = "Disable Java Usage Tracking",
+            Category = "Java",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java usage tracker analytics. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["java", "usage", "tracking", "analytics", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled", "false"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled", "false")],
+        },
+    ];
+}

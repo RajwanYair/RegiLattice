@@ -1,0 +1,88 @@
+// RegiLattice.Core — Models/ProfileDefinitions.cs
+// Static profile data — replaces Python _PROFILES dict.
+
+namespace RegiLattice.Core.Models;
+
+internal static class ProfileDefinitions
+{
+    internal static readonly IReadOnlyList<ProfileDef> All =
+    [
+        new ProfileDef
+        {
+            Name = "business",
+            Description = "Business workstation - productivity, security, cloud & workflow",
+            ApplyCategories =
+            [
+                "Accessibility", "AI / Copilot", "Audio", "Backup & Recovery", "Boot",
+                "Chrome", "Clipboard & Drag-Drop", "Cloud Storage", "Communication",
+                "Context Menu", "Cortana & Search", "Crash & Diagnostics", "Display",
+                "DNS & Networking Advanced", "Edge", "Explorer", "File System", "Fonts",
+                "Indexing & Search", "Input", "Lock Screen & Login", "M365 Copilot",
+                "Maintenance", "Microsoft Store", "Multimedia", "Network",
+                "Night Light & Display", "Notifications", "Office", "OneDrive",
+                "Package Management", "Performance", "Power", "Printing", "Privacy",
+                "Remote Desktop", "Scheduled Tasks", "Security", "Services", "Shell",
+                "Snap & Multitasking", "Startup", "Storage", "System", "Taskbar",
+                "VS Code", "Widgets & News", "Windows Update",
+            ],
+        },
+        new ProfileDef
+        {
+            Name = "gaming",
+            Description = "Gaming rig - GPU, performance, low-latency, distraction-free",
+            ApplyCategories =
+            [
+                "Audio", "Boot", "Context Menu", "Cortana & Search", "Crash & Diagnostics",
+                "Display", "Explorer", "File System", "Gaming", "GPU / Graphics",
+                "Indexing & Search", "Input", "Maintenance", "Microsoft Store", "Multimedia",
+                "Network", "Night Light & Display", "Notifications", "Performance",
+                "Phone Link", "Power", "Privacy", "Scheduled Tasks", "Services", "Shell",
+                "Snap & Multitasking", "Startup", "Storage", "System", "Taskbar",
+                "Telemetry Advanced", "Touch & Pen", "Widgets & News",
+            ],
+        },
+        new ProfileDef
+        {
+            Name = "privacy",
+            Description = "Maximum privacy - telemetry, tracking, browser data disabled",
+            ApplyCategories =
+            [
+                "AI / Copilot", "Chrome", "Clipboard & Drag-Drop", "Cloud Storage",
+                "Communication", "Cortana & Search", "Crash & Diagnostics", "Edge",
+                "Explorer", "Firefox", "Indexing & Search", "Lock Screen & Login",
+                "Maintenance", "Microsoft Store", "Notifications", "OneDrive",
+                "Phone Link", "Privacy", "Scheduled Tasks", "Security", "Services",
+                "Shell", "Startup", "Storage", "System", "Taskbar",
+                "Telemetry Advanced", "Touch & Pen", "Widgets & News",
+                "Windows Update", "WSL",
+            ],
+        },
+        new ProfileDef
+        {
+            Name = "minimal",
+            Description = "Minimal - lightweight essentials for fast, clean operation",
+            ApplyCategories =
+            [
+                "Boot", "Context Menu", "Cortana & Search", "Explorer", "File System",
+                "Indexing & Search", "Maintenance", "Microsoft Store", "Notifications",
+                "Performance", "Phone Link", "Power", "Privacy", "Scheduled Tasks",
+                "Services", "Shell", "Snap & Multitasking", "Startup", "Storage",
+                "System", "Taskbar", "Widgets & News",
+            ],
+        },
+        new ProfileDef
+        {
+            Name = "server",
+            Description = "Server - hardened, headless, uptime & remote management",
+            ApplyCategories =
+            [
+                "Boot", "Cortana & Search", "Crash & Diagnostics", "DNS & Networking Advanced",
+                "Explorer", "File System", "Indexing & Search", "Lock Screen & Login",
+                "Maintenance", "Microsoft Store", "Network", "Notifications", "Performance",
+                "Phone Link", "Power", "Printing", "Privacy", "Remote Desktop",
+                "Scheduled Tasks", "Security", "Services", "Shell", "Startup",
+                "Storage", "System", "Taskbar", "Telemetry Advanced", "Windows Update",
+            ],
+        },
+    ];
+}

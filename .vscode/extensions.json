@@ -1,21 +1,12 @@
 {
   "recommendations": [
-    "ms-python.python",
-    "ms-python.debugpy",
-    "ms-python.mypy-type-checker",
-    "ms-python.pylance",
-    "charliermarsh.ruff",
+    "ms-dotnettools.csharp",
+    "ms-dotnettools.csdevkit",
     "ms-vscode.powershell",
     "github.copilot-chat",
-    "tamasfe.even-better-toml",
     "redhat.vscode-yaml",
-    "esbenp.prettier-vscode",
     "eamodio.gitlens",
     "gruntfuggly.todo-tree",
-    "usernamehw.errorlens",
-    "littlefoxteam.vscode-python-test-adapter"
-  ],
-  "unwantedRecommendations": [
-    "ms-python.black-formatter"
+    "usernamehw.errorlens"
   ]
 }
