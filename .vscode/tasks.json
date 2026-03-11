@@ -2,160 +2,93 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Lint (Ruff)",
+      "label": "build: Solution (Debug)",
       "type": "shell",
-      "command": "python -m ruff check regilattice/ tests/",
-      "group": "build",
-      "problemMatcher": [],
+      "command": "dotnet build RegiLattice.sln -c Debug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile",
       "presentation": {
         "reveal": "always",
         "panel": "shared"
       }
     },
     {
-      "label": "Format (Ruff)",
+      "label": "build: Solution (Release)",
       "type": "shell",
-      "command": "python -m ruff format regilattice/ tests/",
+      "command": "dotnet build RegiLattice.sln -c Release",
       "group": "build",
-      "problemMatcher": [],
+      "problemMatcher": "$msCompile",
       "presentation": {
         "reveal": "always",
         "panel": "shared"
       }
     },
     {
-      "label": "Type Check (mypy)",
+      "label": "test: All",
       "type": "shell",
-      "command": "python -m mypy regilattice/",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Test (pytest)",
-      "type": "shell",
-      "command": "python -m pytest tests/ -v --tb=short",
+      "command": "dotnet test RegiLattice.sln --logger \"console;verbosity=normal\"",
       "group": {
         "kind": "test",
         "isDefault": true
       },
-      "problemMatcher": [],
+      "problemMatcher": "$msCompile",
       "presentation": {
         "reveal": "always",
         "panel": "shared"
       }
     },
     {
-      "label": "Test + Coverage",
+      "label": "test: Core",
       "type": "shell",
-      "command": "python -m pytest tests/ -v --tb=short --cov=regilattice --cov-report=term-missing",
+      "command": "dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --logger \"console;verbosity=normal\"",
       "group": "test",
-      "problemMatcher": [],
+      "problemMatcher": "$msCompile",
       "presentation": {
         "reveal": "always",
         "panel": "shared"
       }
     },
     {
-      "label": "Install (editable)",
+      "label": "test: GUI",
       "type": "shell",
-      "command": "pip install -e .[dev]",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Test (pytest parallel)",
-      "type": "shell",
-      "command": "python -m pytest tests/ -n auto --dist=worksteal --tb=short -q",
+      "command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --logger \"console;verbosity=normal\"",
       "group": "test",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "publish: CLI (win-x64)",
+      "type": "shell",
+      "command": "dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "publish: GUI (win-x64)",
+      "type": "shell",
+      "command": "dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "clean: Solution",
+      "type": "shell",
+      "command": "dotnet clean RegiLattice.sln",
       "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "List Tweaks",
-      "type": "shell",
-      "command": "python -m regilattice --list",
-      "group": "none",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "Test: Changed Files Only",
-      "type": "shell",
-      "command": "pwsh -File scripts/test-changed.ps1",
-      "group": "test",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "build: NativeGUI",
-      "type": "shell",
-      "command": "dotnet build NativeGUI/RegiLatticeNative.csproj -c Debug",
-      "group": "build",
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "build: NativeGUI (Release)",
-      "type": "shell",
-      "command": "dotnet build NativeGUI/RegiLatticeNative.csproj -c Release",
-      "group": "build",
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "build: NativeGUITests",
-      "type": "shell",
-      "command": "dotnet build NativeGUITests/NativeGUITests.csproj -c Debug",
-      "group": "build",
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "test: NativeGUITests",
-      "type": "shell",
-      "command": "dotnet test NativeGUITests/NativeGUITests.csproj --logger \"console;verbosity=normal\"",
-      "group": {
-        "kind": "test",
-        "isDefault": false
-      },
-      "problemMatcher": "$msCompile",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "publish: NativeGUI (win-x64)",
-      "type": "shell",
-      "command": "dotnet publish NativeGUI/RegiLatticeNative.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true",
-      "group": "build",
-      "problemMatcher": "$msCompile",
       "presentation": {
         "reveal": "always",
         "panel": "shared"

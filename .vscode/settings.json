@@ -1,24 +1,9 @@
 {
-  // ── Python ──────────────────────────────────────────────────────────
-  "python.defaultInterpreterPath": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin\\python.exe",
-  "python.analysis.autoImportCompletions": true,
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": [
-    "tests",
-    "--timeout=30",
-    "--tb=short",
-    "--strict-markers"
-  ],
-  // ── Ruff (linter + formatter) ───────────────────────────────────────
-  // Native Ruff server (charliermarsh.ruff ≥ 2024) auto-detects pyproject.toml.
-  // ruff.path / ruff.lint.args are ruff-lsp legacy settings and no longer used.
-  "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "explicit",
-      "source.organizeImports.ruff": "explicit"
-    }
+  // ── C# / .NET ───────────────────────────────────────────────────────
+  "dotnet.defaultSolution": "RegiLattice.sln",
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true
   },
   // ── PowerShell ──────────────────────────────────────────────────────
   "powershell.codeFormatting.preset": "OTBS",
@@ -43,63 +28,34 @@
   "files.trimFinalNewlines": true,
   "files.eol": "\n",
   "files.exclude": {
-    "**/__pycache__": true,
-    "**/*.pyc": true,
-    "**/.mypy_cache": true,
-    "**/.pytest_cache": true,
-    "**/.ruff_cache": true,
-    "**/dist": true,
-    "**/build": true,
-    "**/*.egg-info": true
+    "**/bin": true,
+    "**/obj": true,
+    "**/archive": true
   },
   // ── Search ──────────────────────────────────────────────────────────
   "search.exclude": {
-    "**/__pycache__": true,
-    "**/.mypy_cache": true,
-    "**/.pytest_cache": true,
-    "**/dist": true,
-    "**/build": true
+    "**/bin": true,
+    "**/obj": true,
+    "**/archive": true
   },
   // ── Terminal (best shell integration) ────────────────────────────────
   "terminal.integrated.defaultProfile.windows": "PowerShell",
   "terminal.integrated.shellIntegration.enabled": true,
-  "terminal.integrated.env.windows": {
-    "PYTHONDONTWRITEBYTECODE": "1",
-    "PYTHONPATH": "${workspaceFolder}",
-    "PYTHONIOENCODING": "utf-8",
-    "PATH": "C:\\Users\\ryair\\AppData\\Local\\Python\\bin;C:\\Users\\ryair\\AppData\\Local\\Python\\pythoncore-3.14-64\\Scripts;C:\\Users\\ryair\\AppData\\Local\\Python\\Scripts;${env:PATH}"
-  },
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.enablePersistentSessions": true,
-  // Ensure Copilot chat agent terminals also see Python — mirrors integrated env
+  // Ensure Copilot chat agent terminals also see dotnet tools
   "github.copilot.chat.terminalChatLocation": "terminal",
   // ── Git ─────────────────────────────────────────────────────────────
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   // ── Markdown ────────────────────────────────────────────────────────
-  // Config lives in .markdownlint.json (project root) — takes precedence over
-  // this settings block, so we omit the inline markdownlint.config to avoid
-  // VS Code trying to download the markdownlint JSON schema (blocked by proxy).
-  // ── Python analysis (Pylance/pyright) ─────────────────────────────────
-  // mypy --strict handles type checking in CI; use openFilesOnly here for speed.
-  "python.analysis.typeCheckingMode": "off",
-  "python.analysis.autoSearchPaths": true,
-  "python.analysis.extraPaths": [
-    "${workspaceFolder}"
-  ],
-  "python.analysis.diagnosticMode": "openFilesOnly",
+  // Config lives in .markdownlint.json (project root) — takes precedence.
   // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────
-  // GitHub Actions validation requires network access to resolve `uses:` refs.
-  // Behind corporate proxies this fails with "Unable to resolve action".
-  // http.proxySupport "on" routes extension network calls via the system proxy
-  // (WinHTTP / $HTTPS_PROXY). Users behind non-standard proxies should set
-  // "http.proxy" in their VS Code USER settings (not workspace settings).
   "http.proxySupport": "on",
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
   },
-  "github-actions.workflows.pinned.enabled": false,
-  "python.testing.unittestEnabled": false
+  "github-actions.workflows.pinned.enabled": false
 }

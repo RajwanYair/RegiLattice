@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <RootNamespace>RegiLattice.GUI</RootNamespace>
+    <AssemblyName>RegiLattice.GUI</AssemblyName>
+    <ApplicationIcon />
+    <StartupObject>RegiLattice.GUI.Program</StartupObject>
+    <Version>2.0.0</Version>
+    <Description>RegiLattice — Native WinForms GUI</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="RegiLattice.GUI.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RegiLattice.Core\RegiLattice.Core.csproj" />
+  </ItemGroup>
+
+</Project>

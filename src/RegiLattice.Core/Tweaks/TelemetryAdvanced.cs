@@ -1,0 +1,355 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class TelemetryAdvanced
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "telem-security-only",
+            Label = "Set Telemetry to Security Only (0)",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets AllowTelemetry=0 (Security level, Enterprise/Education only). On Home/Pro this sets Required level minimum. Default: 3 (Full). Recommended: 0.",
+            Tags = ["telemetry", "privacy", "security", "diagnostic"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-diag-optin",
+            Label = "Block Diagnostic Data Settings Changes",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the diagnostic data viewer and prevents users from changing opt-in level via Settings. Default: allowed. Recommended: 1 (blocked).",
+            Tags = ["telemetry", "diagnostic", "settings", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsSyncDiag", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsSyncDiag"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-app-telemetry",
+            Label = "Disable App Telemetry (Steps Recorder + Inventory)",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Steps Recorder (UAR) and Application Inventory collection. Reduces background telemetry. Default: enabled. Recommended: disabled.",
+            Tags = ["telemetry", "app", "steps-recorder", "inventory"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-handwriting",
+            Label = "Disable Handwriting Data Sharing",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents handwriting recognition data and error reports from being sent to Microsoft. Default: allowed. Recommended: 1 (blocked).",
+            Tags = ["telemetry", "handwriting", "privacy", "tablet"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingErrorReports", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingErrorReports"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-advertising-id",
+            Label = "Disable Advertising ID",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the per-user advertising ID used for cross-app ad targeting. Sets both user and policy values. Default: enabled. Recommended: disabled.",
+            Tags = ["telemetry", "advertising", "privacy", "ads"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-feedback",
+            Label = "Disable Feedback Notifications",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets feedback frequency to 0 (never). Stops 'Rate Windows' and similar feedback prompts. Default: automatic. Recommended: 0 (never).",
+            Tags = ["telemetry", "feedback", "notifications", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-input-telemetry",
+            Label = "Disable Typing/Inking Telemetry",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables collection of typing and inking data for improving language recognition. Default: 1 (enabled). Recommended: 0 (disabled).",
+            Tags = ["telemetry", "typing", "inking", "input", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC", "Enabled", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Input\TIPC", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-type-personalization",
+            Label = "Disable Inking & Typing Personalization",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables inking and typing personalization that learns from your writing patterns. Default: 1 (enabled). Recommended: 0 (disabled).",
+            Tags = ["telemetry", "inking", "typing", "personalization"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\InkingAndTypingPersonalization"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-diagtrack-autologger",
+            Label = "Disable DiagTrack ETW Autologger",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the DiagTrack ETW autologger that starts at boot. Stops kernel-level telemetry trace collection. Default: 1 (enabled). Recommended: 0 (disabled).",
+            Tags = ["telemetry", "diagtrack", "etw", "boot", "trace"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-tailored-experiences",
+            Label = "Disable Tailored Experiences",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from using diagnostic data to provide personalized tips, ads, and recommendations. Default: allowed. Recommended: 1 (disabled).",
+            Tags = ["telemetry", "tailored", "suggestions", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableTailoredExperiencesWithDiagnosticData", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableTailoredExperiencesWithDiagnosticData"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableTailoredExperiencesWithDiagnosticData", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-usage-tracking",
+            Label = "Disable Start Menu Usage Tracking",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables app launch tracking used for Start menu 'Most Used' list and personalization. Default: 1 (track). Recommended: 0 (disabled).",
+            Tags = ["telemetry", "start-menu", "usage", "tracking", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-win-error-reporting",
+            Label = "Disable Windows Error Reporting",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Windows Error Reporting (WER). Prevents sending crash data to Microsoft. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["telemetry", "wer", "error-reporting", "crash", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-inventory-collector",
+            Label = "Disable Inventory Collector",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Inventory Collector that sends application/driver data to Microsoft. Default: Enabled. Recommended: Disabled.",
+            Tags = ["telemetry", "inventory", "collector", "appcompat"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-telemetry-disable-connected-user",
+            Label = "Disable Connected User Experiences",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Connected User Experiences and Telemetry proxy. Prevents cloud-based notifications and data sync. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["telemetry", "connected-ux", "push", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"],
+        },
+        new TweakDef
+        {
+            Id = "telem-telemetry-set-max-size",
+            Label = "Limit Telemetry Cache / Dump Collection",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Limits telemetry dump collection to reduce disk usage and data sent to Microsoft. Default: Unlimited. Recommended: Limited.",
+            Tags = ["telemetry", "cache", "dump", "size", "limit"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
+        },
+        new TweakDef
+        {
+            Id = "telem-telemetry-disable-diagnostic-log",
+            Label = "Disable Diagnostic Log Collection",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables diagnostic log collection via LimitDiagnosticLogCollection policy. Reduces telemetry data stored locally. Default: Enabled. Recommended: Disabled.",
+            Tags = ["telemetry", "diagnostic", "log", "collection", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-sqm-upload",
+            Label = "Disable SQM Telemetry Upload",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Software Quality Metrics (SQM) CEIPEnable key, preventing telemetry data from being uploaded to Microsoft. Default: Enabled. Recommended: Disabled.",
+            Tags = ["telemetry", "sqm", "ceip", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient", "CEIPEnable", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient", "CEIPEnable"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient", "CEIPEnable", 0)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-mrt-report",
+            Label = "Disable MRT Infection Reporting",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents the Malicious Software Removal Tool from reporting infection information to Microsoft. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["telemetry", "mrt", "malware", "reporting", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-speech-model-update",
+            Label = "Disable Speech Model Automatic Update",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from automatically downloading updated speech recognition models. Reduces background network activity. Default: Enabled. Recommended: Disabled.",
+            Tags = ["telemetry", "speech", "model", "update", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Speech"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Speech", "AllowSpeechModelUpdate"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-license-telemetry",
+            Label = "Disable License Telemetry (NoGenTicket)",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets NoGenTicket to prevent the Software Protection Platform from sending licensing telemetry to Microsoft. Default: Disabled. Recommended: Enabled for privacy.",
+            Tags = ["telemetry", "license", "spp", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SoftwareProtectionPlatform"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SoftwareProtectionPlatform", "NoGenTicket", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SoftwareProtectionPlatform", "NoGenTicket"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SoftwareProtectionPlatform", "NoGenTicket", 1)],
+        },
+        new TweakDef
+        {
+            Id = "telem-disable-ncsi-probing",
+            Label = "Disable NCSI Active Probe",
+            Category = "Telemetry Advanced",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Network Connectivity Status Indicator active probe that contacts Microsoft servers to check internet connectivity on login. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["telemetry", "ncsi", "probe", "network", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe", 1)],
+        },
+    ];
+}

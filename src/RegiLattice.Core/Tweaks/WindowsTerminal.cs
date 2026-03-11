@@ -1,0 +1,292 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class WindowsTerminal
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "term-default-windows-terminal",
+            Label = "Set Windows Terminal as Default",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets Windows Terminal as the default terminal application for cmd.exe and PowerShell. Requires Windows Terminal installed. Default: Windows Console Host. Recommended: Windows Terminal.",
+            Tags = ["terminal", "windows-terminal", "default", "console"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console\%%Startup"],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-console-v2",
+            Label = "Enable Console V2 Host",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Forces the new Console V2 host with ANSI support, line wrapping, and improved rendering. Default: 1 (enabled). Recommended: 1.",
+            Tags = ["terminal", "console", "v2", "modern"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "ForceV2", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "ForceV2", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "ForceV2", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-vt-processing",
+            Label = "Enable Virtual Terminal (ANSI) Processing",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables VT100/ANSI escape sequence processing in the console. Required for colored output in many CLI tools. Default: 0 (off). Recommended: 1 (on).",
+            Tags = ["terminal", "vt100", "ansi", "colors", "escape"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-disable-quick-edit",
+            Label = "Disable Quick Edit Mode",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Quick Edit so clicking the console window does not pause running commands. Prevents accidental hangs. Default: 1 (on). Recommended: 0 (off).",
+            Tags = ["terminal", "quickedit", "console", "hang"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 0)],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-insert-mode",
+            Label = "Enable Insert Mode by Default",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets insert mode as the default typing mode in consoles. Default: 1 (insert). Recommended: 1.",
+            Tags = ["terminal", "insert", "mode", "typing"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "InsertMode", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "InsertMode", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "InsertMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-large-buffer",
+            Label = "Set Large Screen Buffer (9999 Lines)",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases the console screen buffer to 9999 lines for longer scrollback history. Default: 300 lines. Recommended: 9999.",
+            Tags = ["terminal", "buffer", "scrollback", "history"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-line-wrap",
+            Label = "Enable Line Wrapping",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables automatic line wrapping when resizing the console. Default: 1. Recommended: 1.",
+            Tags = ["terminal", "wrap", "resize", "console"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "LineWrap", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "LineWrap", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "LineWrap", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-disable-legacy-console",
+            Label = "Disable Legacy Console Mode",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the legacy console subsystem. Required for Console V2 features like ANSI escape support. Default: 0 (modern). Recommended: 0.",
+            Tags = ["terminal", "legacy", "console", "modern"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "UseLegacyConsole", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "UseLegacyConsole", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "UseLegacyConsole", 0)],
+        },
+        new TweakDef
+        {
+            Id = "term-console-font-cascadia",
+            Label = "Set Console Font to Cascadia Mono",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the default console font to Cascadia Mono at 16pt. Bundled with Windows Terminal; supports ligatures. Default: Consolas 14pt. Recommended: Cascadia Mono 16pt.",
+            Tags = ["terminal", "font", "cascadia", "appearance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Console", "FaceName", "Cascadia Mono"),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "FontFamily", 54),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Console", "FaceName", "Consolas"),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "FontFamily", 54),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Console", "FaceName", "Cascadia Mono")],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-ctrl-cv",
+            Label = "Enable Ctrl+Shift+C/V Copy-Paste",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables Ctrl+Shift+C / Ctrl+Shift+V clipboard shortcuts in the classic console. Also enables filter-on-paste and line selection. Default: enabled. Recommended: enabled.",
+            Tags = ["terminal", "copy", "paste", "keyboard", "shortcuts"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "FilterOnPaste", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "LineSelection", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "FilterOnPaste"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "LineSelection"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "term-campbell-color-scheme",
+            Label = "Set Campbell Color Scheme",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Applies the modern Campbell color scheme to the classic console. Darker background, improved contrast. Default: legacy colors. Recommended: Campbell.",
+            Tags = ["terminal", "colors", "theme", "campbell", "appearance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+        },
+        new TweakDef
+        {
+            Id = "term-set-cursor-block",
+            Label = "Set Console Cursor to Block",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the console cursor to full block style for better visibility. Default: 25 (line). Recommended: 100 (block).",
+            Tags = ["terminal", "cursor", "block", "appearance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+        },
+        new TweakDef
+        {
+            Id = "term-set-window-opacity",
+            Label = "Set Console Window Opacity (95%)",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets console window to 95% opacity for slight transparency. Default: 255 (opaque). Recommended: 242 (95%).",
+            Tags = ["terminal", "opacity", "transparency", "appearance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "WindowAlpha", 242),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "WindowAlpha", 255),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "WindowAlpha", 242)],
+        },
+        new TweakDef
+        {
+            Id = "term-set-default-wt",
+            Label = "Set Default Terminal to Windows Terminal (Win11)",
+            Category = "Windows Terminal",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets Windows Terminal as the default terminal via the Win11 UseNewTerminal setting. Default: Let Windows decide (0). Recommended: Windows Terminal (1).",
+            Tags = ["terminal", "default", "windows-terminal", "win11"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseNewTerminal", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console\%%Startup", "DelegationConsole"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console\%%Startup", "DelegationTerminal"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseNewTerminal", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-disable-splash",
+            Label = "Disable Terminal Splash Screen",
+            Category = "Windows Terminal",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Windows Terminal splash/startup screen via policy. Default: Enabled. Recommended: Disabled for faster launch.",
+            Tags = ["terminal", "splash", "startup", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableSplashScreen", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableSplashScreen"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableSplashScreen", 1)],
+        },
+        new TweakDef
+        {
+            Id = "term-enable-always-on-top",
+            Label = "Enable Terminal Always-on-Top",
+            Category = "Windows Terminal",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables always-on-top mode for Windows Terminal via policy. Keeps the terminal window above all other windows. Default: Disabled. Recommended: Enabled for dev workflows.",
+            Tags = ["terminal", "always-on-top", "pin", "window"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"],
+        },
+    ];
+}

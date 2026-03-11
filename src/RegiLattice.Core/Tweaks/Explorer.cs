@@ -1,0 +1,808 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class Explorer
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "explorer-show-file-extensions",
+            Label = "Show File Extensions",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Always shows file extensions (.txt, .exe, etc.) in Explorer.",
+            Tags = ["explorer", "files", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-hidden-files",
+            Label = "Show Hidden Files",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows hidden files and folders in Explorer.",
+            Tags = ["explorer", "files"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 2),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-super-hidden",
+            Label = "Show Protected OS Files",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows protected operating system files (super hidden).",
+            Tags = ["explorer", "files", "advanced"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-open-this-pc",
+            Label = "Open Explorer to This PC",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Opens File Explorer to 'This PC' instead of Quick Access.",
+            Tags = ["explorer", "navigation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-thumbnails",
+            Label = "Disable Folder Thumbnails",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows icons instead of thumbnails for faster folder browsing.",
+            Tags = ["explorer", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-full-path-title",
+            Label = "Full Path in Title Bar",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows the full folder path in the Explorer title bar.",
+            Tags = ["explorer", "navigation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-recent-files",
+            Label = "Disable Recent Files in Quick Access",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables recent and frequent files from appearing in Quick Access.",
+            Tags = ["explorer", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-recent-places",
+            Label = "Recent Folders in Quick Access",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Adds a 'Recent Places' virtual folder to Quick Access.",
+            Tags = ["explorer", "navigation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}", @"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}\ShellFolder", @"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}", @"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{22877a6d-37a1-461a-91b0-dbda5aaebc99}\ShellFolder"],
+            RemoveOps =
+            [
+                RegOp.DeleteTree(@"key"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-search-history",
+            Label = "Disable Search History",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from storing device search history.",
+            Tags = ["explorer", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-gallery",
+            Label = "Disable Gallery in Nav Pane",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Removes the Gallery entry from Explorer navigation pane (23H2+).",
+            Tags = ["explorer", "win11"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}", "System.IsPinnedToNameSpaceTree", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}", "System.IsPinnedToNameSpaceTree"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}", "System.IsPinnedToNameSpaceTree", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-compact-view",
+            Label = "Enable Compact View",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces item spacing in Explorer for a denser file list.",
+            Tags = ["explorer", "win11"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-auto-folder-type",
+            Label = "Disable Auto Folder Type Detection",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Explorer from auto-detecting folder content type (e.g. 'Pictures', 'Music') which causes slow loading.",
+            Tags = ["explorer", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell", "FolderType", "NotSpecified"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell", "FolderType"),
+            ],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell", "FolderType", "NotSpecified")],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-breadcrumbs",
+            Label = "Disable Breadcrumb Bar",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows the full path in Explorer address bar instead of breadcrumbs.",
+            Tags = ["explorer", "navigation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-merge-conflicts",
+            Label = "Disable Folder Merge Conflicts",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Hides folder merge conflict prompts when copying/moving folders.",
+            Tags = ["explorer", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-thumbnail-performance",
+            Label = "Optimize Thumbnail Caching & Quality",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Optimizes Explorer thumbnail display: keeps thumbnail cache, increases size to 256px and quality to 100%, disables thumbs.db on network folders. Results in sharper, faster file previews. Default: 96px low quality. Recommended: 256px max quality.",
+            Tags = ["explorer", "thumbnails", "performance", "quality"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize", 256),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailQuality", 100),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache"),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 0),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailQuality"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize", 256)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-status-bar",
+            Label = "Show Explorer Status Bar",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables the status bar at the bottom of Explorer windows showing selected item count, size, and free space. Default: Hidden. Recommended: Shown.",
+            Tags = ["explorer", "ux", "status-bar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-ps-here",
+            Label = "'Open PowerShell Here' in Explorer",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Adds 'Open PowerShell Here' to the context menu when right-clicking a folder or the folder background in Explorer.",
+            Tags = ["explorer", "powershell", "context-menu", "terminal"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\Directory\shell\OpenPowerShellHere", @"HKEY_CLASSES_ROOT\Directory\Background\shell\OpenPowerShellHere"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-recent-docs",
+            Label = "Disable Recent Documents History",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables recent documents tracking in the Start menu and File Explorer. Improves privacy by not recording file access. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["explorer", "recent", "privacy", "history"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-thumbnail-cache",
+            Label = "Disable Thumbnail Cache",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables thumbnail cache (thumbs.db) creation in folders. Reduces disk writes and avoids locked files on network shares. Default: Enabled. Recommended: Disabled on SSDs/network drives.",
+            Tags = ["explorer", "thumbnails", "cache", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-launch-to-this-pc",
+            Label = "Open Explorer to This PC",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets File Explorer to open to This PC instead of Quick Access or Home. Provides direct access to drives. Default: Quick Access. Recommended: This PC.",
+            Tags = ["explorer", "this-pc", "launch", "navigation"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-quick-access",
+            Label = "Disable Quick Access Recent Files",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Quick Access recent and frequent files display. Improves privacy and reduces Explorer clutter. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["explorer", "quick-access", "recent", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "explorer-pdf-thumbnail",
+            Label = "Enable PDF Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for PDF thumbnail previews in File Explorer. Requires a PDF viewer with thumbnail support (e.g., Adobe Acrobat, Sumatra PDF). Default: no preview. Recommended: enabled.",
+            Tags = ["explorer", "thumbnail", "pdf", "preview", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.pdf\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-svg-thumbnail",
+            Label = "Enable SVG Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for SVG vector image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled.",
+            Tags = ["explorer", "thumbnail", "svg", "preview", "vector", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.svg\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-webp-thumbnail",
+            Label = "Enable WebP Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for WebP image thumbnail previews in File Explorer. Default: no preview. Recommended: enabled.",
+            Tags = ["explorer", "thumbnail", "webp", "preview", "image", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.webp\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-stl-thumbnail",
+            Label = "Enable STL/3D File Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for STL and other 3D file thumbnail previews in File Explorer. Default: no preview. Recommended: enabled for 3D workflows.",
+            Tags = ["explorer", "thumbnail", "stl", "3d", "preview", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.stl\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-raw-thumbnail",
+            Label = "Enable RAW Image Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers Windows Imaging Component (WIC) handler for RAW camera image thumbnails (CR2, NEF, ARW, DNG, ORF) in File Explorer. Default: no preview. Recommended: enabled for photographers.",
+            Tags = ["explorer", "thumbnail", "raw", "camera", "preview", "photography", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.dng\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-font-thumbnail",
+            Label = "Enable Font File Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for font file (TTF, OTF, WOFF) thumbnail previews showing sample glyphs in File Explorer. Default: no preview. Recommended: enabled for designers.",
+            Tags = ["explorer", "thumbnail", "font", "ttf", "otf", "preview", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.ttf\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-heic-thumbnail",
+            Label = "Enable HEIC/HEIF Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers Windows Imaging Component (WIC) handler for HEIC/HEIF image thumbnail previews in File Explorer. Requires the HEIF Image Extensions from the Microsoft Store. Default: no preview. Recommended: enabled for Apple photo imports.",
+            Tags = ["explorer", "thumbnail", "heic", "heif", "preview", "apple", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.heic\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-avif-thumbnail",
+            Label = "Enable AVIF Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers Windows Imaging Component (WIC) handler for AVIF image thumbnail previews in File Explorer. Requires the AV1 Video Extension from the Microsoft Store. Default: no preview. Recommended: enabled for modern web images.",
+            Tags = ["explorer", "thumbnail", "avif", "preview", "av1", "image", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.avif\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-psd-thumbnail",
+            Label = "Enable PSD (Photoshop) Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for Adobe Photoshop (PSD) file thumbnail previews in File Explorer. May require a third-party codec or SageThumbs for full support. Default: no preview. Recommended: enabled for designers.",
+            Tags = ["explorer", "thumbnail", "psd", "photoshop", "adobe", "preview", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.psd\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-ai-thumbnail",
+            Label = "Enable AI (Illustrator) Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for Adobe Illustrator (AI) file thumbnail previews in File Explorer. Modern AI files contain an embedded PDF/SVG that compatible handlers can render. Default: no preview. Recommended: enabled for designers.",
+            Tags = ["explorer", "thumbnail", "ai", "illustrator", "adobe", "vector", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.ai\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-eps-thumbnail",
+            Label = "Enable EPS Thumbnail Previews",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Registers a shell extension handler for Encapsulated PostScript (EPS) file thumbnail previews in File Explorer. Best with a PS-compatible handler like Ghostscript or SageThumbs installed. Default: no preview. Recommended: enabled for print/design workflows.",
+            Tags = ["explorer", "thumbnail", "eps", "postscript", "preview", "print", "file-format"],
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\.eps\shellex\{BB2E617C-0920-11d1-9A0B-00C04FC2D6C1}"],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-thumb-cache-cleanup",
+            Label = "Disable Thumbnail Cache Auto-Cleanup",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from automatically deleting the thumbnail cache during Disk Cleanup. Improves Explorer browsing performance for folders with many images. Default: auto-cleanup enabled. Recommended: disabled.",
+            Tags = ["explorer", "thumbnail", "cache", "cleanup", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-navpane-expand",
+            Label = "Expand Nav Pane to Current Folder",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Automatically expands the navigation pane tree to show the current folder location. Default: collapsed. Recommended: expanded.",
+            Tags = ["explorer", "navigation", "pane", "expand", "folder"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-folder-size-tips",
+            Label = "Show File Size in Folder Tooltips",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows the total file size and count in folder tooltips when hovering over a folder. Default: disabled. Recommended: enabled.",
+            Tags = ["explorer", "folder", "size", "tooltip", "info"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-sharing-wizard",
+            Label = "Disable Sharing Wizard",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the simplified sharing wizard and uses the advanced security permissions dialog instead. Default: enabled. Recommended: disabled.",
+            Tags = ["explorer", "sharing", "wizard", "advanced", "permissions"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-new-app-alert",
+            Label = "Disable 'New App' Notifications",
+            Category = "Explorer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the 'A new app can open this type of file' notification that appears when a new program is installed. Default: shown. Recommended: disabled.",
+            Tags = ["explorer", "notification", "new-app", "association"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoNewAppAlert", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoNewAppAlert"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoNewAppAlert", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-checkbox-selection",
+            Label = "Enable Item Check Boxes",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows checkboxes next to file and folder names for easier multi-selection without holding Ctrl. Default: disabled. Recommended: personal preference.",
+            Tags = ["explorer", "checkbox", "selection", "multi-select"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-sync-ads",
+            Label = "Disable Sync Provider Ads",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables sync provider notifications in Explorer that show ads for OneDrive and other cloud services. Default: Shown. Recommended: Disabled.",
+            Tags = ["explorer", "ads", "onedrive", "sync", "notifications"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-always-show-menus",
+            Label = "Always Show Classic Menu Bar",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Always shows the classic File/Edit/View/Help menu bar in Explorer windows. Default: Hidden. Recommended: Shown for power users.",
+            Tags = ["explorer", "menu", "classic", "toolbar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowMenus", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowMenus", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowMenus", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-separate-process",
+            Label = "Launch Folders in Separate Process",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Launches each Explorer folder window in its own process. Prevents a crash in one window from closing all others. Default: Shared process. Recommended: Separate for stability.",
+            Tags = ["explorer", "process", "stability", "crash-recovery"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-drive-letters-first",
+            Label = "Show Drive Letters Before Drive Names",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Displays drive letters (e.g. C:) before the drive name in Explorer. Value 4 = drive letter first. Default: after name (0). Recommended: 4.",
+            Tags = ["explorer", "drives", "navigation", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowDriveLettersFirst", 4),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowDriveLettersFirst", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowDriveLettersFirst", 4)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-encrypted-color",
+            Label = "Show Encrypted/Compressed Files in Color",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Colors encrypted files green and compressed files blue in Explorer. Useful for quickly identifying EFS-encrypted or NTFS-compressed files. Default: no color (0). Recommended: enabled for visibility.",
+            Tags = ["explorer", "encrypted", "compressed", "color", "display", "efs"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-always-show-icons",
+            Label = "Always Show File Icons (Disable Live Thumbnails)",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Forces Explorer to always display file type icons instead of thumbnail previews. Improves performance on slow disks or network shares. Default: thumbnails enabled (0). Recommended: icons-only on slow systems.",
+            Tags = ["explorer", "icons", "thumbnails", "performance", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowIcons", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowIcons", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AlwaysShowIcons", 1)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-show-empty-drives",
+            Label = "Show Empty Removable Drives in This PC",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows empty removable drives (USB, optical) in This PC even without media. Default: hidden (1). Recommended: shown when needed.",
+            Tags = ["explorer", "drives", "removable", "usb", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0)],
+        },
+        new TweakDef
+        {
+            Id = "explorer-disable-balloon-tips",
+            Label = "Disable System Tray Balloon Tips",
+            Category = "Explorer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables old-style popup balloon notifications in the system tray. Modern toast notifications are unaffected. Default: enabled (1). Recommended: disabled.",
+            Tags = ["explorer", "balloon", "tips", "notifications", "tray", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
+        },
+    ];
+}
