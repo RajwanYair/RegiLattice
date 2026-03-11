@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-20 · v3.0.0 · 1 360 tweaks · 72 categories · 129 tests
+> Last updated: 2025-07-20 · v3.1.0 · 1 360 tweaks · 72 categories · 203 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 1 360 verified across 72 categories |
-| Tests | 129 (93 Core + 36 GUI), all passing |
+| Tests | 203 (112 Core + 52 CLI + 39 GUI), all passing |
 | GUI | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula) |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -51,7 +51,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 68 tweak module files auto-generated from Python definitions | ✅ |
 | WinForms GUI with 4 themes | ✅ |
 | CLI with 25+ commands | ✅ |
-| 129 xUnit tests (93 Core + 36 GUI) | ✅ |
+| 203 xUnit tests (112 Core + 52 CLI + 39 GUI) | ✅ |
 | Services: Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ✅ |
 | Documentation overhaul (all docs updated for C#) | ✅ |
 

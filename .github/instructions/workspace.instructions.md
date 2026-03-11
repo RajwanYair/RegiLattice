@@ -39,8 +39,9 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/         # Console application
 │       └── Program.cs           # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 93 xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 36 xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 112 xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 52 xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 39 xUnit tests
 └── archive/python/              # Archived Python v1.x codebase
 ```
 
