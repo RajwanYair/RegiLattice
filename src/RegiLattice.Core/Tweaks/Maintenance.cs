@@ -360,5 +360,120 @@ internal static class Maintenance
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1)],
         },
+
+        // ── Command-based maintenance tweaks ───────────────────────────────
+        new TweakDef
+        {
+            Id = "maint-sfc-scannow",
+            Label = "Run System File Checker (SFC /scannow)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs SFC /scannow to scan and repair corrupted Windows system files. One-time repair action.",
+            Tags = ["maintenance", "sfc", "repair", "system", "integrity"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "May take several minutes. Repairs protected system files from the component store.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated("cmd", ["/c", "sfc", "/scannow"]);
+                if (code != 0)
+                    throw new InvalidOperationException($"SFC /scannow failed: {stderr}");
+            },
+            DetectAction = () => false, // One-time action
+        },
+        new TweakDef
+        {
+            Id = "maint-dism-restorehealth",
+            Label = "Run DISM RestoreHealth",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs DISM /Online /Cleanup-Image /RestoreHealth to repair the Windows component store. Should be run before SFC for best results.",
+            Tags = ["maintenance", "dism", "repair", "component", "restore"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "May take 15+ minutes. Downloads missing components from Windows Update.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated("dism",
+                    ["/online", "/cleanup-image", "/restorehealth"]);
+                if (code != 0)
+                    throw new InvalidOperationException($"DISM RestoreHealth failed: {stderr}");
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "maint-dism-component-cleanup",
+            Label = "DISM Component Store Cleanup",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs DISM /Cleanup-Image /StartComponentCleanup to remove superseded components and reduce WinSxS folder size.",
+            Tags = ["maintenance", "dism", "cleanup", "winsxs", "disk"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Removes old component versions — may prevent uninstalling certain updates.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("dism",
+                    ["/online", "/cleanup-image", "/startcomponentcleanup", "/resetbase"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "maint-flush-dns",
+            Label = "Flush DNS Resolver Cache",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Clears the DNS resolver cache. Useful after changing DNS settings or when resolving stale DNS entries.",
+            Tags = ["maintenance", "dns", "flush", "network", "cache"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("cmd", ["/c", "ipconfig", "/flushdns"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "maint-reset-winsock",
+            Label = "Reset Winsock Catalog (netsh)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Resets the Winsock catalog to a clean state. Fixes network connectivity issues caused by corrupt LSP entries. Requires reboot.",
+            Tags = ["maintenance", "winsock", "reset", "network", "repair"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot. May reset VPN/proxy software configurations.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("netsh", ["winsock", "reset"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "maint-reset-ip-stack",
+            Label = "Reset TCP/IP Stack (netsh)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Resets the TCP/IP stack to clean defaults. Fixes IP connectivity issues. Requires reboot.",
+            Tags = ["maintenance", "tcpip", "reset", "network", "repair"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot. Resets static IP configuration.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("netsh", ["int", "ip", "reset"]);
+            },
+            DetectAction = () => false,
+        },
     ];
 }

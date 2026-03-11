@@ -333,5 +333,112 @@ internal static class Boot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 0)],
         },
+
+        // ── Command-based boot tweaks (bcdedit) ────────────────────────────
+        new TweakDef
+        {
+            Id = "boot-bcd-quiet-boot",
+            Label = "Enable Quiet Boot (bcdedit)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Windows quiet boot mode via bcdedit — suppresses the boot logo and status messages for faster boot appearance.",
+            Tags = ["boot", "bcdedit", "quiet", "logo"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "quietboot", "yes"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "quietboot", "no"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-bcd-timeout-3s",
+            Label = "Set Boot Menu Timeout to 3 Seconds (bcdedit)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the boot manager timeout to 3 seconds via bcdedit. Speeds up boot when multi-boot options exist.",
+            Tags = ["boot", "bcdedit", "timeout", "fast"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "3"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/timeout", "30"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("3", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-bcd-disable-recovery",
+            Label = "Disable Automatic Recovery (bcdedit)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the automatic recovery/repair environment via bcdedit. Prevents boot loops but removes automatic repair capability.",
+            Tags = ["boot", "bcdedit", "recovery", "repair", "server"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Disables automatic repair on boot failure.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "recoveryenabled", "no"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("bcdedit", ["/set", "{current}", "recoveryenabled", "yes"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("recoveryenabled", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("No", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-driver-verifier-reset",
+            Label = "Reset Driver Verifier (verifier)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Resets Driver Verifier settings to none. Useful after debugging driver issues when verifier was left enabled.",
+            Tags = ["boot", "verifier", "driver", "diagnostic", "reset"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("verifier", ["/reset"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("verifier", ["/query"]);
+                return stdout.Contains("No drivers", StringComparison.OrdinalIgnoreCase)
+                    || stdout.Contains("not loaded", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

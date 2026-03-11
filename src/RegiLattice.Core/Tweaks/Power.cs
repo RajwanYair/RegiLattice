@@ -332,5 +332,76 @@ internal static class Power
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e\DefaultPowerSchemeValues\8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", "ACSetting", 1200)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e\DefaultPowerSchemeValues\8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", "ACSetting", 0)],
         },
+
+        // ── Command-based power tweaks (powercfg) ──────────────────────────
+        new TweakDef
+        {
+            Id = "power-ultimate-performance-plan",
+            Label = "Enable Ultimate Performance Power Plan (powercfg)",
+            Category = "Power",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Unhides and activates the Ultimate Performance power plan via powercfg. Provides maximum performance by disabling power-saving features. Available on Win10 1803+.",
+            Tags = ["power", "plan", "ultimate", "performance", "powercfg"],
+            KindHint = TweakKind.SystemCommand,
+            MinBuild = 17134, // Win10 1803
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                // Duplicate the Ultimate Performance plan to make it visible
+                var (code, stdout, _) = Elevation.RunElevated("powercfg",
+                    ["/duplicatescheme", "e9a42b02-d5df-448d-aa00-03f14749eb61"]);
+                if (code == 0 && stdout.Length > 0)
+                {
+                    // Extract GUID from output and set as active
+                    var guidStart = stdout.IndexOf('{');
+                    var guidEnd = stdout.IndexOf('}');
+                    if (guidStart >= 0 && guidEnd > guidStart)
+                    {
+                        var guid = stdout[(guidStart + 1)..guidEnd];
+                        Elevation.RunElevated("powercfg", ["/setactive", guid]);
+                    }
+                }
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                // Revert to Balanced plan
+                Elevation.RunElevated("powercfg", ["/setactive", "381b4222-f694-41f0-9685-ff5bb260df2e"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("powercfg", ["/getactivescheme"]);
+                return stdout.Contains("Ultimate", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "power-disable-hibernate",
+            Label = "Disable Hibernation (powercfg)",
+            Category = "Power",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables hibernation and removes the hiberfil.sys file, freeing disk space equal to RAM size.",
+            Tags = ["power", "hibernate", "disk", "space", "powercfg"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Removes hiberfil.sys. Fast Startup will also be disabled.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("powercfg", ["/hibernate", "off"]);
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("powercfg", ["/hibernate", "on"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("powercfg", ["/availablesleepstates"]);
+                return !stdout.Contains("Hibernate", StringComparison.OrdinalIgnoreCase)
+                    || stdout.Contains("not available", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }
