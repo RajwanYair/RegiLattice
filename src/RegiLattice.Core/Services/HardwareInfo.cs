@@ -1,6 +1,7 @@
 // RegiLattice.Core — Services/HardwareInfo.cs
 // Hardware detection using WMI and P/Invoke.
 
+using System.Collections.Concurrent;
 using System.Management;
 using System.Runtime.InteropServices;
 
@@ -98,82 +99,87 @@ public static class HardwareInfo
     /// <summary>Returns true if Hyper-V is available.</summary>
     public static bool HasHyperVAvailable() => DetectHardware().HasHyperV;
 
-    // ── Software detection (for TweakDef.IsApplicable) ─────────────────
+    // ── Software detection (cached per session) ─────────────────────────
+
+    private static readonly ConcurrentDictionary<string, bool> _softwareCache = new(StringComparer.OrdinalIgnoreCase);
+
+    private static bool CachedCheck(string key, Func<bool> detect) =>
+        _softwareCache.GetOrAdd(key, _ => detect());
 
     /// <summary>Returns true if Google Chrome is installed.</summary>
-    public static bool IsChromeInstalled() =>
+    public static bool IsChromeInstalled() => CachedCheck("chrome", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe",
-            null, null) is not null;
+            null, null) is not null);
 
     /// <summary>Returns true if Mozilla Firefox is installed.</summary>
-    public static bool IsFirefoxInstalled() =>
+    public static bool IsFirefoxInstalled() => CachedCheck("firefox", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe",
-            null, null) is not null;
+            null, null) is not null);
 
     /// <summary>Returns true if Microsoft Edge is installed.</summary>
-    public static bool IsEdgeInstalled() =>
+    public static bool IsEdgeInstalled() => CachedCheck("edge", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe",
-            null, null) is not null;
+            null, null) is not null);
 
     /// <summary>Returns true if Java (JRE/JDK) is installed.</summary>
-    public static bool IsJavaInstalled() =>
+    public static bool IsJavaInstalled() => CachedCheck("java", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment",
             "CurrentVersion", null) is not null ||
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\JDK",
-            "CurrentVersion", null) is not null;
+            "CurrentVersion", null) is not null);
 
     /// <summary>Returns true if Docker Desktop is installed.</summary>
-    public static bool IsDockerInstalled() =>
+    public static bool IsDockerInstalled() => CachedCheck("docker", () =>
         File.Exists(Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            "Docker", "Docker", "Docker Desktop.exe"));
+            "Docker", "Docker", "Docker Desktop.exe")));
 
     /// <summary>Returns true if Adobe Creative Cloud is installed.</summary>
-    public static bool IsAdobeInstalled() =>
+    public static bool IsAdobeInstalled() => CachedCheck("adobe", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Creative Cloud",
             null, null) is not null ||
         Directory.Exists(Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            "Adobe"));
+            "Adobe")));
 
     /// <summary>Returns true if LibreOffice is installed.</summary>
-    public static bool IsLibreOfficeInstalled() =>
+    public static bool IsLibreOfficeInstalled() => CachedCheck("libreoffice", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice",
-            null, null) is not null;
+            null, null) is not null);
 
     /// <summary>Returns true if Microsoft Office is installed.</summary>
-    public static bool IsOfficeInstalled() =>
+    public static bool IsOfficeInstalled() => CachedCheck("office", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\ClickToRun",
-            "InstallPath", null) is not null;
+            "InstallPath", null) is not null);
 
     /// <summary>Returns true if RealVNC is installed.</summary>
-    public static bool IsRealVncInstalled() =>
+    public static bool IsRealVncInstalled() => CachedCheck("realvnc", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC",
-            null, null) is not null;
+            null, null) is not null);
 
     /// <summary>Returns true if VS Code is installed.</summary>
-    public static bool IsVsCodeInstalled() =>
+    public static bool IsVsCodeInstalled() => CachedCheck("vscode", () =>
         Microsoft.Win32.Registry.GetValue(
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\code.cmd",
             null, null) is not null ||
         File.Exists(Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Programs", "Microsoft VS Code", "Code.exe"));
+            "Programs", "Microsoft VS Code", "Code.exe")));
 
     /// <summary>Returns true if Scoop package manager is installed.</summary>
-    public static bool IsScoopInstalled() =>
+    public static bool IsScoopInstalled() => CachedCheck("scoop", () =>
         Directory.Exists(Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            "scoop", "shims"));
+            "scoop", "shims")));
 
     public static CpuInfo DetectCpu()
     {

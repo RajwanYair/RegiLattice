@@ -23,6 +23,7 @@ public sealed class TweakEngine
     private readonly Dictionary<string, List<TweakDef>> _tweaksByScope = [];
     private readonly ConcurrentDictionary<string, TweakScope> _scopeCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = [];
+    private readonly Dictionary<TweakDef, string> _tweakSearchText = [];
 
     public RegistrySession Session => _session;
     public int TweakCount => _allTweaks.Count;
@@ -69,6 +70,7 @@ public sealed class TweakEngine
             // Build search index
             var searchText = $"{td.Id} {td.Label} {td.Category} {td.Description} {string.Join(' ', td.Tags)}".ToLowerInvariant();
             _searchPairs.Add((searchText, td));
+            _tweakSearchText[td] = searchText;
         }
     }
 
@@ -192,7 +194,7 @@ public sealed class TweakEngine
         if (scope.HasValue) results = results.Where(t => t.Scope == scope.Value);
         if (category is not null) results = results.Where(t => t.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
         if (minBuild.HasValue) results = results.Where(t => t.MinBuild <= minBuild.Value);
-        if (query is not null) { var q = query.ToLowerInvariant(); results = results.Where(t => _searchPairs.Any(p => p.Tweak == t && p.Lower.Contains(q))); }
+        if (query is not null) { var q = query.ToLowerInvariant(); results = results.Where(t => _tweakSearchText.TryGetValue(t, out var text) && text.Contains(q)); }
         return results.ToList();
     }
 

@@ -6,6 +6,18 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
+/// <summary>Shared fixture that calls RegisterBuiltins() once for all tests that need it.</summary>
+public sealed class BuiltinsFixture
+{
+    public TweakEngine Engine { get; }
+
+    public BuiltinsFixture()
+    {
+        Engine = new TweakEngine(new RegistrySession(dryRun: true));
+        Engine.RegisterBuiltins();
+    }
+}
+
 /// <summary>Tests for TweakEngine: registration, lookup, search, profiles, dry-run ops.</summary>
 public sealed class TweakEngineTests
 {
@@ -250,36 +262,7 @@ public sealed class TweakEngineTests
     }
 
     // ── RegisterBuiltins ────────────────────────────────────────────────
-    [Fact]
-    public void RegisterBuiltins_LoadsAllTweaks()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        Assert.True(engine.TweakCount > 1000, $"Expected >1000 tweaks, got {engine.TweakCount}");
-        Assert.True(engine.CategoryCount >= 60, $"Expected >=60 categories, got {engine.CategoryCount}");
-    }
-
-    [Fact]
-    public void RegisterBuiltins_AllIdsUnique()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        var ids = engine.AllTweaks().Select(t => t.Id).ToList();
-        Assert.Equal(ids.Count, ids.Distinct(StringComparer.OrdinalIgnoreCase).Count());
-    }
-
-    [Fact]
-    public void RegisterBuiltins_AllHaveRequiredFields()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        foreach (var td in engine.AllTweaks())
-        {
-            Assert.False(string.IsNullOrWhiteSpace(td.Id), $"Tweak with empty Id found");
-            Assert.False(string.IsNullOrWhiteSpace(td.Label), $"Tweak {td.Id} has empty Label");
-            Assert.False(string.IsNullOrWhiteSpace(td.Category), $"Tweak {td.Id} has empty Category");
-        }
-    }
+    // Moved to TweakEngineBuiltinsTests (shared fixture) for performance.
 
     // ── Category / Scope counts ─────────────────────────────────────────
     [Fact]
@@ -490,31 +473,7 @@ public sealed class TweakEngineTests
     }
 
     // ── TweaksForProfile / ApplyProfile ─────────────────────────────────
-    [Fact]
-    public void TweaksForProfile_UnknownProfile_ReturnsEmpty()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        Assert.Empty(engine.TweaksForProfile("nonexistent"));
-    }
-
-    [Fact]
-    public void TweaksForProfile_Business_ReturnsNonEmpty()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        var tweaks = engine.TweaksForProfile("business");
-        Assert.NotEmpty(tweaks);
-        Assert.True(tweaks.Count > 100, $"Expected >100 tweaks for business profile, got {tweaks.Count}");
-    }
-
-    [Fact]
-    public void ApplyProfile_UnknownProfile_ReturnsEmpty()
-    {
-        var engine = CreateEngine();
-        engine.RegisterBuiltins();
-        Assert.Empty(engine.ApplyProfile("nonexistent"));
-    }
+    // Moved to TweakEngineBuiltinsTests (shared fixture) for performance.
 
     // ── SaveSnapshot / LoadSnapshot round-trip ──────────────────────────
     [Fact]
@@ -575,5 +534,61 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         engine.Register([MakeTweak("cat-1", "A"), MakeTweak("cat-2", "B"), MakeTweak("cat-3", "C")]);
         Assert.Equal(engine.Categories().Count, engine.CategoryCount);
+    }
+}
+
+/// <summary>Tests that require RegisterBuiltins — share a single engine via IClassFixture.</summary>
+public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
+{
+    private readonly TweakEngine _engine;
+
+    public TweakEngineBuiltinsTests(BuiltinsFixture fixture)
+    {
+        _engine = fixture.Engine;
+    }
+
+    [Fact]
+    public void RegisterBuiltins_LoadsAllTweaks()
+    {
+        Assert.True(_engine.TweakCount > 1000, $"Expected >1000 tweaks, got {_engine.TweakCount}");
+        Assert.True(_engine.CategoryCount >= 60, $"Expected >=60 categories, got {_engine.CategoryCount}");
+    }
+
+    [Fact]
+    public void RegisterBuiltins_AllIdsUnique()
+    {
+        var ids = _engine.AllTweaks().Select(t => t.Id).ToList();
+        Assert.Equal(ids.Count, ids.Distinct(StringComparer.OrdinalIgnoreCase).Count());
+    }
+
+    [Fact]
+    public void RegisterBuiltins_AllHaveRequiredFields()
+    {
+        foreach (var td in _engine.AllTweaks())
+        {
+            Assert.False(string.IsNullOrWhiteSpace(td.Id), $"Tweak with empty Id found");
+            Assert.False(string.IsNullOrWhiteSpace(td.Label), $"Tweak {td.Id} has empty Label");
+            Assert.False(string.IsNullOrWhiteSpace(td.Category), $"Tweak {td.Id} has empty Category");
+        }
+    }
+
+    [Fact]
+    public void TweaksForProfile_UnknownProfile_ReturnsEmpty()
+    {
+        Assert.Empty(_engine.TweaksForProfile("nonexistent"));
+    }
+
+    [Fact]
+    public void TweaksForProfile_Business_ReturnsNonEmpty()
+    {
+        var tweaks = _engine.TweaksForProfile("business");
+        Assert.NotEmpty(tweaks);
+        Assert.True(tweaks.Count > 100, $"Expected >100 tweaks for business profile, got {tweaks.Count}");
+    }
+
+    [Fact]
+    public void ApplyProfile_UnknownProfile_ReturnsEmpty()
+    {
+        Assert.Empty(_engine.ApplyProfile("nonexistent"));
     }
 }
