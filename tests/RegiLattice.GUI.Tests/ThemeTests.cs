@@ -87,4 +87,28 @@ public sealed class ThemeTests
             AppTheme.SetTheme("catppuccin-mocha");
         }
     }
+
+    [Fact]
+    public void SmallBold_FontExists()
+        => Assert.Equal("Segoe UI", AppTheme.SmallBold.FontFamily.Name);
+
+    [Fact]
+    public void AccentHover_HasLowAlpha()
+        => Assert.Equal(40, AppTheme.AccentHover.A);
+
+    [Fact]
+    public void Border_HasLowAlpha()
+        => Assert.Equal(50, AppTheme.Border.A);
+
+    [Fact]
+    public void Separator_HasLowAlpha()
+        => Assert.Equal(30, AppTheme.Separator.A);
+
+    [Fact]
+    public void RoundedRectPath_CreatesFigure()
+    {
+        var rect = new System.Drawing.Rectangle(0, 0, 100, 30);
+        using var path = AppTheme.RoundedRectPath(rect, 8);
+        Assert.True(path.PointCount > 0);
+    }
 }

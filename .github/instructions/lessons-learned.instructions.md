@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2025-07-21 (v3.1.5, C# 13 / .NET 10.0-windows, 1 882 tweaks, 72 categories)
+> Last updated: 2025-07-21 (v3.1.5, C# 13 / .NET 10.0-windows, 1 981 tweaks, 72 categories)
 
 ---
 
@@ -43,7 +43,7 @@ WinForms controls require a message pump and are fragile in xUnit. Focus tests o
 ## Unique TweakDef IDs — Global Uniqueness Required
 
 `TweakEngine.Register()` throws `ArgumentException` on duplicate IDs.
-Every tweak ID across ALL 72 modules must be globally unique.
+Every tweak ID across ALL 71 modules must be globally unique.
 
 ```csharp
 // ❌ BAD — duplicate ID across modules will throw at registration

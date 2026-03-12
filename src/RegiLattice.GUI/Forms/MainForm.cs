@@ -62,6 +62,8 @@ public partial class MainForm : Form
         _toolStrip.BackColor = AppTheme.Surface;
         _toolStrip.ForeColor = AppTheme.Fg;
         _toolStrip.Renderer = renderer;
+        _toolStrip.GripStyle = ToolStripGripStyle.Hidden;
+        _toolStrip.Padding = new Padding(4, 2, 4, 2);
 
         _menuStrip.BackColor = AppTheme.Surface;
         _menuStrip.ForeColor = AppTheme.Fg;
@@ -69,9 +71,12 @@ public partial class MainForm : Form
 
         _treeView.BackColor = AppTheme.Bg;
         _treeView.ForeColor = AppTheme.Fg;
+        _treeView.BorderStyle = BorderStyle.None;
+        _treeView.Indent = 20;
 
         _listView.BackColor = AppTheme.Surface;
         _listView.ForeColor = AppTheme.Fg;
+        _listView.BorderStyle = BorderStyle.None;
         _listView.OwnerDraw = true;
         _listView.DrawColumnHeader -= OnDrawColumnHeader;
         _listView.DrawSubItem -= OnDrawSubItem;
@@ -80,6 +85,7 @@ public partial class MainForm : Form
 
         _statusStrip.BackColor = AppTheme.Overlay;
         _statusStrip.ForeColor = AppTheme.Fg;
+        _statusStrip.SizingGrip = false;
 
         _searchBox.BackColor = AppTheme.Overlay;
         _searchBox.ForeColor = AppTheme.Fg;
@@ -91,8 +97,11 @@ public partial class MainForm : Form
         _listContextMenu.ForeColor = AppTheme.Fg;
         _listContextMenu.Renderer = renderer;
 
+        // Detail panel with accent left border
         _detailPanel.BackColor = AppTheme.Surface;
+        _detailPanel.Padding = new Padding(8, 6, 8, 6);
         _detailLabel.ForeColor = AppTheme.FgDim;
+        _detailLabel.Font = AppTheme.Regular;
 
         // Re-colour tree nodes
         foreach (TreeNode node in _treeView.Nodes)
@@ -105,44 +114,102 @@ public partial class MainForm : Form
     // ── Owner-draw for dark ListView ───────────────────────────────────────
     private void OnDrawColumnHeader(object? sender, DrawListViewColumnHeaderEventArgs e)
     {
+        var g = e.Graphics;
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+        // Gradient-like header: Surface with accent underline
         using var bg = new SolidBrush(AppTheme.Overlay);
-        e.Graphics.FillRectangle(bg, e.Bounds);
-        TextRenderer.DrawText(e.Graphics, e.Header?.Text ?? "", Font, e.Bounds, AppTheme.Accent,
+        g.FillRectangle(bg, e.Bounds);
+
+        // Subtle accent line at bottom
+        using var accentPen = new Pen(Color.FromArgb(80, AppTheme.Accent), 2f);
+        g.DrawLine(accentPen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
+
+        var textRect = new Rectangle(e.Bounds.X + 6, e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+        TextRenderer.DrawText(g, e.Header?.Text ?? "", AppTheme.Bold, textRect, AppTheme.Accent,
             TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
     }
 
     private void OnDrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
     {
         if (e.Item is null) return;
-        Color bg = e.ItemIndex % 2 == 0 ? AppTheme.Surface : AppTheme.Bg;
-        if (e.Item.Selected) bg = AppTheme.Overlay;
+        var g = e.Graphics;
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        using var brush = new SolidBrush(bg);
-        e.Graphics.FillRectangle(brush, e.Bounds);
+        // Alternating rows with selection highlight
+        Color bg = e.ItemIndex % 2 == 0 ? AppTheme.Surface : AppTheme.Bg;
+        if (e.Item.Selected)
+            bg = Color.FromArgb(AppTheme.Overlay.R, AppTheme.Overlay.G, AppTheme.Overlay.B);
+
+        using var bgBrush = new SolidBrush(bg);
+        g.FillRectangle(bgBrush, e.Bounds);
+
+        // Left accent bar on selected row (first column only)
+        if (e.Item.Selected && e.ColumnIndex == 0)
+        {
+            using var accentBrush = new SolidBrush(AppTheme.Accent);
+            g.FillRectangle(accentBrush, e.Bounds.X, e.Bounds.Y + 2, 3, e.Bounds.Height - 4);
+        }
 
         bool applicable = e.Item.Tag is TweakDef tda && !_inapplicableIds.Contains(tda.Id);
 
-        // Status column (index 2) — coloured text
-        Color fg = applicable ? AppTheme.Fg : AppTheme.FgDim;
+        // Status column (index 2) — pill badge
         if (e.ColumnIndex == 2 && e.Item.Tag is TweakDef td)
         {
+            string statusText = e.SubItem?.Text ?? "";
+            Color pillBg;
+            Color pillFg;
+
             if (!applicable)
             {
-                fg = AppTheme.FgDim;
+                pillBg = AppTheme.FgDim;
+                pillFg = AppTheme.FgDim;
             }
             else
             {
                 var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                fg = status switch
+                (pillBg, pillFg) = status switch
                 {
-                    TweakResult.Applied => AppTheme.Green,
-                    TweakResult.NotApplied => AppTheme.Red,
-                    _ => AppTheme.Yellow,
+                    TweakResult.Applied => (AppTheme.Green, AppTheme.Green),
+                    TweakResult.NotApplied => (AppTheme.Red, AppTheme.Red),
+                    _ => (AppTheme.Yellow, AppTheme.Yellow),
                 };
             }
+
+            int pillY = e.Bounds.Y + (e.Bounds.Height - 18) / 2;
+            AppTheme.DrawPill(g, statusText, AppTheme.SmallBold, pillBg, pillFg,
+                e.Bounds.X + 4, pillY, 6, 1);
+            return;
         }
 
-        TextRenderer.DrawText(e.Graphics, e.SubItem?.Text ?? "", Font, e.Bounds, fg,
+        // Scope column (index 3) — pill badge
+        if (e.ColumnIndex == 3 && e.Item.Tag is TweakDef tdScope)
+        {
+            string scopeText = e.SubItem?.Text ?? "";
+            Color scopeColor = tdScope.Scope switch
+            {
+                TweakScope.User => AppTheme.Green,
+                TweakScope.Machine => AppTheme.Info,
+                TweakScope.Both => AppTheme.Yellow,
+                _ => AppTheme.FgDim,
+            };
+
+            int pillY = e.Bounds.Y + (e.Bounds.Height - 18) / 2;
+            AppTheme.DrawPill(g, scopeText, AppTheme.SmallBold, scopeColor, scopeColor,
+                e.Bounds.X + 4, pillY, 6, 1);
+            return;
+        }
+
+        // Default text rendering
+        Color fg = applicable ? AppTheme.Fg : AppTheme.FgDim;
+
+        // Kind column — accent colour
+        if (e.ColumnIndex == 1)
+            fg = applicable ? AppTheme.Accent : AppTheme.FgDim;
+
+        var textBounds = new Rectangle(e.Bounds.X + (e.ColumnIndex == 0 ? 6 : 4),
+            e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+        TextRenderer.DrawText(g, e.SubItem?.Text ?? "", Font, textBounds, fg,
             TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
     }
 
@@ -675,7 +742,7 @@ public partial class MainForm : Form
         int notApplied = _statusCache.Values.Count(r => r == TweakResult.NotApplied);
         int unknown = _statusCache.Values.Count(r => r == TweakResult.Unknown);
         int error = _statusCache.Values.Count(r => r == TweakResult.Error);
-        _statusLabel.Text = $"Total: {_statusCache.Count} | Applied: {applied} | Default: {notApplied} | Unknown: {unknown} | Errors: {error}";
+        _statusLabel.Text = $"\U0001F4CA {_statusCache.Count} tweaks  \u2502  \u2705 {applied}  \u2502  \u274C {notApplied}  \u2502  \u2753 {unknown}  \u2502  \u26A0 {error}";
     }
 
     private void SetStatus(string message)
@@ -741,25 +808,34 @@ public partial class MainForm : Form
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
             string statusStr = status switch
             {
-                TweakResult.Applied => "Applied",
-                TweakResult.NotApplied => "Default",
-                TweakResult.Error => "Error",
-                _ => "Unknown",
+                TweakResult.Applied => "\u2705 Applied",
+                TweakResult.NotApplied => "\u274C Default",
+                TweakResult.Error => "\u26A0 Error",
+                _ => "\u2753 Unknown",
             };
-            string tags = td.Tags.Count > 0 ? string.Join(", ", td.Tags) : "—";
+            string scopeStr = td.Scope switch
+            {
+                TweakScope.User => "\U0001F464 User",
+                TweakScope.Machine => "\U0001F5A5 Machine",
+                TweakScope.Both => "\U0001F504 Both",
+                _ => "?",
+            };
+            string tags = td.Tags.Count > 0 ? string.Join("  \u2022  ", td.Tags) : "\u2014";
             string keys = td.RegistryKeys.Count > 0
                 ? string.Join("; ", td.RegistryKeys.Take(3))
-                : (td.ApplyOps.Count > 0 ? "Registry operations" : "Command-based");
+                : (td.ApplyOps.Count > 0 ? "\U0001F511 Registry operations" : "\u2699 Command-based");
+            string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
             _detailLabel.Text =
-                $"ID: {td.Id}   |   Kind: {CategoryIcons.GetKindSymbol(td.Kind)} {td.Kind}   |   Status: {statusStr}   |   Scope: {td.Scope}\n" +
+                $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n" +
+                $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n" +
                 $"Tags: {tags}\n" +
-                $"Keys: {keys}" +
-                (td.SideEffects.Length > 0 ? $"\nSide Effects: {td.SideEffects}" : "");
+                $"Registry: {keys}" +
+                (td.SideEffects.Length > 0 ? $"\n\u26A0 {td.SideEffects}" : "");
             _detailLabel.ForeColor = AppTheme.Fg;
         }
         else
         {
-            _detailLabel.Text = "Select a tweak to see details.";
+            _detailLabel.Text = "\U0001F4CB Select a tweak to see details.";
             _detailLabel.ForeColor = AppTheme.FgDim;
         }
     }
@@ -789,29 +865,77 @@ public partial class MainForm : Form
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (e.Item.Selected || e.Item.Pressed)
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            var rect = new Rectangle(1, 1, e.Item.Width - 2, e.Item.Height - 2);
+
+            if (e.Item.Pressed)
             {
-                using var brush = new SolidBrush(AppTheme.Overlay);
-                e.Graphics.FillRectangle(brush, new Rectangle(Point.Empty, e.Item.Size));
+                using var brush = new SolidBrush(AppTheme.AccentPressed);
+                AppTheme.FillRoundedRect(g, brush, rect, 4);
+            }
+            else if (e.Item.Selected)
+            {
+                using var brush = new SolidBrush(AppTheme.AccentHover);
+                AppTheme.FillRoundedRect(g, brush, rect, 4);
             }
             else if (e.Item is ToolStripButton { Checked: true })
             {
                 using var brush = new SolidBrush(Color.FromArgb(60, AppTheme.Accent));
-                e.Graphics.FillRectangle(brush, new Rectangle(Point.Empty, e.Item.Size));
+                AppTheme.FillRoundedRect(g, brush, rect, 4);
+                using var pen = new Pen(Color.FromArgb(100, AppTheme.Accent), 1f);
+                AppTheme.DrawRoundedRect(g, pen, rect, 4);
+            }
+        }
+
+        protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            if (e.Item.Selected)
+            {
+                var rect = new Rectangle(2, 0, e.Item.Width - 4, e.Item.Height);
+                using var brush = new SolidBrush(AppTheme.AccentHover);
+                AppTheme.FillRoundedRect(g, brush, rect, 4);
             }
         }
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            e.TextColor = AppTheme.Fg;
+            e.TextColor = e.Item.Selected ? AppTheme.Accent : AppTheme.Fg;
             base.OnRenderItemText(e);
         }
 
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             int y = e.Item.Bounds.Height / 2;
-            using var pen = new Pen(AppTheme.Overlay);
-            e.Graphics.DrawLine(pen, 0, y, e.Item.Width, y);
+            int margin = 4;
+            using var pen = new Pen(AppTheme.Separator, 1f);
+            e.Graphics.DrawLine(pen, margin, y, e.Item.Width - margin, y);
+        }
+
+        protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            if (e.Item.Selected || e.Item.Pressed)
+            {
+                var rect = new Rectangle(1, 1, e.Item.Width - 2, e.Item.Height - 2);
+                using var brush = new SolidBrush(AppTheme.AccentHover);
+                AppTheme.FillRoundedRect(g, brush, rect, 4);
+            }
+        }
+
+        protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+        {
+            // No border — clean flat look
+        }
+
+        protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
+        {
+            // Fill menu image margin with surface color for consistency
+            using var brush = new SolidBrush(AppTheme.Surface);
+            e.Graphics.FillRectangle(brush, e.AffectedBounds);
         }
     }
 }

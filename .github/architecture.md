@@ -1,7 +1,7 @@
 # RegiLattice — Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2026-03-11 (v3.0.0, 1 360 tweaks, 72 categories, 129 tests).
+> Last verified: 2025-07-21 (v3.1.5, 1 981 tweaks, 72 categories, 203 tests).
 > C# 13 / .NET 10.0-windows (x64).
 
 ---
@@ -23,9 +23,9 @@
             +----------+-----------+
             |                      |
        TweakDef list         ProfileDefinitions
-       (1 360 tweaks)        (5 profiles)
+       (1 981 tweaks)        (5 profiles)
             |
-       Tweaks/*.cs                 ← 72 category modules
+       Tweaks/*.cs                 ← 71 category modules (72 categories)
             |
        +----+----+
        |         |
@@ -57,7 +57,7 @@ RegiLattice.sln
 │     │     ├── HardwareInfo.cs         ← hardware detection + profile suggestion
 │     │     ├── Locale.cs               ← i18n string table
 │     │     └── Ratings.cs              ← tweak rating system (1-5 stars)
-│     └── Tweaks/                       ← 72 category modules, 1 360 tweaks
+│     └── Tweaks/                       ← 71 category modules, 1 981 tweaks
 │           ├── Accessibility.cs
 │           ├── Performance.cs
 │           ├── Privacy.cs
@@ -98,7 +98,7 @@ Application starts
 TweakEngine.RegisterBuiltins()
   │
   ▼
-For each category module (72 modules):
+For each category module (71 modules):
   │
   ├──► Module exposes: public static IReadOnlyList<TweakDef> Tweaks { get; }
   │
@@ -181,7 +181,7 @@ MainForm (Forms/MainForm.cs)
   │     │           ├── Checkbox (batch selection)
   │     │           ├── Toggle button (individual enable/disable)
   │     │           └── Badges: SCOPE (User/Machine/Both), ADMIN, CORP
-  │     └── ... (72 category sections)
+  │     └── ... (72 category sections, 71 modules)
   │
   ├── Action bar: Apply/Remove Selected, Snapshot Save/Restore, Export
   ├── Summary stats bar: Applied / Default / Unknown counts
@@ -318,7 +318,7 @@ Priority order (highest → lowest):
 | **DryRun mode** | Tests validate tweak logic without touching the real registry |
 | **Corporate guard** | Prevents accidental damage on managed machines; legal/compliance safety |
 | **Catppuccin Mocha + 3 themes** | Modern dark theme with switchable alternatives (Latte, Nord, Dracula) |
-| **Parallel status detection** | `StatusMap(parallel: true)` via Task.Run for fast GUI refresh across 1 360 tweaks |
+| **Parallel status detection** | `StatusMap(parallel: true)` via Task.Run for fast GUI refresh across 1 981 tweaks |
 | **IReadOnlyList everywhere** | Immutable public contracts; prevents caller mutation |
 | **Collection expressions** | C# 13 `[]` syntax for concise, readable tweak definitions |
 | **SuspendLayout pattern** | O(1) layout recalculation during bulk control updates |

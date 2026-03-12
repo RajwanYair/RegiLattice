@@ -18,7 +18,7 @@ RegiLattice.sln
 │   ├── Registry/               # RegistrySession — all Win32 registry I/O
 │   ├── Services/               # AppConfig, Analytics, CorporateGuard, Elevation,
 │   │                           #   HardwareInfo, Locale, Ratings
-│   └── Tweaks/                 # 71 modules × ~19 tweaks each = 1,360+ tweaks
+│   └── Tweaks/                 # 71 modules × ~28 tweaks each = 1,981+ tweaks
 ├── src/RegiLattice.GUI/        # WinForms app (depends on Core)
 │   ├── Theme.cs                # 4-theme engine
 │   ├── Forms/                  # MainForm, AboutDialog, 5 package manager dialogs,
@@ -27,7 +27,7 @@ RegiLattice.sln
 │                               #   ChocolateyMgr, PSModuleMgr, ToolVersionChecker
 ├── src/RegiLattice.CLI/        # Console app (depends on Core)
 │   └── Program.cs              # 25+ commands via args parsing
-└── tests/                      # xUnit: 93 Core + 36 GUI = 129 tests
+└── tests/                      # xUnit: 112 Core + 52 CLI + 39 GUI = 203 tests
 ```
 
 ## Data Flow

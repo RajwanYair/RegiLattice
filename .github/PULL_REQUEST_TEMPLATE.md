@@ -19,7 +19,7 @@ Brief description of what this PR does.
 ## Checklist
 
 - [ ] `dotnet build RegiLattice.sln` succeeds with no warnings
-- [ ] `dotnet test` passes (all 129+ tests green)
+- [ ] `dotnet test` passes (all 203+ tests green)
 - [ ] New tweak IDs are globally unique kebab-case
 - [ ] New tweaks have `ApplyOps`, `RemoveOps`, `DetectOps` (or custom delegates)
 - [ ] `CorpSafe` and `NeedsAdmin` flags are set correctly

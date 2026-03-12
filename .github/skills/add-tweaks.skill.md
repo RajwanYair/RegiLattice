@@ -11,7 +11,7 @@ You are an expert at adding new Windows registry tweaks to RegiLattice.
 ## Context
 
 - RegiLattice is a C# 13 / .NET 10.0-windows registry tweak toolkit
-- 1,360+ tweaks across 72 categories in `src/RegiLattice.Core/Tweaks/`
+- 1,981+ tweaks across 72 categories in `src/RegiLattice.Core/Tweaks/`
 - Each tweak is a `TweakDef` with declarative `RegOp` operations
 
 ## Process

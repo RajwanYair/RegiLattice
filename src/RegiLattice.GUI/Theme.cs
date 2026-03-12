@@ -10,7 +10,17 @@ internal static class AppTheme
         Color Fg, Color FgDim,
         Color Accent, Color Green, Color Red, Color Yellow,
         Color Overlay,
-        Color Success, Color Danger, Color Info);
+        Color Success, Color Danger, Color Info)
+    {
+        /// <summary>Lighter accent for hover states (30% alpha over Surface).</summary>
+        internal Color AccentHover => Color.FromArgb(40, Accent);
+        /// <summary>Darker accent for pressed states.</summary>
+        internal Color AccentPressed => Color.FromArgb(70, Accent);
+        /// <summary>Subtle border colour for cards and panels.</summary>
+        internal Color Border => Color.FromArgb(50, Fg);
+        /// <summary>Very subtle separator line colour.</summary>
+        internal Color Separator => Color.FromArgb(30, Fg);
+    }
 
     private static readonly Dictionary<string, ThemeDef> Themes = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -95,12 +105,19 @@ internal static class AppTheme
     internal static Color Danger => _current.Danger;
     internal static Color Info => _current.Info;
 
+    // ── Computed colour shorthand ──────────────────────────────────────────
+    internal static Color AccentHover => _current.AccentHover;
+    internal static Color AccentPressed => _current.AccentPressed;
+    internal static Color Border => _current.Border;
+    internal static Color Separator => _current.Separator;
+
     // ── Fonts ──────────────────────────────────────────────────────────────
     internal static readonly Font Regular = new("Segoe UI", 9f);
     internal static readonly Font Small = new("Segoe UI", 8f);
     internal static readonly Font Bold = new("Segoe UI", 9f, FontStyle.Bold);
     internal static readonly Font Title = new("Segoe UI", 12f, FontStyle.Bold);
     internal static readonly Font Mono = new("Consolas", 9f);
+    internal static readonly Font SmallBold = new("Segoe UI", 7.5f, FontStyle.Bold);
 
     // ── Theme API ──────────────────────────────────────────────────────────
     internal static string[] AvailableThemes() => [.. Themes.Keys];
@@ -170,4 +187,53 @@ internal static class AppTheme
             BorderStyle = BorderStyle.FixedSingle,
             Width = width,
         };
+
+    // ── Modern GDI+ helpers ────────────────────────────────────────────────
+
+    /// <summary>Draw a filled rounded rectangle.</summary>
+    internal static void FillRoundedRect(Graphics g, Brush brush, Rectangle rect, int radius)
+    {
+        if (radius <= 0) { g.FillRectangle(brush, rect); return; }
+        using var path = RoundedRectPath(rect, radius);
+        g.FillPath(brush, path);
+    }
+
+    /// <summary>Draw a rounded rectangle border.</summary>
+    internal static void DrawRoundedRect(Graphics g, Pen pen, Rectangle rect, int radius)
+    {
+        if (radius <= 0) { g.DrawRectangle(pen, rect); return; }
+        using var path = RoundedRectPath(rect, radius);
+        g.DrawPath(pen, path);
+    }
+
+    /// <summary>Create a GraphicsPath for a rounded rectangle.</summary>
+    internal static System.Drawing.Drawing2D.GraphicsPath RoundedRectPath(Rectangle rect, int radius)
+    {
+        int d = radius * 2;
+        var path = new System.Drawing.Drawing2D.GraphicsPath();
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        return path;
+    }
+
+    /// <summary>Draw a pill-shaped badge with text.</summary>
+    internal static void DrawPill(Graphics g, string text, Font font, Color bg, Color fg, int x, int y, int hPad = 6, int vPad = 1)
+    {
+        var textSize = TextRenderer.MeasureText(text, font);
+        int w = textSize.Width + hPad * 2;
+        int h = textSize.Height + vPad * 2;
+        var rect = new Rectangle(x, y, w, h);
+
+        using var brush = new SolidBrush(Color.FromArgb(35, bg));
+        FillRoundedRect(g, brush, rect, h / 2);
+
+        using var border = new Pen(Color.FromArgb(80, bg), 1f);
+        DrawRoundedRect(g, border, rect, h / 2);
+
+        TextRenderer.DrawText(g, text, font, rect, fg,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+    }
 }

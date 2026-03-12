@@ -3,15 +3,15 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-129%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-203%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A comprehensive Windows registry tweak toolkit with **1 360 verified tweaks** across **72 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **1 981 verified tweaks** across **72 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Highlights
 
-- **1 360 verified tweaks** across 72 categories — each fully reversible with apply + remove
+- **1 981 verified tweaks** across 72 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
@@ -27,7 +27,7 @@ A comprehensive Windows registry tweak toolkit with **1 360 verified tweaks** ac
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **129 tests** across 6 test files — full engine, model, service, and GUI coverage (xUnit)
+- **203 tests** across 7 test files — full engine, model, service, and GUI coverage (xUnit)
 
 ## Architecture
 
@@ -66,45 +66,46 @@ graph LR
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
 
-## Tweak Categories (69)
+## Tweak Categories (72)
 
 | Category                    |  #  | Category                    |  #  |
 |-----------------------------|-----|-----------------------------|-----|
-| Accessibility               |  20 | Network                     |  36 |
-| Adobe                       |  20 | Night Light & Display       |  12 |
-| AI / Copilot                |  22 | Notifications               |  21 |
-| Audio                       |  24 | Office                      |  20 |
-| Backup & Recovery           |  15 | OneDrive                    |  18 |
-| Bluetooth                   |  19 | Package Management          |  21 |
-| Boot                        |  26 | Performance                 |  30 |
-| Chrome                      |  20 | Phone Link                  |  14 |
-| Clipboard & Drag-Drop       |  15 | Power                       |  26 |
-| Cloud Storage               |  30 | Printing                    |  20 |
-| Communication               |  21 | Privacy                     |  33 |
-| Context Menu                |  20 | RealVNC                     |  15 |
-| Cortana & Search            |  22 | Remote Desktop              |  21 |
-| Crash & Diagnostics         |  16 | Scheduled Tasks             |  21 |
-| Dev Drive                   |  12 | Scoop Tools                 |  25 |
-| Developer Tools             |  17 | Screensaver & Lock          |  16 |
-| Display                     |  19 | Security                    |  34 |
-| DNS & Networking Advanced   |  16 | Services                    |  21 |
-| Edge                        |  18 | Shell                       |  20 |
-| Explorer                    |  46 | Snap & Multitasking         |  17 |
-| File System                 |  17 | Startup                     |  22 |
-| Firefox                     |  20 | Storage                     |  19 |
-| Fonts                       |  19 | System                      |  24 |
-| Gaming                      |  24 | Taskbar                     |  24 |
-| GPU / Graphics              |  19 | Telemetry Advanced          |  21 |
-| Indexing & Search           |  21 | Touch & Pen                 |  13 |
-| Input                       |  18 | USB & Peripherals           |  16 |
-| Java                        |  16 | Virtualization              |  20 |
-| LibreOffice                 |  18 | Voice Access & Speech       |  13 |
-| Lock Screen & Login         |  16 | VS Code                     |  19 |
-| M365 Copilot                |  18 | Widgets & News              |  20 |
-| Maintenance                 |  17 | Windows 11                  |  35 |
-| Microsoft Store             |  15 | Windows Terminal             |  16 |
-| Multimedia                  |  15 | Windows Update              |  22 |
-|                             |     | WSL                         |  35 |
+| Accessibility               |  25 | Network                     |  38 |
+| Adobe                       |  25 | Night Light & Display       |  23 |
+| AI / Copilot                |  27 | Notifications               |  25 |
+| Audio                       |  29 | Office                      |  25 |
+| Backup & Recovery           |  25 | OneDrive                    |  23 |
+| Bluetooth                   |  24 | Package Management          |  29 |
+| Boot                        |  35 | Performance                 |  34 |
+| Chrome                      |  31 | Phone Link                  |  23 |
+| Clipboard & Drag-Drop       |  25 | Power                       |  30 |
+| Cloud Storage               |  35 | Printing                    |  25 |
+| Communication               |  26 | Privacy                     |  36 |
+| Context Menu                |  27 | RealVNC                     |  25 |
+| Cortana & Search            |  26 | Recovery                    |  20 |
+| Crash & Diagnostics         |  26 | Remote Desktop              |  26 |
+| Dev Drive                   |  12 | Scheduled Tasks             |  26 |
+| Dev Drive / Developer Tools |  10 | Scoop Tools                 |  35 |
+| Display                     |  28 | Screensaver & Lock          |  30 |
+| DNS & Networking Advanced   |  31 | Security                    |  39 |
+| Edge                        |  28 | Services                    |  28 |
+| Encryption                  |  25 | Shell                       |  25 |
+| Explorer                    |  51 | Snap & Multitasking         |  31 |
+| File System                 |  22 | Startup                     |  26 |
+| Firefox                     |  30 | Storage                     |  23 |
+| Firewall                    |  20 | System                      |  29 |
+| Fonts                       |  24 | Taskbar                     |  28 |
+| Gaming                      |  29 | Telemetry Advanced          |  26 |
+| GPU / Graphics              |  27 | Touch & Pen                 |  23 |
+| Indexing & Search           |  25 | USB & Peripherals           |  31 |
+| Input                       |  23 | Virtualization              |  25 |
+| Java                        |  31 | Voice Access & Speech       |  31 |
+| LibreOffice                 |  23 | VS Code                     |  25 |
+| Lock Screen & Login         |  26 | Widgets & News              |  25 |
+| M365 Copilot                |  23 | Windows 11                  |  40 |
+| Maintenance                 |  28 | Windows Terminal             |  31 |
+| Microsoft Store             |  25 | Windows Update              |  26 |
+| Multimedia                  |  25 | WSL                         |  44 |
 
 ## Requirements
 
