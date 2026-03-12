@@ -222,13 +222,34 @@ public partial class MainForm : Form
             await Task.Run(() => _engine.RegisterBuiltins(), _cts.Token);
             SetStatus($"Loaded {_engine.TweakCount} tweaks across {_engine.CategoryCount} categories.");
 
-            // Evaluate hardware applicability (cached, runs once)
+            // Evaluate hardware applicability — group by category to avoid redundant checks
             await Task.Run(() =>
             {
+                var categoryApplicable = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
                 foreach (var td in _engine.AllTweaks())
                 {
-                    if (!TweakEngine.IsApplicableOnHardware(td))
-                        _inapplicableIds.Add(td.Id);
+                    // Custom predicates or tag-based checks must run per-tweak
+                    if (td.IsApplicable is not null || td.Tags.Any(t =>
+                        t.Equals("nvidia", StringComparison.OrdinalIgnoreCase) ||
+                        t.Equals("amd-gpu", StringComparison.OrdinalIgnoreCase) ||
+                        t.Equals("docker", StringComparison.OrdinalIgnoreCase) ||
+                        t.Equals("laptop", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        if (!TweakEngine.IsApplicableOnHardware(td))
+                            _inapplicableIds.Add(td.Id);
+                    }
+                    else if (categoryApplicable.TryGetValue(td.Category, out var cached))
+                    {
+                        if (!cached)
+                            _inapplicableIds.Add(td.Id);
+                    }
+                    else
+                    {
+                        var applicable = TweakEngine.IsApplicableOnHardware(td);
+                        categoryApplicable[td.Category] = applicable;
+                        if (!applicable)
+                            _inapplicableIds.Add(td.Id);
+                    }
                 }
             }, _cts.Token);
 
