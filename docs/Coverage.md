@@ -1,7 +1,7 @@
 # RegiLattice — Coverage Report
 
 > Test coverage baseline for the C# codebase.
-> Last verified: 2025-07-20 · v3.0.0
+> Last verified: 2025-07-21 · v3.1.5
 > Command: `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
@@ -10,15 +10,16 @@
 
 | Scope | Tests | Status |
 |---|---|---|
-| **RegiLattice.Core.Tests** | 93 tests | All passing |
-| **RegiLattice.GUI.Tests** | 36 tests | All passing |
-| **Total** | 129 tests | All passing |
+| **RegiLattice.Core.Tests** | 112 tests | All passing |
+| **RegiLattice.CLI.Tests** | 52 tests | All passing |
+| **RegiLattice.GUI.Tests** | 39 tests | All passing |
+| **Total** | 203 tests | All passing |
 
 ---
 
 ## Test File Inventory
 
-### Core Tests (93 tests)
+### Core Tests (112 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
@@ -27,7 +28,13 @@
 | `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing | ~15 |
 | `ServicesTests.cs` | Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ~23 |
 
-### GUI Tests (36 tests)
+### CLI Tests (52 tests)
+
+| Test File | Focus Area | Tests |
+|---|---|---|
+| `ParseArgsTests.cs` | CLI argument parsing, flags, options, scope, positional args | ~52 |
+
+### GUI Tests (39 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
@@ -38,7 +45,7 @@
 
 ## Coverage Collection
 
-`powershell
+```powershell
 # Collect coverage with coverlet
 dotnet test --collect:"XPlat Code Coverage"
 
@@ -48,13 +55,13 @@ reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coveragereport -re
 
 # View report
 Start-Process coveragereport\index.html
-`
+```
 
 ---
 
 ## Coverage Design Notes
 
-- **Tweak modules** (~1 490 tweaks across 68 .cs files): Registry operations are
+- **Tweak modules** (~1 981 tweaks across 71 .cs files): Registry operations are
   covered via RegOp declarative pattern validation. Actual `HKLM`/`HKCU` writes
   are intentionally **not** exercised in CI — they require admin and a real registry.
 - **Detection operations**: `DetectOps` are validated via `Evaluate()` in dry-run mode.

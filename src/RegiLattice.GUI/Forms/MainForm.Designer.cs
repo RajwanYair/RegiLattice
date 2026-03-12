@@ -133,9 +133,9 @@ partial class MainForm
         mnuHwInfo.Click += (_, _) => OnHardwareInfo();
 
         // ── ToolStrip ──────────────────────────────────────────────────────
-        _btnApply = new ToolStripButton("Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnRemove = new ToolStripButton("Remove") { ToolTipText = "Remove selected tweaks (Ctrl+Del)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnRefresh = new ToolStripButton("Refresh") { ToolTipText = "Reload all tweaks (F5)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnApply = new ToolStripButton("\u2714 Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnRemove = new ToolStripButton("\u2716 Remove") { ToolTipText = "Remove selected tweaks (Ctrl+Del)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnRefresh = new ToolStripButton("\U0001F504 Refresh") { ToolTipText = "Reload all tweaks (F5)", DisplayStyle = ToolStripItemDisplayStyle.Text };
 
         _filterLabel = new ToolStripLabel("Status:");
         _filterCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter tweaks by status" };
@@ -150,7 +150,7 @@ partial class MainForm
         _searchBox = new ToolStripTextBox { ToolTipText = "Search tweaks (Ctrl+F)", Size = new Size(200, 25) };
         _searchBox.TextChanged += OnSearchTextChanged;
 
-        _forceCheck = new ToolStripButton("Force")
+        _forceCheck = new ToolStripButton("\U0001F6E1 Force")
         {
             ToolTipText = "Bypass corporate network restrictions",
             CheckOnClick = true,
@@ -162,9 +162,9 @@ partial class MainForm
         _scopeCombo.Items.AddRange(new object[] { "All Scopes", "User (HKCU)", "Machine (HKLM)" });
         _scopeCombo.SelectedIndex = 0;
 
-        _btnSelectAll = new ToolStripButton("Sel All") { ToolTipText = "Select all (Ctrl+A)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnDeselectAll = new ToolStripButton("Desel All") { ToolTipText = "Deselect all (Ctrl+D)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnInvert = new ToolStripButton("Invert") { ToolTipText = "Invert selection (Ctrl+I)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnSelectAll = new ToolStripButton("\u2611 All") { ToolTipText = "Select all (Ctrl+A)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnDeselectAll = new ToolStripButton("\u2610 None") { ToolTipText = "Deselect all (Ctrl+D)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnInvert = new ToolStripButton("\U0001F504 Invert") { ToolTipText = "Invert selection (Ctrl+I)", DisplayStyle = ToolStripItemDisplayStyle.Text };
 
         _themeLabel = new ToolStripLabel("Theme:");
         _themeCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Switch colour theme" };
@@ -206,7 +206,17 @@ partial class MainForm
         _toolStrip.Dock = DockStyle.Top;
 
         // ── TreeView ───────────────────────────────────────────────────────
-        _treeView = new TreeView { Dock = DockStyle.Fill, ShowLines = true, Font = AppTheme.Regular };
+        _treeView = new TreeView
+        {
+            Dock = DockStyle.Fill,
+            ShowLines = false,
+            ShowRootLines = false,
+            Font = AppTheme.Regular,
+            BorderStyle = BorderStyle.None,
+            ItemHeight = 26,
+            FullRowSelect = true,
+            HotTracking = true,
+        };
         _treeView.AfterSelect += OnTreeAfterSelect;
 
         // ── ListView ───────────────────────────────────────────────────────
@@ -215,20 +225,22 @@ partial class MainForm
             Dock = DockStyle.Fill,
             View = View.Details,
             FullRowSelect = true,
-            GridLines = true,
+            GridLines = false,
             MultiSelect = true,
             CheckBoxes = true,
             Font = AppTheme.Regular,
+            BorderStyle = BorderStyle.None,
+            HotTracking = false,
         };
         _listView.Columns.AddRange(new[]
         {
-            new ColumnHeader { Text = "Label",       Width = 250 },
-            new ColumnHeader { Text = "Kind",        Width =  50 },
-            new ColumnHeader { Text = "Status",      Width =  80 },
-            new ColumnHeader { Text = "Scope",       Width =  70 },
+            new ColumnHeader { Text = "Label",       Width = 260 },
+            new ColumnHeader { Text = "Kind",        Width =  55 },
+            new ColumnHeader { Text = "Status",      Width =  90 },
+            new ColumnHeader { Text = "Scope",       Width =  80 },
             new ColumnHeader { Text = "Admin",       Width =  55 },
             new ColumnHeader { Text = "Corp Safe",   Width =  75 },
-            new ColumnHeader { Text = "Description", Width = 250 },
+            new ColumnHeader { Text = "Description", Width = 260 },
         });
 
         // ── Context menu on ListView ───────────────────────────────────────
@@ -265,18 +277,27 @@ partial class MainForm
             Dock = DockStyle.Fill,
             ForeColor = AppTheme.FgDim,
             Font = AppTheme.Regular,
-            Padding = new Padding(8, 4, 8, 4),
+            Padding = new Padding(10, 6, 10, 6),
             AutoSize = false,
             TextAlign = ContentAlignment.TopLeft,
-            Text = "Select a tweak to see details.",
+            Text = "\U0001F4CB Select a tweak to see details.",
         };
         _detailPanel = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 90,
+            Height = 105,
             BackColor = AppTheme.Surface,
             BorderStyle = BorderStyle.None,
             Padding = new Padding(4),
+        };
+        _detailPanel.Paint += (_, pe) =>
+        {
+            // Accent left bar
+            using var accentBrush = new SolidBrush(AppTheme.Accent);
+            pe.Graphics.FillRectangle(accentBrush, 0, 4, 3, _detailPanel.Height - 8);
+            // Top separator line
+            using var sepPen = new Pen(AppTheme.Separator, 1f);
+            pe.Graphics.DrawLine(sepPen, 0, 0, _detailPanel.Width, 0);
         };
         _detailPanel.Controls.Add(_detailLabel);
 
@@ -293,15 +314,22 @@ partial class MainForm
             ForeColor = AppTheme.Green,
             Font = AppTheme.Mono,
             BorderStyle = BorderStyle.None,
+            ScrollBars = RichTextBoxScrollBars.Vertical,
         };
         _logPanel = new Panel { Dock = DockStyle.Bottom, Height = 150, Visible = false };
+        _logPanel.Paint += (_, pe) =>
+        {
+            // Top separator line
+            using var sepPen = new Pen(AppTheme.Separator, 1f);
+            pe.Graphics.DrawLine(sepPen, 0, 0, _logPanel.Width, 0);
+        };
         _logPanel.Controls.Add(_logBox);
 
         // ── StatusStrip ────────────────────────────────────────────────────
-        _statusLabel = new ToolStripStatusLabel("Ready") { Spring = false };
-        _progressLabel = new ToolStripStatusLabel("") { Spring = true, TextAlign = ContentAlignment.MiddleLeft };
-        _progressBar = new ToolStripProgressBar { Visible = false, Size = new Size(150, 16), Style = ProgressBarStyle.Marquee };
-        _statusStrip = new StatusStrip();
+        _statusLabel = new ToolStripStatusLabel("Ready") { Spring = false, Font = AppTheme.Small };
+        _progressLabel = new ToolStripStatusLabel("") { Spring = true, TextAlign = ContentAlignment.MiddleLeft, Font = AppTheme.Small };
+        _progressBar = new ToolStripProgressBar { Visible = false, Size = new Size(180, 16), Style = ProgressBarStyle.Marquee };
+        _statusStrip = new StatusStrip { SizingGrip = false };
         _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar });
         _statusStrip.Dock = DockStyle.Bottom;
 

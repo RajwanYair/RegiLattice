@@ -6,6 +6,25 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **98 new tweaks** across 10 categories, bringing total to **1 981 tweaks**:
+  - Firewall (10→20), Recovery (10→20), Encryption (15→25)
+  - Windows Terminal (21→31), Java (21→31), USB & Peripherals (21→31)
+  - Voice Access & Speech (21→31), Snap & Multitasking (21→31)
+  - Screensaver & Lock (21→30), DNS & Networking Advanced (21→31)
+
+### Fixed
+
+- Fixed `uint` to `int` overflow in Encryption.cs `RegOp.SetDword` calls
+  using `unchecked((int)0xFFFFFFFF)`
+- Resolved 15 duplicate tweak IDs across 7 category modules
+
+### Changed
+
+- Updated all `.github/` documentation files with current statistics
+  (1 981 tweaks, 72 categories, 203 tests)
+
 ## [3.1.5] — 2025-07-20
 
 ### Added
@@ -21,7 +40,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - **16 broken TweakDef headers** restored after multi-edit consumed `new TweakDef` openers
-  — all 1 360 tweaks register correctly again
+  — all 1 981 tweaks register correctly again
 - **Build clean** — 0 warnings, 0 errors with `-warnaserror`
 
 ### Changed
@@ -41,7 +60,8 @@ that silently returned "Applied" without performing any action have been removed
 - **468 non-functional tweak stubs** across 66 modules — these had metadata (Id, Label,
   Category, Tags) but no ApplyOps, RemoveOps, DetectOps, or Action delegates. The engine
   silently returned `TweakResult.Applied` for these without performing any registry changes.
-- Tweak count reduced from ~1 828 to **1 360 verified functional tweaks**
+- Tweak count reduced from ~1 828 to **1 360 verified functional tweaks**; subsequently
+  expanded back to **1 981** through multiple tweak addition campaigns
 
 ### Added
 
@@ -103,8 +123,8 @@ C#/.NET 10 (WinForms, Microsoft.Win32.Registry). This is a clean-break major ver
 - **HardwareInfo** — CPU/GPU/RAM/disk detection, profile suggestion, hardware summary
 - **Package manager dialogs** — Scoop, pip, PowerShell module managers in GUI
 - **About dialog** — system info, hardware detection, shortcut reference
-- **129 xUnit tests** (93 Core + 36 GUI) — TweakDef, TweakEngine, RegistrySession,
-  Services, Theme, PackageManager validation
+- **129 xUnit tests** (93 Core + 36 GUI) at initial 2.0.0 release;
+  expanded to **203 tests** (112 Core + 52 CLI + 39 GUI) by v3.1.5
 - **winget manifests** — installer package for Windows Package Manager
 
 ### Changed

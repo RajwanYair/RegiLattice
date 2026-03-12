@@ -17,10 +17,12 @@ internal static class ToolVersionChecker
     /// <summary>Check all known external tools and return their status.</summary>
     internal static async Task<IReadOnlyList<ToolInfo>> CheckAllAsync(CancellationToken ct = default)
     {
+        string pythonExe = await FindPythonExeAsync(ct).ConfigureAwait(false);
+
         var tasks = new List<Task<ToolInfo>>
         {
             CheckToolAsync("PowerShell", "pwsh", ["-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"], ct),
-            CheckToolAsync("Python", FindPythonExe(), ["-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')"], ct),
+            CheckToolAsync("Python", pythonExe, ["-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')"], ct),
             CheckToolAsync("winget", "winget", ["--version"], ct),
             CheckToolAsync("Scoop", "powershell", ["-NoProfile", "-Command", "scoop --version | Select-Object -First 1"], ct),
             CheckToolAsync("Chocolatey", "choco", ["--version"], ct),
@@ -208,14 +210,13 @@ internal static class ToolVersionChecker
         return updates;
     }
 
-    private static string FindPythonExe()
+    private static async Task<string> FindPythonExeAsync(CancellationToken ct)
     {
         foreach (string exe in new[] { "python", "python3", "py" })
         {
             try
             {
-                var (code, _, _) = ShellRunner.RunAsync(exe, ["--version"], default)
-                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                var (code, _, _) = await ShellRunner.RunAsync(exe, ["--version"], ct).ConfigureAwait(false);
                 if (code == 0) return exe;
             }
             catch { /* not found */ }

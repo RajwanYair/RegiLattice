@@ -31,7 +31,7 @@ RegiLattice.sln
 │   │   ├── Registry/            # RegistrySession wrapper
 │   │   ├── Services/            # Analytics, AppConfig, CorporateGuard, Elevation,
 │   │   │                        #   HardwareInfo, Locale, Ratings
-│   │   └── Tweaks/              # 71 category modules, ~1,360 tweaks
+│   │   └── Tweaks/              # 71 category modules, ~1,981 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── Theme.cs             # 4-theme engine

@@ -1,7 +1,7 @@
 # RegiLattice — Development Guide
 
 > Local setup, workflow, testing, and contribution instructions for the C# codebase.
-> Last updated: 2025-07-20 · v3.0.0
+> Last updated: 2025-07-21 · v3.1.5
 
 ---
 
@@ -9,7 +9,7 @@
 
 | Requirement | Version | Notes |
 |---|---|---|
-| .NET SDK | 10.0+ | Required. Download from https://dot.net |
+| .NET SDK | 10.0+ | Required. Download from <https://dot.net> |
 | Git | 2.40+ | For version control |
 | Windows | 10/11 (build 19041+) | Required for registry operations and WinForms GUI |
 | VS Code | 1.85+ | Recommended editor with C# Dev Kit extension |
@@ -18,36 +18,37 @@
 
 ## Quick Start (Windows)
 
-`powershell
-# 1. Clone the repository
+```powershell
+# Clone the repository
 git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 
-# 2. Restore NuGet packages and build
+# Restore NuGet packages and build
 dotnet build RegiLattice.sln
 
-# 3. Run all tests
+# Run all tests
 dotnet test RegiLattice.sln --logger "console;verbosity=normal"
 
-# 4. Run the CLI
+# Run the CLI
 dotnet run --project src/RegiLattice.CLI -- --list | Select-Object -First 10
 
-# 5. Run the GUI
+# Run the GUI
 dotnet run --project src/RegiLattice.GUI
-`
+```
 
 ---
 
 ## Solution Structure
 
-`
+```
 RegiLattice.sln
 ├── src/RegiLattice.Core/      # Class library — engine, models, registry, services
 ├── src/RegiLattice.GUI/       # WinForms application (4 themes)
 ├── src/RegiLattice.CLI/       # Console application (25+ commands)
-├── tests/RegiLattice.Core.Tests/   # 93 xUnit tests
-└── tests/RegiLattice.GUI.Tests/    # 36 xUnit tests
-`
+├── tests/RegiLattice.Core.Tests/   # 112 xUnit tests
+├── tests/RegiLattice.CLI.Tests/    # 52 xUnit tests
+└── tests/RegiLattice.GUI.Tests/    # 39 xUnit tests
+```
 
 ---
 
@@ -87,7 +88,7 @@ See `.vscode/tasks.json`.
 2. Define registry key constants: `private const string Key = @"HKEY_...";`
 3. Add a `TweakDef` to the `Tweaks` list using `RegOp` factories:
 
-`csharp
+```csharp
 new TweakDef
 {
     Id = "cat-slug-tweak-name",
@@ -102,11 +103,11 @@ new TweakDef
     RemoveOps = [RegOp.DeleteValue(Key, "ValueName")],
     DetectOps = [RegOp.CheckDword(Key, "ValueName", 1)],
 }
-`
+```
 
-4. Ensure the `Id` is globally unique (kebab-case)
-5. Register the module in `TweakEngine.RegisterBuiltins()` (one line)
-6. Run: `dotnet test`
+1. Ensure the `Id` is globally unique (kebab-case)
+1. Register the module in `TweakEngine.RegisterBuiltins()` (one line)
+1. Run: `dotnet test`
 
 ---
 
@@ -114,28 +115,28 @@ new TweakDef
 
 Run the full test suite:
 
-`powershell
+```powershell
 dotnet test RegiLattice.sln --logger "console;verbosity=normal"
-`
+```
 
 Run a specific test project:
 
-`powershell
+```powershell
 dotnet test tests/RegiLattice.Core.Tests/
 dotnet test tests/RegiLattice.GUI.Tests/
-`
+```
 
 Run a specific test class:
 
-`powershell
+```powershell
 dotnet test --filter "FullyQualifiedName~TweakEngineTests"
-`
+```
 
 Collect coverage:
 
-`powershell
+```powershell
 dotnet test --collect:"XPlat Code Coverage"
-`
+```
 
 ---
 

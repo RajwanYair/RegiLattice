@@ -10,7 +10,7 @@ You are an expert at finding tweaks in the RegiLattice registry tweak toolkit.
 
 ## Context
 
-- RegiLattice has 1,360+ tweaks across 72 categories in `src/RegiLattice.Core/Tweaks/`
+- RegiLattice has 1,981+ tweaks across 72 categories in `src/RegiLattice.Core/Tweaks/`
 - Each tweak has: Id, Label, Category, Description, Tags, RegistryKeys, Scope
 - Tweak IDs follow `{category_slug}-{descriptive-name}` naming
 

@@ -1,16 +1,16 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-20 · v3.1.5 · 1 360 tweaks · 72 categories · 203 tests
+> Last updated: 2025-07-21 · v3.1.5 · 1 981 tweaks · 72 categories · 203 tests
 
 ---
 
-## Current State (as of v3.0.0)
+## Current State (as of v3.1.5)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 1 360 verified across 72 categories |
+| Tweaks | 1 981 verified across 72 categories |
 | Tests | 203 (112 Core + 52 CLI + 39 GUI), all passing |
 | GUI | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula) |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
