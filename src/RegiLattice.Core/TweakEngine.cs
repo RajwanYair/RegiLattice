@@ -242,15 +242,35 @@ public sealed class TweakEngine
             return td.IsApplicable();
 
         // Auto-detect from category
-        if (td.Category.Equals("WSL", StringComparison.OrdinalIgnoreCase))
-            return HardwareInfo.HasWslInstalled();
+        return td.Category switch
+        {
+            "WSL" => HardwareInfo.HasWslInstalled(),
+            "Virtualization" => HardwareInfo.HasHyperVAvailable(),
+            "Chrome" => HardwareInfo.IsChromeInstalled(),
+            "Firefox" => HardwareInfo.IsFirefoxInstalled(),
+            "Edge" => HardwareInfo.IsEdgeInstalled(),
+            "Java" => HardwareInfo.IsJavaInstalled(),
+            "Adobe" => HardwareInfo.IsAdobeInstalled(),
+            "LibreOffice" => HardwareInfo.IsLibreOfficeInstalled(),
+            "Office" => HardwareInfo.IsOfficeInstalled(),
+            "M365 Copilot" => HardwareInfo.IsOfficeInstalled(),
+            "RealVNC" => HardwareInfo.IsRealVncInstalled(),
+            "VS Code" => HardwareInfo.IsVsCodeInstalled(),
+            "Scoop Tools" => HardwareInfo.IsScoopInstalled(),
+            _ => AutoDetectFromTags(td),
+        };
+    }
 
-        if (td.Category.Equals("Virtualization", StringComparison.OrdinalIgnoreCase))
-            return HardwareInfo.HasHyperVAvailable();
-
-        // Auto-detect from tags
+    private static bool AutoDetectFromTags(TweakDef td)
+    {
         if (td.Tags.Contains("nvidia", StringComparer.OrdinalIgnoreCase))
             return HardwareInfo.HasNvidiaGpu();
+        if (td.Tags.Contains("amd-gpu", StringComparer.OrdinalIgnoreCase))
+            return HardwareInfo.HasAmdGpu();
+        if (td.Tags.Contains("docker", StringComparer.OrdinalIgnoreCase))
+            return HardwareInfo.IsDockerInstalled();
+        if (td.Tags.Contains("laptop", StringComparer.OrdinalIgnoreCase))
+            return HardwareInfo.HasBatteryPresent();
 
         return true;
     }
@@ -307,6 +327,31 @@ public sealed class TweakEngine
         catch (Exception ex)
         {
             _session.WriteLog($"ERROR removing {td.Id}: {ex.Message}");
+            return TweakResult.Error;
+        }
+    }
+
+    /// <summary>
+    /// Update a package-manager tweak (e.g. scoop update, pip upgrade).
+    /// Returns <see cref="TweakResult.Applied"/> on success, or <see cref="TweakResult.Error"/> on failure.
+    /// Falls back to <see cref="Apply"/> if no <see cref="TweakDef.UpdateAction"/> is defined.
+    /// </summary>
+    public TweakResult Update(TweakDef td, bool requireAdmin = true, bool forceCorp = false)
+    {
+        if (td.UpdateAction is null)
+            return Apply(td, requireAdmin, forceCorp);
+
+        if (!forceCorp && !td.CorpSafe && CorporateGuard.IsCorporateNetwork())
+            return TweakResult.SkippedCorp;
+
+        try
+        {
+            td.UpdateAction(requireAdmin);
+            return TweakResult.Applied;
+        }
+        catch (Exception ex)
+        {
+            _session.WriteLog($"ERROR updating {td.Id}: {ex.Message}");
             return TweakResult.Error;
         }
     }

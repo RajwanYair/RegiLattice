@@ -88,6 +88,12 @@ public sealed class TweakDef
     public Action<bool>? RemoveAction { get; init; }
     public Func<bool>? DetectAction { get; init; }
 
+    /// <summary>
+    /// Optional update action for package-manager tweaks (e.g. scoop update, pip upgrade).
+    /// Only meaningful for <see cref="TweakKind.PackageManager"/> tweaks.
+    /// </summary>
+    public Action<bool>? UpdateAction { get; init; }
+
     /// <summary>Override the auto-detected TweakKind (set on tweaks with ApplyAction).</summary>
     public TweakKind? KindHint { get; init; }
 

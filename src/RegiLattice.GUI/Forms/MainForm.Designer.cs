@@ -104,8 +104,9 @@ partial class MainForm
         mnuView.DropDownItems.AddRange(new ToolStripItem[] { mnuToggleLog, new ToolStripSeparator(), mnuExpandAll });
 
         var mnuAbout = new ToolStripMenuItem("About RegiLattice...");
+        var mnuHwInfo = new ToolStripMenuItem("Hardware Info...");
         var mnuHelp = new ToolStripMenuItem("&Help");
-        mnuHelp.DropDownItems.Add(mnuAbout);
+        mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuHwInfo, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
         _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuTools, mnuView, mnuHelp });
@@ -129,6 +130,7 @@ partial class MainForm
         mnuToggleLog.Click += (_, _) => ToggleLogPanel();
         mnuExpandAll.Click += (_, _) => _treeView.ExpandAll();
         mnuAbout.Click += (_, _) => OnAbout();
+        mnuHwInfo.Click += (_, _) => OnHardwareInfo();
 
         // ── ToolStrip ──────────────────────────────────────────────────────
         _btnApply = new ToolStripButton("Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", DisplayStyle = ToolStripItemDisplayStyle.Text };
@@ -137,7 +139,7 @@ partial class MainForm
 
         _filterLabel = new ToolStripLabel("Status:");
         _filterCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter tweaks by status" };
-        _filterCombo.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Unknown" });
+        _filterCombo.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Default", "Unknown", "Errors" });
         _filterCombo.SelectedIndex = 0;
 
         _profileLabel = new ToolStripLabel("Profile:");
