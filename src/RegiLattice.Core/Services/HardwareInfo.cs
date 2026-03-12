@@ -98,6 +98,83 @@ public static class HardwareInfo
     /// <summary>Returns true if Hyper-V is available.</summary>
     public static bool HasHyperVAvailable() => DetectHardware().HasHyperV;
 
+    // ── Software detection (for TweakDef.IsApplicable) ─────────────────
+
+    /// <summary>Returns true if Google Chrome is installed.</summary>
+    public static bool IsChromeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe",
+            null, null) is not null;
+
+    /// <summary>Returns true if Mozilla Firefox is installed.</summary>
+    public static bool IsFirefoxInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\firefox.exe",
+            null, null) is not null;
+
+    /// <summary>Returns true if Microsoft Edge is installed.</summary>
+    public static bool IsEdgeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe",
+            null, null) is not null;
+
+    /// <summary>Returns true if Java (JRE/JDK) is installed.</summary>
+    public static bool IsJavaInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment",
+            "CurrentVersion", null) is not null ||
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\JDK",
+            "CurrentVersion", null) is not null;
+
+    /// <summary>Returns true if Docker Desktop is installed.</summary>
+    public static bool IsDockerInstalled() =>
+        File.Exists(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+            "Docker", "Docker", "Docker Desktop.exe"));
+
+    /// <summary>Returns true if Adobe Creative Cloud is installed.</summary>
+    public static bool IsAdobeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe Creative Cloud",
+            null, null) is not null ||
+        Directory.Exists(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+            "Adobe"));
+
+    /// <summary>Returns true if LibreOffice is installed.</summary>
+    public static bool IsLibreOfficeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\LibreOffice",
+            null, null) is not null;
+
+    /// <summary>Returns true if Microsoft Office is installed.</summary>
+    public static bool IsOfficeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\ClickToRun",
+            "InstallPath", null) is not null;
+
+    /// <summary>Returns true if RealVNC is installed.</summary>
+    public static bool IsRealVncInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC",
+            null, null) is not null;
+
+    /// <summary>Returns true if VS Code is installed.</summary>
+    public static bool IsVsCodeInstalled() =>
+        Microsoft.Win32.Registry.GetValue(
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\code.cmd",
+            null, null) is not null ||
+        File.Exists(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Programs", "Microsoft VS Code", "Code.exe"));
+
+    /// <summary>Returns true if Scoop package manager is installed.</summary>
+    public static bool IsScoopInstalled() =>
+        Directory.Exists(Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "scoop", "shims"));
+
     public static CpuInfo DetectCpu()
     {
         var name = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown";

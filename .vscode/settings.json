@@ -2,7 +2,7 @@
   // ── C# / .NET ───────────────────────────────────────────────────────
   "dotnet.defaultSolution": "RegiLattice.sln",
   "[csharp]": {
-    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.defaultFormatter": "csharpier.csharpier-vscode",
     "editor.formatOnSave": true
   },
   // ── PowerShell ──────────────────────────────────────────────────────
@@ -51,9 +51,16 @@
     }
   },
   "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "both",
+  "terminal.integrated.shellIntegration.history": 500,
   "terminal.integrated.cwd": "${workspaceFolder}",
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.enablePersistentSessions": true,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.action.terminal.focusFind",
+    "workbench.action.togglePanel"
+  ],
+  "terminal.integrated.enableImages": true,
   // Ensure Copilot chat agent terminals also see dotnet tools
   "github.copilot.chat.terminalChatLocation": "terminal",
   // ── Git ─────────────────────────────────────────────────────────────

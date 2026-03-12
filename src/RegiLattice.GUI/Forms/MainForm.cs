@@ -289,6 +289,17 @@ public partial class MainForm : Form
         }
         _treeView.EndUpdate();
 
+        // Auto-size splitter to fit longest category label
+        int maxWidth = 0;
+        foreach (TreeNode n in _treeView.Nodes)
+        {
+            var sz = TextRenderer.MeasureText(n.Text, _treeView.Font);
+            if (sz.Width > maxWidth) maxWidth = sz.Width;
+        }
+        int desired = maxWidth + 40; // padding for icons + scrollbar
+        if (desired >= 180 && desired <= _split.Width / 2)
+            _split.SplitterDistance = desired;
+
         if (selectNode is not null)
         {
             _treeView.SelectedNode = selectNode;
@@ -322,13 +333,15 @@ public partial class MainForm : Form
         // Status filter
         if (filter != "All")
         {
-            TweakResult target = filter switch
+            filtered = filter switch
             {
-                "Applied" => TweakResult.Applied,
-                "Not Applied" => TweakResult.NotApplied,
-                _ => TweakResult.Unknown,
+                "Applied" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied),
+                "Not Applied" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.NotApplied),
+                "Default" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.NotApplied),
+                "Errors" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Error),
+                "Unknown" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Unknown),
+                _ => filtered,
             };
-            filtered = filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
         }
 
         // Scope filter
@@ -351,6 +364,9 @@ public partial class MainForm : Form
                 t.Description.Contains(search, StringComparison.OrdinalIgnoreCase));
         }
 
+        // Admin-only dimming
+        bool isAdmin = Elevation.IsAdmin();
+
         foreach (var td in filtered)
         {
             bool applicable = !_inapplicableIds.Contains(td.Id);
@@ -363,9 +379,10 @@ public partial class MainForm : Form
                 _ => "Unknown",
             };
 
-            Color itemFg = applicable ? AppTheme.Fg : AppTheme.FgDim;
+            bool dimmed = !applicable || (!isAdmin && td.NeedsAdmin && td.Scope != TweakScope.User);
+            Color itemFg = dimmed ? AppTheme.FgDim : AppTheme.Fg;
             var item = new ListViewItem(td.Label) { Tag = td, UseItemStyleForSubItems = false, ForeColor = itemFg };
-            Color statusColor = !applicable ? AppTheme.FgDim : status switch
+            Color statusColor = dimmed ? AppTheme.FgDim : status switch
             {
                 TweakResult.Applied => AppTheme.Green,
                 TweakResult.NotApplied => AppTheme.Red,
@@ -625,6 +642,31 @@ public partial class MainForm : Form
         bool isCorp = CorporateGuard.IsCorporateNetwork();
         using var dlg = new AboutDialog(_engine.TweakCount, _engine.CategoryCount, isCorp);
         dlg.ShowDialog(this);
+    }
+
+    private void OnHardwareInfo()
+    {
+        try
+        {
+            string summary = HardwareInfo.Summary();
+            var hw = HardwareInfo.DetectHardware();
+            string details =
+                $"CPU: {hw.Cpu.Name} ({hw.Cpu.PhysicalCores}C / {hw.Cpu.LogicalCores}T, {hw.Cpu.Architecture})\n" +
+                $"RAM: {hw.Memory.TotalMb / 1024} GB ({hw.Memory.AvailableMb / 1024} GB available)\n" +
+                $"GPU: {string.Join(", ", hw.Gpus.Select(g => $"{g.Name} ({g.AdapterRamMb} MB)"))}\n" +
+                $"Disk: {hw.Disk.Drive} — {hw.Disk.TotalGb} GB total, {hw.Disk.FreeGb} GB free\n\n" +
+                $"Windows Build: {hw.WindowsBuild}\n" +
+                $"Hyper-V: {(hw.HasHyperV ? "Yes" : "No")}   |   WSL: {(hw.HasWsl ? "Yes" : "No")}\n" +
+                $"TPM: {(hw.HasTpm ? "Yes" : "No")}   |   Secure Boot: {(hw.HasSecureBoot ? "Yes" : "No")}\n" +
+                $"Battery: {(hw.HasBattery ? "Yes (Laptop)" : "No (Desktop)")}\n\n" +
+                $"Suggested Profile: {HardwareInfo.SuggestProfile()}";
+            MessageBox.Show(details, "Hardware Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to detect hardware:\n{ex.Message}", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void UpdateCounters()
