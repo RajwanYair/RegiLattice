@@ -12,20 +12,25 @@ internal static partial class PSModuleManager
     {
         try
         {
-            var (code, stdout, _) = ShellRunner.RunPowerShellAsync(
-                "Get-Module PowerShellGet -ListAvailable | Select-Object -First 1 -ExpandProperty Version",
-                default).ConfigureAwait(false).GetAwaiter().GetResult();
+            var (code, stdout, _) = ShellRunner
+                .RunPowerShellAsync("Get-Module PowerShellGet -ListAvailable | Select-Object -First 1 -ExpandProperty Version", default)
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
             return code == 0 && stdout.Trim().Length > 0;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>Installs or updates PowerShellGet module.</summary>
     internal static async Task InstallPowerShellGetAsync(CancellationToken ct = default)
     {
-        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
-            "Install-Module PowerShellGet -Force -AllowClobber -Scope CurrentUser",
-            ct, TimeSpan.FromMinutes(2)).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunPowerShellAsync("Install-Module PowerShellGet -Force -AllowClobber -Scope CurrentUser", ct, TimeSpan.FromMinutes(2))
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"PowerShellGet installation failed: {stderr.Trim()}");
     }
@@ -33,9 +38,10 @@ internal static partial class PSModuleManager
     internal static async Task<List<string>> ListInstalledAsync(string scope = "CurrentUser", CancellationToken ct = default)
     {
         // Get-Module -ListAvailable shows all installed modules (not just PSGallery ones)
-        string script = scope == "AllUsers"
-            ? "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique | Sort-Object"
-            : "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Where-Object { $_.ModuleBase -like \"$($env:USERPROFILE)*\" -or $_.ModuleBase -like \"$($env:HOME)*\" } | Select-Object -ExpandProperty Name -Unique | Sort-Object";
+        string script =
+            scope == "AllUsers"
+                ? "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique | Sort-Object"
+                : "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Where-Object { $_.ModuleBase -like \"$($env:USERPROFILE)*\" -or $_.ModuleBase -like \"$($env:HOME)*\" } | Select-Object -ExpandProperty Name -Unique | Sort-Object";
         var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct).ConfigureAwait(false);
 
         return stdout
@@ -90,11 +96,16 @@ internal static partial class PSModuleManager
         return scope;
     }
 
+    /// <summary>Returns just the module names of installed modules in the given scope.</summary>
+    internal static async Task<HashSet<string>> ListInstalledNamesAsync(string scope = "CurrentUser", CancellationToken ct = default)
+    {
+        var list = await ListInstalledAsync(scope, ct).ConfigureAwait(false);
+        return new HashSet<string>(list, StringComparer.OrdinalIgnoreCase);
+    }
+
     internal static async Task<List<string>> ListOutdatedAsync(string scope = "CurrentUser", CancellationToken ct = default)
     {
-        string scopeFilter = scope is "CurrentUser" or "AllUsers"
-            ? $"-Scope {scope}"
-            : string.Empty;
+        string scopeFilter = scope is "CurrentUser" or "AllUsers" ? $"-Scope {scope}" : string.Empty;
         string script = $$"""
             Get-InstalledModule {{scopeFilter}} | ForEach-Object {
                 $online = Find-Module -Name $_.Name -ErrorAction SilentlyContinue
@@ -114,6 +125,16 @@ internal static partial class PSModuleManager
     }
 
     internal static readonly string[] PopularModules =
-        ["PSReadLine", "posh-git", "PowerShellGet", "Az", "Microsoft.Graph",
-         "Terminal-Icons", "oh-my-posh", "PSScriptAnalyzer", "Pester", "SqlServer"];
+    [
+        "PSReadLine",
+        "posh-git",
+        "PowerShellGet",
+        "Az",
+        "Microsoft.Graph",
+        "Terminal-Icons",
+        "oh-my-posh",
+        "PSScriptAnalyzer",
+        "Pester",
+        "SqlServer",
+    ];
 }

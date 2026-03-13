@@ -2,19 +2,23 @@ using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;
 
-/// <summary>PowerShell module manager dialog (via PSGet / Install-Module).</summary>
+/// <summary>PowerShell module manager dialog with ListView, per-item outdated, close button.</summary>
 internal sealed class PSModuleManagerDialog : Form
 {
-    private readonly ListBox _lstInstalled = new();
+    private readonly ListView _lstInstalled = new();
     private readonly TextBox _txtName = new();
     private readonly ComboBox _cmbScope = new();
     private readonly Label _lblStatus = new();
     private readonly Label _lblOutdated = new();
+    private readonly FlowLayoutPanel _flowQuick = new();
     private readonly Button _btnRefresh = new();
     private readonly Button _btnInstall = new();
     private readonly Button _btnRemove = new();
     private readonly Button _btnUpdate = new();
+    private readonly Button _btnClose = new();
 
+    private HashSet<string> _installedNames = new(StringComparer.OrdinalIgnoreCase);
+    private HashSet<string> _outdatedNames = new(StringComparer.OrdinalIgnoreCase);
     private CancellationTokenSource _cts = new();
     private bool _prereqMet;
 
@@ -24,14 +28,18 @@ internal sealed class PSModuleManagerDialog : Form
         Icon = AppIcons.PSModuleIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
-        MinimumSize = new Size(560, 500);
-        ClientSize = new Size(600, 580);
+        MinimumSize = new Size(600, 520);
+        ClientSize = new Size(640, 600);
         BackColor = AppTheme.Bg;
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
 
         BuildLayout();
-        Load += async (_, _) => { if (_prereqMet) await RefreshAsync(); };
+        Load += async (_, _) =>
+        {
+            if (_prereqMet)
+                await RefreshAsync();
+        };
         FormClosed += (_, _) => _cts.Cancel();
     }
 
@@ -64,8 +72,20 @@ internal sealed class PSModuleManagerDialog : Form
         _lblOutdated.Padding = new Padding(8, 0, 0, 0);
         _lblOutdated.Font = AppTheme.Regular;
 
-        var scopePanel = new Panel { Dock = DockStyle.Top, Height = 34, BackColor = AppTheme.Surface, Padding = new Padding(8, 4, 8, 4) };
-        var lblScope = new Label { Text = "Scope:", AutoSize = true, Location = new Point(8, 8), ForeColor = AppTheme.Fg };
+        var scopePanel = new Panel
+        {
+            Dock = DockStyle.Top,
+            Height = 34,
+            BackColor = AppTheme.Surface,
+            Padding = new Padding(8, 4, 8, 4),
+        };
+        var lblScope = new Label
+        {
+            Text = "Scope:",
+            AutoSize = true,
+            Location = new Point(8, 8),
+            ForeColor = AppTheme.Fg,
+        };
         _cmbScope.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbScope.Items.AddRange(["CurrentUser", "AllUsers"]);
         _cmbScope.SelectedIndex = 0;
@@ -77,76 +97,93 @@ internal sealed class PSModuleManagerDialog : Form
         _cmbScope.SelectedIndexChanged += async (_, _) => await RefreshAsync();
         scopePanel.Controls.AddRange([lblScope, _cmbScope]);
 
-        AppTheme.Apply(_lstInstalled);
+        // ListView with Module, Version, Status columns
         _lstInstalled.Dock = DockStyle.Fill;
+        _lstInstalled.View = View.Details;
+        _lstInstalled.FullRowSelect = true;
+        _lstInstalled.GridLines = false;
+        _lstInstalled.MultiSelect = false;
+        _lstInstalled.BackColor = AppTheme.Bg;
+        _lstInstalled.ForeColor = AppTheme.Fg;
         _lstInstalled.Font = AppTheme.Mono;
-        _lstInstalled.SelectionMode = SelectionMode.One;
+        _lstInstalled.BorderStyle = BorderStyle.None;
+        _lstInstalled.Columns.AddRange([
+            new ColumnHeader { Text = "Module", Width = 220 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ]);
         _lstInstalled.SelectedIndexChanged += (_, _) =>
         {
-            if (_lstInstalled.SelectedItem is string name) _txtName.Text = name;
+            if (_lstInstalled.FocusedItem is { Tag: string name })
+                _txtName.Text = name;
         };
 
-        var ctrlPanel = new Panel { Dock = DockStyle.Bottom, Height = 42, BackColor = AppTheme.Surface };
+        var ctrlPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 80,
+            BackColor = AppTheme.Surface,
+        };
         _txtName.Width = 190;
         _txtName.BackColor = AppTheme.Overlay;
         _txtName.ForeColor = AppTheme.Fg;
         _txtName.PlaceholderText = "module name";
         _txtName.Location = new Point(8, 8);
-        _txtName.KeyDown += (_, e) => { if (e.KeyCode == Keys.Enter) { _ = InstallAsync(); e.Handled = true; } };
-
-        void StyleBtn(Button b, Color bg, string t, int x)
+        _txtName.KeyDown += (_, e) =>
         {
-            b.Text = t; b.BackColor = bg; b.ForeColor = AppTheme.Bg;
-            b.FlatStyle = FlatStyle.Flat; b.Location = new Point(x, 7); b.Size = new Size(75, 27);
+            if (e.KeyCode == Keys.Enter)
+            {
+                _ = InstallAsync();
+                e.Handled = true;
+            }
+        };
+
+        void StyleBtn(Button b, Color bg, string t, int x, int y)
+        {
+            b.Text = t;
+            b.BackColor = bg;
+            b.ForeColor = AppTheme.Bg;
+            b.FlatStyle = FlatStyle.Flat;
+            b.Location = new Point(x, y);
+            b.Size = new Size(80, 27);
         }
 
-        StyleBtn(_btnInstall, AppTheme.Green, "Install", 206);
-        StyleBtn(_btnRemove, AppTheme.Red, "Remove", 286);
-        StyleBtn(_btnUpdate, AppTheme.Yellow, "Update", 366);
-        StyleBtn(_btnRefresh, AppTheme.Accent, "Refresh", 446);
+        StyleBtn(_btnInstall, AppTheme.Green, "Install", 206, 7);
+        StyleBtn(_btnRemove, AppTheme.Red, "Remove", 292, 7);
+        StyleBtn(_btnUpdate, AppTheme.Yellow, "Update", 378, 7);
+        StyleBtn(_btnRefresh, AppTheme.Accent, "Refresh", 464, 7);
+
+        _btnClose.Text = "Close";
+        _btnClose.BackColor = AppTheme.Overlay;
+        _btnClose.ForeColor = AppTheme.Fg;
+        _btnClose.FlatStyle = FlatStyle.Flat;
+        _btnClose.Location = new Point(464, 42);
+        _btnClose.Size = new Size(80, 27);
+        _btnClose.Click += (_, _) => Close();
 
         _btnInstall.Click += async (_, _) => await InstallAsync();
         _btnRemove.Click += async (_, _) => await RemoveAsync();
         _btnUpdate.Click += async (_, _) => await UpdateAsync();
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
 
-        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpdate, _btnRefresh]);
+        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpdate, _btnRefresh, _btnClose]);
 
         var quickLabel = new Label
         {
-            Text = "Quick install:",
+            Text = "Quick install (not yet installed):",
             ForeColor = AppTheme.FgDim,
             Dock = DockStyle.Top,
             Height = 22,
             Padding = new Padding(8, 4, 0, 0),
         };
 
-        var flowQuick = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Top,
-            Height = 80,
-            BackColor = AppTheme.Surface,
-            Padding = new Padding(4),
-            AutoScroll = true,
-        };
-        foreach (string mod in PSModuleManager.PopularModules)
-        {
-            string captured = mod;
-            var btn = new Button
-            {
-                Text = captured,
-                BackColor = AppTheme.Overlay,
-                ForeColor = AppTheme.Fg,
-                FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(3),
-                AutoSize = true,
-            };
-            btn.FlatAppearance.BorderColor = AppTheme.Accent;
-            btn.Click += (_, _) => _txtName.Text = captured;
-            flowQuick.Controls.Add(btn);
-        }
+        _flowQuick.Dock = DockStyle.Top;
+        _flowQuick.Height = 80;
+        _flowQuick.BackColor = AppTheme.Surface;
+        _flowQuick.Padding = new Padding(4);
+        _flowQuick.AutoScroll = true;
 
-        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, scopePanel, _lblOutdated, _lblStatus, prereqPanel, lblTitle]);
+        Controls.AddRange([_lstInstalled, ctrlPanel, _flowQuick, quickLabel, scopePanel, _lblOutdated, _lblStatus, prereqPanel, lblTitle]);
 
         if (!_prereqMet)
             SetMainEnabled(false);
@@ -159,10 +196,19 @@ internal sealed class PSModuleManagerDialog : Form
         try
         {
             var list = await PSModuleManager.ListInstalledAsync(scope, _cts.Token);
+            _installedNames = await PSModuleManager.ListInstalledNamesAsync(scope, _cts.Token);
             _lstInstalled.Items.Clear();
-            foreach (var m in list) _lstInstalled.Items.Add(m);
-            _lblStatus.Text = $"Scope: {scope} - {list.Count} module(s)";
+            foreach (var m in list)
+            {
+                var item = new ListViewItem(m) { Tag = m };
+                item.SubItems.Add(""); // Version placeholder
+                item.SubItems.Add("Installed");
+                item.ForeColor = AppTheme.Fg;
+                _lstInstalled.Items.Add(item);
+            }
+            _lblStatus.Text = $"Scope: {scope} — {list.Count} module(s)";
             _lblStatus.ForeColor = AppTheme.Fg;
+            RebuildQuickInstallButtons();
             _ = CheckOutdatedAsync(scope);
         }
         catch (Exception ex)
@@ -170,7 +216,10 @@ internal sealed class PSModuleManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task CheckOutdatedAsync(string scope)
@@ -178,9 +227,16 @@ internal sealed class PSModuleManagerDialog : Form
         try
         {
             var outdated = await PSModuleManager.ListOutdatedAsync(scope, _cts.Token);
-            _lblOutdated.Text = outdated.Count > 0
-                ? $"\u26A0 {outdated.Count} update(s) available"
-                : "\u2714 All modules up to date";
+            _outdatedNames = [.. outdated];
+            foreach (ListViewItem item in _lstInstalled.Items)
+            {
+                if (item.Tag is string name && _outdatedNames.Contains(name))
+                {
+                    item.SubItems[2].Text = "\u26A0 Update available";
+                    item.ForeColor = AppTheme.Yellow;
+                }
+            }
+            _lblOutdated.Text = outdated.Count > 0 ? $"\u26A0 {outdated.Count} update(s) available" : "\u2714 All modules up to date";
             _lblOutdated.ForeColor = outdated.Count > 0 ? AppTheme.Yellow : AppTheme.Green;
         }
         catch
@@ -189,11 +245,35 @@ internal sealed class PSModuleManagerDialog : Form
         }
     }
 
+    private void RebuildQuickInstallButtons()
+    {
+        _flowQuick.Controls.Clear();
+        foreach (string mod in PSModuleManager.PopularModules)
+        {
+            if (_installedNames.Contains(mod))
+                continue;
+            string captured = mod;
+            var btn = new Button
+            {
+                Text = captured,
+                BackColor = AppTheme.Overlay,
+                ForeColor = AppTheme.Fg,
+                FlatStyle = FlatStyle.Flat,
+                Margin = new Padding(3),
+                AutoSize = true,
+            };
+            btn.FlatAppearance.BorderColor = AppTheme.Accent;
+            btn.Click += (_, _) => _txtName.Text = captured;
+            _flowQuick.Controls.Add(btn);
+        }
+    }
+
     private async Task InstallAsync()
     {
         string name = _txtName.Text.Trim();
         string scope = _cmbScope.SelectedItem?.ToString() ?? "CurrentUser";
-        if (name.Length == 0) return;
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Installing {name} ({scope})...");
         try
         {
@@ -205,13 +285,17 @@ internal sealed class PSModuleManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task RemoveAsync()
     {
-        string name = (_lstInstalled.SelectedItem as string ?? _txtName.Text).Trim();
-        if (name.Length == 0) return;
+        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Removing {name}...");
         try
         {
@@ -223,14 +307,18 @@ internal sealed class PSModuleManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task UpdateAsync()
     {
-        string name = (_lstInstalled.SelectedItem as string ?? _txtName.Text).Trim();
+        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
         string scope = _cmbScope.SelectedItem?.ToString() ?? "CurrentUser";
-        if (name.Length == 0) return;
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Updating {name} ({scope})...");
         try
         {
@@ -242,7 +330,10 @@ internal sealed class PSModuleManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private void SetBusy(bool busy, string? message = null)

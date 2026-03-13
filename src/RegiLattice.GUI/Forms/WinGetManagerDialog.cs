@@ -2,19 +2,23 @@ using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;
 
-/// <summary>WinGet (Windows Package Manager) dialog.</summary>
+/// <summary>WinGet (Windows Package Manager) dialog with ListView, per-item outdated, close button.</summary>
 internal sealed class WinGetManagerDialog : Form
 {
-    private readonly ListBox _lstInstalled = new();
+    private readonly ListView _lstInstalled = new();
     private readonly TextBox _txtName = new();
     private readonly Label _lblStatus = new();
     private readonly Label _lblOutdated = new();
+    private readonly FlowLayoutPanel _flowQuick = new();
     private readonly Button _btnRefresh = new();
     private readonly Button _btnInstall = new();
     private readonly Button _btnRemove = new();
     private readonly Button _btnUpgrade = new();
     private readonly Button _btnSearch = new();
+    private readonly Button _btnClose = new();
 
+    private HashSet<string> _installedNames = new(StringComparer.OrdinalIgnoreCase);
+    private HashSet<string> _outdatedNames = new(StringComparer.OrdinalIgnoreCase);
     private CancellationTokenSource _cts = new();
     private bool _prereqMet;
 
@@ -31,7 +35,11 @@ internal sealed class WinGetManagerDialog : Form
         Font = AppTheme.Regular;
 
         BuildLayout();
-        Load += async (_, _) => { if (_prereqMet) await RefreshAsync(); };
+        Load += async (_, _) =>
+        {
+            if (_prereqMet)
+                await RefreshAsync();
+        };
         FormClosed += (_, _) => _cts.Cancel();
     }
 
@@ -62,35 +70,70 @@ internal sealed class WinGetManagerDialog : Form
         _lblOutdated.Padding = new Padding(8, 0, 0, 0);
         _lblOutdated.Font = AppTheme.Regular;
 
-        AppTheme.Apply(_lstInstalled);
+        // ListView with Package, Version, Status columns
         _lstInstalled.Dock = DockStyle.Fill;
+        _lstInstalled.View = View.Details;
+        _lstInstalled.FullRowSelect = true;
+        _lstInstalled.GridLines = false;
+        _lstInstalled.MultiSelect = false;
+        _lstInstalled.BackColor = AppTheme.Bg;
+        _lstInstalled.ForeColor = AppTheme.Fg;
         _lstInstalled.Font = AppTheme.Mono;
-        _lstInstalled.SelectionMode = SelectionMode.One;
+        _lstInstalled.BorderStyle = BorderStyle.None;
+        _lstInstalled.Columns.AddRange([
+            new ColumnHeader { Text = "Package", Width = 240 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ]);
         _lstInstalled.SelectedIndexChanged += (_, _) =>
         {
-            if (_lstInstalled.SelectedItem is string name)
+            if (_lstInstalled.FocusedItem is { Tag: string name })
                 _txtName.Text = name;
         };
 
-        var ctrlPanel = new Panel { Dock = DockStyle.Bottom, Height = 42, BackColor = AppTheme.Surface };
+        var ctrlPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 80,
+            BackColor = AppTheme.Surface,
+        };
         _txtName.Width = 170;
         _txtName.BackColor = AppTheme.Overlay;
         _txtName.ForeColor = AppTheme.Fg;
         _txtName.PlaceholderText = "package id (e.g. Git.Git)";
         _txtName.Location = new Point(8, 8);
-        _txtName.KeyDown += (_, e) => { if (e.KeyCode == Keys.Enter) { _ = InstallAsync(); e.Handled = true; } };
-
-        void StyleBtn(Button b, Color bg, string t, int x)
+        _txtName.KeyDown += (_, e) =>
         {
-            b.Text = t; b.BackColor = bg; b.ForeColor = AppTheme.Bg;
-            b.FlatStyle = FlatStyle.Flat; b.Location = new Point(x, 7); b.Size = new Size(75, 27);
+            if (e.KeyCode == Keys.Enter)
+            {
+                _ = InstallAsync();
+                e.Handled = true;
+            }
+        };
+
+        void StyleBtn(Button b, Color bg, string t, int x, int y)
+        {
+            b.Text = t;
+            b.BackColor = bg;
+            b.ForeColor = AppTheme.Bg;
+            b.FlatStyle = FlatStyle.Flat;
+            b.Location = new Point(x, y);
+            b.Size = new Size(80, 27);
         }
 
-        StyleBtn(_btnInstall, AppTheme.Green, "Install", 186);
-        StyleBtn(_btnRemove, AppTheme.Red, "Remove", 266);
-        StyleBtn(_btnUpgrade, AppTheme.Yellow, "Upgrade", 346);
-        StyleBtn(_btnSearch, AppTheme.Accent, "Search", 426);
-        StyleBtn(_btnRefresh, AppTheme.Accent, "Refresh", 506);
+        StyleBtn(_btnInstall, AppTheme.Green, "Install", 186, 7);
+        StyleBtn(_btnRemove, AppTheme.Red, "Remove", 272, 7);
+        StyleBtn(_btnUpgrade, AppTheme.Yellow, "Upgrade", 358, 7);
+        StyleBtn(_btnSearch, AppTheme.Accent, "Search", 444, 7);
+        StyleBtn(_btnRefresh, AppTheme.Accent, "Refresh", 530, 7);
+
+        _btnClose.Text = "Close";
+        _btnClose.BackColor = AppTheme.Overlay;
+        _btnClose.ForeColor = AppTheme.Fg;
+        _btnClose.FlatStyle = FlatStyle.Flat;
+        _btnClose.Location = new Point(530, 42);
+        _btnClose.Size = new Size(80, 27);
+        _btnClose.Click += (_, _) => Close();
 
         _btnInstall.Click += async (_, _) => await InstallAsync();
         _btnRemove.Click += async (_, _) => await RemoveAsync();
@@ -98,27 +141,37 @@ internal sealed class WinGetManagerDialog : Form
         _btnSearch.Click += async (_, _) => await SearchAsync();
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
 
-        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpgrade, _btnSearch, _btnRefresh]);
+        ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpgrade, _btnSearch, _btnRefresh, _btnClose]);
 
         var quickLabel = new Label
         {
-            Text = "Quick install:",
+            Text = "Quick install (not yet installed):",
             ForeColor = AppTheme.FgDim,
             Dock = DockStyle.Top,
             Height = 22,
             Padding = new Padding(8, 4, 0, 0),
         };
 
-        var flowQuick = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Top,
-            Height = 80,
-            BackColor = AppTheme.Surface,
-            Padding = new Padding(4),
-            AutoScroll = true,
-        };
+        _flowQuick.Dock = DockStyle.Top;
+        _flowQuick.Height = 80;
+        _flowQuick.BackColor = AppTheme.Surface;
+        _flowQuick.Padding = new Padding(4);
+        _flowQuick.AutoScroll = true;
+
+        Controls.AddRange([_lstInstalled, ctrlPanel, _flowQuick, quickLabel, _lblOutdated, _lblStatus, prereqPanel, lblTitle]);
+
+        if (!_prereqMet)
+            SetMainEnabled(false);
+    }
+
+    /// <summary>Rebuilds quick-install buttons, hiding packages already installed.</summary>
+    private void RebuildQuickInstallButtons()
+    {
+        _flowQuick.Controls.Clear();
         foreach (string pkg in WinGetManager.PopularPackages)
         {
+            if (_installedNames.Contains(pkg))
+                continue;
             string captured = pkg;
             var btn = new Button
             {
@@ -131,13 +184,8 @@ internal sealed class WinGetManagerDialog : Form
             };
             btn.FlatAppearance.BorderColor = AppTheme.Accent;
             btn.Click += (_, _) => _txtName.Text = captured;
-            flowQuick.Controls.Add(btn);
+            _flowQuick.Controls.Add(btn);
         }
-
-        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, _lblOutdated, _lblStatus, prereqPanel, lblTitle]);
-
-        if (!_prereqMet)
-            SetMainEnabled(false);
     }
 
     private async Task RefreshAsync()
@@ -146,10 +194,22 @@ internal sealed class WinGetManagerDialog : Form
         try
         {
             var list = await WinGetManager.ListInstalledAsync(_cts.Token);
+            _installedNames = await WinGetManager.ListInstalledNamesAsync(_cts.Token);
+
             _lstInstalled.Items.Clear();
-            foreach (var p in list) _lstInstalled.Items.Add(p);
+            foreach (var entry in list)
+            {
+                var item = new ListViewItem(entry) { Tag = entry };
+                item.SubItems.Add("");
+                item.SubItems.Add("\u2714 Up to date");
+                item.ForeColor = AppTheme.Fg;
+                _lstInstalled.Items.Add(item);
+            }
+
             _lblStatus.Text = $"winget: {list.Count} package(s) installed";
             _lblStatus.ForeColor = AppTheme.Green;
+
+            RebuildQuickInstallButtons();
             _ = CheckOutdatedAsync();
         }
         catch (Exception ex)
@@ -157,7 +217,10 @@ internal sealed class WinGetManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task CheckOutdatedAsync()
@@ -165,9 +228,22 @@ internal sealed class WinGetManagerDialog : Form
         try
         {
             var outdated = await WinGetManager.ListOutdatedAsync(_cts.Token);
-            _lblOutdated.Text = outdated.Count > 0
-                ? $"\u26A0 {outdated.Count} update(s) available"
-                : "\u2714 All packages up to date";
+            _outdatedNames.Clear();
+
+            foreach (var entry in outdated)
+                _outdatedNames.Add(entry);
+
+            // Mark outdated packages per-item in the ListView
+            foreach (ListViewItem item in _lstInstalled.Items)
+            {
+                if (item.Tag is string pkgName && _outdatedNames.Contains(pkgName))
+                {
+                    item.SubItems[2].Text = "\u26A0 Update available";
+                    item.SubItems[2].ForeColor = AppTheme.Yellow;
+                }
+            }
+
+            _lblOutdated.Text = outdated.Count > 0 ? $"\u26A0 {outdated.Count} update(s) available" : "\u2714 All packages up to date";
             _lblOutdated.ForeColor = outdated.Count > 0 ? AppTheme.Yellow : AppTheme.Green;
         }
         catch
@@ -179,13 +255,21 @@ internal sealed class WinGetManagerDialog : Form
     private async Task SearchAsync()
     {
         string query = _txtName.Text.Trim();
-        if (query.Length == 0) return;
+        if (query.Length == 0)
+            return;
         SetBusy(true, $"Searching for '{query}'...");
         try
         {
             var list = await WinGetManager.SearchAsync(query, _cts.Token);
             _lstInstalled.Items.Clear();
-            foreach (var p in list) _lstInstalled.Items.Add(p);
+            foreach (var entry in list)
+            {
+                var item = new ListViewItem(entry) { Tag = entry };
+                item.SubItems.Add("");
+                item.SubItems.Add(_installedNames.Contains(entry) ? "\u2714 Installed" : "");
+                item.ForeColor = AppTheme.Fg;
+                _lstInstalled.Items.Add(item);
+            }
             _lblStatus.Text = $"Search: {list.Count} result(s) for '{query}'";
             _lblStatus.ForeColor = AppTheme.Accent;
         }
@@ -194,13 +278,17 @@ internal sealed class WinGetManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task InstallAsync()
     {
         string name = _txtName.Text.Trim();
-        if (name.Length == 0) return;
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Installing {name}...");
         try
         {
@@ -212,13 +300,17 @@ internal sealed class WinGetManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task RemoveAsync()
     {
-        string name = (_lstInstalled.SelectedItem as string ?? _txtName.Text).Trim();
-        if (name.Length == 0) return;
+        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Removing {name}...");
         try
         {
@@ -230,13 +322,17 @@ internal sealed class WinGetManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task UpgradeAsync()
     {
-        string name = (_lstInstalled.SelectedItem as string ?? _txtName.Text).Trim();
-        if (name.Length == 0) return;
+        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
+        if (name.Length == 0)
+            return;
         SetBusy(true, $"Upgrading {name}...");
         try
         {
@@ -248,7 +344,10 @@ internal sealed class WinGetManagerDialog : Form
             _lblStatus.Text = $"Error: {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private void SetBusy(bool busy, string? message = null)
