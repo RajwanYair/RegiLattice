@@ -41,8 +41,7 @@ public static class PackLoader
                 throw new InvalidOperationException($"SHA-256 mismatch: expected {expectedSha256}, got {actualHash}.");
         }
 
-        var raw = JsonSerializer.Deserialize<RawPack>(json, s_jsonOptions)
-            ?? throw new InvalidOperationException("Failed to deserialise pack JSON.");
+        var raw = JsonSerializer.Deserialize<RawPack>(json, s_jsonOptions) ?? throw new InvalidOperationException("Failed to deserialise pack JSON.");
 
         var errors = Validate(raw);
         if (errors.Count > 0)
@@ -79,7 +78,8 @@ public static class PackLoader
         try
         {
             var raw = JsonSerializer.Deserialize<RawPack>(json, s_jsonOptions);
-            if (raw is null) return ["Failed to parse JSON."];
+            if (raw is null)
+                return ["Failed to parse JSON."];
             return Validate(raw);
         }
         catch (JsonException ex)
@@ -145,11 +145,13 @@ public static class PackLoader
             // Validate registry paths
             foreach (var op in (t.ApplyOps ?? []).Concat(t.RemoveOps ?? []).Concat(t.DetectOps ?? []))
             {
-                if (!string.IsNullOrEmpty(op.Path) &&
-                    !op.Path.StartsWith("HKEY_", StringComparison.OrdinalIgnoreCase) &&
-                    !op.Path.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase) &&
-                    !op.Path.StartsWith("HKLM", StringComparison.OrdinalIgnoreCase) &&
-                    !op.Path.StartsWith("HKCR", StringComparison.OrdinalIgnoreCase))
+                if (
+                    !string.IsNullOrEmpty(op.Path)
+                    && !op.Path.StartsWith("HKEY_", StringComparison.OrdinalIgnoreCase)
+                    && !op.Path.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase)
+                    && !op.Path.StartsWith("HKLM", StringComparison.OrdinalIgnoreCase)
+                    && !op.Path.StartsWith("HKCR", StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     errors.Add($"Tweak '{t.Id}' has invalid registry path: '{op.Path}' (must start with HKEY_ or HKCU/HKLM/HKCR).");
                 }
@@ -194,7 +196,8 @@ public static class PackLoader
 
     private static IReadOnlyList<RegOp> ConvertOps(List<RawRegOp>? ops)
     {
-        if (ops is null || ops.Count == 0) return [];
+        if (ops is null || ops.Count == 0)
+            return [];
         return ops.Select(ConvertOp).ToList();
     }
 
@@ -222,42 +225,97 @@ public static class PackLoader
 
     internal sealed class RawPack
     {
-        [JsonPropertyName("name")] public string? Name { get; set; }
-        [JsonPropertyName("displayName")] public string? DisplayName { get; set; }
-        [JsonPropertyName("version")] public string? Version { get; set; }
-        [JsonPropertyName("author")] public string? Author { get; set; }
-        [JsonPropertyName("description")] public string? Description { get; set; }
-        [JsonPropertyName("minRegiLatticeVersion")] public string? MinRegiLatticeVersion { get; set; }
-        [JsonPropertyName("minWindowsBuild")] public int MinWindowsBuild { get; set; }
-        [JsonPropertyName("categories")] public List<string>? Categories { get; set; }
-        [JsonPropertyName("tags")] public List<string>? Tags { get; set; }
-        [JsonPropertyName("tweaks")] public List<RawTweak>? Tweaks { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string? DisplayName { get; set; }
+
+        [JsonPropertyName("version")]
+        public string? Version { get; set; }
+
+        [JsonPropertyName("author")]
+        public string? Author { get; set; }
+
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+
+        [JsonPropertyName("minRegiLatticeVersion")]
+        public string? MinRegiLatticeVersion { get; set; }
+
+        [JsonPropertyName("minWindowsBuild")]
+        public int MinWindowsBuild { get; set; }
+
+        [JsonPropertyName("categories")]
+        public List<string>? Categories { get; set; }
+
+        [JsonPropertyName("tags")]
+        public List<string>? Tags { get; set; }
+
+        [JsonPropertyName("tweaks")]
+        public List<RawTweak>? Tweaks { get; set; }
     }
 
     internal sealed class RawTweak
     {
-        [JsonPropertyName("id")] public string? Id { get; set; }
-        [JsonPropertyName("label")] public string? Label { get; set; }
-        [JsonPropertyName("category")] public string? Category { get; set; }
-        [JsonPropertyName("description")] public string? Description { get; set; }
-        [JsonPropertyName("tags")] public List<string>? Tags { get; set; }
-        [JsonPropertyName("needsAdmin")] public bool NeedsAdmin { get; set; } = true;
-        [JsonPropertyName("corpSafe")] public bool CorpSafe { get; set; }
-        [JsonPropertyName("minBuild")] public int MinBuild { get; set; }
-        [JsonPropertyName("applyOps")] public List<RawRegOp>? ApplyOps { get; set; }
-        [JsonPropertyName("removeOps")] public List<RawRegOp>? RemoveOps { get; set; }
-        [JsonPropertyName("detectOps")] public List<RawRegOp>? DetectOps { get; set; }
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
+
+        [JsonPropertyName("label")]
+        public string? Label { get; set; }
+
+        [JsonPropertyName("category")]
+        public string? Category { get; set; }
+
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+
+        [JsonPropertyName("tags")]
+        public List<string>? Tags { get; set; }
+
+        [JsonPropertyName("needsAdmin")]
+        public bool NeedsAdmin { get; set; } = true;
+
+        [JsonPropertyName("corpSafe")]
+        public bool CorpSafe { get; set; }
+
+        [JsonPropertyName("minBuild")]
+        public int MinBuild { get; set; }
+
+        [JsonPropertyName("applyOps")]
+        public List<RawRegOp>? ApplyOps { get; set; }
+
+        [JsonPropertyName("removeOps")]
+        public List<RawRegOp>? RemoveOps { get; set; }
+
+        [JsonPropertyName("detectOps")]
+        public List<RawRegOp>? DetectOps { get; set; }
     }
 
     internal sealed class RawRegOp
     {
-        [JsonPropertyName("kind")] public string? Kind { get; set; }
-        [JsonPropertyName("path")] public string? Path { get; set; }
-        [JsonPropertyName("name")] public string? Name { get; set; }
-        [JsonPropertyName("dwordValue")] public int? DwordValue { get; set; }
-        [JsonPropertyName("stringValue")] public string? StringValue { get; set; }
-        [JsonPropertyName("qwordValue")] public long? QwordValue { get; set; }
-        [JsonPropertyName("binaryValue")] public string? BinaryValue { get; set; }
-        [JsonPropertyName("multiSzValue")] public List<string>? MultiSzValue { get; set; }
+        [JsonPropertyName("kind")]
+        public string? Kind { get; set; }
+
+        [JsonPropertyName("path")]
+        public string? Path { get; set; }
+
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("dwordValue")]
+        public int? DwordValue { get; set; }
+
+        [JsonPropertyName("stringValue")]
+        public string? StringValue { get; set; }
+
+        [JsonPropertyName("qwordValue")]
+        public long? QwordValue { get; set; }
+
+        [JsonPropertyName("binaryValue")]
+        public string? BinaryValue { get; set; }
+
+        [JsonPropertyName("multiSzValue")]
+        public List<string>? MultiSzValue { get; set; }
     }
 }
