@@ -16,6 +16,7 @@ internal sealed class PSModuleManagerDialog : Form
     private readonly Button _btnUpdate = new();
 
     private CancellationTokenSource _cts = new();
+    private bool _prereqMet;
 
     internal PSModuleManagerDialog()
     {
@@ -30,7 +31,7 @@ internal sealed class PSModuleManagerDialog : Form
         Font = AppTheme.Regular;
 
         BuildLayout();
-        Load += async (_, _) => await RefreshAsync();
+        Load += async (_, _) => { if (_prereqMet) await RefreshAsync(); };
         FormClosed += (_, _) => _cts.Cancel();
     }
 
@@ -46,6 +47,9 @@ internal sealed class PSModuleManagerDialog : Form
             TextAlign = ContentAlignment.MiddleLeft,
             Padding = new Padding(8, 0, 0, 0),
         };
+
+        _prereqMet = PSModuleManager.IsPowerShellGetAvailable();
+        var prereqPanel = BuildPrereqPanel();
 
         _lblStatus.Text = "Ready";
         _lblStatus.ForeColor = AppTheme.FgDim;
@@ -142,7 +146,10 @@ internal sealed class PSModuleManagerDialog : Form
             flowQuick.Controls.Add(btn);
         }
 
-        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, scopePanel, _lblOutdated, _lblStatus, lblTitle]);
+        Controls.AddRange([_lstInstalled, ctrlPanel, flowQuick, quickLabel, scopePanel, _lblOutdated, _lblStatus, prereqPanel, lblTitle]);
+
+        if (!_prereqMet)
+            SetMainEnabled(false);
     }
 
     private async Task RefreshAsync()
@@ -246,5 +253,78 @@ internal sealed class PSModuleManagerDialog : Form
         _btnRefresh.Enabled = !busy;
         if (message is not null)
             _lblStatus.Text = message;
+    }
+
+    private void SetMainEnabled(bool enabled)
+    {
+        _btnInstall.Enabled = enabled;
+        _btnRemove.Enabled = enabled;
+        _btnUpdate.Enabled = enabled;
+        _btnRefresh.Enabled = enabled;
+        _txtName.Enabled = enabled;
+    }
+
+    private Panel BuildPrereqPanel()
+    {
+        var panel = new Panel
+        {
+            Dock = DockStyle.Top,
+            Height = 34,
+            BackColor = _prereqMet ? Color.FromArgb(20, AppTheme.Green) : Color.FromArgb(20, AppTheme.Red),
+            Padding = new Padding(8, 4, 8, 4),
+        };
+
+        var lbl = new Label
+        {
+            Text = _prereqMet ? "\u2705 PowerShellGet is available" : "\u274C PowerShellGet module not found",
+            AutoSize = true,
+            Location = new Point(8, 8),
+            ForeColor = _prereqMet ? AppTheme.Green : AppTheme.Red,
+        };
+        panel.Controls.Add(lbl);
+
+        if (!_prereqMet)
+        {
+            var btn = new Button
+            {
+                Text = "Install PSGet",
+                BackColor = AppTheme.Accent,
+                ForeColor = AppTheme.Bg,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(110, 25),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+            };
+            btn.Location = new Point(panel.ClientSize.Width - btn.Width - 8, 4);
+            btn.Click += async (_, _) =>
+            {
+                btn.Enabled = false;
+                btn.Text = "Installing...";
+                lbl.Text = "\u23F3 Installing PowerShellGet...";
+                lbl.ForeColor = AppTheme.Yellow;
+                panel.BackColor = Color.FromArgb(20, AppTheme.Yellow);
+                try
+                {
+                    await PSModuleManager.InstallPowerShellGetAsync(_cts.Token);
+                    _prereqMet = true;
+                    lbl.Text = "\u2705 PowerShellGet installed successfully";
+                    lbl.ForeColor = AppTheme.Green;
+                    panel.BackColor = Color.FromArgb(20, AppTheme.Green);
+                    btn.Visible = false;
+                    SetMainEnabled(true);
+                    await RefreshAsync();
+                }
+                catch (Exception ex)
+                {
+                    lbl.Text = $"\u274C Install failed: {ex.Message}";
+                    lbl.ForeColor = AppTheme.Red;
+                    panel.BackColor = Color.FromArgb(20, AppTheme.Red);
+                    btn.Enabled = true;
+                    btn.Text = "Retry";
+                }
+            };
+            panel.Controls.Add(btn);
+        }
+
+        return panel;
     }
 }

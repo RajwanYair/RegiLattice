@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core.Models;
+using RegiLattice.Core.Plugins;
 using RegiLattice.Core.Registry;
 
 namespace RegiLattice.Core;
@@ -149,6 +150,22 @@ public sealed class TweakEngine
         Register(Tweaks.WindowsTerminal.Tweaks);
         Register(Tweaks.WindowsUpdate.Tweaks);
         Register(Tweaks.Wsl.Tweaks);
+    }
+
+    /// <summary>Register tweaks from an installed Tweak Pack (plugin).</summary>
+    public void RegisterPack(IReadOnlyList<TweakDef> packTweaks)
+    {
+        Register(packTweaks);
+    }
+
+    /// <summary>Register all installed packs from %LOCALAPPDATA%\RegiLattice\packs\.</summary>
+    public int RegisterInstalledPacks()
+    {
+        var mgr = new PackManager();
+        var tweaks = mgr.LoadAllInstalledTweaks();
+        if (tweaks.Count == 0) return 0;
+        Register(tweaks);
+        return tweaks.Count;
     }
 
     // ── Lookup & enumeration ────────────────────────────────────────────

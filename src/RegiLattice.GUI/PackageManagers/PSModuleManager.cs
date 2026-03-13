@@ -8,6 +8,28 @@ internal static partial class PSModuleManager
     [GeneratedRegex(@"^[A-Za-z0-9._\-]+$")]
     private static partial Regex SafeNameRegex();
 
+    internal static bool IsPowerShellGetAvailable()
+    {
+        try
+        {
+            var (code, stdout, _) = ShellRunner.RunPowerShellAsync(
+                "Get-Module PowerShellGet -ListAvailable | Select-Object -First 1 -ExpandProperty Version",
+                default).ConfigureAwait(false).GetAwaiter().GetResult();
+            return code == 0 && stdout.Trim().Length > 0;
+        }
+        catch { return false; }
+    }
+
+    /// <summary>Installs or updates PowerShellGet module.</summary>
+    internal static async Task InstallPowerShellGetAsync(CancellationToken ct = default)
+    {
+        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
+            "Install-Module PowerShellGet -Force -AllowClobber -Scope CurrentUser",
+            ct, TimeSpan.FromMinutes(2)).ConfigureAwait(false);
+        if (code != 0)
+            throw new InvalidOperationException($"PowerShellGet installation failed: {stderr.Trim()}");
+    }
+
     internal static async Task<List<string>> ListInstalledAsync(string scope = "CurrentUser", CancellationToken ct = default)
     {
         // Get-Module -ListAvailable shows all installed modules (not just PSGallery ones)
