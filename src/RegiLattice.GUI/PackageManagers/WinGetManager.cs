@@ -12,27 +12,35 @@ internal static partial class WinGetManager
     {
         try
         {
-            var (code, _, _) = ShellRunner.RunAsync("winget", ["--version"], default)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
+            var (code, _, _) = ShellRunner.RunAsync("winget", ["--version"], default).ConfigureAwait(false).GetAwaiter().GetResult();
             return code == 0;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>Attempts to register/install WinGet via the App Installer package.</summary>
     internal static async Task InstallWinGetAsync(CancellationToken ct = default)
     {
-        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
-            "Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe",
-            ct, TimeSpan.FromMinutes(2)).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunPowerShellAsync(
+                "Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe",
+                ct,
+                TimeSpan.FromMinutes(2)
+            )
+            .ConfigureAwait(false);
         if (code != 0)
-            throw new InvalidOperationException($"Could not install WinGet automatically. Please install 'App Installer' from the Microsoft Store. {stderr.Trim()}");
+            throw new InvalidOperationException(
+                $"Could not install WinGet automatically. Please install 'App Installer' from the Microsoft Store. {stderr.Trim()}"
+            );
     }
 
     internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
-        var (_, stdout, _) = await ShellRunner.RunAsync(
-            "winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct)
+        var (_, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct)
             .ConfigureAwait(false);
 
         return ParseWinGetTable(stdout);
@@ -41,8 +49,8 @@ internal static partial class WinGetManager
     internal static async Task<List<string>> SearchAsync(string query, CancellationToken ct = default)
     {
         ValidateName(query);
-        var (_, stdout, _) = await ShellRunner.RunAsync(
-            "winget", ["search", query, "--disable-interactivity", "--accept-source-agreements"], ct)
+        var (_, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["search", query, "--disable-interactivity", "--accept-source-agreements"], ct)
             .ConfigureAwait(false);
 
         return ParseWinGetTable(stdout);
@@ -51,10 +59,9 @@ internal static partial class WinGetManager
     internal static async Task InstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget",
-            ["install", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["install", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget install failed: {stderr.Trim()}");
     }
@@ -62,8 +69,9 @@ internal static partial class WinGetManager
     internal static async Task UninstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget", ["uninstall", "--id", name, "--disable-interactivity"], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["uninstall", "--id", name, "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget uninstall failed: {stderr.Trim()}");
     }
@@ -71,10 +79,9 @@ internal static partial class WinGetManager
     internal static async Task UpgradeAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget",
-            ["upgrade", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["upgrade", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget upgrade failed: {stderr.Trim()}");
     }
@@ -86,19 +93,35 @@ internal static partial class WinGetManager
         return name;
     }
 
+    /// <summary>Returns just the package names/IDs of installed packages.</summary>
+    internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)
+    {
+        var list = await ListInstalledAsync(ct).ConfigureAwait(false);
+        return new HashSet<string>(list, StringComparer.OrdinalIgnoreCase);
+    }
+
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
-        var (_, stdout, _) = await ShellRunner.RunAsync(
-            "winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct)
+        var (_, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct)
             .ConfigureAwait(false);
 
         return ParseWinGetTable(stdout);
     }
 
     internal static readonly string[] PopularPackages =
-        ["7zip.7zip", "Git.Git", "Microsoft.VisualStudioCode", "Google.Chrome",
-         "Mozilla.Firefox", "Notepad++.Notepad++", "VideoLAN.VLC", "WinSCP.WinSCP",
-         "Python.Python.3.12", "Microsoft.PowerToys"];
+    [
+        "7zip.7zip",
+        "Git.Git",
+        "Microsoft.VisualStudioCode",
+        "Google.Chrome",
+        "Mozilla.Firefox",
+        "Notepad++.Notepad++",
+        "VideoLAN.VLC",
+        "WinSCP.WinSCP",
+        "Python.Python.3.12",
+        "Microsoft.PowerToys",
+    ];
 
     private static List<string> ParseWinGetTable(string output)
     {
@@ -114,7 +137,8 @@ internal static partial class WinGetManager
                 pastHeader = true;
                 continue;
             }
-            if (!pastHeader || line.Length == 0) continue;
+            if (!pastHeader || line.Length == 0)
+                continue;
 
             // Take the first "column" — name or id up to double-space
             int dblSpace = line.IndexOf("  ", StringComparison.Ordinal);
