@@ -804,4 +804,144 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.Equal("Performance", tweak.Category);
         Assert.NotEmpty(tweak.ApplyOps);
     }
+
+    // ── Command Line Tweaks ─────────────────────────────────────────────
+    [Theory]
+    [InlineData("cmd-disable-hyper-v-hypervisor")]
+    [InlineData("cmd-enable-boot-log")]
+    [InlineData("cmd-increase-tscsyncpolicy")]
+    [InlineData("cmd-disable-dynamic-tick")]
+    [InlineData("cmd-set-platform-tick-high")]
+    [InlineData("cmd-disable-netbios-over-tcpip")]
+    [InlineData("cmd-enable-tcp-autotuning")]
+    [InlineData("cmd-enable-rss")]
+    [InlineData("cmd-disable-tcp-timestamps")]
+    [InlineData("cmd-enable-ecn")]
+    [InlineData("cmd-set-ultimate-perf-plan")]
+    [InlineData("cmd-disable-usb-selective-suspend")]
+    [InlineData("cmd-disable-ie-feature")]
+    [InlineData("cmd-enable-sandbox")]
+    public void RegisterBuiltins_CmdTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Command Line", tweak.Category);
+        Assert.NotNull(tweak.ApplyAction);
+        Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
+
+    // ── PowerShell Tweaks ───────────────────────────────────────────────
+    [Theory]
+    [InlineData("ps-disable-print-spooler", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-remote-registry", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-fax-service", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-xbox-services", TweakKind.ServiceControl)]
+    [InlineData("ps-clear-temp-files", TweakKind.PowerShell)]
+    [InlineData("ps-flush-dns-cache", TweakKind.PowerShell)]
+    public void RegisterBuiltins_PsTweakExists(string id, TweakKind expectedKind)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("PowerShell", tweak.Category);
+        Assert.Equal(expectedKind, tweak.Kind);
+    }
+
+    // ── Scheduled Task (PS) Tweaks ──────────────────────────────────────
+    [Theory]
+    [InlineData("pst-disable-customer-experience")]
+    [InlineData("pst-disable-app-telemetry")]
+    [InlineData("pst-disable-windows-maps-update")]
+    [InlineData("pst-disable-feedback-hub")]
+    [InlineData("pst-disable-disk-diagnostics")]
+    [InlineData("pst-disable-office-telemetry")]
+    [InlineData("pst-disable-speech-model-update")]
+    [InlineData("pst-disable-device-census")]
+    public void RegisterBuiltins_PstTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Scheduled Tasks", tweak.Category);
+        Assert.Equal(TweakKind.ScheduledTask, tweak.Kind);
+        Assert.NotNull(tweak.ApplyAction);
+    }
+
+    // ── Hardening Tweaks ────────────────────────────────────────────────
+    [Theory]
+    [InlineData("harden-enable-credential-guard")]
+    [InlineData("harden-disable-wdigest")]
+    [InlineData("harden-enable-lsa-protection")]
+    [InlineData("harden-restrict-ntlm-outgoing")]
+    [InlineData("harden-enable-aslr-force")]
+    [InlineData("harden-disable-null-session-pipes")]
+    [InlineData("harden-enable-safe-search-mode")]
+    [InlineData("harden-restrict-remote-sam")]
+    [InlineData("harden-disable-remote-uac-filter")]
+    [InlineData("harden-enable-smb-encryption")]
+    public void RegisterBuiltins_HardeningTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Hardening", tweak.Category);
+    }
+
+    // ── Developer Tweaks ────────────────────────────────────────────────
+    [Theory]
+    [InlineData("dev-disable-last-access-timestamp")]
+    [InlineData("dev-increase-memory-mapped-limit")]
+    [InlineData("dev-add-defender-exclusion-repos")]
+    [InlineData("dev-enable-utf8-system-wide")]
+    [InlineData("dev-enable-sudo")]
+    [InlineData("dev-git-lfs-install")]
+    [InlineData("dev-env-add-dotnet-tools")]
+    [InlineData("dev-disable-defender-realtime-build")]
+    public void RegisterBuiltins_DeveloperTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Developer", tweak.Category);
+    }
+
+    // ── Memory Optimization Tweaks ──────────────────────────────────────
+    [Theory]
+    [InlineData("mem-disable-paging-executive")]
+    [InlineData("mem-enable-large-system-cache")]
+    [InlineData("mem-clear-pagefile-on-shutdown")]
+    [InlineData("mem-set-iot-registry-quota")]
+    [InlineData("mem-optimize-svchosts")]
+    [InlineData("mem-disable-memory-compression")]
+    public void RegisterBuiltins_MemoryTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Memory", tweak.Category);
+    }
+
+    // ── New categories exist ────────────────────────────────────────────
+    [Theory]
+    [InlineData("Command Line")]
+    [InlineData("PowerShell")]
+    [InlineData("Hardening")]
+    [InlineData("Developer")]
+    [InlineData("Memory")]
+    public void RegisterBuiltins_NewCategoryExists(string category)
+    {
+        Assert.Contains(category, _engine.Categories());
+    }
+
+    // ── TweakKind detection ─────────────────────────────────────────────
+    [Fact]
+    public void TweakKind_RegistryTweak_DefaultsToRegistry()
+    {
+        var tweak = _engine.GetTweak("perf-disable-startup-delay");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.Registry, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_CommandLineTweak_IsSystemCommand()
+    {
+        var tweak = _engine.GetTweak("cmd-disable-hyper-v-hypervisor");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
 }
