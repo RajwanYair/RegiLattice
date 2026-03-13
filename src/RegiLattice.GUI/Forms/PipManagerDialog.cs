@@ -43,7 +43,11 @@ internal sealed class PipManagerDialog : Form
         Font = AppTheme.Regular;
 
         BuildLayout();
-        Load += async (_, _) => { if (_prereqMet) await RefreshAsync(); };
+        Load += async (_, _) =>
+        {
+            if (_prereqMet)
+                await RefreshAsync();
+        };
         FormClosed += (_, _) => _cts.Cancel();
     }
 

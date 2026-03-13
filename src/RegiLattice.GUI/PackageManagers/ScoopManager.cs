@@ -17,9 +17,13 @@ internal static partial class ScoopManager
     /// <summary>Installs Scoop via the official installer script (user-level, no admin needed).</summary>
     internal static async Task InstallScoopAsync(CancellationToken ct = default)
     {
-        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
-            "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex",
-            ct, TimeSpan.FromMinutes(3)).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunPowerShellAsync(
+                "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex",
+                ct,
+                TimeSpan.FromMinutes(3)
+            )
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"Scoop installation failed: {stderr.Trim()}");
     }

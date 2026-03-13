@@ -50,11 +50,16 @@ internal static partial class PipManager
     {
         if (WinGetManager.IsWinGetInstalled())
         {
-            var (code, _, stderr) = await ShellRunner.RunAsync(
-                "winget",
-                ["install", "Python.Python.3.12", "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
-                ct, TimeSpan.FromMinutes(5)).ConfigureAwait(false);
-            if (code == 0) return;
+            var (code, _, stderr) = await ShellRunner
+                .RunAsync(
+                    "winget",
+                    ["install", "Python.Python.3.12", "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
+                    ct,
+                    TimeSpan.FromMinutes(5)
+                )
+                .ConfigureAwait(false);
+            if (code == 0)
+                return;
             throw new InvalidOperationException($"Python installation via winget failed: {stderr.Trim()}");
         }
         throw new InvalidOperationException("winget is not available. Please install Python manually from python.org.");
