@@ -48,12 +48,13 @@ public static class PackLoader
         if (errors.Count > 0)
             throw new InvalidOperationException($"Pack validation failed:\n{string.Join('\n', errors)}");
 
+        // Validate() above guarantees Name/DisplayName/Version/Author are non-null.
         var packDef = new PackDef
         {
-            Name = raw.Name,
-            DisplayName = raw.DisplayName,
-            Version = raw.Version,
-            Author = raw.Author,
+            Name = raw.Name!,
+            DisplayName = raw.DisplayName!,
+            Version = raw.Version!,
+            Author = raw.Author!,
             Description = raw.Description ?? "",
             TweakCount = raw.Tweaks?.Count ?? 0,
             Categories = raw.Categories ?? [],
@@ -65,7 +66,7 @@ public static class PackLoader
         var tweaks = new List<TweakDef>();
         foreach (var rt in raw.Tweaks ?? [])
         {
-            var td = ConvertTweak(rt, raw.Name);
+            var td = ConvertTweak(rt, raw.Name!);
             tweaks.Add(td);
         }
 
@@ -164,8 +165,8 @@ public static class PackLoader
     {
         return new TweakDef
         {
-            Id = rt.Id,
-            Label = rt.Label ?? rt.Id,
+            Id = rt.Id!,
+            Label = rt.Label ?? rt.Id!,
             Category = rt.Category ?? packName,
             Description = rt.Description ?? "",
             Tags = rt.Tags ?? [],
