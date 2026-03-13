@@ -28,8 +28,9 @@ internal static partial class ChocolateyManager
     /// <summary>Installs Chocolatey via the official install script (requires admin).</summary>
     internal static async Task InstallChocoAsync(CancellationToken ct = default)
     {
-        string script = "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; " +
-            "iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))";
+        string script =
+            "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; "
+            + "iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))";
         var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(script, ct, TimeSpan.FromMinutes(3)).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"Chocolatey installation failed (may require admin): {stderr.Trim()}");
