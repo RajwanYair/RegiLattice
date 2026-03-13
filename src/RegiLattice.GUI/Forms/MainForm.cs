@@ -28,6 +28,9 @@ public partial class MainForm : Form
     private readonly ListViewColumnSorter _columnSorter = new();
     private readonly Dictionary<int, HashSet<string>> _columnFilters = [];
 
+    // Categories whose tweak status has been loaded (lazy-load on select).
+    private readonly HashSet<string> _loadedCategories = new(StringComparer.OrdinalIgnoreCase);
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -303,7 +306,10 @@ public partial class MainForm : Form
                 _cts.Token
             );
 
-            await RefreshStatusAsync();
+            // Populate the category tree without selecting any node.
+            // Tweak statuses are lazy-loaded when the user clicks a category.
+            PopulateTree(autoSelect: false);
+            UpdateCounters();
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
@@ -324,6 +330,9 @@ public partial class MainForm : Form
         try
         {
             _statusCache = await Task.Run(() => _engine.StatusMap(parallel: true), _cts.Token);
+            _loadedCategories.Clear();
+            foreach (var cat in _engine.Categories())
+                _loadedCategories.Add(cat);
             PopulateTree();
             UpdateCounters();
             SetStatus($"Status refreshed for {_statusCache.Count} tweaks.");
@@ -480,7 +489,7 @@ public partial class MainForm : Form
     }
 
     // ── Tree / List population ─────────────────────────────────────────────
-    private void PopulateTree()
+    private void PopulateTree(bool autoSelect = true)
     {
         string? previousCat = _treeView.SelectedNode?.Tag as string;
 
@@ -505,9 +514,18 @@ public partial class MainForm : Form
                 continue;
 
             int count = kvp.Value.Count;
-            int applied = kvp.Value.Count(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied);
             string icon = CategoryIcons.GetSymbol(CategoryIcons.GetIcon(kvp.Key));
-            var node = new TreeNode($"{icon} {kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
+            string nodeText;
+            if (_loadedCategories.Contains(kvp.Key))
+            {
+                int applied = kvp.Value.Count(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied);
+                nodeText = $"{icon} {kvp.Key}  ({applied}/{count})";
+            }
+            else
+            {
+                nodeText = $"{icon} {kvp.Key}  ({count})";
+            }
+            var node = new TreeNode(nodeText) { Tag = kvp.Key };
             node.ForeColor = AppTheme.Fg;
             _treeView.Nodes.Add(node);
             if (kvp.Key == previousCat)
@@ -532,7 +550,7 @@ public partial class MainForm : Form
             _treeView.SelectedNode = selectNode;
             PopulateList((string)selectNode.Tag!);
         }
-        else if (_treeView.Nodes.Count > 0)
+        else if (autoSelect && _treeView.Nodes.Count > 0)
         {
             _treeView.SelectedNode = _treeView.Nodes[0];
             PopulateList((string)_treeView.Nodes[0].Tag!);
@@ -958,10 +976,64 @@ public partial class MainForm : Form
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────
-    private void OnTreeAfterSelect(object? sender, TreeViewEventArgs e)
+    private async void OnTreeAfterSelect(object? sender, TreeViewEventArgs e)
     {
-        if (e.Node?.Tag is string cat)
-            PopulateList(cat);
+        if (e.Node?.Tag is not string cat)
+            return;
+
+        // Lazy-load status for this category on first select
+        if (!_loadedCategories.Contains(cat))
+        {
+            await LoadCategoryStatusAsync(cat);
+            UpdateTreeNode(e.Node, cat);
+            UpdateCounters();
+        }
+        PopulateList(cat);
+    }
+
+    /// <summary>Detects tweak status for a single category and merges into the cache.</summary>
+    private async Task LoadCategoryStatusAsync(string category)
+    {
+        var byCategory = _engine.TweaksByCategory();
+        if (!byCategory.TryGetValue(category, out var tweaks))
+            return;
+
+        SetBusy(true, $"Loading status for {category}...");
+        try
+        {
+            var statuses = await Task.Run(
+                () =>
+                {
+                    var result = new Dictionary<string, TweakResult>(tweaks.Count, StringComparer.Ordinal);
+                    foreach (var td in tweaks)
+                        result[td.Id] = _engine.DetectStatus(td);
+                    return result;
+                },
+                _cts.Token
+            );
+
+            foreach (var (id, status) in statuses)
+                _statusCache[id] = status;
+
+            _loadedCategories.Add(category);
+        }
+        catch (OperationCanceledException) { }
+        finally
+        {
+            SetBusy(false);
+        }
+    }
+
+    /// <summary>Updates a single tree node's label with the loaded applied/total count.</summary>
+    private void UpdateTreeNode(TreeNode node, string category)
+    {
+        var byCategory = _engine.TweaksByCategory();
+        if (!byCategory.TryGetValue(category, out var tweaks))
+            return;
+        int count = tweaks.Count;
+        int applied = tweaks.Count(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied);
+        string icon = CategoryIcons.GetSymbol(CategoryIcons.GetIcon(category));
+        node.Text = $"{icon} {category}  ({applied}/{count})";
     }
 
     private async void OnApplyClicked(object? sender, EventArgs e) => await ApplySelectedAsync();
