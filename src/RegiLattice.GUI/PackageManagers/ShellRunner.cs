@@ -7,15 +7,17 @@ namespace RegiLattice.GUI.PackageManagers;
 internal static class ShellRunner
 {
     /// <summary>Run a process with explicit argument list (no shell injection risk).</summary>
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(15);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
 
     internal static async Task<(int ExitCode, string StdOut, string StdErr)> RunAsync(
         string fileName,
         IEnumerable<string> args,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        TimeSpan? timeout = null
+    )
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-        cts.CancelAfter(DefaultTimeout);
+        cts.CancelAfter(timeout ?? DefaultTimeout);
         var linked = cts.Token;
 
         using var proc = new Process
@@ -39,8 +41,14 @@ internal static class ShellRunner
         // Register kill callback so cancellation actually terminates the process
         using var killReg = linked.Register(() =>
         {
-            try { if (!proc.HasExited) proc.Kill(entireProcessTree: true); }
-            catch { /* already exited */ }
+            try
+            {
+                if (!proc.HasExited)
+                    proc.Kill(entireProcessTree: true);
+            }
+            catch
+            { /* already exited */
+            }
         });
 
         var stdoutTask = proc.StandardOutput.ReadToEndAsync(linked);
@@ -52,8 +60,14 @@ internal static class ShellRunner
         }
         catch (OperationCanceledException)
         {
-            try { if (!proc.HasExited) proc.Kill(entireProcessTree: true); }
-            catch { /* already exited */ }
+            try
+            {
+                if (!proc.HasExited)
+                    proc.Kill(entireProcessTree: true);
+            }
+            catch
+            { /* already exited */
+            }
             throw;
         }
 
@@ -61,10 +75,10 @@ internal static class ShellRunner
     }
 
     /// <summary>Run a PowerShell -Command script.</summary>
-    internal static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(
-        string script,
-        CancellationToken ct = default)
-        => RunAsync("powershell.exe",
-            ["-NoProfile", "-NonInteractive", "-Command", script],
-            ct);
+    internal static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(string script, CancellationToken ct = default) =>
+        RunAsync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], ct);
+
+    /// <summary>Run a PowerShell -Command script with a custom timeout.</summary>
+    internal static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(string script, CancellationToken ct, TimeSpan timeout) =>
+        RunAsync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], ct, timeout);
 }

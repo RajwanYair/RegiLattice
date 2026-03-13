@@ -107,6 +107,12 @@ public sealed class TweakDef
     /// <summary>Human-readable reason when <see cref="IsApplicable"/> returns false.</summary>
     public string ApplicabilityNote { get; init; } = "";
 
+    /// <summary>
+    /// If non-null, this tweak came from an installed Tweak Pack (plugin).
+    /// Value is the pack name (e.g. "gaming-extra"). Null = built-in.
+    /// </summary>
+    public string? PackSource { get; init; }
+
     /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
     public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
 

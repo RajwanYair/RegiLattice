@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
+using RegiLattice.Core.Plugins;
 using RegiLattice.Core.Registry;
 
 namespace RegiLattice.CLI;
@@ -66,6 +67,7 @@ internal static class Program
             return RunCategoryAction(a);
         if (a.ImportJson is not null && a.Mode is "apply" or "remove")
             return RunImportJson(a);
+        if (a.Marketplace is not null) return RunMarketplace(a);
         if (a.Gui) return RunGui();
         if (a.Menu) return RunMenu(a.Force);
 
@@ -884,6 +886,282 @@ internal static class Program
         return 0;
     }
 
+    // ── Marketplace ────────────────────────────────────────────────────
+
+    private static int RunMarketplace(CliArgs a)
+    {
+        return a.Marketplace?.ToLowerInvariant() switch
+        {
+            "list" => RunMarketplaceList(),
+            "search" => RunMarketplaceSearch(a.MarketplaceArg),
+            "install" => RunMarketplaceInstall(a.MarketplaceArg),
+            "install-file" => RunMarketplaceInstallFile(a.MarketplaceArg),
+            "uninstall" => RunMarketplaceUninstall(a.MarketplaceArg),
+            "installed" => RunMarketplaceInstalled(),
+            "info" => RunMarketplaceInfo(a.MarketplaceArg),
+            "update" => RunMarketplaceUpdate(a.MarketplaceArg),
+            "updates" => RunMarketplaceCheckUpdates(),
+            _ => MarketplaceUsage(),
+        };
+    }
+
+    private static int RunMarketplaceList()
+    {
+        var pm = new PackManager();
+        var index = pm.FetchIndexAsync().GetAwaiter().GetResult();
+        if (index.Packs.Count == 0)
+        {
+            Console.WriteLine("No packs available in the marketplace.");
+            return 0;
+        }
+
+        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Description"}");
+        Console.WriteLine($"  {new string('─', 70)}");
+        foreach (var p in index.Packs)
+            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Description}");
+        Console.WriteLine($"\n  {index.Packs.Count} packs available.\n");
+        return 0;
+    }
+
+    private static int RunMarketplaceSearch(string? query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace search <query>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+        var results = pm.SearchPacksAsync(query).GetAwaiter().GetResult();
+        if (results.Count == 0)
+        {
+            Console.WriteLine($"No packs matching '{query}'.");
+            return 0;
+        }
+
+        Console.WriteLine($"\n  Results for '{query}':\n");
+        Console.WriteLine($"  {"Name",-25} {"Version",-10} {"Description"}");
+        Console.WriteLine($"  {new string('─', 60)}");
+        foreach (var p in results)
+            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.Description}");
+        Console.WriteLine($"\n  {results.Count} packs found.\n");
+        return 0;
+    }
+
+    private static int RunMarketplaceInstall(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace install <pack-name>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+        try
+        {
+            var (pack, tweaks) = pm.InstallPackAsync(name).GetAwaiter().GetResult();
+            _engine.RegisterPack(tweaks);
+            Console.WriteLine($"\u2705 Installed pack '{pack.DisplayName}' v{pack.Version} ({tweaks.Count} tweaks).");
+            return 0;
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"\u274c {ex.Message}");
+            return 2;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"\u274c Network error: {ex.Message}");
+            return 3;
+        }
+    }
+
+    private static int RunMarketplaceInstallFile(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace install-file <path-to-pack.json>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+        try
+        {
+            var (pack, tweaks) = pm.InstallFromFile(path);
+            _engine.RegisterPack(tweaks);
+            Console.WriteLine($"\u2705 Installed local pack '{pack.DisplayName}' v{pack.Version} ({tweaks.Count} tweaks).");
+            return 0;
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"\u274c {ex.Message}");
+            return 2;
+        }
+    }
+
+    private static int RunMarketplaceUninstall(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace uninstall <pack-name>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+        if (pm.UninstallPack(name))
+        {
+            Console.WriteLine($"\u2705 Uninstalled pack '{name}'.");
+            return 0;
+        }
+
+        Console.WriteLine($"\u274c Pack '{name}' is not installed.");
+        return 2;
+    }
+
+    private static int RunMarketplaceInstalled()
+    {
+        var pm = new PackManager();
+        var installed = pm.InstalledPacks();
+        if (installed.Count == 0)
+        {
+            Console.WriteLine("No packs installed.");
+            return 0;
+        }
+
+        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Author"}");
+        Console.WriteLine($"  {new string('─', 60)}");
+        foreach (var p in installed)
+            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Author}");
+        Console.WriteLine($"\n  {installed.Count} packs installed.\n");
+        return 0;
+    }
+
+    private static int RunMarketplaceInfo(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace info <pack-name>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+
+        // Check installed first, then try remote
+        var installed = pm.InstalledPacks();
+        var pack = installed.FirstOrDefault(p =>
+            p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        if (pack is null)
+        {
+            try
+            {
+                var index = pm.FetchIndexAsync().GetAwaiter().GetResult();
+                pack = index.Packs.FirstOrDefault(p =>
+                    p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            }
+            catch (HttpRequestException)
+            {
+                // Offline — can't fetch index
+            }
+        }
+
+        if (pack is null)
+        {
+            Console.WriteLine($"\u274c Pack '{name}' not found (locally or in marketplace).");
+            return 2;
+        }
+
+        bool isInstalled = installed.Any(p =>
+            p.Name.Equals(pack.Name, StringComparison.OrdinalIgnoreCase));
+
+        Console.WriteLine($"""
+
+              Name:         {pack.DisplayName}
+              Pack ID:      {pack.Name}
+              Version:      {pack.Version}
+              Author:       {pack.Author}
+              Description:  {pack.Description}
+              Tweaks:       {pack.TweakCount}
+              Categories:   {string.Join(", ", pack.Categories)}
+              Tags:         {string.Join(", ", pack.Tags)}
+              Min Build:    {(pack.MinWindowsBuild > 0 ? pack.MinWindowsBuild : "any")}
+              Installed:    {(isInstalled ? "yes" : "no")}
+            """);
+        return 0;
+    }
+
+    private static int RunMarketplaceUpdate(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Usage: regilattice --marketplace update <pack-name>");
+            return 1;
+        }
+
+        var pm = new PackManager();
+        try
+        {
+            var (pack, tweaks) = pm.UpdatePackAsync(name).GetAwaiter().GetResult();
+            Console.WriteLine($"\u2705 Updated pack '{pack.DisplayName}' to v{pack.Version} ({tweaks.Count} tweaks).");
+            return 0;
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"\u274c {ex.Message}");
+            return 2;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"\u274c Network error: {ex.Message}");
+            return 3;
+        }
+    }
+
+    private static int RunMarketplaceCheckUpdates()
+    {
+        var pm = new PackManager();
+        try
+        {
+            var updates = pm.CheckUpdatesAsync().GetAwaiter().GetResult();
+            if (updates.Count == 0)
+            {
+                Console.WriteLine("\u2705 All installed packs are up to date.");
+                return 0;
+            }
+
+            Console.WriteLine($"\n  {"Pack",-25} {"Installed",-12} {"Available"}");
+            Console.WriteLine($"  {new string('─', 50)}");
+            foreach (var (local, remote) in updates)
+                Console.WriteLine($"  {local.Name,-25} {local.Version,-12} {remote.Version}");
+            Console.WriteLine($"\n  {updates.Count} update(s) available.\n");
+            return 0;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"\u274c Network error: {ex.Message}");
+            return 3;
+        }
+    }
+
+    private static int MarketplaceUsage()
+    {
+        Console.WriteLine("""
+            Usage: regilattice --marketplace <command> [argument]
+
+            Commands:
+              list                 Browse available tweak packs
+              search <query>       Search packs by keyword
+              install <name>       Install a pack from the marketplace
+              install-file <path>  Install a pack from local JSON file
+              uninstall <name>     Remove an installed pack
+              installed            List installed packs
+              info <name>          Show pack details
+              update <name>        Update a pack to latest version
+              updates              Check for available updates
+            """);
+        return 1;
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────
 
     private static bool Confirm(string label)
@@ -935,6 +1213,17 @@ internal static class Program
               --restore <path>        Restore tweaks from snapshot
               --snapshot-diff A B     Compare two snapshots
               --html <path>           HTML output for snapshot-diff
+
+            Marketplace:
+              --marketplace list                 Browse available tweak packs
+              --marketplace search <query>       Search packs by keyword
+              --marketplace install <name>       Install a pack from the marketplace
+              --marketplace install-file <path>  Install a pack from local JSON file
+              --marketplace uninstall <name>     Remove an installed pack
+              --marketplace installed            List installed packs
+              --marketplace info <name>          Show pack details
+              --marketplace update <name>        Update a pack to latest version
+              --marketplace updates              Check for available updates
 
             Filters (use with --list/--search):
               --scope <user|machine|both>  Filter by registry scope
@@ -1048,6 +1337,11 @@ internal static class Program
                         p.SnapshotDiffB = args[++i];
                     }
                     break;
+                case "--marketplace":
+                    if (++i < args.Length) p.Marketplace = args[i];
+                    if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
+                        p.MarketplaceArg = args[++i];
+                    break;
 
                 default:
                     // Positional: mode, then tweak
@@ -1105,5 +1399,7 @@ internal static class Program
         public TweakScope? ScopeFilter { get; set; }
         public int MinBuild { get; set; }
         public string? FilterStatus { get; set; }
+        public string? Marketplace { get; set; }
+        public string? MarketplaceArg { get; set; }
     }
 }

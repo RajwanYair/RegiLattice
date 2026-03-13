@@ -93,6 +93,8 @@ partial class MainForm
             new ToolStripSeparator(),
             mnuToolVersions,
             new ToolStripSeparator(),
+            new ToolStripMenuItem("Tweak Pack Marketplace…", null, (_, _) => OnOpenMarketplace()),
+            new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
             mnuSelectAll2, mnuDeselectAll2, mnuInvert2,
@@ -267,6 +269,10 @@ partial class MainForm
         ctxDeselAll.Click += (_, _) => DeselectAllListItems();
         _listView.ContextMenuStrip = _listContextMenu;
 
+        // Column sorting and filtering
+        _listView.ListViewItemSorter = _columnSorter;
+        _listView.ColumnClick += OnColumnClick;
+
         // ── SplitContainer ─────────────────────────────────────────────────
         _split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
         _split.Panel1.Controls.Add(_treeView);
@@ -285,7 +291,7 @@ partial class MainForm
         _detailPanel = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 105,
+            Height = 130,
             BackColor = AppTheme.Surface,
             BorderStyle = BorderStyle.None,
             Padding = new Padding(4),

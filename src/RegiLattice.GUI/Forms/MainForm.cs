@@ -21,6 +21,13 @@ public partial class MainForm : Form
     // Tweaks that are not applicable to the current hardware.
     private readonly HashSet<string> _inapplicableIds = new(StringComparer.Ordinal);
 
+    // Tweaks pending reboot/restart to take effect (applied but not yet active).
+    private readonly HashSet<string> _pendingRebootIds = new(StringComparer.Ordinal);
+
+    // Column sorting and filtering state.
+    private readonly ListViewColumnSorter _columnSorter = new();
+    private readonly Dictionary<int, HashSet<string>> _columnFilters = [];
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -117,22 +124,49 @@ public partial class MainForm : Form
         var g = e.Graphics;
         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        // Gradient-like header: Surface with accent underline
-        using var bg = new SolidBrush(AppTheme.Overlay);
-        g.FillRectangle(bg, e.Bounds);
+        // Header background
+        using var bgBr = new SolidBrush(AppTheme.Overlay);
+        g.FillRectangle(bgBr, e.Bounds);
 
-        // Subtle accent line at bottom
+        // Accent underline
         using var accentPen = new Pen(Color.FromArgb(80, AppTheme.Accent), 2f);
         g.DrawLine(accentPen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
 
-        var textRect = new Rectangle(e.Bounds.X + 6, e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
-        TextRenderer.DrawText(g, e.Header?.Text ?? "", AppTheme.Bold, textRect, AppTheme.Accent,
-            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+        // Sort indicator arrow
+        string sortArrow = "";
+        if (_columnSorter.ColumnIndex == e.ColumnIndex && _columnSorter.Order != SortOrder.None)
+            sortArrow = _columnSorter.Order == SortOrder.Ascending ? " \u25B2" : " \u25BC";
+
+        // Filter indicator dot
+        string filterDot = _columnFilters.ContainsKey(e.ColumnIndex) ? " \u25CF" : "";
+
+        string headerText = (e.Header?.Text ?? "") + sortArrow + filterDot;
+        var textRect = new Rectangle(e.Bounds.X + 6, e.Bounds.Y, e.Bounds.Width - 22, e.Bounds.Height);
+        TextRenderer.DrawText(
+            g,
+            headerText,
+            AppTheme.Bold,
+            textRect,
+            AppTheme.Accent,
+            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis
+        );
+
+        // Small dropdown arrow on the right side for filter
+        var dropRect = new Rectangle(e.Bounds.Right - 18, e.Bounds.Y, 16, e.Bounds.Height);
+        TextRenderer.DrawText(
+            g,
+            "\u25BE",
+            AppTheme.Small,
+            dropRect,
+            AppTheme.FgDim,
+            TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter
+        );
     }
 
     private void OnDrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
     {
-        if (e.Item is null) return;
+        if (e.Item is null)
+            return;
         var g = e.Graphics;
         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
@@ -153,7 +187,7 @@ public partial class MainForm : Form
 
         bool applicable = e.Item.Tag is TweakDef tda && !_inapplicableIds.Contains(tda.Id);
 
-        // Status column (index 2) — pill badge
+        // Status column (index 2) — pill badge with pending reboot support
         if (e.ColumnIndex == 2 && e.Item.Tag is TweakDef td)
         {
             string statusText = e.SubItem?.Text ?? "";
@@ -164,6 +198,12 @@ public partial class MainForm : Form
             {
                 pillBg = AppTheme.FgDim;
                 pillFg = AppTheme.FgDim;
+            }
+            else if (_pendingRebootIds.Contains(td.Id))
+            {
+                statusText = "\u23F3 Pending";
+                pillBg = AppTheme.Yellow;
+                pillFg = AppTheme.Yellow;
             }
             else
             {
@@ -177,8 +217,7 @@ public partial class MainForm : Form
             }
 
             int pillY = e.Bounds.Y + (e.Bounds.Height - 18) / 2;
-            AppTheme.DrawPill(g, statusText, AppTheme.SmallBold, pillBg, pillFg,
-                e.Bounds.X + 4, pillY, 6, 1);
+            AppTheme.DrawPill(g, statusText, AppTheme.SmallBold, pillBg, pillFg, e.Bounds.X + 4, pillY, 6, 1);
             return;
         }
 
@@ -195,8 +234,7 @@ public partial class MainForm : Form
             };
 
             int pillY = e.Bounds.Y + (e.Bounds.Height - 18) / 2;
-            AppTheme.DrawPill(g, scopeText, AppTheme.SmallBold, scopeColor, scopeColor,
-                e.Bounds.X + 4, pillY, 6, 1);
+            AppTheme.DrawPill(g, scopeText, AppTheme.SmallBold, scopeColor, scopeColor, e.Bounds.X + 4, pillY, 6, 1);
             return;
         }
 
@@ -207,10 +245,15 @@ public partial class MainForm : Form
         if (e.ColumnIndex == 1)
             fg = applicable ? AppTheme.Accent : AppTheme.FgDim;
 
-        var textBounds = new Rectangle(e.Bounds.X + (e.ColumnIndex == 0 ? 6 : 4),
-            e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
-        TextRenderer.DrawText(g, e.SubItem?.Text ?? "", Font, textBounds, fg,
-            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
+        var textBounds = new Rectangle(e.Bounds.X + (e.ColumnIndex == 0 ? 6 : 4), e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+        TextRenderer.DrawText(
+            g,
+            e.SubItem?.Text ?? "",
+            Font,
+            textBounds,
+            fg,
+            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis
+        );
     }
 
     // ── Initialisation ─────────────────────────────────────────────────────
@@ -223,46 +266,55 @@ public partial class MainForm : Form
             SetStatus($"Loaded {_engine.TweakCount} tweaks across {_engine.CategoryCount} categories.");
 
             // Evaluate hardware applicability — group by category to avoid redundant checks
-            await Task.Run(() =>
-            {
-                var categoryApplicable = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-                foreach (var td in _engine.AllTweaks())
+            await Task.Run(
+                () =>
                 {
-                    // Custom predicates or tag-based checks must run per-tweak
-                    if (td.IsApplicable is not null || td.Tags.Any(t =>
-                        t.Equals("nvidia", StringComparison.OrdinalIgnoreCase) ||
-                        t.Equals("amd-gpu", StringComparison.OrdinalIgnoreCase) ||
-                        t.Equals("docker", StringComparison.OrdinalIgnoreCase) ||
-                        t.Equals("laptop", StringComparison.OrdinalIgnoreCase)))
+                    var categoryApplicable = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var td in _engine.AllTweaks())
                     {
-                        if (!TweakEngine.IsApplicableOnHardware(td))
-                            _inapplicableIds.Add(td.Id);
+                        // Custom predicates or tag-based checks must run per-tweak
+                        if (
+                            td.IsApplicable is not null
+                            || td.Tags.Any(t =>
+                                t.Equals("nvidia", StringComparison.OrdinalIgnoreCase)
+                                || t.Equals("amd-gpu", StringComparison.OrdinalIgnoreCase)
+                                || t.Equals("docker", StringComparison.OrdinalIgnoreCase)
+                                || t.Equals("laptop", StringComparison.OrdinalIgnoreCase)
+                            )
+                        )
+                        {
+                            if (!TweakEngine.IsApplicableOnHardware(td))
+                                _inapplicableIds.Add(td.Id);
+                        }
+                        else if (categoryApplicable.TryGetValue(td.Category, out var cached))
+                        {
+                            if (!cached)
+                                _inapplicableIds.Add(td.Id);
+                        }
+                        else
+                        {
+                            var applicable = TweakEngine.IsApplicableOnHardware(td);
+                            categoryApplicable[td.Category] = applicable;
+                            if (!applicable)
+                                _inapplicableIds.Add(td.Id);
+                        }
                     }
-                    else if (categoryApplicable.TryGetValue(td.Category, out var cached))
-                    {
-                        if (!cached)
-                            _inapplicableIds.Add(td.Id);
-                    }
-                    else
-                    {
-                        var applicable = TweakEngine.IsApplicableOnHardware(td);
-                        categoryApplicable[td.Category] = applicable;
-                        if (!applicable)
-                            _inapplicableIds.Add(td.Id);
-                    }
-                }
-            }, _cts.Token);
+                },
+                _cts.Token
+            );
 
             await RefreshStatusAsync();
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
         {
-            MessageBox.Show($"Failed to initialise engine:\n{ex.Message}", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Failed to initialise engine:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             SetStatus("Error loading tweaks.");
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     // ── Actions ────────────────────────────────────────────────────────────
@@ -281,53 +333,134 @@ public partial class MainForm : Form
         {
             SetStatus($"Error refreshing status: {ex.Message}");
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task ApplySelectedAsync()
     {
         var selected = GetCheckedTweaks();
-        if (selected.Count == 0) return;
+        if (selected.Count == 0)
+            return;
 
         bool force = _forceCheck.Checked;
+
+        // Show log panel so user can watch execution progress
+        if (!_logPanel.Visible)
+            _logPanel.Visible = true;
+
         SetBusy(true, $"Applying {selected.Count} tweak(s)...");
         try
         {
-            var results = await Task.Run(() =>
-                _engine.ApplyBatch(selected, forceCorp: force), _cts.Token);
+            int progress = 0;
+            var results = await Task.Run(
+                () =>
+                {
+                    var res = new Dictionary<string, TweakResult>(StringComparer.Ordinal);
+                    foreach (var td in selected)
+                    {
+                        progress++;
+                        Invoke(() =>
+                        {
+                            AppendLog($"[{progress}/{selected.Count}] Applying: {td.Label} ({td.Id})");
+                            _progressLabel.Text = $"Applying {progress}/{selected.Count}: {td.Label}";
+                        });
+                        var r = _engine.Apply(td, forceCorp: force);
+                        res[td.Id] = r;
+                    }
+                    return res;
+                },
+                _cts.Token
+            );
 
             int success = results.Values.Count(r => r == TweakResult.Applied);
+
+            // Mark successfully applied tweaks as pending reboot
             foreach (var (id, result) in results)
+            {
                 _statusCache[id] = _engine.DetectStatus(_engine.GetTweak(id)!);
+                if (result == TweakResult.Applied)
+                {
+                    _pendingRebootIds.Add(id);
+                    AppendLog($"\u2705 Applied: {id} — pending reboot/restart to take effect");
+                }
+                else
+                {
+                    AppendLog($"\u274C Failed: {id} — {result}");
+                }
+            }
 
             PopulateTree();
             RefreshListView();
             UpdateCounters();
-            SetStatus($"Applied {success}/{selected.Count} tweak(s).");
+
+            string rebootNote = success > 0 ? " (restart may be needed to activate changes)" : "";
+            SetStatus($"Applied {success}/{selected.Count} tweak(s).{rebootNote}");
+
+            if (success > 0)
+            {
+                AppendLog($"\u26A0 {success} tweak(s) applied — a reboot or restart may be required for changes to take effect.");
+            }
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
         {
             SetStatus($"Error applying tweaks: {ex.Message}");
+            AppendLog($"\u274C Error: {ex.Message}");
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     private async Task RemoveSelectedAsync()
     {
         var selected = GetCheckedTweaks();
-        if (selected.Count == 0) return;
+        if (selected.Count == 0)
+            return;
 
         bool force = _forceCheck.Checked;
+
+        if (!_logPanel.Visible)
+            _logPanel.Visible = true;
+
         SetBusy(true, $"Removing {selected.Count} tweak(s)...");
         try
         {
-            var results = await Task.Run(() =>
-                _engine.RemoveBatch(selected, forceCorp: force), _cts.Token);
+            int progress = 0;
+            var results = await Task.Run(
+                () =>
+                {
+                    var res = new Dictionary<string, TweakResult>(StringComparer.Ordinal);
+                    foreach (var td in selected)
+                    {
+                        progress++;
+                        Invoke(() =>
+                        {
+                            AppendLog($"[{progress}/{selected.Count}] Removing: {td.Label} ({td.Id})");
+                            _progressLabel.Text = $"Removing {progress}/{selected.Count}: {td.Label}";
+                        });
+                        var r = _engine.Remove(td, forceCorp: force);
+                        res[td.Id] = r;
+                    }
+                    return res;
+                },
+                _cts.Token
+            );
 
             int success = results.Values.Count(r => r == TweakResult.NotApplied);
-            foreach (var (id, _) in results)
+            foreach (var (id, result) in results)
+            {
                 _statusCache[id] = _engine.DetectStatus(_engine.GetTweak(id)!);
+                _pendingRebootIds.Remove(id);
+                if (result == TweakResult.NotApplied)
+                    AppendLog($"\u2705 Removed: {id}");
+                else
+                    AppendLog($"\u274C Remove failed: {id} — {result}");
+            }
 
             PopulateTree();
             RefreshListView();
@@ -338,8 +471,12 @@ public partial class MainForm : Form
         catch (Exception ex)
         {
             SetStatus($"Error removing tweaks: {ex.Message}");
+            AppendLog($"\u274C Error: {ex.Message}");
         }
-        finally { SetBusy(false); }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 
     // ── Tree / List population ─────────────────────────────────────────────
@@ -373,7 +510,8 @@ public partial class MainForm : Form
             var node = new TreeNode($"{icon} {kvp.Key}  ({applied}/{count})") { Tag = kvp.Key };
             node.ForeColor = AppTheme.Fg;
             _treeView.Nodes.Add(node);
-            if (kvp.Key == previousCat) selectNode = node;
+            if (kvp.Key == previousCat)
+                selectNode = node;
         }
         _treeView.EndUpdate();
 
@@ -382,7 +520,8 @@ public partial class MainForm : Form
         foreach (TreeNode n in _treeView.Nodes)
         {
             var sz = TextRenderer.MeasureText(n.Text, _treeView.Font);
-            if (sz.Width > maxWidth) maxWidth = sz.Width;
+            if (sz.Width > maxWidth)
+                maxWidth = sz.Width;
         }
         int desired = maxWidth + 40; // padding for icons + scrollbar
         if (desired >= 180 && desired <= _split.Width / 2)
@@ -438,18 +577,20 @@ public partial class MainForm : Form
             bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
             bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
             filtered = filtered.Where(t =>
-                wantUser ? t.Scope == TweakScope.User :
-                wantMachine ? t.Scope == TweakScope.Machine :
-                true);
+                wantUser ? t.Scope == TweakScope.User
+                : wantMachine ? t.Scope == TweakScope.Machine
+                : true
+            );
         }
 
         // Search filter
         if (search.Length > 0)
         {
             filtered = filtered.Where(t =>
-                t.Label.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                t.Id.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                t.Description.Contains(search, StringComparison.OrdinalIgnoreCase));
+                t.Label.Contains(search, StringComparison.OrdinalIgnoreCase)
+                || t.Id.Contains(search, StringComparison.OrdinalIgnoreCase)
+                || t.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
+            );
         }
 
         // Admin-only dimming
@@ -459,23 +600,36 @@ public partial class MainForm : Form
         {
             bool applicable = !_inapplicableIds.Contains(td.Id);
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusText = !applicable ? "N/A" : status switch
-            {
-                TweakResult.Applied => "Applied",
-                TweakResult.NotApplied => "Default",
-                TweakResult.Error => "Error",
-                _ => "Unknown",
-            };
+            string statusText;
+            if (!applicable)
+                statusText = "N/A";
+            else if (_pendingRebootIds.Contains(td.Id))
+                statusText = "\u23F3 Pending";
+            else
+                statusText = status switch
+                {
+                    TweakResult.Applied => "Applied",
+                    TweakResult.NotApplied => "Default",
+                    TweakResult.Error => "Error",
+                    _ => "Unknown",
+                };
 
             bool dimmed = !applicable || (!isAdmin && td.NeedsAdmin && td.Scope != TweakScope.User);
             Color itemFg = dimmed ? AppTheme.FgDim : AppTheme.Fg;
-            var item = new ListViewItem(td.Label) { Tag = td, UseItemStyleForSubItems = false, ForeColor = itemFg };
-            Color statusColor = dimmed ? AppTheme.FgDim : status switch
+            var item = new ListViewItem(td.Label)
             {
-                TweakResult.Applied => AppTheme.Green,
-                TweakResult.NotApplied => AppTheme.Red,
-                _ => AppTheme.Yellow,
+                Tag = td,
+                UseItemStyleForSubItems = false,
+                ForeColor = itemFg,
             };
+            Color statusColor = dimmed
+                ? AppTheme.FgDim
+                : status switch
+                {
+                    TweakResult.Applied => AppTheme.Green,
+                    TweakResult.NotApplied => AppTheme.Red,
+                    _ => AppTheme.Yellow,
+                };
 
             string scopeBadge = td.Scope switch
             {
@@ -541,26 +695,40 @@ public partial class MainForm : Form
             bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
             bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
             all = all.Where(t =>
-                wantUser ? t.Scope == TweakScope.User :
-                wantMachine ? t.Scope == TweakScope.Machine :
-                true);
+                wantUser ? t.Scope == TweakScope.User
+                : wantMachine ? t.Scope == TweakScope.Machine
+                : true
+            );
         }
 
         foreach (var td in all)
         {
             bool applicable = !_inapplicableIds.Contains(td.Id);
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusText = !applicable ? "N/A" : status switch
-            {
-                TweakResult.Applied => "Applied",
-                TweakResult.NotApplied => "Default",
-                TweakResult.Error => "Error",
-                _ => "Unknown",
-            };
+            string statusText;
+            if (!applicable)
+                statusText = "N/A";
+            else if (_pendingRebootIds.Contains(td.Id))
+                statusText = "\u23F3 Pending";
+            else
+                statusText = status switch
+                {
+                    TweakResult.Applied => "Applied",
+                    TweakResult.NotApplied => "Default",
+                    TweakResult.Error => "Error",
+                    _ => "Unknown",
+                };
             Color itemFg = applicable ? AppTheme.Fg : AppTheme.FgDim;
             string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
             var item = new ListViewItem(td.Label) { ForeColor = itemFg };
-            item.SubItems.AddRange([kindSymbol, statusText, td.Scope.ToString(), td.NeedsAdmin ? "Yes" : "No", td.CorpSafe ? "Yes" : "No", $"[{td.Category}] {td.Description}"]);
+            item.SubItems.AddRange([
+                kindSymbol,
+                statusText,
+                td.Scope.ToString(),
+                td.NeedsAdmin ? "Yes" : "No",
+                td.CorpSafe ? "Yes" : "No",
+                $"[{td.Category}] {td.Description}",
+            ]);
             item.Tag = td;
             _listView.Items.Add(item);
         }
@@ -569,11 +737,7 @@ public partial class MainForm : Form
     }
 
     // ── Helpers / Utilities ────────────────────────────────────────────────
-    private List<TweakDef> GetCheckedTweaks()
-        => _listView.CheckedItems
-                    .Cast<ListViewItem>()
-                    .Select(i => (TweakDef)i.Tag!)
-                    .ToList();
+    private List<TweakDef> GetCheckedTweaks() => _listView.CheckedItems.Cast<ListViewItem>().Select(i => (TweakDef)i.Tag!).ToList();
 
     private void SelectAllListItems()
     {
@@ -632,7 +796,8 @@ public partial class MainForm : Form
             Filter = "PowerShell Script|*.ps1",
             FileName = "regilattice-tweaks.ps1",
         };
-        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
 
         var sb = new StringBuilder();
         sb.AppendLine("# RegiLattice — exported tweaks");
@@ -664,10 +829,10 @@ public partial class MainForm : Form
             Filter = "JSON file|*.json",
             FileName = "regilattice-selection.json",
         };
-        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
 
-        string json = JsonSerializer.Serialize(tweaks.Select(t => t.Id).ToList(),
-            new JsonSerializerOptions { WriteIndented = true });
+        string json = JsonSerializer.Serialize(tweaks.Select(t => t.Id).ToList(), new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(dlg.FileName, json, Encoding.UTF8);
         AppendLog($"Exported {tweaks.Count} IDs to {dlg.FileName}");
         SetStatus($"Exported {tweaks.Count} ID(s) to JSON.");
@@ -675,12 +840,9 @@ public partial class MainForm : Form
 
     private void OnImportJson()
     {
-        using var dlg = new OpenFileDialog
-        {
-            Title = "Import tweak IDs from JSON",
-            Filter = "JSON file|*.json",
-        };
-        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        using var dlg = new OpenFileDialog { Title = "Import tweak IDs from JSON", Filter = "JSON file|*.json" };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
 
         List<string>? ids;
         try
@@ -690,11 +852,14 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Failed to parse JSON:\n{ex.Message}", "Import Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Failed to parse JSON:\n{ex.Message}", "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
-        if (ids is null || ids.Count == 0) { SetStatus("JSON contained no IDs."); return; }
+        if (ids is null || ids.Count == 0)
+        {
+            SetStatus("JSON contained no IDs.");
+            return;
+        }
 
         var idSet = new HashSet<string>(ids, StringComparer.OrdinalIgnoreCase);
         int matched = 0;
@@ -719,11 +884,18 @@ public partial class MainForm : Form
     }
 
     private void OnOpenScoopManager() => ShowManagerDialog(new ScoopManagerDialog());
+
     private void OnOpenPSModuleManager() => ShowManagerDialog(new PSModuleManagerDialog());
+
     private void OnOpenPipManager() => ShowManagerDialog(new PipManagerDialog());
+
     private void OnOpenWinGetManager() => ShowManagerDialog(new WinGetManagerDialog());
+
     private void OnOpenChocolateyManager() => ShowManagerDialog(new ChocolateyManagerDialog());
+
     private void OnOpenToolVersions() => ShowManagerDialog(new ToolVersionsDialog());
+
+    private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
     {
@@ -739,21 +911,20 @@ public partial class MainForm : Form
             string summary = HardwareInfo.Summary();
             var hw = HardwareInfo.DetectHardware();
             string details =
-                $"CPU: {hw.Cpu.Name} ({hw.Cpu.PhysicalCores}C / {hw.Cpu.LogicalCores}T, {hw.Cpu.Architecture})\n" +
-                $"RAM: {hw.Memory.TotalMb / 1024} GB ({hw.Memory.AvailableMb / 1024} GB available)\n" +
-                $"GPU: {string.Join(", ", hw.Gpus.Select(g => $"{g.Name} ({g.AdapterRamMb} MB)"))}\n" +
-                $"Disk: {hw.Disk.Drive} — {hw.Disk.TotalGb} GB total, {hw.Disk.FreeGb} GB free\n\n" +
-                $"Windows Build: {hw.WindowsBuild}\n" +
-                $"Hyper-V: {(hw.HasHyperV ? "Yes" : "No")}   |   WSL: {(hw.HasWsl ? "Yes" : "No")}\n" +
-                $"TPM: {(hw.HasTpm ? "Yes" : "No")}   |   Secure Boot: {(hw.HasSecureBoot ? "Yes" : "No")}\n" +
-                $"Battery: {(hw.HasBattery ? "Yes (Laptop)" : "No (Desktop)")}\n\n" +
-                $"Suggested Profile: {HardwareInfo.SuggestProfile()}";
+                $"CPU: {hw.Cpu.Name} ({hw.Cpu.PhysicalCores}C / {hw.Cpu.LogicalCores}T, {hw.Cpu.Architecture})\n"
+                + $"RAM: {hw.Memory.TotalMb / 1024} GB ({hw.Memory.AvailableMb / 1024} GB available)\n"
+                + $"GPU: {string.Join(", ", hw.Gpus.Select(g => $"{g.Name} ({g.AdapterRamMb} MB)"))}\n"
+                + $"Disk: {hw.Disk.Drive} — {hw.Disk.TotalGb} GB total, {hw.Disk.FreeGb} GB free\n\n"
+                + $"Windows Build: {hw.WindowsBuild}\n"
+                + $"Hyper-V: {(hw.HasHyperV ? "Yes" : "No")}   |   WSL: {(hw.HasWsl ? "Yes" : "No")}\n"
+                + $"TPM: {(hw.HasTpm ? "Yes" : "No")}   |   Secure Boot: {(hw.HasSecureBoot ? "Yes" : "No")}\n"
+                + $"Battery: {(hw.HasBattery ? "Yes (Laptop)" : "No (Desktop)")}\n\n"
+                + $"Suggested Profile: {HardwareInfo.SuggestProfile()}";
             MessageBox.Show(details, "Hardware Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Failed to detect hardware:\n{ex.Message}", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Failed to detect hardware:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -763,7 +934,10 @@ public partial class MainForm : Form
         int notApplied = _statusCache.Values.Count(r => r == TweakResult.NotApplied);
         int unknown = _statusCache.Values.Count(r => r == TweakResult.Unknown);
         int error = _statusCache.Values.Count(r => r == TweakResult.Error);
-        _statusLabel.Text = $"\U0001F4CA {_statusCache.Count} tweaks  \u2502  \u2705 {applied}  \u2502  \u274C {notApplied}  \u2502  \u2753 {unknown}  \u2502  \u26A0 {error}";
+        int pending = _pendingRebootIds.Count;
+        string pendingStr = pending > 0 ? $"  \u2502  \u23F3 {pending} pending" : "";
+        _statusLabel.Text =
+            $"\U0001F4CA {_statusCache.Count} tweaks  \u2502  \u2705 {applied}  \u2502  \u274C {notApplied}  \u2502  \u2753 {unknown}  \u2502  \u26A0 {error}{pendingStr}";
     }
 
     private void SetStatus(string message)
@@ -779,7 +953,8 @@ public partial class MainForm : Form
         _btnApply.Enabled = !busy;
         _btnRemove.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
-        if (message is not null) SetStatus(message);
+        if (message is not null)
+            SetStatus(message);
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────
@@ -789,24 +964,20 @@ public partial class MainForm : Form
             PopulateList(cat);
     }
 
-    private async void OnApplyClicked(object? sender, EventArgs e)
-        => await ApplySelectedAsync();
+    private async void OnApplyClicked(object? sender, EventArgs e) => await ApplySelectedAsync();
 
-    private async void OnRemoveClicked(object? sender, EventArgs e)
-        => await RemoveSelectedAsync();
+    private async void OnRemoveClicked(object? sender, EventArgs e) => await RemoveSelectedAsync();
 
-    private async void OnRefreshClicked(object? sender, EventArgs e)
-        => await RefreshStatusAsync();
+    private async void OnRefreshClicked(object? sender, EventArgs e) => await RefreshStatusAsync();
 
-    private void OnFilterChanged(object? sender, EventArgs e)
-        => RefreshListView();
+    private void OnFilterChanged(object? sender, EventArgs e) => RefreshListView();
 
-    private void OnProfileChanged(object? sender, EventArgs e)
-        => PopulateTree();
+    private void OnProfileChanged(object? sender, EventArgs e) => PopulateTree();
 
     private void OnThemeChanged(object? sender, EventArgs e)
     {
-        if (_themeCombo.SelectedItem is not string name) return;
+        if (_themeCombo.SelectedItem is not string name)
+            return;
         AppTheme.SetTheme(name);
         AppIcons.InvalidateCache();
         Icon = AppIcons.AppIcon;
@@ -819,21 +990,128 @@ public partial class MainForm : Form
         cfg.Save();
     }
 
-    private void OnSearchTextChanged(object? sender, EventArgs e)
-        => RefreshListView();
+    private void OnSearchTextChanged(object? sender, EventArgs e) => RefreshListView();
+
+    /// <summary>
+    /// Handles column header clicks for sorting and filtering.
+    /// Left-click toggles sort order (A→Z, Z→A). Right side opens filter dropdown.
+    /// </summary>
+    private void OnColumnClick(object? sender, ColumnClickEventArgs e)
+    {
+        // Determine if user clicked on the filter dropdown zone (right 18px of header)
+        var cursorPos = _listView.PointToClient(Cursor.Position);
+        int headerRight = 0;
+        for (int i = 0; i <= e.Column && i < _listView.Columns.Count; i++)
+            headerRight += _listView.Columns[i].Width;
+        int headerLeft = headerRight - _listView.Columns[e.Column].Width;
+        bool clickedFilterZone = cursorPos.X > headerRight - 20;
+
+        if (clickedFilterZone)
+        {
+            ShowColumnFilter(e.Column, headerLeft, _listView.Font.Height + 8);
+        }
+        else
+        {
+            // Toggle sort order
+            if (e.Column == _columnSorter.ColumnIndex)
+            {
+                _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                _columnSorter.ColumnIndex = e.Column;
+                _columnSorter.Order = SortOrder.Ascending;
+            }
+            _listView.Sort();
+            _listView.Invalidate();
+        }
+    }
+
+    /// <summary>Shows a filter dropdown for the given column with unique values from current items.</summary>
+    private void ShowColumnFilter(int columnIndex, int xOffset, int yOffset)
+    {
+        var uniqueValues = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (ListViewItem item in _listView.Items)
+        {
+            if (columnIndex < item.SubItems.Count)
+                uniqueValues.Add(item.SubItems[columnIndex].Text);
+        }
+
+        _columnFilters.TryGetValue(columnIndex, out var previousFilter);
+
+        var popup = new ColumnFilterPopup(uniqueValues, previousFilter);
+        var screenPos = _listView.PointToScreen(new Point(xOffset, yOffset));
+        popup.Location = screenPos;
+        popup.ShowDialog(this);
+
+        if (popup.Applied)
+        {
+            if (popup.SelectedValues.Count == 0)
+            {
+                // Clear filter — show all
+                _columnFilters.Remove(columnIndex);
+            }
+            else
+            {
+                _columnFilters[columnIndex] = popup.SelectedValues;
+            }
+            ApplyColumnFilters();
+        }
+    }
+
+    /// <summary>Hides/shows ListView items based on active column filters.</summary>
+    private void ApplyColumnFilters()
+    {
+        if (_columnFilters.Count == 0)
+        {
+            // No filters active — restore normal view
+            RefreshListView();
+            return;
+        }
+
+        _listView.BeginUpdate();
+        var toRemove = new List<ListViewItem>();
+        foreach (ListViewItem item in _listView.Items)
+        {
+            bool visible = true;
+            foreach (var (col, allowedValues) in _columnFilters)
+            {
+                if (col < item.SubItems.Count)
+                {
+                    string cellText = item.SubItems[col].Text;
+                    if (!allowedValues.Contains(cellText))
+                    {
+                        visible = false;
+                        break;
+                    }
+                }
+            }
+            if (!visible)
+                toRemove.Add(item);
+        }
+        foreach (var item in toRemove)
+            _listView.Items.Remove(item);
+        _listView.EndUpdate();
+    }
 
     private void OnListViewSelectionChanged(object? sender, EventArgs e)
     {
         if (_listView.FocusedItem?.Tag is TweakDef td)
         {
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusStr = status switch
-            {
-                TweakResult.Applied => "\u2705 Applied",
-                TweakResult.NotApplied => "\u274C Default",
-                TweakResult.Error => "\u26A0 Error",
-                _ => "\u2753 Unknown",
-            };
+            bool isPending = _pendingRebootIds.Contains(td.Id);
+            string statusStr;
+            if (isPending)
+                statusStr = "\u23F3 Pending Reboot";
+            else
+                statusStr = status switch
+                {
+                    TweakResult.Applied => "\u2705 Applied",
+                    TweakResult.NotApplied => "\u274C Default",
+                    TweakResult.Error => "\u26A0 Error",
+                    _ => "\u2753 Unknown",
+                };
+
             string scopeStr = td.Scope switch
             {
                 TweakScope.User => "\U0001F464 User",
@@ -842,17 +1120,25 @@ public partial class MainForm : Form
                 _ => "?",
             };
             string tags = td.Tags.Count > 0 ? string.Join("  \u2022  ", td.Tags) : "\u2014";
-            string keys = td.RegistryKeys.Count > 0
-                ? string.Join("; ", td.RegistryKeys.Take(3))
-                : (td.ApplyOps.Count > 0 ? "\U0001F511 Registry operations" : "\u2699 Command-based");
+            string keys =
+                td.RegistryKeys.Count > 0
+                    ? string.Join("; ", td.RegistryKeys.Take(3))
+                    : (td.ApplyOps.Count > 0 ? "\U0001F511 Registry operations" : "\u2699 Command-based");
             string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
+
+            // Build multi-line detail with full description that wraps to window width
+            string desc = td.Description.Length > 0 ? td.Description : "(no description)";
+            string pendingNote = isPending ? "\n\u26A0 Restart/reboot needed for this change to take effect." : "";
+
             _detailLabel.Text =
-                $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n" +
-                $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n" +
-                $"Tags: {tags}\n" +
-                $"Registry: {keys}" +
-                (td.SideEffects.Length > 0 ? $"\n\u26A0 {td.SideEffects}" : "");
-            _detailLabel.ForeColor = AppTheme.Fg;
+                $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
+                + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
+                + $"Tags: {tags}\n"
+                + $"Registry: {keys}\n"
+                + $"Description: {desc}"
+                + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
+                + pendingNote;
+            _detailLabel.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;
         }
         else
         {
@@ -863,16 +1149,66 @@ public partial class MainForm : Form
 
     private void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Control && e.KeyCode == Keys.Enter) { OnApplyClicked(this, e); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.Delete) { OnRemoveClicked(this, e); e.Handled = true; return; }
-        if (e.KeyCode == Keys.F5) { OnRefreshClicked(this, e); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.F) { _searchBox.Focus(); e.Handled = true; return; }
-        if (e.KeyCode == Keys.Escape) { _searchBox.Text = ""; e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.A) { SelectAllListItems(); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.D) { DeselectAllListItems(); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.I) { InvertListSelection(); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.L) { ToggleLogPanel(); e.Handled = true; return; }
-        if (e.Control && e.KeyCode == Keys.E) { _treeView.ExpandAll(); e.Handled = true; return; }
+        if (e.Control && e.KeyCode == Keys.Enter)
+        {
+            OnApplyClicked(this, e);
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.Delete)
+        {
+            OnRemoveClicked(this, e);
+            e.Handled = true;
+            return;
+        }
+        if (e.KeyCode == Keys.F5)
+        {
+            OnRefreshClicked(this, e);
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.F)
+        {
+            _searchBox.Focus();
+            e.Handled = true;
+            return;
+        }
+        if (e.KeyCode == Keys.Escape)
+        {
+            _searchBox.Text = "";
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.A)
+        {
+            SelectAllListItems();
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.D)
+        {
+            DeselectAllListItems();
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.I)
+        {
+            InvertListSelection();
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.L)
+        {
+            ToggleLogPanel();
+            e.Handled = true;
+            return;
+        }
+        if (e.Control && e.KeyCode == Keys.E)
+        {
+            _treeView.ExpandAll();
+            e.Handled = true;
+            return;
+        }
     }
 
     // ── Dark ToolStrip Renderer ────────────────────────────────────────────

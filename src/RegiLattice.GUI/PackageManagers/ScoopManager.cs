@@ -10,10 +10,18 @@ internal static partial class ScoopManager
 
     internal static bool IsScoopInstalled()
     {
-        string path = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            "scoop", "shims", "scoop.ps1");
+        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
         return File.Exists(path);
+    }
+
+    /// <summary>Installs Scoop via the official installer script (user-level, no admin needed).</summary>
+    internal static async Task InstallScoopAsync(CancellationToken ct = default)
+    {
+        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
+            "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex",
+            ct, TimeSpan.FromMinutes(3)).ConfigureAwait(false);
+        if (code != 0)
+            throw new InvalidOperationException($"Scoop installation failed: {stderr.Trim()}");
     }
 
     internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
@@ -22,14 +30,33 @@ internal static partial class ScoopManager
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
-            .Where(l => l.Length > 0
-                        && !l.StartsWith("Installed", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase))
-            .Select(l => l.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0])
+            .Where(l =>
+                l.Length > 0
+                && !l.StartsWith("Installed", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
+            )
+            .Select(l =>
+            {
+                var parts = l.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                return parts.Length >= 2 ? $"{parts[0]} ({parts[1]})" : parts[0];
+            })
             .Where(n => !string.IsNullOrEmpty(n))
             .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
             .ToList();
+    }
+
+    /// <summary>Returns just the package names (no version) of installed packages.</summary>
+    internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)
+    {
+        var list = await ListInstalledAsync(ct).ConfigureAwait(false);
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in list)
+        {
+            int paren = entry.IndexOf(" (", StringComparison.Ordinal);
+            names.Add(paren > 0 ? entry[..paren] : entry);
+        }
+        return names;
     }
 
     internal static async Task InstallAsync(string name, CancellationToken ct = default)
@@ -61,11 +88,13 @@ internal static partial class ScoopManager
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
-            .Where(l => l.Length > 0
-                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("Updates", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("Scoop", StringComparison.OrdinalIgnoreCase))
+            .Where(l =>
+                l.Length > 0
+                && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("Updates", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("Scoop", StringComparison.OrdinalIgnoreCase)
+            )
             .Select(l =>
             {
                 var parts = l.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -98,11 +127,13 @@ internal static partial class ScoopManager
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
-            .Where(l => l.Length > 0
-                        && !l.StartsWith("Results", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("'", StringComparison.Ordinal))
+            .Where(l =>
+                l.Length > 0
+                && !l.StartsWith("Results", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
+                && !l.StartsWith("'", StringComparison.Ordinal)
+            )
             .Select(l => l.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0])
             .Where(n => !string.IsNullOrEmpty(n))
             .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
@@ -115,9 +146,9 @@ internal static partial class ScoopManager
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
-            .Where(l => l.Length > 0
-                        && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase)
-                        && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase))
+            .Where(l =>
+                l.Length > 0 && !l.StartsWith("Name", StringComparison.OrdinalIgnoreCase) && !l.StartsWith("---", StringComparison.OrdinalIgnoreCase)
+            )
             .Select(l => l.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0])
             .Where(n => !string.IsNullOrEmpty(n))
             .ToList();
@@ -153,6 +184,24 @@ internal static partial class ScoopManager
     }
 
     internal static readonly string[] PopularTools =
-        ["7zip", "git", "ripgrep", "fd", "bat", "fzf", "jq", "gsudo", "neovim", "starship",
-         "delta", "cmake", "ninja", "nuget", "tokei", "cloc", "doxygen", "graphviz"];
+    [
+        "7zip",
+        "git",
+        "ripgrep",
+        "fd",
+        "bat",
+        "fzf",
+        "jq",
+        "gsudo",
+        "neovim",
+        "starship",
+        "delta",
+        "cmake",
+        "ninja",
+        "nuget",
+        "tokei",
+        "cloc",
+        "doxygen",
+        "graphviz",
+    ];
 }

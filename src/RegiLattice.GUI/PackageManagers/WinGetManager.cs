@@ -19,6 +19,16 @@ internal static partial class WinGetManager
         catch { return false; }
     }
 
+    /// <summary>Attempts to register/install WinGet via the App Installer package.</summary>
+    internal static async Task InstallWinGetAsync(CancellationToken ct = default)
+    {
+        var (code, _, stderr) = await ShellRunner.RunPowerShellAsync(
+            "Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe",
+            ct, TimeSpan.FromMinutes(2)).ConfigureAwait(false);
+        if (code != 0)
+            throw new InvalidOperationException($"Could not install WinGet automatically. Please install 'App Installer' from the Microsoft Store. {stderr.Trim()}");
+    }
+
     internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
         var (_, stdout, _) = await ShellRunner.RunAsync(

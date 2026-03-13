@@ -14,17 +14,17 @@ internal static partial class PipManager
     {
         foreach (string exe in new[] { "python", "python3", "py" })
         {
-            string path = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "AppData", "Local", "Programs", "Python");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Local", "Programs", "Python");
             // Quick check: try running the executable
             try
             {
-                var (code, _, _) = ShellRunner.RunAsync(exe, ["--version"], default)
-                    .ConfigureAwait(false).GetAwaiter().GetResult();
-                if (code == 0) return exe;
+                var (code, _, _) = ShellRunner.RunAsync(exe, ["--version"], default).ConfigureAwait(false).GetAwaiter().GetResult();
+                if (code == 0)
+                    return exe;
             }
-            catch { /* not found */ }
+            catch
+            { /* not found */
+            }
         }
         return null;
     }
@@ -32,21 +32,43 @@ internal static partial class PipManager
     internal static bool IsPipInstalled()
     {
         string? python = FindPython();
-        if (python is null) return false;
+        if (python is null)
+            return false;
         try
         {
-            var (code, _, _) = ShellRunner.RunAsync(python, ["-m", "pip", "--version"], default)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
+            var (code, _, _) = ShellRunner.RunAsync(python, ["-m", "pip", "--version"], default).ConfigureAwait(false).GetAwaiter().GetResult();
             return code == 0;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
-    internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
+    /// <summary>Attempts to install Python via winget (if available).</summary>
+    internal static async Task InstallPythonAsync(CancellationToken ct = default)
+    {
+        if (WinGetManager.IsWinGetInstalled())
+        {
+            var (code, _, stderr) = await ShellRunner.RunAsync(
+                "winget",
+                ["install", "Python.Python.3.12", "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
+                ct, TimeSpan.FromMinutes(5)).ConfigureAwait(false);
+            if (code == 0) return;
+            throw new InvalidOperationException($"Python installation via winget failed: {stderr.Trim()}");
+        }
+        throw new InvalidOperationException("winget is not available. Please install Python manually from python.org.");
+    }
+
+    internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default) =>
+        await ListInstalledAsync(userOnly: false, ct).ConfigureAwait(false);
+
+    /// <summary>Lists installed pip packages. If userOnly is true, lists only --user packages.</summary>
+    internal static async Task<List<string>> ListInstalledAsync(bool userOnly, CancellationToken ct = default)
     {
         string python = FindPython() ?? "python";
-        var (_, stdout, _) = await ShellRunner.RunAsync(
-            python, ["-m", "pip", "list", "--format=json"], ct).ConfigureAwait(false);
+        var args = userOnly ? new[] { "-m", "pip", "list", "--user", "--format=json" } : new[] { "-m", "pip", "list", "--format=json" };
+        var (_, stdout, _) = await ShellRunner.RunAsync(python, args, ct).ConfigureAwait(false);
 
         var packages = new List<string>();
         try
@@ -60,17 +82,31 @@ internal static partial class PipManager
                     packages.Add(ver is not null ? $"{name} ({ver})" : name);
             }
         }
-        catch { /* parse failed — return empty */ }
+        catch
+        { /* parse failed — return empty */
+        }
 
         return packages.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
+    /// <summary>Returns just the package names (no version) of installed packages.</summary>
+    internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)
+    {
+        var list = await ListInstalledAsync(ct).ConfigureAwait(false);
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in list)
+        {
+            int paren = entry.IndexOf(" (", StringComparison.Ordinal);
+            names.Add(paren > 0 ? entry[..paren] : entry);
+        }
+        return names;
     }
 
     internal static async Task InstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
         string python = FindPython() ?? "python";
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            python, ["-m", "pip", "install", "--user", name], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync(python, ["-m", "pip", "install", "--user", name], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"pip install failed: {stderr.Trim()}");
     }
@@ -79,8 +115,7 @@ internal static partial class PipManager
     {
         ValidateName(name);
         string python = FindPython() ?? "python";
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            python, ["-m", "pip", "uninstall", "-y", name], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync(python, ["-m", "pip", "uninstall", "-y", name], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"pip uninstall failed: {stderr.Trim()}");
     }
@@ -89,8 +124,7 @@ internal static partial class PipManager
     {
         ValidateName(name);
         string python = FindPython() ?? "python";
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            python, ["-m", "pip", "install", "--user", "--upgrade", name], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync(python, ["-m", "pip", "install", "--user", "--upgrade", name], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"pip upgrade failed: {stderr.Trim()}");
     }
@@ -105,8 +139,7 @@ internal static partial class PipManager
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
         string python = FindPython() ?? "python";
-        var (_, stdout, _) = await ShellRunner.RunAsync(
-            python, ["-m", "pip", "list", "--outdated", "--format=json"], ct).ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunAsync(python, ["-m", "pip", "list", "--outdated", "--format=json"], ct).ConfigureAwait(false);
 
         var packages = new List<string>();
         try
@@ -121,11 +154,24 @@ internal static partial class PipManager
                     packages.Add($"{name} ({ver} → {latest})");
             }
         }
-        catch { /* parse failed — return empty */ }
+        catch
+        { /* parse failed — return empty */
+        }
 
         return packages.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
     internal static readonly string[] PopularPackages =
-        ["requests", "rich", "click", "pydantic", "httpx", "pytest", "ruff", "mypy", "black", "ipython"];
+    [
+        "requests",
+        "rich",
+        "click",
+        "pydantic",
+        "httpx",
+        "pytest",
+        "ruff",
+        "mypy",
+        "black",
+        "ipython",
+    ];
 }
