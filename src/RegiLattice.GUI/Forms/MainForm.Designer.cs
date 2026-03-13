@@ -23,6 +23,10 @@ partial class MainForm
     private ToolStripLabel _themeLabel = null!;
     private ToolStripComboBox _themeCombo = null!;
 
+    // ── Kind filter ────────────────────────────────────────────────────────
+    private ToolStripLabel _kindLabel = null!;
+    private ToolStripComboBox _kindCombo = null!;
+
     // ── MenuStrip ──────────────────────────────────────────────────────────
     private MenuStrip _menuStrip = null!;
 
@@ -175,6 +179,12 @@ partial class MainForm
         _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         _themeCombo.SelectedIndexChanged += OnThemeChanged;
 
+        _kindLabel = new ToolStripLabel("Kind:");
+        _kindCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter by tweak kind", Width = 130 };
+        _kindCombo.Items.AddRange(new object[] { "All Kinds", "Registry", "PowerShell", "System Cmd", "Service", "Sched Task", "File Config", "Group Policy", "Package Mgr" });
+        _kindCombo.SelectedIndex = 0;
+        _kindCombo.SelectedIndexChanged += OnFilterChanged;
+
         _btnApply.Click += OnApplyClicked;
         _btnRemove.Click += OnRemoveClicked;
         _btnRefresh.Click += OnRefreshClicked;
@@ -200,6 +210,8 @@ partial class MainForm
             _forceCheck,
             new ToolStripSeparator(),
             _scopeLabel, _scopeCombo,
+            new ToolStripSeparator(),
+            _kindLabel, _kindCombo,
             new ToolStripSeparator(),
             _btnSelectAll, _btnDeselectAll, _btnInvert,
             new ToolStripSeparator(),

@@ -562,6 +562,7 @@ public partial class MainForm : Form
         string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
         string search = _searchBox.Text.Trim();
         string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
+        string kindSel = _kindCombo.SelectedItem?.ToString() ?? "All Kinds";
 
         _listView.BeginUpdate();
         _listView.Items.Clear();
@@ -599,6 +600,25 @@ public partial class MainForm : Form
                 : wantMachine ? t.Scope == TweakScope.Machine
                 : true
             );
+        }
+
+        // Kind filter
+        if (kindSel != "All Kinds")
+        {
+            TweakKind? wantKind = kindSel switch
+            {
+                "Registry" => TweakKind.Registry,
+                "PowerShell" => TweakKind.PowerShell,
+                "System Cmd" => TweakKind.SystemCommand,
+                "Service" => TweakKind.ServiceControl,
+                "Sched Task" => TweakKind.ScheduledTask,
+                "File Config" => TweakKind.FileConfig,
+                "Group Policy" => TweakKind.GroupPolicy,
+                "Package Mgr" => TweakKind.PackageManager,
+                _ => null,
+            };
+            if (wantKind.HasValue)
+                filtered = filtered.Where(t => t.Kind == wantKind.Value);
         }
 
         // Search filter
@@ -689,6 +709,7 @@ public partial class MainForm : Form
     {
         string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
         string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
+        string kindSel = _kindCombo.SelectedItem?.ToString() ?? "All Kinds";
 
         _listView.BeginUpdate();
         _listView.Items.Clear();
@@ -717,6 +738,25 @@ public partial class MainForm : Form
                 : wantMachine ? t.Scope == TweakScope.Machine
                 : true
             );
+        }
+
+        // Kind filter
+        if (kindSel != "All Kinds")
+        {
+            TweakKind? wantKind = kindSel switch
+            {
+                "Registry" => TweakKind.Registry,
+                "PowerShell" => TweakKind.PowerShell,
+                "System Cmd" => TweakKind.SystemCommand,
+                "Service" => TweakKind.ServiceControl,
+                "Sched Task" => TweakKind.ScheduledTask,
+                "File Config" => TweakKind.FileConfig,
+                "Group Policy" => TweakKind.GroupPolicy,
+                "Package Mgr" => TweakKind.PackageManager,
+                _ => null,
+            };
+            if (wantKind.HasValue)
+                all = all.Where(t => t.Kind == wantKind.Value);
         }
 
         foreach (var td in all)
