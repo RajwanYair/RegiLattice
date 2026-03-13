@@ -27,18 +27,19 @@ public sealed class TweakEngineTests
         return new TweakEngine(session);
     }
 
-    private static TweakDef MakeTweak(string id, string category = "Test", string label = "Tweak") => new()
-    {
-        Id = id,
-        Label = label,
-        Category = category,
-        RegistryKeys = [$@"HKCU\Software\{id}"],
-        Description = $"Description for {id}",
-        Tags = ["test", category.ToLowerInvariant()],
-        ApplyOps = [RegOp.SetDword($@"HKCU\Software\{id}", "Enabled", 1)],
-        RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\{id}", "Enabled")],
-        DetectOps = [RegOp.CheckDword($@"HKCU\Software\{id}", "Enabled", 1)],
-    };
+    private static TweakDef MakeTweak(string id, string category = "Test", string label = "Tweak") =>
+        new()
+        {
+            Id = id,
+            Label = label,
+            Category = category,
+            RegistryKeys = [$@"HKCU\Software\{id}"],
+            Description = $"Description for {id}",
+            Tags = ["test", category.ToLowerInvariant()],
+            ApplyOps = [RegOp.SetDword($@"HKCU\Software\{id}", "Enabled", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\{id}", "Enabled")],
+            DetectOps = [RegOp.CheckDword($@"HKCU\Software\{id}", "Enabled", 1)],
+        };
 
     // ── Registration ────────────────────────────────────────────────────
     [Fact]
@@ -164,8 +165,22 @@ public sealed class TweakEngineTests
     public void Filter_ByScope()
     {
         var engine = CreateEngine();
-        var hkcu = new TweakDef { Id = "scope-u", Label = "U", Category = "X", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] };
-        var hklm = new TweakDef { Id = "scope-m", Label = "M", Category = "X", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] };
+        var hkcu = new TweakDef
+        {
+            Id = "scope-u",
+            Label = "U",
+            Category = "X",
+            RegistryKeys = [@"HKCU\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        var hklm = new TweakDef
+        {
+            Id = "scope-m",
+            Label = "M",
+            Category = "X",
+            RegistryKeys = [@"HKLM\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)],
+        };
         engine.Register([hkcu, hklm]);
         var results = engine.Filter(scope: TweakScope.User);
         Assert.Single(results);
@@ -280,8 +295,22 @@ public sealed class TweakEngineTests
     {
         var engine = CreateEngine();
         engine.Register([
-            new TweakDef { Id = "u1", Label = "U", Category = "C", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] },
-            new TweakDef { Id = "m1", Label = "M", Category = "C", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] },
+            new TweakDef
+            {
+                Id = "u1",
+                Label = "U",
+                Category = "C",
+                RegistryKeys = [@"HKCU\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "m1",
+                Label = "M",
+                Category = "C",
+                RegistryKeys = [@"HKLM\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)],
+            },
         ]);
         var counts = engine.ScopeCounts();
         Assert.Equal(1, counts[TweakScope.User]);
@@ -341,7 +370,14 @@ public sealed class TweakEngineTests
     public void TweaksByTag_ReturnsMatchingTweaks()
     {
         var engine = CreateEngine();
-        var td = new TweakDef { Id = "tag-1", Label = "Tag", Category = "X", Tags = ["special-tag"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\tag-1", "V", 1)] };
+        var td = new TweakDef
+        {
+            Id = "tag-1",
+            Label = "Tag",
+            Category = "X",
+            Tags = ["special-tag"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\tag-1", "V", 1)],
+        };
         engine.Register([td, MakeTweak("notag-1")]);
         var results = engine.TweaksByTag("special-tag");
         Assert.Single(results);
@@ -352,7 +388,14 @@ public sealed class TweakEngineTests
     public void TweaksByTag_CaseInsensitive()
     {
         var engine = CreateEngine();
-        var td = new TweakDef { Id = "tagci-1", Label = "T", Category = "X", Tags = ["MyTag"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\tagci-1", "V", 1)] };
+        var td = new TweakDef
+        {
+            Id = "tagci-1",
+            Label = "T",
+            Category = "X",
+            Tags = ["MyTag"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\tagci-1", "V", 1)],
+        };
         engine.Register([td]);
         Assert.Single(engine.TweaksByTag("mytag"));
         Assert.Single(engine.TweaksByTag("MYTAG"));
@@ -364,8 +407,22 @@ public sealed class TweakEngineTests
     {
         var engine = CreateEngine();
         engine.Register([
-            new TweakDef { Id = "scp-u", Label = "U", Category = "C", RegistryKeys = [@"HKCU\Test"], ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] },
-            new TweakDef { Id = "scp-m", Label = "M", Category = "C", RegistryKeys = [@"HKLM\Test"], ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)] },
+            new TweakDef
+            {
+                Id = "scp-u",
+                Label = "U",
+                Category = "C",
+                RegistryKeys = [@"HKCU\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "scp-m",
+                Label = "M",
+                Category = "C",
+                RegistryKeys = [@"HKLM\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)],
+            },
         ]);
         var user = engine.TweaksByScope(TweakScope.User);
         var machine = engine.TweaksByScope(TweakScope.Machine);
@@ -380,8 +437,22 @@ public sealed class TweakEngineTests
     public void Filter_ByCorpSafe()
     {
         var engine = CreateEngine();
-        var safe = new TweakDef { Id = "f-safe", Label = "S", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-safe", "V", 1)] };
-        var risky = new TweakDef { Id = "f-risky", Label = "R", Category = "X", CorpSafe = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-risky", "V", 1)] };
+        var safe = new TweakDef
+        {
+            Id = "f-safe",
+            Label = "S",
+            Category = "X",
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-safe", "V", 1)],
+        };
+        var risky = new TweakDef
+        {
+            Id = "f-risky",
+            Label = "R",
+            Category = "X",
+            CorpSafe = false,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-risky", "V", 1)],
+        };
         engine.Register([safe, risky]);
         var results = engine.Filter(corpSafe: true);
         Assert.Single(results);
@@ -392,8 +463,22 @@ public sealed class TweakEngineTests
     public void Filter_ByNeedsAdmin()
     {
         var engine = CreateEngine();
-        var admin = new TweakDef { Id = "f-admin", Label = "A", Category = "X", NeedsAdmin = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-admin", "V", 1)] };
-        var noAdmin = new TweakDef { Id = "f-noadmin", Label = "N", Category = "X", NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-noadmin", "V", 1)] };
+        var admin = new TweakDef
+        {
+            Id = "f-admin",
+            Label = "A",
+            Category = "X",
+            NeedsAdmin = true,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-admin", "V", 1)],
+        };
+        var noAdmin = new TweakDef
+        {
+            Id = "f-noadmin",
+            Label = "N",
+            Category = "X",
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-noadmin", "V", 1)],
+        };
         engine.Register([admin, noAdmin]);
         var results = engine.Filter(needsAdmin: false);
         Assert.Single(results);
@@ -404,8 +489,22 @@ public sealed class TweakEngineTests
     public void Filter_ByMinBuild()
     {
         var engine = CreateEngine();
-        var old = new TweakDef { Id = "f-old", Label = "O", Category = "X", MinBuild = 19041, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-old", "V", 1)] };
-        var fresh = new TweakDef { Id = "f-fresh", Label = "F", Category = "X", MinBuild = 22631, ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-fresh", "V", 1)] };
+        var old = new TweakDef
+        {
+            Id = "f-old",
+            Label = "O",
+            Category = "X",
+            MinBuild = 19041,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-old", "V", 1)],
+        };
+        var fresh = new TweakDef
+        {
+            Id = "f-fresh",
+            Label = "F",
+            Category = "X",
+            MinBuild = 22631,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\f-fresh", "V", 1)],
+        };
         engine.Register([old, fresh]);
         var results = engine.Filter(minBuild: 20000);
         Assert.Single(results);
@@ -417,9 +516,33 @@ public sealed class TweakEngineTests
     {
         var engine = CreateEngine();
         engine.Register([
-            new TweakDef { Id = "fm-1", Label = "A", Category = "CatA", CorpSafe = true, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-1", "V", 1)] },
-            new TweakDef { Id = "fm-2", Label = "B", Category = "CatA", CorpSafe = false, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-2", "V", 1)] },
-            new TweakDef { Id = "fm-3", Label = "C", Category = "CatB", CorpSafe = true, NeedsAdmin = false, ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-3", "V", 1)] },
+            new TweakDef
+            {
+                Id = "fm-1",
+                Label = "A",
+                Category = "CatA",
+                CorpSafe = true,
+                NeedsAdmin = false,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fm-2",
+                Label = "B",
+                Category = "CatA",
+                CorpSafe = false,
+                NeedsAdmin = false,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-2", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fm-3",
+                Label = "C",
+                Category = "CatB",
+                CorpSafe = true,
+                NeedsAdmin = false,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fm-3", "V", 1)],
+            },
         ]);
         var results = engine.Filter(corpSafe: true, category: "CatA");
         Assert.Single(results);
@@ -433,8 +556,22 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "ab-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-1", "V", 1)] },
-            new TweakDef { Id = "ab-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-2", "V", 1)] },
+            new TweakDef
+            {
+                Id = "ab-1",
+                Label = "A",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "ab-2",
+                Label = "B",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\ab-2", "V", 1)],
+            },
         };
         engine.Register(tweaks);
         var results = engine.ApplyBatch(tweaks);
@@ -448,8 +585,22 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "abp-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-1", "V", 1)] },
-            new TweakDef { Id = "abp-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-2", "V", 1)] },
+            new TweakDef
+            {
+                Id = "abp-1",
+                Label = "A",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "abp-2",
+                Label = "B",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\abp-2", "V", 1)],
+            },
         };
         engine.Register(tweaks);
         var results = engine.ApplyBatch(tweaks, parallel: true);
@@ -463,8 +614,24 @@ public sealed class TweakEngineTests
         var engine = CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "rb-1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-1", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-1", "V")] },
-            new TweakDef { Id = "rb-2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-2", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-2", "V")] },
+            new TweakDef
+            {
+                Id = "rb-1",
+                Label = "A",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-1", "V", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-1", "V")],
+            },
+            new TweakDef
+            {
+                Id = "rb-2",
+                Label = "B",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\rb-2", "V", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\rb-2", "V")],
+            },
         };
         engine.Register(tweaks);
         var results = engine.RemoveBatch(tweaks);
@@ -493,7 +660,8 @@ public sealed class TweakEngineTests
         }
         finally
         {
-            if (File.Exists(path)) File.Delete(path);
+            if (File.Exists(path))
+                File.Delete(path);
         }
     }
 
@@ -515,7 +683,8 @@ public sealed class TweakEngineTests
         }
         finally
         {
-            if (File.Exists(path)) File.Delete(path);
+            if (File.Exists(path))
+                File.Delete(path);
         }
     }
 
@@ -590,5 +759,49 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     public void ApplyProfile_UnknownProfile_ReturnsEmpty()
     {
         Assert.Empty(_engine.ApplyProfile("nonexistent"));
+    }
+
+    [Fact]
+    public void RegisterBuiltins_SecurityCategoryExists()
+    {
+        Assert.Contains("Security", _engine.Categories());
+    }
+
+    [Theory]
+    [InlineData("sec-restrict-anonymous-enum")]
+    [InlineData("sec-enable-dep-always")]
+    [InlineData("sec-enable-safe-dll-search")]
+    [InlineData("sec-reduce-cached-logons")]
+    [InlineData("sec-restrict-sam-remote")]
+    [InlineData("sec-disable-llmnr")]
+    [InlineData("sec-disable-netbios")]
+    [InlineData("sec-disable-wpad")]
+    [InlineData("sec-enforce-smb-signing")]
+    [InlineData("sec-disable-powershell-v2")]
+    public void RegisterBuiltins_SecurityTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Security", tweak.Category);
+        Assert.NotEmpty(tweak.ApplyOps);
+    }
+
+    [Theory]
+    [InlineData("perf-disable-startup-delay")]
+    [InlineData("perf-disable-low-disk-warning")]
+    [InlineData("perf-increase-irp-stack")]
+    [InlineData("perf-disable-tips-notifications")]
+    [InlineData("perf-disable-explorer-search-history")]
+    [InlineData("perf-increase-file-system-cache")]
+    [InlineData("perf-disable-8dot3-name-creation")]
+    [InlineData("perf-increase-network-throttle")]
+    [InlineData("perf-disable-nagle-algorithm")]
+    [InlineData("perf-disable-power-throttling")]
+    public void RegisterBuiltins_NewPerfTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Performance", tweak.Category);
+        Assert.NotEmpty(tweak.ApplyOps);
     }
 }

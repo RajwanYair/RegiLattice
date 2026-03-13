@@ -132,6 +132,7 @@ public sealed class TweakEngine
         Register(Tweaks.ScheduledTasks.Tweaks);
         Register(Tweaks.ScoopTools.Tweaks);
         Register(Tweaks.Screensaver.Tweaks);
+        Register(Tweaks.Security.Tweaks);
         Register(Tweaks.Services.Tweaks);
         Register(Tweaks.Shell.Tweaks);
         Register(Tweaks.SnapMultitasking.Tweaks);
@@ -163,7 +164,8 @@ public sealed class TweakEngine
     {
         var mgr = new PackManager();
         var tweaks = mgr.LoadAllInstalledTweaks();
-        if (tweaks.Count == 0) return 0;
+        if (tweaks.Count == 0)
+            return 0;
         Register(tweaks);
         return tweaks.Count;
     }
@@ -171,19 +173,21 @@ public sealed class TweakEngine
     // ── Lookup & enumeration ────────────────────────────────────────────
 
     public IReadOnlyList<TweakDef> AllTweaks() => _allTweaks;
+
     public TweakDef? GetTweak(string id) => _tweakById.GetValueOrDefault(id);
+
     public IReadOnlyList<string> Categories() => [.. _tweaksByCat.Keys.Order()];
+
     public IReadOnlyDictionary<string, List<TweakDef>> TweaksByCategory() => _tweaksByCat;
+
     public int CategoryCount => _tweaksByCat.Count;
 
-    public IReadOnlyList<TweakDef> TweaksByIds(IEnumerable<string> ids)
-        => ids.Select(id => _tweakById.GetValueOrDefault(id)).Where(t => t is not null).Cast<TweakDef>().ToList();
+    public IReadOnlyList<TweakDef> TweaksByIds(IEnumerable<string> ids) =>
+        ids.Select(id => _tweakById.GetValueOrDefault(id)).Where(t => t is not null).Cast<TweakDef>().ToList();
 
-    public IReadOnlyList<TweakDef> TweaksByTag(string tag)
-        => _allTweaks.Where(t => t.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase)).ToList();
+    public IReadOnlyList<TweakDef> TweaksByTag(string tag) => _allTweaks.Where(t => t.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase)).ToList();
 
-    public IReadOnlyList<TweakDef> TweaksByScope(TweakScope scope)
-        => _tweaksByScope.GetValueOrDefault(scope.ToString().ToLowerInvariant()) ?? [];
+    public IReadOnlyList<TweakDef> TweaksByScope(TweakScope scope) => _tweaksByScope.GetValueOrDefault(scope.ToString().ToLowerInvariant()) ?? [];
 
     public TweakScope GetScope(TweakDef td) => _scopeCache.GetOrAdd(td.Id, _ => td.Scope);
 
@@ -191,27 +195,38 @@ public sealed class TweakEngine
 
     public IReadOnlyList<TweakDef> Search(string query)
     {
-        if (string.IsNullOrWhiteSpace(query)) return _allTweaks;
+        if (string.IsNullOrWhiteSpace(query))
+            return _allTweaks;
         var lower = query.ToLowerInvariant();
         var tokens = lower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        return _searchPairs
-            .Where(p => tokens.All(t => p.Lower.Contains(t)))
-            .Select(p => p.Tweak)
-            .ToList();
+        return _searchPairs.Where(p => tokens.All(t => p.Lower.Contains(t))).Select(p => p.Tweak).ToList();
     }
 
     public IReadOnlyList<TweakDef> Filter(
-        bool? corpSafe = null, bool? needsAdmin = null,
-        TweakScope? scope = null, string? category = null,
-        int? minBuild = null, string? query = null)
+        bool? corpSafe = null,
+        bool? needsAdmin = null,
+        TweakScope? scope = null,
+        string? category = null,
+        int? minBuild = null,
+        string? query = null
+    )
     {
         IEnumerable<TweakDef> results = _allTweaks;
-        if (corpSafe.HasValue) results = results.Where(t => t.CorpSafe == corpSafe.Value);
-        if (needsAdmin.HasValue) results = results.Where(t => t.NeedsAdmin == needsAdmin.Value);
-        if (scope.HasValue) results = results.Where(t => t.Scope == scope.Value);
-        if (category is not null) results = results.Where(t => t.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
-        if (minBuild.HasValue) results = results.Where(t => t.MinBuild <= minBuild.Value);
-        if (query is not null) { var q = query.ToLowerInvariant(); results = results.Where(t => _tweakSearchText.TryGetValue(t, out var text) && text.Contains(q)); }
+        if (corpSafe.HasValue)
+            results = results.Where(t => t.CorpSafe == corpSafe.Value);
+        if (needsAdmin.HasValue)
+            results = results.Where(t => t.NeedsAdmin == needsAdmin.Value);
+        if (scope.HasValue)
+            results = results.Where(t => t.Scope == scope.Value);
+        if (category is not null)
+            results = results.Where(t => t.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
+        if (minBuild.HasValue)
+            results = results.Where(t => t.MinBuild <= minBuild.Value);
+        if (query is not null)
+        {
+            var q = query.ToLowerInvariant();
+            results = results.Where(t => _tweakSearchText.TryGetValue(t, out var text) && text.Contains(q));
+        }
         return results.ToList();
     }
 
@@ -227,7 +242,10 @@ public sealed class TweakEngine
                 return _session.Evaluate(td.DetectOps) ? TweakResult.Applied : TweakResult.NotApplied;
             return TweakResult.Unknown;
         }
-        catch { return TweakResult.Error; }
+        catch
+        {
+            return TweakResult.Error;
+        }
     }
 
     public Dictionary<string, TweakResult> StatusMap(bool parallel = false, IEnumerable<string>? ids = null)
@@ -381,7 +399,8 @@ public sealed class TweakEngine
         if (parallel)
             Parallel.ForEach(tweaks, td => result[td.Id] = Apply(td, forceCorp: forceCorp));
         else
-            foreach (var td in tweaks) result[td.Id] = Apply(td, forceCorp: forceCorp);
+            foreach (var td in tweaks)
+                result[td.Id] = Apply(td, forceCorp: forceCorp);
         return new Dictionary<string, TweakResult>(result);
     }
 
@@ -391,7 +410,8 @@ public sealed class TweakEngine
         if (parallel)
             Parallel.ForEach(tweaks, td => result[td.Id] = Remove(td, forceCorp: forceCorp));
         else
-            foreach (var td in tweaks) result[td.Id] = Remove(td, forceCorp: forceCorp);
+            foreach (var td in tweaks)
+                result[td.Id] = Remove(td, forceCorp: forceCorp);
         return new Dictionary<string, TweakResult>(result);
     }
 
@@ -399,19 +419,19 @@ public sealed class TweakEngine
 
     public static IReadOnlyList<ProfileDef> Profiles { get; } = ProfileDefinitions.All;
 
-    public static ProfileDef? GetProfile(string name)
-        => Profiles.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    public static ProfileDef? GetProfile(string name) => Profiles.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
     public IReadOnlyList<TweakDef> TweaksForProfile(string name)
     {
         var profile = GetProfile(name);
-        if (profile is null) return [];
+        if (profile is null)
+            return [];
         var cats = new HashSet<string>(profile.ApplyCategories, StringComparer.OrdinalIgnoreCase);
         return _allTweaks.Where(t => cats.Contains(t.Category)).ToList();
     }
 
-    public Dictionary<string, TweakResult> ApplyProfile(string name, bool forceCorp = false, bool parallel = false)
-        => ApplyBatch(TweaksForProfile(name), forceCorp, parallel);
+    public Dictionary<string, TweakResult> ApplyProfile(string name, bool forceCorp = false, bool parallel = false) =>
+        ApplyBatch(TweaksForProfile(name), forceCorp, parallel);
 
     // ── Snapshots ───────────────────────────────────────────────────────
 
@@ -436,7 +456,8 @@ public sealed class TweakEngine
         foreach (var (id, state) in snapshot)
         {
             var td = GetTweak(id);
-            if (td is null) continue;
+            if (td is null)
+                continue;
             results[id] = state switch
             {
                 "applied" => Apply(td, forceCorp: forceCorp),
@@ -450,43 +471,48 @@ public sealed class TweakEngine
     // ── Windows Build ───────────────────────────────────────────────────
 
     private static int? _windowsBuild;
+
     public static int WindowsBuild()
     {
-        if (_windowsBuild.HasValue) return _windowsBuild.Value;
+        if (_windowsBuild.HasValue)
+            return _windowsBuild.Value;
         try
         {
             using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
             var build = key?.GetValue("CurrentBuildNumber")?.ToString();
             _windowsBuild = int.TryParse(build, out var b) ? b : 0;
         }
-        catch { _windowsBuild = 0; }
+        catch
+        {
+            _windowsBuild = 0;
+        }
         return _windowsBuild.Value;
     }
 
     // ── Category statistics ─────────────────────────────────────────────
 
-    public Dictionary<string, int> CategoryCounts()
-        => _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
+    public Dictionary<string, int> CategoryCounts() => _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
-    public Dictionary<TweakScope, int> ScopeCounts()
-        => _allTweaks.GroupBy(t => t.Scope).ToDictionary(g => g.Key, g => g.Count());
+    public Dictionary<TweakScope, int> ScopeCounts() => _allTweaks.GroupBy(t => t.Scope).ToDictionary(g => g.Key, g => g.Count());
 
     // ── Export for GUI ──────────────────────────────────────────────────
 
     public void ExportJson(string path)
     {
-        var list = _allTweaks.Select(t => new
-        {
-            t.Id,
-            t.Label,
-            t.Category,
-            status = DetectStatus(t).ToString().ToLowerInvariant(),
-            needs_admin = t.NeedsAdmin,
-            corp_safe = t.CorpSafe,
-            t.Tags,
-            registry_keys = t.RegistryKeys,
-            t.Description,
-        }).ToList();
+        var list = _allTweaks
+            .Select(t => new
+            {
+                t.Id,
+                t.Label,
+                t.Category,
+                status = DetectStatus(t).ToString().ToLowerInvariant(),
+                needs_admin = t.NeedsAdmin,
+                corp_safe = t.CorpSafe,
+                t.Tags,
+                registry_keys = t.RegistryKeys,
+                t.Description,
+            })
+            .ToList();
         var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(path, json);
     }
