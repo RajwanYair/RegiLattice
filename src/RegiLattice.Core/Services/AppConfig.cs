@@ -30,21 +30,24 @@ public sealed class AppConfig
     public bool CheckToolUpdates { get; set; } = true;
 
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
-    public static string ConfigDir => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
+    public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 
     public static string DefaultConfigPath => Path.Combine(ConfigDir, "config.json");
 
     public static AppConfig Load(string? path = null)
     {
         path ??= DefaultConfigPath;
-        if (!File.Exists(path)) return new AppConfig();
+        if (!File.Exists(path))
+            return new AppConfig();
         try
         {
             var json = File.ReadAllText(path);
             return JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
         }
-        catch { return new AppConfig(); }
+        catch
+        {
+            return new AppConfig();
+        }
     }
 
     public void Save(string? path = null)

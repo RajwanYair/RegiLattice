@@ -59,15 +59,19 @@ internal sealed class ToolVersionsDialog : Form
         _lstTools.Font = AppTheme.Mono;
         _lstTools.BackColor = AppTheme.Surface;
         _lstTools.ForeColor = AppTheme.Fg;
-        _lstTools.Columns.AddRange(
-        [
+        _lstTools.Columns.AddRange([
             new ColumnHeader { Text = "Tool", Width = 130 },
             new ColumnHeader { Text = "Installed", Width = 120 },
             new ColumnHeader { Text = "Latest", Width = 120 },
             new ColumnHeader { Text = "Status", Width = 160 },
         ]);
 
-        var ctrlPanel = new Panel { Dock = DockStyle.Bottom, Height = 42, BackColor = AppTheme.Surface };
+        var ctrlPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 42,
+            BackColor = AppTheme.Surface,
+        };
         _btnRefresh.Text = "Refresh";
         _btnRefresh.BackColor = AppTheme.Accent;
         _btnRefresh.ForeColor = AppTheme.Bg;
@@ -90,9 +94,7 @@ internal sealed class ToolVersionsDialog : Form
     {
         _btnRefresh.Enabled = false;
         bool checkUpdates = _chkUpdates.Checked;
-        _lblStatus.Text = checkUpdates
-            ? "Checking tool versions and available updates..."
-            : "Checking tool versions...";
+        _lblStatus.Text = checkUpdates ? "Checking tool versions and available updates..." : "Checking tool versions...";
         _lblStatus.ForeColor = AppTheme.FgDim;
         _lstTools.Items.Clear();
 

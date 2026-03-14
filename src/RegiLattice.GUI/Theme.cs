@@ -6,25 +6,38 @@ internal static class AppTheme
     // ── Theme definition ───────────────────────────────────────────────────
     internal sealed record ThemeDef(
         string Name,
-        Color Bg, Color Surface, Color Surface2,
-        Color Fg, Color FgDim,
-        Color Accent, Color Green, Color Red, Color Yellow,
+        Color Bg,
+        Color Surface,
+        Color Surface2,
+        Color Fg,
+        Color FgDim,
+        Color Accent,
+        Color Green,
+        Color Red,
+        Color Yellow,
         Color Overlay,
-        Color Success, Color Danger, Color Info)
+        Color Success,
+        Color Danger,
+        Color Info
+    )
     {
         /// <summary>Lighter accent for hover states (30% alpha over Surface).</summary>
         internal Color AccentHover => Color.FromArgb(40, Accent);
+
         /// <summary>Darker accent for pressed states.</summary>
         internal Color AccentPressed => Color.FromArgb(70, Accent);
+
         /// <summary>Subtle border colour for cards and panels.</summary>
         internal Color Border => Color.FromArgb(50, Fg);
+
         /// <summary>Very subtle separator line colour.</summary>
         internal Color Separator => Color.FromArgb(30, Fg);
     }
 
     private static readonly Dictionary<string, ThemeDef> Themes = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["catppuccin-mocha"] = new("Catppuccin Mocha",
+        ["catppuccin-mocha"] = new(
+            "Catppuccin Mocha",
             Bg: Color.FromArgb(30, 30, 46),
             Surface: Color.FromArgb(49, 50, 68),
             Surface2: Color.FromArgb(88, 91, 112),
@@ -37,9 +50,11 @@ internal static class AppTheme
             Overlay: Color.FromArgb(69, 71, 90),
             Success: Color.FromArgb(64, 160, 43),
             Danger: Color.FromArgb(230, 74, 25),
-            Info: Color.FromArgb(30, 102, 245)),
+            Info: Color.FromArgb(30, 102, 245)
+        ),
 
-        ["catppuccin-latte"] = new("Catppuccin Latte",
+        ["catppuccin-latte"] = new(
+            "Catppuccin Latte",
             Bg: Color.FromArgb(239, 241, 245),
             Surface: Color.FromArgb(204, 208, 218),
             Surface2: Color.FromArgb(172, 176, 190),
@@ -52,9 +67,11 @@ internal static class AppTheme
             Overlay: Color.FromArgb(156, 160, 176),
             Success: Color.FromArgb(64, 160, 43),
             Danger: Color.FromArgb(210, 15, 57),
-            Info: Color.FromArgb(30, 102, 245)),
+            Info: Color.FromArgb(30, 102, 245)
+        ),
 
-        ["nord"] = new("Nord",
+        ["nord"] = new(
+            "Nord",
             Bg: Color.FromArgb(46, 52, 64),
             Surface: Color.FromArgb(59, 66, 82),
             Surface2: Color.FromArgb(76, 86, 106),
@@ -67,9 +84,11 @@ internal static class AppTheme
             Overlay: Color.FromArgb(67, 76, 94),
             Success: Color.FromArgb(163, 190, 140),
             Danger: Color.FromArgb(191, 97, 106),
-            Info: Color.FromArgb(129, 161, 193)),
+            Info: Color.FromArgb(129, 161, 193)
+        ),
 
-        ["dracula"] = new("Dracula",
+        ["dracula"] = new(
+            "Dracula",
             Bg: Color.FromArgb(40, 42, 54),
             Surface: Color.FromArgb(68, 71, 90),
             Surface2: Color.FromArgb(98, 114, 164),
@@ -82,7 +101,8 @@ internal static class AppTheme
             Overlay: Color.FromArgb(68, 71, 90),
             Success: Color.FromArgb(80, 250, 123),
             Danger: Color.FromArgb(255, 85, 85),
-            Info: Color.FromArgb(139, 233, 253)),
+            Info: Color.FromArgb(139, 233, 253)
+        ),
     };
 
     // ── Current theme ──────────────────────────────────────────────────────
@@ -122,8 +142,7 @@ internal static class AppTheme
     // ── Theme API ──────────────────────────────────────────────────────────
     internal static string[] AvailableThemes() => [.. Themes.Keys];
 
-    internal static string CurrentThemeName()
-        => Themes.FirstOrDefault(kv => kv.Value == _current).Key ?? "catppuccin-mocha";
+    internal static string CurrentThemeName() => Themes.FirstOrDefault(kv => kv.Value == _current).Key ?? "catppuccin-mocha";
 
     internal static void SetTheme(string name)
     {
@@ -166,8 +185,8 @@ internal static class AppTheme
     }
 
     /// <summary>Create a styled ListBox for use inside package manager dialogs.</summary>
-    internal static ListBox StyledListBox()
-        => new()
+    internal static ListBox StyledListBox() =>
+        new()
         {
             BackColor = Surface,
             ForeColor = Fg,
@@ -178,8 +197,8 @@ internal static class AppTheme
         };
 
     /// <summary>Create a styled TextBox.</summary>
-    internal static TextBox StyledTextBox(int width = 200)
-        => new()
+    internal static TextBox StyledTextBox(int width = 200) =>
+        new()
         {
             BackColor = Overlay,
             ForeColor = Fg,
@@ -193,7 +212,11 @@ internal static class AppTheme
     /// <summary>Draw a filled rounded rectangle.</summary>
     internal static void FillRoundedRect(Graphics g, Brush brush, Rectangle rect, int radius)
     {
-        if (radius <= 0) { g.FillRectangle(brush, rect); return; }
+        if (radius <= 0)
+        {
+            g.FillRectangle(brush, rect);
+            return;
+        }
         using var path = RoundedRectPath(rect, radius);
         g.FillPath(brush, path);
     }
@@ -201,7 +224,11 @@ internal static class AppTheme
     /// <summary>Draw a rounded rectangle border.</summary>
     internal static void DrawRoundedRect(Graphics g, Pen pen, Rectangle rect, int radius)
     {
-        if (radius <= 0) { g.DrawRectangle(pen, rect); return; }
+        if (radius <= 0)
+        {
+            g.DrawRectangle(pen, rect);
+            return;
+        }
         using var path = RoundedRectPath(rect, radius);
         g.DrawPath(pen, path);
     }
@@ -233,7 +260,6 @@ internal static class AppTheme
         using var border = new Pen(Color.FromArgb(80, bg), 1f);
         DrawRoundedRect(g, border, rect, h / 2);
 
-        TextRenderer.DrawText(g, text, font, rect, fg,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        TextRenderer.DrawText(g, text, font, rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
     }
 }

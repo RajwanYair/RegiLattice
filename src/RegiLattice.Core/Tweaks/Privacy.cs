@@ -15,7 +15,11 @@ internal static class Privacy
             CorpSafe = false,
             Description = "Disables Windows telemetry and feedback notifications.",
             Tags = ["privacy", "telemetry", "microsoft"],
-            RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection", @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"],
+            RegistryKeys =
+            [
+                @"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0),
@@ -89,7 +93,11 @@ internal static class Privacy
             CorpSafe = true,
             Description = "Disables location tracking for all apps and Windows services.",
             Tags = ["privacy", "location", "tracking"],
-            RegistryKeys = [@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", @"HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors"],
+            RegistryKeys =
+            [
+                @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location",
+                @"HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors",
+            ],
             ApplyOps =
             [
                 RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", "Value", "Deny"),
@@ -100,7 +108,10 @@ internal static class Privacy
                 RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", "Value", "Allow"),
                 RegOp.DeleteValue(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", "DisableLocation"),
             ],
-            DetectOps = [RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", "Value", "Deny")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", "Value", "Deny"),
+            ],
         },
         new TweakDef
         {
@@ -111,7 +122,11 @@ internal static class Privacy
             CorpSafe = true,
             Description = "Disables the Windows advertising ID used for cross-app ad targeting.",
             Tags = ["privacy", "advertising", "tracking"],
-            RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", @"HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"],
+            RegistryKeys =
+            [
+                @"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo",
+                @"HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0),
@@ -134,9 +149,18 @@ internal static class Privacy
             Description = "Denies camera access for UWP/Store apps by default.",
             Tags = ["privacy", "camera", "hardware"],
             RegistryKeys = [@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"],
-            ApplyOps = [RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Deny")],
-            RemoveOps = [RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow")],
-            DetectOps = [RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Deny")],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Deny"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Deny"),
+            ],
         },
         new TweakDef
         {
@@ -148,9 +172,18 @@ internal static class Privacy
             Description = "Denies microphone access for UWP/Store apps by default.",
             Tags = ["privacy", "microphone", "hardware"],
             RegistryKeys = [@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone"],
-            ApplyOps = [RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Deny")],
-            RemoveOps = [RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Allow")],
-            DetectOps = [RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Deny")],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Deny"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Allow"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone", "Value", "Deny"),
+            ],
         },
         new TweakDef
         {
@@ -211,7 +244,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows clipboard history (Win+V). Prevents sensitive copied data from being stored. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables Windows clipboard history (Win+V). Prevents sensitive copied data from being stored. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["privacy", "clipboard", "history"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
@@ -225,7 +259,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables online speech recognition which sends voice data to Microsoft servers. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables online speech recognition which sends voice data to Microsoft servers. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["privacy", "speech", "recognition", "telemetry"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
@@ -239,7 +274,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Windows activity history and timeline via Group Policy. Prevents activity feed and user activity publishing. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables Windows activity history and timeline via Group Policy. Prevents activity feed and user activity publishing. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["privacy", "activity", "history", "timeline", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps =
@@ -265,7 +301,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Windows advertising ID for the current user. Prevents apps from using the ID for cross-app ad targeting. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables the Windows advertising ID for the current user. Prevents apps from using the ID for cross-app ad targeting. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["privacy", "advertising", "id", "tracking"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo"],
             ApplyOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0)],
@@ -279,12 +316,19 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Microsoft tailored experiences that use diagnostic data to personalise ads, tips, and recommendations. Default: enabled. Recommended: disabled.",
+            Description =
+                "Disables Microsoft tailored experiences that use diagnostic data to personalise ads, tips, and recommendations. Default: enabled. Recommended: disabled.",
             Tags = ["privacy", "tailored", "diagnostic", "personalisation"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy"],
             ApplyOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -293,7 +337,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Windows tips, tricks, and 'Get started' suggestions that appear in Start menu, lock screen and notifications. Default: enabled. Recommended: disabled.",
+            Description =
+                "Disables Windows tips, tricks, and 'Get started' suggestions that appear in Start menu, lock screen and notifications. Default: enabled. Recommended: disabled.",
             Tags = ["privacy", "tips", "suggestions", "content-delivery"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
             ApplyOps =
@@ -317,7 +362,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Prevents Windows from tracking which apps you launch to improve Start menu suggestions. Default: enabled. Recommended: disabled.",
+            Description =
+                "Prevents Windows from tracking which apps you launch to improve Start menu suggestions. Default: enabled. Recommended: disabled.",
             Tags = ["privacy", "tracking", "start-menu", "launch"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
@@ -346,7 +392,10 @@ internal static class Privacy
                 RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-353694Enabled", 1),
                 RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-353696Enabled", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338393Enabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338393Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -355,7 +404,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables implicit ink/text collection and handwriting error reports. Prevents handwriting data from being shared with Microsoft. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables implicit ink/text collection and handwriting error reports. Prevents handwriting data from being shared with Microsoft. Default: Enabled. Recommended: Disabled.",
             Tags = ["privacy", "handwriting", "ink", "data-sharing"],
             RegistryKeys = [@"HKCU\Software\Microsoft\InputPersonalization", @"HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports"],
             ApplyOps =
@@ -384,7 +434,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables User Activity Reporting (UAR) at the machine policy level. Prevents Windows from tracking application launches system-wide. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables User Activity Reporting (UAR) at the machine policy level. Prevents Windows from tracking application launches system-wide. Default: Enabled. Recommended: Disabled.",
             Tags = ["privacy", "tracking", "launch", "uar", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
@@ -398,7 +449,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Connected Devices Platform (CDP) which enables cross-device experiences like phone-to-PC linking and shared clipboard. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables the Connected Devices Platform (CDP) which enables cross-device experiences like phone-to-PC linking and shared clipboard. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["privacy", "cross-device", "cdp", "phone-link"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\System", "EnableCdp", 0)],
@@ -412,12 +464,30 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Denies applications access to diagnostic information about other apps. Protects inter-app data leakage. Default: Allow. Recommended: Deny.",
+            Description =
+                "Denies applications access to diagnostic information about other apps. Protects inter-app data leakage. Default: Allow. Recommended: Deny.",
             Tags = ["privacy", "app-diagnostics", "consent", "capability"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics"],
-            ApplyOps = [RegOp.SetString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics", "Value", "Deny")],
-            RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics", "Value")],
-            DetectOps = [RegOp.CheckString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics", "Value", "Deny")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics",
+                    "Value",
+                    "Deny"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics", "Value"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics",
+                    "Value",
+                    "Deny"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -426,12 +496,33 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Denies applications access to user account information (name, picture). Improves privacy. Default: Allow. Recommended: Deny.",
+            Description =
+                "Denies applications access to user account information (name, picture). Improves privacy. Default: Allow. Recommended: Deny.",
             Tags = ["privacy", "account-info", "consent", "capability"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation"],
-            ApplyOps = [RegOp.SetString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation", "Value", "Deny")],
-            RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation", "Value")],
-            DetectOps = [RegOp.CheckString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation", "Value", "Deny")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation",
+                    "Value",
+                    "Deny"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation",
+                    "Value"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation",
+                    "Value",
+                    "Deny"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -440,12 +531,33 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Denies applications access to user notification content. Prevents apps from reading notification text. Default: Allow. Recommended: Deny.",
+            Description =
+                "Denies applications access to user notification content. Prevents apps from reading notification text. Default: Allow. Recommended: Deny.",
             Tags = ["privacy", "notifications", "listener", "consent"],
             RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener"],
-            ApplyOps = [RegOp.SetString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener", "Value", "Deny")],
-            RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener", "Value")],
-            DetectOps = [RegOp.CheckString(@"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener", "Value", "Deny")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener",
+                    "Value",
+                    "Deny"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener",
+                    "Value"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener",
+                    "Value",
+                    "Deny"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -454,7 +566,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents apps from accessing your contacts list via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Prevents apps from accessing your contacts list via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "contacts", "appprivacy", "consent"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessContacts", 2)],
@@ -468,7 +581,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents apps from reading or modifying your calendar via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Prevents apps from reading or modifying your calendar via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "calendar", "appprivacy", "consent"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessCalendar", 2)],
@@ -482,7 +596,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents apps from toggling Bluetooth or Wi-Fi radios via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Prevents apps from toggling Bluetooth or Wi-Fi radios via the AppPrivacy policy. Value 2 = Force Deny. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "radios", "bluetooth", "wifi", "appprivacy", "consent"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessRadios", 2)],
@@ -496,7 +611,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Windows Ink Workspace feature via policy. Prevents the pen/stylus workspace from loading. Default: Enabled. Recommended: Disabled on non-tablet devices.",
+            Description =
+                "Disables the Windows Ink Workspace feature via policy. Prevents the pen/stylus workspace from loading. Default: Enabled. Recommended: Disabled on non-tablet devices.",
             Tags = ["privacy", "ink", "workspace", "pen", "stylus", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
@@ -510,7 +626,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessCallHistory=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading your phone call history. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Sets LetAppsAccessCallHistory=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading your phone call history. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "call-history", "phone", "appprivacy", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessCallHistory", 2)],
@@ -524,7 +641,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessEmail=2 (Force Deny) via AppPrivacy policy. Prevents all UWP apps from reading your email accounts and messages. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Sets LetAppsAccessEmail=2 (Force Deny) via AppPrivacy policy. Prevents all UWP apps from reading your email accounts and messages. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "email", "mail", "appprivacy", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessEmail", 2)],
@@ -538,7 +656,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessTasks=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading or modifying your task/to-do lists. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Sets LetAppsAccessTasks=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading or modifying your task/to-do lists. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "tasks", "todo", "appprivacy", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessTasks", 2)],
@@ -552,7 +671,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessMessaging=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading or sending SMS/MMS messages. Default: Allow (0). Recommended: Force Deny.",
+            Description =
+                "Sets LetAppsAccessMessaging=2 (Force Deny) via AppPrivacy policy. Prevents all apps from reading or sending SMS/MMS messages. Default: Allow (0). Recommended: Force Deny.",
             Tags = ["privacy", "messaging", "sms", "mms", "appprivacy", "policy"],
             RegistryKeys = [@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMessaging", 2)],
@@ -580,7 +700,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables online speech recognition, inking, and typing personalization. Prevents sending typing data to Microsoft. Default: enabled.",
+            Description =
+                "Disables online speech recognition, inking, and typing personalization. Prevents sending typing data to Microsoft. Default: enabled.",
             Tags = ["privacy", "input", "inking", "typing", "personalization"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
@@ -608,12 +729,34 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables tailored experiences with diagnostic data. Prevents Microsoft from using your data to customize tips and recommendations. Default: enabled.",
+            Description =
+                "Disables tailored experiences with diagnostic data. Prevents Microsoft from using your data to customize tips and recommendations. Default: enabled.",
             Tags = ["privacy", "tailored", "experiences", "recommendations"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
+                    "TailoredExperiencesWithDiagnosticDataEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
+                    "TailoredExperiencesWithDiagnosticDataEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
+                    "TailoredExperiencesWithDiagnosticDataEnabled",
+                    0
+                ),
+            ],
         },
     ];
 }

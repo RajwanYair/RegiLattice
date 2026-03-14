@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
@@ -29,5 +28,4 @@
       <_Parameter1>RegiLattice.CLI</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
 </Project>

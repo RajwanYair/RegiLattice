@@ -23,9 +23,7 @@ internal sealed class AboutDialog : Form
         string userName = Environment.UserName;
         string corpStatus = isCorporate ? "Yes (corp-unsafe tweaks blocked)" : "No";
         bool isAdmin = Elevation.IsAdmin();
-        string logPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RegiLattice", "regilattice.log");
+        string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "regilattice.log");
 
         // ── Title ──────────────────────────────────────────────────────────
         var lblTitle = new Label

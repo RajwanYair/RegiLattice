@@ -8,14 +8,29 @@ namespace RegiLattice.Core;
 
 public sealed class AnalyticsData
 {
-    [JsonPropertyName("total_applies")] public int TotalApplies { get; set; }
-    [JsonPropertyName("total_removes")] public int TotalRemoves { get; set; }
-    [JsonPropertyName("total_errors")] public int TotalErrors { get; set; }
-    [JsonPropertyName("total_sessions")] public int TotalSessions { get; set; }
-    [JsonPropertyName("most_applied")] public Dictionary<string, int> MostApplied { get; set; } = [];
-    [JsonPropertyName("most_removed")] public Dictionary<string, int> MostRemoved { get; set; } = [];
-    [JsonPropertyName("error_counts")] public Dictionary<string, int> ErrorCounts { get; set; } = [];
-    [JsonPropertyName("last_session")] public double LastSession { get; set; }
+    [JsonPropertyName("total_applies")]
+    public int TotalApplies { get; set; }
+
+    [JsonPropertyName("total_removes")]
+    public int TotalRemoves { get; set; }
+
+    [JsonPropertyName("total_errors")]
+    public int TotalErrors { get; set; }
+
+    [JsonPropertyName("total_sessions")]
+    public int TotalSessions { get; set; }
+
+    [JsonPropertyName("most_applied")]
+    public Dictionary<string, int> MostApplied { get; set; } = [];
+
+    [JsonPropertyName("most_removed")]
+    public Dictionary<string, int> MostRemoved { get; set; } = [];
+
+    [JsonPropertyName("error_counts")]
+    public Dictionary<string, int> ErrorCounts { get; set; } = [];
+
+    [JsonPropertyName("last_session")]
+    public double LastSession { get; set; }
 }
 
 public static class Analytics
@@ -27,13 +42,17 @@ public static class Analytics
     {
         lock (Lock)
         {
-            if (!File.Exists(FilePath)) return new AnalyticsData();
+            if (!File.Exists(FilePath))
+                return new AnalyticsData();
             try
             {
                 var json = File.ReadAllText(FilePath);
                 return JsonSerializer.Deserialize<AnalyticsData>(json) ?? new AnalyticsData();
             }
-            catch { return new AnalyticsData(); }
+            catch
+            {
+                return new AnalyticsData();
+            }
         }
     }
 
@@ -84,18 +103,15 @@ public static class Analytics
     public static IReadOnlyList<(string Id, int Count)> TopTweaks(int n = 10)
     {
         var data = GetStats();
-        return data.MostApplied
-            .OrderByDescending(kv => kv.Value)
-            .Take(n)
-            .Select(kv => (kv.Key, kv.Value))
-            .ToList();
+        return data.MostApplied.OrderByDescending(kv => kv.Value).Take(n).Select(kv => (kv.Key, kv.Value)).ToList();
     }
 
     public static void Reset()
     {
         lock (Lock)
         {
-            if (File.Exists(FilePath)) File.Delete(FilePath);
+            if (File.Exists(FilePath))
+                File.Delete(FilePath);
         }
     }
 

@@ -16,14 +16,8 @@ internal static class Boot
             Description = "Turns on NumLock automatically at the login screen. Options: 0=Off, 2=On. Default: 0 (Off). Recommended: On.",
             Tags = ["boot", "keyboard", "numlock"],
             RegistryKeys = [@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "2"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "0"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "2")],
+            RemoveOps = [RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "0")],
             DetectOps = [RegOp.CheckString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "2")],
         },
         new TweakDef
@@ -36,14 +30,8 @@ internal static class Boot
             Description = "Suppresses the Secure Boot status notification in Windows by setting UEFISecureBootEnabled to 0 in the registry.",
             Tags = ["boot", "security", "uefi"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State", "UEFISecureBootEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State", "UEFISecureBootEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State", "UEFISecureBootEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State", "UEFISecureBootEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State", "UEFISecureBootEnabled", 0)],
         },
         new TweakDef
@@ -53,17 +41,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the Windows boot animation/spinner for a faster perceived boot. The boot process skips the animated dots. Default: enabled. Recommended: disabled for faster boot.",
+            Description =
+                "Disables the Windows boot animation/spinner for a faster perceived boot. The boot process skips the animated dots. Default: enabled. Recommended: disabled for faster boot.",
             Tags = ["boot", "animation", "performance", "spinner"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams", "Disabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams", "Disabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams", "Disabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams", "Disabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootAnimationParams", "Disabled", 1)],
         },
         new TweakDef
@@ -73,17 +56,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables Windows Fast Startup which uses a hybrid shutdown with hibernation to speed up boot time. Default: Usually enabled. Recommended: Enabled for fast boot.",
+            Description =
+                "Enables Windows Fast Startup which uses a hybrid shutdown with hibernation to speed up boot time. Default: Usually enabled. Recommended: Enabled for fast boot.",
             Tags = ["boot", "fast-startup", "hiberboot", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 1)],
         },
         new TweakDef
@@ -93,18 +71,34 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables both boot and application prefetching for optimal performance. Value 3 = boot + app prefetch. Default: 3. Recommended: 3 for SSDs and HDDs.",
+            Description =
+                "Enables both boot and application prefetching for optimal performance. Value 3 = boot + app prefetch. Default: 3. Recommended: 3 for SSDs and HDDs.",
             Tags = ["boot", "prefetch", "performance", "startup"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 3),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    3
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    0
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 3)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    3
+                ),
+            ],
         },
         new TweakDef
         {
@@ -113,17 +107,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables automatic reboot after a Blue Screen of Death. Allows reading the full BSOD error before the system restarts. Default: Enabled. Recommended: Disabled for debugging.",
+            Description =
+                "Disables automatic reboot after a Blue Screen of Death. Allows reading the full BSOD error before the system restarts. Default: Enabled. Recommended: Disabled for debugging.",
             Tags = ["boot", "bsod", "reboot", "crash", "debugging"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
         },
         new TweakDef
@@ -133,17 +122,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Shows detailed crash parameters on the Blue Screen of Death. Displays bug-check code and arguments for troubleshooting. Default: Hidden. Recommended: Shown for diagnostics.",
+            Description =
+                "Shows detailed crash parameters on the Blue Screen of Death. Displays bug-check code and arguments for troubleshooting. Default: Hidden. Recommended: Shown for diagnostics.",
             Tags = ["boot", "bsod", "parameters", "crash", "diagnostics"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
         },
         new TweakDef
@@ -153,7 +137,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Keeps kernel and drivers in physical RAM instead of paging to disk. Improves system responsiveness on machines with ample RAM. Default: Paging allowed. Recommended: Disabled.",
+            Description =
+                "Keeps kernel and drivers in physical RAM instead of paging to disk. Improves system responsiveness on machines with ample RAM. Default: Paging allowed. Recommended: Disabled.",
             Tags = ["boot", "paging", "kernel", "memory", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps =
@@ -164,7 +149,14 @@ internal static class Boot
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 0),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "DisablePagingExecutive",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -173,17 +165,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Reduces WaitToKillServiceTimeout to 2 seconds (default: 20s). Windows force-kills stuck services faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
+            Description =
+                "Reduces WaitToKillServiceTimeout to 2 seconds (default: 20s). Windows force-kills stuck services faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
             Tags = ["boot", "shutdown", "service", "timeout", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "20000"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "20000")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
         },
         new TweakDef
@@ -193,17 +180,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Reduces HungAppTimeout to 1 second (default: 5s). Non-responsive apps are flagged as hung sooner, showing the 'not responding' dialog faster. Default: 5000 ms. Recommended: 1000 ms.",
+            Description =
+                "Reduces HungAppTimeout to 1 second (default: 5s). Non-responsive apps are flagged as hung sooner, showing the 'not responding' dialog faster. Default: 5000 ms. Recommended: 1000 ms.",
             Tags = ["boot", "shutdown", "application", "hung", "timeout", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
         },
         new TweakDef
@@ -213,17 +195,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Reduces WaitToKillAppTimeout to 2 seconds (default: 20s). Windows force-terminates unresponsive apps faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
+            Description =
+                "Reduces WaitToKillAppTimeout to 2 seconds (default: 20s). Windows force-terminates unresponsive apps faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
             Tags = ["boot", "shutdown", "app", "timeout", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
         },
         new TweakDef
@@ -233,18 +210,34 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Clears the virtual memory pagefile at every shutdown. Prevents sensitive data from being recovered from pagefile.sys. Note: significantly increases shutdown time on large systems. Default: not cleared. Recommended: Apply on secure workstations.",
+            Description =
+                "Clears the virtual memory pagefile at every shutdown. Prevents sensitive data from being recovered from pagefile.sys. Note: significantly increases shutdown time on large systems. Default: not cleared. Recommended: Apply on secure workstations.",
             Tags = ["boot", "security", "pagefile", "shutdown", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "ClearPageFileAtShutdown",
+                    1
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "ClearPageFileAtShutdown",
+                    0
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "ClearPageFileAtShutdown",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -253,17 +246,12 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables creation of memory dump files on BSOD (CrashDumpEnabled=0). Saves disk space and prevents sensitive memory data from being written to disk. Default: Small memory dump (7). Recommended: Disabled on production systems.",
+            Description =
+                "Disables creation of memory dump files on BSOD (CrashDumpEnabled=0). Saves disk space and prevents sensitive memory data from being written to disk. Default: Small memory dump (7). Recommended: Disabled on production systems.",
             Tags = ["boot", "crash-dump", "bsod", "disk", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
         },
         new TweakDef
@@ -273,7 +261,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables the boot log file (ntbtlog.txt) that records all drivers loaded during startup. Useful for diagnosing boot issues. Default: disabled.",
+            Description =
+                "Enables the boot log file (ntbtlog.txt) that records all drivers loaded during startup. Useful for diagnosing boot issues. Default: disabled.",
             Tags = ["boot", "log", "diagnostics", "drivers"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
@@ -304,9 +293,18 @@ internal static class Boot
             Description = "Sets the boot manager menu timeout to 5 seconds for dual-boot systems. Default: 30 seconds.",
             Tags = ["boot", "timeout", "dual-boot", "menu"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 5)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 30)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 5)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 5),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 30),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004", "Element", 5),
+            ],
         },
         new TweakDef
         {
@@ -336,7 +334,6 @@ internal static class Boot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 0)],
         },
-
         // ── Command-based boot tweaks (bcdedit) ────────────────────────────
         new TweakDef
         {
@@ -361,8 +358,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
-                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase) && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -388,8 +384,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
-                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("3", StringComparison.Ordinal);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase) && stdout.Contains("3", StringComparison.Ordinal);
             },
         },
         new TweakDef
@@ -399,7 +394,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the automatic recovery/repair environment via bcdedit. Prevents boot loops but removes automatic repair capability.",
+            Description =
+                "Disables the automatic recovery/repair environment via bcdedit. Prevents boot loops but removes automatic repair capability.",
             Tags = ["boot", "bcdedit", "recovery", "repair", "server"],
             KindHint = TweakKind.SystemCommand,
             SideEffects = "Disables automatic repair on boot failure.",
@@ -443,7 +439,6 @@ internal static class Boot
                     || stdout.Contains("not loaded", StringComparison.OrdinalIgnoreCase);
             },
         },
-
         // ── Restored stubs with real operations ──────────────────
 
         new TweakDef
@@ -497,8 +492,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
-                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("quietboot", StringComparison.OrdinalIgnoreCase) && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -511,9 +505,18 @@ internal static class Boot
             Description = "Clears Driver Verifier flags in the registry. Useful after debugging when verifier causes boot loops.",
             Tags = ["boot", "verifier", "driver", "registry"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0),
+            ],
         },
         new TweakDef
         {
@@ -566,9 +569,29 @@ internal static class Boot
             Description = "Disables the Windows startup sound that plays at login. Default: enabled.",
             Tags = ["boot", "sound", "startup", "audio"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -620,8 +643,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
-                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("0", StringComparison.Ordinal);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase) && stdout.Contains("0", StringComparison.Ordinal);
             },
         },
         new TweakDef
@@ -662,8 +684,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
-                return stdout.Contains("bootlog", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("bootlog", StringComparison.OrdinalIgnoreCase) && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -710,8 +731,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
-                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("10", StringComparison.Ordinal);
+                return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase) && stdout.Contains("10", StringComparison.Ordinal);
             },
         },
         new TweakDef
@@ -737,8 +757,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
-                return stdout.Contains("sos", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("sos", StringComparison.OrdinalIgnoreCase) && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
     ];

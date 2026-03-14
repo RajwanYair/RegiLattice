@@ -206,12 +206,7 @@ public sealed class ParseArgsTests
     [Fact]
     public void ParseArgs_FlagsAndOptions_Combined()
     {
-        var result = Program.ParseArgs([
-            "--force", "--dry-run",
-            "--search", "telemetry",
-            "--scope", "user",
-            "--min-build", "22000"
-        ]);
+        var result = Program.ParseArgs(["--force", "--dry-run", "--search", "telemetry", "--scope", "user", "--min-build", "22000"]);
 
         Assert.NotNull(result);
         Assert.True(result.Force);

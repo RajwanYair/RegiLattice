@@ -16,7 +16,8 @@ public static class ShellRunner
     public static async Task<(int ExitCode, string StdOut, string StdErr)> RunAsync(
         string fileName,
         IEnumerable<string> args,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
         using var proc = new Process
         {
@@ -42,19 +43,13 @@ public static class ShellRunner
     }
 
     /// <summary>Run a PowerShell -Command script.</summary>
-    public static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(
-        string script,
-        CancellationToken ct = default)
-        => RunAsync("powershell.exe",
-            ["-NoProfile", "-NonInteractive", "-Command", script],
-            ct);
+    public static Task<(int ExitCode, string StdOut, string StdErr)> RunPowerShellAsync(string script, CancellationToken ct = default) =>
+        RunAsync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], ct);
 
     /// <summary>Synchronous wrapper for RunAsync (used by TweakDef delegates).</summary>
-    public static (int ExitCode, string StdOut, string StdErr) Run(
-        string fileName, IEnumerable<string> args)
-        => RunAsync(fileName, args).GetAwaiter().GetResult();
+    public static (int ExitCode, string StdOut, string StdErr) Run(string fileName, IEnumerable<string> args) =>
+        RunAsync(fileName, args).GetAwaiter().GetResult();
 
     /// <summary>Synchronous wrapper for RunPowerShellAsync.</summary>
-    public static (int ExitCode, string StdOut, string StdErr) RunPowerShell(string script)
-        => RunPowerShellAsync(script).GetAwaiter().GetResult();
+    public static (int ExitCode, string StdOut, string StdErr) RunPowerShell(string script) => RunPowerShellAsync(script).GetAwaiter().GetResult();
 }

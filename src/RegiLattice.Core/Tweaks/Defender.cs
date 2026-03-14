@@ -16,14 +16,8 @@ internal static class Defender
             Description = "Enables Potentially Unwanted Application (PUA) detection in Windows Defender.",
             Tags = ["defender", "security", "adware"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1)],
         },
         new TweakDef
@@ -58,15 +52,12 @@ internal static class Defender
             Description = "Disables audit telemetry from Windows exploit mitigations.",
             Tags = ["security", "telemetry", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions")],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions", 0),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationAuditOptions", 0)],
         },
         new TweakDef
         {
@@ -78,14 +69,8 @@ internal static class Defender
             Description = "Limits Windows Defender scheduled-scan CPU usage to 25% to reduce impact during scans.",
             Tags = ["defender", "performance", "cpu"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 50),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 50)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25)],
         },
         new TweakDef
@@ -97,16 +82,34 @@ internal static class Defender
             CorpSafe = true,
             Description = "Enables Controlled Folder Access (ransomware protection) which blocks unauthorized changes to protected folders.",
             Tags = ["defender", "ransomware", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access",
+            ],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access", "EnableControlledFolderAccess", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access",
+                    "EnableControlledFolderAccess",
+                    1
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access", "EnableControlledFolderAccess", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access",
+                    "EnableControlledFolderAccess",
+                    0
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access", "EnableControlledFolderAccess", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access",
+                    "EnableControlledFolderAccess",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -120,13 +123,28 @@ internal static class Defender
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection", "EnableNetworkProtection", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection",
+                    "EnableNetworkProtection",
+                    1
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection", "EnableNetworkProtection", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection",
+                    "EnableNetworkProtection",
+                    0
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection", "EnableNetworkProtection", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection",
+                    "EnableNetworkProtection",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -140,13 +158,28 @@ internal static class Defender
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR", "ExploitGuard_ASR_Rules", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR",
+                    "ExploitGuard_ASR_Rules",
+                    1
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR", "ExploitGuard_ASR_Rules", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR",
+                    "ExploitGuard_ASR_Rules",
+                    0
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR", "ExploitGuard_ASR_Rules", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR",
+                    "ExploitGuard_ASR_Rules",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -158,14 +191,8 @@ internal static class Defender
             Description = "Disables SmartScreen phishing filter specifically for Microsoft Edge.",
             Tags = ["defender", "smartscreen", "edge"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter", "EnabledV9", 0)],
         },
         new TweakDef
@@ -175,17 +202,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Limits Windows Defender scan CPU usage to 25%. Prevents Defender from slowing down the system during scans. Options: 5-100. Default: 50. Recommended: 25.",
+            Description =
+                "Limits Windows Defender scan CPU usage to 25%. Prevents Defender from slowing down the system during scans. Options: 5-100. Default: 50. Recommended: 25.",
             Tags = ["security", "defender", "cpu", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 50),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 50)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 25)],
         },
         new TweakDef
@@ -195,17 +217,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Defender Network Inspection System (NIS) protocol analysis. Reduces CPU overhead from deep packet inspection. Default: Enabled. Recommended: Disabled if using third-party firewall.",
+            Description =
+                "Disables Defender Network Inspection System (NIS) protocol analysis. Reduces CPU overhead from deep packet inspection. Default: Enabled. Recommended: Disabled if using third-party firewall.",
             Tags = ["security", "defender", "network", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition", 1)],
         },
         new TweakDef
@@ -215,18 +232,16 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Virtualization Based Security / Credential Guard. May improve performance. Default: Enabled. Recommended: Keep enabled.",
+            Description =
+                "Disables Virtualization Based Security / Credential Guard. May improve performance. Default: Enabled. Recommended: Keep enabled.",
             Tags = ["security", "credential-guard", "vbs", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0)],
         },
         new TweakDef
         {
@@ -238,14 +253,8 @@ internal static class Defender
             Description = "Enables auditing of logon success and failure events. Default: Disabled. Recommended: Enabled for security monitoring.",
             Tags = ["security", "audit", "logon", "monitoring"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "AuditLogonEvents", 3),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "AuditLogonEvents", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "AuditLogonEvents", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "AuditLogonEvents", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "AuditLogonEvents", 3)],
         },
         new TweakDef
@@ -255,17 +264,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Potentially Unwanted Application (PUA) detection in Windows Defender via MpEnablePus policy. Default: Enabled. Recommended: Keep enabled for safety.",
+            Description =
+                "Disables Potentially Unwanted Application (PUA) detection in Windows Defender via MpEnablePus policy. Default: Enabled. Recommended: Keep enabled for safety.",
             Tags = ["security", "defender", "pua", "detection", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine", "MpEnablePus", 1)],
         },
         new TweakDef
@@ -275,17 +279,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the legacy SMBv1 protocol on the server side. Mitigates WannaCry and EternalBlue vulnerabilities. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables the legacy SMBv1 protocol on the server side. Mitigates WannaCry and EternalBlue vulnerabilities. Default: Enabled. Recommended: Disabled.",
             Tags = ["security", "smb", "smbv1", "protocol", "vulnerability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0)],
         },
         new TweakDef
@@ -295,17 +294,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables Local Security Authority (LSA) protection by running LSASS as a Protected Process Light (PPL). Mitigates credential theft. Default: Disabled. Recommended: Enabled.",
+            Description =
+                "Enables Local Security Authority (LSA) protection by running LSASS as a Protected Process Light (PPL). Mitigates credential theft. Default: Disabled. Recommended: Enabled.",
             Tags = ["security", "lsa", "lsass", "ppl", "credential"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
         },
         new TweakDef
@@ -315,20 +309,42 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Ensures Spectre (variant 2) and Meltdown mitigations are enabled via FeatureSettingsOverride. May reduce performance on older CPUs. Default: usually enabled by Windows Update. Recommended: Enabled.",
+            Description =
+                "Ensures Spectre (variant 2) and Meltdown mitigations are enabled via FeatureSettingsOverride. May reduce performance on older CPUs. Default: usually enabled by Windows Update. Recommended: Enabled.",
             Tags = ["security", "spectre", "meltdown", "cpu", "vulnerability", "mitigations"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "FeatureSettingsOverride", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "FeatureSettingsOverrideMask", 3),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "FeatureSettingsOverride",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "FeatureSettingsOverrideMask",
+                    3
+                ),
             ],
             RemoveOps =
             [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "FeatureSettingsOverride"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "FeatureSettingsOverrideMask"),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "FeatureSettingsOverride"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "FeatureSettingsOverrideMask"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "FeatureSettingsOverride", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "FeatureSettingsOverride",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -337,7 +353,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets UAC to 'Always notify' (ConsentPromptBehaviorAdmin=2) — prompts for both Windows changes and other program elevation requests. Default: notify only for app changes (5). Recommended: Always notify.",
+            Description =
+                "Sets UAC to 'Always notify' (ConsentPromptBehaviorAdmin=2) — prompts for both Windows changes and other program elevation requests. Default: notify only for app changes (5). Recommended: Always notify.",
             Tags = ["security", "uac", "elevation", "prompt", "consent"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
             ApplyOps =
@@ -350,7 +367,10 @@ internal static class Defender
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 5),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2),
+            ],
         },
         new TweakDef
         {
@@ -359,17 +379,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets LmCompatibilityLevel=5 to only use NTLMv2 and refuse LM/NTLMv1 responses. Hardens network authentication. May break legacy devices. Default: 3 (NTLMv2 only send). Recommended: 5 for hardened environments.",
+            Description =
+                "Sets LmCompatibilityLevel=5 to only use NTLMv2 and refuse LM/NTLMv1 responses. Hardens network authentication. May break legacy devices. Default: 3 (NTLMv2 only send). Recommended: 5 for hardened environments.",
             Tags = ["security", "ntlm", "ntlmv1", "authentication", "network", "lm"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
         },
         new TweakDef
@@ -379,17 +394,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables WDigest authentication to prevent plain-text password storage in LSASS. Mitigates credential harvesting attacks via Mimikatz. Default: Enabled on older systems. Recommended: Disabled.",
+            Description =
+                "Disables WDigest authentication to prevent plain-text password storage in LSASS. Mitigates credential harvesting attacks via Mimikatz. Default: Enabled on older systems. Recommended: Disabled.",
             Tags = ["security", "wdigest", "lsass", "credential", "mimikatz"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
         },
         new TweakDef
@@ -399,17 +409,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Credential Guard via LsaCfgFlags=1, protecting LSASS credential secrets. Requires TPM 2.0 and Secure Boot. Default: Disabled. Recommended: Enabled on modern hardware.",
+            Description =
+                "Enables Credential Guard via LsaCfgFlags=1, protecting LSASS credential secrets. Requires TPM 2.0 and Secure Boot. Default: Disabled. Recommended: Enabled on modern hardware.",
             Tags = ["security", "credential-guard", "lsa", "tpm", "secureboot"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
         },
         new TweakDef
@@ -419,18 +424,34 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Defender behavior monitoring, which watches processes for suspicious activity patterns beyond signature-based detection. Default: Enabled. Recommended: Enabled.",
+            Description =
+                "Enables Defender behavior monitoring, which watches processes for suspicious activity patterns beyond signature-based detection. Default: Enabled. Recommended: Enabled.",
             Tags = ["security", "defender", "behavior", "monitoring", "heuristics"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableBehaviorMonitoring", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableBehaviorMonitoring",
+                    0
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableBehaviorMonitoring", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableBehaviorMonitoring",
+                    1
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableBehaviorMonitoring", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableBehaviorMonitoring",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -439,18 +460,16 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables AutoRun/AutoPlay for all drive types via policy (NoDriveTypeAutoRun=255). Prevents malware spread via USB drives and CD-ROMs. Default: Partial. Recommended: Fully disabled.",
+            Description =
+                "Disables AutoRun/AutoPlay for all drive types via policy (NoDriveTypeAutoRun=255). Prevents malware spread via USB drives and CD-ROMs. Default: Partial. Recommended: Fully disabled.",
             Tags = ["security", "autorun", "autoplay", "usb", "policy", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
             ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
         },
         new TweakDef
         {
@@ -459,18 +478,13 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Windows Remote Assistance (fAllowToGetHelp=0). Eliminates a remote access vector not typically needed on workstations. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables Windows Remote Assistance (fAllowToGetHelp=0). Eliminates a remote access vector not typically needed on workstations. Default: Enabled. Recommended: Disabled.",
             Tags = ["security", "remote-assistance", "rdp", "access", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
             SideEffects = "Windows Remote Assistance invitations cannot be sent or accepted.",
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
         },
         new TweakDef
@@ -480,7 +494,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Structured Exception Handler Overwrite Protection (SEHOP). Protects against SEH-based exploitation techniques. Default: Disabled (on client SKUs). Recommended: Enabled.",
+            Description =
+                "Enables Structured Exception Handler Overwrite Protection (SEHOP). Protects against SEH-based exploitation techniques. Default: Disabled (on client SKUs). Recommended: Enabled.",
             Tags = ["security", "sehop", "exploit", "mitigation", "kernel", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
             SideEffects = "May break old 16-bit apps that mis-use SEH.",
@@ -492,7 +507,10 @@ internal static class Defender
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0),
+            ],
         },
         new TweakDef
         {
@@ -501,18 +519,13 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables automatic C$ and ADMIN$ administrative shares. Reduces lateral movement options for attackers on local networks. Default: Enabled. Recommended: Disabled on non-managed workstations.",
+            Description =
+                "Disables automatic C$ and ADMIN$ administrative shares. Reduces lateral movement options for attackers on local networks. Default: Enabled. Recommended: Disabled on non-managed workstations.",
             Tags = ["security", "admin-shares", "smb", "lateral-movement", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             SideEffects = "Remote admin tools relying on C$ or ADMIN$ will fail.",
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
         },
         new TweakDef
@@ -522,17 +535,12 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Restricts CD-ROM drive access to the currently logged-on user only. Prevents remote users from accessing optical media on this machine. Default: Not restricted. Recommended: Restricted.",
+            Description =
+                "Restricts CD-ROM drive access to the currently logged-on user only. Prevents remote users from accessing optical media on this machine. Default: Not restricted. Recommended: Restricted.",
             Tags = ["security", "cd-rom", "optical", "access-control", "winlogon"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms", "1"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AllocateCDRoms", "1")],
         },
         new TweakDef
@@ -545,7 +553,10 @@ internal static class Defender
             Description = "Blocks processing of untrusted fonts loaded from the network. Mitigates font-based exploits. Default: allowed.",
             Tags = ["security", "fonts", "untrusted", "exploit-mitigation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
-            ApplyOps = [RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000)],
+            ApplyOps =
+            [
+                RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0)],
         },
@@ -570,7 +581,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Windows Defender Credential Guard to isolate secrets using virtualization-based security. Requires Hyper-V. Default: disabled.",
+            Description =
+                "Enables Windows Defender Credential Guard to isolate secrets using virtualization-based security. Requires Hyper-V. Default: disabled.",
             Tags = ["security", "credential-guard", "vbs", "isolation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
             ApplyOps =
@@ -583,7 +595,10 @@ internal static class Defender
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity"),
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags"),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
+            ],
         },
         new TweakDef
         {
@@ -609,9 +624,29 @@ internal static class Defender
             Description = "Includes command-line data in process creation audit events (Event ID 4688). Aids forensic analysis. Default: disabled.",
             Tags = ["security", "audit", "process", "forensics"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit", "ProcessCreationIncludeCmdLine_Enabled", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
+                    "ProcessCreationIncludeCmdLine_Enabled",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
+                    "ProcessCreationIncludeCmdLine_Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
+                    "ProcessCreationIncludeCmdLine_Enabled",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -620,7 +655,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents local administrators from adding Defender exclusions that override policy. Only policy-managed exclusions apply. Default: allowed.",
+            Description =
+                "Prevents local administrators from adding Defender exclusions that override policy. Only policy-managed exclusions apply. Default: allowed.",
             Tags = ["security", "defender", "exclusions", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "DisableLocalAdminMerge", 1)],
@@ -634,12 +670,22 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Adds common developer folders as Defender exclusions to reduce build/compile scan overhead. Excludes src, .git, node_modules patterns. Default: no exclusions.",
+            Description =
+                "Adds common developer folders as Defender exclusions to reduce build/compile scan overhead. Excludes src, .git, node_modules patterns. Default: no exclusions.",
             Tags = ["security", "defender", "exclusions", "developer"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exclusions\Paths", @"%USERPROFILE%\source", 0),
+            ],
         },
         new TweakDef
         {
@@ -648,7 +694,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables automatic sample submission when Defender detects a suspicious file. Requires manual approval before sending files to Microsoft. Default: auto-submit.",
+            Description =
+                "Disables automatic sample submission when Defender detects a suspicious file. Requires manual approval before sending files to Microsoft. Default: auto-submit.",
             Tags = ["security", "defender", "samples", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet", "SubmitSamplesConsent", 2)],
@@ -662,7 +709,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables cloud-delivered sample uploads for Windows Defender. Prevents file content from being sent to Microsoft cloud. Default: enabled.",
+            Description =
+                "Disables cloud-delivered sample uploads for Windows Defender. Prevents file content from being sent to Microsoft cloud. Default: enabled.",
             Tags = ["security", "defender", "cloud", "samples"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet", "SpynetReporting", 0)],
@@ -676,12 +724,22 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Suppresses Windows Defender toast notifications. Scans and protection still operate silently. Default: notifications shown.",
+            Description =
+                "Suppresses Windows Defender toast notifications. Scans and protection still operate silently. Default: notifications shown.",
             Tags = ["security", "defender", "notifications", "quiet"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1),
+            ],
         },
         new TweakDef
         {
@@ -690,13 +748,34 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Defender real-time monitoring via policy. WARNING: Leaves system without active antimalware protection. Default: enabled.",
+            Description =
+                "Disables Defender real-time monitoring via policy. WARNING: Leaves system without active antimalware protection. Default: enabled.",
             Tags = ["security", "defender", "realtime", "disable"],
             SideEffects = "System will have no active antimalware protection until re-enabled.",
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableRealtimeMonitoring", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableRealtimeMonitoring")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection", "DisableRealtimeMonitoring", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableRealtimeMonitoring",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableRealtimeMonitoring"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
+                    "DisableRealtimeMonitoring",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -705,7 +784,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Allows Defender scheduled scans to run even when the system is not idle. Ensures scans complete on systems that rarely go idle. Default: idle only.",
+            Description =
+                "Allows Defender scheduled scans to run even when the system is not idle. Ensures scans complete on systems that rarely go idle. Default: idle only.",
             Tags = ["security", "defender", "scan", "idle"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "DisableRestorePoint", 0)],
@@ -719,7 +799,8 @@ internal static class Defender
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Schedules Defender scans to run weekly (day 1 = Sunday) instead of daily. Reduces performance impact from daily scans. Default: daily.",
+            Description =
+                "Schedules Defender scans to run weekly (day 1 = Sunday) instead of daily. Reduces performance impact from daily scans. Default: daily.",
             Tags = ["security", "defender", "scan", "schedule"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "ScheduleDay", 1)],

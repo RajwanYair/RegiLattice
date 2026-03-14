@@ -21,8 +21,7 @@ public static class Elevation
     /// <returns>Exit code of the elevated process, or -1 if user cancelled.</returns>
     public static int RequestElevation(string[]? args = null)
     {
-        var exePath = Environment.ProcessPath
-            ?? throw new InvalidOperationException("Cannot determine current process path.");
+        var exePath = Environment.ProcessPath ?? throw new InvalidOperationException("Cannot determine current process path.");
 
         var psi = new ProcessStartInfo
         {
@@ -49,8 +48,7 @@ public static class Elevation
     /// Runs an allowed system command elevated.
     /// Only whitelisted executables are permitted.
     /// </summary>
-    public static (int ExitCode, string StdOut, string StdErr) RunElevated(
-        string executable, string[] args, int timeoutMs = 120_000)
+    public static (int ExitCode, string StdOut, string StdErr) RunElevated(string executable, string[] args, int timeoutMs = 120_000)
     {
         var exeName = Path.GetFileNameWithoutExtension(executable).ToLowerInvariant();
         if (!AllowedCommands.Contains(exeName))
@@ -64,10 +62,10 @@ public static class Elevation
             RedirectStandardError = true,
             CreateNoWindow = true,
         };
-        foreach (var arg in args) psi.ArgumentList.Add(arg);
+        foreach (var arg in args)
+            psi.ArgumentList.Add(arg);
 
-        using var proc = Process.Start(psi)
-            ?? throw new InvalidOperationException($"Failed to start {executable}");
+        using var proc = Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {executable}");
 
         var stdout = proc.StandardOutput.ReadToEnd();
         var stderr = proc.StandardError.ReadToEnd();
@@ -82,13 +80,28 @@ public static class Elevation
             throw new UnauthorizedAccessException("This operation requires administrator privileges.");
     }
 
-    private static string QuoteArg(string arg)
-        => arg.Contains(' ') || arg.Contains('"') ? $"\"{arg.Replace("\"", "\\\"")}\"" : arg;
+    private static string QuoteArg(string arg) => arg.Contains(' ') || arg.Contains('"') ? $"\"{arg.Replace("\"", "\\\"")}\"" : arg;
 
     private static readonly HashSet<string> AllowedCommands = new(StringComparer.OrdinalIgnoreCase)
     {
-        "reg", "dism", "icacls", "takeown", "netsh", "sc", "schtasks",
-        "taskkill", "powershell", "pwsh", "cmd", "bcdedit", "fsutil",
-        "net", "netstat", "wmic", "reagentc", "verifier", "wusa",
+        "reg",
+        "dism",
+        "icacls",
+        "takeown",
+        "netsh",
+        "sc",
+        "schtasks",
+        "taskkill",
+        "powershell",
+        "pwsh",
+        "cmd",
+        "bcdedit",
+        "fsutil",
+        "net",
+        "netstat",
+        "wmic",
+        "reagentc",
+        "verifier",
+        "wusa",
     };
 }

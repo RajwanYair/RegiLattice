@@ -16,14 +16,8 @@ internal static class Bluetooth
             Description = "Prevents Windows from suspending the Bluetooth adapter to save power, reducing connection drops.",
             Tags = ["bluetooth", "power", "stability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowIdleIrpInD3", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowIdleIrpInD3"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowIdleIrpInD3", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowIdleIrpInD3")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowIdleIrpInD3", 0)],
         },
         new TweakDef
@@ -36,14 +30,8 @@ internal static class Bluetooth
             Description = "Prevents the Bluetooth adapter from being discoverable by nearby devices.",
             Tags = ["bluetooth", "security", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "AllowDiscovery", 0)],
         },
         new TweakDef
@@ -56,14 +44,8 @@ internal static class Bluetooth
             Description = "Disables the Bluetooth Handsfree Profile (HFP) service, preventing hands-free audio device connections.",
             Tags = ["bluetooth", "handsfree", "services"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4)],
         },
         new TweakDef
@@ -76,14 +58,8 @@ internal static class Bluetooth
             Description = "Disables the Bluetooth OBEX service, blocking file transfer over Bluetooth to reduce attack surface.",
             Tags = ["bluetooth", "obex", "security", "file-transfer"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthOBEXSrv", "Start", 4)],
         },
         new TweakDef
@@ -96,14 +72,8 @@ internal static class Bluetooth
             Description = "Disables Bluetooth Personal Area Networking (PAN), preventing network sharing over Bluetooth.",
             Tags = ["bluetooth", "network", "pan", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
         },
         new TweakDef
@@ -116,14 +86,8 @@ internal static class Bluetooth
             Description = "Disables the Bluetooth BTHMODEM serial port driver, preventing legacy COM-port connections over Bluetooth.",
             Tags = ["bluetooth", "serial", "com", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHMODEM", "Start", 4)],
         },
         new TweakDef
@@ -136,14 +100,8 @@ internal static class Bluetooth
             Description = "Disables the Bluetooth A2DP Sink service, preventing the PC from receiving audio streams over Bluetooth.",
             Tags = ["bluetooth", "a2dp", "audio", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 4)],
         },
         new TweakDef
@@ -153,17 +111,12 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Bluetooth Low Energy advertising. Prevents the PC from broadcasting BLE presence. Improves privacy. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables Bluetooth Low Energy advertising. Prevents the PC from broadcasting BLE presence. Improves privacy. Default: Enabled. Recommended: Disabled.",
             Tags = ["bluetooth", "ble", "privacy", "advertising"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth", "AllowAdvertising", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth", "AllowAdvertising"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth", "AllowAdvertising", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth", "AllowAdvertising")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth", "AllowAdvertising", 0)],
         },
         new TweakDef
@@ -173,17 +126,12 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Bluetooth A2DP sideband audio offloading to the adapter. Reduces CPU usage for Bluetooth audio streaming. Default: Disabled. Recommended: Enabled.",
+            Description =
+                "Enables Bluetooth A2DP sideband audio offloading to the adapter. Reduces CPU usage for Bluetooth audio streaming. Default: Disabled. Recommended: Enabled.",
             Tags = ["bluetooth", "audio", "performance", "offload"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters", "AllowSidebandAudio", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters", "AllowSidebandAudio"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters", "AllowSidebandAudio", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters", "AllowSidebandAudio")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp\Parameters", "AllowSidebandAudio", 1)],
         },
         new TweakDef
@@ -193,18 +141,16 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Bluetooth Low Energy device discovery. Reduces power usage and limits BLE scanning surface. Default: Enabled. Recommended: Disabled if BLE not needed.",
+            Description =
+                "Disables Bluetooth Low Energy device discovery. Reduces power usage and limits BLE scanning surface. Default: Enabled. Recommended: Disabled if BLE not needed.",
             Tags = ["bluetooth", "ble", "discovery", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery")],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery", 1),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery", 1),
             ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "DisableLEDiscovery", 1)],
         },
         new TweakDef
         {
@@ -213,17 +159,12 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Bluetooth Handsfree telephony profile via BTHPORT parameter. Prevents low-quality HFP audio mode. Default: Enabled. Recommended: Disabled for A2DP-only use.",
+            Description =
+                "Disables the Bluetooth Handsfree telephony profile via BTHPORT parameter. Prevents low-quality HFP audio mode. Default: Enabled. Recommended: Disabled for A2DP-only use.",
             Tags = ["bluetooth", "handsfree", "telephony", "audio"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFPAudio", "Start", 4)],
         },
         new TweakDef
@@ -233,17 +174,12 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets Bluetooth page timeout to 16384 slots (~10 seconds). Increases time allowed for device connection establishment. Default: 8192 slots. Recommended: 16384 for reliability.",
+            Description =
+                "Sets Bluetooth page timeout to 16384 slots (~10 seconds). Increases time allowed for device connection establishment. Default: 8192 slots. Recommended: 16384 for reliability.",
             Tags = ["bluetooth", "page", "timeout", "connection", "reliability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 16384),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 16384)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 16384)],
         },
         new TweakDef
@@ -281,7 +217,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the Bluetooth AVRCP (Audio/Video Remote Control) profile. Prevents media control via Bluetooth. Default: enabled.",
+            Description =
+                "Disables the Bluetooth AVRCP (Audio/Video Remote Control) profile. Prevents media control via Bluetooth. Default: enabled.",
             Tags = ["bluetooth", "avrcp", "remote-control", "media"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg", "Start", 4)],
@@ -323,7 +260,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Bluetooth advertising beacons. Prevents the device from broadcasting its presence to other Bluetooth devices. Default: enabled.",
+            Description =
+                "Disables Bluetooth advertising beacons. Prevents the device from broadcasting its presence to other Bluetooth devices. Default: enabled.",
             Tags = ["bluetooth", "advertising", "beacon", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowAdvertising"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowAdvertising", "value", 0)],
@@ -337,7 +275,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Bluetooth Audio Gateway service. Prevents Bluetooth hands-free/headset profile from running. Default: automatic.",
+            Description =
+                "Disables the Bluetooth Audio Gateway service. Prevents Bluetooth hands-free/headset profile from running. Default: automatic.",
             Tags = ["bluetooth", "audio", "gateway", "service"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService", "Start", 4)],
@@ -354,9 +293,22 @@ internal static class Bluetooth
             Description = "Disables automatic pairing with nearby Bluetooth devices. Requires manual pairing only. Default: auto-pair enabled.",
             Tags = ["bluetooth", "auto-pair", "security", "disable"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections", "value", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections", "value")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections", "value", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections", "value", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections", "value"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Bluetooth\AllowPromptedProximalConnections",
+                    "value",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -365,7 +317,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Bluetooth Low Energy background scanning. Reduces power consumption and prevents BLE device tracking. Default: enabled.",
+            Description =
+                "Disables Bluetooth Low Energy background scanning. Reduces power consumption and prevents BLE device tracking. Default: enabled.",
             Tags = ["bluetooth", "ble", "scan", "power"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableBluetoothLEAdScanning", 0)],
@@ -379,12 +332,16 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces Bluetooth audio to use A2DP high-quality profile instead of hands-free. Improves audio quality at the expense of microphone. Default: auto-select.",
+            Description =
+                "Forces Bluetooth audio to use A2DP high-quality profile instead of hands-free. Improves audio quality at the expense of microphone. Default: auto-select.",
             Tags = ["bluetooth", "audio", "quality", "a2dp"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1),
+            ],
         },
         new TweakDef
         {
@@ -393,7 +350,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures Bluetooth for lower latency connections. Improves responsiveness for gaming peripherals and real-time audio. Default: standard.",
+            Description =
+                "Configures Bluetooth for lower latency connections. Improves responsiveness for gaming peripherals and real-time audio. Default: standard.",
             Tags = ["bluetooth", "latency", "gaming", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "SystemLocalFeatures", 63)],
@@ -407,7 +365,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the Bluetooth Support Service to manual start. Bluetooth starts only when needed instead of running always. Default: automatic.",
+            Description =
+                "Sets the Bluetooth Support Service to manual start. Bluetooth starts only when needed instead of running always. Default: automatic.",
             Tags = ["bluetooth", "service", "manual", "startup"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 3)],

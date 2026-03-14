@@ -21,17 +21,23 @@ internal static class Program
     internal static int Main(string[] args)
     {
         // Graceful shutdown on Ctrl-C
-        Console.CancelKeyPress += (_, e) => { e.Cancel = false; Console.WriteLine("\nShutting down…"); };
+        Console.CancelKeyPress += (_, e) =>
+        {
+            e.Cancel = false;
+            Console.WriteLine("\nShutting down…");
+        };
 
         var parsed = ParseArgs(args);
-        if (parsed is null) return 0; // --help or --version handled
+        if (parsed is null)
+            return 0; // --help or --version handled
 
         _session = new RegistrySession(dryRun: parsed.DryRun);
         _engine = new TweakEngine(_session);
         _engine.RegisterBuiltins();
 
         var cfg = AppConfig.Load(parsed.ConfigPath);
-        if (cfg.ForceCorp && !parsed.Force) parsed.Force = true;
+        if (cfg.ForceCorp && !parsed.Force)
+            parsed.Force = true;
 
         if (parsed.DryRun)
             Console.WriteLine("\U0001f50d Dry-run mode — no registry changes will be made.");
@@ -44,36 +50,58 @@ internal static class Program
     private static int Dispatch(CliArgs a)
     {
         // Standalone flags (order matters — first match wins)
-        if (a.Doctor) return RunDoctor();
-        if (a.HwInfo) return RunHwInfo();
-        if (a.ListProfiles) return RunListProfiles();
-        if (a.Validate) return RunValidate();
-        if (a.Stats) return RunStats();
-        if (a.ShowCategories) return RunCategories(a);
-        if (a.ShowTags) return RunTags();
-        if (a.ExportReg is not null) return RunExportReg(a.ExportReg);
-        if (a.Report) return RunReport(a);
-        if (a.Check) return RunCheck();
-        if (a.Diff is not null) return RunDiff(a.Diff);
-        if (a.ShowList) return RunList(a);
-        if (a.Search is not null) return RunSearch(a);
-        if (a.ExportJson is not null) return RunExportJson(a.ExportJson);
-        if (a.Snapshot is not null) return RunSaveSnapshot(a.Snapshot);
-        if (a.Restore is not null) return RunRestoreSnapshot(a.Restore, a.Force);
+        if (a.Doctor)
+            return RunDoctor();
+        if (a.HwInfo)
+            return RunHwInfo();
+        if (a.ListProfiles)
+            return RunListProfiles();
+        if (a.Validate)
+            return RunValidate();
+        if (a.Stats)
+            return RunStats();
+        if (a.ShowCategories)
+            return RunCategories(a);
+        if (a.ShowTags)
+            return RunTags();
+        if (a.ExportReg is not null)
+            return RunExportReg(a.ExportReg);
+        if (a.Report)
+            return RunReport(a);
+        if (a.Check)
+            return RunCheck();
+        if (a.Diff is not null)
+            return RunDiff(a.Diff);
+        if (a.ShowList)
+            return RunList(a);
+        if (a.Search is not null)
+            return RunSearch(a);
+        if (a.ExportJson is not null)
+            return RunExportJson(a.ExportJson);
+        if (a.Snapshot is not null)
+            return RunSaveSnapshot(a.Snapshot);
+        if (a.Restore is not null)
+            return RunRestoreSnapshot(a.Restore, a.Force);
         if (a.SnapshotDiffA is not null && a.SnapshotDiffB is not null)
             return RunSnapshotDiff(a.SnapshotDiffA, a.SnapshotDiffB, a.HtmlPath);
-        if (a.Profile is not null) return RunApplyProfile(a);
+        if (a.Profile is not null)
+            return RunApplyProfile(a);
         if (a.Category is not null && a.Mode is "apply" or "remove")
             return RunCategoryAction(a);
         if (a.ImportJson is not null && a.Mode is "apply" or "remove")
             return RunImportJson(a);
-        if (a.Marketplace is not null) return RunMarketplace(a);
-        if (a.Gui) return RunGui();
-        if (a.Menu) return RunMenu(a.Force);
+        if (a.Marketplace is not null)
+            return RunMarketplace(a);
+        if (a.Gui)
+            return RunGui();
+        if (a.Menu)
+            return RunMenu(a.Force);
 
         // Positional: mode + tweak
-        if (a.Mode == "status" && a.Tweak is not null) return RunStatus(a.Tweak);
-        if (a.Mode is "apply" or "remove" && a.Tweak is not null) return RunAction(a);
+        if (a.Mode == "status" && a.Tweak is not null)
+            return RunStatus(a.Tweak);
+        if (a.Mode is "apply" or "remove" && a.Tweak is not null)
+            return RunAction(a);
 
         // Default: show help
         PrintHelp();
@@ -100,8 +128,15 @@ internal static class Program
         // 4. Config
         string cfgDetail = "OK";
         bool cfgOk = true;
-        try { AppConfig.Load(); }
-        catch (Exception ex) { cfgOk = false; cfgDetail = ex.Message[..Math.Min(80, ex.Message.Length)]; }
+        try
+        {
+            AppConfig.Load();
+        }
+        catch (Exception ex)
+        {
+            cfgOk = false;
+            cfgDetail = ex.Message[..Math.Min(80, ex.Message.Length)];
+        }
         checks.Add(("Config file", cfgOk, cfgDetail));
 
         // 5. Tweaks loaded
@@ -109,7 +144,11 @@ internal static class Program
         string tweakDetail = $"{_engine.TweakCount} tweaks loaded";
         var ids = _engine.AllTweaks().Select(t => t.Id).ToList();
         var dups = ids.GroupBy(i => i).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
-        if (dups.Count > 0) { tweaksOk = false; tweakDetail = $"Duplicate IDs: {string.Join(", ", dups)}"; }
+        if (dups.Count > 0)
+        {
+            tweaksOk = false;
+            tweakDetail = $"Duplicate IDs: {string.Join(", ", dups)}";
+        }
         checks.Add(("Tweaks registry", tweaksOk, tweakDetail));
 
         // 6. Corporate guard
@@ -118,9 +157,14 @@ internal static class Program
         try
         {
             var (isCorp, reason) = CorporateGuard.Status();
-            if (isCorp) corpDetail = reason;
+            if (isCorp)
+                corpDetail = reason;
         }
-        catch (Exception ex) { corpOk = false; corpDetail = ex.Message[..Math.Min(80, ex.Message.Length)]; }
+        catch (Exception ex)
+        {
+            corpOk = false;
+            corpDetail = ex.Message[..Math.Min(80, ex.Message.Length)];
+        }
         checks.Add(("Corp guard", corpOk, corpDetail));
 
         // 7. Windows build
@@ -129,7 +173,7 @@ internal static class Program
 
         // Report
         Console.WriteLine();
-        Console.WriteLine($"  {"RegiLattice Doctor",38}");
+        Console.WriteLine($"  {"RegiLattice Doctor", 38}");
         Console.WriteLine($"  {PlatformSummary()}");
         Console.WriteLine();
         bool allOk = true;
@@ -137,12 +181,14 @@ internal static class Program
         {
             string icon = passed ? "\u2705" : "\u274c";
             allOk &= passed;
-            Console.WriteLine($"  {icon}  {label,-30}  {detail}");
+            Console.WriteLine($"  {icon}  {label, -30}  {detail}");
         }
         Console.WriteLine();
-        Console.WriteLine(allOk
-            ? "  All checks passed \u2014 RegiLattice is healthy."
-            : "  \u26a0\ufe0f  Some checks failed. Review the items marked with \u274c above.");
+        Console.WriteLine(
+            allOk
+                ? "  All checks passed \u2014 RegiLattice is healthy."
+                : "  \u26a0\ufe0f  Some checks failed. Review the items marked with \u274c above."
+        );
         Console.WriteLine();
         return allOk ? 0 : 1;
     }
@@ -161,12 +207,12 @@ internal static class Program
 
     private static int RunListProfiles()
     {
-        Console.WriteLine($"{"Profile",-12} {"Tweaks",-8} Description");
+        Console.WriteLine($"{"Profile", -12} {"Tweaks", -8} Description");
         Console.WriteLine(new string('-', 60));
         foreach (var p in TweakEngine.Profiles)
         {
             int count = _engine.TweaksForProfile(p.Name).Count;
-            Console.WriteLine($"{p.Name,-12} {count,-8} {p.Description}");
+            Console.WriteLine($"{p.Name, -12} {count, -8} {p.Description}");
         }
         return 0;
     }
@@ -179,15 +225,20 @@ internal static class Program
         var seen = new HashSet<string>();
         foreach (var td in _engine.AllTweaks())
         {
-            if (string.IsNullOrWhiteSpace(td.Id)) errors.Add($"[{td.Label}] empty id");
-            else if (!seen.Add(td.Id)) errors.Add($"Duplicate id: {td.Id}");
-            if (string.IsNullOrWhiteSpace(td.Label)) errors.Add($"[{td.Id}] empty label");
-            if (string.IsNullOrWhiteSpace(td.Category)) errors.Add($"[{td.Id}] empty category");
+            if (string.IsNullOrWhiteSpace(td.Id))
+                errors.Add($"[{td.Label}] empty id");
+            else if (!seen.Add(td.Id))
+                errors.Add($"Duplicate id: {td.Id}");
+            if (string.IsNullOrWhiteSpace(td.Label))
+                errors.Add($"[{td.Id}] empty label");
+            if (string.IsNullOrWhiteSpace(td.Category))
+                errors.Add($"[{td.Id}] empty category");
         }
         if (errors.Count > 0)
         {
             Console.WriteLine($"\u274c Validation found {errors.Count} issue(s):");
-            foreach (var e in errors) Console.WriteLine($"  \u2022 {e}");
+            foreach (var e in errors)
+                Console.WriteLine($"  \u2022 {e}");
             return 1;
         }
         Console.WriteLine($"\u2705 All {_engine.TweakCount} tweaks passed validation.");
@@ -202,14 +253,16 @@ internal static class Program
         var byCat = _engine.TweaksByCategory();
         var scopeCounts = _engine.ScopeCounts();
 
-        Console.WriteLine("\u2500\u2500 RegiLattice Stats \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500");
+        Console.WriteLine(
+            "\u2500\u2500 RegiLattice Stats \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+        );
         Console.WriteLine($"  Total tweaks   : {tweaks.Count}");
         Console.WriteLine($"  Categories     : {byCat.Count}");
         Console.WriteLine($"  Profiles       : {TweakEngine.Profiles.Count}");
         Console.WriteLine();
         Console.WriteLine("  Scope breakdown:");
         foreach (TweakScope s in Enum.GetValues<TweakScope>())
-            Console.WriteLine($"    {s,-10} {scopeCounts.GetValueOrDefault(s)}");
+            Console.WriteLine($"    {s, -10} {scopeCounts.GetValueOrDefault(s)}");
         Console.WriteLine();
         Console.WriteLine($"  Corp-safe      : {tweaks.Count(t => t.CorpSafe)}");
         Console.WriteLine($"  Needs admin    : {tweaks.Count(t => t.NeedsAdmin)}");
@@ -217,10 +270,10 @@ internal static class Program
         Console.WriteLine($"  Has description: {tweaks.Count(t => !string.IsNullOrWhiteSpace(t.Description))}");
         Console.WriteLine($"  Has depends_on : {tweaks.Count(t => t.DependsOn.Count > 0)}");
         Console.WriteLine();
-        Console.WriteLine($"{"Category",-30} Tweaks");
+        Console.WriteLine($"{"Category", -30} Tweaks");
         Console.WriteLine("  " + new string('-', 38));
         foreach (var cat in byCat.Keys.Order())
-            Console.WriteLine($"  {cat,-28} {byCat[cat].Count}");
+            Console.WriteLine($"  {cat, -28} {byCat[cat].Count}");
         return 0;
     }
 
@@ -236,10 +289,10 @@ internal static class Program
         }
         else
         {
-            Console.WriteLine($"{"Category",-25} Tweaks");
+            Console.WriteLine($"{"Category", -25} Tweaks");
             Console.WriteLine(new string('-', 35));
             foreach (var cat in byCat.Keys.Order())
-                Console.WriteLine($"{cat,-25} {byCat[cat].Count}");
+                Console.WriteLine($"{cat, -25} {byCat[cat].Count}");
             Console.WriteLine($"\n{byCat.Count} categories, {byCat.Values.Sum(v => v.Count)} tweaks total.");
         }
         return 0;
@@ -251,13 +304,13 @@ internal static class Program
     {
         var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var td in _engine.AllTweaks())
-            foreach (var tag in td.Tags)
-                counts[tag] = counts.GetValueOrDefault(tag) + 1;
+        foreach (var tag in td.Tags)
+            counts[tag] = counts.GetValueOrDefault(tag) + 1;
 
-        Console.WriteLine($"{"Tag",-25} Tweaks");
+        Console.WriteLine($"{"Tag", -25} Tweaks");
         Console.WriteLine(new string('-', 35));
         foreach (var (tag, cnt) in counts.OrderBy(kv => kv.Key))
-            Console.WriteLine($"{tag,-25} {cnt}");
+            Console.WriteLine($"{tag, -25} {cnt}");
         Console.WriteLine($"\n{counts.Count} unique tags across {counts.Values.Sum()} tag usages.");
         return 0;
     }
@@ -276,8 +329,7 @@ internal static class Program
             foreach (var key in td.RegistryKeys)
             {
                 // Convert HKLM/HKCU to full names for .reg format
-                var regPath = key
-                    .Replace("HKLM\\", "HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase)
+                var regPath = key.Replace("HKLM\\", "HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase)
                     .Replace("HKCU\\", "HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase);
                 sb.AppendLine($"[{regPath}]");
 
@@ -295,7 +347,9 @@ internal static class Program
                         }
                     }
                 }
-                catch { /* skip inaccessible keys */ }
+                catch
+                { /* skip inaccessible keys */
+                }
                 sb.AppendLine();
             }
         }
@@ -312,15 +366,15 @@ internal static class Program
         {
             Microsoft.Win32.RegistryValueKind.DWord => $"{quotedName}=dword:{(int)(val ?? 0):x8}",
             Microsoft.Win32.RegistryValueKind.String => $"{quotedName}=\"{val}\"",
-            Microsoft.Win32.RegistryValueKind.ExpandString => $"{quotedName}=hex(2):{HexBytes(System.Text.Encoding.Unicode.GetBytes((string)(val ?? "") + "\0"))}",
+            Microsoft.Win32.RegistryValueKind.ExpandString =>
+                $"{quotedName}=hex(2):{HexBytes(System.Text.Encoding.Unicode.GetBytes((string)(val ?? "") + "\0"))}",
             Microsoft.Win32.RegistryValueKind.QWord => $"{quotedName}=hex(b):{HexBytes(BitConverter.GetBytes((long)(val ?? 0L)))}",
             Microsoft.Win32.RegistryValueKind.Binary when val is byte[] b => $"{quotedName}=hex:{HexBytes(b)}",
             _ => $"; {quotedName}=(unsupported type {kind})",
         };
     }
 
-    private static string HexBytes(byte[] data)
-        => string.Join(",", data.Select(b => b.ToString("x2")));
+    private static string HexBytes(byte[] data) => string.Join(",", data.Select(b => b.ToString("x2")));
 
     // ── Report ──────────────────────────────────────────────────────────
 
@@ -335,16 +389,26 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var report = byCat.Keys.Order().Select(cat =>
-            {
-                var tweaks = byCat[cat]
-                    .Where(t => filterStatus is null ||
-                                (filterStatus == "enabled" && smap.GetValueOrDefault(t.Id) == TweakResult.Applied) ||
-                                (filterStatus == "disabled" && smap.GetValueOrDefault(t.Id) == TweakResult.NotApplied))
-                    .Select(t => new { t.Id, t.Label, status = smap.GetValueOrDefault(t.Id).ToString() })
-                    .ToList();
-                return new { category = cat, tweaks };
-            }).ToList();
+            var report = byCat
+                .Keys.Order()
+                .Select(cat =>
+                {
+                    var tweaks = byCat[cat]
+                        .Where(t =>
+                            filterStatus is null
+                            || (filterStatus == "enabled" && smap.GetValueOrDefault(t.Id) == TweakResult.Applied)
+                            || (filterStatus == "disabled" && smap.GetValueOrDefault(t.Id) == TweakResult.NotApplied)
+                        )
+                        .Select(t => new
+                        {
+                            t.Id,
+                            t.Label,
+                            status = smap.GetValueOrDefault(t.Id).ToString(),
+                        })
+                        .ToList();
+                    return new { category = cat, tweaks };
+                })
+                .ToList();
             Console.WriteLine(JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
         }
         else
@@ -353,20 +417,25 @@ internal static class Program
             {
                 var tweaks = byCat[cat];
                 var filtered = tweaks.Where(t =>
-                    filterStatus is null ||
-                    (filterStatus == "enabled" && smap.GetValueOrDefault(t.Id) == TweakResult.Applied) ||
-                    (filterStatus == "disabled" && smap.GetValueOrDefault(t.Id) == TweakResult.NotApplied));
+                    filterStatus is null
+                    || (filterStatus == "enabled" && smap.GetValueOrDefault(t.Id) == TweakResult.Applied)
+                    || (filterStatus == "disabled" && smap.GetValueOrDefault(t.Id) == TweakResult.NotApplied)
+                );
 
                 var list = filtered.ToList();
-                if (list.Count == 0) continue;
+                if (list.Count == 0)
+                    continue;
 
                 int applied = list.Count(t => smap.GetValueOrDefault(t.Id) == TweakResult.Applied);
                 Console.WriteLine($"\n\u2500\u2500 {cat}  ({applied}/{list.Count} applied) \u2500\u2500");
                 foreach (var td in list)
                 {
                     var st = smap.GetValueOrDefault(td.Id);
-                    string icon = st == TweakResult.Applied ? "\u2713" : st == TweakResult.NotApplied ? "\u2717" : "?";
-                    Console.WriteLine($"  {icon} {td.Id,-35} {td.Label}");
+                    string icon =
+                        st == TweakResult.Applied ? "\u2713"
+                        : st == TweakResult.NotApplied ? "\u2717"
+                        : "?";
+                    Console.WriteLine($"  {icon} {td.Id, -35} {td.Label}");
                 }
             }
         }
@@ -385,12 +454,12 @@ internal static class Program
         int def = smap.Count(kv => kv.Value == TweakResult.NotApplied);
         int unknown = smap.Count(kv => kv.Value == TweakResult.Unknown);
 
-        Console.WriteLine($"{"Status",-14} {"Count",-8}");
+        Console.WriteLine($"{"Status", -14} {"Count", -8}");
         Console.WriteLine(new string('-', 22));
-        Console.WriteLine($"{"Applied",-14} {applied,-8}");
-        Console.WriteLine($"{"Default",-14} {def,-8}");
-        Console.WriteLine($"{"Unknown",-14} {unknown,-8}");
-        Console.WriteLine($"{"Total",-14} {smap.Count,-8}");
+        Console.WriteLine($"{"Applied", -14} {applied, -8}");
+        Console.WriteLine($"{"Default", -14} {def, -8}");
+        Console.WriteLine($"{"Unknown", -14} {unknown, -8}");
+        Console.WriteLine($"{"Total", -14} {smap.Count, -8}");
 
         if (applied > 0)
         {
@@ -398,7 +467,7 @@ internal static class Program
             foreach (var (id, _) in smap.Where(kv => kv.Value == TweakResult.Applied).OrderBy(kv => kv.Key))
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  \u2713 {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  \u2713 {id, -35} {td?.Label ?? id}");
             }
         }
         return 0;
@@ -414,9 +483,7 @@ internal static class Program
         Console.WriteLine(" done.");
 
         var toApply = profileTweakIds.Where(id => smap.GetValueOrDefault(id) != TweakResult.Applied).Order().ToList();
-        var toRemove = smap
-            .Where(kv => !profileTweakIds.Contains(kv.Key) && kv.Value == TweakResult.Applied)
-            .Select(kv => kv.Key).Order().ToList();
+        var toRemove = smap.Where(kv => !profileTweakIds.Contains(kv.Key) && kv.Value == TweakResult.Applied).Select(kv => kv.Key).Order().ToList();
 
         if (toApply.Count == 0 && toRemove.Count == 0)
         {
@@ -430,7 +497,7 @@ internal static class Program
             foreach (var id in toApply)
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  + {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  + {id, -35} {td?.Label ?? id}");
             }
         }
         if (toRemove.Count > 0)
@@ -439,7 +506,7 @@ internal static class Program
             foreach (var id in toRemove)
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  - {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  - {id, -35} {td?.Label ?? id}");
             }
         }
         Console.WriteLine($"\nSummary: {toApply.Count} to apply, {toRemove.Count} extra applied.");
@@ -461,16 +528,28 @@ internal static class Program
             }
             tweaks = catList;
         }
-        if (a.ScopeFilter is not null) tweaks = tweaks.Where(t => t.Scope == a.ScopeFilter.Value);
-        if (a.MinBuild > 0) tweaks = tweaks.Where(t => t.MinBuild <= a.MinBuild);
-        if (a.CorpSafe) tweaks = tweaks.Where(t => t.CorpSafe);
-        if (a.NeedsAdmin) tweaks = tweaks.Where(t => t.NeedsAdmin);
+        if (a.ScopeFilter is not null)
+            tweaks = tweaks.Where(t => t.Scope == a.ScopeFilter.Value);
+        if (a.MinBuild > 0)
+            tweaks = tweaks.Where(t => t.MinBuild <= a.MinBuild);
+        if (a.CorpSafe)
+            tweaks = tweaks.Where(t => t.CorpSafe);
+        if (a.NeedsAdmin)
+            tweaks = tweaks.Where(t => t.NeedsAdmin);
 
         var list = tweaks.ToList();
 
         if (a.OutputFormat == "json")
         {
-            var data = list.Select(t => new { t.Id, t.Label, t.Category, t.NeedsAdmin, t.CorpSafe }).ToList();
+            var data = list.Select(t => new
+                {
+                    t.Id,
+                    t.Label,
+                    t.Category,
+                    t.NeedsAdmin,
+                    t.CorpSafe,
+                })
+                .ToList();
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
         else
@@ -478,12 +557,12 @@ internal static class Program
             Console.Write("Detecting status");
             var smap = _engine.StatusMap(parallel: true);
             Console.WriteLine(" done.");
-            Console.WriteLine($"{"ID",-30} {"Category",-14} {"Status",-14} Label");
+            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Status", -14} Label");
             Console.WriteLine(new string('-', 80));
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                Console.WriteLine($"{td.Id,-30} {td.Category,-14} {st,-14} {td.Label}");
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {st, -14} {td.Label}");
             }
         }
         return 0;
@@ -494,10 +573,14 @@ internal static class Program
     private static int RunSearch(CliArgs a)
     {
         IEnumerable<TweakDef> results = _engine.Search(a.Search!);
-        if (a.ScopeFilter is not null) results = results.Where(t => t.Scope == a.ScopeFilter.Value);
-        if (a.MinBuild > 0) results = results.Where(t => t.MinBuild <= a.MinBuild);
-        if (a.CorpSafe) results = results.Where(t => t.CorpSafe);
-        if (a.NeedsAdmin) results = results.Where(t => t.NeedsAdmin);
+        if (a.ScopeFilter is not null)
+            results = results.Where(t => t.Scope == a.ScopeFilter.Value);
+        if (a.MinBuild > 0)
+            results = results.Where(t => t.MinBuild <= a.MinBuild);
+        if (a.CorpSafe)
+            results = results.Where(t => t.CorpSafe);
+        if (a.NeedsAdmin)
+            results = results.Where(t => t.NeedsAdmin);
 
         var list = results.ToList();
         if (list.Count == 0)
@@ -508,7 +591,14 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = list.Select(t => new { t.Id, t.Label, t.Category, t.Tags }).ToList();
+            var data = list.Select(t => new
+                {
+                    t.Id,
+                    t.Label,
+                    t.Category,
+                    t.Tags,
+                })
+                .ToList();
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
         else
@@ -516,12 +606,12 @@ internal static class Program
             Console.Write("Detecting status");
             var smap = _engine.StatusMap(parallel: true);
             Console.WriteLine(" done.");
-            Console.WriteLine($"{"ID",-30} {"Category",-14} {"Status",-14} Label");
+            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Status", -14} Label");
             Console.WriteLine(new string('-', 80));
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                Console.WriteLine($"{td.Id,-30} {td.Category,-14} {st,-14} {td.Label}");
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {st, -14} {td.Label}");
             }
             Console.WriteLine($"\n{list.Count} tweak(s) found.");
         }
@@ -565,7 +655,8 @@ internal static class Program
         {
             var a = snapA.GetValueOrDefault(id, "missing");
             var b = snapB.GetValueOrDefault(id, "missing");
-            if (a != b) diffs.Add((id, a, b));
+            if (a != b)
+                diffs.Add((id, a, b));
         }
 
         if (diffs.Count == 0)
@@ -582,10 +673,10 @@ internal static class Program
         else
         {
             Console.WriteLine($"Snapshot diff: {Path.GetFileName(fileA)} vs {Path.GetFileName(fileB)}");
-            Console.WriteLine($"{"ID",-35} {"File A",-15} {"File B",-15}");
+            Console.WriteLine($"{"ID", -35} {"File A", -15} {"File B", -15}");
             Console.WriteLine(new string('-', 65));
             foreach (var (id, stA, stB) in diffs)
-                Console.WriteLine($"{id,-35} {stA,-15} {stB,-15}");
+                Console.WriteLine($"{id, -35} {stA, -15} {stB, -15}");
             Console.WriteLine($"\n{diffs.Count} difference(s).");
         }
         return 0;
@@ -620,7 +711,11 @@ internal static class Program
 
         var targets = _engine.TweaksForProfile(a.Profile!);
         string label = $"Apply '{a.Profile}' profile ({targets.Count} tweaks)";
-        if (!a.AssumeYes && !Confirm(label)) { Console.WriteLine("Aborted."); return 1; }
+        if (!a.AssumeYes && !Confirm(label))
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
 
         var results = _engine.ApplyProfile(a.Profile!, forceCorp: a.Force, parallel: true);
         int ok = results.Count(kv => kv.Value == TweakResult.Applied);
@@ -653,11 +748,13 @@ internal static class Program
         }
 
         string label = $"{(a.Mode == "apply" ? "Apply" : "Remove")} {catTweaks.Count} tweaks in '{a.Category}'";
-        if (!a.AssumeYes && !Confirm(label)) { Console.WriteLine("Aborted."); return 1; }
+        if (!a.AssumeYes && !Confirm(label))
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
 
-        var results = a.Mode == "apply"
-            ? _engine.ApplyBatch(catTweaks, forceCorp: a.Force)
-            : _engine.RemoveBatch(catTweaks, forceCorp: a.Force);
+        var results = a.Mode == "apply" ? _engine.ApplyBatch(catTweaks, forceCorp: a.Force) : _engine.RemoveBatch(catTweaks, forceCorp: a.Force);
 
         int ok = results.Count(kv => kv.Value is TweakResult.Applied or TweakResult.NotApplied);
         var errors = results.Where(kv => kv.Value == TweakResult.Error).ToList();
@@ -703,23 +800,35 @@ internal static class Program
             return 3;
         }
 
-        if (ids is null || ids.Count == 0) { Console.WriteLine("No valid tweaks found in JSON."); return 2; }
+        if (ids is null || ids.Count == 0)
+        {
+            Console.WriteLine("No valid tweaks found in JSON.");
+            return 2;
+        }
 
         var targets = new List<TweakDef>();
         foreach (var id in ids)
         {
             var td = _engine.GetTweak(id);
-            if (td is null) Console.WriteLine($"\u26a0\ufe0f Skipping unknown tweak '{id}'");
-            else targets.Add(td);
+            if (td is null)
+                Console.WriteLine($"\u26a0\ufe0f Skipping unknown tweak '{id}'");
+            else
+                targets.Add(td);
         }
-        if (targets.Count == 0) { Console.WriteLine("No valid tweaks found in JSON."); return 2; }
+        if (targets.Count == 0)
+        {
+            Console.WriteLine("No valid tweaks found in JSON.");
+            return 2;
+        }
 
         string label = $"{(a.Mode == "apply" ? "Apply" : "Remove")} {targets.Count} tweaks from {Path.GetFileName(a.ImportJson)}";
-        if (!a.AssumeYes && !Confirm(label)) { Console.WriteLine("Aborted."); return 1; }
+        if (!a.AssumeYes && !Confirm(label))
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
 
-        var results = a.Mode == "apply"
-            ? _engine.ApplyBatch(targets, forceCorp: a.Force)
-            : _engine.RemoveBatch(targets, forceCorp: a.Force);
+        var results = a.Mode == "apply" ? _engine.ApplyBatch(targets, forceCorp: a.Force) : _engine.RemoveBatch(targets, forceCorp: a.Force);
 
         int ok = results.Count(kv => kv.Value is TweakResult.Applied or TweakResult.NotApplied);
         if (_session.DryRun)
@@ -735,7 +844,11 @@ internal static class Program
     private static int RunStatus(string tweakId)
     {
         var td = _engine.GetTweak(tweakId);
-        if (td is null) { Console.WriteLine($"\u274c Unknown tweak '{tweakId}'."); return 2; }
+        if (td is null)
+        {
+            Console.WriteLine($"\u274c Unknown tweak '{tweakId}'.");
+            return 2;
+        }
         var status = _engine.DetectStatus(td);
         Console.WriteLine($"{td.Label}: {status}");
         return 0;
@@ -757,7 +870,11 @@ internal static class Program
         {
             var all = _engine.AllTweaks();
             string label = $"{(isApply ? "Apply" : "Remove")} ALL {all.Count} tweaks";
-            if (!a.AssumeYes && !Confirm(label)) { Console.WriteLine("Aborted."); return 1; }
+            if (!a.AssumeYes && !Confirm(label))
+            {
+                Console.WriteLine("Aborted.");
+                return 1;
+            }
 
             var results = isApply
                 ? _engine.ApplyBatch(all, forceCorp: a.Force, parallel: true)
@@ -773,10 +890,17 @@ internal static class Program
         }
 
         var td = _engine.GetTweak(a.Tweak!);
-        if (td is null) { Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'."); return 2; }
+        if (td is null)
+        {
+            Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'.");
+            return 2;
+        }
 
         if (!a.AssumeYes && !Confirm($"{(isApply ? "Apply" : "Remove")} '{td.Label}'"))
-        { Console.WriteLine("Aborted."); return 1; }
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
 
         var result = isApply ? _engine.Apply(td, forceCorp: a.Force) : _engine.Remove(td, forceCorp: a.Force);
 
@@ -827,13 +951,14 @@ internal static class Program
             {
                 var cat = categories[i];
                 var count = _engine.TweaksByCategory()[cat].Count;
-                Console.WriteLine($"  {i + 1,3}. {cat,-30} ({count} tweaks)");
+                Console.WriteLine($"  {i + 1, 3}. {cat, -30} ({count} tweaks)");
             }
             Console.WriteLine($"\n    0. Exit\n");
             Console.Write("Select category: ");
 
             var input = Console.ReadLine()?.Trim();
-            if (input == "0" || string.IsNullOrEmpty(input)) break;
+            if (input == "0" || string.IsNullOrEmpty(input))
+                break;
             if (!int.TryParse(input, out int choice) || choice < 1 || choice > categories.Count)
             {
                 Console.WriteLine("Invalid choice. Press any key…");
@@ -851,14 +976,18 @@ internal static class Program
             {
                 var td = tweaks[i];
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                string icon = st == TweakResult.Applied ? "\u2713" : st == TweakResult.NotApplied ? "\u2717" : "?";
-                Console.WriteLine($"  {i + 1,3}. [{icon}] {td.Label}");
+                string icon =
+                    st == TweakResult.Applied ? "\u2713"
+                    : st == TweakResult.NotApplied ? "\u2717"
+                    : "?";
+                Console.WriteLine($"  {i + 1, 3}. [{icon}] {td.Label}");
             }
 
             Console.WriteLine("\n  A = Apply all  |  R = Remove all  |  B = Back\n");
             Console.Write("Select tweak # or command: ");
             var cmd = Console.ReadLine()?.Trim();
-            if (string.IsNullOrEmpty(cmd) || cmd.Equals("B", StringComparison.OrdinalIgnoreCase)) continue;
+            if (string.IsNullOrEmpty(cmd) || cmd.Equals("B", StringComparison.OrdinalIgnoreCase))
+                continue;
 
             if (cmd.Equals("A", StringComparison.OrdinalIgnoreCase))
             {
@@ -877,8 +1006,10 @@ internal static class Program
                 var td = tweaks[tweakChoice - 1];
                 Console.Write($"(A)pply or (R)emove '{td.Label}'? ");
                 var action = Console.ReadLine()?.Trim().ToUpperInvariant();
-                if (action == "A") _engine.Apply(td, forceCorp: force);
-                else if (action == "R") _engine.Remove(td, forceCorp: force);
+                if (action == "A")
+                    _engine.Apply(td, forceCorp: force);
+                else if (action == "R")
+                    _engine.Remove(td, forceCorp: force);
                 Console.WriteLine("Done. Press any key…");
                 Console.ReadKey(true);
             }
@@ -915,10 +1046,10 @@ internal static class Program
             return 0;
         }
 
-        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Description"}");
+        Console.WriteLine($"\n  {"Name", -25} {"Version", -10} {"Tweaks", -8} {"Description"}");
         Console.WriteLine($"  {new string('─', 70)}");
         foreach (var p in index.Packs)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Description}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.TweakCount, -8} {p.Description}");
         Console.WriteLine($"\n  {index.Packs.Count} packs available.\n");
         return 0;
     }
@@ -940,10 +1071,10 @@ internal static class Program
         }
 
         Console.WriteLine($"\n  Results for '{query}':\n");
-        Console.WriteLine($"  {"Name",-25} {"Version",-10} {"Description"}");
+        Console.WriteLine($"  {"Name", -25} {"Version", -10} {"Description"}");
         Console.WriteLine($"  {new string('─', 60)}");
         foreach (var p in results)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.Description}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.Description}");
         Console.WriteLine($"\n  {results.Count} packs found.\n");
         return 0;
     }
@@ -1028,10 +1159,10 @@ internal static class Program
             return 0;
         }
 
-        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Author"}");
+        Console.WriteLine($"\n  {"Name", -25} {"Version", -10} {"Tweaks", -8} {"Author"}");
         Console.WriteLine($"  {new string('─', 60)}");
         foreach (var p in installed)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Author}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.TweakCount, -8} {p.Author}");
         Console.WriteLine($"\n  {installed.Count} packs installed.\n");
         return 0;
     }
@@ -1048,16 +1179,14 @@ internal static class Program
 
         // Check installed first, then try remote
         var installed = pm.InstalledPacks();
-        var pack = installed.FirstOrDefault(p =>
-            p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        var pack = installed.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         if (pack is null)
         {
             try
             {
                 var index = pm.FetchIndexAsync().GetAwaiter().GetResult();
-                pack = index.Packs.FirstOrDefault(p =>
-                    p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                pack = index.Packs.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             }
             catch (HttpRequestException)
             {
@@ -1071,10 +1200,10 @@ internal static class Program
             return 2;
         }
 
-        bool isInstalled = installed.Any(p =>
-            p.Name.Equals(pack.Name, StringComparison.OrdinalIgnoreCase));
+        bool isInstalled = installed.Any(p => p.Name.Equals(pack.Name, StringComparison.OrdinalIgnoreCase));
 
-        Console.WriteLine($"""
+        Console.WriteLine(
+            $"""
 
               Name:         {pack.DisplayName}
               Pack ID:      {pack.Name}
@@ -1086,7 +1215,8 @@ internal static class Program
               Tags:         {string.Join(", ", pack.Tags)}
               Min Build:    {(pack.MinWindowsBuild > 0 ? pack.MinWindowsBuild : "any")}
               Installed:    {(isInstalled ? "yes" : "no")}
-            """);
+            """
+        );
         return 0;
     }
 
@@ -1129,10 +1259,10 @@ internal static class Program
                 return 0;
             }
 
-            Console.WriteLine($"\n  {"Pack",-25} {"Installed",-12} {"Available"}");
+            Console.WriteLine($"\n  {"Pack", -25} {"Installed", -12} {"Available"}");
             Console.WriteLine($"  {new string('─', 50)}");
             foreach (var (local, remote) in updates)
-                Console.WriteLine($"  {local.Name,-25} {local.Version,-12} {remote.Version}");
+                Console.WriteLine($"  {local.Name, -25} {local.Version, -12} {remote.Version}");
             Console.WriteLine($"\n  {updates.Count} update(s) available.\n");
             return 0;
         }
@@ -1145,7 +1275,8 @@ internal static class Program
 
     private static int MarketplaceUsage()
     {
-        Console.WriteLine("""
+        Console.WriteLine(
+            """
             Usage: regilattice --marketplace <command> [argument]
 
             Commands:
@@ -1158,7 +1289,8 @@ internal static class Program
               info <name>          Show pack details
               update <name>        Update a pack to latest version
               updates              Check for available updates
-            """);
+            """
+        );
         return 1;
     }
 
@@ -1171,12 +1303,13 @@ internal static class Program
         return response is "y" or "Y" or "yes" or "Yes";
     }
 
-    private static string PlatformSummary()
-        => $".NET {Environment.Version} | {RuntimeInformation.OSDescription} | Build {TweakEngine.WindowsBuild()}";
+    private static string PlatformSummary() =>
+        $".NET {Environment.Version} | {RuntimeInformation.OSDescription} | Build {TweakEngine.WindowsBuild()}";
 
     private static void PrintHelp()
     {
-        Console.WriteLine($"""
+        Console.WriteLine(
+            $"""
             RegiLattice v{Version} — Windows registry tweak toolkit
 
             Usage: regilattice [mode] [tweak] [options]
@@ -1240,7 +1373,8 @@ internal static class Program
               -y, --assume-yes   Skip confirmation prompts
               --version           Show version info
               --help, -h          Show this help
-            """);
+            """
+        );
     }
 
     // ── Argument parsing ────────────────────────────────────────────────
@@ -1259,72 +1393,120 @@ internal static class Program
                     PrintHelp();
                     return null;
 
-                case "--version" or "-V":
+                case "--version"
+                or "-V":
                     Console.WriteLine($"regilattice {Version} ({PlatformSummaryStatic()})");
                     return null;
 
-                case "--list": p.ShowList = true; break;
-                case "--force": p.Force = true; break;
-                case "--gui": p.Gui = true; break;
-                case "--menu": p.Menu = true; break;
-                case "--dry-run": p.DryRun = true; break;
-                case "-y" or "--assume-yes": p.AssumeYes = true; break;
-                case "--doctor": p.Doctor = true; break;
-                case "--hwinfo": p.HwInfo = true; break;
-                case "--list-profiles": p.ListProfiles = true; break;
-                case "--validate": p.Validate = true; break;
-                case "--stats": p.Stats = true; break;
-                case "--categories" or "--list-categories": p.ShowCategories = true; break;
-                case "--tags": p.ShowTags = true; break;
-                case "--report": p.Report = true; break;
-                case "--check": p.Check = true; break;
-                case "--corp-safe": p.CorpSafe = true; break;
-                case "--needs-admin": p.NeedsAdmin = true; break;
+                case "--list":
+                    p.ShowList = true;
+                    break;
+                case "--force":
+                    p.Force = true;
+                    break;
+                case "--gui":
+                    p.Gui = true;
+                    break;
+                case "--menu":
+                    p.Menu = true;
+                    break;
+                case "--dry-run":
+                    p.DryRun = true;
+                    break;
+                case "-y" or "--assume-yes":
+                    p.AssumeYes = true;
+                    break;
+                case "--doctor":
+                    p.Doctor = true;
+                    break;
+                case "--hwinfo":
+                    p.HwInfo = true;
+                    break;
+                case "--list-profiles":
+                    p.ListProfiles = true;
+                    break;
+                case "--validate":
+                    p.Validate = true;
+                    break;
+                case "--stats":
+                    p.Stats = true;
+                    break;
+                case "--categories" or "--list-categories":
+                    p.ShowCategories = true;
+                    break;
+                case "--tags":
+                    p.ShowTags = true;
+                    break;
+                case "--report":
+                    p.Report = true;
+                    break;
+                case "--check":
+                    p.Check = true;
+                    break;
+                case "--corp-safe":
+                    p.CorpSafe = true;
+                    break;
+                case "--needs-admin":
+                    p.NeedsAdmin = true;
+                    break;
 
                 case "--search":
-                    if (++i < args.Length) p.Search = args[i];
+                    if (++i < args.Length)
+                        p.Search = args[i];
                     break;
                 case "--profile":
-                    if (++i < args.Length) p.Profile = args[i];
+                    if (++i < args.Length)
+                        p.Profile = args[i];
                     break;
                 case "--config":
-                    if (++i < args.Length) p.ConfigPath = args[i];
+                    if (++i < args.Length)
+                        p.ConfigPath = args[i];
                     break;
                 case "--snapshot":
-                    if (++i < args.Length) p.Snapshot = args[i];
+                    if (++i < args.Length)
+                        p.Snapshot = args[i];
                     break;
                 case "--restore":
-                    if (++i < args.Length) p.Restore = args[i];
+                    if (++i < args.Length)
+                        p.Restore = args[i];
                     break;
                 case "--export-json":
-                    if (++i < args.Length) p.ExportJson = args[i];
+                    if (++i < args.Length)
+                        p.ExportJson = args[i];
                     break;
                 case "--export-reg":
-                    if (++i < args.Length) p.ExportReg = args[i];
+                    if (++i < args.Length)
+                        p.ExportReg = args[i];
                     break;
                 case "--import-json":
-                    if (++i < args.Length) p.ImportJson = args[i];
+                    if (++i < args.Length)
+                        p.ImportJson = args[i];
                     break;
                 case "--diff":
-                    if (++i < args.Length) p.Diff = args[i];
+                    if (++i < args.Length)
+                        p.Diff = args[i];
                     break;
                 case "--category":
-                    if (++i < args.Length) p.Category = args[i];
+                    if (++i < args.Length)
+                        p.Category = args[i];
                     break;
                 case "--output":
-                    if (++i < args.Length) p.OutputFormat = args[i];
+                    if (++i < args.Length)
+                        p.OutputFormat = args[i];
                     break;
                 case "--html":
-                    if (++i < args.Length) p.HtmlPath = args[i];
+                    if (++i < args.Length)
+                        p.HtmlPath = args[i];
                     break;
                 case "--scope":
-                    if (++i < args.Length) p.ScopeFilter = args[i].ToLowerInvariant() switch
-                    {
-                        "user" => TweakScope.User,
-                        "machine" => TweakScope.Machine,
-                        "both" => TweakScope.Both,
-                        _ => null,
-                    };
+                    if (++i < args.Length)
+                        p.ScopeFilter = args[i].ToLowerInvariant() switch
+                        {
+                            "user" => TweakScope.User,
+                            "machine" => TweakScope.Machine,
+                            "both" => TweakScope.Both,
+                            _ => null,
+                        };
                     break;
                 case "--min-build":
                     if (++i < args.Length && int.TryParse(args[i], out var build))
@@ -1338,7 +1520,8 @@ internal static class Program
                     }
                     break;
                 case "--marketplace":
-                    if (++i < args.Length) p.Marketplace = args[i];
+                    if (++i < args.Length)
+                        p.Marketplace = args[i];
                     if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
                         p.MarketplaceArg = args[++i];
                     break;
@@ -1356,8 +1539,7 @@ internal static class Program
         return p;
     }
 
-    private static string PlatformSummaryStatic()
-        => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
+    private static string PlatformSummaryStatic() => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
 
     // ── Parsed arguments ────────────────────────────────────────────────
 

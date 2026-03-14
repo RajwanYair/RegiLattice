@@ -4,28 +4,49 @@
 namespace RegiLattice.Core.Models;
 
 /// <summary>Scope of a tweak based on registry hive.</summary>
-public enum TweakScope { User, Machine, Both }
+public enum TweakScope
+{
+    User,
+    Machine,
+    Both,
+}
 
 /// <summary>Result of an apply/remove/detect operation.</summary>
-public enum TweakResult { Applied, NotApplied, Unknown, Error, SkippedCorp, SkippedBuild, SkippedHw }
+public enum TweakResult
+{
+    Applied,
+    NotApplied,
+    Unknown,
+    Error,
+    SkippedCorp,
+    SkippedBuild,
+    SkippedHw,
+}
 
 /// <summary>How a tweak performs its work.</summary>
 public enum TweakKind
 {
     /// <summary>Tweak modifies the Windows registry via RegOps.</summary>
     Registry,
+
     /// <summary>Tweak runs a PowerShell cmdlet or script block.</summary>
     PowerShell,
+
     /// <summary>Tweak runs a system command (bcdedit, dism, netsh, etc.).</summary>
     SystemCommand,
+
     /// <summary>Tweak controls a Windows service (sc, Set-Service).</summary>
     ServiceControl,
+
     /// <summary>Tweak manages a scheduled task (schtasks, Register-ScheduledTask).</summary>
     ScheduledTask,
+
     /// <summary>Tweak modifies a configuration file (e.g. JSON, INI, .wslconfig).</summary>
     FileConfig,
+
     /// <summary>Tweak modifies Group Policy via registry under Policies key.</summary>
     GroupPolicy,
+
     /// <summary>Tweak installs/configures a package manager tool.</summary>
     PackageManager,
 }
@@ -33,29 +54,29 @@ public enum TweakKind
 /// <summary>Standard icon identifier for a tweak category.</summary>
 public enum CategoryIcon
 {
-    Shield,         // Security, Defender, Firewall, Encryption
-    Globe,          // Network, DNS, Browser (Edge, Chrome, Firefox)
-    Monitor,        // Display, GPU, Night Light
-    Gear,           // System, Performance, Boot, Services
-    Lock,           // Privacy, Telemetry, Lock Screen
-    HardDrive,      // Storage, File System, Backup, Recovery
-    Cpu,            // Performance, Power, Gaming
-    Keyboard,       // Input, Accessibility, Touch & Pen
-    Speaker,        // Audio, Multimedia, Speech
-    Cloud,          // Cloud Storage, OneDrive
-    App,            // MsStore, Package Management, Scoop
-    Terminal,       // Shell, Windows Terminal, WSL, Dev Drive
-    Mail,           // Communication, Office, M365
-    Palette,        // Fonts, Context Menu, Explorer
-    Notification,   // Notifications, Widgets
-    Wrench,         // Maintenance, Scheduled Tasks, Crash
-    Phone,          // Phone Link, Bluetooth, USB
-    Desktop,        // Taskbar, Snap, Startup, Screensaver
-    Windows,        // Win11, Windows Update
-    Search,         // Cortana, Indexing & Search
-    Camera,         // Remote Desktop, RealVNC, Virtualization
-    Printer,        // Printing
-    Code,           // VS Code, Java, LibreOffice, Adobe
+    Shield, // Security, Defender, Firewall, Encryption
+    Globe, // Network, DNS, Browser (Edge, Chrome, Firefox)
+    Monitor, // Display, GPU, Night Light
+    Gear, // System, Performance, Boot, Services
+    Lock, // Privacy, Telemetry, Lock Screen
+    HardDrive, // Storage, File System, Backup, Recovery
+    Cpu, // Performance, Power, Gaming
+    Keyboard, // Input, Accessibility, Touch & Pen
+    Speaker, // Audio, Multimedia, Speech
+    Cloud, // Cloud Storage, OneDrive
+    App, // MsStore, Package Management, Scoop
+    Terminal, // Shell, Windows Terminal, WSL, Dev Drive
+    Mail, // Communication, Office, M365
+    Palette, // Fonts, Context Menu, Explorer
+    Notification, // Notifications, Widgets
+    Wrench, // Maintenance, Scheduled Tasks, Crash
+    Phone, // Phone Link, Bluetooth, USB
+    Desktop, // Taskbar, Snap, Startup, Screensaver
+    Windows, // Win11, Windows Update
+    Search, // Cortana, Indexing & Search
+    Camera, // Remote Desktop, RealVNC, Virtualization
+    Printer, // Printing
+    Code, // VS Code, Java, LibreOffice, Adobe
 }
 
 /// <summary>
@@ -125,21 +146,26 @@ public sealed class TweakDef
 
     private TweakScope ComputeScope()
     {
-        bool hasUser = false, hasMachine = false;
+        bool hasUser = false,
+            hasMachine = false;
         foreach (var k in RegistryKeys)
         {
-            if (k.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase) ||
-                k.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase))
+            if (k.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase) || k.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase))
                 hasUser = true;
-            else if (k.StartsWith("HKLM", StringComparison.OrdinalIgnoreCase) ||
-                     k.StartsWith("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase) ||
-                     k.StartsWith("HKCR", StringComparison.OrdinalIgnoreCase) ||
-                     k.StartsWith("HKEY_CLASSES_ROOT", StringComparison.OrdinalIgnoreCase))
+            else if (
+                k.StartsWith("HKLM", StringComparison.OrdinalIgnoreCase)
+                || k.StartsWith("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase)
+                || k.StartsWith("HKCR", StringComparison.OrdinalIgnoreCase)
+                || k.StartsWith("HKEY_CLASSES_ROOT", StringComparison.OrdinalIgnoreCase)
+            )
                 hasMachine = true;
         }
-        if (hasUser && hasMachine) return TweakScope.Both;
-        if (hasUser) return TweakScope.User;
-        if (!hasUser && !hasMachine && !NeedsAdmin) return TweakScope.User;
+        if (hasUser && hasMachine)
+            return TweakScope.Both;
+        if (hasUser)
+            return TweakScope.User;
+        if (!hasUser && !hasMachine && !NeedsAdmin)
+            return TweakScope.User;
         return TweakScope.Machine;
     }
 
@@ -166,41 +192,105 @@ public sealed class RegOp
     public Microsoft.Win32.RegistryValueKind ValueKind { get; init; } = Microsoft.Win32.RegistryValueKind.DWord;
 
     // ── Factory methods ─────────────────────────────────────────────────
-    public static RegOp SetDword(string path, string name, int value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
+    public static RegOp SetDword(string path, string name, int value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.DWord,
+        };
 
-    public static RegOp SetString(string path, string name, string value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.String };
+    public static RegOp SetString(string path, string name, string value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.String,
+        };
 
-    public static RegOp SetExpandString(string path, string name, string value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.ExpandString };
+    public static RegOp SetExpandString(string path, string name, string value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.ExpandString,
+        };
 
-    public static RegOp SetQword(string path, string name, long value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.QWord };
+    public static RegOp SetQword(string path, string name, long value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.QWord,
+        };
 
-    public static RegOp SetBinary(string path, string name, byte[] value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.Binary };
+    public static RegOp SetBinary(string path, string name, byte[] value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.Binary,
+        };
 
-    public static RegOp SetMultiSz(string path, string name, string[] value) => new()
-    { Kind = RegOpKind.SetValue, Path = path, Name = name, Value = value, ValueKind = Microsoft.Win32.RegistryValueKind.MultiString };
+    public static RegOp SetMultiSz(string path, string name, string[] value) =>
+        new()
+        {
+            Kind = RegOpKind.SetValue,
+            Path = path,
+            Name = name,
+            Value = value,
+            ValueKind = Microsoft.Win32.RegistryValueKind.MultiString,
+        };
 
-    public static RegOp DeleteValue(string path, string name) => new()
-    { Kind = RegOpKind.DeleteValue, Path = path, Name = name };
+    public static RegOp DeleteValue(string path, string name) =>
+        new()
+        {
+            Kind = RegOpKind.DeleteValue,
+            Path = path,
+            Name = name,
+        };
 
-    public static RegOp DeleteTree(string path) => new()
-    { Kind = RegOpKind.DeleteTree, Path = path };
+    public static RegOp DeleteTree(string path) => new() { Kind = RegOpKind.DeleteTree, Path = path };
 
-    public static RegOp CheckDword(string path, string name, int expected) => new()
-    { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.DWord };
+    public static RegOp CheckDword(string path, string name, int expected) =>
+        new()
+        {
+            Kind = RegOpKind.CheckValue,
+            Path = path,
+            Name = name,
+            Value = expected,
+            ValueKind = Microsoft.Win32.RegistryValueKind.DWord,
+        };
 
-    public static RegOp CheckString(string path, string name, string expected) => new()
-    { Kind = RegOpKind.CheckValue, Path = path, Name = name, Value = expected, ValueKind = Microsoft.Win32.RegistryValueKind.String };
+    public static RegOp CheckString(string path, string name, string expected) =>
+        new()
+        {
+            Kind = RegOpKind.CheckValue,
+            Path = path,
+            Name = name,
+            Value = expected,
+            ValueKind = Microsoft.Win32.RegistryValueKind.String,
+        };
 
-    public static RegOp CheckMissing(string path, string name) => new()
-    { Kind = RegOpKind.CheckMissing, Path = path, Name = name };
+    public static RegOp CheckMissing(string path, string name) =>
+        new()
+        {
+            Kind = RegOpKind.CheckMissing,
+            Path = path,
+            Name = name,
+        };
 
-    public static RegOp CheckKeyMissing(string path) => new()
-    { Kind = RegOpKind.CheckKeyMissing, Path = path };
+    public static RegOp CheckKeyMissing(string path) => new() { Kind = RegOpKind.CheckKeyMissing, Path = path };
 }
 
 public enum RegOpKind

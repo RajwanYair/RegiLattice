@@ -8,13 +8,14 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Tests for TweakDef model: scope computation, default values, factory methods.</summary>
 public sealed class TweakDefTests
 {
-    private static TweakDef Make(params string[] keys) => new()
-    {
-        Id = "test-id",
-        Label = "Test Tweak",
-        Category = "Test",
-        RegistryKeys = keys,
-    };
+    private static TweakDef Make(params string[] keys) =>
+        new()
+        {
+            Id = "test-id",
+            Label = "Test Tweak",
+            Category = "Test",
+            RegistryKeys = keys,
+        };
 
     // ── Scope computation ──────────────────────────────────────────────────
     [Fact]
@@ -48,7 +49,13 @@ public sealed class TweakDefTests
     [Fact]
     public void Scope_NoKeys_NotAdmin_ReturnsUser()
     {
-        var td = new TweakDef { Id = "t", Label = "T", Category = "C", NeedsAdmin = false };
+        var td = new TweakDef
+        {
+            Id = "t",
+            Label = "T",
+            Category = "C",
+            NeedsAdmin = false,
+        };
         Assert.Equal(TweakScope.User, td.Scope);
     }
 

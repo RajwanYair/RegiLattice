@@ -21,8 +21,9 @@ public static partial class WinGetManager
     /// <summary>List installed winget packages.</summary>
     public static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
-        var (code, stdout, _) = await ShellRunner.RunAsync(
-            "winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct).ConfigureAwait(false);
+        var (code, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct)
+            .ConfigureAwait(false);
         if (code != 0 || string.IsNullOrWhiteSpace(stdout))
             return [];
 
@@ -38,7 +39,8 @@ public static partial class WinGetManager
                 pastHeader = true;
                 continue;
             }
-            if (!pastHeader || line.Length == 0) continue;
+            if (!pastHeader || line.Length == 0)
+                continue;
 
             // First column is the Name, split on double-space (table formatting)
             var parts = line.Split("  ", StringSplitOptions.RemoveEmptyEntries);
@@ -52,9 +54,9 @@ public static partial class WinGetManager
     public static async Task InstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget", ["install", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["install", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget install failed: {stderr.Trim()}");
     }
@@ -63,9 +65,9 @@ public static partial class WinGetManager
     public static async Task UninstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget", ["uninstall", "--id", name, "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["uninstall", "--id", name, "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget uninstall failed: {stderr.Trim()}");
     }
@@ -74,9 +76,9 @@ public static partial class WinGetManager
     public static async Task UpgradeAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "winget", ["upgrade", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner
+            .RunAsync("winget", ["upgrade", "--id", name, "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"winget upgrade failed: {stderr.Trim()}");
     }
@@ -84,9 +86,9 @@ public static partial class WinGetManager
     /// <summary>Search for packages.</summary>
     public static async Task<List<string>> SearchAsync(string query, CancellationToken ct = default)
     {
-        var (code, stdout, _) = await ShellRunner.RunAsync(
-            "winget", ["search", query, "--accept-source-agreements", "--disable-interactivity"],
-            ct).ConfigureAwait(false);
+        var (code, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["search", query, "--accept-source-agreements", "--disable-interactivity"], ct)
+            .ConfigureAwait(false);
         if (code != 0 || string.IsNullOrWhiteSpace(stdout))
             return [];
 
@@ -96,8 +98,13 @@ public static partial class WinGetManager
         foreach (var rawLine in lines)
         {
             var line = rawLine.Trim();
-            if (line.StartsWith("---", StringComparison.Ordinal)) { pastHeader = true; continue; }
-            if (!pastHeader || line.Length == 0) continue;
+            if (line.StartsWith("---", StringComparison.Ordinal))
+            {
+                pastHeader = true;
+                continue;
+            }
+            if (!pastHeader || line.Length == 0)
+                continue;
             var parts = line.Split("  ", StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length >= 2)
                 results.Add($"{parts[0].Trim()} ({parts[1].Trim()})");
@@ -115,7 +122,16 @@ public static partial class WinGetManager
 
     /// <summary>Popular winget packages for quick install.</summary>
     public static readonly string[] PopularPackages =
-        ["7zip.7zip", "Git.Git", "Microsoft.VisualStudioCode", "Google.Chrome",
-         "Mozilla.Firefox", "Notepad++.Notepad++", "VideoLAN.VLC",
-         "Python.Python.3.12", "WinSCP.WinSCP", "PuTTY.PuTTY"];
+    [
+        "7zip.7zip",
+        "Git.Git",
+        "Microsoft.VisualStudioCode",
+        "Google.Chrome",
+        "Mozilla.Firefox",
+        "Notepad++.Notepad++",
+        "VideoLAN.VLC",
+        "Python.Python.3.12",
+        "WinSCP.WinSCP",
+        "PuTTY.PuTTY",
+    ];
 }

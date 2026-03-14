@@ -15,15 +15,13 @@ public sealed class PackManager
 {
     private static readonly string s_packsDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "RegiLattice", "packs");
+        "RegiLattice",
+        "packs"
+    );
 
-    private static readonly string s_indexUrl =
-        "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/index.json";
+    private static readonly string s_indexUrl = "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/index.json";
 
-    private static readonly HttpClient s_http = new()
-    {
-        Timeout = TimeSpan.FromSeconds(30),
-    };
+    private static readonly HttpClient s_http = new() { Timeout = TimeSpan.FromSeconds(30) };
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
@@ -59,12 +57,13 @@ public sealed class PackManager
     {
         var index = await GetIndexAsync(ct);
         var lower = query.ToLowerInvariant();
-        return index.Packs
-            .Where(p =>
-                p.Name.Contains(lower, StringComparison.OrdinalIgnoreCase) ||
-                p.DisplayName.Contains(lower, StringComparison.OrdinalIgnoreCase) ||
-                p.Description.Contains(lower, StringComparison.OrdinalIgnoreCase) ||
-                p.Tags.Any(t => t.Contains(lower, StringComparison.OrdinalIgnoreCase)))
+        return index
+            .Packs.Where(p =>
+                p.Name.Contains(lower, StringComparison.OrdinalIgnoreCase)
+                || p.DisplayName.Contains(lower, StringComparison.OrdinalIgnoreCase)
+                || p.Description.Contains(lower, StringComparison.OrdinalIgnoreCase)
+                || p.Tags.Any(t => t.Contains(lower, StringComparison.OrdinalIgnoreCase))
+            )
             .ToList();
     }
 
@@ -74,12 +73,11 @@ public sealed class PackManager
     /// Download and install a pack by name from the marketplace index.
     /// Returns the loaded TweakDefs ready for registration.
     /// </summary>
-    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> InstallPackAsync(
-        string name, CancellationToken ct = default)
+    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> InstallPackAsync(string name, CancellationToken ct = default)
     {
         var index = await GetIndexAsync(ct);
-        var entry = index.Packs.FirstOrDefault(p =>
-            p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+        var entry =
+            index.Packs.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             ?? throw new ArgumentException($"Pack '{name}' not found in marketplace index.");
 
         if (string.IsNullOrWhiteSpace(entry.DownloadUrl))
@@ -141,7 +139,8 @@ public sealed class PackManager
         foreach (var dir in Directory.GetDirectories(s_packsDir))
         {
             var metaPath = Path.Combine(dir, "meta.json");
-            if (!File.Exists(metaPath)) continue;
+            if (!File.Exists(metaPath))
+                continue;
 
             try
             {
@@ -186,8 +185,7 @@ public sealed class PackManager
     // ── Update ──────────────────────────────────────────────────────────
 
     /// <summary>Check which installed packs have updates available.</summary>
-    public async Task<IReadOnlyList<(PackDef Installed, PackDef Available)>> CheckUpdatesAsync(
-        CancellationToken ct = default)
+    public async Task<IReadOnlyList<(PackDef Installed, PackDef Available)>> CheckUpdatesAsync(CancellationToken ct = default)
     {
         var index = await GetIndexAsync(ct);
         var installed = InstalledPacks();
@@ -195,8 +193,7 @@ public sealed class PackManager
 
         foreach (var local in installed)
         {
-            var remote = index.Packs.FirstOrDefault(p =>
-                p.Name.Equals(local.Name, StringComparison.OrdinalIgnoreCase));
+            var remote = index.Packs.FirstOrDefault(p => p.Name.Equals(local.Name, StringComparison.OrdinalIgnoreCase));
             if (remote is not null && CompareVersions(remote.Version, local.Version) > 0)
                 updates.Add((local, remote));
         }
@@ -204,8 +201,7 @@ public sealed class PackManager
     }
 
     /// <summary>Update a pack to the latest version from the index.</summary>
-    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> UpdatePackAsync(
-        string name, CancellationToken ct = default)
+    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> UpdatePackAsync(string name, CancellationToken ct = default)
     {
         UninstallPack(name);
         return await InstallPackAsync(name, ct);
@@ -223,7 +219,8 @@ public sealed class PackManager
         {
             var av = i < aParts.Length ? aParts[i] : 0;
             var bv = i < bParts.Length ? bParts[i] : 0;
-            if (av != bv) return av.CompareTo(bv);
+            if (av != bv)
+                return av.CompareTo(bv);
         }
         return 0;
     }

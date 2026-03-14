@@ -13,17 +13,12 @@ internal static class Edge
             Category = "Edge",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Edge Collections feature used for organizing web content. Reduces UI clutter and memory usage. Default: Enabled. Recommended: Disabled if not used.",
+            Description =
+                "Disables the Edge Collections feature used for organizing web content. Reduces UI clutter and memory usage. Default: Enabled. Recommended: Disabled if not used.",
             Tags = ["edge", "collections", "ux", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeCollectionsEnabled", 0)],
         },
         new TweakDef
@@ -33,17 +28,12 @@ internal static class Edge
             Category = "Edge",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the mini context menu that appears on text selection in Edge. Removes the floating toolbar with search/copy/etc. Default: Enabled. Recommended: Disabled for cleaner UX.",
+            Description =
+                "Disables the mini context menu that appears on text selection in Edge. Removes the floating toolbar with search/copy/etc. Default: Enabled. Recommended: Disabled for cleaner UX.",
             Tags = ["edge", "mini-menu", "context-menu", "ux"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "MiniContextMenuEnabled", 0)],
         },
         new TweakDef
@@ -235,7 +225,8 @@ internal static class Edge
             Category = "Edge",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Prevents Edge from pre-launching at login and running background processes, saving memory and CPU for users who don't use Edge as primary browser.",
+            Description =
+                "Prevents Edge from pre-launching at login and running background processes, saving memory and CPU for users who don't use Edge as primary browser.",
             Tags = ["edge", "browser", "startup", "background"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0)],
@@ -435,7 +426,8 @@ internal static class Edge
             Category = "Edge",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the Edge Workspaces feature for shared browsing sessions via enterprise policy. Reduces background sync overhead.",
+            Description =
+                "Disables the Edge Workspaces feature for shared browsing sessions via enterprise policy. Reduces background sync overhead.",
             Tags = ["edge", "workspaces", "collaboration", "policy", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeWorkspacesEnabled", 0)],
@@ -449,7 +441,8 @@ internal static class Edge
             Category = "Edge",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the Edge Drop feature used for cross-device file sharing via enterprise policy. Reduces cloud sync and network usage.",
+            Description =
+                "Disables the Edge Drop feature used for cross-device file sharing via enterprise policy. Reduces cloud sync and network usage.",
             Tags = ["edge", "drop", "file-sharing", "policy", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeEDropEnabled", 0)],

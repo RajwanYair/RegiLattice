@@ -12,7 +12,8 @@ internal static class ToolVersionChecker
         string? InstalledVersion,
         bool IsInstalled,
         string? LatestVersion = null,
-        bool UpdateAvailable = false);
+        bool UpdateAvailable = false
+    );
 
     /// <summary>Check all known external tools and return their status.</summary>
     internal static async Task<IReadOnlyList<ToolInfo>> CheckAllAsync(CancellationToken ct = default)
@@ -22,7 +23,12 @@ internal static class ToolVersionChecker
         var tasks = new List<Task<ToolInfo>>
         {
             CheckToolAsync("PowerShell", "pwsh", ["-NoProfile", "-Command", "$PSVersionTable.PSVersion.ToString()"], ct),
-            CheckToolAsync("Python", pythonExe, ["-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')"], ct),
+            CheckToolAsync(
+                "Python",
+                pythonExe,
+                ["-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')"],
+                ct
+            ),
             CheckToolAsync("winget", "winget", ["--version"], ct),
             CheckToolAsync("Scoop", "powershell", ["-NoProfile", "-Command", "scoop --version | Select-Object -First 1"], ct),
             CheckToolAsync("Chocolatey", "choco", ["--version"], ct),
@@ -54,7 +60,9 @@ internal static class ToolVersionChecker
         {
             wingetUpdates = await GetWingetAvailableUpdatesAsync(ct).ConfigureAwait(false);
         }
-        catch { /* winget not available or failed */ }
+        catch
+        { /* winget not available or failed */
+        }
 
         // Map tool names to their winget package IDs for matching
         var wingetMapping = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
@@ -92,7 +100,8 @@ internal static class ToolVersionChecker
                         break;
                     }
                 }
-                if (latestVersion is not null) break;
+                if (latestVersion is not null)
+                    break;
             }
 
             bool hasUpdate = latestVersion is not null;
@@ -103,11 +112,7 @@ internal static class ToolVersionChecker
     }
 
     /// <summary>Check a single tool's version.</summary>
-    internal static async Task<ToolInfo> CheckToolAsync(
-        string displayName,
-        string fileName,
-        IEnumerable<string> args,
-        CancellationToken ct = default)
+    internal static async Task<ToolInfo> CheckToolAsync(string displayName, string fileName, IEnumerable<string> args, CancellationToken ct = default)
     {
         try
         {
@@ -180,22 +185,28 @@ internal static class ToolVersionChecker
     /// <summary>Parse winget upgrade output to find available updates.</summary>
     private static async Task<Dictionary<string, string>> GetWingetAvailableUpdatesAsync(CancellationToken ct)
     {
-        var (code, stdout, _) = await ShellRunner.RunAsync(
-            "winget",
-            ["upgrade", "--disable-interactivity", "--accept-source-agreements"],
-            ct).ConfigureAwait(false);
+        var (code, stdout, _) = await ShellRunner
+            .RunAsync("winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct)
+            .ConfigureAwait(false);
 
         var updates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        if (code != 0) return updates;
+        if (code != 0)
+            return updates;
 
         var lines = stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries);
         bool pastHeader = false;
         foreach (var rawLine in lines)
         {
             string line = rawLine.Trim();
-            if (line.StartsWith('-') && line.Length > 10) { pastHeader = true; continue; }
-            if (!pastHeader || line.Length == 0) continue;
-            if (line.Contains("upgrades available", StringComparison.OrdinalIgnoreCase)) break;
+            if (line.StartsWith('-') && line.Length > 10)
+            {
+                pastHeader = true;
+                continue;
+            }
+            if (!pastHeader || line.Length == 0)
+                continue;
+            if (line.Contains("upgrades available", StringComparison.OrdinalIgnoreCase))
+                break;
 
             // Parse: Name  Id  Version  Available  Source
             var parts = line.Split("  ", StringSplitOptions.RemoveEmptyEntries);
@@ -217,9 +228,12 @@ internal static class ToolVersionChecker
             try
             {
                 var (code, _, _) = await ShellRunner.RunAsync(exe, ["--version"], ct).ConfigureAwait(false);
-                if (code == 0) return exe;
+                if (code == 0)
+                    return exe;
             }
-            catch { /* not found */ }
+            catch
+            { /* not found */
+            }
         }
         return "python";
     }

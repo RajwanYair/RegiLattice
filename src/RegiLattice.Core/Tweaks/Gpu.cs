@@ -13,17 +13,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Multi-Plane Overlay which can cause black screens, flickering, or stuttering on some GPU/monitor combinations. Safe to disable if you experience display issues. Default: Enabled. Recommended: Disabled for troubleshooting.",
+            Description =
+                "Disables Multi-Plane Overlay which can cause black screens, flickering, or stuttering on some GPU/monitor combinations. Safe to disable if you experience display issues. Default: Enabled. Recommended: Disabled for troubleshooting.",
             Tags = ["gpu", "display", "fix", "mpo"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
         },
         new TweakDef
@@ -33,7 +28,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Increases GPU Timeout Detection and Recovery delay from 2s to 10s. Prevents driver crash/reset during heavy GPU workloads like rendering, ML training, or compute shaders. Options: 2s (default) / 10s / 30s / 60s. Recommended: 10s.",
+            Description =
+                "Increases GPU Timeout Detection and Recovery delay from 2s to 10s. Prevents driver crash/reset during heavy GPU workloads like rendering, ML training, or compute shaders. Options: 2s (default) / 10s / 30s / 60s. Recommended: 10s.",
             Tags = ["gpu", "stability", "tdr", "rendering"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps =
@@ -55,11 +51,16 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables NVIDIA telemetry and usage data collection. Only applies if NVIDIA drivers are installed. Default: Enabled (opt-in). Recommended: Disabled.",
+            Description =
+                "Disables NVIDIA telemetry and usage data collection. Only applies if NVIDIA drivers are installed. Default: Enabled (opt-in). Recommended: Disabled.",
             Tags = ["gpu", "nvidia", "privacy", "telemetry"],
             IsApplicable = HardwareInfo.HasNvidiaGpu,
             ApplicabilityNote = "Requires NVIDIA GPU",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client", @"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\FTS"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\FTS",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client", "OptInOrOutPreference", 0),
@@ -83,18 +84,27 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets global DirectX GPU preference to high performance with swap effect upgrade enabled. Improves frame pacing. Default: System default. Recommended: High Performance.",
+            Description =
+                "Sets global DirectX GPU preference to high performance with swap effect upgrade enabled. Improves frame pacing. Default: System default. Recommended: High Performance.",
             Tags = ["gpu", "performance", "directx"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
             ApplyOps =
             [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", "SwapEffectUpgradeEnable=1;"),
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
+                    "DirectXUserGlobalSettings",
+                    "SwapEffectUpgradeEnable=1;"
+                ),
             ],
-            RemoveOps =
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
+            DetectOps =
             [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings"),
+                RegOp.CheckString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
+                    "DirectXUserGlobalSettings",
+                    "SwapEffectUpgradeEnable=1;"
+                ),
             ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", "SwapEffectUpgradeEnable=1;")],
         },
         new TweakDef
         {
@@ -103,17 +113,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Xbox Game Bar overlay (UseNexusForGameBarEnabled=0). Reduces GPU overhead and prevents accidental overlay activation. Default: 1 (Enabled). Recommended: 0 (Disabled).",
+            Description =
+                "Disables the Xbox Game Bar overlay (UseNexusForGameBarEnabled=0). Reduces GPU overhead and prevents accidental overlay activation. Default: 1 (Enabled). Recommended: 0 (Disabled).",
             Tags = ["gpu", "gaming", "overlay", "game-bar"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
         },
         new TweakDef
@@ -123,19 +128,14 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Increases the GPU TDR (Timeout Detection and Recovery) delay to 8 seconds. Prevents driver resets during heavy GPU workloads. Removal deletes the value, restoring the Windows default (2s). Default: 2s. Recommended: 8s.",
+            Description =
+                "Increases the GPU TDR (Timeout Detection and Recovery) delay to 8 seconds. Prevents driver resets during heavy GPU workloads. Removal deletes the value, restoring the Windows default (2s). Default: 2s. Recommended: 8s.",
             Tags = ["gpu", "nvidia", "stability", "tdr"],
             IsApplicable = HardwareInfo.HasNvidiaGpu,
             ApplicabilityNote = "Requires NVIDIA GPU",
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 8),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 8)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 8)],
         },
         new TweakDef
@@ -145,17 +145,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables GPU preemption (EnablePreemption=0) for lower render latency. May improve frame times in GPU-bound scenarios but can affect multi-tasking and system responsiveness. Default: Enabled. Removal deletes the value.",
+            Description =
+                "Disables GPU preemption (EnablePreemption=0) for lower render latency. May improve frame times in GPU-bound scenarios but can affect multi-tasking and system responsiveness. Default: Enabled. Removal deletes the value.",
             Tags = ["gpu", "latency", "gaming", "preemption"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
         },
         new TweakDef
@@ -165,17 +160,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces DirectX 12 mode for all compatible applications. Enables advanced features like mesh shaders and raytracing. Default: Auto. Recommended: Enabled for DX12-capable GPUs.",
+            Description =
+                "Forces DirectX 12 mode for all compatible applications. Enables advanced features like mesh shaders and raytracing. Default: Auto. Recommended: Enabled for DX12-capable GPUs.",
             Tags = ["gpu", "directx", "dx12", "performance", "raytracing"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ForceD3D12", 1)],
         },
         new TweakDef
@@ -185,7 +175,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Optimizes WDDM flip queue length to 2 frames for reduced input latency. Trades slight throughput for lower frame queue depth. Default: 3. Recommended: 2 for competitive gaming.",
+            Description =
+                "Optimizes WDDM flip queue length to 2 frames for reduced input latency. Trades slight throughput for lower frame queue depth. Default: 3. Recommended: 2 for competitive gaming.",
             Tags = ["gpu", "wddm", "flip-queue", "latency", "gaming"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps =
@@ -207,7 +198,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables DWM Aero Peek animations for reduced GPU overhead. Saves GPU cycles on compositing effects. Default: 1 (enabled). Recommended: Disabled for performance.",
+            Description =
+                "Disables DWM Aero Peek animations for reduced GPU overhead. Saves GPU cycles on compositing effects. Default: 1 (enabled). Recommended: Disabled for performance.",
             Tags = ["gpu", "dwm", "animations", "aero-peek", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
             ApplyOps =
@@ -229,17 +221,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Increases GPU Timeout Detection and Recovery delay to 10 seconds. Prevents false TDR resets during heavy GPU workloads. Default: 2s. Recommended: 10s for compute/rendering.",
+            Description =
+                "Increases GPU Timeout Detection and Recovery delay to 10 seconds. Prevents false TDR resets during heavy GPU workloads. Default: 2s. Recommended: 10s for compute/rendering.",
             Tags = ["gpu", "tdr", "timeout", "stability", "compute"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
         },
         new TweakDef
@@ -249,17 +236,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets the flip queue size to 1, limiting pre-rendered frames. Reduces input lag at the cost of slightly lower throughput. Default: 3 frames. Recommended: 1 for competitive gaming.",
+            Description =
+                "Sets the flip queue size to 1, limiting pre-rendered frames. Reduces input lag at the cost of slightly lower throughput. Default: 3 frames. Recommended: 1 for competitive gaming.",
             Tags = ["gpu", "pre-rendered", "frames", "input-lag", "gaming"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "FlipQueueSize", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "FlipQueueSize"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "FlipQueueSize", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "FlipQueueSize")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "FlipQueueSize", 1)],
         },
         new TweakDef
@@ -269,17 +251,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables D3D12 asynchronous command buffer reuse for improved GPU throughput. Most beneficial in DirectX 12 games with async compute shaders. Default: Not set. Recommended: Enabled for gaming.",
+            Description =
+                "Enables D3D12 asynchronous command buffer reuse for improved GPU throughput. Most beneficial in DirectX 12 games with async compute shaders. Default: Not set. Recommended: Enabled for gaming.",
             Tags = ["gpu", "directx12", "async", "compute", "gaming"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "D3D12_ENABLE_UNSAFE_COMMAND_BUFFER_REUSE", 1)],
         },
         new TweakDef
@@ -289,17 +266,12 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the DirectX on-disk shader cache. Reduces disk I/O; useful in scenarios where fresh shader compilation is preferred or disk space is constrained. Default: Enabled.",
+            Description =
+                "Disables the DirectX on-disk shader cache. Reduces disk I/O; useful in scenarios where fresh shader compilation is preferred or disk space is constrained. Default: Enabled.",
             Tags = ["gpu", "shader", "cache", "disk", "directx"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX", "ShaderCachePath", 0)],
         },
         new TweakDef
@@ -323,7 +295,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Increases the Timeout Detection Recovery delay from 2s to 10s. Helps with long compute shaders or heavy rendering. Default: 2.",
+            Description =
+                "Increases the Timeout Detection Recovery delay from 2s to 10s. Helps with long compute shaders or heavy rendering. Default: 2.",
             Tags = ["gpu", "tdr", "timeout", "crash", "stability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
@@ -407,7 +380,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces software cursor rendering instead of hardware cursor. May fix cursor corruption issues on some GPUs. Default: hardware cursor.",
+            Description =
+                "Forces software cursor rendering instead of hardware cursor. May fix cursor corruption issues on some GPUs. Default: hardware cursor.",
             Tags = ["gpu", "cursor", "software", "rendering"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor", 1)],
@@ -436,12 +410,33 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the GPU thread priority to 8 in the MMCSS Games profile. Ensures GPU workloads get higher scheduling priority. Default: not set.",
+            Description =
+                "Sets the GPU thread priority to 8 in the MMCSS Games profile. Ensures GPU workloads get higher scheduling priority. Default: not set.",
             Tags = ["gpu", "priority", "mmcss", "games"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 8)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 8)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GPU Priority",
+                    8
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GPU Priority"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GPU Priority",
+                    8
+                ),
+            ],
         },
         new TweakDef
         {
@@ -450,7 +445,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Multiplane Overlay. Can fix stuttering, flickering, and black screens on some GPU/driver combinations. Default: enabled.",
+            Description =
+                "Disables Multiplane Overlay. Can fix stuttering, flickering, and black screens on some GPU/driver combinations. Default: enabled.",
             Tags = ["gpu", "mpo", "overlay", "fix"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
@@ -464,7 +460,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables GPU compute preemption at the DWM level. May improve GPGPU compute performance but can cause display hangs. Default: enabled.",
+            Description =
+                "Disables GPU compute preemption at the DWM level. May improve GPGPU compute performance but can cause display hangs. Default: enabled.",
             Tags = ["gpu", "compute", "preemption", "dwm"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "CompositionPolicy", 0)],

@@ -38,14 +38,8 @@ internal static class Input
             Description = "Prevents the Sticky Keys dialog from appearing when pressing Shift 5 times.",
             Tags = ["input", "accessibility", "gaming"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
         },
         new TweakDef
@@ -55,17 +49,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables tap-to-click on precision touchpads to reduce accidental clicks and improve input accuracy. Default: Enabled. Recommended: Disabled for desktop users.",
+            Description =
+                "Disables tap-to-click on precision touchpads to reduce accidental clicks and improve input accuracy. Default: Enabled. Recommended: Disabled for desktop users.",
             Tags = ["input", "touchpad", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 0)],
         },
         new TweakDef
@@ -75,17 +64,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Increases mouse hover delay from 400ms to 1000ms. Reduces accidental tooltip popups. Options: 400ms (default) / 1000ms. Recommended: 1000ms.",
+            Description =
+                "Increases mouse hover delay from 400ms to 1000ms. Reduces accidental tooltip popups. Options: 400ms (default) / 1000ms. Recommended: 1000ms.",
             Tags = ["input", "mouse", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "1000"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "400"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "1000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "400")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "1000")],
         },
         new TweakDef
@@ -98,14 +82,8 @@ internal static class Input
             Description = "Disables Filter Keys accessibility shortcut that can interfere with gaming.",
             Tags = ["input", "accessibility", "gaming"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "126"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "126")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0")],
         },
         new TweakDef
@@ -118,14 +96,8 @@ internal static class Input
             Description = "Disables the Toggle Keys beep when pressing Num/Caps/Scroll Lock.",
             Tags = ["input", "accessibility", "gaming"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "62"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "62")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
         },
         new TweakDef
@@ -138,14 +110,8 @@ internal static class Input
             Description = "Sets mouse wheel scroll amount to 5 lines (default 3).",
             Tags = ["input", "mouse", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "5"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "3"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "5")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "3")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "5")],
         },
         new TweakDef
@@ -158,14 +124,8 @@ internal static class Input
             Description = "Sets keyboard repeat delay to 0 (minimum) for faster key repeat.",
             Tags = ["input", "keyboard", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
         },
         new TweakDef
@@ -175,17 +135,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Prevents the touch keyboard from automatically appearing on desktops without touchscreens. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Prevents the touch keyboard from automatically appearing on desktops without touchscreens. Default: Enabled. Recommended: Disabled.",
             Tags = ["input", "touch", "keyboard", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
         },
         new TweakDef
@@ -195,17 +150,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Sticky Keys shortcut (pressing Shift 5 times). Prevents accidental activation during gaming. Default: Enabled (510). Recommended: Disabled (506).",
+            Description =
+                "Disables the Sticky Keys shortcut (pressing Shift 5 times). Prevents accidental activation during gaming. Default: Enabled (510). Recommended: Disabled (506).",
             Tags = ["input", "sticky-keys", "gaming", "accessibility"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
         },
         new TweakDef
@@ -215,17 +165,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic spell checking in Windows text input. Reduces CPU usage from background spell-check processing. Default: Enabled. Recommended: Disabled for developers.",
+            Description =
+                "Disables automatic spell checking in Windows text input. Reduces CPU usage from background spell-check processing. Default: Enabled. Recommended: Disabled for developers.",
             Tags = ["input", "spell-check", "typing", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableSpellchecking", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableSpellchecking", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
         },
         new TweakDef
@@ -235,17 +180,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables text prediction and suggestions while typing. Prevents the suggestion bar from appearing above the keyboard. Default: Enabled. Recommended: Disabled for power users.",
+            Description =
+                "Disables text prediction and suggestions while typing. Prevents the suggestion bar from appearing above the keyboard. Default: Enabled. Recommended: Disabled for power users.",
             Tags = ["input", "text-prediction", "suggestions", "typing"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableTextPrediction", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableTextPrediction", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
         },
         new TweakDef
@@ -255,17 +195,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the cursor blink rate to 400 ms (faster than default). Makes the text cursor more visible and responsive. Default: 530 ms. Recommended: 400 ms for faster feedback.",
+            Description =
+                "Sets the cursor blink rate to 400 ms (faster than default). Makes the text cursor more visible and responsive. Default: 530 ms. Recommended: 400 ms for faster feedback.",
             Tags = ["input", "cursor", "blink-rate", "typing", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "400"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "400")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "400")],
         },
         new TweakDef
@@ -275,17 +210,12 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Reduces the double-click detection interval to 200 ms for faster response. Requires quicker double-clicks but feels responsive. Default: 500 ms. Recommended: 200 ms for power users.",
+            Description =
+                "Reduces the double-click detection interval to 200 ms for faster response. Requires quicker double-clicks but feels responsive. Default: 500 ms. Recommended: 200 ms for power users.",
             Tags = ["input", "mouse", "double-click", "speed", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "DoubleClickSpeed", "200"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "DoubleClickSpeed", "500"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "DoubleClickSpeed", "200")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "DoubleClickSpeed", "500")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "DoubleClickSpeed", "200")],
         },
         new TweakDef
@@ -295,7 +225,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables visual feedback animations for touch and pen input. Removes the circle/ripple effect on touch and gesture indicators. Default: Enabled. Recommended: Disabled on non-touch devices.",
+            Description =
+                "Disables visual feedback animations for touch and pen input. Removes the circle/ripple effect on touch and gesture indicators. Default: Enabled. Recommended: Disabled on non-touch devices.",
             Tags = ["input", "touch", "pen", "feedback", "visual"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
             ApplyOps =
@@ -387,15 +318,18 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables mouse acceleration (enhanced pointer precision). Provides 1:1 mouse movement for gaming and precision work. Default: acceleration enabled.",
+            Description =
+                "Disables mouse acceleration (enhanced pointer precision). Provides 1:1 mouse movement for gaming and precision work. Default: acceleration enabled.",
             Tags = ["input", "mouse", "acceleration", "gaming"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [
+            ApplyOps =
+            [
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0"),
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold1", "0"),
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold2", "0"),
             ],
-            RemoveOps = [
+            RemoveOps =
+            [
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "1"),
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold1", "6"),
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseThreshold2", "10"),
@@ -409,7 +343,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Windows Enhanced Pointer Precision feature. Provides raw unfiltered mouse input for consistent cursor movement. Default: enabled.",
+            Description =
+                "Disables the Windows Enhanced Pointer Precision feature. Provides raw unfiltered mouse input for consistent cursor movement. Default: enabled.",
             Tags = ["input", "pointer", "precision", "raw"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
@@ -423,7 +358,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the touch keyboard from auto-launching when tapping text fields on non-tablet devices. Default: auto-launch on touch devices.",
+            Description =
+                "Disables the touch keyboard from auto-launching when tapping text fields on non-tablet devices. Default: auto-launch on touch devices.",
             Tags = ["input", "touch", "keyboard", "disable"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],

@@ -202,7 +202,8 @@ internal sealed class MarketplaceDialog : Form
 
     private async Task InstallSelectedAsync()
     {
-        if (_lstBrowse.SelectedItems.Count == 0) return;
+        if (_lstBrowse.SelectedItems.Count == 0)
+            return;
         var pack = (PackDef)_lstBrowse.SelectedItems[0].Tag!;
 
         _lblStatus.Text = $"Installing '{pack.DisplayName}'…";
@@ -223,12 +224,9 @@ internal sealed class MarketplaceDialog : Form
 
     private void OnInstallFromFile(object? sender, EventArgs e)
     {
-        using var dlg = new OpenFileDialog
-        {
-            Title = "Select Tweak Pack JSON",
-            Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-        };
-        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        using var dlg = new OpenFileDialog { Title = "Select Tweak Pack JSON", Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*" };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
 
         try
         {
@@ -266,7 +264,8 @@ internal sealed class MarketplaceDialog : Form
 
     private void OnUninstallSelected(object? sender, EventArgs e)
     {
-        if (_lstInstalled.SelectedItems.Count == 0) return;
+        if (_lstInstalled.SelectedItems.Count == 0)
+            return;
         var pack = (PackDef)_lstInstalled.SelectedItems[0].Tag!;
 
         var result = MessageBox.Show(
@@ -274,8 +273,10 @@ internal sealed class MarketplaceDialog : Form
             $"Uninstall '{pack.DisplayName}' v{pack.Version}?",
             "Confirm Uninstall",
             MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question);
-        if (result != DialogResult.Yes) return;
+            MessageBoxIcon.Question
+        );
+        if (result != DialogResult.Yes)
+            return;
 
         _pm.UninstallPack(pack.Name);
         _lblStatus.Text = $"Uninstalled '{pack.DisplayName}'.";
@@ -285,7 +286,8 @@ internal sealed class MarketplaceDialog : Form
 
     private async Task UpdateSelectedAsync()
     {
-        if (_lstInstalled.SelectedItems.Count == 0) return;
+        if (_lstInstalled.SelectedItems.Count == 0)
+            return;
         var pack = (PackDef)_lstInstalled.SelectedItems[0].Tag!;
 
         _lblStatus.Text = $"Updating '{pack.DisplayName}'…";
@@ -309,24 +311,32 @@ internal sealed class MarketplaceDialog : Form
 
     private void OnBrowseSelectionChanged(object? sender, EventArgs e)
     {
-        if (_lstBrowse.SelectedItems.Count == 0) { _txtDetails.Clear(); return; }
+        if (_lstBrowse.SelectedItems.Count == 0)
+        {
+            _txtDetails.Clear();
+            return;
+        }
         ShowPackDetails((PackDef)_lstBrowse.SelectedItems[0].Tag!);
     }
 
     private void OnInstalledSelectionChanged(object? sender, EventArgs e)
     {
-        if (_lstInstalled.SelectedItems.Count == 0) { _txtDetails.Clear(); return; }
+        if (_lstInstalled.SelectedItems.Count == 0)
+        {
+            _txtDetails.Clear();
+            return;
+        }
         ShowPackDetails((PackDef)_lstInstalled.SelectedItems[0].Tag!);
     }
 
     private void ShowPackDetails(PackDef p)
     {
         _txtDetails.Text =
-            $"Name: {p.DisplayName}  (ID: {p.Name})\n" +
-            $"Version: {p.Version}  |  Author: {p.Author}  |  Tweaks: {p.TweakCount}\n" +
-            $"Categories: {string.Join(", ", p.Categories)}\n" +
-            $"Tags: {string.Join(", ", p.Tags)}\n" +
-            $"{p.Description}";
+            $"Name: {p.DisplayName}  (ID: {p.Name})\n"
+            + $"Version: {p.Version}  |  Author: {p.Author}  |  Tweaks: {p.TweakCount}\n"
+            + $"Categories: {string.Join(", ", p.Categories)}\n"
+            + $"Tags: {string.Join(", ", p.Tags)}\n"
+            + $"{p.Description}";
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────

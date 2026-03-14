@@ -13,7 +13,8 @@ internal static class Chrome
             Category = "Chrome",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables renderer code integrity checks in Chrome. Fixes compatibility issues with certain security software. Default: enabled.",
+            Description =
+                "Disables renderer code integrity checks in Chrome. Fixes compatibility issues with certain security software. Default: enabled.",
             Tags = ["chrome", "renderer", "code-integrity", "compatibility"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "RendererCodeIntegrityEnabled", 0)],
@@ -55,7 +56,8 @@ internal static class Chrome
             Category = "Chrome",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables search and URL suggestions in the Chrome address bar. Prevents keystrokes from being sent to Google. Default: enabled.",
+            Description =
+                "Disables search and URL suggestions in the Chrome address bar. Prevents keystrokes from being sent to Google. Default: enabled.",
             Tags = ["chrome", "search", "suggestions", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SearchSuggestEnabled", 0)],
@@ -97,7 +99,8 @@ internal static class Chrome
             Category = "Chrome",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables enhanced Safe Browsing which sends URLs to Google in real-time. Standard protection remains active. Default: standard.",
+            Description =
+                "Disables enhanced Safe Browsing which sends URLs to Google in real-time. Standard protection remains active. Default: standard.",
             Tags = ["chrome", "safe-browsing", "privacy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 1)],
@@ -215,7 +218,11 @@ internal static class Chrome
             ApplyOps =
             [
                 RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "automatic"),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsTemplates", "https://cloudflare-dns.com/dns-query"),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome",
+                    "DnsOverHttpsTemplates",
+                    "https://cloudflare-dns.com/dns-query"
+                ),
             ],
             RemoveOps =
             [
@@ -463,7 +470,11 @@ internal static class Chrome
             ApplyOps =
             [
                 RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "secure"),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsTemplates", "https://cloudflare-dns.com/dns-query"),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome",
+                    "DnsOverHttpsTemplates",
+                    "https://cloudflare-dns.com/dns-query"
+                ),
             ],
             RemoveOps =
             [
