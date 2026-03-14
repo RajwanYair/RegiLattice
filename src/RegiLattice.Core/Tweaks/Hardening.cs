@@ -171,5 +171,100 @@ internal static class Hardening
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "harden-disable-smb1",
+            Label = "Disable SMBv1 Protocol",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables the legacy SMBv1 protocol which is vulnerable to EternalBlue/WannaCry exploits.",
+            Tags = ["hardening", "security", "smb", "wannacry"],
+            ApplyAction = _ => ShellRunner.RunPowerShell(
+                "Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force; " +
+                "Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart -ErrorAction SilentlyContinue"),
+            RemoveAction = _ => ShellRunner.RunPowerShell(
+                "Set-SmbServerConfiguration -EnableSMB1Protocol $true -Force"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-SmbServerConfiguration).EnableSMB1Protocol -eq $false");
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "harden-enable-secure-boot-check",
+            Label = "Verify Secure Boot Status",
+            Category = "Hardening",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Checks if Secure Boot is enabled. Detection-only tweak for security auditing.",
+            Tags = ["hardening", "security", "secureboot", "audit"],
+            ApplyAction = _ => { }, // Read-only check
+            RemoveAction = _ => { },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("Confirm-SecureBootUEFI -ErrorAction SilentlyContinue");
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "harden-enable-audit-logon-events",
+            Label = "Enable Audit Logon Events",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables auditing of logon success and failure events for security monitoring.",
+            Tags = ["hardening", "security", "audit", "logon"],
+            ApplyAction = _ => ShellRunner.Run("auditpol.exe", ["/set", "/subcategory:Logon", "/success:enable", "/failure:enable"]),
+            RemoveAction = _ => ShellRunner.Run("auditpol.exe", ["/set", "/subcategory:Logon", "/success:disable", "/failure:disable"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("auditpol.exe", ["/get", "/subcategory:Logon"]);
+                return stdout.Contains("Success and Failure", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "harden-set-password-policy",
+            Label = "Enforce Minimum Password Length (12 chars)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Sets the local security policy to require minimum 12-character passwords.",
+            Tags = ["hardening", "security", "password", "policy"],
+            ApplyAction = _ => ShellRunner.Run("net.exe", ["accounts", "/minpwlen:12"]),
+            RemoveAction = _ => ShellRunner.Run("net.exe", ["accounts", "/minpwlen:0"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("net.exe", ["accounts"]);
+                return stdout.Contains("Minimum password length          12", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "harden-enable-firewall-all-profiles",
+            Label = "Enable Windows Firewall (All Profiles)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Ensures Windows Firewall is enabled for Domain, Private, and Public profiles.",
+            Tags = ["hardening", "security", "firewall", "network"],
+            ApplyAction = _ => ShellRunner.RunPowerShell(
+                "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True"),
+            RemoveAction = _ => { }, // Don't disable firewall
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-NetFirewallProfile | Where-Object Enabled -eq $false).Count -eq 0");
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

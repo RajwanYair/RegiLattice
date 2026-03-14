@@ -187,5 +187,141 @@ internal static class Developer
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "dev-enable-developer-mode-full",
+            Label = "Enable Developer Mode (Full AppModelUnlock)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables Windows Developer Mode for sideloading apps, SSH server, and Device Portal.",
+            Tags = ["developer", "sideload", "apps", "developer-mode"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowAllTrustedApps", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowAllTrustedApps", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-increase-irp-stack-size",
+            Label = "Increase IRP Stack Size (Network/Disk I/O)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the I/O Request Packet stack size from 15 to 32. Improves performance for heavy disk/network I/O workloads.",
+            Tags = ["developer", "disk", "network", "performance", "irp"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-wsl2",
+            Label = "Enable WSL 2 (Windows Subsystem for Linux)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables WSL 2 with Virtual Machine Platform. Installs the latest WSL from the Store.",
+            Tags = ["developer", "wsl", "linux", "virtualization"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Microsoft-Windows-Subsystem-Linux", "/All", "/NoRestart"]);
+                ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:VirtualMachinePlatform", "/All", "/NoRestart"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Microsoft-Windows-Subsystem-Linux", "/NoRestart"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:Microsoft-Windows-Subsystem-Linux"]);
+                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-openssh-server",
+            Label = "Install and Start OpenSSH Server",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Installs the OpenSSH Server optional feature and starts the sshd service for remote access.",
+            Tags = ["developer", "ssh", "remote", "server"],
+            ApplyAction = _ => ShellRunner.RunPowerShell(
+                "Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue; " +
+                "Set-Service -Name sshd -StartupType Automatic -ErrorAction SilentlyContinue; " +
+                "Start-Service sshd -ErrorAction SilentlyContinue; " +
+                "New-NetFirewallRule -Name 'OpenSSH-Server' -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22 -ErrorAction SilentlyContinue"),
+            RemoveAction = _ => ShellRunner.RunPowerShell(
+                "Stop-Service sshd -Force -ErrorAction SilentlyContinue; " +
+                "Set-Service -Name sshd -StartupType Disabled -ErrorAction SilentlyContinue; " +
+                "Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service sshd -ErrorAction SilentlyContinue).Status -eq 'Running'");
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-set-execution-policy-unrestricted",
+            Label = "Set PowerShell Execution Policy to RemoteSigned",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Sets the machine-level PowerShell execution policy to RemoteSigned, allowing local scripts to run.",
+            Tags = ["developer", "powershell", "execution-policy"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-ExecutionPolicy RemoteSigned -Scope LocalMachine -Force"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-ExecutionPolicy Restricted -Scope LocalMachine -Force"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-ExecutionPolicy -Scope LocalMachine) -eq 'RemoteSigned'");
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-ntfs-8dot3-names",
+            Label = "Disable NTFS 8.3 Short Name Generation",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables DOS-compatible 8.3 short file names. Speeds up directory enumeration in large repos.",
+            Tags = ["developer", "filesystem", "ntfs", "performance"],
+            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["8dot3name", "set", "1"]),
+            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["8dot3name", "set", "0"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["8dot3name", "query"]);
+                return stdout.Contains("NtfsDisable8dot3NameCreation = 1", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-increase-file-handle-limit",
+            Label = "Increase System-Wide File Handle Limit",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the maximum number of open file handles. Helps Node.js, Java, and build systems with many files.",
+            Tags = ["developer", "filesystem", "handles", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval", 60)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval", 60)],
+        },
     ];
 }
