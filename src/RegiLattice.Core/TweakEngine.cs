@@ -105,6 +105,7 @@ public sealed class TweakEngine
         Register(Tweaks.DnsNetworking.Tweaks);
         Register(Tweaks.Edge.Tweaks);
         Register(Tweaks.Encryption.Tweaks);
+        Register(Tweaks.EventLogging.Tweaks);
         Register(Tweaks.Explorer.Tweaks);
         Register(Tweaks.FileSystem.Tweaks);
         Register(Tweaks.Firewall.Tweaks);
@@ -137,6 +138,7 @@ public sealed class TweakEngine
         Register(Tweaks.PowerShellTweaks.Tweaks);
         Register(Tweaks.Printing.Tweaks);
         Register(Tweaks.Privacy.Tweaks);
+        Register(Tweaks.ProxyVpn.Tweaks);
         Register(Tweaks.RealVnc.Tweaks);
         Register(Tweaks.Recovery.Tweaks);
         Register(Tweaks.RemoteDesktop.Tweaks);
@@ -151,6 +153,7 @@ public sealed class TweakEngine
         Register(Tweaks.Speech.Tweaks);
         Register(Tweaks.SsdOptimization.Tweaks);
         Register(Tweaks.Startup.Tweaks);
+        Register(Tweaks.SystemRestore.Tweaks);
         Register(Tweaks.Storage.Tweaks);
         Register(Tweaks.SystemTweaks.Tweaks);
         Register(Tweaks.Taskbar.Tweaks);
@@ -161,6 +164,7 @@ public sealed class TweakEngine
         Register(Tweaks.Virtualization.Tweaks);
         Register(Tweaks.VsCode.Tweaks);
         Register(Tweaks.Widgets.Tweaks);
+        Register(Tweaks.WindowsRecall.Tweaks);
         Register(Tweaks.Win11.Tweaks);
         Register(Tweaks.WindowsTerminal.Tweaks);
         Register(Tweaks.WindowsUpdate.Tweaks);
