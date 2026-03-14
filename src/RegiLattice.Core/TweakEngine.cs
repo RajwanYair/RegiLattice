@@ -94,9 +94,11 @@ public sealed class TweakEngine
         Register(Tweaks.Copilot.Tweaks);
         Register(Tweaks.Cortana.Tweaks);
         Register(Tweaks.CrashDiagnostics.Tweaks);
+        Register(Tweaks.Debloat.Tweaks);
         Register(Tweaks.Defender.Tweaks);
         Register(Tweaks.Developer.Tweaks);
         Register(Tweaks.DevDrive.Tweaks);
+        Register(Tweaks.DiskCleanup.Tweaks);
         Register(Tweaks.Display.Tweaks);
         Register(Tweaks.DnsNetworking.Tweaks);
         Register(Tweaks.Edge.Tweaks);
@@ -120,6 +122,7 @@ public sealed class TweakEngine
         Register(Tweaks.MsStore.Tweaks);
         Register(Tweaks.Multimedia.Tweaks);
         Register(Tweaks.Network.Tweaks);
+        Register(Tweaks.NetworkOptimization.Tweaks);
         Register(Tweaks.NightLight.Tweaks);
         Register(Tweaks.Notifications.Tweaks);
         Register(Tweaks.Office.Tweaks);
@@ -128,6 +131,7 @@ public sealed class TweakEngine
         Register(Tweaks.PhoneLink.Tweaks);
         Register(Tweaks.PackageManagement.Tweaks);
         Register(Tweaks.Power.Tweaks);
+        Register(Tweaks.PowerManagement.Tweaks);
         Register(Tweaks.PowerShellTweaks.Tweaks);
         Register(Tweaks.Printing.Tweaks);
         Register(Tweaks.Privacy.Tweaks);
