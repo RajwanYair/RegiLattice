@@ -81,10 +81,12 @@ public sealed class TweakEngine
         // Each category module provides a static Tweaks property
         Register(Tweaks.Accessibility.Tweaks);
         Register(Tweaks.Adobe.Tweaks);
+        Register(Tweaks.AppCompatibility.Tweaks);
         Register(Tweaks.Audio.Tweaks);
         Register(Tweaks.Backup.Tweaks);
         Register(Tweaks.Bluetooth.Tweaks);
         Register(Tweaks.Boot.Tweaks);
+        Register(Tweaks.BrowserCommon.Tweaks);
         Register(Tweaks.Chrome.Tweaks);
         Register(Tweaks.Clipboard.Tweaks);
         Register(Tweaks.CloudStorage.Tweaks);
@@ -147,6 +149,7 @@ public sealed class TweakEngine
         Register(Tweaks.Shell.Tweaks);
         Register(Tweaks.SnapMultitasking.Tweaks);
         Register(Tweaks.Speech.Tweaks);
+        Register(Tweaks.SsdOptimization.Tweaks);
         Register(Tweaks.Startup.Tweaks);
         Register(Tweaks.Storage.Tweaks);
         Register(Tweaks.SystemTweaks.Tweaks);
@@ -154,6 +157,7 @@ public sealed class TweakEngine
         Register(Tweaks.TelemetryAdvanced.Tweaks);
         Register(Tweaks.TouchPen.Tweaks);
         Register(Tweaks.UsbPeripherals.Tweaks);
+        Register(Tweaks.UserAccount.Tweaks);
         Register(Tweaks.Virtualization.Tweaks);
         Register(Tweaks.VsCode.Tweaks);
         Register(Tweaks.Widgets.Tweaks);

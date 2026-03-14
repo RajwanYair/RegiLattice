@@ -939,6 +939,10 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("Debloat")]
     [InlineData("Network Optimization")]
     [InlineData("Power Management")]
+    [InlineData("SSD Optimization")]
+    [InlineData("App Compatibility")]
+    [InlineData("User Account")]
+    [InlineData("Browser Common")]
     public void RegisterBuiltins_NewCategoryExists(string category)
     {
         Assert.Contains(category, _engine.Categories());
@@ -1060,5 +1064,99 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var tweak = _engine.GetTweak("pwrmgmt-set-high-performance-plan");
         Assert.NotNull(tweak);
         Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
+
+    // ── SSD Optimization Tweaks ─────────────────────────────────────────
+    [Theory]
+    [InlineData("ssd-disable-superfetch")]
+    [InlineData("ssd-disable-prefetch")]
+    [InlineData("ssd-disable-last-access-timestamp")]
+    [InlineData("ssd-enable-trim")]
+    [InlineData("ssd-disable-defrag-schedule")]
+    [InlineData("ssd-disable-windows-search-indexing")]
+    [InlineData("ssd-enable-write-caching")]
+    [InlineData("ssd-disable-hibernation-ssd")]
+    [InlineData("ssd-disable-8dot3-names")]
+    [InlineData("ssd-increase-ntfs-memory-usage")]
+    [InlineData("ssd-large-system-cache")]
+    public void RegisterBuiltins_SsdOptimizationTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("SSD Optimization", tweak.Category);
+    }
+
+    // ── App Compatibility Tweaks ────────────────────────────────────────
+    [Theory]
+    [InlineData("compat-disable-compatibility-telemetry")]
+    [InlineData("compat-disable-program-compatibility-assistant")]
+    [InlineData("compat-disable-steps-recorder")]
+    [InlineData("compat-disable-inventory-collector")]
+    [InlineData("compat-disable-engine")]
+    [InlineData("compat-disable-switchback")]
+    [InlineData("compat-disable-web-search-in-run")]
+    [InlineData("compat-disable-fault-tolerant-heap")]
+    [InlineData("compat-disable-customer-experience")]
+    [InlineData("compat-disable-smart-screen-apps")]
+    public void RegisterBuiltins_AppCompatibilityTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("App Compatibility", tweak.Category);
+    }
+
+    // ── User Account Tweaks ─────────────────────────────────────────────
+    [Theory]
+    [InlineData("uac-disable-dimming")]
+    [InlineData("uac-set-silent-admin")]
+    [InlineData("uac-disable-for-built-in-admin")]
+    [InlineData("uac-enable-admin-approval-mode")]
+    [InlineData("uac-virtualise-file-registry")]
+    [InlineData("uac-disable-auto-admin-logon")]
+    [InlineData("uac-set-account-lockout-10")]
+    [InlineData("uac-set-password-length-8")]
+    [InlineData("uac-hide-last-username")]
+    [InlineData("uac-disable-credential-guard-lock-timeout")]
+    public void RegisterBuiltins_UserAccountTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("User Account", tweak.Category);
+    }
+
+    // ── Browser Common Tweaks ───────────────────────────────────────────
+    [Theory]
+    [InlineData("browser-disable-dns-prefetch")]
+    [InlineData("browser-disable-background-network")]
+    [InlineData("browser-disable-prediction-service")]
+    [InlineData("browser-disable-metrics-reporting")]
+    [InlineData("browser-disable-autofill-cc")]
+    [InlineData("browser-disable-autofill-addresses")]
+    [InlineData("browser-disable-password-manager")]
+    [InlineData("browser-send-do-not-track")]
+    [InlineData("browser-block-third-party-cookies")]
+    [InlineData("browser-disable-safe-browsing-telemetry")]
+    public void RegisterBuiltins_BrowserCommonTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Browser Common", tweak.Category);
+    }
+
+    // ── TweakKind detection for wave 3 modules ──────────────────────────
+    [Fact]
+    public void TweakKind_SsdSystemCommand_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("ssd-disable-last-access-timestamp");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_UacRegistry_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("uac-disable-dimming");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.GroupPolicy, tweak.Kind);
     }
 }
