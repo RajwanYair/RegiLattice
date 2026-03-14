@@ -15,7 +15,12 @@ internal static class Accessibility
             CorpSafe = true,
             Description = "Suppresses the Sticky Keys, Toggle Keys, and Filter Keys popups triggered by repeated key presses.",
             Tags = ["accessibility", "keyboard", "gaming"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", @"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", @"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys",
+                @"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys",
+                @"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response",
+            ],
             ApplyOps =
             [
                 RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506"),
@@ -150,14 +155,8 @@ internal static class Accessibility
             Description = "Enables high contrast mode for improved visual clarity.",
             Tags = ["accessibility", "contrast", "display"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "127"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "126"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "127")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "126")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "127")],
         },
         new TweakDef
@@ -169,7 +168,11 @@ internal static class Accessibility
             CorpSafe = true,
             Description = "Disables the Win+Plus hotkey that launches Magnifier and prevents it from running.",
             Tags = ["accessibility", "magnifier", "hotkey"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier", @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier", "RunningState", 0),
@@ -191,7 +194,11 @@ internal static class Accessibility
             CorpSafe = true,
             Description = "Prevents the On-Screen Keyboard from automatically launching at startup or when entering tablet mode.",
             Tags = ["accessibility", "keyboard", "osk", "tablet"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Osk", @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TabletMode"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Osk",
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\TabletMode",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Osk", "ShowStartupPanel", 0),
@@ -214,14 +221,8 @@ internal static class Accessibility
             Description = "Disables the underline indicators on menu access keys (keyboard shortcuts) for a cleaner UI.",
             Tags = ["accessibility", "keyboard", "menu", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "1"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "0")],
         },
         new TweakDef
@@ -234,14 +235,8 @@ internal static class Accessibility
             Description = "Disables SoundSentry visual alerts that flash the screen or window when a system sound plays.",
             Tags = ["accessibility", "sound", "visual-alert"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry", "Flags", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry", "Flags", "2"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry", "Flags", "2")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\SoundSentry", "Flags", "0")],
         },
         new TweakDef
@@ -276,14 +271,8 @@ internal static class Accessibility
             Description = "Disables the Filter Keys shortcut, preventing accidental activation that can interfere with typing and gaming.",
             Tags = ["accessibility", "filter-keys", "keyboard"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "126"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "126")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\FilterKeys", "Flags", "0")],
         },
         new TweakDef
@@ -296,14 +285,8 @@ internal static class Accessibility
             Description = "Disables the Toggle Keys shortcut that plays a tone when Caps Lock, Num Lock, or Scroll Lock is pressed.",
             Tags = ["accessibility", "toggle-keys", "keyboard"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "62"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "62")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
         },
         new TweakDef
@@ -313,7 +296,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Win+Enter keyboard shortcut that launches Narrator. Prevents accidental Narrator activation. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables the Win+Enter keyboard shortcut that launches Narrator. Prevents accidental Narrator activation. Default: Enabled. Recommended: Disabled.",
             Tags = ["accessibility", "narrator", "hotkey", "keyboard"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam"],
             ApplyOps =
@@ -335,17 +319,12 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Increases the mouse hover delay before tooltips appear from 400ms to 1000ms. Reduces accidental tooltip popups. Default: 400ms. Recommended: 1000ms for accessibility.",
+            Description =
+                "Increases the mouse hover delay before tooltips appear from 400ms to 1000ms. Reduces accidental tooltip popups. Default: 400ms. Recommended: 1000ms for accessibility.",
             Tags = ["accessibility", "mouse", "hover", "tooltip", "delay"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MouseHoverTime", "1000"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MouseHoverTime", "400"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MouseHoverTime", "1000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MouseHoverTime", "400")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MouseHoverTime", "1000")],
         },
         new TweakDef
@@ -355,17 +334,12 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Increases the text cursor (caret) width from 1px to 3px. Makes the blinking text cursor easier to locate visually. Default: 1px. Recommended: 3px for visibility.",
+            Description =
+                "Increases the text cursor (caret) width from 1px to 3px. Makes the blinking text cursor easier to locate visually. Default: 1px. Recommended: 3px for visibility.",
             Tags = ["accessibility", "caret", "cursor", "visibility"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 3),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 3)],
         },
         new TweakDef
@@ -375,7 +349,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Increases the focus rectangle border from 1px to 3px wide. Makes keyboard-focused controls easier to identify visually. Default: 1px. Recommended: 3px for low vision.",
+            Description =
+                "Increases the focus rectangle border from 1px to 3px wide. Makes keyboard-focused controls easier to identify visually. Default: 1px. Recommended: 3px for low vision.",
             Tags = ["accessibility", "focus", "border", "keyboard", "visibility"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps =
@@ -411,7 +386,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the keyboard shortcut (hold right Shift 8 sec) that activates Filter Keys. Prevents accidental activation during gaming. Default: enabled.",
+            Description =
+                "Disables the keyboard shortcut (hold right Shift 8 sec) that activates Filter Keys. Prevents accidental activation during gaming. Default: enabled.",
             Tags = ["accessibility", "filter-keys", "shortcut", "keyboard"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response", "Flags", "122")],
@@ -425,7 +401,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Shows underlined keyboard shortcuts in menus and dialogs at all times, not just when Alt is pressed. Default: hidden until Alt. Recommended: visible.",
+            Description =
+                "Shows underlined keyboard shortcuts in menus and dialogs at all times, not just when Alt is pressed. Default: hidden until Alt. Recommended: visible.",
             Tags = ["accessibility", "access-keys", "underline", "keyboard"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Preference", "On", "1")],
@@ -453,7 +430,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Stops the magnifier view from following the keyboard cursor. Useful for users who prefer manual control. Default: follows keyboard.",
+            Description =
+                "Stops the magnifier view from following the keyboard cursor. Useful for users who prefer manual control. Default: follows keyboard.",
             Tags = ["accessibility", "magnifier", "keyboard", "follow"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\ScreenMagnifier"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\ScreenMagnifier", "FollowCaret", 0)],
@@ -467,7 +445,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Prevents the Magnifier from auto-starting with Windows. Disables the magnifier startup accessibility feature. Default: depends on accessibility settings.",
+            Description =
+                "Prevents the Magnifier from auto-starting with Windows. Disables the magnifier startup accessibility feature. Default: depends on accessibility settings.",
             Tags = ["accessibility", "magnifier", "autostart", "disable"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\ScreenMagnifier"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\ScreenMagnifier", "IsAutoStartEnabled", 0)],
@@ -481,7 +460,8 @@ internal static class Accessibility
             Category = "Accessibility",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Mouse Keys accessibility feature that lets you control the cursor with the numeric keypad. Default: user setting.",
+            Description =
+                "Disables the Mouse Keys accessibility feature that lets you control the cursor with the numeric keypad. Default: user setting.",
             Tags = ["accessibility", "mouse-keys", "numpad", "disable"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys", "Flags", "0")],

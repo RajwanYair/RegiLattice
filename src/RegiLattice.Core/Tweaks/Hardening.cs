@@ -20,7 +20,11 @@ internal static class Hardening
             Description = "Enables Windows Credential Guard to protect domain credentials in isolated containers. Requires Secure Boot and Hyper-V.",
             Tags = ["hardening", "credential-guard", "security", "enterprise"],
             SideEffects = "May break some legacy authentication protocols.",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard",
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
@@ -69,7 +73,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Restricts outgoing NTLM authentication to audit mode first, then deny all. Improves security posture against relay attacks.",
+            Description =
+                "Restricts outgoing NTLM authentication to audit mode first, then deny all. Improves security posture against relay attacks.",
             Tags = ["hardening", "security", "ntlm", "authentication"],
             SideEffects = "May break legacy apps requiring NTLM.",
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
@@ -84,7 +89,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces Address Space Layout Randomization for all executables, including those not compiled with ASLR. CIS benchmark recommendation.",
+            Description =
+                "Forces Address Space Layout Randomization for all executables, including those not compiled with ASLR. CIS benchmark recommendation.",
             Tags = ["hardening", "security", "aslr", "exploit-mitigation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationOptions", 256)],
@@ -106,7 +112,8 @@ internal static class Hardening
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters' -Name NullSessionPipes -ErrorAction SilentlyContinue).NullSessionPipes.Count");
+                    "(Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters' -Name NullSessionPipes -ErrorAction SilentlyContinue).NullSessionPipes.Count"
+                );
                 return int.TryParse(stdout.Trim(), out var count) && count == 0;
             },
         },
@@ -136,7 +143,10 @@ internal static class Hardening
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)"),
+            ],
         },
         new TweakDef
         {
@@ -148,9 +158,18 @@ internal static class Hardening
             Description = "Ensures remote UAC filtering is enabled (value 0). Prevents pass-the-hash attacks via local administrator accounts.",
             Tags = ["hardening", "security", "uac", "pass-the-hash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 0),
+            ],
         },
         new TweakDef
         {
@@ -181,11 +200,12 @@ internal static class Hardening
             KindHint = TweakKind.PowerShell,
             Description = "Disables the legacy SMBv1 protocol which is vulnerable to EternalBlue/WannaCry exploits.",
             Tags = ["hardening", "security", "smb", "wannacry"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force; " +
-                "Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart -ErrorAction SilentlyContinue"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Set-SmbServerConfiguration -EnableSMB1Protocol $true -Force"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force; "
+                        + "Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-SmbServerConfiguration -EnableSMB1Protocol $true -Force"),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-SmbServerConfiguration).EnableSMB1Protocol -eq $false");
@@ -256,13 +276,11 @@ internal static class Hardening
             KindHint = TweakKind.PowerShell,
             Description = "Ensures Windows Firewall is enabled for Domain, Private, and Public profiles.",
             Tags = ["hardening", "security", "firewall", "network"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True"),
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True"),
             RemoveAction = _ => { }, // Don't disable firewall
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-NetFirewallProfile | Where-Object Enabled -eq $false).Count -eq 0");
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-NetFirewallProfile | Where-Object Enabled -eq $false).Count -eq 0");
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },

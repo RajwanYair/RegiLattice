@@ -82,7 +82,8 @@ public static class Locale
 
     public static void LoadLocaleFile(string path)
     {
-        if (!File.Exists(path)) return;
+        if (!File.Exists(path))
+            return;
         var lines = File.ReadAllLines(path);
         var overrides = new Dictionary<string, string>();
         foreach (var line in lines)

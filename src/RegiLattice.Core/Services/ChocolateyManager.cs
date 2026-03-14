@@ -21,8 +21,7 @@ public static partial class ChocolateyManager
     /// <summary>List installed Chocolatey packages.</summary>
     public static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
-        var (code, stdout, _) = await ShellRunner.RunAsync(
-            "choco", ["list", "--local-only", "--limit-output"], ct).ConfigureAwait(false);
+        var (code, stdout, _) = await ShellRunner.RunAsync("choco", ["list", "--local-only", "--limit-output"], ct).ConfigureAwait(false);
         if (code != 0 || string.IsNullOrWhiteSpace(stdout))
             return [];
 
@@ -39,8 +38,7 @@ public static partial class ChocolateyManager
     public static async Task InstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "choco", ["install", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync("choco", ["install", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"choco install failed: {stderr.Trim()}");
     }
@@ -49,8 +47,7 @@ public static partial class ChocolateyManager
     public static async Task UninstallAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "choco", ["uninstall", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync("choco", ["uninstall", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"choco uninstall failed: {stderr.Trim()}");
     }
@@ -59,8 +56,7 @@ public static partial class ChocolateyManager
     public static async Task UpgradeAsync(string name, CancellationToken ct = default)
     {
         ValidateName(name);
-        var (code, _, stderr) = await ShellRunner.RunAsync(
-            "choco", ["upgrade", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
+        var (code, _, stderr) = await ShellRunner.RunAsync("choco", ["upgrade", name, "-y", "--no-progress"], ct).ConfigureAwait(false);
         if (code != 0)
             throw new InvalidOperationException($"choco upgrade failed: {stderr.Trim()}");
     }
@@ -75,6 +71,16 @@ public static partial class ChocolateyManager
 
     /// <summary>Popular Chocolatey packages for quick install.</summary>
     public static readonly string[] PopularPackages =
-        ["googlechrome", "firefox", "vscode", "7zip", "git",
-         "notepadplusplus", "vlc", "python3", "nodejs", "sysinternals"];
+    [
+        "googlechrome",
+        "firefox",
+        "vscode",
+        "7zip",
+        "git",
+        "notepadplusplus",
+        "vlc",
+        "python3",
+        "nodejs",
+        "sysinternals",
+    ];
 }

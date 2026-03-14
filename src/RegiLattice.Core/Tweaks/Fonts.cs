@@ -16,14 +16,8 @@ internal static class Fonts
             Description = "Enables ClearType sub-pixel rendering for sharper text on LCD displays (sets FontSmoothingType to 2).",
             Tags = ["fonts", "cleartype", "rendering", "display"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "2"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "1"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "2")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "2")],
         },
         new TweakDef
@@ -62,8 +56,16 @@ internal static class Fonts
             [
                 RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI (TrueType)", "segoeui.ttf"),
                 RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Bold (TrueType)", "segoeuib.ttf"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Italic (TrueType)", "segoeuii.ttf"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Bold Italic (TrueType)", "segoeuiz.ttf"),
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts",
+                    "Segoe UI Italic (TrueType)",
+                    "segoeuii.ttf"
+                ),
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts",
+                    "Segoe UI Bold Italic (TrueType)",
+                    "segoeuiz.ttf"
+                ),
             ],
             RemoveOps =
             [
@@ -72,7 +74,10 @@ internal static class Fonts
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Italic (TrueType)"),
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI Bold Italic (TrueType)"),
             ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI (TrueType)", "segoeui.ttf")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Fonts", "Segoe UI (TrueType)", "segoeui.ttf"),
+            ],
         },
         new TweakDef
         {
@@ -84,14 +89,8 @@ internal static class Fonts
             Description = "Disables the Windows Font Cache Service (FontCache). May reduce memory usage but can slow down font loading.",
             Tags = ["fonts", "cache", "service", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
         },
         new TweakDef
@@ -104,14 +103,8 @@ internal static class Fonts
             Description = "Disables the Windows Presentation Foundation Font Cache 3.0 Service used by WPF applications.",
             Tags = ["fonts", "cache", "wpf", "service"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache3.0.0.0"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
         },
         new TweakDef
@@ -124,14 +117,8 @@ internal static class Fonts
             Description = "Sets the ClearType rendering level to 100 (maximum) for WPF and Avalon-based applications on the primary display.",
             Tags = ["fonts", "cleartype", "tuning", "wpf", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "ClearTypeLevel", 100),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "ClearTypeLevel"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "ClearTypeLevel", 100)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "ClearTypeLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "ClearTypeLevel", 100)],
         },
         new TweakDef
@@ -144,14 +131,8 @@ internal static class Fonts
             Description = "Sets the WPF text contrast level to 1 for a more natural, softer ClearType appearance on the primary display.",
             Tags = ["fonts", "cleartype", "contrast", "wpf", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "TextContrastLevel", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "TextContrastLevel"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "TextContrastLevel", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "TextContrastLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics\DISPLAY1", "TextContrastLevel", 1)],
         },
         new TweakDef
@@ -164,14 +145,8 @@ internal static class Fonts
             Description = "Ensures WPF applications use GPU-accelerated text rendering by explicitly setting DisableHWAcceleration to 0.",
             Tags = ["fonts", "wpf", "gpu", "hardware", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
         },
         new TweakDef
@@ -181,7 +156,8 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Overrides MS Shell Dlg font fallback to Segoe UI for consistent rendering across legacy and modern applications. Default: Microsoft Sans Serif. Recommended: Segoe UI.",
+            Description =
+                "Overrides MS Shell Dlg font fallback to Segoe UI for consistent rendering across legacy and modern applications. Default: Microsoft Sans Serif. Recommended: Segoe UI.",
             Tags = ["fonts", "fallback", "substitutes", "rendering"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"],
             ApplyOps =
@@ -191,10 +167,17 @@ internal static class Fonts
             ],
             RemoveOps =
             [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Microsoft Sans Serif"),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes",
+                    "MS Shell Dlg",
+                    "Microsoft Sans Serif"
+                ),
                 RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg 2", "Tahoma"),
             ],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
+            ],
         },
         new TweakDef
         {
@@ -203,17 +186,12 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables font smoothing/anti-aliasing for sharper pixel-aligned text. May improve readability on low-DPI screens. Default: 2 (enabled). Recommended: Disabled for CRT/low-DPI.",
+            Description =
+                "Disables font smoothing/anti-aliasing for sharper pixel-aligned text. May improve readability on low-DPI screens. Default: 2 (enabled). Recommended: Disabled for CRT/low-DPI.",
             Tags = ["fonts", "antialiasing", "smoothing", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
         },
         new TweakDef
@@ -223,17 +201,12 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets subpixel font smoothing orientation to RGB for standard LCD panels. Improves ClearType rendering on horizontal RGB displays. Default: 0 (auto). Recommended: 1 (RGB) for most monitors.",
+            Description =
+                "Sets subpixel font smoothing orientation to RGB for standard LCD panels. Improves ClearType rendering on horizontal RGB displays. Default: 0 (auto). Recommended: 1 (RGB) for most monitors.",
             Tags = ["fonts", "cleartype", "subpixel", "orientation", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "0"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "0")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
         },
         new TweakDef
@@ -243,17 +216,12 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ClearType gamma to 1000 for higher contrast text rendering. Makes text appear bolder and easier to read on most displays. Default: 1400. Recommended: 1000 for high-DPI screens.",
+            Description =
+                "Sets ClearType gamma to 1000 for higher contrast text rendering. Makes text appear bolder and easier to read on most displays. Default: 1400. Recommended: 1000 for high-DPI screens.",
             Tags = ["fonts", "cleartype", "contrast", "gamma", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1000),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1000)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1000)],
         },
         new TweakDef
@@ -263,18 +231,16 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Increases the GDI font glyph cache from default 2 MB to 4 MB. Reduces glyph re-rasterization in multi-font or CJK workloads. Default: 2097152 (~2 MB). Recommended: 4194304 (4 MB).",
+            Description =
+                "Increases the GDI font glyph cache from default 2 MB to 4 MB. Reduces glyph re-rasterization in multi-font or CJK workloads. Default: 2097152 (~2 MB). Recommended: 4194304 (4 MB).",
             Tags = ["fonts", "glyph-cache", "gdi", "performance", "rendering"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize", 4194304)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize")],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize", 4194304),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize", 4194304),
             ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\GRE_Initialize", "GlyphCacheSize", 4194304)],
         },
         new TweakDef
         {
@@ -314,7 +280,10 @@ internal static class Fonts
             Description = "Blocks untrusted fonts from loading in processes. Mitigates font parsing vulnerabilities. Default: off.",
             Tags = ["fonts", "security", "untrusted", "mitigation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
-            ApplyOps = [RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000)],
+            ApplyOps =
+            [
+                RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 1)],
         },
@@ -353,12 +322,22 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks font downloads via Internet Explorer security zones. Prevents malicious font exploitation via web. Default: allowed.",
+            Description =
+                "Blocks font downloads via Internet Explorer security zones. Prevents malicious font exploitation via web. Default: allowed.",
             Tags = ["fonts", "ie", "download", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604", 3)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604", 3)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604", 3),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3", "1604", 3),
+            ],
         },
         new TweakDef
         {
@@ -367,12 +346,19 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks loading of untrusted fonts to mitigate font parsing vulnerabilities. Only system-installed fonts are rendered. Default: allowed.",
+            Description =
+                "Blocks loading of untrusted fonts to mitigate font parsing vulnerabilities. Only system-installed fonts are rendered. Default: allowed.",
             Tags = ["fonts", "untrusted", "security", "block"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
-            ApplyOps = [RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000)],
+            ApplyOps =
+            [
+                RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\MitigationOptions", "MitigationOptions_FontBocking", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\MitigationOptions", "MitigationOptions_FontBocking", 1),
+            ],
         },
         new TweakDef
         {
@@ -381,7 +367,8 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables web font downloading in Edge browser. Prevents remote font rendering. Pages may render with system fonts. Default: enabled.",
+            Description =
+                "Disables web font downloading in Edge browser. Prevents remote font rendering. Pages may render with system fonts. Default: enabled.",
             Tags = ["fonts", "edge", "download", "disable"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebFontsSetting", 2)],
@@ -409,7 +396,8 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ClearType tuning to optimize for rendering performance over maximum quality. Reduces font rendering overhead. Default: quality-optimized.",
+            Description =
+                "Sets ClearType tuning to optimize for rendering performance over maximum quality. Reduces font rendering overhead. Default: quality-optimized.",
             Tags = ["fonts", "cleartype", "performance", "tuning"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "1")],
@@ -423,7 +411,8 @@ internal static class Fonts
             Category = "Fonts",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows font streaming (cloud font download). Prevents background font fetching from Microsoft servers. Default: enabled.",
+            Description =
+                "Disables Windows font streaming (cloud font download). Prevents background font fetching from Microsoft servers. Default: enabled.",
             Tags = ["fonts", "streaming", "cloud", "disable"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders", 0)],

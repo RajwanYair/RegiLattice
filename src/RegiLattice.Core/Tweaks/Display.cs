@@ -16,10 +16,7 @@ internal static class Display
             Description = "Enables the Windows 8-style DPI scaling override, forcing the system DPI setting for all applications.",
             Tags = ["display", "dpi", "scaling"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
             RemoveOps =
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DpiScalingVer"),
@@ -59,14 +56,8 @@ internal static class Display
             Description = "Forces the display to use 96 DPI (100% scaling), disabling any high-DPI scaling that Windows may apply.",
             Tags = ["display", "dpi", "scaling", "96dpi"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
         },
         new TweakDef
@@ -79,14 +70,8 @@ internal static class Display
             Description = "Switches UWP and modern apps to their dark colour scheme.",
             Tags = ["display", "dark", "theme", "apps"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
         },
         new TweakDef
@@ -99,15 +84,15 @@ internal static class Display
             Description = "Switches the Windows system theme (taskbar, Start menu, Action Center) to dark mode.",
             Tags = ["display", "dark", "theme", "system"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
             RemoveOps =
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
+            ],
         },
         new TweakDef
         {
@@ -119,15 +104,12 @@ internal static class Display
             Description = "Disables the acrylic/blur transparency effects on the taskbar, Start menu, and window backgrounds.",
             Tags = ["display", "transparency", "performance", "visual"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
         },
         new TweakDef
         {
@@ -139,14 +121,8 @@ internal static class Display
             Description = "Disables minimize and maximize window animations for snappier window management.",
             Tags = ["display", "animation", "performance", "visual"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
         },
         new TweakDef
@@ -159,14 +135,8 @@ internal static class Display
             Description = "Sets wallpaper JPEG import quality to 100%, preventing Windows from compressing desktop wallpapers.",
             Tags = ["display", "wallpaper", "quality", "compression"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
         },
         new TweakDef
@@ -179,14 +149,8 @@ internal static class Display
             Description = "Shows the Windows accent colour on title bars and window borders.",
             Tags = ["display", "accent", "color", "titlebar", "dwm"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "ColorPrevalence", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "ColorPrevalence", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "ColorPrevalence", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "ColorPrevalence", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "ColorPrevalence", 1)],
         },
         new TweakDef
@@ -199,14 +163,8 @@ internal static class Display
             Description = "Disables the screen edge swipe gesture that opens the Charms bar or Action Center on touch devices.",
             Tags = ["display", "edge", "swipe", "gesture", "touch"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "AllowEdgeSwipe", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "AllowEdgeSwipe"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "AllowEdgeSwipe", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "AllowEdgeSwipe")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "AllowEdgeSwipe", 0)],
         },
         new TweakDef
@@ -216,17 +174,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Adaptive Brightness sensor service. Prevents automatic screen brightness changes based on ambient light. Default: Enabled (3=Manual). Recommended: Disabled (4).",
+            Description =
+                "Disables the Adaptive Brightness sensor service. Prevents automatic screen brightness changes based on ambient light. Default: Enabled (3=Manual). Recommended: Disabled (4).",
             Tags = ["display", "brightness", "adaptive", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
         },
         new TweakDef
@@ -236,7 +189,8 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Forces display scaling to 100% (96 DPI) using the legacy DPI override. Disables DPI virtualization for crisp rendering. Default: System-managed. Recommended: 96 DPI for external monitors.",
+            Description =
+                "Forces display scaling to 100% (96 DPI) using the legacy DPI override. Disables DPI virtualization for crisp rendering. Default: System-managed. Recommended: 96 DPI for external monitors.",
             Tags = ["display", "dpi", "scaling", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps =
@@ -258,17 +212,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables adaptive brightness via ICM display calibration. Prevents automatic brightness adjustments based on content. Default: Enabled. Recommended: Disabled for consistent brightness.",
+            Description =
+                "Disables adaptive brightness via ICM display calibration. Prevents automatic brightness adjustments based on content. Default: Enabled. Recommended: Disabled for consistent brightness.",
             Tags = ["display", "brightness", "icm", "calibration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM\Calibration"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
         },
         new TweakDef
@@ -278,17 +227,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Forces hardware cursor rendering and disables smooth scrolling. Reduces input lag and cursor rendering overhead. Default: Smooth scrolling on. Recommended: Hardware cursor for gaming.",
+            Description =
+                "Forces hardware cursor rendering and disables smooth scrolling. Reduces input lag and cursor rendering overhead. Default: Smooth scrolling on. Recommended: Hardware cursor for gaming.",
             Tags = ["display", "cursor", "hardware", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "1"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "0")],
         },
         new TweakDef
@@ -298,18 +242,16 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables window transparency and acrylic blur effects. Improves rendering performance on integrated GPUs. Default: Enabled. Recommended: Disabled for performance.",
+            Description =
+                "Disables window transparency and acrylic blur effects. Improves rendering performance on integrated GPUs. Default: Enabled. Recommended: Disabled for performance.",
             Tags = ["display", "transparency", "acrylic", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
         },
         new TweakDef
         {
@@ -318,17 +260,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Enables GPU-based DPI scaling (Win8DpiScaling) for sharper rendering on non-native resolutions. Default: Disabled. Recommended: Enabled for high-DPI displays.",
+            Description =
+                "Enables GPU-based DPI scaling (Win8DpiScaling) for sharper rendering on non-native resolutions. Default: Disabled. Recommended: Enabled for high-DPI displays.",
             Tags = ["display", "gpu", "scaling", "dpi", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
         },
         new TweakDef
@@ -338,17 +275,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Windows Desktop Window Manager automatic color management for manual ICC profile control. Default: Enabled. Recommended: Disabled for color-critical work.",
+            Description =
+                "Disables Windows Desktop Window Manager automatic color management for manual ICC profile control. Default: Enabled. Recommended: Disabled for color-critical work.",
             Tags = ["display", "color", "management", "dwm", "icc"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAutoColorManagement", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAutoColorManagement"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAutoColorManagement", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAutoColorManagement")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAutoColorManagement", 0)],
         },
         new TweakDef
@@ -361,14 +293,8 @@ internal static class Display
             Description = "Removes the drop shadow rendered under the mouse cursor. Very slightly reduces compositor workload. Default: Enabled.",
             Tags = ["display", "cursor", "shadow", "performance", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 0)],
         },
         new TweakDef
@@ -378,17 +304,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the DWM blur-behind intensity to 50. Reduces the visual weight of frosted-glass Mica/Acrylic effects. Default: Not set (OS default full blur).",
+            Description =
+                "Sets the DWM blur-behind intensity to 50. Reduces the visual weight of frosted-glass Mica/Acrylic effects. Default: Not set (OS default full blur).",
             Tags = ["display", "dwm", "blur", "aero", "visual"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity", 50),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity", 50)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "BlurIntensity", 50)],
         },
         new TweakDef
@@ -398,17 +319,12 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Explicitly enables Desktop Window Manager composition (Aero). Ensures DWM is active even on systems where it was manually disabled. Default: Enabled.",
+            Description =
+                "Explicitly enables Desktop Window Manager composition (Aero). Ensures DWM is active even on systems where it was manually disabled. Default: Enabled.",
             Tags = ["display", "dwm", "aero", "composition", "visual"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "Composition", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "Composition"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "Composition", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "Composition")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "Composition", 1)],
         },
         new TweakDef
@@ -432,7 +348,8 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Windows auto color management. Use when accurate colors are managed by a dedicated ICC profile. Default: enabled.",
+            Description =
+                "Disables Windows auto color management. Use when accurate colors are managed by a dedicated ICC profile. Default: enabled.",
             Tags = ["display", "color", "management", "icc"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\AutoColorManagement"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\AutoColorManagement", "Enable", 0)],
@@ -502,7 +419,8 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables screen saver activation via Group Policy. Prevents screen saver from interrupting work. Default: user-controlled.",
+            Description =
+                "Disables screen saver activation via Group Policy. Prevents screen saver from interrupting work. Default: user-controlled.",
             Tags = ["display", "screensaver", "policy", "disable"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "0")],
@@ -516,7 +434,8 @@ internal static class Display
             Category = "Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the ClearType font smoothing gamma correction to optimal value. Improves text rendering contrast on LCD displays. Default: system default.",
+            Description =
+                "Sets the ClearType font smoothing gamma correction to optimal value. Improves text rendering contrast on LCD displays. Default: system default.",
             Tags = ["display", "font", "gamma", "cleartype"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],

@@ -27,39 +27,34 @@ public sealed class RegistrySession
     public RegistrySession(bool dryRun = false, string? backupDir = null)
     {
         _dryRun = dryRun;
-        _backupDir = backupDir ?? Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RegiLattice", "backups");
+        _backupDir = backupDir ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "backups");
     }
 
     // ── Write operations ────────────────────────────────────────────────
 
-    public void SetDword(string path, string name, int value)
-        => SetValue(path, name, value, RegistryValueKind.DWord);
+    public void SetDword(string path, string name, int value) => SetValue(path, name, value, RegistryValueKind.DWord);
 
-    public void SetString(string path, string name, string value)
-        => SetValue(path, name, value, RegistryValueKind.String);
+    public void SetString(string path, string name, string value) => SetValue(path, name, value, RegistryValueKind.String);
 
-    public void SetExpandString(string path, string name, string value)
-        => SetValue(path, name, value, RegistryValueKind.ExpandString);
+    public void SetExpandString(string path, string name, string value) => SetValue(path, name, value, RegistryValueKind.ExpandString);
 
-    public void SetQword(string path, string name, long value)
-        => SetValue(path, name, value, RegistryValueKind.QWord);
+    public void SetQword(string path, string name, long value) => SetValue(path, name, value, RegistryValueKind.QWord);
 
-    public void SetBinary(string path, string name, byte[] value)
-        => SetValue(path, name, value, RegistryValueKind.Binary);
+    public void SetBinary(string path, string name, byte[] value) => SetValue(path, name, value, RegistryValueKind.Binary);
 
-    public void SetMultiSz(string path, string name, string[] value)
-        => SetValue(path, name, value, RegistryValueKind.MultiString);
+    public void SetMultiSz(string path, string name, string[] value) => SetValue(path, name, value, RegistryValueKind.MultiString);
 
     public void SetValue(string path, string name, object value, RegistryValueKind kind)
     {
         WriteLog($"SET {path}\\{name} = {value} ({kind})");
-        if (_dryRun) { Interlocked.Increment(ref _dryOps); return; }
+        if (_dryRun)
+        {
+            Interlocked.Increment(ref _dryOps);
+            return;
+        }
 
         var (root, subKey) = ParsePath(path);
-        using var key = root.CreateSubKey(subKey, writable: true)
-            ?? throw new InvalidOperationException($"Cannot open/create key: {path}");
+        using var key = root.CreateSubKey(subKey, writable: true) ?? throw new InvalidOperationException($"Cannot open/create key: {path}");
         key.SetValue(name, value, kind);
     }
 
@@ -68,7 +63,11 @@ public sealed class RegistrySession
     public void DeleteValue(string path, string name)
     {
         WriteLog($"DELETE {path}\\{name}");
-        if (_dryRun) { Interlocked.Increment(ref _dryOps); return; }
+        if (_dryRun)
+        {
+            Interlocked.Increment(ref _dryOps);
+            return;
+        }
 
         var (root, subKey) = ParsePath(path);
         using var key = root.OpenSubKey(subKey, writable: true);
@@ -78,11 +77,21 @@ public sealed class RegistrySession
     public void DeleteTree(string path)
     {
         WriteLog($"DELETE_TREE {path}");
-        if (_dryRun) { Interlocked.Increment(ref _dryOps); return; }
+        if (_dryRun)
+        {
+            Interlocked.Increment(ref _dryOps);
+            return;
+        }
 
         var (root, subKey) = ParsePath(path);
-        try { root.DeleteSubKeyTree(subKey, throwOnMissingSubKey: false); }
-        catch (UnauthorizedAccessException) { WriteLog($"WARN: Cannot delete {path} (access denied)"); }
+        try
+        {
+            root.DeleteSubKeyTree(subKey, throwOnMissingSubKey: false);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            WriteLog($"WARN: Cannot delete {path} (access denied)");
+        }
     }
 
     // ── Read operations ─────────────────────────────────────────────────
@@ -221,13 +230,16 @@ public sealed class RegistrySession
             switch (op.Kind)
             {
                 case RegOpKind.CheckValue:
-                    if (!CheckValueMatch(op)) return false;
+                    if (!CheckValueMatch(op))
+                        return false;
                     break;
                 case RegOpKind.CheckMissing:
-                    if (ValueExists(op.Path, op.Name)) return false;
+                    if (ValueExists(op.Path, op.Name))
+                        return false;
                     break;
                 case RegOpKind.CheckKeyMissing:
-                    if (KeyExists(op.Path)) return false;
+                    if (KeyExists(op.Path))
+                        return false;
                     break;
                 default:
                     throw new InvalidOperationException($"Cannot evaluate write op: {op.Kind}");
@@ -240,9 +252,11 @@ public sealed class RegistrySession
     {
         var (root, subKey) = ParsePath(op.Path);
         using var key = root.OpenSubKey(subKey);
-        if (key is null) return false;
+        if (key is null)
+            return false;
         var actual = key.GetValue(op.Name);
-        if (actual is null) return false;
+        if (actual is null)
+            return false;
 
         return op.Value switch
         {
@@ -259,7 +273,10 @@ public sealed class RegistrySession
     public void WriteLog(string message)
     {
         var entry = $"[{DateTime.Now:HH:mm:ss}] {message}";
-        lock (_logLock) { _log.Add(entry); }
+        lock (_logLock)
+        {
+            _log.Add(entry);
+        }
         LogWritten?.Invoke(entry);
     }
 
@@ -271,7 +288,8 @@ public sealed class RegistrySession
     {
         // Normalize: HKLM\ → HKEY_LOCAL_MACHINE\, HKCU\ → HKEY_CURRENT_USER\
         var sep = path.IndexOf('\\');
-        if (sep < 0) throw new ArgumentException($"Invalid registry path: {path}");
+        if (sep < 0)
+            throw new ArgumentException($"Invalid registry path: {path}");
 
         var hive = path[..sep].ToUpperInvariant();
         var subKey = path[(sep + 1)..];

@@ -103,7 +103,6 @@ internal static class CommandLineTweaks
                 return stdout.Contains("useplatformtick         Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
-
         // ── netsh tweaks ────────────────────────────────────────────────
         new TweakDef
         {
@@ -115,7 +114,11 @@ internal static class CommandLineTweaks
             KindHint = TweakKind.SystemCommand,
             Description = "Disables the NetBIOS name resolution protocol via Windows Firewall inbound rule. Reduces attack surface.",
             Tags = ["netsh", "security", "network"],
-            ApplyAction = _ => ShellRunner.Run("netsh.exe", ["advfirewall", "firewall", "add", "rule", "name=Block NetBIOS", "dir=in", "action=block", "protocol=TCP", "localport=137-139"]),
+            ApplyAction = _ =>
+                ShellRunner.Run(
+                    "netsh.exe",
+                    ["advfirewall", "firewall", "add", "rule", "name=Block NetBIOS", "dir=in", "action=block", "protocol=TCP", "localport=137-139"]
+                ),
             RemoveAction = _ => ShellRunner.Run("netsh.exe", ["advfirewall", "firewall", "delete", "rule", "name=Block NetBIOS"]),
             DetectAction = () =>
             {
@@ -138,8 +141,8 @@ internal static class CommandLineTweaks
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("netsh.exe", ["int", "tcp", "show", "global"]);
-                return stdout.Contains("Receive Window Auto-Tuning Level", StringComparison.OrdinalIgnoreCase) &&
-                       stdout.Contains("normal", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("Receive Window Auto-Tuning Level", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("normal", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -157,8 +160,8 @@ internal static class CommandLineTweaks
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("netsh.exe", ["int", "tcp", "show", "global"]);
-                return stdout.Contains("Receive-Side Scaling State", StringComparison.OrdinalIgnoreCase) &&
-                       stdout.Contains("enabled", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("Receive-Side Scaling State", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("enabled", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -176,8 +179,8 @@ internal static class CommandLineTweaks
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("netsh.exe", ["int", "tcp", "show", "global"]);
-                return stdout.Contains("Timestamps", StringComparison.OrdinalIgnoreCase) &&
-                       stdout.Contains("disabled", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("Timestamps", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("disabled", StringComparison.OrdinalIgnoreCase);
             },
         },
         new TweakDef
@@ -195,11 +198,10 @@ internal static class CommandLineTweaks
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("netsh.exe", ["int", "tcp", "show", "global"]);
-                return stdout.Contains("ECN Capability", StringComparison.OrdinalIgnoreCase) &&
-                       stdout.Contains("enabled", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("ECN Capability", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("enabled", StringComparison.OrdinalIgnoreCase);
             },
         },
-
         // ── powercfg tweaks ─────────────────────────────────────────────
         new TweakDef
         {
@@ -240,23 +242,36 @@ internal static class CommandLineTweaks
             Tags = ["powercfg", "usb", "power", "stability"],
             ApplyAction = _ =>
             {
-                ShellRunner.Run("powercfg.exe", ["/setacvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "0"]);
-                ShellRunner.Run("powercfg.exe", ["/setdcvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "0"]);
+                ShellRunner.Run(
+                    "powercfg.exe",
+                    ["/setacvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "0"]
+                );
+                ShellRunner.Run(
+                    "powercfg.exe",
+                    ["/setdcvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "0"]
+                );
                 ShellRunner.Run("powercfg.exe", ["/setactive", "SCHEME_CURRENT"]);
             },
             RemoveAction = _ =>
             {
-                ShellRunner.Run("powercfg.exe", ["/setacvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "1"]);
-                ShellRunner.Run("powercfg.exe", ["/setdcvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "1"]);
+                ShellRunner.Run(
+                    "powercfg.exe",
+                    ["/setacvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "1"]
+                );
+                ShellRunner.Run(
+                    "powercfg.exe",
+                    ["/setdcvalueindex", "SCHEME_CURRENT", "2a737441-1930-4402-8d77-b2bebba308a3", "48e6b7a6-50f5-4782-a5d4-53bb8f07e226", "1"]
+                );
                 ShellRunner.Run("powercfg.exe", ["/setactive", "SCHEME_CURRENT"]);
             },
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.RunPowerShell("(powercfg /query SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226) -match '0x00000000'");
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(powercfg /query SCHEME_CURRENT 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226) -match '0x00000000'"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
-
         // ── DISM tweaks ─────────────────────────────────────────────────
         new TweakDef
         {
@@ -268,8 +283,10 @@ internal static class CommandLineTweaks
             KindHint = TweakKind.SystemCommand,
             Description = "Disables the Internet Explorer optional feature via DISM. Reduces attack surface.",
             Tags = ["dism", "security", "ie", "legacy"],
-            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Internet-Explorer-Optional-amd64", "/NoRestart"]),
-            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Internet-Explorer-Optional-amd64", "/NoRestart"]),
+            ApplyAction = _ =>
+                ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Internet-Explorer-Optional-amd64", "/NoRestart"]),
+            RemoveAction = _ =>
+                ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Internet-Explorer-Optional-amd64", "/NoRestart"]),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:Internet-Explorer-Optional-amd64"]);
@@ -287,8 +304,10 @@ internal static class CommandLineTweaks
             Description = "Enables the Windows Sandbox feature for isolated testing environments. Requires Hyper-V support.",
             Tags = ["dism", "security", "sandbox", "virtualization"],
             SideEffects = "Requires reboot after enabling.",
-            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Containers-DisposableClientVM", "/All", "/NoRestart"]),
-            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Containers-DisposableClientVM", "/NoRestart"]),
+            ApplyAction = _ =>
+                ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Containers-DisposableClientVM", "/All", "/NoRestart"]),
+            RemoveAction = _ =>
+                ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Containers-DisposableClientVM", "/NoRestart"]),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:Containers-DisposableClientVM"]);

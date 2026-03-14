@@ -19,13 +19,28 @@ internal static class PackageManagement
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 1),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    1
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -34,17 +49,12 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables automatic WinGet package manager self-updates via policy. Default: Enabled. Recommended: Disabled for controlled environments.",
+            Description =
+                "Disables automatic WinGet package manager self-updates via policy. Default: Enabled. Recommended: Disabled for controlled environments.",
             Tags = ["packages", "winget", "auto-update", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate", 0)],
         },
         new TweakDef
@@ -54,17 +64,12 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Configures Chocolatey to use the system proxy for package downloads. Useful in corporate environments behind a proxy. Default: Direct. Recommended: Enabled behind proxy.",
+            Description =
+                "Configures Chocolatey to use the system proxy for package downloads. Useful in corporate environments behind a proxy. Default: Direct. Recommended: Enabled behind proxy.",
             Tags = ["packages", "chocolatey", "proxy", "corporate"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy", 1)],
         },
         new TweakDef
@@ -74,17 +79,12 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Prevents WinGet from overriding package hash validation. Ensures integrity checks are enforced for all package sources. Default: Override allowed. Recommended: Disabled (validation enforced).",
+            Description =
+                "Prevents WinGet from overriding package hash validation. Ensures integrity checks are enforced for all package sources. Default: Override allowed. Recommended: Disabled (validation enforced).",
             Tags = ["packages", "winget", "hash", "validation", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 0)],
         },
         new TweakDef
@@ -157,7 +157,6 @@ internal static class PackageManagement
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
         },
-
         // ── Command-based package management tweaks ────────────────────────
         new TweakDef
         {
@@ -179,8 +178,7 @@ internal static class PackageManagement
             },
             DetectAction = () =>
             {
-                var (code, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-PSRepository -Name PSGallery).InstallationPolicy");
+                var (code, stdout, _) = ShellRunner.RunPowerShell("(Get-PSRepository -Name PSGallery).InstallationPolicy");
                 return code == 0 && stdout.Trim().Equals("Trusted", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -197,14 +195,12 @@ internal static class PackageManagement
             ApplyAction = (_) =>
             {
                 ShellRunner.RunPowerShell(
-                    "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; " +
-                    "Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression");
+                    "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; " + "Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression"
+                );
             },
             DetectAction = () =>
             {
-                string path = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "scoop", "shims", "scoop.ps1");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
                 return File.Exists(path);
             },
         },
@@ -220,14 +216,15 @@ internal static class PackageManagement
             KindHint = TweakKind.PackageManager,
             ApplyAction = (_) =>
             {
-                ShellRunner.RunPowerShell(
-                    "Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser");
+                ShellRunner.RunPowerShell("Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser");
             },
             DetectAction = () =>
             {
                 var (code, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-Module -ListAvailable PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1).Version.ToString()");
-                if (code != 0) return false;
+                    "(Get-Module -ListAvailable PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1).Version.ToString()"
+                );
+                if (code != 0)
+                    return false;
                 // If version >= 2.2.5, consider "applied"
                 return Version.TryParse(stdout.Trim(), out var ver) && ver >= new Version(2, 2, 5);
             },
@@ -239,7 +236,8 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables the WinGet package manager via App Installer policy. Ensures WinGet is available on managed devices. Default: enabled.",
+            Description =
+                "Enables the WinGet package manager via App Installer policy. Ensures WinGet is available on managed devices. Default: enabled.",
             Tags = ["packages", "winget", "enable", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAppInstaller", 1)],
@@ -253,7 +251,8 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Configures npm to prefer cached packages over network requests. Speeds up installs when packages are already cached. Default: online first.",
+            Description =
+                "Configures npm to prefer cached packages over network requests. Speeds up installs when packages are already cached. Default: online first.",
             Tags = ["packages", "npm", "offline", "cache"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "NPM_CONFIG_PREFER_OFFLINE", "true")],
@@ -295,7 +294,8 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Forces pip to only install packages inside a virtual environment. Prevents accidental global installs. Default: allows global.",
+            Description =
+                "Forces pip to only install packages inside a virtual environment. Prevents accidental global installs. Default: allows global.",
             Tags = ["packages", "pip", "virtualenv", "safety"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_REQUIRE_VIRTUALENV", "1")],
@@ -312,9 +312,23 @@ internal static class PackageManagement
             Description = "Sets the default PyPI index URL for all users at the system level. Useful for corporate mirrors. Default: pypi.org.",
             Tags = ["packages", "pip", "index", "system"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_INDEX_URL", "https://pypi.org/simple")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_INDEX_URL",
+                    "https://pypi.org/simple"
+                ),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_INDEX_URL")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_INDEX_URL", "https://pypi.org/simple")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_INDEX_URL",
+                    "https://pypi.org/simple"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -328,7 +342,10 @@ internal static class PackageManagement
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR", "1")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR", "1")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR", "1"),
+            ],
         },
         new TweakDef
         {
@@ -340,9 +357,18 @@ internal static class PackageManagement
             Description = "Forces pip to only install inside virtual environments at the system level for all users. Default: allows global.",
             Tags = ["packages", "pip", "virtualenv", "system"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1")],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1"),
+            ],
         },
         new TweakDef
         {
@@ -354,9 +380,23 @@ internal static class PackageManagement
             Description = "Sets trusted pip hosts at the system level to bypass SSL verification. Useful for corporate proxies. Default: none.",
             Tags = ["packages", "pip", "trusted-host", "system"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_TRUSTED_HOST",
+                    "pypi.org files.pythonhosted.org"
+                ),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_TRUSTED_HOST")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_TRUSTED_HOST",
+                    "pypi.org files.pythonhosted.org"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -365,7 +405,8 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the pip network timeout to 30 seconds. Prevents hangs on slow connections while allowing reasonable wait time. Default: 15 seconds.",
+            Description =
+                "Sets the pip network timeout to 30 seconds. Prevents hangs on slow connections while allowing reasonable wait time. Default: 15 seconds.",
             Tags = ["packages", "pip", "timeout", "network"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_TIMEOUT", "30")],
@@ -393,7 +434,8 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Configures pip to install packages to the user site-packages directory by default. Avoids needing admin for pip install. Default: system site.",
+            Description =
+                "Configures pip to install packages to the user site-packages directory by default. Avoids needing admin for pip install. Default: system site.",
             Tags = ["packages", "pip", "user", "install"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_USER", "1")],
@@ -425,12 +467,27 @@ internal static class PackageManagement
             Category = "Package Management",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the PowerShell execution policy to RemoteSigned for the current user. Allows local scripts to run. Default: Restricted.",
+            Description =
+                "Sets the PowerShell execution policy to RemoteSigned for the current user. Allows local scripts to run. Default: Restricted.",
             Tags = ["packages", "powershell", "execution-policy", "remotesigned"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell", "ExecutionPolicy", "RemoteSigned")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell",
+                    "ExecutionPolicy",
+                    "RemoteSigned"
+                ),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell", "ExecutionPolicy")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell", "ExecutionPolicy", "RemoteSigned")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell",
+                    "ExecutionPolicy",
+                    "RemoteSigned"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -440,15 +497,14 @@ internal static class PackageManagement
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
-            Description = "Installs the Scoop package manager for Windows. Provides command-line app installation without admin. Default: not installed.",
+            Description =
+                "Installs the Scoop package manager for Windows. Provides command-line app installation without admin. Default: not installed.",
             Tags = ["packages", "scoop", "install", "setup"],
             ApplyAction = _ => ShellRunner.RunPowerShell("irm get.scoop.sh | iex"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall scoop"),
             DetectAction = () =>
             {
-                var path = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "scoop", "shims", "scoop.ps1");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
                 return File.Exists(path);
             },
         },

@@ -18,13 +18,27 @@ internal static class Audio
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound",
+                    1
+                ),
             ],
             RemoveOps =
             [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound"),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation", "DisableStartupSound", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
+                    "DisableStartupSound",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -36,14 +50,8 @@ internal static class Audio
             Description = "Disables all audio enhancements (equalizer, bass boost, virtual surround, loudness equalization).",
             Tags = ["audio", "enhancements", "equalizer", "processing"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
         },
         new TweakDef
@@ -56,14 +64,8 @@ internal static class Audio
             Description = "Disables automatic spatial audio (Windows Sonic / Dolby Atmos) activation by the OS.",
             Tags = ["audio", "spatial", "sonic", "atmos"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Audio", "EnableSpatialAudio", 0)],
         },
         new TweakDef
@@ -76,14 +78,8 @@ internal static class Audio
             Description = "Sets the default audio format to 24-bit quality for improved audio fidelity.",
             Tags = ["audio", "quality", "24-bit", "format"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultFormat", 24),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultFormat"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultFormat", 24)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultFormat")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultFormat", 24)],
         },
         new TweakDef
@@ -96,14 +92,8 @@ internal static class Audio
             Description = "Prevents applications from taking exclusive control of audio devices, avoiding sound conflicts.",
             Tags = ["audio", "exclusive", "sharing", "device"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveMode", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveMode"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveMode", 0)],
         },
         new TweakDef
@@ -116,15 +106,15 @@ internal static class Audio
             Description = "Silences the audible alert played when the battery level drops below the warning threshold.",
             Tags = ["audio", "battery", "warning", "power"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLowBatterySound", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLowBatterySound", 1)],
             RemoveOps =
             [
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLowBatterySound"),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLowBatterySound", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLowBatterySound", 1),
+            ],
         },
         new TweakDef
         {
@@ -136,14 +126,8 @@ internal static class Audio
             Description = "Opts out of online speech recognition, preventing voice data from being sent to Microsoft cloud services.",
             Tags = ["audio", "speech", "recognition", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
         },
         new TweakDef
@@ -153,17 +137,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables all audio processing enhancements system-wide. Reduces audio latency and prevents driver conflicts. Default: Enabled. Recommended: Disabled for music production.",
+            Description =
+                "Disables all audio processing enhancements system-wide. Reduces audio latency and prevents driver conflicts. Default: Enabled. Recommended: Disabled for music production.",
             Tags = ["audio", "enhancements", "latency", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
         },
         new TweakDef
@@ -173,20 +152,44 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets audio thread scheduling to highest priority. Reduces audio glitches during heavy CPU load. Default: Medium. Recommended: High for audio workstations.",
+            Description =
+                "Sets audio thread scheduling to highest priority. Reduces audio glitches during heavy CPU load. Default: Medium. Recommended: High for audio workstations.",
             Tags = ["audio", "priority", "performance", "latency"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "High"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    6
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 2),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "Medium"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    2
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "Medium"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    6
+                ),
+            ],
         },
         new TweakDef
         {
@@ -195,17 +198,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables all audio effects system-wide via DisableEffects flag. Eliminates post-processing for cleaner audio output. Default: Enabled. Recommended: Disabled for studio use.",
+            Description =
+                "Disables all audio effects system-wide via DisableEffects flag. Eliminates post-processing for cleaner audio output. Default: Enabled. Recommended: Disabled for studio use.",
             Tags = ["audio", "effects", "performance", "studio"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableEffects", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableEffects"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableEffects", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableEffects")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableEffects", 1)],
         },
         new TweakDef
@@ -215,17 +213,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Enables exclusive mode audio priority for applications that request dedicated audio device access. Default: Disabled. Recommended: Enabled for DAWs.",
+            Description =
+                "Enables exclusive mode audio priority for applications that request dedicated audio device access. Default: Disabled. Recommended: Enabled for DAWs.",
             Tags = ["audio", "exclusive", "priority", "daw"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveModePriority", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveModePriority"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveModePriority", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveModePriority")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "ExclusiveModePriority", 1)],
         },
         new TweakDef
@@ -235,17 +228,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables loudness equalization which normalizes audio levels. Preserves original dynamic range of audio output. Default: Enabled. Recommended: Disabled for audiophiles.",
+            Description =
+                "Disables loudness equalization which normalizes audio levels. Preserves original dynamic range of audio output. Default: Enabled. Recommended: Disabled for audiophiles.",
             Tags = ["audio", "loudness", "equalization", "dynamic-range"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "LoudnessEqualization", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "LoudnessEqualization"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "LoudnessEqualization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "LoudnessEqualization")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "LoudnessEqualization", 0)],
         },
         new TweakDef
@@ -255,17 +243,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the default audio sample rate to 48000 Hz (DVD quality). Matches standard for video and professional audio. Default: 44100 Hz. Recommended: 48000 Hz.",
+            Description =
+                "Sets the default audio sample rate to 48000 Hz (DVD quality). Matches standard for video and professional audio. Default: 44100 Hz. Recommended: 48000 Hz.",
             Tags = ["audio", "sample-rate", "48khz", "quality"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultSampleRate", 48000),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultSampleRate"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultSampleRate", 48000)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultSampleRate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DefaultSampleRate", 48000)],
         },
         new TweakDef
@@ -275,17 +258,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic gain control that adjusts microphone input levels. Prevents unwanted volume fluctuations. Default: Enabled. Recommended: Disabled for streaming.",
+            Description =
+                "Disables automatic gain control that adjusts microphone input levels. Prevents unwanted volume fluctuations. Default: Enabled. Recommended: Disabled for streaming.",
             Tags = ["audio", "gain", "microphone", "agc", "streaming"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "AutomaticGainControl", 0)],
         },
         new TweakDef
@@ -295,17 +273,12 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables dynamic silence detection that may cut audio during quiet passages. Prevents unintended audio cutoff during low-volume sections. Default: Enabled. Recommended: Disabled for musicians.",
+            Description =
+                "Disables dynamic silence detection that may cut audio during quiet passages. Prevents unintended audio cutoff during low-volume sections. Default: Enabled. Recommended: Disabled for musicians.",
             Tags = ["audio", "silence", "detection", "cutoff", "production"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DynamicSilenceDetection", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DynamicSilenceDetection"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DynamicSilenceDetection", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DynamicSilenceDetection")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DynamicSilenceDetection", 0)],
         },
         new TweakDef
@@ -315,18 +288,16 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables audio application loopback capture. Prevents applications from recording system audio output without permission. Default: Enabled. Recommended: Disabled for privacy.",
+            Description =
+                "Disables audio application loopback capture. Prevents applications from recording system audio output without permission. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["audio", "capture", "loopback", "privacy", "recording"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture")],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture", 1),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture", 1),
             ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableAudioApplicationCapture", 1)],
         },
         new TweakDef
         {
@@ -335,7 +306,8 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows Sonic and other spatial sound processing. Reduces audio latency for competitive gaming. Default: off (per-device).",
+            Description =
+                "Disables Windows Sonic and other spatial sound processing. Reduces audio latency for competitive gaming. Default: off (per-device).",
             Tags = ["audio", "spatial", "sonic", "latency"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableSpatialAudio", 1)],
@@ -410,7 +382,10 @@ internal static class Audio
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1),
+            ],
         },
         new TweakDef
         {
@@ -419,7 +394,8 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic audio ducking when communications are detected (e.g., calls). Prevents volume reduction during voice calls. Default: reduce 80%.",
+            Description =
+                "Disables automatic audio ducking when communications are detected (e.g., calls). Prevents volume reduction during voice calls. Default: reduce 80%.",
             Tags = ["audio", "ducking", "communication", "volume"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 3)],
@@ -436,9 +412,29 @@ internal static class Audio
             Description = "Disables all notification sounds. Toast and system notifications appear silently. Default: enabled.",
             Tags = ["audio", "notifications", "sounds", "quiet"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings", "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -447,7 +443,8 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the sound scheme to 'No Sounds'. Disables all Windows event sounds (startup, navigation, errors). Default: Windows Default.",
+            Description =
+                "Sets the sound scheme to 'No Sounds'. Disables all Windows event sounds (startup, navigation, errors). Default: Windows Default.",
             Tags = ["audio", "sounds", "scheme", "quiet"],
             RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
@@ -461,20 +458,44 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the MMCSS Audio task to high priority and low latency scheduling. Reduces audio glitches and pops. Default: Normal scheduling.",
+            Description =
+                "Sets the MMCSS Audio task to high priority and low latency scheduling. Reduces audio glitches and pops. Default: Normal scheduling.",
             Tags = ["audio", "latency", "mmcss", "priority"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "High"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    6
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 2),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Scheduling Category", "Medium"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    2
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "Medium"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "Priority", 6)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Priority",
+                    6
+                ),
+            ],
         },
         new TweakDef
         {
@@ -483,12 +504,33 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the GPU priority for the Audio MMCSS task to 8 (high). Ensures audio-related GPU operations are not delayed. Default: 8.",
+            Description =
+                "Sets the GPU priority for the Audio MMCSS task to 8 (high). Ensures audio-related GPU operations are not delayed. Default: 8.",
             Tags = ["audio", "gpu", "priority", "mmcss"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority", 8)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "GPU Priority", 8)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "GPU Priority",
+                    8
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "GPU Priority"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "GPU Priority",
+                    8
+                ),
+            ],
         },
         new TweakDef
         {
@@ -497,20 +539,44 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the Pro Audio MMCSS task scheduling category to High. Optimises CPU scheduling for pro audio workloads. Default: High.",
+            Description =
+                "Sets the Pro Audio MMCSS task scheduling category to High. Optimises CPU scheduling for pro audio workloads. Default: High.",
             Tags = ["audio", "pro-audio", "scheduling", "mmcss"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 6),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Scheduling Category", "High"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority",
+                    6
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 1),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Scheduling Category", "High"),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority",
+                    1
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio", "Priority", 6)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority",
+                    6
+                ),
+            ],
         },
         new TweakDef
         {
@@ -519,12 +585,34 @@ internal static class Audio
             Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the Scheduled File I/O (SFIO) priority for audio playback to High. Ensures audio stream buffers are filled with minimal delay. Default: Normal.",
+            Description =
+                "Sets the Scheduled File I/O (SFIO) priority for audio playback to High. Ensures audio stream buffers are filled with minimal delay. Default: Normal.",
             Tags = ["audio", "sfio", "priority", "io"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "High")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "Normal")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio", "SFIO Priority", "High")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "SFIO Priority",
+                    "High"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "SFIO Priority",
+                    "Normal"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "SFIO Priority",
+                    "High"
+                ),
+            ],
         },
     ];
 }

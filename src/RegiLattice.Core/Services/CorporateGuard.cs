@@ -15,7 +15,8 @@ public static class CorporateGuard
     /// <summary>Returns true if this machine is in a corporate/managed environment.</summary>
     public static bool IsCorporateNetwork()
     {
-        if (_cached.HasValue) return _cached.Value;
+        if (_cached.HasValue)
+            return _cached.Value;
         _cached = IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
         return _cached.Value;
     }
@@ -25,10 +26,14 @@ public static class CorporateGuard
     /// <summary>Detailed status for UI display.</summary>
     public static (bool IsCorporate, string Reason) Status()
     {
-        if (IsDomainJoined()) return (true, "Active Directory domain member");
-        if (IsAzureAdJoined()) return (true, "Azure AD / Entra ID joined");
-        if (HasGroupPolicy()) return (true, "Group Policy indicators found");
-        if (HasManagementAgent()) return (true, "SCCM / Intune enrollment detected");
+        if (IsDomainJoined())
+            return (true, "Active Directory domain member");
+        if (IsAzureAdJoined())
+            return (true, "Azure AD / Entra ID joined");
+        if (HasGroupPolicy())
+            return (true, "Group Policy indicators found");
+        if (HasManagementAgent())
+            return (true, "SCCM / Intune enrollment detected");
         return (false, "Not a managed environment");
     }
 
@@ -44,7 +49,8 @@ public static class CorporateGuard
             if (policyKey != key && Registry.RegistrySession.ParsePath(policyKey) is var (root, sub))
             {
                 using var k = root.OpenSubKey(sub);
-                if (k is not null) return true;
+                if (k is not null)
+                    return true;
             }
         }
         return false;
@@ -70,12 +76,14 @@ public static class CorporateGuard
         // Fallback: check registry for domain membership
         try
         {
-            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
-                @"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters");
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters");
             var domain = key?.GetValue("Domain") as string;
             return !string.IsNullOrWhiteSpace(domain);
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     private static bool IsAzureAdJoined()
@@ -83,22 +91,21 @@ public static class CorporateGuard
         // Check Entra ID (AAD) join status via registry
         try
         {
-            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
-                @"SYSTEM\CurrentControlSet\Control\CloudDomainJoin\JoinInfo");
-            if (key is null) return false;
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\CloudDomainJoin\JoinInfo");
+            if (key is null)
+                return false;
             return key.GetSubKeyNames().Length > 0;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     private static bool HasGroupPolicy()
     {
         // Check for Group Policy registry indicators
-        string[] gpoKeys =
-        [
-            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies",
-            @"SOFTWARE\Policies\Microsoft\Windows",
-        ];
+        string[] gpoKeys = [@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies", @"SOFTWARE\Policies\Microsoft\Windows"];
 
         foreach (var path in gpoKeys)
         {
@@ -108,7 +115,8 @@ public static class CorporateGuard
                 if (key is not null)
                 {
                     var subKeys = key.GetSubKeyNames();
-                    if (subKeys.Length > 5) return true; // Non-default GPO presence
+                    if (subKeys.Length > 5)
+                        return true; // Non-default GPO presence
                 }
             }
             catch { }
@@ -121,18 +129,18 @@ public static class CorporateGuard
         // Check for SCCM client
         try
         {
-            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
-                @"SOFTWARE\Microsoft\CCM");
-            if (key is not null) return true;
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\CCM");
+            if (key is not null)
+                return true;
         }
         catch { }
 
         // Check for Intune MDM enrollment
         try
         {
-            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
-                @"SOFTWARE\Microsoft\Enrollments");
-            if (key is not null && key.GetSubKeyNames().Length > 0) return true;
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Enrollments");
+            if (key is not null && key.GetSubKeyNames().Length > 0)
+                return true;
         }
         catch { }
 

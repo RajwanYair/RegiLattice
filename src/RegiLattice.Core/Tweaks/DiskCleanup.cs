@@ -37,9 +37,18 @@ internal static class DiskCleanup
             Description = "Prevents creation of hidden Thumbs.db files on network shares.",
             Tags = ["cleanup", "disk", "network", "thumbnails"],
             RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1),
+            ],
         },
         new TweakDef
         {
@@ -63,14 +72,16 @@ internal static class DiskCleanup
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
-            Description = "Runs cleanmgr with all cleanup handlers enabled silently. Removes temp files, logs, caches, and old Windows installations.",
+            Description =
+                "Runs cleanmgr with all cleanup handlers enabled silently. Removes temp files, logs, caches, and old Windows installations.",
             Tags = ["cleanup", "disk", "temp", "maintenance"],
             ApplyAction = _ =>
             {
                 // Set all cleanup handlers to active in Sageset profile 9999
                 ShellRunner.RunPowerShell(
-                    "$path = 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VolumeCaches'; " +
-                    "Get-ChildItem $path | ForEach-Object { Set-ItemProperty $_.PSPath -Name StateFlags9999 -Value 2 -Type DWord -ErrorAction SilentlyContinue }");
+                    "$path = 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VolumeCaches'; "
+                        + "Get-ChildItem $path | ForEach-Object { Set-ItemProperty $_.PSPath -Name StateFlags9999 -Value 2 -Type DWord -ErrorAction SilentlyContinue }"
+                );
                 ShellRunner.Run("cleanmgr.exe", ["/sagerun:9999"]);
             },
             RemoveAction = _ => { }, // One-shot cleanup, nothing to remove
@@ -86,9 +97,11 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Removes all files from C:\\Windows\\Temp and user %TEMP% folders.",
             Tags = ["cleanup", "disk", "temp"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Remove-Item \"$env:windir\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue; " +
-                "Remove-Item \"$env:TEMP\\*\" -Recurse -Force -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Remove-Item \"$env:windir\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue; "
+                        + "Remove-Item \"$env:TEMP\\*\" -Recurse -Force -ErrorAction SilentlyContinue"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -102,10 +115,12 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Stops Windows Update service, clears the SoftwareDistribution\\Download folder, then restarts the service.",
             Tags = ["cleanup", "disk", "windows-update", "cache"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Stop-Service wuauserv -Force -ErrorAction SilentlyContinue; " +
-                "Remove-Item \"$env:windir\\SoftwareDistribution\\Download\\*\" -Recurse -Force -ErrorAction SilentlyContinue; " +
-                "Start-Service wuauserv -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service wuauserv -Force -ErrorAction SilentlyContinue; "
+                        + "Remove-Item \"$env:windir\\SoftwareDistribution\\Download\\*\" -Recurse -Force -ErrorAction SilentlyContinue; "
+                        + "Start-Service wuauserv -ErrorAction SilentlyContinue"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -119,10 +134,12 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Stops the Font Cache service, clears cached font data, then restarts the service. Fixes font rendering issues.",
             Tags = ["cleanup", "disk", "fonts", "cache"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Stop-Service FontCache -Force -ErrorAction SilentlyContinue; " +
-                "Remove-Item \"$env:windir\\ServiceProfiles\\LocalService\\AppData\\Local\\FontCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; " +
-                "Start-Service FontCache -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service FontCache -Force -ErrorAction SilentlyContinue; "
+                        + "Remove-Item \"$env:windir\\ServiceProfiles\\LocalService\\AppData\\Local\\FontCache\\*\" -Recurse -Force -ErrorAction SilentlyContinue; "
+                        + "Start-Service FontCache -ErrorAction SilentlyContinue"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -136,11 +153,13 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Deletes the icon cache database and restarts Explorer. Fixes missing or corrupted icons.",
             Tags = ["cleanup", "disk", "icons", "explorer"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue; " +
-                "Remove-Item \"$env:LOCALAPPDATA\\IconCache.db\" -Force -ErrorAction SilentlyContinue; " +
-                "Remove-Item \"$env:LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\iconcache*\" -Force -ErrorAction SilentlyContinue; " +
-                "Start-Process explorer.exe"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Process -Name explorer -Force -ErrorAction SilentlyContinue; "
+                        + "Remove-Item \"$env:LOCALAPPDATA\\IconCache.db\" -Force -ErrorAction SilentlyContinue; "
+                        + "Remove-Item \"$env:LOCALAPPDATA\\Microsoft\\Windows\\Explorer\\iconcache*\" -Force -ErrorAction SilentlyContinue; "
+                        + "Start-Process explorer.exe"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -162,10 +181,7 @@ internal static class DiskCleanup
                 RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "32", 1),
                 RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "2048", 30),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
+            RemoveOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0)],
             DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1)],
         },
         new TweakDef
@@ -216,9 +232,11 @@ internal static class DiskCleanup
             Description = "Clears all Windows Event logs. Use with caution — forensic evidence will be lost.",
             Tags = ["cleanup", "disk", "event-log", "maintenance"],
             SideEffects = "All event logs will be permanently deleted.",
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-WinEvent -ListLog * -ErrorAction SilentlyContinue | ForEach-Object { " +
-                "try { [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName) } catch {} }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-WinEvent -ListLog * -ErrorAction SilentlyContinue | ForEach-Object { "
+                        + "try { [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName) } catch {} }"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -250,8 +268,7 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Clears the Windows Prefetch folder. System will rebuild it automatically.",
             Tags = ["cleanup", "disk", "prefetch", "cache"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Remove-Item \"$env:windir\\Prefetch\\*\" -Force -ErrorAction SilentlyContinue"),
+            ApplyAction = _ => ShellRunner.RunPowerShell("Remove-Item \"$env:windir\\Prefetch\\*\" -Force -ErrorAction SilentlyContinue"),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -265,11 +282,13 @@ internal static class DiskCleanup
             KindHint = TweakKind.PowerShell,
             Description = "Configures the Recycle Bin maximum size to 5% of each drive instead of the default 10%.",
             Tags = ["cleanup", "disk", "recycle-bin"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "$shell = New-Object -ComObject Shell.Application; " +
-                "$rb = $shell.Namespace(10); " +
-                "# Note: Recycle Bin size is stored per-drive in the registry " +
-                "Set-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume' -Name 'NukeOnDelete' -Value 0 -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$shell = New-Object -ComObject Shell.Application; "
+                        + "$rb = $shell.Namespace(10); "
+                        + "# Note: Recycle Bin size is stored per-drive in the registry "
+                        + "Set-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\BitBucket\\Volume' -Name 'NukeOnDelete' -Value 0 -ErrorAction SilentlyContinue"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },

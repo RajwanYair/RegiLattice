@@ -16,14 +16,8 @@ internal static class Network
             Description = "Increases the I/O Request Packet stack size to 32 for better network/file-sharing throughput.",
             Tags = ["network", "performance", "smb"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 15),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 15)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
         },
         new TweakDef
@@ -35,16 +29,17 @@ internal static class Network
             CorpSafe = true,
             Description = "Enables Remote Desktop with Network Level Authentication (NLA).",
             Tags = ["network", "remote", "rdp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server",
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 0),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "UserAuthentication", 1),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 1),
-            ],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 0)],
         },
         new TweakDef
@@ -57,14 +52,8 @@ internal static class Network
             Description = "Disables Wi-Fi Sense auto-connect to suggested open hotspots.",
             Tags = ["network", "wifi", "privacy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
         },
         new TweakDef
@@ -77,14 +66,8 @@ internal static class Network
             Description = "Disables Link-Local Multicast Name Resolution. Mitigates LLMNR poisoning attacks on enterprise networks.",
             Tags = ["network", "security", "llmnr", "enterprise"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
         },
         new TweakDef
@@ -97,14 +80,8 @@ internal static class Network
             Description = "Disables Web Proxy Auto-Discovery (WPAD). Prevents rogue WPAD attacks on untrusted networks.",
             Tags = ["network", "security", "proxy", "wpad"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad", "WpadOverride", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad", "WpadOverride"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad", "WpadOverride", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad", "WpadOverride")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad", "WpadOverride", 1)],
         },
         new TweakDef
@@ -117,14 +94,8 @@ internal static class Network
             Description = "Enables Explicit Congestion Notification for smarter TCP congestion control without packet loss.",
             Tags = ["network", "performance", "ecn", "tcp"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableECN", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableECN"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableECN", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableECN")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableECN", 1)],
         },
         new TweakDef
@@ -142,10 +113,7 @@ internal static class Network
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "EnableSecuritySignature", 1),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "Start", 4),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "Start", 3),
-            ],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "Start", 4)],
         },
         new TweakDef
@@ -177,7 +145,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Increases the ARP cache lifetime to 3600 seconds (1 hour). Reduces ARP broadcast traffic on busy networks and speeds up repeated connections to known hosts. Default: 120s. Recommended: 3600s.",
+            Description =
+                "Increases the ARP cache lifetime to 3600 seconds (1 hour). Reduces ARP broadcast traffic on busy networks and speeds up repeated connections to known hosts. Default: 120s. Recommended: 3600s.",
             Tags = ["network", "arp", "cache", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps =
@@ -199,9 +168,14 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Receive Side Scaling (RSS) to distribute network receive processing across multiple CPU cores. Improves throughput on multi-core systems with supported NICs. Default: OS-managed. Recommended: enabled.",
+            Description =
+                "Enables Receive Side Scaling (RSS) to distribute network receive processing across multiple CPU cores. Improves throughput on multi-core systems with supported NICs. Default: OS-managed. Recommended: enabled.",
             Tags = ["network", "rss", "performance", "throughput", "multicore"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NDIS\Parameters", @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NDIS\Parameters",
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
+            ],
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NDIS\Parameters", "RssBaseCpu", 1),
@@ -221,7 +195,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Nagle's algorithm via TcpNoDelay for lower network latency. Sends TCP packets immediately without buffering. Default: Enabled. Recommended: Disabled for gaming/real-time.",
+            Description =
+                "Disables Nagle's algorithm via TcpNoDelay for lower network latency. Sends TCP packets immediately without buffering. Default: Enabled. Recommended: Disabled for gaming/real-time.",
             Tags = ["network", "nagle", "tcp", "latency", "gaming"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps =
@@ -243,7 +218,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Increases maximum ephemeral port range to 65534. Allows more concurrent outbound connections for high-throughput workloads. Default: 5000. Recommended: 65534 for servers.",
+            Description =
+                "Increases maximum ephemeral port range to 65534. Allows more concurrent outbound connections for high-throughput workloads. Default: 5000. Recommended: 65534 for servers.",
             Tags = ["network", "port", "connections", "throughput", "server"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps =
@@ -272,14 +248,8 @@ internal static class Network
             Description = "Disables Teredo IPv6 tunneling which is rarely used and can be a security risk. Default: enabled. Recommended: disabled.",
             Tags = ["network", "teredo", "ipv6", "tunneling", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters", "Type", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters", "Type", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters", "Type", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters", "Type", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Teredo\Parameters", "Type", 4)],
         },
         new TweakDef
@@ -289,17 +259,12 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the ISATAP IPv6 transition adapter. Removes an unnecessary virtual adapter. Default: enabled. Recommended: disabled.",
+            Description =
+                "Disables the ISATAP IPv6 transition adapter. Removes an unnecessary virtual adapter. Default: enabled. Recommended: disabled.",
             Tags = ["network", "isatap", "ipv6", "adapter", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters", "State", "Disabled"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters", "State", "Default"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters", "State", "Disabled")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters", "State", "Default")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ISATAP\Parameters", "State", "Disabled")],
         },
         new TweakDef
@@ -309,17 +274,12 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets TCP receive window auto-tuning to restricted mode. Can improve compatibility with older routers/firewalls. Default: normal. Recommended: restricted for problematic networks.",
+            Description =
+                "Sets TCP receive window auto-tuning to restricted mode. Can improve compatibility with older routers/firewalls. Default: normal. Recommended: restricted for problematic networks.",
             Tags = ["network", "tcp", "autotune", "window", "restricted"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableAutoTuning", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableAutoTuning"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableAutoTuning", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableAutoTuning")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableAutoTuning", 0)],
         },
         new TweakDef
@@ -329,7 +289,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enforces SMB packet signing on all server connections. Protects against NTLM relay and man-in-the-middle attacks on file shares. Default: Not required. Recommended: Enabled on corp networks.",
+            Description =
+                "Enforces SMB packet signing on all server connections. Protects against NTLM relay and man-in-the-middle attacks on file shares. Default: Not required. Recommended: Enabled on corp networks.",
             Tags = ["network", "smb", "signing", "security", "ntlm"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps =
@@ -342,7 +303,10 @@ internal static class Network
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 0),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableSecuritySignature", 0),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
+            ],
         },
         new TweakDef
         {
@@ -351,17 +315,12 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Suppresses the 'Set Network Location' dialog when connecting to a new network. Useful on headless/server machines. Default: Enabled (dialog appears).",
+            Description =
+                "Suppresses the 'Set Network Location' dialog when connecting to a new network. Useful on headless/server machines. Default: Enabled (dialog appears).",
             Tags = ["network", "wizard", "dialog", "location", "server"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "(Default)", 0)],
         },
         new TweakDef
@@ -371,17 +330,12 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables TCP timestamps (RFC 1323) for more accurate RTT calculations. Improves TCP performance on high-bandwidth connections. Default: Not set. Recommended: Enabled.",
+            Description =
+                "Enables TCP timestamps (RFC 1323) for more accurate RTT calculations. Improves TCP performance on high-bandwidth connections. Default: Not set. Recommended: Enabled.",
             Tags = ["network", "tcp", "timestamps", "rfc1323", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts", 1)],
         },
         new TweakDef
@@ -391,18 +345,13 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets DisabledComponents=255 to disable all IPv6 tunnel adapters (6to4, ISATAP, Teredo, etc.) at once. Reduces attack surface on IPv4-only networks. Default: Enabled. Recommended: Disabled on pure IPv4 networks.",
+            Description =
+                "Sets DisabledComponents=255 to disable all IPv6 tunnel adapters (6to4, ISATAP, Teredo, etc.) at once. Reduces attack surface on IPv4-only networks. Default: Enabled. Recommended: Disabled on pure IPv4 networks.",
             Tags = ["network", "ipv6", "tunnel", "6to4", "isatap", "teredo", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
             SideEffects = "IPv6 connectivity is fully disabled.",
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
         },
         new TweakDef
@@ -412,17 +361,12 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the PNRP service used for peer-to-peer name resolution. Eliminates an infrequently used network service. Default: Manual. Recommended: Disabled.",
+            Description =
+                "Disables the PNRP service used for peer-to-peer name resolution. Eliminates an infrequently used network service. Default: Manual. Recommended: Disabled.",
             Tags = ["network", "pnrp", "p2p", "service", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc", "Start", 3),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PNRPsvc", "Start", 4)],
         },
         new TweakDef
@@ -432,7 +376,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows Connect Now which broadcasts Wi-Fi credentials over USB and NFC. Policy-level control to prevent accidental credential sharing. Default: Enabled. Recommended: Disabled.",
+            Description =
+                "Disables Windows Connect Now which broadcasts Wi-Fi credentials over USB and NFC. Policy-level control to prevent accidental credential sharing. Default: Enabled. Recommended: Disabled.",
             Tags = ["network", "wcn", "wifi", "credentials", "policy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCN\Registrars"],
             ApplyOps =
@@ -454,18 +399,13 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables TCP/IP task offloading to the NIC. Resolves connectivity issues caused by buggy NIC firmware or driver offload bugs. Default: Enabled. Recommended: Disabled for troubleshooting network issues.",
+            Description =
+                "Disables TCP/IP task offloading to the NIC. Resolves connectivity issues caused by buggy NIC firmware or driver offload bugs. Default: Enabled. Recommended: Disabled for troubleshooting network issues.",
             Tags = ["network", "tcp", "offload", "nic", "compatibility"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters"],
             SideEffects = "May slightly increase CPU usage for network processing.",
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "DisableTaskOffload", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "DisableTaskOffload"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "DisableTaskOffload", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "DisableTaskOffload")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "DisableTaskOffload", 1)],
         },
         new TweakDef
@@ -506,9 +446,29 @@ internal static class Network
             Description = "Increases the maximum number of concurrent TCP connections per server from 2 to 16. Improves download speeds. Default: 2.",
             Tags = ["network", "tcp", "connections", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "explorer.exe", 16)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "explorer.exe")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "explorer.exe", 16)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "explorer.exe",
+                    16
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "explorer.exe"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "explorer.exe",
+                    16
+                ),
+            ],
         },
         new TweakDef
         {
@@ -545,7 +505,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Blocks connections to WiFi networks that are not on the domain. Prevents connecting to untrusted wireless networks. Default: allowed.",
+            Description =
+                "Blocks connections to WiFi networks that are not on the domain. Prevents connecting to untrusted wireless networks. Default: allowed.",
             Tags = ["network", "wifi", "domain", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy", "fBlockNonDomain", 1)],
@@ -573,7 +534,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables automatic DNS over HTTPS for the DNS client. Encrypts DNS queries for privacy. Requires a DoH-capable DNS server. Default: disabled.",
+            Description =
+                "Enables automatic DNS over HTTPS for the DNS client. Encrypts DNS queries for privacy. Requires a DoH-capable DNS server. Default: disabled.",
             Tags = ["network", "dns", "doh", "https", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
@@ -601,7 +563,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures the system to prefer IPv4 over IPv6 without fully disabling IPv6. Sets DisabledComponents to 0x20. Default: IPv6 preferred.",
+            Description =
+                "Configures the system to prefer IPv4 over IPv6 without fully disabling IPv6. Sets DisabledComponents to 0x20. Default: IPv6 preferred.",
             Tags = ["network", "ipv4", "ipv6", "preference"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0x20)],
@@ -615,7 +578,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Restricts anonymous enumeration of SAM accounts and shares. Prevents unauthenticated users from listing network resources. Default: allowed.",
+            Description =
+                "Restricts anonymous enumeration of SAM accounts and shares. Prevents unauthenticated users from listing network resources. Default: allowed.",
             Tags = ["network", "security", "anonymous", "enumeration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 1)],
@@ -629,12 +593,22 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Requires SMB packet signing on the workstation (client) side. Protects against SMB relay attacks. May impact legacy device compatibility. Default: not required.",
+            Description =
+                "Requires SMB packet signing on the workstation (client) side. Protects against SMB relay attacks. May impact legacy device compatibility. Default: not required.",
             Tags = ["network", "smb", "signing", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
         },
         new TweakDef
         {
@@ -643,7 +617,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the initial TCP retransmission timeout estimate to 300ms. Faster initial connection establishment on fast networks. Default: 3000ms.",
+            Description =
+                "Sets the initial TCP retransmission timeout estimate to 300ms. Faster initial connection establishment on fast networks. Default: 3000ms.",
             Tags = ["network", "tcp", "rtt", "latency"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "InitialRtt", 300)],
@@ -657,7 +632,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TCP keepalive interval to 300000ms (5 minutes). Detects dead connections faster than the 2-hour default. Default: 7200000ms (2 hours).",
+            Description =
+                "Sets TCP keepalive interval to 300000ms (5 minutes). Detects dead connections faster than the 2-hour default. Default: 7200000ms (2 hours).",
             Tags = ["network", "tcp", "keepalive", "timeout"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 300000)],
@@ -671,7 +647,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables TCP SYN flood attack protection. Reduces resource consumption from SYN flood attacks by enabling SYN-ACK retransmission control. Default: off.",
+            Description =
+                "Enables TCP SYN flood attack protection. Reduces resource consumption from SYN flood attacks by enabling SYN-ACK retransmission control. Default: off.",
             Tags = ["network", "tcp", "syn", "security", "ddos"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "SynAttackProtect", 1)],
@@ -685,12 +662,34 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the multimedia system profile NetworkThrottlingIndex to 0xFFFFFFFF, disabling network traffic throttling during multimedia playback. Default: 10.",
+            Description =
+                "Sets the multimedia system profile NetworkThrottlingIndex to 0xFFFFFFFF, disabling network traffic throttling during multimedia playback. Default: 10.",
             Tags = ["network", "throttling", "multimedia", "bandwidth"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 10)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    10
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
         },
     ];
 }

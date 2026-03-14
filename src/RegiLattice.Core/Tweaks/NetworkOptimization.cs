@@ -23,16 +23,8 @@ internal static class NetworkOptimization
             Description = "Disables TCP Nagle's algorithm which buffers small packets. Improves latency for gaming and real-time apps.",
             Tags = ["network", "latency", "gaming", "tcp"],
             RegistryKeys = [TcpParams],
-            ApplyOps =
-            [
-                RegOp.SetDword(TcpParams, "TcpNoDelay", 1),
-                RegOp.SetDword(TcpParams, "TcpAckFrequency", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(TcpParams, "TcpNoDelay"),
-                RegOp.DeleteValue(TcpParams, "TcpAckFrequency"),
-            ],
+            ApplyOps = [RegOp.SetDword(TcpParams, "TcpNoDelay", 1), RegOp.SetDword(TcpParams, "TcpAckFrequency", 1)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "TcpNoDelay"), RegOp.DeleteValue(TcpParams, "TcpAckFrequency")],
             DetectOps = [RegOp.CheckDword(TcpParams, "TcpNoDelay", 1)],
         },
         new TweakDef
@@ -45,16 +37,8 @@ internal static class NetworkOptimization
             Description = "Sets TCP global receive window to 16 MB. Improves throughput on high-bandwidth connections.",
             Tags = ["network", "throughput", "tcp", "bandwidth"],
             RegistryKeys = [TcpParams],
-            ApplyOps =
-            [
-                RegOp.SetDword(TcpParams, "TcpWindowSize", 16776960),
-                RegOp.SetDword(TcpParams, "GlobalMaxTcpWindowSize", 16776960),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(TcpParams, "TcpWindowSize"),
-                RegOp.DeleteValue(TcpParams, "GlobalMaxTcpWindowSize"),
-            ],
+            ApplyOps = [RegOp.SetDword(TcpParams, "TcpWindowSize", 16776960), RegOp.SetDword(TcpParams, "GlobalMaxTcpWindowSize", 16776960)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "TcpWindowSize"), RegOp.DeleteValue(TcpParams, "GlobalMaxTcpWindowSize")],
             DetectOps = [RegOp.CheckDword(TcpParams, "TcpWindowSize", 16776960)],
         },
         new TweakDef
@@ -67,9 +51,29 @@ internal static class NetworkOptimization
             Description = "Increases max simultaneous TCP connections beyond the default. Improves download managers and web scraping.",
             Tags = ["network", "tcp", "connections", "throughput"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "iexplore.exe", 10)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "iexplore.exe")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER", "iexplore.exe", 10)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe",
+                    10
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\MAIN\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe",
+                    10
+                ),
+            ],
         },
         new TweakDef
         {
@@ -81,9 +85,26 @@ internal static class NetworkOptimization
             Description = "Removes the Windows network throttling that limits non-multimedia traffic to 10 packets/ms.",
             Tags = ["network", "throughput", "throttling", "performance"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
         },
         new TweakDef
         {
@@ -109,18 +130,23 @@ internal static class NetworkOptimization
             KindHint = TweakKind.PowerShell,
             Description = "Sets all active network adapters to use Cloudflare DNS (1.1.1.1, 1.0.0.1) with DNS-over-HTTPS enabled.",
             Tags = ["network", "dns", "cloudflare", "privacy", "doh"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { " +
-                "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses @('1.1.1.1','1.0.0.1','2606:4700:4700::1111','2606:4700:4700::1001') }; " +
-                "Set-DnsClientDohServerAddress -ServerAddress 1.1.1.1 -DohTemplate 'https://cloudflare-dns.com/dns-query' -AllowFallbackToUdp $true -AutoUpgrade $true -ErrorAction SilentlyContinue; " +
-                "Set-DnsClientDohServerAddress -ServerAddress 1.0.0.1 -DohTemplate 'https://cloudflare-dns.com/dns-query' -AllowFallbackToUdp $true -AutoUpgrade $true -ErrorAction SilentlyContinue"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { " +
-                "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "
+                        + "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses @('1.1.1.1','1.0.0.1','2606:4700:4700::1111','2606:4700:4700::1001') }; "
+                        + "Set-DnsClientDohServerAddress -ServerAddress 1.1.1.1 -DohTemplate 'https://cloudflare-dns.com/dns-query' -AllowFallbackToUdp $true -AutoUpgrade $true -ErrorAction SilentlyContinue; "
+                        + "Set-DnsClientDohServerAddress -ServerAddress 1.0.0.1 -DohTemplate 'https://cloudflare-dns.com/dns-query' -AllowFallbackToUdp $true -AutoUpgrade $true -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "
+                        + "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses }"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "$dns = (Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object ServerAddresses -Contains '1.1.1.1'); $null -ne $dns");
+                    "$dns = (Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object ServerAddresses -Contains '1.1.1.1'); $null -ne $dns"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -134,16 +160,21 @@ internal static class NetworkOptimization
             KindHint = TweakKind.PowerShell,
             Description = "Sets all active network adapters to use Google DNS (8.8.8.8, 8.8.4.4).",
             Tags = ["network", "dns", "google", "doh"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { " +
-                "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses @('8.8.8.8','8.8.4.4','2001:4860:4860::8888','2001:4860:4860::8844') }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { " +
-                "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "
+                        + "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses @('8.8.8.8','8.8.4.4','2001:4860:4860::8888','2001:4860:4860::8844') }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "
+                        + "Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses }"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "$dns = (Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object ServerAddresses -Contains '8.8.8.8'); $null -ne $dns");
+                    "$dns = (Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object ServerAddresses -Contains '8.8.8.8'); $null -ne $dns"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -158,16 +189,21 @@ internal static class NetworkOptimization
             Description = "Disables IPv6 on all network adapters. Some ISPs don't support IPv6, causing latency from failed lookups.",
             Tags = ["network", "ipv6", "latency", "performance"],
             SideEffects = "IPv6-only services will be unreachable.",
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | " +
-                "Disable-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | " +
-                "Enable-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | "
+                        + "Disable-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | "
+                        + "Enable-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | Where-Object Enabled -eq $true).Count -eq 0");
+                    "(Get-NetAdapterBinding -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue | Where-Object Enabled -eq $true).Count -eq 0"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -209,17 +245,21 @@ internal static class NetworkOptimization
             KindHint = TweakKind.PowerShell,
             Description = "Prevents Windows from turning off network adapters to save power. Fixes connection drops after sleep.",
             Tags = ["network", "power", "adapter", "stability"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter -Physical | ForEach-Object { " +
-                "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Disabled -WakeOnPattern Disabled -ErrorAction SilentlyContinue; " +
-                "$dev = Get-PnpDevice -FriendlyName $_.InterfaceDescription -ErrorAction SilentlyContinue; " +
-                "if ($dev) { " +
-                "$instance = $dev.InstanceId; " +
-                "$path = \"HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\$instance\\Device Parameters\\Power\"; " +
-                "if (Test-Path $path) { Set-ItemProperty $path -Name 'AllowIdleIrpInD3' -Value 0 -ErrorAction SilentlyContinue } } }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter -Physical | ForEach-Object { " +
-                "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Enabled -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { "
+                        + "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Disabled -WakeOnPattern Disabled -ErrorAction SilentlyContinue; "
+                        + "$dev = Get-PnpDevice -FriendlyName $_.InterfaceDescription -ErrorAction SilentlyContinue; "
+                        + "if ($dev) { "
+                        + "$instance = $dev.InstanceId; "
+                        + "$path = \"HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\$instance\\Device Parameters\\Power\"; "
+                        + "if (Test-Path $path) { Set-ItemProperty $path -Name 'AllowIdleIrpInD3' -Value 0 -ErrorAction SilentlyContinue } } }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { "
+                        + "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Enabled -ErrorAction SilentlyContinue }"
+                ),
             DetectAction = () => false, // Complex detection across adapters
         },
         new TweakDef
@@ -261,13 +301,16 @@ internal static class NetworkOptimization
             KindHint = TweakKind.PowerShell,
             Description = "Enables TCP/UDP checksum offload and large send offload on all physical adapters for reduced CPU usage.",
             Tags = ["network", "offload", "performance", "nic"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter -Physical | ForEach-Object { " +
-                "Enable-NetAdapterChecksumOffload -Name $_.Name -ErrorAction SilentlyContinue; " +
-                "Enable-NetAdapterLso -Name $_.Name -ErrorAction SilentlyContinue }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Get-NetAdapter -Physical | ForEach-Object { " +
-                "Disable-NetAdapterLso -Name $_.Name -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { "
+                        + "Enable-NetAdapterChecksumOffload -Name $_.Name -ErrorAction SilentlyContinue; "
+                        + "Enable-NetAdapterLso -Name $_.Name -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { " + "Disable-NetAdapterLso -Name $_.Name -ErrorAction SilentlyContinue }"
+                ),
             DetectAction = () => false,
         },
         new TweakDef

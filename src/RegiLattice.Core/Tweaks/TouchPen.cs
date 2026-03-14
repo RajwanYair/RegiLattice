@@ -16,14 +16,8 @@ internal static class TouchPen
             Description = "Disables the Windows Ink Workspace via Group Policy. Hides the Ink Workspace button and features.",
             Tags = ["touch", "pen", "ink", "workspace", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
         },
         new TweakDef
@@ -44,7 +38,14 @@ internal static class TouchPen
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
+                    "PenWorkspaceButtonDesiredVisibility",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -56,14 +57,8 @@ internal static class TouchPen
             Description = "Stops Windows from collecting handwriting and inking data for personalisation. Recommended: Disabled for privacy.",
             Tags = ["touch", "pen", "handwriting", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
         },
         new TweakDef
@@ -84,7 +79,10 @@ internal static class TouchPen
             [
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace"),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace", 0),
+            ],
         },
         new TweakDef
         {
@@ -96,14 +94,8 @@ internal static class TouchPen
             Description = "Maps pen button double-click to Screen Sketch (screenshot annotation). Default: Nothing.",
             Tags = ["touch", "pen", "screenshot", "shortcut"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "DoubleClickAction", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "DoubleClickAction", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "DoubleClickAction", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "DoubleClickAction", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "DoubleClickAction", 4)],
         },
         new TweakDef
@@ -116,14 +108,8 @@ internal static class TouchPen
             Description = "Maps pen button long-press to open the Ink Workspace. Default: Nothing.",
             Tags = ["touch", "pen", "workspace", "shortcut"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "LongPressAction", 3),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "LongPressAction", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "LongPressAction", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "LongPressAction", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Pen", "LongPressAction", 3)],
         },
         new TweakDef
@@ -139,12 +125,19 @@ internal static class TouchPen
             ApplyOps =
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "ConvertibleSlateModePromptPreference", 0),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell",
+                    "ConvertibleSlateModePromptPreference",
+                    0
+                ),
             ],
             RemoveOps =
             [
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "ConvertibleSlateModePromptPreference"),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell",
+                    "ConvertibleSlateModePromptPreference"
+                ),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode", 1)],
         },
@@ -158,14 +151,8 @@ internal static class TouchPen
             Description = "Disables the handwriting input panel that appears when tapping text fields with a pen. Policy setting.",
             Tags = ["touch", "pen", "handwriting", "panel", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
         },
         new TweakDef
@@ -188,7 +175,10 @@ internal static class TouchPen
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 1),
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -210,7 +200,10 @@ internal static class TouchPen
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 1),
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -222,14 +215,8 @@ internal static class TouchPen
             Description = "Disables the screen-edge swipe gesture that opens Action Centre / notification pane. Prevents accidental triggers.",
             Tags = ["touch", "edge", "swipe", "gesture", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "DisableSwipe", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "DisableSwipe"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "DisableSwipe", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "DisableSwipe")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EdgeUI", "DisableSwipe", 1)],
         },
         new TweakDef
@@ -242,14 +229,8 @@ internal static class TouchPen
             Description = "Disables pen flick gestures (quick strokes for scroll, back, forward). Prevents accidental navigation.",
             Tags = ["touch", "pen", "flicks", "gestures"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 0)],
         },
         new TweakDef
@@ -259,18 +240,16 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables two-finger tap as a right-click gesture on precision touchpads. Prevents accidental right-click menus while typing. Default: Enabled.",
+            Description =
+                "Disables two-finger tap as a right-click gesture on precision touchpads. Prevents accidental right-click menus while typing. Default: Enabled.",
             Tags = ["touch", "touchpad", "two-finger", "right-click", "gesture"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 1)],
+            DetectOps =
             [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0),
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0)],
         },
         new TweakDef
         {
@@ -282,14 +261,8 @@ internal static class TouchPen
             Description = "Disables the two-finger pinch-to-zoom gesture on precision touchpads. Prevents accidental zoom changes. Default: Enabled.",
             Tags = ["touch", "touchpad", "pinch", "zoom", "gesture"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 0)],
         },
         new TweakDef
@@ -299,17 +272,12 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Reverses touchpad scroll direction so content moves in the same direction as your fingers (natural/Mac-style scrolling). Default: Traditional.",
+            Description =
+                "Reverses touchpad scroll direction so content moves in the same direction as your fingers (natural/Mac-style scrolling). Default: Traditional.",
             Tags = ["touch", "touchpad", "scroll", "direction", "natural"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ScrollDirection", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ScrollDirection", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ScrollDirection", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ScrollDirection", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ScrollDirection", 0)],
         },
         new TweakDef
@@ -319,17 +287,12 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets precision touchpad sensitivity to maximum (AAPThreshold=0). Registers even the lightest touch. Default: Medium (2). Recommended: High for light-touch users.",
+            Description =
+                "Sets precision touchpad sensitivity to maximum (AAPThreshold=0). Registers even the lightest touch. Default: Medium (2). Recommended: High for light-touch users.",
             Tags = ["touch", "touchpad", "sensitivity", "threshold"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "AAPThreshold", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "AAPThreshold", 2),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "AAPThreshold", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "AAPThreshold", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "AAPThreshold", 0)],
         },
         new TweakDef
@@ -339,17 +302,12 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables touchpad palm rejection and cursor-leave detection. Useful when palm rejection causes missed inputs. Default: Enabled.",
+            Description =
+                "Disables touchpad palm rejection and cursor-leave detection. Useful when palm rejection causes missed inputs. Default: Enabled.",
             Tags = ["touch", "touchpad", "palm", "rejection"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "LeaveOnEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "LeaveOnEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "LeaveOnEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "LeaveOnEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "LeaveOnEnabled", 0)],
         },
         new TweakDef
@@ -418,9 +376,22 @@ internal static class TouchPen
             Description = "Hides the Windows Ink Workspace button from the taskbar system tray. Default: visible.",
             Tags = ["touch", "pen", "ink-workspace", "taskbar"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
+                    "PenWorkspaceButtonDesiredVisibility",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -429,7 +400,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the visual feedback animations shown when touching the screen. Removes the touch ripple effects. Default: enabled.",
+            Description =
+                "Disables the visual feedback animations shown when touching the screen. Removes the touch ripple effects. Default: enabled.",
             Tags = ["touch", "visual", "feedback", "animation"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],

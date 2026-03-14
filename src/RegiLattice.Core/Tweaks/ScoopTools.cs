@@ -14,17 +14,12 @@ internal static class ScoopTools
             Category = "Scoop Tools",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SCOOP_NO_AUTO_UPDATE=1 to prevent Scoop from auto-updating itself before every app install. Default: auto-update. Recommended: disabled for speed.",
+            Description =
+                "Sets SCOOP_NO_AUTO_UPDATE=1 to prevent Scoop from auto-updating itself before every app install. Default: auto-update. Recommended: disabled for speed.",
             Tags = ["scoop", "autoupdate", "speed", "environment"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE", "1"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE", "1")],
         },
         new TweakDef
@@ -34,17 +29,12 @@ internal static class ScoopTools
             Category = "Scoop Tools",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SCOOP_ARIA2_ENABLED=true to enable parallel downloads via aria2 for faster Scoop package installs. Default: disabled. Recommended: enabled.",
+            Description =
+                "Sets SCOOP_ARIA2_ENABLED=true to enable parallel downloads via aria2 for faster Scoop package installs. Default: disabled. Recommended: enabled.",
             Tags = ["scoop", "parallel", "downloads", "aria2", "speed"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED", "true"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED", "true")],
         },
         new TweakDef
@@ -110,7 +100,8 @@ internal static class ScoopTools
             Category = "Scoop Tools",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the Scoop global apps install directory to C:\\ScoopGlobal. Keeps system programs organised. Default: %ProgramData%\\scoop.",
+            Description =
+                "Sets the Scoop global apps install directory to C:\\ScoopGlobal. Keeps system programs organised. Default: %ProgramData%\\scoop.",
             Tags = ["scoop", "global", "install-path", "directory"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
@@ -124,7 +115,8 @@ internal static class ScoopTools
             Category = "Scoop Tools",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the SCOOP_VIRUSTOTAL_API_KEY environment variable placeholder. Replace with your actual key for automatic malware scanning. Default: not set.",
+            Description =
+                "Sets the SCOOP_VIRUSTOTAL_API_KEY environment variable placeholder. Replace with your actual key for automatic malware scanning. Default: not set.",
             Tags = ["scoop", "virustotal", "security", "scanning"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY", "YOUR_API_KEY_HERE")],
@@ -194,9 +186,7 @@ internal static class ScoopTools
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall aria2"),
             DetectAction = () =>
             {
-                var scoopDir = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "scoop", "apps", "aria2");
+                var scoopDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "aria2");
                 return Directory.Exists(scoopDir);
             },
         },
@@ -212,7 +202,8 @@ internal static class ScoopTools
             Tags = ["scoop", "7zip", "archive", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install 7zip"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall 7zip"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "7zip")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "7zip")),
         },
         new TweakDef
         {
@@ -226,7 +217,8 @@ internal static class ScoopTools
             Tags = ["scoop", "bat", "cat", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install bat"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall bat"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "bat")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "bat")),
         },
         new TweakDef
         {
@@ -240,7 +232,8 @@ internal static class ScoopTools
             Tags = ["scoop", "btop", "monitor", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install btop"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall btop"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "btop")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "btop")),
         },
         new TweakDef
         {
@@ -254,7 +247,8 @@ internal static class ScoopTools
             Tags = ["scoop", "curl", "http", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install curl"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall curl"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "curl")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "curl")),
         },
         new TweakDef
         {
@@ -268,7 +262,8 @@ internal static class ScoopTools
             Tags = ["scoop", "delta", "diff", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install delta"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall delta"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "delta")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "delta")),
         },
         new TweakDef
         {
@@ -282,7 +277,8 @@ internal static class ScoopTools
             Tags = ["scoop", "duf", "disk", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install duf"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall duf"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "duf")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "duf")),
         },
         new TweakDef
         {
@@ -296,7 +292,8 @@ internal static class ScoopTools
             Tags = ["scoop", "dust", "disk-usage", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install dust"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall dust"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "dust")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "dust")),
         },
         new TweakDef
         {
@@ -310,7 +307,8 @@ internal static class ScoopTools
             Tags = ["scoop", "everything", "search", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install everything"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall everything"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "everything")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "everything")),
         },
         new TweakDef
         {
@@ -324,7 +322,8 @@ internal static class ScoopTools
             Tags = ["scoop", "fd", "find", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install fd"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall fd"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fd")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fd")),
         },
         new TweakDef
         {
@@ -338,7 +337,8 @@ internal static class ScoopTools
             Tags = ["scoop", "fzf", "fuzzy", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install fzf"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall fzf"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fzf")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fzf")),
         },
         new TweakDef
         {
@@ -352,7 +352,8 @@ internal static class ScoopTools
             Tags = ["scoop", "git", "vcs", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install git"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall git"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "git")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "git")),
         },
         new TweakDef
         {
@@ -366,7 +367,8 @@ internal static class ScoopTools
             Tags = ["scoop", "gsudo", "sudo", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gsudo"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gsudo"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gsudo")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gsudo")),
         },
         new TweakDef
         {
@@ -380,7 +382,8 @@ internal static class ScoopTools
             Tags = ["scoop", "hyperfine", "benchmark", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install hyperfine"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall hyperfine"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "hyperfine")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "hyperfine")),
         },
         new TweakDef
         {
@@ -394,7 +397,8 @@ internal static class ScoopTools
             Tags = ["scoop", "jq", "json", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install jq"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall jq"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "jq")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "jq")),
         },
         new TweakDef
         {
@@ -408,7 +412,8 @@ internal static class ScoopTools
             Tags = ["scoop", "lazygit", "git", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install lazygit"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall lazygit"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "lazygit")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "lazygit")),
         },
         new TweakDef
         {
@@ -422,7 +427,8 @@ internal static class ScoopTools
             Tags = ["scoop", "neovim", "editor", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install neovim"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall neovim"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "neovim")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "neovim")),
         },
         new TweakDef
         {
@@ -436,7 +442,8 @@ internal static class ScoopTools
             Tags = ["scoop", "nodejs", "javascript", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install nodejs"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall nodejs"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "nodejs")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "nodejs")),
         },
         new TweakDef
         {
@@ -450,7 +457,8 @@ internal static class ScoopTools
             Tags = ["scoop", "python", "interpreter", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install python"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall python"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "python")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "python")),
         },
         new TweakDef
         {
@@ -464,7 +472,8 @@ internal static class ScoopTools
             Tags = ["scoop", "ripgrep", "search", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install ripgrep"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall ripgrep"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "ripgrep")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "ripgrep")),
         },
         new TweakDef
         {
@@ -473,12 +482,27 @@ internal static class ScoopTools
             Category = "Scoop Tools",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Adds the Scoop global apps directory to the system PATH. Allows globally installed Scoop apps to be available to all users. Default: not in PATH.",
+            Description =
+                "Adds the Scoop global apps directory to the system PATH. Allows globally installed Scoop apps to be available to all users. Default: not in PATH.",
             Tags = ["scoop", "global", "path", "environment"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
-            ApplyOps = [RegOp.SetExpandString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "SCOOP_GLOBAL", @"%ProgramData%\scoop")],
+            ApplyOps =
+            [
+                RegOp.SetExpandString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "SCOOP_GLOBAL",
+                    @"%ProgramData%\scoop"
+                ),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "SCOOP_GLOBAL")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "SCOOP_GLOBAL", @"%ProgramData%\scoop")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "SCOOP_GLOBAL",
+                    @"%ProgramData%\scoop"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -492,7 +516,8 @@ internal static class ScoopTools
             Tags = ["scoop", "starship", "prompt", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install starship"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall starship"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "starship")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "starship")),
         },
         new TweakDef
         {
@@ -506,7 +531,8 @@ internal static class ScoopTools
             Tags = ["scoop", "tldr", "man", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tldr"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tldr"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tldr")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tldr")),
         },
         new TweakDef
         {
@@ -520,7 +546,8 @@ internal static class ScoopTools
             Tags = ["scoop", "wget", "download", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install wget"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall wget"),
-            DetectAction = () => Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "wget")),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "wget")),
         },
     ];
 }

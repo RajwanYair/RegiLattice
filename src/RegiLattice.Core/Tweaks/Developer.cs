@@ -25,8 +25,7 @@ internal static class Developer
             {
                 var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["behavior", "query", "disablelastaccess"]);
                 // Output: "DisableLastAccess = 1" when System Managed / User enabled
-                return stdout.Contains("= 1", StringComparison.Ordinal) ||
-                       stdout.Contains("= 3", StringComparison.Ordinal);
+                return stdout.Contains("= 1", StringComparison.Ordinal) || stdout.Contains("= 3", StringComparison.Ordinal);
             },
         },
         new TweakDef
@@ -39,9 +38,18 @@ internal static class Developer
             Description = "Increases the PoolUsageMaximum to 60% of RAM. Helps large Visual Studio solutions, Docker, and JetBrains IDEs.",
             Tags = ["developer", "memory", "performance", "ide"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60),
+            ],
         },
         new TweakDef
         {
@@ -51,19 +59,24 @@ internal static class Developer
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
-            Description = "Adds Windows Defender exclusions for common dev paths: C:\\repos, C:\\src, %USERPROFILE%\\source, and common IDE cache folders.",
+            Description =
+                "Adds Windows Defender exclusions for common dev paths: C:\\repos, C:\\src, %USERPROFILE%\\source, and common IDE cache folders.",
             Tags = ["developer", "defender", "performance", "build"],
             SideEffects = "Files in excluded paths won't be scanned by Windows Defender.",
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "foreach ($p in @('C:\\repos','C:\\src',\"$env:USERPROFILE\\source\",\"$env:USERPROFILE\\.nuget\",\"$env:USERPROFILE\\.dotnet\")) { " +
-                "Add-MpPreference -ExclusionPath $p -ErrorAction SilentlyContinue };" +
-                "foreach ($ext in @('.obj','.pdb','.dll','.exe','.nupkg')) { " +
-                "Add-MpPreference -ExclusionExtension $ext -ErrorAction SilentlyContinue }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "foreach ($p in @('C:\\repos','C:\\src',\"$env:USERPROFILE\\source\",\"$env:USERPROFILE\\.nuget\",\"$env:USERPROFILE\\.dotnet\")) { " +
-                "Remove-MpPreference -ExclusionPath $p -ErrorAction SilentlyContinue };" +
-                "foreach ($ext in @('.obj','.pdb','.dll','.exe','.nupkg')) { " +
-                "Remove-MpPreference -ExclusionExtension $ext -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "foreach ($p in @('C:\\repos','C:\\src',\"$env:USERPROFILE\\source\",\"$env:USERPROFILE\\.nuget\",\"$env:USERPROFILE\\.dotnet\")) { "
+                        + "Add-MpPreference -ExclusionPath $p -ErrorAction SilentlyContinue };"
+                        + "foreach ($ext in @('.obj','.pdb','.dll','.exe','.nupkg')) { "
+                        + "Add-MpPreference -ExclusionExtension $ext -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "foreach ($p in @('C:\\repos','C:\\src',\"$env:USERPROFILE\\source\",\"$env:USERPROFILE\\.nuget\",\"$env:USERPROFILE\\.dotnet\")) { "
+                        + "Remove-MpPreference -ExclusionPath $p -ErrorAction SilentlyContinue };"
+                        + "foreach ($ext in @('.obj','.pdb','.dll','.exe','.nupkg')) { "
+                        + "Remove-MpPreference -ExclusionExtension $ext -ErrorAction SilentlyContinue }"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-MpPreference).ExclusionPath -contains 'C:\\repos'");
@@ -150,14 +163,18 @@ internal static class Developer
             KindHint = TweakKind.PowerShell,
             Description = "Ensures %USERPROFILE%\\.dotnet\\tools is on the user PATH for running global .NET tools.",
             Tags = ["developer", "dotnet", "path", "tools"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "$toolsPath = Join-Path $env:USERPROFILE '.dotnet\\tools'; " +
-                "$current = [Environment]::GetEnvironmentVariable('PATH','User'); " +
-                "if ($current -notlike \"*$toolsPath*\") { [Environment]::SetEnvironmentVariable('PATH',\"$current;$toolsPath\",'User') }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "$toolsPath = Join-Path $env:USERPROFILE '.dotnet\\tools'; " +
-                "$current = [Environment]::GetEnvironmentVariable('PATH','User'); " +
-                "[Environment]::SetEnvironmentVariable('PATH', ($current -replace [regex]::Escape(\";$toolsPath\"),''),'User')"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$toolsPath = Join-Path $env:USERPROFILE '.dotnet\\tools'; "
+                        + "$current = [Environment]::GetEnvironmentVariable('PATH','User'); "
+                        + "if ($current -notlike \"*$toolsPath*\") { [Environment]::SetEnvironmentVariable('PATH',\"$current;$toolsPath\",'User') }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$toolsPath = Join-Path $env:USERPROFILE '.dotnet\\tools'; "
+                        + "$current = [Environment]::GetEnvironmentVariable('PATH','User'); "
+                        + "[Environment]::SetEnvironmentVariable('PATH', ($current -replace [regex]::Escape(\";$toolsPath\"),''),'User')"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell("[Environment]::GetEnvironmentVariable('PATH','User') -like '*\\.dotnet\\tools*'");
@@ -175,12 +192,16 @@ internal static class Developer
             Description = "Adds process exclusions for common build tools (MSBuild, dotnet, node, cargo, gcc) to speed up compilation.",
             Tags = ["developer", "defender", "performance", "build"],
             SideEffects = "Build tool processes won't be scanned in real-time.",
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "foreach ($p in @('MSBuild.exe','dotnet.exe','node.exe','npm.cmd','cargo.exe','rustc.exe','gcc.exe','cl.exe','link.exe','java.exe','javac.exe','python.exe')) { " +
-                "Add-MpPreference -ExclusionProcess $p -ErrorAction SilentlyContinue }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "foreach ($p in @('MSBuild.exe','dotnet.exe','node.exe','npm.cmd','cargo.exe','rustc.exe','gcc.exe','cl.exe','link.exe','java.exe','javac.exe','python.exe')) { " +
-                "Remove-MpPreference -ExclusionProcess $p -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "foreach ($p in @('MSBuild.exe','dotnet.exe','node.exe','npm.cmd','cargo.exe','rustc.exe','gcc.exe','cl.exe','link.exe','java.exe','javac.exe','python.exe')) { "
+                        + "Add-MpPreference -ExclusionProcess $p -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "foreach ($p in @('MSBuild.exe','dotnet.exe','node.exe','npm.cmd','cargo.exe','rustc.exe','gcc.exe','cl.exe','link.exe','java.exe','javac.exe','python.exe')) { "
+                        + "Remove-MpPreference -ExclusionProcess $p -ErrorAction SilentlyContinue }"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-MpPreference).ExclusionProcess -contains 'dotnet.exe'");
@@ -199,15 +220,30 @@ internal static class Developer
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                    "AllowDevelopmentWithoutDevLicense",
+                    1
+                ),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowAllTrustedApps", 1),
             ],
             RemoveOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                    "AllowDevelopmentWithoutDevLicense",
+                    0
+                ),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowAllTrustedApps", 0),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                    "AllowDevelopmentWithoutDevLicense",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -258,15 +294,19 @@ internal static class Developer
             KindHint = TweakKind.PowerShell,
             Description = "Installs the OpenSSH Server optional feature and starts the sshd service for remote access.",
             Tags = ["developer", "ssh", "remote", "server"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue; " +
-                "Set-Service -Name sshd -StartupType Automatic -ErrorAction SilentlyContinue; " +
-                "Start-Service sshd -ErrorAction SilentlyContinue; " +
-                "New-NetFirewallRule -Name 'OpenSSH-Server' -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22 -ErrorAction SilentlyContinue"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "Stop-Service sshd -Force -ErrorAction SilentlyContinue; " +
-                "Set-Service -Name sshd -StartupType Disabled -ErrorAction SilentlyContinue; " +
-                "Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue; "
+                        + "Set-Service -Name sshd -StartupType Automatic -ErrorAction SilentlyContinue; "
+                        + "Start-Service sshd -ErrorAction SilentlyContinue; "
+                        + "New-NetFirewallRule -Name 'OpenSSH-Server' -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22 -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service sshd -Force -ErrorAction SilentlyContinue; "
+                        + "Set-Service -Name sshd -StartupType Disabled -ErrorAction SilentlyContinue; "
+                        + "Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -ErrorAction SilentlyContinue"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service sshd -ErrorAction SilentlyContinue).Status -eq 'Running'");
@@ -319,9 +359,29 @@ internal static class Developer
             Description = "Increases the maximum number of open file handles. Helps Node.js, Java, and build systems with many files.",
             Tags = ["developer", "filesystem", "handles", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval", 60)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "RegistryLazyFlushInterval", 60)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager",
+                    "RegistryLazyFlushInterval",
+                    60
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager",
+                    "RegistryLazyFlushInterval"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager",
+                    "RegistryLazyFlushInterval",
+                    60
+                ),
+            ],
         },
     ];
 }

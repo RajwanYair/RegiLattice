@@ -82,8 +82,7 @@ internal static class PowerManagement
             },
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(powercfg /query scheme_current sub_processor CPMINCORES) -match '0x00000064'");
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(powercfg /query scheme_current sub_processor CPMINCORES) -match '0x00000064'");
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -111,8 +110,7 @@ internal static class PowerManagement
             },
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(powercfg /query scheme_current sub_processor PROCTHROTTLEMAX) -match '0x00000064'");
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(powercfg /query scheme_current sub_processor PROCTHROTTLEMAX) -match '0x00000064'");
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -200,7 +198,14 @@ internal static class PowerManagement
                 RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Power\PowerSettings\BD3B718A-0680-4D9D-8AB2-E1D2B4AC806D", "ACSettingIndex"),
                 RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Power\PowerSettings\BD3B718A-0680-4D9D-8AB2-E1D2B4AC806D", "DCSettingIndex"),
             ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Power\PowerSettings\BD3B718A-0680-4D9D-8AB2-E1D2B4AC806D", "ACSettingIndex", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SOFTWARE\Policies\Microsoft\Power\PowerSettings\BD3B718A-0680-4D9D-8AB2-E1D2B4AC806D",
+                    "ACSettingIndex",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {

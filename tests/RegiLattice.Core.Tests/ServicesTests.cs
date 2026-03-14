@@ -32,14 +32,26 @@ public sealed class AppConfigTests
         var path = Path.Combine(dir, "config.json");
         try
         {
-            var cfg = new AppConfig { Theme = "nord", MaxWorkers = 16, ForceCorp = true };
+            var cfg = new AppConfig
+            {
+                Theme = "nord",
+                MaxWorkers = 16,
+                ForceCorp = true,
+            };
             cfg.Save(path);
             var loaded = AppConfig.Load(path);
             Assert.Equal("nord", loaded.Theme);
             Assert.Equal(16, loaded.MaxWorkers);
             Assert.True(loaded.ForceCorp);
         }
-        finally { try { Directory.Delete(dir, true); } catch { } }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
     }
 
     [Fact]
@@ -114,7 +126,10 @@ public sealed class RatingsTests
             Assert.Equal(4, r.Stars);
             Assert.Equal("good", r.Note);
         }
-        finally { Ratings.RemoveRating(id); }
+        finally
+        {
+            Ratings.RemoveRating(id);
+        }
     }
 
     [Fact]
@@ -151,9 +166,14 @@ public sealed class RatingsTests
             var top = Ratings.TopRated(100);
             var idx1 = top.ToList().FindIndex(t => t.Id == id1);
             var idx2 = top.ToList().FindIndex(t => t.Id == id2);
-            if (idx1 >= 0 && idx2 >= 0) Assert.True(idx2 < idx1);
+            if (idx1 >= 0 && idx2 >= 0)
+                Assert.True(idx2 < idx1);
         }
-        finally { Ratings.RemoveRating(id1); Ratings.RemoveRating(id2); }
+        finally
+        {
+            Ratings.RemoveRating(id1);
+            Ratings.RemoveRating(id2);
+        }
     }
 }
 
@@ -203,16 +223,23 @@ public sealed class ElevationTests
     [Fact]
     public void RunElevated_DisallowedCommand_Throws()
     {
-        Assert.Throws<UnauthorizedAccessException>(() =>
-            Elevation.RunElevated("arbitrary-command.exe", []));
+        Assert.Throws<UnauthorizedAccessException>(() => Elevation.RunElevated("arbitrary-command.exe", []));
     }
 
     [Fact]
     public void RunElevated_AllowedCommand_DoesNotThrowAuth()
     {
         // 'reg' is in allowlist — it will try to run but won't throw UnauthorizedAccessException
-        try { Elevation.RunElevated("reg", ["query", @"HKCU\Software"]); }
-        catch (UnauthorizedAccessException) { Assert.Fail("Should not throw for allowed command"); }
-        catch { /* other exceptions OK (e.g. process issues) */ }
+        try
+        {
+            Elevation.RunElevated("reg", ["query", @"HKCU\Software"]);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Assert.Fail("Should not throw for allowed command");
+        }
+        catch
+        { /* other exceptions OK (e.g. process issues) */
+        }
     }
 }

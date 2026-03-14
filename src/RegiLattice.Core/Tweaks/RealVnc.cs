@@ -38,14 +38,8 @@ internal static class RealVnc
             Description = "Sets VNC authentication to VncAuth + System authentication.",
             Tags = ["vnc", "security", "authentication"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SingleSignOn"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SingleSignOn")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth")],
         },
         new TweakDef
@@ -58,14 +52,8 @@ internal static class RealVnc
             Description = "Disconnects idle VNC sessions after 1 hour (3600s).",
             Tags = ["vnc", "security", "timeout"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600)],
         },
         new TweakDef
@@ -78,14 +66,8 @@ internal static class RealVnc
             Description = "Blanks the local monitor during an active VNC session for privacy.",
             Tags = ["vnc", "security", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "BlankScreen", "WhenConnected"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "BlankScreen", "Never"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "BlankScreen", "WhenConnected")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "BlankScreen", "Never")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "BlankScreen", "WhenConnected")],
         },
         new TweakDef
@@ -121,17 +103,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables RealVNC automatic update checks. Updates must be applied manually. Default: Enabled. Recommended: Disabled for managed deployments.",
+            Description =
+                "Disables RealVNC automatic update checks. Updates must be applied manually. Default: Enabled. Recommended: Disabled for managed deployments.",
             Tags = ["realvnc", "vnc", "update"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "AutoUpdate", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "AutoUpdate", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "AutoUpdate", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "AutoUpdate", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "AutoUpdate", 0)],
         },
         new TweakDef
@@ -141,17 +118,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets VNC encoding to ZRLE for best compression ratio over slow networks. Reduces bandwidth usage. Default: Auto. Recommended: ZRLE for WAN connections.",
+            Description =
+                "Sets VNC encoding to ZRLE for best compression ratio over slow networks. Reduces bandwidth usage. Default: Auto. Recommended: ZRLE for WAN connections.",
             Tags = ["realvnc", "vnc", "encoding", "performance", "network"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "PreferredEncoding", "ZRLE"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "PreferredEncoding"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "PreferredEncoding", "ZRLE")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "PreferredEncoding")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "PreferredEncoding", "ZRLE")],
         },
         new TweakDef
@@ -161,17 +133,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets VNC idle session timeout to 30 minutes (1800 seconds). Automatically disconnects idle VNC sessions for security. Default: no timeout. Recommended: 1800.",
+            Description =
+                "Sets VNC idle session timeout to 30 minutes (1800 seconds). Automatically disconnects idle VNC sessions for security. Default: no timeout. Recommended: 1800.",
             Tags = ["vnc", "timeout", "idle", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 1800),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 1800)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 1800)],
         },
         new TweakDef
@@ -181,17 +148,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables clipboard sharing between VNC server and clients via DWORD value. Prevents data leakage through clipboard transfer. Default: enabled. Recommended: disabled for DLP.",
+            Description =
+                "Disables clipboard sharing between VNC server and clients via DWORD value. Prevents data leakage through clipboard transfer. Default: enabled. Recommended: disabled for DLP.",
             Tags = ["vnc", "clipboard", "dlp", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisableClipboard", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisableClipboard"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisableClipboard", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisableClipboard")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisableClipboard", 1)],
         },
         new TweakDef
@@ -201,7 +163,8 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Forces VNC encryption to AlwaysOn via group policy key and sets EncryptionForced flag. Ensures connections are always encrypted regardless of server config. Default: PreferOn. Recommended: AlwaysOn.",
+            Description =
+                "Forces VNC encryption to AlwaysOn via group policy key and sets EncryptionForced flag. Ensures connections are always encrypted regardless of server config. Default: PreferOn. Recommended: AlwaysOn.",
             Tags = ["vnc", "encryption", "policy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
             ApplyOps =
@@ -223,7 +186,8 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables file transfer capability in VNC sessions. Prevents users from transferring files via the VNC connection. Default: enabled. Recommended: disabled for DLP.",
+            Description =
+                "Disables file transfer capability in VNC sessions. Prevents users from transferring files via the VNC connection. Default: enabled. Recommended: disabled for DLP.",
             Tags = ["vnc", "file-transfer", "dlp", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
             ApplyOps =
@@ -245,17 +209,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets VNC authentication to SystemAuth (Windows credentials). Uses OS-level authentication instead of VNC-specific password. Default: VncAuth. Recommended: SystemAuth for enterprise.",
+            Description =
+                "Sets VNC authentication to SystemAuth (Windows credentials). Uses OS-level authentication instead of VNC-specific password. Default: VncAuth. Recommended: SystemAuth for enterprise.",
             Tags = ["vnc", "auth", "system", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SingleSignOn"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SingleSignOn")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SystemAuth")],
         },
         new TweakDef
@@ -265,7 +224,8 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables QueryConnect — shows a dialog on the physical machine asking the logged-in user to accept or reject each incoming VNC connection. Default: disabled. Recommended: enabled for attended machines.",
+            Description =
+                "Enables QueryConnect — shows a dialog on the physical machine asking the logged-in user to accept or reject each incoming VNC connection. Default: disabled. Recommended: enabled for attended machines.",
             Tags = ["vnc", "security", "query", "connect", "prompt"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
             ApplyOps =
@@ -287,17 +247,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets DisconnectAction=Lock so the screen locks when a VNC session cleanly disconnects. Prevents leaving an unlocked desktop after remote access. Default: Nothing. Recommended: Lock.",
+            Description =
+                "Sets DisconnectAction=Lock so the screen locks when a VNC session cleanly disconnects. Prevents leaving an unlocked desktop after remote access. Default: Nothing. Recommended: Lock.",
             Tags = ["vnc", "security", "disconnect", "lock", "session"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisconnectAction", "Lock"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisconnectAction", "Nothing"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisconnectAction", "Lock")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisconnectAction", "Nothing")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "DisconnectAction", "Lock")],
         },
         new TweakDef
@@ -307,17 +262,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets LostConnAction=Lock so the screen locks when a VNC connection is unexpectedly terminated (network drop, client crash). Default: Nothing. Recommended: Lock.",
+            Description =
+                "Sets LostConnAction=Lock so the screen locks when a VNC connection is unexpectedly terminated (network drop, client crash). Default: Nothing. Recommended: Lock.",
             Tags = ["vnc", "security", "lost-connection", "lock", "network"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "LostConnAction", "Lock"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "LostConnAction", "Nothing"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "LostConnAction", "Lock")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "LostConnAction", "Nothing")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "LostConnAction", "Lock")],
         },
         new TweakDef
@@ -327,17 +277,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Configures RealVNC Viewer to open remote sessions in fullscreen mode automatically, maximising the workspace for remote control. Default: windowed. Recommended: fullscreen for power users.",
+            Description =
+                "Configures RealVNC Viewer to open remote sessions in fullscreen mode automatically, maximising the workspace for remote control. Default: windowed. Recommended: fullscreen for power users.",
             Tags = ["vnc", "viewer", "fullscreen", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer", "FullScreen", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer", "FullScreen"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer", "FullScreen", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer", "FullScreen")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RealVNC\vncviewer", "FullScreen", 1)],
         },
         new TweakDef
@@ -347,17 +292,12 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables desktop sharing so only one VNC viewer can connect at a time (exclusive access). Prevents multiple simultaneous viewers from watching a session. Default: shared. Recommended: exclusive.",
+            Description =
+                "Disables desktop sharing so only one VNC viewer can connect at a time (exclusive access). Prevents multiple simultaneous viewers from watching a session. Default: shared. Recommended: exclusive.",
             Tags = ["vnc", "security", "share", "exclusive", "access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShareDesktop", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShareDesktop"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShareDesktop", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShareDesktop")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShareDesktop", 0)],
         },
         new TweakDef
@@ -437,7 +377,8 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Hides the VNC Server system tray icon. Keeps VNC running without a visible indicator. Useful for kiosk or embedded scenarios. Default: shown.",
+            Description =
+                "Hides the VNC Server system tray icon. Keeps VNC running without a visible indicator. Useful for kiosk or embedded scenarios. Default: shown.",
             Tags = ["vnc", "tray", "icon", "hide"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "ShowTrayIcon", 0)],
@@ -465,7 +406,8 @@ internal static class RealVnc
             Category = "RealVNC",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables VNC Viewer from storing recent connection history. Enhances privacy by not recording server addresses. Default: stored.",
+            Description =
+                "Disables VNC Viewer from storing recent connection history. Enhances privacy by not recording server addresses. Default: stored.",
             Tags = ["vnc", "viewer", "recent", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\RealVNC\vncviewer", "RememberConnections", 0)],

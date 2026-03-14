@@ -116,8 +116,7 @@ public sealed class RegistrySessionTests
     public void Execute_CheckOp_Throws()
     {
         var s = new RegistrySession(dryRun: true);
-        Assert.Throws<InvalidOperationException>(() =>
-            s.Execute([RegOp.CheckDword(@"HKCU\Software\Test", "V", 1)]));
+        Assert.Throws<InvalidOperationException>(() => s.Execute([RegOp.CheckDword(@"HKCU\Software\Test", "V", 1)]));
     }
 
     [Fact]
@@ -131,8 +130,7 @@ public sealed class RegistrySessionTests
     public void Evaluate_SetOp_Throws()
     {
         var s = new RegistrySession(dryRun: true);
-        Assert.Throws<InvalidOperationException>(() =>
-            s.Evaluate([RegOp.SetDword(@"HKCU\Software\Test", "V", 1)]));
+        Assert.Throws<InvalidOperationException>(() => s.Evaluate([RegOp.SetDword(@"HKCU\Software\Test", "V", 1)]));
     }
 
     // ── Log ─────────────────────────────────────────────────────────────

@@ -6,20 +6,16 @@ namespace RegiLattice.GUI.Tests;
 public sealed class ThemeTests
 {
     [Fact]
-    public void Bg_IsNotNull()
-        => Assert.NotEqual(default, AppTheme.Bg);
+    public void Bg_IsNotNull() => Assert.NotEqual(default, AppTheme.Bg);
 
     [Fact]
-    public void Fg_IsNotNull()
-        => Assert.NotEqual(default, AppTheme.Fg);
+    public void Fg_IsNotNull() => Assert.NotEqual(default, AppTheme.Fg);
 
     [Fact]
-    public void Accent_IsNotNull()
-        => Assert.NotEqual(default, AppTheme.Accent);
+    public void Accent_IsNotNull() => Assert.NotEqual(default, AppTheme.Accent);
 
     [Fact]
-    public void Regular_FontIsSegoeUI()
-        => Assert.Equal("Segoe UI", AppTheme.Regular.FontFamily.Name);
+    public void Regular_FontIsSegoeUI() => Assert.Equal("Segoe UI", AppTheme.Regular.FontFamily.Name);
 
     [Fact]
     public void AllColors_AreDark()
@@ -89,20 +85,16 @@ public sealed class ThemeTests
     }
 
     [Fact]
-    public void SmallBold_FontExists()
-        => Assert.Equal("Segoe UI", AppTheme.SmallBold.FontFamily.Name);
+    public void SmallBold_FontExists() => Assert.Equal("Segoe UI", AppTheme.SmallBold.FontFamily.Name);
 
     [Fact]
-    public void AccentHover_HasLowAlpha()
-        => Assert.Equal(40, AppTheme.AccentHover.A);
+    public void AccentHover_HasLowAlpha() => Assert.Equal(40, AppTheme.AccentHover.A);
 
     [Fact]
-    public void Border_HasLowAlpha()
-        => Assert.Equal(50, AppTheme.Border.A);
+    public void Border_HasLowAlpha() => Assert.Equal(50, AppTheme.Border.A);
 
     [Fact]
-    public void Separator_HasLowAlpha()
-        => Assert.Equal(30, AppTheme.Separator.A);
+    public void Separator_HasLowAlpha() => Assert.Equal(30, AppTheme.Separator.A);
 
     [Fact]
     public void RoundedRectPath_CreatesFigure()

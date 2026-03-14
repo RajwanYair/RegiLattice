@@ -8,8 +8,11 @@ namespace RegiLattice.Core;
 
 public sealed class TweakRating
 {
-    [JsonPropertyName("stars")] public int Stars { get; set; }
-    [JsonPropertyName("note")] public string Note { get; set; } = "";
+    [JsonPropertyName("stars")]
+    public int Stars { get; set; }
+
+    [JsonPropertyName("note")]
+    public string Note { get; set; } = "";
 }
 
 public static class Ratings
@@ -19,7 +22,8 @@ public static class Ratings
 
     public static void Rate(string tweakId, int stars, string note = "")
     {
-        if (stars < 1 || stars > 5) throw new ArgumentOutOfRangeException(nameof(stars), "Stars must be 1-5.");
+        if (stars < 1 || stars > 5)
+            throw new ArgumentOutOfRangeException(nameof(stars), "Stars must be 1-5.");
         lock (Lock)
         {
             var all = AllRatings();
@@ -28,20 +32,23 @@ public static class Ratings
         }
     }
 
-    public static TweakRating? GetRating(string tweakId)
-        => AllRatings().GetValueOrDefault(tweakId);
+    public static TweakRating? GetRating(string tweakId) => AllRatings().GetValueOrDefault(tweakId);
 
     public static Dictionary<string, TweakRating> AllRatings()
     {
         lock (Lock)
         {
-            if (!File.Exists(FilePath)) return [];
+            if (!File.Exists(FilePath))
+                return [];
             try
             {
                 var json = File.ReadAllText(FilePath);
                 return JsonSerializer.Deserialize<Dictionary<string, TweakRating>>(json) ?? [];
             }
-            catch { return []; }
+            catch
+            {
+                return [];
+            }
         }
     }
 
@@ -55,12 +62,8 @@ public static class Ratings
         }
     }
 
-    public static IReadOnlyList<(string Id, TweakRating Rating)> TopRated(int n = 10)
-        => AllRatings()
-            .OrderByDescending(kv => kv.Value.Stars)
-            .Take(n)
-            .Select(kv => (kv.Key, kv.Value))
-            .ToList();
+    public static IReadOnlyList<(string Id, TweakRating Rating)> TopRated(int n = 10) =>
+        AllRatings().OrderByDescending(kv => kv.Value.Stars).Take(n).Select(kv => (kv.Key, kv.Value)).ToList();
 
     public static double? AverageRating()
     {

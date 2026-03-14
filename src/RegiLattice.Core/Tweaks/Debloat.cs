@@ -26,19 +26,22 @@ internal static class Debloat
             Description = "Removes common pre-installed Store apps (Clipchamp, News, Weather, Solitaire, etc.) for all users.",
             Tags = ["debloat", "apps", "store", "bloatware"],
             SideEffects = "Apps can be reinstalled from the Microsoft Store.",
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "$bloat = @('Clipchamp.Clipchamp','Microsoft.BingNews','Microsoft.BingWeather','Microsoft.GamingApp'," +
-                "'Microsoft.GetHelp','Microsoft.Getstarted','Microsoft.MicrosoftSolitaireCollection','Microsoft.People'," +
-                "'Microsoft.PowerAutomateDesktop','Microsoft.Todos','Microsoft.WindowsFeedbackHub','Microsoft.WindowsMaps'," +
-                "'Microsoft.ZuneMusic','Microsoft.ZuneVideo','MicrosoftTeams','Microsoft.MicrosoftOfficeHub'," +
-                "'Microsoft.549981C3F5F10','Microsoft.YourPhone','Microsoft.WindowsAlarms','Microsoft.WindowsSoundRecorder'); " +
-                "foreach ($app in $bloat) { Get-AppxPackage -AllUsers -Name $app -ErrorAction SilentlyContinue | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue; " +
-                "Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object DisplayName -eq $app | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$bloat = @('Clipchamp.Clipchamp','Microsoft.BingNews','Microsoft.BingWeather','Microsoft.GamingApp',"
+                        + "'Microsoft.GetHelp','Microsoft.Getstarted','Microsoft.MicrosoftSolitaireCollection','Microsoft.People',"
+                        + "'Microsoft.PowerAutomateDesktop','Microsoft.Todos','Microsoft.WindowsFeedbackHub','Microsoft.WindowsMaps',"
+                        + "'Microsoft.ZuneMusic','Microsoft.ZuneVideo','MicrosoftTeams','Microsoft.MicrosoftOfficeHub',"
+                        + "'Microsoft.549981C3F5F10','Microsoft.YourPhone','Microsoft.WindowsAlarms','Microsoft.WindowsSoundRecorder'); "
+                        + "foreach ($app in $bloat) { Get-AppxPackage -AllUsers -Name $app -ErrorAction SilentlyContinue | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue; "
+                        + "Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object DisplayName -eq $app | Remove-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue }"
+                ),
             RemoveAction = _ => { }, // Cannot auto-reinstall; user must use Store
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-AppxPackage -AllUsers -Name 'Clipchamp.Clipchamp' -ErrorAction SilentlyContinue) -eq $null");
+                    "(Get-AppxPackage -AllUsers -Name 'Clipchamp.Clipchamp' -ErrorAction SilentlyContinue) -eq $null"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -227,19 +230,24 @@ internal static class Debloat
             KindHint = TweakKind.PowerShell,
             Description = "Removes rarely-used optional features: Internet Explorer, Windows Media Player, Steps Recorder, and WordPad.",
             Tags = ["debloat", "features", "optional", "cleanup"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "$features = @('Browser.InternetExplorer~~~~0.0.11.0','Media.WindowsMediaPlayer~~~~0.0.12.0'," +
-                "'App.StepsRecorder~~~~0.0.1.0','Microsoft.Windows.WordPad~~~~0.0.1.0'); " +
-                "foreach ($f in $features) { " +
-                "Remove-WindowsCapability -Online -Name $f -ErrorAction SilentlyContinue }"),
-            RemoveAction = _ => ShellRunner.RunPowerShell(
-                "$features = @('Browser.InternetExplorer~~~~0.0.11.0','Media.WindowsMediaPlayer~~~~0.0.12.0'); " +
-                "foreach ($f in $features) { " +
-                "Add-WindowsCapability -Online -Name $f -ErrorAction SilentlyContinue }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$features = @('Browser.InternetExplorer~~~~0.0.11.0','Media.WindowsMediaPlayer~~~~0.0.12.0',"
+                        + "'App.StepsRecorder~~~~0.0.1.0','Microsoft.Windows.WordPad~~~~0.0.1.0'); "
+                        + "foreach ($f in $features) { "
+                        + "Remove-WindowsCapability -Online -Name $f -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "$features = @('Browser.InternetExplorer~~~~0.0.11.0','Media.WindowsMediaPlayer~~~~0.0.12.0'); "
+                        + "foreach ($f in $features) { "
+                        + "Add-WindowsCapability -Online -Name $f -ErrorAction SilentlyContinue }"
+                ),
             DetectAction = () =>
             {
                 var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-WindowsCapability -Online -Name 'Browser.InternetExplorer*' -ErrorAction SilentlyContinue).State -eq 'NotPresent'");
+                    "(Get-WindowsCapability -Online -Name 'Browser.InternetExplorer*' -ErrorAction SilentlyContinue).State -eq 'NotPresent'"
+                );
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -267,9 +275,11 @@ internal static class Debloat
             KindHint = TweakKind.PowerShell,
             Description = "Removes all pinned tiles from the Start menu for a clean layout (Windows 10).",
             Tags = ["debloat", "start-menu", "tiles", "clean"],
-            ApplyAction = _ => ShellRunner.RunPowerShell(
-                "(New-Object -ComObject Shell.Application).Namespace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | " +
-                "ForEach-Object { $_.Verbs() | Where-Object Name -Match 'Un.*pin' | ForEach-Object { $_.DoIt() } }"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "(New-Object -ComObject Shell.Application).Namespace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | "
+                        + "ForEach-Object { $_.Verbs() | Where-Object Name -Match 'Un.*pin' | ForEach-Object { $_.DoIt() } }"
+                ),
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
@@ -284,8 +294,14 @@ internal static class Debloat
             Tags = ["debloat", "setup", "oobe", "nag"],
             RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement"],
             ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled", 0),
+            ],
         },
         new TweakDef
         {

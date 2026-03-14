@@ -38,14 +38,8 @@ internal static class Adobe
             Description = "Disables Adobe Creative Cloud file synchronization.",
             Tags = ["adobe", "cloud", "sync"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome", "SyncDisabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome", "SyncDisabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome", "SyncDisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome", "SyncDisabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXWelcome", "SyncDisabled", 1)],
         },
         new TweakDef
@@ -58,14 +52,8 @@ internal static class Adobe
             Description = "Disables the Adobe Genuine Software integrity check.",
             Tags = ["adobe", "genuine", "licensing"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware", "AdobeGenuineEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware", "AdobeGenuineEnabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware", "AdobeGenuineEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware", "AdobeGenuineEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeGenuineSoftware", "AdobeGenuineEnabled", 0)],
         },
         new TweakDef
@@ -78,14 +66,8 @@ internal static class Adobe
             Description = "Disables Adobe crash reporting.",
             Tags = ["adobe", "telemetry", "crash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess", "CrashReporting", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess", "CrashReporting"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess", "CrashReporting", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess", "CrashReporting")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXProcess", "CrashReporting", 0)],
         },
         new TweakDef
@@ -98,14 +80,8 @@ internal static class Adobe
             Description = "Disables the Adobe home screen shown on application launch.",
             Tags = ["adobe", "ux", "home"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC", "ShowHomeScreen", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC", "ShowHomeScreen", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC", "ShowHomeScreen", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC", "ShowHomeScreen", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Adobe\CommonFiles\UsageCC", "ShowHomeScreen", 0)],
         },
         new TweakDef
@@ -118,14 +94,8 @@ internal static class Adobe
             Description = "Disables Adobe Creative Cloud font synchronization.",
             Tags = ["adobe", "fonts", "sync"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop", "DisableFontSync", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop", "DisableFontSync"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop", "DisableFontSync", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop", "DisableFontSync")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\CCXDesktop", "DisableFontSync", 1)],
         },
         new TweakDef
@@ -135,7 +105,8 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Adobe Acrobat Reader automatic updater. Updates must be applied manually. Default: Enabled. Recommended: Disabled for managed environments.",
+            Description =
+                "Disables Adobe Acrobat Reader automatic updater. Updates must be applied manually. Default: Enabled. Recommended: Disabled for managed environments.",
             Tags = ["adobe", "updater", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\ARM\1\ARM"],
             ApplyOps =
@@ -159,17 +130,12 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Forces Adobe Reader to reuse existing instances instead of spawning new processes. Reduces memory footprint. Default: New instance. Recommended: Reuse.",
+            Description =
+                "Forces Adobe Reader to reuse existing instances instead of spawning new processes. Reduces memory footprint. Default: New instance. Recommended: Reuse.",
             Tags = ["adobe", "memory", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "bReuseAcrobatInstance", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "bReuseAcrobatInstance"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "bReuseAcrobatInstance", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "bReuseAcrobatInstance")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "bReuseAcrobatInstance", 1)],
         },
         new TweakDef
@@ -203,7 +169,8 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Adobe Creative Cloud file and settings sync. Reduces background network activity and cloud dependency. Default: Enabled. Recommended: Disabled on managed machines.",
+            Description =
+                "Disables Adobe Creative Cloud file and settings sync. Reduces background network activity and cloud dependency. Default: Enabled. Recommended: Disabled on managed machines.",
             Tags = ["adobe", "cloud", "sync", "creative-cloud"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Adobe\CreativeCloud"],
             ApplyOps =
@@ -216,7 +183,10 @@ internal static class Adobe
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore"),
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bUpdatesHidden"),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
+            ],
         },
         new TweakDef
         {
@@ -225,7 +195,8 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Adobe Document Cloud file store integration in Acrobat Reader. Prevents cloud save prompts. Default: enabled. Recommended: disabled.",
+            Description =
+                "Disables Adobe Document Cloud file store integration in Acrobat Reader. Prevents cloud save prompts. Default: enabled. Recommended: disabled.",
             Tags = ["adobe", "acrobat", "cloud", "document-cloud"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"],
             ApplyOps =
@@ -236,7 +207,10 @@ internal static class Adobe
             [
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore"),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
+            ],
         },
         new TweakDef
         {
@@ -245,17 +219,12 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the default PDF page layout to single page view. Overrides continuous scroll as the default. Default: continuous. Recommended: single page.",
+            Description =
+                "Sets the default PDF page layout to single page view. Overrides continuous scroll as the default. Default: continuous. Recommended: single page.",
             Tags = ["adobe", "pdf", "view", "layout", "single-page"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode", 0)],
         },
         new TweakDef
@@ -265,18 +234,33 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the What's New promotional screen shown after Adobe Reader updates. Different from the start screen. Default: shown. Recommended: hidden.",
+            Description =
+                "Disables the What's New promotional screen shown after Adobe Reader updates. Different from the start screen. Default: shown. Recommended: hidden.",
             Tags = ["adobe", "welcome", "whats-new", "ux"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"],
             ApplyOps =
             [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen", 0),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen",
+                    0
+                ),
             ],
             RemoveOps =
             [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen"),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen"
+                ),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -285,12 +269,22 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Adobe Reader cloud document synchronization. Prevents files from being synced to Adobe Document Cloud. Default: enabled.",
+            Description =
+                "Disables Adobe Reader cloud document synchronization. Prevents files from being synced to Adobe Document Cloud. Default: enabled.",
             Tags = ["adobe", "cloud", "sync", "reader"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bAdobeSendPluginToggle", 0),
+            ],
         },
         new TweakDef
         {
@@ -302,9 +296,29 @@ internal static class Adobe
             Description = "Disables Adobe Reader integration with SharePoint and Office 365. Default: enabled.",
             Tags = ["adobe", "sharepoint", "office365", "integration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint", "bDisableSharePointFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint", "bDisableSharePointFeatures")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint", "bDisableSharePointFeatures", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint",
+                    "bDisableSharePointFeatures",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint",
+                    "bDisableSharePointFeatures"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cSharePoint",
+                    "bDisableSharePointFeatures",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -316,9 +330,29 @@ internal static class Adobe
             Description = "Disables Adobe Reader webmail integration for sending files via web-based email. Default: enabled.",
             Tags = ["adobe", "webmail", "email", "integration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles", "bDisableWebmail", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles", "bDisableWebmail")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles", "bDisableWebmail", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles",
+                    "bDisableWebmail",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles",
+                    "bDisableWebmail"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWebmailProfiles",
+                    "bDisableWebmail",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -355,12 +389,22 @@ internal static class Adobe
             Category = "Adobe",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Adobe Creative Cloud online services and sync features. Prevents background cloud communication. Default: enabled.",
+            Description =
+                "Disables Adobe Creative Cloud online services and sync features. Prevents background cloud communication. Default: enabled.",
             Tags = ["adobe", "cloud", "sync", "disable"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
+            ],
         },
         new TweakDef
         {
@@ -414,9 +458,29 @@ internal static class Adobe
             Description = "Disables the Adobe Reader/Acrobat welcome screen and home view. Opens directly to recent files. Default: shown.",
             Tags = ["adobe", "welcome", "home", "startup"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen", "bShowWelcomeScreen", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
+                    "bShowWelcomeScreen",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -442,9 +506,29 @@ internal static class Adobe
             Description = "Disables Adobe Chromium Embedded Framework subprocess. Prevents embedded browser for cloud services. Default: enabled.",
             Tags = ["adobe", "cef", "chromium", "subprocess"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices", "bToggleAdobeDocumentServices", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices", "bToggleAdobeDocumentServices")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices", "bToggleAdobeDocumentServices", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices",
+                    "bToggleAdobeDocumentServices",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices",
+                    "bToggleAdobeDocumentServices"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cServices",
+                    "bToggleAdobeDocumentServices",
+                    1
+                ),
+            ],
         },
     ];
 }

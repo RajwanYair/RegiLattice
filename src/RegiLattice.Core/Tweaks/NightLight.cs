@@ -16,14 +16,8 @@ internal static class NightLight
             Description = "Enables HDR video playback on HDR-capable displays. Requires hardware support. Default: Disabled.",
             Tags = ["night-light", "hdr", "display", "video"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDR", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDR", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDR", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDR", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDR", 1)],
         },
         new TweakDef
@@ -36,14 +30,8 @@ internal static class NightLight
             Description = "Enables automatic brightness adjustment for HDR content. Optimises SDR-to-HDR content mapping.",
             Tags = ["night-light", "hdr", "brightness", "auto"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "AutoHDR", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "AutoHDR", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "AutoHDR", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "AutoHDR", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "AutoHDR", 1)],
         },
         new TweakDef
@@ -53,17 +41,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Content Adaptive Brightness Control (CABC) which adjusts screen brightness based on content. Can cause distracting brightness shifts. Recommended: Disabled for content creation.",
+            Description =
+                "Disables Content Adaptive Brightness Control (CABC) which adjusts screen brightness based on content. Can cause distracting brightness shifts. Recommended: Disabled for content creation.",
             Tags = ["night-light", "brightness", "cabc", "display"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "CABCEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "CABCEnabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "CABCEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "CABCEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "CABCEnabled", 0)],
         },
         new TweakDef
@@ -73,17 +56,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the adaptive colour feature that shifts display colours based on ambient light. Provides consistent colour output.",
+            Description =
+                "Disables the adaptive colour feature that shifts display colours based on ambient light. Provides consistent colour output.",
             Tags = ["night-light", "colour", "adaptive", "calibration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "AdaptiveColorEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "AdaptiveColorEnabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "AdaptiveColorEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "AdaptiveColorEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "AdaptiveColorEnabled", 0)],
         },
         new TweakDef
@@ -96,14 +74,8 @@ internal static class NightLight
             Description = "Enables Wide Colour Gamut support for richer colours on compatible displays. Default: Disabled.",
             Tags = ["night-light", "wcg", "colour", "gamut", "display"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableWCG", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableWCG", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableWCG", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableWCG", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableWCG", 1)],
         },
         new TweakDef
@@ -124,7 +96,10 @@ internal static class NightLight
             [
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForStreamingVideo", 1),
             ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForStreamingVideo", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForStreamingVideo", 0),
+            ],
         },
         new TweakDef
         {
@@ -138,13 +113,21 @@ internal static class NightLight
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
             ApplyOps =
             [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", "SwapEffectUpgradeEnable=1;"),
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
+                    "DirectXUserGlobalSettings",
+                    "SwapEffectUpgradeEnable=1;"
+                ),
             ],
-            RemoveOps =
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
+            DetectOps =
             [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings"),
+                RegOp.CheckString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
+                    "DirectXUserGlobalSettings",
+                    "SwapEffectUpgradeEnable=1;"
+                ),
             ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", "SwapEffectUpgradeEnable=1;")],
         },
         new TweakDef
         {
@@ -156,14 +139,8 @@ internal static class NightLight
             Description = "Prevents users from changing display settings via Group Policy. Useful for kiosk/shared machines.",
             Tags = ["night-light", "display", "policy", "lock"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display", "DisableDisplaySettings", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display", "DisableDisplaySettings"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display", "DisableDisplaySettings", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display", "DisableDisplaySettings")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display", "DisableDisplaySettings", 1)],
         },
         new TweakDef
@@ -176,14 +153,8 @@ internal static class NightLight
             Description = "Sets the default colour profile to standard sRGB IEC61966-2.1. Ensures consistent colour across applications.",
             Tags = ["night-light", "colour", "srgb", "profile", "calibration"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile", "sRGB IEC61966-2.1"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile"),
-            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile", "sRGB IEC61966-2.1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICM", "ICMProfile", "sRGB IEC61966-2.1")],
         },
         new TweakDef
@@ -196,14 +167,8 @@ internal static class NightLight
             Description = "Disables the Desktop Window Manager HDR compositor via policy. Force SDR mode even on HDR displays.",
             Tags = ["night-light", "hdr", "dwm", "compositor", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR"),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR", 1)],
         },
         new TweakDef
@@ -213,17 +178,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables ClearType/anti-aliased font rendering. Reverts to standard aliased fonts. Some users prefer sharper pixel-perfect text. Default: ClearType enabled (value 2).",
+            Description =
+                "Disables ClearType/anti-aliased font rendering. Reverts to standard aliased fonts. Some users prefer sharper pixel-perfect text. Default: ClearType enabled (value 2).",
             Tags = ["night-light", "display", "cleartype", "fonts", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 2),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 0)],
         },
         new TweakDef
@@ -233,17 +193,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets the video colour profile to Vivid mode (UseHDR=2). Increases saturation for SDR content on HDR displays. Default: Off.",
+            Description =
+                "Sets the video colour profile to Vivid mode (UseHDR=2). Increases saturation for SDR content on HDR displays. Default: Off.",
             Tags = ["night-light", "hdr", "vivid", "colour", "display"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 2),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 2)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "UseHDR", 2)],
         },
         new TweakDef
@@ -253,17 +208,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables automatic ICC colour profile activation by Windows Colour Management. Useful when custom calibration profiles cause unintended colour shifts. Default: Enabled.",
+            Description =
+                "Disables automatic ICC colour profile activation by Windows Colour Management. Useful when custom calibration profiles cause unintended colour shifts. Default: Enabled.",
             Tags = ["night-light", "icc", "colour", "calibration", "display"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 0)],
         },
         new TweakDef
@@ -273,17 +223,12 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Hardware-Accelerated GPU Scheduler (HWSCH). Can resolve flickering or latency issues on some GPU models. Default: Enabled (HwSchMode=2). Recommended: Disable if experiencing display artefacts.",
+            Description =
+                "Disables the Hardware-Accelerated GPU Scheduler (HWSCH). Can resolve flickering or latency issues on some GPU models. Default: Enabled (HwSchMode=2). Recommended: Disable if experiencing display artefacts.",
             Tags = ["night-light", "gpu", "scheduler", "hwsch", "latency", "display"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
         },
         new TweakDef
@@ -295,10 +240,16 @@ internal static class NightLight
             CorpSafe = true,
             Description = "Disables Windows adaptive color temperature adjustment. Keeps display color consistent. Default: varies.",
             Tags = ["nightlight", "adaptive", "color", "temperature"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings",
+            ],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
+            ],
         },
         new TweakDef
         {
@@ -311,8 +262,14 @@ internal static class NightLight
             Tags = ["nightlight", "dark-mode", "theme", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
+            ],
         },
         new TweakDef
         {
@@ -335,12 +292,16 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables transparency/blur effects in Windows (taskbar, start menu, action center). Saves GPU resources. Default: enabled.",
+            Description =
+                "Disables transparency/blur effects in Windows (taskbar, start menu, action center). Saves GPU resources. Default: enabled.",
             Tags = ["nightlight", "transparency", "blur", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
+            ],
         },
         new TweakDef
         {
@@ -363,7 +324,8 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables dynamic refresh rate switching. Display stays at a fixed refresh rate instead of auto-adjusting. Avoids flickering issues. Default: dynamic.",
+            Description =
+                "Disables dynamic refresh rate switching. Display stays at a fixed refresh rate instead of auto-adjusting. Avoids flickering issues. Default: dynamic.",
             Tags = ["display", "refresh-rate", "dynamic", "disable"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", 0)],
@@ -377,12 +339,36 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the automatic Night Light schedule. Night Light must be toggled manually. Default: scheduled based on sunset/sunrise.",
+            Description =
+                "Disables the automatic Night Light schedule. Night Light must be toggled manually. Default: scheduled based on sunset/sunrise.",
             Tags = ["night-light", "schedule", "disable", "manual"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings", "ScheduleEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings", "ScheduleEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings", "ScheduleEnabled", 0)],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings",
+                    "ScheduleEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings",
+                    "ScheduleEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings",
+                    "ScheduleEnabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -393,10 +379,33 @@ internal static class NightLight
             CorpSafe = true,
             Description = "Enables the Windows Night Light blue light filter. Reduces blue light emission to reduce eye strain. Default: disabled.",
             Tags = ["night-light", "blue-light", "enable", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate", "Enabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate", "Enabled", 1)],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate",
+                    "Enabled",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate",
+                    "Enabled",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -405,7 +414,8 @@ internal static class NightLight
             Category = "Night Light & Display",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Keeps HDR enabled when running on battery power. Prevents auto-disabling HDR to save power. Default: HDR disabled on battery.",
+            Description =
+                "Keeps HDR enabled when running on battery power. Prevents auto-disabling HDR to save power. Default: HDR disabled on battery.",
             Tags = ["display", "hdr", "battery", "power"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AutoRotation"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AutoRotation", "Enable", 0)],
