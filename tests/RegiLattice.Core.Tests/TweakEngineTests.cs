@@ -877,6 +877,11 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("harden-restrict-remote-sam")]
     [InlineData("harden-disable-remote-uac-filter")]
     [InlineData("harden-enable-smb-encryption")]
+    [InlineData("harden-disable-smb1")]
+    [InlineData("harden-enable-secure-boot-check")]
+    [InlineData("harden-enable-audit-logon-events")]
+    [InlineData("harden-set-password-policy")]
+    [InlineData("harden-enable-firewall-all-profiles")]
     public void RegisterBuiltins_HardeningTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -894,6 +899,13 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("dev-git-lfs-install")]
     [InlineData("dev-env-add-dotnet-tools")]
     [InlineData("dev-disable-defender-realtime-build")]
+    [InlineData("dev-enable-developer-mode-full")]
+    [InlineData("dev-increase-irp-stack-size")]
+    [InlineData("dev-enable-wsl2")]
+    [InlineData("dev-enable-openssh-server")]
+    [InlineData("dev-set-execution-policy-unrestricted")]
+    [InlineData("dev-disable-ntfs-8dot3-names")]
+    [InlineData("dev-increase-file-handle-limit")]
     public void RegisterBuiltins_DeveloperTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -923,6 +935,10 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("Hardening")]
     [InlineData("Developer")]
     [InlineData("Memory")]
+    [InlineData("Disk Cleanup")]
+    [InlineData("Debloat")]
+    [InlineData("Network Optimization")]
+    [InlineData("Power Management")]
     public void RegisterBuiltins_NewCategoryExists(string category)
     {
         Assert.Contains(category, _engine.Categories());
@@ -941,6 +957,107 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     public void TweakKind_CommandLineTweak_IsSystemCommand()
     {
         var tweak = _engine.GetTweak("cmd-disable-hyper-v-hypervisor");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
+
+    // ── Disk Cleanup Tweaks ─────────────────────────────────────────────
+    [Theory]
+    [InlineData("cleanup-disable-thumbnail-cache")]
+    [InlineData("cleanup-disable-delivery-optimisation")]
+    [InlineData("cleanup-run-disk-cleanup-silent")]
+    [InlineData("cleanup-clear-windows-temp")]
+    [InlineData("cleanup-clear-windows-update-cache")]
+    [InlineData("cleanup-enable-storage-sense")]
+    [InlineData("cleanup-disable-hibernation")]
+    [InlineData("cleanup-compact-os")]
+    [InlineData("cleanup-disable-reserved-storage")]
+    public void RegisterBuiltins_DiskCleanupTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Disk Cleanup", tweak.Category);
+    }
+
+    // ── Debloat Tweaks ──────────────────────────────────────────────────
+    [Theory]
+    [InlineData("debloat-remove-preinstalled-apps")]
+    [InlineData("debloat-disable-suggested-apps")]
+    [InlineData("debloat-disable-auto-app-install")]
+    [InlineData("debloat-disable-consumer-features")]
+    [InlineData("debloat-disable-xbox-game-bar")]
+    [InlineData("debloat-remove-optional-features")]
+    [InlineData("debloat-disable-start-web-search")]
+    [InlineData("debloat-disable-cloud-content")]
+    public void RegisterBuiltins_DebloatTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Debloat", tweak.Category);
+    }
+
+    // ── Network Optimization Tweaks ─────────────────────────────────────
+    [Theory]
+    [InlineData("netopt-disable-nagle-algorithm")]
+    [InlineData("netopt-increase-tcp-window-size")]
+    [InlineData("netopt-disable-network-throttling")]
+    [InlineData("netopt-set-dns-cloudflare")]
+    [InlineData("netopt-set-dns-google")]
+    [InlineData("netopt-disable-ipv6")]
+    [InlineData("netopt-disable-qos-packet-scheduler")]
+    [InlineData("netopt-enable-dns-cache-boost")]
+    public void RegisterBuiltins_NetworkOptimizationTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Network Optimization", tweak.Category);
+    }
+
+    // ── Power Management Tweaks ─────────────────────────────────────────
+    [Theory]
+    [InlineData("pwrmgmt-disable-fast-startup")]
+    [InlineData("pwrmgmt-disable-connected-standby")]
+    [InlineData("pwrmgmt-set-high-performance-plan")]
+    [InlineData("pwrmgmt-disable-cpu-parking")]
+    [InlineData("pwrmgmt-disable-usb-selective-suspend")]
+    [InlineData("pwrmgmt-disable-wake-timers")]
+    [InlineData("pwrmgmt-set-lid-close-nothing")]
+    public void RegisterBuiltins_PowerManagementTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Power Management", tweak.Category);
+    }
+
+    // ── TweakKind detection for new modules ─────────────────────────────
+    [Fact]
+    public void TweakKind_DiskCleanupSystemCommand_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("cleanup-disable-hibernation");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_DebloatPowerShell_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("debloat-remove-preinstalled-apps");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.PowerShell, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_NetworkOptPowerShell_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("netopt-set-dns-cloudflare");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.PowerShell, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_PowerMgmtSystemCommand_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("pwrmgmt-set-high-performance-plan");
         Assert.NotNull(tweak);
         Assert.Equal(TweakKind.SystemCommand, tweak.Kind);
     }
