@@ -896,6 +896,66 @@ public partial class MainForm : Form
         SetStatus($"Exported {tweaks.Count} ID(s) to JSON.");
     }
 
+    private void OnExportReg()
+    {
+        var tweaks = GetCheckedTweaks();
+        if (tweaks.Count == 0)
+        {
+            MessageBox.Show("No tweaks selected.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        using var dlg = new SaveFileDialog
+        {
+            Title = "Export as Windows Registry (.reg) file",
+            Filter = "Registry file|*.reg",
+            FileName = "regilattice-tweaks.reg",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Windows Registry Editor Version 5.00");
+        sb.AppendLine($"; RegiLattice — exported tweaks ({tweaks.Count} selected)");
+        sb.AppendLine($"; Generated: {DateTime.Now:yyyy-MM-dd HH:mm}");
+        sb.AppendLine();
+
+        foreach (var td in tweaks)
+        {
+            sb.AppendLine($"; {td.Label} ({td.Id})");
+            foreach (var op in td.ApplyOps)
+            {
+                var regPath = op
+                    .Path.Replace("HKLM\\", "HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase)
+                    .Replace("HKCU\\", "HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase);
+                sb.AppendLine($"[{regPath}]");
+                sb.AppendLine(FormatRegOp(op));
+            }
+            sb.AppendLine();
+        }
+
+        File.WriteAllText(dlg.FileName, sb.ToString(), Encoding.Unicode);
+        AppendLog($"Exported {tweaks.Count} tweaks to {dlg.FileName}");
+        SetStatus($"Exported {tweaks.Count} tweak(s) to .REG file.");
+    }
+
+    private static string FormatRegOp(RegOp op)
+    {
+        var quotedName = string.IsNullOrEmpty(op.Name) ? "@" : $"\"{op.Name}\"";
+        if (op.Kind == RegOpKind.DeleteValue)
+            return $"{quotedName}=-";
+        if (op.Kind != RegOpKind.SetValue)
+            return $"; {quotedName}=(unsupported op {op.Kind})";
+
+        return op.ValueKind switch
+        {
+            Microsoft.Win32.RegistryValueKind.DWord when op.Value is int dw => $"{quotedName}=dword:{dw:x8}",
+            Microsoft.Win32.RegistryValueKind.String when op.Value is string s => $"{quotedName}=\"{s}\"",
+            Microsoft.Win32.RegistryValueKind.QWord when op.Value is long qw =>
+                $"{quotedName}=hex(b):{string.Join(",", BitConverter.GetBytes(qw).Select(b => b.ToString("x2")))}",
+            _ => $"; {quotedName}=(type {op.ValueKind})",
+        };
+    }
+
     private void OnImportJson()
     {
         using var dlg = new OpenFileDialog { Title = "Import tweak IDs from JSON", Filter = "JSON file|*.json" };

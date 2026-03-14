@@ -68,13 +68,14 @@ partial class MainForm
         // ── MenuStrip ──────────────────────────────────────────────────────
         var mnuExportPs1 = new ToolStripMenuItem("Export as PowerShell (.ps1)...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.E };
         var mnuExportJson = new ToolStripMenuItem("Export selected IDs as JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.J };
+        var mnuExportReg = new ToolStripMenuItem("Export as .REG file...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.R };
         var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I };
         var mnuExit = new ToolStripMenuItem("Exit");
 
         var mnuFile = new ToolStripMenuItem("&File");
         mnuFile.DropDownItems.AddRange(new ToolStripItem[]
         {
-            mnuExportPs1, mnuExportJson, mnuImportJson,
+            mnuExportPs1, mnuExportJson, mnuExportReg, mnuImportJson,
             new ToolStripSeparator(),
             mnuExit,
         });
@@ -121,6 +122,7 @@ partial class MainForm
         // Wire menu events
         mnuExportPs1.Click += (_, _) => OnExportPs1();
         mnuExportJson.Click += (_, _) => OnExportJson();
+        mnuExportReg.Click += (_, _) => OnExportReg();
         mnuImportJson.Click += (_, _) => OnImportJson();
         mnuExit.Click += (_, _) => Close();
         mnuScoopMgr.Click += (_, _) => OnOpenScoopManager();
