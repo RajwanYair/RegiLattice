@@ -943,6 +943,10 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("App Compatibility")]
     [InlineData("User Account")]
     [InlineData("Browser Common")]
+    [InlineData("Windows Recall")]
+    [InlineData("Proxy & VPN")]
+    [InlineData("Event Logging")]
+    [InlineData("System Restore")]
     public void RegisterBuiltins_NewCategoryExists(string category)
     {
         Assert.Contains(category, _engine.Categories());
@@ -1158,5 +1162,103 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var tweak = _engine.GetTweak("uac-disable-dimming");
         Assert.NotNull(tweak);
         Assert.Equal(TweakKind.GroupPolicy, tweak.Kind);
+    }
+
+    // ── Windows Recall Tweaks ───────────────────────────────────────────
+    [Theory]
+    [InlineData("recall-disable-recall")]
+    [InlineData("recall-disable-saving-snapshots")]
+    [InlineData("recall-disable-ai-suggestions")]
+    [InlineData("recall-disable-semantic-indexing")]
+    [InlineData("recall-disable-cocreator")]
+    [InlineData("recall-disable-image-creator")]
+    [InlineData("recall-disable-generative-fill")]
+    [InlineData("recall-disable-ai-in-notepad")]
+    [InlineData("recall-disable-web-content-eval")]
+    [InlineData("recall-disable-cross-device-resume")]
+    [InlineData("recall-disable-ai-search-highlights")]
+    [InlineData("recall-disable-inking-and-typing-personalization")]
+    public void RegisterBuiltins_WindowsRecallTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Windows Recall", tweak.Category);
+    }
+
+    // ── Proxy & VPN Tweaks ──────────────────────────────────────────────
+    [Theory]
+    [InlineData("proxy-disable-auto-detect")]
+    [InlineData("proxy-disable-proxy-server")]
+    [InlineData("proxy-disable-ncsi-active-probing")]
+    [InlineData("proxy-disable-ipv6-transition")]
+    [InlineData("proxy-disable-smart-multi-homed")]
+    [InlineData("proxy-disable-llmnr")]
+    [InlineData("proxy-disable-netbios-over-tcpip")]
+    [InlineData("proxy-set-winhttp-timeout")]
+    [InlineData("proxy-disable-insecure-fallback")]
+    [InlineData("proxy-disable-web-proxy-auto-config")]
+    [InlineData("proxy-enable-dns-over-https")]
+    [InlineData("proxy-disable-wifi-sense")]
+    public void RegisterBuiltins_ProxyVpnTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Proxy & VPN", tweak.Category);
+    }
+
+    // ── Event Logging Tweaks ────────────────────────────────────────────
+    [Theory]
+    [InlineData("evtlog-increase-system-log-size")]
+    [InlineData("evtlog-increase-security-log-size")]
+    [InlineData("evtlog-increase-application-log-size")]
+    [InlineData("evtlog-enable-powershell-script-block-logging")]
+    [InlineData("evtlog-enable-powershell-module-logging")]
+    [InlineData("evtlog-enable-process-creation-audit")]
+    [InlineData("evtlog-set-crash-dump-mini")]
+    [InlineData("evtlog-disable-auto-reboot-on-crash")]
+    [InlineData("evtlog-enable-verbose-boot-status")]
+    [InlineData("evtlog-enable-shutdown-reason")]
+    [InlineData("evtlog-log-retention-overwrite")]
+    public void RegisterBuiltins_EventLoggingTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Event Logging", tweak.Category);
+    }
+
+    // ── System Restore Tweaks ───────────────────────────────────────────
+    [Theory]
+    [InlineData("restore-disable-system-restore")]
+    [InlineData("restore-disable-config-change-restore")]
+    [InlineData("restore-set-max-frequency-daily")]
+    [InlineData("restore-disable-vss-service")]
+    [InlineData("restore-disable-previous-versions")]
+    [InlineData("restore-enable-scheduled-points")]
+    [InlineData("restore-disable-wer-queue")]
+    [InlineData("restore-disable-wer-archive")]
+    [InlineData("restore-set-wer-consent-send-always")]
+    [InlineData("restore-disable-memory-dump")]
+    public void RegisterBuiltins_SystemRestoreTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("System Restore", tweak.Category);
+    }
+
+    // ── TweakKind detection for wave 4 ──────────────────────────────────
+    [Fact]
+    public void TweakKind_RecallGroupPolicy_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("recall-disable-recall");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.GroupPolicy, tweak.Kind);
+    }
+
+    [Fact]
+    public void TweakKind_ProxyRegistry_IsCorrect()
+    {
+        var tweak = _engine.GetTweak("proxy-disable-auto-detect");
+        Assert.NotNull(tweak);
+        Assert.Equal(TweakKind.Registry, tweak.Kind);
     }
 }
