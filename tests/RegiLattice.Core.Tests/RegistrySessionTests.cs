@@ -160,4 +160,106 @@ public sealed class RegistrySessionTests
         Assert.True(new RegistrySession(dryRun: true).DryRun);
         Assert.False(new RegistrySession(dryRun: false).DryRun);
     }
+
+    // ── Read operations (safe, uses real HKCU) ──────────────────────────
+
+    [Fact]
+    public void ReadDword_ExistingValue_ReturnsInt()
+    {
+        // Windows always has HKCU\Console\ScreenBufferSize
+        var s = new RegistrySession(dryRun: false);
+        var val = s.ReadValue(@"HKEY_CURRENT_USER\Console", "ScreenBufferSize");
+        Assert.NotNull(val);
+    }
+
+    [Fact]
+    public void ReadString_NonexistentValue_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var val = s.ReadString(@"HKEY_CURRENT_USER\Software", "RegiLatticeNonExistent12345");
+        Assert.Null(val);
+    }
+
+    [Fact]
+    public void KeyExists_KnownKey_ReturnsTrue()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.True(s.KeyExists(@"HKEY_CURRENT_USER\Software"));
+    }
+
+    [Fact]
+    public void KeyExists_UnknownKey_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.False(s.KeyExists(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_Key_12345"));
+    }
+
+    [Fact]
+    public void ValueExists_KnownValue_ReturnsTrue()
+    {
+        var s = new RegistrySession(dryRun: false);
+        // Console key always has values
+        Assert.True(s.ValueExists(@"HKEY_CURRENT_USER\Console", "ScreenBufferSize"));
+    }
+
+    [Fact]
+    public void ValueExists_UnknownValue_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.False(s.ValueExists(@"HKEY_CURRENT_USER\Software", "RegiLatticeNonExistent12345"));
+    }
+
+    [Fact]
+    public void ListSubKeys_Software_ReturnsNonEmpty()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var keys = s.ListSubKeys(@"HKEY_CURRENT_USER\Software");
+        Assert.NotEmpty(keys);
+    }
+
+    [Fact]
+    public void ListValueNames_Console_ReturnsNonEmpty()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var names = s.ListValueNames(@"HKEY_CURRENT_USER\Console");
+        Assert.NotEmpty(names);
+    }
+
+    [Fact]
+    public void ListSubKeys_NonexistentKey_ReturnsEmpty()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var keys = s.ListSubKeys(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_Key_12345");
+        Assert.Empty(keys);
+    }
+
+    // ── ParsePath edge cases ────────────────────────────────────────────
+
+    [Fact]
+    public void ParsePath_AbbreviatedHklm_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKLM\SOFTWARE\Microsoft");
+        Assert.Equal(Microsoft.Win32.Registry.LocalMachine, root);
+        Assert.Equal(@"SOFTWARE\Microsoft", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_AbbreviatedHkcu_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKCU\Software\Test");
+        Assert.Equal(Microsoft.Win32.Registry.CurrentUser, root);
+        Assert.Equal(@"Software\Test", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_SingleSegmentNoBackslash_Throws()
+    {
+        Assert.Throws<ArgumentException>(() => RegistrySession.ParsePath("NoBackslash"));
+    }
+
+    [Fact]
+    public void ParsePath_UnsupportedHivePrefix_Throws()
+    {
+        Assert.Throws<ArgumentException>(() => RegistrySession.ParsePath(@"HKZZ\Software\Test"));
+    }
 }

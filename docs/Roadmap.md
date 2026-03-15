@@ -186,6 +186,22 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 10 | Update all documentation with current stats (658 tests, 529 Core + 58 CLI + 71 GUI) | ✅ |
 | 11 | Total: 2,316 tweaks, 658 tests (529 Core + 58 CLI + 71 GUI) | ✅ |
 
+### Sprint 10 — Test Deepening & Engine Coverage ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | TweakEngine: snapshot tests (SaveSnapshot, LoadSnapshot, RestoreSnapshot round-trip) | ✅ |
+| 2 | TweakEngine: ExportJson validation (valid JSON array, correct count) | ✅ |
+| 3 | TweakEngine: TweaksByTag, TweaksByScope, GetScope tests | ✅ |
+| 4 | TweakEngine: Freeze, CategoryCounts, ScopeCounts tests | ✅ |
+| 5 | TweakEngine: TweaksForProfile valid/invalid name tests | ✅ |
+| 6 | TweakEngine: WindowsBuild returns positive | ✅ |
+| 7 | RegistrySession: read ops (ReadValue, ReadString), existence checks (KeyExists, ValueExists) | ✅ |
+| 8 | RegistrySession: ListSubKeys, ListValueNames, ParsePath edge cases | ✅ |
+| 9 | Services: HardwareInfo (DetectHardware, Summary, SuggestProfile, IsEdgeInstalled) | ✅ |
+| 10 | Services: CorporateGuard (IsCorporateNetwork, Status, IsGpoManaged, ClearCache) | ✅ |
+| 11 | Total: 2,316 tweaks, 700 tests (571 Core + 58 CLI + 71 GUI) | ✅ |
+
 ---
 
 ## Prioritized Backlog

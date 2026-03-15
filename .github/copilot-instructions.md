@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 658 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 700 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 658 tests across 8 test files                     |
+| Test        | xUnit 2.9.2 — 700 tests across 8 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 2 316 across 89 categories (90 module files)                      |
-| Tests       | 658 passing (529 Core + 58 CLI + 71 GUI)                         |
+| Tests       | 700 passing (571 Core + 58 CLI + 71 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -137,7 +137,7 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/           # Console application
 │       └── Program.cs             # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 529 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 571 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs

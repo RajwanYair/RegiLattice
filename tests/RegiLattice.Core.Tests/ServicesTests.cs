@@ -294,3 +294,83 @@ public sealed class ElevationTests
         }
     }
 }
+
+/// <summary>Tests for HardwareInfo service.</summary>
+public sealed class HardwareInfoTests
+{
+    [Fact]
+    public void DetectHardware_ReturnsNonNull()
+    {
+        var info = HardwareInfo.DetectHardware();
+        Assert.NotNull(info);
+    }
+
+    [Fact]
+    public void Summary_ReturnsNonEmptyString()
+    {
+        var summary = HardwareInfo.Summary();
+        Assert.NotNull(summary);
+        Assert.NotEmpty(summary);
+    }
+
+    [Fact]
+    public void SuggestProfile_ReturnsValidProfile()
+    {
+        string profile = HardwareInfo.SuggestProfile();
+        Assert.NotNull(profile);
+        Assert.Contains(profile, new[] { "business", "gaming", "privacy", "minimal", "server" });
+    }
+
+    [Fact]
+    public void IsEdgeInstalled_ReturnsBool()
+    {
+        bool result = HardwareInfo.IsEdgeInstalled();
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void DetectHardware_HasCpuAndMemory()
+    {
+        var hw = HardwareInfo.DetectHardware();
+        Assert.NotNull(hw.Cpu);
+        Assert.NotNull(hw.Memory);
+        Assert.True(hw.Memory.TotalMb > 0, "Expected positive RAM");
+        Assert.NotEmpty(hw.Cpu.Name);
+    }
+}
+
+/// <summary>Tests for CorporateGuard service.</summary>
+public sealed class CorporateGuardTests
+{
+    [Fact]
+    public void IsCorporateNetwork_ReturnsBool()
+    {
+        // Should not throw — returns true/false
+        bool result = CorporateGuard.IsCorporateNetwork();
+        // Just verifying it runs without exception
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void Status_ReturnsTuple()
+    {
+        var (isCorp, reason) = CorporateGuard.Status();
+        Assert.IsType<bool>(isCorp);
+        Assert.NotNull(reason);
+    }
+
+    [Fact]
+    public void IsGpoManaged_ReturnsBool()
+    {
+        bool result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Policies\Microsoft\Windows"]);
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void ClearCache_DoesNotThrow()
+    {
+        CorporateGuard.ClearCache();
+        // Second call should also work
+        CorporateGuard.ClearCache();
+    }
+}

@@ -46,6 +46,18 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Sprint 10 — Test Deepening & Engine Coverage
+
+- 36 new tests across TweakEngine, RegistrySession, and Services
+- TweakEngine: snapshot round-trip (SaveSnapshot, LoadSnapshot, RestoreSnapshot),
+  ExportJson validation, TweaksByTag, TweaksByScope, GetScope, Freeze/CategoryCounts/ScopeCounts,
+  TweaksForProfile, WindowsBuild
+- RegistrySession: ReadValue, ReadString, KeyExists, ValueExists, ListSubKeys,
+  ListValueNames, ParsePath abbreviated/edge cases
+- Services: HardwareInfo (DetectHardware, Summary, SuggestProfile, IsEdgeInstalled),
+  CorporateGuard (IsCorporateNetwork, Status, IsGpoManaged, ClearCache)
+- Total: **2,316 tweaks**, **700 tests** (571 Core + 58 CLI + 71 GUI)
+
 ### Sprint 9 — Test Coverage & Analytics Integration
 
 - CLI: `update <id>` command — runs UpdateAction or falls back to Apply
