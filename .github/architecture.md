@@ -1,7 +1,7 @@
 # RegiLattice — Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2025-07-21 (v3.1.5, 1 981 tweaks, 72 categories, 203 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 301 tweaks, 89 categories, 556 tests).
 > C# 13 / .NET 10.0-windows (x64).
 
 ---

@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2025-07-21 (v3.1.5, C# 13 / .NET 10.0-windows, 1 981 tweaks, 72 categories)
+> Last updated: 2025-07-22 (v3.2.0, C# 13 / .NET 10.0-windows, 2 301 tweaks, 89 categories)
 
 ---
 
@@ -210,7 +210,7 @@ All references to the GitHub account must use `RajwanYair`:
 
 ## Version & Metadata
 
-- Version lives in `.csproj` files — `<Version>3.1.5</Version>`
+- Version lives in `.csproj` files — `<Version>3.2.0</Version>`
 - Do not duplicate version strings — single source of truth per project
 - GitHub URLs: `https://github.com/RajwanYair/RegiLattice`
 

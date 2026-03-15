@@ -4,6 +4,46 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.2.0] — 2025-07-22
+
+### Added
+
+- **Windows Health & Maintenance manager** — 19 system health commands
+  (DISM, SFC, disk cleanup, network reset, chkdsk, power reports) with
+  full dialog UI, admin badge, progress bar, and per-command log
+- **320 new tweaks** across expanded modules, bringing total to **2 301 tweaks**
+  across **89 categories**:
+  - 8 modules expanded to ~20 tweaks each: EventLogging, SsdOptimization,
+    AppCompatibility, BrowserCommon, Security, UserAccount, SystemRestore,
+    ScheduledTaskTweaks
+  - 6 first-wave modules (57 tweaks): CommandLine, PowerShell, Hardening,
+    Developer, MemoryOptimization, ScheduledTaskTweaks
+  - 4 second-wave modules + expanded Developer/Hardening (+71 tweaks)
+  - Wave 3: SsdOptimization, AppCompatibility, UserAccount, BrowserCommon
+  - Wave 4: WindowsRecall, ProxyVpn, EventLogging, SystemRestore
+  - MemoryOptimization 6→15, PowerShellTweaks 9→15
+- **RegistryHives.cs** constant strings for common registry paths
+- **77 new expansion tests** — total now **556 tests** (435 Core + 52 CLI + 69 GUI)
+- **AppIcons.WindowsHealthIcon** (green shield with white cross)
+- **Windows Health** menu item in Tools menu
+
+### Fixed
+
+- **Duplicate tweak ID crash** — `evtlog-enable-powershell-module-logging`
+  appeared at lines 80 and 302 in EventLogging.cs; renamed second to
+  `evtlog-enable-powershell-transcription`
+- **3 duplicate sec- IDs** between Security.cs and Defender.cs: renamed to
+  `sec-enforce-lsa-ppl`, `sec-block-wdigest-caching`, `sec-enforce-sehop`
+- **Test hangs** — added `tests/.runsettings` with `MaxCpuCount=1`,
+  capped `maxParallelThreads` to 4 in all xunit.runner.json
+
+### Changed
+
+- Performance optimizations: tag index, search, HardwareInfo parallelization,
+  Analytics caching, MainForm filter dedup, UpdateCounters single-pass
+- Updated all documentation with current statistics (2 301 tweaks, 89 categories,
+  556 tests)
+
 ## [Unreleased]
 
 ### Added
