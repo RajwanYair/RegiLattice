@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.0, 2 301 tweaks, 89 categories, 556 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 301 tweaks, 89 categories, 622 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 203 tests across 7 test files                     |
+| Test        | xUnit 2.9.2 — 622 tests across 8 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 1 981 across 72 categories                                       |
-| Tests       | 203 passing (112 Core + 52 CLI + 39 GUI)                         |
+| Tweaks      | 2 301 across 89 categories                                       |
+| Tests       | 622 passing (499 Core + 52 CLI + 71 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -113,13 +113,18 @@ RegiLattice.sln
 │   │   │   ├── CorporateGuard.cs    # Corporate network detection (P/Invoke + WMI)
 │   │   │   ├── Elevation.cs         # UAC elevation helpers
 │   │   │   ├── HardwareInfo.cs      # Hardware detection + profile suggestion
-│   │   │   ├── Locale.cs            # i18n string table
+│   │   │   ├── Locale.cs            # i18n string table (English + German)
 │   │   │   └── Ratings.cs           # Tweak rating system (1-5 stars)
-│   │   └── Tweaks/                  # 71 category modules, 1 981 tweaks total
+│   │   ├── Plugins/                 # Tweak Pack system (JSON marketplace)
+│   │   │   ├── PackDef.cs           # Pack metadata record
+│   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
+│   │   │   ├── PackManager.cs       # Install, uninstall, update, marketplace
+│   │   │   └── PackIndex.cs         # Remote marketplace index model
+│   │   └── Tweaks/                  # 89 category modules, 2 301 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
-│   │       ├── ...                  # 68 more
+│   │       ├── ...                  # 86 more
 │   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/            # WinForms application
 │   │   ├── Program.cs              # Entry point
@@ -132,14 +137,15 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/           # Console application
 │       └── Program.cs             # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 112 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 499 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
-│   │   └── ServicesTests.cs
+│   │   ├── ServicesTests.cs
+│   │   └── PluginTests.cs          # Pack system + locale tests
 │   ├── RegiLattice.CLI.Tests/     # 52 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/    # 39 xUnit tests
+│   └── RegiLattice.GUI.Tests/    # 71 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
 └── archive/python/               # Archived Python v1.x codebase
@@ -250,6 +256,7 @@ Override: `--force` CLI flag or GUI "Force" checkbox.
 ### GUI Details
 
 - 4 colour themes: Catppuccin Mocha (default), Catppuccin Latte, Nord, Dracula — switchable at runtime
+- System theme auto-detection (follows Windows dark/light mode on startup)
 - Collapsible category sections with tweak counts
 - Scope badges: USER (green) / MACHINE (blue) / BOTH (yellow)
 - Search bar + status filters + scope filters
@@ -258,6 +265,8 @@ Override: `--force` CLI flag or GUI "Force" checkbox.
 - Package manager dialogs (Scoop, pip, PowerShell modules)
 - About dialog with hardware info
 - Double-buffered rendering for smooth scrolling
+- Minimize to system tray with context menu
+- Percentage progress bar for batch operations
 
 ## CLI Commands (25+)
 
@@ -342,9 +351,10 @@ Canonical category slugs:
 - `tests/RegiLattice.Core.Tests/TweakEngineTests.cs` — engine registration, lookup, search, profiles, batch ops
 - `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing
 - `tests/RegiLattice.Core.Tests/ServicesTests.cs` — Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+- `tests/RegiLattice.Core.Tests/PluginTests.cs` — PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
 - `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
-- `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes
-- `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation
+- `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes, system theme detection
+- `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation, tool version checking
 
 ## Adding a New Tweak — Checklist
 
@@ -365,18 +375,22 @@ Canonical category slugs:
 
 | File / Namespace | Purpose | Key Exports |
 | --- | --- | --- |
-| `TweakEngine.cs` | Central engine | `Register`, `AllTweaks`, `Categories`, `Search`, `Filter`, `Apply`, `StatusMap`, `Profiles` |
+| `TweakEngine.cs` | Central engine | `Register`, `AllTweaks`, `Categories`, `Search`, `Filter`, `Apply`, `StatusMap`, `Profiles`, `Freeze` |
 | `TweakDef.cs` | Tweak model | `TweakDef`, `RegOp`, `TweakScope`, `TweakResult`, `RegOpKind` |
 | `ProfileDef.cs` | Profile model | `ProfileDef` (Name, Description, ApplyCategories, SkipCategories) |
 | `ProfileDefinitions.cs` | 5 profiles | `All` static list |
 | `RegistrySession.cs` | Registry wrapper | `SetDword`, `ReadDword`, `Execute`, `Evaluate`, `Backup`, `DryRun` |
+| `PackDef.cs` | Pack model | `PackDef` record (Name, Version, Author, TweakCount, Tags, Sha256) |
+| `PackLoader.cs` | Pack loader | `LoadFromJson`, `ValidatePackJson`, `ComputeSha256` |
+| `PackManager.cs` | Pack manager | `InstallPackAsync`, `UninstallPack`, `InstalledPacks`, `CheckUpdatesAsync` |
+| `PackIndex.cs` | Marketplace index | `FromJson`, `ToJson`, `Packs` |
 | `CorporateGuard.cs` | Corp detection | `IsCorporateNetwork()`, `Status()`, `IsGpoManaged()` |
 | `Elevation.cs` | UAC helpers | `IsAdmin()`, `RequestElevation()` |
 | `HardwareInfo.cs` | Hardware detection | `Detect()`, `Summary()`, `SuggestProfile()` |
 | `Analytics.cs` | Usage analytics | `RecordApply()`, `RecordRemove()`, `GetStats()` |
 | `AppConfig.cs` | Configuration | `Load()`, `ForceCorpGuard`, `Theme`, `Locale` |
-| `Locale.cs` | i18n | `Translate()`, `SetLocale()`, `CurrentLocale()` |
+| `Locale.cs` | i18n (en, de) | `T()`, `SetLocale()`, `CurrentLocale`, `AvailableLocales` |
 | `Ratings.cs` | Rating system | `Rate()`, `GetRating()`, `AllRatings()`, `TopRated()` |
-| `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `CurrentThemeName()`, `AvailableThemes()`, `ThemeDef` record |
-| `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations |
+| `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record |
+| `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations, tray icon |
 | `Program.cs` (CLI) | CLI entry | 25+ commands via args parsing |

@@ -48,22 +48,39 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- **98 new tweaks** across 10 categories, bringing total to **1 981 tweaks**:
-  - Firewall (10→20), Recovery (10→20), Encryption (15→25)
-  - Windows Terminal (21→31), Java (21→31), USB & Peripherals (21→31)
-  - Voice Access & Speech (21→31), Snap & Multitasking (21→31)
-  - Screensaver & Lock (21→30), DNS & Networking Advanced (21→31)
-
-### Fixed
-
-- Fixed `uint` to `int` overflow in Encryption.cs `RegOp.SetDword` calls
-  using `unchecked((int)0xFFFFFFFF)`
-- Resolved 15 duplicate tweak IDs across 7 category modules
+- **System theme auto-detection** — GUI follows Windows dark/light mode on startup,
+  `Theme.DetectSystemTheme()` reads `AppsUseLightTheme` registry value
+- **Percentage progress bar** — batch apply/remove shows percentage instead of
+  indeterminate marquee; `SetBusy(bool, string?, int)` + `SetProgress(int)`
+- **Tray icon** — minimize to system tray with context menu (Show/Exit);
+  `NotifyIcon` with app icon, restore on double-click
+- **FrozenDictionary performance** — `TweakEngine.Freeze()` builds `FrozenDictionary`
+  for O(1) ID lookups, caches sorted categories, category counts, scope counts;
+  called automatically at end of `RegisterBuiltins()`
+- **62 plugin system tests** — `PluginTests.cs` covering PackLoader (load, validate,
+  SHA-256, all 12 RegOp kinds, validation failures), PackManager (install/uninstall
+  lifecycle, version comparison), PackIndex (round-trip), TweakEngine `RegisterPack`
+  integration, and Locale (German translations, format args, file loading)
+- **Built-in German locale** — 48 translated UI strings in `Locale.cs`,
+  `AvailableLocales` property, `SetLocale()` uses built-in locale as base
+- **2 system theme tests** in ThemeTests.cs: `DetectSystemTheme_ReturnsValidThemeKey`,
+  `DetectSystemTheme_ThemeKeyExistsInAvailable`
 
 ### Changed
 
-- Updated all `.github/` documentation files with current statistics
-  (1 981 tweaks, 72 categories, 203 tests)
+- **Test parallelism** — `.runsettings` `MaxCpuCount` 1→4 (4 assemblies parallel),
+  `TestSessionTimeout` 300s→60s; all `xunit.runner.json` now include
+  `longRunningTestSeconds: 5`
+- **ShellRunner.DefaultTimeout** reduced from 30s to 10s; `ToolVersionChecker`
+  per-tool timeout 5s, per-probe timeout 2s
+- **`ScopeCounts()`** now uses `_tweaksByScope` dictionary (O(3)) instead of
+  O(n=2301) GroupBy scan
+- **`Categories()`** returns cached sorted array instead of re-sorting on every call
+- **PackageManagerValidationTests** — removed `OperationCanceledException` swallow
+  that silently passed when tool checks timed out
+- `.gitignore` pattern changed from `RegiLattice.log` to `*.log`
+- Updated Roadmap with Sprint 1–5 completion status
+- Total tests: **622** (499 Core + 52 CLI + 71 GUI), all passing
 
 ## [3.1.5] — 2025-07-20
 
