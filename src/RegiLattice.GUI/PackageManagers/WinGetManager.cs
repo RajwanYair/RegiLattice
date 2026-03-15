@@ -1,12 +1,8 @@
-using System.Text.RegularExpressions;
-
 namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps winget CLI operations with input validation.</summary>
-internal static partial class WinGetManager
+internal static class WinGetManager
 {
-    [GeneratedRegex(@"^[A-Za-z0-9._\-]+$")]
-    private static partial Regex SafeNameRegex();
 
     internal static bool IsWinGetInstalled()
     {
@@ -86,12 +82,7 @@ internal static partial class WinGetManager
             throw new InvalidOperationException($"winget upgrade failed: {stderr.Trim()}");
     }
 
-    internal static string ValidateName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name) || !SafeNameRegex().IsMatch(name))
-            throw new ArgumentException($"Invalid package name '{name}': only letters, digits, '.', '_', '-' allowed.");
-        return name;
-    }
+    internal static string ValidateName(string name) => PackageNameValidator.Validate(name, "package");
 
     /// <summary>Returns just the package names/IDs of installed packages.</summary>
     internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)

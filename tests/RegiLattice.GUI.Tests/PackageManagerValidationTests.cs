@@ -164,4 +164,52 @@ public sealed class PackageManagerValidationTests
 
     [Fact]
     public void WindowsHealthCommands_Has19Commands() => Assert.Equal(19, WindowsHealthManager.Commands.Count);
+
+    // ── PackageNameValidator (shared) ──────────────────────────────────
+
+    [Theory]
+    [InlineData("7zip")]
+    [InlineData("posh-git")]
+    [InlineData("My.Package_2")]
+    public void PackageNameValidator_Standard_Valid(string name) =>
+        Assert.Equal(name, PackageNameValidator.Validate(name, "test"));
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("a b")]
+    [InlineData("pkg;evil")]
+    [InlineData("pkg$(cmd)")]
+    public void PackageNameValidator_Standard_Invalid(string name) =>
+        Assert.Throws<ArgumentException>(() => PackageNameValidator.Validate(name, "test"));
+
+    [Theory]
+    [InlineData("requests[security]")]
+    [InlineData("pkg[extra]")]
+    public void PackageNameValidator_ExtendedBrackets_Valid(string name) =>
+        Assert.Equal(name, PackageNameValidator.Validate(name, "test", allowBrackets: true));
+
+    [Theory]
+    [InlineData("requests[security]")]
+    public void PackageNameValidator_StandardRejectsBrackets(string name) =>
+        Assert.Throws<ArgumentException>(() => PackageNameValidator.Validate(name, "test", allowBrackets: false));
+
+    [Fact]
+    public void PackageNameValidator_ExtractNames_ParsesVersionTuples()
+    {
+        var entries = new[] { "git (2.43.0)", "ripgrep (14.1.0)", "plain-name" };
+        var names = PackageNameValidator.ExtractNames(entries);
+
+        Assert.Equal(3, names.Count);
+        Assert.Contains("git", names);
+        Assert.Contains("ripgrep", names);
+        Assert.Contains("plain-name", names);
+    }
+
+    [Fact]
+    public void PackageNameValidator_ExtractNames_Empty_ReturnsEmpty()
+    {
+        var names = PackageNameValidator.ExtractNames([]);
+        Assert.Empty(names);
+    }
 }

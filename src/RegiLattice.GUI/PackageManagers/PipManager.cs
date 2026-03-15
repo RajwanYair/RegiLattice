@@ -1,13 +1,10 @@
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps pip CLI operations with input validation.</summary>
-internal static partial class PipManager
+internal static class PipManager
 {
-    [GeneratedRegex(@"^[A-Za-z0-9._\-\[\]]+$")]
-    private static partial Regex SafeNameRegex();
 
     /// <summary>Finds python executable (python, python3, py).</summary>
     internal static string? FindPython()
@@ -98,13 +95,7 @@ internal static partial class PipManager
     internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)
     {
         var list = await ListInstalledAsync(ct).ConfigureAwait(false);
-        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var entry in list)
-        {
-            int paren = entry.IndexOf(" (", StringComparison.Ordinal);
-            names.Add(paren > 0 ? entry[..paren] : entry);
-        }
-        return names;
+        return PackageNameValidator.ExtractNames(list);
     }
 
     internal static async Task InstallAsync(string name, CancellationToken ct = default)
@@ -134,12 +125,7 @@ internal static partial class PipManager
             throw new InvalidOperationException($"pip upgrade failed: {stderr.Trim()}");
     }
 
-    internal static string ValidateName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name) || !SafeNameRegex().IsMatch(name))
-            throw new ArgumentException($"Invalid package name '{name}': only letters, digits, '.', '_', '-', '[]' allowed.");
-        return name;
-    }
+    internal static string ValidateName(string name) => PackageNameValidator.Validate(name, "package", allowBrackets: true);
 
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
