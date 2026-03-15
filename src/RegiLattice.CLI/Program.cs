@@ -13,9 +13,29 @@ namespace RegiLattice.CLI;
 
 internal static class Program
 {
-    private static readonly string Version = "3.0.0";
+    private static readonly string Version = "3.2.0";
     private static TweakEngine _engine = null!;
     private static RegistrySession _session = null!;
+    private static bool _noColor;
+
+    // ANSI escape codes for coloured terminal output
+    private static string Green(string s) => _noColor ? s : $"\x1b[32m{s}\x1b[0m";
+
+    private static string Red(string s) => _noColor ? s : $"\x1b[31m{s}\x1b[0m";
+
+    private static string Yellow(string s) => _noColor ? s : $"\x1b[33m{s}\x1b[0m";
+
+    private static string Dim(string s) => _noColor ? s : $"\x1b[90m{s}\x1b[0m";
+
+    private static string ColourisedStatus(TweakResult status) =>
+        status switch
+        {
+            TweakResult.Applied => Green(status.ToString()),
+            TweakResult.NotApplied => Red(status.ToString()),
+            TweakResult.Error => Red(status.ToString()),
+            TweakResult.SkippedCorp or TweakResult.SkippedBuild or TweakResult.SkippedHw => Yellow(status.ToString()),
+            _ => Dim(status.ToString()),
+        };
 
     [STAThread]
     internal static int Main(string[] args)
@@ -30,6 +50,8 @@ internal static class Program
         var parsed = ParseArgs(args);
         if (parsed is null)
             return 0; // --help or --version handled
+
+        _noColor = parsed.NoColor || Console.IsOutputRedirected;
 
         _session = new RegistrySession(dryRun: parsed.DryRun);
         _engine = new TweakEngine(_session);
@@ -72,6 +94,8 @@ internal static class Program
             return RunCheck();
         if (a.Diff is not null)
             return RunDiff(a.Diff);
+        if (a.DependsOn is not null)
+            return RunDependsOn(a.DependsOn);
         if (a.ShowList)
             return RunList(a);
         if (a.Search is not null)
@@ -221,19 +245,7 @@ internal static class Program
 
     private static int RunValidate()
     {
-        var errors = new List<string>();
-        var seen = new HashSet<string>();
-        foreach (var td in _engine.AllTweaks())
-        {
-            if (string.IsNullOrWhiteSpace(td.Id))
-                errors.Add($"[{td.Label}] empty id");
-            else if (!seen.Add(td.Id))
-                errors.Add($"Duplicate id: {td.Id}");
-            if (string.IsNullOrWhiteSpace(td.Label))
-                errors.Add($"[{td.Id}] empty label");
-            if (string.IsNullOrWhiteSpace(td.Category))
-                errors.Add($"[{td.Id}] empty category");
-        }
+        var errors = _engine.ValidateTweaks();
         if (errors.Count > 0)
         {
             Console.WriteLine($"\u274c Validation found {errors.Count} issue(s):");
@@ -562,7 +574,8 @@ internal static class Program
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {st, -14} {td.Label}");
+                var stText = ColourisedStatus(st);
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {stText, -14} {td.Label}");
             }
         }
         return 0;
@@ -611,10 +624,72 @@ internal static class Program
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
-                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {st, -14} {td.Label}");
+                var stText = ColourisedStatus(st);
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {stText, -14} {td.Label}");
             }
             Console.WriteLine($"\n{list.Count} tweak(s) found.");
         }
+        return 0;
+    }
+
+    // ── Depends-On ──────────────────────────────────────────────────────
+
+    private static int RunDependsOn(string tweakId)
+    {
+        var td = _engine.GetTweak(tweakId);
+        if (td is null)
+        {
+            Console.WriteLine($"\u274c Unknown tweak: {tweakId}");
+            return 2;
+        }
+
+        // Show what this tweak depends on
+        if (td.DependsOn.Count > 0)
+        {
+            Console.WriteLine($"\n\u2500\u2500 {td.Id} depends on:");
+            foreach (var depId in td.DependsOn)
+            {
+                var dep = _engine.GetTweak(depId);
+                if (dep is not null)
+                    Console.WriteLine($"  \u2192 {dep.Id, -30} {dep.Category, -14} {dep.Label}");
+                else
+                    Console.WriteLine($"  \u2192 {depId, -30} {Red("(not found)")}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"\n{td.Id} has no dependencies.");
+        }
+
+        // Show what depends on this tweak (reverse lookup)
+        var dependents = _engine.Dependents(tweakId);
+        if (dependents.Count > 0)
+        {
+            Console.WriteLine($"\n\u2500\u2500 Tweaks that depend on {td.Id}:");
+            foreach (var dep in dependents)
+                Console.WriteLine($"  \u2190 {dep.Id, -30} {dep.Category, -14} {dep.Label}");
+        }
+        else
+        {
+            Console.WriteLine($"No other tweaks depend on {td.Id}.");
+        }
+
+        // Show full resolved chain
+        try
+        {
+            var chain = _engine.ResolveDependencies(tweakId);
+            if (chain.Count > 1)
+            {
+                Console.WriteLine($"\n\u2500\u2500 Full dependency chain (apply order):");
+                for (int i = 0; i < chain.Count; i++)
+                    Console.WriteLine($"  {i + 1}. {chain[i].Id}");
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"\n\u274c {ex.Message}");
+        }
+
         return 0;
     }
 
@@ -1525,6 +1600,13 @@ internal static class Program
                     if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
                         p.MarketplaceArg = args[++i];
                     break;
+                case "--no-color":
+                    p.NoColor = true;
+                    break;
+                case "--depends-on":
+                    if (++i < args.Length)
+                        p.DependsOn = args[i];
+                    break;
 
                 default:
                     // Positional: mode, then tweak
@@ -1564,6 +1646,7 @@ internal static class Program
         public bool Check { get; set; }
         public bool CorpSafe { get; set; }
         public bool NeedsAdmin { get; set; }
+        public bool NoColor { get; set; }
         public string? Search { get; set; }
         public string? Profile { get; set; }
         public string? ConfigPath { get; set; }
@@ -1583,5 +1666,6 @@ internal static class Program
         public string? FilterStatus { get; set; }
         public string? Marketplace { get; set; }
         public string? MarketplaceArg { get; set; }
+        public string? DependsOn { get; set; }
     }
 }
