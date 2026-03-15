@@ -10,16 +10,16 @@
 
 | Scope | Tests | Status |
 |---|---|---|
-| **RegiLattice.Core.Tests** | 514 tests | All passing |
-| **RegiLattice.CLI.Tests** | 56 tests | All passing |
+| **RegiLattice.Core.Tests** | 529 tests | All passing |
+| **RegiLattice.CLI.Tests** | 58 tests | All passing |
 | **RegiLattice.GUI.Tests** | 71 tests | All passing |
-| **Total** | 641 tests | All passing |
+| **Total** | 658 tests | All passing |
 
 ---
 
 ## Test File Inventory
 
-### Core Tests (514 tests)
+### Core Tests (529 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
