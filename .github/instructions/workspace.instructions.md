@@ -66,10 +66,25 @@ new TweakDef
 
 ### Immutable Models
 
-- `TweakDef` — sealed class with `required` + `init` properties
+- `TweakDef` — sealed class with `required` + `init` properties (see copilot-instructions.md for full field list)
 - `RegOp` — immutable with 12 factory methods
 - `ProfileDef` — record type
 - `ThemeDef` — record type
+
+### TweakKind — How Tweaks Operate (8 variants)
+
+Auto-detected from category/registry paths, or explicitly set via `KindHint`:
+
+| Kind | Typical Pattern | Example Category | TweakDef Fields Used |
+|------|-----------------|------------------|----------------------|
+| `Registry` | RegOps on HKCU/HKLM | Privacy, Performance | `ApplyOps`, `RemoveOps`, `DetectOps` |
+| `PowerShell` | PSH cmdlet/script block | PowerShell Tweaks | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `SystemCommand` | bcdedit, dism, netsh | Boot, Network Opt. | `ApplyAction`, `RemoveAction` |
+| `ServiceControl` | sc.exe, Set-Service | Services | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `ScheduledTask` | schtasks cmd | Scheduled Tasks | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `FileConfig` | JSON, INI, .wslconfig | WSL, Win Terminal | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `GroupPolicy` | HKLM\...\Policies\... | Security, Hardening | `ApplyOps` with policy paths |
+| `PackageManager` | scoop, pip, winget | Package Management | `ApplyAction`, `UpdateAction`, `DetectAction` |
 
 ### Registry Access via RegistrySession
 

@@ -11,7 +11,19 @@ internal static partial class ScoopManager
     internal static bool IsScoopInstalled()
     {
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
-        return File.Exists(path);
+        if (File.Exists(path))
+            return true;
+
+        // Fallback: check if scoop is in PATH
+        try
+        {
+            var (code, _, _) = ShellRunner.RunAsync("scoop", ["--version"], default, TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
+            return code == 0;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>Installs Scoop via the official installer script (user-level, no admin needed).</summary>
@@ -30,7 +42,7 @@ internal static partial class ScoopManager
 
     internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
-        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync("scoop list 2>&1", ct).ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync("scoop list 2>&1", ct, TimeSpan.FromSeconds(30)).ConfigureAwait(false);
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())
@@ -88,7 +100,7 @@ internal static partial class ScoopManager
 
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
-        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync("scoop status 2>&1", ct).ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync("scoop status 2>&1", ct, TimeSpan.FromSeconds(30)).ConfigureAwait(false);
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(l => l.Trim())

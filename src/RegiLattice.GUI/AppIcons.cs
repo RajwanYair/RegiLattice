@@ -32,12 +32,49 @@ internal static class AppIcons
     /// <summary>Windows Health / shield icon.</summary>
     internal static Icon WindowsHealthIcon => GetOrCreate("winhealth", DrawWindowsHealthIcon);
 
+    /// <summary>Tweak Pack / marketplace icon.</summary>
+    internal static Icon MarketplaceIcon => GetOrCreate("marketplace", DrawMarketplaceIcon);
+
+    // ── Small bitmaps for menu items (16×16) ───────────────────────────
+
+    private static readonly Dictionary<string, Bitmap> _bmpCache = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Returns a 16×16 bitmap suitable for ToolStripMenuItem.Image.</summary>
+    internal static Bitmap MenuBitmap(string key, Action<Graphics, int> draw)
+    {
+        if (_bmpCache.TryGetValue(key, out var cached))
+            return cached;
+
+        const int size = 16;
+        var bmp = new Bitmap(size, size);
+        using (var g = Graphics.FromImage(bmp))
+        {
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.Clear(Color.Transparent);
+            draw(g, size);
+        }
+        _bmpCache[key] = bmp;
+        return bmp;
+    }
+
+    internal static Bitmap ScoopMenuBitmap => MenuBitmap("menu-scoop", DrawScoopIcon);
+    internal static Bitmap PSModuleMenuBitmap => MenuBitmap("menu-ps", DrawPSModuleIcon);
+    internal static Bitmap PipMenuBitmap => MenuBitmap("menu-pip", DrawPipIcon);
+    internal static Bitmap WinGetMenuBitmap => MenuBitmap("menu-winget", DrawWinGetIcon);
+    internal static Bitmap ChocolateyMenuBitmap => MenuBitmap("menu-choco", DrawChocolateyIcon);
+    internal static Bitmap ToolVersionsMenuBitmap => MenuBitmap("menu-toolversions", DrawToolVersionsIcon);
+    internal static Bitmap WindowsHealthMenuBitmap => MenuBitmap("menu-winhealth", DrawWindowsHealthIcon);
+    internal static Bitmap MarketplaceMenuBitmap => MenuBitmap("menu-marketplace", DrawMarketplaceIcon);
+
     /// <summary>Invalidate the cache (call after theme change).</summary>
     internal static void InvalidateCache()
     {
         foreach (var icon in _cache.Values)
             icon.Dispose();
         _cache.Clear();
+        foreach (var bmp in _bmpCache.Values)
+            bmp.Dispose();
+        _bmpCache.Clear();
     }
 
     private static Icon GetOrCreate(string key, Action<Graphics, int> draw)
@@ -177,5 +214,21 @@ internal static class AppIcons
         int cy = s / 2;
         g.DrawLine(fgPen, cx, cy - 7, cx, cy + 7);
         g.DrawLine(fgPen, cx - 7, cy, cx + 7, cy);
+    }
+
+    /// <summary>Marketplace: a purple square with a white shopping bag / package glyph.</summary>
+    private static void DrawMarketplaceIcon(Graphics g, int s)
+    {
+        using var bgBrush = new SolidBrush(Color.FromArgb(130, 80, 200)); // Purple
+        using var fgBrush = new SolidBrush(Color.White);
+        using var fgPen = new Pen(Color.White, 2f);
+
+        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+
+        // Shopping bag outline
+        int pad = s / 4;
+        g.DrawRectangle(fgPen, pad, pad + 3, s - pad * 2, s - pad * 2 - 2);
+        // Handle arc
+        g.DrawArc(fgPen, pad + 3, pad - 2, s - pad * 2 - 6, 10, 180, 180);
     }
 }

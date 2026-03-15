@@ -40,7 +40,7 @@ internal static partial class WinGetManager
     internal static async Task<List<string>> ListInstalledAsync(CancellationToken ct = default)
     {
         var (_, stdout, _) = await ShellRunner
-            .RunAsync("winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct)
+            .RunAsync("winget", ["list", "--disable-interactivity", "--accept-source-agreements"], ct, TimeSpan.FromSeconds(60))
             .ConfigureAwait(false);
 
         return ParseWinGetTable(stdout);
@@ -103,7 +103,7 @@ internal static partial class WinGetManager
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
         var (_, stdout, _) = await ShellRunner
-            .RunAsync("winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct)
+            .RunAsync("winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct, TimeSpan.FromSeconds(60))
             .ConfigureAwait(false);
 
         return ParseWinGetTable(stdout);

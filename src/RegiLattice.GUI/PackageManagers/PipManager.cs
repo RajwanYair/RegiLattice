@@ -73,7 +73,7 @@ internal static partial class PipManager
     {
         string python = FindPython() ?? "python";
         var args = userOnly ? new[] { "-m", "pip", "list", "--user", "--format=json" } : new[] { "-m", "pip", "list", "--format=json" };
-        var (_, stdout, _) = await ShellRunner.RunAsync(python, args, ct).ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunAsync(python, args, ct, TimeSpan.FromSeconds(30)).ConfigureAwait(false);
 
         var packages = new List<string>();
         try

@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2025-07-22 (v3.2.0, C# 13 / .NET 10.0-windows, 2 301 tweaks, 89 categories)
+> Last updated: 2025-07-22 (v3.2.0, C# 13 / .NET 10.0-windows, 2 316 tweaks, 89 categories)
 
 ---
 
@@ -316,3 +316,59 @@ new TweakDef
 `TweakEngine.IsApplicableOnHardware()` checks custom predicates first,
 then auto-detects from category (WSL, Virtualization) and tags (nvidia).
 MainForm caches results in `_inapplicableIds` at startup.
+
+---
+
+## HasOperations Gate — Tweaks Without ApplyOps Are Silently Skipped
+
+`TweakEngine.Register()` skips any `TweakDef` where `HasOperations` is `false`:
+
+```csharp
+// HasOperations == ApplyOps.Count > 0 || ApplyAction is not null
+
+// ❌ BAD — silently skipped, never registered
+new TweakDef { Id = "test-1", Label = "X", Category = "A", Tags = ["t"] }
+
+// ✅ GOOD — has ApplyOps, so HasOperations == true
+new TweakDef { Id = "test-1", Label = "X", Category = "A",
+    ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)] }
+```
+
+**Common trap in tests**: Creating TweakDef instances for tag/scope/search tests without
+ApplyOps. The engine silently skips them, making assertions fail with empty results.
+
+---
+
+## Coverage Patterns — What Is and Isn't Testable
+
+**94.9% line coverage** on Core (571 tests). Branch coverage at 56.8%.
+
+Components that are trivially 100%: TweakDef model, RegOp factories, all ~90 tweak
+module static Tweaks properties (just declarative data), ProfileDef, PackDef.
+
+Components that are NOT easily testable:
+- Package managers (ChocolateyManager, PipManager, WinGetManager) — require external tools
+- ShellRunner — runs real processes
+- PackManager async methods — require network/filesystem
+- CorporateGuard P/Invoke paths — environment-dependent
+
+Safe to test against real registry (read-only):
+- `RegistrySession.ReadDword/ReadString` on well-known HKCU keys
+- `KeyExists/ValueExists` on known paths like `HKCU\Software`
+- `ListSubKeys/ListValueNames` on populated keys
+
+---
+
+## Assert.Contains Ambiguity with Collection Expressions
+
+xUnit 2.9.2’s `Assert.Contains<T>(T, collection)` is ambiguous when the collection
+is a C# 13 collection expression `["a", "b"]` (matches both `HashSet<T>` and
+`SortedSet<T>` overloads):
+
+```csharp
+// ❌ BAD — CS0121 ambiguous call
+Assert.Contains(profile, ["business", "gaming", "privacy"]);
+
+// ✅ GOOD — explicit array
+Assert.Contains(profile, new[] { "business", "gaming", "privacy" });
+```
