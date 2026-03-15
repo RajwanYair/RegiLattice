@@ -838,6 +838,12 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("ps-disable-xbox-services", TweakKind.ServiceControl)]
     [InlineData("ps-clear-temp-files", TweakKind.PowerShell)]
     [InlineData("ps-flush-dns-cache", TweakKind.PowerShell)]
+    [InlineData("ps-disable-diagnostics-hub", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-wmp-network-sharing", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-geolocation-service", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-connected-user-experience", TweakKind.ServiceControl)]
+    [InlineData("ps-disable-dmwappush-service", TweakKind.ServiceControl)]
+    [InlineData("ps-optimize-network-adapter", TweakKind.PowerShell)]
     public void RegisterBuiltins_PsTweakExists(string id, TweakKind expectedKind)
     {
         var tweak = _engine.GetTweak(id);
@@ -921,6 +927,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("mem-set-iot-registry-quota")]
     [InlineData("mem-optimize-svchosts")]
     [InlineData("mem-disable-memory-compression")]
+    [InlineData("mem-set-second-level-data-cache")]
+    [InlineData("mem-disable-prefetch-boost")]
+    [InlineData("mem-set-io-page-lock-limit")]
+    [InlineData("mem-disable-page-combining")]
+    [InlineData("mem-set-nonpaged-pool-limit")]
+    [InlineData("mem-disable-trim-on-memory-pressure")]
+    [InlineData("mem-set-system-pages")]
+    [InlineData("mem-disable-superfetch-service")]
+    [InlineData("mem-enable-large-pages")]
     public void RegisterBuiltins_MemoryTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
