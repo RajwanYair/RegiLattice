@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 700 tests across 8 test files                     |
+| Test        | xUnit 2.9.2 — 727 tests across 8 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 2 316 across 89 categories (90 module files)                      |
-| Tests       | 700 passing (571 Core + 58 CLI + 71 GUI)                         |
+| Tests       | 727 passing (571 Core + 72 CLI + 84 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -101,6 +101,9 @@ RegiLattice.sln
 ├── src/
 │   ├── RegiLattice.Core/            # Class library — engine, models, registry, services
 │   │   ├── TweakEngine.cs           # Central tweak manager (register, apply, search, profiles)
+│   │   ├── SnapshotManager.cs       # Save/load/restore tweak state snapshots
+│   │   ├── TweakValidator.cs        # Tweak integrity validation & circular dep detection
+│   │   ├── DependencyResolver.cs    # Topological dependency resolution
 │   │   ├── Models/
 │   │   │   ├── TweakDef.cs          # Immutable tweak definition + RegOp + TweakScope + TweakResult
 │   │   │   ├── ProfileDef.cs        # Profile definition model
@@ -135,17 +138,19 @@ RegiLattice.sln
 │   │       ├── ScoopManagerDialog.cs
 │   │       └── PSModuleManagerDialog.cs
 │   └── RegiLattice.CLI/           # Console application
-│       └── Program.cs             # 25+ commands via args parsing
+│       ├── Program.cs             # 25+ commands via args parsing
+│       ├── CliArgs.cs             # CLI argument model (extracted from Program)
+│       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 571 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 571 xUnit tests (unchanged)
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
 │   │   └── PluginTests.cs          # Pack system + locale tests
-│   ├── RegiLattice.CLI.Tests/     # 58 xUnit tests
-│   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/    # 71 xUnit tests
+│   ├── RegiLattice.CLI.Tests/     # 72 xUnit tests
+│   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
+│   └── RegiLattice.GUI.Tests/    # 84 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
 └── archive/                      # Archived Python v1.x + old NativeGUI (untracked)
@@ -421,6 +426,9 @@ Canonical category slugs:
 | File / Namespace | Purpose | Key Exports |
 | --- | --- | --- |
 | `TweakEngine.cs` | Central engine | `Register`, `AllTweaks`, `Categories`, `Search`, `Filter`, `Apply`, `StatusMap`, `Profiles`, `Freeze` |
+| `SnapshotManager.cs` | Snapshot management | `Save()`, `Load()`, `Restore()` |
+| `TweakValidator.cs` | Tweak validation | `Validate()` (static — checks IDs, labels, deps, circular refs) |
+| `DependencyResolver.cs` | Dependency resolution | `Resolve()`, `Dependents()` (static — topological sort) |
 | `TweakDef.cs` | Tweak model | `TweakDef`, `RegOp`, `TweakScope`, `TweakResult`, `RegOpKind` |
 | `ProfileDef.cs` | Profile model | `ProfileDef` (Name, Description, ApplyCategories, SkipCategories) |
 | `ProfileDefinitions.cs` | 5 profiles | `All` static list |
@@ -439,3 +447,5 @@ Canonical category slugs:
 | `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record |
 | `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations, tray icon |
 | `Program.cs` (CLI) | CLI entry | 25+ commands via args parsing |
+| `CliArgs.cs` (CLI) | CLI argument model | Mode, Tweak, ShowList, Force, DryRun, etc. |
+| `ConsoleColorizer.cs` (CLI) | ANSI colour helpers | `Green()`, `Red()`, `Yellow()`, `Dim()`, `NoColor` |

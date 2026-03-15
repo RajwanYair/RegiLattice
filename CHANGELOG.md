@@ -4,6 +4,38 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Refactored — Codebase Architecture Improvements
+
+#### Core Engine Decomposition
+
+- **SnapshotManager** — extracted Save/Load/Restore snapshot logic from TweakEngine
+  into dedicated `SnapshotManager.cs` (single responsibility, backward-compatible delegation)
+- **TweakValidator** — extracted `ValidateTweaks()` + circular dependency detection
+  into static `TweakValidator.cs` with pure-function API
+- **DependencyResolver** — extracted `ResolveDependencies()`, topological sort, and
+  reverse lookup (`Dependents()`) into static `DependencyResolver.cs`
+- TweakEngine public API unchanged — all existing tests pass without modification
+
+#### CLI Extraction
+
+- **CliArgs** — extracted nested `Program.CliArgs` class to standalone `CliArgs.cs`
+- **ConsoleColorizer** — extracted 5 ANSI color helper methods from Program.cs into
+  `ConsoleColorizer.cs` with `NoColor` toggle property
+
+#### Package Manager DRY Elimination
+
+- **PackageNameValidator** — consolidated 5 identical `SafeNameRegex` patterns and
+  `ValidateName()` methods from Scoop/Pip/WinGet/Chocolatey/PSModule managers into
+  single shared utility with `Validate()` and `ExtractNames()` methods
+
+#### Tests
+
+- 27 new tests (700 → 727): 10 ConsoleColorizer tests, 8 PackageNameValidator tests,
+  9 additional CLI parsing tests
+- Total: **2,316 tweaks**, **727 tests** (571 Core + 72 CLI + 84 GUI)
+
 ## [3.2.1] — 2026-03-15
 
 ### Sprint 11 — GUI Polish, Package Manager Fixes & Documentation Refresh

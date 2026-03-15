@@ -488,40 +488,17 @@ public sealed class TweakEngine
     public Dictionary<string, TweakResult> ApplyProfile(string name, bool forceCorp = false, bool parallel = false) =>
         ApplyBatch(TweaksForProfile(name), forceCorp, parallel);
 
-    // ── Snapshots ───────────────────────────────────────────────────────
+    // ── Snapshots (delegated to SnapshotManager) ──────────────────────
 
-    public void SaveSnapshot(string path)
-    {
-        var status = StatusMap();
-        var snapshot = status.ToDictionary(kv => kv.Key, kv => kv.Value.ToString().ToLowerInvariant());
-        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(path, json);
-    }
+    private SnapshotManager? _snapshotManager;
+    private SnapshotManager Snapshots => _snapshotManager ??= new SnapshotManager(this);
 
-    public Dictionary<string, string> LoadSnapshot(string path)
-    {
-        var json = File.ReadAllText(path);
-        return JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? [];
-    }
+    public void SaveSnapshot(string path) => Snapshots.Save(path);
 
-    public Dictionary<string, TweakResult> RestoreSnapshot(string path, bool forceCorp = false)
-    {
-        var snapshot = LoadSnapshot(path);
-        var results = new Dictionary<string, TweakResult>();
-        foreach (var (id, state) in snapshot)
-        {
-            var td = GetTweak(id);
-            if (td is null)
-                continue;
-            results[id] = state switch
-            {
-                "applied" => Apply(td, forceCorp: forceCorp),
-                "notapplied" => Remove(td, forceCorp: forceCorp),
-                _ => TweakResult.Unknown,
-            };
-        }
-        return results;
-    }
+    public Dictionary<string, string> LoadSnapshot(string path) => SnapshotManager.Load(path);
+
+    public Dictionary<string, TweakResult> RestoreSnapshot(string path, bool forceCorp = false) =>
+        Snapshots.Restore(path, forceCorp);
 
     // ── Windows Build ───────────────────────────────────────────────────
 
@@ -573,110 +550,21 @@ public sealed class TweakEngine
         File.WriteAllText(path, json);
     }
 
-    // ── Validation ──────────────────────────────────────────────────────
+    // ── Validation (delegated to TweakValidator) ──────────────────────
 
-    /// <summary>
-    /// Validate all registered tweaks and return a list of issues found.
-    /// Checks: empty IDs/Labels, broken DependsOn references, duplicate tags, empty ops.
-    /// </summary>
-    public IReadOnlyList<string> ValidateTweaks()
-    {
-        var errors = new List<string>();
-        var seenIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public IReadOnlyList<string> ValidateTweaks() =>
+        TweakValidator.Validate(_allTweaks, GetTweak);
 
-        foreach (var td in _allTweaks)
-        {
-            if (string.IsNullOrWhiteSpace(td.Id))
-                errors.Add("Tweak with empty Id found");
-            else if (!seenIds.Add(td.Id))
-                errors.Add($"Duplicate tweak Id: {td.Id}");
+    // ── Dependency resolution (delegated to DependencyResolver) ─────
 
-            if (string.IsNullOrWhiteSpace(td.Label))
-                errors.Add($"{td.Id}: empty Label");
-
-            if (string.IsNullOrWhiteSpace(td.Category))
-                errors.Add($"{td.Id}: empty Category");
-
-            foreach (var dep in td.DependsOn)
-            {
-                if (!_tweakById.ContainsKey(dep))
-                    errors.Add($"{td.Id}: DependsOn references unknown tweak '{dep}'");
-            }
-
-            if (td.ApplyOps.Count == 0 && td.ApplyAction is null)
-                errors.Add($"{td.Id}: no ApplyOps or ApplyAction defined");
-        }
-
-        // Detect circular dependencies
-        foreach (var td in _allTweaks.Where(t => t.DependsOn.Count > 0))
-        {
-            var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            if (HasCircularDep(td.Id, visited))
-                errors.Add($"{td.Id}: circular dependency detected");
-        }
-
-        return errors;
-    }
-
-    private bool HasCircularDep(string id, HashSet<string> visited)
-    {
-        if (!visited.Add(id))
-            return true;
-        var td = GetTweak(id);
-        if (td is null)
-            return false;
-        foreach (var dep in td.DependsOn)
-        {
-            if (HasCircularDep(dep, new HashSet<string>(visited, StringComparer.OrdinalIgnoreCase)))
-                return true;
-        }
-        return false;
-    }
-
-    // ── Dependency resolution ───────────────────────────────────────────
-
-    /// <summary>
-    /// Resolve the full dependency chain for a tweak, returning them in
-    /// topological order (dependencies first, target last).
-    /// Throws <see cref="InvalidOperationException"/> on circular dependencies.
-    /// </summary>
     public IReadOnlyList<TweakDef> ResolveDependencies(string tweakId)
     {
         var td = GetTweak(tweakId) ?? throw new ArgumentException($"Unknown tweak: {tweakId}");
-        if (td.DependsOn.Count == 0)
-            return [td];
-
-        var result = new List<TweakDef>();
-        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var inStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        TopoVisit(td, visited, inStack, result);
-        return result;
+        return DependencyResolver.Resolve(td, GetTweak);
     }
 
-    private void TopoVisit(TweakDef td, HashSet<string> visited, HashSet<string> inStack, List<TweakDef> result)
-    {
-        if (inStack.Contains(td.Id))
-            throw new InvalidOperationException($"Circular dependency detected involving '{td.Id}'");
-        if (!visited.Add(td.Id))
-            return;
-        inStack.Add(td.Id);
-
-        foreach (var depId in td.DependsOn)
-        {
-            var dep = GetTweak(depId);
-            if (dep is not null)
-                TopoVisit(dep, visited, inStack, result);
-        }
-
-        inStack.Remove(td.Id);
-        result.Add(td);
-    }
-
-    /// <summary>
-    /// Find all tweaks that depend on the given tweak ID (reverse dependency lookup).
-    /// </summary>
     public IReadOnlyList<TweakDef> Dependents(string tweakId) =>
-        _allTweaks.Where(t => t.DependsOn.Contains(tweakId, StringComparer.OrdinalIgnoreCase)).ToList();
+        DependencyResolver.Dependents(tweakId, _allTweaks);
 
     // ── Batch operations with progress ──────────────────────────────────
 
