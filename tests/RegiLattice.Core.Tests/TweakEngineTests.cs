@@ -778,6 +778,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("sec-disable-wpad")]
     [InlineData("sec-enforce-smb-signing")]
     [InlineData("sec-disable-powershell-v2")]
+    [InlineData("sec-enforce-lsa-ppl")]
+    [InlineData("sec-block-wdigest-caching")]
+    [InlineData("sec-disable-autorun-all")]
+    [InlineData("sec-enforce-nla")]
+    [InlineData("sec-disable-lm-hash")]
+    [InlineData("sec-enforce-sehop")]
+    [InlineData("sec-force-strong-key-protection")]
+    [InlineData("sec-restrict-null-session-pipes")]
+    [InlineData("sec-set-ntlmv2-only")]
     public void RegisterBuiltins_SecurityTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -862,6 +871,18 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("pst-disable-office-telemetry")]
     [InlineData("pst-disable-speech-model-update")]
     [InlineData("pst-disable-device-census")]
+    [InlineData("pst-disable-handwriting-data")]
+    [InlineData("pst-disable-cloud-experience")]
+    [InlineData("pst-disable-diagnostic-data-controller")]
+    [InlineData("pst-disable-power-efficiency")]
+    [InlineData("pst-disable-idle-maintenance")]
+    [InlineData("pst-disable-defrag-scheduled")]
+    [InlineData("pst-disable-location-notification")]
+    [InlineData("pst-disable-windows-error-reporting")]
+    [InlineData("pst-disable-family-safety")]
+    [InlineData("pst-disable-autochk-rebooter")]
+    [InlineData("pst-disable-license-validation")]
+    [InlineData("pst-disable-net-framework-ngen")]
     public void RegisterBuiltins_PstTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -962,6 +983,8 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("Proxy & VPN")]
     [InlineData("Event Logging")]
     [InlineData("System Restore")]
+    [InlineData("Scheduled Tasks")]
+    [InlineData("Security")]
     public void RegisterBuiltins_NewCategoryExists(string category)
     {
         Assert.Contains(category, _engine.Categories());
@@ -1098,6 +1121,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("ssd-disable-8dot3-names")]
     [InlineData("ssd-increase-ntfs-memory-usage")]
     [InlineData("ssd-large-system-cache")]
+    [InlineData("ssd-disable-boot-trace")]
+    [InlineData("ssd-disable-ntfs-compression")]
+    [InlineData("ssd-disable-ntfs-encryption")]
+    [InlineData("ssd-disable-storage-sense")]
+    [InlineData("ssd-set-io-priority-normal")]
+    [InlineData("ssd-disable-low-disk-check")]
+    [InlineData("ssd-increase-ntfs-mft-zone")]
+    [InlineData("ssd-disable-readyboost")]
+    [InlineData("ssd-disable-disk-perf-counters")]
     public void RegisterBuiltins_SsdOptimizationTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1117,6 +1149,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("compat-disable-fault-tolerant-heap")]
     [InlineData("compat-disable-customer-experience")]
     [InlineData("compat-disable-smart-screen-apps")]
+    [InlineData("compat-disable-app-launch-tracking")]
+    [InlineData("compat-disable-startup-delay")]
+    [InlineData("compat-disable-autoplay-devices")]
+    [InlineData("compat-disable-maintenance-wakeup")]
+    [InlineData("compat-set-diagnostic-data-basic")]
+    [InlineData("compat-force-classic-shutdown")]
+    [InlineData("compat-disable-background-apps")]
+    [InlineData("compat-disable-tips-suggestions")]
+    [InlineData("compat-disable-shim-database")]
     public void RegisterBuiltins_AppCompatibilityTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1136,6 +1177,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("uac-set-password-length-8")]
     [InlineData("uac-hide-last-username")]
     [InlineData("uac-disable-credential-guard-lock-timeout")]
+    [InlineData("uac-require-ctrl-alt-del")]
+    [InlineData("uac-set-lockout-duration-30")]
+    [InlineData("uac-set-max-password-age-90")]
+    [InlineData("uac-elevate-signed-only")]
+    [InlineData("uac-restrict-blank-password")]
+    [InlineData("uac-enable-installer-detection")]
+    [InlineData("uac-standard-user-prompt-credentials")]
+    [InlineData("uac-disable-remote-uac")]
+    [InlineData("uac-enable-secure-desktop")]
     public void RegisterBuiltins_UserAccountTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1155,6 +1205,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("browser-send-do-not-track")]
     [InlineData("browser-block-third-party-cookies")]
     [InlineData("browser-disable-safe-browsing-telemetry")]
+    [InlineData("browser-disable-translate")]
+    [InlineData("browser-disable-spell-check")]
+    [InlineData("browser-disable-search-suggestions")]
+    [InlineData("browser-disable-sync")]
+    [InlineData("browser-disable-browser-sign-in")]
+    [InlineData("browser-disable-media-router")]
+    [InlineData("browser-disable-shopping-features")]
+    [InlineData("browser-disable-preloading")]
+    [InlineData("browser-disable-form-fill")]
     public void RegisterBuiltins_BrowserCommonTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1234,6 +1293,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("evtlog-enable-verbose-boot-status")]
     [InlineData("evtlog-enable-shutdown-reason")]
     [InlineData("evtlog-log-retention-overwrite")]
+    [InlineData("evtlog-disable-event-forwarding")]
+    [InlineData("evtlog-set-app-log-32mb")]
+    [InlineData("evtlog-set-system-log-32mb")]
+    [InlineData("evtlog-set-security-log-64mb")]
+    [InlineData("evtlog-disable-event-tracing-autologger")]
+    [InlineData("evtlog-disable-powershell-logging")]
+    [InlineData("evtlog-enable-powershell-transcription")]
+    [InlineData("evtlog-enable-command-line-auditing")]
+    [InlineData("evtlog-disable-srum")]
     public void RegisterBuiltins_EventLoggingTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1253,6 +1321,16 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("restore-disable-wer-archive")]
     [InlineData("restore-set-wer-consent-send-always")]
     [InlineData("restore-disable-memory-dump")]
+    [InlineData("restore-set-mini-dump-only")]
+    [InlineData("restore-overwrite-existing-dump")]
+    [InlineData("restore-disable-auto-reboot-on-crash")]
+    [InlineData("restore-disable-wer-logging")]
+    [InlineData("restore-set-wer-max-queue-5")]
+    [InlineData("restore-set-wer-max-archive-5")]
+    [InlineData("restore-disable-auto-recovery-boot")]
+    [InlineData("restore-disable-shadow-copy-optimisation")]
+    [InlineData("restore-disable-wer-dump-type")]
+    [InlineData("restore-limit-wer-dump-count")]
     public void RegisterBuiltins_SystemRestoreTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
