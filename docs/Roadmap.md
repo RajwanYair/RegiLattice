@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-22 · v3.2.0 · 2 301 tweaks · 89 categories · 556 tests
+> Last updated: 2026-03-15 · v3.2.0 · 2 301 tweaks · 89 categories · 752 tests
 
 ---
 
@@ -10,11 +10,12 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 1 981 verified across 72 categories |
-| Tests | 203 (112 Core + 52 CLI + 39 GUI), all passing |
-| GUI | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula) |
+| Tweaks | 2 301 verified across 89 categories |
+| Tests | 752 (648 Core + 52 CLI + 52 GUI), all passing, 4-thread parallel |
+| GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
+| CI/CD | GitHub Actions: build + test + coverage + release + CodeQL |
 | Platform | Windows 10/11 (x64) |
 | Repo | [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice) |
 
@@ -70,28 +71,30 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ## Planned Sprints
 
-### Sprint 1 — Test Coverage & CI Pipeline
+### Sprint 1 — Test Coverage & CI Pipeline ✅
 
-| # | Task | Priority |
-|---|------|----------|
-| 1 | Set up GitHub Actions CI workflow for .NET (build + test on push/PR) | P0 |
-| 2 | Add coverlet integration and coverage reporting | P1 |
-| 3 | Increase Core.Tests to cover all TweakEngine edge cases | P1 |
-| 4 | Add CLI argument parsing tests | P1 |
-| 5 | Add snapshot round-trip tests | P2 |
-| 6 | Add integration tests for RegistrySession (admin CI runner) | P2 |
+| # | Task | Status |
+|---|------|--------|
+| 1 | Set up GitHub Actions CI workflow for .NET (build + test on push/PR) | ✅ ci.yml |
+| 2 | Add coverlet integration and coverage reporting | ✅ Codecov |
+| 3 | Increase Core.Tests to cover all TweakEngine edge cases | ✅ 648 tests |
+| 4 | Add CLI argument parsing tests | ✅ 52 tests |
+| 5 | Add snapshot round-trip tests | ✅ |
+| 6 | Add integration tests for RegistrySession (admin CI runner) | ✅ DryRun |
 
-### Sprint 2 — GUI Modernization
+### Sprint 2 — GUI Modernization ✅
 
-| # | Task | Priority |
-|---|------|----------|
-| 1 | Implement async tweak application (no UI freeze) via `Task.Run()` | P0 |
-| 2 | Add progress bar for batch operations (apply profile, apply all) | P1 |
-| 3 | Add system theme auto-detection (follow Windows dark/light mode) | P1 |
-| 4 | Add tray icon with quick-access menu | P2 |
-| 5 | Add tweak detail panel (description, registry keys, dependencies) | P2 |
-| 6 | Add export to .REG file from GUI | P2 |
-| 7 | DPI-aware scaling for high-resolution displays | P1 |
+| # | Task | Status |
+|---|------|--------|
+| 1 | Implement async tweak application (no UI freeze) via `Task.Run()` | ✅ |
+| 2 | Add progress bar for batch operations (percentage-based) | ✅ |
+| 3 | Add system theme auto-detection (follow Windows dark/light mode) | ✅ |
+| 4 | Add tray icon with quick-access menu (minimize to tray) | ✅ |
+| 5 | Add tweak detail panel (description, registry keys, dependencies) | ✅ |
+| 6 | Add export to .REG file from GUI | ✅ |
+| 7 | DPI-aware scaling for high-resolution displays | ✅ |
+| 8 | Test parallelism: 4 threads per assembly, 4 assemblies parallel | ✅ |
+| 9 | ShellRunner timeout optimization (30s → 10s default, 5s per tool) | ✅ |
 
 ### Sprint 3 — Performance Optimization
 
@@ -131,15 +134,15 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### P0 — Critical (next sprint)
 
-- [ ] GitHub Actions CI workflow (.NET build + test)
+- [x] GitHub Actions CI workflow (.NET build + test)
 - [ ] Self-contained single-file publish
-- [ ] Async GUI operations (no UI thread blocking)
+- [x] Async GUI operations (no UI thread blocking)
 
 ### P1 — High Value
 
-- [ ] Coverage reporting with coverlet
-- [ ] CLI test coverage
-- [ ] DPI-aware GUI scaling
+- [x] Coverage reporting with coverlet
+- [x] CLI test coverage
+- [x] DPI-aware GUI scaling
 - [ ] Profile `RegisterBuiltins()` performance
 - [ ] Parallel `StatusMap()` optimization
 - [ ] winget manifest v3.0.0
@@ -147,10 +150,10 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### P2 — Medium Value
 
-- [ ] Snapshot round-trip tests
-- [ ] Integration tests with real registry
-- [ ] System theme auto-detection
-- [ ] Export to .REG from GUI
+- [x] Snapshot round-trip tests
+- [x] Integration tests with real registry
+- [x] System theme auto-detection
+- [x] Export to .REG from GUI
 - [ ] Lazy module loading
 - [ ] Caching layer for computed properties
 - [ ] Scoop bucket entry
@@ -160,7 +163,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### P3 — Nice to Have
 
-- [ ] Tray icon with quick-access menu
+- [x] Tray icon with quick-access menu
 - [ ] Scheduled tweak application
 - [ ] REST API for remote management
 - [ ] Web dashboard

@@ -108,21 +108,11 @@ public sealed class PackageManagerValidationTests
         Assert.False(info.IsInstalled);
     }
 
-    [Fact(Timeout = 30_000)]
+    [Fact(Timeout = 25_000)]
     public async Task ToolVersionChecker_CheckAll_ReturnsResults()
     {
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
-        IReadOnlyList<ToolVersionChecker.ToolInfo> results;
-        try
-        {
-            results = await ToolVersionChecker.CheckAllAsync(cts.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            // If the overall timeout fires, the test still validates structure below
-            // with a graceful fallback — this prevents CI from hanging indefinitely.
-            return;
-        }
+        var results = await ToolVersionChecker.CheckAllAsync(cts.Token);
 
         Assert.NotEmpty(results);
         Assert.Equal(16, results.Count);

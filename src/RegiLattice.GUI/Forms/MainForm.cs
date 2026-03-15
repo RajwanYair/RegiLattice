@@ -39,9 +39,10 @@ public partial class MainForm : Form
         Text = "RegiLattice";
         Icon = AppIcons.AppIcon;
 
-        // Load saved theme from config
+        // Load saved theme from config (or auto-detect from Windows)
         var cfg = AppConfig.Load();
-        AppTheme.SetTheme(cfg.Theme);
+        string theme = string.IsNullOrEmpty(cfg.Theme) ? AppTheme.DetectSystemTheme() : cfg.Theme;
+        AppTheme.SetTheme(theme);
         _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
 
         ApplyTheme();
@@ -56,8 +57,29 @@ public partial class MainForm : Form
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
+        _trayIcon.Visible = false;
         _cts.Cancel();
         base.OnFormClosing(e);
+    }
+
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        if (WindowState == FormWindowState.Minimized)
+        {
+            _trayIcon.Visible = true;
+            ShowInTaskbar = false;
+            Hide();
+        }
+    }
+
+    private void RestoreFromTray()
+    {
+        Show();
+        ShowInTaskbar = true;
+        WindowState = FormWindowState.Normal;
+        _trayIcon.Visible = false;
+        Activate();
     }
 
     // ── Theme ──────────────────────────────────────────────────────────────
@@ -360,7 +382,7 @@ public partial class MainForm : Form
         if (!_logPanel.Visible)
             _logPanel.Visible = true;
 
-        SetBusy(true, $"Applying {selected.Count} tweak(s)...");
+        SetBusy(true, $"Applying {selected.Count} tweak(s)...", totalSteps: selected.Count);
         try
         {
             int progress = 0;
@@ -375,6 +397,7 @@ public partial class MainForm : Form
                         {
                             AppendLog($"[{progress}/{selected.Count}] Applying: {td.Label} ({td.Id})");
                             _progressLabel.Text = $"Applying {progress}/{selected.Count}: {td.Label}";
+                            SetProgress(progress);
                         });
                         var r = _engine.Apply(td, forceCorp: force);
                         res[td.Id] = r;
@@ -436,7 +459,7 @@ public partial class MainForm : Form
         if (!_logPanel.Visible)
             _logPanel.Visible = true;
 
-        SetBusy(true, $"Removing {selected.Count} tweak(s)...");
+        SetBusy(true, $"Removing {selected.Count} tweak(s)...", totalSteps: selected.Count);
         try
         {
             int progress = 0;
@@ -451,6 +474,7 @@ public partial class MainForm : Form
                         {
                             AppendLog($"[{progress}/{selected.Count}] Removing: {td.Label} ({td.Id})");
                             _progressLabel.Text = $"Removing {progress}/{selected.Count}: {td.Label}";
+                            SetProgress(progress);
                         });
                         var r = _engine.Remove(td, forceCorp: force);
                         res[td.Id] = r;
@@ -1008,15 +1032,31 @@ public partial class MainForm : Form
         AppendLog(message);
     }
 
-    private void SetBusy(bool busy, string? message = null)
+    private void SetBusy(bool busy, string? message = null, int totalSteps = 0)
     {
         _progressBar.Visible = busy;
-        _progressBar.Style = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
+        if (busy && totalSteps > 0)
+        {
+            _progressBar.Style = ProgressBarStyle.Blocks;
+            _progressBar.Minimum = 0;
+            _progressBar.Maximum = totalSteps;
+            _progressBar.Value = 0;
+        }
+        else
+        {
+            _progressBar.Style = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
+        }
         _btnApply.Enabled = !busy;
         _btnRemove.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
         if (message is not null)
             SetStatus(message);
+    }
+
+    private void SetProgress(int current)
+    {
+        if (_progressBar.Style == ProgressBarStyle.Blocks && current <= _progressBar.Maximum)
+            _progressBar.Value = current;
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────
