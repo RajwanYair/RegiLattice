@@ -80,7 +80,30 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   that silently passed when tool checks timed out
 - `.gitignore` pattern changed from `RegiLattice.log` to `*.log`
 - Updated Roadmap with Sprint 1–5 completion status
-- Total tests: **622** (499 Core + 52 CLI + 71 GUI), all passing
+- Total tests: **641** (514 Core + 56 CLI + 71 GUI), all passing
+
+### Sprint 7 — Engine Optimization & Tweak Expansion
+
+- Clean up stale tracking files (current-ids.txt regenerated, missing/removed deleted)
+- Profile RegisterBuiltins() performance: 37ms for 2,301 tweaks (budget 500ms)
+- Add 4 perf benchmark tests (startup, search, freeze, caching)
+- Add 15 new tweaks: 5 Windows Recall, 5 Debloat, 5 Proxy & VPN
+- Total: 2,316 tweaks, 89 categories
+
+### Sprint 8 — Consolidation, Validation & CLI Enhancements
+
+- Untrack archive/ (151 files, 84,575 line deletions) + current-ids.txt from git
+- Delete .mypy_cache (16 MB) and __pycache__ (3 MB) from disk
+- Core: `ValidateTweaks()` — checks empty IDs/Labels/Categories, broken DependsOn, circular deps
+- Core: `ResolveDependencies(id)` — topological-sort dependency resolution
+- Core: `Dependents(id)` — reverse dependency lookup
+- Core: `ApplyBatch`/`RemoveBatch` progress overloads with `Action<int,int,string,TweakResult>` callback
+- CLI: ANSI colour output for status display (Green/Red/Yellow/Dim)
+- CLI: `--depends-on <id>` command showing deps, reverse deps, and resolved chain
+- CLI: `--no-color` flag + auto-detect `Console.IsOutputRedirected`
+- CLI: version bump 3.0.0 → 3.2.0, `RunValidate` delegates to engine
+- 15 new tests (11 Core + 4 CLI): validation, dep resolution, batch progress, CLI flags
+- Total: **2,316 tweaks**, **641 tests** (514 Core + 56 CLI + 71 GUI)
 
 ## [3.1.5] — 2025-07-20
 

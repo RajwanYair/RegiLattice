@@ -43,7 +43,7 @@ WinForms controls require a message pump and are fragile in xUnit. Focus tests o
 ## Unique TweakDef IDs — Global Uniqueness Required
 
 `TweakEngine.Register()` throws `ArgumentException` on duplicate IDs.
-Every tweak ID across ALL 71 modules must be globally unique.
+Every tweak ID across ALL 90 modules must be globally unique.
 
 ```csharp
 // ❌ BAD — duplicate ID across modules will throw at registration

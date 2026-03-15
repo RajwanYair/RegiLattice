@@ -3,15 +3,15 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-203%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-641%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A comprehensive Windows registry tweak toolkit with **1 981 verified tweaks** across **72 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **2 316 verified tweaks** across **89 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Highlights
 
-- **1 981 verified tweaks** across 72 categories — each fully reversible with apply + remove
+- **2 316 verified tweaks** across 89 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
@@ -27,7 +27,11 @@ A comprehensive Windows registry tweak toolkit with **1 981 verified tweaks** ac
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **203 tests** across 7 test files — full engine, model, service, and GUI coverage (xUnit)
+- **641 tests** across 8 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
+- **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
+- **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
+- **Localization** — built-in English + German locale (48 strings)
 
 ## Architecture
 
@@ -47,11 +51,11 @@ graph LR
         SV[Services<br/>Analytics · Config · HW]
     end
 
-    subgraph Tweaks["68 Tweak Modules"]
+    subgraph Tweaks["90 Tweak Modules"]
         T1[Performance.cs]
         T2[Privacy.cs]
         T3[Gaming.cs]
-        TN[... 68 more]
+        TN[... 87 more]
     end
 
     CLI --> TE
@@ -66,46 +70,11 @@ graph LR
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
 
-## Tweak Categories (72)
+## Tweak Categories (89)
 
-| Category                    |  #  | Category                    |  #  |
-|-----------------------------|-----|-----------------------------|-----|
-| Accessibility               |  25 | Network                     |  38 |
-| Adobe                       |  25 | Night Light & Display       |  23 |
-| AI / Copilot                |  27 | Notifications               |  25 |
-| Audio                       |  29 | Office                      |  25 |
-| Backup & Recovery           |  25 | OneDrive                    |  23 |
-| Bluetooth                   |  24 | Package Management          |  29 |
-| Boot                        |  35 | Performance                 |  34 |
-| Chrome                      |  31 | Phone Link                  |  23 |
-| Clipboard & Drag-Drop       |  25 | Power                       |  30 |
-| Cloud Storage               |  35 | Printing                    |  25 |
-| Communication               |  26 | Privacy                     |  36 |
-| Context Menu                |  27 | RealVNC                     |  25 |
-| Cortana & Search            |  26 | Recovery                    |  20 |
-| Crash & Diagnostics         |  26 | Remote Desktop              |  26 |
-| Dev Drive                   |  12 | Scheduled Tasks             |  26 |
-| Dev Drive / Developer Tools |  10 | Scoop Tools                 |  35 |
-| Display                     |  28 | Screensaver & Lock          |  30 |
-| DNS & Networking Advanced   |  31 | Security                    |  39 |
-| Edge                        |  28 | Services                    |  28 |
-| Encryption                  |  25 | Shell                       |  25 |
-| Explorer                    |  51 | Snap & Multitasking         |  31 |
-| File System                 |  22 | Startup                     |  26 |
-| Firefox                     |  30 | Storage                     |  23 |
-| Firewall                    |  20 | System                      |  29 |
-| Fonts                       |  24 | Taskbar                     |  28 |
-| Gaming                      |  29 | Telemetry Advanced          |  26 |
-| GPU / Graphics              |  27 | Touch & Pen                 |  23 |
-| Indexing & Search           |  25 | USB & Peripherals           |  31 |
-| Input                       |  23 | Virtualization              |  25 |
-| Java                        |  31 | Voice Access & Speech       |  31 |
-| LibreOffice                 |  23 | VS Code                     |  25 |
-| Lock Screen & Login         |  26 | Widgets & News              |  25 |
-| M365 Copilot                |  23 | Windows 11                  |  40 |
-| Maintenance                 |  28 | Windows Terminal             |  31 |
-| Microsoft Store             |  25 | Windows Update              |  26 |
-| Multimedia                  |  25 | WSL                         |  44 |
+89 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
+
+See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
 ## Requirements
 
@@ -222,12 +191,13 @@ RegiLattice/
 │   │   │   ├── HardwareInfo.cs              # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs                    # i18n string table
 │   │   │   └── Ratings.cs                   # Tweak rating system (1-5 stars)
-│   │   └── Tweaks/                          # 71 category modules
-│   │       ├── Accessibility.cs             # Accessibility (20 tweaks)
-│   │       ├── Performance.cs               # Performance (30 tweaks)
-│   │       ├── Privacy.cs                   # Privacy (33 tweaks)
-│   │       ├── ...                          # 68 more category modules
-│   │       └── Wsl.cs                       # WSL (35 tweaks)
+│   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
+│   │   └── Tweaks/                          # 90 category modules, 2 316 tweaks
+│   │       ├── Accessibility.cs
+│   │       ├── Performance.cs
+│   │       ├── Privacy.cs
+│   │       ├── ...                          # 87 more
+│   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
 │   │   ├── Program.cs                       # Entry point
 │   │   ├── Theme.cs                         # 4-theme engine
@@ -239,12 +209,15 @@ RegiLattice/
 │   └── RegiLattice.CLI/                     # Console CLI (net10.0)
 │       └── Program.cs                       # 25+ commands
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # xUnit tests (93 tests)
+│   ├── RegiLattice.Core.Tests/              # 514 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
-│   │   └── ServicesTests.cs
-│   └── RegiLattice.GUI.Tests/              # xUnit tests (36 tests)
+│   │   ├── ServicesTests.cs
+│   │   └── PluginTests.cs
+│   ├── RegiLattice.CLI.Tests/               # 56 xUnit tests
+│   │   └── ParseArgsTests.cs
+│   └── RegiLattice.GUI.Tests/               # 71 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
 ├── winget/                                  # Winget package manifests

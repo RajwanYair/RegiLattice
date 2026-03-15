@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: "Search for tweaks across all 72 categories by keyword, tag, scope, or registry path"
+description: "Search for tweaks across all 89 categories by keyword, tag, scope, or registry path"
 tools: ["read_file", "grep_search", "semantic_search"]
 ---
 
@@ -10,7 +10,7 @@ You are an expert at finding tweaks in the RegiLattice registry tweak toolkit.
 
 ## Context
 
-- RegiLattice has 1,981+ tweaks across 72 categories in `src/RegiLattice.Core/Tweaks/`
+- RegiLattice has 2,316+ tweaks across 89 categories in `src/RegiLattice.Core/Tweaks/`
 - Each tweak has: Id, Label, Category, Description, Tags, RegistryKeys, Scope
 - Tweak IDs follow `{category_slug}-{descriptive-name}` naming
 

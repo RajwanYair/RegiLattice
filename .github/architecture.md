@@ -1,7 +1,7 @@
 # RegiLattice — Architecture
 
 > Deep-dive into data flow, dependency graph, and design decisions.
-> Last verified: 2025-07-22 (v3.2.0, 2 301 tweaks, 89 categories, 556 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 641 tests).
 > C# 13 / .NET 10.0-windows (x64).
 
 ---
@@ -23,9 +23,9 @@
             +----------+-----------+
             |                      |
        TweakDef list         ProfileDefinitions
-       (1 981 tweaks)        (5 profiles)
+       (2 316 tweaks)        (5 profiles)
             |
-       Tweaks/*.cs                 ← 71 category modules (72 categories)
+       Tweaks/*.cs                 ← 90 category modules (89 categories)
             |
        +----+----+
        |         |
@@ -55,13 +55,14 @@ RegiLattice.sln
 │     │     ├── CorporateGuard.cs       ← corp network detection (P/Invoke + WMI)
 │     │     ├── Elevation.cs            ← UAC elevation helpers
 │     │     ├── HardwareInfo.cs         ← hardware detection + profile suggestion
-│     │     ├── Locale.cs               ← i18n string table
+│     │     ├── Locale.cs               ← i18n string table (en + de)
 │     │     └── Ratings.cs              ← tweak rating system (1-5 stars)
-│     └── Tweaks/                       ← 71 category modules, 1 981 tweaks
+│     ├── Plugins/                        ← Tweak Pack system (JSON marketplace)
+│     └── Tweaks/                       ← 90 category modules, 2 316 tweaks
 │           ├── Accessibility.cs
 │           ├── Performance.cs
 │           ├── Privacy.cs
-│           └── ... (69 more)
+│           └── ... (87 more)
 │
 ├── src/RegiLattice.GUI/ ──────────────► depends on RegiLattice.Core
 │     ├── Program.cs                    ← WinForms entry point
@@ -77,9 +78,13 @@ RegiLattice.sln
 │
 ├── tests/RegiLattice.Core.Tests/ ─────► depends on RegiLattice.Core
 │     ├── TweakDefTests.cs              ← model, RegOp factories, scope computation
-│     ├── TweakEngineTests.cs           ← engine registration, search, profiles
+│     ├── TweakEngineTests.cs           ← engine registration, search, profiles, validation, deps
 │     ├── RegistrySessionTests.cs       ← session helpers, dry-run, path parsing
-│     └── ServicesTests.cs              ← Analytics, Config, CorporateGuard, etc.
+│     ├── ServicesTests.cs              ← Analytics, Config, CorporateGuard, etc.
+│     └── PluginTests.cs               ← PackLoader, PackManager, PackIndex, Locale
+│
+├── tests/RegiLattice.CLI.Tests/ ─────► depends on RegiLattice.CLI + Core
+│     └── ParseArgsTests.cs            ← CLI argument parsing, --depends-on, --no-color
 │
 └── tests/RegiLattice.GUI.Tests/ ──────► depends on RegiLattice.GUI + Core
       ├── ThemeTests.cs                 ← theme switching, colour attributes
@@ -98,7 +103,7 @@ Application starts
 TweakEngine.RegisterBuiltins()
   │
   ▼
-For each category module (71 modules):
+For each category module (90 modules):
   │
   ├──► Module exposes: public static IReadOnlyList<TweakDef> Tweaks { get; }
   │
@@ -181,7 +186,7 @@ MainForm (Forms/MainForm.cs)
   │     │           ├── Checkbox (batch selection)
   │     │           ├── Toggle button (individual enable/disable)
   │     │           └── Badges: SCOPE (User/Machine/Both), ADMIN, CORP
-  │     └── ... (72 category sections, 71 modules)
+  │     └── ... (89 category sections, 90 modules)
   │
   ├── Action bar: Apply/Remove Selected, Snapshot Save/Restore, Export
   ├── Summary stats bar: Applied / Default / Unknown counts
@@ -318,7 +323,7 @@ Priority order (highest → lowest):
 | **DryRun mode** | Tests validate tweak logic without touching the real registry |
 | **Corporate guard** | Prevents accidental damage on managed machines; legal/compliance safety |
 | **Catppuccin Mocha + 3 themes** | Modern dark theme with switchable alternatives (Latte, Nord, Dracula) |
-| **Parallel status detection** | `StatusMap(parallel: true)` via Task.Run for fast GUI refresh across 1 981 tweaks |
+| **Parallel status detection** | `StatusMap(parallel: true)` via Task.Run for fast GUI refresh across 2 316 tweaks |
 | **IReadOnlyList everywhere** | Immutable public contracts; prevents caller mutation |
 | **Collection expressions** | C# 13 `[]` syntax for concise, readable tweak definitions |
 | **SuspendLayout pattern** | O(1) layout recalculation during bulk control updates |

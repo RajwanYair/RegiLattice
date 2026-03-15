@@ -94,7 +94,7 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `Register` | `(TweakDef td)` | Register a single tweak (throws on duplicate ID) |
-| `RegisterBuiltins` | `()` | Register all 68 built-in tweak modules |
+| `RegisterBuiltins` | `()` | Register all 90 built-in tweak modules |
 | `AllTweaks` | `() -> IReadOnlyList<TweakDef>` | All registered tweaks |
 | `GetTweak` | `(string id) -> TweakDef?` | Look up by ID |
 

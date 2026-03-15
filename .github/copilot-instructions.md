@@ -81,7 +81,7 @@ Rules:
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 316 across 89 categories                                       |
+| Tweaks      | 2 316 across 89 categories (90 module files)                      |
 | Tests       | 641 passing (514 Core + 56 CLI + 71 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
@@ -120,7 +120,7 @@ RegiLattice.sln
 │   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
 │   │   │   ├── PackManager.cs       # Install, uninstall, update, marketplace
 │   │   │   └── PackIndex.cs         # Remote marketplace index model
-│   │   └── Tweaks/                  # 89 category modules, 2 316 tweaks total
+│   │   └── Tweaks/                  # 90 category modules, 2 316 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
