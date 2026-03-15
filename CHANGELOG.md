@@ -4,6 +4,40 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Sprint 11 — GUI Polish, Package Manager Fixes & Documentation Refresh
+
+#### Changed
+
+- **ShellRunner default timeout** increased from 10 s → 30 s — fixes package managers
+  that failed to list installed packages due to timeout (winget list, pip list, scoop list)
+- **Explicit longer timeouts** for slow list commands: winget list/upgrade (60 s),
+  scoop list/status (30 s), pip list (30 s), PowerShell Get-Module (30 s)
+- **Scoop detection** now falls back to PATH check when `~/scoop/shims/scoop.ps1`
+  doesn't exist (non-default Scoop installations)
+- **GUI log panel** now visible by default (was hidden)
+
+#### Added
+
+- **Menu item icons** — all 8 Tools menu entries now show 16×16 tool-specific icons
+  (Scoop, PowerShell, pip, WinGet, Chocolatey, Tool Versions, Windows Health, Marketplace)
+- **MarketplaceIcon** — new purple shopping-bag icon for the Tweak Pack Marketplace dialog
+- **AppIcons.MenuBitmap()** — generates 16×16 bitmaps for ToolStripMenuItem images
+
+#### Documentation
+
+- Updated `copilot-instructions.md`: full TweakDef model (all fields), TweakKind table
+  (8 variants with fields used), TweakResult table (7 outcomes), GUI details
+- Updated `workspace.instructions.md`: TweakKind table with fields used per kind
+- Updated `lessons-learned.instructions.md`: HasOperations gate, coverage patterns,
+  Assert.Contains ambiguity lessons
+- Updated `testing.instructions.md`: TweakKind coverage by kind, actual coverage data
+  (94.9% line), intentionally untested components
+- Updated `Roadmap.md`: Sprint 11 entry, marked completed backlog items (self-contained
+  publish, parallel StatusMap, winget manifest v3.2.0, GitHub Releases automation)
+- Total: **2,316 tweaks**, **700 tests** (571 Core + 58 CLI + 71 GUI)
+
 ## [3.2.0] — 2025-07-22
 
 ### Added
@@ -43,8 +77,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   Analytics caching, MainForm filter dedup, UpdateCounters single-pass
 - Updated all documentation with current statistics (2 301 tweaks, 89 categories,
   556 tests)
-
-## [Unreleased]
 
 ### Sprint 10 — Test Deepening & Engine Coverage
 
