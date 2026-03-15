@@ -29,6 +29,9 @@ internal static class AppIcons
     /// <summary>Tool versions / wrench icon.</summary>
     internal static Icon ToolVersionsIcon => GetOrCreate("toolversions", DrawToolVersionsIcon);
 
+    /// <summary>Windows Health / shield icon.</summary>
+    internal static Icon WindowsHealthIcon => GetOrCreate("winhealth", DrawWindowsHealthIcon);
+
     /// <summary>Invalidate the cache (call after theme change).</summary>
     internal static void InvalidateCache()
     {
@@ -157,5 +160,22 @@ internal static class AppIcons
         using var font = new Font("Segoe UI", 14f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("🔧", font, fgBrush, s / 2f, s / 2f, sf);
+    }
+
+    /// <summary>Windows Health: a green shield with a white "+" cross.</summary>
+    private static void DrawWindowsHealthIcon(Graphics g, int s)
+    {
+        using var bgBrush = new SolidBrush(Color.FromArgb(34, 139, 34)); // Forest green
+        using var fgBrush = new SolidBrush(Color.White);
+        using var fgPen = new Pen(Color.White, 2.5f);
+
+        // Shield shape (rounded-rect)
+        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+
+        // White "+" cross
+        int cx = s / 2;
+        int cy = s / 2;
+        g.DrawLine(fgPen, cx, cy - 7, cx, cy + 7);
+        g.DrawLine(fgPen, cx - 7, cy, cx + 7, cy);
     }
 }

@@ -937,6 +937,8 @@ public partial class MainForm : Form
 
     private void OnOpenToolVersions() => ShowManagerDialog(new ToolVersionsDialog());
 
+    private void OnOpenWindowsHealth() => ShowManagerDialog(new WindowsHealthDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
