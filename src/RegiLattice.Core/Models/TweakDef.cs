@@ -99,6 +99,9 @@ public sealed class TweakDef
     public string SideEffects { get; init; } = "";
     public string SourceUrl { get; init; } = "";
 
+    /// <summary>Explicit expected-result text shown when tweak is selected. Auto-generated from metadata if empty.</summary>
+    public string ExpectedResult { get; init; } = "";
+
     // ── Declarative registry operations (majority of tweaks) ────────────
     public IReadOnlyList<RegOp> ApplyOps { get; init; } = [];
     public IReadOnlyList<RegOp> RemoveOps { get; init; } = [];
@@ -167,6 +170,137 @@ public sealed class TweakDef
         if (!hasUser && !hasMachine && !NeedsAdmin)
             return TweakScope.User;
         return TweakScope.Machine;
+    }
+
+    /// <summary>Returns ExpectedResult if explicitly set, otherwise auto-generates from metadata.</summary>
+    public string GetExpectedResult() => ExpectedResult.Length > 0 ? ExpectedResult : GenerateExpectedResult();
+
+    private string GenerateExpectedResult()
+    {
+        // Parse action verb from Label
+        string label = Label;
+        string verb = "";
+        string subject = label;
+
+        if (label.StartsWith("Disable ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "disable";
+            subject = label[8..];
+        }
+        else if (label.StartsWith("Enable ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "enable";
+            subject = label[7..];
+        }
+        else if (label.StartsWith("Block ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "block";
+            subject = label[6..];
+        }
+        else if (label.StartsWith("Remove ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "remove";
+            subject = label[7..];
+        }
+        else if (label.StartsWith("Hide ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "hide";
+            subject = label[5..];
+        }
+        else if (label.StartsWith("Show ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "show";
+            subject = label[5..];
+        }
+        else if (label.StartsWith("Set ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "set";
+            subject = label[4..];
+        }
+        else if (label.StartsWith("Optimize ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "optimize";
+            subject = label[9..];
+        }
+        else if (label.StartsWith("Reduce ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "reduce";
+            subject = label[7..];
+        }
+        else if (label.StartsWith("Increase ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "increase";
+            subject = label[9..];
+        }
+        else if (label.StartsWith("Configure ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "configure";
+            subject = label[10..];
+        }
+        else if (label.StartsWith("Force ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "force";
+            subject = label[6..];
+        }
+        else if (label.StartsWith("Prevent ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "prevent";
+            subject = label[8..];
+        }
+        else if (label.StartsWith("Restrict ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "restrict";
+            subject = label[9..];
+        }
+        else if (label.StartsWith("Limit ", StringComparison.OrdinalIgnoreCase))
+        {
+            verb = "limit";
+            subject = label[6..];
+        }
+
+        string action = verb switch
+        {
+            "disable" => $"{subject} will be turned off.",
+            "enable" => $"{subject} will be activated.",
+            "block" => $"{subject} will be blocked.",
+            "remove" => $"{subject} will be removed.",
+            "hide" => $"{subject} will be hidden from view.",
+            "show" => $"{subject} will become visible.",
+            "set" => $"{subject} will be applied.",
+            "optimize" => $"{subject} will be optimized.",
+            "reduce" => $"{subject} will be reduced.",
+            "increase" => $"{subject} will be increased.",
+            "configure" => $"{subject} will be configured.",
+            "force" => $"{subject} will be enforced.",
+            "prevent" => $"{subject} will be prevented.",
+            "restrict" => $"{subject} will be restricted.",
+            "limit" => $"{subject} will be limited.",
+            _ => $"{label} will be applied.",
+        };
+
+        string categoryNote = Category switch
+        {
+            "Privacy" or "Telemetry Advanced" => " Less data will be sent to Microsoft, improving your privacy.",
+            "Performance" or "Memory Optimization" or "SSD Optimization" => " System responsiveness and speed may improve.",
+            "Gaming" or "GPU / Graphics" => " Gaming performance and frame rates may improve.",
+            "Security" or "Hardening" or "Encryption" or "Firewall" => " System security posture will be strengthened.",
+            "Network" or "Network Optimization" or "DNS & Networking Advanced" => " Network behaviour or performance will change.",
+            "Power" or "Power Management" => " Power consumption or sleep behaviour will change.",
+            "Boot" or "Startup" => " Startup or boot time may be affected.",
+            "Explorer" or "Context Menu" or "Shell" or "Taskbar" => " Windows shell appearance or behaviour will change.",
+            "Notifications" => " Notification behaviour will change; fewer interruptions.",
+            "Windows Update" => " Windows Update behaviour will be modified.",
+            "Accessibility" => " Accessibility features will be adjusted.",
+            "Bluetooth" or "USB & Peripherals" => " Peripheral device behaviour will change.",
+            "Printing" => " Printing configuration will be modified.",
+            _ => "",
+        };
+
+        bool needsRestart = NeedsAdmin || RegistryKeys.Any(k => k.Contains("HKLM", StringComparison.OrdinalIgnoreCase)
+            || k.Contains("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase));
+        string restartNote = needsRestart ? " A restart or sign-out may be needed for changes to take full effect." : "";
+
+        return action + categoryNote + restartNote;
     }
 
     public override string ToString() => $"{Id} [{Category}]";

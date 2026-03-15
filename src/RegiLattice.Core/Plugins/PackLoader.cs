@@ -171,6 +171,7 @@ public static class PackLoader
             Label = rt.Label ?? rt.Id!,
             Category = rt.Category ?? packName,
             Description = rt.Description ?? "",
+            ExpectedResult = rt.ExpectedResult ?? "",
             Tags = rt.Tags ?? [],
             NeedsAdmin = rt.NeedsAdmin,
             CorpSafe = rt.CorpSafe,
@@ -269,6 +270,9 @@ public static class PackLoader
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }
+
+        [JsonPropertyName("expectedResult")]
+        public string? ExpectedResult { get; set; }
 
         [JsonPropertyName("tags")]
         public List<string>? Tags { get; set; }

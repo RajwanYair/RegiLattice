@@ -169,3 +169,86 @@ public sealed class RegOpTests
         Assert.Equal(RegOpKind.CheckKeyMissing, op.Kind);
     }
 }
+
+/// <summary>Tests for TweakDef.GetExpectedResult() auto-generation logic.</summary>
+public sealed class ExpectedResultTests
+{
+    // ── ExpectedResult ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void GetExpectedResult_ExplicitValue_ReturnsExplicit()
+    {
+        var td = new TweakDef
+        {
+            Id = "test-explicit",
+            Label = "Disable Something",
+            Category = "Test",
+            ExpectedResult = "Custom expected result text.",
+        };
+        Assert.Equal("Custom expected result text.", td.GetExpectedResult());
+    }
+
+    [Fact]
+    public void GetExpectedResult_DisableLabel_ContainsTurnedOff()
+    {
+        var td = new TweakDef
+        {
+            Id = "test-disable",
+            Label = "Disable Windows Telemetry",
+            Category = "Privacy",
+        };
+        string result = td.GetExpectedResult();
+        Assert.Contains("turned off", result);
+        Assert.Contains("Windows Telemetry", result);
+        Assert.Contains("privacy", result, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void GetExpectedResult_EnableLabel_ContainsActivated()
+    {
+        var td = new TweakDef
+        {
+            Id = "test-enable",
+            Label = "Enable Hardware-Accelerated GPU Scheduling",
+            Category = "Gaming",
+        };
+        string result = td.GetExpectedResult();
+        Assert.Contains("activated", result);
+    }
+
+    [Fact]
+    public void GetExpectedResult_UnknownVerb_FallsBackToLabel()
+    {
+        var td = new TweakDef
+        {
+            Id = "test-custom",
+            Label = "Tweak Some Setting",
+            Category = "Test",
+        };
+        string result = td.GetExpectedResult();
+        Assert.Contains("Tweak Some Setting", result);
+        Assert.Contains("applied", result);
+    }
+
+    [Fact]
+    public void GetExpectedResult_MachineTweak_MentionsRestart()
+    {
+        var td = new TweakDef
+        {
+            Id = "test-restart",
+            Label = "Disable Service",
+            Category = "Performance",
+            NeedsAdmin = true,
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\Services\Test"],
+        };
+        string result = td.GetExpectedResult();
+        Assert.Contains("restart", result, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ExpectedResult_DefaultsToEmpty()
+    {
+        var td = new TweakDef { Id = "test-default", Label = "Test", Category = "Test", RegistryKeys = [@"HKCU\Test"] };
+        Assert.Equal("", td.ExpectedResult);
+    }
+}
