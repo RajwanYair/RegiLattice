@@ -27,6 +27,9 @@ RegiLattice.sln
 ├── src/
 │   ├── RegiLattice.Core/        # Class library — engine, models, registry, services
 │   │   ├── TweakEngine.cs       # Central tweak manager
+│   │   ├── SnapshotManager.cs   # Save/load/restore tweak state snapshots
+│   │   ├── TweakValidator.cs    # Tweak integrity validation & circular dep detection
+│   │   ├── DependencyResolver.cs # Topological dependency resolution
 │   │   ├── Models/              # TweakDef, ProfileDef, ProfileDefinitions
 │   │   ├── Registry/            # RegistrySession wrapper
 │   │   ├── Services/            # Analytics, AppConfig, CorporateGuard, Elevation,
@@ -38,11 +41,13 @@ RegiLattice.sln
 │   │   ├── Theme.cs             # 4-theme engine
 │   │   └── Forms/               # MainForm, AboutDialog, package manager dialogs
 │   └── RegiLattice.CLI/         # Console application
-│       └── Program.cs           # 25+ commands via args parsing
+│       ├── Program.cs           # 25+ commands via args parsing
+│       ├── CliArgs.cs           # CLI argument model
+│       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
 │   ├── RegiLattice.Core.Tests/  # 571 xUnit tests
-│   ├── RegiLattice.CLI.Tests/   # 58 xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 71 xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 72 xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 84 xUnit tests
 └── archive/                     # Archived (untracked)
 ```
 
