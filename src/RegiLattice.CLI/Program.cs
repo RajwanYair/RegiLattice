@@ -16,26 +16,12 @@ internal static class Program
     private static readonly string Version = "3.2.1";
     private static TweakEngine _engine = null!;
     private static RegistrySession _session = null!;
-    private static bool _noColor;
 
-    // ANSI escape codes for coloured terminal output
-    private static string Green(string s) => _noColor ? s : $"\x1b[32m{s}\x1b[0m";
-
-    private static string Red(string s) => _noColor ? s : $"\x1b[31m{s}\x1b[0m";
-
-    private static string Yellow(string s) => _noColor ? s : $"\x1b[33m{s}\x1b[0m";
-
-    private static string Dim(string s) => _noColor ? s : $"\x1b[90m{s}\x1b[0m";
-
-    private static string ColourisedStatus(TweakResult status) =>
-        status switch
-        {
-            TweakResult.Applied => Green(status.ToString()),
-            TweakResult.NotApplied => Red(status.ToString()),
-            TweakResult.Error => Red(status.ToString()),
-            TweakResult.SkippedCorp or TweakResult.SkippedBuild or TweakResult.SkippedHw => Yellow(status.ToString()),
-            _ => Dim(status.ToString()),
-        };
+    private static string Green(string s) => ConsoleColorizer.Green(s);
+    private static string Red(string s) => ConsoleColorizer.Red(s);
+    private static string Yellow(string s) => ConsoleColorizer.Yellow(s);
+    private static string Dim(string s) => ConsoleColorizer.Dim(s);
+    private static string ColourisedStatus(TweakResult status) => ConsoleColorizer.ColourisedStatus(status);
 
     [STAThread]
     internal static int Main(string[] args)
@@ -51,7 +37,7 @@ internal static class Program
         if (parsed is null)
             return 0; // --help or --version handled
 
-        _noColor = parsed.NoColor || Console.IsOutputRedirected;
+        ConsoleColorizer.NoColor = parsed.NoColor || Console.IsOutputRedirected;
 
         _session = new RegistrySession(dryRun: parsed.DryRun);
         _engine = new TweakEngine(_session);
@@ -1716,49 +1702,4 @@ internal static class Program
 
     private static string PlatformSummaryStatic() => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
 
-    // ── Parsed arguments ────────────────────────────────────────────────
-
-    internal sealed class CliArgs
-    {
-        public string? Mode { get; set; }
-        public string? Tweak { get; set; }
-        public bool ShowList { get; set; }
-        public bool Force { get; set; }
-        public bool Gui { get; set; }
-        public bool Menu { get; set; }
-        public bool DryRun { get; set; }
-        public bool AssumeYes { get; set; }
-        public bool Doctor { get; set; }
-        public bool HwInfo { get; set; }
-        public bool ListProfiles { get; set; }
-        public bool Validate { get; set; }
-        public bool Stats { get; set; }
-        public bool ShowCategories { get; set; }
-        public bool ShowTags { get; set; }
-        public bool Report { get; set; }
-        public bool Check { get; set; }
-        public bool CorpSafe { get; set; }
-        public bool NeedsAdmin { get; set; }
-        public bool NoColor { get; set; }
-        public string? Search { get; set; }
-        public string? Profile { get; set; }
-        public string? ConfigPath { get; set; }
-        public string? Snapshot { get; set; }
-        public string? Restore { get; set; }
-        public string? ExportJson { get; set; }
-        public string? ExportReg { get; set; }
-        public string? ImportJson { get; set; }
-        public string? Diff { get; set; }
-        public string? Category { get; set; }
-        public string OutputFormat { get; set; } = "table";
-        public string? HtmlPath { get; set; }
-        public string? SnapshotDiffA { get; set; }
-        public string? SnapshotDiffB { get; set; }
-        public TweakScope? ScopeFilter { get; set; }
-        public int MinBuild { get; set; }
-        public string? FilterStatus { get; set; }
-        public string? Marketplace { get; set; }
-        public string? MarketplaceArg { get; set; }
-        public string? DependsOn { get; set; }
-    }
 }

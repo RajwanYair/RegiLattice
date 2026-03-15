@@ -1,12 +1,8 @@
-using System.Text.RegularExpressions;
-
 namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps PowerShell module management via PSGet.</summary>
-internal static partial class PSModuleManager
+internal static class PSModuleManager
 {
-    [GeneratedRegex(@"^[A-Za-z0-9._\-]+$")]
-    private static partial Regex SafeNameRegex();
 
     internal static bool IsPowerShellGetAvailable()
     {
@@ -82,12 +78,7 @@ internal static partial class PSModuleManager
             throw new InvalidOperationException($"Update-Module failed: {stderr.Trim()}");
     }
 
-    internal static string ValidateName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name) || !SafeNameRegex().IsMatch(name))
-            throw new ArgumentException($"Invalid module name '{name}'.");
-        return name;
-    }
+    internal static string ValidateName(string name) => PackageNameValidator.Validate(name, "module");
 
     internal static string ValidateScope(string scope)
     {

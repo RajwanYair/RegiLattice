@@ -15,43 +15,43 @@ public sealed class ParseArgsTests
     }
 
     [Theory]
-    [InlineData("--list", nameof(Program.CliArgs.ShowList))]
-    [InlineData("--force", nameof(Program.CliArgs.Force))]
-    [InlineData("--gui", nameof(Program.CliArgs.Gui))]
-    [InlineData("--menu", nameof(Program.CliArgs.Menu))]
-    [InlineData("--dry-run", nameof(Program.CliArgs.DryRun))]
-    [InlineData("--doctor", nameof(Program.CliArgs.Doctor))]
-    [InlineData("--hwinfo", nameof(Program.CliArgs.HwInfo))]
-    [InlineData("--list-profiles", nameof(Program.CliArgs.ListProfiles))]
-    [InlineData("--validate", nameof(Program.CliArgs.Validate))]
-    [InlineData("--stats", nameof(Program.CliArgs.Stats))]
-    [InlineData("--categories", nameof(Program.CliArgs.ShowCategories))]
-    [InlineData("--list-categories", nameof(Program.CliArgs.ShowCategories))]
-    [InlineData("--tags", nameof(Program.CliArgs.ShowTags))]
-    [InlineData("--report", nameof(Program.CliArgs.Report))]
-    [InlineData("--check", nameof(Program.CliArgs.Check))]
-    [InlineData("--corp-safe", nameof(Program.CliArgs.CorpSafe))]
-    [InlineData("--needs-admin", nameof(Program.CliArgs.NeedsAdmin))]
-    [InlineData("--no-color", nameof(Program.CliArgs.NoColor))]
+    [InlineData("--list", nameof(CliArgs.ShowList))]
+    [InlineData("--force", nameof(CliArgs.Force))]
+    [InlineData("--gui", nameof(CliArgs.Gui))]
+    [InlineData("--menu", nameof(CliArgs.Menu))]
+    [InlineData("--dry-run", nameof(CliArgs.DryRun))]
+    [InlineData("--doctor", nameof(CliArgs.Doctor))]
+    [InlineData("--hwinfo", nameof(CliArgs.HwInfo))]
+    [InlineData("--list-profiles", nameof(CliArgs.ListProfiles))]
+    [InlineData("--validate", nameof(CliArgs.Validate))]
+    [InlineData("--stats", nameof(CliArgs.Stats))]
+    [InlineData("--categories", nameof(CliArgs.ShowCategories))]
+    [InlineData("--list-categories", nameof(CliArgs.ShowCategories))]
+    [InlineData("--tags", nameof(CliArgs.ShowTags))]
+    [InlineData("--report", nameof(CliArgs.Report))]
+    [InlineData("--check", nameof(CliArgs.Check))]
+    [InlineData("--corp-safe", nameof(CliArgs.CorpSafe))]
+    [InlineData("--needs-admin", nameof(CliArgs.NeedsAdmin))]
+    [InlineData("--no-color", nameof(CliArgs.NoColor))]
     public void ParseArgs_Flag_SetsProperty(string flag, string propertyName)
     {
         var result = Program.ParseArgs([flag]);
 
         Assert.NotNull(result);
-        var prop = typeof(Program.CliArgs).GetProperty(propertyName);
+        var prop = typeof(CliArgs).GetProperty(propertyName);
         Assert.NotNull(prop);
         Assert.True((bool)prop.GetValue(result)!);
     }
 
     [Theory]
-    [InlineData("-y", nameof(Program.CliArgs.AssumeYes))]
-    [InlineData("--assume-yes", nameof(Program.CliArgs.AssumeYes))]
+    [InlineData("-y", nameof(CliArgs.AssumeYes))]
+    [InlineData("--assume-yes", nameof(CliArgs.AssumeYes))]
     public void ParseArgs_ShortFlag_SetsProperty(string flag, string propertyName)
     {
         var result = Program.ParseArgs([flag]);
 
         Assert.NotNull(result);
-        var prop = typeof(Program.CliArgs).GetProperty(propertyName);
+        var prop = typeof(CliArgs).GetProperty(propertyName);
         Assert.NotNull(prop);
         Assert.True((bool)prop.GetValue(result)!);
     }
@@ -59,24 +59,23 @@ public sealed class ParseArgsTests
     // ── Options with values ─────────────────────────────────────────────
 
     [Theory]
-    [InlineData("--search", "telemetry", nameof(Program.CliArgs.Search))]
-    [InlineData("--profile", "gaming", nameof(Program.CliArgs.Profile))]
-    [InlineData("--config", @"C:\config.json", nameof(Program.CliArgs.ConfigPath))]
-    [InlineData("--snapshot", "snap.json", nameof(Program.CliArgs.Snapshot))]
-    [InlineData("--restore", "snap.json", nameof(Program.CliArgs.Restore))]
-    [InlineData("--export-json", "out.json", nameof(Program.CliArgs.ExportJson))]
-    [InlineData("--export-reg", "out.reg", nameof(Program.CliArgs.ExportReg))]
-    [InlineData("--import-json", "in.json", nameof(Program.CliArgs.ImportJson))]
-    [InlineData("--diff", "diff.json", nameof(Program.CliArgs.Diff))]
-    [InlineData("--category", "Privacy", nameof(Program.CliArgs.Category))]
-    [InlineData("--output", "json", nameof(Program.CliArgs.OutputFormat))]
-    [InlineData("--html", "report.html", nameof(Program.CliArgs.HtmlPath))]
-    public void ParseArgs_OptionWithValue_SetsProperty(string option, string value, string propertyName)
+    [InlineData("--search", "telemetry", nameof(CliArgs.Search))]
+    [InlineData("--profile", "gaming", nameof(CliArgs.Profile))]
+    [InlineData("--config", @"C:\config.json", nameof(CliArgs.ConfigPath))]
+    [InlineData("--snapshot", "snap.json", nameof(CliArgs.Snapshot))]
+    [InlineData("--restore", "snap.json", nameof(CliArgs.Restore))]
+    [InlineData("--export-json", "out.json", nameof(CliArgs.ExportJson))]
+    [InlineData("--export-reg", "out.reg", nameof(CliArgs.ExportReg))]
+    [InlineData("--import-json", "in.json", nameof(CliArgs.ImportJson))]
+    [InlineData("--diff", "diff.json", nameof(CliArgs.Diff))]
+    [InlineData("--category", "Privacy", nameof(CliArgs.Category))]
+    [InlineData("--output", "json", nameof(CliArgs.OutputFormat))]
+    [InlineData("--html", "report.html", nameof(CliArgs.HtmlPath))]    public void ParseArgs_OptionWithValue_SetsProperty(string option, string value, string propertyName)
     {
         var result = Program.ParseArgs([option, value]);
 
         Assert.NotNull(result);
-        var prop = typeof(Program.CliArgs).GetProperty(propertyName);
+        var prop = typeof(CliArgs).GetProperty(propertyName);
         Assert.NotNull(prop);
         Assert.Equal(value, (string?)prop.GetValue(result));
     }
@@ -294,5 +293,81 @@ public sealed class ParseArgsTests
         Assert.Equal("priv-disable-telemetry", result.Tweak);
         Assert.True(result.Force);
         Assert.True(result.DryRun);
+    }
+
+    // ── Marketplace ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Marketplace_ParsesCommandAndArg()
+    {
+        var result = Program.ParseArgs(["--marketplace", "install", "my-pack"]);
+        Assert.NotNull(result);
+        Assert.Equal("install", result.Marketplace);
+        Assert.Equal("my-pack", result.MarketplaceArg);
+    }
+}
+
+/// <summary>Tests for the ConsoleColorizer utility.</summary>
+public sealed class ConsoleColorizerTests
+{
+    [Fact]
+    public void Green_NoColor_ReturnsPlainText()
+    {
+        ConsoleColorizer.NoColor = true;
+        Assert.Equal("hello", ConsoleColorizer.Green("hello"));
+    }
+
+    [Fact]
+    public void Green_WithColor_ContainsAnsiCodes()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Green("hello");
+        Assert.Contains("\x1b[32m", result);
+        Assert.Contains("hello", result);
+        Assert.Contains("\x1b[0m", result);
+    }
+
+    [Fact]
+    public void Red_NoColor_ReturnsPlainText()
+    {
+        ConsoleColorizer.NoColor = true;
+        Assert.Equal("error", ConsoleColorizer.Red("error"));
+    }
+
+    [Fact]
+    public void Yellow_NoColor_ReturnsPlainText()
+    {
+        ConsoleColorizer.NoColor = true;
+        Assert.Equal("warn", ConsoleColorizer.Yellow("warn"));
+    }
+
+    [Fact]
+    public void Dim_NoColor_ReturnsPlainText()
+    {
+        ConsoleColorizer.NoColor = true;
+        Assert.Equal("dim", ConsoleColorizer.Dim("dim"));
+    }
+
+    [Theory]
+    [InlineData(TweakResult.Applied)]
+    [InlineData(TweakResult.NotApplied)]
+    [InlineData(TweakResult.Unknown)]
+    [InlineData(TweakResult.Error)]
+    [InlineData(TweakResult.SkippedCorp)]
+    [InlineData(TweakResult.SkippedBuild)]
+    [InlineData(TweakResult.SkippedHw)]
+    public void ColourisedStatus_NoColor_ContainsStatusName(TweakResult status)
+    {
+        ConsoleColorizer.NoColor = true;
+        var result = ConsoleColorizer.ColourisedStatus(status);
+        Assert.Equal(status.ToString(), result);
+    }
+
+    [Fact]
+    public void ColourisedStatus_Applied_IsGreen()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.Applied);
+        Assert.Contains("\x1b[32m", result); // green ANSI code
     }
 }

@@ -1,12 +1,8 @@
-using System.Text.RegularExpressions;
-
 namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps Chocolatey CLI operations with input validation.</summary>
-internal static partial class ChocolateyManager
+internal static class ChocolateyManager
 {
-    [GeneratedRegex(@"^[A-Za-z0-9._\-]+$")]
-    private static partial Regex SafeNameRegex();
 
     internal static bool IsChocoInstalled()
     {
@@ -62,13 +58,7 @@ internal static partial class ChocolateyManager
     internal static async Task<HashSet<string>> ListInstalledNamesAsync(CancellationToken ct = default)
     {
         var list = await ListInstalledAsync(ct).ConfigureAwait(false);
-        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var entry in list)
-        {
-            int paren = entry.IndexOf(" (", StringComparison.Ordinal);
-            names.Add(paren > 0 ? entry[..paren] : entry);
-        }
-        return names;
+        return PackageNameValidator.ExtractNames(list);
     }
 
     internal static async Task InstallAsync(string name, CancellationToken ct = default)
@@ -101,12 +91,7 @@ internal static partial class ChocolateyManager
             throw new InvalidOperationException($"choco upgrade failed: {stderr.Trim()}");
     }
 
-    internal static string ValidateName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name) || !SafeNameRegex().IsMatch(name))
-            throw new ArgumentException($"Invalid package name '{name}': only letters, digits, '.', '_', '-' allowed.");
-        return name;
-    }
+    internal static string ValidateName(string name) => PackageNameValidator.Validate(name, "package");
 
     internal static async Task<List<string>> ListOutdatedAsync(CancellationToken ct = default)
     {
