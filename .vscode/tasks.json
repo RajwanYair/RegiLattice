@@ -29,7 +29,7 @@
     {
       "label": "test: All",
       "type": "shell",
-      "command": "dotnet test RegiLattice.sln --logger \"console;verbosity=normal\" --blame-hang-timeout 60s",
+      "command": "dotnet test RegiLattice.sln --settings tests/.runsettings --logger \"console;verbosity=normal\" --blame-hang-timeout 60s",
       "group": {
         "kind": "test",
         "isDefault": true
