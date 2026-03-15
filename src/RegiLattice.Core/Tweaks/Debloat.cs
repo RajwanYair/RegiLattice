@@ -343,5 +343,92 @@ internal static class Debloat
             RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
             DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
         },
+        new TweakDef
+        {
+            Id = "debloat-disable-tailored-experiences",
+            Label = "Disable Tailored Experiences",
+            Category = "Debloat",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from using diagnostic data to show personalized ads and recommendations.",
+            Tags = ["debloat", "advertising", "privacy", "tailored"],
+            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Privacy"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Privacy", "TailoredExperiencesWithDiagnosticDataEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "debloat-disable-feedback-notifications",
+            Label = "Disable Feedback Hub Notifications",
+            Category = "Debloat",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows Feedback Hub from sending survey requests and notifications.",
+            Tags = ["debloat", "feedback", "notifications", "nag"],
+            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Siuf\Rules"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{CuKey}\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0),
+                RegOp.SetDword($@"{CuKey}\Software\Microsoft\Siuf\Rules", "PeriodInNanoSeconds", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod"),
+                RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Siuf\Rules", "PeriodInNanoSeconds"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
+        },
+        new TweakDef
+        {
+            Id = "debloat-disable-windows-hello-prompt",
+            Label = "Disable Windows Hello Setup Prompt",
+            Category = "Debloat",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from nagging users to set up Windows Hello biometrics.",
+            Tags = ["debloat", "hello", "biometrics", "nag", "setup"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "debloat-disable-people-bar",
+            Label = "Disable People Bar on Taskbar",
+            Category = "Debloat",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Removes the People icon and contact integration from the taskbar.",
+            Tags = ["debloat", "taskbar", "people", "contacts"],
+            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"],
+            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand")],
+            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
+        },
+        new TweakDef
+        {
+            Id = "debloat-disable-getting-started-app",
+            Label = "Disable Getting Started App",
+            Category = "Debloat",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents the 'Get Started' tips app from launching after updates or on first login.",
+            Tags = ["debloat", "tips", "oobe", "nag", "startup"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoStartPage", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoStartPage")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoStartPage", 1)],
+        },
     ];
 }

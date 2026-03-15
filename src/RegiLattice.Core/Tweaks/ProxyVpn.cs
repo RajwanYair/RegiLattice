@@ -199,5 +199,90 @@ internal static class ProxyVpn
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
         },
+        new TweakDef
+        {
+            Id = "proxy-disable-hotspot-2",
+            Label = "Disable Hotspot 2.0 / Passpoint",
+            Category = "Proxy & VPN",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Hotspot 2.0 (Passpoint) which auto-connects to carrier hotspots.",
+            Tags = ["proxy", "wifi", "hotspot", "passpoint", "security"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus", 0)],
+        },
+        new TweakDef
+        {
+            Id = "proxy-disable-wpad",
+            Label = "Disable WPAD Protocol",
+            Category = "Proxy & VPN",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Web Proxy Auto-Discovery (WPAD) to prevent automatic proxy detection attacks.",
+            Tags = ["proxy", "wpad", "security", "network"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "proxy-enforce-tls12-minimum",
+            Label = "Enforce TLS 1.2 as Minimum",
+            Category = "Proxy & VPN",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables TLS 1.0 and 1.1, requiring TLS 1.2 or higher for all HTTPS connections.",
+            Tags = ["proxy", "tls", "security", "encryption", "https"],
+            RegistryKeys =
+            [
+                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled"),
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "proxy-disable-multicast-dns",
+            Label = "Disable Multicast DNS (mDNS)",
+            Category = "Proxy & VPN",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables mDNS to prevent local network service discovery and reduce attack surface.",
+            Tags = ["proxy", "mdns", "network", "security", "dns"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
+        },
+        new TweakDef
+        {
+            Id = "proxy-disable-network-location-wizard",
+            Label = "Disable Network Location Wizard",
+            Category = "Proxy & VPN",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents the network location identification wizard from appearing on new networks.",
+            Tags = ["proxy", "network", "wizard", "firewall"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "NewNetworkWindowOff", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "NewNetworkWindowOff")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff", "NewNetworkWindowOff", 1)],
+        },
     ];
 }

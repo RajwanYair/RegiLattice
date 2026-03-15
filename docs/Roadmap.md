@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-22 · v3.2.0 · 2 301 tweaks · 89 categories · 622 tests
+> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 626 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 301 verified across 89 categories |
-| Tests | 622 (499 Core + 52 CLI + 71 GUI), all passing, 4-thread parallel |
+| Tweaks | 2 316 verified across 89 categories |
+| Tests | 626 (503 Core + 52 CLI + 71 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -115,7 +115,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 3 | GitHub Releases with auto-generated release notes | ✅ softprops/action-gh-release |
 | 4 | Automated build pipeline (build → test → publish on tag) | ✅ release.yml |
 | 5 | WiX 6.0.2 MSI installer | ✅ installer/Package.wxs |
-| 6 | Create Scoop bucket entry | ⭕ planned |
+| 6 | Create Scoop bucket entry | ✅ scoop/regilattice.json |
 | 7 | Code signing for published binaries | ⭕ planned |
 
 ### Sprint 5 — Advanced Features ✅
@@ -129,6 +129,27 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 5 | Scheduled tweak application (apply on boot/login) | ⭕ planned (P3) |
 | 6 | REST API layer for remote management | ⭕ planned (P3) |
 | 7 | Web dashboard for tweak status visualization | ⭕ planned (P3) |
+
+### Sprint 6 — Documentation, Distribution & Polish ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Update CHANGELOG.md [Unreleased] with Sprint 2-5 post-v3.2.0 work | ✅ |
+| 2 | Update copilot-instructions.md: 622 tests, 8 files, PluginTests, Plugins/, locale, tray icon | ✅ |
+| 3 | Update testing.instructions.md + workspace.instructions.md stats | ✅ |
+| 4 | Create Scoop bucket manifest (`scoop/regilattice.json`) | ✅ |
+| 5 | Fix ListViewColumnSorter.cs CRLF → LF line endings | ✅ |
+| 6 | Update repo memory from Python-era to C# conventions | ✅ |
+
+### Sprint 7 — Engine Optimization & Tweak Expansion ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Clean up stale tracking files (current-ids.txt regenerated, missing/removed deleted) | ✅ |
+| 2 | Profile RegisterBuiltins() performance: 37ms for 2,301 tweaks (budget 500ms) | ✅ |
+| 3 | Add 4 perf benchmark tests (startup, search, freeze, caching) | ✅ |
+| 4 | Add 15 new tweaks: 5 Windows Recall, 5 Debloat, 5 Proxy & VPN | ✅ |
+| 5 | Total: 2,316 tweaks, 626 tests (503 Core + 52 CLI + 71 GUI) | ✅ |
 
 ---
 
@@ -145,7 +166,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [x] Coverage reporting with coverlet
 - [x] CLI test coverage
 - [x] DPI-aware GUI scaling
-- [ ] Profile `RegisterBuiltins()` performance
+- [x] Profile `RegisterBuiltins()` performance
 - [ ] Parallel `StatusMap()` optimization
 - [ ] winget manifest v3.0.0
 - [ ] GitHub Releases automation
@@ -158,7 +179,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [x] Export to .REG from GUI
 - [ ] Lazy module loading
 - [x] Caching layer for computed properties
-- [ ] Scoop bucket entry
+- [x] Scoop bucket entry
 - [ ] Code signing
 - [x] Plugin system (JSON Tweak Packs with marketplace)
 - [x] User-defined tweaks via JSON

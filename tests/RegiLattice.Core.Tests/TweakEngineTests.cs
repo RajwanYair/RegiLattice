@@ -1354,4 +1354,44 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal(TweakKind.Registry, tweak.Kind);
     }
+
+    // ── Performance: RegisterBuiltins + Freeze ──────────────────────────
+    [Fact]
+    public void RegisterBuiltins_CompletesUnder500ms()
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.RegisterBuiltins();
+        sw.Stop();
+
+        Assert.True(sw.ElapsedMilliseconds < 500, $"RegisterBuiltins took {sw.ElapsedMilliseconds}ms (budget: 500ms)");
+    }
+
+    [Fact]
+    public void Freeze_BuildsFrozenDictionary()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.RegisterBuiltins();
+        // Freeze() is called inside RegisterBuiltins, so lookups should work
+        Assert.NotNull(engine.GetTweak("priv-disable-telemetry"));
+    }
+
+    [Fact]
+    public void Search_After2301Tweaks_CompletesUnder50ms()
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var results = _engine.Search("telemetry");
+        sw.Stop();
+
+        Assert.NotEmpty(results);
+        Assert.True(sw.ElapsedMilliseconds < 50, $"Search took {sw.ElapsedMilliseconds}ms (budget: 50ms)");
+    }
+
+    [Fact]
+    public void Categories_ReturnsCachedResult()
+    {
+        var cats1 = _engine.Categories();
+        var cats2 = _engine.Categories();
+        Assert.Same(cats1, cats2); // Should be same reference (cached)
+    }
 }

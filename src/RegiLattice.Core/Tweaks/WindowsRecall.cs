@@ -202,5 +202,110 @@ internal static class WindowsRecall
             ],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
         },
+        new TweakDef
+        {
+            Id = "recall-disable-activity-history",
+            Label = "Disable Activity History",
+            Category = "Windows Recall",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description = "Disables activity history collection and timeline features used by Recall.",
+            Tags = ["recall", "ai", "privacy", "activity", "timeline"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
+        },
+        new TweakDef
+        {
+            Id = "recall-disable-voice-activation",
+            Label = "Disable Voice Activation for AI",
+            Category = "Windows Recall",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description = "Prevents AI assistants from listening for voice activation keywords.",
+            Tags = ["recall", "ai", "privacy", "voice", "microphone"],
+            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "recall-disable-online-tips",
+            Label = "Disable Online Tips & Suggestions",
+            Category = "Windows Recall",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description = "Disables cloud-based tips and suggestions throughout Windows.",
+            Tags = ["recall", "ai", "tips", "suggestions", "cloud"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "AllowOnlineTips", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Policies\Explorer", "AllowOnlineTips")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "AllowOnlineTips", 0)],
+        },
+        new TweakDef
+        {
+            Id = "recall-disable-copilot-key",
+            Label = "Disable Copilot Keyboard Key",
+            Category = "Windows Recall",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description = "Disables the dedicated Copilot key on supported keyboards.",
+            Tags = ["recall", "ai", "copilot", "keyboard", "hardware"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableCopilotKey", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableCopilotKey")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableCopilotKey", 1)],
+        },
+        new TweakDef
+        {
+            Id = "recall-disable-suggested-actions",
+            Label = "Disable AI Suggested Actions",
+            Category = "Windows Recall",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description = "Disables AI-powered suggested actions when copying dates, phone numbers, or addresses.",
+            Tags = ["recall", "ai", "clipboard", "suggestions"],
+            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard"],
+            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled")],
+            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1)],
+        },
     ];
 }
