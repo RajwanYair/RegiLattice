@@ -86,6 +86,7 @@ partial class MainForm
         var mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...");
         var mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...");
         var mnuToolVersions = new ToolStripMenuItem("Tool Versions...");
+        var mnuWinHealth = new ToolStripMenuItem("Windows Health...");
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -97,6 +98,7 @@ partial class MainForm
             mnuScoopMgr, mnuPsMgr, mnuPipMgr, mnuWinGetMgr, mnuChocoMgr,
             new ToolStripSeparator(),
             mnuToolVersions,
+            mnuWinHealth,
             new ToolStripSeparator(),
             new ToolStripMenuItem("Tweak Pack Marketplace…", null, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -131,6 +133,7 @@ partial class MainForm
         mnuWinGetMgr.Click += (_, _) => OnOpenWinGetManager();
         mnuChocoMgr.Click += (_, _) => OnOpenChocolateyManager();
         mnuToolVersions.Click += (_, _) => OnOpenToolVersions();
+        mnuWinHealth.Click += (_, _) => OnOpenWindowsHealth();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

@@ -128,4 +128,50 @@ public sealed class PackageManagerValidationTests
         Assert.Equal(16, results.Count);
         Assert.All(results, r => Assert.NotNull(r.Name));
     }
+
+    // ── WindowsHealthManager ────────────────────────────────────────────
+
+    [Fact]
+    public void WindowsHealthCommands_NotEmpty() => Assert.NotEmpty(WindowsHealthManager.Commands);
+
+    [Fact]
+    public void WindowsHealthCommands_AllHaveUniqueIds()
+    {
+        var ids = WindowsHealthManager.Commands.Select(c => c.Id).ToList();
+        Assert.Equal(ids.Count, ids.Distinct(StringComparer.Ordinal).Count());
+    }
+
+    [Fact]
+    public void WindowsHealthCommands_AllHaveLabel() =>
+        Assert.All(WindowsHealthManager.Commands, c => Assert.False(string.IsNullOrWhiteSpace(c.Label)));
+
+    [Fact]
+    public void WindowsHealthCommands_AllHaveDescription() =>
+        Assert.All(WindowsHealthManager.Commands, c => Assert.False(string.IsNullOrWhiteSpace(c.Description)));
+
+    [Fact]
+    public void WindowsHealthCommands_AllHaveFileName() =>
+        Assert.All(WindowsHealthManager.Commands, c => Assert.False(string.IsNullOrWhiteSpace(c.FileName)));
+
+    [Theory]
+    [InlineData("dism-analyze-store")]
+    [InlineData("dism-cleanup-store")]
+    [InlineData("dism-check-health")]
+    [InlineData("dism-scan-health")]
+    [InlineData("dism-restore-health")]
+    [InlineData("sfc-scannow")]
+    [InlineData("ipconfig-flushdns")]
+    [InlineData("netsh-reset-winsock")]
+    [InlineData("chkdsk-scan")]
+    [InlineData("powercfg-energy")]
+    public void WindowsHealthCommand_Exists(string id) => Assert.Contains(WindowsHealthManager.Commands, c => c.Id == id);
+
+    [Fact]
+    public void WindowsHealthIsAdmin_ReturnsBool()
+    {
+        _ = WindowsHealthManager.IsAdmin(); // just ensure no throw
+    }
+
+    [Fact]
+    public void WindowsHealthCommands_Has19Commands() => Assert.Equal(19, WindowsHealthManager.Commands.Count);
 }
