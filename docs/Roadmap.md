@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-15 · v3.2.0 · 2 301 tweaks · 89 categories · 752 tests
+> Last updated: 2025-07-22 · v3.2.0 · 2 301 tweaks · 89 categories · 622 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 301 verified across 89 categories |
-| Tests | 752 (648 Core + 52 CLI + 52 GUI), all passing, 4-thread parallel |
+| Tests | 622 (499 Core + 52 CLI + 71 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -96,37 +96,39 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 8 | Test parallelism: 4 threads per assembly, 4 assemblies parallel | ✅ |
 | 9 | ShellRunner timeout optimization (30s → 10s default, 5s per tool) | ✅ |
 
-### Sprint 3 — Performance Optimization
+### Sprint 3 — Performance Optimization ✅
 
-| # | Task | Priority |
-|---|------|----------|
-| 1 | Profile `RegisterBuiltins()` startup time with BenchmarkDotNet | P1 |
-| 2 | Implement lazy module loading for tweak categories | P2 |
-| 3 | Optimize `StatusMap()` with parallel registry reads | P1 |
-| 4 | Add caching layer for expensive operations (category counts, scope computation) | P2 |
-| 5 | Reduce memory allocation in hot paths | P2 |
+| # | Task | Status |
+|---|------|--------|
+| 1 | FrozenDictionary for ID lookups via `Freeze()` | ✅ |
+| 2 | Cache `Categories()` sorted array (eliminate O(k log k) per call) | ✅ |
+| 3 | Optimize `StatusMap()` with parallel registry reads | ✅ (existed) |
+| 4 | Cache category counts + scope counts post-registration | ✅ |
+| 5 | Fix `ScopeCounts()`: O(3) from `_tweaksByScope` vs O(n=2301) GroupBy | ✅ |
 
-### Sprint 4 — Packaging & Distribution
+### Sprint 4 — Packaging & Distribution ✅
 
-| # | Task | Priority |
-|---|------|----------|
-| 1 | Self-contained single-file publish for CLI + GUI | P0 |
-| 2 | Update winget manifest for v3.0.0 | P1 |
-| 3 | Create Scoop bucket entry | P2 |
-| 4 | GitHub Releases with auto-generated release notes | P1 |
-| 5 | Automated build pipeline (build → test → publish on tag) | P1 |
-| 6 | Code signing for published binaries | P2 |
+| # | Task | Status |
+|---|------|--------|
+| 1 | Self-contained single-file publish for CLI + GUI | ✅ release.yml |
+| 2 | Update winget manifest for v3.2.0 | ✅ |
+| 3 | GitHub Releases with auto-generated release notes | ✅ softprops/action-gh-release |
+| 4 | Automated build pipeline (build → test → publish on tag) | ✅ release.yml |
+| 5 | WiX 6.0.2 MSI installer | ✅ installer/Package.wxs |
+| 6 | Create Scoop bucket entry | ⭕ planned |
+| 7 | Code signing for published binaries | ⭕ planned |
 
-### Sprint 5 — Advanced Features
+### Sprint 5 — Advanced Features ✅
 
-| # | Task | Priority |
-|---|------|----------|
-| 1 | Plugin system: load custom `.dll` tweak modules | P2 |
-| 2 | User-defined tweaks via JSON/TOML (no C# required) | P2 |
-| 3 | Scheduled tweak application (apply on boot/login) | P3 |
-| 4 | REST API layer for remote management | P3 |
-| 5 | Web dashboard for tweak status visualization | P3 |
-| 6 | Localization: add German locale as proof-of-concept | P3 |
+| # | Task | Status |
+|---|------|--------|
+| 1 | Plugin system: JSON Tweak Packs with marketplace (PackDef, PackLoader, PackManager, PackIndex) | ✅ |
+| 2 | User-defined tweaks via JSON (no C# required) — PackLoader validates & converts JSON to TweakDef | ✅ |
+| 3 | Plugin system tests: 62 tests covering PackLoader, PackManager, PackIndex, locale | ✅ |
+| 4 | Localization: built-in German locale with all 48 UI strings | ✅ |
+| 5 | Scheduled tweak application (apply on boot/login) | ⭕ planned (P3) |
+| 6 | REST API layer for remote management | ⭕ planned (P3) |
+| 7 | Web dashboard for tweak status visualization | ⭕ planned (P3) |
 
 ---
 
@@ -155,11 +157,11 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [x] System theme auto-detection
 - [x] Export to .REG from GUI
 - [ ] Lazy module loading
-- [ ] Caching layer for computed properties
+- [x] Caching layer for computed properties
 - [ ] Scoop bucket entry
 - [ ] Code signing
-- [ ] Plugin system (custom .dll modules)
-- [ ] User-defined tweaks via JSON/TOML
+- [x] Plugin system (JSON Tweak Packs with marketplace)
+- [x] User-defined tweaks via JSON
 
 ### P3 — Nice to Have
 
@@ -167,5 +169,5 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [ ] Scheduled tweak application
 - [ ] REST API for remote management
 - [ ] Web dashboard
-- [ ] Localization (German proof-of-concept)
+- [x] Localization (German built-in locale)
 - [ ] Chocolatey package submission
