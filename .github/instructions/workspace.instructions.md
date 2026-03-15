@@ -40,7 +40,7 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/         # Console application
 │       └── Program.cs           # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 529 xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 571 xUnit tests
 │   ├── RegiLattice.CLI.Tests/   # 58 xUnit tests
 │   └── RegiLattice.GUI.Tests/   # 71 xUnit tests
 └── archive/                     # Archived (untracked)

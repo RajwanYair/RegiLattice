@@ -704,6 +704,269 @@ public sealed class TweakEngineTests
         engine.Register([MakeTweak("cat-1", "A"), MakeTweak("cat-2", "B"), MakeTweak("cat-3", "C")]);
         Assert.Equal(engine.Categories().Count, engine.CategoryCount);
     }
+
+    // ── Snapshot round-trip ──────────────────────────────────────────────
+
+    [Fact]
+    public void SaveSnapshot_CreatesFile()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("snap-1")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.SaveSnapshot(path);
+            Assert.True(File.Exists(path));
+            var json = File.ReadAllText(path);
+            Assert.Contains("snap-1", json);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void LoadSnapshot_ReturnsCorrectData()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            File.WriteAllText(path, "{\"tweak-a\": \"applied\", \"tweak-b\": \"notapplied\"}");
+            var engine = CreateEngine();
+            var snapshot = engine.LoadSnapshot(path);
+            Assert.Equal(2, snapshot.Count);
+            Assert.Equal("applied", snapshot["tweak-a"]);
+            Assert.Equal("notapplied", snapshot["tweak-b"]);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void RestoreSnapshot_SkipsMissingIds()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            File.WriteAllText(path, "{\"nonexistent-tweak\": \"applied\"}");
+            var engine = CreateEngine();
+            var results = engine.RestoreSnapshot(path);
+            Assert.Empty(results);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void SaveSnapshot_LoadSnapshot_RoundTrip()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("rt-1"), MakeTweak("rt-2")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.SaveSnapshot(path);
+            var loaded = engine.LoadSnapshot(path);
+            Assert.Equal(2, loaded.Count);
+            Assert.True(loaded.ContainsKey("rt-1"));
+            Assert.True(loaded.ContainsKey("rt-2"));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    // ── ExportJson ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void ExportJson_CreatesValidJson()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("exp-1", "Export"), MakeTweak("exp-2", "Export")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-test-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.ExportJson(path);
+            var json = File.ReadAllText(path);
+            var doc = JsonDocument.Parse(json);
+            Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+            Assert.Equal(2, doc.RootElement.GetArrayLength());
+            Assert.Contains("exp-1", json);
+            Assert.Contains("exp-2", json);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    // ── TweaksByTag / TweaksByScope / GetScope ──────────────────────────
+
+    [Fact]
+    public void TweaksByTag_MultipleTags_ReturnsMatchingSubset()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "tag-1",
+                Label = "T1",
+                Category = "A",
+                Tags = ["alpha", "beta"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\T", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "tag-2",
+                Label = "T2",
+                Category = "A",
+                Tags = ["beta", "gamma"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\T", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "tag-3",
+                Label = "T3",
+                Category = "A",
+                Tags = ["gamma"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\T", "V", 1)],
+            },
+        ]);
+        var beta = engine.TweaksByTag("beta");
+        Assert.Equal(2, beta.Count);
+        Assert.All(beta, t => Assert.Contains("beta", t.Tags));
+    }
+
+    [Fact]
+    public void TweaksByTag_MissingTag_ReturnsEmpty()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("tag-x")]);
+        Assert.Empty(engine.TweaksByTag("nonexistent"));
+    }
+
+    [Fact]
+    public void TweaksByScope_ReturnsCorrectScope()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "scope-user",
+                Label = "U",
+                Category = "A",
+                RegistryKeys = [@"HKCU\Software\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "scope-machine",
+                Label = "M",
+                Category = "A",
+                RegistryKeys = [@"HKLM\Software\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\Software\Test", "V", 1)],
+            },
+        ]);
+        var userTweaks = engine.TweaksByScope(TweakScope.User);
+        Assert.Single(userTweaks);
+        Assert.Equal("scope-user", userTweaks[0].Id);
+    }
+
+    [Fact]
+    public void GetScope_ReturnsCachedScope()
+    {
+        var engine = CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "gs-1",
+            Label = "Test",
+            Category = "A",
+            RegistryKeys = [@"HKCU\Soft\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Soft\Test", "V", 1)],
+        };
+        engine.Register([td]);
+        Assert.Equal(TweakScope.User, engine.GetScope(td));
+    }
+
+    // ── Freeze / CategoryCounts / ScopeCounts ───────────────────────────
+
+    [Fact]
+    public void Freeze_BuildsCaches()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("frz-1", "Alpha"), MakeTweak("frz-2", "Beta")]);
+        engine.Freeze();
+        var catCounts = engine.CategoryCounts();
+        Assert.Equal(2, catCounts.Count);
+        Assert.Equal(1, catCounts["Alpha"]);
+        Assert.Equal(1, catCounts["Beta"]);
+    }
+
+    [Fact]
+    public void ScopeCounts_ReturnsCorrectBreakdown()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "sc-u",
+                Label = "U",
+                Category = "A",
+                RegistryKeys = [@"HKCU\Soft\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Soft\Test", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "sc-m",
+                Label = "M",
+                Category = "A",
+                RegistryKeys = [@"HKLM\Soft\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\Soft\Test", "V", 1)],
+            },
+        ]);
+        engine.Freeze();
+        var counts = engine.ScopeCounts();
+        Assert.Equal(1, counts[TweakScope.User]);
+        Assert.Equal(1, counts[TweakScope.Machine]);
+    }
+
+    // ── TweaksForProfile ────────────────────────────────────────────────
+
+    [Fact]
+    public void TweaksForProfile_InvalidName_ReturnsEmpty()
+    {
+        var engine = CreateEngine();
+        engine.RegisterBuiltins();
+        Assert.Empty(engine.TweaksForProfile("nonexistent-profile"));
+    }
+
+    [Fact]
+    public void TweaksForProfile_ValidName_ReturnsNonEmpty()
+    {
+        var engine = CreateEngine();
+        engine.RegisterBuiltins();
+        var tweaks = engine.TweaksForProfile("privacy");
+        Assert.NotEmpty(tweaks);
+        // All returned tweaks should be in the privacy profile's categories
+        var profile = TweakEngine.Profiles.First(p => p.Name == "privacy");
+        var cats = new HashSet<string>(profile.ApplyCategories, StringComparer.OrdinalIgnoreCase);
+        Assert.All(tweaks, t => Assert.True(cats.Contains(t.Category), $"{t.Id} has category {t.Category} not in privacy profile"));
+    }
+
+    // ── WindowsBuild ────────────────────────────────────────────────────
+
+    [Fact]
+    public void WindowsBuild_ReturnsPositiveNumber()
+    {
+        int build = TweakEngine.WindowsBuild();
+        Assert.True(build > 0, $"Expected positive build number, got {build}");
+    }
 }
 
 /// <summary>Tests that require RegisterBuiltins — share a single engine via IClassFixture.</summary>
