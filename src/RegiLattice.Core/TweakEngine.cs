@@ -3,6 +3,7 @@
 // Replaces Python tweaks/__init__.py entirely.
 
 using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core.Models;
@@ -26,6 +27,13 @@ public sealed class TweakEngine
     private readonly ConcurrentDictionary<string, TweakScope> _scopeCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = [];
     private readonly Dictionary<TweakDef, string> _tweakSearchText = [];
+
+    // Cached post-registration data (populated by Freeze())
+    private string[]? _cachedCategories;
+    private Dictionary<string, int>? _cachedCategoryCounts;
+    private Dictionary<TweakScope, int>? _cachedScopeCounts;
+    private FrozenDictionary<string, TweakDef>? _frozenById;
+    private bool _frozen;
 
     public RegistrySession Session => _session;
     public int TweakCount => _allTweaks.Count;
@@ -180,6 +188,22 @@ public sealed class TweakEngine
         Register(Tweaks.WindowsTerminal.Tweaks);
         Register(Tweaks.WindowsUpdate.Tweaks);
         Register(Tweaks.Wsl.Tweaks);
+
+        Freeze();
+    }
+
+    /// <summary>
+    /// Freeze internal data structures for optimal read performance.
+    /// Called automatically after RegisterBuiltins(). Can also be called
+    /// manually after Register() if building a custom engine.
+    /// </summary>
+    public void Freeze()
+    {
+        _frozenById = _tweakById.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+        _cachedCategories = [.. _tweaksByCat.Keys.Order()];
+        _cachedCategoryCounts = _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
+        _cachedScopeCounts = _tweaksByScope.ToDictionary(kv => Enum.Parse<TweakScope>(kv.Key, ignoreCase: true), kv => kv.Value.Count);
+        _frozen = true;
     }
 
     /// <summary>Register tweaks from an installed Tweak Pack (plugin).</summary>
@@ -203,9 +227,9 @@ public sealed class TweakEngine
 
     public IReadOnlyList<TweakDef> AllTweaks() => _allTweaks;
 
-    public TweakDef? GetTweak(string id) => _tweakById.GetValueOrDefault(id);
+    public TweakDef? GetTweak(string id) => _frozen ? _frozenById!.GetValueOrDefault(id) : _tweakById.GetValueOrDefault(id);
 
-    public IReadOnlyList<string> Categories() => [.. _tweaksByCat.Keys.Order()];
+    public IReadOnlyList<string> Categories() => _cachedCategories ?? [.. _tweaksByCat.Keys.Order()];
 
     public IReadOnlyDictionary<string, List<TweakDef>> TweaksByCategory() => _tweaksByCat;
 
@@ -522,9 +546,10 @@ public sealed class TweakEngine
 
     // ── Category statistics ─────────────────────────────────────────────
 
-    public Dictionary<string, int> CategoryCounts() => _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
+    public Dictionary<string, int> CategoryCounts() => _cachedCategoryCounts ?? _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
-    public Dictionary<TweakScope, int> ScopeCounts() => _allTweaks.GroupBy(t => t.Scope).ToDictionary(g => g.Key, g => g.Count());
+    public Dictionary<TweakScope, int> ScopeCounts() =>
+        _cachedScopeCounts ?? _tweaksByScope.ToDictionary(kv => Enum.Parse<TweakScope>(kv.Key, ignoreCase: true), kv => kv.Value.Count);
 
     // ── Export for GUI ──────────────────────────────────────────────────
 
