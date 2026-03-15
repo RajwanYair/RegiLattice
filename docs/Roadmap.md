@@ -204,12 +204,26 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ---
 
+## Sprint 11 — Documentation Refresh & Roadmap Cleanup
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | GUI: log panel visible by default | ✅ |
+| 2 | Update copilot-instructions.md: full TweakDef model, TweakKind, TweakResult tables | ✅ |
+| 3 | Update workspace.instructions.md: TweakKind table with fields used | ✅ |
+| 4 | Update lessons-learned.instructions.md: HasOperations gate, coverage patterns, Assert.Contains ambiguity | ✅ |
+| 5 | Update testing.instructions.md: TweakKind coverage patterns, actual coverage data, intentionally untested components | ✅ |
+| 6 | Mark completed roadmap items: self-contained publish, parallel StatusMap, winget manifest, GitHub Releases | ✅ |
+| 7 | Coverage verification: 94.9% line coverage (exceeds 80% target) | ✅ |
+
+---
+
 ## Prioritized Backlog
 
 ### P0 — Critical (next sprint)
 
 - [x] GitHub Actions CI workflow (.NET build + test)
-- [ ] Self-contained single-file publish
+- [x] Self-contained single-file publish
 - [x] Async GUI operations (no UI thread blocking)
 
 ### P1 — High Value
@@ -218,9 +232,9 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [x] CLI test coverage
 - [x] DPI-aware GUI scaling
 - [x] Profile `RegisterBuiltins()` performance
-- [ ] Parallel `StatusMap()` optimization
-- [ ] winget manifest v3.0.0
-- [ ] GitHub Releases automation
+- [x] Parallel `StatusMap()` optimization
+- [x] winget manifest v3.2.0
+- [x] GitHub Releases automation
 
 ### P2 — Medium Value
 

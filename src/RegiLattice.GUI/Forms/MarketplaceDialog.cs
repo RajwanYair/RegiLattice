@@ -23,6 +23,7 @@ internal sealed class MarketplaceDialog : Form
     internal MarketplaceDialog()
     {
         Text = "\U0001F4E6 Tweak Pack Marketplace";
+        Icon = AppIcons.MarketplaceIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = new Size(700, 520);

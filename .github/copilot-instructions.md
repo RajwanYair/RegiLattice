@@ -168,6 +168,7 @@ public sealed class TweakDef
     public IReadOnlyList<string> DependsOn { get; init; } = [];
     public string SideEffects { get; init; } = "";
     public string SourceUrl { get; init; } = "";
+    public string ExpectedResult { get; init; } = ""; // auto-generated if empty
 
     // Declarative RegOp pattern (preferred — ~95% of tweaks)
     public IReadOnlyList<RegOp> ApplyOps { get; init; } = [];
@@ -175,14 +176,49 @@ public sealed class TweakDef
     public IReadOnlyList<RegOp> DetectOps { get; init; } = [];
 
     // Custom logic delegates (complex tweaks only — ~5%)
-    public Action<bool>? ApplyAction { get; init; }
+    public Action<bool>? ApplyAction { get; init; }   // bool = dryRun
     public Action<bool>? RemoveAction { get; init; }
     public Func<bool>? DetectAction { get; init; }
+    public Action<bool>? UpdateAction { get; init; }  // for package managers
+
+    // Kind & applicability
+    public TweakKind? KindHint { get; init; }         // override auto-detection
+    public Func<bool>? IsApplicable { get; init; }    // hardware gating predicate
+    public string ApplicabilityNote { get; init; } = ""; // reason when not applicable
+    public string? PackSource { get; init; }          // plugin name if from pack
 
     // Computed
-    public TweakScope Scope => ComputeScope();  // User, Machine, or Both
+    public TweakKind Kind { get; }                    // auto-detected from category/ops or KindHint
+    public bool HasOperations { get; }                // ApplyOps.Count > 0 || ApplyAction != null
+    public TweakScope Scope => ComputeScope();        // User, Machine, or Both
+    public string GetExpectedResult();                // returns ExpectedResult or auto-generated
 }
 ```
+
+### TweakKind — 8 Operation Variants
+
+| Kind | Typical Pattern | Example Category |
+|------|-----------------|------------------|
+| `Registry` | RegOps on HKCU/HKLM | Privacy, Performance, Explorer |
+| `PowerShell` | PSH cmdlet or script block | PowerShell Tweaks |
+| `SystemCommand` | bcdedit, dism, netsh, fsutil | Boot, Network Optimization |
+| `ServiceControl` | sc.exe, Set-Service | Services |
+| `ScheduledTask` | schtasks, Register-ScheduledTask | Scheduled Tasks |
+| `FileConfig` | JSON, INI, .wslconfig | WSL, Windows Terminal |
+| `GroupPolicy` | HKLM\...\Policies\... paths | Security, Hardening |
+| `PackageManager` | scoop, pip, chocolatey, winget | Package Management |
+
+### TweakResult — 7 Outcomes
+
+| Result | Meaning |
+|--------|---------|
+| `Applied` | Tweak is active |
+| `NotApplied` | Tweak is not active |
+| `Unknown` | Detection failed or inconclusive |
+| `Error` | Exception during apply/remove/detect |
+| `SkippedCorp` | Blocked by CorporateGuard |
+| `SkippedBuild` | MinBuild not met |
+| `SkippedHw` | IsApplicable returned false |
 
 ### RegOp Factory Methods (12)
 
@@ -263,9 +299,11 @@ Override: `--force` CLI flag or GUI "Force" checkbox.
 - System theme auto-detection (follows Windows dark/light mode on startup)
 - Collapsible category sections with tweak counts
 - Scope badges: USER (green) / MACHINE (blue) / BOTH (yellow)
+- Kind column with symbol from `CategoryIcons.GetKindSymbol()`
 - Search bar + status filters + scope filters
 - Profile selector dropdown
 - Theme selector
+- **Log panel (bottom, visible by default)** — timestamped operation log, toggle via File menu
 - Package manager dialogs (Scoop, pip, PowerShell modules)
 - About dialog with hardware info
 - Double-buffered rendering for smooth scrolling

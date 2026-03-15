@@ -42,7 +42,7 @@ internal static partial class PSModuleManager
             scope == "AllUsers"
                 ? "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name -Unique | Sort-Object"
                 : "Get-Module -ListAvailable -ErrorAction SilentlyContinue | Where-Object { $_.ModuleBase -like \"$($env:USERPROFILE)*\" -or $_.ModuleBase -like \"$($env:HOME)*\" } | Select-Object -ExpandProperty Name -Unique | Sort-Object";
-        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct).ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct, TimeSpan.FromSeconds(30)).ConfigureAwait(false);
 
         return stdout
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)

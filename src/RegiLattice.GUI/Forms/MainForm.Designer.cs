@@ -84,13 +84,13 @@ partial class MainForm
             mnuExit,
         });
 
-        var mnuScoopMgr = new ToolStripMenuItem("Scoop Manager...");
-        var mnuPsMgr = new ToolStripMenuItem("PowerShell Modules...");
-        var mnuPipMgr = new ToolStripMenuItem("pip Manager...");
-        var mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...");
-        var mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...");
-        var mnuToolVersions = new ToolStripMenuItem("Tool Versions...");
-        var mnuWinHealth = new ToolStripMenuItem("Windows Health...");
+        var mnuScoopMgr = new ToolStripMenuItem("Scoop Manager...") { Image = AppIcons.ScoopMenuBitmap };
+        var mnuPsMgr = new ToolStripMenuItem("PowerShell Modules...") { Image = AppIcons.PSModuleMenuBitmap };
+        var mnuPipMgr = new ToolStripMenuItem("pip Manager...") { Image = AppIcons.PipMenuBitmap };
+        var mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...") { Image = AppIcons.WinGetMenuBitmap };
+        var mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...") { Image = AppIcons.ChocolateyMenuBitmap };
+        var mnuToolVersions = new ToolStripMenuItem("Tool Versions...") { Image = AppIcons.ToolVersionsMenuBitmap };
+        var mnuWinHealth = new ToolStripMenuItem("Windows Health...") { Image = AppIcons.WindowsHealthMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -104,7 +104,7 @@ partial class MainForm
             mnuToolVersions,
             mnuWinHealth,
             new ToolStripSeparator(),
-            new ToolStripMenuItem("Tweak Pack Marketplace…", null, (_, _) => OnOpenMarketplace()),
+            new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
@@ -343,7 +343,7 @@ partial class MainForm
             BorderStyle = BorderStyle.None,
             ScrollBars = RichTextBoxScrollBars.Vertical,
         };
-        _logPanel = new Panel { Dock = DockStyle.Bottom, Height = 150, Visible = false };
+        _logPanel = new Panel { Dock = DockStyle.Bottom, Height = 150, Visible = true };
         _logPanel.Paint += (_, pe) =>
         {
             // Top separator line
