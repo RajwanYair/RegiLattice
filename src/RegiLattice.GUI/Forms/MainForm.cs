@@ -559,50 +559,79 @@ public partial class MainForm : Form
 
     private void PopulateList(string category)
     {
-        string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
-        string search = _searchBox.Text.Trim();
-        string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
-        string kindSel = _kindCombo.SelectedItem?.ToString() ?? "All Kinds";
-
-        _listView.BeginUpdate();
-        _listView.Items.Clear();
-
         var byCategory = _engine.TweaksByCategory();
         if (!byCategory.TryGetValue(category, out var tweaks))
         {
+            _listView.BeginUpdate();
+            _listView.Items.Clear();
             _listView.EndUpdate();
             return;
         }
 
-        IEnumerable<TweakDef> filtered = tweaks;
-
-        // Status filter
-        if (filter != "All")
+        IEnumerable<TweakDef> source = tweaks;
+        string search = _searchBox.Text.Trim();
+        if (search.Length > 0)
         {
-            filtered = filter switch
-            {
-                "Applied" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Applied),
-                "Not Applied" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.NotApplied),
-                "Default" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.NotApplied),
-                "Errors" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Error),
-                "Unknown" => filtered.Where(t => _statusCache.GetValueOrDefault(t.Id) == TweakResult.Unknown),
-                _ => filtered,
-            };
+            source = source.Where(t =>
+                t.Label.Contains(search, StringComparison.OrdinalIgnoreCase)
+                || t.Id.Contains(search, StringComparison.OrdinalIgnoreCase)
+                || t.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
+            );
         }
 
-        // Scope filter
+        PopulateListViewFiltered(ApplyFilters(source), showCategory: false);
+    }
+
+    private void RefreshListView()
+    {
+        string search = _searchBox.Text.Trim();
+        if (search.Length > 0)
+        {
+            // Cross-category search: show matching tweaks from ALL categories
+            PopulateSearchResults(search);
+            SetStatus($"Search: \"{search}\" — {_listView.Items.Count} result(s) across all categories.");
+        }
+        else if (_treeView.SelectedNode is { Tag: string cat })
+        {
+            PopulateList(cat);
+        }
+    }
+
+    private void PopulateSearchResults(string search)
+    {
+        PopulateListViewFiltered(ApplyFilters(_engine.Search(search)), showCategory: true);
+    }
+
+    /// <summary>Shared filter logic for status, scope, and kind combos.</summary>
+    private IEnumerable<TweakDef> ApplyFilters(IEnumerable<TweakDef> tweaks)
+    {
+        string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
+        string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
+        string kindSel = _kindCombo.SelectedItem?.ToString() ?? "All Kinds";
+
+        if (filter != "All")
+        {
+            TweakResult target = filter switch
+            {
+                "Applied" => TweakResult.Applied,
+                "Not Applied" or "Default" => TweakResult.NotApplied,
+                "Errors" => TweakResult.Error,
+                _ => TweakResult.Unknown,
+            };
+            tweaks = tweaks.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
+        }
+
         if (scopeSel != "All Scopes")
         {
             bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
             bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
-            filtered = filtered.Where(t =>
+            tweaks = tweaks.Where(t =>
                 wantUser ? t.Scope == TweakScope.User
                 : wantMachine ? t.Scope == TweakScope.Machine
                 : true
             );
         }
 
-        // Kind filter
         if (kindSel != "All Kinds")
         {
             TweakKind? wantKind = kindSel switch
@@ -618,21 +647,19 @@ public partial class MainForm : Form
                 _ => null,
             };
             if (wantKind.HasValue)
-                filtered = filtered.Where(t => t.Kind == wantKind.Value);
+                tweaks = tweaks.Where(t => t.Kind == wantKind.Value);
         }
 
-        // Search filter
-        if (search.Length > 0)
-        {
-            filtered = filtered.Where(t =>
-                t.Label.Contains(search, StringComparison.OrdinalIgnoreCase)
-                || t.Id.Contains(search, StringComparison.OrdinalIgnoreCase)
-                || t.Description.Contains(search, StringComparison.OrdinalIgnoreCase)
-            );
-        }
+        return tweaks;
+    }
 
-        // Admin-only dimming
+    /// <summary>Shared ListView population from a filtered tweak sequence.</summary>
+    private void PopulateListViewFiltered(IEnumerable<TweakDef> filtered, bool showCategory)
+    {
         bool isAdmin = Elevation.IsAdmin();
+
+        _listView.BeginUpdate();
+        _listView.Items.Clear();
 
         foreach (var td in filtered)
         {
@@ -683,111 +710,8 @@ public partial class MainForm : Form
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, scopeBadge) { ForeColor = AppTheme.Accent });
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.NeedsAdmin ? "Yes" : "No"));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.CorpSafe ? "Yes" : "No"));
-            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, td.Description));
-            _listView.Items.Add(item);
-        }
-
-        _listView.EndUpdate();
-    }
-
-    private void RefreshListView()
-    {
-        string search = _searchBox.Text.Trim();
-        if (search.Length > 0)
-        {
-            // Cross-category search: show matching tweaks from ALL categories
-            PopulateSearchResults(search);
-            SetStatus($"Search: \"{search}\" — {_listView.Items.Count} result(s) across all categories.");
-        }
-        else if (_treeView.SelectedNode is { Tag: string cat })
-        {
-            PopulateList(cat);
-        }
-    }
-
-    private void PopulateSearchResults(string search)
-    {
-        string filter = _filterCombo.SelectedItem?.ToString() ?? "All";
-        string scopeSel = _scopeCombo.SelectedItem?.ToString() ?? "All Scopes";
-        string kindSel = _kindCombo.SelectedItem?.ToString() ?? "All Kinds";
-
-        _listView.BeginUpdate();
-        _listView.Items.Clear();
-
-        IEnumerable<TweakDef> all = _engine.Search(search);
-
-        // Status filter
-        if (filter != "All")
-        {
-            TweakResult target = filter switch
-            {
-                "Applied" => TweakResult.Applied,
-                "Not Applied" => TweakResult.NotApplied,
-                _ => TweakResult.Unknown,
-            };
-            all = all.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
-        }
-
-        // Scope filter
-        if (scopeSel != "All Scopes")
-        {
-            bool wantUser = scopeSel.StartsWith("User", StringComparison.OrdinalIgnoreCase);
-            bool wantMachine = scopeSel.StartsWith("Machine", StringComparison.OrdinalIgnoreCase);
-            all = all.Where(t =>
-                wantUser ? t.Scope == TweakScope.User
-                : wantMachine ? t.Scope == TweakScope.Machine
-                : true
-            );
-        }
-
-        // Kind filter
-        if (kindSel != "All Kinds")
-        {
-            TweakKind? wantKind = kindSel switch
-            {
-                "Registry" => TweakKind.Registry,
-                "PowerShell" => TweakKind.PowerShell,
-                "System Cmd" => TweakKind.SystemCommand,
-                "Service" => TweakKind.ServiceControl,
-                "Sched Task" => TweakKind.ScheduledTask,
-                "File Config" => TweakKind.FileConfig,
-                "Group Policy" => TweakKind.GroupPolicy,
-                "Package Mgr" => TweakKind.PackageManager,
-                _ => null,
-            };
-            if (wantKind.HasValue)
-                all = all.Where(t => t.Kind == wantKind.Value);
-        }
-
-        foreach (var td in all)
-        {
-            bool applicable = !_inapplicableIds.Contains(td.Id);
-            var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
-            string statusText;
-            if (!applicable)
-                statusText = "N/A";
-            else if (_pendingRebootIds.Contains(td.Id))
-                statusText = "\u23F3 Pending";
-            else
-                statusText = status switch
-                {
-                    TweakResult.Applied => "Applied",
-                    TweakResult.NotApplied => "Default",
-                    TweakResult.Error => "Error",
-                    _ => "Unknown",
-                };
-            Color itemFg = applicable ? AppTheme.Fg : AppTheme.FgDim;
-            string kindSymbol = CategoryIcons.GetKindSymbol(td.Kind);
-            var item = new ListViewItem(td.Label) { ForeColor = itemFg };
-            item.SubItems.AddRange([
-                kindSymbol,
-                statusText,
-                td.Scope.ToString(),
-                td.NeedsAdmin ? "Yes" : "No",
-                td.CorpSafe ? "Yes" : "No",
-                $"[{td.Category}] {td.Description}",
-            ]);
-            item.Tag = td;
+            string desc = showCategory ? $"[{td.Category}] {td.Description}" : td.Description;
+            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, desc));
             _listView.Items.Add(item);
         }
 
@@ -1048,10 +972,28 @@ public partial class MainForm : Form
 
     private void UpdateCounters()
     {
-        int applied = _statusCache.Values.Count(r => r == TweakResult.Applied);
-        int notApplied = _statusCache.Values.Count(r => r == TweakResult.NotApplied);
-        int unknown = _statusCache.Values.Count(r => r == TweakResult.Unknown);
-        int error = _statusCache.Values.Count(r => r == TweakResult.Error);
+        int applied = 0,
+            notApplied = 0,
+            unknown = 0,
+            error = 0;
+        foreach (var r in _statusCache.Values)
+        {
+            switch (r)
+            {
+                case TweakResult.Applied:
+                    applied++;
+                    break;
+                case TweakResult.NotApplied:
+                    notApplied++;
+                    break;
+                case TweakResult.Error:
+                    error++;
+                    break;
+                default:
+                    unknown++;
+                    break;
+            }
+        }
         int pending = _pendingRebootIds.Count;
         string pendingStr = pending > 0 ? $"  \u2502  \u23F3 {pending} pending" : "";
         _statusLabel.Text =
