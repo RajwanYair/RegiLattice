@@ -47,11 +47,17 @@ htmlcov/
 *.nettrace
 *.etl
 
-# ── Python archive (legacy, still in repo) ───────────────────
+# ── Archive (legacy Python + old NativeGUI — no longer tracked) ─
+archive/
+
+# ── Python leftovers ─────────────────────────────────────────
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# ── Generated files ──────────────────────────────────────────
+current-ids.txt
 
 .fake
