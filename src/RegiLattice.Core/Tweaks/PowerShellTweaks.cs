@@ -213,5 +213,143 @@ internal static class PowerShellTweaks
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2),
             ],
         },
+        new TweakDef
+        {
+            Id = "ps-disable-diagnostics-hub",
+            Label = "Disable Diagnostics Hub Service",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ServiceControl,
+            Description = "Disables the Diagnostics Hub Standard Collector service (DiagTrack helper). Reduces telemetry overhead.",
+            Tags = ["powershell", "service", "telemetry", "privacy", "performance"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service -Name diagnosticshub.standardcollector.service -Force -ErrorAction SilentlyContinue; "
+                        + "Set-Service -Name diagnosticshub.standardcollector.service -StartupType Disabled -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Set-Service -Name diagnosticshub.standardcollector.service -StartupType Manual -ErrorAction SilentlyContinue"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-Service -Name diagnosticshub.standardcollector.service -ErrorAction SilentlyContinue).StartType"
+                );
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-wmp-network-sharing",
+            Label = "Disable WMP Network Sharing Service",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ServiceControl,
+            Description = "Disables Windows Media Player Network Sharing service. Reduces network exposure.",
+            Tags = ["powershell", "service", "media", "network", "cleanup"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service -Name WMPNetworkSvc -Force -ErrorAction SilentlyContinue; "
+                        + "Set-Service -Name WMPNetworkSvc -StartupType Disabled -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-Service -Name WMPNetworkSvc -StartupType Manual -ErrorAction SilentlyContinue"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service -Name WMPNetworkSvc -ErrorAction SilentlyContinue).StartType");
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-geolocation-service",
+            Label = "Disable Geolocation Service",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ServiceControl,
+            Description = "Disables the Geolocation service to prevent apps from tracking your physical location.",
+            Tags = ["powershell", "service", "privacy", "location"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service -Name lfsvc -Force -ErrorAction SilentlyContinue; Set-Service -Name lfsvc -StartupType Disabled"
+                ),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-Service -Name lfsvc -StartupType Manual"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service -Name lfsvc -ErrorAction SilentlyContinue).StartType");
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-connected-user-experience",
+            Label = "Disable Connected User Experience (DiagTrack)",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ServiceControl,
+            Description = "Disables the DiagTrack (Connected User Experiences and Telemetry) service. Major Windows telemetry reducer.",
+            Tags = ["powershell", "service", "telemetry", "privacy"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service -Name DiagTrack -Force -ErrorAction SilentlyContinue; Set-Service -Name DiagTrack -StartupType Disabled"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Set-Service -Name DiagTrack -StartupType Automatic; Start-Service -Name DiagTrack -ErrorAction SilentlyContinue"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service -Name DiagTrack -ErrorAction SilentlyContinue).StartType");
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-dmwappush-service",
+            Label = "Disable Device Management WAP Push Service",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.ServiceControl,
+            Description = "Disables the dmwappushservice used for telemetry data collection routing.",
+            Tags = ["powershell", "service", "telemetry", "privacy"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Stop-Service -Name dmwappushservice -Force -ErrorAction SilentlyContinue; "
+                        + "Set-Service -Name dmwappushservice -StartupType Disabled -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-Service -Name dmwappushservice -StartupType Automatic -ErrorAction SilentlyContinue"),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("(Get-Service -Name dmwappushservice -ErrorAction SilentlyContinue).StartType");
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-optimize-network-adapter",
+            Label = "Optimize Network Adapter Power Settings",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables power management on all network adapters to prevent them from sleeping and dropping connections.",
+            Tags = ["powershell", "network", "power", "performance", "stability"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { "
+                        + "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Disabled -WakeOnPattern Disabled -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { "
+                        + "Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Enabled -WakeOnPattern Enabled -ErrorAction SilentlyContinue }"
+                ),
+            DetectAction = () => false,
+        },
     ];
 }
