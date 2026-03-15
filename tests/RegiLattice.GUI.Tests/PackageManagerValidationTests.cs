@@ -108,10 +108,10 @@ public sealed class PackageManagerValidationTests
         Assert.False(info.IsInstalled);
     }
 
-    [Fact(Timeout = 60_000)]
+    [Fact(Timeout = 30_000)]
     public async Task ToolVersionChecker_CheckAll_ReturnsResults()
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(45));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
         IReadOnlyList<ToolVersionChecker.ToolInfo> results;
         try
         {

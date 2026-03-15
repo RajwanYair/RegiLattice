@@ -234,5 +234,143 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1)],
         },
+        new TweakDef
+        {
+            Id = "ssd-disable-boot-trace",
+            Label = "Disable Boot Trace Logging",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables boot trace diagnostic logging that writes to disk during startup.",
+            Tags = ["ssd", "performance", "boot", "trace", "io"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 0)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-ntfs-compression",
+            Label = "Disable NTFS Compression (System Drive)",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS compression on the system drive. Compression adds CPU overhead and provides minimal benefit on fast SSDs.",
+            Tags = ["ssd", "performance", "ntfs", "compression", "cpu"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-ntfs-encryption",
+            Label = "Disable NTFS Encryption Paging",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS encrypted paging file. Reduces I/O overhead from encrypting page file writes.",
+            Tags = ["ssd", "performance", "ntfs", "encryption", "paging"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-storage-sense",
+            Label = "Disable Storage Sense Auto-Cleanup",
+            Category = "SSD Optimization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the automatic Storage Sense cleanup that periodically deletes temporary files. Gives you manual control.",
+            Tags = ["ssd", "storage", "cleanup", "automatic"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-set-io-priority-normal",
+            Label = "Set Default I/O Priority to Normal",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the default I/O priority for all processes to Normal. Prevents I/O starvation from low-priority background tasks.",
+            Tags = ["ssd", "performance", "io-priority", "scheduling"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-low-disk-check",
+            Label = "Disable Low Disk Space Check",
+            Category = "SSD Optimization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the periodic low disk space notification check. Reduces unnecessary disk I/O.",
+            Tags = ["ssd", "performance", "notification", "disk-space"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-increase-ntfs-mft-zone",
+            Label = "Increase NTFS MFT Zone Reservation",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the NTFS Master File Table zone reservation to reduce MFT fragmentation on SSDs with many small files.",
+            Tags = ["ssd", "performance", "ntfs", "mft", "fragmentation"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-readyboost",
+            Label = "Disable ReadyBoost Service",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the ReadyBoost service which uses USB flash drives as cache. Useless on systems with SSDs.",
+            Tags = ["ssd", "performance", "readyboost", "service", "usb"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-disk-perf-counters",
+            Label = "Disable Disk Performance Counters",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables disk performance counters to reduce I/O overhead. Disable only if you don't monitor disk performance.",
+            Tags = ["ssd", "performance", "counters", "io", "monitoring"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
+        },
     ];
 }
