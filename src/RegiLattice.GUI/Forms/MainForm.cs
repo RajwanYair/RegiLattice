@@ -1146,7 +1146,22 @@ public partial class MainForm : Form
         cfg.Save();
     }
 
-    private void OnSearchTextChanged(object? sender, EventArgs e) => RefreshListView();
+    private System.Windows.Forms.Timer? _searchDebounceTimer;
+
+    private void OnSearchTextChanged(object? sender, EventArgs e)
+    {
+        _searchDebounceTimer?.Stop();
+        _searchDebounceTimer?.Dispose();
+        _searchDebounceTimer = new System.Windows.Forms.Timer { Interval = 300 };
+        _searchDebounceTimer.Tick += (_, _) =>
+        {
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Dispose();
+            _searchDebounceTimer = null;
+            RefreshListView();
+        };
+        _searchDebounceTimer.Start();
+    }
 
     /// <summary>
     /// Handles column header clicks for sorting and filtering.
@@ -1286,12 +1301,15 @@ public partial class MainForm : Form
             string desc = td.Description.Length > 0 ? td.Description : "(no description)";
             string pendingNote = isPending ? "\n\u26A0 Restart/reboot needed for this change to take effect." : "";
 
+            string expected = td.GetExpectedResult();
+
             _detailLabel.Text =
                 $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
                 + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
                 + $"Tags: {tags}\n"
                 + $"Registry: {keys}\n"
-                + $"Description: {desc}"
+                + $"Description: {desc}\n"
+                + $"\U0001F4CB Expected Result: {expected}"
                 + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
                 + pendingNote;
             _detailLabel.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;

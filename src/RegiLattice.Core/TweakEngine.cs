@@ -88,7 +88,7 @@ public sealed class TweakEngine
             scopeList.Add(td);
 
             // Build search index
-            var searchText = $"{td.Id} {td.Label} {td.Category} {td.Description} {string.Join(' ', td.Tags)}".ToLowerInvariant();
+            var searchText = $"{td.Id} {td.Label} {td.Category} {td.Description} {td.GetExpectedResult()} {string.Join(' ', td.Tags)}".ToLowerInvariant();
             _searchPairs.Add((searchText, td));
             _tweakSearchText[td] = searchText;
         }
