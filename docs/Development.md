@@ -42,12 +42,12 @@ dotnet run --project src/RegiLattice.GUI
 
 ```
 RegiLattice.sln
-├── src/RegiLattice.Core/      # Class library — engine, models, registry, services
+├── src/RegiLattice.Core/      # Class library — engine, models, registry, services, plugins
 ├── src/RegiLattice.GUI/       # WinForms application (4 themes)
 ├── src/RegiLattice.CLI/       # Console application (25+ commands)
-├── tests/RegiLattice.Core.Tests/   # 112 xUnit tests
-├── tests/RegiLattice.CLI.Tests/    # 52 xUnit tests
-└── tests/RegiLattice.GUI.Tests/    # 39 xUnit tests
+├── tests/RegiLattice.Core.Tests/   # 514 xUnit tests
+├── tests/RegiLattice.CLI.Tests/    # 56 xUnit tests
+└── tests/RegiLattice.GUI.Tests/    # 71 xUnit tests
 ```
 
 ---

@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: "Search for tweaks across all 72 categories by keyword, registry path, tag, or scope"
+description: "Search for tweaks across all 89 categories by keyword, registry path, tag, or scope"
 ---
 
 # Search Tweaks

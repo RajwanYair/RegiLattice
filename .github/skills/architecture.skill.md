@@ -18,7 +18,7 @@ RegiLattice.sln
 │   ├── Registry/               # RegistrySession — all Win32 registry I/O
 │   ├── Services/               # AppConfig, Analytics, CorporateGuard, Elevation,
 │   │                           #   HardwareInfo, Locale, Ratings
-│   └── Tweaks/                 # 71 modules × ~28 tweaks each = 1,981+ tweaks
+│   └── Tweaks/                 # 90 modules × ~26 tweaks each = 2,316+ tweaks
 ├── src/RegiLattice.GUI/        # WinForms app (depends on Core)
 │   ├── Theme.cs                # 4-theme engine
 │   ├── Forms/                  # MainForm, AboutDialog, 5 package manager dialogs,
@@ -27,12 +27,12 @@ RegiLattice.sln
 │                               #   ChocolateyMgr, PSModuleMgr, ToolVersionChecker
 ├── src/RegiLattice.CLI/        # Console app (depends on Core)
 │   └── Program.cs              # 25+ commands via args parsing
-└── tests/                      # xUnit: 112 Core + 52 CLI + 39 GUI = 203 tests
+└── tests/                      # xUnit: 514 Core + 56 CLI + 71 GUI = 641 tests
 ```
 
 ## Data Flow
 
-1. `TweakEngine.RegisterBuiltins()` loads all 71 category modules
+1. `TweakEngine.RegisterBuiltins()` loads all 90 category modules
 2. Each module provides `static IReadOnlyList<TweakDef> Tweaks` property
 3. Engine indexes by ID, Category, Scope; builds search index
 4. GUI/CLI calls `Search()`, `Filter()`, `DetectStatus()`, `Apply()`, `Remove()`

@@ -32,7 +32,7 @@ RegiLattice.sln
 │   │   ├── Services/            # Analytics, AppConfig, CorporateGuard, Elevation,
 │   │   │                        #   HardwareInfo, Locale, Ratings
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 89 category modules, ~2,316 tweaks
+│   │   └── Tweaks/              # 90 category modules, ~2,316 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── Theme.cs             # 4-theme engine
