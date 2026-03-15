@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <RunConfiguration>
-    <!-- Run test assemblies sequentially to prevent WinForms STA deadlocks -->
-    <MaxCpuCount>1</MaxCpuCount>
-    <TestSessionTimeout>300000</TestSessionTimeout>
+    <!-- Run up to 4 test assemblies in parallel -->
+    <MaxCpuCount>4</MaxCpuCount>
+    <TestSessionTimeout>60000</TestSessionTimeout>
   </RunConfiguration>
 </RunSettings>

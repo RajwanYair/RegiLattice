@@ -52,6 +52,10 @@ partial class MainForm
     private ToolStripStatusLabel _progressLabel = null!;
     private ToolStripProgressBar _progressBar = null!;
 
+    // ── Tray icon ──────────────────────────────────────────────────────────
+    private NotifyIcon _trayIcon = null!;
+    private ContextMenuStrip _trayMenu = null!;
+
     // ── Dispose ────────────────────────────────────────────────────────────
     protected override void Dispose(bool disposing)
     {
@@ -355,6 +359,21 @@ partial class MainForm
         _statusStrip = new StatusStrip { SizingGrip = false };
         _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar });
         _statusStrip.Dock = DockStyle.Bottom;
+
+        // ── Tray icon ──────────────────────────────────────────────────────
+        _trayMenu = new ContextMenuStrip();
+        _trayMenu.Items.Add("Show RegiLattice", null, (_, _) => RestoreFromTray());
+        _trayMenu.Items.Add(new ToolStripSeparator());
+        _trayMenu.Items.Add("Exit", null, (_, _) => { _trayIcon.Visible = false; Application.Exit(); });
+
+        _trayIcon = new NotifyIcon(components!)
+        {
+            Icon = AppIcons.AppIcon,
+            Text = "RegiLattice",
+            ContextMenuStrip = _trayMenu,
+            Visible = false,
+        };
+        _trayIcon.DoubleClick += (_, _) => RestoreFromTray();
 
         // ── Form ───────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(96f, 96f);

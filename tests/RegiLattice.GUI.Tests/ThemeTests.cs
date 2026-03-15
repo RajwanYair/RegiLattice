@@ -103,4 +103,18 @@ public sealed class ThemeTests
         using var path = AppTheme.RoundedRectPath(rect, 8);
         Assert.True(path.PointCount > 0);
     }
+
+    [Fact]
+    public void DetectSystemTheme_ReturnsValidThemeKey()
+    {
+        var result = AppTheme.DetectSystemTheme();
+        Assert.Contains(result, new[] { "catppuccin-mocha", "catppuccin-latte" });
+    }
+
+    [Fact]
+    public void DetectSystemTheme_ThemeKeyExistsInAvailable()
+    {
+        var result = AppTheme.DetectSystemTheme();
+        Assert.Contains(result, AppTheme.AvailableThemes());
+    }
 }

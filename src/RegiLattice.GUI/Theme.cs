@@ -150,6 +150,21 @@ internal static class AppTheme
             _current = def;
     }
 
+    /// <summary>Detect Windows 10/11 system theme preference (dark vs light).</summary>
+    /// <returns>Theme key matching system preference: "catppuccin-mocha" for dark, "catppuccin-latte" for light.</returns>
+    internal static string DetectSystemTheme()
+    {
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+            if (key?.GetValue("AppsUseLightTheme") is int value)
+                return value == 1 ? "catppuccin-latte" : "catppuccin-mocha";
+        }
+        catch (System.Security.SecurityException) { }
+        catch (UnauthorizedAccessException) { }
+        return "catppuccin-mocha"; // default to dark
+    }
+
     /// <summary>Event raised after theme changes — subscribers should re-apply colours.</summary>
     internal static event Action? ThemeChanged;
 

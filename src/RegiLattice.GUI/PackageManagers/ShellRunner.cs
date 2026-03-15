@@ -7,7 +7,7 @@ namespace RegiLattice.GUI.PackageManagers;
 internal static class ShellRunner
 {
     /// <summary>Run a process with explicit argument list (no shell injection risk).</summary>
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
 
     internal static async Task<(int ExitCode, string StdOut, string StdErr)> RunAsync(
         string fileName,
