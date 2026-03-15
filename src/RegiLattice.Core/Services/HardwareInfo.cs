@@ -58,10 +58,29 @@ public static class HardwareInfo
     {
         if (_cached is not null)
             return _cached;
-        var cpu = DetectCpu();
-        var gpus = DetectGpus();
+
+        // Parallelize WMI queries for faster startup
+        CpuInfo cpu = null!;
+        IReadOnlyList<GpuInfo> gpus = null!;
+        DiskInfo disk = null!;
+        bool hasHyperV = false,
+            hasWsl = false,
+            hasTpm = false,
+            hasSecureBoot = false,
+            hasBattery = false;
+
+        Task.WaitAll(
+            Task.Run(() => cpu = DetectCpu()),
+            Task.Run(() => gpus = DetectGpus()),
+            Task.Run(() => disk = DetectDisk()),
+            Task.Run(() => hasHyperV = CheckHyperV()),
+            Task.Run(() => hasWsl = CheckWsl()),
+            Task.Run(() => hasTpm = CheckTpm()),
+            Task.Run(() => hasSecureBoot = CheckSecureBoot()),
+            Task.Run(() => hasBattery = CheckBattery())
+        );
+
         var mem = DetectMemory();
-        var disk = DetectDisk();
         var build = TweakEngine.WindowsBuild();
 
         _cached = new HwProfile
@@ -70,11 +89,11 @@ public static class HardwareInfo
             Gpus = gpus,
             Memory = mem,
             Disk = disk,
-            HasHyperV = CheckHyperV(),
-            HasWsl = CheckWsl(),
-            HasTpm = CheckTpm(),
-            HasSecureBoot = CheckSecureBoot(),
-            HasBattery = CheckBattery(),
+            HasHyperV = hasHyperV,
+            HasWsl = hasWsl,
+            HasTpm = hasTpm,
+            HasSecureBoot = hasSecureBoot,
+            HasBattery = hasBattery,
             WindowsBuild = build,
             OptimalWorkers = Math.Max(1, cpu.LogicalCores / 2),
             GuiBatchSize = mem.TotalMb > 8192 ? 8 : 4,

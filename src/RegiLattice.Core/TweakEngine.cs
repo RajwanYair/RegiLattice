@@ -21,6 +21,7 @@ public sealed class TweakEngine
     private readonly List<TweakDef> _allTweaks = [];
     private readonly Dictionary<string, TweakDef> _tweakById = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<TweakDef>> _tweaksByCat = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, List<TweakDef>> _tweaksByTag = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<TweakDef>> _tweaksByScope = [];
     private readonly ConcurrentDictionary<string, TweakScope> _scopeCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = [];
@@ -57,6 +58,16 @@ public sealed class TweakEngine
                 _tweaksByCat[td.Category] = catList;
             }
             catList.Add(td);
+
+            foreach (var tag in td.Tags)
+            {
+                if (!_tweaksByTag.TryGetValue(tag, out var tagList))
+                {
+                    tagList = [];
+                    _tweaksByTag[tag] = tagList;
+                }
+                tagList.Add(td);
+            }
 
             var scope = td.Scope;
             _scopeCache[td.Id] = scope;
@@ -203,7 +214,7 @@ public sealed class TweakEngine
     public IReadOnlyList<TweakDef> TweaksByIds(IEnumerable<string> ids) =>
         ids.Select(id => _tweakById.GetValueOrDefault(id)).Where(t => t is not null).Cast<TweakDef>().ToList();
 
-    public IReadOnlyList<TweakDef> TweaksByTag(string tag) => _allTweaks.Where(t => t.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase)).ToList();
+    public IReadOnlyList<TweakDef> TweaksByTag(string tag) => _tweaksByTag.TryGetValue(tag, out var list) ? list : [];
 
     public IReadOnlyList<TweakDef> TweaksByScope(TweakScope scope) => _tweaksByScope.GetValueOrDefault(scope.ToString().ToLowerInvariant()) ?? [];
 
@@ -217,6 +228,8 @@ public sealed class TweakEngine
             return _allTweaks;
         var lower = query.ToLowerInvariant();
         var tokens = lower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (tokens.Length == 1)
+            return _searchPairs.Where(p => p.Lower.Contains(tokens[0])).Select(p => p.Tweak).ToList();
         return _searchPairs.Where(p => tokens.All(t => p.Lower.Contains(t))).Select(p => p.Tweak).ToList();
     }
 
@@ -515,7 +528,7 @@ public sealed class TweakEngine
 
     // ── Export for GUI ──────────────────────────────────────────────────
 
-    public void ExportJson(string path)
+    public void ExportJson(string path, Dictionary<string, TweakResult>? cachedStatus = null)
     {
         var list = _allTweaks
             .Select(t => new
@@ -523,7 +536,7 @@ public sealed class TweakEngine
                 t.Id,
                 t.Label,
                 t.Category,
-                status = DetectStatus(t).ToString().ToLowerInvariant(),
+                status = (cachedStatus is not null && cachedStatus.TryGetValue(t.Id, out var s) ? s : DetectStatus(t)).ToString().ToLowerInvariant(),
                 needs_admin = t.NeedsAdmin,
                 corp_safe = t.CorpSafe,
                 t.Tags,
