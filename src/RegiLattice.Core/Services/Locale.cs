@@ -60,6 +60,64 @@ public static class Locale
         ["import_complete"] = "Imported {0} tweaks from {1}.",
     };
 
+    private static readonly Dictionary<string, string> De = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["apply_all"] = "Alle anwenden",
+        ["remove_all"] = "Alle entfernen",
+        ["search_placeholder"] = "Optimierungen suchen\u2026",
+        ["status_applied"] = "ANGEWENDET",
+        ["status_not_applied"] = "STANDARD",
+        ["status_unknown"] = "UNBEKANNT",
+        ["status_error"] = "FEHLER",
+        ["status_skipped_corp"] = "\u00dcBERSPRUNGEN (Firma)",
+        ["status_skipped_build"] = "\u00dcBERSPRUNGEN (Build)",
+        ["filter_all"] = "Alle",
+        ["filter_applied"] = "Angewendet",
+        ["filter_default"] = "Standard",
+        ["filter_unknown"] = "Unbekannt",
+        ["scope_user"] = "Benutzer (HKCU)",
+        ["scope_machine"] = "Computer (HKLM)",
+        ["scope_both"] = "Beide",
+        ["scope_all"] = "Alle Bereiche",
+        ["profile_business"] = "Gesch\u00e4ftlich",
+        ["profile_gaming"] = "Gaming",
+        ["profile_privacy"] = "Datenschutz",
+        ["profile_minimal"] = "Minimal",
+        ["profile_server"] = "Server",
+        ["btn_apply"] = "Ausgew\u00e4hlte anwenden",
+        ["btn_remove"] = "Ausgew\u00e4hlte entfernen",
+        ["btn_select_all"] = "Alle ausw\u00e4hlen",
+        ["btn_deselect_all"] = "Auswahl aufheben",
+        ["btn_invert"] = "Auswahl umkehren",
+        ["btn_refresh"] = "Status aktualisieren",
+        ["btn_export_ps1"] = "PS1 exportieren",
+        ["btn_export_json"] = "JSON exportieren",
+        ["btn_import_json"] = "JSON importieren",
+        ["menu_file"] = "Datei",
+        ["menu_tools"] = "Werkzeuge",
+        ["menu_view"] = "Ansicht",
+        ["menu_help"] = "Hilfe",
+        ["about_title"] = "\u00dcber RegiLattice",
+        ["scoop_manager"] = "Scoop-Verwaltung",
+        ["psmodule_manager"] = "PowerShell-Module",
+        ["pip_manager"] = "pip-Pakete",
+        ["log_panel"] = "Protokollbereich umschalten",
+        ["corporate_warning"] = "Firmenumgebung erkannt. Einige Optimierungen sind gesperrt.",
+        ["admin_required"] = "Administratorrechte erforderlich.",
+        ["confirm_apply"] = "{0} ausgew\u00e4hlte Optimierungen anwenden?",
+        ["confirm_remove"] = "{0} ausgew\u00e4hlte Optimierungen entfernen?",
+        ["tweaks_loaded"] = "{0} Optimierungen in {1} Kategorien geladen.",
+        ["detection_complete"] = "Statuserkennung abgeschlossen.",
+        ["export_complete"] = "Exportiert nach {0}.",
+        ["import_complete"] = "{0} Optimierungen aus {1} importiert.",
+    };
+
+    private static readonly Dictionary<string, Dictionary<string, string>> BuiltInLocales = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["en"] = En,
+        ["de"] = De,
+    };
+
     private static Dictionary<string, string> _active = new(En);
 
     public static string T(string key, params object[] args)
@@ -71,7 +129,8 @@ public static class Locale
     public static void SetLocale(string name, Dictionary<string, string>? overrides = null)
     {
         _current = name;
-        _active = new Dictionary<string, string>(En, StringComparer.OrdinalIgnoreCase);
+        var baseLocale = BuiltInLocales.GetValueOrDefault(name) ?? En;
+        _active = new Dictionary<string, string>(baseLocale, StringComparer.OrdinalIgnoreCase);
         if (overrides is not null)
             foreach (var (k, v) in overrides)
                 _active[k] = v;
@@ -79,6 +138,7 @@ public static class Locale
 
     public static string CurrentLocale => _current;
     public static IReadOnlyCollection<string> AvailableKeys => _active.Keys;
+    public static IReadOnlyCollection<string> AvailableLocales => BuiltInLocales.Keys;
 
     public static void LoadLocaleFile(string path)
     {
