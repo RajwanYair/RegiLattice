@@ -10,7 +10,7 @@
     <AssemblyName>RegiLattice.GUI</AssemblyName>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <StartupObject>RegiLattice.GUI.Program</StartupObject>
-    <Version>3.2.0</Version>
+    <Version>3.2.1</Version>
     <Description>RegiLattice — WinForms GUI</Description>
   </PropertyGroup>
 

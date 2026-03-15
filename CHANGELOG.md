@@ -4,7 +4,7 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [3.2.1] — 2026-03-15
 
 ### Sprint 11 — GUI Polish, Package Manager Fixes & Documentation Refresh
 
