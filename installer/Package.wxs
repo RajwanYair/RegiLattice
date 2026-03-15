@@ -2,7 +2,7 @@
     <Package
         Name="RegiLattice"
         Manufacturer="YairRajwan"
-        Version="3.2.0"
+        Version="3.2.1"
         UpgradeCode="AC51EAE9-CC0B-4A17-92E0-070A64E83988"
         Compressed="yes"
         InstallerVersion="500">

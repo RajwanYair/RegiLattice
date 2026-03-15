@@ -13,7 +13,7 @@ namespace RegiLattice.CLI;
 
 internal static class Program
 {
-    private static readonly string Version = "3.2.0";
+    private static readonly string Version = "3.2.1";
     private static TweakEngine _engine = null!;
     private static RegistrySession _session = null!;
     private static bool _noColor;
