@@ -46,6 +46,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Sprint 9 — Test Coverage & Analytics Integration
+
+- CLI: `update <id>` command — runs UpdateAction or falls back to Apply
+- CLI: Analytics integration — `RecordSession()` on startup, `Flush()` on exit,
+  `RecordApply/Remove/Error` in all action methods (RunAction, RunApplyProfile,
+  RunCategoryAction, RunImportJson, RunUpdate)
+- 17 new tests: Filter multi-criteria (4), Update method (3), complex dependency
+  graphs (3), Analytics persistence (5), CLI update parsing (2)
+- Total: **2,316 tweaks**, **658 tests** (529 Core + 58 CLI + 71 GUI)
+
 ### Added
 
 - **System theme auto-detection** — GUI follows Windows dark/light mode on startup,

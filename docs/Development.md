@@ -45,8 +45,8 @@ RegiLattice.sln
 ├── src/RegiLattice.Core/      # Class library — engine, models, registry, services, plugins
 ├── src/RegiLattice.GUI/       # WinForms application (4 themes)
 ├── src/RegiLattice.CLI/       # Console application (25+ commands)
-├── tests/RegiLattice.Core.Tests/   # 514 xUnit tests
-├── tests/RegiLattice.CLI.Tests/    # 56 xUnit tests
+├── tests/RegiLattice.Core.Tests/   # 529 xUnit tests
+├── tests/RegiLattice.CLI.Tests/    # 58 xUnit tests
 └── tests/RegiLattice.GUI.Tests/    # 71 xUnit tests
 ```
 

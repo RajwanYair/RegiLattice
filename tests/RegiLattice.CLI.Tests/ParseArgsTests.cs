@@ -273,4 +273,26 @@ public sealed class ParseArgsTests
         Assert.NotNull(result);
         Assert.Null(result.DependsOn);
     }
+
+    // ── Update mode ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_UpdateMode_ParsesPositional()
+    {
+        var result = Program.ParseArgs(["update", "perf-disable-animations"]);
+        Assert.NotNull(result);
+        Assert.Equal("update", result.Mode);
+        Assert.Equal("perf-disable-animations", result.Tweak);
+    }
+
+    [Fact]
+    public void ParseArgs_UpdateModeWithFlags_Combined()
+    {
+        var result = Program.ParseArgs(["update", "priv-disable-telemetry", "--force", "--dry-run"]);
+        Assert.NotNull(result);
+        Assert.Equal("update", result.Mode);
+        Assert.Equal("priv-disable-telemetry", result.Tweak);
+        Assert.True(result.Force);
+        Assert.True(result.DryRun);
+    }
 }

@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 641 tests
+> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 658 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 316 verified across 89 categories |
-| Tests | 641 (514 Core + 56 CLI + 71 GUI), all passing, 4-thread parallel |
+| Tests | 658 (529 Core + 58 CLI + 71 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -169,6 +169,22 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 12 | 15 new tests (11 Core + 4 CLI): validation, dep resolution, batch progress, CLI flags | ✅ |
 | 13 | Update instruction files: copilot, workspace, testing, Roadmap | ✅ |
 | 14 | Total: 2,316 tweaks, 641 tests (514 Core + 56 CLI + 71 GUI) | ✅ |
+
+### Sprint 9 — Test Coverage & Analytics Integration ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | CLI: `update <id>` command — runs UpdateAction or falls back to Apply | ✅ |
+| 2 | CLI: Analytics.RecordSession() on startup + Analytics.Flush() on exit | ✅ |
+| 3 | CLI: RecordApply/Remove/Error in RunAction, RunApplyProfile, RunCategoryAction, RunImportJson, RunUpdate | ✅ |
+| 4 | CLI: Add `update <id>` to help text and `--depends-on`, `--no-color` to General section | ✅ |
+| 5 | 4 Filter tests: AllCriteria, NoMatches, NoCriteria, QueryAndScope | ✅ |
+| 6 | 3 Update tests: NoUpdateAction fallback, WithUpdateAction, UpdateActionThrows | ✅ |
+| 7 | 3 dependency tests: diamond graph, deep chain (5 levels), multiple children | ✅ |
+| 8 | 5 Analytics tests: RecordRemove, RecordError, RecordSession, Flush persist, Flush no-op | ✅ |
+| 9 | 2 CLI tests: update mode positional, update mode with flags | ✅ |
+| 10 | Update all documentation with current stats (658 tests, 529 Core + 58 CLI + 71 GUI) | ✅ |
+| 11 | Total: 2,316 tweaks, 658 tests (529 Core + 58 CLI + 71 GUI) | ✅ |
 
 ---
 

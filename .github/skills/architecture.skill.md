@@ -27,7 +27,7 @@ RegiLattice.sln
 │                               #   ChocolateyMgr, PSModuleMgr, ToolVersionChecker
 ├── src/RegiLattice.CLI/        # Console app (depends on Core)
 │   └── Program.cs              # 25+ commands via args parsing
-└── tests/                      # xUnit: 514 Core + 56 CLI + 71 GUI = 641 tests
+└── tests/                      # xUnit: 529 Core + 58 CLI + 71 GUI = 658 tests
 ```
 
 ## Data Flow

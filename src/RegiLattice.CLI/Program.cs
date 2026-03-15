@@ -64,7 +64,10 @@ internal static class Program
         if (parsed.DryRun)
             Console.WriteLine("\U0001f50d Dry-run mode — no registry changes will be made.");
 
-        return Dispatch(parsed);
+        Analytics.RecordSession();
+        var exitCode = Dispatch(parsed);
+        Analytics.Flush();
+        return exitCode;
     }
 
     // ── Dispatch ────────────────────────────────────────────────────────
@@ -124,6 +127,8 @@ internal static class Program
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null)
             return RunStatus(a.Tweak);
+        if (a.Mode == "update" && a.Tweak is not null)
+            return RunUpdate(a);
         if (a.Mode is "apply" or "remove" && a.Tweak is not null)
             return RunAction(a);
 
@@ -795,6 +800,14 @@ internal static class Program
         var results = _engine.ApplyProfile(a.Profile!, forceCorp: a.Force, parallel: true);
         int ok = results.Count(kv => kv.Value == TweakResult.Applied);
 
+        foreach (var (id, res) in results)
+        {
+            if (res is TweakResult.Applied)
+                Analytics.RecordApply(id);
+            else if (res is TweakResult.Error)
+                Analytics.RecordError(id);
+        }
+
         if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{results.Count} tweaks would be applied ({_session.DryOps} ops skipped).");
         else
@@ -830,9 +843,20 @@ internal static class Program
         }
 
         var results = a.Mode == "apply" ? _engine.ApplyBatch(catTweaks, forceCorp: a.Force) : _engine.RemoveBatch(catTweaks, forceCorp: a.Force);
+        bool isApply = a.Mode == "apply";
 
         int ok = results.Count(kv => kv.Value is TweakResult.Applied or TweakResult.NotApplied);
         var errors = results.Where(kv => kv.Value == TweakResult.Error).ToList();
+
+        foreach (var (id, res) in results)
+        {
+            if (res is TweakResult.Applied && isApply)
+                Analytics.RecordApply(id);
+            else if (res is TweakResult.NotApplied && !isApply)
+                Analytics.RecordRemove(id);
+            else if (res is TweakResult.Error)
+                Analytics.RecordError(id);
+        }
 
         if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{catTweaks.Count} tweaks ({_session.DryOps} ops skipped).");
@@ -904,8 +928,20 @@ internal static class Program
         }
 
         var results = a.Mode == "apply" ? _engine.ApplyBatch(targets, forceCorp: a.Force) : _engine.RemoveBatch(targets, forceCorp: a.Force);
+        bool isApply = a.Mode == "apply";
 
         int ok = results.Count(kv => kv.Value is TweakResult.Applied or TweakResult.NotApplied);
+
+        foreach (var (id, res) in results)
+        {
+            if (res is TweakResult.Applied && isApply)
+                Analytics.RecordApply(id);
+            else if (res is TweakResult.NotApplied && !isApply)
+                Analytics.RecordRemove(id);
+            else if (res is TweakResult.Error)
+                Analytics.RecordError(id);
+        }
+
         if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{targets.Count} tweaks from JSON ({_session.DryOps} ops skipped).");
         else
@@ -957,6 +993,15 @@ internal static class Program
 
             int ok = results.Count(kv => kv.Value is TweakResult.Applied or TweakResult.NotApplied);
             int errs = results.Count(kv => kv.Value == TweakResult.Error);
+            foreach (var (id, res) in results)
+            {
+                if (res is TweakResult.Applied)
+                    Analytics.RecordApply(id);
+                else if (res is TweakResult.NotApplied && !isApply)
+                    Analytics.RecordRemove(id);
+                else if (res is TweakResult.Error)
+                    Analytics.RecordError(id);
+            }
             if (_session.DryRun)
                 Console.WriteLine($"\U0001f50d Dry-run: {ok}/{all.Count} tweaks ({_session.DryOps} ops skipped).");
             else
@@ -979,12 +1024,57 @@ internal static class Program
 
         var result = isApply ? _engine.Apply(td, forceCorp: a.Force) : _engine.Remove(td, forceCorp: a.Force);
 
+        if (result is TweakResult.Applied && isApply)
+            Analytics.RecordApply(td.Id);
+        else if (result is TweakResult.NotApplied && !isApply)
+            Analytics.RecordRemove(td.Id);
+        else if (result is TweakResult.Error)
+            Analytics.RecordError(td.Id);
+
         if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {td.Label} — {result} ({_session.DryOps} ops skipped).");
         else
             Console.WriteLine($"\u2705 {td.Label}: {result}");
 
         return result is TweakResult.Applied or TweakResult.NotApplied ? 0 : 1;
+    }
+
+    // ── Update ──────────────────────────────────────────────────────────
+
+    private static int RunUpdate(CliArgs a)
+    {
+        if (!a.Force && CorporateGuard.IsCorporateNetwork())
+        {
+            Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
+            return 6;
+        }
+
+        var td = _engine.GetTweak(a.Tweak!);
+        if (td is null)
+        {
+            Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'.");
+            return 2;
+        }
+
+        if (!a.AssumeYes && !Confirm($"Update '{td.Label}'"))
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
+
+        var result = _engine.Update(td, forceCorp: a.Force);
+
+        if (_session.DryRun)
+            Console.WriteLine($"\U0001f50d Dry-run: {td.Label} — {result} ({_session.DryOps} ops skipped).");
+        else
+            Console.WriteLine($"\u2705 {td.Label}: {ColourisedStatus(result)}");
+
+        if (result is TweakResult.Applied)
+            Analytics.RecordApply(td.Id);
+        else if (result is TweakResult.Error)
+            Analytics.RecordError(td.Id);
+
+        return result is TweakResult.Applied ? 0 : 1;
     }
 
     // ── GUI launcher ────────────────────────────────────────────────────
@@ -1392,6 +1482,7 @@ internal static class Program
             Modes:
               apply <id|all>     Apply a tweak or all tweaks
               remove <id|all>    Remove a tweak or all tweaks
+              update <id>        Update a tweak (runs UpdateAction or falls back to Apply)
               status <id>        Show status of a specific tweak
 
             Options:
@@ -1442,12 +1533,14 @@ internal static class Program
               --category <name>            Filter by category / apply-remove category
 
             General:
-              --force             Bypass corporate network guard
-              --dry-run           Preview without modifying registry
-              --config <path>     Specify config file path
+              --depends-on <id>  Show dependency chain for a tweak
+              --force            Bypass corporate network guard
+              --dry-run          Preview without modifying registry
+              --config <path>    Specify config file path
               -y, --assume-yes   Skip confirmation prompts
-              --version           Show version info
-              --help, -h          Show this help
+              --no-color         Disable ANSI colour output
+              --version          Show version info
+              --help, -h         Show this help
             """
         );
     }
@@ -1610,7 +1703,7 @@ internal static class Program
 
                 default:
                     // Positional: mode, then tweak
-                    if (p.Mode is null && arg is "apply" or "remove" or "status")
+                    if (p.Mode is null && arg is "apply" or "remove" or "status" or "update")
                         p.Mode = arg;
                     else if (p.Tweak is null && p.Mode is not null)
                         p.Tweak = arg;

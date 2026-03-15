@@ -1607,4 +1607,333 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         engine.RemoveBatch(engine.AllTweaks(), forceCorp: false, (_, _, _, _) => callCount++);
         Assert.Equal(1, callCount);
     }
+
+    // ── Filter: multi-criteria edge cases ───────────────────────────────
+
+    [Fact]
+    public void Filter_AllCriteria_CombinesAnd()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var target = new TweakDef
+        {
+            Id = "fa-target",
+            Label = "Target Tweak",
+            Category = "FilterAll",
+            CorpSafe = true,
+            NeedsAdmin = false,
+            MinBuild = 19041,
+            Tags = ["filtertest"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fa-target", "V", 1)],
+        };
+        engine.Register([
+            target,
+            new TweakDef
+            {
+                Id = "fa-wrong-cat",
+                Label = "Wrong Cat",
+                Category = "Other",
+                CorpSafe = true,
+                NeedsAdmin = false,
+                MinBuild = 19041,
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fa-wrong-cat", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fa-wrong-admin",
+                Label = "Needs Admin",
+                Category = "FilterAll",
+                CorpSafe = true,
+                NeedsAdmin = true,
+                MinBuild = 19041,
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fa-wrong-admin", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fa-wrong-corp",
+                Label = "Not CorpSafe",
+                Category = "FilterAll",
+                CorpSafe = false,
+                NeedsAdmin = false,
+                MinBuild = 19041,
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fa-wrong-corp", "V", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        var results = engine.Filter(corpSafe: true, needsAdmin: false, category: "FilterAll", minBuild: 20000, query: "target");
+        Assert.Single(results);
+        Assert.Equal("fa-target", results[0].Id);
+    }
+
+    [Fact]
+    public void Filter_NoMatches_ReturnsEmpty()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef { Id = "fn-1", Label = "T", Category = "CatA", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-1", "V", 1)] },
+            new TweakDef { Id = "fn-2", Label = "T", Category = "CatB", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-2", "V", 1)] },
+        ]);
+        engine.Freeze();
+
+        var results = engine.Filter(category: "NonExistentCategory");
+        Assert.Empty(results);
+    }
+
+    [Fact]
+    public void Filter_NoCriteria_ReturnsAll()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef { Id = "fnc-1", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-1", "V", 1)] },
+            new TweakDef { Id = "fnc-2", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-2", "V", 1)] },
+            new TweakDef { Id = "fnc-3", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-3", "V", 1)] },
+        ]);
+        engine.Freeze();
+
+        var results = engine.Filter();
+        Assert.Equal(3, results.Count);
+    }
+
+    [Fact]
+    public void Filter_QueryAndScope_CombinesAnd()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "fqs-user",
+                Label = "User Telemetry",
+                Category = "Privacy",
+                RegistryKeys = [@"HKEY_CURRENT_USER\Software\fqs-user"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fqs-user", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fqs-machine",
+                Label = "Machine Telemetry",
+                Category = "Privacy",
+                RegistryKeys = [@"HKEY_LOCAL_MACHINE\Software\fqs-machine"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\Software\fqs-machine", "V", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        var results = engine.Filter(scope: TweakScope.User, query: "telemetry");
+        Assert.Single(results);
+        Assert.Equal("fqs-user", results[0].Id);
+    }
+
+    // ── Update ──────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Update_NoUpdateAction_FallsBackToApply()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var td = new TweakDef
+        {
+            Id = "upd-fallback",
+            Label = "U",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\upd-fallback", "V", 1)],
+        };
+        engine.Register([td]);
+
+        var result = engine.Update(td);
+        Assert.Equal(TweakResult.Applied, result);
+    }
+
+    [Fact]
+    public void Update_WithUpdateAction_CallsUpdateAction()
+    {
+        bool called = false;
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var td = new TweakDef
+        {
+            Id = "upd-custom",
+            Label = "U",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\upd-custom", "V", 1)],
+            UpdateAction = (_) => { called = true; },
+        };
+        engine.Register([td]);
+
+        var result = engine.Update(td);
+        Assert.Equal(TweakResult.Applied, result);
+        Assert.True(called);
+    }
+
+    [Fact]
+    public void Update_UpdateActionThrows_ReturnsError()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var td = new TweakDef
+        {
+            Id = "upd-err",
+            Label = "U",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\upd-err", "V", 1)],
+            UpdateAction = (_) => throw new InvalidOperationException("update failed"),
+        };
+        engine.Register([td]);
+
+        var result = engine.Update(td);
+        Assert.Equal(TweakResult.Error, result);
+    }
+
+    // ── Complex dependency graphs ───────────────────────────────────────
+
+    [Fact]
+    public void ResolveDependencies_DiamondGraph_ReturnsCorrectOrder()
+    {
+        // Diamond: A depends on B and C, both B and C depend on D
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "diamond-d",
+                Label = "D",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "D", 1)],
+            },
+            new TweakDef
+            {
+                Id = "diamond-b",
+                Label = "B",
+                Category = "Test",
+                DependsOn = ["diamond-d"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "B", 1)],
+            },
+            new TweakDef
+            {
+                Id = "diamond-c",
+                Label = "C",
+                Category = "Test",
+                DependsOn = ["diamond-d"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "C", 1)],
+            },
+            new TweakDef
+            {
+                Id = "diamond-a",
+                Label = "A",
+                Category = "Test",
+                DependsOn = ["diamond-b", "diamond-c"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "A", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        var chain = engine.ResolveDependencies("diamond-a");
+        var chainList = chain.ToList();
+        Assert.Equal(4, chainList.Count);
+        // D must come before B and C; B and C must come before A
+        int idxD = chainList.FindIndex(t => t.Id == "diamond-d");
+        int idxB = chainList.FindIndex(t => t.Id == "diamond-b");
+        int idxC = chainList.FindIndex(t => t.Id == "diamond-c");
+        int idxA = chainList.FindIndex(t => t.Id == "diamond-a");
+        Assert.True(idxD < idxB);
+        Assert.True(idxD < idxC);
+        Assert.True(idxB < idxA);
+        Assert.True(idxC < idxA);
+    }
+
+    [Fact]
+    public void ResolveDependencies_DeepChain_FiveLevels()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "chain-1",
+                Label = "L1",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "L1", 1)],
+            },
+            new TweakDef
+            {
+                Id = "chain-2",
+                Label = "L2",
+                Category = "Test",
+                DependsOn = ["chain-1"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "L2", 1)],
+            },
+            new TweakDef
+            {
+                Id = "chain-3",
+                Label = "L3",
+                Category = "Test",
+                DependsOn = ["chain-2"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "L3", 1)],
+            },
+            new TweakDef
+            {
+                Id = "chain-4",
+                Label = "L4",
+                Category = "Test",
+                DependsOn = ["chain-3"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "L4", 1)],
+            },
+            new TweakDef
+            {
+                Id = "chain-5",
+                Label = "L5",
+                Category = "Test",
+                DependsOn = ["chain-4"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "L5", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        var chain = engine.ResolveDependencies("chain-5");
+        Assert.Equal(5, chain.Count);
+        for (int i = 0; i < 5; i++)
+            Assert.Equal($"chain-{i + 1}", chain[i].Id);
+    }
+
+    [Fact]
+    public void Dependents_MultipleChildren_ReturnsAll()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "multi-parent",
+                Label = "Parent",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "P", 1)],
+            },
+            new TweakDef
+            {
+                Id = "multi-child-1",
+                Label = "Child1",
+                Category = "Test",
+                DependsOn = ["multi-parent"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "C1", 1)],
+            },
+            new TweakDef
+            {
+                Id = "multi-child-2",
+                Label = "Child2",
+                Category = "Test",
+                DependsOn = ["multi-parent"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "C2", 1)],
+            },
+            new TweakDef
+            {
+                Id = "multi-child-3",
+                Label = "Child3",
+                Category = "Test",
+                DependsOn = ["multi-parent"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "C3", 1)],
+            },
+        ]);
+
+        var deps = engine.Dependents("multi-parent");
+        Assert.Equal(3, deps.Count);
+        Assert.Contains(deps, d => d.Id == "multi-child-1");
+        Assert.Contains(deps, d => d.Id == "multi-child-2");
+        Assert.Contains(deps, d => d.Id == "multi-child-3");
+    }
 }

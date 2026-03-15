@@ -203,6 +203,57 @@ public sealed class AnalyticsTests
         Assert.NotNull(top);
         Assert.True(top.Count <= 5);
     }
+
+    [Fact]
+    public void RecordRemove_IncrementsTotalRemoves()
+    {
+        var before = Analytics.GetStats().TotalRemoves;
+        Analytics.RecordRemove($"test-{Guid.NewGuid():N}");
+        var after = Analytics.GetStats().TotalRemoves;
+        Assert.Equal(before + 1, after);
+    }
+
+    [Fact]
+    public void RecordError_IncrementsTotalErrors()
+    {
+        var before = Analytics.GetStats().TotalErrors;
+        Analytics.RecordError($"test-{Guid.NewGuid():N}");
+        var after = Analytics.GetStats().TotalErrors;
+        Assert.Equal(before + 1, after);
+    }
+
+    [Fact]
+    public void RecordSession_IncrementsTotalSessions()
+    {
+        var before = Analytics.GetStats().TotalSessions;
+        Analytics.RecordSession();
+        var after = Analytics.GetStats().TotalSessions;
+        Assert.Equal(before + 1, after);
+    }
+
+    [Fact]
+    public void Flush_PersistsData()
+    {
+        // Record something unique so we know it persisted
+        var uniqueId = $"flush-test-{Guid.NewGuid():N}";
+        Analytics.RecordApply(uniqueId);
+        Analytics.Flush();
+
+        // Verify the analytics file exists
+        var filePath = Path.Combine(AppConfig.ConfigDir, "analytics.json");
+        Assert.True(File.Exists(filePath));
+
+        // Read and verify the unique ID is in the persisted data
+        var json = File.ReadAllText(filePath);
+        Assert.Contains(uniqueId, json);
+    }
+
+    [Fact]
+    public void Flush_NoDirtyData_DoesNotThrow()
+    {
+        // Call Flush when nothing has been recorded — should be a no-op
+        Analytics.Flush();
+    }
 }
 
 public sealed class ElevationTests
