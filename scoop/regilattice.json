@@ -1,0 +1,32 @@
+{
+    "version": "3.2.0",
+    "description": "Windows registry tweak toolkit with 2,301 tweaks across 89 categories. GUI + CLI.",
+    "homepage": "https://github.com/RajwanYair/RegiLattice",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v3.2.0/RegiLattice-win-x64.zip",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+    },
+    "extract_dir": "RegiLattice",
+    "bin": [
+        "RegiLattice.CLI.exe",
+        "RegiLattice.GUI.exe"
+    ],
+    "shortcuts": [
+        [
+            "RegiLattice.GUI.exe",
+            "RegiLattice"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v$version/RegiLattice-win-x64.zip"
+            }
+        }
+    },
+    "notes": "Run 'RegiLattice.CLI --help' for CLI usage or launch RegiLattice.GUI for the graphical interface."
+}

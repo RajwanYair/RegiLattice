@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project | Tests | Covers |
 |---------|-------|--------|
-| `RegiLattice.Core.Tests` | 112 | TweakDef, TweakEngine, RegistrySession, Services |
+| `RegiLattice.Core.Tests` | 499 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale |
 | `RegiLattice.CLI.Tests` | 52 | CLI argument parsing (ParseArgs, CliArgs) |
-| `RegiLattice.GUI.Tests` | 39 | Theme, PackageManagerValidation |
-| **Total** | **203** | |
+| `RegiLattice.GUI.Tests` | 71 | Theme, PackageManagerValidation |
+| **Total** | **622** | |
 
 ## Running Tests
 
@@ -53,12 +53,13 @@ tests/
 │   ├── TweakDefTests.cs         # TweakDef model, RegOp factories, scope computation
 │   ├── TweakEngineTests.cs      # Engine registration, lookup, search, profiles, batch
 │   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing
-│   └── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+│   ├── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
+│   └── PluginTests.cs           # PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
 ├── RegiLattice.CLI.Tests/
 │   └── ParseArgsTests.cs        # CLI argument parsing, flags, options, scope, positional args
 └── RegiLattice.GUI.Tests/
-    ├── ThemeTests.cs             # Theme switching, colour attributes, all 4 themes
-    └── PackageManagerValidationTests.cs  # Package name validation
+    ├── ThemeTests.cs             # Theme switching, colour attributes, all 4 themes, system theme detection
+    └── PackageManagerValidationTests.cs  # Package name validation, tool version checking
 ```
 
 ## Naming Convention
