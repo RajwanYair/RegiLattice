@@ -179,8 +179,8 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-enable-lsa-protection",
-            Label = "Enable LSA Protection (RunAsPPL)",
+            Id = "sec-enforce-lsa-ppl",
+            Label = "Enforce LSA Protected Process Light",
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
@@ -194,8 +194,8 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-disable-wdigest",
-            Label = "Disable WDigest Credential Caching",
+            Id = "sec-block-wdigest-caching",
+            Label = "Block WDigest Credential Caching",
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
@@ -264,8 +264,8 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-enable-sehop",
-            Label = "Enable SEHOP (Exception Handler Protection)",
+            Id = "sec-enforce-sehop",
+            Label = "Enforce SEHOP (SEH Chain Validation)",
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
