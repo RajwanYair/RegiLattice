@@ -32,6 +32,7 @@ public sealed class ParseArgsTests
     [InlineData("--check", nameof(Program.CliArgs.Check))]
     [InlineData("--corp-safe", nameof(Program.CliArgs.CorpSafe))]
     [InlineData("--needs-admin", nameof(Program.CliArgs.NeedsAdmin))]
+    [InlineData("--no-color", nameof(Program.CliArgs.NoColor))]
     public void ParseArgs_Flag_SetsProperty(string flag, string propertyName)
     {
         var result = Program.ParseArgs([flag]);
@@ -247,5 +248,29 @@ public sealed class ParseArgsTests
         Assert.Null(result.ScopeFilter);
         Assert.Equal(0, result.MinBuild);
         Assert.Equal("table", result.OutputFormat);
+    }
+
+    [Fact]
+    public void ParseArgs_DependsOn_SetsProperty()
+    {
+        var result = Program.ParseArgs(["--depends-on", "perf-disable-animations"]);
+        Assert.NotNull(result);
+        Assert.Equal("perf-disable-animations", result.DependsOn);
+    }
+
+    [Fact]
+    public void ParseArgs_NoColor_DefaultsFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.NoColor);
+    }
+
+    [Fact]
+    public void ParseArgs_DependsOn_DefaultsNull()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Null(result.DependsOn);
     }
 }

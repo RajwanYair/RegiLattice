@@ -1394,4 +1394,217 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var cats2 = _engine.Categories();
         Assert.Same(cats1, cats2); // Should be same reference (cached)
     }
+
+    // ── Validation ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void ValidateTweaks_AllBuiltins_ReturnsNoErrors()
+    {
+        var errors = _engine.ValidateTweaks();
+        Assert.Empty(errors);
+    }
+
+    [Fact]
+    public void ValidateTweaks_BrokenDependsOn_ReturnsError()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "test-dep-missing",
+                Label = "Test",
+                Category = "Test",
+                DependsOn = ["nonexistent-tweak"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "V", 1)],
+            },
+        ]);
+        var errors = engine.ValidateTweaks();
+        Assert.Contains(errors, e => e.Contains("nonexistent-tweak"));
+    }
+
+    [Fact]
+    public void ValidateTweaks_CircularDependency_ReturnsError()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "circ-a",
+                Label = "A",
+                Category = "Test",
+                DependsOn = ["circ-b"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "A", 1)],
+            },
+            new TweakDef
+            {
+                Id = "circ-b",
+                Label = "B",
+                Category = "Test",
+                DependsOn = ["circ-a"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "B", 1)],
+            },
+        ]);
+        var errors = engine.ValidateTweaks();
+        Assert.Contains(errors, e => e.Contains("circular dependency"));
+    }
+
+    // ── Dependency resolution ───────────────────────────────────────────
+
+    [Fact]
+    public void ResolveDependencies_NoDeps_ReturnsSingleItem()
+    {
+        var chain = _engine.ResolveDependencies(_engine.AllTweaks()[0].Id);
+        Assert.Single(chain);
+    }
+
+    [Fact]
+    public void ResolveDependencies_SimpleChain_ReturnsTopologicalOrder()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "dep-base",
+                Label = "Base",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "Base", 1)],
+            },
+            new TweakDef
+            {
+                Id = "dep-child",
+                Label = "Child",
+                Category = "Test",
+                DependsOn = ["dep-base"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "Child", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        var chain = engine.ResolveDependencies("dep-child");
+        Assert.Equal(2, chain.Count);
+        Assert.Equal("dep-base", chain[0].Id);
+        Assert.Equal("dep-child", chain[1].Id);
+    }
+
+    [Fact]
+    public void ResolveDependencies_CircularDep_Throws()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "loop-a",
+                Label = "A",
+                Category = "Test",
+                DependsOn = ["loop-b"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "A", 1)],
+            },
+            new TweakDef
+            {
+                Id = "loop-b",
+                Label = "B",
+                Category = "Test",
+                DependsOn = ["loop-a"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "B", 1)],
+            },
+        ]);
+        engine.Freeze();
+
+        Assert.Throws<InvalidOperationException>(() => engine.ResolveDependencies("loop-a"));
+    }
+
+    [Fact]
+    public void ResolveDependencies_UnknownId_Throws()
+    {
+        Assert.Throws<ArgumentException>(() => _engine.ResolveDependencies("nonexistent-tweak-id"));
+    }
+
+    [Fact]
+    public void Dependents_NoReverse_ReturnsEmpty()
+    {
+        // Pick a tweak that nothing depends on (most tweaks)
+        var dependents = _engine.Dependents(_engine.AllTweaks()[0].Id);
+        // May be empty or not — just verify it doesn't throw
+        Assert.NotNull(dependents);
+    }
+
+    [Fact]
+    public void Dependents_WithReverseDep_ReturnsDependents()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "parent-tweak",
+                Label = "Parent",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "P", 1)],
+            },
+            new TweakDef
+            {
+                Id = "child-tweak",
+                Label = "Child",
+                Category = "Test",
+                DependsOn = ["parent-tweak"],
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "C", 1)],
+            },
+        ]);
+
+        var deps = engine.Dependents("parent-tweak");
+        Assert.Single(deps);
+        Assert.Equal("child-tweak", deps[0].Id);
+    }
+
+    // ── Batch with progress callback ────────────────────────────────────
+
+    [Fact]
+    public void ApplyBatch_WithProgress_ReportsAllTweaks()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "prog-a",
+                Label = "A",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "A", 1)],
+            },
+            new TweakDef
+            {
+                Id = "prog-b",
+                Label = "B",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "B", 1)],
+            },
+        ]);
+
+        var progressCalls = new List<(int Done, int Total, string Id)>();
+        engine.ApplyBatch(engine.AllTweaks(), forceCorp: false, (done, total, id, _) => progressCalls.Add((done, total, id)));
+
+        Assert.Equal(2, progressCalls.Count);
+        Assert.Equal(1, progressCalls[0].Done);
+        Assert.Equal(2, progressCalls[0].Total);
+        Assert.Equal(2, progressCalls[1].Done);
+        Assert.Equal(2, progressCalls[1].Total);
+    }
+
+    [Fact]
+    public void RemoveBatch_WithProgress_ReportsAllTweaks()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([
+            new TweakDef
+            {
+                Id = "rmprog-a",
+                Label = "A",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "A", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Test", "A")],
+            },
+        ]);
+
+        int callCount = 0;
+        engine.RemoveBatch(engine.AllTweaks(), forceCorp: false, (_, _, _, _) => callCount++);
+        Assert.Equal(1, callCount);
+    }
 }

@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.0, 2 301 tweaks, 89 categories, 622 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 641 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 622 tests across 8 test files                     |
+| Test        | xUnit 2.9.2 — 641 tests across 8 test files                     |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 301 across 89 categories                                       |
-| Tests       | 622 passing (499 Core + 52 CLI + 71 GUI)                         |
+| Tweaks      | 2 316 across 89 categories                                       |
+| Tests       | 641 passing (514 Core + 56 CLI + 71 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -120,7 +120,7 @@ RegiLattice.sln
 │   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
 │   │   │   ├── PackManager.cs       # Install, uninstall, update, marketplace
 │   │   │   └── PackIndex.cs         # Remote marketplace index model
-│   │   └── Tweaks/                  # 89 category modules, 2 301 tweaks total
+│   │   └── Tweaks/                  # 89 category modules, 2 316 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -137,18 +137,18 @@ RegiLattice.sln
 │   └── RegiLattice.CLI/           # Console application
 │       └── Program.cs             # 25+ commands via args parsing
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 499 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 514 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
 │   │   └── PluginTests.cs          # Pack system + locale tests
-│   ├── RegiLattice.CLI.Tests/     # 52 xUnit tests
+│   ├── RegiLattice.CLI.Tests/     # 56 xUnit tests
 │   │   └── ParseArgsTests.cs
 │   └── RegiLattice.GUI.Tests/    # 71 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
-└── archive/python/               # Archived Python v1.x codebase
+└── archive/                      # Archived Python v1.x + old NativeGUI (untracked)
 ```
 
 ### TweakDef Model
@@ -209,7 +209,11 @@ RegOp.CheckKeyMissing(path)
 
 **Status**: `DetectStatus(td)`, `StatusMap(parallel, ids?)`
 
-**Apply/Remove**: `Apply()`, `Remove()`, `ApplyBatch()`, `RemoveBatch()`
+**Apply/Remove**: `Apply()`, `Remove()`, `ApplyBatch()`, `RemoveBatch()` (+ progress callback overloads)
+
+**Validation**: `ValidateTweaks()` — checks IDs, labels, categories, broken DependsOn, circular deps
+
+**Dependencies**: `ResolveDependencies(id)` — topological sort, `Dependents(id)` — reverse lookup
 
 **Profiles**: `Profiles` (5 static), `GetProfile()`, `TweaksForProfile()`, `ApplyProfile()`
 
@@ -299,6 +303,8 @@ Override: `--force` CLI flag or GUI "Force" checkbox.
 | `--dry-run` | Preview mode |
 | `--force` | Override corporate guard |
 | `--config <path>` | Custom config file |
+| `--depends-on <id>` | Show dependency chain for a tweak |
+| `--no-color` | Disable ANSI colour output |
 
 ## Tweak ID Naming Convention
 

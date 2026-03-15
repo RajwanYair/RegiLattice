@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 626 tests
+> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 641 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 316 verified across 89 categories |
-| Tests | 626 (503 Core + 52 CLI + 71 GUI), all passing, 4-thread parallel |
+| Tests | 641 (514 Core + 56 CLI + 71 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -150,6 +150,25 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 3 | Add 4 perf benchmark tests (startup, search, freeze, caching) | ✅ |
 | 4 | Add 15 new tweaks: 5 Windows Recall, 5 Debloat, 5 Proxy & VPN | ✅ |
 | 5 | Total: 2,316 tweaks, 626 tests (503 Core + 52 CLI + 71 GUI) | ✅ |
+
+### Sprint 8 — Consolidation, Validation & CLI Enhancements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Untrack archive/ (151 files, 84 575 line deletions) + current-ids.txt from git | ✅ |
+| 2 | Delete .mypy_cache (16 MB) and __pycache__ (3 MB) from disk | ✅ |
+| 3 | Update .gitignore: archive/, current-ids.txt, rename Python section | ✅ |
+| 4 | Core: ValidateTweaks() — checks empty IDs/Labels/Categories, broken DependsOn, circular deps | ✅ |
+| 5 | Core: ResolveDependencies(id) — topological-sort dependency resolution | ✅ |
+| 6 | Core: Dependents(id) — reverse dependency lookup | ✅ |
+| 7 | Core: ApplyBatch/RemoveBatch progress overloads with Action<int,int,string,TweakResult> callback | ✅ |
+| 8 | CLI: ANSI colour output for status display (Green/Red/Yellow/Dim) | ✅ |
+| 9 | CLI: --depends-on <id> command showing deps, reverse deps, and resolved chain | ✅ |
+| 10 | CLI: --no-color flag + auto-detect redirected output | ✅ |
+| 11 | CLI: version bump 3.0.0 → 3.2.0, RunValidate() delegates to engine | ✅ |
+| 12 | 15 new tests (11 Core + 4 CLI): validation, dep resolution, batch progress, CLI flags | ✅ |
+| 13 | Update instruction files: copilot, workspace, testing, Roadmap | ✅ |
+| 14 | Total: 2,316 tweaks, 641 tests (514 Core + 56 CLI + 71 GUI) | ✅ |
 
 ---
 

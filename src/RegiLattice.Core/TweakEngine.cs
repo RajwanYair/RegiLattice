@@ -572,4 +572,146 @@ public sealed class TweakEngine
         var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(path, json);
     }
+
+    // ── Validation ──────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Validate all registered tweaks and return a list of issues found.
+    /// Checks: empty IDs/Labels, broken DependsOn references, duplicate tags, empty ops.
+    /// </summary>
+    public IReadOnlyList<string> ValidateTweaks()
+    {
+        var errors = new List<string>();
+        var seenIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var td in _allTweaks)
+        {
+            if (string.IsNullOrWhiteSpace(td.Id))
+                errors.Add("Tweak with empty Id found");
+            else if (!seenIds.Add(td.Id))
+                errors.Add($"Duplicate tweak Id: {td.Id}");
+
+            if (string.IsNullOrWhiteSpace(td.Label))
+                errors.Add($"{td.Id}: empty Label");
+
+            if (string.IsNullOrWhiteSpace(td.Category))
+                errors.Add($"{td.Id}: empty Category");
+
+            foreach (var dep in td.DependsOn)
+            {
+                if (!_tweakById.ContainsKey(dep))
+                    errors.Add($"{td.Id}: DependsOn references unknown tweak '{dep}'");
+            }
+
+            if (td.ApplyOps.Count == 0 && td.ApplyAction is null)
+                errors.Add($"{td.Id}: no ApplyOps or ApplyAction defined");
+        }
+
+        // Detect circular dependencies
+        foreach (var td in _allTweaks.Where(t => t.DependsOn.Count > 0))
+        {
+            var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (HasCircularDep(td.Id, visited))
+                errors.Add($"{td.Id}: circular dependency detected");
+        }
+
+        return errors;
+    }
+
+    private bool HasCircularDep(string id, HashSet<string> visited)
+    {
+        if (!visited.Add(id))
+            return true;
+        var td = GetTweak(id);
+        if (td is null)
+            return false;
+        foreach (var dep in td.DependsOn)
+        {
+            if (HasCircularDep(dep, new HashSet<string>(visited, StringComparer.OrdinalIgnoreCase)))
+                return true;
+        }
+        return false;
+    }
+
+    // ── Dependency resolution ───────────────────────────────────────────
+
+    /// <summary>
+    /// Resolve the full dependency chain for a tweak, returning them in
+    /// topological order (dependencies first, target last).
+    /// Throws <see cref="InvalidOperationException"/> on circular dependencies.
+    /// </summary>
+    public IReadOnlyList<TweakDef> ResolveDependencies(string tweakId)
+    {
+        var td = GetTweak(tweakId) ?? throw new ArgumentException($"Unknown tweak: {tweakId}");
+        if (td.DependsOn.Count == 0)
+            return [td];
+
+        var result = new List<TweakDef>();
+        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var inStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        TopoVisit(td, visited, inStack, result);
+        return result;
+    }
+
+    private void TopoVisit(TweakDef td, HashSet<string> visited, HashSet<string> inStack, List<TweakDef> result)
+    {
+        if (inStack.Contains(td.Id))
+            throw new InvalidOperationException($"Circular dependency detected involving '{td.Id}'");
+        if (!visited.Add(td.Id))
+            return;
+        inStack.Add(td.Id);
+
+        foreach (var depId in td.DependsOn)
+        {
+            var dep = GetTweak(depId);
+            if (dep is not null)
+                TopoVisit(dep, visited, inStack, result);
+        }
+
+        inStack.Remove(td.Id);
+        result.Add(td);
+    }
+
+    /// <summary>
+    /// Find all tweaks that depend on the given tweak ID (reverse dependency lookup).
+    /// </summary>
+    public IReadOnlyList<TweakDef> Dependents(string tweakId) =>
+        _allTweaks.Where(t => t.DependsOn.Contains(tweakId, StringComparer.OrdinalIgnoreCase)).ToList();
+
+    // ── Batch operations with progress ──────────────────────────────────
+
+    /// <summary>
+    /// Apply a batch of tweaks with progress reporting.
+    /// <paramref name="onProgress"/> is called after each tweak with (completed, total, id, result).
+    /// </summary>
+    public Dictionary<string, TweakResult> ApplyBatch(IEnumerable<TweakDef> tweaks, bool forceCorp, Action<int, int, string, TweakResult> onProgress)
+    {
+        var list = tweaks as IReadOnlyList<TweakDef> ?? tweaks.ToList();
+        var result = new Dictionary<string, TweakResult>(list.Count);
+        for (int i = 0; i < list.Count; i++)
+        {
+            var td = list[i];
+            var r = Apply(td, forceCorp: forceCorp);
+            result[td.Id] = r;
+            onProgress(i + 1, list.Count, td.Id, r);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Remove a batch of tweaks with progress reporting.
+    /// </summary>
+    public Dictionary<string, TweakResult> RemoveBatch(IEnumerable<TweakDef> tweaks, bool forceCorp, Action<int, int, string, TweakResult> onProgress)
+    {
+        var list = tweaks as IReadOnlyList<TweakDef> ?? tweaks.ToList();
+        var result = new Dictionary<string, TweakResult>(list.Count);
+        for (int i = 0; i < list.Count; i++)
+        {
+            var td = list[i];
+            var r = Remove(td, forceCorp: forceCorp);
+            result[td.Id] = r;
+            onProgress(i + 1, list.Count, td.Id, r);
+        }
+        return result;
+    }
 }
