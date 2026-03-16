@@ -84,7 +84,11 @@ partial class MainForm
         var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I };
         var mnuExit = new ToolStripMenuItem("Exit");
 
-        var mnuFile = new ToolStripMenuItem("&File");
+        mnuExportPs1.Image = AppIcons.ExportMenuBitmap;
+        mnuExportJson.Image = AppIcons.ExportMenuBitmap;
+        mnuExportReg.Image = AppIcons.ExportMenuBitmap;
+
+        var mnuFile = new ToolStripMenuItem("&File") { Image = AppIcons.FileMenuBitmap };
         mnuFile.DropDownItems.AddRange(new ToolStripItem[]
         {
             mnuExportPs1, mnuExportJson, mnuExportReg, mnuImportJson,
@@ -121,12 +125,12 @@ partial class MainForm
 
         var mnuToggleLog = new ToolStripMenuItem("Toggle Log Panel");
         var mnuExpandAll = new ToolStripMenuItem("Expand All Categories");
-        var mnuView = new ToolStripMenuItem("&View");
+        var mnuView = new ToolStripMenuItem("&View") { Image = AppIcons.ViewMenuBitmap };
         mnuView.DropDownItems.AddRange(new ToolStripItem[] { mnuToggleLog, new ToolStripSeparator(), mnuExpandAll });
 
         var mnuAbout = new ToolStripMenuItem("About RegiLattice...");
         var mnuHwInfo = new ToolStripMenuItem("Hardware Info...");
-        var mnuHelp = new ToolStripMenuItem("&Help");
+        var mnuHelp = new ToolStripMenuItem("&Help") { Image = AppIcons.HelpMenuBitmap };
         mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuHwInfo, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
@@ -156,9 +160,9 @@ partial class MainForm
         mnuHwInfo.Click += (_, _) => OnHardwareInfo();
 
         // ── ToolStrip ──────────────────────────────────────────────────────
-        _btnApply = new ToolStripButton("\u2714 Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnRemove = new ToolStripButton("\u2716 Remove") { ToolTipText = "Remove selected tweaks (Ctrl+Del)", DisplayStyle = ToolStripItemDisplayStyle.Text };
-        _btnRefresh = new ToolStripButton("\U0001F504 Refresh") { ToolTipText = "Reload all tweaks (F5)", DisplayStyle = ToolStripItemDisplayStyle.Text };
+        _btnApply = new ToolStripButton("Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", Image = AppIcons.ApplyMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
+        _btnRemove = new ToolStripButton("Remove") { ToolTipText = "Remove selected tweaks (Ctrl+Del)", Image = AppIcons.RemoveMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
+        _btnRefresh = new ToolStripButton("Refresh") { ToolTipText = "Reload all tweaks (F5)", Image = AppIcons.RefreshMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
 
         _filterLabel = new ToolStripLabel("Status:");
         _filterCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter tweaks by status" };

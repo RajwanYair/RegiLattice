@@ -35,14 +35,21 @@ public sealed class ThemeTests
     }
 
     [Fact]
-    public void AvailableThemes_ReturnsFourThemes()
+    public void AvailableThemes_ReturnsElevenThemes()
     {
         var themes = AppTheme.AvailableThemes();
-        Assert.Equal(4, themes.Length);
+        Assert.Equal(11, themes.Length);
         Assert.Contains("catppuccin-mocha", themes);
         Assert.Contains("catppuccin-latte", themes);
         Assert.Contains("nord", themes);
         Assert.Contains("dracula", themes);
+        Assert.Contains("tokyo-night", themes);
+        Assert.Contains("gruvbox-dark", themes);
+        Assert.Contains("solarized-dark", themes);
+        Assert.Contains("one-dark", themes);
+        Assert.Contains("rose-pine", themes);
+        Assert.Contains("everforest", themes);
+        Assert.Contains("cyberpunk", themes);
     }
 
     [Fact]
@@ -209,6 +216,13 @@ public sealed class ThemeTests
     [InlineData("catppuccin-latte")]
     [InlineData("nord")]
     [InlineData("dracula")]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
     public void AllThemes_HaveDistinctBgAndFg(string themeName)
     {
         try
@@ -352,5 +366,75 @@ public sealed class ThemeTests
         var rect = new System.Drawing.Rectangle(0, 0, 200, 100);
         using var path = AppTheme.RoundedRectPath(rect, 50);
         Assert.True(path.PointCount > 0);
+    }
+
+    // ── Sprint 18 — New theme dark/light verification ───────────────────
+
+    [Theory]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
+    public void NewDarkThemes_AreDark(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.True(AppTheme.Bg.R < 80, $"{themeName} Bg.R={AppTheme.Bg.R} expected < 80");
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Theory]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
+    public void NewDarkThemes_HaveNonDefaultAccent(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.NotEqual(default, AppTheme.Accent);
+            Assert.NotEqual(default, AppTheme.Green);
+            Assert.NotEqual(default, AppTheme.Red);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Theory]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
+    public void NewDarkThemes_ComputedColorsWork(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.Equal(40, AppTheme.AccentHover.A);
+            Assert.Equal(70, AppTheme.AccentPressed.A);
+            Assert.Equal(50, AppTheme.Border.A);
+            Assert.Equal(30, AppTheme.Separator.A);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
     }
 }

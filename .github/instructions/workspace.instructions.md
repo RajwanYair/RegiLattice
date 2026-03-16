@@ -13,7 +13,7 @@ Version 3.4.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 - **Language**: C# 13 / .NET 10.0-windows (x64)
 - **Build**: `dotnet build` via MSBuild / `RegiLattice.sln`
-- **GUI Framework**: WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)
+- **GUI Framework**: WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more)
 - **CLI**: Args-based command parsing (25+ commands)
 - **Testing**: xUnit 2.9.2 + coverlet 6.0.2
 - **NuGet**: System.Management 9.0.3, Microsoft.NET.Test.Sdk 17.11.1
