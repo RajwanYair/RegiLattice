@@ -3,7 +3,7 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-799%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-972%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -27,7 +27,7 @@ A comprehensive Windows registry tweak toolkit with **2 316 verified tweaks** ac
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **799 tests** across 11 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **972 tests** across 13 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -220,20 +220,22 @@ RegiLattice/
 │       ├── CliArgs.cs                       # CLI argument model
 │       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 643 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 738 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
+│   │   ├── TweakEngineBuiltinsTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
 │   │   ├── PluginTests.cs
 │   │   ├── SnapshotManagerTests.cs
 │   │   ├── TweakValidatorTests.cs
 │   │   └── DependencyResolverTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 72 xUnit tests
+│   ├── RegiLattice.CLI.Tests/               # 103 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 84 xUnit tests
+│   └── RegiLattice.GUI.Tests/               # 131 xUnit tests
 │       ├── ThemeTests.cs
-│       └── PackageManagerValidationTests.cs
+│       ├── PackageManagerValidationTests.cs
+│       └── AppIconsTests.cs
 ├── winget/                                  # Winget package manifests
 ├── docs/                                    # Documentation
 └── .vscode/                                 # VS Code workspace settings

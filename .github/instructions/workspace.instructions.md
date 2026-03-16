@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 3.2.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 3.2.1 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -45,9 +45,9 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 643 xUnit tests
-│   ├── RegiLattice.CLI.Tests/   # 72 xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 84 xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 738 xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 103 xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 131 xUnit tests
 └── archive/                     # Archived (untracked)
 ```
 

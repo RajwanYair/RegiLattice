@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.1, 2 316 tweaks, 89 categories, 972 tests).
+> Last verified: 2026-03-16 (v3.2.1, 2 316 tweaks, 89 categories, 972 tests).
 
 ## Companion Instruction Files
 
@@ -77,7 +77,7 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 972 tests across 12 test files                    |
+| Test        | xUnit 2.9.2 — 972 tests across 13 test files                    |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
@@ -402,6 +402,7 @@ Canonical category slugs:
 
 - `tests/RegiLattice.Core.Tests/TweakDefTests.cs` — TweakDef model, RegOp factories, scope computation
 - `tests/RegiLattice.Core.Tests/TweakEngineTests.cs` — engine registration, lookup, search, profiles, batch ops
+- `tests/RegiLattice.Core.Tests/TweakEngineBuiltinsTests.cs` — RegisterBuiltins integration, ID uniqueness, profiles, categories, search/filter
 - `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing, read/write ops
 - `tests/RegiLattice.Core.Tests/ServicesTests.cs` — Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
 - `tests/RegiLattice.Core.Tests/PluginTests.cs` — PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale

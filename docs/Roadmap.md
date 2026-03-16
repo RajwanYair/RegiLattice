@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-17 · v3.2.1 · 2 316 tweaks · 89 categories · 799 tests
+> Last updated: 2026-03-16 · v3.2.1 · 2 316 tweaks · 89 categories · 972 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 316 verified across 89 categories |
-| Tests | 799 (643 Core + 72 CLI + 84 GUI), all passing, 4-thread parallel |
+| Tests | 972 (738 Core + 103 CLI + 131 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -244,6 +244,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 7 | GUI verified — all status data is dynamic, no stale values | ✅ |
 | 8 | Update all documentation with new test counts | ✅ |
 | 9 | Total: 2,316 tweaks, 799 tests (643 Core + 72 CLI + 84 GUI) | ✅ |
+
+### Sprint 14 — Deep Test Expansion & Documentation Reconciliation ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Add `TweakEngineBuiltinsTests.cs` — 63 integration tests with shared `BuiltinsFixture` (RegisterBuiltins perf, unique IDs, required fields, profiles, search, filter, categories) | ✅ |
+| 2 | Expand Core tests: +95 (643 → 738) across TweakDef, TweakEngine, RegistrySession, Services, Plugins | ✅ |
+| 3 | Expand CLI tests: +31 (72 → 103) in ParseArgsTests | ✅ |
+| 4 | Expand GUI tests: +47 (84 → 131) across ThemeTests, PackageManagerValidation, AppIcons | ✅ |
+| 5 | Reconcile all documentation: CHANGELOG, Roadmap, Readme, copilot-instructions, testing, workspace, Coverage, Development | ✅ |
+| 6 | Total: 2,316 tweaks, 972 tests (738 Core + 103 CLI + 131 GUI), 13 test files | ✅ |
 
 ---
 
