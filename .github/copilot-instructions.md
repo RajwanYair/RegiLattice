@@ -106,6 +106,7 @@ RegiLattice.sln
 │   │   ├── DependencyResolver.cs    # Topological dependency resolution
 │   │   ├── Models/
 │   │   │   ├── TweakDef.cs          # Immutable tweak definition + RegOp + TweakScope + TweakResult
+│   │   │   ├── CategoryIcons.cs     # TweakKind symbols for CLI/GUI display
 │   │   │   ├── ProfileDef.cs        # Profile definition model
 │   │   │   └── ProfileDefinitions.cs # 5 hardcoded profiles
 │   │   ├── Registry/
@@ -113,11 +114,15 @@ RegiLattice.sln
 │   │   ├── Services/
 │   │   │   ├── Analytics.cs         # Local usage analytics
 │   │   │   ├── AppConfig.cs         # Configuration management
+│   │   │   ├── ChocolateyManager.cs # Chocolatey package manager integration
 │   │   │   ├── CorporateGuard.cs    # Corporate network detection (P/Invoke + WMI)
 │   │   │   ├── Elevation.cs         # UAC elevation helpers
 │   │   │   ├── HardwareInfo.cs      # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs            # i18n string table (English + German)
-│   │   │   └── Ratings.cs           # Tweak rating system (1-5 stars)
+│   │   │   ├── PipManager.cs        # pip package manager integration
+│   │   │   ├── Ratings.cs           # Tweak rating system (1-5 stars)
+│   │   │   ├── ShellRunner.cs       # Safe process execution wrapper
+│   │   │   └── WinGetManager.cs     # WinGet package manager integration
 │   │   ├── Plugins/                 # Tweak Pack system (JSON marketplace)
 │   │   │   ├── PackDef.cs           # Pack metadata record
 │   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
@@ -131,31 +136,50 @@ RegiLattice.sln
 │   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/            # WinForms application
 │   │   ├── Program.cs              # Entry point
+│   │   ├── AppIcons.cs             # Programmatic icon/bitmap generation
 │   │   ├── Theme.cs                # 4-theme engine (ThemeDef record, runtime switching)
-│   │   └── Forms/
-│   │       ├── MainForm.cs         # Main window (categories, search, filters, profiles)
-│   │       ├── AboutDialog.cs      # About + hardware info
-│   │       ├── ScoopManagerDialog.cs
-│   │       └── PSModuleManagerDialog.cs
+│   │   ├── Forms/
+│   │   │   ├── MainForm.cs         # Main window (categories, search, filters, profiles)
+│   │   │   ├── AboutDialog.cs      # About + hardware info
+│   │   │   ├── ChocolateyManagerDialog.cs
+│   │   │   ├── MarketplaceDialog.cs # Tweak Pack marketplace browser
+│   │   │   ├── PipManagerDialog.cs
+│   │   │   ├── PSModuleManagerDialog.cs
+│   │   │   ├── ScoopManagerDialog.cs
+│   │   │   ├── ToolVersionsDialog.cs # Installed tool version checker
+│   │   │   ├── WindowsHealthDialog.cs # System health & maintenance
+│   │   │   └── WinGetManagerDialog.cs
+│   │   └── PackageManagers/        # GUI-side package manager wrappers
+│   │       ├── PackageNameValidator.cs # Shared name validation (regex)
+│   │       ├── ShellRunner.cs       # Process execution for GUI dialogs
+│   │       ├── ScoopManager.cs
+│   │       ├── PipManager.cs
+│   │       ├── PSModuleManager.cs
+│   │       ├── ChocolateyManager.cs
+│   │       ├── WinGetManager.cs
+│   │       ├── ToolVersionChecker.cs
+│   │       └── WindowsHealthManager.cs
 │   └── RegiLattice.CLI/           # Console application
 │       ├── Program.cs             # 25+ commands via args parsing
 │       ├── CliArgs.cs             # CLI argument model (extracted from Program)
 │       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 643 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 738 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
+│   │   ├── TweakEngineBuiltinsTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
 │   │   ├── PluginTests.cs
 │   │   ├── SnapshotManagerTests.cs
 │   │   ├── TweakValidatorTests.cs
 │   │   └── DependencyResolverTests.cs
-│   ├── RegiLattice.CLI.Tests/     # 72 xUnit tests
+│   ├── RegiLattice.CLI.Tests/     # 103 xUnit tests
 │   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
-│   └── RegiLattice.GUI.Tests/    # 84 xUnit tests
+│   └── RegiLattice.GUI.Tests/    # 131 xUnit tests
 │       ├── ThemeTests.cs
-│       └── PackageManagerValidationTests.cs
+│       ├── PackageManagerValidationTests.cs
+│       └── AppIconsTests.cs
 └── archive/                      # Archived Python v1.x + old NativeGUI (untracked)
 ```
 
@@ -366,37 +390,45 @@ Canonical category slugs:
 | `ai`       | AI / Copilot                | `m365`     | M365 Copilot          |
 | `audio`    | Audio                       | `maint`    | Maintenance           |
 | `backup`   | Backup & Recovery           | `media`    | Multimedia            |
-| `boot`     | Boot                        | `msstore`  | Microsoft Store       |
+| `boot`     | Boot                        | `mem`      | Memory                |
+| `browser`  | Browser Common              | `msstore`  | Microsoft Store       |
 | `bt`       | Bluetooth                   | `net`      | Network               |
-| `chrome`   | Chrome                      | `night`    | Night Light & Display |
+| `chrome`   | Chrome                      | `netopt`   | Network Optimization  |
+| `cleanup`  | Disk Cleanup                | `night`    | Night Light & Display |
 | `clip`     | Clipboard & Drag-Drop       | `notif`    | Notifications         |
 | `cloud`    | Cloud Storage               | `od`       | OneDrive              |
-| `comm`     | Communication               | `office`   | Office                |
-| `cortana`  | Cortana & Search            | `perf`     | Performance           |
-| `crash`    | Crash & Diagnostics         | `phone`    | Phone Link            |
-| `ctx`      | Context Menu                | `pkg`      | Package Management    |
-| `dev`      | Dev Drive / Developer Tools | `power`    | Power                 |
-| `display`  | Display                     | `printing` | Printing              |
-| `dns`      | DNS & Networking Advanced   | `priv`     | Privacy               |
+| `cmd`      | Command Line                | `office`   | Office                |
+| `comm`     | Communication               | `perf`     | Performance           |
+| `compat`   | App Compatibility           | `phone`    | Phone Link            |
+| `cortana`  | Cortana & Search            | `pkg`      | Package Management    |
+| `crash`    | Crash & Diagnostics         | `power`    | Power                 |
+| `ctx`      | Context Menu                | `printing` | Printing              |
+| `debloat`  | Debloat                     | `priv`     | Privacy               |
+| `dev`      | Dev Drive / Developer       | `proxy`    | Proxy & VPN           |
+| `display`  | Display                     | `ps`       | PowerShell            |
+| `dns`      | DNS & Networking Advanced   | `pwrmgmt`  | Power Management      |
 | `edge`     | Edge                        | `rdp`      | Remote Desktop        |
-| `enc`      | Encryption                  | `recovery` | Recovery              |
-| `explorer` | Explorer                    | `schtask`  | Scheduled Tasks       |
-| `firefox`  | Firefox                     | `scoop`    | Scoop Tools           |
-| `font`     | Fonts                       | `sec`      | Security              |
-| `fs`       | File System                 | `shell`    | Shell                 |
-| `fw`       | Firewall                    |            |                       |
+| `enc`      | Encryption                  | `recall`   | Windows Recall        |
+| `evtlog`   | Event Logging               | `recovery` | Recovery              |
+| `explorer` | Explorer                    | `restore`  | System Restore        |
+| `firefox`  | Firefox                     | `schtask`  | Scheduled Tasks       |
+| `font`     | Fonts                       | `scoop`    | Scoop Tools           |
+| `fs`       | File System                 | `sec`      | Security              |
+| `fw`       | Firewall                    | `shell`    | Shell                 |
 | `game`     | Gaming                      | `snap`     | Snap & Multitasking   |
 | `gpu`      | GPU / Graphics              | `speech`   | Voice Access & Speech |
-| `idx`      | Indexing & Search           | `ss`       | Screensaver & Lock    |
+| `harden`   | Hardening                   | `ss`       | Screensaver & Lock    |
+| `idx`      | Indexing & Search           | `ssd`      | SSD Optimization      |
 | `input`    | Input                       | `startup`  | Startup               |
 | `java`     | Java                        | `stor`     | Storage               |
 | `svc`      | Services                    | `sys`      | System                |
 | `tb`       | Taskbar                     | `telem`    | Telemetry Advanced    |
 | `term`     | Windows Terminal             | `touch`    | Touch & Pen           |
-| `usb`      | USB & Peripherals           | `virt`     | Virtualization        |
-| `vnc`      | RealVNC                     | `vscode`   | VS Code               |
-| `w11`      | Windows 11                  | `widgets`  | Widgets & News        |
-| `wsl`      | WSL                         | `wu`       | Windows Update        |
+| `uac`      | User Account                | `virt`     | Virtualization        |
+| `usb`      | USB & Peripherals           | `vnc`      | RealVNC               |
+| `vscode`   | VS Code                     | `w11`      | Windows 11            |
+| `widgets`  | Widgets & News              | `wsl`      | WSL                   |
+| `wu`       | Windows Update              |            |                       |
 
 ## Test Infrastructure
 
@@ -452,8 +484,14 @@ Canonical category slugs:
 | `AppConfig.cs` | Configuration | `Load()`, `ForceCorpGuard`, `Theme`, `Locale` |
 | `Locale.cs` | i18n (en, de) | `T()`, `SetLocale()`, `CurrentLocale`, `AvailableLocales` |
 | `Ratings.cs` | Rating system | `Rate()`, `GetRating()`, `AllRatings()`, `TopRated()` |
+| `ShellRunner.cs` (Core) | Process execution | `RunPowerShell()`, `RunCommand()` (safe subprocess wrapper) |
+| `ChocolateyManager.cs` (Core) | Chocolatey integration | Package install, list, update via choco CLI |
+| `PipManager.cs` (Core) | pip integration | Package install, list, update via pip CLI |
+| `WinGetManager.cs` (Core) | WinGet integration | Package install, list, update via winget CLI |
 | `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record |
+| `AppIcons.cs` (GUI) | Icon generation | Programmatic bitmap/icon creation for menus and tray |
 | `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations, tray icon |
+| `PackageNameValidator.cs` (GUI) | Name validation | Shared regex validation for all package manager dialogs |
 | `Program.cs` (CLI) | CLI entry | 25+ commands via args parsing |
 | `CliArgs.cs` (CLI) | CLI argument model | Mode, Tweak, ShowList, Force, DryRun, etc. |
 | `ConsoleColorizer.cs` (CLI) | ANSI colour helpers | `Green()`, `Red()`, `Yellow()`, `Dim()`, `NoColor` |

@@ -195,11 +195,15 @@ RegiLattice/
 │   │   ├── Services/
 │   │   │   ├── Analytics.cs                 # Local usage analytics
 │   │   │   ├── AppConfig.cs                 # Configuration management
+│   │   │   ├── ChocolateyManager.cs         # Chocolatey package manager integration
 │   │   │   ├── CorporateGuard.cs            # Corporate network detection
 │   │   │   ├── Elevation.cs                 # UAC elevation helpers
 │   │   │   ├── HardwareInfo.cs              # Hardware detection + profile suggestion
 │   │   │   ├── Locale.cs                    # i18n string table
-│   │   │   └── Ratings.cs                   # Tweak rating system (1-5 stars)
+│   │   │   ├── PipManager.cs                # pip package manager integration
+│   │   │   ├── Ratings.cs                   # Tweak rating system (1-5 stars)
+│   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
+│   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
 │   │   └── Tweaks/                          # 90 category modules, 2 316 tweaks
 │   │       ├── Accessibility.cs
@@ -209,12 +213,29 @@ RegiLattice/
 │   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
 │   │   ├── Program.cs                       # Entry point
+│   │   ├── AppIcons.cs                      # Programmatic icon/bitmap generation
 │   │   ├── Theme.cs                         # 4-theme engine
-│   │   └── Forms/
-│   │       ├── MainForm.cs                  # Main window
-│   │       ├── AboutDialog.cs               # About + hardware info
-│   │       ├── ScoopManagerDialog.cs        # Scoop package manager
-│   │       └── PSModuleManagerDialog.cs     # PowerShell module manager
+│   │   ├── Forms/
+│   │   │   ├── MainForm.cs                  # Main window
+│   │   │   ├── AboutDialog.cs               # About + hardware info
+│   │   │   ├── ChocolateyManagerDialog.cs
+│   │   │   ├── MarketplaceDialog.cs         # Tweak Pack marketplace browser
+│   │   │   ├── PipManagerDialog.cs
+│   │   │   ├── PSModuleManagerDialog.cs
+│   │   │   ├── ScoopManagerDialog.cs
+│   │   │   ├── ToolVersionsDialog.cs        # Installed tool version checker
+│   │   │   ├── WindowsHealthDialog.cs       # System health & maintenance
+│   │   │   └── WinGetManagerDialog.cs
+│   │   └── PackageManagers/                 # GUI-side package manager wrappers
+│   │       ├── PackageNameValidator.cs      # Shared name validation (regex)
+│   │       ├── ShellRunner.cs               # Process execution for GUI dialogs
+│   │       ├── ScoopManager.cs
+│   │       ├── PipManager.cs
+│   │       ├── PSModuleManager.cs
+│   │       ├── ChocolateyManager.cs
+│   │       ├── WinGetManager.cs
+│   │       ├── ToolVersionChecker.cs
+│   │       └── WindowsHealthManager.cs
 │   └── RegiLattice.CLI/                     # Console CLI (net10.0)
 │       ├── Program.cs                       # 25+ commands
 │       ├── CliArgs.cs                       # CLI argument model
