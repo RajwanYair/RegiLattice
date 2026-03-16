@@ -3,15 +3,15 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-972%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-960%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-A comprehensive Windows registry tweak toolkit with **2 366 verified tweaks** across **89 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **2 363 verified tweaks** across **89 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Highlights
 
-- **2 366 verified tweaks** across 89 categories — each fully reversible with apply + remove
+- **2 363 verified tweaks** across 89 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
@@ -27,7 +27,7 @@ A comprehensive Windows registry tweak toolkit with **2 366 verified tweaks** ac
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **972 tests** across 13 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **960 tests** across 13 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
