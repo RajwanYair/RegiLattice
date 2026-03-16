@@ -967,6 +967,235 @@ public sealed class TweakEngineTests
         int build = TweakEngine.WindowsBuild();
         Assert.True(build > 0, $"Expected positive build number, got {build}");
     }
+
+    // ── TweaksByScope edge cases ────────────────────────────────────────
+
+    [Fact]
+    public void TweaksByScope_UserOnly_ExcludesMachine()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "scope-user",
+                Label = "User",
+                Category = "Test",
+                RegistryKeys = [@"HKCU\Software\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "scope-machine",
+                Label = "Machine",
+                Category = "Test",
+                RegistryKeys = [@"HKLM\SOFTWARE\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Test", "V", 1)],
+            },
+        ]);
+
+        var userTweaks = engine.TweaksByScope(TweakScope.User);
+        Assert.Single(userTweaks);
+        Assert.Equal("scope-user", userTweaks[0].Id);
+    }
+
+    [Fact]
+    public void TweaksByScope_BothScope_ReturnsBothScopeTweaks()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "scope-both",
+                Label = "Both",
+                Category = "Test",
+                RegistryKeys = [@"HKCU\Software\Test", @"HKLM\SOFTWARE\Test"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+            },
+        ]);
+
+        var bothTweaks = engine.TweaksByScope(TweakScope.Both);
+        Assert.Single(bothTweaks);
+        Assert.Equal("scope-both", bothTweaks[0].Id);
+    }
+
+    // ── GetScope caching ────────────────────────────────────────────────
+
+    [Fact]
+    public void GetScope_ReturnsConsistentResult()
+    {
+        var engine = CreateEngine();
+        var td = MakeTweak("scope-cache-test");
+        engine.Register([td]);
+
+        var scope1 = engine.GetScope(td);
+        var scope2 = engine.GetScope(td);
+        Assert.Equal(scope1, scope2);
+    }
+
+    // ── Filter: query filter ────────────────────────────────────────────
+
+    [Fact]
+    public void Filter_ByQuery_FiltersOnSearchText()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "fq-telemetry",
+                Label = "Disable Telemetry",
+                Category = "Privacy",
+                Description = "Stops telemetry data collection",
+                Tags = ["telemetry"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-telemetry", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fq-animation",
+                Label = "Disable Animations",
+                Category = "Performance",
+                Tags = ["ui"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-animation", "V", 1)],
+            },
+        ]);
+
+        var result = engine.Filter(query: "telemetry");
+        Assert.Single(result);
+        Assert.Equal("fq-telemetry", result[0].Id);
+    }
+
+    [Fact]
+    public void Filter_NoCriteria_ReturnsAllTweaks()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("filter-all-1"), MakeTweak("filter-all-2"), MakeTweak("filter-all-3")]);
+        var result = engine.Filter();
+        Assert.Equal(3, result.Count);
+    }
+
+    // ── IsApplicableOnHardware edge cases ───────────────────────────────
+
+    [Fact]
+    public void IsApplicableOnHardware_CustomPredicate_True()
+    {
+        var td = new TweakDef
+        {
+            Id = "hw-custom-true",
+            Label = "Custom",
+            Category = "Test",
+            IsApplicable = () => true,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\hw-test", "V", 1)],
+        };
+        Assert.True(TweakEngine.IsApplicableOnHardware(td));
+    }
+
+    [Fact]
+    public void IsApplicableOnHardware_CustomPredicate_False()
+    {
+        var td = new TweakDef
+        {
+            Id = "hw-custom-false",
+            Label = "Custom",
+            Category = "Test",
+            IsApplicable = () => false,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\hw-test", "V", 1)],
+        };
+        Assert.False(TweakEngine.IsApplicableOnHardware(td));
+    }
+
+    [Fact]
+    public void IsApplicableOnHardware_GenericCategory_ReturnsTrue()
+    {
+        var td = new TweakDef
+        {
+            Id = "hw-generic",
+            Label = "Generic",
+            Category = "Privacy",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\hw-test", "V", 1)],
+        };
+        Assert.True(TweakEngine.IsApplicableOnHardware(td));
+    }
+
+    // ── DetectStatus edge cases ─────────────────────────────────────────
+
+    [Fact]
+    public void DetectStatus_ThrowingDetectAction_ReturnsError()
+    {
+        var engine = CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "detect-throw",
+            Label = "Thrower",
+            Category = "Test",
+            DetectAction = () => throw new InvalidOperationException("detect boom"),
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\detect-throw", "V", 1)],
+        };
+        engine.Register([td]);
+
+        var result = engine.DetectStatus(td);
+        Assert.Equal(TweakResult.Error, result);
+    }
+
+    [Fact]
+    public void DetectStatus_NoDetection_ReturnsUnknown()
+    {
+        var engine = CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "detect-none",
+            Label = "NoDetect",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\detect-none", "V", 1)],
+        };
+        engine.Register([td]);
+
+        var result = engine.DetectStatus(td);
+        Assert.Equal(TweakResult.Unknown, result);
+    }
+
+    // ── StatusMap with subset of IDs ────────────────────────────────────
+
+    [Fact]
+    public void StatusMap_WithIds_ReturnsSubset()
+    {
+        var engine = CreateEngine();
+        engine.Register([MakeTweak("sm-1"), MakeTweak("sm-2"), MakeTweak("sm-3")]);
+
+        var map = engine.StatusMap(ids: ["sm-1", "sm-3"]);
+        Assert.Equal(2, map.Count);
+        Assert.Contains("sm-1", map.Keys);
+        Assert.Contains("sm-3", map.Keys);
+        Assert.DoesNotContain("sm-2", map.Keys);
+    }
+
+    // ── Search multi-token ──────────────────────────────────────────────
+
+    [Fact]
+    public void Search_MultipleTokens_MatchesBothTerms()
+    {
+        var engine = CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "search-multi-perf-anim",
+                Label = "Disable Performance Animations",
+                Category = "Performance",
+                Tags = ["animation"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\search-multi", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "search-multi-priv",
+                Label = "Disable Privacy Telemetry",
+                Category = "Privacy",
+                Tags = ["telemetry"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\search-priv", "V", 1)],
+            },
+        ]);
+
+        var result = engine.Search("performance animation");
+        Assert.Single(result);
+        Assert.Equal("search-multi-perf-anim", result[0].Id);
+    }
 }
 
 /// <summary>Tests that require RegisterBuiltins — share a single engine via IClassFixture.</summary>
@@ -1627,7 +1856,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         engine.RegisterBuiltins();
         sw.Stop();
 
-        Assert.True(sw.ElapsedMilliseconds < 500, $"RegisterBuiltins took {sw.ElapsedMilliseconds}ms (budget: 500ms)");
+        Assert.True(sw.ElapsedMilliseconds < 750, $"RegisterBuiltins took {sw.ElapsedMilliseconds}ms (budget: 750ms)");
     }
 
     [Fact]

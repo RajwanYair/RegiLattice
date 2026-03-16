@@ -45,7 +45,7 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 571 xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 643 xUnit tests
 │   ├── RegiLattice.CLI.Tests/   # 72 xUnit tests
 │   └── RegiLattice.GUI.Tests/   # 84 xUnit tests
 └── archive/                     # Archived (untracked)

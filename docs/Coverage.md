@@ -1,7 +1,7 @@
 # RegiLattice — Coverage Report
 
 > Test coverage baseline for the C# codebase.
-> Last verified: 2026-03-16 · v3.2.1
+> Last verified: 2026-03-17 · v3.2.1
 > Command: `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
@@ -10,24 +10,27 @@
 
 | Scope | Tests | Status |
 |---|---|---|
-| **RegiLattice.Core.Tests** | 571 tests | All passing |
+| **RegiLattice.Core.Tests** | 643 tests | All passing |
 | **RegiLattice.CLI.Tests** | 72 tests | All passing |
 | **RegiLattice.GUI.Tests** | 84 tests | All passing |
-| **Total** | 727 tests | All passing |
+| **Total** | 799 tests | All passing |
 
 ---
 
 ## Test File Inventory
 
-### Core Tests (571 tests)
+### Core Tests (643 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
 | `TweakDefTests.cs` | TweakDef model, RegOp factories, TweakScope computation | ~25 |
-| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution, snapshots | ~200 |
-| `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing | ~15 |
+| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution, snapshots | ~213 |
+| `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing, read/write ops, evaluate | ~53 |
 | `ServicesTests.cs` | Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ~23 |
-| `PluginTests.cs` | PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale | ~62 |
+| `PluginTests.cs` | PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale | ~64 |
+| `SnapshotManagerTests.cs` | Save/Load/Restore, round-trip, edge cases | 12 |
+| `TweakValidatorTests.cs` | Valid tweaks, empty fields, duplicates, circular deps, broken deps | 19 |
+| `DependencyResolverTests.cs` | Resolve (topological sort), Dependents (reverse lookup), circular detection | 15 |
 
 ### CLI Tests (72 tests)
 
@@ -86,3 +89,8 @@ Start-Process coveragereport\index.html
 | Plugin system tests (62 tests) | P1 | ✅ Done |
 | Validation & dependency resolution tests | P1 | ✅ Done |
 | GUI.Tests for theme records and package validation | P2 | ✅ Done |
+| SnapshotManager direct tests (12 tests) | P1 | ✅ Done |
+| TweakValidator direct tests (19 tests) | P1 | ✅ Done |
+| DependencyResolver direct tests (15 tests) | P1 | ✅ Done |
+| TweakEngine edge case expansion (+13 tests) | P2 | ✅ Done |
+| RegistrySession edge case expansion (+17 tests) | P2 | ✅ Done |

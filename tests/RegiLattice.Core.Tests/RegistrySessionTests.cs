@@ -262,4 +262,167 @@ public sealed class RegistrySessionTests
     {
         Assert.Throws<ArgumentException>(() => RegistrySession.ParsePath(@"HKZZ\Software\Test"));
     }
+
+    // ── Execute in DryRun ───────────────────────────────────────────────
+
+    [Fact]
+    public void Execute_DryRun_RecordsOpsWithoutWriting()
+    {
+        var s = new RegistrySession(dryRun: true);
+        var ops = new[]
+        {
+            RegOp.SetDword(@"HKCU\Software\Test", "Val1", 1),
+            RegOp.SetDword(@"HKCU\Software\Test", "Val2", 2),
+            RegOp.DeleteValue(@"HKCU\Software\Test", "Val3"),
+        };
+        s.Execute(ops);
+        Assert.Equal(3, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_EmptyOps_DoesNothing()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([]);
+        Assert.Equal(0, s.DryOps);
+    }
+
+    // ── Evaluate edge cases ──────────────────────────────────────────
+
+    [Fact]
+    public void Evaluate_CheckMissing_OnNonExistentKey_ReturnsTrue()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var ops = new[] { RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345", "NoVal") };
+        var result = s.Evaluate(ops);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Evaluate_CheckKeyMissing_OnNonExistentKey_ReturnsTrue()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var ops = new[] { RegOp.CheckKeyMissing(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345") };
+        var result = s.Evaluate(ops);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Evaluate_CheckKeyMissing_OnExistingKey_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var ops = new[] { RegOp.CheckKeyMissing(@"HKEY_CURRENT_USER\Software") };
+        var result = s.Evaluate(ops);
+        Assert.False(result);
+    }
+
+    // ── Backup in DryRun ────────────────────────────────────────────────
+
+    [Fact]
+    public void Backup_ReadOnlyKeys_CreatesBackupFile()
+    {
+        var backupDir = Path.Combine(Path.GetTempPath(), $"rl_backup_test_{Guid.NewGuid()}");
+        var s = new RegistrySession(dryRun: false, backupDir: backupDir);
+
+        try
+        {
+            var path = s.Backup([@"HKEY_CURRENT_USER\Console"], "test-backup");
+            Assert.True(File.Exists(path));
+            var json = File.ReadAllText(path);
+            Assert.False(string.IsNullOrWhiteSpace(json));
+        }
+        finally
+        {
+            if (Directory.Exists(backupDir))
+                Directory.Delete(backupDir, true);
+        }
+    }
+
+    [Fact]
+    public void Backup_NonExistentKey_StillCreatesFile()
+    {
+        var backupDir = Path.Combine(Path.GetTempPath(), $"rl_backup_nxk_{Guid.NewGuid()}");
+        var s = new RegistrySession(dryRun: false, backupDir: backupDir);
+
+        try
+        {
+            var path = s.Backup([@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_99999"], "test-nxk");
+            Assert.True(File.Exists(path));
+        }
+        finally
+        {
+            if (Directory.Exists(backupDir))
+                Directory.Delete(backupDir, true);
+        }
+    }
+
+    // ── WriteLog ────────────────────────────────────────────────────────
+
+    [Fact]
+    public void WriteLog_AppendsToLog()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.WriteLog("Test message 1");
+        s.WriteLog("Test message 2");
+        Assert.Equal(2, s.Log.Count);
+        Assert.Contains("Test message 1", s.Log[0]);
+        Assert.Contains("Test message 2", s.Log[1]);
+    }
+
+    // ── Read operations ─────────────────────────────────────────────────
+
+    [Fact]
+    public void ReadDword_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadDword(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345", "Nope");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ReadString_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadString(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345", "Nope");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void KeyExists_ExistingKey_ReturnsTrue()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.True(s.KeyExists(@"HKEY_CURRENT_USER\Software"));
+    }
+
+    [Fact]
+    public void KeyExists_NonExistentKey_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.False(s.KeyExists(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345"));
+    }
+
+    [Fact]
+    public void ValueExists_NonExistentKey_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        Assert.False(s.ValueExists(@"HKEY_CURRENT_USER\Software\RegiLattice_NonExistent_12345", "V"));
+    }
+
+    // ── ParsePath: full hive names ──────────────────────────────────────
+
+    [Fact]
+    public void ParsePath_FullHKLM_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft");
+        Assert.Equal(Microsoft.Win32.Registry.LocalMachine, root);
+        Assert.Equal(@"SOFTWARE\Microsoft", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_HKCR_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKEY_CLASSES_ROOT\*\shell");
+        Assert.Equal(Microsoft.Win32.Registry.ClassesRoot, root);
+        Assert.Equal(@"*\shell", subKey);
+    }
 }

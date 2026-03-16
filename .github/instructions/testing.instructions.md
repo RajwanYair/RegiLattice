@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project | Tests | Covers |
 |---------|-------|--------|
-| `RegiLattice.Core.Tests` | 571 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale |
+| `RegiLattice.Core.Tests` | 643 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver |
 | `RegiLattice.CLI.Tests` | 72 | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer) |
 | `RegiLattice.GUI.Tests` | 84 | Theme, PackageManagerValidation, PackageNameValidator |
-| **Total** | **727** | |
+| **Total** | **799** | |
 
 ## Running Tests
 
@@ -52,9 +52,12 @@ tests/
 ├── RegiLattice.Core.Tests/
 │   ├── TweakDefTests.cs         # TweakDef model, RegOp factories, scope computation
 │   ├── TweakEngineTests.cs      # Engine registration, lookup, search, profiles, batch
-│   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing
+│   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing, read/write ops
 │   ├── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
-│   └── PluginTests.cs           # PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
+│   ├── PluginTests.cs           # PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
+│   ├── SnapshotManagerTests.cs  # Save/Load/Restore, round-trip, edge cases
+│   ├── TweakValidatorTests.cs   # Valid tweaks, empty fields, duplicates, circular deps, broken deps
+│   └── DependencyResolverTests.cs # Resolve topological sort, Dependents reverse lookup
 ├── RegiLattice.CLI.Tests/
 │   └── ParseArgsTests.cs        # CLI argument parsing, flags, options, scope, positional args
 └── RegiLattice.GUI.Tests/

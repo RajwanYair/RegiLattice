@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-16 · v3.2.1 · 2 316 tweaks · 89 categories · 727 tests
+> Last updated: 2026-03-17 · v3.2.1 · 2 316 tweaks · 89 categories · 799 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 316 verified across 89 categories |
-| Tests | 727 (571 Core + 72 CLI + 84 GUI), all passing, 4-thread parallel |
+| Tests | 799 (643 Core + 72 CLI + 84 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -230,6 +230,20 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 8 | TweakEngine reduced from ~750 → ~580 lines, all public API unchanged | ✅ |
 | 9 | Update all documentation: CHANGELOG, copilot-instructions, workspace, testing, Roadmap, Api, Coverage, Development, Readme, Profiling, lessons-learned | ✅ |
 | 10 | Total: 2,316 tweaks, 727 tests (571 Core + 72 CLI + 84 GUI) | ✅ |
+
+### Sprint 13 — Test Coverage Expansion ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Add `SnapshotManagerTests.cs` — 12 direct tests (Save, Load, Restore, round-trip, edge cases) | ✅ |
+| 2 | Add `TweakValidatorTests.cs` — 19 direct tests (valid tweaks, empty fields, duplicates, circular deps) | ✅ |
+| 3 | Add `DependencyResolverTests.cs` — 15 direct tests (Resolve topological sort, Dependents reverse lookup, circular detection) | ✅ |
+| 4 | Add TweakEngine edge case tests (+13): TweaksByScope, Filter, IsApplicableOnHardware, DetectStatus, StatusMap subset, Search multi-token | ✅ |
+| 5 | Add RegistrySession edge case tests (+17): Execute DryRun, Evaluate CheckMissing/CheckKeyMissing, Backup, WriteLog, Read ops, ParsePath | ✅ |
+| 6 | Fix corporate guard interference in tests (`forceCorp: true`) | ✅ |
+| 7 | GUI verified — all status data is dynamic, no stale values | ✅ |
+| 8 | Update all documentation with new test counts | ✅ |
+| 9 | Total: 2,316 tweaks, 799 tests (643 Core + 72 CLI + 84 GUI) | ✅ |
 
 ---
 
