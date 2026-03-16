@@ -1,7 +1,7 @@
 # RegiLattice — Development Guide
 
 > Local setup, workflow, testing, and contribution instructions for the C# codebase.
-> Last updated: 2026-03-16 · v3.2.1
+> Last updated: 2026-03-17 · v3.2.1
 
 ---
 
@@ -45,7 +45,7 @@ RegiLattice.sln
 ├── src/RegiLattice.Core/      # Class library — engine, models, registry, services, plugins
 ├── src/RegiLattice.GUI/       # WinForms application (4 themes)
 ├── src/RegiLattice.CLI/       # Console application (25+ commands)
-├── tests/RegiLattice.Core.Tests/   # 571 xUnit tests
+├── tests/RegiLattice.Core.Tests/   # 643 xUnit tests
 ├── tests/RegiLattice.CLI.Tests/    # 72 xUnit tests
 └── tests/RegiLattice.GUI.Tests/    # 84 xUnit tests
 ```

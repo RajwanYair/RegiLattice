@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 700 tests).
+> Last verified: 2025-07-22 (v3.2.0, 2 316 tweaks, 89 categories, 799 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 727 tests across 8 test files                     |
+| Test        | xUnit 2.9.2 — 799 tests across 11 test files                    |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 2 316 across 89 categories (90 module files)                      |
-| Tests       | 727 passing (571 Core + 72 CLI + 84 GUI)                         |
+| Tests       | 799 passing (643 Core + 72 CLI + 84 GUI)                         |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -142,12 +142,15 @@ RegiLattice.sln
 │       ├── CliArgs.cs             # CLI argument model (extracted from Program)
 │       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 571 xUnit tests (unchanged)
+│   ├── RegiLattice.Core.Tests/    # 643 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
-│   │   └── PluginTests.cs          # Pack system + locale tests
+│   │   ├── PluginTests.cs
+│   │   ├── SnapshotManagerTests.cs
+│   │   ├── TweakValidatorTests.cs
+│   │   └── DependencyResolverTests.cs
 │   ├── RegiLattice.CLI.Tests/     # 72 xUnit tests
 │   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
 │   └── RegiLattice.GUI.Tests/    # 84 xUnit tests
@@ -399,9 +402,12 @@ Canonical category slugs:
 
 - `tests/RegiLattice.Core.Tests/TweakDefTests.cs` — TweakDef model, RegOp factories, scope computation
 - `tests/RegiLattice.Core.Tests/TweakEngineTests.cs` — engine registration, lookup, search, profiles, batch ops
-- `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing
+- `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing, read/write ops
 - `tests/RegiLattice.Core.Tests/ServicesTests.cs` — Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
 - `tests/RegiLattice.Core.Tests/PluginTests.cs` — PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
+- `tests/RegiLattice.Core.Tests/SnapshotManagerTests.cs` — Save/Load/Restore, round-trip, edge cases
+- `tests/RegiLattice.Core.Tests/TweakValidatorTests.cs` — Valid tweaks, empty fields, duplicates, circular deps, broken deps
+- `tests/RegiLattice.Core.Tests/DependencyResolverTests.cs` — Resolve topological sort, Dependents reverse lookup, circular detection
 - `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
 - `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes, system theme detection
 - `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation, tool version checking
