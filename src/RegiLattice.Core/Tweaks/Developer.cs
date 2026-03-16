@@ -383,5 +383,226 @@ internal static class Developer
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "dev-set-dotnet-cli-telemetry-off",
+            Label = "Disable .NET CLI Telemetry",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Sets the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to suppress .NET SDK telemetry.",
+            Tags = ["dotnet", "telemetry", "developer", "privacy"],
+            ApplyAction = _ => Environment.SetEnvironmentVariable("DOTNET_CLI_TELEMETRY_OPTOUT", "1", EnvironmentVariableTarget.User),
+            RemoveAction = _ => Environment.SetEnvironmentVariable("DOTNET_CLI_TELEMETRY_OPTOUT", null, EnvironmentVariableTarget.User),
+            DetectAction = () =>
+            {
+                var val = Environment.GetEnvironmentVariable("DOTNET_CLI_TELEMETRY_OPTOUT", EnvironmentVariableTarget.User);
+                return val is "1" or "true";
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-symlink-no-admin",
+            Label = "Allow Symbolic Links Without Admin",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables Developer Mode policy that allows creating symlinks without elevation.",
+            Tags = ["symlink", "developer", "filesystem"],
+            ApplyAction = _ =>
+                ShellRunner.Run(
+                    "reg.exe",
+                    [
+                        "add",
+                        @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                        "/v",
+                        "AllowDevelopmentWithoutDevLicense",
+                        "/t",
+                        "REG_DWORD",
+                        "/d",
+                        "1",
+                        "/f",
+                    ]
+                ),
+            RemoveAction = _ =>
+                ShellRunner.Run(
+                    "reg.exe",
+                    [
+                        "add",
+                        @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                        "/v",
+                        "AllowDevelopmentWithoutDevLicense",
+                        "/t",
+                        "REG_DWORD",
+                        "/d",
+                        "0",
+                        "/f",
+                    ]
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run(
+                    "reg.exe",
+                    ["query", @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "/v", "AllowDevelopmentWithoutDevLicense"]
+                );
+                return stdout.Contains("0x1", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-python-utf8-mode",
+            Label = "Enable Python UTF-8 Mode Globally",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Sets PYTHONUTF8=1 environment variable so Python uses UTF-8 encoding by default on Windows.",
+            Tags = ["python", "utf8", "developer", "encoding"],
+            ApplyAction = _ => Environment.SetEnvironmentVariable("PYTHONUTF8", "1", EnvironmentVariableTarget.User),
+            RemoveAction = _ => Environment.SetEnvironmentVariable("PYTHONUTF8", null, EnvironmentVariableTarget.User),
+            DetectAction = () =>
+            {
+                var val = Environment.GetEnvironmentVariable("PYTHONUTF8", EnvironmentVariableTarget.User);
+                return val == "1";
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-git-credential-manager",
+            Label = "Set Git Credential Manager as Default",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Configures Git Credential Manager as the default credential helper for HTTPS repos.",
+            Tags = ["git", "credential", "developer"],
+            ApplyAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "credential.helper", "manager"]),
+            RemoveAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "--unset", "credential.helper"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("git.exe", ["config", "--global", "credential.helper"]);
+                return stdout.Trim().Equals("manager", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-git-default-branch-main",
+            Label = "Set Git Default Branch to 'main'",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Sets the default branch name for new Git repositories to 'main'.",
+            Tags = ["git", "branch", "developer"],
+            ApplyAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "init.defaultBranch", "main"]),
+            RemoveAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "--unset", "init.defaultBranch"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("git.exe", ["config", "--global", "init.defaultBranch"]);
+                return stdout.Trim().Equals("main", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-git-auto-crlf-input",
+            Label = "Set Git autocrlf to Input (LF on Commit)",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Normalises line endings to LF on commit while checking out as-is. Best for cross-platform repos.",
+            Tags = ["git", "line-endings", "developer"],
+            ApplyAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "core.autocrlf", "input"]),
+            RemoveAction = _ => ShellRunner.Run("git.exe", ["config", "--global", "--unset", "core.autocrlf"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("git.exe", ["config", "--global", "core.autocrlf"]);
+                return stdout.Trim().Equals("input", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-env-add-cargo-bin",
+            Label = "Add Cargo bin to User PATH",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Adds %USERPROFILE%\\.cargo\\bin to user PATH for Rust toolchain executables.",
+            Tags = ["rust", "cargo", "path", "developer"],
+            ApplyAction = _ =>
+            {
+                var cargoPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cargo", "bin");
+                var current = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) ?? "";
+                if (!current.Contains(cargoPath, StringComparison.OrdinalIgnoreCase))
+                    Environment.SetEnvironmentVariable("PATH", current + ";" + cargoPath, EnvironmentVariableTarget.User);
+            },
+            RemoveAction = _ =>
+            {
+                var cargoPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cargo", "bin");
+                var current = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) ?? "";
+                var updated = current.Replace(";" + cargoPath, "", StringComparison.OrdinalIgnoreCase);
+                Environment.SetEnvironmentVariable("PATH", updated, EnvironmentVariableTarget.User);
+            },
+            DetectAction = () =>
+            {
+                var cargoPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cargo", "bin");
+                var current = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) ?? "";
+                return current.Contains(cargoPath, StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-windows-error-reporting",
+            Label = "Disable Windows Error Reporting for Devs",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Windows Error Reporting so crash dialogs don't block build/test automation.",
+            Tags = ["wer", "crash", "developer", "automation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-increase-environment-variable-size",
+            Label = "Increase Max Environment Variable Size",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the maximum size of environment variables to support very long PATH strings.",
+            Tags = ["environment", "path", "developer"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "MaxUserEnvSize", 65536)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "MaxUserEnvSize")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "MaxUserEnvSize", 65536),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-containers-feature",
+            Label = "Enable Windows Containers Feature",
+            Category = "Dev Drive / Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 17763,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables the Windows Containers optional feature for Docker and container workloads.",
+            Tags = ["dism", "containers", "docker", "developer"],
+            SideEffects = "Requires reboot. May need Hyper-V enabled.",
+            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:Containers", "/All", "/NoRestart"]),
+            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:Containers", "/NoRestart"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:Containers"]);
+                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

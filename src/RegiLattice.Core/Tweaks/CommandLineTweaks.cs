@@ -314,5 +314,188 @@ internal static class CommandLineTweaks
                 return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "cmd-enable-net35",
+            Label = "Enable .NET Framework 3.5",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables the .NET Framework 3.5 feature (includes .NET 2.0 and 3.0) for legacy application support.",
+            Tags = ["dism", "dotnet", "framework", "legacy"],
+            SideEffects = "Downloads components from Windows Update if not cached.",
+            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:NetFx3", "/All", "/NoRestart"]),
+            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:NetFx3", "/NoRestart"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:NetFx3"]);
+                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "cmd-enable-telnet-client",
+            Label = "Enable Telnet Client",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables the Telnet client for network diagnostics and testing.",
+            Tags = ["dism", "telnet", "network", "diagnostics"],
+            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:TelnetClient", "/NoRestart"]),
+            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:TelnetClient", "/NoRestart"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:TelnetClient"]);
+                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "cmd-enable-tftp-client",
+            Label = "Enable TFTP Client",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables the TFTP client for firmware updates and network boot diagnostics.",
+            Tags = ["dism", "tftp", "network", "firmware"],
+            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:TFTP", "/NoRestart"]),
+            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:TFTP", "/NoRestart"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:TFTP"]);
+                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "cmd-disable-ipv6-tunnel-adapters",
+            Label = "Disable IPv6 Tunnel Adapters (6to4, ISATAP, Teredo)",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables IPv6 transition technologies (6to4, ISATAP, Teredo) to reduce attack surface.",
+            Tags = ["netsh", "ipv6", "security", "network"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("netsh.exe", ["interface", "6to4", "set", "state", "disabled"]);
+                ShellRunner.Run("netsh.exe", ["interface", "isatap", "set", "state", "disabled"]);
+                ShellRunner.Run("netsh.exe", ["interface", "teredo", "set", "state", "disabled"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("netsh.exe", ["interface", "6to4", "set", "state", "default"]);
+                ShellRunner.Run("netsh.exe", ["interface", "isatap", "set", "state", "default"]);
+                ShellRunner.Run("netsh.exe", ["interface", "teredo", "set", "state", "default"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "cmd-set-processor-scheduling-programs",
+            Label = "Prioritise Active Programs (Processor Scheduling)",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets Windows processor scheduling to prioritise foreground programs over background services.",
+            Tags = ["performance", "cpu", "scheduling", "foreground"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
+        },
+        new TweakDef
+        {
+            Id = "cmd-disable-netbios-broadcast",
+            Label = "Disable NetBIOS Broadcast Resolution",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables NetBIOS name resolution via broadcast to reduce network noise and attack surface.",
+            Tags = ["netsh", "netbios", "security", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
+        },
+        new TweakDef
+        {
+            Id = "cmd-enable-ntp-high-freq",
+            Label = "Set NTP Polling to High Frequency",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Configures the Windows Time service to poll NTP servers more frequently (every 256s instead of 3600s).",
+            Tags = ["time", "ntp", "synchronisation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config", "MinPollInterval", 6),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config", "MaxPollInterval", 8),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config", "MinPollInterval", 10),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config", "MaxPollInterval", 15),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config", "MinPollInterval", 6)],
+        },
+        new TweakDef
+        {
+            Id = "cmd-set-multi-plane-overlay",
+            Label = "Enable Multi-Plane Overlay (MPO)",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Ensures Multi-Plane Overlay is enabled for GPU composition offloading, reducing CPU usage.",
+            Tags = ["gpu", "display", "performance", "mpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
+        },
+        new TweakDef
+        {
+            Id = "cmd-disable-game-dvr-background",
+            Label = "Disable Background Game Recording (Game DVR)",
+            Category = "Command Line",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Xbox Game DVR background recording to free up GPU and disk resources.",
+            Tags = ["gaming", "game-dvr", "xbox", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 1),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "cmd-enable-fsutil-disable-encrypt",
+            Label = "Disable File-Level Encryption (EFS)",
+            Category = "Command Line",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables NTFS Encrypting File System (EFS). Simplifies administration but removes file encryption capability.",
+            Tags = ["fsutil", "encryption", "ntfs", "security"],
+            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disableencryption", "1"]),
+            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disableencryption", "0"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["behavior", "query", "disableencryption"]);
+                return stdout.Contains("= 1", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

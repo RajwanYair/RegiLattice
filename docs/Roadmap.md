@@ -256,6 +256,20 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 5 | Reconcile all documentation: CHANGELOG, Roadmap, Readme, copilot-instructions, testing, workspace, Coverage, Development | ✅ |
 | 6 | Total: 2,316 tweaks, 972 tests (738 Core + 103 CLI + 131 GUI), 13 test files | ✅ |
 
+### Sprint 15 — 50 New Tweaks & Test Performance ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Optimise GUI test suite: ToolVersionChecker timeout 5s→3s, test timeout 25s→12s, CancellationToken 20s→10s | ✅ |
+| 2 | Enable assembly-level parallelism across all 3 test projects (xunit.runner.json) | ✅ |
+| 3 | Add 10 tweaks to PowerManagement.cs (12→22): adaptive brightness, power throttling, core parking, etc. | ✅ |
+| 4 | Add 10 tweaks to CommandLineTweaks.cs (14→24): .NET 3.5, Telnet, TFTP, IPv6 tunnels, NTP, MPO, etc. | ✅ |
+| 5 | Add 10 tweaks to Developer.cs (15→25): .NET CLI telemetry, symlinks, Python UTF-8, Git config, containers, etc. | ✅ |
+| 6 | Add 10 tweaks to Hardening.cs (15→25): AutoRun, SAM, remote assistance, SMB signing, LLMNR, admin shares, etc. | ✅ |
+| 7 | Add 10 tweaks to NetworkOptimization.cs (15→25): TCP Fast Open, RSC, ARP cache, DCA, keepalive, etc. | ✅ |
+| 8 | Update all documentation with new tweak count (2,316→2,366) | ✅ |
+| 9 | Total: 2,366 tweaks, 972 tests (738 Core + 103 CLI + 131 GUI), 13 test files | ✅ |
+
 ---
 
 ## Prioritized Backlog

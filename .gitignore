@@ -41,6 +41,7 @@ Desktop.ini
 htmlcov/
 **/TestResults/
 **/coverage.cobertura.xml
+**/diag*.txt
 
 # ── Profiling data ───────────────────────────────────────────
 *.dat
