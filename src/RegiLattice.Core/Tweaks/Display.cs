@@ -442,5 +442,156 @@ internal static class Display
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],
         },
+        new TweakDef
+        {
+            Id = "display-increase-icon-spacing-horizontal",
+            Label = "Increase Horizontal Icon Spacing",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Increases horizontal icon spacing on the desktop from the default -1125 to -1500 twips. Reduces icon overlap on high-DPI displays.",
+            Tags = ["display", "icons", "spacing", "desktop"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconSpacing", "-1500")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconSpacing", "-1125")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconSpacing", "-1500")],
+        },
+        new TweakDef
+        {
+            Id = "display-increase-icon-spacing-vertical",
+            Label = "Increase Vertical Icon Spacing",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Increases vertical icon spacing on the desktop from the default -1125 to -1500 twips. Reduces icon overlap on high-DPI displays.",
+            Tags = ["display", "icons", "spacing", "desktop"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconVerticalSpacing", "-1500")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconVerticalSpacing", "-1125")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconVerticalSpacing", "-1500")],
+        },
+        new TweakDef
+        {
+            Id = "display-set-scrollbar-width",
+            Label = "Set Narrow Scrollbar Width",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Reduces the scrollbar width from the default -255 to -200 twips. Gives more screen real estate for content. Requires logoff.",
+            Tags = ["display", "scrollbar", "width", "compact"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollWidth", "-200")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollWidth", "-255")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollWidth", "-200")],
+        },
+        new TweakDef
+        {
+            Id = "display-set-scrollbar-height",
+            Label = "Set Narrow Scrollbar Height",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the horizontal scrollbar height from the default -255 to -200 twips. More compact UI. Requires logoff.",
+            Tags = ["display", "scrollbar", "height", "compact"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollHeight", "-200")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollHeight", "-255")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "ScrollHeight", "-200")],
+        },
+        new TweakDef
+        {
+            Id = "display-set-border-width",
+            Label = "Set Thin Window Border",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the window border width from the default -15 to -1 twips for a thinner, modern look. Requires logoff.",
+            Tags = ["display", "border", "width", "thin"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "BorderWidth", "-1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "BorderWidth", "-15")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "BorderWidth", "-1")],
+        },
+        new TweakDef
+        {
+            Id = "display-disable-window-shake",
+            Label = "Disable Aero Shake (Minimize All)",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Aero Shake feature that minimizes all other windows when shaking a title bar. Prevents accidental minimization.",
+            Tags = ["display", "aero", "shake", "minimize"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
+        },
+        new TweakDef
+        {
+            Id = "display-set-menu-show-delay",
+            Label = "Reduce Menu Show Delay to 50ms",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the submenu popup delay from 400ms to 50ms. Makes menus feel more responsive.",
+            Tags = ["display", "menu", "delay", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "400")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
+        },
+        new TweakDef
+        {
+            Id = "display-enable-text-cursor-indicator",
+            Label = "Enable Text Cursor Indicator",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables a coloured visual indicator at the text cursor position. Improves cursor visibility in dense text.",
+            Tags = ["display", "cursor", "indicator", "accessibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Accessibility"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Accessibility", "Configuration", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Accessibility", "Configuration")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Accessibility", "Configuration", 1)],
+        },
+        new TweakDef
+        {
+            Id = "display-set-tooltip-initial-delay",
+            Label = "Reduce Tooltip Initial Delay",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the initial tooltip popup delay from 400ms to 100ms. Shows hover info faster.",
+            Tags = ["display", "tooltip", "delay", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "100")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "400")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "100")],
+        },
+        new TweakDef
+        {
+            Id = "display-enable-dark-mode-system",
+            Label = "Force System Dark Mode",
+            Category = "Display",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Forces system-wide dark mode for the Windows shell (taskbar, Start menu, Action Center). Default: follows user preference.",
+            Tags = ["display", "dark", "mode", "theme"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
+            ],
+        },
     ];
 }

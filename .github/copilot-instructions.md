@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-16 (v3.4.0, 2 363 tweaks, 89 categories, 960 tests).
+> Last verified: 2026-03-16 (v3.4.0, 2 410 tweaks, 89 categories, 1 001 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 960 tests across 13 test files                    |
+| Test        | xUnit 2.9.2 — 1,001 tests across 16 test files                  |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.4.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 363 across 89 categories (90 module files)                      |
-| Tests       | 960 passing (738 Core + 103 CLI + 131 GUI)                       |
+| Tweaks      | 2 410 across 89 categories (90 module files)                      |
+| Tests       | 1,001 passing (779 Core + 111 CLI + 131 GUI)                     |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -164,7 +164,7 @@ RegiLattice.sln
 │       ├── CliArgs.cs             # CLI argument model (extracted from Program)
 │       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 738 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 779 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -173,8 +173,11 @@ RegiLattice.sln
 │   │   ├── PluginTests.cs
 │   │   ├── SnapshotManagerTests.cs
 │   │   ├── TweakValidatorTests.cs
-│   │   └── DependencyResolverTests.cs
-│   ├── RegiLattice.CLI.Tests/     # 103 xUnit tests
+│   │   ├── DependencyResolverTests.cs
+│   │   ├── FavoritesTests.cs
+│   │   ├── TweakHistoryTests.cs
+│   │   └── ConfigExporterTests.cs
+│   ├── RegiLattice.CLI.Tests/     # 111 xUnit tests
 │   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
 │   └── RegiLattice.GUI.Tests/    # 131 xUnit tests
 │       ├── ThemeTests.cs
@@ -441,6 +444,9 @@ Canonical category slugs:
 - `tests/RegiLattice.Core.Tests/SnapshotManagerTests.cs` — Save/Load/Restore, round-trip, edge cases
 - `tests/RegiLattice.Core.Tests/TweakValidatorTests.cs` — Valid tweaks, empty fields, duplicates, circular deps, broken deps
 - `tests/RegiLattice.Core.Tests/DependencyResolverTests.cs` — Resolve topological sort, Dependents reverse lookup, circular detection
+- `tests/RegiLattice.Core.Tests/FavoritesTests.cs` — Add, Remove, Toggle, IsFavorite, case-insensitive, Flush/Reload
+- `tests/RegiLattice.Core.Tests/TweakHistoryTests.cs` — Record apply/remove/update, Recent, ForTweak, MaxEntries, Flush/Reload
+- `tests/RegiLattice.Core.Tests/ConfigExporterTests.cs` — Export JSON, Import 3 formats, Validate, RoundTrip
 - `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
 - `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes, system theme detection
 - `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation, tool version checking
@@ -484,6 +490,9 @@ Canonical category slugs:
 | `AppConfig.cs` | Configuration | `Load()`, `ForceCorpGuard`, `Theme`, `Locale` |
 | `Locale.cs` | i18n (en, de) | `T()`, `SetLocale()`, `CurrentLocale`, `AvailableLocales` |
 | `Ratings.cs` | Rating system | `Rate()`, `GetRating()`, `AllRatings()`, `TopRated()` |
+| `ConfigExporter.cs` | Config export/import | `Export()`, `ExportApplied()`, `Import()`, `Validate()` |
+| `Favorites.cs` | Favorite tweaks | `Add()`, `Remove()`, `Toggle()`, `IsFavorite()`, `All()`, `Flush()` |
+| `TweakHistory.cs` | Operation history | `RecordApply()`, `RecordRemove()`, `RecordUpdate()`, `Recent()`, `ForTweak()` |
 | `ShellRunner.cs` (Core) | Process execution | `RunPowerShell()`, `RunCommand()` (safe subprocess wrapper) |
 | `ChocolateyManager.cs` (Core) | Chocolatey integration | Package install, list, update via choco CLI |
 | `PipManager.cs` (Core) | pip integration | Package install, list, update via pip CLI |

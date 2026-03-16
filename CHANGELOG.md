@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [3.4.0] — 2026-03-16
 
+### Added — Sprint 17: Core Services, CLI Commands & 50 New Tweaks
+
+- **ConfigExporter** service — export/import portable tweak selection configs as JSON;
+  supports 3 import formats (full, array, object), Validate() for ID hygiene
+- **Favorites** service — persist user's favorite tweak IDs with thread-safe static API;
+  case-insensitive HashSet, Add/Remove/Toggle/IsFavorite/All/Flush/Clear
+- **TweakHistory** service — rolling 500-entry history of tweak operations (apply/remove/update);
+  HistoryEntry model with ISO 8601 timestamps, Recent/ForTweak/Flush
+- **7 new CLI commands**: `--export-config`, `--import-config`, `--favorites`,
+  `--favorite-add`, `--favorite-remove`, `--history`, `--history <count>`
+- **Display** (10 new): icon spacing, scrollbar dimensions, border width, window shake,
+  menu show delay, text cursor indicator, tooltip delay, dark mode system
+- **Startup** (10 new): welcome experience, tips & suggestions, boot timeout,
+  first-logon animation, pre-launch apps, background apps policy, autoplay
+- **Network Optimization** (10 new): ARP cache size, max connections, NetBIOS over TCP/IP,
+  LMHosts lookup, DNS cache TTL, WPAD, RSS, SMB throttling, max user port, TCP timestamps
+- **Power Management** (10 new): processor boost, throttle states, energy saver,
+  away mode, min processor state, unattended timeout, dimmed display, hybrid sleep,
+  lid close action, and more
+- **Privacy** (10 new): error reporting, web search in Start, search highlights,
+  cloud content search, app launch tracking, handwriting error reports,
+  customer experience program, inventory collector
+- **40 new tests**: FavoritesTests (11), TweakHistoryTests (11), ConfigExporterTests (10),
+  FavoritesAndHistoryParseTests (8)
+- Total: **2,410 tweaks** across 89 categories, **1,001 tests passing**
+
 ### Added — Sprint 15: 50 New Tweaks
 
 - **Power Management** (10 new): adaptive brightness, power throttling, hard disk timeout,

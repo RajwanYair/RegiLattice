@@ -9,6 +9,8 @@ using RegiLattice.Core.Models;
 using RegiLattice.Core.Plugins;
 using RegiLattice.Core.Registry;
 
+using RegiLattice.Core.Services;
+
 namespace RegiLattice.CLI;
 
 internal static class Program
@@ -53,6 +55,8 @@ internal static class Program
         Analytics.RecordSession();
         var exitCode = Dispatch(parsed);
         Analytics.Flush();
+        TweakHistory.Flush();
+        Favorites.Flush();
         return exitCode;
     }
 
@@ -105,6 +109,18 @@ internal static class Program
             return RunImportJson(a);
         if (a.Marketplace is not null)
             return RunMarketplace(a);
+        if (a.ExportConfig is not null)
+            return RunExportConfig(a);
+        if (a.ImportConfig is not null)
+            return RunImportConfig(a);
+        if (a.ShowFavorites)
+            return RunFavorites();
+        if (a.FavoriteAdd is not null)
+            return RunFavoriteAdd(a.FavoriteAdd);
+        if (a.FavoriteRemove is not null)
+            return RunFavoriteRemove(a.FavoriteRemove);
+        if (a.ShowHistory)
+            return RunHistory(a.HistoryCount);
         if (a.Gui)
             return RunGui();
         if (a.Menu)
@@ -1456,6 +1472,134 @@ internal static class Program
         return 1;
     }
 
+    // ── Export / Import Config ────────────────────────────────────────
+
+    private static int RunExportConfig(CliArgs a)
+    {
+        var path = a.ExportConfig!;
+        ConfigExporter.ExportApplied(path, _engine, "RegiLattice config export");
+        var config = ConfigExporter.Import(path);
+        Console.WriteLine($"\u2705 Exported {config?.Tweaks.Count ?? 0} applied tweak IDs to {path}");
+        return 0;
+    }
+
+    private static int RunImportConfig(CliArgs a)
+    {
+        var path = a.ImportConfig!;
+        var config = ConfigExporter.Import(path);
+        if (config is null || config.Tweaks.Count == 0)
+        {
+            Console.WriteLine("\u274c No valid tweak config found in file.");
+            return 2;
+        }
+
+        var (validIds, unknownIds) = ConfigExporter.Validate(config, _engine);
+        if (unknownIds.Count > 0)
+            Console.WriteLine($"\u26a0 {unknownIds.Count} unknown tweak ID(s) skipped: {string.Join(", ", unknownIds.Take(5))}");
+
+        if (validIds.Count == 0)
+        {
+            Console.WriteLine("No valid tweaks to apply.");
+            return 2;
+        }
+
+        if (!a.Force && CorporateGuard.IsCorporateNetwork())
+        {
+            Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
+            return 6;
+        }
+
+        string label = $"Apply {validIds.Count} tweaks from config '{config.Name}'";
+        if (!a.AssumeYes && !Confirm(label))
+        {
+            Console.WriteLine("Aborted.");
+            return 1;
+        }
+
+        var targets = validIds.Select(id => _engine.GetTweak(id)!).ToList();
+        var results = _engine.ApplyBatch(targets, forceCorp: a.Force);
+        int ok = results.Count(kv => kv.Value is TweakResult.Applied);
+
+        foreach (var (id, res) in results)
+        {
+            TweakHistory.RecordApply(id, res);
+            if (res is TweakResult.Applied)
+                Analytics.RecordApply(id);
+            else if (res is TweakResult.Error)
+                Analytics.RecordError(id);
+        }
+        TweakHistory.Flush();
+
+        Console.WriteLine($"\u2705 {ok}/{validIds.Count} tweaks applied from config.");
+        return 0;
+    }
+
+    // ── Favorites ────────────────────────────────────────────────────────
+
+    private static int RunFavorites()
+    {
+        var favs = Favorites.All();
+        if (favs.Count == 0)
+        {
+            Console.WriteLine("No favorites saved. Use --favorite-add <id> to add one.");
+            return 0;
+        }
+
+        Console.WriteLine($"\u2b50 {favs.Count} favorite tweak(s):\n");
+        foreach (var id in favs)
+        {
+            var td = _engine.GetTweak(id);
+            if (td is not null)
+                Console.WriteLine($"  {Yellow(id), -45} {td.Label}");
+            else
+                Console.WriteLine($"  {Dim(id), -45} (unknown)");
+        }
+        return 0;
+    }
+
+    private static int RunFavoriteAdd(string tweakId)
+    {
+        var td = _engine.GetTweak(tweakId);
+        if (td is null)
+        {
+            Console.WriteLine($"\u274c Unknown tweak: {tweakId}");
+            return 2;
+        }
+        Favorites.Add(tweakId);
+        Favorites.Flush();
+        Console.WriteLine($"\u2b50 Added '{td.Label}' to favorites.");
+        return 0;
+    }
+
+    private static int RunFavoriteRemove(string tweakId)
+    {
+        Favorites.Remove(tweakId);
+        Favorites.Flush();
+        Console.WriteLine($"\u2705 Removed '{tweakId}' from favorites.");
+        return 0;
+    }
+
+    // ── History ──────────────────────────────────────────────────────────
+
+    private static int RunHistory(int count)
+    {
+        var entries = TweakHistory.Recent(count);
+        if (entries.Count == 0)
+        {
+            Console.WriteLine("No history recorded yet.");
+            return 0;
+        }
+
+        Console.WriteLine($"\U0001f4cb Last {entries.Count} operation(s):\n");
+        foreach (var e in entries)
+        {
+            var timeStr = DateTimeOffset.TryParse(e.Timestamp, out var ts) ? ts.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : e.Timestamp;
+            var actionColor = e.Action == "apply" ? Green(e.Action) : (e.Action == "remove" ? Red(e.Action) : Yellow(e.Action));
+            Console.WriteLine($"  {Dim(timeStr)}  {actionColor, -20}  {e.TweakId, -45}  {e.Result}");
+        }
+        return 0;
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────
 
     private static bool Confirm(string label)
@@ -1503,6 +1647,14 @@ internal static class Program
               --export-json <path>   Export tweak definitions to JSON
               --export-reg <path>    Export registry state to .reg file
               --import-json <path>   Import tweak IDs from JSON (use with apply/remove)
+              --export-config <path> Export applied tweak selections to shareable JSON config
+              --import-config <path> Import & apply tweaks from a config file
+
+            Favorites & History:
+              --favorites            List all favorited tweaks
+              --favorite-add <id>    Add a tweak to favorites
+              --favorite-remove <id> Remove a tweak from favorites
+              --history [count]      Show recent tweak operation history (default: 20)
 
             Snapshots:
               --snapshot <path>       Save current state snapshot
@@ -1696,6 +1848,33 @@ internal static class Program
                 case "--depends-on":
                     if (++i < args.Length)
                         p.DependsOn = args[i];
+                    break;
+                case "--export-config":
+                    if (++i < args.Length)
+                        p.ExportConfig = args[i];
+                    break;
+                case "--import-config":
+                    if (++i < args.Length)
+                        p.ImportConfig = args[i];
+                    break;
+                case "--favorites":
+                    p.ShowFavorites = true;
+                    break;
+                case "--favorite-add":
+                    if (++i < args.Length)
+                        p.FavoriteAdd = args[i];
+                    break;
+                case "--favorite-remove":
+                    if (++i < args.Length)
+                        p.FavoriteRemove = args[i];
+                    break;
+                case "--history":
+                    p.ShowHistory = true;
+                    if (i + 1 < args.Length && int.TryParse(args[i + 1], out var hcount))
+                    {
+                        p.HistoryCount = hcount;
+                        i++;
+                    }
                     break;
 
                 default:

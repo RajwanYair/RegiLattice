@@ -758,5 +758,194 @@ internal static class Privacy
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "priv-disable-error-reporting",
+            Label = "Disable Windows Error Reporting",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Error Reporting (WER). Prevents crash dumps and error logs from being sent to Microsoft.",
+            Tags = ["privacy", "error", "reporting", "crash"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-web-search-in-start",
+            Label = "Disable Web Search Results in Start Menu",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Start menu search from querying Bing web results. Keeps search results local only. Faster and more private.",
+            Tags = ["privacy", "search", "bing", "web", "start"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-search-highlights",
+            Label = "Disable Search Highlights (Bing Content)",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables search highlights that show trending Bing content in the search box. Removes distracting web content from taskbar.",
+            Tags = ["privacy", "search", "highlights", "bing"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-cloud-content-search",
+            Label = "Disable Cloud Content Search (OneDrive/Outlook)",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows Search from indexing and returning results from OneDrive and Outlook cloud content.",
+            Tags = ["privacy", "search", "cloud", "onedrive"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsMSACloudSearchEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsMSACloudSearchEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0),
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsMSACloudSearchEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-suggest-ways-to-finish-setup",
+            Label = "Disable 'Suggest Ways to Finish Setting Up' Prompt",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the 'Suggest ways to finish setting up my device' prompt that pushes Microsoft account linking and OneDrive setup.",
+            Tags = ["privacy", "setup", "nag", "microsoft"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-app-launch-tracking",
+            Label = "Disable App Launch Tracking",
+            Category = "Privacy",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from tracking which apps you launch to improve Start menu suggestions. Improves privacy.",
+            Tags = ["privacy", "tracking", "launch", "start"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-handwriting-error-reports",
+            Label = "Disable Handwriting Error Reporting",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from sending handwriting recognition error reports to Microsoft. Default: enabled.",
+            Tags = ["privacy", "handwriting", "errors", "telemetry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports",
+                    "PreventHandwritingErrorReports",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports",
+                    "PreventHandwritingErrorReports"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports",
+                    "PreventHandwritingErrorReports",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-customer-experience-program",
+            Label = "Opt Out of Customer Experience Improvement Program",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Opts out of the Windows Customer Experience Improvement Program (CEIP). Prevents anonymous usage data collection.",
+            Tags = ["privacy", "ceip", "telemetry", "optout"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
+        },
+        new TweakDef
+        {
+            Id = "priv-disable-inventory-collector",
+            Label = "Disable Application Inventory Collector",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Application Inventory Collector which sends a list of installed programs to Microsoft. Default: enabled.",
+            Tags = ["privacy", "inventory", "apps", "telemetry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+        },
     ];
 }

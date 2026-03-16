@@ -108,17 +108,18 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-disable-wifi-sense",
-            Label = "Disable Wi-Fi Sense (Auto-Connect)",
+            Id = "netopt-set-tcp-timestamps",
+            Label = "Enable TCP Timestamps (RFC 1323)",
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Wi-Fi Sense which auto-connects to open hotspots and shares WiFi credentials.",
-            Tags = ["network", "wifi", "privacy", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
+            Description =
+                "Enables TCP timestamps for improved RTT calculation and protection against wrapped sequence numbers. Better performance on high-bandwidth connections.",
+            Tags = ["network", "tcp", "timestamps", "rfc1323"],
+            RegistryKeys = [TcpParams],
+            ApplyOps = [RegOp.SetDword(TcpParams, "Tcp1323Opts", 1)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "Tcp1323Opts")],
+            DetectOps = [RegOp.CheckDword(TcpParams, "Tcp1323Opts", 1)],
         },
         new TweakDef
         {
@@ -497,6 +498,172 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-increase-arp-cache-size",
+            Label = "Increase ARP Cache Size",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the ARP table cache from default 256 to 4096 entries. Reduces ARP lookup latency on busy networks.",
+            Tags = ["network", "arp", "cache", "performance"],
+            RegistryKeys = [TcpParams],
+            ApplyOps = [RegOp.SetDword(TcpParams, "ArpCacheSize", 4096)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "ArpCacheSize")],
+            DetectOps = [RegOp.CheckDword(TcpParams, "ArpCacheSize", 4096)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-set-max-connections-per-server",
+            Label = "Increase Max Connections Per Server",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets maximum concurrent connections per server from default 2 to 16. Improves parallel download speed.",
+            Tags = ["network", "connections", "http", "speed"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe",
+                    16
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
+                    "iexplore.exe",
+                    16
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-netbios-over-tcpip",
+            Label = "Disable NetBIOS over TCP/IP",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables NetBIOS over TCP/IP. Reduces network attack surface and broadcast traffic. May break legacy file sharing.",
+            Tags = ["network", "netbios", "security", "disable"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 2)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 0)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 2)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-wifi-sense",
+            Label = "Disable Wi-Fi Sense Auto-Connect",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Wi-Fi Sense that auto-connects to suggested open hotspots and shared networks. Improves security and prevents unwanted connections.",
+            Tags = ["network", "wifi", "sense", "security"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-set-dns-cache-max-ttl",
+            Label = "Increase DNS Cache Max TTL to 1 Day",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the maximum DNS cache TTL to 86400 seconds (1 day). Reduces DNS queries for frequently visited sites.",
+            Tags = ["network", "dns", "cache", "ttl"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-set-dns-negative-cache-ttl",
+            Label = "Reduce DNS Negative Cache TTL",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reduces the negative DNS cache TTL from 900s to 60s. Failed DNS lookups are retried sooner.",
+            Tags = ["network", "dns", "cache", "negative"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 60)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 60)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-wpad",
+            Label = "Disable Web Proxy Auto-Discovery (WPAD)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables WPAD protocol used for automatic proxy configuration. Removes a known security risk. Not recommended on corporate networks.",
+            Tags = ["network", "wpad", "proxy", "security"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-enable-rss",
+            Label = "Enable Receive Side Scaling (RSS)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables receive-side scaling to distribute network processing across multiple CPU cores. Improves throughput on multi-core systems.",
+            Tags = ["network", "rss", "multicore", "throughput"],
+            RegistryKeys = [TcpParams],
+            ApplyOps = [RegOp.SetDword(TcpParams, "EnableRSS", 1)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "EnableRSS")],
+            DetectOps = [RegOp.CheckDword(TcpParams, "EnableRSS", 1)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-smb-bandwidth-throttling",
+            Label = "Disable SMB Bandwidth Throttling",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes large-file SMB bandwidth throttling. Allows file copies over network shares to use full bandwidth.",
+            Tags = ["network", "smb", "bandwidth", "fileserver"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "DisableBandwidthThrottling", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "DisableBandwidthThrottling")],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "DisableBandwidthThrottling", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "netopt-set-max-user-port",
+            Label = "Increase Max Ephemeral Port Range",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the ephemeral port range to 65534. Prevents port exhaustion under high connection loads.",
+            Tags = ["network", "ports", "ephemeral", "connections"],
+            RegistryKeys = [TcpParams],
+            ApplyOps = [RegOp.SetDword(TcpParams, "MaxUserPort", 65534)],
+            RemoveOps = [RegOp.DeleteValue(TcpParams, "MaxUserPort")],
+            DetectOps = [RegOp.CheckDword(TcpParams, "MaxUserPort", 65534)],
         },
     ];
 }
