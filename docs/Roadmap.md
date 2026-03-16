@@ -1,11 +1,11 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-16 · v3.2.1 · 2 316 tweaks · 89 categories · 972 tests
+> Last updated: 2026-03-16 · v3.3.0 · 2 316 tweaks · 89 categories · 972 tests
 
 ---
 
-## Current State (as of v3.2.1)
+## Current State (as of v3.3.0)
 
 | Metric | Value |
 |--------|-------|
