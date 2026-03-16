@@ -1,7 +1,7 @@
 # RegiLattice — Coverage Report
 
 > Test coverage baseline for the C# codebase.
-> Last verified: 2025-07-22 · v3.2.0
+> Last verified: 2026-03-16 · v3.2.1
 > Command: `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
@@ -10,37 +10,37 @@
 
 | Scope | Tests | Status |
 |---|---|---|
-| **RegiLattice.Core.Tests** | 529 tests | All passing |
-| **RegiLattice.CLI.Tests** | 58 tests | All passing |
-| **RegiLattice.GUI.Tests** | 71 tests | All passing |
-| **Total** | 658 tests | All passing |
+| **RegiLattice.Core.Tests** | 571 tests | All passing |
+| **RegiLattice.CLI.Tests** | 72 tests | All passing |
+| **RegiLattice.GUI.Tests** | 84 tests | All passing |
+| **Total** | 727 tests | All passing |
 
 ---
 
 ## Test File Inventory
 
-### Core Tests (529 tests)
+### Core Tests (571 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
 | `TweakDefTests.cs` | TweakDef model, RegOp factories, TweakScope computation | ~25 |
-| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution | ~200 |
+| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution, snapshots | ~200 |
 | `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing | ~15 |
 | `ServicesTests.cs` | Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ~23 |
 | `PluginTests.cs` | PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale | ~62 |
 
-### CLI Tests (56 tests)
+### CLI Tests (72 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
-| `ParseArgsTests.cs` | CLI argument parsing, flags, options, scope, positional args, --depends-on, --no-color | ~56 |
+| `ParseArgsTests.cs` | CLI argument parsing, flags, options, scope, positional args, --depends-on, --no-color, ConsoleColorizer | ~72 |
 
-### GUI Tests (71 tests)
+### GUI Tests (84 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
 | `ThemeTests.cs` | Theme switching, colour attributes, all 4 themes, system theme detection | ~40 |
-| `PackageManagerValidationTests.cs` | Package name validation for Scoop, pip, PowerShell modules | ~31 |
+| `PackageManagerValidationTests.cs` | Package name validation (Scoop, pip, PSModules), PackageNameValidator shared utility | ~44 |
 
 ---
 
@@ -82,7 +82,7 @@ Start-Process coveragereport\index.html
 | Core.Tests covers all TweakEngine edge cases | P1 | ✅ Done |
 | Integration tests for RegistrySession (DryRun mode) | P2 | ✅ Done |
 | Snapshot round-trip tests | P2 | ✅ Done |
-| CLI argument parsing tests (56 tests) | P1 | ✅ Done |
+| CLI argument parsing tests (72 tests) | P1 | ✅ Done |
 | Plugin system tests (62 tests) | P1 | ✅ Done |
 | Validation & dependency resolution tests | P1 | ✅ Done |
 | GUI.Tests for theme records and package validation | P2 | ✅ Done |

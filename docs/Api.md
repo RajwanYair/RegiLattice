@@ -1,7 +1,7 @@
 # API Reference
 
 > Reference for the RegiLattice C# public API.
-> Last verified: 2025-07-22 · v3.2.0
+> Last verified: 2026-03-16 · v3.2.1
 
 ---
 
@@ -143,6 +143,8 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 
 ### Snapshots
 
+Delegated to `SnapshotManager` internally — TweakEngine methods are thin wrappers.
+
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `SaveSnapshot` | `(string path)` | Save current state to JSON |
@@ -157,6 +159,42 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 | `ScopeCounts` | `() -> IReadOnlyDictionary<TweakScope, int>` | Counts by scope |
 | `ExportJson` | `(string path)` | Export all tweaks as JSON |
 | `WindowsBuild` | `() -> int` | Current Windows build number |
+
+---
+
+## RegiLattice.Core — SnapshotManager
+
+Manages saving, loading, and restoring tweak state snapshots.
+Extracted from `TweakEngine` for single responsibility.
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `Save` | `(string path)` | Save current status of all tweaks to JSON |
+| `Load` | `static (string path) -> Dictionary<string, string>` | Load snapshot file and return ID → state map |
+| `Restore` | `(string path, bool forceCorp) -> Dictionary<string, TweakResult>` | Restore tweak states from snapshot |
+
+---
+
+## RegiLattice.Core — TweakValidator
+
+Static validation utility for tweak integrity checking.
+Extracted from `TweakEngine` for single responsibility.
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `Validate` | `static (IReadOnlyList<TweakDef>, Func<string, TweakDef?>) -> IReadOnlyList<string>` | Check all tweaks for issues: empty IDs/Labels, broken DependsOn, duplicates, circular deps |
+
+---
+
+## RegiLattice.Core — DependencyResolver
+
+Static topological dependency resolution.
+Extracted from `TweakEngine` for single responsibility.
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `Resolve` | `static (TweakDef td, Func<string, TweakDef?>) -> IReadOnlyList<TweakDef>` | Topological sort of dependency chain (deps first, target last) |
+| `Dependents` | `static (string tweakId, IReadOnlyList<TweakDef> all) -> IReadOnlyList<TweakDef>` | Reverse dependency lookup — all tweaks depending on the given ID |
 
 ---
 

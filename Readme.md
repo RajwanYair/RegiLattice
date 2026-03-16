@@ -3,7 +3,7 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-658%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-727%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -27,7 +27,7 @@ A comprehensive Windows registry tweak toolkit with **2 316 verified tweaks** ac
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **658 tests** across 8 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **727 tests** across 8 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -44,6 +44,9 @@ graph LR
 
     subgraph Core["RegiLattice.Core"]
         TE[TweakEngine<br/>Register · Apply · Search]
+        SM[SnapshotManager<br/>Save · Load · Restore]
+        TV[TweakValidator<br/>Validate · CircularDeps]
+        DR[DependencyResolver<br/>Resolve · Dependents]
         TD[TweakDef<br/>RegOp · Scope]
         RS[RegistrySession<br/>Read · Write · Backup]
         CG[CorporateGuard]
@@ -60,6 +63,9 @@ graph LR
 
     CLI --> TE
     GUI --> TE
+    TE --> SM
+    TE --> TV
+    TE --> DR
     TE --> RS
     TE --> CG
     TE --> PD
@@ -177,6 +183,9 @@ RegiLattice/
 ├── src/
 │   ├── RegiLattice.Core/                    # Core library (netstandard/net10.0)
 │   │   ├── TweakEngine.cs                   # Central tweak manager
+│   │   ├── SnapshotManager.cs               # Save/load/restore tweak state snapshots
+│   │   ├── TweakValidator.cs                # Tweak integrity validation & circular dep detection
+│   │   ├── DependencyResolver.cs            # Topological dependency resolution
 │   │   ├── Models/
 │   │   │   ├── TweakDef.cs                  # Immutable tweak definition + RegOp
 │   │   │   ├── ProfileDef.cs                # Profile definition model
@@ -207,17 +216,19 @@ RegiLattice/
 │   │       ├── ScoopManagerDialog.cs        # Scoop package manager
 │   │       └── PSModuleManagerDialog.cs     # PowerShell module manager
 │   └── RegiLattice.CLI/                     # Console CLI (net10.0)
-│       └── Program.cs                       # 25+ commands
+│       ├── Program.cs                       # 25+ commands
+│       ├── CliArgs.cs                       # CLI argument model
+│       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 529 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 571 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── RegistrySessionTests.cs
 │   │   ├── ServicesTests.cs
 │   │   └── PluginTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 58 xUnit tests
+│   ├── RegiLattice.CLI.Tests/               # 72 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 71 xUnit tests
+│   └── RegiLattice.GUI.Tests/               # 84 xUnit tests
 │       ├── ThemeTests.cs
 │       └── PackageManagerValidationTests.cs
 ├── winget/                                  # Winget package manifests
