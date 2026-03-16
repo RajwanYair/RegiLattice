@@ -186,4 +186,113 @@ public sealed class TweakValidatorTests
         var errors = TweakValidator.Validate([td1, td2, td3], _ => null);
         Assert.True(errors.Count >= 3, $"Expected at least 3 errors, got {errors.Count}");
     }
+
+    // ── Duplicate registry operations ───────────────────────────────────
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_DuplicateTarget_ReturnsWarning()
+    {
+        var td1 = new TweakDef
+        {
+            Id = "dup-reg-1",
+            Label = "Dup Reg 1",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "Value", 1)],
+        };
+        var td2 = new TweakDef
+        {
+            Id = "dup-reg-2",
+            Label = "Dup Reg 2",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "Value", 0)],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Contains(warnings, e => e.Contains("Duplicate registry target") && e.Contains("dup-reg-1") && e.Contains("dup-reg-2"));
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_SamePathDifferentNames_NoWarning()
+    {
+        var td1 = new TweakDef
+        {
+            Id = "diff-name-1",
+            Label = "Diff Name 1",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "ValueA", 1)],
+        };
+        var td2 = new TweakDef
+        {
+            Id = "diff-name-2",
+            Label = "Diff Name 2",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "ValueB", 1)],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Empty(warnings);
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_CaseInsensitive()
+    {
+        var td1 = new TweakDef
+        {
+            Id = "case-reg-1",
+            Label = "Case Reg 1",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\SOFTWARE\Test", "Value", 1)],
+        };
+        var td2 = new TweakDef
+        {
+            Id = "case-reg-2",
+            Label = "Case Reg 2",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\software\test", "value", 0)],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Contains(warnings, e => e.Contains("Duplicate registry target"));
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_SameTweakMultipleOps_NoWarning()
+    {
+        var td = new TweakDef
+        {
+            Id = "multi-ops",
+            Label = "Multi Ops",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "Value", 1), RegOp.SetDword(@"HKCU\Software\Test", "Value", 2)],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td]);
+        Assert.Empty(warnings);
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_DeleteTreeDuplicate_ReturnsWarning()
+    {
+        var td1 = new TweakDef
+        {
+            Id = "tree-1",
+            Label = "Tree 1",
+            Category = "Test",
+            ApplyOps = [RegOp.DeleteTree(@"HKCU\Software\Cleanup")],
+        };
+        var td2 = new TweakDef
+        {
+            Id = "tree-2",
+            Label = "Tree 2",
+            Category = "Test",
+            ApplyOps = [RegOp.DeleteTree(@"HKCU\Software\Cleanup")],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Contains(warnings, e => e.Contains("Duplicate registry target") && e.Contains("tree-1") && e.Contains("tree-2"));
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_NoOverlap_NoWarning()
+    {
+        var td1 = TestHelpers.Make("unique-1");
+        var td2 = TestHelpers.Make("unique-2");
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Empty(warnings);
+    }
 }

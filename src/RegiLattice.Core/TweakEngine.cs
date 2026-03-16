@@ -478,6 +478,8 @@ public sealed class TweakEngine
     public IReadOnlyList<string> ValidateTweaks() =>
         TweakValidator.Validate(_allTweaks, GetTweak);
 
+    public IReadOnlyList<string> DetectDuplicateRegistryOps() => TweakValidator.DetectDuplicateRegistryOps(_allTweaks);
+
     // ── Dependency resolution (delegated to DependencyResolver) ─────
 
     public IReadOnlyList<TweakDef> ResolveDependencies(string tweakId)

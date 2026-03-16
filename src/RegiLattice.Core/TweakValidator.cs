@@ -53,6 +53,51 @@ public static class TweakValidator
         return errors;
     }
 
+    /// <summary>
+    /// Finds ApplyOps that target the same registry Path+Name across different tweaks.
+    /// Only considers write operations (Set*/Delete*), not detection (Check*) ops.
+    /// </summary>
+    public static IReadOnlyList<string> DetectDuplicateRegistryOps(IReadOnlyList<TweakDef> allTweaks)
+    {
+        var warnings = new List<string>();
+
+        // Map "PATH\ValueName" → list of tweak IDs that write there
+        var regTargets = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var td in allTweaks)
+        {
+            foreach (var op in td.ApplyOps)
+            {
+                if (op.Kind is RegOpKind.CheckValue or RegOpKind.CheckMissing
+                    or RegOpKind.CheckKeyMissing)
+                    continue;
+
+                var key = string.IsNullOrEmpty(op.Name)
+                    ? op.Path
+                    : $@"{op.Path}\{op.Name}";
+
+                if (!regTargets.TryGetValue(key, out var ids))
+                {
+                    ids = [];
+                    regTargets[key] = ids;
+                }
+                ids.Add(td.Id);
+            }
+        }
+
+        foreach (var (regKey, ids) in regTargets)
+        {
+            if (ids.Count > 1)
+            {
+                var distinct = ids.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                if (distinct.Count > 1)
+                    warnings.Add($"Duplicate registry target '{regKey}' written by: {string.Join(", ", distinct)}");
+            }
+        }
+
+        return warnings;
+    }
+
     private static bool HasCircularDep(string id, HashSet<string> visited, Func<string, TweakDef?> tweakLookup)
     {
         if (!visited.Add(id))

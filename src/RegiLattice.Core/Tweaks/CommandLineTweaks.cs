@@ -335,42 +335,6 @@ internal static class CommandLineTweaks
         },
         new TweakDef
         {
-            Id = "cmd-enable-telnet-client",
-            Label = "Enable Telnet Client",
-            Category = "Command Line",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            KindHint = TweakKind.SystemCommand,
-            Description = "Enables the Telnet client for network diagnostics and testing.",
-            Tags = ["dism", "telnet", "network", "diagnostics"],
-            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:TelnetClient", "/NoRestart"]),
-            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:TelnetClient", "/NoRestart"]),
-            DetectAction = () =>
-            {
-                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:TelnetClient"]);
-                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
-            },
-        },
-        new TweakDef
-        {
-            Id = "cmd-enable-tftp-client",
-            Label = "Enable TFTP Client",
-            Category = "Command Line",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            KindHint = TweakKind.SystemCommand,
-            Description = "Enables the TFTP client for firmware updates and network boot diagnostics.",
-            Tags = ["dism", "tftp", "network", "firmware"],
-            ApplyAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Enable-Feature", "/FeatureName:TFTP", "/NoRestart"]),
-            RemoveAction = _ => ShellRunner.Run("dism.exe", ["/Online", "/Disable-Feature", "/FeatureName:TFTP", "/NoRestart"]),
-            DetectAction = () =>
-            {
-                var (_, stdout, _) = ShellRunner.Run("dism.exe", ["/Online", "/Get-FeatureInfo", "/FeatureName:TFTP"]);
-                return stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
-            },
-        },
-        new TweakDef
-        {
             Id = "cmd-disable-ipv6-tunnel-adapters",
             Label = "Disable IPv6 Tunnel Adapters (6to4, ISATAP, Teredo)",
             Category = "Command Line",
@@ -478,24 +442,6 @@ internal static class CommandLineTweaks
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cmd-enable-fsutil-disable-encrypt",
-            Label = "Disable File-Level Encryption (EFS)",
-            Category = "Command Line",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            KindHint = TweakKind.SystemCommand,
-            Description = "Disables NTFS Encrypting File System (EFS). Simplifies administration but removes file encryption capability.",
-            Tags = ["fsutil", "encryption", "ntfs", "security"],
-            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disableencryption", "1"]),
-            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disableencryption", "0"]),
-            DetectAction = () =>
-            {
-                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["behavior", "query", "disableencryption"]);
-                return stdout.Contains("= 1", StringComparison.OrdinalIgnoreCase);
-            },
         },
     ];
 }
