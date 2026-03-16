@@ -1,7 +1,7 @@
 # RegiLattice — Coverage Report
 
 > Test coverage baseline for the C# codebase.
-> Last verified: 2026-03-16 · v3.3.0
+> Last verified: 2026-03-16 · v3.4.0
 > Command: `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
@@ -13,7 +13,7 @@
 | **RegiLattice.Core.Tests** | 738 tests | All passing |
 | **RegiLattice.CLI.Tests** | 103 tests | All passing |
 | **RegiLattice.GUI.Tests** | 131 tests | All passing |
-| **Total** | 972 tests | All passing |
+| **Total** | 960 tests | All passing |
 
 ---
 

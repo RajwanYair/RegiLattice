@@ -18,7 +18,7 @@ RegiLattice.sln
 │   ├── Registry/               # RegistrySession — all Win32 registry I/O
 │   ├── Services/               # AppConfig, Analytics, CorporateGuard, Elevation,
 │   │                           #   HardwareInfo, Locale, Ratings
-│   └── Tweaks/                 # 90 modules × ~26 tweaks each = 2,366+ tweaks
+│   └── Tweaks/                 # 90 modules × ~26 tweaks each = 2,363+ tweaks
 ├── src/RegiLattice.GUI/        # WinForms app (depends on Core)
 │   ├── Theme.cs                # 4-theme engine
 │   ├── Forms/                  # MainForm, AboutDialog, 5 package manager dialogs,

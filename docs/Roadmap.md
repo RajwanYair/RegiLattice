@@ -1,17 +1,17 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-16 · v3.3.0 · 2 316 tweaks · 89 categories · 972 tests
+> Last updated: 2026-03-16 · v3.4.0 · 2 363 tweaks · 89 categories · 960 tests
 
 ---
 
-## Current State (as of v3.3.0)
+## Current State (as of v3.4.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 316 verified across 89 categories |
-| Tests | 972 (738 Core + 103 CLI + 131 GUI), all passing, 4-thread parallel |
+| Tweaks | 2 363 verified across 89 categories |
+| Tests | 960 (738 Core + 103 CLI + 131 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -269,6 +269,211 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 7 | Add 10 tweaks to NetworkOptimization.cs (15→25): TCP Fast Open, RSC, ARP cache, DCA, keepalive, etc. | ✅ |
 | 8 | Update all documentation with new tweak count (2,316→2,366) | ✅ |
 | 9 | Total: 2,366 tweaks, 972 tests (738 Core + 103 CLI + 131 GUI), 13 test files | ✅ |
+
+### Sprint 16 — Security Audit & Validation Enhancement ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Security audit: identify & remove insecure tweaks (Telnet, TFTP, EFS disable) | ✅ |
+| 2 | Remove `cmd-enable-telnet-client`, `cmd-enable-tftp-client`, `cmd-enable-fsutil-disable-encrypt` from CommandLineTweaks.cs | ✅ |
+| 3 | Add `TweakValidator.DetectDuplicateRegistryOps()` — warns when >1 tweak writes to same `Path\Name` | ✅ |
+| 4 | Add `TweakEngine.DetectDuplicateRegistryOps()` convenience method | ✅ |
+| 5 | CLI `--validate` now shows errors + duplicate registry warnings separately (exit 1 only on errors) | ✅ |
+| 6 | 6 new validator tests: DuplicateTarget, SamePathDiffNames, CaseInsensitive, SameTweakMultiOps, DeleteTreeDuplicate, NoOverlap | ✅ |
+| 7 | Competitive analysis: 13 Win11 tweak tools researched (Winaero, ExplorerPatcher, OFGB, etc.) | ✅ |
+| 8 | Gap analysis & enhancement roadmap generated (100 items across 10 phases) | ✅ |
+| 9 | Total: 2,363 tweaks, 960 tests (738 Core + 103 CLI + 131 GUI) | ✅ |
+
+---
+
+## Competitive Analysis Summary
+
+> Research from 2026-03-16 covering 13 top Win11 tweak tools.
+
+| Tool | Type | Focus | GitHub Stars |
+|------|------|-------|-------------|
+| **Winaero Tweaker** | All-in-one tweaker | Hundreds of registry/UI tweaks | Millions of users |
+| **ExplorerPatcher** | Shell patcher | Win10 taskbar/Start on Win11 | 31.9k★ |
+| **TranslucentTB** | Taskbar transparency | Taskbar visual effects | 19.1k★ |
+| **Mem Reduct** | Memory cleaner | Cache clearing | 8.9k★ |
+| **Open-Shell** | Start menu | Classic Start menu | 8.7k★ |
+| **OFGB** | Ad remover | Win11 ads only | 7.5k★ |
+| **StartAllBack** | Start + taskbar | Win7/10 UI on Win11 | Paid |
+| **Start11** | Start menu | Custom Start + taskbar | Paid |
+| **WindowBlinds 11** | Visual skins | Window frames/themes | Paid |
+| **Fences 6** | Desktop organizer | Icon groups | Paid |
+| **NetAdapter Repair** | Network fixer | TCP/IP/Winsock reset | Free |
+| **AutoPowerOptionsOK** | Power switcher | Power plan toggle | Free |
+| **MS PC Manager** | System optimizer | Cleanup + boost | Free (MS) |
+
+### RegiLattice Unique Strengths (already ahead)
+
+- Most tweaks by far: 2,363 across 89 categories
+- Declarative tweak model (TweakDef + RegOp)
+- 5 profile system (business, gaming, privacy, minimal, server)
+- Plugin marketplace (JSON Tweak Packs)
+- Corporate Guard (enterprise safety)
+- Dependency resolution (topological sort)
+- Snapshot/restore (save and rollback)
+- CLI + GUI (25+ commands + full WinForms)
+- DryRun mode (preview before applying)
+- 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)
+- Validation engine (TweakValidator + duplicate registry detection)
+- Full test suite (960 xUnit tests, 95% line coverage)
+
+---
+
+## Future Roadmap — 100 Enhancement Items (10 Phases)
+
+### Phase 1 — UX & Config Management (Sprint 17–18)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 1 | Import/export tweak selections as JSON config file | HIGH | Winaero Tweaker |
+| 2 | Tweak favorites/bookmarks — star frequently used tweaks | HIGH | Winaero Tweaker |
+| 3 | Tweak history panel — timeline of applied/removed with undo | HIGH | Original |
+| 4 | Search result highlighting — bold matched terms in tweak list | MEDIUM | UX improvement |
+| 5 | Recently applied tweaks section in GUI sidebar | MEDIUM | UX improvement |
+| 6 | Tweak comparison view — diff two tweak configs side by side | MEDIUM | Original |
+| 7 | Bulk select by tag (e.g., select all "privacy" tagged tweaks) | MEDIUM | UX improvement |
+| 8 | Keyboard shortcuts for common operations (Ctrl+A apply, Ctrl+Z undo) | MEDIUM | UX improvement |
+| 9 | "What's New" dialog on version upgrade showing changelog | LOW | Original |
+| 10 | Tweak tooltip with full description on hover | LOW | UX improvement |
+
+### Phase 2 — System Monitoring & Diagnostics (Sprint 19–20)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | HIGH | Mem Reduct |
+| 12 | Memory cache cleaner — working set purge via Native API | HIGH | Mem Reduct |
+| 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct |
+| 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct |
+| 15 | CPU usage monitor in status bar | MEDIUM | Original |
+| 16 | Disk usage overview panel (per-drive space breakdown) | MEDIUM | MS PC Manager |
+| 17 | Network connectivity status indicator | LOW | NetAdapter Repair |
+| 18 | Battery health monitor for laptops | LOW | Original |
+| 19 | System uptime display in About dialog | LOW | Original |
+| 20 | Hardware temperature monitoring (CPU/GPU) via WMI | LOW | Original |
+
+### Phase 3 — Visual Appearance Tweaks (Sprint 21–22)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 21 | Title bar color customization (active/inactive) | HIGH | Winaero Tweaker |
+| 22 | Scrollbar width/height adjustment | HIGH | Winaero Tweaker |
+| 23 | System font replacement (menus, dialogs, title bars) | HIGH | Winaero Tweaker |
+| 24 | Icon spacing adjustment (horizontal/vertical) | MEDIUM | Winaero Tweaker |
+| 25 | Window border width customization | MEDIUM | Winaero Tweaker |
+| 26 | Menu animation speed control | MEDIUM | Winaero Tweaker |
+| 27 | Tooltip delay adjustment | MEDIUM | Winaero Tweaker |
+| 28 | Alt+Tab appearance switch (Win10 vs Win11 style) | MEDIUM | ExplorerPatcher |
+| 29 | Accent color customization for Start/Taskbar/Title bars | LOW | WindowBlinds |
+| 30 | Dark mode per-app overrides | LOW | Original |
+
+### Phase 4 — Network & Connectivity Tools (Sprint 23–24)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 31 | One-click network repair wizard (TCP/IP, Winsock, DNS reset) | HIGH | NetAdapter Repair |
+| 32 | DNS server quick-switch (Cloudflare, Google, Quad9, custom) | HIGH | Original |
+| 33 | Network adapter diagnostics panel | MEDIUM | NetAdapter Repair |
+| 34 | Wi-Fi profile management (export/import/delete) | MEDIUM | Original |
+| 35 | Proxy configuration wizard | MEDIUM | Original |
+| 36 | VPN quick-connect from system tray | MEDIUM | Original |
+| 37 | Firewall rule manager (simplified view of Windows Firewall) | MEDIUM | Original |
+| 38 | Port scanner / connectivity tester | LOW | Original |
+| 39 | Network bandwidth monitor | LOW | Original |
+| 40 | MAC address randomization toggle | LOW | Original |
+
+### Phase 5 — Startup & Service Management (Sprint 25–26)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 41 | Startup manager — review and disable startup items | HIGH | MS PC Manager |
+| 42 | Service manager — disable/enable Windows services with descriptions | HIGH | Original |
+| 43 | Scheduled task manager — view and toggle system tasks | MEDIUM | Original |
+| 44 | Boot time analyzer — identify slow-starting services | MEDIUM | Original |
+| 45 | Context menu manager — add/remove/sort right-click items | MEDIUM | Original |
+| 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original |
+| 47 | Installed programs quick-uninstaller | LOW | MS PC Manager |
+| 48 | Temporary file cleaner with size preview | LOW | MS PC Manager |
+| 49 | Windows Update pause/resume controls | LOW | Original |
+| 50 | Driver update checker (optional components) | LOW | Original |
+
+### Phase 6 — Power & Energy Management (Sprint 27–28)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 51 | Power plan quick-switch from system tray | HIGH | AutoPowerOptionsOK |
+| 52 | Timer-based power plan switching (e.g., gaming hours) | MEDIUM | AutoPowerOptionsOK |
+| 53 | Custom power plan creator with presets | MEDIUM | Original |
+| 54 | Battery saver automation (auto-enable at threshold) | MEDIUM | Original |
+| 55 | Sleep/hibernate timer with countdown | LOW | Original |
+| 56 | Monitor power-off timer | LOW | Original |
+| 57 | USB selective suspend per-device control | LOW | Original |
+| 58 | Wake-on-LAN configuration | LOW | Original |
+| 59 | Power consumption estimator (from current configuration) | LOW | Original |
+| 60 | Screen brightness scheduler (time-based) | LOW | Original |
+
+### Phase 7 — Privacy & Ad Removal (Sprint 29–30)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB |
+| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager |
+| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original |
+| 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original |
+| 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original |
+| 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original |
+| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original |
+| 68 | DNS-over-HTTPS quick setup | LOW | Original |
+| 69 | Location services granular control | LOW | Original |
+| 70 | App permission manager (camera, microphone, location per-app) | LOW | Original |
+
+### Phase 8 — Plugin & Extensibility Improvements (Sprint 31–32)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 71 | Plugin sandboxing — isolated execution of third-party packs | HIGH | Original |
+| 72 | Plugin auto-update — check marketplace for newer versions | HIGH | Original |
+| 73 | Plugin rating and review system | MEDIUM | Original |
+| 74 | Plugin dependency resolution (pack A requires pack B) | MEDIUM | Original |
+| 75 | Plugin template generator (CLI command to scaffold a new pack) | MEDIUM | Original |
+| 76 | Community plugin submission workflow (GitHub PR-based) | MEDIUM | Original |
+| 77 | Plugin categories and tags in marketplace browser | LOW | Original |
+| 78 | Plugin install from URL (direct .json download) | LOW | Original |
+| 79 | Plugin changelog viewer in marketplace | LOW | Original |
+| 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original |
+
+### Phase 9 — Advanced Features & Automation (Sprint 33–34)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 81 | Scheduled tweak application — apply tweaks on boot/login/timer | HIGH | Planned (P3) |
+| 82 | Before/after preview — show what a tweak changes before applying | HIGH | ExplorerPatcher |
+| 83 | Tweak rollback queue — undo last N operations with one click | MEDIUM | Original |
+| 84 | Profile scheduler — auto-switch profiles by time or event | MEDIUM | Original |
+| 85 | REST API for remote tweak management | MEDIUM | Planned (P3) |
+| 86 | Web dashboard for tweak status visualization | MEDIUM | Planned (P3) |
+| 87 | PowerShell module wrapper (`Install-Module RegiLattice`) | MEDIUM | Original |
+| 88 | Group Policy export — generate .admx/.adml from tweak selections | LOW | Original |
+| 89 | Intune/SCCM integration — deploy tweaks via MDM | LOW | Original |
+| 90 | Tweak compliance reporting (drift detection from baseline) | LOW | Original |
+
+### Phase 10 — Localization, Packaging & Community (Sprint 35–36)
+
+| # | Item | Priority | Source |
+|---|------|----------|--------|
+| 91 | French locale (3rd language) | HIGH | Original |
+| 92 | Spanish locale (4th language) | HIGH | Original |
+| 93 | Japanese locale (5th language) | MEDIUM | Original |
+| 94 | Chocolatey package submission | MEDIUM | Planned (P3) |
+| 95 | Microsoft Store listing | MEDIUM | Original |
+| 96 | Code signing for published binaries | MEDIUM | Planned (P2) |
+| 97 | Auto-update mechanism (check GitHub Releases) | MEDIUM | Original |
+| 98 | Portable mode (run from USB, no install) | LOW | Original |
+| 99 | Community tweak submission form (web-based) | LOW | Original |
+| 100 | Comprehensive user documentation site (mkdocs/docfx) | LOW | Original |
 
 ---
 

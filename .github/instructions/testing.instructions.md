@@ -18,7 +18,7 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 | `RegiLattice.Core.Tests` | 738 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver |
 | `RegiLattice.CLI.Tests` | 103 | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer) |
 | `RegiLattice.GUI.Tests` | 131 | Theme, PackageManagerValidation, PackageNameValidator, AppIcons |
-| **Total** | **972** | |
+| **Total** | **960** | |
 
 ## Running Tests
 
@@ -185,7 +185,7 @@ reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -repor
 
 ### Coverage Targets
 
-| Component | Target | Actual (v3.3.0) | Notes |
+| Component | Target | Actual (v3.4.0) | Notes |
 |-----------|--------|------------------|-------|
 | TweakDef model | 95%+ | 100% | Pure logic, fully testable |
 | TweakEngine | 90%+ | 87% | Core business logic |

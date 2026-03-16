@@ -4,15 +4,15 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [3.4.0] — 2026-03-16
 
 ### Added — Sprint 15: 50 New Tweaks
 
 - **Power Management** (10 new): adaptive brightness, power throttling, hard disk timeout,
   core parking, PCI Express max performance, display scaling, processor idle demote,
   energy estimation, high precision timer, turbo boost control
-- **Command Line** (10 new): .NET 3.5, Telnet client, TFTP client, IPv6 tunnel adapters,
-  processor scheduling, NetBIOS broadcast, NTP high frequency, MPO, Game DVR, EFS toggle
+- **Command Line** (7 new): .NET 3.5, IPv6 tunnel adapters, processor scheduling,
+  NetBIOS broadcast, NTP high frequency, MPO, Game DVR
 - **Developer** (10 new): .NET CLI telemetry, symlink without admin, Python UTF-8 mode,
   Git credential manager, Git default branch, Git autocrlf, Cargo PATH, WER disable,
   environment variable size, Windows Containers
@@ -22,7 +22,28 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Network Optimization** (10 new): TCP Fast Open, TCP slow start, ARP cache, RSC,
   direct cache access, TCP max connections, TCP keepalive, NIC flow control,
   NIC power management, DNS IPv4 priority
-- Total: **2,366 tweaks** across 89 categories
+- Total: **2,363 tweaks** across 89 categories
+
+### Added — Sprint 16: Security Audit & Validation Enhancement
+
+- **TweakValidator.DetectDuplicateRegistryOps()** — new public method that warns when
+  multiple tweaks write to the same registry `Path\Name` target. Case-insensitive.
+  Skips check-only ops (CheckValue, CheckMissing, CheckKeyMissing).
+- **TweakEngine.DetectDuplicateRegistryOps()** — convenience method delegating to
+  TweakValidator for engine consumers
+- **CLI `--validate`** now shows duplicate registry warnings separately from errors;
+  exit code 1 only on errors (warnings are informational)
+- **6 new validator tests**: DuplicateTarget, SamePathDiffNames, CaseInsensitive,
+  SameTweakMultiOps, DeleteTreeDuplicate, NoOverlap
+- **100-item future roadmap** added to docs/Roadmap.md spanning 10 phases
+- **Competitive analysis** of 13 Win11 tweak tools (Winaero, ExplorerPatcher, OFGB, etc.)
+
+### Removed — Security Hardening
+
+- Removed 3 insecure tweaks from CommandLineTweaks.cs:
+  - `cmd-enable-telnet-client` — enables unencrypted Telnet protocol
+  - `cmd-enable-tftp-client` — enables unencrypted TFTP protocol
+  - `cmd-enable-fsutil-disable-encrypt` — disables EFS disk encryption
 
 ### Changed
 

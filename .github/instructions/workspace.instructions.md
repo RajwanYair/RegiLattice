@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 3.3.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 3.4.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -36,7 +36,7 @@ RegiLattice.sln
 │   │   │                        #   Elevation, HardwareInfo, Locale, PipManager, Ratings,
 │   │   │                        #   ShellRunner, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 90 category modules, ~2,366 tweaks
+│   │   └── Tweaks/              # 90 category modules, ~2,363 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
