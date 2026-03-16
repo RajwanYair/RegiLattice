@@ -32,14 +32,23 @@ RegiLattice.sln
 │   │   ├── DependencyResolver.cs # Topological dependency resolution
 │   │   ├── Models/              # TweakDef, ProfileDef, ProfileDefinitions
 │   │   ├── Registry/            # RegistrySession wrapper
-│   │   ├── Services/            # Analytics, AppConfig, CorporateGuard, Elevation,
-│   │   │                        #   HardwareInfo, Locale, Ratings
+│   │   ├── Services/            # Analytics, AppConfig, ChocolateyManager, CorporateGuard,
+│   │   │                        #   Elevation, HardwareInfo, Locale, PipManager, Ratings,
+│   │   │                        #   ShellRunner, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
 │   │   └── Tweaks/              # 90 category modules, ~2,316 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
+│   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
 │   │   ├── Theme.cs             # 4-theme engine
-│   │   └── Forms/               # MainForm, AboutDialog, package manager dialogs
+│   │   ├── Forms/               # MainForm, AboutDialog, ChocolateyManagerDialog,
+│   │   │                        #   MarketplaceDialog, PipManagerDialog, PSModuleManagerDialog,
+│   │   │                        #   ScoopManagerDialog, ToolVersionsDialog, WindowsHealthDialog,
+│   │   │                        #   WinGetManagerDialog
+│   │   └── PackageManagers/     # GUI-side package manager wrappers
+│   │                            #   PackageNameValidator, ShellRunner, ScoopManager, PipManager,
+│   │                            #   PSModuleManager, ChocolateyManager, WinGetManager,
+│   │                            #   ToolVersionChecker, WindowsHealthManager
 │   └── RegiLattice.CLI/         # Console application
 │       ├── Program.cs           # 25+ commands via args parsing
 │       ├── CliArgs.cs           # CLI argument model
