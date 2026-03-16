@@ -185,7 +185,7 @@ reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -repor
 
 ### Coverage Targets
 
-| Component | Target | Actual (v3.2.0) | Notes |
+| Component | Target | Actual (v3.3.0) | Notes |
 |-----------|--------|------------------|-------|
 | TweakDef model | 95%+ | 100% | Pure logic, fully testable |
 | TweakEngine | 90%+ | 87% | Core business logic |

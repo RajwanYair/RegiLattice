@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.3.0] — 2026-03-16
+
 ### Refactored — Codebase Architecture Improvements
 
 #### Core Engine Decomposition
