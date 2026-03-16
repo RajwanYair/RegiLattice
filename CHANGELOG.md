@@ -6,6 +6,29 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added — Sprint 15: 50 New Tweaks
+
+- **Power Management** (10 new): adaptive brightness, power throttling, hard disk timeout,
+  core parking, PCI Express max performance, display scaling, processor idle demote,
+  energy estimation, high precision timer, turbo boost control
+- **Command Line** (10 new): .NET 3.5, Telnet client, TFTP client, IPv6 tunnel adapters,
+  processor scheduling, NetBIOS broadcast, NTP high frequency, MPO, Game DVR, EFS toggle
+- **Developer** (10 new): .NET CLI telemetry, symlink without admin, Python UTF-8 mode,
+  Git credential manager, Git default branch, Git autocrlf, Cargo PATH, WER disable,
+  environment variable size, Windows Containers
+- **Hardening** (10 new): AutoRun disable, remote SAM restriction, remote assistance,
+  SMB signing (client + server), LLMNR disable, SMB encryption, cached logons limit,
+  admin shares disable
+- **Network Optimization** (10 new): TCP Fast Open, TCP slow start, ARP cache, RSC,
+  direct cache access, TCP max connections, TCP keepalive, NIC flow control,
+  NIC power management, DNS IPv4 priority
+- Total: **2,366 tweaks** across 89 categories
+
+### Changed
+
+- GUI test suite optimised: 49% faster xUnit time (ToolVersionChecker timeout reduced,
+  assembly-level parallelism enabled)
+
 ## [3.3.0] — 2026-03-16
 
 ### Refactored — Codebase Architecture Improvements

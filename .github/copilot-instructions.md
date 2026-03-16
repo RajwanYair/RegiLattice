@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-16 (v3.3.0, 2 316 tweaks, 89 categories, 972 tests).
+> Last verified: 2026-03-16 (v3.3.0, 2 366 tweaks, 89 categories, 972 tests).
 
 ## Companion Instruction Files
 
@@ -81,7 +81,7 @@ Rules:
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.3.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 316 across 89 categories (90 module files)                      |
+| Tweaks      | 2 366 across 89 categories (90 module files)                      |
 | Tests       | 972 passing (738 Core + 103 CLI + 131 GUI)                       |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
@@ -128,7 +128,7 @@ RegiLattice.sln
 │   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
 │   │   │   ├── PackManager.cs       # Install, uninstall, update, marketplace
 │   │   │   └── PackIndex.cs         # Remote marketplace index model
-│   │   └── Tweaks/                  # 90 category modules, 2 316 tweaks total
+│   │   └── Tweaks/                  # 90 category modules, 2 366 tweaks total
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs

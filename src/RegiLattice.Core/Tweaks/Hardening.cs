@@ -284,5 +284,163 @@ internal static class Hardening
                 return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "harden-disable-autorun",
+            Label = "Disable AutoRun / AutoPlay for All Drives",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables AutoRun and AutoPlay for all drive types to prevent malware execution via USB or optical media.",
+            Tags = ["hardening", "security", "autorun", "usb"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoAutorun", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoAutorun"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "harden-block-remote-sam",
+            Label = "Restrict Remote SAM Enumeration",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Restricts remote enumeration of SAM accounts and groups (CIS L1 benchmark).",
+            Tags = ["hardening", "security", "sam", "cis"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "harden-disable-remote-assistance",
+            Label = "Disable Remote Assistance",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Remote Assistance to prevent unauthorised remote sessions.",
+            Tags = ["hardening", "security", "remote", "assistance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
+        },
+        new TweakDef
+        {
+            Id = "harden-enable-smb-signing",
+            Label = "Require SMB Signing (Client)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Requires SMB packet signing on the client side to prevent relay and MitM attacks.",
+            Tags = ["hardening", "security", "smb", "signing"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "harden-enable-smb-signing-server",
+            Label = "Require SMB Signing (Server)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Requires SMB packet signing on the server side to prevent relay and MitM attacks.",
+            Tags = ["hardening", "security", "smb", "signing"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "harden-disable-llmnr",
+            Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables LLMNR which is vulnerable to poisoning/relay attacks (Responder, Inveigh).",
+            Tags = ["hardening", "security", "llmnr", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
+        },
+        new TweakDef
+        {
+            Id = "harden-enforce-smb-encryption",
+            Label = "Enforce SMB 3.0 Encryption",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Requires SMB 3.0 encryption on the server, preventing eavesdropping on file share traffic.",
+            Tags = ["hardening", "security", "smb", "encryption"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
+        },
+        new TweakDef
+        {
+            Id = "harden-disable-cached-logons",
+            Label = "Limit Cached Logon Credentials to 2",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Limits cached domain logons stored on the machine from 10 (default) to 2, reducing credential theft risk.",
+            Tags = ["hardening", "security", "credentials", "domain"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "2")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "10")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "2")],
+        },
+        new TweakDef
+        {
+            Id = "harden-disable-admin-shares",
+            Label = "Disable Administrative Shares (C$, ADMIN$)",
+            Category = "Hardening",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables default administrative shares (C$, ADMIN$, IPC$) to reduce lateral movement risk.",
+            Tags = ["hardening", "security", "shares", "lateral-movement"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
+        },
     ];
 }

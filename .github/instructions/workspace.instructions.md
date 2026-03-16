@@ -36,7 +36,7 @@ RegiLattice.sln
 │   │   │                        #   Elevation, HardwareInfo, Locale, PipManager, Ratings,
 │   │   │                        #   ShellRunner, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 90 category modules, ~2,316 tweaks
+│   │   └── Tweaks/              # 90 category modules, ~2,366 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation

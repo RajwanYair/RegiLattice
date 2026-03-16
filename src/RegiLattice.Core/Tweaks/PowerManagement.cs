@@ -252,5 +252,214 @@ internal static class PowerManagement
             },
             DetectAction = () => false,
         },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-adaptive-brightness",
+            Label = "Disable Adaptive Brightness",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables automatic brightness adjustment based on ambient light sensor.",
+            Tags = ["power", "display", "brightness"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SensorState\Sensors", "AdaptiveBrightnessEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SensorState\Sensors", "AdaptiveBrightnessEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SensorState\Sensors", "AdaptiveBrightnessEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-power-throttling",
+            Label = "Disable Power Throttling",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows power throttling to prevent CPU frequency capping on background processes.",
+            Tags = ["power", "cpu", "performance", "throttling"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-hard-disk-timeout",
+            Label = "Disable Hard Disk Auto Power-Off",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Prevents hard disks from spinning down after inactivity. Useful for always-on workstations.",
+            Tags = ["power", "disk", "hdd", "spin-down"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_disk", "DISKIDLE", "0"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_disk", "DISKIDLE", "20"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-core-parking",
+            Label = "Disable CPU Core Parking (All Cores Active)",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Keeps all CPU cores active by setting minimum core parking percentage to 100%.",
+            Tags = ["power", "cpu", "core-parking", "performance"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_processor", "CPMINCORES", "100"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_processor", "CPMINCORES", "50"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-set-pci-express-max-performance",
+            Label = "PCI Express Link State — Maximum Performance",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables PCI Express Active State Power Management (ASPM) for maximum GPU/NVMe throughput.",
+            Tags = ["power", "pcie", "gpu", "nvme", "aspm"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_pciexpress", "ASPM", "0"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_pciexpress", "ASPM", "2"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-display-scaling",
+            Label = "Disable Display Power Savings",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables Intel/AMD display power saving features (dimming, adaptive backlight) for consistent brightness.",
+            Tags = ["power", "display", "brightness", "intel"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_video", "ADAPTBRIGHT", "0"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            RemoveAction = _ =>
+            {
+                ShellRunner.Run("powercfg.exe", ["-setacvalueindex", "scheme_current", "sub_video", "ADAPTBRIGHT", "1"]);
+                ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-processor-idle-demote",
+            Label = "Disable CPU Idle Demotion",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents the OS from demoting a processor to a deeper C-state, reducing latency spikes.",
+            Tags = ["power", "cpu", "latency", "c-state"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-energy-estimation",
+            Label = "Disable Energy Estimation Engine",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Windows energy estimation engine to reduce overhead on battery-powered systems used as desktops.",
+            Tags = ["power", "energy", "battery", "overhead"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-enable-high-precision-timer",
+            Label = "Enable High Precision Event Timer",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Enables the HPET timer in BCD for more consistent system timing (lower DPC latency).",
+            Tags = ["power", "timer", "hpet", "latency"],
+            ApplyAction = _ => ShellRunner.Run("bcdedit.exe", ["/set", "useplatformtick", "yes"]),
+            RemoveAction = _ => ShellRunner.Run("bcdedit.exe", ["/deletevalue", "useplatformtick"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("bcdedit.exe", ["/enum", "{current}"]);
+                return stdout.Contains("useplatformtick", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-turbo-boost",
+            Label = "Disable CPU Turbo Boost (Thermal Control)",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Caps CPU frequency at base clock by disabling turbo boost. Reduces heat and power consumption.",
+            Tags = ["power", "cpu", "turbo", "thermal"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
     ];
 }

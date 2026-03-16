@@ -335,5 +335,168 @@ internal static class NetworkOptimization
             ],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit", 86400)],
         },
+        new TweakDef
+        {
+            Id = "netopt-enable-tcp-fast-open",
+            Label = "Enable TCP Fast Open (TFO)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables TCP Fast Open to reduce connection latency by sending data in the SYN packet.",
+            Tags = ["network", "tcp", "latency", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableTFO", 3)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableTFO")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableTFO", 3)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-tcp-slow-start",
+            Label = "Disable TCP Slow Start After Idle",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Prevents TCP from resetting congestion window after idle, keeping throughput high on persistent connections.",
+            Tags = ["network", "tcp", "throughput", "performance"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider CTCP; netsh int tcp set supplemental Template=InternetCustom"
+                ),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider Default"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "netopt-increase-arp-cache",
+            Label = "Increase ARP Cache Size",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the ARP cache limit from default 256 to 4096 entries for networks with many peers.",
+            Tags = ["network", "arp", "cache", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize", 4096),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheLife", 300),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize"),
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheLife"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize", 4096)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-enable-rsc",
+            Label = "Enable Receive Segment Coalescing (RSC)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Enables Receive Segment Coalescing on all physical adaptors to reduce CPU overhead for high-throughput scenarios.",
+            Tags = ["network", "rsc", "nic", "performance"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Get-NetAdapter -Physical | Enable-NetAdapterRsc -IPv4 -ErrorAction SilentlyContinue"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Get-NetAdapter -Physical | Disable-NetAdapterRsc -IPv4 -ErrorAction SilentlyContinue"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "netopt-enable-direct-cache-access",
+            Label = "Enable Direct Cache Access (DCA)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables Direct Cache Access so NIC data is placed directly into CPU cache, reducing memory latency.",
+            Tags = ["network", "nic", "dca", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableDCA", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableDCA")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableDCA", 1)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-increase-tcp-max-connections",
+            Label = "Increase Maximum TCP Connections Per Server",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the maximum allowed half-open TCP connections from default 10 to 65534 for high-throughput workloads.",
+            Tags = ["network", "tcp", "connections", "throughput"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxHalfOpen", 65534)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxHalfOpen")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxHalfOpen", 65534)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-increase-tcp-keepalive",
+            Label = "Reduce TCP Keep-Alive Interval",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reduces the TCP keep-alive interval from 2 hours to 30 minutes, detecting dead connections faster.",
+            Tags = ["network", "tcp", "keepalive", "reliability"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 1800000)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 1800000)],
+        },
+        new TweakDef
+        {
+            Id = "netopt-enable-flow-control",
+            Label = "Enable NIC Flow Control",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Enables IEEE 802.3x flow control on physical adapters for buffer overflow prevention.",
+            Tags = ["network", "nic", "flow-control", "performance"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { Set-NetAdapterAdvancedProperty -Name $_.Name -RegistryKeyword '*FlowControl' -RegistryValue 3 -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { Set-NetAdapterAdvancedProperty -Name $_.Name -RegistryKeyword '*FlowControl' -RegistryValue 0 -ErrorAction SilentlyContinue }"
+                ),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "netopt-disable-power-management-nic",
+            Label = "Disable NIC Power Management (Prevent Sleep)",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables power management on all physical network adapters so they don't disconnect during sleep transitions.",
+            Tags = ["network", "nic", "power", "reliability"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Disabled -WakeOnPattern Disabled -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-NetAdapter -Physical | ForEach-Object { Set-NetAdapterPowerManagement -Name $_.Name -WakeOnMagicPacket Enabled -WakeOnPattern Enabled -ErrorAction SilentlyContinue }"
+                ),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "netopt-set-dns-priority-ipv4",
+            Label = "Prioritise IPv4 DNS over IPv6",
+            Category = "Network Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the prefix policy to prefer IPv4 DNS resolution, reducing lookup latency on networks without native IPv6.",
+            Tags = ["network", "dns", "ipv4", "ipv6"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
+        },
     ];
 }
