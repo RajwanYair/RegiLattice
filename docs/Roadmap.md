@@ -1,17 +1,17 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2025-07-22 · v3.2.0 · 2 316 tweaks · 89 categories · 658 tests
+> Last updated: 2026-03-16 · v3.2.1 · 2 316 tweaks · 89 categories · 727 tests
 
 ---
 
-## Current State (as of v3.2.0)
+## Current State (as of v3.2.1)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 316 verified across 89 categories |
-| Tests | 658 (529 Core + 58 CLI + 71 GUI), all passing, 4-thread parallel |
+| Tests | 727 (571 Core + 72 CLI + 84 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -215,6 +215,21 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 5 | Update testing.instructions.md: TweakKind coverage patterns, actual coverage data, intentionally untested components | ✅ |
 | 6 | Mark completed roadmap items: self-contained publish, parallel StatusMap, winget manifest, GitHub Releases | ✅ |
 | 7 | Coverage verification: 94.9% line coverage (exceeds 80% target) | ✅ |
+
+### Sprint 12 — Codebase Refactoring & Architecture Improvements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Extract `SnapshotManager.cs` from TweakEngine (Save/Load/Restore) | ✅ |
+| 2 | Extract `TweakValidator.cs` from TweakEngine (ValidateTweaks + circular dep detection) | ✅ |
+| 3 | Extract `DependencyResolver.cs` from TweakEngine (topological sort + Dependents) | ✅ |
+| 4 | Extract `CliArgs.cs` from CLI Program.cs (nested class to standalone) | ✅ |
+| 5 | Extract `ConsoleColorizer.cs` from CLI Program.cs (ANSI colour helpers) | ✅ |
+| 6 | Create `PackageNameValidator.cs` — consolidate 5 identical regex/validation across package managers | ✅ |
+| 7 | 27 new tests (700 → 727): 10 ConsoleColorizer, 8 PackageNameValidator, 9 CLI parsing | ✅ |
+| 8 | TweakEngine reduced from ~750 → ~580 lines, all public API unchanged | ✅ |
+| 9 | Update all documentation: CHANGELOG, copilot-instructions, workspace, testing, Roadmap, Api, Coverage, Development, Readme, Profiling, lessons-learned | ✅ |
+| 10 | Total: 2,316 tweaks, 727 tests (571 Core + 72 CLI + 84 GUI) | ✅ |
 
 ---
 
