@@ -94,100 +94,23 @@ public sealed class TweakEngine
         }
     }
 
-    /// <summary>Register all built-in tweaks from the Tweaks namespace.</summary>
+    /// <summary>Register all built-in tweaks from the Tweaks namespace via reflection.</summary>
     public void RegisterBuiltins()
     {
-        // Each category module provides a static Tweaks property
-        Register(Tweaks.Accessibility.Tweaks);
-        Register(Tweaks.Adobe.Tweaks);
-        Register(Tweaks.AppCompatibility.Tweaks);
-        Register(Tweaks.Audio.Tweaks);
-        Register(Tweaks.Backup.Tweaks);
-        Register(Tweaks.Bluetooth.Tweaks);
-        Register(Tweaks.Boot.Tweaks);
-        Register(Tweaks.BrowserCommon.Tweaks);
-        Register(Tweaks.Chrome.Tweaks);
-        Register(Tweaks.Clipboard.Tweaks);
-        Register(Tweaks.CloudStorage.Tweaks);
-        Register(Tweaks.CommandLineTweaks.Tweaks);
-        Register(Tweaks.Communication.Tweaks);
-        Register(Tweaks.ContextMenu.Tweaks);
-        Register(Tweaks.Copilot.Tweaks);
-        Register(Tweaks.Cortana.Tweaks);
-        Register(Tweaks.CrashDiagnostics.Tweaks);
-        Register(Tweaks.Debloat.Tweaks);
-        Register(Tweaks.Defender.Tweaks);
-        Register(Tweaks.Developer.Tweaks);
-        Register(Tweaks.DevDrive.Tweaks);
-        Register(Tweaks.DiskCleanup.Tweaks);
-        Register(Tweaks.Display.Tweaks);
-        Register(Tweaks.DnsNetworking.Tweaks);
-        Register(Tweaks.Edge.Tweaks);
-        Register(Tweaks.Encryption.Tweaks);
-        Register(Tweaks.EventLogging.Tweaks);
-        Register(Tweaks.Explorer.Tweaks);
-        Register(Tweaks.FileSystem.Tweaks);
-        Register(Tweaks.Firewall.Tweaks);
-        Register(Tweaks.Firefox.Tweaks);
-        Register(Tweaks.Fonts.Tweaks);
-        Register(Tweaks.Gaming.Tweaks);
-        Register(Tweaks.Gpu.Tweaks);
-        Register(Tweaks.Hardening.Tweaks);
-        Register(Tweaks.IndexingSearch.Tweaks);
-        Register(Tweaks.Input.Tweaks);
-        Register(Tweaks.Java.Tweaks);
-        Register(Tweaks.LibreOffice.Tweaks);
-        Register(Tweaks.LockScreen.Tweaks);
-        Register(Tweaks.Maintenance.Tweaks);
-        Register(Tweaks.MemoryOptimization.Tweaks);
-        Register(Tweaks.Ms365Copilot.Tweaks);
-        Register(Tweaks.MsStore.Tweaks);
-        Register(Tweaks.Multimedia.Tweaks);
-        Register(Tweaks.Network.Tweaks);
-        Register(Tweaks.NetworkOptimization.Tweaks);
-        Register(Tweaks.NightLight.Tweaks);
-        Register(Tweaks.Notifications.Tweaks);
-        Register(Tweaks.Office.Tweaks);
-        Register(Tweaks.OneDrive.Tweaks);
-        Register(Tweaks.Performance.Tweaks);
-        Register(Tweaks.PhoneLink.Tweaks);
-        Register(Tweaks.PackageManagement.Tweaks);
-        Register(Tweaks.Power.Tweaks);
-        Register(Tweaks.PowerManagement.Tweaks);
-        Register(Tweaks.PowerShellTweaks.Tweaks);
-        Register(Tweaks.Printing.Tweaks);
-        Register(Tweaks.Privacy.Tweaks);
-        Register(Tweaks.ProxyVpn.Tweaks);
-        Register(Tweaks.RealVnc.Tweaks);
-        Register(Tweaks.Recovery.Tweaks);
-        Register(Tweaks.RemoteDesktop.Tweaks);
-        Register(Tweaks.ScheduledTasks.Tweaks);
-        Register(Tweaks.ScheduledTaskTweaks.Tweaks);
-        Register(Tweaks.ScoopTools.Tweaks);
-        Register(Tweaks.Screensaver.Tweaks);
-        Register(Tweaks.Security.Tweaks);
-        Register(Tweaks.Services.Tweaks);
-        Register(Tweaks.Shell.Tweaks);
-        Register(Tweaks.SnapMultitasking.Tweaks);
-        Register(Tweaks.Speech.Tweaks);
-        Register(Tweaks.SsdOptimization.Tweaks);
-        Register(Tweaks.Startup.Tweaks);
-        Register(Tweaks.SystemRestore.Tweaks);
-        Register(Tweaks.Storage.Tweaks);
-        Register(Tweaks.SystemTweaks.Tweaks);
-        Register(Tweaks.Taskbar.Tweaks);
-        Register(Tweaks.TelemetryAdvanced.Tweaks);
-        Register(Tweaks.TouchPen.Tweaks);
-        Register(Tweaks.UsbPeripherals.Tweaks);
-        Register(Tweaks.UserAccount.Tweaks);
-        Register(Tweaks.Virtualization.Tweaks);
-        Register(Tweaks.VsCode.Tweaks);
-        Register(Tweaks.Widgets.Tweaks);
-        Register(Tweaks.WindowsRecall.Tweaks);
-        Register(Tweaks.Win11.Tweaks);
-        Register(Tweaks.WindowsTerminal.Tweaks);
-        Register(Tweaks.WindowsUpdate.Tweaks);
-        Register(Tweaks.Wsl.Tweaks);
+        // Discover all internal static classes in RegiLattice.Core.Tweaks that expose
+        // a static "Tweaks" property returning IReadOnlyList<TweakDef>.
+        var tweaksNs = typeof(Tweaks.Accessibility).Namespace!;
+        var bindingFlags = System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+
+        foreach (var type in typeof(Tweaks.Accessibility).Assembly.GetTypes())
+        {
+            if (type.Namespace != tweaksNs || !type.IsClass || !type.IsAbstract || !type.IsSealed)
+                continue; // skip non-static classes
+
+            var prop = type.GetProperty("Tweaks", bindingFlags);
+            if (prop?.GetValue(null) is IReadOnlyList<TweakDef> tweaks)
+                Register(tweaks);
+        }
 
         Freeze();
     }
