@@ -116,7 +116,7 @@ internal static class ToolVersionChecker
     {
         try
         {
-            var (code, stdout, stderr) = await ShellRunner.RunAsync(fileName, args, ct, TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+            var (code, stdout, stderr) = await ShellRunner.RunAsync(fileName, args, ct, TimeSpan.FromSeconds(3)).ConfigureAwait(false);
             // Java outputs version to stderr
             string output = !string.IsNullOrWhiteSpace(stdout) ? stdout : stderr;
             if (code == 0 && !string.IsNullOrWhiteSpace(output))
