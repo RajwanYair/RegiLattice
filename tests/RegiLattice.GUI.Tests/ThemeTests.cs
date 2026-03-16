@@ -117,4 +117,240 @@ public sealed class ThemeTests
         var result = AppTheme.DetectSystemTheme();
         Assert.Contains(result, AppTheme.AvailableThemes());
     }
+
+    // ── Additional colour properties ────────────────────────────────────
+
+    [Fact]
+    public void Surface_IsNotDefault() => Assert.NotEqual(default, AppTheme.Surface);
+
+    [Fact]
+    public void Surface2_IsNotDefault() => Assert.NotEqual(default, AppTheme.Surface2);
+
+    [Fact]
+    public void FgDim_IsNotDefault() => Assert.NotEqual(default, AppTheme.FgDim);
+
+    [Fact]
+    public void Green_IsNotDefault() => Assert.NotEqual(default, AppTheme.Green);
+
+    [Fact]
+    public void Red_IsNotDefault() => Assert.NotEqual(default, AppTheme.Red);
+
+    [Fact]
+    public void Yellow_IsNotDefault() => Assert.NotEqual(default, AppTheme.Yellow);
+
+    [Fact]
+    public void Overlay_IsNotDefault() => Assert.NotEqual(default, AppTheme.Overlay);
+
+    [Fact]
+    public void Success_IsNotDefault() => Assert.NotEqual(default, AppTheme.Success);
+
+    [Fact]
+    public void Danger_IsNotDefault() => Assert.NotEqual(default, AppTheme.Danger);
+
+    [Fact]
+    public void Info_IsNotDefault() => Assert.NotEqual(default, AppTheme.Info);
+
+    // ── Additional computed colours ─────────────────────────────────────
+
+    [Fact]
+    public void AccentPressed_HasAlpha70() => Assert.Equal(70, AppTheme.AccentPressed.A);
+
+    // ── Font variants ───────────────────────────────────────────────────
+
+    [Fact]
+    public void Small_FontExists() => Assert.Equal("Segoe UI", AppTheme.Small.FontFamily.Name);
+
+    [Fact]
+    public void Bold_FontIsBold() => Assert.True(AppTheme.Bold.Bold);
+
+    [Fact]
+    public void Title_FontIsBold() => Assert.True(AppTheme.Title.Bold);
+
+    [Fact]
+    public void Title_FontIsLarger() => Assert.True(AppTheme.Title.Size > AppTheme.Regular.Size);
+
+    [Fact]
+    public void Mono_FontIsConsolas() => Assert.Equal("Consolas", AppTheme.Mono.FontFamily.Name);
+
+    // ── SetTheme case-insensitivity ─────────────────────────────────────
+
+    [Fact]
+    public void SetTheme_CaseInsensitive_Works()
+    {
+        try
+        {
+            AppTheme.SetTheme("NORD");
+            Assert.Equal("nord", AppTheme.CurrentThemeName());
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Fact]
+    public void SetTheme_MixedCase_Works()
+    {
+        try
+        {
+            AppTheme.SetTheme("Dracula");
+            Assert.Equal("dracula", AppTheme.CurrentThemeName());
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── All 4 themes colour verification ────────────────────────────────
+
+    [Theory]
+    [InlineData("catppuccin-mocha")]
+    [InlineData("catppuccin-latte")]
+    [InlineData("nord")]
+    [InlineData("dracula")]
+    public void AllThemes_HaveDistinctBgAndFg(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.NotEqual(AppTheme.Bg, AppTheme.Fg);
+            Assert.NotEqual(default, AppTheme.Accent);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Fact]
+    public void Nord_IsDarkTheme()
+    {
+        try
+        {
+            AppTheme.SetTheme("nord");
+            Assert.True(AppTheme.Bg.R < 80, $"Nord Bg.R={AppTheme.Bg.R} expected < 80");
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Fact]
+    public void Dracula_IsDarkTheme()
+    {
+        try
+        {
+            AppTheme.SetTheme("dracula");
+            Assert.True(AppTheme.Bg.R < 80, $"Dracula Bg.R={AppTheme.Bg.R} expected < 80");
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── CurrentThemeName default ────────────────────────────────────────
+
+    [Fact]
+    public void CurrentThemeName_Default_IsMocha()
+    {
+        AppTheme.SetTheme("catppuccin-mocha");
+        Assert.Equal("catppuccin-mocha", AppTheme.CurrentThemeName());
+    }
+
+    // ── ThemeChanged event ──────────────────────────────────────────────
+
+    [Fact]
+    public void RaiseThemeChanged_InvokesSubscriber()
+    {
+        bool fired = false;
+        void handler() => fired = true;
+        AppTheme.ThemeChanged += handler;
+        try
+        {
+            AppTheme.RaiseThemeChanged();
+            Assert.True(fired);
+        }
+        finally
+        {
+            AppTheme.ThemeChanged -= handler;
+        }
+    }
+
+    // ── Styled controls ─────────────────────────────────────────────────
+
+    [Fact]
+    public void StyledButton_HasCorrectProperties()
+    {
+        using var btn = AppTheme.StyledButton("Test", AppTheme.Accent, AppTheme.Fg, (_, _) => { });
+        Assert.Equal("Test", btn.Text);
+        Assert.Equal(AppTheme.Accent, btn.BackColor);
+        Assert.Equal(AppTheme.Fg, btn.ForeColor);
+        Assert.Equal(FlatStyle.Flat, btn.FlatStyle);
+    }
+
+    [Fact]
+    public void StyledListBox_HasCorrectColors()
+    {
+        using var lb = AppTheme.StyledListBox();
+        Assert.Equal(AppTheme.Surface, lb.BackColor);
+        Assert.Equal(AppTheme.Fg, lb.ForeColor);
+        Assert.Equal(SelectionMode.One, lb.SelectionMode);
+    }
+
+    [Fact]
+    public void StyledTextBox_DefaultWidth()
+    {
+        using var tb = AppTheme.StyledTextBox();
+        Assert.Equal(200, tb.Width);
+        Assert.Equal(AppTheme.Overlay, tb.BackColor);
+    }
+
+    [Fact]
+    public void StyledTextBox_CustomWidth()
+    {
+        using var tb = AppTheme.StyledTextBox(350);
+        Assert.Equal(350, tb.Width);
+    }
+
+    // ── RoundedRectPath edge cases ──────────────────────────────────────
+
+    [Fact]
+    public void FillRoundedRect_RadiusZero_DoesNotThrow()
+    {
+        using var bmp = new System.Drawing.Bitmap(100, 100);
+        using var g = Graphics.FromImage(bmp);
+        using var brush = new SolidBrush(Color.Red);
+        AppTheme.FillRoundedRect(g, brush, new Rectangle(0, 0, 50, 30), 0);
+        // No exception means success
+    }
+
+    [Fact]
+    public void DrawRoundedRect_RadiusZero_DoesNotThrow()
+    {
+        using var bmp = new System.Drawing.Bitmap(100, 100);
+        using var g = Graphics.FromImage(bmp);
+        using var pen = new Pen(Color.Red);
+        AppTheme.DrawRoundedRect(g, pen, new Rectangle(0, 0, 50, 30), 0);
+        // No exception means success
+    }
+
+    [Fact]
+    public void DrawPill_DoesNotThrow()
+    {
+        using var bmp = new System.Drawing.Bitmap(200, 50);
+        using var g = Graphics.FromImage(bmp);
+        AppTheme.DrawPill(g, "USER", AppTheme.SmallBold, AppTheme.Green, AppTheme.Fg, 5, 5);
+        // No exception means success
+    }
+
+    [Fact]
+    public void RoundedRectPath_LargeRadius_DoesNotThrow()
+    {
+        var rect = new System.Drawing.Rectangle(0, 0, 200, 100);
+        using var path = AppTheme.RoundedRectPath(rect, 50);
+        Assert.True(path.PointCount > 0);
+    }
 }

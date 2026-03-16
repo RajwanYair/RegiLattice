@@ -337,6 +337,358 @@ public sealed class HardwareInfoTests
         Assert.True(hw.Memory.TotalMb > 0, "Expected positive RAM");
         Assert.NotEmpty(hw.Cpu.Name);
     }
+
+    [Fact]
+    public void IsChromeInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsChromeInstalled());
+    }
+
+    [Fact]
+    public void IsFirefoxInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsFirefoxInstalled());
+    }
+
+    [Fact]
+    public void IsJavaInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsJavaInstalled());
+    }
+
+    [Fact]
+    public void IsOfficeInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsOfficeInstalled());
+    }
+
+    [Fact]
+    public void IsVsCodeInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsVsCodeInstalled());
+    }
+
+    [Fact]
+    public void HasNvidiaGpu_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.HasNvidiaGpu());
+    }
+
+    [Fact]
+    public void HasAmdGpu_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.HasAmdGpu());
+    }
+
+    [Fact]
+    public void HasBatteryPresent_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.HasBatteryPresent());
+    }
+
+    [Fact]
+    public void HasWslInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.HasWslInstalled());
+    }
+
+    [Fact]
+    public void HasHyperVAvailable_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.HasHyperVAvailable());
+    }
+}
+
+/// <summary>Extended Locale tests for branch coverage of format strings and locale switching.</summary>
+public sealed class LocaleExtendedTests
+{
+    [Fact]
+    public void T_MultipleFormatArgs_FormatsCorrectly()
+    {
+        Locale.SetLocale("en");
+        Assert.Equal("Imported 5 tweaks from backup.json.", Locale.T("import_complete", 5, "backup.json"));
+    }
+
+    [Fact]
+    public void SetLocale_German_ReturnsGermanTranslations()
+    {
+        Locale.SetLocale("de");
+        Assert.Equal("Alle anwenden", Locale.T("apply_all"));
+        Assert.Equal("Alle entfernen", Locale.T("remove_all"));
+        Locale.SetLocale("en"); // reset
+    }
+
+    [Fact]
+    public void SetLocale_German_OverrideOneKey_PreservesOthers()
+    {
+        Locale.SetLocale("de", new Dictionary<string, string> { ["apply_all"] = "Custom" });
+        Assert.Equal("Custom", Locale.T("apply_all"));
+        Assert.Equal("Alle entfernen", Locale.T("remove_all")); // other keys still German
+        Locale.SetLocale("en"); // reset
+    }
+
+    [Fact]
+    public void SetLocale_UnknownLanguage_FallsBackToEnglish()
+    {
+        Locale.SetLocale("xx");
+        Assert.Equal("Apply All", Locale.T("apply_all")); // falls back to En
+        Locale.SetLocale("en"); // reset
+    }
+
+    [Fact]
+    public void AvailableLocales_ContainsEnAndDe()
+    {
+        var locales = Locale.AvailableLocales;
+        Assert.Contains("en", locales);
+        Assert.Contains("de", locales);
+    }
+
+    [Fact]
+    public void AvailableKeys_HasAtLeast40Keys()
+    {
+        Locale.SetLocale("en");
+        Assert.True(Locale.AvailableKeys.Count >= 40, $"Expected >= 40 keys, got {Locale.AvailableKeys.Count}");
+    }
+}
+
+/// <summary>Extended AppConfig tests for error handling and edge cases.</summary>
+public sealed class AppConfigExtendedTests
+{
+    [Fact]
+    public void Load_MalformedJson_ReturnsDefaults()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-cfg-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "config.json");
+        try
+        {
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(path, "{ this is not valid json }}}");
+            var cfg = AppConfig.Load(path);
+            Assert.Equal("catppuccin-mocha", cfg.Theme); // defaults
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void Load_ExtraJsonProperties_IgnoresThem()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-cfg-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "config.json");
+        try
+        {
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(path, """{"theme":"nord","unknown_field":"value","max_workers":4}""");
+            var cfg = AppConfig.Load(path);
+            Assert.Equal("nord", cfg.Theme);
+            Assert.Equal(4, cfg.MaxWorkers);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void Save_CreatesDirectoryIfMissing()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-cfg-{Guid.NewGuid()}", "nested");
+        var path = Path.Combine(dir, "config.json");
+        try
+        {
+            Assert.False(Directory.Exists(dir));
+            new AppConfig { Theme = "dracula" }.Save(path);
+            Assert.True(File.Exists(path));
+            var loaded = AppConfig.Load(path);
+            Assert.Equal("dracula", loaded.Theme);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(Path.GetDirectoryName(dir)!, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void DefaultConfigPath_ContainsConfigJson()
+    {
+        Assert.EndsWith("config.json", AppConfig.DefaultConfigPath);
+    }
+}
+
+/// <summary>Extended Ratings tests for edge cases and calculations.</summary>
+public sealed class RatingsExtendedTests
+{
+    [Fact]
+    public void AverageRating_ReturnsCorrectAverage()
+    {
+        var ids = new[] { $"avg-{Guid.NewGuid():N}", $"avg-{Guid.NewGuid():N}" };
+        try
+        {
+            Ratings.Rate(ids[0], 2);
+            Ratings.Rate(ids[1], 4);
+            var avg = Ratings.AverageRating();
+            Assert.NotNull(avg);
+            // We can't assert exact value because other tests might have left ratings
+            Assert.True(avg > 0);
+        }
+        finally
+        {
+            foreach (var id in ids)
+                Ratings.RemoveRating(id);
+        }
+    }
+
+    [Fact]
+    public void Rate_EmptyNote_StoresEmptyString()
+    {
+        var id = $"note-{Guid.NewGuid():N}";
+        try
+        {
+            Ratings.Rate(id, 3, "");
+            var r = Ratings.GetRating(id);
+            Assert.NotNull(r);
+            Assert.Equal("", r.Note);
+        }
+        finally
+        {
+            Ratings.RemoveRating(id);
+        }
+    }
+
+    [Fact]
+    public void RemoveRating_NonExistent_DoesNotThrow()
+    {
+        Ratings.RemoveRating($"remove-nope-{Guid.NewGuid():N}");
+    }
+
+    [Fact]
+    public void TopRated_LimitN_RespectsLimit()
+    {
+        var ids = Enumerable.Range(0, 5).Select(_ => $"top-{Guid.NewGuid():N}").ToList();
+        try
+        {
+            for (int i = 0; i < ids.Count; i++)
+                Ratings.Rate(ids[i], i + 1);
+            var top = Ratings.TopRated(2);
+            Assert.True(top.Count <= 2);
+        }
+        finally
+        {
+            foreach (var id in ids)
+                Ratings.RemoveRating(id);
+        }
+    }
+
+    [Fact]
+    public void Rate_BoundaryValues_AcceptsOneAndFive()
+    {
+        var id1 = $"rate-1-{Guid.NewGuid():N}";
+        var id5 = $"rate-5-{Guid.NewGuid():N}";
+        try
+        {
+            Ratings.Rate(id1, 1);
+            Ratings.Rate(id5, 5);
+            Assert.Equal(1, Ratings.GetRating(id1)!.Stars);
+            Assert.Equal(5, Ratings.GetRating(id5)!.Stars);
+        }
+        finally
+        {
+            Ratings.RemoveRating(id1);
+            Ratings.RemoveRating(id5);
+        }
+    }
+}
+
+/// <summary>Extended Analytics tests for TopTweaks and Reset.</summary>
+public sealed class AnalyticsExtendedTests
+{
+    [Fact]
+    public void RecordApply_SameTweakMultipleTimes_CountsCorrectly()
+    {
+        var id = $"multi-{Guid.NewGuid():N}";
+        var before = Analytics.GetStats().MostApplied.GetValueOrDefault(id);
+        Analytics.RecordApply(id);
+        Analytics.RecordApply(id);
+        Analytics.RecordApply(id);
+        var after = Analytics.GetStats().MostApplied[id];
+        Assert.Equal(before + 3, after);
+    }
+
+    [Fact]
+    public void TopTweaks_LimitRespected()
+    {
+        var top = Analytics.TopTweaks(3);
+        Assert.True(top.Count <= 3);
+    }
+
+    [Fact]
+    public void RecordSession_SetsLastSession()
+    {
+        Analytics.RecordSession();
+        var stats = Analytics.GetStats();
+        Assert.True(stats.LastSession > 0);
+    }
+}
+
+/// <summary>Tests for CorporateGuard — safe-to-run aspects only.</summary>
+public sealed class CorporateGuardExtendedTests
+{
+    [Fact]
+    public void IsCorporateNetwork_ReturnsBool()
+    {
+        Assert.IsType<bool>(CorporateGuard.IsCorporateNetwork());
+    }
+
+    [Fact]
+    public void Status_ReturnsTupleWithReason()
+    {
+        var (isCorp, reason) = CorporateGuard.Status();
+        Assert.IsType<bool>(isCorp);
+        Assert.NotNull(reason);
+        Assert.NotEmpty(reason);
+    }
+
+    [Fact]
+    public void ClearCache_ThenQuery_DoesNotThrow()
+    {
+        CorporateGuard.ClearCache();
+        _ = CorporateGuard.IsCorporateNetwork();
+    }
+
+    [Fact]
+    public void IsGpoManaged_WithPoliciesKey_ReturnsTrue()
+    {
+        var result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Policies\Microsoft\Windows\Test"]);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsGpoManaged_WithoutPolicies_ReturnsFalseOrTrue()
+    {
+        // Non-policies path — result depends on whether actual GPO overlays exist
+        var result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion"]);
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void IsGpoManaged_EmptyList_ReturnsFalse()
+    {
+        Assert.False(CorporateGuard.IsGpoManaged([]));
+    }
 }
 
 /// <summary>Tests for CorporateGuard service.</summary>
