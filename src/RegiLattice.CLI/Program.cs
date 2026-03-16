@@ -239,13 +239,24 @@ internal static class Program
         var errors = _engine.ValidateTweaks();
         if (errors.Count > 0)
         {
-            Console.WriteLine($"\u274c Validation found {errors.Count} issue(s):");
+            Console.WriteLine($"\u274c Validation found {errors.Count} error(s):");
             foreach (var e in errors)
                 Console.WriteLine($"  \u2022 {e}");
-            return 1;
         }
-        Console.WriteLine($"\u2705 All {_engine.TweakCount} tweaks passed validation.");
-        return 0;
+        else
+        {
+            Console.WriteLine($"\u2705 All {_engine.TweakCount} tweaks passed validation.");
+        }
+
+        var dupWarnings = _engine.DetectDuplicateRegistryOps();
+        if (dupWarnings.Count > 0)
+        {
+            Console.WriteLine($"\u26a0 {dupWarnings.Count} duplicate registry target(s) detected:");
+            foreach (var w in dupWarnings)
+                Console.WriteLine($"  \u2022 {w}");
+        }
+
+        return errors.Count > 0 ? 1 : 0;
     }
 
     // ── Stats ───────────────────────────────────────────────────────────
