@@ -52,6 +52,7 @@ tests/
 ├── RegiLattice.Core.Tests/
 │   ├── TweakDefTests.cs         # TweakDef model, RegOp factories, scope computation
 │   ├── TweakEngineTests.cs      # Engine registration, lookup, search, profiles, batch
+│   ├── TweakEngineBuiltinsTests.cs # RegisterBuiltins integration, ID uniqueness, profiles, categories, search/filter
 │   ├── RegistrySessionTests.cs  # Session helpers, dry-run, path parsing, read/write ops
 │   ├── ServicesTests.cs         # Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
 │   ├── PluginTests.cs           # PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
@@ -62,7 +63,8 @@ tests/
 │   └── ParseArgsTests.cs        # CLI argument parsing, flags, options, scope, positional args
 └── RegiLattice.GUI.Tests/
     ├── ThemeTests.cs             # Theme switching, colour attributes, all 4 themes, system theme detection
-    └── PackageManagerValidationTests.cs  # Package name validation, tool version checking
+    ├── PackageManagerValidationTests.cs  # Package name validation, tool version checking
+    └── AppIconsTests.cs          # AppIcons bitmap/icon validity, cache invalidation safety
 ```
 
 ## Naming Convention

@@ -30,11 +30,38 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   `ValidateName()` methods from Scoop/Pip/WinGet/Chocolatey/PSModule managers into
   single shared utility with `Validate()` and `ExtractNames()` methods
 
-#### Tests
+#### Tests (Sprint 12)
 
 - 27 new tests (700 → 727): 10 ConsoleColorizer tests, 8 PackageNameValidator tests,
   9 additional CLI parsing tests
-- Total: **2,316 tweaks**, **727 tests** (571 Core + 72 CLI + 84 GUI)
+
+### Added — Test Coverage Expansion (Sprint 13)
+
+- **SnapshotManagerTests.cs** — 12 direct tests (Save, Load, Restore, round-trip, edge cases)
+- **TweakValidatorTests.cs** — 19 direct tests (valid tweaks, empty fields, duplicates,
+  circular deps, broken deps)
+- **DependencyResolverTests.cs** — 15 direct tests (Resolve topological sort, Dependents
+  reverse lookup, circular detection)
+- TweakEngine edge case tests (+13): TweaksByScope, Filter, IsApplicableOnHardware,
+  DetectStatus, StatusMap subset, Search multi-token
+- RegistrySession edge case tests (+17): Execute DryRun, Evaluate CheckMissing/CheckKeyMissing,
+  Backup, WriteLog, Read ops, ParsePath
+- Total after Sprint 13: **799 tests** (643 Core + 72 CLI + 84 GUI)
+
+### Added — Deep Test Expansion (Sprint 14)
+
+- **TweakEngineBuiltinsTests.cs** — new integration test file with shared `BuiltinsFixture`;
+  63 test methods covering RegisterBuiltins validation, global ID uniqueness, required fields,
+  profile coverage (all 5 profiles), category counts, search/filter integration, scope
+  distribution, TweakKind distribution, dependency resolution on real data
+- Expanded TweakDefTests (+57 methods): RegOp factory coverage, TweakScope computation,
+  HasOperations gate, KindHint override, ExpectedResult generation
+- Expanded ServicesTests (+70 methods): Analytics, AppConfig, CorporateGuard, Elevation,
+  HardwareInfo, Locale, Ratings comprehensive coverage
+- Expanded CLI ParseArgsTests (+31): additional flag/option combos, edge cases, scope parsing
+- Expanded GUI ThemeTests (+48): all 4 themes colour attribute validation, system detection
+- Expanded GUI AppIconsTests (+13): bitmap/icon validity, cache invalidation safety
+- Total: **2,316 tweaks**, **972 tests** (738 Core + 103 CLI + 131 GUI), **13 test files**
 
 ## [3.2.1] — 2026-03-15
 

@@ -10,40 +10,42 @@
 
 | Scope | Tests | Status |
 |---|---|---|
-| **RegiLattice.Core.Tests** | 643 tests | All passing |
-| **RegiLattice.CLI.Tests** | 72 tests | All passing |
-| **RegiLattice.GUI.Tests** | 84 tests | All passing |
-| **Total** | 799 tests | All passing |
+| **RegiLattice.Core.Tests** | 738 tests | All passing |
+| **RegiLattice.CLI.Tests** | 103 tests | All passing |
+| **RegiLattice.GUI.Tests** | 131 tests | All passing |
+| **Total** | 972 tests | All passing |
 
 ---
 
 ## Test File Inventory
 
-### Core Tests (643 tests)
+### Core Tests (738 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
-| `TweakDefTests.cs` | TweakDef model, RegOp factories, TweakScope computation | ~25 |
-| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution, snapshots | ~213 |
-| `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing, read/write ops, evaluate | ~53 |
-| `ServicesTests.cs` | Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ~23 |
-| `PluginTests.cs` | PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale | ~64 |
-| `SnapshotManagerTests.cs` | Save/Load/Restore, round-trip, edge cases | 12 |
-| `TweakValidatorTests.cs` | Valid tweaks, empty fields, duplicates, circular deps, broken deps | 19 |
-| `DependencyResolverTests.cs` | Resolve (topological sort), Dependents (reverse lookup), circular detection | 15 |
+| `TweakDefTests.cs` | TweakDef model, RegOp factories, TweakScope computation, HasOperations, KindHint | ~57 |
+| `TweakEngineTests.cs` | Engine registration, lookup, search, profiles, batch operations, validation, dependency resolution, snapshots | ~95 |
+| `TweakEngineBuiltinsTests.cs` | RegisterBuiltins integration, ID uniqueness, required fields, profiles, categories, search/filter | ~63 |
+| `RegistrySessionTests.cs` | Session helpers, dry-run mode, path parsing, read/write ops, evaluate | ~44 |
+| `ServicesTests.cs` | Analytics, AppConfig, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings | ~70 |
+| `PluginTests.cs` | PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale | ~45 |
+| `SnapshotManagerTests.cs` | Save/Load/Restore, round-trip, edge cases | ~12 |
+| `TweakValidatorTests.cs` | Valid tweaks, empty fields, duplicates, circular deps, broken deps | ~18 |
+| `DependencyResolverTests.cs` | Resolve (topological sort), Dependents (reverse lookup), circular detection | ~15 |
 
-### CLI Tests (72 tests)
-
-| Test File | Focus Area | Tests |
-|---|---|---|
-| `ParseArgsTests.cs` | CLI argument parsing, flags, options, scope, positional args, --depends-on, --no-color, ConsoleColorizer | ~72 |
-
-### GUI Tests (84 tests)
+### CLI Tests (103 tests)
 
 | Test File | Focus Area | Tests |
 |---|---|---|
-| `ThemeTests.cs` | Theme switching, colour attributes, all 4 themes, system theme detection | ~40 |
-| `PackageManagerValidationTests.cs` | Package name validation (Scoop, pip, PSModules), PackageNameValidator shared utility | ~44 |
+| `ParseArgsTests.cs` | CLI argument parsing, flags, options, scope, positional args, --depends-on, --no-color, ConsoleColorizer | ~103 |
+
+### GUI Tests (131 tests)
+
+| Test File | Focus Area | Tests |
+|---|---|---|
+| `ThemeTests.cs` | Theme switching, colour attributes, all 4 themes, system theme detection | ~48 |
+| `PackageManagerValidationTests.cs` | Package name validation (Scoop, pip, PSModules), PackageNameValidator shared utility | ~70 |
+| `AppIconsTests.cs` | AppIcons bitmap/icon validity, cache invalidation safety | ~13 |
 
 ---
 
