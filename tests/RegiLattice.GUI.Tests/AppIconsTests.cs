@@ -136,6 +136,57 @@ public sealed class AppIconsTests
         Assert.Same(first, second);
     }
 
+    // ── Sprint 18 — New menu icon bitmaps ──────────────────────────────
+
+    [Fact]
+    public void FileMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.FileMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void ViewMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.ViewMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void HelpMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.HelpMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void ApplyMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.ApplyMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void RemoveMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.RemoveMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void RefreshMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.RefreshMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
+    [Fact]
+    public void ExportMenuBitmap_IsValid16x16()
+    {
+        var bmp = AppIcons.ExportMenuBitmap;
+        AssertValidBitmap(bmp, 16);
+    }
+
     // ── Helper ─────────────────────────────────────────────────────────
 
     private static void AssertValidBitmap(Bitmap bmp, int expectedSize)

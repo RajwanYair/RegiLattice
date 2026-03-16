@@ -104,15 +104,20 @@ internal static class AppIcons
 
     // ── Icon drawing methods ───────────────────────────────────────────
 
-    /// <summary>Registry key icon: a blue square with a white "R" and small key glyph.</summary>
+    /// <summary>Registry key icon: vibrant blue-to-cyan gradient square with a white "R" and key glyph.</summary>
     private static void DrawRegistryIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(30, 102, 245)); // Blue
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(30, 102, 245),
+            Color.FromArgb(0, 195, 255),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
         using var fgBrush = new SolidBrush(Color.White);
         using var fgPen = new Pen(Color.White, 2f);
 
-        // Rounded-rect background
-        g.FillRectangle(bgBrush, 1, 1, s - 2, s - 2);
+        // Rounded-rect background with gradient
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(1, 1, s - 2, s - 2), 5);
 
         // "R" letter
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
@@ -124,27 +129,36 @@ internal static class AppIcons
         g.DrawLine(fgPen, s - 5, s - 8, s - 5, s - 4);
     }
 
-    /// <summary>Scoop: a cyan circle with a white "S" (bucket).</summary>
+    /// <summary>Scoop: vibrant cyan-to-teal gradient circle with a white "S".</summary>
     private static void DrawScoopIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(0, 150, 200));
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 200, 220),
+            Color.FromArgb(0, 120, 180),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
         using var fgBrush = new SolidBrush(Color.White);
 
-        g.FillEllipse(bgBrush, 2, 2, s - 4, s - 4);
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("S", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
-    /// <summary>WinGet: a blue square with a white package box glyph.</summary>
+    /// <summary>WinGet: Windows blue-to-purple gradient with a white package box glyph.</summary>
     private static void DrawWinGetIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(0, 120, 215)); // Windows blue
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 120, 215),
+            Color.FromArgb(80, 60, 200),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
         using var fgPen = new Pen(Color.White, 2f);
-        using var fgBrush = new SolidBrush(Color.White);
 
-        g.FillRectangle(bgBrush, 1, 1, s - 2, s - 2);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(1, 1, s - 2, s - 2), 5);
 
         // Package box outline
         int pad = 7;
@@ -154,67 +168,91 @@ internal static class AppIcons
         g.DrawLine(fgPen, pad, pad + 8, s - pad, pad + 8);
     }
 
-    /// <summary>pip/Python: a yellow circle with "Py" text.</summary>
+    /// <summary>pip/Python: Python blue-to-gold gradient circle with "Py" text.</summary>
     private static void DrawPipIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(55, 118, 171)); // Python blue
-        using var fgBrush = new SolidBrush(Color.FromArgb(255, 212, 59)); // Python yellow
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(55, 118, 171),
+            Color.FromArgb(255, 212, 59),
+            System.Drawing.Drawing2D.LinearGradientMode.BackwardDiagonal
+        );
+        using var fgBrush = new SolidBrush(Color.White);
 
-        g.FillEllipse(bgBrush, 2, 2, s - 4, s - 4);
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Consolas", 11f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("Py", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
-    /// <summary>Chocolatey: a brown rounded square with white "C".</summary>
+    /// <summary>Chocolatey: rich chocolate-to-amber gradient with white "C".</summary>
     private static void DrawChocolateyIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(128, 80, 30)); // Chocolate brown
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(170, 100, 40),
+            Color.FromArgb(100, 50, 10),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
         using var fgBrush = new SolidBrush(Color.White);
 
-        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         using var font = new Font("Segoe UI", 16f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString("C", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
-    /// <summary>PowerShell: a dark blue rectangle with ">_" prompt.</summary>
+    /// <summary>PowerShell: dark blue-to-bright blue gradient with ">_" prompt.</summary>
     private static void DrawPSModuleIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(1, 36, 86)); // PS dark blue
-        using var fgBrush = new SolidBrush(Color.FromArgb(238, 237, 240)); // PS light
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(1, 36, 86),
+            Color.FromArgb(0, 100, 200),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var fgBrush = new SolidBrush(Color.FromArgb(238, 237, 240));
 
-        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         using var font = new Font("Consolas", 12f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         g.DrawString(">_", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
-    /// <summary>Tool versions: a grey circle with a wrench-like "T" glyph.</summary>
+    /// <summary>Tool versions: silver-to-steel gradient circle with a wrench glyph.</summary>
     private static void DrawToolVersionsIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(100, 100, 120));
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(140, 140, 160),
+            Color.FromArgb(70, 70, 90),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
         using var fgBrush = new SolidBrush(Color.White);
 
-        g.FillEllipse(bgBrush, 2, 2, s - 4, s - 4);
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
 
         using var font = new Font("Segoe UI", 14f, FontStyle.Bold);
         var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-        g.DrawString("🔧", font, fgBrush, s / 2f, s / 2f, sf);
+        g.DrawString("\U0001F527", font, fgBrush, s / 2f, s / 2f, sf);
     }
 
-    /// <summary>Windows Health: a green shield with a white "+" cross.</summary>
+    /// <summary>Windows Health: green-to-emerald gradient shield with a white "+" cross.</summary>
     private static void DrawWindowsHealthIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(34, 139, 34)); // Forest green
-        using var fgBrush = new SolidBrush(Color.White);
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 200, 80),
+            Color.FromArgb(0, 120, 60),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
         using var fgPen = new Pen(Color.White, 2.5f);
 
-        // Shield shape (rounded-rect)
-        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+        // Shield rounded rect
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         // White "+" cross
         int cx = s / 2;
@@ -223,14 +261,18 @@ internal static class AppIcons
         g.DrawLine(fgPen, cx - 7, cy, cx + 7, cy);
     }
 
-    /// <summary>Marketplace: a purple square with a white shopping bag / package glyph.</summary>
+    /// <summary>Marketplace: purple-to-magenta gradient with a white shopping bag outline.</summary>
     private static void DrawMarketplaceIcon(Graphics g, int s)
     {
-        using var bgBrush = new SolidBrush(Color.FromArgb(130, 80, 200)); // Purple
-        using var fgBrush = new SolidBrush(Color.White);
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(180, 80, 255),
+            Color.FromArgb(100, 40, 180),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
         using var fgPen = new Pen(Color.White, 2f);
 
-        g.FillRectangle(bgBrush, 2, 2, s - 4, s - 4);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         // Shopping bag outline
         int pad = s / 4;
@@ -238,4 +280,133 @@ internal static class AppIcons
         // Handle arc
         g.DrawArc(fgPen, pad + 3, pad - 2, s - pad * 2 - 6, 10, 180, 180);
     }
+
+    // ── Additional colourful menu icons ────────────────────────────────
+
+    /// <summary>File menu: orange-to-red gradient folder glyph.</summary>
+    private static void DrawFileIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 165, 0),
+            Color.FromArgb(255, 80, 40),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        using var fgPen = new Pen(Color.White, 1.5f);
+
+        // Folder shape
+        int m = 2;
+        g.FillRectangle(gradient, m, m + 3, s - m * 2, s - m * 2 - 3);
+        // Tab
+        g.FillRectangle(gradient, m, m, (s - m * 2) / 3, 4);
+        // Highlight line
+        g.DrawLine(fgPen, m + 2, m + 6, s - m - 2, m + 6);
+    }
+
+    /// <summary>View menu: teal-to-blue gradient eye glyph.</summary>
+    private static void DrawViewIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 200, 180),
+            Color.FromArgb(0, 120, 230),
+            System.Drawing.Drawing2D.LinearGradientMode.Horizontal
+        );
+        // Eye shape
+        int cy = s / 2;
+        g.FillEllipse(gradient, 2, cy - 5, s - 4, 10);
+        // Pupil
+        using var pupilBrush = new SolidBrush(Color.White);
+        g.FillEllipse(pupilBrush, s / 2 - 3, cy - 3, 6, 6);
+    }
+
+    /// <summary>Help menu: gold-to-yellow gradient circle with "?" mark.</summary>
+    private static void DrawHelpIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 220, 50),
+            Color.FromArgb(255, 170, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        using var fgBrush = new SolidBrush(Color.FromArgb(60, 40, 0));
+
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
+
+        using var font = new Font("Segoe UI", 12f, FontStyle.Bold);
+        var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+        g.DrawString("?", font, fgBrush, s / 2f, s / 2f, sf);
+    }
+
+    /// <summary>Apply / check icon: green gradient circle with a white checkmark.</summary>
+    private static void DrawApplyIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 220, 100),
+            Color.FromArgb(0, 160, 60),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
+
+        using var pen = new Pen(Color.White, 2.2f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };
+        // Checkmark
+        g.DrawLines(pen, new PointF[] { new(s * 0.25f, s * 0.5f), new(s * 0.42f, s * 0.7f), new(s * 0.75f, s * 0.3f) });
+    }
+
+    /// <summary>Remove / X icon: red gradient circle with a white X.</summary>
+    private static void DrawRemoveIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 80, 80),
+            Color.FromArgb(180, 30, 30),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        g.FillEllipse(gradient, 2, 2, s - 4, s - 4);
+
+        using var pen = new Pen(Color.White, 2.2f);
+        float p = s * 0.3f;
+        float q = s * 0.7f;
+        g.DrawLine(pen, p, p, q, q);
+        g.DrawLine(pen, q, p, p, q);
+    }
+
+    /// <summary>Refresh icon: blue gradient with circular arrow.</summary>
+    private static void DrawRefreshIcon(Graphics g, int s)
+    {
+        using var pen = new Pen(Color.FromArgb(60, 160, 255), 2.2f)
+        {
+            StartCap = System.Drawing.Drawing2D.LineCap.Round,
+            EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor,
+        };
+        g.DrawArc(pen, 3, 3, s - 6, s - 6, -60, 300);
+    }
+
+    /// <summary>Export icon: cyan gradient square with an arrow pointing out.</summary>
+    private static void DrawExportIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 200, 220),
+            Color.FromArgb(0, 120, 200),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+
+        using var pen = new Pen(Color.White, 2f) { EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor };
+        int cx = s / 2;
+        g.DrawLine(pen, cx, s - 6, cx, 5);
+        g.DrawLine(new Pen(Color.White, 1.5f), s / 4, s - 5, s - s / 4, s - 5);
+    }
+
+    // ── Menu bitmap accessors for new icons ─────────────────────────────
+
+    internal static Bitmap FileMenuBitmap => MenuBitmap("menu-file", DrawFileIcon);
+    internal static Bitmap ViewMenuBitmap => MenuBitmap("menu-view", DrawViewIcon);
+    internal static Bitmap HelpMenuBitmap => MenuBitmap("menu-help", DrawHelpIcon);
+    internal static Bitmap ApplyMenuBitmap => MenuBitmap("menu-apply", DrawApplyIcon);
+    internal static Bitmap RemoveMenuBitmap => MenuBitmap("menu-remove", DrawRemoveIcon);
+    internal static Bitmap RefreshMenuBitmap => MenuBitmap("menu-refresh", DrawRefreshIcon);
+    internal static Bitmap ExportMenuBitmap => MenuBitmap("menu-export", DrawExportIcon);
 }

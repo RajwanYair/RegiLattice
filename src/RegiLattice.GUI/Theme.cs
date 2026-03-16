@@ -103,6 +103,125 @@ internal static class AppTheme
             Danger: Color.FromArgb(255, 85, 85),
             Info: Color.FromArgb(139, 233, 253)
         ),
+
+        ["tokyo-night"] = new(
+            "Tokyo Night",
+            Bg: Color.FromArgb(26, 27, 38),
+            Surface: Color.FromArgb(36, 40, 59),
+            Surface2: Color.FromArgb(52, 59, 88),
+            Fg: Color.FromArgb(169, 177, 214),
+            FgDim: Color.FromArgb(86, 95, 137),
+            Accent: Color.FromArgb(122, 162, 247),
+            Green: Color.FromArgb(158, 206, 106),
+            Red: Color.FromArgb(247, 118, 142),
+            Yellow: Color.FromArgb(224, 175, 104),
+            Overlay: Color.FromArgb(41, 46, 66),
+            Success: Color.FromArgb(115, 218, 202),
+            Danger: Color.FromArgb(219, 75, 75),
+            Info: Color.FromArgb(125, 207, 255)
+        ),
+
+        ["gruvbox-dark"] = new(
+            "Gruvbox Dark",
+            Bg: Color.FromArgb(40, 40, 40),
+            Surface: Color.FromArgb(60, 56, 54),
+            Surface2: Color.FromArgb(80, 73, 69),
+            Fg: Color.FromArgb(235, 219, 178),
+            FgDim: Color.FromArgb(168, 153, 132),
+            Accent: Color.FromArgb(250, 189, 47),
+            Green: Color.FromArgb(184, 187, 38),
+            Red: Color.FromArgb(251, 73, 52),
+            Yellow: Color.FromArgb(250, 189, 47),
+            Overlay: Color.FromArgb(50, 48, 47),
+            Success: Color.FromArgb(184, 187, 38),
+            Danger: Color.FromArgb(204, 36, 29),
+            Info: Color.FromArgb(131, 165, 152)
+        ),
+
+        ["solarized-dark"] = new(
+            "Solarized Dark",
+            Bg: Color.FromArgb(0, 43, 54),
+            Surface: Color.FromArgb(7, 54, 66),
+            Surface2: Color.FromArgb(88, 110, 117),
+            Fg: Color.FromArgb(131, 148, 150),
+            FgDim: Color.FromArgb(101, 123, 131),
+            Accent: Color.FromArgb(38, 139, 210),
+            Green: Color.FromArgb(133, 153, 0),
+            Red: Color.FromArgb(220, 50, 47),
+            Yellow: Color.FromArgb(181, 137, 0),
+            Overlay: Color.FromArgb(7, 54, 66),
+            Success: Color.FromArgb(133, 153, 0),
+            Danger: Color.FromArgb(203, 75, 22),
+            Info: Color.FromArgb(42, 161, 152)
+        ),
+
+        ["one-dark"] = new(
+            "One Dark Pro",
+            Bg: Color.FromArgb(40, 44, 52),
+            Surface: Color.FromArgb(50, 55, 65),
+            Surface2: Color.FromArgb(62, 68, 81),
+            Fg: Color.FromArgb(171, 178, 191),
+            FgDim: Color.FromArgb(92, 99, 112),
+            Accent: Color.FromArgb(97, 175, 239),
+            Green: Color.FromArgb(152, 195, 121),
+            Red: Color.FromArgb(224, 108, 117),
+            Yellow: Color.FromArgb(229, 192, 123),
+            Overlay: Color.FromArgb(44, 49, 58),
+            Success: Color.FromArgb(152, 195, 121),
+            Danger: Color.FromArgb(190, 80, 70),
+            Info: Color.FromArgb(86, 182, 194)
+        ),
+
+        ["rose-pine"] = new(
+            "Rosé Pine",
+            Bg: Color.FromArgb(25, 23, 36),
+            Surface: Color.FromArgb(38, 35, 53),
+            Surface2: Color.FromArgb(57, 53, 82),
+            Fg: Color.FromArgb(224, 222, 244),
+            FgDim: Color.FromArgb(110, 106, 134),
+            Accent: Color.FromArgb(196, 167, 231),
+            Green: Color.FromArgb(156, 207, 216),
+            Red: Color.FromArgb(235, 111, 146),
+            Yellow: Color.FromArgb(246, 193, 119),
+            Overlay: Color.FromArgb(57, 53, 82),
+            Success: Color.FromArgb(156, 207, 216),
+            Danger: Color.FromArgb(235, 111, 146),
+            Info: Color.FromArgb(49, 116, 143)
+        ),
+
+        ["everforest"] = new(
+            "Everforest",
+            Bg: Color.FromArgb(39, 46, 34),
+            Surface: Color.FromArgb(52, 60, 46),
+            Surface2: Color.FromArgb(79, 88, 72),
+            Fg: Color.FromArgb(211, 198, 170),
+            FgDim: Color.FromArgb(135, 134, 115),
+            Accent: Color.FromArgb(163, 190, 140),
+            Green: Color.FromArgb(167, 192, 128),
+            Red: Color.FromArgb(230, 126, 128),
+            Yellow: Color.FromArgb(219, 188, 127),
+            Overlay: Color.FromArgb(45, 53, 38),
+            Success: Color.FromArgb(131, 192, 110),
+            Danger: Color.FromArgb(230, 126, 128),
+            Info: Color.FromArgb(127, 187, 179)
+        ),
+
+        ["cyberpunk"] = new(
+            "Cyberpunk",
+            Bg: Color.FromArgb(13, 2, 33),
+            Surface: Color.FromArgb(25, 10, 56),
+            Surface2: Color.FromArgb(45, 20, 90),
+            Fg: Color.FromArgb(230, 230, 255),
+            FgDim: Color.FromArgb(140, 130, 180),
+            Accent: Color.FromArgb(255, 0, 255),
+            Green: Color.FromArgb(0, 255, 159),
+            Red: Color.FromArgb(255, 45, 85),
+            Yellow: Color.FromArgb(255, 230, 0),
+            Overlay: Color.FromArgb(30, 15, 60),
+            Success: Color.FromArgb(0, 255, 159),
+            Danger: Color.FromArgb(255, 45, 85),
+            Info: Color.FromArgb(0, 210, 255)
+        ),
     };
 
     // ── Current theme ──────────────────────────────────────────────────────

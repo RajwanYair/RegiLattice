@@ -149,12 +149,17 @@ public partial class MainForm : Form
         var g = e.Graphics;
         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        // Header background
-        using var bgBr = new SolidBrush(AppTheme.Overlay);
-        g.FillRectangle(bgBr, e.Bounds);
+        // Gradient header background (surface → overlay)
+        using var gradientBg = new System.Drawing.Drawing2D.LinearGradientBrush(
+            e.Bounds,
+            AppTheme.Surface,
+            AppTheme.Overlay,
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        g.FillRectangle(gradientBg, e.Bounds);
 
-        // Accent underline
-        using var accentPen = new Pen(Color.FromArgb(80, AppTheme.Accent), 2f);
+        // Accent underline (brighter, thicker)
+        using var accentPen = new Pen(AppTheme.Accent, 2f);
         g.DrawLine(accentPen, e.Bounds.Left, e.Bounds.Bottom - 1, e.Bounds.Right, e.Bounds.Bottom - 1);
 
         // Sort indicator arrow
@@ -198,10 +203,21 @@ public partial class MainForm : Form
         // Alternating rows with selection highlight
         Color bg = e.ItemIndex % 2 == 0 ? AppTheme.Surface : AppTheme.Bg;
         if (e.Item.Selected)
-            bg = Color.FromArgb(AppTheme.Overlay.R, AppTheme.Overlay.G, AppTheme.Overlay.B);
-
-        using var bgBrush = new SolidBrush(bg);
-        g.FillRectangle(bgBrush, e.Bounds);
+        {
+            // Gradient selection highlight: accent tint → overlay
+            using var selGradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+                e.Bounds,
+                Color.FromArgb(40, AppTheme.Accent),
+                AppTheme.Overlay,
+                System.Drawing.Drawing2D.LinearGradientMode.Horizontal
+            );
+            g.FillRectangle(selGradient, e.Bounds);
+        }
+        else
+        {
+            using var bgBrush = new SolidBrush(bg);
+            g.FillRectangle(bgBrush, e.Bounds);
+        }
 
         // Left accent bar on selected row (first column only)
         if (e.Item.Selected && e.ColumnIndex == 0)

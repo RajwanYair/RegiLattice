@@ -6,6 +6,40 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [3.4.0] — 2026-03-16
 
+### Added — Sprint 18: GUI Visual Overhaul, 7 New Themes & 50 New Tweaks
+
+- **7 new colour themes**: Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro,
+  Rosé Pine, Everforest, Cyberpunk — 11 themes total, all switchable at runtime
+- **AppIcons overhaul**: all 9 existing icons upgraded to vibrant gradient fills
+  (LinearGradientBrush), rounded-rect/circle shapes with GDI+ anti-aliasing
+- **7 new menu icon bitmaps**: File, View, Help, Apply (green checkmark),
+  Remove (red X), Refresh (blue circular arrow), Export (cyan arrow-out)
+- **ToolStrip buttons**: Apply/Remove/Refresh now use colourful ImageAndText style
+  instead of plain Unicode text
+- **Top-level menus**: File, View, Help now have colourful icon bitmaps
+- **Export menu items**: all three export formats (PS1, JSON, REG) display Export icon
+- **MainForm visual polish**: gradient header backgrounds (surface→overlay),
+  gradient selection highlight (accent tint→overlay) for selected rows
+- **DNS & Networking Advanced** (10 new): LLMNR disable, IPv4 DNS priority,
+  smart multi-homed disable, DNS client diagnostics, WINS disable,
+  negative cache TTL, devolution fallback, FQDN-only, ETW query logging,
+  parallel adapter query disable
+- **Encryption** (10 new): DES cipher disable, strong key enforcement,
+  TLS session ticket lifetime, export-grade cipher disable, OCSP stapling,
+  MD5 disable, cert padding enforcement, legacy renegotiation disable,
+  extended master secret, Triple DES disable
+- **Firewall** (10 new): multicast/broadcast response disable, domain/private profile logging,
+  public outbound default-block, NetBIOS/SMB/RPC inbound blocking,
+  notification suppression, log max size increase, domain outbound block
+- **Hardening** (10 new): WPAD disable, LM auth disable (NTLMv2 only),
+  remote registry disable, SEHOP, mandatory ASLR, anonymous SAM restrict,
+  CFG enforcement, autoplay all-drives, named pipe restrict, NTLM outgoing block
+- **Recovery** (10 new): auto-restart disable, boot logging, minidump type,
+  auto-repair disable, crash upload disable, dump folder path, dump count increase,
+  startup repair prompt, system failure popup, overwrite existing dump
+- **28 new xUnit tests**: 21 new theme verification Theory tests (7 dark themes × 3),
+  7 new AppIcons bitmap validity tests
+
 ### Added — Sprint 17: Core Services, CLI Commands & 50 New Tweaks
 
 - **ConfigExporter** service — export/import portable tweak selection configs as JSON;
