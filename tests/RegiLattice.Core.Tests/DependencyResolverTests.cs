@@ -7,28 +7,13 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Direct tests for <see cref="DependencyResolver"/> — topological sort and reverse lookup.</summary>
 public sealed class DependencyResolverTests
 {
-    private static TweakDef Make(string id, params string[] dependsOn) =>
-        new()
-        {
-            Id = id,
-            Label = $"Tweak {id}",
-            Category = "Test",
-            DependsOn = dependsOn,
-            ApplyOps = [RegOp.SetDword($@"HKCU\Software\{id}", "V", 1)],
-        };
-
-    private static Func<string, TweakDef?> LookupFrom(params TweakDef[] tweaks)
-    {
-        var dict = tweaks.ToDictionary(t => t.Id, StringComparer.OrdinalIgnoreCase);
-        return id => dict.GetValueOrDefault(id);
-    }
 
     // ── Resolve: no dependencies ────────────────────────────────────────
 
     [Fact]
     public void Resolve_NoDeps_ReturnsSelfOnly()
     {
-        var td = Make("independent");
+        var td = TestHelpers.Make("independent");
         var result = DependencyResolver.Resolve(td, _ => null);
         Assert.Single(result);
         Assert.Equal("independent", result[0].Id);
@@ -39,9 +24,9 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Resolve_SingleDep_ReturnsTwoInOrder()
     {
-        var tdA = Make("dep-a");
-        var tdB = Make("dep-b", "dep-a");
-        var result = DependencyResolver.Resolve(tdB, LookupFrom(tdA, tdB));
+        var tdA = TestHelpers.Make("dep-a");
+        var tdB = TestHelpers.Make("dep-b", dependsOn: ["dep-a"]);
+        var result = DependencyResolver.Resolve(tdB, TestHelpers.LookupFrom(tdA, tdB));
         Assert.Equal(2, result.Count);
         Assert.Equal("dep-a", result[0].Id);
         Assert.Equal("dep-b", result[1].Id);
@@ -50,10 +35,10 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Resolve_ThreeNodeChain_ReturnsCorrectOrder()
     {
-        var tdA = Make("chain-a");
-        var tdB = Make("chain-b", "chain-a");
-        var tdC = Make("chain-c", "chain-b");
-        var result = DependencyResolver.Resolve(tdC, LookupFrom(tdA, tdB, tdC));
+        var tdA = TestHelpers.Make("chain-a");
+        var tdB = TestHelpers.Make("chain-b", dependsOn: ["chain-a"]);
+        var tdC = TestHelpers.Make("chain-c", dependsOn: ["chain-b"]);
+        var result = DependencyResolver.Resolve(tdC, TestHelpers.LookupFrom(tdA, tdB, tdC));
         Assert.Equal(3, result.Count);
         Assert.Equal("chain-a", result[0].Id);
         Assert.Equal("chain-b", result[1].Id);
@@ -66,11 +51,11 @@ public sealed class DependencyResolverTests
     public void Resolve_DiamondDep_NoDuplicates()
     {
         // A < B, A < C, B < D, C < D (diamond: D depends on B and C, both depend on A)
-        var tdA = Make("dia-a");
-        var tdB = Make("dia-b", "dia-a");
-        var tdC = Make("dia-c", "dia-a");
-        var tdD = Make("dia-d", "dia-b", "dia-c");
-        var result = DependencyResolver.Resolve(tdD, LookupFrom(tdA, tdB, tdC, tdD));
+        var tdA = TestHelpers.Make("dia-a");
+        var tdB = TestHelpers.Make("dia-b", dependsOn: ["dia-a"]);
+        var tdC = TestHelpers.Make("dia-c", dependsOn: ["dia-a"]);
+        var tdD = TestHelpers.Make("dia-d", dependsOn: ["dia-b", "dia-c"]);
+        var result = DependencyResolver.Resolve(tdD, TestHelpers.LookupFrom(tdA, tdB, tdC, tdD));
 
         Assert.Equal(4, result.Count);
         // A must come before B and C; B and C must come before D
@@ -89,7 +74,7 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Resolve_MissingDep_SkipsGracefully()
     {
-        var td = Make("broken-dep", "nonexistent");
+        var td = TestHelpers.Make("broken-dep", dependsOn: ["nonexistent"]);
         var result = DependencyResolver.Resolve(td, _ => null);
         // Should still return the target tweak, just skip the missing dep
         Assert.Single(result);
@@ -101,33 +86,33 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Resolve_CircularDep_TwoNodes_Throws()
     {
-        var tdX = Make("circ-x", "circ-y");
-        var tdY = Make("circ-y", "circ-x");
-        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(tdX, LookupFrom(tdX, tdY)));
+        var tdX = TestHelpers.Make("circ-x", dependsOn: ["circ-y"]);
+        var tdY = TestHelpers.Make("circ-y", dependsOn: ["circ-x"]);
+        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(tdX, TestHelpers.LookupFrom(tdX, tdY)));
     }
 
     [Fact]
     public void Resolve_CircularDep_ThreeNodes_Throws()
     {
-        var td1 = Make("loop-1", "loop-3");
-        var td2 = Make("loop-2", "loop-1");
-        var td3 = Make("loop-3", "loop-2");
-        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(td1, LookupFrom(td1, td2, td3)));
+        var td1 = TestHelpers.Make("loop-1", dependsOn: ["loop-3"]);
+        var td2 = TestHelpers.Make("loop-2", dependsOn: ["loop-1"]);
+        var td3 = TestHelpers.Make("loop-3", dependsOn: ["loop-2"]);
+        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(td1, TestHelpers.LookupFrom(td1, td2, td3)));
     }
 
     [Fact]
     public void Resolve_SelfDep_Throws()
     {
-        var td = Make("self-loop", "self-loop");
-        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(td, LookupFrom(td)));
+        var td = TestHelpers.Make("self-loop", dependsOn: ["self-loop"]);
+        Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(td, TestHelpers.LookupFrom(td)));
     }
 
     [Fact]
     public void Resolve_CircularDep_ErrorMessageContainsId()
     {
-        var tdX = Make("err-a", "err-b");
-        var tdY = Make("err-b", "err-a");
-        var ex = Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(tdX, LookupFrom(tdX, tdY)));
+        var tdX = TestHelpers.Make("err-a", dependsOn: ["err-b"]);
+        var tdY = TestHelpers.Make("err-b", dependsOn: ["err-a"]);
+        var ex = Assert.Throws<InvalidOperationException>(() => DependencyResolver.Resolve(tdX, TestHelpers.LookupFrom(tdX, tdY)));
         Assert.Contains("Circular", ex.Message);
     }
 
@@ -136,7 +121,7 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Dependents_NoDependents_ReturnsEmpty()
     {
-        var td = Make("leaf");
+        var td = TestHelpers.Make("leaf");
         var result = DependencyResolver.Dependents("leaf", [td]);
         Assert.Empty(result);
     }
@@ -144,8 +129,8 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Dependents_SingleDependent_ReturnsOne()
     {
-        var parent = Make("parent");
-        var child = Make("child", "parent");
+        var parent = TestHelpers.Make("parent");
+        var child = TestHelpers.Make("child", dependsOn: ["parent"]);
         var result = DependencyResolver.Dependents("parent", [parent, child]);
         Assert.Single(result);
         Assert.Equal("child", result[0].Id);
@@ -154,11 +139,11 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Dependents_MultipleDependents_ReturnsAll()
     {
-        var parent = Make("base");
-        var c1 = Make("c1", "base");
-        var c2 = Make("c2", "base");
-        var c3 = Make("c3", "base");
-        var other = Make("other");
+        var parent = TestHelpers.Make("base");
+        var c1 = TestHelpers.Make("c1", dependsOn: ["base"]);
+        var c2 = TestHelpers.Make("c2", dependsOn: ["base"]);
+        var c3 = TestHelpers.Make("c3", dependsOn: ["base"]);
+        var other = TestHelpers.Make("other");
         var result = DependencyResolver.Dependents("base", [parent, c1, c2, c3, other]);
         Assert.Equal(3, result.Count);
         Assert.Contains(result, t => t.Id == "c1");
@@ -169,7 +154,7 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Dependents_UnknownId_ReturnsEmpty()
     {
-        var td = Make("only-one");
+        var td = TestHelpers.Make("only-one");
         var result = DependencyResolver.Dependents("nonexistent", [td]);
         Assert.Empty(result);
     }
@@ -177,8 +162,8 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Dependents_CaseInsensitive()
     {
-        var parent = Make("PARENT-UPPER");
-        var child = Make("child-lower", "parent-upper");
+        var parent = TestHelpers.Make("PARENT-UPPER");
+        var child = TestHelpers.Make("child-lower", dependsOn: ["parent-upper"]);
         var result = DependencyResolver.Dependents("parent-upper", [parent, child]);
         Assert.Single(result);
         Assert.Equal("child-lower", result[0].Id);
@@ -189,10 +174,10 @@ public sealed class DependencyResolverTests
     [Fact]
     public void Resolve_MultipleDepsAtSameLevel_AllIncluded()
     {
-        var tdA = Make("multi-a");
-        var tdB = Make("multi-b");
-        var tdC = Make("multi-c", "multi-a", "multi-b");
-        var result = DependencyResolver.Resolve(tdC, LookupFrom(tdA, tdB, tdC));
+        var tdA = TestHelpers.Make("multi-a");
+        var tdB = TestHelpers.Make("multi-b");
+        var tdC = TestHelpers.Make("multi-c", dependsOn: ["multi-a", "multi-b"]);
+        var result = DependencyResolver.Resolve(tdC, TestHelpers.LookupFrom(tdA, tdB, tdC));
         Assert.Equal(3, result.Count);
         // C must be last
         Assert.Equal("multi-c", result[^1].Id);

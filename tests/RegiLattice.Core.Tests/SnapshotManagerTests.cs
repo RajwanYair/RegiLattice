@@ -9,31 +9,13 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Direct tests for <see cref="SnapshotManager"/> — save, load, restore snapshot logic.</summary>
 public sealed class SnapshotManagerTests
 {
-    private static TweakEngine CreateEngine(params TweakDef[] tweaks)
-    {
-        var engine = new TweakEngine(new RegistrySession(dryRun: true));
-        if (tweaks.Length > 0)
-            engine.Register(tweaks);
-        return engine;
-    }
-
-    private static TweakDef MakeTweak(string id) =>
-        new()
-        {
-            Id = id,
-            Label = $"Tweak {id}",
-            Category = "Test",
-            ApplyOps = [RegOp.SetDword($@"HKCU\Software\{id}", "V", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\{id}", "V")],
-            DetectOps = [RegOp.CheckDword($@"HKCU\Software\{id}", "V", 1)],
-        };
 
     // ── Save ────────────────────────────────────────────────────────────
 
     [Fact]
     public void Save_CreatesJsonFile()
     {
-        var engine = CreateEngine(MakeTweak("snap-1"), MakeTweak("snap-2"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("snap-1"), TestHelpers.MakeTweak("snap-2"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_test_{Guid.NewGuid()}.json");
 
@@ -55,7 +37,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Save_WritesValidJson()
     {
-        var engine = CreateEngine(MakeTweak("snap-json-1"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("snap-json-1"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_json_{Guid.NewGuid()}.json");
 
@@ -77,7 +59,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Save_ContainsAllTweakIds()
     {
-        var engine = CreateEngine(MakeTweak("snap-a"), MakeTweak("snap-b"), MakeTweak("snap-c"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("snap-a"), TestHelpers.MakeTweak("snap-b"), TestHelpers.MakeTweak("snap-c"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_ids_{Guid.NewGuid()}.json");
 
@@ -100,7 +82,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Save_StatusValuesAreLowercase()
     {
-        var engine = CreateEngine(MakeTweak("snap-lower"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("snap-lower"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_lower_{Guid.NewGuid()}.json");
 
@@ -175,7 +157,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Restore_AppliesTweaksMarkedApplied()
     {
-        var engine = CreateEngine(MakeTweak("restore-apply"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("restore-apply"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_restore_{Guid.NewGuid()}.json");
 
@@ -198,7 +180,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Restore_RemovesTweaksMarkedNotApplied()
     {
-        var engine = CreateEngine(MakeTweak("restore-remove"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("restore-remove"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_restore_rm_{Guid.NewGuid()}.json");
 
@@ -221,7 +203,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Restore_UnknownState_ReturnsUnknown()
     {
-        var engine = CreateEngine(MakeTweak("restore-unk"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("restore-unk"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_restore_unk_{Guid.NewGuid()}.json");
 
@@ -244,7 +226,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void Restore_SkipsMissingTweaks()
     {
-        var engine = CreateEngine(MakeTweak("restore-existing"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("restore-existing"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_restore_missing_{Guid.NewGuid()}.json");
 
@@ -270,7 +252,7 @@ public sealed class SnapshotManagerTests
     [Fact]
     public void SaveThenLoad_RoundTrip_PreservesKeys()
     {
-        var engine = CreateEngine(MakeTweak("rt-1"), MakeTweak("rt-2"));
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("rt-1"), TestHelpers.MakeTweak("rt-2"));
         var mgr = new SnapshotManager(engine);
         var path = Path.Combine(Path.GetTempPath(), $"snap_rt_{Guid.NewGuid()}.json");
 
