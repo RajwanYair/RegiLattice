@@ -461,5 +461,313 @@ internal static class PowerManagement
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-processor-boost",
+            Label = "Disable Processor Turbo Boost via Registry",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables CPU turbo boost via performance boost mode registry key. Reduces heat and power on laptops at the cost of peak performance.",
+            Tags = ["power", "processor", "turbo", "boost"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-processor-idle-promote",
+            Label = "Disable Processor Idle Promote Threshold",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets processor idle promote threshold to 100% so the CPU always stays in the shallowest idle state. Maximum responsiveness at the cost of power.",
+            Tags = ["power", "processor", "idle", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\7b224883-b3cc-4d79-819f-8374152cbe7c"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\7b224883-b3cc-4d79-819f-8374152cbe7c",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\7b224883-b3cc-4d79-819f-8374152cbe7c",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\7b224883-b3cc-4d79-819f-8374152cbe7c",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-throttle-states",
+            Label = "Disable CPU Throttle States (T-States)",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables processor throttle states hidden power setting. Prevents the OS from reducing CPU clock speed for thermal management.",
+            Tags = ["power", "throttle", "states", "cpu"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\68f262a7-f621-4069-b9a5-4874169be23c"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\68f262a7-f621-4069-b9a5-4874169be23c",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\68f262a7-f621-4069-b9a5-4874169be23c",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\68f262a7-f621-4069-b9a5-4874169be23c",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-energy-saver",
+            Label = "Disable Energy Saver (Battery Saver Override)",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Energy Saver feature introduced in Windows 11 24H2. Prevents automatic brightness reduction and performance throttling.",
+            Tags = ["power", "energy", "saver", "battery"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergySaverEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergySaverEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergySaverEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-away-mode",
+            Label = "Disable Away Mode",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Away Mode which keeps the system in low-power state while appearing off. Ensures full off or full sleep behaviour.",
+            Tags = ["power", "away", "mode", "sleep"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\25dfa149-5dd1-4736-b5ab-e8a37b5b8187"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\25dfa149-5dd1-4736-b5ab-e8a37b5b8187",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\25dfa149-5dd1-4736-b5ab-e8a37b5b8187",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\25dfa149-5dd1-4736-b5ab-e8a37b5b8187",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-set-min-processor-state-100",
+            Label = "Set Minimum Processor State to 100%",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents the CPU from downclocking below maximum frequency. Ensures consistent single-thread performance at the expense of power efficiency.",
+            Tags = ["power", "processor", "frequency", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\893dee8e-2bef-41e0-89c6-b55d0929964c"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\893dee8e-2bef-41e0-89c6-b55d0929964c",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\893dee8e-2bef-41e0-89c6-b55d0929964c",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\893dee8e-2bef-41e0-89c6-b55d0929964c",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-system-unattended-timeout",
+            Label = "Disable System Unattended Sleep Timeout",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the hidden unattended sleep timeout (2 minutes by default). Prevents surprise sleeps after waking from user-initiated wake events.",
+            Tags = ["power", "unattended", "sleep", "timeout"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-dimmed-display-timeout",
+            Label = "Disable Dimmed Display Timeout",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the hidden dimmed display timeout setting. Prevents screen from dimming before the display timeout kicks in.",
+            Tags = ["power", "display", "dim", "timeout"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\17aaa29b-8b43-4b94-aafe-35f64daaf1ee"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\17aaa29b-8b43-4b94-aafe-35f64daaf1ee", "Attributes", 2)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\17aaa29b-8b43-4b94-aafe-35f64daaf1ee", "Attributes", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\17aaa29b-8b43-4b94-aafe-35f64daaf1ee", "Attributes", 2)],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-lid-close-action",
+            Label = "Do Nothing on Lid Close (AC Power)",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the lid close action to 'Do nothing' while on AC power. Keeps the laptop running when the lid is closed (e.g., with external display).",
+            Tags = ["power", "lid", "close", "laptop"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\4f971e89-eebd-4455-a8de-9e59040e7347\5ca83367-6e45-459f-a27b-476b1d01c936"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\4f971e89-eebd-4455-a8de-9e59040e7347\5ca83367-6e45-459f-a27b-476b1d01c936",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\4f971e89-eebd-4455-a8de-9e59040e7347\5ca83367-6e45-459f-a27b-476b1d01c936",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\4f971e89-eebd-4455-a8de-9e59040e7347\5ca83367-6e45-459f-a27b-476b1d01c936",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pwrmgmt-disable-hybrid-sleep",
+            Label = "Disable Hybrid Sleep",
+            Category = "Power Management",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables hybrid sleep which combines sleep and hibernate. Uses pure sleep for faster wake. Saves disk space from hiberfil.sys partial dump.",
+            Tags = ["power", "hybrid", "sleep", "hibernate"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\94ac6d29-73ce-41a6-809f-6363ba21b47e"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\94ac6d29-73ce-41a6-809f-6363ba21b47e",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\94ac6d29-73ce-41a6-809f-6363ba21b47e",
+                    "Attributes",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\94ac6d29-73ce-41a6-809f-6363ba21b47e",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
     ];
 }

@@ -45,4 +45,11 @@ internal sealed class CliArgs
     public string? Marketplace { get; set; }
     public string? MarketplaceArg { get; set; }
     public string? DependsOn { get; set; }
+    public string? ExportConfig { get; set; }
+    public string? ImportConfig { get; set; }
+    public bool ShowFavorites { get; set; }
+    public string? FavoriteAdd { get; set; }
+    public string? FavoriteRemove { get; set; }
+    public bool ShowHistory { get; set; }
+    public int HistoryCount { get; set; } = 20;
 }

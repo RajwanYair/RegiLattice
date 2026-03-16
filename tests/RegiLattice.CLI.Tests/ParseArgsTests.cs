@@ -578,3 +578,73 @@ public sealed class ConsoleColorizerTests
         Assert.Contains("info", result);
     }
 }
+
+// ── Favorites & History CLI argument tests ──────────────────────────────
+
+public sealed class FavoritesAndHistoryParseTests
+{
+    [Fact]
+    public void ParseArgs_ExportConfig_SetsPath()
+    {
+        var result = Program.ParseArgs(["--export-config", "my-config.json"]);
+        Assert.NotNull(result);
+        Assert.Equal("my-config.json", result.ExportConfig);
+    }
+
+    [Fact]
+    public void ParseArgs_ImportConfig_SetsPath()
+    {
+        var result = Program.ParseArgs(["--import-config", "my-config.json"]);
+        Assert.NotNull(result);
+        Assert.Equal("my-config.json", result.ImportConfig);
+    }
+
+    [Fact]
+    public void ParseArgs_Favorites_SetsFlag()
+    {
+        var result = Program.ParseArgs(["--favorites"]);
+        Assert.NotNull(result);
+        Assert.True(result.ShowFavorites);
+    }
+
+    [Fact]
+    public void ParseArgs_FavoriteAdd_SetsId()
+    {
+        var result = Program.ParseArgs(["--favorite-add", "perf-disable-animations"]);
+        Assert.NotNull(result);
+        Assert.Equal("perf-disable-animations", result.FavoriteAdd);
+    }
+
+    [Fact]
+    public void ParseArgs_FavoriteRemove_SetsId()
+    {
+        var result = Program.ParseArgs(["--favorite-remove", "perf-disable-animations"]);
+        Assert.NotNull(result);
+        Assert.Equal("perf-disable-animations", result.FavoriteRemove);
+    }
+
+    [Fact]
+    public void ParseArgs_History_SetsFlag()
+    {
+        var result = Program.ParseArgs(["--history"]);
+        Assert.NotNull(result);
+        Assert.True(result.ShowHistory);
+    }
+
+    [Fact]
+    public void ParseArgs_HistoryCount_SetsValue()
+    {
+        var result = Program.ParseArgs(["--history", "50"]);
+        Assert.NotNull(result);
+        Assert.True(result.ShowHistory);
+        Assert.Equal(50, result.HistoryCount);
+    }
+
+    [Fact]
+    public void ParseArgs_HistoryCount_Default_Is20()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Equal(20, result.HistoryCount);
+    }
+}

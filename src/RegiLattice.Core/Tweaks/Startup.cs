@@ -550,5 +550,233 @@ internal static class Startup
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "startup-disable-welcome-experience",
+            Label = "Disable Windows Welcome Experience",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Windows Welcome Experience that shows after updates to highlight new features. Faster post-update boot.",
+            Tags = ["startup", "welcome", "experience", "updates"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-tips-and-suggestions",
+            Label = "Disable Tips and Suggestions Notifications",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Windows tips, tricks, and suggestion notifications that appear periodically. Reduces distractions.",
+            Tags = ["startup", "tips", "suggestions", "notifications"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-get-even-more-out-of-windows",
+            Label = "Disable 'Get Even More Out of Windows' Nag",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the 'Get even more out of Windows' full-screen nag that promotes Microsoft services. Default: enabled.",
+            Tags = ["startup", "nag", "promotion", "microsoft"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement",
+                    "ScoobeSystemSettingEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-prelaunch-apps",
+            Label = "Disable App Pre-Launch at Login",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Windows pre-launching UWP apps in the background at login. Reduces memory usage and speeds up login.",
+            Tags = ["startup", "prelaunch", "uwp", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-background-apps-policy",
+            Label = "Disable Background Apps via Policy",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables all UWP background apps via Group Policy. Saves CPU and battery. Individual app permissions still apply. Default: enabled.",
+            Tags = ["startup", "background", "uwp", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
+        },
+        new TweakDef
+        {
+            Id = "startup-set-boot-timeout-3s",
+            Label = "Set Boot Menu Timeout to 3 Seconds",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the multi-boot OS selection timeout to 3 seconds instead of the default 30. Faster boot on single-OS machines.",
+            Tags = ["startup", "boot", "timeout", "speed"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\BCD00000000\Objects\{9dea862c-5cdd-4e70-acc1-f32b344d4795}\Elements\25000004"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-firstlogon-animation",
+            Label = "Disable First Sign-In Animation",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Skips the 'Hi, we're getting things ready' animation after first login or profile creation. Boots straight to desktop.",
+            Tags = ["startup", "animation", "firstlogon", "speed"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-windows-tips-finish-setup",
+            Label = "Disable Suggested Content in Settings",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from showing suggested content and ads in the Settings app. Reduces promotional distractions.",
+            Tags = ["startup", "settings", "suggestions", "ads"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "startup-disable-autoplay",
+            Label = "Disable AutoPlay for All Drives",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables AutoPlay for all media and devices. Prevents automatic program execution when connecting USB drives. Security best-practice.",
+            Tags = ["startup", "autoplay", "usb", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
+            ],
+        },
     ];
 }
