@@ -305,6 +305,168 @@ public sealed class ParseArgsTests
         Assert.Equal("install", result.Marketplace);
         Assert.Equal("my-pack", result.MarketplaceArg);
     }
+
+    // ── Help / Version (returns null) ───────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Help_ReturnsNull()
+    {
+        var result = Program.ParseArgs(["--help"]);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ParseArgs_HelpShort_ReturnsNull()
+    {
+        var result = Program.ParseArgs(["-h"]);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ParseArgs_Version_ReturnsNull()
+    {
+        var result = Program.ParseArgs(["--version"]);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ParseArgs_VersionShort_ReturnsNull()
+    {
+        var result = Program.ParseArgs(["-V"]);
+        Assert.Null(result);
+    }
+
+    // ── Options without value (graceful null) ───────────────────────────
+
+    [Theory]
+    [InlineData("--profile", nameof(CliArgs.Profile))]
+    [InlineData("--config", nameof(CliArgs.ConfigPath))]
+    [InlineData("--snapshot", nameof(CliArgs.Snapshot))]
+    [InlineData("--restore", nameof(CliArgs.Restore))]
+    [InlineData("--export-json", nameof(CliArgs.ExportJson))]
+    [InlineData("--export-reg", nameof(CliArgs.ExportReg))]
+    [InlineData("--import-json", nameof(CliArgs.ImportJson))]
+    [InlineData("--diff", nameof(CliArgs.Diff))]
+    [InlineData("--category", nameof(CliArgs.Category))]
+    [InlineData("--html", nameof(CliArgs.HtmlPath))]
+    [InlineData("--depends-on", nameof(CliArgs.DependsOn))]
+    public void ParseArgs_OptionWithoutValue_StaysNull(string option, string propertyName)
+    {
+        var result = Program.ParseArgs([option]);
+        Assert.NotNull(result);
+        var prop = typeof(CliArgs).GetProperty(propertyName);
+        Assert.NotNull(prop);
+        Assert.Null((string?)prop.GetValue(result));
+    }
+
+    // ── MinBuild edge cases ─────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_MinBuild_NegativeValue_Parsed()
+    {
+        var result = Program.ParseArgs(["--min-build", "-1"]);
+        Assert.NotNull(result);
+        Assert.Equal(-1, result.MinBuild);
+    }
+
+    [Fact]
+    public void ParseArgs_MinBuild_Overflow_KeepsDefault()
+    {
+        var result = Program.ParseArgs(["--min-build", "99999999999"]);
+        Assert.NotNull(result);
+        Assert.Equal(0, result.MinBuild);
+    }
+
+    [Fact]
+    public void ParseArgs_MinBuild_WithoutValue_KeepsDefault()
+    {
+        var result = Program.ParseArgs(["--min-build"]);
+        Assert.NotNull(result);
+        Assert.Equal(0, result.MinBuild);
+    }
+
+    // ── Scope edge cases ────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Scope_AllCaps_ParsesCorrectly()
+    {
+        var result = Program.ParseArgs(["--scope", "BOTH"]);
+        Assert.NotNull(result);
+        Assert.Equal(TweakScope.Both, result.ScopeFilter);
+    }
+
+    [Fact]
+    public void ParseArgs_Scope_WithoutValue_StaysNull()
+    {
+        var result = Program.ParseArgs(["--scope"]);
+        Assert.NotNull(result);
+        Assert.Null(result.ScopeFilter);
+    }
+
+    // ── Marketplace edge cases ──────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Marketplace_CommandOnly_NoPackageName()
+    {
+        var result = Program.ParseArgs(["--marketplace", "list"]);
+        Assert.NotNull(result);
+        Assert.Equal("list", result.Marketplace);
+        Assert.Null(result.MarketplaceArg);
+    }
+
+    [Fact]
+    public void ParseArgs_Marketplace_ArgStartingWithDash_NotConsumed()
+    {
+        var result = Program.ParseArgs(["--marketplace", "install", "--force"]);
+        Assert.NotNull(result);
+        Assert.Equal("install", result.Marketplace);
+        Assert.Null(result.MarketplaceArg);
+        Assert.True(result.Force);
+    }
+
+    // ── SnapshotDiff edge cases ─────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_SnapshotDiff_NoArgs_DoesNotCrash()
+    {
+        var result = Program.ParseArgs(["--snapshot-diff"]);
+        Assert.NotNull(result);
+        Assert.Null(result.SnapshotDiffA);
+        Assert.Null(result.SnapshotDiffB);
+    }
+
+    // ── Flag order independence ─────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_OptionsBeforeMode_AllParsed()
+    {
+        var result = Program.ParseArgs(["--force", "--dry-run", "apply", "test-tweak"]);
+        Assert.NotNull(result);
+        Assert.True(result.Force);
+        Assert.True(result.DryRun);
+        Assert.Equal("apply", result.Mode);
+        Assert.Equal("test-tweak", result.Tweak);
+    }
+
+    // ── Duplicate flags ─────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_DuplicateSearch_LastWins()
+    {
+        var result = Program.ParseArgs(["--search", "first", "--search", "second"]);
+        Assert.NotNull(result);
+        Assert.Equal("second", result.Search);
+    }
+
+    // ── OutputFormat default ─────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_OutputFormat_CustomValue()
+    {
+        var result = Program.ParseArgs(["--output", "csv"]);
+        Assert.NotNull(result);
+        Assert.Equal("csv", result.OutputFormat);
+    }
 }
 
 /// <summary>Tests for the ConsoleColorizer utility.</summary>
@@ -369,5 +531,50 @@ public sealed class ConsoleColorizerTests
         ConsoleColorizer.NoColor = false;
         var result = ConsoleColorizer.ColourisedStatus(TweakResult.Applied);
         Assert.Contains("\x1b[32m", result); // green ANSI code
+    }
+
+    [Fact]
+    public void ColourisedStatus_Error_IsRed()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.Error);
+        Assert.Contains("\x1b[31m", result); // red ANSI code
+    }
+
+    [Fact]
+    public void ColourisedStatus_SkippedCorp_IsYellow()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.SkippedCorp);
+        Assert.Contains("\x1b[33m", result); // yellow ANSI code
+    }
+
+    [Fact]
+    public void Red_WithColor_ContainsAnsiCodes()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Red("error");
+        Assert.Contains("\x1b[31m", result);
+        Assert.Contains("error", result);
+        Assert.Contains("\x1b[0m", result);
+    }
+
+    [Fact]
+    public void Yellow_WithColor_ContainsAnsiCodes()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Yellow("warn");
+        Assert.Contains("\x1b[33m", result);
+        Assert.Contains("warn", result);
+        Assert.Contains("\x1b[0m", result);
+    }
+
+    [Fact]
+    public void Dim_WithColor_ContainsAnsiDimCode()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Dim("info");
+        Assert.Contains("\x1b[90m", result);
+        Assert.Contains("info", result);
     }
 }
