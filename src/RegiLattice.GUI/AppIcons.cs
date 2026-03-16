@@ -67,13 +67,17 @@ internal static class AppIcons
     internal static Bitmap MarketplaceMenuBitmap => MenuBitmap("menu-marketplace", DrawMarketplaceIcon);
 
     /// <summary>Invalidate the cache (call after theme change).</summary>
+    /// <remarks>
+    /// Icons are disposed immediately (form icons are reassigned right after).
+    /// Bitmap entries are NOT disposed here because ToolStripMenuItem.Image may
+    /// still reference them. The caller must reassign menu images; old bitmaps
+    /// become unreferenced and are collected by GC/finalizer.
+    /// </remarks>
     internal static void InvalidateCache()
     {
         foreach (var icon in _cache.Values)
             icon.Dispose();
         _cache.Clear();
-        foreach (var bmp in _bmpCache.Values)
-            bmp.Dispose();
         _bmpCache.Clear();
     }
 
@@ -90,7 +94,10 @@ internal static class AppIcons
             g.Clear(Color.Transparent);
             draw(g, size);
         }
-        var icon = Icon.FromHandle(bmp.GetHicon());
+        // Clone so the Icon owns a managed copy of the image data,
+        // independent of the temporary HICON handle from GetHicon().
+        using var temp = Icon.FromHandle(bmp.GetHicon());
+        var icon = (Icon)temp.Clone();
         _cache[key] = icon;
         return icon;
     }

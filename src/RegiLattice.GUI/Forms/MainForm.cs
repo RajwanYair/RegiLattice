@@ -1137,6 +1137,7 @@ public partial class MainForm : Form
         AppTheme.SetTheme(name);
         AppIcons.InvalidateCache();
         Icon = AppIcons.AppIcon;
+        RefreshMenuImages();
         ApplyTheme();
         PopulateTree();
 
@@ -1144,6 +1145,19 @@ public partial class MainForm : Form
         var cfg = AppConfig.Load();
         cfg.Theme = name;
         cfg.Save();
+    }
+
+    /// <summary>Re-assign menu item images after the AppIcons bitmap cache has been invalidated.</summary>
+    private void RefreshMenuImages()
+    {
+        _mnuScoopMgr.Image = AppIcons.ScoopMenuBitmap;
+        _mnuPsMgr.Image = AppIcons.PSModuleMenuBitmap;
+        _mnuPipMgr.Image = AppIcons.PipMenuBitmap;
+        _mnuWinGetMgr.Image = AppIcons.WinGetMenuBitmap;
+        _mnuChocoMgr.Image = AppIcons.ChocolateyMenuBitmap;
+        _mnuToolVersions.Image = AppIcons.ToolVersionsMenuBitmap;
+        _mnuWinHealth.Image = AppIcons.WindowsHealthMenuBitmap;
+        _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
     }
 
     private System.Windows.Forms.Timer? _searchDebounceTimer;

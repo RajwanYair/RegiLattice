@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2025-07-22 (v3.2.1, 2 316 tweaks, 89 categories, 959 tests).
+> Last verified: 2025-07-22 (v3.2.1, 2 316 tweaks, 89 categories, 972 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 959 tests across 11 test files                    |
+| Test        | xUnit 2.9.2 — 972 tests across 12 test files                    |
 | GUI         | WinForms with 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)   |
 | Version     | 3.2.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
 | Tweaks      | 2 316 across 89 categories (90 module files)                      |
-| Tests       | 959 passing (738 Core + 103 CLI + 118 GUI)                       |
+| Tests       | 972 passing (738 Core + 103 CLI + 131 GUI)                       |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -411,6 +411,7 @@ Canonical category slugs:
 - `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
 - `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes, system theme detection
 - `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation, tool version checking
+- `tests/RegiLattice.GUI.Tests/AppIconsTests.cs` — AppIcons bitmap/icon validity, cache invalidation safety
 
 ## Adding a New Tweak — Checklist
 

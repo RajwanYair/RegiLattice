@@ -29,6 +29,14 @@ partial class MainForm
 
     // ── MenuStrip ──────────────────────────────────────────────────────────
     private MenuStrip _menuStrip = null!;
+    private ToolStripMenuItem _mnuScoopMgr = null!;
+    private ToolStripMenuItem _mnuPsMgr = null!;
+    private ToolStripMenuItem _mnuPipMgr = null!;
+    private ToolStripMenuItem _mnuWinGetMgr = null!;
+    private ToolStripMenuItem _mnuChocoMgr = null!;
+    private ToolStripMenuItem _mnuToolVersions = null!;
+    private ToolStripMenuItem _mnuWinHealth = null!;
+    private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
     private SplitContainer _split = null!;
@@ -84,13 +92,13 @@ partial class MainForm
             mnuExit,
         });
 
-        var mnuScoopMgr = new ToolStripMenuItem("Scoop Manager...") { Image = AppIcons.ScoopMenuBitmap };
-        var mnuPsMgr = new ToolStripMenuItem("PowerShell Modules...") { Image = AppIcons.PSModuleMenuBitmap };
-        var mnuPipMgr = new ToolStripMenuItem("pip Manager...") { Image = AppIcons.PipMenuBitmap };
-        var mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...") { Image = AppIcons.WinGetMenuBitmap };
-        var mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...") { Image = AppIcons.ChocolateyMenuBitmap };
-        var mnuToolVersions = new ToolStripMenuItem("Tool Versions...") { Image = AppIcons.ToolVersionsMenuBitmap };
-        var mnuWinHealth = new ToolStripMenuItem("Windows Health...") { Image = AppIcons.WindowsHealthMenuBitmap };
+        _mnuScoopMgr = new ToolStripMenuItem("Scoop Manager...") { Image = AppIcons.ScoopMenuBitmap };
+        _mnuPsMgr = new ToolStripMenuItem("PowerShell Modules...") { Image = AppIcons.PSModuleMenuBitmap };
+        _mnuPipMgr = new ToolStripMenuItem("pip Manager...") { Image = AppIcons.PipMenuBitmap };
+        _mnuWinGetMgr = new ToolStripMenuItem("WinGet Manager...") { Image = AppIcons.WinGetMenuBitmap };
+        _mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...") { Image = AppIcons.ChocolateyMenuBitmap };
+        _mnuToolVersions = new ToolStripMenuItem("Tool Versions...") { Image = AppIcons.ToolVersionsMenuBitmap };
+        _mnuWinHealth = new ToolStripMenuItem("Windows Health...") { Image = AppIcons.WindowsHealthMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -99,12 +107,12 @@ partial class MainForm
         var mnuTools = new ToolStripMenuItem("&Tools");
         mnuTools.DropDownItems.AddRange(new ToolStripItem[]
         {
-            mnuScoopMgr, mnuPsMgr, mnuPipMgr, mnuWinGetMgr, mnuChocoMgr,
+            _mnuScoopMgr, _mnuPsMgr, _mnuPipMgr, _mnuWinGetMgr, _mnuChocoMgr,
             new ToolStripSeparator(),
-            mnuToolVersions,
-            mnuWinHealth,
+            _mnuToolVersions,
+            _mnuWinHealth,
             new ToolStripSeparator(),
-            new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
+            _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
@@ -131,13 +139,13 @@ partial class MainForm
         mnuExportReg.Click += (_, _) => OnExportReg();
         mnuImportJson.Click += (_, _) => OnImportJson();
         mnuExit.Click += (_, _) => Close();
-        mnuScoopMgr.Click += (_, _) => OnOpenScoopManager();
-        mnuPsMgr.Click += (_, _) => OnOpenPSModuleManager();
-        mnuPipMgr.Click += (_, _) => OnOpenPipManager();
-        mnuWinGetMgr.Click += (_, _) => OnOpenWinGetManager();
-        mnuChocoMgr.Click += (_, _) => OnOpenChocolateyManager();
-        mnuToolVersions.Click += (_, _) => OnOpenToolVersions();
-        mnuWinHealth.Click += (_, _) => OnOpenWindowsHealth();
+        _mnuScoopMgr.Click += (_, _) => OnOpenScoopManager();
+        _mnuPsMgr.Click += (_, _) => OnOpenPSModuleManager();
+        _mnuPipMgr.Click += (_, _) => OnOpenPipManager();
+        _mnuWinGetMgr.Click += (_, _) => OnOpenWinGetManager();
+        _mnuChocoMgr.Click += (_, _) => OnOpenChocolateyManager();
+        _mnuToolVersions.Click += (_, _) => OnOpenToolVersions();
+        _mnuWinHealth.Click += (_, _) => OnOpenWindowsHealth();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
