@@ -461,7 +461,27 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 29 | Accent color customization for Start/Taskbar/Title bars | LOW | WindowBlinds |
 | 30 | Dark mode per-app overrides | LOW | Original |
 
-### Phase 4 — Network & Connectivity Tools (Sprint 23–24)
+### Sprint 20 — Sprint 22: Refactoring, Performance & CI Hardening ✅
+
+> See Sprint 22 commit `f8e4129`, tag `v3.4.0-refactor.1`.
+> MSBuild centralization, runtime performance (enum scope index, locale hot cache, debounce timer),
+> CI hardening (concurrency, timeouts, SHA256), VS Code tooling updates, docs refresh.
+> Total: 2,610 tweaks, 1,308 tests (950 Core + 116 CLI + 241 GUI + 1 skipped)
+
+### Sprint 23 — Coverage Expansion (+62 tests) ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `TweakEngineCoverageTests.cs` — 50 new tests covering all unvisited TweakEngine branches | ✅ |
+| 2 | Apply/Remove/Update result branches: SkippedBuild, SkippedHw, delegate paths, forceCorp | ✅ |
+| 3 | `IsApplicableOnHardware` — all 13 software categories (Theory) + 4 tag types | ✅ |
+| 4 | Filter(query:), multi-token AND search, StatusMap(ids:), ExportJson, GetScope, Freeze caching | ✅ |
+| 5 | ServicesTests extensions: Locale `_hotCache` hit/miss, LoadLocaleFile, CorporateGuard branches | ✅ |
+| 6 | HardwareInfo extended: IsAdobeInstalled, IsLibreOffice, IsRealVnc, IsScoop, IsDocker, Gpus, Disk | ✅ |
+| 7 | Refactor `CorporateGuard._cached` from `bool?` to `Lazy<bool>` (thread-safe) | ✅ |
+| 8 | Total: 2,610 tweaks, **1,370 tests** (1,012 Core + 116 CLI + 241 GUI + 1 skipped) | ✅ |
+
+### Phase 4 — Network & Connectivity Tools (Sprint 24–25)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|

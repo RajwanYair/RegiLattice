@@ -3,7 +3,7 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-1308%20total-brightgreen)
+![Tests](https://img.shields.io/badge/tests-1370%20total-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Version](https://img.shields.io/badge/version-3.4.0-blue)
@@ -45,7 +45,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **1 199 tests** across 16 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **1 370 tests** across 17 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -116,7 +116,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (1 199 tests)
+# Run tests (1 370 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -264,7 +264,7 @@ RegiLattice/
 │       ├── CliArgs.cs                       # CLI argument model
 │       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 888 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 1012 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -279,7 +279,7 @@ RegiLattice/
 │   │   └── ConfigExporterTests.cs
 │   ├── RegiLattice.CLI.Tests/               # 116 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 195 xUnit tests
+│   └── RegiLattice.GUI.Tests/               # 241 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs

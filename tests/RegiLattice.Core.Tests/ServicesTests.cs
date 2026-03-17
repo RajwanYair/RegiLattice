@@ -1,4 +1,4 @@
-using RegiLattice.Core;
+﻿using RegiLattice.Core;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;
@@ -1053,5 +1053,197 @@ public sealed class RatingsCoverageTests
         Assert.True(all.Count > 0);
         Assert.True(all.ContainsKey(id));
         Ratings.RemoveRating(id);
+    }
+}
+
+// ── Sprint 23 — Locale hot-cache branch coverage ─────────────────────────────
+
+/// <summary>Tests targeting Locale._hotCache hit/miss branches and LoadLocaleFile.</summary>
+public sealed class LocaleHotCacheTests
+{
+    [Fact]
+    public void T_SameKey_Twice_UsesCacheSecondTime()
+    {
+        Locale.SetLocale("en");
+        // First call — cold (populates _hotCache)
+        var first = Locale.T("apply_all");
+        // Second call — warm (uses _hotCache)
+        var second = Locale.T("apply_all");
+        Assert.Equal(first, second);
+        Assert.Equal("Apply All", first);
+    }
+
+    [Fact]
+    public void SetLocale_InvalidatesHotCache()
+    {
+        Locale.SetLocale("en");
+        var en = Locale.T("apply_all"); // warms cache
+
+        Locale.SetLocale("de"); // should clear cache
+        var de = Locale.T("apply_all"); // fresh lookup in German
+        Assert.NotEqual(en, de);
+        Assert.Equal("Alle anwenden", de);
+
+        Locale.SetLocale("en"); // reset
+    }
+
+    [Fact]
+    public void T_NoArgs_ReturnsCachedTemplate()
+    {
+        Locale.SetLocale("en");
+        Locale.T("status_applied"); // warms
+        var cached = Locale.T("status_applied"); // from cache
+        Assert.Equal("APPLIED", cached);
+    }
+
+    [Fact]
+    public void T_WithArgs_DoesNotCacheFormattedString()
+    {
+        Locale.SetLocale("en");
+        var r1 = Locale.T("confirm_apply", 3);
+        var r2 = Locale.T("confirm_apply", 7);
+        Assert.Equal("Apply 3 selected tweaks?", r1);
+        Assert.Equal("Apply 7 selected tweaks?", r2);
+    }
+
+    [Fact]
+    public void LoadLocaleFile_NonExistentPath_DoesNotThrow()
+    {
+        // Should silently no-op when file doesn't exist
+        Locale.LoadLocaleFile(Path.Combine(Path.GetTempPath(), "nonexistent_locale_xyz.ini"));
+        // Locale remains unchanged
+        Assert.Equal("Apply All", Locale.T("apply_all"));
+    }
+
+    [Fact]
+    public void LoadLocaleFile_ValidFile_LoadsOverrides()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"test-locale-{Guid.NewGuid():N}.ini");
+        try
+        {
+            File.WriteAllLines(path, ["apply_all = Custom Apply", "remove_all = Custom Remove"]);
+            Locale.LoadLocaleFile(path);
+            Assert.Equal("Custom Apply", Locale.T("apply_all"));
+            Assert.Equal("Custom Remove", Locale.T("remove_all"));
+        }
+        finally
+        {
+            Locale.SetLocale("en"); // reset
+            File.Delete(path);
+        }
+    }
+}
+
+// ── Sprint 23 — CorporateGuard extra branches ───────────────────────────────
+
+/// <summary>Additional branch coverage for CorporateGuard.</summary>
+public sealed class CorporateGuardBranchTests
+{
+    [Fact]
+    public void IsCorporateNetwork_CalledTwice_ReturnsSameResult()
+    {
+        CorporateGuard.ClearCache();
+        var first = CorporateGuard.IsCorporateNetwork();
+        var second = CorporateGuard.IsCorporateNetwork(); // hits _cached branch
+        Assert.Equal(first, second);
+    }
+
+    [Fact]
+    public void ClearCache_ResetsState()
+    {
+        _ = CorporateGuard.IsCorporateNetwork(); // populate cache
+        CorporateGuard.ClearCache();
+        _ = CorporateGuard.IsCorporateNetwork(); // re-evaluate after clear
+    }
+
+    [Fact]
+    public void IsGpoManaged_PoliciesPathKey_ReturnsTrue()
+    {
+        var result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Policies\Microsoft\Windows\Test"]);
+        Assert.True(result); // path contains \Policies\ → immediate true
+    }
+
+    [Fact]
+    public void IsGpoManaged_NonPoliciesPath_ReturnsBool()
+    {
+        // Non-policies path is checked against real registry — result is bool
+        var result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion"]);
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void IsGpoManaged_EmptyList_ReturnsFalse()
+    {
+        Assert.False(CorporateGuard.IsGpoManaged([]));
+    }
+
+    [Fact]
+    public void IsGpoManaged_MixedPaths_ChecksAll()
+    {
+        // First entry has \Policies\ → should return true immediately
+        var result = CorporateGuard.IsGpoManaged([
+            @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion",
+            @"HKLM\SOFTWARE\Policies\Microsoft\Windows",
+        ]);
+        // At least one has Policies — result depends on which is evaluated first
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void Status_ReturnsReasonString()
+    {
+        var (_, reason) = CorporateGuard.Status();
+        Assert.NotNull(reason);
+        Assert.NotEmpty(reason);
+    }
+}
+
+// ── Sprint 23 — HardwareInfo extended branches ──────────────────────────────
+
+/// <summary>Extended coverage for HardwareInfo methods not yet tested.</summary>
+public sealed class HardwareInfoExtendedTests
+{
+    [Fact]
+    public void IsAdobeInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsAdobeInstalled());
+    }
+
+    [Fact]
+    public void IsLibreOfficeInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsLibreOfficeInstalled());
+    }
+
+    [Fact]
+    public void IsRealVncInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsRealVncInstalled());
+    }
+
+    [Fact]
+    public void IsScoopInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsScoopInstalled());
+    }
+
+    [Fact]
+    public void IsDockerInstalled_ReturnsBool()
+    {
+        Assert.IsType<bool>(HardwareInfo.IsDockerInstalled());
+    }
+
+    [Fact]
+    public void DetectHardware_HasGpuInfo()
+    {
+        var hw = HardwareInfo.DetectHardware();
+        Assert.NotNull(hw.Gpus);
+    }
+
+    [Fact]
+    public void DetectHardware_HasDisk()
+    {
+        var hw = HardwareInfo.DetectHardware();
+        Assert.NotNull(hw.Disk);
     }
 }

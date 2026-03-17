@@ -10,18 +10,16 @@ namespace RegiLattice.Core;
 /// <summary>Detects corporate/managed environments to block unsafe tweaks.</summary>
 public static class CorporateGuard
 {
-    private static bool? _cached;
+    private static Lazy<bool> _cached = new(ComputeIsCorporate, LazyThreadSafetyMode.ExecutionAndPublication);
+
+    private static bool ComputeIsCorporate() =>
+        IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
 
     /// <summary>Returns true if this machine is in a corporate/managed environment.</summary>
-    public static bool IsCorporateNetwork()
-    {
-        if (_cached.HasValue)
-            return _cached.Value;
-        _cached = IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
-        return _cached.Value;
-    }
+    public static bool IsCorporateNetwork() => _cached.Value;
 
-    public static void ClearCache() => _cached = null;
+    /// <summary>Reset cached result (for testing or when environment changes).</summary>
+    public static void ClearCache() => _cached = new(ComputeIsCorporate, LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>Detailed status for UI display.</summary>
     public static (bool IsCorporate, string Reason) Status()
