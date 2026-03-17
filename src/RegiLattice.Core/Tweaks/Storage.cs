@@ -430,5 +430,157 @@ internal static class Storage
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
         },
+
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "stor-disable-disk-quotas",
+            Label = "Disable Disk Quotas Enforcement",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS disk quota enforcement. Frees I/O overhead from quota tracking on every write operation.",
+            Tags = ["storage", "ntfs", "quotas", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-volume-shadow-schedule",
+            Label = "Disable Volume Shadow Copy Schedule",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables scheduled Volume Shadow Copy snapshots. Frees disk space used by shadow copies. System Restore still works on demand.",
+            Tags = ["storage", "shadow-copy", "disk-space", "vss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DisableSR", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DisableSR", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DisableSR", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-low-disk-space-warning",
+            Label = "Disable Low Disk Space Warning",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the low disk space notification balloon. Useful for small partitions where the warning is a nuisance.",
+            Tags = ["storage", "notifications", "disk-space", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-enable-write-cache-flush",
+            Label = "Disable Write Cache Buffer Flushing",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables write cache buffer flushing on disks. Improves write performance but increases risk of data loss on power failure.",
+            Tags = ["storage", "write-cache", "performance", "risk"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\IDE"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCacheFlush", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCacheFlush", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCacheFlush", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-thumbnail-cache-cleanup",
+            Label = "Disable Thumbnail Cache Auto-Cleanup",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from periodically clearing the thumbnail cache, avoiding slow folder icon generation on re-open.",
+            Tags = ["storage", "thumbnails", "cache", "explorer"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\Thumbnail Cache", "Autorun", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-remote-diff-compression",
+            Label = "Disable Remote Differential Compression",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Remote Differential Compression API feature used for network file transfers. Saves memory and CPU on standalone machines.",
+            Tags = ["storage", "network", "rdc", "features"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSRDC"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSRDC", "DisableMSRDC", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSRDC", "DisableMSRDC")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSRDC", "DisableMSRDC", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-set-recycle-bin-max-5pct",
+            Label = "Limit Recycle Bin to 5% of Drive",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Limits the Recycle Bin to consume at most 5% of the drive. Default is 10%. Recovers disk space on large drives.",
+            Tags = ["storage", "recycle-bin", "disk-space", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket\Volume"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "MaxCapacity", 5)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "MaxCapacity", 10)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "MaxCapacity", 5)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-windows-error-reporting-dump",
+            Label = "Disable Error Reporting Dump Collection",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Error Reporting crash dump collection. Prevents multi-GB dump files accumulating in %LOCALAPPDATA%\\CrashDumps.",
+            Tags = ["storage", "error-reporting", "dump", "disk-space"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-search-index-backoff",
+            Label = "Disable Search Index I/O Backoff",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Windows Search indexer I/O backoff logic. Completes indexing faster but uses more disk I/O during the process.",
+            Tags = ["storage", "search", "indexing", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "stor-disable-offline-files-cache",
+            Label = "Disable Offline Files Cache",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Offline Files (CSC) cache feature. Frees disk space and reduces background I/O from offline file syncing.",
+            Tags = ["storage", "offline-files", "cache", "csc"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache", "Enabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache", "Enabled", 0)],
+        },
     ];
 }

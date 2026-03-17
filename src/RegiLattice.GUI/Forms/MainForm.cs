@@ -59,6 +59,19 @@ public partial class MainForm : Form
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
         _monitorTimer.Stop();
+
+        // Warn user about pending reboot tweaks
+        if (_pendingRebootIds.Count > 0)
+        {
+            MessageBox.Show(
+                $"{_pendingRebootIds.Count} tweak(s) have been applied but require a reboot to take effect.\n\n"
+                    + "Changes will only be fully active after restarting your computer.",
+                "Reboot Pending",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
         _trayIcon.Visible = false;
         _cts.Cancel();
         base.OnFormClosing(e);
@@ -221,6 +234,32 @@ public partial class MainForm : Form
             g.FillRectangle(bgBrush, e.Bounds);
         }
 
+        // Checkbox for first column
+        if (e.ColumnIndex == 0)
+        {
+            int cbSize = 14;
+            int cbX = e.Bounds.X + 4;
+            int cbY = e.Bounds.Y + (e.Bounds.Height - cbSize) / 2;
+            var cbRect = new Rectangle(cbX, cbY, cbSize, cbSize);
+
+            // Checkbox border
+            using var borderPen = new Pen(AppTheme.FgDim, 1f);
+            AppTheme.DrawRoundedRect(g, borderPen, cbRect, 2);
+
+            if (e.Item.Checked)
+            {
+                // Filled checkbox with accent
+                using var fillBrush = new SolidBrush(AppTheme.Accent);
+                var inner = new Rectangle(cbX + 1, cbY + 1, cbSize - 2, cbSize - 2);
+                AppTheme.FillRoundedRect(g, fillBrush, inner, 2);
+
+                // Checkmark
+                using var checkPen = new Pen(AppTheme.Bg, 2f);
+                g.DrawLine(checkPen, cbX + 3, cbY + 7, cbX + 6, cbY + 10);
+                g.DrawLine(checkPen, cbX + 6, cbY + 10, cbX + 11, cbY + 4);
+            }
+        }
+
         // Left accent bar on selected row (first column only)
         if (e.Item.Selected && e.ColumnIndex == 0)
         {
@@ -288,7 +327,8 @@ public partial class MainForm : Form
         if (e.ColumnIndex == 1)
             fg = applicable ? AppTheme.Accent : AppTheme.FgDim;
 
-        var textBounds = new Rectangle(e.Bounds.X + (e.ColumnIndex == 0 ? 6 : 4), e.Bounds.Y, e.Bounds.Width - 6, e.Bounds.Height);
+        int textLeft = e.ColumnIndex == 0 ? 24 : 4; // offset for checkbox in first column
+        var textBounds = new Rectangle(e.Bounds.X + textLeft, e.Bounds.Y, e.Bounds.Width - textLeft - 2, e.Bounds.Height);
         TextRenderer.DrawText(
             g,
             e.SubItem?.Text ?? "",
@@ -653,14 +693,21 @@ public partial class MainForm : Form
 
         if (filter != "All")
         {
-            TweakResult target = filter switch
+            if (filter == "Pending")
             {
-                "Applied" => TweakResult.Applied,
-                "Not Applied" or "Default" => TweakResult.NotApplied,
-                "Errors" => TweakResult.Error,
-                _ => TweakResult.Unknown,
-            };
-            tweaks = tweaks.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
+                tweaks = tweaks.Where(t => _pendingRebootIds.Contains(t.Id));
+            }
+            else
+            {
+                TweakResult target = filter switch
+                {
+                    "Applied" => TweakResult.Applied,
+                    "Not Applied" or "Default" => TweakResult.NotApplied,
+                    "Errors" => TweakResult.Error,
+                    _ => TweakResult.Unknown,
+                };
+                tweaks = tweaks.Where(t => _statusCache.GetValueOrDefault(t.Id) == target);
+            }
         }
 
         if (scopeSel != "All Scopes")
@@ -1190,6 +1237,8 @@ public partial class MainForm : Form
 
     private void OnSearchTextChanged(object? sender, EventArgs e)
     {
+        _searchClear.Visible = _searchBox.Text.Length > 0;
+
         _searchDebounceTimer?.Stop();
         _searchDebounceTimer?.Dispose();
         _searchDebounceTimer = new System.Windows.Forms.Timer { Interval = 300 };

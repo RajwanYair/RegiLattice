@@ -778,5 +778,157 @@ internal static class Startup
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
             ],
         },
+
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "startup-disable-tablet-mode-prompt",
+            Label = "Disable Tablet Mode Switch Prompt",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents the 'Do you want to switch to tablet mode?' prompt on login for convertible devices.",
+            Tags = ["startup", "tablet", "login", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-signin-info-reopen",
+            Label = "Disable Sign-In Info for App Reopen",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from using sign-in info to automatically finish setting up and reopen apps after restart.",
+            Tags = ["startup", "signin", "privacy", "reopen"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-boot-logo",
+            Label = "Disable Boot Logo Display",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses the Windows boot logo animation for faster POST-to-desktop times.",
+            Tags = ["startup", "boot", "logo", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-auto-maintenance",
+            Label = "Disable Automatic Maintenance at Startup",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows automatic maintenance that runs background tasks on startup. Reduces early boot CPU/disk load.",
+            Tags = ["startup", "maintenance", "performance", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-narrator-at-login",
+            Label = "Disable Narrator at Login Screen",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Narrator auto-start at the Windows login screen.",
+            Tags = ["startup", "narrator", "accessibility", "login"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe", "Debugger", @"%SystemRoot%\System32\systray.exe")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe", "Debugger")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\Narrator.exe", "Debugger", @"%SystemRoot%\System32\systray.exe")],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-fast-user-switching",
+            Label = "Disable Fast User Switching",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables fast user switching at login. Simplifies the login screen and slightly reduces memory usage on shared PCs.",
+            Tags = ["startup", "login", "user-switching", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-logon-provider-ads",
+            Label = "Disable Login Provider Suggestions",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables sign-in provider suggestions and ads (e.g., PIN setup prompts, Microsoft account suggestions) at the login screen.",
+            Tags = ["startup", "login", "ads", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-edge-prelaunch",
+            Label = "Disable Edge Pre-Launch at Login",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Microsoft Edge from pre-launching in the background at login. Reduces startup memory and CPU usage.",
+            Tags = ["startup", "edge", "prelaunch", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-prefetch-on-ssd",
+            Label = "Disable Prefetch for SSD Boot Drives",
+            Category = "Startup",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables boot and application prefetch on SSD boot drives. SSDs have fast random access, so prefetch adds unnecessary write wear.",
+            Tags = ["startup", "prefetch", "ssd", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "startup-disable-compatibility-assistant",
+            Label = "Disable Program Compatibility Assistant",
+            Category = "Startup",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Program Compatibility Assistant that checks applications for compatibility issues at launch.",
+            Tags = ["startup", "compatibility", "performance", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
+        },
     ];
 }

@@ -374,5 +374,157 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
+
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "fs-set-additional-critical-worker-threads",
+            Label = "Increase Critical Worker Threads",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Adds additional critical worker threads for the file system. Improves I/O throughput on multi-core systems with many concurrent operations.",
+            Tags = ["filesystem", "performance", "threads", "io"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads", 16)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads", 16)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-set-additional-delayed-worker-threads",
+            Label = "Increase Delayed Worker Threads",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Adds additional delayed worker threads for background file system operations. Reduces queuing delays under heavy I/O.",
+            Tags = ["filesystem", "performance", "threads", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads", 16)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads", 16)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-disable-notification-change",
+            Label = "Disable NTFS Change Notifications",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables NTFS change notification tracking. Reduces kernel overhead from file watchers (may break live-reload tools).",
+            Tags = ["filesystem", "ntfs", "notifications", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableChangeJournal", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableChangeJournal")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableChangeJournal", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-optimize-path-cache",
+            Label = "Increase File Path Cache Size",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the path cache size to speed up directory traversals, especially on deep file hierarchies like node_modules.",
+            Tags = ["filesystem", "cache", "performance", "traversal"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "PathCache", 128)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "PathCache")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "PathCache", 128)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-enable-opportunistic-locking",
+            Label = "Enable Opportunistic File Locking",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Ensures opportunistic locking (oplock) is enabled for file I/O. Improves read/write performance for network and local files.",
+            Tags = ["filesystem", "oplock", "performance", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-disable-ntfs-tunneling",
+            Label = "Disable NTFS File Name Tunneling",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS file name tunneling. Tunneling preserves short/long name associations across rename/delete cycles. Disabling frees kernel memory.",
+            Tags = ["filesystem", "ntfs", "tunneling", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-set-io-queue-depth",
+            Label = "Increase I/O Queue Depth",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the I/O request packet (IRP) stack size for deeper driver stacks. Improves throughput with advanced storage controllers.",
+            Tags = ["filesystem", "io", "queue", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-enable-win32-long-paths-policy",
+            Label = "Enable Long Paths via Group Policy",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables long path support (>260 chars) via the Group Policy registry key. Complements the manifest-level opt-in for Win32 applications.",
+            Tags = ["filesystem", "long-paths", "policy", "developer"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-disable-transacted-installer-rollback",
+            Label = "Disable Transactional NTFS Rollback",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Transactional NTFS (TxF) rollback log creation. Saves disk space and I/O for this rarely-used feature.",
+            Tags = ["filesystem", "ntfs", "txf", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableTxfLog", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableTxfLog")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableTxfLog", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "fs-increase-file-handle-limit",
+            Label = "Increase System File Handle Limit",
+            Category = "File System",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the system-wide file handle limit. Prevents 'too many open files' errors for applications with heavy file I/O.",
+            Tags = ["filesystem", "handles", "limits", "server"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Subsystems"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "ObjectDirectories", 16384)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "ObjectDirectories")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "ObjectDirectories", 16384)],
+        },
     ];
 }

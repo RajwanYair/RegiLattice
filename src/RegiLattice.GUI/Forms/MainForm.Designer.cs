@@ -16,6 +16,7 @@ partial class MainForm
     private ToolStripLabel _profileLabel = null!;
     private ToolStripComboBox _profileCombo = null!;
     private ToolStripTextBox _searchBox = null!;
+    private ToolStripButton _searchClear = null!;
     private ToolStripButton _forceCheck = null!;
     private ToolStripLabel _scopeLabel = null!;
     private ToolStripComboBox _scopeCombo = null!;
@@ -170,7 +171,7 @@ partial class MainForm
 
         _filterLabel = new ToolStripLabel("Status:");
         _filterCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter tweaks by status" };
-        _filterCombo.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Default", "Unknown", "Errors" });
+        _filterCombo.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Default", "Pending", "Unknown", "Errors" });
         _filterCombo.SelectedIndex = 0;
 
         _profileLabel = new ToolStripLabel("Profile:");
@@ -180,6 +181,15 @@ partial class MainForm
 
         _searchBox = new ToolStripTextBox { ToolTipText = "Search tweaks (Ctrl+F)", Size = new Size(200, 25) };
         _searchBox.TextChanged += OnSearchTextChanged;
+
+        _searchClear = new ToolStripButton("\u2715")
+        {
+            ToolTipText = "Clear search (Esc)",
+            DisplayStyle = ToolStripItemDisplayStyle.Text,
+            Visible = false,
+            Margin = new Padding(-4, 0, 2, 0),
+        };
+        _searchClear.Click += (_, _) => { _searchBox.Text = ""; _searchBox.Focus(); };
 
         _forceCheck = new ToolStripButton("\U0001F6E1 Force")
         {
@@ -230,7 +240,7 @@ partial class MainForm
             _filterLabel, _filterCombo,
             _profileLabel, _profileCombo,
             new ToolStripSeparator(),
-            _searchBox,
+            _searchBox, _searchClear,
             new ToolStripSeparator(),
             _forceCheck,
             new ToolStripSeparator(),
