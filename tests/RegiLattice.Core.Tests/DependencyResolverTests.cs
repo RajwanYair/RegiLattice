@@ -272,4 +272,80 @@ public sealed class DependencyResolverTests
         Assert.Contains(result, t => t.Id == "dep-level-b");
         Assert.Contains(result, t => t.Id == "dep-level-d");
     }
+
+    // ── Resolve: deep chain (10 levels) ─────────────────────────────────
+
+    [Fact]
+    public void Resolve_TenLevelChain_ReturnsAllInOrder()
+    {
+        var tweaks = new TweakDef[10];
+        tweaks[0] = TestHelpers.Make("deep-0");
+        for (int i = 1; i < 10; i++)
+            tweaks[i] = TestHelpers.Make($"deep-{i}", dependsOn: [$"deep-{i - 1}"]);
+
+        var result = DependencyResolver.Resolve(tweaks[9], TestHelpers.LookupFrom(tweaks));
+        Assert.Equal(10, result.Count);
+        Assert.Equal("deep-0", result[0].Id);
+        Assert.Equal("deep-9", result[9].Id);
+    }
+
+    // ── Resolve: wide fan-out ───────────────────────────────────────────
+
+    [Fact]
+    public void Resolve_WideFanOut_AllDepsBeforeTarget()
+    {
+        // Target depends on 5 independent tweaks
+        var deps = Enumerable.Range(0, 5).Select(i => TestHelpers.Make($"fan-{i}")).ToArray();
+        var target = TestHelpers.Make("fan-root", dependsOn: deps.Select(d => d.Id).ToList());
+        var all = deps.Append(target).ToArray();
+        var result = DependencyResolver.Resolve(target, TestHelpers.LookupFrom(all));
+        Assert.Equal(6, result.Count);
+        Assert.Equal("fan-root", result[^1].Id);
+        foreach (var dep in deps)
+            Assert.Contains(result, t => t.Id == dep.Id);
+    }
+
+    // ── Resolve: all deps missing ───────────────────────────────────────
+
+    [Fact]
+    public void Resolve_AllDepsMissing_ReturnsSelfOnly()
+    {
+        var td = TestHelpers.Make("lonely", dependsOn: ["ghost-1", "ghost-2", "ghost-3"]);
+        var result = DependencyResolver.Resolve(td, _ => null);
+        Assert.Single(result);
+        Assert.Equal("lonely", result[0].Id);
+    }
+
+    // ── Dependents: multiple incoming edges ─────────────────────────────
+
+    [Fact]
+    public void Dependents_NodeDependsOnMultipleParents_AppearsOnce()
+    {
+        var p1 = TestHelpers.Make("parent-1");
+        var p2 = TestHelpers.Make("parent-2");
+        var child = TestHelpers.Make("multi-child", dependsOn: ["parent-1", "parent-2"]);
+        var result1 = DependencyResolver.Dependents("parent-1", [p1, p2, child]);
+        var result2 = DependencyResolver.Dependents("parent-2", [p1, p2, child]);
+        Assert.Single(result1);
+        Assert.Single(result2);
+        Assert.Equal("multi-child", result1[0].Id);
+        Assert.Equal("multi-child", result2[0].Id);
+    }
+
+    // ── Resolve: diamond with 5 nodes ───────────────────────────────────
+
+    [Fact]
+    public void Resolve_DoubleDiamond_NoDuplicates()
+    {
+        // A -> B -> D, A -> C -> D, D -> E
+        var a = TestHelpers.Make("dd-a");
+        var b = TestHelpers.Make("dd-b", dependsOn: ["dd-a"]);
+        var c = TestHelpers.Make("dd-c", dependsOn: ["dd-a"]);
+        var d = TestHelpers.Make("dd-d", dependsOn: ["dd-b", "dd-c"]);
+        var e = TestHelpers.Make("dd-e", dependsOn: ["dd-d"]);
+        var result = DependencyResolver.Resolve(e, TestHelpers.LookupFrom(a, b, c, d, e));
+        Assert.Equal(5, result.Count);
+        Assert.Equal(5, result.Select(t => t.Id).Distinct().Count());
+        Assert.Equal("dd-e", result[^1].Id);
+    }
 }

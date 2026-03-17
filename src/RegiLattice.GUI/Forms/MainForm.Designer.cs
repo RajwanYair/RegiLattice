@@ -44,6 +44,7 @@ partial class MainForm
     // ── Main layout ────────────────────────────────────────────────────────
     private SplitContainer _split = null!;
     private TreeView _treeView = null!;
+    private ImageList _categoryImageList = null!;
     private ListView _listView = null!;
 
     // ── Detail panel fields ───────────────────────────────────────────────
@@ -255,6 +256,7 @@ partial class MainForm
         _toolStrip.Dock = DockStyle.Top;
 
         // ── TreeView ───────────────────────────────────────────────────────
+        _categoryImageList = AppIcons.BuildCategoryImageList();
         _treeView = new TreeView
         {
             Dock = DockStyle.Fill,
@@ -265,6 +267,7 @@ partial class MainForm
             ItemHeight = 26,
             FullRowSelect = true,
             HotTracking = true,
+            ImageList = _categoryImageList,
         };
         _treeView.AfterSelect += OnTreeAfterSelect;
 
@@ -280,6 +283,7 @@ partial class MainForm
             Font = AppTheme.Regular,
             BorderStyle = BorderStyle.None,
             HotTracking = false,
+            SmallImageList = _categoryImageList,
         };
         _listView.Columns.AddRange(new[]
         {

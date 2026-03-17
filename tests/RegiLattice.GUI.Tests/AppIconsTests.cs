@@ -1,4 +1,5 @@
 using System.Drawing;
+using RegiLattice.Core.Models;
 using Xunit;
 
 namespace RegiLattice.GUI.Tests;
@@ -199,5 +200,130 @@ public sealed class AppIconsTests
         // when the bitmap was disposed. Ensures the bitmap is fully valid.
         var dims = bmp.FrameDimensionsList;
         Assert.NotNull(dims);
+    }
+}
+
+// ── Category ImageList & KindBitmap tests ──────────────────────────────
+
+public sealed class CategoryImageListTests
+{
+    [Fact]
+    public void BuildCategoryImageList_Returns23Images()
+    {
+        using var list = AppIcons.BuildCategoryImageList();
+        int enumCount = Enum.GetValues<CategoryIcon>().Length;
+        Assert.Equal(enumCount, list.Images.Count);
+    }
+
+    [Fact]
+    public void BuildCategoryImageList_ImageSize_Is16x16()
+    {
+        using var list = AppIcons.BuildCategoryImageList();
+        Assert.Equal(new Size(16, 16), list.ImageSize);
+    }
+
+    [Fact]
+    public void BuildCategoryImageList_ColorDepth_Is32Bit()
+    {
+        using var list = AppIcons.BuildCategoryImageList();
+        Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
+    }
+
+    [Theory]
+    [InlineData(CategoryIcon.Shield)]
+    [InlineData(CategoryIcon.Globe)]
+    [InlineData(CategoryIcon.Monitor)]
+    [InlineData(CategoryIcon.Gear)]
+    [InlineData(CategoryIcon.Lock)]
+    [InlineData(CategoryIcon.HardDrive)]
+    [InlineData(CategoryIcon.Cpu)]
+    [InlineData(CategoryIcon.Keyboard)]
+    [InlineData(CategoryIcon.Speaker)]
+    [InlineData(CategoryIcon.Cloud)]
+    [InlineData(CategoryIcon.App)]
+    [InlineData(CategoryIcon.Terminal)]
+    [InlineData(CategoryIcon.Mail)]
+    [InlineData(CategoryIcon.Palette)]
+    [InlineData(CategoryIcon.Notification)]
+    [InlineData(CategoryIcon.Wrench)]
+    [InlineData(CategoryIcon.Phone)]
+    [InlineData(CategoryIcon.Desktop)]
+    [InlineData(CategoryIcon.Windows)]
+    [InlineData(CategoryIcon.Search)]
+    [InlineData(CategoryIcon.Camera)]
+    [InlineData(CategoryIcon.Printer)]
+    [InlineData(CategoryIcon.Code)]
+    public void BuildCategoryImageList_ContainsKeyForEachEnum(CategoryIcon icon)
+    {
+        using var list = AppIcons.BuildCategoryImageList();
+        Assert.True(list.Images.ContainsKey(icon.ToString()), $"Missing key: {icon}");
+    }
+
+    [Theory]
+    [InlineData(CategoryIcon.Shield)]
+    [InlineData(CategoryIcon.Globe)]
+    [InlineData(CategoryIcon.Cpu)]
+    [InlineData(CategoryIcon.Code)]
+    public void BuildCategoryImageList_EachImage_Is16x16(CategoryIcon icon)
+    {
+        using var list = AppIcons.BuildCategoryImageList();
+        var img = list.Images[icon.ToString()];
+        Assert.NotNull(img);
+        Assert.Equal(16, img.Width);
+        Assert.Equal(16, img.Height);
+    }
+
+    [Theory]
+    [InlineData("Privacy", "Lock")]
+    [InlineData("Network", "Globe")]
+    [InlineData("Performance", "Cpu")]
+    [InlineData("VS Code", "Code")]
+    [InlineData("Explorer", "Palette")]
+    public void CategoryImageKey_ReturnsExpectedEnumName(string category, string expected)
+    {
+        string key = AppIcons.CategoryImageKey(category);
+        Assert.Equal(expected, key);
+    }
+
+    [Fact]
+    public void CategoryImageKey_UnknownCategory_ReturnsFallback()
+    {
+        string key = AppIcons.CategoryImageKey("NonexistentCategory");
+        // Should still return a valid enum name (likely Gear as fallback)
+        Assert.False(string.IsNullOrEmpty(key));
+        Assert.True(Enum.TryParse<CategoryIcon>(key, out _));
+    }
+
+    [Theory]
+    [InlineData(TweakKind.Registry)]
+    [InlineData(TweakKind.PowerShell)]
+    [InlineData(TweakKind.SystemCommand)]
+    [InlineData(TweakKind.ServiceControl)]
+    [InlineData(TweakKind.ScheduledTask)]
+    [InlineData(TweakKind.FileConfig)]
+    [InlineData(TweakKind.GroupPolicy)]
+    [InlineData(TweakKind.PackageManager)]
+    public void KindBitmap_EachKind_IsValid16x16(TweakKind kind)
+    {
+        var bmp = AppIcons.KindBitmap(kind);
+        Assert.NotNull(bmp);
+        Assert.Equal(16, bmp.Width);
+        Assert.Equal(16, bmp.Height);
+    }
+
+    [Fact]
+    public void KindBitmap_SameKind_ReturnsCachedInstance()
+    {
+        var first = AppIcons.KindBitmap(TweakKind.Registry);
+        var second = AppIcons.KindBitmap(TweakKind.Registry);
+        Assert.Same(first, second);
+    }
+
+    [Fact]
+    public void BuildCategoryImageList_CalledTwice_ReturnsDifferentInstances()
+    {
+        using var list1 = AppIcons.BuildCategoryImageList();
+        using var list2 = AppIcons.BuildCategoryImageList();
+        Assert.NotSame(list1, list2);
     }
 }

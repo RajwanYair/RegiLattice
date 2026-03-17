@@ -1,5 +1,7 @@
 namespace RegiLattice.GUI;
 
+using RegiLattice.Core.Models;
+
 /// <summary>
 /// Generates themed icons programmatically for the main application and each package manager dialog.
 /// Icons are 32×32 bitmaps drawn with theme-aware colours.
@@ -409,4 +411,94 @@ internal static class AppIcons
     internal static Bitmap RemoveMenuBitmap => MenuBitmap("menu-remove", DrawRemoveIcon);
     internal static Bitmap RefreshMenuBitmap => MenuBitmap("menu-refresh", DrawRefreshIcon);
     internal static Bitmap ExportMenuBitmap => MenuBitmap("menu-export", DrawExportIcon);
+
+    // ── Category colour-coded icon pairs (colour + symbol) ──────────────
+
+    /// <summary>Colour assigned to each <see cref="CategoryIcon"/> for tree/list rendering.</summary>
+    private static readonly Dictionary<CategoryIcon, (Color From, Color To, string Glyph)> CategoryColors = new()
+    {
+        [CategoryIcon.Shield] = (Color.FromArgb(220, 50, 50), Color.FromArgb(150, 20, 20), "🛡"),
+        [CategoryIcon.Globe] = (Color.FromArgb(30, 144, 255), Color.FromArgb(0, 80, 180), "🌐"),
+        [CategoryIcon.Monitor] = (Color.FromArgb(0, 180, 220), Color.FromArgb(0, 100, 160), "🖥"),
+        [CategoryIcon.Gear] = (Color.FromArgb(120, 120, 140), Color.FromArgb(70, 70, 90), "⚙"),
+        [CategoryIcon.Lock] = (Color.FromArgb(180, 80, 220), Color.FromArgb(100, 40, 150), "🔒"),
+        [CategoryIcon.HardDrive] = (Color.FromArgb(100, 140, 180), Color.FromArgb(50, 80, 120), "💾"),
+        [CategoryIcon.Cpu] = (Color.FromArgb(255, 140, 0), Color.FromArgb(200, 90, 0), "⚡"),
+        [CategoryIcon.Keyboard] = (Color.FromArgb(100, 180, 100), Color.FromArgb(50, 120, 50), "⌨"),
+        [CategoryIcon.Speaker] = (Color.FromArgb(255, 100, 150), Color.FromArgb(200, 50, 100), "🔊"),
+        [CategoryIcon.Cloud] = (Color.FromArgb(100, 180, 255), Color.FromArgb(50, 120, 200), "☁"),
+        [CategoryIcon.App] = (Color.FromArgb(0, 200, 120), Color.FromArgb(0, 140, 80), "📦"),
+        [CategoryIcon.Terminal] = (Color.FromArgb(1, 36, 86), Color.FromArgb(0, 100, 200), ">_"),
+        [CategoryIcon.Mail] = (Color.FromArgb(255, 180, 50), Color.FromArgb(200, 120, 0), "✉"),
+        [CategoryIcon.Palette] = (Color.FromArgb(255, 100, 200), Color.FromArgb(200, 50, 150), "🎨"),
+        [CategoryIcon.Notification] = (Color.FromArgb(255, 200, 50), Color.FromArgb(200, 150, 0), "🔔"),
+        [CategoryIcon.Wrench] = (Color.FromArgb(140, 140, 160), Color.FromArgb(90, 90, 110), "🔧"),
+        [CategoryIcon.Phone] = (Color.FromArgb(50, 180, 230), Color.FromArgb(20, 120, 180), "📱"),
+        [CategoryIcon.Desktop] = (Color.FromArgb(80, 160, 220), Color.FromArgb(40, 100, 160), "🖥"),
+        [CategoryIcon.Windows] = (Color.FromArgb(0, 120, 215), Color.FromArgb(0, 70, 160), "🪟"),
+        [CategoryIcon.Search] = (Color.FromArgb(100, 200, 100), Color.FromArgb(50, 140, 50), "🔍"),
+        [CategoryIcon.Camera] = (Color.FromArgb(180, 100, 200), Color.FromArgb(120, 50, 150), "📷"),
+        [CategoryIcon.Printer] = (Color.FromArgb(160, 160, 180), Color.FromArgb(100, 100, 120), "🖨"),
+        [CategoryIcon.Code] = (Color.FromArgb(0, 150, 200), Color.FromArgb(0, 100, 160), "</>"),
+    };
+
+    /// <summary>Builds an <see cref="ImageList"/> with one 16×16 bitmap per <see cref="CategoryIcon"/>.</summary>
+    internal static ImageList BuildCategoryImageList()
+    {
+        var list = new ImageList { ImageSize = new Size(16, 16), ColorDepth = ColorDepth.Depth32Bit };
+        foreach (CategoryIcon ci in Enum.GetValues<CategoryIcon>())
+        {
+            var bmp = new Bitmap(16, 16);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.Clear(Color.Transparent);
+                var (from, to, glyph) = CategoryColors.GetValueOrDefault(ci, (Color.Gray, Color.DarkGray, "?"));
+                using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+                    new Rectangle(0, 0, 16, 16),
+                    from,
+                    to,
+                    System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+                );
+                AppTheme.FillRoundedRect(g, gradient, new Rectangle(1, 1, 14, 14), 3);
+
+                // Single-character or short text glyph
+                using var font = glyph.Length <= 2 ? new Font("Segoe UI Emoji", 7f, FontStyle.Regular) : new Font("Consolas", 6f, FontStyle.Bold);
+                using var fgBrush = new SolidBrush(Color.White);
+                var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                g.DrawString(glyph, font, fgBrush, 8f, 8f, sf);
+            }
+            list.Images.Add(ci.ToString(), bmp);
+        }
+        return list;
+    }
+
+    /// <summary>Returns the <see cref="CategoryIcon"/> name for use as an ImageList key.</summary>
+    internal static string CategoryImageKey(string category) => CategoryIcons.GetIcon(category).ToString();
+
+    /// <summary>Creates a 16×16 coloured dot bitmap for a <see cref="TweakKind"/>.</summary>
+    internal static Bitmap KindBitmap(TweakKind kind)
+    {
+        string key = $"kind-{kind}";
+        return MenuBitmap(
+            key,
+            (g, s) =>
+            {
+                var color = kind switch
+                {
+                    TweakKind.Registry => Color.FromArgb(30, 144, 255),
+                    TweakKind.PowerShell => Color.FromArgb(1, 36, 86),
+                    TweakKind.SystemCommand => Color.FromArgb(255, 140, 0),
+                    TweakKind.ServiceControl => Color.FromArgb(0, 180, 80),
+                    TweakKind.ScheduledTask => Color.FromArgb(180, 80, 220),
+                    TweakKind.FileConfig => Color.FromArgb(100, 180, 100),
+                    TweakKind.GroupPolicy => Color.FromArgb(220, 50, 50),
+                    TweakKind.PackageManager => Color.FromArgb(0, 200, 220),
+                    _ => Color.Gray,
+                };
+                using var brush = new SolidBrush(color);
+                g.FillEllipse(brush, 3, 3, s - 6, s - 6);
+            }
+        );
+    }
 }

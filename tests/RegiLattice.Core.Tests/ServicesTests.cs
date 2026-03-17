@@ -803,6 +803,37 @@ public sealed class SystemMonitorTests
         Assert.InRange(cpuA, 0, 100);
         Assert.InRange(cpuB, 0, 100);
     }
+
+    [Fact]
+    public void GetCpuUsagePercent_FirstCall_ReturnsValidRange()
+    {
+        var monitor = new SystemMonitor();
+        int cpu = monitor.GetCpuUsagePercent();
+        // First call computes delta from boot — valid range but not necessarily 0
+        Assert.InRange(cpu, 0, 100);
+    }
+
+    [Fact]
+    public void GetCpuUsagePercent_MultipleCalls_DoNotThrow()
+    {
+        var monitor = new SystemMonitor();
+        for (int i = 0; i < 5; i++)
+        {
+            int cpu = monitor.GetCpuUsagePercent();
+            Assert.InRange(cpu, 0, 100);
+        }
+    }
+
+    [Fact]
+    public void GetCpuUsagePercent_TwoInstances_BothReturnValidRange()
+    {
+        var m1 = new SystemMonitor();
+        var m2 = new SystemMonitor();
+        int c1 = m1.GetCpuUsagePercent();
+        int c2 = m2.GetCpuUsagePercent();
+        Assert.InRange(c1, 0, 100);
+        Assert.InRange(c2, 0, 100);
+    }
 }
 
 // ── Sprint 21: Coverage boost — Analytics, Locale, Ratings edge cases ────────
