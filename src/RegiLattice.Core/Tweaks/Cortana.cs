@@ -458,5 +458,174 @@ internal static class Cortana
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
             ],
         },
+        // ── Sprint 21 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "cortana-disable-search-in-store",
+            Label = "Disable Search the Microsoft Store",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the 'Search the Microsoft Store' link in Windows Search results. Removes promotional app suggestions.",
+            Tags = ["cortana", "search", "store", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith", 1)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-search-history-local",
+            Label = "Disable Local Search History",
+            Category = "Cortana & Search",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables local search history in the Windows Search box. Prevents recent searches from appearing as suggestions.",
+            Tags = ["cortana", "search", "history", "local"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-cortana-consent",
+            Label = "Disable Cortana Consent Required",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Cortana consent popup that appears on first use. Prevents Cortana from requesting permissions.",
+            Tags = ["cortana", "consent", "popup", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-show-search-icon-only",
+            Label = "Show Search Icon Only (Hide Search Box)",
+            Category = "Cortana & Search",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Shows only the search icon on the taskbar instead of the full search box. Saves taskbar space while keeping search accessible.",
+            Tags = ["cortana", "search", "icon", "taskbar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-windows-copilot",
+            Label = "Disable Windows Copilot in Search",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Copilot integration in Windows Search. Prevents AI-powered suggestions and Bing Chat results from appearing.",
+            Tags = ["cortana", "copilot", "ai", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot", "TurnOffWindowsCopilot", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot", "TurnOffWindowsCopilot")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot", "TurnOffWindowsCopilot", 1)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-search-transparency",
+            Label = "Disable Search Box Transparency",
+            Category = "Cortana & Search",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables transparency effects in the Windows Search flyout. Improves rendering performance on integrated GPUs.",
+            Tags = ["cortana", "search", "transparency", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTransparencyEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTransparencyEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTransparencyEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-search-indexing-removable",
+            Label = "Disable Search Indexing on Removable Drives",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows Search from indexing removable drives (USB sticks, external HDDs). Reduces I/O on external media.",
+            Tags = ["cortana", "indexing", "removable", "usb"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableRemovableDriveIndexing", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableRemovableDriveIndexing"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableRemovableDriveIndexing", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-search-indexing-encrypted",
+            Label = "Disable Indexing of Encrypted Files",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows Search from indexing encrypted (EFS) files. Reduces indexing overhead and potential data exposure in the search index.",
+            Tags = ["cortana", "indexing", "encrypted", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "cortana-limit-search-indexer-throttle",
+            Label = "Throttle Search Indexer CPU Usage",
+            Category = "Cortana & Search",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Limits the Search Indexer to reduced performance mode. Caps CPU usage during indexing, trading speed for lower system impact.",
+            Tags = ["cortana", "indexer", "throttle", "cpu"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
+        },
+        new TweakDef
+        {
+            Id = "cortana-disable-search-preview-pane",
+            Label = "Disable Search Preview Pane",
+            Category = "Cortana & Search",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the preview pane in Windows Search that shows file contents and web results. Speeds up search UI rendering.",
+            Tags = ["cortana", "search", "preview", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarPreview", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarPreview")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarPreview", 0)],
+        },
     ];
 }

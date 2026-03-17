@@ -1790,4 +1790,322 @@ public sealed class TweakEngineTests
         var td = engine.GetTweak("FROZEN-CASE");
         Assert.NotNull(td);
     }
+
+    // ── Sprint 21: Coverage boost — Filter, Batch, StatusMap, Export edge cases ──
+
+    [Fact]
+    public void Filter_ByCategory_ReturnsOnlyThatCategory()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("fcat-a", "CatA"), TestHelpers.MakeTweak("fcat-b", "CatB"), TestHelpers.MakeTweak("fcat-c", "CatA")]);
+        var results = engine.Filter(category: "CatA");
+        Assert.Equal(2, results.Count);
+        Assert.All(results, t => Assert.Equal("CatA", t.Category));
+    }
+
+    [Fact]
+    public void Filter_ByMinBuild_ReturnsApplicableTweaks()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var lowBuild = new TweakDef
+        {
+            Id = "fbuild-low",
+            Label = "Low",
+            Category = "Test",
+            MinBuild = 10000,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        var highBuild = new TweakDef
+        {
+            Id = "fbuild-high",
+            Label = "High",
+            Category = "Test",
+            MinBuild = 99999,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        engine.Register([lowBuild, highBuild]);
+        var results = engine.Filter(minBuild: 50000);
+        Assert.Single(results);
+        Assert.Equal("fbuild-low", results[0].Id);
+    }
+
+    [Fact]
+    public void Filter_ByNeedsAdmin_ReturnsMatching()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var admin = new TweakDef
+        {
+            Id = "fadmin-yes",
+            Label = "Admin",
+            Category = "Test",
+            NeedsAdmin = true,
+            ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)],
+        };
+        var noAdmin = new TweakDef
+        {
+            Id = "fadmin-no",
+            Label = "NoAdmin",
+            Category = "Test",
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        engine.Register([admin, noAdmin]);
+        var results = engine.Filter(needsAdmin: false);
+        Assert.Single(results);
+        Assert.Equal("fadmin-no", results[0].Id);
+    }
+
+    [Fact]
+    public void ApplyBatch_Parallel_ReturnsAllResults()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var tweaks = Enumerable.Range(1, 5).Select(i => TestHelpers.MakeTweak($"batch-par-{i}")).ToList();
+        engine.Register(tweaks);
+        var results = engine.ApplyBatch(tweaks, forceCorp: true, parallel: true);
+        Assert.Equal(5, results.Count);
+        Assert.All(results.Values, r => Assert.Equal(TweakResult.Applied, r));
+    }
+
+    [Fact]
+    public void RemoveBatch_Sequential_ReturnsAllResults()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var tweaks = Enumerable.Range(1, 3).Select(i => TestHelpers.MakeTweak($"rmbatch-seq-{i}")).ToList();
+        engine.Register(tweaks);
+        var results = engine.RemoveBatch(tweaks, forceCorp: true, parallel: false);
+        Assert.Equal(3, results.Count);
+    }
+
+    [Fact]
+    public void RemoveBatch_Parallel_ReturnsAllResults()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var tweaks = Enumerable.Range(1, 4).Select(i => TestHelpers.MakeTweak($"rmbatch-par-{i}")).ToList();
+        engine.Register(tweaks);
+        var results = engine.RemoveBatch(tweaks, forceCorp: true, parallel: true);
+        Assert.Equal(4, results.Count);
+    }
+
+    [Fact]
+    public void Apply_SkippedBuild_ReturnsBuildSkipped()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "skip-build",
+            Label = "Future",
+            Category = "Test",
+            CorpSafe = true,
+            MinBuild = 99999,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        engine.Register([td]);
+        var result = engine.Apply(td, forceCorp: true);
+        Assert.Equal(TweakResult.SkippedBuild, result);
+    }
+
+    [Fact]
+    public void Remove_WithRemoveOps_ReturnsNotAppliedAfterRemoval()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "remove-ops",
+            Label = "Test",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKCU\Test", "V")],
+        };
+        engine.Register([td]);
+        var result = engine.Remove(td, forceCorp: true);
+        Assert.Equal(TweakResult.NotApplied, result);
+    }
+
+    [Fact]
+    public void TweaksByTag_CustomTag_ReturnsNonEmpty()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("tag-test-1")]);
+        var results = engine.TweaksByTag("test");
+        Assert.NotEmpty(results);
+    }
+
+    [Fact]
+    public void TweaksByScope_ReturnsMatchingTweaks()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("scope-user-x")]);
+        var results = engine.TweaksByScope(TweakScope.User);
+        Assert.NotEmpty(results);
+    }
+
+    [Fact]
+    public void GetScope_ReturnsCorrectScope()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = TestHelpers.MakeTweak("scope-get-x");
+        engine.Register([td]);
+        var scope = engine.GetScope(td);
+        Assert.Equal(TweakScope.User, scope);
+    }
+
+    [Fact]
+    public void CategoryCounts_ReturnsCorrectCounts()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("cc-a1", "CatX"), TestHelpers.MakeTweak("cc-a2", "CatX"), TestHelpers.MakeTweak("cc-b1", "CatY")]);
+        var counts = engine.CategoryCounts();
+        Assert.Equal(2, counts["CatX"]);
+        Assert.Equal(1, counts["CatY"]);
+    }
+
+    [Fact]
+    public void ScopeCounts_ReturnsAllThreeScopes()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("sc-user")]);
+        var counts = engine.ScopeCounts();
+        Assert.True(counts.ContainsKey(TweakScope.User) || counts.ContainsKey(TweakScope.Machine));
+    }
+
+    [Fact]
+    public void ExportJson_WritesFile()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("json-export-1")]);
+        var path = Path.Combine(Path.GetTempPath(), $"regilattice-export-{Guid.NewGuid():N}.json");
+        try
+        {
+            engine.ExportJson(path);
+            Assert.True(File.Exists(path));
+            var json = File.ReadAllText(path);
+            Assert.StartsWith("[", json);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void WindowsBuild_ValueIsAboveZero()
+    {
+        var build = TweakEngine.WindowsBuild();
+        Assert.True(build > 0);
+    }
+
+    [Fact]
+    public void TweaksByIds_ReturnsOnlyRequested()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("byid-1"), TestHelpers.MakeTweak("byid-2"), TestHelpers.MakeTweak("byid-3")]);
+        var results = engine.TweaksByIds(["byid-1", "byid-3"]);
+        Assert.Equal(2, results.Count);
+    }
+
+    [Fact]
+    public void DetectStatus_WithDetectAction_UsesAction()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "detect-action-test",
+            Label = "Test",
+            Category = "Test",
+            ApplyAction = _ => { },
+            DetectAction = () => true,
+        };
+        engine.Register([td]);
+        var status = engine.DetectStatus(td);
+        Assert.Equal(TweakResult.Applied, status);
+    }
+
+    [Fact]
+    public void DetectStatus_WithDetectAction_False_ReturnsNotApplied()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "detect-action-false",
+            Label = "Test",
+            Category = "Test",
+            ApplyAction = _ => { },
+            DetectAction = () => false,
+        };
+        engine.Register([td]);
+        var status = engine.DetectStatus(td);
+        Assert.Equal(TweakResult.NotApplied, status);
+    }
+
+    [Fact]
+    public void DetectStatus_WithDetectAction_Throws_ReturnsError()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "detect-action-throws",
+            Label = "Test",
+            Category = "Test",
+            ApplyAction = _ => { },
+            DetectAction = () => throw new InvalidOperationException("test"),
+        };
+        engine.Register([td]);
+        var status = engine.DetectStatus(td);
+        Assert.Equal(TweakResult.Error, status);
+    }
+
+    [Fact]
+    public void Update_WithUpdateAction_Throws_ReturnsError()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "update-throws",
+            Label = "Test",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyAction = _ => { },
+            UpdateAction = _ => throw new InvalidOperationException("test"),
+        };
+        engine.Register([td]);
+        var result = engine.Update(td, forceCorp: true);
+        Assert.Equal(TweakResult.Error, result);
+    }
+
+    [Fact]
+    public void Apply_ApplyAction_Throws_ReturnsError()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "apply-throws",
+            Label = "Test",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyAction = _ => throw new InvalidOperationException("boom"),
+        };
+        engine.Register([td]);
+        var result = engine.Apply(td, forceCorp: true);
+        Assert.Equal(TweakResult.Error, result);
+    }
+
+    [Fact]
+    public void Remove_RemoveAction_Throws_ReturnsError()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var td = new TweakDef
+        {
+            Id = "remove-throws",
+            Label = "Test",
+            Category = "Test",
+            CorpSafe = true,
+            ApplyAction = _ => { },
+            RemoveAction = _ => throw new InvalidOperationException("boom"),
+        };
+        engine.Register([td]);
+        var result = engine.Remove(td, forceCorp: true);
+        Assert.Equal(TweakResult.Error, result);
+    }
 }

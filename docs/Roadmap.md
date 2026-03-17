@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-16 · v3.4.0 · 2 510 tweaks · 89 categories · 1 305 tests
+> Last updated: 2026-03-17 · v3.4.0 · 2 610 tweaks · 89 categories · 1 199 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 510 verified across 89 categories |
-| Tests | 1 305 (784 Core + 111 CLI + 410 GUI), all passing, 4-thread parallel |
+| Tweaks | 2 610 verified across 89 categories |
+| Tests | 1 199 (888 Core + 116 CLI + 195 GUI), all passing, 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |

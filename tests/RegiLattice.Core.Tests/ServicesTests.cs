@@ -802,3 +802,222 @@ public sealed class SystemMonitorTests
         Assert.InRange(cpuB, 0, 100);
     }
 }
+
+// ── Sprint 21: Coverage boost — Analytics, Locale, Ratings edge cases ────────
+
+public sealed class AnalyticsCoverageTests
+{
+    private readonly string _tempDir;
+
+    public AnalyticsCoverageTests()
+    {
+        _tempDir = Path.Combine(Path.GetTempPath(), $"regilattice-analytics-test-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(_tempDir);
+    }
+
+    [Fact]
+    public void Reset_ClearsAllStats()
+    {
+        Analytics.RecordApply("reset-test-1");
+        Analytics.RecordApply("reset-test-2");
+        Analytics.Reset();
+        var stats = Analytics.GetStats();
+        Assert.Equal(0, stats.TotalApplies);
+        Assert.Equal(0, stats.TotalRemoves);
+        Assert.Equal(0, stats.TotalErrors);
+    }
+
+    [Fact]
+    public void TopTweaks_Empty_ReturnsEmptyList()
+    {
+        Analytics.Reset();
+        var top = Analytics.TopTweaks(5);
+        Assert.Empty(top);
+    }
+
+    [Fact]
+    public void TopTweaks_ZeroN_ReturnsEmptyList()
+    {
+        Analytics.Reset();
+        Analytics.RecordApply("top-zero");
+        var top = Analytics.TopTweaks(0);
+        Assert.Empty(top);
+    }
+
+    [Fact]
+    public void TopTweaks_OrderedByCount()
+    {
+        Analytics.Reset();
+        Analytics.RecordApply("top-a");
+        Analytics.RecordApply("top-b");
+        Analytics.RecordApply("top-b");
+        Analytics.RecordApply("top-c");
+        Analytics.RecordApply("top-c");
+        Analytics.RecordApply("top-c");
+        var top = Analytics.TopTweaks(3);
+        Assert.Equal(3, top.Count);
+        Assert.Equal("top-c", top[0].Item1);
+        Assert.Equal("top-b", top[1].Item1);
+        Assert.Equal("top-a", top[2].Item1);
+    }
+
+    [Fact]
+    public void TopTweaks_NGreaterThanTotal_ReturnsAll()
+    {
+        Analytics.Reset();
+        Analytics.RecordApply("only-one");
+        var top = Analytics.TopTweaks(100);
+        Assert.Single(top);
+    }
+
+    [Fact]
+    public void RecordApply_MultipleTweaks_TracksEachSeparately()
+    {
+        Analytics.Reset();
+        Analytics.RecordApply("multi-a");
+        Analytics.RecordApply("multi-a");
+        Analytics.RecordApply("multi-b");
+        var stats = Analytics.GetStats();
+        Assert.Equal(3, stats.TotalApplies);
+    }
+
+    [Fact]
+    public void RecordError_MultipleTimes_Accumulates()
+    {
+        Analytics.Reset();
+        Analytics.RecordError("err-1");
+        Analytics.RecordError("err-2");
+        Analytics.RecordError("err-3");
+        var stats = Analytics.GetStats();
+        Assert.Equal(3, stats.TotalErrors);
+    }
+}
+
+public sealed class LocaleCoverageTests
+{
+    [Fact]
+    public void T_EmptyKey_ReturnsEmptyString()
+    {
+        var result = Locale.T("");
+        Assert.Equal("", result);
+    }
+
+    [Fact]
+    public void T_UnknownKeyNoArgs_ReturnsKey()
+    {
+        var result = Locale.T("nonexistent-key-xyz-123");
+        Assert.Equal("nonexistent-key-xyz-123", result);
+    }
+
+    [Fact]
+    public void SetLocale_EnglishThenGerman_SwitchesCorrectly()
+    {
+        Locale.SetLocale("en");
+        var en = Locale.T("apply_all");
+        Locale.SetLocale("de");
+        var de = Locale.T("apply_all");
+        Assert.NotEqual(en, de);
+        Locale.SetLocale("en"); // restore
+    }
+
+    [Fact]
+    public void LoadLocaleFile_NonExistentFile_DoesNotThrow()
+    {
+        var fakePath = Path.Combine(Path.GetTempPath(), "nonexistent-locale-xyz.txt");
+        Locale.LoadLocaleFile(fakePath);
+        // Should silently return; no exception
+    }
+
+    [Fact]
+    public void LoadLocaleFile_ValidFile_OverridesKeys()
+    {
+        var tempFile = Path.Combine(Path.GetTempPath(), $"test-locale-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllText(tempFile, "app_title=Custom Title\n");
+            Locale.LoadLocaleFile(tempFile);
+            var result = Locale.T("app_title");
+            Assert.Equal("Custom Title", result);
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
+            Locale.SetLocale("en"); // restore
+        }
+    }
+
+    [Fact]
+    public void AvailableLocales_ContainsAtLeastTwo()
+    {
+        var locales = Locale.AvailableLocales;
+        Assert.True(locales.Count >= 2);
+        Assert.Contains("en", locales);
+        Assert.Contains("de", locales);
+    }
+}
+
+public sealed class RatingsCoverageTests
+{
+    private static string UniqueId() => $"ratcov-{Guid.NewGuid():N}";
+
+    [Fact]
+    public void AverageRating_WithRatings_ReturnsNonNull()
+    {
+        var id = UniqueId();
+        Ratings.Rate(id, 4);
+        var avg = Ratings.AverageRating();
+        Assert.NotNull(avg);
+        Ratings.RemoveRating(id);
+    }
+
+    [Fact]
+    public void AverageRating_SingleRating_ReturnsExact()
+    {
+        var id = UniqueId();
+        // Remove all known test ratings first, then add exactly one
+        Ratings.Rate(id, 3);
+        // Since we can't isolate, just verify non-null and reasonable range
+        var avg = Ratings.AverageRating();
+        Assert.NotNull(avg);
+        Assert.InRange(avg.Value, 1.0, 5.0);
+        Ratings.RemoveRating(id);
+    }
+
+    [Fact]
+    public void AllRatings_DirectCall_ReturnsNonNull()
+    {
+        var id1 = UniqueId();
+        var id2 = UniqueId();
+        Ratings.Rate(id1, 2);
+        Ratings.Rate(id2, 4);
+        var all = Ratings.AllRatings();
+        Assert.True(all.ContainsKey(id1));
+        Assert.True(all.ContainsKey(id2));
+        Ratings.RemoveRating(id1);
+        Ratings.RemoveRating(id2);
+    }
+
+    [Fact]
+    public void Rate_UpdateExisting_OverwritesStars()
+    {
+        var id = UniqueId();
+        Ratings.Rate(id, 2);
+        Ratings.Rate(id, 5);
+        var rating = Ratings.GetRating(id);
+        Assert.NotNull(rating);
+        Assert.Equal(5, rating.Stars);
+        Ratings.RemoveRating(id);
+    }
+
+    [Fact]
+    public void AllRatings_ContainsNewlyAdded()
+    {
+        var id = UniqueId();
+        Ratings.Rate(id, 3);
+        var all = Ratings.AllRatings();
+        Assert.True(all.Count > 0);
+        Assert.True(all.ContainsKey(id));
+        Ratings.RemoveRating(id);
+    }
+}

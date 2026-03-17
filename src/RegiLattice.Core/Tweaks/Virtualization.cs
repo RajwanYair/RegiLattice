@@ -465,5 +465,154 @@ internal static class Virtualization
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures", 3),
             ],
         },
+        // ── Sprint 21 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-time-sync",
+            Label = "Disable Hyper-V Time Synchronization",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Hyper-V Integration Services time synchronization for guest VMs. Useful when guests use their own NTP configuration.",
+            Tags = ["virtualization", "hyper-v", "time-sync", "guest"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync", 1)],
+        },
+        new TweakDef
+        {
+            Id = "virt-set-hyperv-scheduler-classic",
+            Label = "Set Hyper-V Classic Scheduler",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the hypervisor scheduler type to classic (non-root). Better CPU performance for VMs at the cost of security mitigations.",
+            Tags = ["virtualization", "hyper-v", "scheduler", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType", 1)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-heartbeat",
+            Label = "Disable Hyper-V Heartbeat Service",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Hyper-V Heartbeat integration service. Reduces overhead for VMs that do not need host health monitoring.",
+            Tags = ["virtualization", "hyper-v", "heartbeat", "overhead"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicheartbeat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicheartbeat", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicheartbeat", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicheartbeat", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-guest-shutdown",
+            Label = "Disable Hyper-V Guest Shutdown Service",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Hyper-V Guest Shutdown integration service. Host will no longer be able to gracefully shut down guest VMs remotely.",
+            Tags = ["virtualization", "hyper-v", "shutdown", "guest"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicshutdown"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicshutdown", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicshutdown", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicshutdown", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-kvp-exchange",
+            Label = "Disable Hyper-V KVP Exchange Service",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Hyper-V Data Exchange (KVP) integration service. Prevents key-value pair metadata exchange between host and guest.",
+            Tags = ["virtualization", "hyper-v", "kvp", "metadata"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-wdag-policy",
+            Label = "Disable Windows Defender Application Guard via Policy",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Defender Application Guard (WDAG) via Group Policy. Frees VBS resources when WDAG is not needed.",
+            Tags = ["virtualization", "wdag", "policy", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-video-offload",
+            Label = "Disable Hyper-V Video Remote FX",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Hyper-V Remote FX video rendering service. Reduces GPU resource consumption when RemoteFX is not used.",
+            Tags = ["virtualization", "hyper-v", "remotefx", "gpu"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicrdv"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicrdv", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicrdv", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicrdv", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-vss-writer",
+            Label = "Disable Hyper-V VSS Writer",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Hyper-V Volume Shadow Copy (VSS) integration service. Not needed if host-level backup of VMs is not required.",
+            Tags = ["virtualization", "hyper-v", "vss", "backup"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicvss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicvss", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicvss", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicvss", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "virt-set-vm-memory-weight-high",
+            Label = "Set VM Memory Weight to High Priority",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Hyper-V memory weight configuration to high priority. VMs receive memory allocation preference over low-priority workloads.",
+            Tags = ["virtualization", "hyper-v", "memory", "priority"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "MemoryWeight", 5000)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "MemoryWeight")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "MemoryWeight", 5000)],
+        },
+        new TweakDef
+        {
+            Id = "virt-disable-hyperv-gcs",
+            Label = "Disable Hyper-V Guest Clustering Service",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Hyper-V Guest Clustering integration service. Not needed for standalone VMs that are not part of a failover cluster.",
+            Tags = ["virtualization", "hyper-v", "clustering", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicguestinterface"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicguestinterface", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicguestinterface", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmicguestinterface", "Start", 4)],
+        },
     ];
 }
