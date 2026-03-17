@@ -4,7 +4,30 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [3.4.0] — 2026-03-16
+## [3.4.0] — 2026-03-17
+
+### Added — Pre-production Release: Installer, GUI Polish & Repo Cleanup
+
+- **`RegiLattice-3.4.0-win-x64.msi` installer** — self-contained WiX v6 MSI for
+  one-click install of GUI + CLI; adds CLI to `PATH`; Start Menu shortcut; upgrade
+  and uninstall via Add/Remove Programs
+- **Portable executables** — `RegiLattice.GUI.exe` and `RegiLattice.exe` published
+  as self-contained win-x64 single-file binaries, available on the Releases page
+- **ListView double-click to toggle checkbox** — double-clicking any tweak row in the
+  GUI now toggles its checkbox (select/deselect for batch apply)
+- **Selected items counter in status bar** — the bottom status bar now shows `☑ N selected`
+  when one or more tweaks are checked, updating live as checkboxes change
+- **`.gitignore` extended** — added `*.msi`, `*.wixpdb`, `*.wixobj`, `*.cab` to prevent
+  WiX installer build outputs from being tracked
+- **README overhauled** — updated to reflect 2 610 tweaks, 1 199 tests, 11 themes,
+  added Download & Install section with MSI link, added Building the Installer section
+  with step-by-step commands, corrected all stale counts and badges
+
+### Fixed
+
+- Indentation of ListView event handler wiring in `MainForm.Designer.cs` (cosmetic)
+
+
 
 ### Added — Sprint 21: 50 New Tweaks & +10% Coverage Goal Exceeded
 
