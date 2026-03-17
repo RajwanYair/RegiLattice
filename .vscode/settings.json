@@ -89,5 +89,7 @@
     { "file": ".github/instructions/cicd.instructions.md" }
   ],
   "chat.promptFiles": true,
-  "chat.agent.enabled": true
+  "chat.agent.enabled": true,
+  // ── Testing ─────────────────────────────────────────────────────────
+  "dotnet.unitTests.runSettingsPath": "tests/.runsettings"
 }
