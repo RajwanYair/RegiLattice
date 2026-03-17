@@ -320,14 +320,17 @@ partial class MainForm
         _listView.ListViewItemSorter = _columnSorter;
         _listView.ColumnClick += OnColumnClick;
 
-        // ── SplitContainer ─────────────────────────────────────────────────
+    // ── ListView event handlers ────────────────────────────────────────
+    _listView.MouseDoubleClick += OnListViewMouseDoubleClick;
+    _listView.ItemCheck += OnListViewItemCheck;
+
+    // ── SplitContainer ─────────────────────────────────────────────────
         _split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
         _split.Panel1.Controls.Add(_treeView);
 
         // ── Detail panel (bottom of Panel2) ────────────────────────────────
         _detailLabel = new Label
         {
-            Dock = DockStyle.Fill,
             ForeColor = AppTheme.FgDim,
             Font = AppTheme.Regular,
             Padding = new Padding(10, 6, 10, 6),
