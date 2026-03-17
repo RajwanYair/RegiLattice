@@ -611,8 +611,14 @@ public partial class MainForm : Form
             {
                 nodeText = $"{icon} {kvp.Key}  ({count})";
             }
-            var node = new TreeNode(nodeText) { Tag = kvp.Key };
-            node.ForeColor = AppTheme.Fg;
+            string imageKey = AppIcons.CategoryImageKey(kvp.Key);
+            var node = new TreeNode(nodeText)
+            {
+                Tag = kvp.Key,
+                ForeColor = AppTheme.Fg,
+                ImageKey = imageKey,
+                SelectedImageKey = imageKey,
+            };
             _treeView.Nodes.Add(node);
             if (kvp.Key == previousCat)
                 selectNode = node;
@@ -779,6 +785,7 @@ public partial class MainForm : Form
                 Tag = td,
                 UseItemStyleForSubItems = false,
                 ForeColor = itemFg,
+                ImageKey = AppIcons.CategoryImageKey(td.Category),
             };
             Color statusColor = dimmed
                 ? AppTheme.FgDim

@@ -40,11 +40,29 @@ Each manager provides:
 
 ## Adding a New Manager
 
-1. Create `src/RegiLattice.GUI/PackageManagers/NewManager.cs` — backend
-2. Create `src/RegiLattice.GUI/Forms/NewManagerDialog.cs` — UI dialog
-3. Add menu item in `MainForm.Designer.cs` under Tools menu
+All 5 dialog classes extend `BasePackageManagerDialog` (template method pattern).
+To add a new package manager dialog:
+
+1. Create `src/RegiLattice.GUI/PackageManagers/NewManager.cs` — backend (static async methods)
+2. Create `src/RegiLattice.GUI/Forms/NewManagerDialog.cs` — sealed class extending `BasePackageManagerDialog`
+   - Override abstract properties: `DialogTitle`, `DialogIcon`, `PrereqReadyText`, `PrereqMissingText`,
+     `PrereqInstallingText`, `PrereqInstallButtonText`, `UpgradeText`, `PopularPackages`, `BuildListColumns()`
+   - Override abstract methods: `CheckPrereq()`, `InstallPrereqAsync(ct)`, `RefreshCoreAsync(ct)`,
+     `InstallCoreAsync(name, ct)`, `RemoveCoreAsync(name, ct)`, `UpgradeCoreAsync(name, ct)`
+   - Optional: override `BuildScopePanel()` for scope selection, `AddExtraButtons()` for custom buttons
+3. Add menu item in `MainForm.cs` under Tools menu
 4. Add version checking in `ToolVersionChecker.cs`
 5. Write validation tests in `PackageManagerValidationTests.cs`
+
+### BasePackageManagerDialog Provides (inherited for free)
+
+- `SplitContainer` with resizable pane: top = ListView + buttons, bottom = RichTextBox log panel
+- Shared controls: `_lstInstalled` ListView, `_txtName` TextBox, `_lblStatus`, `_lblOutdated`, `_flowQuick` FlowLayoutPanel
+- Prereq banner with async install flow (yellow→green/red states)
+- `AppendLog(msg, color?)` — timestamped `[HH:mm:ss]` entries in the log panel
+- `SetBusy(bool, msg?)`, `SetStatus(msg, color?)`, `SetOutdated(msg, color?)`
+- `RebuildQuickInstallButtons()` — auto-generates quick-install buttons from `PopularPackages`
+- Shared async wrappers: `RefreshAsync()`, `InstallAsync()`, `RemoveAsync()`, `UpgradeAsync()`
 
 ## Rules
 

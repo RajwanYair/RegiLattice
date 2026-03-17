@@ -37,15 +37,16 @@ RegiLattice.sln
 │   │   │                        #   Locale, PipManager, Ratings, ShellRunner,
 │   │   │                        #   SystemMonitor, TweakHistory, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 90 category modules, ~2,510 tweaks
+│   │   └── Tweaks/              # 90 category modules, ~2,610 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
-│   │   ├── Theme.cs             # 4-theme engine
-│   │   ├── Forms/               # MainForm, AboutDialog, ChocolateyManagerDialog,
-│   │   │                        #   MarketplaceDialog, PipManagerDialog, PSModuleManagerDialog,
-│   │   │                        #   ScoopManagerDialog, ToolVersionsDialog, WindowsHealthDialog,
-│   │   │                        #   WinGetManagerDialog
+│   │   ├── Theme.cs             # 11-theme engine
+│   │   ├── Forms/               # MainForm, AboutDialog, BasePackageManagerDialog,
+│   │   │                        #   ChocolateyManagerDialog, MarketplaceDialog,
+│   │   │                        #   PipManagerDialog, PSModuleManagerDialog,
+│   │   │                        #   ScoopManagerDialog, ToolVersionsDialog,
+│   │   │                        #   WindowsHealthDialog, WinGetManagerDialog
 │   │   └── PackageManagers/     # GUI-side package manager wrappers
 │   │                            #   PackageNameValidator, ShellRunner, ScoopManager, PipManager,
 │   │                            #   PSModuleManager, ChocolateyManager, WinGetManager,
@@ -55,9 +56,10 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 784 xUnit tests
-│   ├── RegiLattice.CLI.Tests/   # 111 xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 410 xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 888+ xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 116+ xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 195+ xUnit tests
+├── .tmp/                        # Intermediate dev files (gitignored)
 └── archive/                     # Archived (untracked)
 ```
 
@@ -175,3 +177,37 @@ dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 
 - Don't use `Thread` directly — use `Task.Run` or async/await
 - Don't skip tests for "simple" code
 - Don't commit debug code or temp files
+
+## Intermediate / Temporary Files
+
+Place all development intermediate files (generated reports, profiling output, scratch
+scripts, coverage HTML, etc.) in the `.tmp/` directory at the project root. This
+directory is gitignored and will never be tracked. Do NOT place these in root or `docs/`.
+
+```powershell
+# Example: export coverage report to .tmp/
+dotnet test --collect:"XPlat Code Coverage"
+reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:".tmp/htmlcov" -reporttypes:Html
+```
+
+## Package Manager Dialog Architecture
+
+All 5 package manager dialogs extend `BasePackageManagerDialog` (template method pattern):
+
+```
+BasePackageManagerDialog (abstract)
+├── ChocolateyManagerDialog
+├── ScoopManagerDialog
+├── PipManagerDialog         (+BuildScopePanel override)
+├── WinGetManagerDialog      (+AddExtraButtons override for Search)
+└── PSModuleManagerDialog    (+BuildScopePanel override, UpgradeText="Update")
+```
+
+The base class provides:
+- `SplitContainer` with resizable pane (top: ListView + buttons, bottom: RichTextBox log)
+- Prereq banner with async install flow
+- `AppendLog()`, `SetBusy()`, `SetStatus()`, `SetOutdated()`, `RebuildQuickInstallButtons()`
+- Shared async wrappers: `RefreshAsync()`, `InstallAsync()`, `RemoveAsync()`, `UpgradeAsync()`
+
+To add a new manager dialog, extend `BasePackageManagerDialog` and override the abstract
+properties and methods. See `.github/skills/package-managers.skill.md` for full details.
