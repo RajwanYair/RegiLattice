@@ -468,5 +468,157 @@ internal static class Accessibility
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys", "Flags", "62")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\MouseKeys", "Flags", "0")],
         },
+
+        // ── Sprint 21 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "acc-disable-sticky-keys",
+            Label = "Disable Sticky Keys",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Sticky Keys which allows modifier keys to remain active after being released. Eliminates the common 5× Shift annoyance during gaming.",
+            Tags = ["accessibility", "sticky-keys", "gaming", "keyboard"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "0")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-disable-bounce-keys",
+            Label = "Disable Bounce Keys",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Bounce Keys which ignores repeated keystrokes within a short time. Removes unwanted key filtering for fast typists.",
+            Tags = ["accessibility", "bounce-keys", "keyboard", "filter"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response", "BounceTime", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response", "BounceTime", "100")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\Keyboard Response", "BounceTime", "0")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-reduce-repeat-delay",
+            Label = "Reduce Keyboard Repeat Delay",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the keyboard repeat delay to the shortest setting (250ms). Keys start repeating faster when held down.",
+            Tags = ["accessibility", "keyboard", "repeat-delay", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-increase-repeat-rate",
+            Label = "Maximize Keyboard Repeat Rate",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the keyboard repeat rate to the fastest setting (31 repeats/sec). Characters repeat quicker when a key is held.",
+            Tags = ["accessibility", "keyboard", "repeat-rate", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "20")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-disable-ease-of-access-hotkey",
+            Label = "Disable Ease of Access Center Hotkey",
+            Category = "Accessibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Win+U hotkey that opens the Ease of Access Center. Frees the shortcut for other uses and prevents accidental opening.",
+            Tags = ["accessibility", "hotkey", "ease-of-access", "keyboard"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispEasyAccessCPL", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispEasyAccessCPL")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispEasyAccessCPL", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-set-menu-show-delay",
+            Label = "Reduce Menu Show Delay",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the delay before menus appear to 50ms (default 400ms). Makes context menus and submenus feel instant.",
+            Tags = ["accessibility", "menu", "delay", "responsiveness"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "400")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-disable-on-screen-keyboard-auto",
+            Label = "Disable On-Screen Keyboard Auto-Launch on Tablet",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents the touch keyboard from automatically appearing when a text field is focused in tablet mode. Useful for keyboard-attached tablets.",
+            Tags = ["accessibility", "on-screen-keyboard", "tablet", "touch"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-increase-cursor-blink-rate",
+            Label = "Increase Cursor Blink Rate",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases the cursor blink rate to 200ms (default ~530ms). The faster blinking makes the cursor easier to locate.",
+            Tags = ["accessibility", "cursor", "blink", "visibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "200")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "200")],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-disable-auto-correct",
+            Label = "Disable Auto-Correct for Touch Keyboard",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables automatic word correction in the Windows touch keyboard. Prevents unwanted text changes during touch input.",
+            Tags = ["accessibility", "auto-correct", "touch-keyboard", "typing"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableAutocorrection", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableAutocorrection")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableAutocorrection", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "acc-disable-high-contrast-hotkey",
+            Label = "Disable High Contrast Hotkey",
+            Category = "Accessibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Left Alt+Left Shift+Print Screen hotkey for toggling high contrast mode. Prevents accidental theme changes.",
+            Tags = ["accessibility", "high-contrast", "hotkey", "keyboard"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "126")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "0")],
+        },
     ];
 }

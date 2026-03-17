@@ -329,5 +329,157 @@ internal static class Security
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
         },
+        // ── Sprint 21 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "sec-enable-credential-guard-vbs",
+            Label = "Enable Credential Guard",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables Windows Credential Guard to protect NTLM hashes and Kerberos tickets using virtualization-based security. Prevents pass-the-hash attacks.",
+            Tags = ["security", "credential-guard", "vbs", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-enforce-audit-policy",
+            Label = "Enforce Advanced Audit Policy",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Forces use of advanced audit policy configuration over legacy audit policies. Ensures granular logging control.",
+            Tags = ["security", "audit", "logging", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "SCENoApplyLegacyAuditPolicy", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "SCENoApplyLegacyAuditPolicy")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "SCENoApplyLegacyAuditPolicy", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-remote-registry",
+            Label = "Disable Remote Registry Service",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets the Remote Registry service to disabled. Prevents remote access to the Windows registry, reducing attack surface.",
+            Tags = ["security", "remote-registry", "service", "attack-surface"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "sec-block-unsigned-drivers",
+            Label = "Block Unsigned Driver Installation",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Blocks installation of unsigned kernel-mode drivers. Strengthens driver signing enforcement beyond default.",
+            Tags = ["security", "drivers", "signing", "kernel"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Driver Signing"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Driver Signing", "Policy", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Driver Signing", "Policy")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Driver Signing", "Policy", 2)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-ip-source-routing",
+            Label = "Disable IP Source Routing",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables IP source routing which allows packets to specify their own route. Prevents source routing-based attacks.",
+            Tags = ["security", "network", "source-routing", "ip"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "DisableIPSourceRouting", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "DisableIPSourceRouting")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "DisableIPSourceRouting", 2)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-icmp-redirect-disable",
+            Label = "Disable ICMP Redirects",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables processing of ICMP redirect messages. Prevents MITM attacks that could redirect network traffic.",
+            Tags = ["security", "network", "icmp", "redirect"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableICMPRedirect", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableICMPRedirect")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableICMPRedirect", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enforce-smb-encryption",
+            Label = "Enforce SMB Encryption",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Requires encryption for all SMB 3.0+ connections. Prevents eavesdropping on file share traffic.",
+            Tags = ["security", "smb", "encryption", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-restrict-anonymous-access-shares",
+            Label = "Restrict Anonymous Access to Named Pipes and Shares",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Restricts anonymous access to named pipes and shares. Prevents null session enumeration of shared resources.",
+            Tags = ["security", "anonymous", "shares", "named-pipes"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-default-admin-shares",
+            Label = "Disable Administrative Shares",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables automatic creation of administrative shares (C$, D$, ADMIN$). Prevents lateral movement in compromised networks.",
+            Tags = ["security", "admin-shares", "lateral-movement", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-safe-search-mode",
+            Label = "Enable Safe DLL Search Mode",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Ensures the system directory is searched before the current directory for DLLs. Mitigates DLL hijacking attacks.",
+            Tags = ["security", "dll", "hijacking", "search-order"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
+        },
     ];
 }

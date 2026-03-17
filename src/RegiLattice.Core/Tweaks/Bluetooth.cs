@@ -373,5 +373,152 @@ internal static class Bluetooth
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 3)],
         },
+        // ── Sprint 21 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "bt-disable-bt-audio-router",
+            Label = "Disable Bluetooth Audio Gateway Router",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth Audio Gateway service used for hands-free audio routing. Reduces overhead when only A2DP audio is needed.",
+            Tags = ["bluetooth", "audio", "gateway", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthhfAud"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthhfAud", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthhfAud", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthhfAud", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-enum-service",
+            Label = "Disable Bluetooth Device Enumeration Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth user-mode device enumeration service. Reduces background scanning when Bluetooth devices are not actively paired.",
+            Tags = ["bluetooth", "enumeration", "service", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-rfcomm",
+            Label = "Disable Bluetooth RFCOMM Protocol",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Bluetooth RFCOMM driver used for serial port emulation. Breaks SPP-based connections (e.g., serial GPS, OBD-II).",
+            Tags = ["bluetooth", "rfcomm", "serial", "protocol"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-bnep",
+            Label = "Disable Bluetooth Network Protocol (BNEP)",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Bluetooth BNEP driver used for PAN networking. Not needed when Bluetooth tethering is unused.",
+            Tags = ["bluetooth", "bnep", "networking", "tethering"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-set-inquiry-timeout",
+            Label = "Reduce Bluetooth Inquiry Timeout",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Bluetooth inquiry scan timeout to a shorter window (5 seconds). Speeds up device discovery at the cost of finding slower-responding devices.",
+            Tags = ["bluetooth", "inquiry", "timeout", "discovery"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "InquiryTimeout", 5)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "InquiryTimeout")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", "InquiryTimeout", 5)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-hid-service",
+            Label = "Disable Bluetooth HID Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Bluetooth Human Interface Device service. Breaks Bluetooth keyboards, mice, and game controllers.",
+            Tags = ["bluetooth", "hid", "keyboard", "mouse"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\HidBth"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\HidBth", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\HidBth", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\HidBth", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-amp-manager",
+            Label = "Disable Bluetooth AMP Manager",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Bluetooth Alternate MAC/PHY Manager protocol. AMP (802.11) is rarely used by consumer devices.",
+            Tags = ["bluetooth", "amp", "protocol", "overhead"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAMPManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAMPManager", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAMPManager", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAMPManager", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-connection-notifications",
+            Label = "Disable Bluetooth Connection Notifications",
+            Category = "Bluetooth",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables toast notifications when Bluetooth devices connect or disconnect. Reduces notification noise.",
+            Tags = ["bluetooth", "notifications", "toast", "connect"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Bluetooth"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Bluetooth", "ShowNotification", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Bluetooth", "ShowNotification")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Bluetooth", "ShowNotification", 0)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-le-proximity",
+            Label = "Disable Bluetooth LE Proximity Detection",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Bluetooth Low Energy proximity detection events. Reduces background radio activity and improves battery life.",
+            Tags = ["bluetooth", "le", "proximity", "battery"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthLEEnum", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-set-selective-suspend",
+            Label = "Enable Bluetooth Selective Suspend",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables selective suspend for the Bluetooth USB adapter. Allows the adapter to enter low-power state when idle, saving battery.",
+            Tags = ["bluetooth", "selective-suspend", "usb", "power"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters", "SelectiveSuspendEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters", "SelectiveSuspendEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters", "SelectiveSuspendEnabled", 1)],
+        },
     ];
 }

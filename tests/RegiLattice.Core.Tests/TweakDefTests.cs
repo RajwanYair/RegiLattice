@@ -666,4 +666,335 @@ public sealed class RegOpExtendedTests
         var op = RegOp.CheckKeyMissing(@"HKLM\Test\Sub");
         Assert.Equal("", op.Name);
     }
+
+    // ── Sprint 21: Coverage boost — ComputeScope, GetExpectedResult, Kind detection ──
+
+    [Fact]
+    public void Scope_HKCR_ReturnsMachine()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-hkcr",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKEY_CLASSES_ROOT\*\shell\open"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CLASSES_ROOT\*\shell\open", "V", "x")],
+        };
+        Assert.Equal(TweakScope.Machine, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_HKCU_ReturnsUser()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-hkcu",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Test", "V", 1)],
+        };
+        Assert.Equal(TweakScope.User, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_BothHives_ReturnsBoth()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-both",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Test", @"HKEY_LOCAL_MACHINE\SOFTWARE\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+        };
+        Assert.Equal(TweakScope.Both, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_NoKeys_NotAdmin_ReturnsUser()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-nokeys-noadmin",
+            Label = "Test",
+            Category = "Test",
+            NeedsAdmin = false,
+            ApplyAction = _ => { },
+        };
+        Assert.Equal(TweakScope.User, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_NoKeys_Admin_ReturnsMachine()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-nokeys-admin",
+            Label = "Test",
+            Category = "Test",
+            NeedsAdmin = true,
+            ApplyAction = _ => { },
+        };
+        Assert.Equal(TweakScope.Machine, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_HKLM_Abbreviation_ReturnsMachine()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-hklm-abbrev",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKLM\SOFTWARE\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Test", "V", 1)],
+        };
+        Assert.Equal(TweakScope.Machine, td.Scope);
+    }
+
+    [Fact]
+    public void Scope_HKCU_Abbreviation_ReturnsUser()
+    {
+        var td = new TweakDef
+        {
+            Id = "scope-hkcu-abbrev",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKCU\Software\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+        };
+        Assert.Equal(TweakScope.User, td.Scope);
+    }
+
+    [Fact]
+    public void Kind_WithKindHint_ReturnsHint()
+    {
+        var td = new TweakDef
+        {
+            Id = "kind-hint",
+            Label = "Test",
+            Category = "Test",
+            KindHint = TweakKind.ServiceControl,
+            ApplyOps = [RegOp.SetDword(@"HKLM\Test", "V", 1)],
+        };
+        Assert.Equal(TweakKind.ServiceControl, td.Kind);
+    }
+
+    [Fact]
+    public void Kind_WithApplyAction_ReturnsPowerShell()
+    {
+        var td = new TweakDef
+        {
+            Id = "kind-action",
+            Label = "Test",
+            Category = "Test",
+            ApplyAction = _ => { },
+        };
+        Assert.Equal(TweakKind.PowerShell, td.Kind);
+    }
+
+    [Fact]
+    public void Kind_PoliciesPath_ReturnsGroupPolicy()
+    {
+        var td = new TweakDef
+        {
+            Id = "kind-gpo",
+            Label = "Test",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows", "V", 0)],
+        };
+        Assert.Equal(TweakKind.GroupPolicy, td.Kind);
+    }
+
+    [Fact]
+    public void Kind_NormalRegOps_ReturnsRegistry()
+    {
+        var td = new TweakDef
+        {
+            Id = "kind-registry",
+            Label = "Test",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test", "V", 1)],
+        };
+        Assert.Equal(TweakKind.Registry, td.Kind);
+    }
+
+    [Fact]
+    public void HasOperations_WithApplyOps_ReturnsTrue()
+    {
+        var td = new TweakDef
+        {
+            Id = "hasops-ops",
+            Label = "Test",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        Assert.True(td.HasOperations);
+    }
+
+    [Fact]
+    public void HasOperations_WithApplyAction_ReturnsTrue()
+    {
+        var td = new TweakDef
+        {
+            Id = "hasops-action",
+            Label = "Test",
+            Category = "Test",
+            ApplyAction = _ => { },
+        };
+        Assert.True(td.HasOperations);
+    }
+
+    [Fact]
+    public void HasOperations_NoOpsNoAction_ReturnsFalse()
+    {
+        var td = new TweakDef
+        {
+            Id = "hasops-none",
+            Label = "Test",
+            Category = "Test",
+        };
+        Assert.False(td.HasOperations);
+    }
+
+    [Fact]
+    public void GetExpectedResult_ExplicitValue_ReturnsIt()
+    {
+        var td = new TweakDef
+        {
+            Id = "expected-explicit",
+            Label = "Disable X",
+            Category = "Privacy",
+            ExpectedResult = "Custom result text.",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        Assert.Equal("Custom result text.", td.GetExpectedResult());
+    }
+
+    [Fact]
+    public void GetExpectedResult_Empty_AutoGenerates()
+    {
+        var td = new TweakDef
+        {
+            Id = "expected-auto",
+            Label = "Disable Telemetry",
+            Category = "Privacy",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        var result = td.GetExpectedResult();
+        Assert.NotEmpty(result);
+        Assert.NotEqual("", result);
+    }
+
+    [Fact]
+    public void GetExpectedResult_EnableLabel_AutoGenerates()
+    {
+        var td = new TweakDef
+        {
+            Id = "expected-enable",
+            Label = "Enable Dark Mode",
+            Category = "Display",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        var result = td.GetExpectedResult();
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public void GetExpectedResult_NeedsAdmin_IncludesRestartNote()
+    {
+        var td = new TweakDef
+        {
+            Id = "expected-restart",
+            Label = "Disable Something",
+            Category = "Performance",
+            NeedsAdmin = true,
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Test"],
+            ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Test", "V", 1)],
+        };
+        var result = td.GetExpectedResult();
+        Assert.Contains("restart", result, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void PackSource_Null_ByDefault()
+    {
+        var td = new TweakDef
+        {
+            Id = "pack-default",
+            Label = "Test",
+            Category = "Test",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        Assert.Null(td.PackSource);
+    }
+
+    [Fact]
+    public void PackSource_SetFromPack_ReturnsPackName()
+    {
+        var td = new TweakDef
+        {
+            Id = "pack-set",
+            Label = "Test",
+            Category = "Test",
+            PackSource = "my-custom-pack",
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        Assert.Equal("my-custom-pack", td.PackSource);
+    }
+
+    [Fact]
+    public void SetBinary_ValueKindAndData_AreCorrect()
+    {
+        byte[] data = [0x01, 0x02, 0x03];
+        var op = RegOp.SetBinary(@"HKCU\Test", "BinVal", data);
+        Assert.Equal(RegOpKind.SetValue, op.Kind);
+        Assert.Equal(Microsoft.Win32.RegistryValueKind.Binary, op.ValueKind);
+        Assert.Equal(data, op.Value);
+    }
+
+    [Fact]
+    public void SetMultiSz_ValueKindAndData_AreCorrect()
+    {
+        string[] data = ["val1", "val2", "val3"];
+        var op = RegOp.SetMultiSz(@"HKCU\Test", "MultiVal", data);
+        Assert.Equal(RegOpKind.SetValue, op.Kind);
+        Assert.Equal(Microsoft.Win32.RegistryValueKind.MultiString, op.ValueKind);
+        Assert.Equal(data, op.Value);
+    }
+
+    [Fact]
+    public void SetExpandString_ValueKindAndData_AreCorrect()
+    {
+        var op = RegOp.SetExpandString(@"HKLM\Test", "Path", @"%SystemRoot%\System32");
+        Assert.Equal(RegOpKind.SetValue, op.Kind);
+        Assert.Equal(Microsoft.Win32.RegistryValueKind.ExpandString, op.ValueKind);
+        Assert.Equal(@"%SystemRoot%\System32", op.Value);
+    }
+
+    [Fact]
+    public void SetQword_ValueKindAndData_AreCorrect()
+    {
+        var op = RegOp.SetQword(@"HKCU\Test", "Big", 999999999999L);
+        Assert.Equal(RegOpKind.SetValue, op.Kind);
+        Assert.Equal(Microsoft.Win32.RegistryValueKind.QWord, op.ValueKind);
+        Assert.Equal(999999999999L, op.Value);
+    }
+
+    [Fact]
+    public void DeleteTree_CreatesCorrectOp()
+    {
+        var op = RegOp.DeleteTree(@"HKLM\Software\Test\SubKey");
+        Assert.Equal(RegOpKind.DeleteTree, op.Kind);
+        Assert.Equal(@"HKLM\Software\Test\SubKey", op.Path);
+    }
+
+    [Fact]
+    public void CheckMissing_CreatesCorrectOp()
+    {
+        var op = RegOp.CheckMissing(@"HKCU\Test", "ShouldNotExist");
+        Assert.Equal(RegOpKind.CheckMissing, op.Kind);
+        Assert.Equal("ShouldNotExist", op.Name);
+    }
 }

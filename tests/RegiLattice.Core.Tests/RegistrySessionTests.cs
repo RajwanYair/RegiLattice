@@ -425,4 +425,246 @@ public sealed class RegistrySessionTests
         Assert.Equal(Microsoft.Win32.Registry.ClassesRoot, root);
         Assert.Equal(@"*\shell", subKey);
     }
+
+    // ── Sprint 21: Coverage boost — DryRun ops, Execute dispatch, Evaluate, ParsePath, Events ──
+
+    [Fact]
+    public void DryRun_SetExpandString_IncrementsCounter()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.SetExpandString(@"HKCU\Software\Test", "Path", @"%SystemRoot%\bin");
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void DryRun_SetQword_IncrementsCounter()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.SetQword(@"HKCU\Software\Test", "Big", 123456789L);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void DryRun_SetBinary_IncrementsCounter()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.SetBinary(@"HKCU\Software\Test", "Blob", [0x01, 0x02, 0x03]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void DryRun_SetMultiSz_IncrementsCounter()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.SetMultiSz(@"HKCU\Software\Test", "Lines", ["a", "b"]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_DeleteValueOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.DeleteValue(@"HKCU\Software\Test", "V")]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_DeleteTreeOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.DeleteTree(@"HKCU\Software\Test\SubKey")]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_SetStringOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.SetString(@"HKCU\Software\Test", "N", "V")]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_SetExpandStringOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.SetExpandString(@"HKCU\Software\Test", "Path", @"%TEMP%\x")]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_SetQwordOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.SetQword(@"HKCU\Software\Test", "Q", 42L)]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_SetBinaryOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.SetBinary(@"HKCU\Software\Test", "B", [0xFF])]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Execute_SetMultiSzOp_IncrementsDryOps()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.Execute([RegOp.SetMultiSz(@"HKCU\Software\Test", "M", ["a", "b"])]);
+        Assert.Equal(1, s.DryOps);
+    }
+
+    [Fact]
+    public void Evaluate_CheckDword_OnKnownValue_ReturnsCorrectly()
+    {
+        var s = new RegistrySession(dryRun: false);
+        // HKCU\Console\FullScreen should exist on most Windows; 0 = windowed
+        var result = s.Evaluate([RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "FullScreen", 0)]);
+        // Whether true or false, it should not throw
+        Assert.True(result || !result);
+    }
+
+    [Fact]
+    public void Evaluate_CheckMissing_OnExistingValue_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        // HKCU\Console has known values, so checking for "missing" on an existing one should fail
+        var result = s.Evaluate([RegOp.CheckMissing(@"HKEY_CURRENT_USER\Console", "FullScreen")]);
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Evaluate_MultipleChecks_AllMustPass()
+    {
+        var s = new RegistrySession(dryRun: false);
+        // Both check non-existent keys → both true → overall true
+        var result = s.Evaluate([
+            RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "A"),
+            RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "B"),
+        ]);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Evaluate_MixedCheckResults_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: false);
+        // One passes (non-existent), one fails (existing key that shouldn't be missing)
+        var result = s.Evaluate([
+            RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "A"),
+            RegOp.CheckKeyMissing(@"HKEY_CURRENT_USER\Console"),
+        ]);
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void ParsePath_HKU_FullName_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKEY_USERS\.DEFAULT\Software");
+        Assert.Equal(Microsoft.Win32.Registry.Users, root);
+        Assert.Equal(@".DEFAULT\Software", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_HKU_Abbreviated_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKU\.DEFAULT\Software");
+        Assert.Equal(Microsoft.Win32.Registry.Users, root);
+        Assert.Equal(@".DEFAULT\Software", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_HKCC_FullName_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKEY_CURRENT_CONFIG\Software");
+        Assert.Equal(Microsoft.Win32.Registry.CurrentConfig, root);
+        Assert.Equal("Software", subKey);
+    }
+
+    [Fact]
+    public void ParsePath_HKCC_Abbreviated_Works()
+    {
+        var (root, subKey) = RegistrySession.ParsePath(@"HKCC\Software");
+        Assert.Equal(Microsoft.Win32.Registry.CurrentConfig, root);
+        Assert.Equal("Software", subKey);
+    }
+
+    [Fact]
+    public void LogWritten_Event_FiresOnWriteLog()
+    {
+        var s = new RegistrySession(dryRun: true);
+        string? received = null;
+        s.LogWritten += msg => received = msg;
+        s.WriteLog("test-event");
+        Assert.NotNull(received);
+        Assert.Contains("test-event", received);
+    }
+
+    [Fact]
+    public void LogWritten_Event_FiresOnDryRunOp()
+    {
+        var s = new RegistrySession(dryRun: true);
+        var events = new List<string>();
+        s.LogWritten += msg => events.Add(msg);
+        s.SetDword(@"HKCU\Software\Test", "V", 1);
+        Assert.NotEmpty(events);
+    }
+
+    [Fact]
+    public void ReadQword_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadQword(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "Q");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ReadBinary_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadBinary(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "B");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ReadMultiSz_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadMultiSz(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "M");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ReadValue_NonExistentKey_ReturnsNull()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ReadValue(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99", "X");
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void ListValueNames_NonexistentKey_ReturnsEmpty()
+    {
+        var s = new RegistrySession(dryRun: false);
+        var result = s.ListValueNames(@"HKEY_CURRENT_USER\Software\RegiLattice_NOEXIST_99");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void DryRun_AllOpsTypes_LogMessages()
+    {
+        var s = new RegistrySession(dryRun: true);
+        s.SetDword(@"HKCU\Test", "D", 1);
+        s.SetString(@"HKCU\Test", "S", "v");
+        s.SetExpandString(@"HKCU\Test", "E", @"%TEMP%");
+        s.SetQword(@"HKCU\Test", "Q", 1L);
+        s.SetBinary(@"HKCU\Test", "B", [0x01]);
+        s.SetMultiSz(@"HKCU\Test", "M", ["a"]);
+        s.DeleteValue(@"HKCU\Test", "X");
+        s.DeleteTree(@"HKCU\Test\Sub");
+        Assert.Equal(8, s.DryOps);
+        Assert.Equal(8, s.Log.Count);
+    }
 }

@@ -6,6 +6,23 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [3.4.0] — 2026-03-16
 
+### Added — Sprint 21: 50 New Tweaks & +10% Coverage Goal Exceeded
+
+- **50 new tweaks** across 5 categories:
+  Security (10), Virtualization (10), Bluetooth (10), Accessibility (10), Cortana & Search (10)
+- **93 new Core tests** added across 4 files:
+  `TweakDefTests.cs`, `TweakEngineTests.cs`, `RegistrySessionTests.cs`, `ServicesTests.cs`
+- **Coverage boost (Core, Cobertura line rate):**
+  - TweakEngine.cs: **82.3% → 90.18%** (+7.88)
+  - TweakDef.cs: **67.9% → 100%** (+32.1)
+  - RegistrySession.cs: **38.9% → 90.25%** (+51.35)
+  - Analytics.cs: **54.1% → 100%** (+45.9)
+  - Locale.cs: **84.6% → 100%** (+15.4)
+  - Ratings.cs: **88.9% → 100%** (+11.1)
+  - Overall Core line coverage: **95.3%**
+- **Full validation:** all tests pass on solution run (**1,199/1,199**)
+- Total: **2,610 tweaks**, **1,199 tests passing** (888 Core + 116 CLI + 195 GUI)
+
 ### Added — Sprint 20: GUI Enhancements, Coverage Boost & 50 New Tweaks
 
 - **Search clear button**: ToolStripButton "✕" next to search box, auto-shown/hidden
