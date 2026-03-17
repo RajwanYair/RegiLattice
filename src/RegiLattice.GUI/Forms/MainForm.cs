@@ -52,11 +52,13 @@ public partial class MainForm : Form
     protected override async void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
+        _monitorTimer.Start();
         await InitialiseEngineAsync();
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
+        _monitorTimer.Stop();
         _trayIcon.Visible = false;
         _cts.Cancel();
         base.OnFormClosing(e);
@@ -1046,6 +1048,14 @@ public partial class MainForm : Form
     {
         _progressLabel.Text = message;
         AppendLog(message);
+    }
+
+    private void OnMonitorTimerTick(object? sender, EventArgs e)
+    {
+        int cpu = _sysMonitor.GetCpuUsagePercent();
+        var (usedMb, totalMb, memPct) = SystemMonitor.GetMemoryUsage();
+        _cpuLabel.Text = $"CPU: {cpu}%";
+        _memLabel.Text = $"RAM: {usedMb / 1024.0:F1}/{totalMb / 1024.0:F0} GB ({memPct}%)";
     }
 
     private void SetBusy(bool busy, string? message = null, int totalSteps = 0)

@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-16 (v3.4.0, C# 13 / .NET 10.0-windows, 2 363 tweaks, 89 categories)
+> Last updated: 2026-03-16 (v3.4.0, C# 13 / .NET 10.0-windows, 2 510 tweaks, 89 categories)
 
 ---
 
@@ -141,11 +141,13 @@ ApplyOps = new List<RegOp> { RegOp.SetDword(...) },
 
 ---
 
-## P/Invoke — Only 2 Calls Allowed
+## P/Invoke — Only 4 Calls Allowed
 
-The entire codebase uses exactly 2 P/Invoke calls:
+The entire codebase uses exactly 4 P/Invoke calls:
 1. `GetComputerNameExW` in `CorporateGuard.cs` — AD domain detection
 2. `GlobalMemoryStatusEx` in `HardwareInfo.cs` — RAM detection
+3. `GetSystemTimes` in `SystemMonitor.cs` — CPU usage (idle/kernel/user delta)
+4. `GlobalMemoryStatusEx` in `SystemMonitor.cs` — live memory monitoring
 
 Any new P/Invoke must be explicitly justified. Prefer `Microsoft.Win32.Registry`
 and `System.Management` (WMI) for system queries.

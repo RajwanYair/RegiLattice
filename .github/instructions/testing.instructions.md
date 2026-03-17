@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project | Tests | Covers |
 |---------|-------|--------|
-| `RegiLattice.Core.Tests` | 779 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
+| `RegiLattice.Core.Tests` | 784 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
 | `RegiLattice.CLI.Tests` | 111 | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer) |
-| `RegiLattice.GUI.Tests` | 159 | Theme, PackageManagerValidation, PackageNameValidator, AppIcons |
-| **Total** | **1,029** | |
+| `RegiLattice.GUI.Tests` | 410 | Theme, PackageManagerValidation, PackageNameValidator, AppIcons |
+| **Total** | **1,305** | |
 
 ## Running Tests
 

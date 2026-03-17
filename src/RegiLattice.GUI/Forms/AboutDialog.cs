@@ -24,6 +24,7 @@ internal sealed class AboutDialog : Form
         string corpStatus = isCorporate ? "Yes (corp-unsafe tweaks blocked)" : "No";
         bool isAdmin = Elevation.IsAdmin();
         string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "regilattice.log");
+        var uptime = SystemMonitor.GetUptime();
 
         // ── Title ──────────────────────────────────────────────────────────
         var lblTitle = new Label
@@ -47,6 +48,7 @@ internal sealed class AboutDialog : Form
             Machine     : {machineName}  ({userName})
             Admin       : {(isAdmin ? "Yes" : "No")}
             Corporate   : {corpStatus}
+            Uptime      : {(int)uptime.TotalDays}d {uptime.Hours}h {uptime.Minutes}m
             Log         : {logPath}
             """;
 
@@ -106,16 +108,16 @@ internal sealed class AboutDialog : Form
         };
 
         string shortcuts = """
-            Ctrl+Enter  Apply selected tweaks
-            Ctrl+Del    Remove selected tweaks
-            F5          Refresh status
-            Ctrl+F      Focus search bar
-            Esc         Clear search
-            Ctrl+A      Select all in current view
-            Ctrl+D      Deselect all
-            Ctrl+I      Invert selection
-            Ctrl+L      Toggle log panel
-            Ctrl+E      Expand all categories
+            Ctrl+Enter    Apply selected tweaks
+            Ctrl+Del      Remove selected tweaks
+            F5            Refresh status
+            Ctrl+F        Focus search bar
+            Esc           Clear search
+            Ctrl+A        Select all in current view
+            Ctrl+D        Deselect all
+            Ctrl+I        Invert selection
+            Ctrl+L        Toggle log panel
+            Ctrl+E        Expand all categories
             Ctrl+Shift+E  Export selected as PowerShell script
             Ctrl+Shift+J  Export selected IDs as JSON
             Ctrl+Shift+I  Import tweak IDs from JSON
