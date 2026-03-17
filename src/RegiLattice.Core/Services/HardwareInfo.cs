@@ -34,7 +34,9 @@ public sealed class HwProfile
 /// <summary>Hardware detection using WMI and P/Invoke.</summary>
 public static class HardwareInfo
 {
-    private static HwProfile? _cached;
+    // Thread-safe lazy initialization — only ONE WMI probe ever runs,
+    // even if DetectHardware() is called concurrently from test collections.
+    private static readonly Lazy<HwProfile> _lazy = new(BuildHwProfile, LazyThreadSafetyMode.ExecutionAndPublication);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct MEMORYSTATUSEX
@@ -54,35 +56,38 @@ public static class HardwareInfo
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
-    public static HwProfile DetectHardware()
-    {
-        if (_cached is not null)
-            return _cached;
+    /// <summary>Returns cached hardware profile; the WMI probe runs exactly once per process.</summary>
+    public static HwProfile DetectHardware() => _lazy.Value;
 
-        // Parallelize WMI queries for faster startup
-        CpuInfo cpu = null!;
-        IReadOnlyList<GpuInfo> gpus = null!;
-        DiskInfo disk = null!;
+    private static HwProfile BuildHwProfile()
+    {
+        // Parallelize WMI queries for faster startup.
+        // CancellationTokenSource signals tasks to skip queuing if we've already timed out.
+        CpuInfo? cpu = null;
+        IReadOnlyList<GpuInfo>? gpus = null;
+        DiskInfo? disk = null;
         bool hasHyperV = false,
             hasWsl = false,
             hasTpm = false,
             hasSecureBoot = false,
             hasBattery = false;
 
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         Task[] wmiTasks =
         [
-            Task.Run(() => cpu = DetectCpu()),
-            Task.Run(() => gpus = DetectGpus()),
-            Task.Run(() => disk = DetectDisk()),
-            Task.Run(() => hasHyperV = CheckHyperV()),
-            Task.Run(() => hasWsl = CheckWsl()),
-            Task.Run(() => hasTpm = CheckTpm()),
-            Task.Run(() => hasSecureBoot = CheckSecureBoot()),
-            Task.Run(() => hasBattery = CheckBattery()),
+            Task.Run(() => cpu = DetectCpu(), cts.Token),
+            Task.Run(() => gpus = DetectGpus(), cts.Token),
+            Task.Run(() => disk = DetectDisk(), cts.Token),
+            Task.Run(() => hasHyperV = CheckHyperV(), cts.Token),
+            Task.Run(() => hasWsl = CheckWsl(), cts.Token),
+            Task.Run(() => hasTpm = CheckTpm(), cts.Token),
+            Task.Run(() => hasSecureBoot = CheckSecureBoot(), cts.Token),
+            Task.Run(() => hasBattery = CheckBattery(), cts.Token),
         ];
-        // 20-second hard cap; individual WMI queries are limited to 5 s each.
-        Task.WaitAll(wmiTasks, 20_000);
-        // Null-guard fallbacks for any task that did not finish within the cap.
+        // 12-second hard cap (covers the 10 s CTS window with margin).
+        // Individual searchers have a 5 s EnumerationOptions.Timeout.
+        Task.WaitAll(wmiTasks, 12_000);
+        // Null-guard fallbacks for any task that did not complete in time.
         cpu ??= new CpuInfo(
             Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown",
             Environment.ProcessorCount / 2,
@@ -95,7 +100,7 @@ public static class HardwareInfo
         var mem = DetectMemory();
         var build = TweakEngine.WindowsBuild();
 
-        _cached = new HwProfile
+        return new HwProfile
         {
             Cpu = cpu,
             Gpus = gpus,
@@ -110,7 +115,6 @@ public static class HardwareInfo
             OptimalWorkers = Math.Max(1, cpu.LogicalCores / 2),
             GuiBatchSize = mem.TotalMb > 8192 ? 8 : 4,
         };
-        return _cached;
     }
 
     // ── Quick applicability checks (for TweakDef.IsApplicable) ─────────
