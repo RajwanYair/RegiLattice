@@ -295,4 +295,92 @@ public sealed class TweakValidatorTests
         var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
         Assert.Empty(warnings);
     }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_EmptyList_ReturnsNoWarnings()
+    {
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([]);
+        Assert.Empty(warnings);
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_DetectionOpsExcluded()
+    {
+        // CheckDword/CheckMissing/CheckKeyMissing should NOT count as duplicates
+        var td1 = new TweakDef
+        {
+            Id = "detect-only-1",
+            Label = "Detect 1",
+            Category = "Test",
+            ApplyOps = [RegOp.CheckDword(@"HKCU\Software\Test", "Value", 1)],
+        };
+        var td2 = new TweakDef
+        {
+            Id = "detect-only-2",
+            Label = "Detect 2",
+            Category = "Test",
+            ApplyOps = [RegOp.CheckDword(@"HKCU\Software\Test", "Value", 1)],
+        };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([td1, td2]);
+        Assert.Empty(warnings);
+    }
+
+    [Theory]
+    [InlineData("white-label", " ", "Test")]
+    [InlineData("white-cat", "Label", "   ")]
+    public void Validate_WhitespaceFields_ReturnError(string id, string label, string category)
+    {
+        var td = new TweakDef
+        {
+            Id = id,
+            Label = label,
+            Category = category,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Test", "V", 1)],
+        };
+        var errors = TweakValidator.Validate([td], TestHelpers.LookupFrom(td));
+        Assert.NotEmpty(errors);
+    }
+
+    [Fact]
+    public void Validate_MultipleBrokenDeps_AllErrorsReported()
+    {
+        var td = TestHelpers.Make("multi-broken-dep", dependsOn: ["ghost-1", "ghost-2"]);
+        var errors = TweakValidator.Validate([td], _ => null);
+        var depErrors = errors.Where(e => e.Contains("unknown tweak")).ToList();
+        Assert.Equal(2, depErrors.Count);
+    }
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_ThreeTweaksSameKey_AllNamed()
+    {
+        TweakDef Make(string id, int val) =>
+            new()
+            {
+                Id = id,
+                Label = id,
+                Category = "T",
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Shared", "SameValue", val)],
+            };
+        var warnings = TweakValidator.DetectDuplicateRegistryOps([Make("x1", 1), Make("x2", 0), Make("x3", 2)]);
+        Assert.Single(warnings);
+        Assert.Contains("x1", warnings[0]);
+        Assert.Contains("x2", warnings[0]);
+        Assert.Contains("x3", warnings[0]);
+    }
+
+    [Fact]
+    public void Validate_WithApplyAction_BrokenDep_ReportsDepError()
+    {
+        var td = new TweakDef
+        {
+            Id = "action-broken",
+            Label = "Action",
+            Category = "Test",
+            ApplyAction = _ => { },
+            DependsOn = ["nonexistent"],
+        };
+        var errors = TweakValidator.Validate([td], _ => null);
+        Assert.Contains(errors, e => e.Contains("unknown tweak"));
+        Assert.DoesNotContain(errors, e => e.Contains("no ApplyOps"));
+    }
 }

@@ -142,4 +142,85 @@ public sealed class TweakHistoryTests : IDisposable
         Assert.Single(all);
         Assert.Equal("persist-test", all[0].TweakId);
     }
+
+    [Fact]
+    public void Count_Initially_IsZero()
+    {
+        Assert.Equal(0, TweakHistory.Count);
+    }
+
+    [Fact]
+    public void All_Initially_IsEmpty()
+    {
+        Assert.Empty(TweakHistory.All());
+    }
+
+    [Fact]
+    public void Recent_WhenFewerRecordsThanRequested_ReturnsAll()
+    {
+        TweakHistory.Record("a", "apply", "Applied");
+        TweakHistory.Record("b", "apply", "Applied");
+        var recent = TweakHistory.Recent(100);
+        Assert.Equal(2, recent.Count);
+    }
+
+    [Fact]
+    public void Recent_ZeroCount_ReturnsEmpty()
+    {
+        TweakHistory.Record("a", "apply", "Applied");
+        var recent = TweakHistory.Recent(0);
+        Assert.Empty(recent);
+    }
+
+    [Fact]
+    public void ForTweak_NoMatch_ReturnsEmpty()
+    {
+        TweakHistory.Record("tweak-x", "apply", "Applied");
+        var result = TweakHistory.ForTweak("completely-different");
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void Flush_WhenNotDirty_DoesNotThrow()
+    {
+        // Ensure flush when _dirty is false does not throw
+        var dirty = typeof(TweakHistory).GetField("_dirty", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        dirty?.SetValue(null, false);
+        TweakHistory.Flush(); // should be a no-op
+        Assert.Equal(0, TweakHistory.Count);
+    }
+
+    [Fact]
+    public void Record_HasNonEmptyTimestamp()
+    {
+        TweakHistory.Record("stamp-test", "apply", "Applied");
+        var entry = TweakHistory.All()[0];
+        Assert.False(string.IsNullOrEmpty(entry.Timestamp));
+    }
+
+    [Fact]
+    public void MaxEntries_ExactlyAtLimit_NoTrimOccurs()
+    {
+        for (int i = 0; i < TweakHistory.MaxEntries; i++)
+            TweakHistory.Record($"exact-{i}", "apply", "Applied");
+        Assert.Equal(TweakHistory.MaxEntries, TweakHistory.Count);
+    }
+
+    [Fact]
+    public void Clear_Then_Count_IsZero()
+    {
+        TweakHistory.Record("a", "apply", "Applied");
+        TweakHistory.Record("b", "apply", "Applied");
+        TweakHistory.Clear();
+        Assert.Equal(0, TweakHistory.Count);
+    }
+
+    [Fact]
+    public void Recent_DefaultCountTwenty_ReturnsAtMostTwenty()
+    {
+        for (int i = 0; i < 30; i++)
+            TweakHistory.Record($"rec-{i}", "apply", "Applied");
+        var recent = TweakHistory.Recent(); // default = 20
+        Assert.Equal(20, recent.Count);
+    }
 }

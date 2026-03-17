@@ -124,4 +124,73 @@ public sealed class FavoritesTests : IDisposable
 
         Assert.True(Favorites.IsFavorite("test-roundtrip"));
     }
+
+    [Fact]
+    public void Count_Initially_IsZero()
+    {
+        Assert.Equal(0, Favorites.Count);
+    }
+
+    [Fact]
+    public void All_Initially_IsEmpty()
+    {
+        Assert.Empty(Favorites.All());
+    }
+
+    [Fact]
+    public void IsFavorite_Initially_ReturnsFalse()
+    {
+        Assert.False(Favorites.IsFavorite("anything"));
+    }
+
+    [Fact]
+    public void Flush_WhenNotDirty_DoesNotThrow()
+    {
+        // Call flush on clean state — should not throw
+        var dirty = typeof(Favorites).GetField("_dirty", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        dirty?.SetValue(null, false);
+        Favorites.Flush(); // no-op
+        Assert.Equal(0, Favorites.Count);
+    }
+
+    [Fact]
+    public void Remove_Then_IsFavorite_ReturnsFalse()
+    {
+        Favorites.Add("to-remove");
+        Favorites.Remove("to-remove");
+        Assert.False(Favorites.IsFavorite("to-remove"));
+    }
+
+    [Fact]
+    public void Add_Multiple_AllListedAndSorted()
+    {
+        Favorites.Add("z-last");
+        Favorites.Add("a-first");
+        Favorites.Add("m-middle");
+        var all = Favorites.All();
+        Assert.Equal(3, all.Count);
+        Assert.Equal("a-first", all[0]);
+        Assert.Equal("z-last", all[2]);
+    }
+
+    [Fact]
+    public void Clear_Then_Add_Works()
+    {
+        Favorites.Add("before-clear");
+        Favorites.Clear();
+        Assert.Equal(0, Favorites.Count);
+        Favorites.Add("after-clear");
+        Assert.Equal(1, Favorites.Count);
+        Assert.True(Favorites.IsFavorite("after-clear"));
+    }
+
+    [Fact]
+    public void Toggle_CaseInsensitive_BypassesCaseDifference()
+    {
+        Favorites.Add("UPPER-ID");
+        // Toggle with lowercase — should remove (because cache is case-insensitive)
+        var result = Favorites.Toggle("upper-id");
+        Assert.False(result);
+        Assert.False(Favorites.IsFavorite("UPPER-ID"));
+    }
 }

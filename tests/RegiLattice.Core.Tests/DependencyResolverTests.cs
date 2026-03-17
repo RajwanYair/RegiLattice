@@ -185,4 +185,91 @@ public sealed class DependencyResolverTests
         Assert.Contains(result, t => t.Id == "multi-a");
         Assert.Contains(result, t => t.Id == "multi-b");
     }
+
+    [Fact]
+    public void Resolve_FourLevelChain_ReturnsCorrectOrder()
+    {
+        var td1 = TestHelpers.Make("lvl-1");
+        var td2 = TestHelpers.Make("lvl-2", dependsOn: ["lvl-1"]);
+        var td3 = TestHelpers.Make("lvl-3", dependsOn: ["lvl-2"]);
+        var td4 = TestHelpers.Make("lvl-4", dependsOn: ["lvl-3"]);
+        var result = DependencyResolver.Resolve(td4, TestHelpers.LookupFrom(td1, td2, td3, td4));
+        Assert.Equal(4, result.Count);
+        Assert.Equal("lvl-1", result[0].Id);
+        Assert.Equal("lvl-4", result[3].Id);
+    }
+
+    [Fact]
+    public void Resolve_AlreadyVisitedNode_IsNotDuplicated()
+    {
+        // B and C both depend on A. D depends on B and C. A should appear only once.
+        var tdA = TestHelpers.Make("shared-a");
+        var tdB = TestHelpers.Make("shared-b", dependsOn: ["shared-a"]);
+        var tdC = TestHelpers.Make("shared-c", dependsOn: ["shared-a"]);
+        var tdD = TestHelpers.Make("shared-d", dependsOn: ["shared-b", "shared-c"]);
+        var result = DependencyResolver.Resolve(tdD, TestHelpers.LookupFrom(tdA, tdB, tdC, tdD));
+        var aCount = result.Count(t => t.Id == "shared-a");
+        Assert.Equal(1, aCount);
+    }
+
+    [Fact]
+    public void Dependents_EmptyCollection_ReturnsEmpty()
+    {
+        var result = DependencyResolver.Dependents("any-id", []);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void Dependents_TransitiveDependents_NotIncluded()
+    {
+        // C depends on B, B depends on A — Dependents(A) should only return B (direct), not C
+        var tdA = TestHelpers.Make("trans-a");
+        var tdB = TestHelpers.Make("trans-b", dependsOn: ["trans-a"]);
+        var tdC = TestHelpers.Make("trans-c", dependsOn: ["trans-b"]);
+        var result = DependencyResolver.Dependents("trans-a", [tdA, tdB, tdC]);
+        Assert.Single(result);
+        Assert.Equal("trans-b", result[0].Id);
+    }
+
+    [Fact]
+    public void Resolve_OneMissingOnePresentDep_SkipsMissingIncludesPresent()
+    {
+        var present = TestHelpers.Make("present-dep");
+        var target = TestHelpers.Make("target", dependsOn: ["missing-dep", "present-dep"]);
+        var result = DependencyResolver.Resolve(target, TestHelpers.LookupFrom(present, target));
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, t => t.Id == "present-dep");
+        Assert.Contains(result, t => t.Id == "target");
+    }
+
+    [Fact]
+    public void Resolve_TargetHasNoDeps_ReturnsSelf()
+    {
+        var td = TestHelpers.Make("no-deps-v2");
+        var result = DependencyResolver.Resolve(td, TestHelpers.LookupFrom(td));
+        Assert.Single(result);
+        Assert.Equal("no-deps-v2", result[0].Id);
+    }
+
+    [Fact]
+    public void Dependents_CaseInsensitive_Id_Match()
+    {
+        var parent = TestHelpers.Make("MixedCase-Parent");
+        var child = TestHelpers.Make("child-of-mixed", dependsOn: ["MixedCase-Parent"]);
+        var result = DependencyResolver.Dependents("mixedcase-parent", [parent, child]);
+        Assert.Single(result);
+    }
+
+    [Fact]
+    public void Dependents_MultipleLevel_OnlyDirectDeps()
+    {
+        var a = TestHelpers.Make("dep-level-a");
+        var b = TestHelpers.Make("dep-level-b", dependsOn: ["dep-level-a"]);
+        var c = TestHelpers.Make("dep-level-c", dependsOn: ["dep-level-b"]);
+        var d = TestHelpers.Make("dep-level-d", dependsOn: ["dep-level-a"]);
+        var result = DependencyResolver.Dependents("dep-level-a", [a, b, c, d]);
+        Assert.Equal(2, result.Count);
+        Assert.Contains(result, t => t.Id == "dep-level-b");
+        Assert.Contains(result, t => t.Id == "dep-level-d");
+    }
 }

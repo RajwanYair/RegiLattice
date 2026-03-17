@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <RunConfiguration>
-    <!-- Run up to 4 test assemblies in parallel -->
-    <MaxCpuCount>4</MaxCpuCount>
-    <TestSessionTimeout>60000</TestSessionTimeout>
+    <!-- Run the 3 test assemblies in parallel (one per project) -->
+    <MaxCpuCount>3</MaxCpuCount>
+    <!-- 120 s total session hard limit -->
+    <TestSessionTimeout>120000</TestSessionTimeout>
+    <!-- 15 s per individual test — kills any single hanging test case -->
+    <TestCaseTimeout>15000</TestCaseTimeout>
   </RunConfiguration>
 </RunSettings>

@@ -24,6 +24,10 @@ public partial class MainForm : Form
     // Tweaks pending reboot/restart to take effect (applied but not yet active).
     private readonly HashSet<string> _pendingRebootIds = new(StringComparer.Ordinal);
 
+    // Double-click debounce — prevents ItemCheck firing twice for one double-click sequence.
+    private int _lastCheckedIndex = -1;
+    private long _lastCheckedTick;
+
     // Column sorting and filtering state.
     private readonly ListViewColumnSorter _columnSorter = new();
     private readonly Dictionary<int, HashSet<string>> _columnFilters = [];
@@ -1478,14 +1482,31 @@ public partial class MainForm : Form
 
     private void OnListViewMouseDoubleClick(object? sender, MouseEventArgs e)
     {
-        var item = _listView.GetItemAt(e.X, e.Y);
-        if (item is not null)
-            item.Checked = !item.Checked;
+        var hit = _listView.HitTest(e.X, e.Y);
+        if (hit.Item is null)
+            return;
+
+        // If the double-click landed on the native checkbox (StateImage), the first click
+        // of the double-click sequence already fired ItemCheck and toggled it — skip here
+        // to avoid toggling a second time (the flicker bug).
+        if ((hit.Location & ListViewHitTestLocations.StateImage) != 0)
+            return;
+
+        hit.Item.Checked = !hit.Item.Checked;
     }
 
     private void OnListViewItemCheck(object? sender, ItemCheckEventArgs e)
     {
-        this.BeginInvoke(() => UpdateCounters());
+        long now = Environment.TickCount64;
+        if (e.Index == _lastCheckedIndex && (now - _lastCheckedTick) < SystemInformation.DoubleClickTime)
+        {
+            e.NewValue = e.CurrentValue; // cancel second toggle in double-click sequence
+            _lastCheckedIndex = -1;
+            return;
+        }
+        _lastCheckedIndex = e.Index;
+        _lastCheckedTick = now;
+        this.BeginInvoke(UpdateCounters);
     }
 
     // ── Dark ToolStrip Renderer ────────────────────────────────────────────

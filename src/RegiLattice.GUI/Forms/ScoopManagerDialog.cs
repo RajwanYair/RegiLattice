@@ -80,7 +80,7 @@ internal sealed class ScoopManagerDialog : Form
         _lstInstalled.View = View.Details;
         _lstInstalled.FullRowSelect = true;
         _lstInstalled.GridLines = false;
-        _lstInstalled.MultiSelect = false;
+        _lstInstalled.MultiSelect = true;
         _lstInstalled.BackColor = AppTheme.Bg;
         _lstInstalled.ForeColor = AppTheme.Fg;
         _lstInstalled.Font = AppTheme.Mono;
@@ -92,7 +92,7 @@ internal sealed class ScoopManagerDialog : Form
         ]);
         _lstInstalled.SelectedIndexChanged += (_, _) =>
         {
-            if (_lstInstalled.FocusedItem is { Tag: string name })
+            if (_lstInstalled.SelectedItems.Count == 1 && _lstInstalled.SelectedItems[0].Tag is string name)
                 _txtName.Text = name;
         };
 
@@ -286,13 +286,16 @@ internal sealed class ScoopManagerDialog : Form
 
     private async Task RemoveAsync()
     {
-        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
-        if (name.Length == 0)
+        var names = _lstInstalled.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag as string).Where(n => !string.IsNullOrEmpty(n)).ToList();
+        if (names.Count == 0)
+            names = [_txtName.Text.Trim()];
+        if (names.Count == 0 || names.All(n => n!.Length == 0))
             return;
-        SetBusy(true, $"Removing {name}...");
+        SetBusy(true, $"Removing {names.Count} package(s)...");
         try
         {
-            await ScoopManager.UninstallAsync(name, _cts.Token);
+            foreach (string? name in names)
+                await ScoopManager.UninstallAsync(name!, _cts.Token);
             await RefreshAsync();
         }
         catch (Exception ex)
@@ -308,13 +311,16 @@ internal sealed class ScoopManagerDialog : Form
 
     private async Task UpgradeAsync()
     {
-        string name = (_lstInstalled.FocusedItem?.Tag as string ?? _txtName.Text).Trim();
-        if (name.Length == 0)
+        var names = _lstInstalled.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag as string).Where(n => !string.IsNullOrEmpty(n)).ToList();
+        if (names.Count == 0)
+            names = [_txtName.Text.Trim()];
+        if (names.Count == 0 || names.All(n => n!.Length == 0))
             return;
-        SetBusy(true, $"Upgrading {name}...");
+        SetBusy(true, $"Upgrading {names.Count} package(s)...");
         try
         {
-            await ScoopManager.UpgradeAsync(name, _cts.Token);
+            foreach (string? name in names)
+                await ScoopManager.UpgradeAsync(name!, _cts.Token);
             await RefreshAsync();
         }
         catch (Exception ex)
