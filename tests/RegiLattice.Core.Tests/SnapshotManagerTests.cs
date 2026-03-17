@@ -274,4 +274,150 @@ public sealed class SnapshotManagerTests
                 File.Delete(path);
         }
     }
+
+    // ── Extended ────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Save_EmptyEngine_CreatesFileWithEmptyObject()
+    {
+        var engine = new TweakEngine();
+        var mgr = new SnapshotManager(engine);
+        var path = Path.Combine(Path.GetTempPath(), $"snap_empty_{Guid.NewGuid()}.json");
+        try
+        {
+            mgr.Save(path);
+            Assert.True(File.Exists(path));
+            var json = File.ReadAllText(path);
+            Assert.Contains("{}", json);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Save_OverwritesExistingFile()
+    {
+        var engine1 = TestHelpers.CreateEngine(TestHelpers.MakeTweak("overwrite-1"));
+        var engine2 = TestHelpers.CreateEngine(TestHelpers.MakeTweak("overwrite-2"));
+        var path = Path.Combine(Path.GetTempPath(), $"snap_overwrite_{Guid.NewGuid()}.json");
+        try
+        {
+            new SnapshotManager(engine1).Save(path);
+            new SnapshotManager(engine2).Save(path);
+            var loaded = SnapshotManager.Load(path);
+            Assert.Single(loaded);
+            Assert.Contains("overwrite-2", loaded.Keys);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Save_ToExistingDirectory_Succeeds()
+    {
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("dir-1"));
+        var path = Path.Combine(Path.GetTempPath(), $"snap_dir_{Guid.NewGuid()}.json");
+        try
+        {
+            new SnapshotManager(engine).Save(path);
+            Assert.True(File.Exists(path));
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Restore_EmptySnapshot_ReturnsEmptyResults()
+    {
+        var engine = TestHelpers.CreateEngine(TestHelpers.MakeTweak("rest-empty-1"));
+        var mgr = new SnapshotManager(engine);
+        var path = Path.Combine(Path.GetTempPath(), $"snap_empty_restore_{Guid.NewGuid()}.json");
+        try
+        {
+            File.WriteAllText(path, "{}");
+            var results = mgr.Restore(path);
+            Assert.Empty(results);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Restore_MultipleApplied_AllApplied()
+    {
+        var td1 = TestHelpers.MakeTweak("multi-rest-1");
+        var td2 = TestHelpers.MakeTweak("multi-rest-2");
+        var engine = TestHelpers.CreateEngine(td1, td2);
+        var mgr = new SnapshotManager(engine);
+        mgr.Save(Path.Combine(Path.GetTempPath(), $"snap_multi_save_{Guid.NewGuid()}.json"));
+        // save and immediately restore to verify no errors
+        var path = Path.Combine(Path.GetTempPath(), $"snap_multi_restore_{Guid.NewGuid()}.json");
+        var json = "{\"multi-rest-1\":\"applied\",\"multi-rest-2\":\"applied\"}";
+        try
+        {
+            File.WriteAllText(path, json);
+            var results = mgr.Restore(path);
+            Assert.Equal(2, results.Count);
+            Assert.All(results.Values, v => Assert.NotEqual(TweakResult.Error, v));
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void Load_ValidJson_CorrectKeyCount()
+    {
+        var json = "{\"key-a\":\"applied\",\"key-b\":\"notapplied\",\"key-c\":\"unknown\"}";
+        var path = Path.Combine(Path.GetTempPath(), $"snap_load_{Guid.NewGuid()}.json");
+        try
+        {
+            File.WriteAllText(path, json);
+            var loaded = SnapshotManager.Load(path);
+            Assert.Equal(3, loaded.Count);
+            Assert.Equal("applied", loaded["key-a"]);
+            Assert.Equal("notapplied", loaded["key-b"]);
+            Assert.Equal("unknown", loaded["key-c"]);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void SaveThenLoad_MultipleTweaks_AllKeysPreserved()
+    {
+        var tweaks = Enumerable.Range(1, 5).Select(i => TestHelpers.MakeTweak($"bulk-snap-{i}")).ToArray();
+        var engine = TestHelpers.CreateEngine(tweaks);
+        var path = Path.Combine(Path.GetTempPath(), $"snap_bulk_{Guid.NewGuid()}.json");
+        try
+        {
+            new SnapshotManager(engine).Save(path);
+            var loaded = SnapshotManager.Load(path);
+            Assert.Equal(5, loaded.Count);
+            for (int i = 1; i <= 5; i++)
+                Assert.Contains($"bulk-snap-{i}", loaded.Keys);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
 }

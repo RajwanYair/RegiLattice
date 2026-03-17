@@ -177,6 +177,7 @@ public sealed class RatingsTests
     }
 }
 
+[Collection("Analytics")]
 public sealed class AnalyticsTests
 {
     [Fact]
@@ -614,6 +615,7 @@ public sealed class RatingsExtendedTests
 }
 
 /// <summary>Extended Analytics tests for TopTweaks and Reset.</summary>
+[Collection("Analytics")]
 public sealed class AnalyticsExtendedTests
 {
     [Fact]
@@ -805,6 +807,7 @@ public sealed class SystemMonitorTests
 
 // ── Sprint 21: Coverage boost — Analytics, Locale, Ratings edge cases ────────
 
+[Collection("Analytics")]
 public sealed class AnalyticsCoverageTests
 {
     private readonly string _tempDir;

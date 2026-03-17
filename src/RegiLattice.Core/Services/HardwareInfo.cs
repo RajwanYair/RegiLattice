@@ -69,7 +69,8 @@ public static class HardwareInfo
             hasSecureBoot = false,
             hasBattery = false;
 
-        Task.WaitAll(
+        Task[] wmiTasks =
+        [
             Task.Run(() => cpu = DetectCpu()),
             Task.Run(() => gpus = DetectGpus()),
             Task.Run(() => disk = DetectDisk()),
@@ -77,8 +78,19 @@ public static class HardwareInfo
             Task.Run(() => hasWsl = CheckWsl()),
             Task.Run(() => hasTpm = CheckTpm()),
             Task.Run(() => hasSecureBoot = CheckSecureBoot()),
-            Task.Run(() => hasBattery = CheckBattery())
+            Task.Run(() => hasBattery = CheckBattery()),
+        ];
+        // 20-second hard cap; individual WMI queries are limited to 5 s each.
+        Task.WaitAll(wmiTasks, 20_000);
+        // Null-guard fallbacks for any task that did not finish within the cap.
+        cpu ??= new CpuInfo(
+            Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown",
+            Environment.ProcessorCount / 2,
+            Environment.ProcessorCount,
+            RuntimeInformation.ProcessArchitecture.ToString()
         );
+        gpus ??= [];
+        disk ??= new DiskInfo("C:", 0, 0, false);
 
         var mem = DetectMemory();
         var build = TweakEngine.WindowsBuild();
@@ -229,6 +241,7 @@ public static class HardwareInfo
         try
         {
             using var searcher = new ManagementObjectSearcher("SELECT Name, NumberOfCores FROM Win32_Processor");
+            searcher.Options.Timeout = TimeSpan.FromSeconds(5);
             foreach (var obj in searcher.Get())
             {
                 name = obj["Name"]?.ToString()?.Trim() ?? name;
@@ -249,6 +262,7 @@ public static class HardwareInfo
         try
         {
             using var searcher = new ManagementObjectSearcher("SELECT Name, DriverVersion, AdapterRAM FROM Win32_VideoController");
+            searcher.Options.Timeout = TimeSpan.FromSeconds(5);
             foreach (var obj in searcher.Get())
             {
                 var ram = Convert.ToInt64(obj["AdapterRAM"] ?? 0);
@@ -276,7 +290,14 @@ public static class HardwareInfo
             bool isSsd = false;
             try
             {
-                using var searcher = new ManagementObjectSearcher(@"\\.\root\Microsoft\Windows\Storage", "SELECT MediaType FROM MSFT_PhysicalDisk");
+                var storageScope = new ManagementScope(@"\\.\.root\Microsoft\Windows\Storage");
+                storageScope.Options.Timeout = TimeSpan.FromSeconds(5);
+                var storageOpts = new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(5) };
+                using var searcher = new ManagementObjectSearcher(
+                    storageScope,
+                    new ObjectQuery("SELECT MediaType FROM MSFT_PhysicalDisk"),
+                    storageOpts
+                );
                 // This WMI class is only on Win8+
             }
             catch { }
@@ -321,6 +342,7 @@ public static class HardwareInfo
         try
         {
             using var searcher = new ManagementObjectSearcher("SELECT HypervisorPresent FROM Win32_ComputerSystem");
+            searcher.Options.Timeout = TimeSpan.FromSeconds(5);
             foreach (var obj in searcher.Get())
                 return Convert.ToBoolean(obj["HypervisorPresent"]);
         }
@@ -345,9 +367,13 @@ public static class HardwareInfo
     {
         try
         {
+            var tpmScope = new ManagementScope(@"\\.\.root\CIMv2\Security\MicrosoftTpm");
+            tpmScope.Options.Timeout = TimeSpan.FromSeconds(5);
+            var tpmOpts = new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(5) };
             using var searcher = new ManagementObjectSearcher(
-                new ManagementScope(@"\\.\root\CIMv2\Security\MicrosoftTpm"),
-                new ObjectQuery("SELECT IsActivated_InitialValue FROM Win32_Tpm")
+                tpmScope,
+                new ObjectQuery("SELECT IsActivated_InitialValue FROM Win32_Tpm"),
+                tpmOpts
             );
             foreach (var obj in searcher.Get())
                 return Convert.ToBoolean(obj["IsActivated_InitialValue"]);
@@ -374,6 +400,7 @@ public static class HardwareInfo
         try
         {
             using var searcher = new ManagementObjectSearcher("SELECT BatteryStatus FROM Win32_Battery");
+            searcher.Options.Timeout = TimeSpan.FromSeconds(5);
             return searcher.Get().Count > 0;
         }
         catch
