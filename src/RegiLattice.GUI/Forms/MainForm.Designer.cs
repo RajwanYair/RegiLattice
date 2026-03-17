@@ -320,11 +320,11 @@ partial class MainForm
         _listView.ListViewItemSorter = _columnSorter;
         _listView.ColumnClick += OnColumnClick;
 
-    // ── ListView event handlers ────────────────────────────────────────
-    _listView.MouseDoubleClick += OnListViewMouseDoubleClick;
-    _listView.ItemCheck += OnListViewItemCheck;
+        // ── ListView event handlers ────────────────────────────────────────
+        _listView.MouseDoubleClick += OnListViewMouseDoubleClick;
+        _listView.ItemCheck += OnListViewItemCheck;
 
-    // ── SplitContainer ─────────────────────────────────────────────────
+        // ── SplitContainer ─────────────────────────────────────────────────
         _split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
         _split.Panel1.Controls.Add(_treeView);
 

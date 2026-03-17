@@ -3,18 +3,36 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-960%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-1199%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-3.4.0-blue)
 
-A comprehensive Windows registry tweak toolkit with **2 363 verified tweaks** across **89 categories**, a **declarative RegOp engine**, a **full CLI**, **interactive console menu**, and a **WinForms GUI** with 4 switchable themes. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **2 610 verified tweaks** across **89 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10** for native performance on Windows 10/11.
+
+## Download & Install
+
+**Pre-built installer (recommended):**
+
+👉 **[Download RegiLattice-3.4.0-win-x64.msi](https://github.com/RajwanYair/RegiLattice/releases/latest)** from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+
+The MSI installer:
+- Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
+- Installs **CLI** (`RegiLattice.exe`) under `Program Files\RegiLattice\CLI\` and adds it to `PATH`
+- Creates a **Start Menu** shortcut
+- Supports **upgrade** and **uninstall** via Add/Remove Programs
+- Requires no separate .NET runtime (self-contained, win-x64)
+
+**Portable executables (no install required):**
+
+Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases), place them anywhere, and run.
 
 ## Highlights
 
-- **2 363 verified tweaks** across 89 categories — each fully reversible with apply + remove
+- **2 610 verified tweaks** across 89 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
-- **WinForms GUI** — 4 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, status filters, profile selector
+- **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
 - **5 machine profiles** — business, gaming, privacy, minimal, server
 - **Dry-run mode** — preview changes without touching the registry (`--dry-run`)
 - **Snapshot & diff** — save/restore tweak state (JSON), compare snapshots (`--snapshot-diff`)
@@ -26,8 +44,8 @@ A comprehensive Windows registry tweak toolkit with **2 363 verified tweaks** ac
 - **UAC elevation** — automatic admin re-launch
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
-- **Package managers** — built-in Scoop, pip, and PowerShell module manager dialogs
-- **960 tests** across 13 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
+- **1 199 tests** across 16 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -98,19 +116,24 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests
+# Run tests (1 199 tests)
 dotnet test RegiLattice.sln
+
+# Publish self-contained executables
+dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/gui
+dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/cli
 ```
 
 ### GUI (Recommended)
 
 ```powershell
 dotnet run --project src/RegiLattice.GUI
-# or after publishing:
-RegiLattice.GUI.exe
+# or run the published self-contained executable:
+.\publish\gui\RegiLattice.GUI.exe
+# or install via MSI and launch from Start Menu
 ```
 
-WinForms window with 4 themes (Catppuccin Mocha default), collapsible categories, scope badges (USER/MACHINE/BOTH), live search bar, status filters, profile selector, and package manager dialogs.
+WinForms window with **11 themes** (Catppuccin Mocha default), collapsible categories, scope badges (USER/MACHINE/BOTH), live search bar, checkbox selection (double-click to toggle), status filters, profile selector, and package manager dialogs (Scoop, pip, Chocolatey, WinGet).
 
 ### CLI
 
@@ -205,7 +228,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 90 category modules, 2 316 tweaks
+│   │   └── Tweaks/                          # 90 category modules, 2 610 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -214,7 +237,7 @@ RegiLattice/
 │   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
 │   │   ├── Program.cs                       # Entry point
 │   │   ├── AppIcons.cs                      # Programmatic icon/bitmap generation
-│   │   ├── Theme.cs                         # 4-theme engine
+│   │   ├── Theme.cs                         # 11-theme engine
 │   │   ├── Forms/
 │   │   │   ├── MainForm.cs                  # Main window
 │   │   │   ├── AboutDialog.cs               # About + hardware info
@@ -241,7 +264,7 @@ RegiLattice/
 │       ├── CliArgs.cs                       # CLI argument model
 │       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 738 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 888 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -250,10 +273,13 @@ RegiLattice/
 │   │   ├── PluginTests.cs
 │   │   ├── SnapshotManagerTests.cs
 │   │   ├── TweakValidatorTests.cs
-│   │   └── DependencyResolverTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 103 xUnit tests
+│   │   ├── DependencyResolverTests.cs
+│   │   ├── FavoritesTests.cs
+│   │   ├── TweakHistoryTests.cs
+│   │   └── ConfigExporterTests.cs
+│   ├── RegiLattice.CLI.Tests/               # 116 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 131 xUnit tests
+│   └── RegiLattice.GUI.Tests/               # 195 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs
@@ -314,6 +340,29 @@ new TweakDef
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+
+## Building the Installer
+
+The MSI installer is built with [WiX Toolset v6](https://wixtoolset.org/). It requires the self-contained publish outputs to exist first:
+
+```powershell
+# 1. Publish self-contained executables
+dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/gui
+dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/cli
+
+# 2. Build the MSI
+dotnet build installer/RegiLattice.Installer.wixproj -c Release
+
+# Output: installer/bin/Release/RegiLattice.msi
+```
+
+Install WiX toolset (if not already installed):
+
+```powershell
+dotnet tool install --global wix
+# or update:
+dotnet tool update --global wix
+```
 
 ## License
 

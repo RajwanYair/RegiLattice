@@ -10,6 +10,12 @@ publish/
 *.dll
 *.pdb
 
+# ── WiX installer outputs ────────────────────────────────────
+*.msi
+*.wixpdb
+*.wixobj
+*.cab
+
 # ── NuGet ────────────────────────────────────────────────────
 *.nupkg
 .nuget/

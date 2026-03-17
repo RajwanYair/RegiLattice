@@ -1086,9 +1086,11 @@ public partial class MainForm : Form
             }
         }
         int pending = _pendingRebootIds.Count;
+        int selected = _listView.CheckedItems.Count;
+        string selectedStr = selected > 0 ? $"  \u2502  \u2611 {selected} selected" : "";
         string pendingStr = pending > 0 ? $"  \u2502  \u23F3 {pending} pending" : "";
         _statusLabel.Text =
-            $"\U0001F4CA {_statusCache.Count} tweaks  \u2502  \u2705 {applied}  \u2502  \u274C {notApplied}  \u2502  \u2753 {unknown}  \u2502  \u26A0 {error}{pendingStr}";
+            $"\U0001F4CA {_statusCache.Count} tweaks  \u2502  \u2705 {applied}  \u2502  \u274C {notApplied}  \u2502  \u2753 {unknown}  \u2502  \u26A0 {error}{selectedStr}{pendingStr}";
     }
 
     private void SetStatus(string message)
@@ -1472,6 +1474,18 @@ public partial class MainForm : Form
             e.Handled = true;
             return;
         }
+    }
+
+    private void OnListViewMouseDoubleClick(object? sender, MouseEventArgs e)
+    {
+        var item = _listView.GetItemAt(e.X, e.Y);
+        if (item is not null)
+            item.Checked = !item.Checked;
+    }
+
+    private void OnListViewItemCheck(object? sender, ItemCheckEventArgs e)
+    {
+        this.BeginInvoke(() => UpdateCounters());
     }
 
     // ── Dark ToolStrip Renderer ────────────────────────────────────────────
