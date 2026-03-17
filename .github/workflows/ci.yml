@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -12,6 +17,7 @@ permissions:
 jobs:
   build-and-test:
     runs-on: windows-latest
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +30,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Restore
@@ -36,6 +42,8 @@ jobs:
       - name: Test with coverage
         run: >-
           dotnet test RegiLattice.sln -c Release --no-build
+          --settings tests/.runsettings
+          --blame-hang-timeout 60s
           --collect:"XPlat Code Coverage"
           --logger "console;verbosity=normal"
 
@@ -44,6 +52,7 @@ jobs:
         with:
           name: coverage-report
           path: "**/coverage.cobertura.xml"
+          if-no-files-found: warn
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5

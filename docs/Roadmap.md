@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-17 · v3.4.0 · 2 610 tweaks · 89 categories · 1 199 tests
+> Last updated: 2026-03-17 · v3.4.0 · 2 610 tweaks · 89 categories · 1 308 tests
 
 ---
 
@@ -11,7 +11,7 @@
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 610 verified across 89 categories |
-| Tests | 1 199 (888 Core + 116 CLI + 195 GUI), all passing, 4-thread parallel |
+| Tests | 1 308 total, all passing (1 skipped integration), 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -255,6 +255,61 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 4 | Expand GUI tests: +47 (84 → 131) across ThemeTests, PackageManagerValidation, AppIcons | ✅ |
 | 5 | Reconcile all documentation: CHANGELOG, Roadmap, Readme, copilot-instructions, testing, workspace, Coverage, Development | ✅ |
 | 6 | Total: 2,316 tweaks, 972 tests (738 Core + 103 CLI + 131 GUI), 13 test files | ✅ |
+
+### Sprint 22 — Performance + Consolidation + Production Readiness (50 Tasks)
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Add `Directory.Build.props` for shared .NET build properties | ✅ |
+| 2 | Add `Directory.Packages.props` for central package version management | ✅ |
+| 3 | Remove duplicate framework/nullable/implicit/platform/version config from Core csproj | ✅ |
+| 4 | Remove duplicate framework/nullable/implicit/platform/version config from GUI csproj | ✅ |
+| 5 | Remove duplicate framework/nullable/implicit/platform/version config from CLI csproj | ✅ |
+| 6 | Remove duplicate test package versions from Core.Tests csproj | ✅ |
+| 7 | Remove duplicate test package versions from GUI.Tests csproj | ✅ |
+| 8 | Remove duplicate test package versions from CLI.Tests csproj | ✅ |
+| 9 | Switch TweakEngine scope index to enum-keyed dictionary | ✅ |
+| 10 | Eliminate repeated `ToString().ToLowerInvariant()` scope lookups in hot paths | ✅ |
+| 11 | Simplify scope count computation without enum parsing | ✅ |
+| 12 | Convert search text cache to ID-based lookup for lower overhead | ✅ |
+| 13 | Add Locale hot-key cache to reduce repeated dictionary lookups | ✅ |
+| 14 | Invalidate Locale hot cache when locale changes | ✅ |
+| 15 | Replace per-keystroke search timer allocation in MainForm | ✅ |
+| 16 | Reuse a single debounce timer instance for search | ✅ |
+| 17 | Skip redundant search refresh when text has not changed | ✅ |
+| 18 | Expand VS Code file excludes to hide generated/large folders | ✅ |
+| 19 | Add VS Code watcher excludes for bin/obj/publish/.tmp to reduce CPU churn | ✅ |
+| 20 | Add VS Code recommendation for GitHub Actions extension | ✅ |
+| 21 | Align VS Code Core test task with runsettings and hang timeout | ✅ |
+| 22 | Align VS Code GUI test task with runsettings and hang timeout | ✅ |
+| 23 | Add VS Code CLI test task | ✅ |
+| 24 | Add VS Code release gate task (build+test+publish) | ✅ |
+| 25 | Harden CI workflow with manual dispatch support | ✅ |
+| 26 | Add CI concurrency guard to cancel superseded runs | ✅ |
+| 27 | Add CI timeout budget to prevent stuck runners | ✅ |
+| 28 | Expand CI NuGet cache key to include central package/SDK config | ✅ |
+| 29 | Use runsettings + hang timeout in CI test execution | ✅ |
+| 30 | Harden coverage artifact upload with missing-file warning behavior | ✅ |
+| 31 | Harden Release workflow with manual dispatch support | ✅ |
+| 32 | Add Release workflow concurrency guard | ✅ |
+| 33 | Add Release workflow timeout budget | ✅ |
+| 34 | Expand Release NuGet cache key to include central package/SDK config | ✅ |
+| 35 | Use runsettings + hang timeout in Release test execution | ✅ |
+| 36 | Publish GUI into deterministic release output directory | ✅ |
+| 37 | Publish CLI into deterministic release output directory | ✅ |
+| 38 | Generate SHA256 checksums for release artifacts | ✅ |
+| 39 | Include checksums file in GitHub release assets | ✅ |
+| 40 | Align PowerShell analyzer workflow to Windows runner | ✅ |
+| 41 | Update Development guide with centralized build/package management | ✅ |
+| 42 | Update Development guide with production release gate commands | ✅ |
+| 43 | Update README test badge with latest total | ✅ |
+| 44 | Update Roadmap headline test metrics | ✅ |
+| 45 | Add this 50-task sprint plan to roadmap with tracked completion | ✅ |
+| 46 | Validate solution builds after refactor | ✅ |
+| 47 | Validate full test suite after refactor | ✅ |
+| 48 | Validate release publish outputs after refactor | ✅ |
+| 49 | Commit refactor and production-hardening changes | ✅ |
+| 50 | Push release-ready state to GitHub main branch | ✅ |
 
 ### Sprint 15 — 50 New Tweaks & Test Performance ✅
 

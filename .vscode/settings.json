@@ -30,13 +30,29 @@
   "files.exclude": {
     "**/bin": true,
     "**/obj": true,
-    "**/archive": true
+    "**/archive": true,
+    "**/.tmp": true,
+    "**/publish": true,
+    "installer/bin": true,
+    "installer/obj": true
+  },
+  "files.watcherExclude": {
+    "**/bin/**": true,
+    "**/obj/**": true,
+    "**/.tmp/**": true,
+    "**/publish/**": true,
+    "installer/bin/**": true,
+    "installer/obj/**": true
   },
   // ── Search ──────────────────────────────────────────────────────────
   "search.exclude": {
     "**/bin": true,
     "**/obj": true,
-    "**/archive": true
+    "**/archive": true,
+    "**/.tmp": true,
+    "**/publish": true,
+    "installer/bin": true,
+    "installer/obj": true
   },
   // ── Terminal (best shell integration) ────────────────────────────────
   "terminal.integrated.defaultProfile.windows": "RegiLattice Dev",

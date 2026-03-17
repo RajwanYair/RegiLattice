@@ -6,6 +6,7 @@
     "ms-vscode.powershell",
     "github.copilot-chat",
     "redhat.vscode-yaml",
+    "github.vscode-github-actions",
     "eamodio.gitlens",
     "gruntfuggly.todo-tree",
     "usernamehw.errorlens"

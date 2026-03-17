@@ -141,12 +141,16 @@ Expose `IReadOnlyList<T>` (not `List<T>`) for all public collection properties.
 
 ## Build & Test Commands
 
+Build and package configuration is centralized in:
+- `Directory.Build.props`
+- `Directory.Packages.props`
+
 ```powershell
 # Build
 dotnet build RegiLattice.sln
 
 # Test
-dotnet test
+dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s
 
 # Run GUI
 dotnet run --project src/RegiLattice.GUI
