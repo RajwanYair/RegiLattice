@@ -52,15 +52,24 @@ RegiLattice.sln
 
 ---
 
-## NuGet Packages
+## Build and Dependency Management
 
-| Package | Version | Project |
+The solution now centralizes shared build and package settings to reduce duplication and drift:
+
+- `Directory.Build.props`: shared `TargetFramework`, `Nullable`, `ImplicitUsings`, `Platforms`, `Version`, deterministic build flags
+- `Directory.Packages.props`: central package versions for core and test dependencies
+
+This means project files only keep project-specific settings and references.
+
+## NuGet Packages (Centralized)
+
+| Package | Version | Scope |
 |---|---|---|
-| System.Management | 9.0.3 | Core (WMI queries) |
-| xunit | 2.9.2 | Tests |
-| xunit.runner.visualstudio | 2.8.2 | Tests |
-| Microsoft.NET.Test.Sdk | 17.11.1 | Tests |
-| coverlet.collector | 6.0.2 | Tests (coverage) |
+| System.Management | 9.0.3 | Core |
+| xunit | 2.9.2 | Test projects |
+| xunit.runner.visualstudio | 2.8.2 | Test projects |
+| Microsoft.NET.Test.Sdk | 17.11.1 | Test projects |
+| coverlet.collector | 6.0.2 | Test projects |
 
 ---
 
@@ -79,6 +88,15 @@ RegiLattice.sln
 
 VS Code tasks (`Ctrl+Shift+B`) provide IDE integration for all commands above.
 See `.vscode/tasks.json`.
+
+Production gate task:
+
+```powershell
+dotnet build RegiLattice.sln -c Release
+dotnet test RegiLattice.sln -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger "console;verbosity=normal"
+dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui
+dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli
+```
 
 ---
 

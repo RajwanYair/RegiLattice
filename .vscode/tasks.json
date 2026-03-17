@@ -43,7 +43,7 @@
     {
       "label": "test: Core",
       "type": "shell",
-      "command": "dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --verbosity normal --blame-hang-timeout 60s",
+      "command": "dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -54,7 +54,18 @@
     {
       "label": "test: GUI",
       "type": "shell",
-      "command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --verbosity normal --blame-hang-timeout 60s",
+      "command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s",
+      "group": "test",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "test: CLI",
+      "type": "shell",
+      "command": "dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -77,6 +88,17 @@
       "label": "publish: GUI (win-x64)",
       "type": "shell",
       "command": "dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true",
+      "group": "build",
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "verify: Release Gate",
+      "type": "shell",
+      "command": "dotnet build RegiLattice.sln -c Release; dotnet test RegiLattice.sln -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger \"console;verbosity=normal\"; dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui; dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli",
       "group": "build",
       "problemMatcher": "$msCompile",
       "presentation": {

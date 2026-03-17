@@ -23,10 +23,10 @@ public sealed class TweakEngine
     private readonly Dictionary<string, TweakDef> _tweakById = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<TweakDef>> _tweaksByCat = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, List<TweakDef>> _tweaksByTag = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, List<TweakDef>> _tweaksByScope = [];
+    private readonly Dictionary<TweakScope, List<TweakDef>> _tweaksByScope = [];
     private readonly ConcurrentDictionary<string, TweakScope> _scopeCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = [];
-    private readonly Dictionary<TweakDef, string> _tweakSearchText = [];
+    private readonly Dictionary<string, string> _tweakSearchText = new(StringComparer.OrdinalIgnoreCase);
 
     // Cached post-registration data (populated by Freeze())
     private string[]? _cachedCategories;
@@ -79,18 +79,17 @@ public sealed class TweakEngine
 
             var scope = td.Scope;
             _scopeCache[td.Id] = scope;
-            var scopeKey = scope.ToString().ToLowerInvariant();
-            if (!_tweaksByScope.TryGetValue(scopeKey, out var scopeList))
+            if (!_tweaksByScope.TryGetValue(scope, out var scopeList))
             {
                 scopeList = [];
-                _tweaksByScope[scopeKey] = scopeList;
+                _tweaksByScope[scope] = scopeList;
             }
             scopeList.Add(td);
 
-            // Build search index
+            // Build search index once, reused by Search() and Filter(query: ...).
             var searchText = $"{td.Id} {td.Label} {td.Category} {td.Description} {td.GetExpectedResult()} {string.Join(' ', td.Tags)}".ToLowerInvariant();
             _searchPairs.Add((searchText, td));
-            _tweakSearchText[td] = searchText;
+            _tweakSearchText[td.Id] = searchText;
         }
     }
 
@@ -125,7 +124,7 @@ public sealed class TweakEngine
         _frozenById = _tweakById.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
         _cachedCategories = [.. _tweaksByCat.Keys.Order()];
         _cachedCategoryCounts = _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
-        _cachedScopeCounts = _tweaksByScope.ToDictionary(kv => Enum.Parse<TweakScope>(kv.Key, ignoreCase: true), kv => kv.Value.Count);
+        _cachedScopeCounts = _tweaksByScope.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
         _frozen = true;
     }
 
@@ -163,7 +162,7 @@ public sealed class TweakEngine
 
     public IReadOnlyList<TweakDef> TweaksByTag(string tag) => _tweaksByTag.TryGetValue(tag, out var list) ? list : [];
 
-    public IReadOnlyList<TweakDef> TweaksByScope(TweakScope scope) => _tweaksByScope.GetValueOrDefault(scope.ToString().ToLowerInvariant()) ?? [];
+    public IReadOnlyList<TweakDef> TweaksByScope(TweakScope scope) => _tweaksByScope.GetValueOrDefault(scope) ?? [];
 
     public TweakScope GetScope(TweakDef td) => _scopeCache.GetOrAdd(td.Id, _ => td.Scope);
 
@@ -203,7 +202,7 @@ public sealed class TweakEngine
         if (query is not null)
         {
             var q = query.ToLowerInvariant();
-            results = results.Where(t => _tweakSearchText.TryGetValue(t, out var text) && text.Contains(q));
+            results = results.Where(t => _tweakSearchText.TryGetValue(t.Id, out var text) && text.Contains(q));
         }
         return results.ToList();
     }
@@ -449,7 +448,7 @@ public sealed class TweakEngine
     public Dictionary<string, int> CategoryCounts() => _cachedCategoryCounts ?? _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
     public Dictionary<TweakScope, int> ScopeCounts() =>
-        _cachedScopeCounts ?? _tweaksByScope.ToDictionary(kv => Enum.Parse<TweakScope>(kv.Key, ignoreCase: true), kv => kv.Value.Count);
+        _cachedScopeCounts ?? _tweaksByScope.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
     // ── Export for GUI ──────────────────────────────────────────────────
 

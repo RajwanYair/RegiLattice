@@ -119,10 +119,16 @@ public static class Locale
     };
 
     private static Dictionary<string, string> _active = new(En);
+    private static readonly Dictionary<string, string> _hotCache = new(StringComparer.OrdinalIgnoreCase);
 
     public static string T(string key, params object[] args)
     {
-        var template = _active.GetValueOrDefault(key, key);
+        if (!_hotCache.TryGetValue(key, out var template))
+        {
+            template = _active.GetValueOrDefault(key, key);
+            _hotCache[key] = template;
+        }
+
         return args.Length > 0 ? string.Format(template, args) : template;
     }
 
@@ -134,6 +140,8 @@ public static class Locale
         if (overrides is not null)
             foreach (var (k, v) in overrides)
                 _active[k] = v;
+
+        _hotCache.Clear();
     }
 
     public static string CurrentLocale => _current;

@@ -3,6 +3,11 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -10,12 +15,20 @@ permissions:
 jobs:
   build-and-release:
     runs-on: windows-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Restore
         run: dotnet restore RegiLattice.sln
@@ -24,24 +37,38 @@ jobs:
         run: dotnet build RegiLattice.sln -c Release --no-restore
 
       - name: Test
-        run: dotnet test RegiLattice.sln -c Release --no-build --logger "console;verbosity=normal"
+        run: >-
+          dotnet test RegiLattice.sln -c Release --no-build
+          --settings tests/.runsettings
+          --blame-hang-timeout 60s
+          --logger "console;verbosity=normal"
 
       - name: Publish GUI (self-contained)
         run: >-
           dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -o publish/release/gui
 
       - name: Publish CLI (self-contained)
         run: >-
           dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=true
+          -o publish/release/cli
+
+      - name: Generate checksums
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem publish/release -Recurse -File
+          $hashes = foreach ($f in $files) { Get-FileHash $f.FullName -Algorithm SHA256 }
+          $hashes | ForEach-Object { "{0}  {1}" -f $_.Hash.ToLowerInvariant(), ($_.Path -replace '^.*publish/release[/\\]', '') } | Set-Content publish/release/SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src/RegiLattice.GUI/bin/Release/net10.0-windows/win-x64/publish/*
-            src/RegiLattice.CLI/bin/Release/net10.0-windows/win-x64/publish/*
+            publish/release/gui/*
+            publish/release/cli/*
+            publish/release/SHA256SUMS.txt
           generate_release_notes: true

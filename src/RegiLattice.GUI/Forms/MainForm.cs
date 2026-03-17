@@ -35,6 +35,10 @@ public partial class MainForm : Form
     // Categories whose tweak status has been loaded (lazy-load on select).
     private readonly HashSet<string> _loadedCategories = new(StringComparer.OrdinalIgnoreCase);
 
+    // Reusable search debounce timer (prevents per-keystroke timer allocations).
+    private readonly System.Windows.Forms.Timer _searchDebounceTimer = new() { Interval = 250 };
+    private string _lastSearchText = string.Empty;
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -49,6 +53,7 @@ public partial class MainForm : Form
         AppTheme.SetTheme(theme);
         _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
 
+        _searchDebounceTimer.Tick += OnSearchDebounceTick;
         ApplyTheme();
     }
 
@@ -75,6 +80,9 @@ public partial class MainForm : Form
                 MessageBoxIcon.Information
             );
         }
+
+        _searchDebounceTimer.Stop();
+        _searchDebounceTimer.Tick -= OnSearchDebounceTick;
 
         _trayIcon.Visible = false;
         _cts.Cancel();
@@ -1246,22 +1254,23 @@ public partial class MainForm : Form
         _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
     }
 
-    private System.Windows.Forms.Timer? _searchDebounceTimer;
+    private void OnSearchDebounceTick(object? sender, EventArgs e)
+    {
+        _searchDebounceTimer.Stop();
+
+        string search = _searchBox.Text.Trim();
+        if (string.Equals(search, _lastSearchText, StringComparison.Ordinal))
+            return;
+
+        _lastSearchText = search;
+        RefreshListView();
+    }
 
     private void OnSearchTextChanged(object? sender, EventArgs e)
     {
         _searchClear.Visible = _searchBox.Text.Length > 0;
 
-        _searchDebounceTimer?.Stop();
-        _searchDebounceTimer?.Dispose();
-        _searchDebounceTimer = new System.Windows.Forms.Timer { Interval = 300 };
-        _searchDebounceTimer.Tick += (_, _) =>
-        {
-            _searchDebounceTimer.Stop();
-            _searchDebounceTimer.Dispose();
-            _searchDebounceTimer = null;
-            RefreshListView();
-        };
+        _searchDebounceTimer.Stop();
         _searchDebounceTimer.Start();
     }
 
