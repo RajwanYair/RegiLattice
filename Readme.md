@@ -339,7 +339,7 @@ new TweakDef
 }
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full guide.
 
 ## Building the Installer
 
