@@ -726,3 +726,79 @@ public sealed class CorporateGuardTests
         CorporateGuard.ClearCache();
     }
 }
+
+// ── SystemMonitor Tests ────────────────────────────────────────────────────
+public sealed class SystemMonitorTests
+{
+    [Fact]
+    public void GetCpuUsagePercent_ReturnsZeroToHundred()
+    {
+        var monitor = new SystemMonitor();
+        // First call may return 0 (no delta yet)
+        int first = monitor.GetCpuUsagePercent();
+        Assert.InRange(first, 0, 100);
+    }
+
+    [Fact]
+    public void GetCpuUsagePercent_SecondCallReturnsValidRange()
+    {
+        var monitor = new SystemMonitor();
+        monitor.GetCpuUsagePercent(); // prime the delta
+        Thread.Sleep(100); // allow some CPU time to pass
+        int second = monitor.GetCpuUsagePercent();
+        Assert.InRange(second, 0, 100);
+    }
+
+    [Fact]
+    public void GetMemoryUsage_ReturnsPositiveValues()
+    {
+        var (usedMb, totalMb, percent) = SystemMonitor.GetMemoryUsage();
+        Assert.True(totalMb > 0, $"Expected positive total MB, got {totalMb}");
+        Assert.True(usedMb > 0, $"Expected positive used MB, got {usedMb}");
+        Assert.True(usedMb <= totalMb, $"Used ({usedMb}) should not exceed total ({totalMb})");
+        Assert.InRange(percent, 1, 100);
+    }
+
+    [Fact]
+    public void GetMemoryUsage_TotalMatchesHardwareInfo()
+    {
+        var (_, totalMb, _) = SystemMonitor.GetMemoryUsage();
+        var hwMem = HardwareInfo.DetectMemory();
+        // Allow 1GB tolerance for firmware-reserved memory
+        Assert.True(
+            Math.Abs(totalMb - hwMem.TotalMb) < 1024,
+            $"SystemMonitor total ({totalMb}) should be close to HardwareInfo total ({hwMem.TotalMb})"
+        );
+    }
+
+    [Fact]
+    public void GetUptime_ReturnsPositiveTimeSpan()
+    {
+        var uptime = SystemMonitor.GetUptime();
+        Assert.True(uptime.TotalSeconds > 0, "Uptime should be positive");
+        Assert.True(uptime.TotalDays < 365, "Uptime should be less than a year");
+    }
+
+    [Fact]
+    public void GetUptime_IsConsistent()
+    {
+        var first = SystemMonitor.GetUptime();
+        Thread.Sleep(50);
+        var second = SystemMonitor.GetUptime();
+        Assert.True(second >= first, "Second uptime reading should be >= first");
+    }
+
+    [Fact]
+    public void MultipleInstances_TrackCpuIndependently()
+    {
+        var a = new SystemMonitor();
+        var b = new SystemMonitor();
+        a.GetCpuUsagePercent();
+        b.GetCpuUsagePercent();
+        Thread.Sleep(50);
+        int cpuA = a.GetCpuUsagePercent();
+        int cpuB = b.GetCpuUsagePercent();
+        Assert.InRange(cpuA, 0, 100);
+        Assert.InRange(cpuB, 0, 100);
+    }
+}

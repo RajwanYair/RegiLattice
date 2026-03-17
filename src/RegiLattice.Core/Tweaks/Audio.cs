@@ -614,5 +614,231 @@ internal static class Audio
                 ),
             ],
         },
+        // ── Sprint 19 additions ────────────────────────────────────────────
+        new TweakDef
+        {
+            Id = "audio-disable-recording-quality-limit",
+            Label = "Remove Recording Quality Limit",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Removes the default recording quality limit. Allows recording at the maximum quality supported by the hardware. Default: limited.",
+            Tags = ["audio", "recording", "quality", "limit"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Capture"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableRecordingQualityLimit", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableRecordingQualityLimit")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableRecordingQualityLimit", 1)],
+        },
+        new TweakDef
+        {
+            Id = "audio-enable-stereo-mix",
+            Label = "Enable Stereo Mix Device",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables the Stereo Mix virtual recording device for capturing system audio output. Default: disabled/hidden.",
+            Tags = ["audio", "stereo", "mix", "recording"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableStereoMix", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableStereoMix")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableStereoMix", 1)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-mmcss-scheduling",
+            Label = "Optimise MMCSS Audio Scheduling",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Multimedia Class Scheduler Service (MMCSS) to prioritise audio threads. Reduces audio glitches. Default: default scheduling.",
+            Tags = ["audio", "mmcss", "scheduling", "latency"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    10
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    20
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    10
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-network-throttling",
+            Label = "Disable Network Throttling for Audio",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables network throttling during multimedia playback. Prevents network-related audio dropouts. Default: throttled.",
+            Tags = ["audio", "network", "throttling", "streaming"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "NetworkThrottlingIndex",
+                    unchecked((int)0xFFFFFFFF)
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-audio-graph-isolation",
+            Label = "Disable Audio Graph Isolation",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Audio Graph isolation process (audiodg.exe enhancements). Can reduce latency for DAW users. Default: enabled.",
+            Tags = ["audio", "graph", "isolation", "latency"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 1)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-device-priority-high",
+            Label = "Set Audio Device Priority to High",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets audio device thread priority to high. Improves audio playback reliability under CPU load. Default: normal.",
+            Tags = ["audio", "priority", "device", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "Medium"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-dpc-latency-low",
+            Label = "Reduce Audio DPC Latency",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reduces Deferred Procedure Call (DPC) latency for audio processing. Minimises audio stuttering. Default: 10ms.",
+            Tags = ["audio", "dpc", "latency", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Latency Sensitive",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Latency Sensitive"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Latency Sensitive",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-beep-sounds",
+            Label = "Disable System Beep",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the system beep (PC speaker). Stops the annoying beep on errors and backspace in CMD. Default: enabled.",
+            Tags = ["audio", "beep", "speaker", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Beep"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Beep", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Beep", "Start", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Beep", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-critical-battery-sound",
+            Label = "Disable Critical Battery Sound",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Silences the critical battery level alert sound. The visual notification remains. Default: enabled.",
+            Tags = ["audio", "battery", "critical", "alert"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default\CriticalBatteryAlarm\.Current"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default\CriticalBatteryAlarm\.Current", "", "")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default\CriticalBatteryAlarm\.Current", "")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\AppEvents\Schemes\Apps\.Default\CriticalBatteryAlarm\.Current", "", "")],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-headphone-auto-detect",
+            Label = "Enable Headphone Auto-Detection",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables automatic audio device switching when headphones are plugged in or removed. Default: varies by driver.",
+            Tags = ["audio", "headphone", "auto-detect", "switching"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableAutoDeviceSwitch", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableAutoDeviceSwitch")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableAutoDeviceSwitch", 1)],
+        },
     ];
 }

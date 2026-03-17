@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-16 · v3.4.0 · 2 363 tweaks · 89 categories · 960 tests
+> Last updated: 2026-03-16 · v3.4.0 · 2 510 tweaks · 89 categories · 1 305 tests
 
 ---
 
@@ -10,9 +10,9 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 363 verified across 89 categories |
-| Tests | 960 (738 Core + 103 CLI + 131 GUI), all passing, 4-thread parallel |
-| GUI | WinForms with 4 themes, system theme auto-detection, tray icon, percentage progress |
+| Tweaks | 2 510 verified across 89 categories |
+| Tests | 1 305 (784 Core + 111 CLI + 410 GUI), all passing, 4-thread parallel |
+| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
 | CI/CD | GitHub Actions: build + test + coverage + release + CodeQL |
@@ -284,6 +284,41 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 8 | Gap analysis & enhancement roadmap generated (100 items across 10 phases) | ✅ |
 | 9 | Total: 2,363 tweaks, 960 tests (738 Core + 103 CLI + 131 GUI) | ✅ |
 
+### Sprint 17 — Core Services, CLI Commands & 50 New Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | ConfigExporter service — export/import portable tweak configs as JSON | ✅ |
+| 2 | Favorites service — persist user favorite tweak IDs, thread-safe, case-insensitive | ✅ |
+| 3 | TweakHistory service — rolling 500-entry operation history with ISO 8601 timestamps | ✅ |
+| 4 | 7 CLI commands: export-config, import-config, favorites, favorite-add/remove, history | ✅ |
+| 5 | 50 new tweaks: Display +10, Startup +10, Network Optimization +10, Power Management +10, Privacy +10 | ✅ |
+| 6 | 40 new tests: FavoritesTests (11), TweakHistoryTests (11), ConfigExporterTests (10), FavoritesAndHistoryParseTests (8) | ✅ |
+| 7 | Total: 2,410 tweaks, 1,001 tests (779 Core + 111 CLI + 131 GUI) | ✅ |
+
+### Sprint 18 — GUI Visual Overhaul, 7 New Themes & 50 New Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | 7 new colour themes: Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk (11 total) | ✅ |
+| 2 | AppIcons gradient overhaul: 9 existing + 7 new icons with LinearGradientBrush | ✅ |
+| 3 | ToolStrip buttons: Apply/Remove/Refresh with colourful ImageAndText style | ✅ |
+| 4 | MainForm visual polish: gradient column headers + gradient selection highlight | ✅ |
+| 5 | 50 new tweaks: DNS +10, Encryption +10, Firewall +10, Hardening +10, Recovery +10 | ✅ |
+| 6 | 28 new tests: 21 theme Theory tests (7 themes × 3), 7 AppIcons bitmap tests | ✅ |
+| 7 | Total: 2,460 tweaks, 1,029 tests (779 Core + 111 CLI + 159 GUI) | ✅ |
+
+### Sprint 19 — System Monitoring & 50 New Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | SystemMonitor service: CPU usage (GetSystemTimes P/Invoke, delta-based), memory (GlobalMemoryStatusEx), uptime (TickCount64) | ✅ |
+| 2 | Live CPU/RAM in MainForm status bar: 2s timer, accent-coloured labels | ✅ |
+| 3 | System uptime in About dialog (`Xd Yh Zm` format) | ✅ |
+| 4 | 50 new tweaks: Display +10, Fonts +10, Input +10, Audio +10, Taskbar +10 | ✅ |
+| 5 | 7 new SystemMonitor tests: CPU range, memory values, uptime consistency, multi-instance | ✅ |
+| 6 | Total: 2,510 tweaks, 1,305 tests (784 Core + 111 CLI + 410 GUI) | ✅ |
+
 ---
 
 ## Competitive Analysis Summary
@@ -308,7 +343,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### RegiLattice Unique Strengths (already ahead)
 
-- Most tweaks by far: 2,363 across 89 categories
+- Most tweaks by far: 2,510 across 89 categories
 - Declarative tweak model (TweakDef + RegOp)
 - 5 profile system (business, gaming, privacy, minimal, server)
 - Plugin marketplace (JSON Tweak Packs)
@@ -317,9 +352,10 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - Snapshot/restore (save and rollback)
 - CLI + GUI (25+ commands + full WinForms)
 - DryRun mode (preview before applying)
-- 4 themes (Catppuccin Mocha/Latte, Nord, Dracula)
+- 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more)
+- Live system monitoring (CPU, RAM, uptime in status bar)
 - Validation engine (TweakValidator + duplicate registry detection)
-- Full test suite (960 xUnit tests, 95% line coverage)
+- Full test suite (1,305 xUnit tests, 95% line coverage)
 
 ---
 
@@ -344,15 +380,15 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
-| 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | HIGH | Mem Reduct |
+| 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | ✅ Sprint 19 | Mem Reduct |
 | 12 | Memory cache cleaner — working set purge via Native API | HIGH | Mem Reduct |
 | 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct |
 | 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct |
-| 15 | CPU usage monitor in status bar | MEDIUM | Original |
+| 15 | CPU usage monitor in status bar | ✅ Sprint 19 | Original |
 | 16 | Disk usage overview panel (per-drive space breakdown) | MEDIUM | MS PC Manager |
 | 17 | Network connectivity status indicator | LOW | NetAdapter Repair |
 | 18 | Battery health monitor for laptops | LOW | Original |
-| 19 | System uptime display in About dialog | LOW | Original |
+| 19 | System uptime display in About dialog | ✅ Sprint 19 | Original |
 | 20 | Hardware temperature monitoring (CPU/GPU) via WMI | LOW | Original |
 
 ### Phase 3 — Visual Appearance Tweaks (Sprint 21–22)

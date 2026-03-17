@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-16 (v3.4.0, 2 460 tweaks, 89 categories, 1 029 tests).
+> Last verified: 2026-03-16 (v3.4.0, 2 510 tweaks, 89 categories, 1 305 tests).
 
 ## Companion Instruction Files
 
@@ -77,12 +77,12 @@ Rules:
 | ----------- | ---------------------------------------------------------------- |
 | Language    | C# 13 / .NET 10.0-windows (x64)                                 |
 | Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 1,029 tests across 16 test files                  |
+| Test        | xUnit 2.9.2 — 1,305 tests across 16 test files                  |
 | GUI         | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
 | Version     | 3.4.0                                                            |
 | Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 460 across 89 categories (90 module files)                      |
-| Tests       | 1,029 passing (779 Core + 111 CLI + 159 GUI)                     |
+| Tweaks      | 2 510 across 89 categories (90 module files)                      |
+| Tests       | 1,305 passing (784 Core + 111 CLI + 410 GUI)                     |
 | NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
 
 ## Git Workflow (IMPORTANT)
@@ -122,6 +122,7 @@ RegiLattice.sln
 │   │   │   ├── PipManager.cs        # pip package manager integration
 │   │   │   ├── Ratings.cs           # Tweak rating system (1-5 stars)
 │   │   │   ├── ShellRunner.cs       # Safe process execution wrapper
+│   │   │   ├── SystemMonitor.cs     # Live CPU/RAM/uptime monitoring (P/Invoke)
 │   │   │   └── WinGetManager.cs     # WinGet package manager integration
 │   │   ├── Plugins/                 # Tweak Pack system (JSON marketplace)
 │   │   │   ├── PackDef.cs           # Pack metadata record
@@ -164,7 +165,7 @@ RegiLattice.sln
 │       ├── CliArgs.cs             # CLI argument model (extracted from Program)
 │       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 779 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 784 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -179,7 +180,7 @@ RegiLattice.sln
 │   │   └── ConfigExporterTests.cs
 │   ├── RegiLattice.CLI.Tests/     # 111 xUnit tests
 │   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
-│   └── RegiLattice.GUI.Tests/    # 131 xUnit tests
+│   └── RegiLattice.GUI.Tests/    # 410 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs
@@ -465,7 +466,7 @@ Canonical category slugs:
 
 - **Duplicate IDs**: `TweakEngine.Register()` will throw on duplicate IDs. Each `Id` must be unique across ALL modules.
 - **RegOp paths**: Use full hive names `HKEY_LOCAL_MACHINE\...` or `HKEY_CURRENT_USER\...` (abbreviations `HKLM\...` / `HKCU\...` also accepted).
-- **P/Invoke**: Only 2 P/Invoke calls in the entire codebase — `GetComputerNameExW` (CorporateGuard) and `GlobalMemoryStatusEx` (HardwareInfo). Prefer `Microsoft.Win32.Registry` for all registry access.
+- **P/Invoke**: Only 4 P/Invoke calls in the entire codebase — `GetComputerNameExW` (CorporateGuard), `GlobalMemoryStatusEx` (HardwareInfo), `GetSystemTimes` + `GlobalMemoryStatusEx` (SystemMonitor). Prefer `Microsoft.Win32.Registry` for all registry access.
 
 ## File-by-File Quick Ref
 
@@ -497,6 +498,7 @@ Canonical category slugs:
 | `ChocolateyManager.cs` (Core) | Chocolatey integration | Package install, list, update via choco CLI |
 | `PipManager.cs` (Core) | pip integration | Package install, list, update via pip CLI |
 | `WinGetManager.cs` (Core) | WinGet integration | Package install, list, update via winget CLI |
+| `SystemMonitor.cs` (Core) | System monitoring | `GetCpuUsagePercent()`, `GetMemoryUsage()`, `GetUptime()` (P/Invoke) |
 | `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record |
 | `AppIcons.cs` (GUI) | Icon generation | Programmatic bitmap/icon creation for menus and tray |
 | `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations, tray icon |

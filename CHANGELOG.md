@@ -6,6 +6,32 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [3.4.0] — 2026-03-16
 
+### Added — Sprint 19: System Monitoring, Live CPU/RAM & 50 New Tweaks
+
+- **SystemMonitor service** (`SystemMonitor.cs`): live system resource monitoring
+  via `GetSystemTimes` and `GlobalMemoryStatusEx` P/Invoke — CPU usage (delta-based),
+  memory usage (used/total MB + percent), system uptime
+- **Live CPU/RAM status bar**: 2-second polling timer displays `CPU: X%` and
+  `RAM: X.X / Y.Y GB (Z%)` in the MainForm status strip with accent-coloured labels
+- **System uptime in About dialog**: shows `Uptime: Xd Yh Zm` in the hardware info panel
+- **Display** (10 new): Windows Ink Workspace disable, force disable HDR, high contrast mode,
+  color depth 32-bit, auto-rotation disable, caption button height, mouse hover select,
+  full-screen optimization, menu animation fade, peek desktop disable
+- **Fonts** (10 new): DPI-aware font scaling, font substitution policy, Cascadia Code icon title font,
+  TrueType rendering, font hinting disable, system font size default, DirectWrite enable,
+  font providers disable, caption font weight, message font default
+- **Input** (10 new): Feedback Hub disable, wheel scroll chars, pen workspace disable,
+  handwriting panel disable, mouse hover width, touch visualizations, gesture visualizations,
+  input personalization disable, writing insights disable, mouse pointer speed
+- **Audio** (10 new): recording quality limit, stereo mix enable, MMCSS scheduling,
+  network throttling (multimedia), audio graph isolation, device priority high,
+  DPC latency low, beep sounds disable, critical battery sound disable, headphone auto-detect
+- **Taskbar** (10 new): taskbar transparency disable, full path title bars, Cortana taskbar button,
+  taskbar animations disable, Ink Workspace button hide, news feed taskbar, multi-display show all,
+  thumbnail preview disable, thumbnail preview size, peek live preview disable
+- **7 new xUnit tests**: SystemMonitor CPU usage, memory usage, uptime, consistency, multi-instance
+- Total: **2,510 tweaks**, **1,305 tests passing** (784 Core + 111 CLI + 410 GUI)
+
 ### Added — Sprint 18: GUI Visual Overhaul, 7 New Themes & 50 New Tweaks
 
 - **7 new colour themes**: Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro,

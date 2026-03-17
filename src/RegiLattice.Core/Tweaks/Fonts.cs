@@ -419,5 +419,160 @@ internal static class Fonts
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders", 0)],
         },
+        // ── Sprint 19 additions ────────────────────────────────────────────
+        new TweakDef
+        {
+            Id = "font-set-dpi-aware-font-scaling",
+            Label = "Set DPI-Aware Font Scaling",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables per-monitor DPI-aware font scaling for sharper text on high-DPI displays. Default: system-level scaling.",
+            Tags = ["fonts", "dpi", "scaling", "high-dpi"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", "1")],
+        },
+        new TweakDef
+        {
+            Id = "font-disable-font-substitution-policy",
+            Label = "Disable Font Substitution",
+            Category = "Fonts",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables automatic font substitution for missing fonts. Applications will use their fallback fonts instead. Default: enabled.",
+            Tags = ["fonts", "substitution", "fallback", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes",
+                    "MS Shell Dlg",
+                    "Microsoft Sans Serif"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "font-set-icon-title-font-cascadia",
+            Label = "Set Icon Title Font to Cascadia Mono",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Changes the icon title font to Cascadia Mono for a modern developer-friendly look. Default: Segoe UI.",
+            Tags = ["fonts", "icon", "cascadia", "developer"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconFont", "Cascadia Mono")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconFont", "Segoe UI")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "IconFont", "Cascadia Mono")],
+        },
+        new TweakDef
+        {
+            Id = "font-force-truetype-rendering",
+            Label = "Force TrueType Font Rendering",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Forces TrueType rendering mode for all fonts, preventing bitmap font fallback. Default: auto-select.",
+            Tags = ["fonts", "truetype", "rendering", "quality"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
+        },
+        new TweakDef
+        {
+            Id = "font-disable-font-hinting",
+            Label = "Disable Font Hinting",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables font hinting for smoother-looking text on high-DPI displays. May reduce sharpness on low-DPI. Default: enabled.",
+            Tags = ["fonts", "hinting", "smoothing", "high-dpi"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "font-set-system-font-size-default",
+            Label = "Reset System Font Size to Default",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Resets the system-wide font size to the Windows default (96 DPI = 100%). Overrides any custom scaling.",
+            Tags = ["fonts", "size", "default", "reset"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
+        },
+        new TweakDef
+        {
+            Id = "font-enable-directwrite",
+            Label = "Force DirectWrite Rendering",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Forces DirectWrite text rendering for improved subpixel anti-aliasing and colour accuracy. Default: auto.",
+            Tags = ["fonts", "directwrite", "rendering", "subpixel"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectWrite"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectWrite", "GammaLevel", 2200)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectWrite", "GammaLevel")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectWrite", "GammaLevel", 2200)],
+        },
+        new TweakDef
+        {
+            Id = "font-disable-font-providers",
+            Label = "Disable Cloud Font Providers",
+            Category = "Fonts",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Blocks Windows from contacting cloud font providers, preventing font downloads over the network. Default: enabled.",
+            Tags = ["fonts", "cloud", "providers", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowFontProviders", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowFontProviders")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowFontProviders", 0)],
+        },
+        new TweakDef
+        {
+            Id = "font-set-caption-font-weight",
+            Label = "Set Bold Caption Font",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the window caption (title bar) font weight to bold for improved readability. Default: normal weight.",
+            Tags = ["fonts", "caption", "bold", "titlebar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "CaptionWidth", "-270")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "CaptionWidth", "-225")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "CaptionWidth", "-270")],
+        },
+        new TweakDef
+        {
+            Id = "font-set-message-font-default",
+            Label = "Reset Message Box Font",
+            Category = "Fonts",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Resets the message box font to the default Segoe UI 9pt. Fixes applications displaying incorrect dialog fonts.",
+            Tags = ["fonts", "message", "dialog", "reset"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MessageFont", "Segoe UI")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MessageFont")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MessageFont", "Segoe UI")],
+        },
     ];
 }

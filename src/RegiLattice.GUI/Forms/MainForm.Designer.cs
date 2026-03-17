@@ -1,3 +1,5 @@
+using RegiLattice.Core;
+
 namespace RegiLattice.GUI.Forms;
 
 partial class MainForm
@@ -58,8 +60,10 @@ partial class MainForm
     private StatusStrip _statusStrip = null!;
     private ToolStripStatusLabel _statusLabel = null!;
     private ToolStripStatusLabel _progressLabel = null!;
-    private ToolStripProgressBar _progressBar = null!;
-
+    private ToolStripProgressBar _progressBar = null!;    private ToolStripStatusLabel _cpuLabel = null!;
+    private ToolStripStatusLabel _memLabel = null!;
+    private System.Windows.Forms.Timer _monitorTimer = null!;
+    private readonly SystemMonitor _sysMonitor = new();
     // ── Tray icon ──────────────────────────────────────────────────────────
     private NotifyIcon _trayIcon = null!;
     private ContextMenuStrip _trayMenu = null!;
@@ -368,9 +372,15 @@ partial class MainForm
         _statusLabel = new ToolStripStatusLabel("Ready") { Spring = false, Font = AppTheme.Small };
         _progressLabel = new ToolStripStatusLabel("") { Spring = true, TextAlign = ContentAlignment.MiddleLeft, Font = AppTheme.Small };
         _progressBar = new ToolStripProgressBar { Visible = false, Size = new Size(180, 16), Style = ProgressBarStyle.Marquee };
+        _cpuLabel = new ToolStripStatusLabel("CPU: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
+        _memLabel = new ToolStripStatusLabel("RAM: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
         _statusStrip = new StatusStrip { SizingGrip = false };
-        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar });
+        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel });
         _statusStrip.Dock = DockStyle.Bottom;
+
+        // ── System monitor timer ───────────────────────────────────────────
+        _monitorTimer = new System.Windows.Forms.Timer(components!) { Interval = 2000 };
+        _monitorTimer.Tick += OnMonitorTimerTick;
 
         // ── Tray icon ──────────────────────────────────────────────────────
         _trayMenu = new ContextMenuStrip();

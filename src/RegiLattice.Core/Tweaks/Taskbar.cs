@@ -438,5 +438,169 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
         },
+        // ── Sprint 19 additions ────────────────────────────────────────────
+        new TweakDef
+        {
+            Id = "tb-disable-taskbar-transparency",
+            Label = "Disable Taskbar Transparency",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the transparency effect on the taskbar. Makes the taskbar fully opaque. Default: transparent.",
+            Tags = ["taskbar", "transparency", "opaque", "visual"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "tb-show-full-path-title",
+            Label = "Show Full Path in Explorer Title Bar",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Shows the full folder path in Explorer window title bars, making it easier to identify windows. Default: folder name only.",
+            Tags = ["taskbar", "explorer", "path", "title"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
+        },
+        new TweakDef
+        {
+            Id = "tb-disable-cortana-taskbar",
+            Label = "Disable Cortana in Taskbar",
+            Category = "Taskbar",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Cortana from appearing in the taskbar via Group Policy. Default: enabled.",
+            Tags = ["taskbar", "cortana", "disable", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
+        },
+        new TweakDef
+        {
+            Id = "tb-disable-taskbar-animations",
+            Label = "Disable Taskbar Animations",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables taskbar button animations (slide, pulse, flash). Reduces visual distractions. Default: enabled.",
+            Tags = ["taskbar", "animation", "disable", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
+        },
+        new TweakDef
+        {
+            Id = "tb-hide-ink-workspace-button",
+            Label = "Hide Ink Workspace Taskbar Button",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Hides the Windows Ink Workspace button from the taskbar. Default: visible on pen-enabled devices.",
+            Tags = ["taskbar", "ink", "workspace", "hide"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
+                    "PenWorkspaceButtonDesiredVisibility",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "tb-disable-news-feed-taskbar",
+            Label = "Disable News & Interests Feed",
+            Category = "Taskbar",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the News & Interests feed widget via Group Policy. Removes weather/news from the taskbar. Default: enabled.",
+            Tags = ["taskbar", "news", "interests", "feed", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
+        },
+        new TweakDef
+        {
+            Id = "tb-taskbar-multi-display-show-all",
+            Label = "Show Taskbar on All Displays",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Shows the taskbar on all connected monitors in a multi-display setup. Default: primary only on Win11.",
+            Tags = ["taskbar", "multi-display", "monitor", "show"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "tb-disable-thumbnail-preview",
+            Label = "Disable Taskbar Thumbnail Previews",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the thumbnail preview popup when hovering over taskbar buttons. Shows tooltip text instead. Default: enabled.",
+            Tags = ["taskbar", "thumbnail", "preview", "hover"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 30000),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 30000),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "tb-set-thumbnail-size",
+            Label = "Increase Thumbnail Preview Size",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Increases the size of taskbar thumbnail previews from 200 to 350 pixels wide. Default: 200.",
+            Tags = ["taskbar", "thumbnail", "size", "preview"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx", 350)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx", 350)],
+        },
+        new TweakDef
+        {
+            Id = "tb-disable-peek-live-preview",
+            Label = "Disable Aero Peek Live Preview",
+            Category = "Taskbar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Aero Peek live thumbnails on taskbar hover. Reduces GPU usage from rendering previews. Default: enabled.",
+            Tags = ["taskbar", "peek", "live", "preview", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
+        },
     ];
 }
