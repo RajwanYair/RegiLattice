@@ -381,5 +381,157 @@ internal static class MemoryOptimization
                 ),
             ],
         },
+
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "mem-set-pool-usage-max",
+            Label = "Set Pool Usage Maximum to 60%",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Limits paged and nonpaged pool usage to 60% of physical RAM, preventing runaway pool consumption from leaky drivers.",
+            Tags = ["memory", "pool", "performance", "stability"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-set-session-pool-size",
+            Label = "Optimize Session Pool Size",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the session paged pool to auto-tune (0) for optimal allocation based on available RAM and workload.",
+            Tags = ["memory", "pool", "session", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SessionPoolSize", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SessionPoolSize")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SessionPoolSize", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-conservative-swap",
+            Label = "Conservative Swap File Usage",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Forces Windows to exhaust physical RAM before using the page file, reducing disk I/O on systems with ample RAM.",
+            Tags = ["memory", "swap", "pagefile", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ConservativeSwapfileUsage", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ConservativeSwapfileUsage")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ConservativeSwapfileUsage", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-disable-crash-dump",
+            Label = "Disable Crash Memory Dump",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables kernel memory dump on BSOD, freeing up pagefile space equal to RAM size. Not recommended for debugging.",
+            Tags = ["memory", "crash", "dump", "pagefile"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-disable-auto-reboot-bsod",
+            Label = "Disable Auto-Reboot on BSOD",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents automatic restart after a Blue Screen of Death, allowing you to read the error message.",
+            Tags = ["memory", "crash", "bsod", "stability"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-set-dirty-page-threshold",
+            Label = "Set System Cache Dirty Page Threshold",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Limits the number of dirty pages the system cache can accumulate before flushing to disk, reducing bursty I/O.",
+            Tags = ["memory", "cache", "performance", "io"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SystemCacheDirtyPageThreshold", 256)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SystemCacheDirtyPageThreshold")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SystemCacheDirtyPageThreshold", 256)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-set-heap-decommit",
+            Label = "Optimize Heap Decommit Free Block Threshold",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the threshold for heap manager to decommit free blocks, returning memory to the OS faster.",
+            Tags = ["memory", "heap", "performance", "decommit"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 262144)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 262144)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-enable-pae",
+            Label = "Enable Physical Address Extension",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Ensures Physical Address Extension (PAE) is enabled, allowing 32-bit Windows to use Data Execution Prevention and more RAM.",
+            Tags = ["memory", "pae", "security", "hardware"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PhysicalAddressExtension", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PhysicalAddressExtension")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PhysicalAddressExtension", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-disable-write-watch",
+            Label = "Disable Write Watch for Faster Allocation",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables memory write watch tracking which adds overhead to memory allocation. Useful for high-throughput applications.",
+            Tags = ["memory", "performance", "allocation", "write-watch"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "mem-set-paged-pool-quota",
+            Label = "Disable Per-Process Paged Pool Quota",
+            Category = "Memory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables per-process paged pool quota enforcement, allowing processes to use more paged pool memory when available.",
+            Tags = ["memory", "pool", "quota", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PagedPoolQuota", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PagedPoolQuota")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PagedPoolQuota", 0)],
+        },
     ];
 }

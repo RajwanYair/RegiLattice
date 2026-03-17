@@ -1597,4 +1597,197 @@ public sealed class TweakEngineTests
         var result = engine.Search("   ");
         Assert.Single(result);
     }
+
+    // ── Update fallback ─────────────────────────────────────────────────
+
+    [Fact]
+    public void Update_WithoutUpdateAction_FallsBackToApply()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "upd-fallback",
+                Label = "No Update",
+                Category = "Test",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\upd-fallback", "V", 1)],
+            },
+        ]);
+        var td = engine.GetTweak("upd-fallback")!;
+        var result = engine.Update(td, forceCorp: true);
+        Assert.Equal(TweakResult.Applied, result);
+    }
+
+    // ── Apply: IsApplicable gate ────────────────────────────────────────
+
+    [Fact]
+    public void Apply_NotApplicable_ReturnsSkippedHw()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "hw-blocked",
+                Label = "Blocked",
+                Category = "Test",
+                CorpSafe = true,
+                IsApplicable = () => false,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\hw-blocked", "V", 1)],
+            },
+        ]);
+        var td = engine.GetTweak("hw-blocked")!;
+        var result = engine.Apply(td, forceCorp: true);
+        Assert.Equal(TweakResult.SkippedHw, result);
+    }
+
+    // ── ExportJson with cached status ───────────────────────────────────
+
+    [Fact]
+    public void ExportJson_WithCachedStatus_UsesProvidedStatus()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("export-cached")]);
+        var cached = new Dictionary<string, TweakResult> { ["export-cached"] = TweakResult.Applied };
+        var path = Path.Combine(Path.GetTempPath(), $"rl-export-cached-{Guid.NewGuid()}.json");
+        try
+        {
+            engine.ExportJson(path, cached);
+            var json = File.ReadAllText(path);
+            Assert.Contains("\"applied\"", json);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    // ── StatusMap parallel with ids ──────────────────────────────────────
+
+    [Fact]
+    public void StatusMap_WithIds_Parallel_ReturnsSubset()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("smp-1"), TestHelpers.MakeTweak("smp-2"), TestHelpers.MakeTweak("smp-3")]);
+        var map = engine.StatusMap(parallel: true, ids: ["smp-1", "smp-3"]);
+        Assert.Equal(2, map.Count);
+        Assert.Contains("smp-1", map.Keys);
+        Assert.Contains("smp-3", map.Keys);
+    }
+
+    // ── DetectDuplicateRegistryOps ──────────────────────────────────────
+
+    [Fact]
+    public void DetectDuplicateRegistryOps_NoDuplicates_ReturnsEmpty()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("ddup-1"), TestHelpers.MakeTweak("ddup-2")]);
+        var errors = engine.DetectDuplicateRegistryOps();
+        Assert.Empty(errors);
+    }
+
+    // ── RegisterPack ────────────────────────────────────────────────────
+
+    [Fact]
+    public void RegisterPack_RegistersTweaks()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var packTweaks = new List<TweakDef>
+        {
+            TestHelpers.MakeTweak("pack-t-1", "PackCat"),
+            TestHelpers.MakeTweak("pack-t-2", "PackCat"),
+        };
+        engine.RegisterPack(packTweaks);
+        Assert.Equal(2, engine.TweakCount);
+        Assert.NotNull(engine.GetTweak("pack-t-1"));
+        Assert.NotNull(engine.GetTweak("pack-t-2"));
+    }
+
+    // ── Apply/Remove with action delegates ──────────────────────────────
+
+    [Fact]
+    public void Apply_WithApplyAction_CallsDelegate()
+    {
+        var engine = TestHelpers.CreateEngine();
+        bool called = false;
+        engine.Register([
+            new TweakDef
+            {
+                Id = "act-apply",
+                Label = "Action",
+                Category = "Test",
+                CorpSafe = true,
+                ApplyAction = _ => called = true,
+            },
+        ]);
+        var td = engine.GetTweak("act-apply")!;
+        engine.Apply(td, forceCorp: true);
+        Assert.True(called);
+    }
+
+    [Fact]
+    public void Remove_WithRemoveAction_CallsDelegate()
+    {
+        var engine = TestHelpers.CreateEngine();
+        bool called = false;
+        engine.Register([
+            new TweakDef
+            {
+                Id = "act-remove",
+                Label = "Action",
+                Category = "Test",
+                CorpSafe = true,
+                ApplyAction = _ => { },
+                RemoveAction = _ => called = true,
+            },
+        ]);
+        var td = engine.GetTweak("act-remove")!;
+        engine.Remove(td, forceCorp: true);
+        Assert.True(called);
+    }
+
+    // ── Dependents with actual dependent ─────────────────────────────────
+
+    [Fact]
+    public void Dependents_WithDep_ReturnsDependent()
+    {
+        var engine = TestHelpers.CreateEngine();
+        var parent = TestHelpers.MakeTweak("dep-parent");
+        var child = new TweakDef
+        {
+            Id = "dep-child",
+            Label = "Child",
+            Category = "Test",
+            DependsOn = ["dep-parent"],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\dep-child", "V", 1)],
+        };
+        engine.Register([parent, child]);
+        var dependents = engine.Dependents("dep-parent");
+        Assert.Single(dependents);
+        Assert.Equal("dep-child", dependents[0].Id);
+    }
+
+    // ── GetTweak after Freeze uses frozen dictionary ─────────────────────
+
+    [Fact]
+    public void GetTweak_AfterFreeze_ReturnsTweak()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("frozen-lookup")]);
+        engine.Freeze();
+        var td = engine.GetTweak("frozen-lookup");
+        Assert.NotNull(td);
+        Assert.Equal("frozen-lookup", td.Id);
+    }
+
+    [Fact]
+    public void GetTweak_AfterFreeze_CaseInsensitive()
+    {
+        var engine = TestHelpers.CreateEngine();
+        engine.Register([TestHelpers.MakeTweak("frozen-case")]);
+        engine.Freeze();
+        var td = engine.GetTweak("FROZEN-CASE");
+        Assert.NotNull(td);
+    }
 }

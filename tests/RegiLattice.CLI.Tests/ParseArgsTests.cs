@@ -577,6 +577,47 @@ public sealed class ConsoleColorizerTests
         Assert.Contains("\x1b[90m", result);
         Assert.Contains("info", result);
     }
+
+    [Fact]
+    public void ColourisedStatus_NotApplied_IsRed()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.NotApplied);
+        Assert.Contains("\x1b[31m", result);
+    }
+
+    [Fact]
+    public void ColourisedStatus_SkippedBuild_IsYellow()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.SkippedBuild);
+        Assert.Contains("\x1b[33m", result);
+    }
+
+    [Fact]
+    public void ColourisedStatus_SkippedHw_IsYellow()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.SkippedHw);
+        Assert.Contains("\x1b[33m", result);
+    }
+
+    [Fact]
+    public void ColourisedStatus_Unknown_IsDim()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.ColourisedStatus(TweakResult.Unknown);
+        Assert.Contains("\x1b[90m", result);
+    }
+
+    [Fact]
+    public void Green_EmptyString_ReturnsAnsiWrapped()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Green("");
+        Assert.StartsWith("\x1b[32m", result);
+        Assert.EndsWith("\x1b[0m", result);
+    }
 }
 
 // ── Favorites & History CLI argument tests ──────────────────────────────

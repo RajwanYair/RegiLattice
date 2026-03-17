@@ -372,5 +372,157 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 2)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
         },
+
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "ssd-disable-link-power-management",
+            Label = "Disable AHCI Link Power Management",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables AHCI Link Power Management (HIPM/DIPM) to prevent SSD latency spikes from power state transitions.",
+            Tags = ["ssd", "performance", "power", "ahci"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-dipm",
+            Label = "Disable Device-Initiated Power Management",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables DIPM (Device-Initiated Power Management) on SATA SSDs. Prevents the SSD from entering low-power states that add latency.",
+            Tags = ["ssd", "performance", "power", "dipm"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-idle-power-timeout",
+            Label = "Disable Disk Idle Power Timeout",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the disk idle timeout to 0, preventing SSDs from entering sleep mode. Eliminates wake-up latency spikes.",
+            Tags = ["ssd", "performance", "power", "timeout"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-increase-mft-zone-4",
+            Label = "Increase MFT Zone Reservation to 4",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reserves a larger contiguous area for the Master File Table, reducing MFT fragmentation on heavily used SSDs.",
+            Tags = ["ssd", "ntfs", "mft", "fragmentation"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-log-file-flush",
+            Label = "Reduce NTFS Log File Flush Frequency",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reduces the frequency of NTFS journal log file flushes. Decreases write amplification on SSDs at a small risk of data on power loss.",
+            Tags = ["ssd", "ntfs", "log", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-pagefile-encryption",
+            Label = "Disable Page File Encryption",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables page file encryption that adds CPU overhead and write amplification on SSDs. Less secure but faster swap performance.",
+            Tags = ["ssd", "pagefile", "encryption", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-optimize-power-scheme",
+            Label = "Optimize SSD Power Scheme Settings",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Configures the active power scheme for SSDs by disabling aggressive power saving that causes latency on modern NVMe drives.",
+            Tags = ["ssd", "power", "nvme", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-timestamp-on-directories",
+            Label = "Disable Timestamp Updates on Directories",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS timestamp updates on directory access. Reduces unnecessary write operations during directory traversals.",
+            Tags = ["ssd", "ntfs", "timestamp", "io"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-enable-volatile-write-cache",
+            Label = "Enable Volatile Write Cache on SSD",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables volatile write caching on SSD controller. Improves sequential write performance but data may be lost on sudden power loss.",
+            Tags = ["ssd", "write-cache", "performance", "risk"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Enum\SCSI"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 0)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-disable-content-indexing-global",
+            Label = "Disable Content Indexing via Registry",
+            Category = "SSD Optimization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Search content indexing globally via registry. Reduces background I/O and write wear on SSDs.",
+            Tags = ["ssd", "indexing", "search", "performance"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
+        },
     ];
 }

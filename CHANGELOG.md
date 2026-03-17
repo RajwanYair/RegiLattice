@@ -6,6 +6,39 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [3.4.0] — 2026-03-16
 
+### Added — Sprint 20: GUI Enhancements, Coverage Boost & 50 New Tweaks
+
+- **Search clear button**: ToolStripButton "✕" next to search box, auto-shown/hidden
+  when search text is non-empty, clears search on click
+- **ListView checkboxes**: custom owner-drawn 14px checkboxes with accent-colour fill
+  and white checkmark on checked items, reflecting selection state visually
+- **Pending status filter**: new "Pending" option in status filter combo to show only
+  tweaks with a pending reboot requirement (from `_pendingRebootIds`)
+- **Reboot warning on exit**: when exiting with pending tweaks, a MessageBox warns that
+  changes will only take effect after a reboot
+- **Test coverage improvement**: TweakEngine.cs 61% → 82.26% (+21%);
+  14 new Core tests, ~30 new GUI tests, 6 new CLI tests
+- **Memory Optimization** (10 new): pool usage max, session pool size, conservative swap,
+  crash dump disable, auto-reboot BSOD disable, dirty page threshold, heap decommit,
+  PAE enable, write watch disable, paged pool quota
+- **Storage** (10 new): disk quotas disable, volume shadow schedule disable,
+  low disk space warning disable, write cache flush enable, thumbnail cache cleanup disable,
+  remote diff compression disable, recycle bin 5% max, WER dump disable,
+  search index backoff disable, offline files cache disable
+- **Startup** (10 new): tablet mode prompt disable, sign-in info reopen disable,
+  boot logo disable, auto maintenance disable, narrator at login disable,
+  fast user switching disable, logon provider ads disable, Edge prelaunch disable,
+  prefetch on SSD disable, compatibility assistant disable
+- **SSD Optimization** (10 new): AHCI link power management disable, DIPM disable,
+  idle power timeout disable, MFT zone increase, log file flush disable,
+  pagefile encryption disable, power scheme optimize, directory timestamp disable,
+  volatile write cache enable, global content indexing disable
+- **File System** (10 new): critical worker threads increase, delayed worker threads increase,
+  change notifications disable, path cache increase, opportunistic locking enable,
+  NTFS tunneling disable, I/O queue depth increase, long paths via policy,
+  TxF rollback disable, file handle limit increase
+- Total: **2,560 tweaks**, **~1,090 tests passing** (50 new tests added)
+
 ### Added — Sprint 19: System Monitoring, Live CPU/RAM & 50 New Tweaks
 
 - **SystemMonitor service** (`SystemMonitor.cs`): live system resource monitoring

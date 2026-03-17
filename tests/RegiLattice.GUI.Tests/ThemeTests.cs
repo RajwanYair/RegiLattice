@@ -437,4 +437,154 @@ public sealed class ThemeTests
             AppTheme.SetTheme("catppuccin-mocha");
         }
     }
+
+    // ── Apply(Control) ──────────────────────────────────────────────────
+
+    [Fact]
+    public void Apply_SetsControlColors()
+    {
+        try
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+            var panel = new Panel();
+            AppTheme.Apply(panel);
+            Assert.Equal(AppTheme.Bg, panel.BackColor);
+            Assert.Equal(AppTheme.Fg, panel.ForeColor);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    [Fact]
+    public void Apply_RecursesIntoChildControls()
+    {
+        try
+        {
+            AppTheme.SetTheme("nord");
+            var parent = new Panel();
+            var child = new Label();
+            parent.Controls.Add(child);
+            AppTheme.Apply(parent);
+            Assert.Equal(AppTheme.Bg, child.BackColor);
+            Assert.Equal(AppTheme.Fg, child.ForeColor);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── Per-theme Success/Danger/Info ────────────────────────────────────
+
+    [Theory]
+    [InlineData("catppuccin-mocha")]
+    [InlineData("catppuccin-latte")]
+    [InlineData("nord")]
+    [InlineData("dracula")]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
+    public void AllThemes_HaveSuccessDangerInfoDefined(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.NotEqual(default, AppTheme.Success);
+            Assert.NotEqual(default, AppTheme.Danger);
+            Assert.NotEqual(default, AppTheme.Info);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── Font definitions ────────────────────────────────────────────────
+
+    [Fact]
+    public void MonoFont_IsConsolas()
+    {
+        Assert.Equal("Consolas", AppTheme.Mono.FontFamily.Name);
+        Assert.Equal(9f, AppTheme.Mono.Size);
+    }
+
+    [Fact]
+    public void SmallBoldFont_IsBold()
+    {
+        Assert.True(AppTheme.SmallBold.Bold);
+        Assert.Equal(7.5f, AppTheme.SmallBold.Size);
+    }
+
+    // ── CurrentThemeName ────────────────────────────────────────────────
+
+    [Fact]
+    public void CurrentThemeName_MatchesSetTheme()
+    {
+        try
+        {
+            AppTheme.SetTheme("dracula");
+            Assert.Equal("dracula", AppTheme.CurrentThemeName());
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── Accent distinct from Bg ─────────────────────────────────────────
+
+    [Theory]
+    [InlineData("catppuccin-mocha")]
+    [InlineData("catppuccin-latte")]
+    [InlineData("nord")]
+    [InlineData("dracula")]
+    [InlineData("tokyo-night")]
+    [InlineData("gruvbox-dark")]
+    [InlineData("solarized-dark")]
+    [InlineData("one-dark")]
+    [InlineData("rose-pine")]
+    [InlineData("everforest")]
+    [InlineData("cyberpunk")]
+    public void AllThemes_AccentIsDistinctFromBg(string themeName)
+    {
+        try
+        {
+            AppTheme.SetTheme(themeName);
+            Assert.NotEqual(AppTheme.Bg, AppTheme.Accent);
+        }
+        finally
+        {
+            AppTheme.SetTheme("catppuccin-mocha");
+        }
+    }
+
+    // ── StyledTextBox ───────────────────────────────────────────────────
+
+    [Fact]
+    public void StyledTextBox_HasCorrectProperties()
+    {
+        var tb = AppTheme.StyledTextBox(300);
+        Assert.Equal(AppTheme.Overlay, tb.BackColor);
+        Assert.Equal(AppTheme.Fg, tb.ForeColor);
+        Assert.Equal(BorderStyle.FixedSingle, tb.BorderStyle);
+        Assert.Equal(300, tb.Width);
+    }
+
+    // ── StyledListBox ───────────────────────────────────────────────────
+
+    [Fact]
+    public void StyledListBox_HasCorrectProperties()
+    {
+        var lb = AppTheme.StyledListBox();
+        Assert.Equal(AppTheme.Surface, lb.BackColor);
+        Assert.Equal(AppTheme.Fg, lb.ForeColor);
+        Assert.Equal(BorderStyle.None, lb.BorderStyle);
+        Assert.True(lb.HorizontalScrollbar);
+    }
 }
