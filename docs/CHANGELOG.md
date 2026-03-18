@@ -4,6 +4,59 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added — Sprint 27: Network Tools
+
+- **`NetworkManager`** Core service: DNS quick-switch (`SetDnsAsync`, `ResetDnsToDhcpAsync`),
+  network repair suite (`FlushDnsCacheAsync`, `ResetTcpIpAsync`, `ResetWinsockAsync`), and
+  DHCP lease renewal (`RenewDhcpLeaseAsync`, `RepairAllAsync` IAsyncEnumerable)
+- **6 built-in DNS presets** — Automatic (DHCP), Cloudflare, Google, Quad9, OpenDNS, NextDNS —
+  as `DnsPreset` records with IPv4 + IPv6 addresses
+- **`NetworkToolsDialog`** — adapter drop-down, DNS preset quick-switch buttons, repair action
+  buttons, async operation log (`RichTextBox`), admin elevation banner
+- **Tools → Network Tools** menu item with globe icon
+
+### Added — Sprint 28: Startup Manager
+
+- **`StartupManager`** Core service: reads/writes HKCU Run, HKLM Run, per-user and all-users
+  Startup shell folders; exposes `GetAllEntries()`, `SetEnabled()`, `Delete()`
+- **`StartupEntry`** record (`Id`, `Name`, `Command`, `Location`, `IsEnabled`) and
+  **`StartupLocation`** enum (`RegistryUser`, `RegistryMachine`, `FolderUser`, `FolderAllUsers`)
+- **`StartupManagerDialog`** — resizable ListView (Name / Status / Location / Command),
+  Enable / Disable / Delete / Refresh buttons, admin elevation banner
+- **Tools → Startup Manager** menu item with rocket icon
+
+### Added — Sprint 29: Service Manager
+
+- **`ServiceManager`** Core service: enumerates all Windows services (`GetAllServices()`),
+  queries single service (`GetService(name)`), `StartAsync`, `StopAsync`,
+  `SetStartTypeAsync` (delegates to `sc.exe config start=`)
+- **`ServiceEntry`** record (ServiceName, DisplayName, Description, Status, StartType,
+  CanStop, CanPauseAndContinue)
+- **`ServiceManagerDialog`** — searchable ListView, description pane, async Start/Stop/
+  Enable/Disable/Refresh, admin elevation banner, CancellationToken support
+- **Tools → Service Manager** menu item with gear icon
+- Added `System.ServiceProcess.ServiceController` v9.0.3 NuGet to `Directory.Packages.props`
+  and `RegiLattice.Core.csproj`
+
+### Added — Task 6: BaseDialog Consolidation
+
+- **`BaseDialog : Form`** abstract class with constructor `(string title, Size size, bool resizable)`;
+  sets common Form properties (StartPosition, ShowInTaskbar, Icon, MaximizeBox, MinimizeBox)
+- Helper factory methods: `CreateSectionHeader()`, `CreateLabel()`, `CreateButtonRow()`, `CreateButton()`
+- **Migrated** `NetworkToolsDialog`, `StartupManagerDialog`, `ServiceManagerDialog` to `: BaseDialog`
+  — eliminates ~10 lines of identical boilerplate per dialog
+
+### Tests
+
+- **`NetworkManagerTests.cs`** — 8 tests covering `DnsPreset.BuiltIn` structure and
+  `NetworkManager.GetActiveAdapterNames()` read-only operations
+- **`StartupManagerTests.cs`** — 7 tests covering `StartupManager.GetAllEntries()` return
+  contract and `StartupEntry` record semantics
+- **`ServiceManagerTests.cs`** — 10 tests covering `ServiceManager.GetAllServices()`,
+  `GetService()`, and `ServiceEntry` record semantics
+
 ## [3.4.0] — 2026-03-17
 
 ### Added — Pre-production Release: Installer, GUI Polish & Repo Cleanup

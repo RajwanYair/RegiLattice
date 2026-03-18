@@ -68,6 +68,8 @@ internal static class AppIcons
     internal static Bitmap WindowsHealthMenuBitmap => MenuBitmap("menu-winhealth", DrawWindowsHealthIcon);
     internal static Bitmap MarketplaceMenuBitmap => MenuBitmap("menu-marketplace", DrawMarketplaceIcon);
     internal static Bitmap NetworkMenuBitmap => MenuBitmap("menu-network", DrawNetworkIcon);
+    internal static Bitmap StartupMenuBitmap => MenuBitmap("menu-startup", DrawStartupIcon);
+    internal static Bitmap ServiceMenuBitmap => MenuBitmap("menu-service", DrawServiceIcon);
 
     /// <summary>Invalidate the cache (call after theme change).</summary>
     /// <remarks>
@@ -286,6 +288,59 @@ internal static class AppIcons
 
     // ── Additional colourful menu icons ────────────────────────────────
 
+    /// <summary>Service icon: dark-blue gradient with a gear/cog glyph.</summary>
+    private static void DrawServiceIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(60, 80, 200),
+            Color.FromArgb(20, 40, 140),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var fgPen = new Pen(Color.White, 1.5f);
+        using var fgBrush = new SolidBrush(Color.White);
+
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+
+        // Simple gear: outer circle + inner circle + 4 teeth
+        int cx = s / 2,
+            cy = s / 2,
+            ro = s / 3,
+            ri = s / 5;
+        g.DrawEllipse(fgPen, cx - ro, cy - ro, ro * 2, ro * 2);
+        g.FillEllipse(fgBrush, cx - ri, cy - ri, ri * 2, ri * 2);
+        foreach (int angle in new[] { 0, 90, 180, 270 })
+        {
+            double rad = angle * Math.PI / 180;
+            int tx = (int)(cx + ro * Math.Cos(rad)),
+                ty = (int)(cy + ro * Math.Sin(rad));
+            g.FillRectangle(fgBrush, tx - 2, ty - 2, 4, 4);
+        }
+    }
+
+    /// <summary>Startup icon: green-to-teal gradient with a rocket/launch glyph.</summary>
+    private static void DrawStartupIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(50, 200, 80),
+            Color.FromArgb(0, 160, 130),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var fgPen = new Pen(Color.White, 1.5f);
+        using var fgBrush = new SolidBrush(Color.White);
+
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+
+        // Simple rocket: body triangle + flame
+        int cx = s / 2;
+        var body = new[] { new Point(cx, 3), new Point(cx - 4, s - 6), new Point(cx + 4, s - 6) };
+        g.FillPolygon(fgBrush, body);
+        g.DrawLine(fgPen, cx - 4, s - 6, cx - 6, s - 3);
+        g.DrawLine(fgPen, cx + 4, s - 6, cx + 6, s - 3);
+        g.DrawLine(fgPen, cx - 6, s - 3, cx + 6, s - 3);
+    }
+
     /// <summary>Network icon: teal-to-blue gradient with a globe/network glyph.</summary>
     private static void DrawNetworkIcon(Graphics g, int s)
     {
@@ -293,14 +348,17 @@ internal static class AppIcons
             new Rectangle(0, 0, s, s),
             Color.FromArgb(0, 200, 200),
             Color.FromArgb(30, 100, 220),
-            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal);
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
         using var fgPen = new Pen(Color.White, 1.5f);
         using var fgBrush = new SolidBrush(Color.White);
 
         AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
 
         // Simple globe outline: circle + horizontal + vertical lines
-        int cx = s / 2, cy = s / 2, r = s / 3;
+        int cx = s / 2,
+            cy = s / 2,
+            r = s / 3;
         g.DrawEllipse(fgPen, cx - r, cy - r, r * 2, r * 2);
         g.DrawLine(fgPen, cx, cy - r, cx, cy + r);
         g.DrawLine(fgPen, cx - r, cy, cx + r, cy);

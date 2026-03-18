@@ -1131,6 +1131,20 @@ public partial class MainForm : Form
         dlg.ShowDialog(this);
     }
 
+    private void OnOpenStartupManager()
+    {
+        using var dlg = new StartupManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenServiceManager()
+    {
+        using var dlg = new ServiceManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
@@ -1408,6 +1422,8 @@ public partial class MainForm : Form
         _mnuToolVersions.Image = AppIcons.ToolVersionsMenuBitmap;
         _mnuWinHealth.Image = AppIcons.WindowsHealthMenuBitmap;
         _mnuNetTools.Image = AppIcons.NetworkMenuBitmap;
+        _mnuStartupMgr.Image = AppIcons.StartupMenuBitmap;
+        _mnuServiceMgr.Image = AppIcons.ServiceMenuBitmap;
         _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
     }
 

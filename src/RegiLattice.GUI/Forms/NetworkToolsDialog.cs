@@ -10,7 +10,7 @@ namespace RegiLattice.GUI.Forms;
 /// Provides DNS quick-switch for active adapters and a network repair wizard
 /// that runs flush-DNS / TCP-IP reset / Winsock reset.
 /// </summary>
-internal sealed class NetworkToolsDialog : Form
+internal sealed class NetworkToolsDialog : BaseDialog
 {
     private readonly TabControl _tabs;
 
@@ -33,16 +33,8 @@ internal sealed class NetworkToolsDialog : Form
     private CancellationTokenSource _cts = new();
 
     internal NetworkToolsDialog()
+        : base("Network Tools", new Size(560, 480))
     {
-        Text = "Network Tools";
-        Size = new Size(560, 480);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
-        MinimizeBox = false;
-        StartPosition = FormStartPosition.CenterParent;
-        ShowInTaskbar = false;
-        Icon = AppIcons.AppIcon;
-
         _tabs = new TabControl { Dock = DockStyle.Fill };
 
         // ── DNS Quick-Switch Tab ─────────────────────────────────────────
