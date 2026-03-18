@@ -25,6 +25,7 @@ partial class MainForm
     private ToolStripButton _btnInvert = null!;
     private ToolStripLabel _themeLabel = null!;
     private ToolStripComboBox _themeCombo = null!;
+    private ToolStripButton _btnSettings = null!;
 
     // ── Kind filter ────────────────────────────────────────────────────────
     private ToolStripLabel _kindLabel = null!;
@@ -49,7 +50,7 @@ partial class MainForm
 
     // ── Detail panel fields ───────────────────────────────────────────────
     private Panel _detailPanel = null!;
-    private Label _detailLabel = null!;
+    private RichTextBox _detailBox = null!;
 
     // ── Log panel ──────────────────────────────────────────────────────────
     private Panel _logPanel = null!;
@@ -214,12 +215,21 @@ partial class MainForm
         _btnDeselectAll = new ToolStripButton("\u2610 None") { ToolTipText = "Deselect all (Ctrl+D)", DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnInvert = new ToolStripButton("\U0001F504 Invert") { ToolTipText = "Invert selection (Ctrl+I)", DisplayStyle = ToolStripItemDisplayStyle.Text };
 
+        // Theme combo stays in toolbar for quick switching AND appears in Preferences dialog
         _themeLabel = new ToolStripLabel("Theme:");
-        _themeCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Switch colour theme" };
+        _themeCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Quick-switch colour theme (also in Preferences)", Width = 140 };
         foreach (string t in AppTheme.AvailableThemes())
             _themeCombo.Items.Add(t);
         _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         _themeCombo.SelectedIndexChanged += OnThemeChanged;
+
+        // Settings / Preferences button
+        _btnSettings = new ToolStripButton("\u2699 Settings")
+        {
+            ToolTipText = "Open Preferences dialog (Ctrl+Shift+P)",
+            DisplayStyle = ToolStripItemDisplayStyle.Text,
+        };
+        _btnSettings.Click += (_, _) => OnOpenPreferences();
 
         _kindLabel = new ToolStripLabel("Kind:");
         _kindCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter by tweak kind", Width = 130 };
@@ -258,6 +268,8 @@ partial class MainForm
             _btnSelectAll, _btnDeselectAll, _btnInvert,
             new ToolStripSeparator(),
             _themeLabel, _themeCombo,
+            new ToolStripSeparator(),
+            _btnSettings,
         });
         _toolStrip.Dock = DockStyle.Top;
 
@@ -339,18 +351,22 @@ partial class MainForm
         _split.Panel1.Controls.Add(_treeView);
 
         // ── Detail panel (bottom of Panel2) ────────────────────────────────
-        _detailLabel = new Label
+        _detailBox = new RichTextBox
         {
             BackColor = AppTheme.Surface,
             ForeColor = AppTheme.FgDim,
             Font = AppTheme.Regular,
-            Padding = new Padding(10, 6, 10, 6),
-            AutoSize = false,
+            ReadOnly = true,
+            BorderStyle = BorderStyle.None,
+            ScrollBars = RichTextBoxScrollBars.None,
+            Multiline = true,
+            WordWrap = true,
             Dock = DockStyle.Fill,
-            TextAlign = ContentAlignment.TopLeft,
-            UseMnemonic = false,
+            TabStop = false,
             Text = "\U0001F4CB Select a tweak to see details.",
         };
+        // Prevent the default white RichTextBox context menu from stealing focus
+        _detailBox.MouseClick += (_, _) => _listView.Focus();
         _detailPanel = new Panel
         {
             Dock = DockStyle.Bottom,
@@ -368,7 +384,7 @@ partial class MainForm
             using var sepPen = new Pen(AppTheme.Separator, 1f);
             pe.Graphics.DrawLine(sepPen, 0, 0, _detailPanel.Width, 0);
         };
-        _detailPanel.Controls.Add(_detailLabel);
+        _detailPanel.Controls.Add(_detailBox);
 
         _split.Panel2.Controls.Add(_listView);
         _split.Panel2.Controls.Add(_detailPanel);

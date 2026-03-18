@@ -251,12 +251,53 @@ internal static class AppTheme
     internal static Color Separator => _current.Separator;
 
     // ── Fonts ──────────────────────────────────────────────────────────────
-    internal static readonly Font Regular = new("Segoe UI", 9f);
-    internal static readonly Font Small = new("Segoe UI", 8f);
-    internal static readonly Font Bold = new("Segoe UI", 9f, FontStyle.Bold);
-    internal static readonly Font Title = new("Segoe UI", 12f, FontStyle.Bold);
-    internal static readonly Font Mono = new("Consolas", 9f);
-    internal static readonly Font SmallBold = new("Segoe UI", 7.5f, FontStyle.Bold);
+    // Base font size — configurable via Preferences → Appearance → Font size.
+    private static float _baseFontSize = 9f;
+    internal static Font Regular = new("Segoe UI", 9f);
+    internal static Font Small = new("Segoe UI", 8f);
+    internal static Font Bold = new("Segoe UI", 9f, FontStyle.Bold);
+    internal static Font Title = new("Segoe UI", 12f, FontStyle.Bold);
+    internal static Font Mono = new("Consolas", 9f);
+    internal static Font SmallBold = new("Segoe UI", 7.5f, FontStyle.Bold);
+
+    /// <summary>Current base font size in points (default 9f).</summary>
+    internal static float BaseFontSize => _baseFontSize;
+
+    /// <summary>
+    /// Recreate all theme fonts using <paramref name="baseSize"/> as the base point size.
+    /// Dispose the previous font instances to prevent GDI handle leaks.
+    /// </summary>
+    internal static void SetFontSize(float baseSize)
+    {
+        if (baseSize is < 7f or > 16f)
+            return;
+
+        _baseFontSize = baseSize;
+        float small = MathF.Max(7f, baseSize - 1f);
+        float smallBold = MathF.Max(7f, baseSize - 1.5f);
+        float title = baseSize + 3f;
+
+        Font prevRegular = Regular,
+            prevSmall = Small,
+            prevBold = Bold;
+        Font prevTitle = Title,
+            prevMono = Mono,
+            prevSmallBold = SmallBold;
+
+        Regular = new Font("Segoe UI", baseSize);
+        Small = new Font("Segoe UI", small);
+        Bold = new Font("Segoe UI", baseSize, FontStyle.Bold);
+        Title = new Font("Segoe UI", title, FontStyle.Bold);
+        Mono = new Font("Consolas", baseSize);
+        SmallBold = new Font("Segoe UI", smallBold, FontStyle.Bold);
+
+        prevRegular.Dispose();
+        prevSmall.Dispose();
+        prevBold.Dispose();
+        prevTitle.Dispose();
+        prevMono.Dispose();
+        prevSmallBold.Dispose();
+    }
 
     // ── Theme API ──────────────────────────────────────────────────────────
     internal static string[] AvailableThemes() => [.. Themes.Keys];

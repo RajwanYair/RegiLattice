@@ -52,10 +52,27 @@ public partial class MainForm : Form
         var cfg = AppConfig.Load();
         string theme = string.IsNullOrEmpty(cfg.Theme) ? AppTheme.DetectSystemTheme() : cfg.Theme;
         AppTheme.SetTheme(theme);
-        _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
 
+        // Apply saved font size (only if non-default to avoid redundant font creation)
+        if (Math.Abs(cfg.FontSize - AppTheme.BaseFontSize) > 0.01f)
+            AppTheme.SetFontSize(cfg.FontSize);
+
+        _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         ApplyTheme();
+
+        // Restore log panel and detail panel dimensions from config
+        _logPanel.Visible = cfg.ShowLogPanel;
+        _logPanel.Height = cfg.LogPanelHeight;
+        _detailPanel.Height = cfg.DetailPanelHeight;
+
+        // Start minimized to tray if configured
+        if (cfg.LaunchMinimized)
+        {
+            WindowState = FormWindowState.Minimized;
+            _trayIcon.Visible = true;
+            ShowInTaskbar = false;
+        }
     }
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -167,9 +184,9 @@ public partial class MainForm : Form
         // Detail panel with accent left border
         _detailPanel.BackColor = AppTheme.Surface;
         _detailPanel.Padding = new Padding(8, 6, 8, 6);
-        _detailLabel.BackColor = AppTheme.Surface;
-        _detailLabel.ForeColor = AppTheme.FgDim;
-        _detailLabel.Font = AppTheme.Regular;
+        _detailBox.BackColor = AppTheme.Surface;
+        _detailBox.ForeColor = AppTheme.FgDim;
+        _detailBox.Font = AppTheme.Regular;
 
         // Re-colour tree nodes
         foreach (TreeNode node in _treeView.Nodes)
@@ -364,14 +381,7 @@ public partial class MainForm : Form
             }
         }
 
-        TextRenderer.DrawText(
-            g,
-            cellText,
-            Font,
-            textBounds,
-            fg,
-            TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis
-        );
+        TextRenderer.DrawText(g, cellText, Font, textBounds, fg, TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
     }
 
     /// <summary>Draws text with the matched search portion highlighted in accent/bold.</summary>
@@ -1351,13 +1361,24 @@ public partial class MainForm : Form
             AppIcons.InvalidateCache();
             Icon = AppIcons.AppIcon;
             RefreshMenuImages();
-            ApplyTheme();
-            PopulateTree();
             _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         }
 
-        // Apply detail panel height
+        // Apply font size if changed — requires full theme re-apply
+        if (dlg.FontSizeChanged)
+            AppTheme.SetFontSize(cfg.FontSize);
+
+        // Re-apply theme colours and fonts to all controls
+        if (dlg.ThemeChanged || dlg.FontSizeChanged)
+        {
+            ApplyTheme();
+            PopulateTree();
+        }
+
+        // Apply panel dimensions
         _detailPanel.Height = cfg.DetailPanelHeight;
+        _logPanel.Height = cfg.LogPanelHeight;
+        _logPanel.Visible = cfg.ShowLogPanel;
 
         // Apply monitor timer
         if (cfg.StatusBarMonitor)
@@ -1506,7 +1527,9 @@ public partial class MainForm : Form
 
     private void OnListViewSelectionChanged(object? sender, EventArgs e)
     {
-        if (_listView.FocusedItem?.Tag is TweakDef td)
+        // Prefer SelectedItems[0] over FocusedItem — FocusedItem can be null mid-selection
+        var selected = _listView.SelectedItems.Count > 0 ? _listView.SelectedItems[0] : _listView.FocusedItem;
+        if (selected?.Tag is TweakDef td)
         {
             var status = _statusCache.GetValueOrDefault(td.Id, TweakResult.Unknown);
             bool isPending = _pendingRebootIds.Contains(td.Id);
@@ -1542,7 +1565,7 @@ public partial class MainForm : Form
 
             string expected = td.GetExpectedResult();
 
-            _detailLabel.Text =
+            _detailBox.Text =
                 $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
                 + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
                 + $"Tags: {tags}\n"
@@ -1551,13 +1574,13 @@ public partial class MainForm : Form
                 + $"\U0001F4CB Expected Result: {expected}"
                 + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
                 + pendingNote;
-            _detailLabel.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;
+            _detailBox.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;
             _detailPanel.Invalidate();
         }
         else
         {
-            _detailLabel.Text = "\U0001F4CB Select a tweak to see details.";
-            _detailLabel.ForeColor = AppTheme.FgDim;
+            _detailBox.Text = "\U0001F4CB Select a tweak to see details.";
+            _detailBox.ForeColor = AppTheme.FgDim;
             _detailPanel.Invalidate();
         }
     }

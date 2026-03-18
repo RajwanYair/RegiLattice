@@ -9,10 +9,18 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
+    <!-- Prevent MSBuild Roslyn compiler server from holding file handles across builds.
+         Critical for network drives (OneDrive) to avoid AssemblyInfoInputs.cache locking
+         when multiple test assemblies are built in parallel. -->
+    <UseSharedCompilation>false</UseSharedCompilation>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true' and '$(IsTestProject)' == 'true'">
     <IsPackable>false</IsPackable>
     <DisableAppDomain>true</DisableAppDomain>
+    <!-- Disable AssemblyInfo generation for test projects to prevent parallel-build
+         cache-file locking on network drives (OneDrive). Test projects do not publish
+         and do not need the auto-generated assembly attributes. -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 </Project>
