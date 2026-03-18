@@ -668,3 +668,107 @@ public sealed class RegistrySessionTests
         Assert.Equal(8, s.Log.Count);
     }
 }
+
+// ── Sprint 24: CheckValueMatch branches, ReadQword/Binary/MultiSz/Value ────
+
+public sealed class RegistrySessionSprint24Tests : IDisposable
+{
+    private const string TestKey = @"HKEY_CURRENT_USER\Software\RegiLattice\TestTemp_Sprint24";
+
+    public void Dispose()
+    {
+        try
+        {
+            new RegistrySession().DeleteTree(TestKey);
+        }
+        catch { }
+    }
+
+    [Fact]
+    public void Evaluate_CheckDword_WhenKeyMissing_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: true);
+        var result = s.Evaluate([RegOp.CheckDword($@"{TestKey}\Missing", "Value", 1)]);
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Evaluate_CheckString_WhenKeyMissing_ReturnsFalse()
+    {
+        var s = new RegistrySession(dryRun: true);
+        var result = s.Evaluate([RegOp.CheckString($@"{TestKey}\Missing", "Value", "x")]);
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Evaluate_WriteAndCheckDword_MatchReturnsTrue_NonMatchReturnsFalse()
+    {
+        var s = new RegistrySession();
+        s.SetDword(TestKey, "CheckDwordVal", 42);
+        Assert.True(s.Evaluate([RegOp.CheckDword(TestKey, "CheckDwordVal", 42)]));
+        Assert.False(s.Evaluate([RegOp.CheckDword(TestKey, "CheckDwordVal", 99)]));
+    }
+
+    [Fact]
+    public void Evaluate_WriteAndCheckString_MatchReturnsTrue_NonMatchReturnsFalse()
+    {
+        var s = new RegistrySession();
+        s.SetString(TestKey, "CheckStrVal", "hello");
+        Assert.True(s.Evaluate([RegOp.CheckString(TestKey, "CheckStrVal", "hello")]));
+        Assert.False(s.Evaluate([RegOp.CheckString(TestKey, "CheckStrVal", "world")]));
+    }
+
+    [Fact]
+    public void ReadQword_AfterSetQword_ReturnsExpected()
+    {
+        var s = new RegistrySession();
+        s.SetQword(TestKey, "QwordVal", 1234567890123L);
+        Assert.Equal(1234567890123L, s.ReadQword(TestKey, "QwordVal"));
+    }
+
+    [Fact]
+    public void ReadBinary_AfterSetBinary_ReturnsExpected()
+    {
+        var s = new RegistrySession();
+        byte[] data = [0x01, 0x02, 0x03];
+        s.SetBinary(TestKey, "BinVal", data);
+        var read = s.ReadBinary(TestKey, "BinVal");
+        Assert.Equal(data, read);
+    }
+
+    [Fact]
+    public void ReadMultiSz_AfterSetMultiSz_ReturnsExpected()
+    {
+        var s = new RegistrySession();
+        string[] values = ["alpha", "beta", "gamma"];
+        s.SetMultiSz(TestKey, "MultiVal", values);
+        var read = s.ReadMultiSz(TestKey, "MultiVal");
+        Assert.Equal(values, read);
+    }
+
+    [Fact]
+    public void ReadString_MissingValue_ReturnsNull()
+    {
+        var s = new RegistrySession();
+        Assert.Null(s.ReadString(TestKey, $"NoSuchValue_{Guid.NewGuid():N}"));
+    }
+
+    [Fact]
+    public void ValueExists_AfterSetDword_ReturnsTrue()
+    {
+        var s = new RegistrySession();
+        s.SetDword(TestKey, "ExistsVE", 1);
+        Assert.True(s.ValueExists(TestKey, "ExistsVE"));
+    }
+
+    [Fact]
+    public void DeleteValue_RemovesSpecificValue_LeavesOther()
+    {
+        var s = new RegistrySession();
+        s.SetDword(TestKey, "KeepMe", 1);
+        s.SetDword(TestKey, "DeleteMe", 2);
+        s.DeleteValue(TestKey, "DeleteMe");
+        Assert.True(s.ValueExists(TestKey, "KeepMe"));
+        Assert.False(s.ValueExists(TestKey, "DeleteMe"));
+    }
+}

@@ -89,6 +89,7 @@ partial class MainForm
         var mnuExportReg = new ToolStripMenuItem("Export as .REG file...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.R };
         var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I };
         var mnuExit = new ToolStripMenuItem("Exit");
+        var mnuPreferences = new ToolStripMenuItem("Preferences…") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.P };
 
         mnuExportPs1.Image = AppIcons.ExportMenuBitmap;
         mnuExportJson.Image = AppIcons.ExportMenuBitmap;
@@ -98,6 +99,8 @@ partial class MainForm
         mnuFile.DropDownItems.AddRange(new ToolStripItem[]
         {
             mnuExportPs1, mnuExportJson, mnuExportReg, mnuImportJson,
+            new ToolStripSeparator(),
+            mnuPreferences,
             new ToolStripSeparator(),
             mnuExit,
         });
@@ -136,8 +139,9 @@ partial class MainForm
 
         var mnuAbout = new ToolStripMenuItem("About RegiLattice...");
         var mnuHwInfo = new ToolStripMenuItem("Hardware Info...");
+        var mnuWhatsNew = new ToolStripMenuItem("What's New...");
         var mnuHelp = new ToolStripMenuItem("&Help") { Image = AppIcons.HelpMenuBitmap };
-        mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuHwInfo, new ToolStripSeparator(), mnuAbout });
+        mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
         _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuTools, mnuView, mnuHelp });
@@ -148,6 +152,7 @@ partial class MainForm
         mnuExportJson.Click += (_, _) => OnExportJson();
         mnuExportReg.Click += (_, _) => OnExportReg();
         mnuImportJson.Click += (_, _) => OnImportJson();
+        mnuPreferences.Click += (_, _) => OnOpenPreferences();
         mnuExit.Click += (_, _) => Close();
         _mnuScoopMgr.Click += (_, _) => OnOpenScoopManager();
         _mnuPsMgr.Click += (_, _) => OnOpenPSModuleManager();
@@ -164,6 +169,7 @@ partial class MainForm
         mnuExpandAll.Click += (_, _) => _treeView.ExpandAll();
         mnuAbout.Click += (_, _) => OnAbout();
         mnuHwInfo.Click += (_, _) => OnHardwareInfo();
+        mnuWhatsNew.Click += (_, _) => new WhatsNewDialog().ShowDialog(this);
 
         // ── ToolStrip ──────────────────────────────────────────────────────
         _btnApply = new ToolStripButton("Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", Image = AppIcons.ApplyMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
@@ -335,11 +341,14 @@ partial class MainForm
         // ── Detail panel (bottom of Panel2) ────────────────────────────────
         _detailLabel = new Label
         {
+            BackColor = AppTheme.Surface,
             ForeColor = AppTheme.FgDim,
             Font = AppTheme.Regular,
             Padding = new Padding(10, 6, 10, 6),
             AutoSize = false,
+            Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.TopLeft,
+            UseMnemonic = false,
             Text = "\U0001F4CB Select a tweak to see details.",
         };
         _detailPanel = new Panel

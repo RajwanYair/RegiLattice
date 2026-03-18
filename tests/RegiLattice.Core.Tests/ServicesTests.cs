@@ -282,9 +282,10 @@ public sealed class ElevationTests
     public void RunElevated_AllowedCommand_DoesNotThrowAuth()
     {
         // 'reg' is in allowlist — it will try to run but won't throw UnauthorizedAccessException
+        // Use a lightweight query (single value) to avoid huge output that blocks ReadToEnd()
         try
         {
-            Elevation.RunElevated("reg", ["query", @"HKCU\Software"]);
+            Elevation.RunElevated("reg", ["query", @"HKCU\Environment", "/v", "TEMP"], timeoutMs: 10_000);
         }
         catch (UnauthorizedAccessException)
         {
@@ -1246,4 +1247,230 @@ public sealed class HardwareInfoExtendedTests
         var hw = HardwareInfo.DetectHardware();
         Assert.NotNull(hw.Disk);
     }
+}
+
+// ── Sprint 24: AppConfig field coverage ───────────────────────────────────
+
+public sealed class AppConfigFieldTests
+{
+    [Fact]
+    public void Default_AutoBackup_IsTrue() => Assert.True(new AppConfig().AutoBackup);
+
+    [Fact]
+    public void Default_BackupDir_IsEmpty() => Assert.Empty(new AppConfig().BackupDir);
+
+    [Fact]
+    public void Default_Locale_IsEn() => Assert.Equal("en", new AppConfig().Locale);
+
+    [Fact]
+    public void Default_CheckToolUpdates_IsTrue() => Assert.True(new AppConfig().CheckToolUpdates);
+
+    [Fact]
+    public void Default_MaxWorkers_IsEight() => Assert.Equal(8, new AppConfig().MaxWorkers);
+
+    [Fact]
+    public void Default_ForceCorp_IsFalse() => Assert.False(new AppConfig().ForceCorp);
+
+    [Fact]
+    public void SaveAndLoad_ThemeRoundTrip()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-sp24-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "cfg.json");
+        try
+        {
+            var cfg = new AppConfig { Theme = "nord" };
+            cfg.Save(path);
+            Assert.Equal("nord", AppConfig.Load(path).Theme);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_MaxWorkersRoundTrip()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-sp24mw-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "cfg.json");
+        try
+        {
+            var cfg = new AppConfig { MaxWorkers = 4 };
+            cfg.Save(path);
+            Assert.Equal(4, AppConfig.Load(path).MaxWorkers);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_AutoBackupFalseRoundTrip()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-sp24ab-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "cfg.json");
+        try
+        {
+            var cfg = new AppConfig { AutoBackup = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).AutoBackup);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+
+    [Fact]
+    public void Load_MissingFile_ReturnsDefaultTheme()
+    {
+        var cfg = AppConfig.Load(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nope.json"));
+        Assert.Equal("catppuccin-mocha", cfg.Theme);
+    }
+
+    [Fact]
+    public void Default_LastSeenVersion_IsEmpty() => Assert.Empty(new AppConfig().LastSeenVersion);
+
+    [Fact]
+    public void SaveAndLoad_LastSeenVersionRoundTrip()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-sp26-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "cfg.json");
+        try
+        {
+            var cfg = new AppConfig { LastSeenVersion = "3.4.0" };
+            cfg.Save(path);
+            Assert.Equal("3.4.0", AppConfig.Load(path).LastSeenVersion);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(dir, true);
+            }
+            catch { }
+        }
+    }
+}
+
+// ── Sprint 24: Ratings edge cases ─────────────────────────────────────────
+
+public sealed class RatingsSprintTests
+{
+    private static string UniqueId() => $"sp24-r-{Guid.NewGuid():N}";
+
+    [Fact]
+    public void Rate_UpdateExistingRating_OverwritesNote()
+    {
+        var id = UniqueId();
+        try
+        {
+            Ratings.Rate(id, 2, "old note");
+            Ratings.Rate(id, 5, "new note");
+            var rating = Ratings.GetRating(id);
+            Assert.Equal(5, rating!.Stars);
+            Assert.Equal("new note", rating.Note);
+        }
+        finally
+        {
+            Ratings.RemoveRating(id);
+        }
+    }
+
+    [Fact]
+    public void Rate_InvalidStars_ThrowsAtBoundaries()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => Ratings.Rate("sp24-boundary-lo", 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Ratings.Rate("sp24-boundary-hi", 6));
+    }
+
+    [Fact]
+    public void RemoveRating_NonExistent_DoesNotThrow()
+    {
+        var ex = Record.Exception(() => Ratings.RemoveRating($"sp24-missing-{Guid.NewGuid():N}"));
+        Assert.Null(ex);
+    }
+
+    [Fact]
+    public void TopRated_WithRatings_HigherStarsPositionedFirst()
+    {
+        var low = UniqueId();
+        var high = UniqueId();
+        try
+        {
+            Ratings.Rate(low, 1, "low");
+            Ratings.Rate(high, 5, "high");
+            var top = Ratings.TopRated(100).ToList();
+            var posLow = top.FindIndex(t => t.Id == low);
+            var posHigh = top.FindIndex(t => t.Id == high);
+            if (posLow >= 0 && posHigh >= 0)
+                Assert.True(posHigh < posLow);
+        }
+        finally
+        {
+            Ratings.RemoveRating(low);
+            Ratings.RemoveRating(high);
+        }
+    }
+
+    [Fact]
+    public void AverageRating_WithAtLeastOneRating_IsPositive()
+    {
+        var id = UniqueId();
+        try
+        {
+            Ratings.Rate(id, 3, "");
+            var avg = Ratings.AverageRating();
+            Assert.NotNull(avg);
+            Assert.True(avg > 0);
+        }
+        finally
+        {
+            Ratings.RemoveRating(id);
+        }
+    }
+}
+
+// ── Sprint 24: Analytics edge cases ───────────────────────────────────────
+
+[Collection("Analytics")]
+public sealed class AnalyticsSprintTests
+{
+    [Fact]
+    public void GetStats_ReturnsNonNull() => Assert.NotNull(Analytics.GetStats());
+
+    [Fact]
+    public void GetStats_TotalApplies_IsNonNegative() => Assert.True(Analytics.GetStats().TotalApplies >= 0);
+
+    [Fact]
+    public void RecordApply_IncrementsCount()
+    {
+        var before = Analytics.GetStats().TotalApplies;
+        Analytics.RecordApply($"sp24-{Guid.NewGuid():N}");
+        Assert.Equal(before + 1, Analytics.GetStats().TotalApplies);
+    }
+
+    [Fact]
+    public void RecordRemove_IncrementsTotalRemoves()
+    {
+        var before = Analytics.GetStats().TotalRemoves;
+        Analytics.RecordRemove($"sp24-rm-{Guid.NewGuid():N}");
+        Assert.Equal(before + 1, Analytics.GetStats().TotalRemoves);
+    }
+
+    [Fact]
+    public void TopTweaks_ReturnsNonNullList() => Assert.NotNull(Analytics.TopTweaks(5));
 }

@@ -127,6 +127,15 @@ public static class CategoryIcons
         // AI
         ["AI / Copilot"] = CategoryIcon.Search,
         ["Clipboard & Drag-Drop"] = CategoryIcon.Palette,
+
+        // Window Appearance
+        ["Window Appearance"] = CategoryIcon.Palette,
+
+        // System Optimization
+        ["System Optimization"] = CategoryIcon.Cpu,
+
+        // Desktop Customization
+        ["Desktop Customization"] = CategoryIcon.Desktop,
     };
 
     /// <summary>Get the icon for a category name. Returns <see cref="CategoryIcon.Gear"/> as fallback.</summary>

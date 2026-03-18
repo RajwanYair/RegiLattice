@@ -29,6 +29,27 @@ public sealed class AppConfig
     [JsonPropertyName("check_tool_updates")]
     public bool CheckToolUpdates { get; set; } = true;
 
+    [JsonPropertyName("minimize_to_tray")]
+    public bool MinimizeToTray { get; set; } = true;
+
+    [JsonPropertyName("confirm_apply")]
+    public bool ConfirmApply { get; set; } = true;
+
+    [JsonPropertyName("confirm_remove")]
+    public bool ConfirmRemove { get; set; } = true;
+
+    [JsonPropertyName("show_inapplicable")]
+    public bool ShowInapplicable { get; set; } = true;
+
+    [JsonPropertyName("status_bar_monitor")]
+    public bool StatusBarMonitor { get; set; } = true;
+
+    [JsonPropertyName("detail_panel_height")]
+    public int DetailPanelHeight { get; set; } = 130;
+
+    [JsonPropertyName("last_seen_version")]
+    public string LastSeenVersion { get; set; } = "";
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 

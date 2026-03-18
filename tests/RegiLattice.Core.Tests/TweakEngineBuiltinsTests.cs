@@ -1235,4 +1235,114 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.Contains(deps, d => d.Id == "multi-child-2");
         Assert.Contains(deps, d => d.Id == "multi-child-3");
     }
+
+    // ── Sprint 24: Window Appearance ───────────────────────────────────────
+
+    [Fact]
+    public void RegisterBuiltins_HasWindowAppearanceCategory() => Assert.Contains("Window Appearance", _engine.Categories());
+
+    [Theory]
+    [InlineData("winapp-titlebar-color-active")]
+    [InlineData("winapp-caption-height-compact")]
+    [InlineData("winapp-scrollbar-width-thin")]
+    [InlineData("winapp-icon-spacing-h-compact")]
+    [InlineData("winapp-menu-show-delay-fast")]
+    [InlineData("winapp-tooltip-delay-fast")]
+    [InlineData("winapp-alt-tab-classic")]
+    [InlineData("winapp-disable-window-animation")]
+    [InlineData("winapp-disable-cursor-blink")]
+    [InlineData("winapp-dark-mode-apps")]
+    [InlineData("winapp-disable-font-smoothing")]
+    [InlineData("winapp-disable-desktop-icons")]
+    [InlineData("winapp-solid-color-background")]
+    [InlineData("winapp-foreground-lock-timeout")]
+    [InlineData("winapp-disable-drop-shadow")]
+    public void RegisterBuiltins_WindowAppearanceTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Window Appearance", tweak.Category);
+    }
+
+    // ── Sprint 25: System Optimization ─────────────────────────────────────
+
+    [Fact]
+    public void RegisterBuiltins_HasSystemOptimizationCategory() => Assert.Contains("System Optimization", _engine.Categories());
+
+    [Theory]
+    [InlineData("sysopt-disable-paging-executive")]
+    [InlineData("sysopt-large-system-cache")]
+    [InlineData("sysopt-io-page-lock-limit")]
+    [InlineData("sysopt-ntfs-disable-8dot3")]
+    [InlineData("sysopt-ntfs-disable-last-access")]
+    [InlineData("sysopt-win32-priority-separation-fg")]
+    [InlineData("sysopt-mmcss-system-responsible")]
+    [InlineData("sysopt-disable-auto-reboot-bsod")]
+    [InlineData("sysopt-verbose-logon-messages")]
+    [InlineData("sysopt-explorer-separate-process")]
+    [InlineData("sysopt-low-disk-space-warning-off")]
+    [InlineData("sysopt-network-throttling-index")]
+    [InlineData("sysopt-hung-app-timeout-short")]
+    public void RegisterBuiltins_SystemOptimizationTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("System Optimization", tweak.Category);
+    }
+
+    // ── Sprint 25: Desktop Customization ───────────────────────────────────
+
+    [Fact]
+    public void RegisterBuiltins_HasDesktopCustomizationCategory() => Assert.Contains("Desktop Customization", _engine.Categories());
+
+    [Theory]
+    [InlineData("dtcust-show-file-extensions")]
+    [InlineData("dtcust-show-hidden-files")]
+    [InlineData("dtcust-show-super-hidden")]
+    [InlineData("dtcust-launch-to-this-pc")]
+    [InlineData("dtcust-expand-to-current-folder")]
+    [InlineData("dtcust-compact-view")]
+    [InlineData("dtcust-small-taskbar-icons")]
+    [InlineData("dtcust-hide-widgets-button")]
+    [InlineData("dtcust-disable-news-feed")]
+    [InlineData("dtcust-disable-start-suggestions")]
+    [InlineData("dtcust-disable-pen-workspace")]
+    [InlineData("dtcust-always-show-transfer-details")]
+    [InlineData("dtcust-skip-recycle-bin")]
+    [InlineData("dtcust-disable-thumbnail-cache")]
+    public void RegisterBuiltins_DesktopCustomizationTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Desktop Customization", tweak.Category);
+    }
+
+    // ── Sprint 24-25: Category counts ──────────────────────────────────────
+
+    [Fact]
+    public void RegisterBuiltins_WindowAppearance_HasAtLeast40Tweaks()
+    {
+        var byCat = _engine.TweaksByCategory();
+        Assert.True(byCat.ContainsKey("Window Appearance"));
+        Assert.True(byCat["Window Appearance"].Count >= 40, $"Expected ≥40 Window Appearance tweaks, got {byCat["Window Appearance"].Count}");
+    }
+
+    [Fact]
+    public void RegisterBuiltins_SystemOptimization_HasAtLeast30Tweaks()
+    {
+        var byCat = _engine.TweaksByCategory();
+        Assert.True(byCat.ContainsKey("System Optimization"));
+        Assert.True(byCat["System Optimization"].Count >= 30, $"Expected ≥30 System Optimization tweaks, got {byCat["System Optimization"].Count}");
+    }
+
+    [Fact]
+    public void RegisterBuiltins_DesktopCustomization_HasAtLeast30Tweaks()
+    {
+        var byCat = _engine.TweaksByCategory();
+        Assert.True(byCat.ContainsKey("Desktop Customization"));
+        Assert.True(
+            byCat["Desktop Customization"].Count >= 30,
+            $"Expected ≥30 Desktop Customization tweaks, got {byCat["Desktop Customization"].Count}"
+        );
+    }
 }

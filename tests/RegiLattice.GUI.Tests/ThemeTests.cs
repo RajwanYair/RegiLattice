@@ -588,3 +588,17 @@ public sealed class ThemeTests
         Assert.True(lb.HorizontalScrollbar);
     }
 }
+
+// ── Sprint 26: WhatsNewDialog ──────────────────────────────────────────────
+
+public sealed class WhatsNewDialogTests
+{
+    [Fact]
+    public void ShouldShow_ReturnsBool()
+    {
+        // ShouldShow compares AppConfig.LastSeenVersion to assembly version.
+        // In test context it should return a bool (no exceptions).
+        var result = Forms.WhatsNewDialog.ShouldShow();
+        Assert.IsType<bool>(result);
+    }
+}
