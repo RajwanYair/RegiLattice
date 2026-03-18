@@ -1124,6 +1124,13 @@ public partial class MainForm : Form
 
     private void OnOpenWindowsHealth() => ShowManagerDialog(new WindowsHealthDialog());
 
+    private void OnOpenNetworkTools()
+    {
+        using var dlg = new NetworkToolsDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
@@ -1400,6 +1407,7 @@ public partial class MainForm : Form
         _mnuChocoMgr.Image = AppIcons.ChocolateyMenuBitmap;
         _mnuToolVersions.Image = AppIcons.ToolVersionsMenuBitmap;
         _mnuWinHealth.Image = AppIcons.WindowsHealthMenuBitmap;
+        _mnuNetTools.Image = AppIcons.NetworkMenuBitmap;
         _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
     }
 

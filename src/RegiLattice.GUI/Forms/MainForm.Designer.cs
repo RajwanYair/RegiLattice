@@ -40,6 +40,7 @@ partial class MainForm
     private ToolStripMenuItem _mnuChocoMgr = null!;
     private ToolStripMenuItem _mnuToolVersions = null!;
     private ToolStripMenuItem _mnuWinHealth = null!;
+    private ToolStripMenuItem _mnuNetTools = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -113,6 +114,7 @@ partial class MainForm
         _mnuChocoMgr = new ToolStripMenuItem("Chocolatey Manager...") { Image = AppIcons.ChocolateyMenuBitmap };
         _mnuToolVersions = new ToolStripMenuItem("Tool Versions...") { Image = AppIcons.ToolVersionsMenuBitmap };
         _mnuWinHealth = new ToolStripMenuItem("Windows Health...") { Image = AppIcons.WindowsHealthMenuBitmap };
+        _mnuNetTools = new ToolStripMenuItem("Network Tools...") { Image = AppIcons.NetworkMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -125,6 +127,7 @@ partial class MainForm
             new ToolStripSeparator(),
             _mnuToolVersions,
             _mnuWinHealth,
+            _mnuNetTools,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -162,6 +165,7 @@ partial class MainForm
         _mnuChocoMgr.Click += (_, _) => OnOpenChocolateyManager();
         _mnuToolVersions.Click += (_, _) => OnOpenToolVersions();
         _mnuWinHealth.Click += (_, _) => OnOpenWindowsHealth();
+        _mnuNetTools.Click += (_, _) => OnOpenNetworkTools();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
