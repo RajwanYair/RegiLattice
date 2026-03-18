@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-17 · v3.4.0 · 2 610 tweaks · 89 categories · 1 308 tests
+> Last updated: 2026-03-18 · v3.4.0 · 2 736 tweaks · 92 categories · 1 645 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 610 verified across 89 categories |
-| Tests | 1 308 total, all passing (1 skipped integration), 4-thread parallel |
+| Tweaks | 2 736 verified across 92 categories |
+| Tests | 1 645 total, all passing (1 skipped integration), 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -481,7 +481,43 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 7 | Refactor `CorporateGuard._cached` from `bool?` to `Lazy<bool>` (thread-safe) | ✅ |
 | 8 | Total: 2,610 tweaks, **1,370 tests** (1,012 Core + 116 CLI + 241 GUI + 1 skipped) | ✅ |
 
-### Phase 4 — Network & Connectivity Tools (Sprint 24–25)
+### Sprint 24 — UX Enhancements + 51 Visual Appearance Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Search text highlighting in ListView owner-draw (bold accent on matched text) | ✅ |
+| 2 | "Recently Applied" virtual category in tree view (last 50 from TweakHistory) | ✅ |
+| 3 | `WindowAppearance.cs` — 51 new tweaks (title bars, scrollbars, fonts, icons, borders, animations, accent colours) | ✅ |
+| 4 | CategoryIcons mapping for "Window Appearance" category | ✅ |
+| 5 | PreferencesDialog — tabbed settings (Appearance, Behaviour, Performance, Data) | ✅ |
+| 6 | AppConfig extended with 6 new properties (ConfirmApply/Remove, ShowInapplicable, etc.) | ✅ |
+| 7 | Sprint 24 builtins tests (15 specific IDs + category assertions) | ✅ |
+| 8 | Total: 2,661 tweaks, 90 categories | ✅ |
+
+### Sprint 25 — 75 New Tweaks (System Optimization + Desktop Customization) ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `SystemOptimization.cs` — 39 new tweaks (memory mgmt, I/O scheduling, kernel params, crash control) | ✅ |
+| 2 | `DesktopCustomization.cs` — 36 new tweaks (Explorer behaviour, Quick Access, ribbon, feeds) | ✅ |
+| 3 | CategoryIcons mapping for 2 new categories | ✅ |
+| 4 | Sprint 25 builtins tests (27 specific IDs + category assertions) | ✅ |
+| 5 | Total: 2,736 tweaks, 92 categories | ✅ |
+
+### Sprint 26 — WhatsNew Dialog + Test Expansion ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | WhatsNewDialog — version-gated changelog viewer with ShouldShow/MarkSeen logic | ✅ |
+| 2 | AppConfig `LastSeenVersion` property for upgrade detection | ✅ |
+| 3 | WhatsNewDialog auto-show on startup for new versions | ✅ |
+| 4 | Help menu integration ("What's New..." menu item) | ✅ |
+| 5 | GUI detail panel BackColor fix (gray block → themed Surface colour) | ✅ |
+| 6 | Test hang fix — Sprint 24 ExportJson/ApplyProfile tests refactored to avoid process spawning | ✅ |
+| 7 | Sprint 26 GUI tests (WhatsNewDialog ShouldShow) | ✅ |
+| 8 | Total: 2,736 tweaks, 92 categories, **1,645 tests** (1,248 Core + 154 CLI + 242 GUI + 1 skipped) | ✅ |
+
+### Phase 4 — Network & Connectivity Tools (Sprint 27–28)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -496,7 +532,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 39 | Network bandwidth monitor | LOW | Original |
 | 40 | MAC address randomization toggle | LOW | Original |
 
-### Phase 5 — Startup & Service Management (Sprint 25–26)
+### Phase 5 — Startup & Service Management (Sprint 29–30)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -511,7 +547,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 49 | Windows Update pause/resume controls | LOW | Original |
 | 50 | Driver update checker (optional components) | LOW | Original |
 
-### Phase 6 — Power & Energy Management (Sprint 27–28)
+### Phase 6 — Power & Energy Management (Sprint 31–32)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -526,7 +562,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 59 | Power consumption estimator (from current configuration) | LOW | Original |
 | 60 | Screen brightness scheduler (time-based) | LOW | Original |
 
-### Phase 7 — Privacy & Ad Removal (Sprint 29–30)
+### Phase 7 — Privacy & Ad Removal (Sprint 33–34)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -541,7 +577,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 69 | Location services granular control | LOW | Original |
 | 70 | App permission manager (camera, microphone, location per-app) | LOW | Original |
 
-### Phase 8 — Plugin & Extensibility Improvements (Sprint 31–32)
+### Phase 8 — Plugin & Extensibility Improvements (Sprint 35–36)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -556,7 +592,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 79 | Plugin changelog viewer in marketplace | LOW | Original |
 | 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original |
 
-### Phase 9 — Advanced Features & Automation (Sprint 33–34)
+### Phase 9 — Advanced Features & Automation (Sprint 37–38)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|
@@ -571,7 +607,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 89 | Intune/SCCM integration — deploy tweaks via MDM | LOW | Original |
 | 90 | Tweak compliance reporting (drift detection from baseline) | LOW | Original |
 
-### Phase 10 — Localization, Packaging & Community (Sprint 35–36)
+### Phase 10 — Localization, Packaging & Community (Sprint 39–40)
 
 | # | Item | Priority | Source |
 |---|------|----------|--------|

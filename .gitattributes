@@ -1,42 +1,43 @@
-# Git Attributes for RegiLattice (C# / .NET project)
+﻿# Git Attributes for RegiLattice (C# / .NET project)
 
-# Auto-detect text files and normalise line endings in the repo
-* text=auto
+# Normalize all text files to LF in the repo; override specific tools that need CRLF
+* text=auto eol=lf
 
-# ── C# / .NET ────────────────────────────────────────────────
-*.cs text diff=csharp
-*.csx text diff=csharp
-*.csproj text
-*.sln text eol=crlf
-*.props text
-*.targets text
-*.xaml text
-*.resx text
-*.config text
-*.manifest text
-*.wixproj text
-*.wxs text
+# C# / .NET
+*.cs      text eol=lf diff=csharp
+*.csx     text eol=lf diff=csharp
+*.csproj  text eol=lf
+*.props   text eol=lf
+*.targets text eol=lf
+*.xaml    text eol=lf
+*.resx    text eol=lf
+*.config  text eol=lf
+*.manifest text eol=lf
+*.wixproj text eol=lf
+*.wxs     text eol=lf
+# Visual Studio solution files require CRLF
+*.sln     text eol=crlf
 
-# ── Shell / Scripts ──────────────────────────────────────────
-*.ps1 text eol=crlf
-*.psm1 text eol=crlf
-*.bat text eol=crlf
-*.cmd text eol=crlf
-*.sh text eol=lf
+# Shell / Scripts
+*.ps1     text eol=crlf
+*.psm1    text eol=crlf
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+*.sh      text eol=lf
 
-# ── Config / Data ────────────────────────────────────────────
-*.json text
-*.yml text
-*.yaml text
-*.toml text
-*.cfg text
-*.ini text
+# Config / Data
+*.json    text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.toml    text eol=lf
+*.cfg     text eol=lf
+*.ini     text eol=lf
 
-# ── Documentation ────────────────────────────────────────────
-*.md text diff=markdown
-*.txt text
+# Documentation
+*.md      text eol=lf diff=markdown
+*.txt     text eol=lf
 
-# ── Binary ───────────────────────────────────────────────────
+# Binary
 *.png binary
 *.jpg binary
 *.jpeg binary
@@ -50,6 +51,6 @@
 *.nupkg binary
 *.snk binary
 
-# ── Legacy (archived Python) ─────────────────────────────────
-*.py text eol=lf linguist-vendored
+# Legacy (archived Python)
+*.py  text eol=lf linguist-vendored
 *.pyi text eol=lf linguist-vendored

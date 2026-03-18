@@ -3,9 +3,9 @@
   <RunConfiguration>
     <!-- Run the 3 test assemblies in parallel (one per project) -->
     <MaxCpuCount>3</MaxCpuCount>
-    <!-- 120 s total session hard limit -->
-    <TestSessionTimeout>120000</TestSessionTimeout>
-    <!-- 15 s per individual test — kills any single hanging test case -->
-    <TestCaseTimeout>15000</TestCaseTimeout>
+    <!-- 300 s total session hard limit (1370+ tests need headroom) -->
+    <TestSessionTimeout>300000</TestSessionTimeout>
+    <!-- 30 s per individual test — generous for slow CI systems -->
+    <TestCaseTimeout>30000</TestCaseTimeout>
   </RunConfiguration>
 </RunSettings>

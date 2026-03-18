@@ -470,6 +470,7 @@ public sealed class ParseArgsTests
 }
 
 /// <summary>Tests for the ConsoleColorizer utility.</summary>
+[Collection("ConsoleColorizer")]
 public sealed class ConsoleColorizerTests
 {
     [Fact]
@@ -687,5 +688,190 @@ public sealed class FavoritesAndHistoryParseTests
         var result = Program.ParseArgs([]);
         Assert.NotNull(result);
         Assert.Equal(20, result.HistoryCount);
+    }
+}
+
+// ── Sprint 24: Additional CLI arg parsing edge cases ─────────────────────
+
+public sealed class CliArgEdgeCaseTests
+{
+    [Fact]
+    public void ParseArgs_AllDefaults_NullableStringsAreNull()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Null(result.Search);
+        Assert.Null(result.Category);
+        Assert.Null(result.Profile);
+        Assert.Null(result.Snapshot);
+        Assert.Null(result.Restore);
+        Assert.Null(result.ExportJson);
+        Assert.Null(result.ExportReg);
+        Assert.Null(result.ImportJson);
+    }
+
+    [Fact]
+    public void ParseArgs_DryRun_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.DryRun);
+    }
+
+    [Fact]
+    public void ParseArgs_Force_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.Force);
+    }
+
+    [Fact]
+    public void ParseArgs_ShowList_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.ShowList);
+    }
+
+    [Fact]
+    public void ParseArgs_ShowCategories_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.ShowCategories);
+    }
+
+    [Fact]
+    public void ParseArgs_ShowTags_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.ShowTags);
+    }
+
+    [Fact]
+    public void ParseArgs_Validate_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.Validate);
+    }
+
+    [Fact]
+    public void ParseArgs_Stats_DefaultFalse()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.False(result.Stats);
+    }
+
+    [Theory]
+    [InlineData("--list")]
+    [InlineData("--show-categories")]
+    [InlineData("--show-tags")]
+    [InlineData("--validate")]
+    [InlineData("--stats")]
+    [InlineData("--dry-run")]
+    [InlineData("--force")]
+    [InlineData("--no-color")]
+    [InlineData("--favorites")]
+    [InlineData("--history")]
+    public void ParseArgs_EachInfoFlag_DoesNotReturnNull(string flag)
+    {
+        var result = Program.ParseArgs([flag]);
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void ParseArgs_MultipleSearchFlags_LastWins()
+    {
+        var result = Program.ParseArgs(["--search", "first", "--search", "second"]);
+        Assert.NotNull(result);
+        Assert.Equal("second", result.Search);
+    }
+
+    [Fact]
+    public void ParseArgs_CategoryWithAction_ParsesBoth()
+    {
+        var result = Program.ParseArgs(["--category", "Privacy", "apply"]);
+        Assert.NotNull(result);
+        Assert.Equal("Privacy", result.Category);
+    }
+
+    [Fact]
+    public void ParseArgs_Profile_SetsFlagAndName()
+    {
+        var result = Program.ParseArgs(["--profile", "gaming"]);
+        Assert.NotNull(result);
+        Assert.Equal("gaming", result.Profile);
+    }
+}
+
+// ── Sprint 24: ConsoleColorizer additional coverage ───────────────────────
+
+public sealed class ConsoleColorizerSprintTests
+{
+    [Theory]
+    [InlineData(TweakResult.Applied)]
+    [InlineData(TweakResult.NotApplied)]
+    [InlineData(TweakResult.Unknown)]
+    [InlineData(TweakResult.Error)]
+    [InlineData(TweakResult.SkippedCorp)]
+    [InlineData(TweakResult.SkippedBuild)]
+    [InlineData(TweakResult.SkippedHw)]
+    public void ColourisedStatus_WithColor_ReturnsNonEmptyString(TweakResult result)
+    {
+        ConsoleColorizer.NoColor = false;
+        var text = ConsoleColorizer.ColourisedStatus(result);
+        Assert.NotEmpty(text);
+    }
+
+    [Theory]
+    [InlineData(TweakResult.Applied)]
+    [InlineData(TweakResult.NotApplied)]
+    [InlineData(TweakResult.Unknown)]
+    [InlineData(TweakResult.Error)]
+    [InlineData(TweakResult.SkippedCorp)]
+    [InlineData(TweakResult.SkippedBuild)]
+    [InlineData(TweakResult.SkippedHw)]
+    public void ColourisedStatus_NoColor_ContainsResultName(TweakResult result)
+    {
+        ConsoleColorizer.NoColor = true;
+        try
+        {
+            var text = ConsoleColorizer.ColourisedStatus(result);
+            Assert.Contains(result.ToString(), text, StringComparison.OrdinalIgnoreCase);
+        }
+        finally { ConsoleColorizer.NoColor = false; }
+    }
+
+    [Fact]
+    public void Green_LongString_ContainsOriginalText()
+    {
+        ConsoleColorizer.NoColor = false;
+        var long_ = new string('a', 200);
+        var result = ConsoleColorizer.Green(long_);
+        Assert.Contains(long_, result);
+    }
+
+    [Fact]
+    public void Dim_WithColor_StartsWith_ESC()
+    {
+        ConsoleColorizer.NoColor = false;
+        var result = ConsoleColorizer.Dim("test");
+        Assert.StartsWith("\u001b[", result);
+    }
+
+    [Fact]
+    public void Red_NoColor_ReturnsSameText()
+    {
+        ConsoleColorizer.NoColor = true;
+        try
+        {
+            var input = "error message here";
+            Assert.Equal(input, ConsoleColorizer.Red(input));
+        }
+        finally { ConsoleColorizer.NoColor = false; }
     }
 }

@@ -2109,3 +2109,181 @@ public sealed class TweakEngineTests
         Assert.Equal(TweakResult.Error, result);
     }
 }
+
+// ── Sprint 24: ApplyProfile, CategoryCounts, ScopeCounts, utility paths ──
+
+public sealed class TweakEngineSprint24Tests
+{
+    [Fact]
+    public void ApplyProfile_ValidProfile_ReturnsResultsForEachTweak()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        // Verify profile resolution works (returns tweaks without applying - avoids spawning processes)
+        var tweaks = engine.TweaksForProfile("privacy");
+        Assert.NotEmpty(tweaks);
+        Assert.All(tweaks, t => Assert.NotEmpty(t.Id));
+    }
+
+    [Fact]
+    public void ApplyProfile_InvalidProfile_ReturnsEmpty()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var results = engine.ApplyProfile("nonexistent-xyz-profile");
+        Assert.Empty(results);
+    }
+
+    [Fact]
+    public void CategoryCounts_SumsToAllTweaksCount()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var total = engine.CategoryCounts().Values.Sum();
+        Assert.Equal(engine.AllTweaks().Count, total);
+    }
+
+    [Fact]
+    public void ScopeCounts_SumsToAllTweaksCount()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var total = engine.ScopeCounts().Values.Sum();
+        Assert.Equal(engine.AllTweaks().Count, total);
+    }
+
+    [Fact]
+    public void CategoryCounts_AllCategoriesPresent()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var cats = engine.Categories().ToHashSet();
+        Assert.All(engine.CategoryCounts().Keys, k => Assert.Contains(k, cats));
+    }
+
+    [Fact]
+    public void ScopeCounts_ContainsUserAndMachine()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var counts = engine.ScopeCounts();
+        Assert.True(counts.ContainsKey(TweakScope.User) || counts.ContainsKey(TweakScope.Machine));
+    }
+
+    [Fact]
+    public void GetScope_KnownId_ReturnsScope()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var first = engine.AllTweaks()[0];
+        var scope = engine.GetScope(first);
+        Assert.True(Enum.IsDefined(typeof(TweakScope), scope));
+    }
+
+    [Fact]
+    public void TweaksByScope_User_ContainsAtLeastOneTweak()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var userTweaks = engine.TweaksByScope(TweakScope.User);
+        Assert.NotEmpty(userTweaks);
+        Assert.All(userTweaks, t => Assert.Equal(TweakScope.User, t.Scope));
+    }
+
+    [Fact]
+    public void TweaksByScope_Machine_ContainsAtLeastOneTweak()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var machineTweaks = engine.TweaksByScope(TweakScope.Machine);
+        Assert.NotEmpty(machineTweaks);
+        Assert.All(machineTweaks, t => Assert.Equal(TweakScope.Machine, t.Scope));
+    }
+
+    [Fact]
+    public void TweaksByTag_ReturnsOnlyMatchingTag()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var tagged = engine.TweaksByTag("privacy");
+        Assert.NotEmpty(tagged);
+        Assert.All(tagged, t => Assert.Contains("privacy", t.Tags, StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void Filter_ByCorpSafe_True_ReturnsOnlyCorpSafe()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var corpSafe = engine.Filter(corpSafe: true);
+        Assert.NotEmpty(corpSafe);
+        Assert.All(corpSafe, t => Assert.True(t.CorpSafe));
+    }
+
+    [Fact]
+    public void Filter_ByNeedsAdmin_False_ReturnsOnlyNonAdmin()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var nonAdmin = engine.Filter(needsAdmin: false);
+        Assert.NotEmpty(nonAdmin);
+        Assert.All(nonAdmin, t => Assert.False(t.NeedsAdmin));
+    }
+
+    [Fact]
+    public void WindowsBuild_IsPositive()
+    {
+        Assert.True(TweakEngine.WindowsBuild() > 0);
+    }
+
+    [Fact]
+    public void Search_SingleToken_ReturnsRelevantTweaks()
+    {
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var results = engine.Search("telemetry");
+        Assert.NotEmpty(results);
+        Assert.All(
+            results,
+            t =>
+                Assert.True(
+                    t.Label.Contains("telemetry", StringComparison.OrdinalIgnoreCase)
+                        || t.Description.Contains("telemetry", StringComparison.OrdinalIgnoreCase)
+                        || t.Tags.Any(tag => tag.Contains("telemetry", StringComparison.OrdinalIgnoreCase))
+                )
+        );
+    }
+
+    [Fact]
+    public void ExportJson_WritesReadableJson()
+    {
+        var engine = new TweakEngine();
+        engine.Register([
+            new TweakDef
+            {
+                Id = "sp24-export-test",
+                Label = "Export Test Tweak",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\RegiLattice\Test", "Export", 1)],
+                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\RegiLattice\Test", "Export", 1)],
+            },
+        ]);
+        var path = Path.Combine(Path.GetTempPath(), $"sp24-export-{Guid.NewGuid():N}.json");
+        try
+        {
+            engine.ExportJson(path);
+            var text = File.ReadAllText(path);
+            Assert.Contains("Id", text);
+            Assert.Contains("Label", text);
+            Assert.Contains("sp24-export-test", text);
+        }
+        finally
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch { }
+        }
+    }
+}

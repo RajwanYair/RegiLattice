@@ -67,10 +67,23 @@ public static class Elevation
 
         using var proc = Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start {executable}");
 
-        var stdout = proc.StandardOutput.ReadToEnd();
-        var stderr = proc.StandardError.ReadToEnd();
-        proc.WaitForExit(timeoutMs);
-        return (proc.ExitCode, stdout, stderr);
+        // Read stdout/stderr asynchronously to prevent deadlock when output buffers fill up
+        var stdoutTask = proc.StandardOutput.ReadToEndAsync();
+        var stderrTask = proc.StandardError.ReadToEndAsync();
+
+        if (!proc.WaitForExit(timeoutMs))
+        {
+            try
+            {
+                proc.Kill(entireProcessTree: true);
+            }
+            catch
+            { /* best effort */
+            }
+            throw new TimeoutException($"Process '{executable}' did not exit within {timeoutMs}ms.");
+        }
+
+        return (proc.ExitCode, stdoutTask.GetAwaiter().GetResult(), stderrTask.GetAwaiter().GetResult());
     }
 
     /// <summary>Throws if not running as admin and requireAdmin is true.</summary>

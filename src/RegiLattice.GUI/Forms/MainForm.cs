@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
+using RegiLattice.Core.Services;
 
 namespace RegiLattice.GUI.Forms;
 
@@ -63,6 +64,13 @@ public partial class MainForm : Form
         base.OnLoad(e);
         _monitorTimer.Start();
         await InitialiseEngineAsync();
+
+        if (WhatsNewDialog.ShouldShow())
+        {
+            using var dlg = new WhatsNewDialog();
+            dlg.ShowDialog(this);
+            WhatsNewDialog.MarkSeen();
+        }
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -92,7 +100,7 @@ public partial class MainForm : Form
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        if (WindowState == FormWindowState.Minimized)
+        if (WindowState == FormWindowState.Minimized && AppConfig.Load().MinimizeToTray)
         {
             _trayIcon.Visible = true;
             ShowInTaskbar = false;
@@ -159,6 +167,7 @@ public partial class MainForm : Form
         // Detail panel with accent left border
         _detailPanel.BackColor = AppTheme.Surface;
         _detailPanel.Padding = new Padding(8, 6, 8, 6);
+        _detailLabel.BackColor = AppTheme.Surface;
         _detailLabel.ForeColor = AppTheme.FgDim;
         _detailLabel.Font = AppTheme.Regular;
 
@@ -341,14 +350,63 @@ public partial class MainForm : Form
 
         int textLeft = e.ColumnIndex == 0 ? 24 : 4; // offset for checkbox in first column
         var textBounds = new Rectangle(e.Bounds.X + textLeft, e.Bounds.Y, e.Bounds.Width - textLeft - 2, e.Bounds.Height);
+        string cellText = e.SubItem?.Text ?? "";
+        string search = _searchBox.Text.Trim();
+
+        // Search highlight: bold the matched portion in Label (col 0) and Description (col 6)
+        if (search.Length > 0 && (e.ColumnIndex == 0 || e.ColumnIndex == 6))
+        {
+            int matchIdx = cellText.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+            if (matchIdx >= 0)
+            {
+                DrawHighlightedText(g, cellText, search, matchIdx, textBounds, fg);
+                return;
+            }
+        }
+
         TextRenderer.DrawText(
             g,
-            e.SubItem?.Text ?? "",
+            cellText,
             Font,
             textBounds,
             fg,
             TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis
         );
+    }
+
+    /// <summary>Draws text with the matched search portion highlighted in accent/bold.</summary>
+    private void DrawHighlightedText(Graphics g, string text, string search, int matchIdx, Rectangle bounds, Color fg)
+    {
+        const TextFormatFlags baseFlags = TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.NoPadding;
+
+        string before = text[..matchIdx];
+        string match = text.Substring(matchIdx, search.Length);
+        string after = text[(matchIdx + search.Length)..];
+
+        using var boldFont = new Font(Font, FontStyle.Bold);
+        int x = bounds.X;
+
+        if (before.Length > 0)
+        {
+            var sz = TextRenderer.MeasureText(g, before, Font, bounds.Size, baseFlags);
+            var r = new Rectangle(x, bounds.Y, sz.Width, bounds.Height);
+            TextRenderer.DrawText(g, before, Font, r, fg, baseFlags);
+            x += sz.Width;
+        }
+
+        // Highlight background + bold text for the match
+        var matchSz = TextRenderer.MeasureText(g, match, boldFont, bounds.Size, baseFlags);
+        var matchRect = new Rectangle(x, bounds.Y, matchSz.Width, bounds.Height);
+        using var hlBrush = new SolidBrush(Color.FromArgb(40, AppTheme.Accent));
+        g.FillRectangle(hlBrush, x, bounds.Y + 2, matchSz.Width, bounds.Height - 4);
+        TextRenderer.DrawText(g, match, boldFont, matchRect, AppTheme.Accent, baseFlags);
+        x += matchSz.Width;
+
+        if (after.Length > 0)
+        {
+            var r = new Rectangle(x, bounds.Y, bounds.Right - x, bounds.Height);
+            TextRenderer.DrawText(g, after, Font, r, fg, baseFlags);
+        }
     }
 
     // ── Initialisation ─────────────────────────────────────────────────────
@@ -589,6 +647,15 @@ public partial class MainForm : Form
 
         _treeView.BeginUpdate();
         _treeView.Nodes.Clear();
+
+        // Virtual node: Recently Applied (from TweakHistory)
+        if (TweakHistory.Count > 0)
+        {
+            var recentNode = new TreeNode("\U0001F552 Recently Applied") { Tag = "__recent__", ForeColor = AppTheme.Accent };
+            _treeView.Nodes.Add(recentNode);
+            if (previousCat == "__recent__")
+                _treeView.SelectedNode = recentNode;
+        }
 
         // Get profile filter
         string profile = _profileCombo.SelectedItem?.ToString() ?? "(None)";
@@ -1159,6 +1226,13 @@ public partial class MainForm : Form
         if (e.Node?.Tag is not string cat)
             return;
 
+        // Virtual category: Recently Applied
+        if (cat == "__recent__")
+        {
+            PopulateRecentlyApplied();
+            return;
+        }
+
         // Lazy-load status for this category on first select
         if (!_loadedCategories.Contains(cat))
         {
@@ -1167,6 +1241,26 @@ public partial class MainForm : Form
             UpdateCounters();
         }
         PopulateList(cat);
+    }
+
+    /// <summary>Populates the ListView with recently applied tweaks from TweakHistory.</summary>
+    private void PopulateRecentlyApplied()
+    {
+        var recent = TweakHistory.Recent(50);
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var tweaks = new List<TweakDef>();
+
+        foreach (var entry in recent)
+        {
+            if (!seen.Add(entry.TweakId))
+                continue;
+            var td = _engine.GetTweak(entry.TweakId);
+            if (td is not null)
+                tweaks.Add(td);
+        }
+
+        PopulateListViewFiltered(ApplyFilters(tweaks), showCategory: true);
+        SetStatus($"Recently Applied — {tweaks.Count} unique tweak(s)");
     }
 
     /// <summary>Detects tweak status for a single category and merges into the cache.</summary>
@@ -1239,6 +1333,40 @@ public partial class MainForm : Form
         var cfg = AppConfig.Load();
         cfg.Theme = name;
         cfg.Save();
+    }
+
+    private void OnOpenPreferences()
+    {
+        var cfg = AppConfig.Load();
+        using var dlg = new PreferencesDialog(cfg);
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        dlg.ApplyToConfig();
+
+        // Apply theme if changed
+        if (dlg.ThemeChanged)
+        {
+            AppTheme.SetTheme(cfg.Theme);
+            AppIcons.InvalidateCache();
+            Icon = AppIcons.AppIcon;
+            RefreshMenuImages();
+            ApplyTheme();
+            PopulateTree();
+            _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
+        }
+
+        // Apply detail panel height
+        _detailPanel.Height = cfg.DetailPanelHeight;
+
+        // Apply monitor timer
+        if (cfg.StatusBarMonitor)
+            _monitorTimer.Start();
+        else
+            _monitorTimer.Stop();
+
+        // Sync force checkbox
+        _forceCheck.Checked = cfg.ForceCorp;
     }
 
     /// <summary>Re-assign menu item images after the AppIcons bitmap cache has been invalidated.</summary>
@@ -1424,11 +1552,13 @@ public partial class MainForm : Form
                 + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
                 + pendingNote;
             _detailLabel.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;
+            _detailPanel.Invalidate();
         }
         else
         {
             _detailLabel.Text = "\U0001F4CB Select a tweak to see details.";
             _detailLabel.ForeColor = AppTheme.FgDim;
+            _detailPanel.Invalidate();
         }
     }
 
