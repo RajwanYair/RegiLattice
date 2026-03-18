@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="RegiLattice.CLI.Tests" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RegiLattice.Core\RegiLattice.Core.csproj" />
   </ItemGroup>
 </Project>

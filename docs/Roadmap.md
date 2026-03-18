@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-18 · v3.4.0 · 2 736 tweaks · 92 categories · 1 645 tests
+> Last updated: 2026-03-19 · v3.4.0 · 2 736 tweaks · 92 categories · 1 670 tests
 
 ---
 
@@ -516,6 +516,47 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 6 | Test hang fix — Sprint 24 ExportJson/ApplyProfile tests refactored to avoid process spawning | ✅ |
 | 7 | Sprint 26 GUI tests (WhatsNewDialog ShouldShow) | ✅ |
 | 8 | Total: 2,736 tweaks, 92 categories, **1,645 tests** (1,248 Core + 154 CLI + 242 GUI + 1 skipped) | ✅ |
+
+### Sprint 27 — Network Tools ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `NetworkManager` Core service (DNS quick-switch, TCP/IP + Winsock + DNS reset, DHCP renew) | ✅ |
+| 2 | 6 built-in DNS presets: DHCP, Cloudflare, Google, Quad9, OpenDNS, NextDNS | ✅ |
+| 3 | `NetworkToolsDialog` GUI — adapter drop-down, DNS preset buttons, repair action buttons, async log | ✅ |
+| 4 | Tools menu → Network Tools (globe icon) | ✅ |
+| 5 | `NetworkManagerTests.cs` — 8 unit tests covering presets and read-only operations | ✅ |
+
+### Sprint 28 — Startup Manager ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `StartupManager` Core service — reads HKCU/HKLM Run + Run-Disabled registry keys + user/all-users Startup folders | ✅ |
+| 2 | `StartupEntry` record + `StartupLocation` enum (RegistryUser, RegistryMachine, FolderUser, FolderAllUsers) | ✅ |
+| 3 | Enable/Disable (moves between Run ↔ Run-Disabled), Delete operations | ✅ |
+| 4 | `StartupManagerDialog` GUI — ListView with Name/Status/Location/Command, admin banner, Enable/Disable/Delete/Refresh | ✅ |
+| 5 | Tools menu → Startup Manager (rocket icon) | ✅ |
+| 6 | `StartupManagerTests.cs` — 7 unit tests covering read-only operations and record model | ✅ |
+
+### Sprint 29 — Service Manager ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `ServiceManager` Core service — enumerates and controls Windows services via `System.ServiceProcess.ServiceController` | ✅ |
+| 2 | `ServiceEntry` record (ServiceName, DisplayName, Description, Status, StartType, CanStop, CanPauseAndContinue) | ✅ |
+| 3 | `StartAsync`, `StopAsync`, `SetStartTypeAsync` (uses `sc.exe config`) async operations with CancellationToken | ✅ |
+| 4 | `ServiceManagerDialog` GUI — searchable ListView, description panel, async Start/Stop/Enable/Disable/Refresh, admin banner | ✅ |
+| 5 | Tools menu → Service Manager (gear icon) | ✅ |
+| 6 | `System.ServiceProcess.ServiceController` v9.0.3 NuGet added | ✅ |
+| 7 | `ServiceManagerTests.cs` — 10 unit tests covering enumeration and record model | ✅ |
+
+### Task 6 — BaseDialog Consolidation ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `BaseDialog : Form` abstract class with common constructor (title, size, resizable) | ✅ |
+| 2 | Helper factory methods: `CreateSectionHeader()`, `CreateLabel()`, `CreateButtonRow()`, `CreateButton()` | ✅ |
+| 3 | Migrated `NetworkToolsDialog`, `StartupManagerDialog`, `ServiceManagerDialog` to `: BaseDialog` | ✅ |
 
 ### Phase 4 — Network & Connectivity Tools (Sprint 27–28)
 
