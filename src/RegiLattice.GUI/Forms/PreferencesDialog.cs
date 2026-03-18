@@ -14,6 +14,7 @@ internal sealed class PreferencesDialog : Form
     private readonly AppConfig _config;
     private bool _themeChanged;
     private bool _localeChanged;
+    private bool _fontSizeChanged;
 
     // ── Controls ────────────────────────────────────────────────────────
     private readonly TabControl _tabs;
@@ -22,6 +23,9 @@ internal sealed class PreferencesDialog : Form
     private readonly ComboBox _themeCombo;
     private readonly ComboBox _localeCombo;
     private readonly NumericUpDown _detailHeight;
+    private readonly NumericUpDown _fontSizeSpinner;
+    private readonly CheckBox _chkShowLogPanel;
+    private readonly NumericUpDown _logPanelHeight;
 
     // Behaviour
     private readonly CheckBox _chkMinimizeToTray;
@@ -29,6 +33,8 @@ internal sealed class PreferencesDialog : Form
     private readonly CheckBox _chkConfirmRemove;
     private readonly CheckBox _chkShowInapplicable;
     private readonly CheckBox _chkForceCorp;
+    private readonly CheckBox _chkAutoRefreshOnStartup;
+    private readonly CheckBox _chkLaunchMinimized;
 
     // Performance
     private readonly NumericUpDown _maxWorkers;
@@ -77,12 +83,34 @@ internal sealed class PreferencesDialog : Form
             Value = config.DetailPanelHeight,
             Width = 80,
         };
+        _fontSizeSpinner = new NumericUpDown
+        {
+            Minimum = 7,
+            Maximum = 16,
+            DecimalPlaces = 1,
+            Increment = 0.5m,
+            Value = (decimal)Math.Clamp(config.FontSize, 7f, 16f),
+            Width = 80,
+        };
+        _chkShowLogPanel = new CheckBox
+        {
+            Text = "Show log panel by default",
+            Checked = config.ShowLogPanel,
+            AutoSize = true,
+        };
+        _logPanelHeight = new NumericUpDown
+        {
+            Minimum = 60,
+            Maximum = 500,
+            Value = config.LogPanelHeight,
+            Width = 80,
+        };
 
         var appearancePanel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 4,
+            RowCount = 7,
             Padding = new Padding(12),
         };
         appearancePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
@@ -92,8 +120,14 @@ internal sealed class PreferencesDialog : Form
         appearancePanel.Controls.Add(_themeCombo, 1, 0);
         appearancePanel.Controls.Add(CreateLabel("Language:"), 0, 1);
         appearancePanel.Controls.Add(_localeCombo, 1, 1);
-        appearancePanel.Controls.Add(CreateLabel("Detail panel height:"), 0, 2);
-        appearancePanel.Controls.Add(_detailHeight, 1, 2);
+        appearancePanel.Controls.Add(CreateLabel("Font size (pt):"), 0, 2);
+        appearancePanel.Controls.Add(_fontSizeSpinner, 1, 2);
+        appearancePanel.Controls.Add(CreateLabel("Detail panel height:"), 0, 3);
+        appearancePanel.Controls.Add(_detailHeight, 1, 3);
+        appearancePanel.Controls.Add(_chkShowLogPanel, 0, 4);
+        appearancePanel.SetColumnSpan(_chkShowLogPanel, 2);
+        appearancePanel.Controls.Add(CreateLabel("Log panel height:"), 0, 5);
+        appearancePanel.Controls.Add(_logPanelHeight, 1, 5);
 
         tabAppearance.Controls.Add(appearancePanel);
 
@@ -130,6 +164,18 @@ internal sealed class PreferencesDialog : Form
             Checked = config.ForceCorp,
             AutoSize = true,
         };
+        _chkAutoRefreshOnStartup = new CheckBox
+        {
+            Text = "Auto-refresh tweak status on startup",
+            Checked = config.AutoRefreshOnStartup,
+            AutoSize = true,
+        };
+        _chkLaunchMinimized = new CheckBox
+        {
+            Text = "Launch minimized to system tray",
+            Checked = config.LaunchMinimized,
+            AutoSize = true,
+        };
 
         var behaviourPanel = new FlowLayoutPanel
         {
@@ -139,6 +185,8 @@ internal sealed class PreferencesDialog : Form
             WrapContents = false,
         };
         behaviourPanel.Controls.Add(_chkMinimizeToTray);
+        behaviourPanel.Controls.Add(_chkLaunchMinimized);
+        behaviourPanel.Controls.Add(_chkAutoRefreshOnStartup);
         behaviourPanel.Controls.Add(_chkConfirmApply);
         behaviourPanel.Controls.Add(_chkConfirmRemove);
         behaviourPanel.Controls.Add(_chkShowInapplicable);
@@ -266,8 +314,13 @@ internal sealed class PreferencesDialog : Form
         _config.Theme = _themeCombo.SelectedItem as string ?? "catppuccin-mocha";
         _config.Locale = _localeCombo.SelectedItem as string ?? "en";
         _config.DetailPanelHeight = (int)_detailHeight.Value;
+        _config.FontSize = (float)_fontSizeSpinner.Value;
+        _config.ShowLogPanel = _chkShowLogPanel.Checked;
+        _config.LogPanelHeight = (int)_logPanelHeight.Value;
 
         _config.MinimizeToTray = _chkMinimizeToTray.Checked;
+        _config.LaunchMinimized = _chkLaunchMinimized.Checked;
+        _config.AutoRefreshOnStartup = _chkAutoRefreshOnStartup.Checked;
         _config.ConfirmApply = _chkConfirmApply.Checked;
         _config.ConfirmRemove = _chkConfirmRemove.Checked;
         _config.ShowInapplicable = _chkShowInapplicable.Checked;
@@ -282,6 +335,7 @@ internal sealed class PreferencesDialog : Form
 
         _themeChanged = _config.Theme != (AppTheme.CurrentThemeName());
         _localeChanged = _config.Locale != Locale.CurrentLocale;
+        _fontSizeChanged = Math.Abs(_config.FontSize - AppTheme.BaseFontSize) > 0.01f;
 
         _config.Save();
         return true;
@@ -289,6 +343,7 @@ internal sealed class PreferencesDialog : Form
 
     internal bool ThemeChanged => _themeChanged;
     internal bool LocaleChanged => _localeChanged;
+    internal bool FontSizeChanged => _fontSizeChanged;
 
     private void OnBrowseBackup(object? sender, EventArgs e)
     {
@@ -306,7 +361,12 @@ internal sealed class PreferencesDialog : Form
         _themeCombo.SelectedItem = defaults.Theme;
         _localeCombo.SelectedItem = defaults.Locale;
         _detailHeight.Value = defaults.DetailPanelHeight;
+        _fontSizeSpinner.Value = (decimal)defaults.FontSize;
+        _chkShowLogPanel.Checked = defaults.ShowLogPanel;
+        _logPanelHeight.Value = defaults.LogPanelHeight;
         _chkMinimizeToTray.Checked = defaults.MinimizeToTray;
+        _chkLaunchMinimized.Checked = defaults.LaunchMinimized;
+        _chkAutoRefreshOnStartup.Checked = defaults.AutoRefreshOnStartup;
         _chkConfirmApply.Checked = defaults.ConfirmApply;
         _chkConfirmRemove.Checked = defaults.ConfirmRemove;
         _chkShowInapplicable.Checked = defaults.ShowInapplicable;

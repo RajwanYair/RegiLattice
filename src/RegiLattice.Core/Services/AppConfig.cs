@@ -50,6 +50,22 @@ public sealed class AppConfig
     [JsonPropertyName("last_seen_version")]
     public string LastSeenVersion { get; set; } = "";
 
+    // ── GUI display preferences ──────────────────────────────────────────
+    [JsonPropertyName("font_size")]
+    public float FontSize { get; set; } = 9f;
+
+    [JsonPropertyName("show_log_panel")]
+    public bool ShowLogPanel { get; set; } = true;
+
+    [JsonPropertyName("log_panel_height")]
+    public int LogPanelHeight { get; set; } = 150;
+
+    [JsonPropertyName("auto_refresh_startup")]
+    public bool AutoRefreshOnStartup { get; set; } = true;
+
+    [JsonPropertyName("launch_minimized")]
+    public bool LaunchMinimized { get; set; }
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 

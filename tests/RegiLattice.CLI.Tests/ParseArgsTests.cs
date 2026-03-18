@@ -70,7 +70,8 @@ public sealed class ParseArgsTests
     [InlineData("--diff", "diff.json", nameof(CliArgs.Diff))]
     [InlineData("--category", "Privacy", nameof(CliArgs.Category))]
     [InlineData("--output", "json", nameof(CliArgs.OutputFormat))]
-    [InlineData("--html", "report.html", nameof(CliArgs.HtmlPath))]    public void ParseArgs_OptionWithValue_SetsProperty(string option, string value, string propertyName)
+    [InlineData("--html", "report.html", nameof(CliArgs.HtmlPath))]
+    public void ParseArgs_OptionWithValue_SetsProperty(string option, string value, string propertyName)
     {
         var result = Program.ParseArgs([option, value]);
 
@@ -810,6 +811,9 @@ public sealed class CliArgEdgeCaseTests
 
 // ── Sprint 24: ConsoleColorizer additional coverage ───────────────────────
 
+/// <summary>Sprint-era ConsoleColorizer tests — share the same collection to prevent
+/// race conditions on the shared NoColor static property.</summary>
+[Collection("ConsoleColorizer")]
 public sealed class ConsoleColorizerSprintTests
 {
     [Theory]
@@ -843,7 +847,10 @@ public sealed class ConsoleColorizerSprintTests
             var text = ConsoleColorizer.ColourisedStatus(result);
             Assert.Contains(result.ToString(), text, StringComparison.OrdinalIgnoreCase);
         }
-        finally { ConsoleColorizer.NoColor = false; }
+        finally
+        {
+            ConsoleColorizer.NoColor = false;
+        }
     }
 
     [Fact]
@@ -872,6 +879,9 @@ public sealed class ConsoleColorizerSprintTests
             var input = "error message here";
             Assert.Equal(input, ConsoleColorizer.Red(input));
         }
-        finally { ConsoleColorizer.NoColor = false; }
+        finally
+        {
+            ConsoleColorizer.NoColor = false;
+        }
     }
 }
