@@ -67,6 +67,7 @@ internal static class AppIcons
     internal static Bitmap ToolVersionsMenuBitmap => MenuBitmap("menu-toolversions", DrawToolVersionsIcon);
     internal static Bitmap WindowsHealthMenuBitmap => MenuBitmap("menu-winhealth", DrawWindowsHealthIcon);
     internal static Bitmap MarketplaceMenuBitmap => MenuBitmap("menu-marketplace", DrawMarketplaceIcon);
+    internal static Bitmap NetworkMenuBitmap => MenuBitmap("menu-network", DrawNetworkIcon);
 
     /// <summary>Invalidate the cache (call after theme change).</summary>
     /// <remarks>
@@ -284,6 +285,28 @@ internal static class AppIcons
     }
 
     // ── Additional colourful menu icons ────────────────────────────────
+
+    /// <summary>Network icon: teal-to-blue gradient with a globe/network glyph.</summary>
+    private static void DrawNetworkIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 200, 200),
+            Color.FromArgb(30, 100, 220),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal);
+        using var fgPen = new Pen(Color.White, 1.5f);
+        using var fgBrush = new SolidBrush(Color.White);
+
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+
+        // Simple globe outline: circle + horizontal + vertical lines
+        int cx = s / 2, cy = s / 2, r = s / 3;
+        g.DrawEllipse(fgPen, cx - r, cy - r, r * 2, r * 2);
+        g.DrawLine(fgPen, cx, cy - r, cx, cy + r);
+        g.DrawLine(fgPen, cx - r, cy, cx + r, cy);
+        // Horizontal arc hints (latitude lines)
+        g.DrawArc(fgPen, cx - r, cy - r / 2, r * 2, r, 0, 180);
+    }
 
     /// <summary>File menu: orange-to-red gradient folder glyph.</summary>
     private static void DrawFileIcon(Graphics g, int s)
