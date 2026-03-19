@@ -126,6 +126,7 @@ internal sealed class PowerSchedulerDialog : BaseDialog
             new ColumnHeader { Text = "Power Plan", Width = 190 },
             new ColumnHeader { Text = "Active Now", Width = 88 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnPanel.Controls.AddRange([_btnAdd, _btnEdit, _btnDelete, _btnApplyNow, _btnClose]);
         Controls.AddRange([_list, _statusLabel, _btnPanel]);

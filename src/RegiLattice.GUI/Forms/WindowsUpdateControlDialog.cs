@@ -85,7 +85,7 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
     };
 
     public WindowsUpdateControlDialog()
-        : base("Windows Update Control", new Size(620, 480), resizable: false)
+        : base("Windows Update Control", new Size(620, 480), resizable: true)
     {
         EnableStandaloneMode();
         BuildLayout();

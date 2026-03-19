@@ -216,6 +216,7 @@ internal sealed class AppPermissionsDialog : BaseDialog
             new ColumnHeader { Text = "Policy Status", Width = 120 },
             new ColumnHeader { Text = "Registry Path", Width = 260 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnPanel.Controls.AddRange([_btnBlockAll, _btnAllowAll, _btnClose]);
         Controls.AddRange([_list, _descBox, _statusLabel, _btnPanel]);

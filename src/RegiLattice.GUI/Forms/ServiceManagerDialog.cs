@@ -146,6 +146,7 @@ internal sealed class ServiceManagerDialog : BaseDialog
         _list.Columns.Add("Status", 90);
         _list.Columns.Add("Start Type", 100);
         _list.Columns.Add("Display Name", 360);
+        ListViewColumnSorter.AttachTo(_list);
 
         var label = new Label
         {

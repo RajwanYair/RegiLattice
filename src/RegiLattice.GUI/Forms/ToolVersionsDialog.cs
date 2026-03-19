@@ -65,6 +65,7 @@ internal sealed class ToolVersionsDialog : Form
             new ColumnHeader { Text = "Latest", Width = 120 },
             new ColumnHeader { Text = "Status", Width = 160 },
         ]);
+        ListViewColumnSorter.AttachTo(_lstTools);
 
         var ctrlPanel = new Panel
         {

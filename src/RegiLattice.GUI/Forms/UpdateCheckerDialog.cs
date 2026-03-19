@@ -70,7 +70,7 @@ internal sealed class UpdateCheckerDialog : BaseDialog
     // ── Construction ─────────────────────────────────────────────────────────
 
     internal UpdateCheckerDialog()
-        : base("Check for Updates", new System.Drawing.Size(520, 380))
+        : base("Check for Updates", new System.Drawing.Size(520, 380), resizable: true)
     {
         BuildLayout();
         Load += async (_, _) => await CheckAsync();

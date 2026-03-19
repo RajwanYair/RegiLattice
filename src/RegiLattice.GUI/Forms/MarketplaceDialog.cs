@@ -99,6 +99,7 @@ internal sealed class MarketplaceDialog : Form
         _lstBrowse.Columns.Add("Tweaks", 65);
         _lstBrowse.Columns.Add("Author", 120);
         _lstBrowse.Columns.Add("Description", 280);
+        ListViewColumnSorter.AttachTo(_lstBrowse);
         _lstBrowse.Dock = DockStyle.Fill;
         _lstBrowse.SelectedIndexChanged += OnBrowseSelectionChanged;
 
@@ -135,6 +136,7 @@ internal sealed class MarketplaceDialog : Form
         _lstInstalled.Columns.Add("Tweaks", 65);
         _lstInstalled.Columns.Add("Author", 120);
         _lstInstalled.Columns.Add("Description", 280);
+        ListViewColumnSorter.AttachTo(_lstInstalled);
         _lstInstalled.Dock = DockStyle.Fill;
         _lstInstalled.SelectedIndexChanged += OnInstalledSelectionChanged;
 

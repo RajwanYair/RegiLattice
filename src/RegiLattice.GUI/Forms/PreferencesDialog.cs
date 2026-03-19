@@ -60,8 +60,8 @@ internal sealed class PreferencesDialog : Form
         _config = config;
         Text = "Preferences";
         Size = new Size(520, 500);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
+        FormBorderStyle = FormBorderStyle.Sizable;
+        MaximizeBox = true;
         MinimizeBox = false;
         StartPosition = FormStartPosition.CenterParent;
         ShowInTaskbar = false;

@@ -116,6 +116,7 @@ internal sealed class TempFileCleanerDialog : BaseDialog
             new ColumnHeader { Text = "Size", Width = 100 },
             new ColumnHeader { Text = "Path", Width = 300 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnScan.Click += async (_, _) => await ScanAsync();
         _btnClean.Click += async (_, _) => await CleanAsync();

@@ -32,6 +32,28 @@ internal sealed class ListViewColumnSorter : IComparer
 
         return Order == SortOrder.Descending ? -result : result;
     }
+
+    /// <summary>
+    /// Attaches click-to-sort to <paramref name="list"/>.
+    /// Clicking a column header sorts ascending; clicking again reverses to descending.
+    /// Call once after all columns have been defined.
+    /// </summary>
+    internal static void AttachTo(ListView list)
+    {
+        var sorter = new ListViewColumnSorter();
+        list.ListViewItemSorter = sorter;
+        list.ColumnClick += (_, e) =>
+        {
+            if (sorter.ColumnIndex == e.Column)
+                sorter.Order = sorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            else
+            {
+                sorter.ColumnIndex = e.Column;
+                sorter.Order = SortOrder.Ascending;
+            }
+            list.Sort();
+        };
+    }
 }
 
 /// <summary>

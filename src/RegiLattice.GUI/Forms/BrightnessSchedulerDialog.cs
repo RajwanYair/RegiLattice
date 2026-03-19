@@ -88,7 +88,7 @@ internal sealed class BrightnessSchedulerDialog : BaseDialog
     };
 
     public BrightnessSchedulerDialog()
-        : base("Screen Brightness Scheduler", new Size(540, 440), resizable: false)
+        : base("Screen Brightness Scheduler", new Size(540, 440), resizable: true)
     {
         EnableStandaloneMode();
         BuildLayout();

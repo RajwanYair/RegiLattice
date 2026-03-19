@@ -132,6 +132,7 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
             new ColumnHeader { Text = "Last Run", Width = 150 },
             new ColumnHeader { Text = "Author", Width = 200 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _filterCombo.Items.AddRange(["All", "Ready", "Disabled", "Running"]);
         _filterCombo.SelectedIndex = 0;

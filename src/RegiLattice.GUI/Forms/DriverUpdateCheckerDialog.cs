@@ -90,6 +90,7 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
             new ColumnHeader { Text = "Install Date", Width = 110 },
             new ColumnHeader { Text = "Class", Width = 120 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _searchBox.TextChanged += (_, _) => ApplyFilter();
         _searchBox.Location = new Point(50, 5);

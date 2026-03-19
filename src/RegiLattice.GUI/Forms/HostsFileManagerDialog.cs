@@ -123,6 +123,7 @@ internal sealed class HostsFileManagerDialog : BaseDialog
             new ColumnHeader { Text = "Status", Width = 80 },
             new ColumnHeader { Text = "Comment", Width = 160 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
         _list.SelectedIndexChanged += OnSelectionChanged;
 
         _btnAdd.Click += OnAddEntry;

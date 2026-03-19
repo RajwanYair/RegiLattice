@@ -93,7 +93,7 @@ internal sealed class MemoryCleanerDialog : BaseDialog
     private CancellationTokenSource _cts = new();
 
     internal MemoryCleanerDialog()
-        : base("Memory Cache Cleaner", new Size(480, 300), resizable: false)
+        : base("Memory Cache Cleaner", new Size(480, 300), resizable: true)
     {
         BuildControls();
         UpdateBeforeLabel();

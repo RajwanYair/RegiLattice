@@ -141,6 +141,7 @@ internal sealed class DnsSwitcherDialog : BaseDialog
         _presetList.Columns.Add("DNS Preset", 250);
         _presetList.Columns.Add("Primary", 130);
         _presetList.Columns.Add("Secondary", 130);
+        ListViewColumnSorter.AttachTo(_presetList);
         foreach (DnsPreset p in Presets)
         {
             var lvi = new ListViewItem(p.Name);

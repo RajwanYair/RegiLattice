@@ -143,6 +143,7 @@ internal sealed class UsbPowerDialog : BaseDialog
             new ColumnHeader { Text = "Current State", Width = 120 },
             new ColumnHeader { Text = "Recommended", Width = 110 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnPanel.Controls.AddRange([_btnApply, _btnDisableAll, _btnRestore, _btnClose]);
         Controls.AddRange([_list, _descBox, _statusLabel, _btnPanel]);

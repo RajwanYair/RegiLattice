@@ -78,7 +78,7 @@ internal sealed class ProxyConfigDialog : BaseDialog
     };
 
     public ProxyConfigDialog()
-        : base("Proxy Configuration", new Size(540, 480), resizable: false)
+        : base("Proxy Configuration", new Size(540, 480), resizable: true)
     {
         EnableStandaloneMode();
         BuildLayout();

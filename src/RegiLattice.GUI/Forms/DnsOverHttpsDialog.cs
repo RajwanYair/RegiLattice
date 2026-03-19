@@ -139,6 +139,7 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
             new ColumnHeader { Text = "Secondary DNS", Width = 120 },
             new ColumnHeader { Text = "Status", Width = 140 },
         ]);
+        ListViewColumnSorter.AttachTo(_providerList);
 
         _btnPanel.Controls.AddRange([_btnApply, _btnDisable, _btnClose]);
         Controls.AddRange([_infoLabel, _providerList, _descBox, _statusLabel, _btnPanel]);

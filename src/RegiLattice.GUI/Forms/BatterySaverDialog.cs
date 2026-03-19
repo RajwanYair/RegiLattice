@@ -101,7 +101,7 @@ internal sealed class BatterySaverDialog : BaseDialog
 
     // ── Construction ──────────────────────────────────────────────────────────
     internal BatterySaverDialog()
-        : base("Battery Saver Automation", new Size(520, 460), resizable: false)
+        : base("Battery Saver Automation", new Size(520, 460), resizable: true)
     {
         BuildLayout();
         LoadCurrentSettings();

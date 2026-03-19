@@ -139,6 +139,7 @@ internal sealed class PrivacyDashboardDialog : BaseDialog
             new ColumnHeader { Text = "Coverage", Width = 100 },
             new ColumnHeader { Text = "Status", Width = 120 },
         ]);
+        ListViewColumnSorter.AttachTo(_categoryList);
 
         _scorePanel.Controls.AddRange([_lblScore, _lblScoreDesc]);
 

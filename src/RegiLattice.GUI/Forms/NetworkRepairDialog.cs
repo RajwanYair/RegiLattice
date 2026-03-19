@@ -149,6 +149,7 @@ internal sealed class NetworkRepairDialog : BaseDialog
         _actionList.Columns.Add("Repair Action", 200);
         _actionList.Columns.Add("Description", 440);
         _actionList.Columns.Add("Restart?", 70, HorizontalAlignment.Center);
+        ListViewColumnSorter.AttachTo(_actionList);
 
         foreach (RepairAction a in Actions)
         {
