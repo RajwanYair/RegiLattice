@@ -64,6 +64,7 @@ partial class MainForm
     private ToolStripMenuItem _mnuProxyConfig = null!;
     private ToolStripMenuItem _mnuShellExtensions = null!;
     private ToolStripMenuItem _mnuBootAnalyzer = null!;
+    private ToolStripMenuItem _mnuWuControl = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -163,6 +164,7 @@ partial class MainForm
         _mnuProxyConfig = new ToolStripMenuItem("Proxy Configuration...") { Image = AppIcons.NetworkMenuBitmap };
         _mnuShellExtensions = new ToolStripMenuItem("Shell Extension Manager...") { Image = AppIcons.ExplorerMenuBitmap };
         _mnuBootAnalyzer = new ToolStripMenuItem("Boot Time Analyzer...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuWuControl = new ToolStripMenuItem("Windows Update Control...") { Image = AppIcons.WindowsHealthMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -206,6 +208,7 @@ partial class MainForm
             _mnuProxyConfig,
             _mnuShellExtensions,
             _mnuBootAnalyzer,
+            _mnuWuControl,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -269,6 +272,7 @@ partial class MainForm
         _mnuProxyConfig.Click         += (_, _) => OnOpenProxyConfig();
         _mnuShellExtensions.Click     += (_, _) => OnOpenShellExtensions();
         _mnuBootAnalyzer.Click        += (_, _) => OnOpenBootAnalyzer();
+        _mnuWuControl.Click            += (_, _) => OnOpenWuControl();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

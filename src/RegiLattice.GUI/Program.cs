@@ -85,6 +85,7 @@ internal static class Program
                 "proxyconfig" => new ProxyConfigDialog(),
                 "shellextensions" => new ShellExtensionDialog(),
                 "bootanalyzer" => new BootTimeAnalyzerDialog(),
+                "wucontrol" => new WindowsUpdateControlDialog(),
 
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),

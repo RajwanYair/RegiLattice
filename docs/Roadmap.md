@@ -658,7 +658,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original | ✅ Sprint 34 |
 | 47 | Installed programs quick-uninstaller | LOW | MS PC Manager | ✅ Sprint 30 |
 | 48 | Temporary file cleaner with size preview | LOW | MS PC Manager | ✅ Sprint 30 |
-| 49 | Windows Update pause/resume controls | LOW | Original | 🔄 Pending |
+| 49 | Windows Update pause/resume controls | LOW | Original | ✅ Sprint 35 |
 | 50 | Driver update checker (optional components) | LOW | Original | 🔄 Pending |
 
 ### Phase 6 — Power & Energy Management (Sprint 31–32) ✅
