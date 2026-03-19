@@ -156,7 +156,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | # | Task | Status |
 |---|------|--------|
 | 1 | Untrack archive/ (151 files, 84 575 line deletions) + current-ids.txt from git | ✅ |
-| 2 | Delete .mypy_cache (16 MB) and __pycache__ (3 MB) from disk | ✅ |
+| 2 | Delete .mypy\_cache (16 MB) and \_\_pycache\_\_ (3 MB) from disk | ✅ |
 | 3 | Update .gitignore: archive/, current-ids.txt, rename Python section | ✅ |
 | 4 | Core: ValidateTweaks() — checks empty IDs/Labels/Categories, broken DependsOn, circular deps | ✅ |
 | 5 | Core: ResolveDependencies(id) — topological-sort dependency resolution | ✅ |
@@ -631,6 +631,25 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 7 | Phase 5 items 44 (Boot Time Analyzer) and 46 (Shell Extension Manager) also completed | ✅ |
 | 8 | Build: 0 errors, 0 warnings | ✅ |
 
+### Sprint 35 — Windows Update Control (Phase 5 item 49) ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `WindowsUpdateControlDialog` — pause/resume Feature + Quality updates via registry; duration selector (7–35 d); Check Now + Open Settings quick actions | ✅ |
+| 2 | Wired into Tools menu + `Program.cs` (`--manager wucontrol`) | ✅ |
+
+### Sprint 36 — Notifications, Browser Cache & Driver Tools ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `NotificationManagerDialog` — global notification toggle; Focus Assist mode selector; per-app enable/disable via `HKCU Notifications\Settings` | ✅ |
+| 2 | `BrowserCacheCleanerDialog` — discovers Chrome, Edge, Brave, Vivaldi, Opera, Firefox, Waterfox profiles; shows cache sizes; async clean with freed-bytes report | ✅ |
+| 3 | `DriverUpdateCheckerDialog` — WMI `Win32_PnPSignedDriver` query; filterable driver list with version/date; links to Device Manager + Windows Update | ✅ |
+| 4 | All 3 registered in `Program.cs ResolveManagerArg()`: `notifmgr`/`browsercache`/`driverchecker` | ✅ |
+| 5 | Tools menu entries added for all 3 dialogs | ✅ |
+| 6 | Phase 7 items 62, 63, 67 (Notification + Browser Cache) + Phase 5 item 50 (Driver Checker) completed | ✅ |
+| 7 | MD050 lint warning fixed in Roadmap.md; stale `🔄 Sprint 34/35` items corrected | ✅ |
+
 ### Phase 4 — Network & Connectivity Tools (Sprint 33–34) ✅
 
 | # | Item | Priority | Source | Status |
@@ -659,7 +678,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 47 | Installed programs quick-uninstaller | LOW | MS PC Manager | ✅ Sprint 30 |
 | 48 | Temporary file cleaner with size preview | LOW | MS PC Manager | ✅ Sprint 30 |
 | 49 | Windows Update pause/resume controls | LOW | Original | ✅ Sprint 35 |
-| 50 | Driver update checker (optional components) | LOW | Original | 🔄 Pending |
+| 50 | Driver update checker (optional components) | LOW | Original | ✅ Sprint 36 |
 
 ### Phase 6 — Power & Energy Management (Sprint 31–32) ✅
 
@@ -672,69 +691,69 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 55 | Sleep/hibernate timer with countdown | LOW | Original | ✅ Sprint 31 |
 | 56 | Monitor power-off timer | LOW | Original | ✅ Sprint 31 |
 | 57 | USB selective suspend per-device control | LOW | Original | ✅ Sprint 31 |
-| 58 | Wake-on-LAN configuration | LOW | Original | 🔄 Pending |
-| 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Pending |
-| 60 | Screen brightness scheduler (time-based) | LOW | Original | 🔄 Pending |
+| 58 | Wake-on-LAN configuration | LOW | Original | 🔄 Sprint 37 |
+| 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Sprint 37 |
+| 60 | Screen brightness scheduler (time-based) | LOW | Original | 🔄 Sprint 37 |
 
 ### Phase 7 — Privacy & Ad Removal (Sprint 32–34) ✅
 
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
 | 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB | ✅ Sprint 32 |
-| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager | 🔄 Sprint 34 |
-| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original | 🔄 Sprint 35 |
+| 62 | Notification manager — per-app notification settings + Focus Assist | HIGH | MS PC Manager | ✅ Sprint 36 |
+| 63 | Browser cache & cookie cleaner for all installed browsers | MEDIUM | Original | ✅ Sprint 36 |
 | 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original | ✅ Sprint 32 |
 | 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original | ✅ Sprint 29 |
 | 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original | ✅ Sprint 30 |
-| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original | 🔄 Sprint 35 |
+| 67 | Browser privacy overview (trackers/fingerprinting per-browser) | LOW | Original | ✅ Sprint 36 |
 | 68 | DNS-over-HTTPS quick setup | LOW | Original | ✅ Sprint 32 |
 | 69 | Location services granular control | LOW | Original | ✅ Sprint 32 |
 | 70 | App permission manager (camera, microphone, location per-app) | LOW | Original | ✅ Sprint 32 |
 
-### Phase 8 — Plugin & Extensibility Improvements (Sprint 35–36)
+### Phase 8 — Plugin & Extensibility Improvements (Sprint 39)
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 71 | Plugin sandboxing — isolated execution of third-party packs | HIGH | Original |
-| 72 | Plugin auto-update — check marketplace for newer versions | HIGH | Original |
-| 73 | Plugin rating and review system | MEDIUM | Original |
-| 74 | Plugin dependency resolution (pack A requires pack B) | MEDIUM | Original |
-| 75 | Plugin template generator (CLI command to scaffold a new pack) | MEDIUM | Original |
-| 76 | Community plugin submission workflow (GitHub PR-based) | MEDIUM | Original |
-| 77 | Plugin categories and tags in marketplace browser | LOW | Original |
-| 78 | Plugin install from URL (direct .json download) | LOW | Original |
-| 79 | Plugin changelog viewer in marketplace | LOW | Original |
-| 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 71 | Plugin sandboxing — isolated execution of third-party packs | HIGH | Original | 🔄 Future |
+| 72 | Plugin auto-update — check marketplace for newer versions | HIGH | Original | 🔄 Sprint 39 |
+| 73 | Plugin rating and review system | MEDIUM | Original | 🔄 Future |
+| 74 | Plugin dependency resolution (pack A requires pack B) | MEDIUM | Original | 🔄 Future |
+| 75 | Plugin template generator (CLI command to scaffold a new pack) | MEDIUM | Original | 🔄 Future |
+| 76 | Community plugin submission workflow (GitHub PR-based) | MEDIUM | Original | 🔄 Future |
+| 77 | Plugin categories and tags in marketplace browser | LOW | Original | 🔄 Sprint 39 |
+| 78 | Plugin install from URL (direct .json download) | LOW | Original | 🔄 Sprint 39 |
+| 79 | Plugin changelog viewer in marketplace | LOW | Original | 🔄 Future |
+| 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original | 🔄 Sprint 39 |
 
-### Phase 9 — Advanced Features & Automation (Sprint 37–38)
+### Phase 9 — Advanced Features & Automation (Sprint 40)
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 81 | Scheduled tweak application — apply tweaks on boot/login/timer | HIGH | Planned (P3) |
-| 82 | Before/after preview — show what a tweak changes before applying | HIGH | ExplorerPatcher |
-| 83 | Tweak rollback queue — undo last N operations with one click | MEDIUM | Original |
-| 84 | Profile scheduler — auto-switch profiles by time or event | MEDIUM | Original |
-| 85 | REST API for remote tweak management | MEDIUM | Planned (P3) |
-| 86 | Web dashboard for tweak status visualization | MEDIUM | Planned (P3) |
-| 87 | PowerShell module wrapper (`Install-Module RegiLattice`) | MEDIUM | Original |
-| 88 | Group Policy export — generate .admx/.adml from tweak selections | LOW | Original |
-| 89 | Intune/SCCM integration — deploy tweaks via MDM | LOW | Original |
-| 90 | Tweak compliance reporting (drift detection from baseline) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 81 | Scheduled tweak application — apply tweaks on boot/login/timer | HIGH | Planned (P3) | 🔄 Future |
+| 82 | Before/after preview — show what a tweak changes before applying | HIGH | ExplorerPatcher | 🔄 Sprint 40 |
+| 83 | Tweak rollback queue — undo last N operations with one click | MEDIUM | Original | 🔄 Sprint 40 |
+| 84 | Profile scheduler — auto-switch profiles by time or event | MEDIUM | Original | 🔄 Future |
+| 85 | REST API for remote tweak management | MEDIUM | Planned (P3) | 🔄 Future |
+| 86 | Web dashboard for tweak status visualization | MEDIUM | Planned (P3) | 🔄 Future |
+| 87 | PowerShell module wrapper (`Install-Module RegiLattice`) | MEDIUM | Original | 🔄 Future |
+| 88 | Group Policy export — generate .admx/.adml from tweak selections | LOW | Original | 🔄 Future |
+| 89 | Intune/SCCM integration — deploy tweaks via MDM | LOW | Original | 🔄 Future |
+| 90 | Tweak compliance reporting (drift detection from baseline) | LOW | Original | 🔄 Future |
 
-### Phase 10 — Localization, Packaging & Community (Sprint 39–40)
+### Phase 10 — Localization, Packaging & Community (Sprint 38–42)
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 91 | French locale (3rd language) | HIGH | Original |
-| 92 | Spanish locale (4th language) | HIGH | Original |
-| 93 | Japanese locale (5th language) | MEDIUM | Original |
-| 94 | Chocolatey package submission | MEDIUM | Planned (P3) |
-| 95 | Microsoft Store listing | MEDIUM | Original |
-| 96 | Code signing for published binaries | MEDIUM | Planned (P2) |
-| 97 | Auto-update mechanism (check GitHub Releases) | MEDIUM | Original |
-| 98 | Portable mode (run from USB, no install) | LOW | Original |
-| 99 | Community tweak submission form (web-based) | LOW | Original |
-| 100 | Comprehensive user documentation site (mkdocs/docfx) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 91 | French locale (3rd language) | HIGH | Original | 🔄 Sprint 38 |
+| 92 | Spanish locale (4th language) | HIGH | Original | 🔄 Sprint 38 |
+| 93 | Japanese locale (5th language) | MEDIUM | Original | 🔄 Future |
+| 94 | Chocolatey package submission | MEDIUM | Planned (P3) | 🔄 Future |
+| 95 | Microsoft Store listing | MEDIUM | Original | 🔄 Future |
+| 96 | Code signing for published binaries | MEDIUM | Planned (P2) | 🔄 Future |
+| 97 | Auto-update mechanism (check GitHub Releases) | MEDIUM | Original | 🔄 Future |
+| 98 | Portable mode (run from USB, no install) | LOW | Original | 🔄 Future |
+| 99 | Community tweak submission form (web-based) | LOW | Original | 🔄 Future |
+| 100 | Comprehensive user documentation site (mkdocs/docfx) | LOW | Original | 🔄 Future |
 
 ---
 

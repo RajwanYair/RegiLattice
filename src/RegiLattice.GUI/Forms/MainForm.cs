@@ -1241,6 +1241,12 @@ public partial class MainForm : Form
 
     private void OnOpenWuControl() => ShowManagerDialog(new WindowsUpdateControlDialog());
 
+    private void OnOpenNotifMgr() => ShowManagerDialog(new NotificationManagerDialog());
+
+    private void OnOpenBrowserCache() => ShowManagerDialog(new BrowserCacheCleanerDialog());
+
+    private void OnOpenDriverChecker() => ShowManagerDialog(new DriverUpdateCheckerDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
