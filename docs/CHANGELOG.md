@@ -4,6 +4,57 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 41
+
+### Fixed
+
+- **`MemoryCleanerDialog`** — resolved 3 build errors: `AppTheme.ApplyToForm` renamed to `AppTheme.Apply`,
+  `new SystemMonitor().GetMemoryUsage()` corrected to static call `SystemMonitor.GetMemoryUsage()`,
+  2-element tuple deconstruct expanded to 3-element (`(used, _, _)`)
+
+### Added — System Monitor Tool Dialogs
+
+- **`DiskSpaceDialog`** — per-drive disk space overview with colour-coded usage bars (green <70%, amber 70–90%,
+  red ≥90%); double-click drive to open in Explorer; async refresh; exposes `diskspace` in `--tool`
+- **`PortScannerDialog`** — TCP port/connectivity tester: hostname + CSV port input, 7 preset groups
+  (Web, SSH/RDP, FTP, Mail, Database, DNS/DHCP, Top 20), async parallel scan with 2 s timeout,
+  ping test, WellKnownService name lookup, colour-coded OPEN/CLOSED results; exposes `portscan` in `--tool`
+- **`BatteryHealthDialog`** — WMI `BatteryStaticData` + `BatteryStatus` health monitor: design vs full-charge
+  capacity, cycle count, charge/discharge rate bars; **Full Report** runs `powercfg /batteryreport`;
+  graceful no-battery fallback; exposes `batteryhealth` in `--tool`
+- **`MemoryCleanerDialog`** wired into `Program.cs ResolveManagerArg()` (`memorycleaner`) and
+  `Tools → Memory Cleaner` menu item
+- Phase 2 items 12 (Memory Cleaner), 16 (Disk Space), 18 (Battery Health) and Phase 4 item 37
+  (Port Scanner) completed
+
+### Added — 31 New Tweaks
+
+**`DiskCleanup.cs`** (+10, total 25):
+`cleanup-disable-recent-docs`, `cleanup-disable-recent-programs`, `cleanup-disable-search-history`,
+`cleanup-disable-swap-file`, `cleanup-disable-auto-maintenance`, `cleanup-disable-volume-shadow-copy`,
+`cleanup-disable-internet-temp-auto`, `cleanup-disable-wer-queue`, `cleanup-disable-superfetch-write`,
+`cleanup-limit-disk-usage-windows-update`
+
+**`UserAccount.cs`** (+11, total 30):
+`uac-disable-account-picture`, `uac-disable-guest-account`, `uac-disable-biometrics-policy`,
+`uac-disable-smartcard-removal-lock`, `uac-disable-windows-hello-for-business`,
+`uac-lock-workstation-on-screensaver`, `uac-disable-microsoft-account-logon`,
+`uac-enforce-password-complexity`, `uac-disable-offline-files`, `uac-disable-fast-user-switching`,
+`uac-disable-linked-connections`
+
+**`AppCompatibility.cs`** (+10, total 29):
+`compat-disable-wer-server-connection`, `compat-disable-compat-telemetry-runner`,
+`compat-disable-user-choice-protection`, `compat-disable-vdm-allowed`,
+`compat-disable-app-repkg-service`, `compat-disable-install-service`,
+`compat-disable-just-in-time-debugging`, `compat-enable-dep-always-on`,
+`compat-disable-error-reporting-ui`, `compat-disable-ie-compat-view`
+
+### Tests
+
+- 31 new `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` covering all new tweak IDs
+- Total: **1 711 tests** passing (1 315 Core + 154 CLI + 242 GUI, 1 intentional skip)
+- Tweaks: **2 767** across 92 categories
+
 ## [3.5.0] — 2026-03-18
 
 ### Added — Sprint 27: Network Tools

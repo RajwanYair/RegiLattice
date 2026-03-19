@@ -79,8 +79,11 @@ internal sealed class MarketplaceDialog : Form
 
         var searchRow = new FlowLayoutPanel
         {
-            Dock = DockStyle.Top, Height = 32, FlowDirection = FlowDirection.LeftToRight,
-            WrapContents = false, Padding = new Padding(0),
+            Dock = DockStyle.Top,
+            Height = 32,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            Padding = new Padding(0),
         };
         _txtSearch.Dock = DockStyle.None;
         _txtSearch.Width = 280;
@@ -208,9 +211,7 @@ internal sealed class MarketplaceDialog : Form
                 _cmbTagFilter.EndUpdate();
             }
 
-            IEnumerable<PackDef> packs = string.IsNullOrWhiteSpace(query)
-                ? index.Packs
-                : await _pm.SearchPacksAsync(query, _cts.Token);
+            IEnumerable<PackDef> packs = string.IsNullOrWhiteSpace(query) ? index.Packs : await _pm.SearchPacksAsync(query, _cts.Token);
 
             if (selectedTag != "All Tags")
                 packs = packs.Where(p => p.Tags.Any(t => t.Equals(selectedTag, StringComparison.OrdinalIgnoreCase)));
@@ -285,7 +286,8 @@ internal sealed class MarketplaceDialog : Form
     private async Task OnInstallFromUrlAsync()
     {
         string? url = PromptInput("Install Pack from URL", "Enter the direct URL to the pack JSON file:");
-        if (string.IsNullOrWhiteSpace(url)) return;
+        if (string.IsNullOrWhiteSpace(url))
+            return;
 
         _lblStatus.Text = "Downloading pack…";
         _lblStatus.ForeColor = AppTheme.Fg;
@@ -313,15 +315,46 @@ internal sealed class MarketplaceDialog : Form
     {
         using var form = new Form
         {
-            Text = title, FormBorderStyle = FormBorderStyle.FixedDialog,
+            Text = title,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
             StartPosition = FormStartPosition.CenterParent,
-            ClientSize = new Size(480, 110), MaximizeBox = false, MinimizeBox = false,
-            Font = AppTheme.Regular, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg,
+            ClientSize = new Size(480, 110),
+            MaximizeBox = false,
+            MinimizeBox = false,
+            Font = AppTheme.Regular,
+            BackColor = AppTheme.Surface,
+            ForeColor = AppTheme.Fg,
         };
-        var lbl = new Label { Text = prompt, Location = new Point(12, 12), Width = 456, AutoSize = false, Height = 22 };
-        var txt = new TextBox { Location = new Point(12, 38), Width = 456, Height = 26, BackColor = AppTheme.Overlay, ForeColor = AppTheme.Fg };
-        var ok  = new Button { Text = "OK",     DialogResult = DialogResult.OK,     Location = new Point(300, 74), Width = 80 };
-        var no  = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(388, 74), Width = 80 };
+        var lbl = new Label
+        {
+            Text = prompt,
+            Location = new Point(12, 12),
+            Width = 456,
+            AutoSize = false,
+            Height = 22,
+        };
+        var txt = new TextBox
+        {
+            Location = new Point(12, 38),
+            Width = 456,
+            Height = 26,
+            BackColor = AppTheme.Overlay,
+            ForeColor = AppTheme.Fg,
+        };
+        var ok = new Button
+        {
+            Text = "OK",
+            DialogResult = DialogResult.OK,
+            Location = new Point(300, 74),
+            Width = 80,
+        };
+        var no = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Location = new Point(388, 74),
+            Width = 80,
+        };
         form.AcceptButton = ok;
         form.CancelButton = no;
         form.Controls.AddRange(new Control[] { lbl, txt, ok, no });
@@ -333,8 +366,13 @@ internal sealed class MarketplaceDialog : Form
         var conflicts = _pm.DetectConflicts();
         if (conflicts.Count == 0)
         {
-            MessageBox.Show(this, "No conflicts detected between installed packs.", "Conflict Detector",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(
+                this,
+                "No conflicts detected between installed packs.",
+                "Conflict Detector",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
             return;
         }
 
@@ -346,10 +384,21 @@ internal sealed class MarketplaceDialog : Form
         using var details = new Form
         {
             Text = $"\u26A0 {conflicts.Count} Conflict(s) Found",
-            Size = new Size(620, 400), StartPosition = FormStartPosition.CenterParent,
-            Font = AppTheme.Regular, BackColor = AppTheme.Bg, ForeColor = AppTheme.Fg,
+            Size = new Size(620, 400),
+            StartPosition = FormStartPosition.CenterParent,
+            Font = AppTheme.Regular,
+            BackColor = AppTheme.Bg,
+            ForeColor = AppTheme.Fg,
         };
-        var rtb = new RichTextBox { Dock = DockStyle.Fill, ReadOnly = true, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg, Font = AppTheme.Mono, Text = sb.ToString() };
+        var rtb = new RichTextBox
+        {
+            Dock = DockStyle.Fill,
+            ReadOnly = true,
+            BackColor = AppTheme.Surface,
+            ForeColor = AppTheme.Fg,
+            Font = AppTheme.Mono,
+            Text = sb.ToString(),
+        };
         details.Controls.Add(rtb);
         details.ShowDialog(this);
     }

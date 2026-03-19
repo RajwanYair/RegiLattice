@@ -26,8 +26,4 @@ public sealed record PackDef
 /// <summary>
 /// Describes a registry key/value pair that is modified by two or more installed packs.
 /// </summary>
-public sealed record PackConflict(
-    string RegistryPath,
-    string ValueName,
-    IReadOnlyList<string> ConflictingPacks
-);
+public sealed record PackConflict(string RegistryPath, string ValueName, IReadOnlyList<string> ConflictingPacks);

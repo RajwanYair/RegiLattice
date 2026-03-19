@@ -26,7 +26,9 @@ internal static class Program
     /// or null for normal main-window launch.
     /// Supported names: scoop | psmodule | pip | winget | chocolatey |
     ///                  toolversions | windowshealth | network | startup |
-    ///                  service | scheduledtask | powerplan | privacy |    ///                  contextmenu | hostsfile | tempcleaner | installedapps |    ///                  marketplace | preferences | whatsnew
+    ///                  service | scheduledtask | powerplan | privacy |    ///                  contextmenu | hostsfile | tempcleaner | installedapps |
+    ///                  memorycleaner | diskspace | portscan | batteryhealth |
+    ///                  marketplace | preferences | whatsnew
     /// </summary>
     private static Form? ResolveManagerArg(string[] args)
     {
@@ -91,6 +93,12 @@ internal static class Program
                 "driverchecker" => new DriverUpdateCheckerDialog(),
                 "wakeonlan" => new WakeOnLanDialog(),
                 "brightness" => new BrightnessSchedulerDialog(),
+
+                // System monitor tools (Sprint 41)
+                "memorycleaner" => new MemoryCleanerDialog(),
+                "diskspace" => new DiskSpaceDialog(),
+                "portscan" => new PortScannerDialog(),
+                "batteryhealth" => new BatteryHealthDialog(),
 
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),

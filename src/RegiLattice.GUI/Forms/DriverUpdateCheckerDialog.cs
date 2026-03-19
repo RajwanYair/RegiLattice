@@ -25,7 +25,7 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         string Status
     );
 
-    private readonly ListView  _list = new()
+    private readonly ListView _list = new()
     {
         View = View.Details,
         FullRowSelect = true,
@@ -40,12 +40,39 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         Width = 240,
         Height = 24,
     };
-    private readonly Button _btnRefresh     = new() { Text = "⟳ Refresh",           Width = 90,  Height = 28 };
-    private readonly Button _btnDevMgr      = new() { Text = "Device Manager",       Width = 130, Height = 28 };
-    private readonly Button _btnWinUpdate   = new() { Text = "Windows Update",       Width = 120, Height = 28 };
-    private readonly Button _btnClose       = new() { Text = "Close",                Width = 75,  Height = 28, DialogResult = DialogResult.Cancel };
-    private readonly Label  _lblStatus      = new() { Dock = DockStyle.Top, Height = 26, TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(6, 0, 0, 0) };
-    private readonly Panel  _searchPanel    = new() { Dock = DockStyle.Top, Height = 34 };
+    private readonly Button _btnRefresh = new()
+    {
+        Text = "⟳ Refresh",
+        Width = 90,
+        Height = 28,
+    };
+    private readonly Button _btnDevMgr = new()
+    {
+        Text = "Device Manager",
+        Width = 130,
+        Height = 28,
+    };
+    private readonly Button _btnWinUpdate = new()
+    {
+        Text = "Windows Update",
+        Width = 120,
+        Height = 28,
+    };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 75,
+        Height = 28,
+        DialogResult = DialogResult.Cancel,
+    };
+    private readonly Label _lblStatus = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 26,
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(6, 0, 0, 0),
+    };
+    private readonly Panel _searchPanel = new() { Dock = DockStyle.Top, Height = 34 };
 
     private List<DriverInfo> _allDrivers = [];
 
@@ -56,17 +83,24 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         EnableStandaloneMode();
 
         _list.Columns.AddRange([
-            new ColumnHeader { Text = "Device Name",   Width = 260 },
-            new ColumnHeader { Text = "Driver",        Width = 200 },
-            new ColumnHeader { Text = "Manufacturer",  Width = 160 },
-            new ColumnHeader { Text = "Version",       Width = 120 },
-            new ColumnHeader { Text = "Install Date",  Width = 110 },
-            new ColumnHeader { Text = "Class",         Width = 120 },
+            new ColumnHeader { Text = "Device Name", Width = 260 },
+            new ColumnHeader { Text = "Driver", Width = 200 },
+            new ColumnHeader { Text = "Manufacturer", Width = 160 },
+            new ColumnHeader { Text = "Version", Width = 120 },
+            new ColumnHeader { Text = "Install Date", Width = 110 },
+            new ColumnHeader { Text = "Class", Width = 120 },
         ]);
 
         _searchBox.TextChanged += (_, _) => ApplyFilter();
         _searchBox.Location = new Point(50, 5);
-        _searchPanel.Controls.Add(new Label { Text = "Filter:", AutoSize = true, Location = new Point(6, 8) });
+        _searchPanel.Controls.Add(
+            new Label
+            {
+                Text = "Filter:",
+                AutoSize = true,
+                Location = new Point(6, 8),
+            }
+        );
         _searchPanel.Controls.Add(_searchBox);
 
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };
@@ -79,10 +113,10 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
         btnPanel.Resize += (_, _) => _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
 
-        _btnRefresh.Click   += async (_, _) => await LoadDriversAsync();
-        _btnDevMgr.Click    += (_, _) => Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
+        _btnRefresh.Click += async (_, _) => await LoadDriversAsync();
+        _btnDevMgr.Click += (_, _) => Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
         _btnWinUpdate.Click += (_, _) => Process.Start(new ProcessStartInfo("ms-settings:windowsupdate") { UseShellExecute = true });
-        _btnClose.Click     += (_, _) => Close();
+        _btnClose.Click += (_, _) => Close();
 
         btnPanel.Controls.AddRange(new Control[] { _btnRefresh, _btnDevMgr, _btnWinUpdate, _btnClose });
 
@@ -112,17 +146,16 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         var drivers = new List<DriverInfo>();
         try
         {
-            using var searcher = new ManagementObjectSearcher(
-                "SELECT * FROM Win32_PnPSignedDriver WHERE DeviceName IS NOT NULL");
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPSignedDriver WHERE DeviceName IS NOT NULL");
             foreach (ManagementObject obj in searcher.Get())
             {
-                string name       = obj["DeviceName"]?.ToString()  ?? "";
-                string driver     = obj["DriverName"]?.ToString()  ?? "";
-                string mfr        = obj["Manufacturer"]?.ToString() ?? "";
-                string version    = obj["DriverVersion"]?.ToString() ?? "";
-                string dateWmi    = obj["DriverDate"]?.ToString() ?? "";
-                string cls        = obj["DeviceClass"]?.ToString() ?? "";
-                string status     = obj["Status"]?.ToString() ?? "OK";
+                string name = obj["DeviceName"]?.ToString() ?? "";
+                string driver = obj["DriverName"]?.ToString() ?? "";
+                string mfr = obj["Manufacturer"]?.ToString() ?? "";
+                string version = obj["DriverVersion"]?.ToString() ?? "";
+                string dateWmi = obj["DriverDate"]?.ToString() ?? "";
+                string cls = obj["DeviceClass"]?.ToString() ?? "";
+                string status = obj["Status"]?.ToString() ?? "OK";
 
                 // WMI date format: "20230412000000.000000+000"
                 string date = FormatWmiDate(dateWmi);
@@ -136,10 +169,7 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
             // WMI unavailable — return empty list
         }
 
-        return drivers
-            .OrderBy(d => d.DeviceClass)
-            .ThenBy(d => d.DeviceName)
-            .ToList();
+        return drivers.OrderBy(d => d.DeviceClass).ThenBy(d => d.DeviceName).ToList();
     }
 
     private void ApplyFilter()
@@ -148,10 +178,11 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         IEnumerable<DriverInfo> src = string.IsNullOrEmpty(q)
             ? _allDrivers
             : _allDrivers.Where(d =>
-                d.DeviceName.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                d.Manufacturer.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                d.DeviceClass.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                d.Version.Contains(q, StringComparison.OrdinalIgnoreCase));
+                d.DeviceName.Contains(q, StringComparison.OrdinalIgnoreCase)
+                || d.Manufacturer.Contains(q, StringComparison.OrdinalIgnoreCase)
+                || d.DeviceClass.Contains(q, StringComparison.OrdinalIgnoreCase)
+                || d.Version.Contains(q, StringComparison.OrdinalIgnoreCase)
+            );
 
         _list.BeginUpdate();
         _list.Items.Clear();
@@ -163,7 +194,8 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
             lvi.SubItems.Add(d.Version);
             lvi.SubItems.Add(d.Date);
             lvi.SubItems.Add(d.DeviceClass);
-            if (d.Status != "OK") lvi.ForeColor = Color.FromArgb(180, 60, 60);
+            if (d.Status != "OK")
+                lvi.ForeColor = Color.FromArgb(180, 60, 60);
             _list.Items.Add(lvi);
         }
         _list.EndUpdate();
@@ -171,10 +203,17 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
 
     private static string FormatWmiDate(string wmiDate)
     {
-        if (string.IsNullOrEmpty(wmiDate) || wmiDate.Length < 8) return "";
-        if (DateTime.TryParseExact(wmiDate[..8], "yyyyMMdd",
-            System.Globalization.CultureInfo.InvariantCulture,
-            System.Globalization.DateTimeStyles.None, out DateTime dt))
+        if (string.IsNullOrEmpty(wmiDate) || wmiDate.Length < 8)
+            return "";
+        if (
+            DateTime.TryParseExact(
+                wmiDate[..8],
+                "yyyyMMdd",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out DateTime dt
+            )
+        )
             return dt.ToString("yyyy-MM-dd");
         return wmiDate[..8];
     }

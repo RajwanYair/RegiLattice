@@ -1245,9 +1245,20 @@ public partial class MainForm : Form
 
     private void OnOpenBrowserCache() => ShowManagerDialog(new BrowserCacheCleanerDialog());
 
-    private void OnOpenDriverChecker()  => ShowManagerDialog(new DriverUpdateCheckerDialog());
-    private void OnOpenWakeOnLan()       => ShowManagerDialog(new WakeOnLanDialog());
-    private void OnOpenBrightness()      => ShowManagerDialog(new BrightnessSchedulerDialog());
+    private void OnOpenDriverChecker() => ShowManagerDialog(new DriverUpdateCheckerDialog());
+
+    private void OnOpenWakeOnLan() => ShowManagerDialog(new WakeOnLanDialog());
+
+    private void OnOpenBrightness() => ShowManagerDialog(new BrightnessSchedulerDialog());
+
+    // Sprint 41 — system monitor tools
+    private void OnOpenMemoryCleaner() => ShowManagerDialog(new MemoryCleanerDialog());
+
+    private void OnOpenDiskSpace() => ShowManagerDialog(new DiskSpaceDialog());
+
+    private void OnOpenPortScanner() => ShowManagerDialog(new PortScannerDialog());
+
+    private void OnOpenBatteryHealth() => ShowManagerDialog(new BatteryHealthDialog());
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
@@ -1479,8 +1490,7 @@ public partial class MainForm : Form
         }
 
         HistoryEntry last = recent[0];
-        TweakDef? tweak = _engine.AllTweaks().FirstOrDefault(t =>
-            t.Id.Equals(last.TweakId, StringComparison.OrdinalIgnoreCase));
+        TweakDef? tweak = _engine.AllTweaks().FirstOrDefault(t => t.Id.Equals(last.TweakId, StringComparison.OrdinalIgnoreCase));
 
         if (tweak is null)
         {
@@ -1499,10 +1509,11 @@ public partial class MainForm : Form
         SetBusy(true, $"Undoing: {tweak.Label}\u2026", totalSteps: 1);
         try
         {
-            var result = await Task.Run(() =>
-                last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase)
-                    ? _engine.Remove(tweak, forceCorp: force)
-                    : _engine.Apply(tweak, forceCorp: force),
+            var result = await Task.Run(
+                () =>
+                    last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase)
+                        ? _engine.Remove(tweak, forceCorp: force)
+                        : _engine.Apply(tweak, forceCorp: force),
                 _cts.Token
             );
 
@@ -1766,8 +1777,13 @@ public partial class MainForm : Form
                     foreach (RegOp op in setOps)
                     {
                         object? curVal = null;
-                        try { curVal = Microsoft.Win32.Registry.GetValue(op.Path, op.Name, null); }
-                        catch (Exception) { /* ignore — registry access requires admin or key may not exist */ }
+                        try
+                        {
+                            curVal = Microsoft.Win32.Registry.GetValue(op.Path, op.Name, null);
+                        }
+                        catch (Exception)
+                        { /* ignore — registry access requires admin or key may not exist */
+                        }
                         string curStr = curVal is null ? "(not set)" : curVal.ToString() ?? "(null)";
                         string willStr = op.Value?.ToString() ?? "(null)";
                         lines.Append($"\n  {op.Name}: {curStr}  \u2192  {willStr}");

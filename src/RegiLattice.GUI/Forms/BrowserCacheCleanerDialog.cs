@@ -13,13 +13,7 @@ namespace RegiLattice.GUI.Forms;
 /// </summary>
 internal sealed class BrowserCacheCleanerDialog : BaseDialog
 {
-    private sealed record BrowserProfile(
-        string BrowserName,
-        string ProfilePath,
-        string CachePath,
-        long CacheBytes,
-        bool Exists
-    );
+    private sealed record BrowserProfile(string BrowserName, string ProfilePath, string CachePath, long CacheBytes, bool Exists);
 
     private readonly ListView _list = new()
     {
@@ -29,15 +23,40 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
         GridLines = true,
         Dock = DockStyle.Fill,
     };
-    private readonly Button _btnScan   = new() { Text = "⟳ Scan",        Width = 90,  Height = 28 };
-    private readonly Button _btnClean  = new() { Text = "🗑 Clean Selected", Width = 130, Height = 28 };
-    private readonly Button _btnClose  = new() { Text = "Close",          Width = 75,  Height = 28, DialogResult = DialogResult.Cancel };
-    private readonly Label  _lblStatus = new() { Dock = DockStyle.Top, Height = 26, TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(6, 0, 0, 0) };
-    private readonly Label  _lblNote   = new()
+    private readonly Button _btnScan = new()
+    {
+        Text = "⟳ Scan",
+        Width = 90,
+        Height = 28,
+    };
+    private readonly Button _btnClean = new()
+    {
+        Text = "🗑 Clean Selected",
+        Width = 130,
+        Height = 28,
+    };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 75,
+        Height = 28,
+        DialogResult = DialogResult.Cancel,
+    };
+    private readonly Label _lblStatus = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 26,
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(6, 0, 0, 0),
+    };
+    private readonly Label _lblNote = new()
     {
         Text = "⚠ Close all browsers before cleaning. Running browsers may lock cache files.",
-        Dock = DockStyle.Top, Height = 26, TextAlign = ContentAlignment.MiddleLeft,
-        ForeColor = Color.FromArgb(180, 100, 0), Padding = new Padding(6, 0, 0, 0),
+        Dock = DockStyle.Top,
+        Height = 26,
+        TextAlign = ContentAlignment.MiddleLeft,
+        ForeColor = Color.FromArgb(180, 100, 0),
+        Padding = new Padding(6, 0, 0, 0),
     };
 
     private List<BrowserProfile> _profiles = [];
@@ -45,14 +64,14 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
     // Known browser cache path patterns relative to %LOCALAPPDATA% or %APPDATA%
     private static readonly (string Name, string RelRoot, string CacheSuffix, bool UseLocal)[] s_browsers =
     [
-        ("Google Chrome",   @"Google\Chrome\User Data\Default",           @"Cache\Cache_Data",   true),
-        ("Microsoft Edge",  @"Microsoft\Edge\User Data\Default",          @"Cache\Cache_Data",   true),
-        ("Brave",           @"BraveSoftware\Brave-Browser\User Data\Default", @"Cache\Cache_Data", true),
-        ("Vivaldi",         @"Vivaldi\User Data\Default",                 @"Cache\Cache_Data",   true),
-        ("Opera",           @"Opera Software\Opera Stable",               @"Cache\Cache_Data",   true),
-        ("Opera GX",        @"Opera Software\Opera GX Stable",            @"Cache\Cache_Data",   true),
-        ("Firefox",         @"Mozilla\Firefox\Profiles",                  "",                    false),  // special
-        ("Waterfox",        @"Waterfox\Profiles",                         "",                    false),  // special
+        ("Google Chrome", @"Google\Chrome\User Data\Default", @"Cache\Cache_Data", true),
+        ("Microsoft Edge", @"Microsoft\Edge\User Data\Default", @"Cache\Cache_Data", true),
+        ("Brave", @"BraveSoftware\Brave-Browser\User Data\Default", @"Cache\Cache_Data", true),
+        ("Vivaldi", @"Vivaldi\User Data\Default", @"Cache\Cache_Data", true),
+        ("Opera", @"Opera Software\Opera Stable", @"Cache\Cache_Data", true),
+        ("Opera GX", @"Opera Software\Opera GX Stable", @"Cache\Cache_Data", true),
+        ("Firefox", @"Mozilla\Firefox\Profiles", "", false), // special
+        ("Waterfox", @"Waterfox\Profiles", "", false), // special
     ];
 
     public BrowserCacheCleanerDialog()
@@ -62,18 +81,18 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
         EnableStandaloneMode();
 
         _list.Columns.AddRange([
-            new ColumnHeader { Text = "Browser",      Width = 150 },
-            new ColumnHeader { Text = "Profile",      Width = 240 },
-            new ColumnHeader { Text = "Cache Size",   Width = 100 },
-            new ColumnHeader { Text = "Cache Path",   Width = 280 },
+            new ColumnHeader { Text = "Browser", Width = 150 },
+            new ColumnHeader { Text = "Profile", Width = 240 },
+            new ColumnHeader { Text = "Cache Size", Width = 100 },
+            new ColumnHeader { Text = "Cache Path", Width = 280 },
         ]);
 
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };
-        _btnScan.Location  = new Point(8, 5);
+        _btnScan.Location = new Point(8, 5);
         _btnClean.Location = new Point(104, 5);
         _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
         btnPanel.Resize += (_, _) => _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
-        _btnScan.Click  += async (_, _) => await ScanAsync();
+        _btnScan.Click += async (_, _) => await ScanAsync();
         _btnClean.Click += async (_, _) => await CleanAsync();
         _btnClose.Click += (_, _) => Close();
         btnPanel.Controls.AddRange(new Control[] { _btnScan, _btnClean, _btnClose });
@@ -88,9 +107,9 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
 
     private async Task ScanAsync()
     {
-        _btnScan.Enabled  = false;
+        _btnScan.Enabled = false;
         _btnClean.Enabled = false;
-        _lblStatus.Text   = "Scanning for browser profiles…";
+        _lblStatus.Text = "Scanning for browser profiles…";
         _list.Items.Clear();
 
         _profiles = await Task.Run(DiscoverProfiles);
@@ -102,7 +121,8 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             lvi.SubItems.Add(Path.GetFileName(p.ProfilePath));
             lvi.SubItems.Add(p.Exists ? FormatSize(p.CacheBytes) : "Not Found");
             lvi.SubItems.Add(p.CachePath);
-            if (!p.Exists) lvi.ForeColor = Color.FromArgb(128, 128, 128);
+            if (!p.Exists)
+                lvi.ForeColor = Color.FromArgb(128, 128, 128);
             lvi.Checked = p.Exists && p.CacheBytes > 0;
             _list.Items.Add(lvi);
         }
@@ -110,13 +130,13 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
 
         long totalBytes = _profiles.Where(p => p.Exists).Sum(p => p.CacheBytes);
         _lblStatus.Text = $"{_profiles.Count(p => p.Exists)} browser profile(s) found — {FormatSize(totalBytes)} total cache.";
-        _btnScan.Enabled  = true;
+        _btnScan.Enabled = true;
         _btnClean.Enabled = _profiles.Any(p => p.Exists && p.CacheBytes > 0);
     }
 
     private static List<BrowserProfile> DiscoverProfiles()
     {
-        string local  = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         string roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var result = new List<BrowserProfile>();
 
@@ -128,7 +148,8 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             if (name is "Firefox" or "Waterfox")
             {
                 // Firefox uses named profile directories inside Profiles/
-                if (!Directory.Exists(profileRoot)) continue;
+                if (!Directory.Exists(profileRoot))
+                    continue;
                 foreach (string profileDir in Directory.GetDirectories(profileRoot))
                 {
                     string cachePath = Path.Combine(profileDir, "cache2");
@@ -161,9 +182,9 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             return;
         }
 
-        _btnScan.Enabled  = false;
+        _btnScan.Enabled = false;
         _btnClean.Enabled = false;
-        _lblStatus.Text   = $"Cleaning {toClean.Count} profile(s)…";
+        _lblStatus.Text = $"Cleaning {toClean.Count} profile(s)…";
 
         long freedBytes = await Task.Run(() =>
         {
@@ -192,12 +213,23 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
 
     private static long DirectorySize(string path)
     {
-        if (!Directory.Exists(path)) return 0;
+        if (!Directory.Exists(path))
+            return 0;
         try
         {
             return new DirectoryInfo(path)
                 .EnumerateFiles("*", SearchOption.AllDirectories)
-                .Sum(f => { try { return f.Length; } catch { return 0L; } });
+                .Sum(f =>
+                {
+                    try
+                    {
+                        return f.Length;
+                    }
+                    catch
+                    {
+                        return 0L;
+                    }
+                });
         }
         catch
         {
@@ -209,19 +241,30 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
     {
         foreach (string file in Directory.GetFiles(path, "*", SearchOption.AllDirectories))
         {
-            try { File.Delete(file); } catch { }
+            try
+            {
+                File.Delete(file);
+            }
+            catch { }
         }
         foreach (string dir in Directory.GetDirectories(path))
         {
-            try { Directory.Delete(dir, recursive: true); } catch { }
+            try
+            {
+                Directory.Delete(dir, recursive: true);
+            }
+            catch { }
         }
     }
 
     private static string FormatSize(long bytes)
     {
-        if (bytes < 1024)       return $"{bytes} B";
-        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
-        if (bytes < 1024L * 1024 * 1024) return $"{bytes / (1024.0 * 1024):F1} MB";
+        if (bytes < 1024)
+            return $"{bytes} B";
+        if (bytes < 1024 * 1024)
+            return $"{bytes / 1024.0:F1} KB";
+        if (bytes < 1024L * 1024 * 1024)
+            return $"{bytes / (1024.0 * 1024):F1} MB";
         return $"{bytes / (1024.0 * 1024 * 1024):F2} GB";
     }
 }

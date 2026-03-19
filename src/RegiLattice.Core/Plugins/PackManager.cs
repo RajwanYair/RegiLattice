@@ -213,11 +213,9 @@ public sealed class PackManager
     /// Install a pack from a direct URL pointing to a pack JSON file.
     /// Downloads, validates (via PackLoader), and installs as a local pack.
     /// </summary>
-    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> InstallFromUrlAsync(
-        string url, CancellationToken ct = default)
+    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> InstallFromUrlAsync(string url, CancellationToken ct = default)
     {
-        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
-            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
             throw new ArgumentException($"Invalid or non-HTTP(S) URL: {url}", nameof(url));
 
         var json = await s_http.GetStringAsync(uri, ct);
@@ -247,7 +245,8 @@ public sealed class PackManager
         foreach (var pack in installed)
         {
             var tweaks = LoadInstalledPack(pack.Name);
-            if (tweaks is null) continue;
+            if (tweaks is null)
+                continue;
 
             foreach (var tweak in tweaks)
             {
