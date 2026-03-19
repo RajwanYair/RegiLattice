@@ -103,6 +103,65 @@ public sealed class LocaleTests
     {
         Assert.True(Locale.AvailableKeys.Count > 0);
     }
+
+    [Fact]
+    public void SetLocale_French_TranslatesApplyAll()
+    {
+        Locale.SetLocale("fr");
+        Assert.Equal("Tout appliquer", Locale.T("apply_all"));
+        Locale.SetLocale("en");
+    }
+
+    [Fact]
+    public void SetLocale_Spanish_TranslatesApplyAll()
+    {
+        Locale.SetLocale("es");
+        Assert.Equal("Aplicar todo", Locale.T("apply_all"));
+        Locale.SetLocale("en");
+    }
+
+    [Fact]
+    public void SetLocale_French_HasAllRequiredKeys()
+    {
+        Locale.SetLocale("fr");
+        var requiredKeys = new[] { "apply_all", "remove_all", "status_applied", "status_not_applied",
+            "confirm_apply", "confirm_remove", "tweaks_loaded", "detection_complete",
+            "admin_required", "corporate_warning" };
+        foreach (var key in requiredKeys)
+            Assert.NotEqual(key, Locale.T(key)); // key itself means missing translation
+        Locale.SetLocale("en");
+    }
+
+    [Fact]
+    public void SetLocale_Spanish_HasAllRequiredKeys()
+    {
+        Locale.SetLocale("es");
+        var requiredKeys = new[] { "apply_all", "remove_all", "status_applied", "status_not_applied",
+            "confirm_apply", "confirm_remove", "tweaks_loaded", "detection_complete",
+            "admin_required", "corporate_warning" };
+        foreach (var key in requiredKeys)
+            Assert.NotEqual(key, Locale.T(key));
+        Locale.SetLocale("en");
+    }
+
+    [Fact]
+    public void AvailableLocales_ContainsFrAndEs()
+    {
+        Assert.Contains("fr", Locale.AvailableLocales);
+        Assert.Contains("es", Locale.AvailableLocales);
+    }
+
+    [Theory]
+    [InlineData("en", "Apply All")]
+    [InlineData("de", "Alle anwenden")]
+    [InlineData("fr", "Tout appliquer")]
+    [InlineData("es", "Aplicar todo")]
+    public void SetLocale_AllBuiltIn_TranslateApplyAll(string locale, string expected)
+    {
+        Locale.SetLocale(locale);
+        Assert.Equal(expected, Locale.T("apply_all"));
+        Locale.SetLocale("en");
+    }
 }
 
 public sealed class RatingsTests

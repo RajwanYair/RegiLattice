@@ -638,6 +638,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 1 | `WindowsUpdateControlDialog` — pause/resume Feature + Quality updates via registry; duration selector (7–35 d); Check Now + Open Settings quick actions | ✅ |
 | 2 | Wired into Tools menu + `Program.cs` (`--manager wucontrol`) | ✅ |
 
+### Sprint 38 — French & Spanish Locales ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `Locale.cs` — added `Fr` dictionary (51 keys, French translations) | ✅ |
+| 2 | `Locale.cs` — added `Es` dictionary (51 keys, Spanish translations) | ✅ |
+| 3 | `BuiltInLocales` dictionary updated: `["fr"] = Fr, ["es"] = Es` | ✅ |
+| 4 | `PreferencesDialog` locale combo now reads from `Locale.AvailableLocales` dynamically | ✅ |
+| 5 | 7 new xUnit locale tests: French/Spanish `apply_all`, required-keys coverage, `AvailableLocales` assertion, `Theory` for all 4 built-ins | ✅ |
+| 6 | Phase 10 items 91 (French) + 92 (Spanish) completed | ✅ |
+
 ### Sprint 37 — Wake-on-LAN & Brightness Scheduler ✅
 
 | # | Task | Status |
@@ -755,8 +766,8 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
-| 91 | French locale (3rd language) | HIGH | Original | 🔄 Sprint 38 |
-| 92 | Spanish locale (4th language) | HIGH | Original | 🔄 Sprint 38 |
+| 91 | French locale (3rd language) | HIGH | Original | ✅ Sprint 38 |
+| 92 | Spanish locale (4th language) | HIGH | Original | ✅ Sprint 38 |
 | 93 | Japanese locale (5th language) | MEDIUM | Original | 🔄 Future |
 | 94 | Chocolatey package submission | MEDIUM | Planned (P3) | 🔄 Future |
 | 95 | Microsoft Store listing | MEDIUM | Original | 🔄 Future |
