@@ -121,6 +121,23 @@ public sealed class AppConfig
     [JsonPropertyName("auto_clean_memory_threshold")]
     public int AutoCleanMemoryThreshold { get; set; } = 0;
 
+    // ── Sprint 47 enhancements ────────────────────────────────────────────
+
+    /// <summary>
+    /// When true, RegiLattice automatically creates a registry backup (JSON) in
+    /// <see cref="BackupDir"/> before applying any tweak batch.  This provides a
+    /// one-click rollback point without requiring a manual snapshot.
+    /// </summary>
+    [JsonPropertyName("auto_backup_on_apply")]
+    public bool AutoBackupOnApply { get; set; } = true;
+
+    /// <summary>
+    /// When true, a full state snapshot is saved to <c>%LOCALAPPDATA%\RegiLattice\snapshots\</c>
+    /// automatically before a profile is applied.  Enables single-click profile rollback.
+    /// </summary>
+    [JsonPropertyName("snapshot_on_profile_change")]
+    public bool SnapshotOnProfileChange { get; set; } = true;
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 

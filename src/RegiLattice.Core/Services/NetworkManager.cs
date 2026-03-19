@@ -22,6 +22,53 @@ public sealed record DnsPreset(string Name, string Primary, string Secondary, st
 /// <summary>Result of a network repair or DNS operation.</summary>
 public sealed record NetworkOperationResult(bool Success, string Message);
 
+/// <summary>Summary of a <see cref="NetworkManager.PingAsync"/> call.</summary>
+public sealed record PingResult(string Host, int Sent, int Received, int Lost, double AverageMs, double MinMs, double MaxMs)
+{
+    /// <summary>Packet loss percentage (0–100).</summary>
+    public double LossPercent => Sent == 0 ? 100.0 : (double)Lost / Sent * 100.0;
+
+    /// <summary>Parses the stdout of a Windows <c>ping -n N host</c> command.</summary>
+    internal static PingResult Parse(string host, string stdout)
+    {
+        int sent = 0, received = 0, lost = 0;
+        double avg = 0, min = 0, max = 0;
+
+        foreach (string line in stdout.Split('\n'))
+        {
+            string l = line.Trim();
+            if (l.StartsWith("Packets:", StringComparison.OrdinalIgnoreCase))
+            {
+                // "Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)"
+                var m = System.Text.RegularExpressions.Regex.Matches(l, @"\d+");
+                if (m.Count >= 3)
+                {
+                    int.TryParse(m[0].Value, out sent);
+                    int.TryParse(m[1].Value, out received);
+                    int.TryParse(m[2].Value, out lost);
+                }
+            }
+            else if (l.StartsWith("Minimum", StringComparison.OrdinalIgnoreCase) ||
+                     l.StartsWith("Minimum".ToLower(), StringComparison.OrdinalIgnoreCase))
+            {
+                // "Minimum = 1ms, Maximum = 4ms, Average = 2ms"
+                var m = System.Text.RegularExpressions.Regex.Matches(l, @"(\d+)ms");
+                if (m.Count >= 3)
+                {
+                    double.TryParse(m[0].Value, out min);
+                    double.TryParse(m[1].Value, out max);
+                    double.TryParse(m[2].Value, out avg);
+                }
+            }
+        }
+
+        return new PingResult(host, sent, received, lost, avg, min, max);
+    }
+}
+
+/// <summary>Per-adapter network I/O statistics snapshot.</summary>
+public sealed record NetworkInterfaceStats(string Name, long BytesSent, long BytesReceived, long PacketsSent, long PacketsReceived, long Errors);
+
 /// <summary>
 /// Sprint 27 service: DNS quick-switch and network repair.
 /// All mutating operations require Administrator privileges.
@@ -155,5 +202,50 @@ public static class NetworkManager
         yield return await FlushDnsCacheAsync(ct).ConfigureAwait(false);
         yield return await ResetTcpIpAsync(ct).ConfigureAwait(false);
         yield return await ResetWinsockAsync(ct).ConfigureAwait(false);
+    }
+
+    // ── Sprint 47 enhancements ─────────────────────────────────────────────
+
+    /// <summary>
+    /// Pings the specified <paramref name="host"/> up to <paramref name="count"/> times
+    /// and returns a <see cref="PingResult"/> summarising latency and packet loss.
+    /// </summary>
+    public static async Task<PingResult> PingAsync(string host, int count = 4, CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(host);
+        if (count < 1 || count > 100)
+            throw new ArgumentOutOfRangeException(nameof(count), "count must be 1–100.");
+
+        var (_, stdout, _) = await ShellRunner
+            .RunAsync("ping", ["-n", count.ToString(), host], ct)
+            .ConfigureAwait(false);
+
+        return PingResult.Parse(host, stdout);
+    }
+
+    /// <summary>
+    /// Returns per-adapter byte/packet statistics for all active non-loopback interfaces.
+    /// </summary>
+    public static IReadOnlyList<NetworkInterfaceStats> GetNetworkInterfaceStats()
+    {
+        var result = new List<NetworkInterfaceStats>();
+        foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            if (ni.OperationalStatus != OperationalStatus.Up)
+                continue;
+            if (ni.NetworkInterfaceType is NetworkInterfaceType.Loopback or NetworkInterfaceType.Tunnel)
+                continue;
+
+            var stats = ni.GetIPStatistics();
+            result.Add(new NetworkInterfaceStats(
+                Name: ni.Name,
+                BytesSent: stats.BytesSent,
+                BytesReceived: stats.BytesReceived,
+                PacketsSent: stats.UnicastPacketsSent,
+                PacketsReceived: stats.UnicastPacketsReceived,
+                Errors: stats.IncomingPacketsWithErrors + stats.OutgoingPacketsWithErrors
+            ));
+        }
+        return result;
     }
 }

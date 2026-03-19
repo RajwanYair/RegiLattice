@@ -125,6 +125,47 @@ public static class ServiceManager
             throw new InvalidOperationException($"sc.exe config failed for '{serviceName}' (exit {exitCode}): {stderr}");
     }
 
+    // ── Sprint 47 enhancements ────────────────────────────────────────────────
+
+    /// <summary>
+    /// Returns the names of all services that depend on <paramref name="serviceName"/>
+    /// (i.e. services that would stop if the specified service is stopped).
+    /// </summary>
+    public static IReadOnlyList<string> GetDependentServices(string serviceName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(serviceName);
+        try
+        {
+            using var sc = new ServiceController(serviceName);
+            return sc.DependentServices.Select(d => d.ServiceName).OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList().AsReadOnly();
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            return [];
+        }
+    }
+
+    /// <summary>
+    /// Exports the current service list to a CSV file at <paramref name="filePath"/>.
+    /// Columns: ServiceName, DisplayName, Status, StartType, CanStop.
+    /// </summary>
+    public static async Task ExportToCsvAsync(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        var services = GetAllServices();
+        var lines = new List<string>(services.Count + 1)
+        {
+            "ServiceName,DisplayName,Status,StartType,CanStop"
+        };
+        foreach (var s in services)
+        {
+            static string safe(string v) => v.Contains(',') || v.Contains('"') ? $"\"{v.Replace("\"", "\"\"")}\"" : v;
+            lines.Add($"{safe(s.ServiceName)},{safe(s.DisplayName)},{s.Status},{s.StartType},{s.CanStop}");
+        }
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
+        await File.WriteAllLinesAsync(filePath, lines).ConfigureAwait(false);
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private static async Task WaitForStatusAsync(ServiceController sc, ServiceControllerStatus desired, CancellationToken ct)

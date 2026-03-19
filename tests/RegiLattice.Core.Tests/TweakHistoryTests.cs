@@ -223,4 +223,59 @@ public sealed class TweakHistoryTests : IDisposable
         var recent = TweakHistory.Recent(); // default = 20
         Assert.Equal(20, recent.Count);
     }
+
+    // ── Sprint 47 enhancement tests ───────────────────────────────
+
+    [Fact]
+    public void GetSummaryStats_ReturnsCorrectActionCounts()
+    {
+        TweakHistory.RecordApply("a", TweakResult.Applied);
+        TweakHistory.RecordApply("b", TweakResult.Applied);
+        TweakHistory.RecordRemove("a", TweakResult.NotApplied);
+        TweakHistory.RecordUpdate("c", TweakResult.Applied);
+
+        var stats = TweakHistory.GetSummaryStats();
+
+        Assert.Equal(4, stats.TotalEntries);
+        Assert.Equal(2, stats.ApplyCount);
+        Assert.Equal(1, stats.RemoveCount);
+        Assert.Equal(1, stats.UpdateCount);
+    }
+
+    [Fact]
+    public void GetSummaryStats_TopTweaks_MostFrequentFirst()
+    {
+        for (int i = 0; i < 5; i++)
+            TweakHistory.RecordApply("frequent-tweak", TweakResult.Applied);
+        TweakHistory.RecordApply("rare-tweak", TweakResult.Applied);
+
+        var stats = TweakHistory.GetSummaryStats();
+
+        Assert.NotEmpty(stats.TopTweaks);
+        Assert.Equal("frequent-tweak", stats.TopTweaks[0].TweakId);
+        Assert.Equal(5, stats.TopTweaks[0].Count);
+    }
+
+    [Fact]
+    public async Task ExportToJsonAsync_WritesValidJsonArray()
+    {
+        TweakHistory.RecordApply("perf-a", TweakResult.Applied);
+        TweakHistory.RecordRemove("perf-b", TweakResult.NotApplied);
+
+        var path = Path.Combine(Path.GetTempPath(), $"rl-hist-{Guid.NewGuid()}.json");
+        try
+        {
+            await TweakHistory.ExportToJsonAsync(path);
+            Assert.True(File.Exists(path));
+            var json = await File.ReadAllTextAsync(path);
+            Assert.StartsWith("[", json.TrimStart());
+            Assert.Contains("perf-a", json);
+            Assert.Contains("perf-b", json);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
 }

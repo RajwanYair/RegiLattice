@@ -193,4 +193,59 @@ public sealed class FavoritesTests : IDisposable
         Assert.False(result);
         Assert.False(Favorites.IsFavorite("UPPER-ID"));
     }
+
+    // ── Sprint 47 enhancement tests ───────────────────────────────
+
+    [Fact]
+    public async Task ExportToJsonAsync_WritesJsonArrayOfIds()
+    {
+        Favorites.Add("perf-test-1");
+        Favorites.Add("priv-test-2");
+
+        var path = Path.Combine(Path.GetTempPath(), $"rl-fav-{Guid.NewGuid()}.json");
+        try
+        {
+            await Favorites.ExportToJsonAsync(path);
+            Assert.True(File.Exists(path));
+            var json = await File.ReadAllTextAsync(path);
+            Assert.Contains("perf-test-1", json);
+            Assert.Contains("priv-test-2", json);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ImportFromJson_MergesNewIds_ReturnsAddedCount()
+    {
+        Favorites.Add("existing-fav");
+
+        var path = Path.Combine(Path.GetTempPath(), $"rl-fav-imp-{Guid.NewGuid()}.json");
+        try
+        {
+            await File.WriteAllTextAsync(path, "[\"existing-fav\",\"new-fav-1\",\"new-fav-2\"]");
+            int added = Favorites.ImportFromJson(path);
+
+            Assert.Equal(2, added);                        // existing-fav not counted
+            Assert.True(Favorites.IsFavorite("new-fav-1"));
+            Assert.True(Favorites.IsFavorite("new-fav-2"));
+            Assert.Equal(3, Favorites.Count);
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void ImportFromJson_MissingFile_ThrowsFileNotFound()
+    {
+        Assert.Throws<FileNotFoundException>(
+            () => Favorites.ImportFromJson(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".json"))
+        );
+    }
 }

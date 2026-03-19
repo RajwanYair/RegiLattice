@@ -147,6 +147,62 @@ public static class TweakHistory
         }
     }
 
+    // ── Sprint 47 enhancements ─────────────────────────────────────────────
+
+    /// <summary>Summary statistics record for the current history window.</summary>
+    public sealed record HistorySummaryStats(
+        int TotalEntries,
+        int ApplyCount,
+        int RemoveCount,
+        int UpdateCount,
+        IReadOnlyList<(string TweakId, int Count)> TopTweaks
+    );
+
+    /// <summary>
+    /// Returns aggregate statistics: total entries, counts by action type, and the top-5 most
+    /// frequently operated tweaks (any action).
+    /// </summary>
+    public static HistorySummaryStats GetSummaryStats()
+    {
+        lock (Lock)
+        {
+            var list = LoadList();
+            int apply = 0, remove = 0, update = 0;
+            var freq = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var e in list)
+            {
+                switch (e.Action.ToLowerInvariant())
+                {
+                    case "apply": apply++; break;
+                    case "remove": remove++; break;
+                    case "update": update++; break;
+                }
+                freq[e.TweakId] = freq.GetValueOrDefault(e.TweakId, 0) + 1;
+            }
+
+            var top = freq.OrderByDescending(kv => kv.Value).Take(5)
+                         .Select(kv => (kv.Key, kv.Value)).ToList();
+
+            return new HistorySummaryStats(list.Count, apply, remove, update, top);
+        }
+    }
+
+    /// <summary>
+    /// Exports the current history to a JSON file at <paramref name="filePath"/>.
+    /// </summary>
+    public static async Task ExportToJsonAsync(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        IReadOnlyList<HistoryEntry> snapshot;
+        lock (Lock)
+            snapshot = LoadList().ToList();
+
+        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
+        await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
+    }
+
     private static List<HistoryEntry> LoadList()
     {
         if (_cache is not null)

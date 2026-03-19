@@ -87,6 +87,44 @@ public static class StartupManager
             DeleteFolderEntry(entry);
     }
 
+    // ── Sprint 47 enhancements ────────────────────────────────────────────────
+
+    /// <summary>
+    /// Adds a new HKCU startup registry entry with the given <paramref name="name"/> and
+    /// <paramref name="command"/>. Throws <see cref="ArgumentException"/> if the name is blank or
+    /// an entry with that name already exists.
+    /// </summary>
+    public static void AddRegistryEntry(string name, string command)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(command);
+
+        using Win32.RegistryKey? key = Win32.Registry.CurrentUser.OpenSubKey(RegRunUser, writable: true)
+            ?? Win32.Registry.CurrentUser.CreateSubKey(RegRunUser);
+
+        if (key is null)
+            throw new InvalidOperationException("Unable to open the HKCU Run key.");
+
+        if (key.GetValue(name) is not null)
+            throw new ArgumentException($"A startup entry named \"{name}\" already exists.", nameof(name));
+
+        key.SetValue(name, command, Win32.RegistryValueKind.String);
+    }
+
+    /// <summary>
+    /// Exports all current startup entries to a JSON file at <paramref name="filePath"/>.
+    /// Each entry is serialised with its Id, Name, Command, Location, and IsEnabled fields.
+    /// </summary>
+    public static async Task ExportEntriesAsync(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+
+        var entries = GetAllEntries();
+        var json = System.Text.Json.JsonSerializer.Serialize(entries, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
+        await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
+    }
+
     // ── Registry helpers ────────────────────────────────────────────────────
 
     private static IEnumerable<StartupEntry> ReadRegistryEntries(Win32.RegistryKey hive, string subKeyPath, StartupLocation location, bool enabled)

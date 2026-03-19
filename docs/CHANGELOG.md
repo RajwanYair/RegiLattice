@@ -4,6 +4,28 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.7.0] — 2026-07-17
+
+### Fixed
+
+- **MSI missing from GitHub Releases** — `release.yml` never built `installer/RegiLattice.Installer.wixproj`; publish paths were `publish/release/gui|cli` but installer expects `publish/gui|cli`; both issues now corrected, WiX 6.0.2 installed + MSI build step added + SHA256SUMS updated to include MSI
+
+### Added
+
+- **`NetworkManager.cs`** +2 methods: `PingAsync(host, count, ct)` (shells Windows `ping`, parses stdout into `PingResult` record with loss/avg/min/max); `GetNetworkInterfaceStats()` (per-adapter `NetworkInterfaceStats` with byte + packet counters)
+- **`StartupManager.cs`** +2 methods: `AddRegistryEntry(name, command)` (adds HKCU Run entry, validates uniqueness); `ExportEntriesAsync(filePath)` (JSON export of all startup entries)
+- **`ServiceManager.cs`** +2 methods: `GetDependentServices(name)` (returns names of dependent services); `ExportToCsvAsync(filePath)` (CSV export with ServiceName, DisplayName, Status, StartType, CanStop)
+- **`TweakHistory.cs`** +2 members: `GetSummaryStats()` returns `HistorySummaryStats` record (action counts + top-5 tweaks by frequency); `ExportToJsonAsync(filePath)` exports full history as JSON
+- **`Favorites.cs`** +2 methods: `ExportToJsonAsync(filePath)` (sorted JSON array of IDs); `ImportFromJson(filePath)` (merge from JSON array, returns newly-added count)
+- **`AppConfig.cs`** +2 properties: `AutoBackupOnApply` (bool, default `true`, triggers registry backup before batch apply); `SnapshotOnProfileChange` (bool, default `true`, auto-snapshots before profile is applied)
+- **Tests**: +19 new tests — total 1 879 (all passing)
+
+### Changed
+
+- Version bumped `3.6.0` → `3.7.0`
+
+---
+
 ## [3.6.0] — 2026-03-19
 
 ### Added
