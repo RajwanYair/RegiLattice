@@ -1,5 +1,6 @@
 // RegiLattice.GUI — Forms/InstalledAppsDialog.cs
 // Sprint 30: Installed-programs viewer with quick-uninstall trigger.
+// Sprint 47: +Publisher filter ComboBox, +Copy Name button.
 
 #nullable enable
 
@@ -44,6 +45,7 @@ internal sealed class InstalledAppsDialog : BaseDialog
     // ── Controls ─────────────────────────────────────────────────────────────
     private readonly TextBox _searchBox = new() { Width = 250, PlaceholderText = "Search apps…" };
     private readonly ComboBox _scopeFilter = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 130 };
+    private readonly ComboBox _publisherFilter = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 160 };
     private readonly ListView _list = new()
     {
         Dock = DockStyle.Fill,
@@ -70,6 +72,12 @@ internal sealed class InstalledAppsDialog : BaseDialog
     {
         Text = "Uninstall…",
         Width = 100,
+        Enabled = false,
+    };
+    private readonly Button _btnCopyName = new()
+    {
+        Text = "Copy Name",
+        Width = 90,
         Enabled = false,
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 80 };
@@ -107,10 +115,17 @@ internal sealed class InstalledAppsDialog : BaseDialog
             AutoSize = true,
             Margin = new Padding(8, 8, 4, 0),
         };
+        var publisherLabel = new Label
+        {
+            Text = "Publisher:",
+            AutoSize = true,
+            Margin = new Padding(8, 8, 4, 0),
+        };
         _scopeFilter.Items.AddRange(["All", "HKLM (Machine)", "HKCU (User)"]);
         _scopeFilter.SelectedIndex = 0;
         _searchBox.TextChanged += (_, _) => FilterList();
         _scopeFilter.SelectedIndexChanged += (_, _) => FilterList();
+        _publisherFilter.SelectedIndexChanged += (_, _) => FilterList();
 
         var flow = new FlowLayoutPanel
         {
@@ -118,7 +133,7 @@ internal sealed class InstalledAppsDialog : BaseDialog
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
         };
-        flow.Controls.AddRange(new Control[] { searchLabel, _searchBox, scopeLabel, _scopeFilter });
+        flow.Controls.AddRange(new Control[] { searchLabel, _searchBox, scopeLabel, _scopeFilter, publisherLabel, _publisherFilter });
         _topPanel.Controls.Add(flow);
 
         // List columns
@@ -133,10 +148,15 @@ internal sealed class InstalledAppsDialog : BaseDialog
         _list.SelectedIndexChanged += OnSelectionChanged;
 
         _btnUninstall.Click += OnUninstall;
+        _btnCopyName.Click += (_, _) =>
+        {
+            if (_list.SelectedItems.Count > 0 && _list.SelectedItems[0].Tag is AppEntry a)
+                Clipboard.SetText(a.Name);
+        };
         _btnRefresh.Click += async (_, _) => await LoadAppsAsync();
         _btnClose.Click += (_, _) => Close();
 
-        _btnPanel.Controls.AddRange(new Control[] { _btnUninstall, _btnRefresh, _btnClose });
+        _btnPanel.Controls.AddRange(new Control[] { _btnUninstall, _btnCopyName, _btnRefresh, _btnClose });
 
         Controls.Add(_list);
         Controls.Add(_topPanel);
@@ -171,6 +191,19 @@ internal sealed class InstalledAppsDialog : BaseDialog
 
         if (token.IsCancellationRequested)
             return;
+
+        // Populate publisher filter
+        var publishers = _allApps
+            .Select(a => a.Publisher)
+            .Where(p => !string.IsNullOrEmpty(p))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(p => p)
+            .ToList();
+        _publisherFilter.Items.Clear();
+        _publisherFilter.Items.Add("All");
+        foreach (string pub in publishers)
+            _publisherFilter.Items.Add(pub);
+        _publisherFilter.SelectedIndex = 0;
 
         FilterList();
         _countLabel.Text = $"{_allApps.Count} applications found.";
@@ -236,6 +269,7 @@ internal sealed class InstalledAppsDialog : BaseDialog
     private void FilterList()
     {
         string search = _searchBox.Text.Trim();
+        string? pubFilter = _publisherFilter.SelectedIndex > 0 ? _publisherFilter.SelectedItem?.ToString() : null;
         var filtered = _allApps.AsEnumerable();
 
         if (!string.IsNullOrEmpty(search))
@@ -244,6 +278,9 @@ internal sealed class InstalledAppsDialog : BaseDialog
                 || a.Publisher.Contains(search, StringComparison.OrdinalIgnoreCase)
                 || a.Version.Contains(search, StringComparison.OrdinalIgnoreCase)
             );
+
+        if (pubFilter is not null)
+            filtered = filtered.Where(a => a.Publisher.Equals(pubFilter, StringComparison.OrdinalIgnoreCase));
 
         var sorted = _sortColumn switch
         {
@@ -332,8 +369,10 @@ internal sealed class InstalledAppsDialog : BaseDialog
 
     private void OnSelectionChanged(object? sender, EventArgs e)
     {
-        bool hasUninstall = _list.SelectedItems.Count > 0 && _list.SelectedItems[0].Tag is AppEntry { UninstallString: not null };
+        bool hasSelection = _list.SelectedItems.Count > 0 && _list.SelectedItems[0].Tag is AppEntry;
+        bool hasUninstall = hasSelection && _list.SelectedItems[0].Tag is AppEntry { UninstallString: not null };
         _btnUninstall.Enabled = hasUninstall;
+        _btnCopyName.Enabled = hasSelection;
     }
 
     // ── Formatting ────────────────────────────────────────────────────────────

@@ -1642,4 +1642,64 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("Remote Desktop", tweak.Category);
     }
+
+    // ── Sprint 47: Communication (new tweaks) ─────────────────────────────
+
+    [Theory]
+    [InlineData("comm-disable-teams-read-receipts")]
+    [InlineData("comm-disable-teams-presence-share")]
+    [InlineData("comm-disable-teams-survey-bell")]
+    [InlineData("comm-disable-teams-animations")]
+    [InlineData("comm-disable-teams-file-auto-download")]
+    public void RegisterBuiltins_Sprint47CommunicationTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Communication", tweak.Category);
+    }
+
+    // ── Sprint 47: Accessibility (new tweaks) ─────────────────────────────
+
+    [Theory]
+    [InlineData("acc-disable-narrator-key-echo")]
+    [InlineData("acc-disable-magnifier-caret-follow")]
+    [InlineData("acc-set-wider-caret")]
+    [InlineData("acc-disable-mouse-trails")]
+    [InlineData("acc-disable-color-filters")]
+    public void RegisterBuiltins_Sprint47AccessibilityTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Accessibility", tweak.Category);
+    }
+
+    // ── Sprint 47: Clipboard (new tweaks) ─────────────────────────────────
+
+    [Theory]
+    [InlineData("clip-disable-emoji-panel")]
+    [InlineData("clip-disable-clipboard-sync-across-devices")]
+    [InlineData("clip-disable-paste-preview")]
+    [InlineData("clip-disable-gif-panel")]
+    [InlineData("clip-disable-typing-insights")]
+    public void RegisterBuiltins_Sprint47ClipboardTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Clipboard & Drag-Drop", tweak.Category);
+    }
+
+    // ── Sprint 47: VS Code (new tweaks) ───────────────────────────────────
+
+    [Theory]
+    [InlineData("vscode-policy-crash-reporter")]
+    [InlineData("vscode-policy-extension-gallery")]
+    [InlineData("vscode-disable-experiment-service")]
+    [InlineData("vscode-disable-account-sync")]
+    [InlineData("vscode-disable-github-copilot-chat")]
+    public void RegisterBuiltins_Sprint47VsCodeTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("VS Code", tweak.Category);
+    }
 }

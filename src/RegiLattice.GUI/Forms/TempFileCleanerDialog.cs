@@ -1,5 +1,6 @@
 // RegiLattice.GUI — Forms/TempFileCleanerDialog.cs
 // Sprint 30: Scan well-known temp locations, preview sizes, and selectively delete.
+// Sprint 47: +User Downloads location, +age filter (skip files newer than N days).
 
 #nullable enable
 
@@ -32,6 +33,7 @@ internal sealed class TempFileCleanerDialog : BaseDialog
             () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"SoftwareDistribution\Download")
         ),
         ("Recycle Bin", () => @"C:\$Recycle.Bin"),
+        ("User Downloads", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads")),
     ];
 
     // ── Model ─────────────────────────────────────────────────────────────────
@@ -70,6 +72,14 @@ internal sealed class TempFileCleanerDialog : BaseDialog
         Enabled = false,
     };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    private readonly NumericUpDown _ageFilter = new()
+    {
+        Minimum = 0,
+        Maximum = 3650,
+        Value = 0,
+        Width = 60,
+        DecimalPlaces = 0,
+    };
     private readonly ProgressBar _progress = new()
     {
         Dock = DockStyle.Bottom,
@@ -111,9 +121,26 @@ internal sealed class TempFileCleanerDialog : BaseDialog
         _btnClean.Click += async (_, _) => await CleanAsync();
         _btnClose.Click += (_, _) => Close();
 
+        var ageLabel = new Label
+        {
+            Text = "Min age (days, 0 = all):",
+            AutoSize = true,
+            Margin = new Padding(0, 8, 4, 0),
+        };
+        var topBar = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            Height = 40,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            Padding = new Padding(6, 6, 6, 2),
+        };
+        topBar.Controls.AddRange(new Control[] { ageLabel, _ageFilter });
+
         _btnPanel.Controls.AddRange(new Control[] { _btnScan, _btnClean, _btnClose });
 
         Controls.Add(_list);
+        Controls.Add(topBar);
         Controls.Add(_statusLabel);
         Controls.Add(_progress);
         Controls.Add(_btnPanel);
@@ -170,13 +197,18 @@ internal sealed class TempFileCleanerDialog : BaseDialog
                         if (!Directory.Exists(g.Path))
                             continue;
                         var files = Directory.EnumerateFiles(g.Path, "*", SearchOption.AllDirectories);
+                        int minAgeDays = (int)_ageFilter.Value;
+                        DateTime cutoff = minAgeDays > 0 ? DateTime.Now.AddDays(-minAgeDays) : DateTime.MinValue;
                         foreach (var f in files)
                         {
                             if (token.IsCancellationRequested)
                                 return;
                             try
                             {
-                                g.FileBytes += new FileInfo(f).Length;
+                                var fi = new FileInfo(f);
+                                if (minAgeDays > 0 && fi.LastWriteTime > cutoff)
+                                    continue;
+                                g.FileBytes += fi.Length;
                                 g.FileCount++;
                             }
                             catch
@@ -240,6 +272,9 @@ internal sealed class TempFileCleanerDialog : BaseDialog
                     {
                         try
                         {
+                            int minAgeDays = (int)_ageFilter.Value;
+                            if (minAgeDays > 0 && new FileInfo(f).LastWriteTime > DateTime.Now.AddDays(-minAgeDays))
+                                continue;
                             long size = new FileInfo(f).Length;
                             File.Delete(f);
                             deleted++;

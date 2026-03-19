@@ -1,6 +1,9 @@
 // RegiLattice.GUI — Forms/NetworkToolsDialog.cs
 // Sprint 27: DNS quick-switch + network repair wizard dialog.
+// Sprint 47: +Export Repair Log button, +Net Interfaces tab.
 
+using System.Net.NetworkInformation;
+using System.Text;
 using RegiLattice.Core;
 
 namespace RegiLattice.GUI.Forms;
@@ -28,6 +31,12 @@ internal sealed class NetworkToolsDialog : BaseDialog
     private readonly Button _btnResetTcpIp;
     private readonly Button _btnResetWinsock;
     private readonly Button _btnFullRepair;
+    private readonly Button _btnExportRepairLog = new()
+    {
+        Text = "💾 Export Log",
+        Width = 120,
+        Height = 30,
+    };
     private readonly RichTextBox _repairLog;
 
     private CancellationTokenSource _cts = new();
@@ -205,6 +214,9 @@ internal sealed class NetworkToolsDialog : BaseDialog
         repairTopPanel.Controls.Add(_btnResetWinsock);
         repairTopPanel.Controls.Add(new Label { Height = 4 }); // spacer
         repairTopPanel.Controls.Add(_btnFullRepair);
+        repairTopPanel.Controls.Add(new Label { Height = 4 }); // spacer
+        repairTopPanel.Controls.Add(_btnExportRepairLog);
+        _btnExportRepairLog.Click += OnExportRepairLog;
 
         tabRepair.Controls.Add(_repairLog);
         tabRepair.Controls.Add(repairTopPanel);
@@ -251,8 +263,36 @@ internal sealed class NetworkToolsDialog : BaseDialog
         tabTrace.Controls.Add(traceTopPanel);
         _btnTrace.Click += async (_, _) => await RunTraceAsync();
 
-        // ── Tabs & close button ─────────────────────────────────────
-        _tabs.TabPages.AddRange([tabDns, tabRepair, tabPing, tabTrace]);
+        // ── Net Interfaces Tab ───────────────────────────────────
+        var tabIface = new TabPage("Net Interfaces");
+        var ifaceLog = new RichTextBox
+        {
+            ReadOnly = true,
+            BackColor = AppTheme.Bg,
+            ForeColor = AppTheme.Green,
+            Font = AppTheme.Mono,
+            BorderStyle = BorderStyle.None,
+            ScrollBars = RichTextBoxScrollBars.Vertical,
+            Dock = DockStyle.Fill,
+        };
+        var btnRefreshIface = new Button
+        {
+            Text = "⟳ Refresh",
+            Width = 90,
+            Height = 30,
+            Dock = DockStyle.Top,
+        };
+        btnRefreshIface.Click += (_, _) => RefreshNetInterfaces(ifaceLog);
+        tabIface.Controls.Add(ifaceLog);
+        tabIface.Controls.Add(btnRefreshIface);
+
+        // ── Tabs & close button ───────────────────────────────────
+        _tabs.TabPages.AddRange([tabDns, tabRepair, tabPing, tabTrace, tabIface]);
+        _tabs.Selected += (_, e) =>
+        {
+            if (e.TabPage == tabIface)
+                RefreshNetInterfaces(ifaceLog);
+        };
 
         var btnClose = new Button
         {
@@ -270,6 +310,69 @@ internal sealed class NetworkToolsDialog : BaseDialog
         ApplyTheme();
         RefreshAdapters();
     }
+
+    // ── Sprint 47 enhancements ────────────────────────────────────────────────
+    private void OnExportRepairLog(object? sender, EventArgs e)
+    {
+        using var sfd = new SaveFileDialog
+        {
+            Title = "Export Repair Log",
+            Filter = "Text file (*.txt)|*.txt|All files (*.*)|*.*",
+            FileName = $"repair-log-{DateTime.Now:yyyyMMdd-HHmmss}.txt",
+        };
+        if (sfd.ShowDialog(this) != DialogResult.OK)
+            return;
+        try
+        {
+            File.WriteAllText(sfd.FileName, _repairLog.Text, Encoding.UTF8);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to export log:\n{ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private static void RefreshNetInterfaces(RichTextBox log)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"Network Interfaces as of {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        sb.AppendLine(new string('-', 60));
+
+        foreach (
+            NetworkInterface nic in NetworkInterface
+                .GetAllNetworkInterfaces()
+                .Where(n => n.OperationalStatus == OperationalStatus.Up)
+                .OrderBy(n => n.Name)
+        )
+        {
+            sb.AppendLine($"Name       : {nic.Name}");
+            sb.AppendLine($"Description: {nic.Description}");
+            sb.AppendLine($"Type       : {nic.NetworkInterfaceType}");
+            sb.AppendLine($"Speed      : {FormatIfaceSpeed(nic.Speed)}");
+            sb.AppendLine($"MAC        : {nic.GetPhysicalAddress()}");
+
+            var ipProps = nic.GetIPProperties();
+            foreach (var addr in ipProps.UnicastAddresses)
+                sb.AppendLine($"  IP       : {addr.Address}/{addr.PrefixLength}");
+            foreach (var gw in ipProps.GatewayAddresses)
+                sb.AppendLine($"  Gateway  : {gw.Address}");
+            foreach (var dns in ipProps.DnsAddresses)
+                sb.AppendLine($"  DNS      : {dns}");
+
+            sb.AppendLine();
+        }
+
+        log.Text = sb.ToString();
+    }
+
+    private static string FormatIfaceSpeed(long bps) =>
+        bps switch
+        {
+            >= 1_000_000_000 => $"{bps / 1_000_000_000.0:F0} Gbps",
+            >= 1_000_000 => $"{bps / 1_000_000.0:F0} Mbps",
+            >= 1_000 => $"{bps / 1_000.0:F0} Kbps",
+            _ => $"{bps} bps",
+        };
 
     // ── DNS helpers ─────────────────────────────────────────────────────
 
