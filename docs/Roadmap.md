@@ -638,6 +638,15 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 1 | `WindowsUpdateControlDialog` — pause/resume Feature + Quality updates via registry; duration selector (7–35 d); Check Now + Open Settings quick actions | ✅ |
 | 2 | Wired into Tools menu + `Program.cs` (`--manager wucontrol`) | ✅ |
 
+### Sprint 40 — Before/After Registry Preview + Undo Last ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Detail panel: Before/After registry value preview for Registry/GroupPolicy tweaks (first 2 SetValue ops) | ✅ |
+| 2 | `_btnUndoLast` ToolStripButton — undoes last apply/remove by calling inverse engine op | ✅ |
+| 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
+| 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
+
 ### Sprint 39 — Plugin URL Install, Tag Filter & Conflict Detector ✅
 
 | # | Task | Status |
@@ -764,8 +773,8 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
 | 81 | Scheduled tweak application — apply tweaks on boot/login/timer | HIGH | Planned (P3) | 🔄 Future |
-| 82 | Before/after preview — show what a tweak changes before applying | HIGH | ExplorerPatcher | 🔄 Sprint 40 |
-| 83 | Tweak rollback queue — undo last N operations with one click | MEDIUM | Original | 🔄 Sprint 40 |
+| 82 | Before/after preview — show what a tweak changes before applying | HIGH | ExplorerPatcher | ✅ Sprint 40 |
+| 83 | Tweak rollback queue — undo last N operations with one click | MEDIUM | Original | ✅ Sprint 40 |
 | 84 | Profile scheduler — auto-switch profiles by time or event | MEDIUM | Original | 🔄 Future |
 | 85 | REST API for remote tweak management | MEDIUM | Planned (P3) | 🔄 Future |
 | 86 | Web dashboard for tweak status visualization | MEDIUM | Planned (P3) | 🔄 Future |
