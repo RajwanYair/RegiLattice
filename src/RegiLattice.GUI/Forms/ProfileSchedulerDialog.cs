@@ -168,7 +168,8 @@ internal sealed class ProfileSchedulerDialog : BaseDialog
             $"Remove schedule for profile '{entry.Profile}'?",
             "Confirm Remove",
             MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question);
+            MessageBoxIcon.Question
+        );
 
         if (answer != DialogResult.Yes)
             return;
@@ -212,11 +213,21 @@ internal sealed class AddProfileScheduleDialog : Form
     {
         Format = DateTimePickerFormat.Time,
         ShowUpDown = true,
-        Width = 120
+        Width = 120,
     };
     private readonly Label _lblTime = new() { Text = "Time (HH:mm):", AutoSize = true };
-    private readonly Button _btnOk = new() { Text = "Add", Width = 80, DialogResult = DialogResult.None };
-    private readonly Button _btnCancel = new() { Text = "Cancel", DialogResult = DialogResult.Cancel, Width = 80 };
+    private readonly Button _btnOk = new()
+    {
+        Text = "Add",
+        Width = 80,
+        DialogResult = DialogResult.None,
+    };
+    private readonly Button _btnCancel = new()
+    {
+        Text = "Cancel",
+        DialogResult = DialogResult.Cancel,
+        Width = 80,
+    };
 
     public AddProfileScheduleDialog(string[] profiles)
     {
@@ -260,9 +271,27 @@ internal sealed class AddProfileScheduleDialog : Form
         table.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-        table.Controls.Add(new Label { Text = "Profile:", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 0);
+        table.Controls.Add(
+            new Label
+            {
+                Text = "Profile:",
+                AutoSize = true,
+                Anchor = AnchorStyles.Left,
+            },
+            0,
+            0
+        );
         table.Controls.Add(_cmbProfile, 1, 0);
-        table.Controls.Add(new Label { Text = "Trigger:", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 1);
+        table.Controls.Add(
+            new Label
+            {
+                Text = "Trigger:",
+                AutoSize = true,
+                Anchor = AnchorStyles.Left,
+            },
+            0,
+            1
+        );
         table.Controls.Add(_cmbTrigger, 1, 1);
         table.Controls.Add(_lblTime, 0, 2);
         table.Controls.Add(_timePicker, 1, 2);
@@ -289,9 +318,7 @@ internal sealed class AddProfileScheduleDialog : Form
         }
 
         string trigger = _cmbTrigger.SelectedItem?.ToString() ?? "daily";
-        string time = trigger == "daily"
-            ? _timePicker.Value.ToString("HH:mm")
-            : "";
+        string time = trigger == "daily" ? _timePicker.Value.ToString("HH:mm") : "";
 
         Result = new ProfileScheduleEntry
         {

@@ -208,7 +208,6 @@ All references to the GitHub account must use `RajwanYair`:
 
 - `CODEOWNERS`: `@RajwanYair`
 - All GitHub URLs: `https://github.com/RajwanYair/RegiLattice`
-- No `aeger` references anywhere
 
 ---
 

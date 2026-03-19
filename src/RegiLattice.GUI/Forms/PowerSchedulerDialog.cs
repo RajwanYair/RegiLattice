@@ -70,8 +70,10 @@ internal sealed class PowerSchedulerDialog : BaseDialog
     };
     private readonly Button _btnApplyNow = new() { Text = "Apply Now", Width = 90 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+
     // Sprint 51 §9a: apply tweak profile on power plan switch
     private readonly Button _btnApplyProfile = new() { Text = "Profile on Plan Switch…", Width = 160 };
+
     // Sprint 51 §9b: schedule history log
     private readonly Button _btnPlanHistory = new() { Text = "Schedule History", Width = 130 };
     private readonly List<string> _planSwitchLog = [];
@@ -321,8 +323,18 @@ internal sealed class PowerSchedulerDialog : BaseDialog
         var cfg = AppConfig.Load();
         int idx = Array.IndexOf(profiles, cfg.ProfileOnPlanSwitch ?? "");
         combo.SelectedIndex = Math.Max(0, idx);
-        var lblHint = new Label { Text = "Switch to this profile when power plan changes:", Bounds = new Rectangle(16, 20, 300, 22), AutoSize = false };
-        var btnOk = new Button { Text = "Save", DialogResult = DialogResult.OK, Bounds = new Rectangle(260, 50, 72, 28) };
+        var lblHint = new Label
+        {
+            Text = "Switch to this profile when power plan changes:",
+            Bounds = new Rectangle(16, 20, 300, 22),
+            AutoSize = false,
+        };
+        var btnOk = new Button
+        {
+            Text = "Save",
+            DialogResult = DialogResult.OK,
+            Bounds = new Rectangle(260, 50, 72, 28),
+        };
         dlg.Controls.AddRange([lblHint, combo, btnOk]);
         dlg.AcceptButton = btnOk;
         if (dlg.ShowDialog(this) == DialogResult.OK && combo.SelectedItem is string chosen)

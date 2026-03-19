@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -292,7 +292,6 @@ internal static class DiskCleanup
             RemoveAction = _ => { },
             DetectAction = () => false,
         },
-
         // ── Sprint 41 additions ────────────────────────────────────────────
 
         new TweakDef
@@ -344,7 +343,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the secondary swapfile.sys used by Windows apps. Frees disk space on SSDs. Not recommended for systems with <8 GB RAM.",
+            Description =
+                "Disables the secondary swapfile.sys used by Windows apps. Frees disk space on SSDs. Not recommended for systems with <8 GB RAM.",
             Tags = ["cleanup", "disk", "performance", "ssd"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SwapFileControl", 0)],
@@ -372,7 +372,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the VSS system writer to reduce disk I/O. Affects System Restore and backup. Only for systems where backups are managed externally.",
+            Description =
+                "Disables the VSS system writer to reduce disk I/O. Affects System Restore and backup. Only for systems where backups are managed externally.",
             Tags = ["cleanup", "disk", "backup", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS", "Start", 4)],
@@ -417,9 +418,30 @@ internal static class DiskCleanup
             Description = "Reduces SysMain (SuperFetch) write activity to disk by disabling pre-population of the cache.",
             Tags = ["cleanup", "performance", "ssd", "superfetch"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 3)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters", "EnablePrefetcher", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    3
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -431,16 +453,29 @@ internal static class DiskCleanup
             Description = "Caps the disk space Windows Update can use for its download cache to 1024 MB.",
             Tags = ["cleanup", "windows-update", "disk"],
             KindHint = TweakKind.PowerShell,
-            ApplyAction = _ => ShellRunner.RunPowerShell("Set-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization' -Name 'AbsoluteMaxCacheSize' -Value 1024 -ErrorAction SilentlyContinue"),
-            RemoveAction = _ => ShellRunner.RunPowerShell("Remove-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization' -Name 'AbsoluteMaxCacheSize' -ErrorAction SilentlyContinue"),
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Set-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization' -Name 'AbsoluteMaxCacheSize' -Value 1024 -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Remove-ItemProperty 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization' -Name 'AbsoluteMaxCacheSize' -ErrorAction SilentlyContinue"
+                ),
             DetectAction = () =>
             {
                 try
                 {
-                    var val = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "AbsoluteMaxCacheSize", null);
+                    var val = Microsoft.Win32.Registry.GetValue(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization",
+                        "AbsoluteMaxCacheSize",
+                        null
+                    );
                     return val is int v && v <= 1024;
                 }
-                catch { return false; }
+                catch
+                {
+                    return false;
+                }
             },
         },
     ];

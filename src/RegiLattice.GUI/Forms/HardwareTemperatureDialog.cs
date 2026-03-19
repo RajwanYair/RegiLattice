@@ -311,13 +311,29 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
             Size = new Size(360, 180),
             FormBorderStyle = FormBorderStyle.FixedDialog,
             StartPosition = FormStartPosition.CenterParent,
-            MaximizeBox = false, MinimizeBox = false,
+            MaximizeBox = false,
+            MinimizeBox = false,
         };
 
-        var lblSensor = new Label { Text = "Sensor name (partial match):", Location = new Point(12, 18), AutoSize = true };
-        var txtSensor = new TextBox { Location = new Point(12, 38), Width = 310, Text = "Thermal" };
+        var lblSensor = new Label
+        {
+            Text = "Sensor name (partial match):",
+            Location = new Point(12, 18),
+            AutoSize = true,
+        };
+        var txtSensor = new TextBox
+        {
+            Location = new Point(12, 38),
+            Width = 310,
+            Text = "Thermal",
+        };
 
-        var lblThresh = new Label { Text = "Alert threshold (\u00b0C):", Location = new Point(12, 70), AutoSize = true };
+        var lblThresh = new Label
+        {
+            Text = "Alert threshold (\u00b0C):",
+            Location = new Point(12, 70),
+            AutoSize = true,
+        };
         var nudThresh = new NumericUpDown
         {
             Location = new Point(12, 90),
@@ -328,8 +344,20 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
             DecimalPlaces = 0,
         };
 
-        var btnOk = new Button { Text = "Set Alert", DialogResult = DialogResult.OK, Location = new Point(190, 108), Width = 80 };
-        var btnClear = new Button { Text = "Clear", DialogResult = DialogResult.Abort, Location = new Point(280, 108), Width = 55 };
+        var btnOk = new Button
+        {
+            Text = "Set Alert",
+            DialogResult = DialogResult.OK,
+            Location = new Point(190, 108),
+            Width = 80,
+        };
+        var btnClear = new Button
+        {
+            Text = "Clear",
+            DialogResult = DialogResult.Abort,
+            Location = new Point(280, 108),
+            Width = 55,
+        };
         dlg.AcceptButton = btnOk;
         dlg.Controls.AddRange([lblSensor, txtSensor, lblThresh, nudThresh, btnOk, btnClear]);
 
@@ -369,12 +397,18 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
             ScrollBars = ScrollBars.Both,
             ReadOnly = true,
             Font = new Font("Consolas", 8.5f),
-            Text = _historyLog.Count > 0
-                ? string.Join(Environment.NewLine, _historyLog)
-                : "No history yet. Log records start at the next 60-second interval.",
+            Text =
+                _historyLog.Count > 0
+                    ? string.Join(Environment.NewLine, _historyLog)
+                    : "No history yet. Log records start at the next 60-second interval.",
         };
 
-        var btnOk = new Button { Text = "Close", Dock = DockStyle.Bottom, Height = 32 };
+        var btnOk = new Button
+        {
+            Text = "Close",
+            Dock = DockStyle.Bottom,
+            Height = 32,
+        };
         btnOk.Click += (_, _) => histDlg.Close();
         histDlg.Controls.Add(txt);
         histDlg.Controls.Add(btnOk);

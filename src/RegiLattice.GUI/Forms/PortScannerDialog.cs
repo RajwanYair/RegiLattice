@@ -377,10 +377,33 @@ internal sealed class PortScannerDialog : BaseDialog
             BackColor = AppTheme.Bg,
             ForeColor = AppTheme.Fg,
         };
-        var lbl = new Label { Text = "Profile name:", Location = new Point(10, 16), AutoSize = true };
-        var txt = new TextBox { Location = new Point(100, 12), Width = 220, BackColor = AppTheme.Overlay, ForeColor = AppTheme.Fg };
-        var ok = new Button { Text = "Save", DialogResult = DialogResult.OK, Location = new Point(150, 65), Width = 75 };
-        var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(235, 65), Width = 75 };
+        var lbl = new Label
+        {
+            Text = "Profile name:",
+            Location = new Point(10, 16),
+            AutoSize = true,
+        };
+        var txt = new TextBox
+        {
+            Location = new Point(100, 12),
+            Width = 220,
+            BackColor = AppTheme.Overlay,
+            ForeColor = AppTheme.Fg,
+        };
+        var ok = new Button
+        {
+            Text = "Save",
+            DialogResult = DialogResult.OK,
+            Location = new Point(150, 65),
+            Width = 75,
+        };
+        var cancel = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Location = new Point(235, 65),
+            Width = 75,
+        };
         input.Controls.AddRange(new Control[] { lbl, txt, ok, cancel });
         input.AcceptButton = ok;
         input.CancelButton = cancel;
@@ -400,8 +423,16 @@ internal sealed class PortScannerDialog : BaseDialog
             Directory.CreateDirectory(ProfilesDir);
             string slug = System.Text.RegularExpressions.Regex.Replace(name.ToLowerInvariant(), @"[^a-z0-9\-_]+", "-").Trim('-');
             string path = System.IO.Path.Combine(ProfilesDir, $"{slug}.json");
-            var obj = new { name, host, ports };
-            File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(obj, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+            var obj = new
+            {
+                name,
+                host,
+                ports,
+            };
+            File.WriteAllText(
+                path,
+                System.Text.Json.JsonSerializer.Serialize(obj, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })
+            );
             _statusLabel.Text = $"\u2705 Profile \u2018{name}\u2019 saved.";
         }
         catch (Exception ex)
@@ -434,7 +465,12 @@ internal sealed class PortScannerDialog : BaseDialog
                 BackColor = AppTheme.Bg,
                 ForeColor = AppTheme.Fg,
             };
-            var list = new ListBox { Dock = DockStyle.Fill, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg };
+            var list = new ListBox
+            {
+                Dock = DockStyle.Fill,
+                BackColor = AppTheme.Surface,
+                ForeColor = AppTheme.Fg,
+            };
             var profileMap = new Dictionary<string, string>(); // display name -> file path
             foreach (string f in files)
             {
@@ -445,9 +481,19 @@ internal sealed class PortScannerDialog : BaseDialog
                     profileMap[displayName] = f;
                     list.Items.Add(displayName);
                 }
-                catch { list.Items.Add(System.IO.Path.GetFileNameWithoutExtension(f)); profileMap[System.IO.Path.GetFileNameWithoutExtension(f)] = f; }
+                catch
+                {
+                    list.Items.Add(System.IO.Path.GetFileNameWithoutExtension(f));
+                    profileMap[System.IO.Path.GetFileNameWithoutExtension(f)] = f;
+                }
             }
-            var ok = new Button { Text = "Load", DialogResult = DialogResult.OK, Dock = DockStyle.Bottom, Height = 32 };
+            var ok = new Button
+            {
+                Text = "Load",
+                DialogResult = DialogResult.OK,
+                Dock = DockStyle.Bottom,
+                Height = 32,
+            };
             dlg.Controls.AddRange(new Control[] { list, ok });
             dlg.AcceptButton = ok;
 
@@ -459,8 +505,10 @@ internal sealed class PortScannerDialog : BaseDialog
                 return;
 
             var data = System.Text.Json.JsonDocument.Parse(File.ReadAllText(filePath)).RootElement;
-            if (data.TryGetProperty("host", out var h)) _txtHost.Text = h.GetString() ?? "";
-            if (data.TryGetProperty("ports", out var p)) _txtPorts.Text = p.GetString() ?? "";
+            if (data.TryGetProperty("host", out var h))
+                _txtHost.Text = h.GetString() ?? "";
+            if (data.TryGetProperty("ports", out var p))
+                _txtPorts.Text = p.GetString() ?? "";
             _statusLabel.Text = $"\u2705 Profile \u2018{selected}\u2019 loaded.";
         }
         catch (Exception ex)

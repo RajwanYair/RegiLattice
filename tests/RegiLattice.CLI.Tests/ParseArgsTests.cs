@@ -891,5 +891,4 @@ public sealed class ConsoleColorizerSprintTests
             ConsoleColorizer.NoColor = false;
         }
     }
-
 }

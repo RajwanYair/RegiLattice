@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -439,7 +439,10 @@ internal static class UserAccount
             ApplyAction = dryRun =>
             {
                 if (!dryRun)
-                    ShellRunner.Run("secedit", ["/configure", "/db", "secedit.sdb", "/cfg", "%windir%\\inf\\defltbase.inf", "/areas", "SECURITYPOLICY", "/quiet"]);
+                    ShellRunner.Run(
+                        "secedit",
+                        ["/configure", "/db", "secedit.sdb", "/cfg", "%windir%\\inf\\defltbase.inf", "/areas", "SECURITYPOLICY", "/quiet"]
+                    );
             },
             RemoveAction = _ => { },
             DetectAction = () =>
@@ -483,7 +486,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Prevents the OS from creating elevated duplicate network connections for admin tokens, stopping credential elevation leakage over the network.",
+            Description =
+                "Prevents the OS from creating elevated duplicate network connections for admin tokens, stopping credential elevation leakage over the network.",
             Tags = ["uac", "network", "admin", "security"],
             SideEffects = "May break mapped drives when opened from an elevated process.",
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],

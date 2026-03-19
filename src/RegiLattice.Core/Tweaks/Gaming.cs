@@ -1087,7 +1087,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets AllowAppCapture=0 in GameConfigStore to disable background app DVR capture. Reduces background overhead during gaming sessions. Default: enabled.",
+            Description =
+                "Sets AllowAppCapture=0 in GameConfigStore to disable background app DVR capture. Reduces background overhead during gaming sessions. Default: enabled.",
             Tags = ["gaming", "dvr", "capture", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "AllowAppCapture", 0)],
@@ -1101,7 +1102,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Prevents the Xbox gamepad button from opening Game Bar overlay. Avoids accidental overlay popups during gameplay. Default: enabled.",
+            Description =
+                "Prevents the Xbox gamepad button from opening Game Bar overlay. Avoids accidental overlay popups during gameplay. Default: enabled.",
             Tags = ["gaming", "gamebar", "gamepad", "hotkey"],
             RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "AllowOpenByGamepad", 0)],
@@ -1115,7 +1117,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Forces AutoGameModeEnabled=1 so Windows 11 automatically activates Game Mode when a full-screen game is detected. Default: enabled on Win11.",
+            Description =
+                "Forces AutoGameModeEnabled=1 so Windows 11 automatically activates Game Mode when a full-screen game is detected. Default: enabled on Win11.",
             Tags = ["gaming", "game-mode", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1)],
@@ -1129,7 +1132,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets LowLevelHooksTimeout=50ms so unresponsive keyboard/mouse hooks are bypassed faster. Reduces input latency in games. Default: 5000ms.",
+            Description =
+                "Sets LowLevelHooksTimeout=50ms so unresponsive keyboard/mouse hooks are bypassed faster. Reduces input latency in games. Default: 5000ms.",
             Tags = ["gaming", "input", "latency", "hooks"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LowLevelHooksTimeout", "50")],
@@ -1143,12 +1147,22 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableHighPrecisionEventTimer=1 in the kernel config to disable HPET. Can improve frame consistency on some hardware by forcing use of TSC/LAPIC timers. Default: HPET enabled.",
+            Description =
+                "Sets DisableHighPrecisionEventTimer=1 in the kernel config to disable HPET. Can improve frame consistency on some hardware by forcing use of TSC/LAPIC timers. Default: HPET enabled.",
             Tags = ["gaming", "hpet", "timer", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableHighPrecisionEventTimer", 1),
+            ],
         },
         new TweakDef
         {
@@ -1157,12 +1171,22 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoLazyModeTimeout=1 in the Multimedia SystemProfile to prevent the scheduler from entering lazy mode between frames. Reduces micro-stutters. Default: off.",
+            Description =
+                "Sets NoLazyModeTimeout=1 in the Multimedia SystemProfile to prevent the scheduler from entering lazy mode between frames. Reduces micro-stutters. Default: off.",
             Tags = ["gaming", "multimedia", "scheduler", "stutter"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyModeTimeout", 1),
+            ],
         },
         new TweakDef
         {
@@ -1171,7 +1195,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the Psched (QoS Packet Scheduler) service to Disabled. Removes QoS scheduling overhead on gaming machines that don't need traffic shaping. Default: Manual.",
+            Description =
+                "Sets the Psched (QoS Packet Scheduler) service to Disabled. Removes QoS scheduling overhead on gaming machines that don't need traffic shaping. Default: Manual.",
             Tags = ["gaming", "network", "qos", "service"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Psched"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Psched", "Start", 4)],
@@ -1185,7 +1210,8 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets GameDVR_FSEBehaviorMode=2 which forces exclusive fullscreen mode for games running through GameConfigStore. Reduces DWM overhead. Default: 0.",
+            Description =
+                "Sets GameDVR_FSEBehaviorMode=2 which forces exclusive fullscreen mode for games running through GameConfigStore. Reduces DWM overhead. Default: 0.",
             Tags = ["gaming", "fullscreen", "fse", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
@@ -1199,12 +1225,22 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AudioLatencyMs=1 in Multimedia SystemProfile. Requests minimum audio buffer latency from the audio engine. May cause crackling on weak CPUs. Default: 10ms.",
+            Description =
+                "Sets AudioLatencyMs=1 in Multimedia SystemProfile. Requests minimum audio buffer latency from the audio engine. May cause crackling on weak CPUs. Default: 10ms.",
             Tags = ["gaming", "audio", "latency", "multimedia"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "AudioLatencyMs", 1),
+            ],
         },
         new TweakDef
         {
@@ -1213,12 +1249,33 @@ internal static class Gaming
             Category = "Gaming",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets BackgroundOnly=False in the Multimedia SystemProfile Tasks\\Games key. Ensures games are not treated as background-only processes by MMCSS. Default: False.",
+            Description =
+                "Sets BackgroundOnly=False in the Multimedia SystemProfile Tasks\\Games key. Ensures games are not treated as background-only processes by MMCSS. Default: False.",
             Tags = ["gaming", "mmcss", "background", "priority"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "BackgroundOnly", "False")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "BackgroundOnly")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "BackgroundOnly", "False")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "BackgroundOnly",
+                    "False"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "BackgroundOnly"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "BackgroundOnly",
+                    "False"
+                ),
+            ],
         },
     ];
 }

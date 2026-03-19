@@ -143,40 +143,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-disable-startup-sound",
-            Label = "Disable Windows Startup Sound",
-            Category = "Multimedia",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows startup/logon sound. Silences the chime played during boot. Default: Enabled. Recommended: Disabled.",
-            Tags = ["multimedia", "startup", "sound", "boot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "media-disable-autoplay-handlers",
             Label = "Disable AutoPlay Handlers (User)",
             Category = "Multimedia",

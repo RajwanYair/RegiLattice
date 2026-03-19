@@ -72,11 +72,7 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 80 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
-    private readonly Button _btnCreateTask = new()
-    {
-        Text = "Create Task…",
-        Width = 100,
-    };
+    private readonly Button _btnCreateTask = new() { Text = "Create Task…", Width = 100 };
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -307,12 +303,32 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
             MinimizeBox = false,
         };
 
-        var lblName = new Label { Text = "Task name:", Location = new Point(12, 16), AutoSize = true };
-        var txtName = new TextBox { Location = new Point(120, 12), Width = 280, Text = "MyTask" };
+        var lblName = new Label
+        {
+            Text = "Task name:",
+            Location = new Point(12, 16),
+            AutoSize = true,
+        };
+        var txtName = new TextBox
+        {
+            Location = new Point(120, 12),
+            Width = 280,
+            Text = "MyTask",
+        };
 
-        var lblPath = new Label { Text = "Program/script:", Location = new Point(12, 48), AutoSize = true };
+        var lblPath = new Label
+        {
+            Text = "Program/script:",
+            Location = new Point(12, 48),
+            AutoSize = true,
+        };
         var txtPath = new TextBox { Location = new Point(120, 44), Width = 230 };
-        var btnBrowse = new Button { Text = "…", Location = new Point(356, 43), Width = 44 };
+        var btnBrowse = new Button
+        {
+            Text = "…",
+            Location = new Point(356, 43),
+            Width = 44,
+        };
         btnBrowse.Click += (_, _) =>
         {
             using var ofd = new OpenFileDialog { Filter = "Executables (*.exe;*.bat;*.ps1)|*.exe;*.bat;*.ps1|All Files (*.*)|*.*" };
@@ -320,7 +336,12 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
                 txtPath.Text = ofd.FileName;
         };
 
-        var lblTrigger = new Label { Text = "Trigger:", Location = new Point(12, 82), AutoSize = true };
+        var lblTrigger = new Label
+        {
+            Text = "Trigger:",
+            Location = new Point(12, 82),
+            AutoSize = true,
+        };
         var cboTrigger = new ComboBox
         {
             Location = new Point(120, 78),
@@ -330,7 +351,12 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
         cboTrigger.Items.AddRange(["Once", "Daily", "AtLogon", "AtStartup"]);
         cboTrigger.SelectedIndex = 2; // AtLogon default
 
-        var lblTime = new Label { Text = "Start time:", Location = new Point(12, 116), AutoSize = true };
+        var lblTime = new Label
+        {
+            Text = "Start time:",
+            Location = new Point(12, 116),
+            AutoSize = true,
+        };
         var dtpTime = new DateTimePicker
         {
             Location = new Point(120, 112),
@@ -349,13 +375,24 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
         lblTime.Visible = false;
         dtpTime.Visible = false;
 
-        var btnOk = new Button { Text = "Create", DialogResult = DialogResult.OK, Location = new Point(230, 195), Width = 80 };
-        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(320, 195), Width = 80 };
+        var btnOk = new Button
+        {
+            Text = "Create",
+            DialogResult = DialogResult.OK,
+            Location = new Point(230, 195),
+            Width = 80,
+        };
+        var btnCancel = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Location = new Point(320, 195),
+            Width = 80,
+        };
         dlg.AcceptButton = btnOk;
         dlg.CancelButton = btnCancel;
 
-        dlg.Controls.AddRange([lblName, txtName, lblPath, txtPath, btnBrowse,
-            lblTrigger, cboTrigger, lblTime, dtpTime, btnOk, btnCancel]);
+        dlg.Controls.AddRange([lblName, txtName, lblPath, txtPath, btnBrowse, lblTrigger, cboTrigger, lblTime, dtpTime, btnOk, btnCancel]);
 
         if (dlg.ShowDialog(this) != DialogResult.OK)
             return;
@@ -364,15 +401,12 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
         string programPath = txtPath.Text.Trim();
         if (string.IsNullOrWhiteSpace(taskName) || string.IsNullOrWhiteSpace(programPath))
         {
-            MessageBox.Show(this, "Task name and program path are required.", "Validation Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, "Task name and program path are required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         string trigger = cboTrigger.SelectedItem?.ToString() ?? "AtLogon";
-        string stArg = trigger is "Once" or "Daily"
-            ? $" /ST {dtpTime.Value:HH:mm}"
-            : "";
+        string stArg = trigger is "Once" or "Daily" ? $" /ST {dtpTime.Value:HH:mm}" : "";
 
         try
         {
@@ -399,14 +433,12 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
             else
             {
                 string msg = string.IsNullOrWhiteSpace(error) ? output : error;
-                MessageBox.Show(this, $"schtasks failed:\n{msg}", "Create Task Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, $"schtasks failed:\n{msg}", "Create Task Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Could not create task: {ex.Message}", "Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, $"Could not create task: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 

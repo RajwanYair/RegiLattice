@@ -515,7 +515,10 @@ internal static class Office
             CorpSafe = true,
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Excel\Security", "BlockContentExecutionFromInternet", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Excel\Security", "BlockContentExecutionFromInternet")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Excel\Security", "BlockContentExecutionFromInternet", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Excel\Security", "BlockContentExecutionFromInternet", 1),
+            ],
         },
         new TweakDef
         {
@@ -539,7 +542,10 @@ internal static class Office
             CorpSafe = true,
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\ExperimentConfigs", "ExternalExperimentOptIn", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\ExperimentConfigs", "ExternalExperimentOptIn")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\ExperimentConfigs", "ExternalExperimentOptIn", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\ExperimentConfigs", "ExternalExperimentOptIn", 0),
+            ],
         },
         new TweakDef
         {
@@ -549,9 +555,18 @@ internal static class Office
             Tags = ["office", "update", "notification"],
             NeedsAdmin = true,
             CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate", "HideUpdateNotifications", 1),
+            ],
         },
         new TweakDef
         {

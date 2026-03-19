@@ -71,8 +71,10 @@ internal sealed class SleepTimerDialog : BaseDialog
         Enabled = false,
     };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+
     // Sprint 51 §10a: recurring daily schedule mode
     private readonly CheckBox _chkRecurring = new() { Text = "Recurring (repeat daily at schedule time)", AutoSize = true };
+
     // Sprint 51 §10b: cancel-all quick button
     private readonly Button _btnCancelAll = new() { Text = "Cancel All", Width = 90 };
 
@@ -336,7 +338,9 @@ internal sealed class SleepTimerDialog : BaseDialog
             foreach (var proc in System.Diagnostics.Process.GetProcessesByName("shutdown"))
                 proc.Kill();
         }
-        catch { /* non-fatal */ }
+        catch
+        { /* non-fatal */
+        }
         _statusLabel.Text = "All sleep timers cancelled.";
     }
 }

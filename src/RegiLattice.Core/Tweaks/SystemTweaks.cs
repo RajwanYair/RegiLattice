@@ -531,7 +531,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NtfsEncryptPagingFile=0 to disable NTFS encryption of the pagefile. Reduces CPU overhead during memory paging operations. Default: 0 on most systems.",
+            Description =
+                "Sets NtfsEncryptPagingFile=0 to disable NTFS encryption of the pagefile. Reduces CPU overhead during memory paging operations. Default: 0 on most systems.",
             Tags = ["system", "pagefile", "ntfs", "encryption"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
@@ -545,12 +546,25 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Removes the PhysicalMemoryAllocationPolicy value from Memory Management to let Windows use all available RAM without a capped upper bound. Default: not set.",
+            Description =
+                "Removes the PhysicalMemoryAllocationPolicy value from Memory Management to let Windows use all available RAM without a capped upper bound. Default: not set.",
             Tags = ["system", "memory", "ram", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PhysicalMemoryAllocationPolicy")],
+            ApplyOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "PhysicalMemoryAllocationPolicy"
+                ),
+            ],
             RemoveOps = [],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PhysicalMemoryAllocationPolicy")],
+            DetectOps =
+            [
+                RegOp.CheckMissing(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
+                    "PhysicalMemoryAllocationPolicy"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -559,7 +573,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MaxWorkItems=8192 in LanmanServer parameters. Increases the number of simultaneous outstanding server-side requests for SMB workloads. Default: system varies.",
+            Description =
+                "Sets MaxWorkItems=8192 in LanmanServer parameters. Increases the number of simultaneous outstanding server-side requests for SMB workloads. Default: system varies.",
             Tags = ["system", "smb", "lanman", "threading"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "MaxWorkItems", 8192)],
@@ -573,7 +588,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets ITEPriority=3 in PriorityControl to give foreground processes an I/O priority boost (Normal+). Improves responsiveness under disk-heavy background workloads. Default: 3.",
+            Description =
+                "Sets ITEPriority=3 in PriorityControl to give foreground processes an I/O priority boost (Normal+). Improves responsiveness under disk-heavy background workloads. Default: 3.",
             Tags = ["system", "io", "priority", "foreground"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "ITEPriority", 3)],
@@ -587,7 +603,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets GDIBatchLimit=256 in the Session Manager key. Increases the GDI batch flush threshold, reducing context switches for apps that make many consecutive GDI calls. Default: 0 (unbatched).",
+            Description =
+                "Sets GDIBatchLimit=256 in the Session Manager key. Increases the GDI batch flush threshold, reducing context switches for apps that make many consecutive GDI calls. Default: 0 (unbatched).",
             Tags = ["system", "gdi", "graphics", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "GDIBatchLimit", 256)],
@@ -601,12 +618,19 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets HeapDeCommitFreeBlockThreshold=0x40000 in Session Manager. Raises the size at which heap free blocks are returned to the OS, reducing per-process fragmentation overhead. Default: 0.",
+            Description =
+                "Sets HeapDeCommitFreeBlockThreshold=0x40000 in Session Manager. Raises the size at which heap free blocks are returned to the OS, reducing per-process fragmentation overhead. Default: 0.",
             Tags = ["system", "heap", "memory", "fragmentation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000),
+            ],
         },
         new TweakDef
         {
@@ -615,7 +639,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets WriteWatch=0 in Memory Management to disable write-watch tracking. Reduces kernel overhead when this feature is not needed by the workload. Default: 0.",
+            Description =
+                "Sets WriteWatch=0 in Memory Management to disable write-watch tracking. Reduces kernel overhead when this feature is not needed by the workload. Default: 0.",
             Tags = ["system", "vm", "memory", "kernel"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
@@ -629,12 +654,22 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LargePageMinimum=0 in Memory Management to allow large page (2MB) memory allocations when possible. Reduces TLB pressure for large working sets. Default: depends.",
+            Description =
+                "Sets LargePageMinimum=0 in Memory Management to allow large page (2MB) memory allocations when possible. Reduces TLB pressure for large working sets. Default: depends.",
             Tags = ["system", "large-pages", "memory", "tlb"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0),
+            ],
         },
         new TweakDef
         {
@@ -643,7 +678,8 @@ internal static class SystemTweaks
             Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets IdleTaskPriority=1 in PriorityControl to ensure idle maintenance tasks run at lowest possible CPU priority. Prevents background tasks from stealing CPU time. Default: 1.",
+            Description =
+                "Sets IdleTaskPriority=1 in PriorityControl to ensure idle maintenance tasks run at lowest possible CPU priority. Prevents background tasks from stealing CPU time. Default: 1.",
             Tags = ["system", "idle", "priority", "background"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "IdleTaskPriority", 1)],

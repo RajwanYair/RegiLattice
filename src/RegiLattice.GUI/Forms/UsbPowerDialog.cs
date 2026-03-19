@@ -46,8 +46,10 @@ internal sealed class UsbPowerDialog : BaseDialog
     private readonly Button _btnDisableAll = new() { Text = "Disable All USB Suspend", Width = 150 };
     private readonly Button _btnRestore = new() { Text = "Restore Defaults", Width = 120 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+
     // Sprint 51 §11a: per-device override list
     private readonly Button _btnDeviceOverrides = new() { Text = "Per-Device Overrides…", Width = 150 };
+
     // Sprint 51 §11b: log power events
     private readonly CheckBox _chkLogPowerEvents = new() { Text = "Log USB power events", AutoSize = true };
     private readonly List<string> _powerEventLog = [];
@@ -289,7 +291,12 @@ internal sealed class UsbPowerDialog : BaseDialog
             TextAlign = ContentAlignment.MiddleLeft,
             Padding = new Padding(4, 0, 0, 0),
         };
-        var btnClose2 = new Button { Text = "Close", Dock = DockStyle.Bottom, Height = 30 };
+        var btnClose2 = new Button
+        {
+            Text = "Close",
+            Dock = DockStyle.Bottom,
+            Height = 30,
+        };
         btnClose2.Click += (_, _) => dlg.Close();
         dlg.Controls.AddRange([lv, hint, btnClose2]);
         dlg.ShowDialog(this);

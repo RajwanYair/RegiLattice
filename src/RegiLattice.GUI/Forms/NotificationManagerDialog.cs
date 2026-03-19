@@ -336,8 +336,7 @@ internal sealed class NotificationManagerDialog : BaseDialog
     // ── History log ───────────────────────────────────────────────────────────
     private readonly System.Collections.Generic.List<string> _notifHistory = [];
 
-    private void RecordHistory(string action)
-        => _notifHistory.Add($"[{DateTime.Now:HH:mm:ss}]  {action}");
+    private void RecordHistory(string action) => _notifHistory.Add($"[{DateTime.Now:HH:mm:ss}]  {action}");
 
     private void OnShowNotifHistory(object? sender, EventArgs e)
     {
@@ -356,12 +355,18 @@ internal sealed class NotificationManagerDialog : BaseDialog
             ScrollBars = ScrollBars.Vertical,
             ReadOnly = true,
             Font = new Font("Consolas", 9f),
-            Text = _notifHistory.Count > 0
-                ? string.Join(Environment.NewLine, _notifHistory)
-                : "No actions recorded yet this session.\n\nActions are logged whenever you enable or disable app notifications using this dialog.",
+            Text =
+                _notifHistory.Count > 0
+                    ? string.Join(Environment.NewLine, _notifHistory)
+                    : "No actions recorded yet this session.\n\nActions are logged whenever you enable or disable app notifications using this dialog.",
         };
 
-        var btnOk = new Button { Text = "Close", Dock = DockStyle.Bottom, Height = 32 };
+        var btnOk = new Button
+        {
+            Text = "Close",
+            Dock = DockStyle.Bottom,
+            Height = 32,
+        };
         btnOk.Click += (_, _) => dlg.Close();
         dlg.Controls.Add(txt);
         dlg.Controls.Add(btnOk);
@@ -369,14 +374,17 @@ internal sealed class NotificationManagerDialog : BaseDialog
     }
 
     // ── DND Schedule ──────────────────────────────────────────────────────────
-    private static readonly string DndSchedulePath =
-        System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RegiLattice", "dnd-schedule.json");
+    private static readonly string DndSchedulePath = System.IO.Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "RegiLattice",
+        "dnd-schedule.json"
+    );
 
     private void OnDndSchedule(object? sender, EventArgs e)
     {
         // Load existing schedule
-        TimeOnly startTime = new(22, 0), endTime = new(7, 0);
+        TimeOnly startTime = new(22, 0),
+            endTime = new(7, 0);
         bool enabled = false;
         try
         {
@@ -384,12 +392,17 @@ internal sealed class NotificationManagerDialog : BaseDialog
             {
                 var doc = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(DndSchedulePath));
                 var root = doc.RootElement;
-                if (root.TryGetProperty("enabled", out var pe)) enabled = pe.GetBoolean();
-                if (root.TryGetProperty("start", out var ps) && TimeOnly.TryParse(ps.GetString(), out var ts)) startTime = ts;
-                if (root.TryGetProperty("end", out var pe2) && TimeOnly.TryParse(pe2.GetString(), out var te)) endTime = te;
+                if (root.TryGetProperty("enabled", out var pe))
+                    enabled = pe.GetBoolean();
+                if (root.TryGetProperty("start", out var ps) && TimeOnly.TryParse(ps.GetString(), out var ts))
+                    startTime = ts;
+                if (root.TryGetProperty("end", out var pe2) && TimeOnly.TryParse(pe2.GetString(), out var te))
+                    endTime = te;
             }
         }
-        catch { /* ignore corrupt file */ }
+        catch
+        { /* ignore corrupt file */
+        }
 
         using var dlg = new Form
         {
@@ -397,29 +410,62 @@ internal sealed class NotificationManagerDialog : BaseDialog
             Size = new Size(360, 220),
             FormBorderStyle = FormBorderStyle.FixedDialog,
             StartPosition = FormStartPosition.CenterParent,
-            MaximizeBox = false, MinimizeBox = false,
+            MaximizeBox = false,
+            MinimizeBox = false,
         };
 
-        var chkEnabled = new CheckBox { Text = "Enable DND schedule", AutoSize = true, Location = new Point(12, 16), Checked = enabled };
+        var chkEnabled = new CheckBox
+        {
+            Text = "Enable DND schedule",
+            AutoSize = true,
+            Location = new Point(12, 16),
+            Checked = enabled,
+        };
 
-        var lblStart = new Label { Text = "Quiet hours start:", Location = new Point(12, 48), AutoSize = true };
+        var lblStart = new Label
+        {
+            Text = "Quiet hours start:",
+            Location = new Point(12, 48),
+            AutoSize = true,
+        };
         var dtpStart = new DateTimePicker
         {
-            Location = new Point(140, 44), Width = 130,
-            Format = DateTimePickerFormat.Time, ShowUpDown = true,
+            Location = new Point(140, 44),
+            Width = 130,
+            Format = DateTimePickerFormat.Time,
+            ShowUpDown = true,
             Value = DateTime.Today.Add(startTime.ToTimeSpan()),
         };
 
-        var lblEnd = new Label { Text = "Quiet hours end:", Location = new Point(12, 82), AutoSize = true };
+        var lblEnd = new Label
+        {
+            Text = "Quiet hours end:",
+            Location = new Point(12, 82),
+            AutoSize = true,
+        };
         var dtpEnd = new DateTimePicker
         {
-            Location = new Point(140, 78), Width = 130,
-            Format = DateTimePickerFormat.Time, ShowUpDown = true,
+            Location = new Point(140, 78),
+            Width = 130,
+            Format = DateTimePickerFormat.Time,
+            ShowUpDown = true,
             Value = DateTime.Today.Date.Add(endTime.ToTimeSpan()),
         };
 
-        var btnSave = new Button { Text = "Save", DialogResult = DialogResult.OK, Location = new Point(190, 145), Width = 75 };
-        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(275, 145), Width = 65 };
+        var btnSave = new Button
+        {
+            Text = "Save",
+            DialogResult = DialogResult.OK,
+            Location = new Point(190, 145),
+            Width = 75,
+        };
+        var btnCancel = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Location = new Point(275, 145),
+            Width = 65,
+        };
         dlg.AcceptButton = btnSave;
         dlg.CancelButton = btnCancel;
         dlg.Controls.AddRange([chkEnabled, lblStart, dtpStart, lblEnd, dtpEnd, btnSave, btnCancel]);
@@ -438,9 +484,10 @@ internal sealed class NotificationManagerDialog : BaseDialog
         try
         {
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(DndSchedulePath)!);
-            System.IO.File.WriteAllText(DndSchedulePath,
-                System.Text.Json.JsonSerializer.Serialize(schedule,
-                    new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+            System.IO.File.WriteAllText(
+                DndSchedulePath,
+                System.Text.Json.JsonSerializer.Serialize(schedule, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })
+            );
 
             RecordHistory($"DND schedule saved: {schedule.start}–{schedule.end} (enabled={schedule.enabled})");
             _lblStatus.Text = $"DND schedule saved: {schedule.start}\u2013{schedule.end}";

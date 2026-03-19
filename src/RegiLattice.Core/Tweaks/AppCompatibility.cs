@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -174,20 +174,6 @@ internal static class AppCompatibility
         },
         new TweakDef
         {
-            Id = "compat-disable-startup-delay",
-            Label = "Disable Startup App Delay",
-            Category = "App Compatibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the artificial delay Windows adds before launching startup applications. Apps start immediately at logon.",
-            Tags = ["compatibility", "performance", "startup", "delay"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0)],
-        },
-        new TweakDef
-        {
             Id = "compat-disable-autoplay-devices",
             Label = "Disable AutoPlay for Non-Volume Devices",
             Category = "App Compatibility",
@@ -323,7 +309,10 @@ internal static class AppCompatibility
             {
                 if (!dryRun)
                 {
-                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/DISABLE"]);
+                    ShellRunner.Run(
+                        "schtasks",
+                        ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/DISABLE"]
+                    );
                     ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\ProgramDataUpdater", "/DISABLE"]);
                 }
             },
@@ -331,13 +320,19 @@ internal static class AppCompatibility
             {
                 if (!dryRun)
                 {
-                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/ENABLE"]);
+                    ShellRunner.Run(
+                        "schtasks",
+                        ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/ENABLE"]
+                    );
                     ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\ProgramDataUpdater", "/ENABLE"]);
                 }
             },
             DetectAction = () =>
             {
-                var (_, stdout, _) = ShellRunner.Run("schtasks", ["/Query", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/FO", "LIST"]);
+                var (_, stdout, _) = ShellRunner.Run(
+                    "schtasks",
+                    ["/Query", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/FO", "LIST"]
+                );
                 return stdout.Contains("Disabled", StringComparison.OrdinalIgnoreCase);
             },
         },
@@ -348,7 +343,8 @@ internal static class AppCompatibility
             Category = "App Compatibility",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the User Choice Protection Driver that Microsoft installs to prevent changing default browser/app associations via registry.",
+            Description =
+                "Disables the User Choice Protection Driver that Microsoft installs to prevent changing default browser/app associations via registry.",
             Tags = ["compatibility", "defaults", "ucpd", "browser"],
             SideEffects = "Microsoft may re-enable this periodically via Windows Update.",
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\UCPD"],
@@ -410,7 +406,10 @@ internal static class AppCompatibility
             Tags = ["compatibility", "debugging", "crash", "ux"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug"],
             ApplyOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger")],
-            RemoveOps = [RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger", @"vsjitdebugger.exe -p %ld -e %ld")],
+            RemoveOps =
+            [
+                RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger", @"vsjitdebugger.exe -p %ld -e %ld"),
+            ],
             DetectOps = [RegOp.CheckMissing($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger")],
         },
         new TweakDef
@@ -420,7 +419,8 @@ internal static class AppCompatibility
             Category = "App Compatibility",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces Data Execution Prevention (DEP/NX) for all processes, not just Windows system components, increasing exploit mitigation.",
+            Description =
+                "Forces Data Execution Prevention (DEP/NX) for all processes, not just Windows system components, increasing exploit mitigation.",
             Tags = ["compatibility", "dep", "security", "exploit", "hardening"],
             SideEffects = "Some very old or poorly-written applications may crash with DEP enabled.",
             ApplyAction = dryRun =>

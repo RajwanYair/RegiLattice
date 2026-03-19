@@ -17,8 +17,10 @@ public enum ScheduleTrigger
 {
     /// <summary>Apply on every system boot (via startup registry key).</summary>
     OnBoot,
+
     /// <summary>Apply on user login (HKCU Run key).</summary>
     OnLogin,
+
     /// <summary>Apply on a repeating timer interval.</summary>
     Timer,
 }
@@ -55,13 +57,10 @@ public sealed class ScheduledTweakService
     private static readonly string SchedulesPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "RegiLattice",
-        "scheduled-tweaks.json");
+        "scheduled-tweaks.json"
+    );
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true,
-        Converters = { new JsonStringEnumConverter() },
-    };
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } };
 
     private List<TweakSchedule> _schedules = [];
 
@@ -110,23 +109,20 @@ public sealed class ScheduledTweakService
     /// <summary>Remove the schedule for <paramref name="tweakId"/> if it exists.</summary>
     public bool RemoveSchedule(string tweakId)
     {
-        int removed = _schedules.RemoveAll(s =>
-            string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
+        int removed = _schedules.RemoveAll(s => string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
         return removed > 0;
     }
 
     /// <summary>Returns the schedule for <paramref name="tweakId"/>, or <c>null</c> if not found.</summary>
     public TweakSchedule? GetSchedule(string tweakId) =>
-        _schedules.FirstOrDefault(s =>
-            string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
+        _schedules.FirstOrDefault(s => string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
     /// Update the LastRun timestamp for an existing schedule without changing other fields.
     /// </summary>
     public void RecordLastRun(string tweakId, DateTime runTime)
     {
-        int idx = _schedules.FindIndex(s =>
-            string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
+        int idx = _schedules.FindIndex(s => string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
         if (idx < 0)
             return;
 
@@ -138,8 +134,7 @@ public sealed class ScheduledTweakService
     /// </summary>
     public void SetEnabled(string tweakId, bool enabled)
     {
-        int idx = _schedules.FindIndex(s =>
-            string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
+        int idx = _schedules.FindIndex(s => string.Equals(s.TweakId, tweakId, StringComparison.OrdinalIgnoreCase));
         if (idx >= 0)
             _schedules[idx] = _schedules[idx] with { Enabled = enabled };
     }
@@ -150,10 +145,11 @@ public sealed class ScheduledTweakService
         var now = DateTime.UtcNow;
         return _schedules
             .Where(s =>
-                s.Enabled &&
-                s.Trigger == ScheduleTrigger.Timer &&
-                s.IntervalMinutes > 0 &&
-                (s.LastRun is null || (now - s.LastRun.Value).TotalMinutes >= s.IntervalMinutes))
+                s.Enabled
+                && s.Trigger == ScheduleTrigger.Timer
+                && s.IntervalMinutes > 0
+                && (s.LastRun is null || (now - s.LastRun.Value).TotalMinutes >= s.IntervalMinutes)
+            )
             .ToList();
     }
 }

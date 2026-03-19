@@ -80,6 +80,7 @@ internal sealed class BrightnessSchedulerDialog : BaseDialog
         Padding = new Padding(6, 0, 0, 0),
     };
     private readonly System.Windows.Forms.Timer _timer = new() { Interval = 60_000 };
+
     // Sprint 51 §12a: transition duration control
     private readonly NumericUpDown _nudTransition = new()
     {
@@ -90,6 +91,7 @@ internal sealed class BrightnessSchedulerDialog : BaseDialog
         DecimalPlaces = 0,
     };
     private readonly Label _lblTransition = new() { Text = "Fade duration (s):", AutoSize = true };
+
     // Sprint 51 §12b: sunrise/sunset auto mode
     private readonly CheckBox _chkSunriseSunset = new() { Text = "Sunrise/sunset auto (use day/night times as above)", AutoSize = true };
     private readonly Label _lblNote = new()
