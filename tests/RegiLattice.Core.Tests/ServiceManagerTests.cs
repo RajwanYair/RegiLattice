@@ -9,39 +9,37 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Tests for the Sprint-29 ServiceManager service (read-only operations).</summary>
 public sealed class ServiceManagerTests
 {
+    // Fetched once per test-class lifetime so the slow OS enumeration runs only once.
+    private static readonly IReadOnlyList<ServiceEntry> _allServices = ServiceManager.GetAllServices();
+
     [Fact]
     public void GetAllServices_ReturnsNonEmptyList()
     {
-        var services = ServiceManager.GetAllServices();
-        Assert.NotEmpty(services);
+        Assert.NotEmpty(_allServices);
     }
 
     [Fact]
     public void GetAllServices_AllEntries_HaveServiceName()
     {
-        var services = ServiceManager.GetAllServices();
-        Assert.All(services, s => Assert.False(string.IsNullOrEmpty(s.ServiceName)));
+        Assert.All(_allServices, s => Assert.False(string.IsNullOrEmpty(s.ServiceName)));
     }
 
     [Fact]
     public void GetAllServices_AllEntries_HaveDisplayName()
     {
-        var services = ServiceManager.GetAllServices();
-        Assert.All(services, s => Assert.False(string.IsNullOrEmpty(s.DisplayName)));
+        Assert.All(_allServices, s => Assert.False(string.IsNullOrEmpty(s.DisplayName)));
     }
 
     [Fact]
     public void GetAllServices_AllEntries_HaveValidStatus()
     {
-        var services = ServiceManager.GetAllServices();
-        Assert.All(services, s => Assert.True(Enum.IsDefined(typeof(ServiceControllerStatus), s.Status)));
+        Assert.All(_allServices, s => Assert.True(Enum.IsDefined(typeof(ServiceControllerStatus), s.Status)));
     }
 
     [Fact]
     public void GetAllServices_AllEntries_HaveValidStartType()
     {
-        var services = ServiceManager.GetAllServices();
-        Assert.All(services, s => Assert.True(Enum.IsDefined(typeof(ServiceStartMode), s.StartType)));
+        Assert.All(_allServices, s => Assert.True(Enum.IsDefined(typeof(ServiceStartMode), s.StartType)));
     }
 
     [Fact]
@@ -91,7 +89,6 @@ public sealed class ServiceManagerTests
     public void GetAllServices_CountIsGreaterThanTen()
     {
         // Any Windows installation will have well more than 10 services
-        var services = ServiceManager.GetAllServices();
-        Assert.True(services.Count > 10, $"Expected >10 services but got {services.Count}");
+        Assert.True(_allServices.Count > 10, $"Expected >10 services but got {_allServices.Count}");
     }
 }
