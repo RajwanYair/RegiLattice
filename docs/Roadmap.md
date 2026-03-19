@@ -1,17 +1,17 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-19 · v3.6.0 · 2 946 tweaks · 92 categories · 2 088 tests
+> Last updated: 2026-07-17 · v3.7.0 · 2 995 tweaks · 92 categories · 1 879 tests
 
 ---
 
-## Current State (as of v3.6.0)
+## Current State (as of v3.7.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 946 verified across 92 categories |
-| Tests | 2 088 total, all passing, 4-thread parallel |
+| Tweaks | 2 995 verified across 92 categories |
+| Tests | 2 130 total, all passing, 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -970,6 +970,22 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 10 | `StartupManagerDialog` +2: "Search/filter" textbox + "Impact" column (High/Medium/Low) | ✅ |
 | 11 | Tests: +20 `[InlineData]` entries in `TweakEngineBuiltinsTests` — 1464 Core tests passing | ✅ |
 | 12 | Target: **2 996 tweaks** (+50) | ✅ |
+
+### Sprint 47b — v3.7.0: MSI Release Fix + Service Enhancements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Diagnose missing MSI: `release.yml` never built `installer/RegiLattice.Installer.wixproj`; publish paths mismatched (`publish/release/gui` vs `publish/gui`) | ✅ |
+| 2 | Fix `release.yml`: corrected publish paths, added WiX 6.0.2 install step, added MSI build step, updated SHA256SUMS to include MSI, added MSI to release assets | ✅ |
+| 3 | Bump version `3.6.0` → `3.7.0` in `Directory.Build.props` and `installer/Package.wxs` | ✅ |
+| 4 | `NetworkManager.cs` +2: `PingAsync()` (shells to `ping -n N`, parses stdout) + `GetNetworkInterfaceStats()` (per-adapter byte/packet stats) | ✅ |
+| 5 | `StartupManager.cs` +2: `AddRegistryEntry(name, command)` (HKCU Run) + `ExportEntriesAsync(filePath)` (JSON export) | ✅ |
+| 6 | `ServiceManager.cs` +2: `GetDependentServices(name)` (reverse dependency list) + `ExportToCsvAsync(filePath)` (CSV export) | ✅ |
+| 7 | `TweakHistory.cs` +2: `GetSummaryStats()` (action counts + top-5 tweaks) + `ExportToJsonAsync(filePath)` (full history JSON export) | ✅ |
+| 8 | `Favorites.cs` +2: `ExportToJsonAsync(filePath)` (JSON array export) + `ImportFromJson(filePath)` (merge + return added count) | ✅ |
+| 9 | `AppConfig.cs` +2: `AutoBackupOnApply` (bool, default `true`) + `SnapshotOnProfileChange` (bool, default `true`) | ✅ |
+| 10 | Tests: +19 new tests — 1 879 total passing | ✅ |
+| 11 | Target: **2 995 tweaks** (Sprint 47 result; no new tweaks in this patch sprint) | ✅ |
 
 ### Sprint 48 — 50 New Tweaks + 5 Dialog Enhancements
 

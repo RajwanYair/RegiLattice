@@ -52,27 +52,42 @@ jobs:
           dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
-          -o publish/release/gui
+          -o publish/gui
 
       - name: Publish CLI (self-contained)
         run: >-
           dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=true
-          -o publish/release/cli
+          -o publish/cli
+
+      - name: Install WiX toolset
+        run: dotnet tool install --global wix --version 6.0.2
+
+      - name: Build MSI installer
+        run: dotnet build installer/RegiLattice.Installer.wixproj -c Release
 
       - name: Generate checksums
         shell: pwsh
         run: |
-          $files = Get-ChildItem publish/release -Recurse -File
-          $hashes = foreach ($f in $files) { Get-FileHash $f.FullName -Algorithm SHA256 }
-          $hashes | ForEach-Object { "{0}  {1}" -f $_.Hash.ToLowerInvariant(), ($_.Path -replace '^.*publish/release[/\\]', '') } | Set-Content publish/release/SHA256SUMS.txt
+          $exeFiles = @(
+            Get-ChildItem "publish/gui" -File -Filter "*.exe"
+            Get-ChildItem "publish/cli" -File -Filter "*.exe"
+          )
+          $msiFiles = Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
+          $all = @($exeFiles) + @($msiFiles)
+          $hashes = foreach ($f in $all) { Get-FileHash $f.FullName -Algorithm SHA256 }
+          $hashes | ForEach-Object {
+            $rel = $_.Path -replace [regex]::Escape((Get-Location).Path + '\'), '' -replace '\\', '/'
+            "{0}  {1}" -f $_.Hash.ToLowerInvariant(), $rel
+          } | Set-Content publish/SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            publish/release/gui/*
-            publish/release/cli/*
-            publish/release/SHA256SUMS.txt
+            publish/gui/RegiLattice.GUI.exe
+            publish/cli/RegiLattice.exe
+            installer/bin/Release/**/*.msi
+            publish/SHA256SUMS.txt
           generate_release_notes: true

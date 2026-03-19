@@ -78,6 +78,51 @@ public static class Favorites
         }
     }
 
+    // ── Sprint 47 enhancements ─────────────────────────────────────────────
+
+    /// <summary>
+    /// Exports the current favorites list to a JSON array file at <paramref name="filePath"/>.
+    /// </summary>
+    public static async Task ExportToJsonAsync(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        IReadOnlyList<string> snapshot = All();
+        var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? ".");
+        await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Imports tweak IDs from a JSON array at <paramref name="filePath"/> and merges them
+    /// into the current favorites (existing favorites are preserved, duplicates are ignored).
+    /// Returns the number of newly added IDs.
+    /// </summary>
+    public static int ImportFromJson(string filePath)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        if (!File.Exists(filePath))
+            throw new FileNotFoundException("Favorites import file not found.", filePath);
+
+        string json = File.ReadAllText(filePath);
+        var ids = JsonSerializer.Deserialize<List<string>>(json)
+            ?? throw new InvalidOperationException("Favorites file does not contain a JSON array.");
+
+        int added = 0;
+        lock (Lock)
+        {
+            var set = LoadSet();
+            foreach (string id in ids)
+            {
+                if (!string.IsNullOrWhiteSpace(id) && set.Add(id))
+                {
+                    added++;
+                    _dirty = true;
+                }
+            }
+        }
+        return added;
+    }
+
     /// <summary>Write pending changes to disk.</summary>
     public static void Flush()
     {

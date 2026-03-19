@@ -1,4 +1,5 @@
 ﻿using RegiLattice.Core;
+using RegiLattice.Core.Services;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;
@@ -1549,4 +1550,136 @@ public sealed class AnalyticsSprintTests
 
     [Fact]
     public void TopTweaks_ReturnsNonNullList() => Assert.NotNull(Analytics.TopTweaks(5));
+}
+
+// ── Sprint 47: AppConfig new property defaults ──────────────────────────────
+
+public sealed class AppConfigSprint47Tests
+{
+    [Fact]
+    public void Default_AutoBackupOnApply_IsTrue() =>
+        Assert.True(new AppConfig().AutoBackupOnApply);
+
+    [Fact]
+    public void Default_SnapshotOnProfileChange_IsTrue() =>
+        Assert.True(new AppConfig().SnapshotOnProfileChange);
+
+    [Fact]
+    public void SaveLoadRoundTrip_AutoBackupOnApply_False()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-sp47-{Guid.NewGuid()}");
+        var path = Path.Combine(dir, "cfg.json");
+        try
+        {
+            var cfg = new AppConfig { AutoBackupOnApply = false, SnapshotOnProfileChange = false };
+            cfg.Save(path);
+            var loaded = AppConfig.Load(path);
+            Assert.False(loaded.AutoBackupOnApply);
+            Assert.False(loaded.SnapshotOnProfileChange);
+        }
+        finally
+        {
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, recursive: true);
+        }
+    }
+}
+
+// ── Sprint 47: NetworkManager new APIs ──────────────────────────────────────
+
+public sealed class NetworkManagerSprint47Tests
+{
+    [Fact]
+    public void GetNetworkInterfaceStats_ReturnsNonNull()
+    {
+        var stats = NetworkManager.GetNetworkInterfaceStats();
+        Assert.NotNull(stats);
+    }
+
+    [Fact]
+    public void GetNetworkInterfaceStats_AllNamesNonEmpty()
+    {
+        var stats = NetworkManager.GetNetworkInterfaceStats();
+        Assert.All(stats, s => Assert.False(string.IsNullOrWhiteSpace(s.Name)));
+    }
+
+    [Fact]
+    public void PingResult_Parse_TypicalOutput_ExtractsPacketCounts()
+    {
+        const string stdout = "\r\nPinging 1.1.1.1 with 32 bytes of data:\r\nReply from 1.1.1.1: bytes=32 time=5ms TTL=58\r\nReply from 1.1.1.1: bytes=32 time=4ms TTL=58\r\n\r\nPing statistics for 1.1.1.1:\r\n    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),\r\nApproximate round trip times in milli-seconds:\r\n    Minimum = 4ms, Maximum = 5ms, Average = 4ms\r\n";
+        var result = PingResult.Parse("1.1.1.1", stdout);
+        Assert.Equal("1.1.1.1", result.Host);
+        Assert.Equal(2, result.Sent);
+        Assert.Equal(2, result.Received);
+        Assert.Equal(0, result.Lost);
+        Assert.Equal(0.0, result.LossPercent);
+    }
+
+    [Fact]
+    public void PingResult_Parse_AllLost_LossPercent100()
+    {
+        const string stdout = "    Packets: Sent = 4, Received = 0, Lost = 4 (100% loss),";
+        var result = PingResult.Parse("unreachable", stdout);
+        Assert.Equal(100.0, result.LossPercent);
+    }
+}
+
+// ── Sprint 47: StartupManager AddRegistryEntry validation ──────────────────
+
+public sealed class StartupManagerSprint47Tests
+{
+    [Fact]
+    public void AddRegistryEntry_BlankName_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("", "notepad.exe"));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_BlankCommand_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("TestEntry", ""));
+    }
+
+    [Fact]
+    public async Task ExportEntriesAsync_BlankPath_ThrowsArgumentException()
+    {
+        await Assert.ThrowsAsync<ArgumentException>(() => StartupManager.ExportEntriesAsync(""));
+    }
+}
+
+// ── Sprint 47: ServiceManager new APIs ──────────────────────────────────────
+
+public sealed class ServiceManagerSprint47Tests
+{
+    [Fact]
+    public void GetDependentServices_BlankName_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => ServiceManager.GetDependentServices(""));
+    }
+
+    [Fact]
+    public void GetDependentServices_UnknownService_ReturnsEmptyList()
+    {
+        var deps = ServiceManager.GetDependentServices("rl-test-nonexistent-svc-9x8a");
+        Assert.Empty(deps);
+    }
+
+    [Fact]
+    public async Task ExportToCsvAsync_WritesHeaderAndAtLeastOneRow()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"rl-svc-{Guid.NewGuid()}.csv");
+        try
+        {
+            await ServiceManager.ExportToCsvAsync(path);
+            Assert.True(File.Exists(path));
+            var lines = await File.ReadAllLinesAsync(path);
+            Assert.True(lines.Length >= 2);               // header + at least 1 service
+            Assert.Contains("ServiceName", lines[0]);
+            Assert.Contains("DisplayName", lines[0]);
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
 }

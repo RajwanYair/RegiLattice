@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project                  | Tests     | Covers                                                                                                                                                                         |
 | ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `RegiLattice.Core.Tests` | 784       | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
-| `RegiLattice.CLI.Tests`  | 111       | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
-| `RegiLattice.GUI.Tests`  | 410       | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **1,305** |                                                                                                                                                                                |
+| `RegiLattice.Core.Tests` | 1,483     | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
+| `RegiLattice.CLI.Tests`  | 154       | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
+| `RegiLattice.GUI.Tests`  | 242       | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
+| **Total**                | **1,879** |                                                                                                                                                                                |
 
 ## Running Tests
 
