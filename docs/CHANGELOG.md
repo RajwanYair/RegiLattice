@@ -4,6 +4,49 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 43
+
+### Fixed
+
+- **Version display** — `AssemblyInfo.cs` created (`AssemblyVersion`/`AssemblyInformationalVersion = "3.5.0"`);
+  `AboutDialog` reads `AssemblyInformationalVersionAttribute` so version shows `3.5.0` instead of `0.0.0.0`
+- **`WindowsHealthDialog` crash** — `AppendLog` and `SetBusy` now fully dispose-safe and thread-safe;
+  `RunBatchAsync` final status block guarded with `if (!IsDisposed)`
+- **Marketplace 404 + corporate proxy** — `PackManager.s_http` uses `HttpClientHandler` with
+  `WebRequest.GetSystemWebProxy()` and `UseDefaultCredentials = true`; `FetchIndexAsync` handles
+  `HttpStatusCode.NotFound` gracefully returning an empty `PackIndex`
+
+### Added
+
+- **Admin indicator** — firebrick `ToolStripStatusLabel` (`🛡 ADMIN`) in StatusStrip, visible only when
+  process is elevated
+- **Package Manager top-level menu** — Scoop, pip, PowerShell modules, WinGet, Chocolatey, and Tweak Pack
+  Marketplace moved from `Tools` into a dedicated `&Package Manager` top-level menu item
+- **Hebrew locale (`he`)** — 51-string translation added to `Locale.cs` (`BuiltInLocales["he"]`)
+- **50 new tweaks** across 5 modules (+10 each):
+  - **`Debloat.cs`** (29→29): Find My Device, Inking/Typing Personalization, Nearby Sharing, Mixed Reality
+    Portal, Steps Recorder, Error Reporting UI, Wireless Display Projection, Post-Update OOBE, Tablet Mode
+    Auto-Switch, Spotlight Content in Settings
+  - **`BrowserCommon.cs`** (19→29): Cast icon, Sign-in interception, Edge Shopping Assistant, Edge Follow,
+    Chrome NTP custom background, Chrome promotional tabs, Chrome NTP spotlight recs, First-run experience,
+    Address autofill, Edge pre-launch startup boost
+  - **`SystemRestore.cs`** (20→30): Hibernate file, Small crash dump, Dump overwrite, No auto-reboot on
+    BSOD, WER 2nd-level data, WER queue limit, WER archive limit, WER throttle bypass, WER response timeout,
+    BSOD admin alert
+  - **`ScheduledTaskTweaks.cs`** (20→30): Compatibility Appraiser, RAC task, ProgramDataUpdater, WER
+    QueueReporting, Device Information, Power Efficiency Diagnostics, SmartScreen AppID, MRT telemetry,
+    Defender Cache Maintenance, USB CEIP
+  - **`WindowsRecall.cs`** (17→27): Publish user activities (HKCU), Cross-device clipboard, Typing
+    insights, Taskbar AI widget content, Cloud search, Voice data collection, Auto map downloads,
+    ContentDelivery feature management, Spotlight on settings, CEIP/SQM policy
+
+### Stats
+
+- Total tweaks: **2 846** (+50 from Sprint 42)
+- All tests: **1 740** (1344 Core + 154 CLI + 242 GUI) — all passing
+
+---
+
 ## [Unreleased] — Sprint 42
 
 ### Added — Hardware & Network Tools

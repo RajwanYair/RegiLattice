@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-06-02 · v3.5.0 · 2 796 tweaks · 92 categories · 1 740 tests
+> Last updated: 2026-06-02 · v3.5.0 · 2 846 tweaks · 92 categories · 1 740 tests
 
 ---
 
@@ -10,7 +10,7 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 796 verified across 92 categories |
+| Tweaks | 2 846 verified across 92 categories |
 | Tests | 1 740 total, all passing (1 skipped integration), 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
@@ -646,6 +646,25 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 2 | `_btnUndoLast` ToolStripButton — undoes last apply/remove by calling inverse engine op | ✅ |
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
+
+### Sprint 43 — Bug Fixes + Package Manager Menu + Hebrew + 50 New Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Fix version display showing `0.0.0.0` — created `src/RegiLattice.Core/Properties/AssemblyInfo.cs`, `AboutDialog` reads `AssemblyInformationalVersionAttribute` | ✅ |
+| 2 | Fix `ObjectDisposedException` in `WindowsHealthDialog` — `AppendLog`/`SetBusy` fully dispose-safe and thread-safe | ✅ |
+| 3 | Admin indicator — firebrick `🛡 ADMIN` `ToolStripStatusLabel` in status bar, visible only when elevated | ✅ |
+| 4 | Split Tools menu — `Scoop/pip/WinGet/Chocolatey/PSModules + Marketplace` moved into new `&Package Manager` top-level menu | ✅ |
+| 5 | Hebrew locale (`he`) — 51-key translation dictionary added to `Locale.cs` | ✅ |
+| 6 | Marketplace 404 + system proxy — `PackManager.s_http` now proxy-aware via `HttpClientHandler`; `FetchIndexAsync` handles `HttpStatusCode.NotFound` gracefully | ✅ |
+| 7 | Build: 0 errors, 0 warnings confirmed post-fix | ✅ |
+| 8 | `Debloat.cs` — 10 new tweaks: `debloat-disable-find-my-device`, `-inking-typing-personalization`, `-nearby-sharing`, `-mixed-reality-portal`, `-steps-recorder`, `-error-reporting-ui`, `-wireless-display-projection`, `-oobe-post-update`, `-tablet-mode-auto-switch`, `-subscribed-spotlight-settings` | ✅ |
+| 9 | `BrowserCommon.cs` — 10 new tweaks: `browser-disable-cast-icon`, `-signin-interception`, `-edge-shopping-assistant`, `-edge-follow`, `-ntp-custom-background`, `-promotional-tabs`, `-ntp-spotlight-recommendations`, `-first-run-experience`, `-autofill-address`, `-edge-prelaunch` | ✅ |
+| 10 | `SystemRestore.cs` — 10 new tweaks: `restore-disable-hiberfil`, `-set-crash-dump-type-small`, `-allow-dump-overwrite`, `-disable-auto-reboot-after-bsod`, `-suppress-wer-second-level-data`, `-limit-wer-report-queue`, `-limit-wer-archive-size`, `-disable-wer-throttle-bypass`, `-set-wer-response-timeout`, `-disable-bsod-alert-send` | ✅ |
+| 11 | `ScheduledTaskTweaks.cs` — 10 new tweaks: `pst-disable-compat-appraiser`, `-rac-task`, `-program-compat-updater`, `-wer-queue-reporting`, `-device-info-collector`, `-power-efficiency-diag`, `-smart-screen-app-id`, `-mrt-telemetry`, `-defender-cache-maintenance`, `-usbceip` | ✅ |
+| 12 | `WindowsRecall.cs` — 10 new tweaks: `recall-disable-publish-user-activities`, `-cross-device-clipboard`, `-typing-insights`, `-taskbar-ai-widget-content`, `-cloud-search-results`, `-voice-data-collection`, `-auto-map-downloads`, `-content-delivery-features`, `-spotlight-on-settings`, `-ceip-sqm-policy` | ✅ |
+| 13 | All tests pass: **1 740** (1344 Core + 154 CLI + 242 GUI) | ✅ |
+| 14 | Total: **2 846 tweaks** (+50), locale count 5 (en/de/fr/es/he) | ✅ |
 
 ### Sprint 42 — Hardware Monitors, Network Tools + Tweak Expansion ✅
 

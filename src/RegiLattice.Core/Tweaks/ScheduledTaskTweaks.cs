@@ -555,5 +555,265 @@ internal static class ScheduledTaskTweaks
                 return int.TryParse(stdout.Trim(), out var count) && count >= 1;
             },
         },
+        new TweakDef
+        {
+            Id = "pst-disable-compat-appraiser",
+            Label = "Disable Compatibility Appraiser Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Microsoft Compatibility Appraiser task that gathers telemetry for upgrade compatibility.",
+            Tags = ["scheduledtask", "privacy", "telemetry", "compatibility", "upgrade"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'Microsoft Compatibility Appraiser' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'Microsoft Compatibility Appraiser' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'Microsoft Compatibility Appraiser' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-rac-task",
+            Label = "Disable Reliability Monitor (RAC) Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Reliability Monitor data-collection task that reports system stability errors.",
+            Tags = ["scheduledtask", "privacy", "telemetry", "reliability", "rac"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RAC\\' -TaskName 'RacTask' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RAC\\' -TaskName 'RacTask' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RAC\\' -TaskName 'RacTask' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-program-compat-updater",
+            Label = "Disable Program Compatibility Data Updater",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Application Experience ProgramDataUpdater task that uploads compatibility telemetry.",
+            Tags = ["scheduledtask", "privacy", "telemetry", "compatibility", "appcompat"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'ProgramDataUpdater' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'ProgramDataUpdater' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Application Experience\\' -TaskName 'ProgramDataUpdater' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-wer-queue-reporting",
+            Label = "Disable WER Queue Error Reporting Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Windows Error Reporting QueueReporting scheduled task that submits crash reports.",
+            Tags = ["scheduledtask", "privacy", "telemetry", "wer", "crash"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Error Reporting\\' -TaskName 'QueueReporting' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Error Reporting\\' -TaskName 'QueueReporting' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Error Reporting\\' -TaskName 'QueueReporting' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-device-info-collector",
+            Label = "Disable Device Information Collection Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Device Information tasks that gather hardware inventory for Microsoft telemetry.",
+            Tags = ["scheduledtask", "privacy", "telemetry", "hardware", "inventory"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Device Information\\' -ErrorAction SilentlyContinue | Disable-ScheduledTask -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Device Information\\' -ErrorAction SilentlyContinue | Enable-ScheduledTask -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Device Information\\' -ErrorAction SilentlyContinue | Where-Object State -eq 'Disabled').Count"
+                );
+                return int.TryParse(stdout.Trim(), out var count) && count >= 1;
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-power-efficiency-diag",
+            Label = "Disable Power Efficiency Diagnostics Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the AnalyzeSystem task that runs CPU power efficiency diagnostics in the background.",
+            Tags = ["scheduledtask", "power", "diagnostics", "performance", "cpu"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-smart-screen-app-id",
+            Label = "Disable SmartScreen App-ID Background Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the SmartScreen credential lookup background task under AppID.",
+            Tags = ["scheduledtask", "smartscreen", "privacy", "security", "appid"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\AppID\\' -TaskName 'SmartScreenSpecific' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\AppID\\' -TaskName 'SmartScreenSpecific' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\AppID\\' -TaskName 'SmartScreenSpecific' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-mrt-telemetry",
+            Label = "Disable MRT Telemetry Heartbeat Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the MRT_HB heartbeat task that sends usage telemetry for the Malicious Software Removal Tool.",
+            Tags = ["scheduledtask", "mrt", "telemetry", "privacy", "malware"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RemovalTools\\' -TaskName 'MRT_HB' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RemovalTools\\' -TaskName 'MRT_HB' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\RemovalTools\\' -TaskName 'MRT_HB' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-defender-cache-maintenance",
+            Label = "Disable Defender Cache Maintenance Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the Windows Defender background cache maintenance scheduled task to reduce idle CPU usage.",
+            Tags = ["scheduledtask", "defender", "cache", "performance", "cpu"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Defender\\' -TaskName 'Windows Defender Cache Maintenance' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Defender\\' -TaskName 'Windows Defender Cache Maintenance' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Windows Defender\\' -TaskName 'Windows Defender Cache Maintenance' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pst-disable-usbceip",
+            Label = "Disable USB CEIP Telemetry Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.ScheduledTask,
+            Description = "Disables the USB Customer Experience Improvement Program background data collection task.",
+            Tags = ["scheduledtask", "usb", "ceip", "telemetry", "privacy"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Customer Experience Improvement Program\\' -TaskName 'UsbCeip' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Customer Experience Improvement Program\\' -TaskName 'UsbCeip' -ErrorAction SilentlyContinue | Out-Null"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Customer Experience Improvement Program\\' -TaskName 'UsbCeip' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
+                );
+                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }

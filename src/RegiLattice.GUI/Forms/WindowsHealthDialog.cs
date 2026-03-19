@@ -301,18 +301,38 @@ internal sealed class WindowsHealthDialog : Form
         }
 
         _progressBar.Visible = false;
-        _lblStatus.Text = $"Completed: {passed} succeeded, {failed} failed";
-        _lblStatus.ForeColor = failed > 0 ? AppTheme.Yellow : AppTheme.Green;
+        if (!IsDisposed)
+        {
+            _lblStatus.Text = $"Completed: {passed} succeeded, {failed} failed";
+            _lblStatus.ForeColor = failed > 0 ? AppTheme.Yellow : AppTheme.Green;
+        }
         SetBusy(false);
     }
 
     private void AppendLog(string line)
     {
-        _txtLog.AppendText(line + Environment.NewLine);
+        if (IsDisposed || !IsHandleCreated)
+            return;
+        if (InvokeRequired)
+        {
+            try
+            {
+                BeginInvoke(() => AppendLog(line));
+            }
+            catch (ObjectDisposedException) { }
+            return;
+        }
+        try
+        {
+            _txtLog.AppendText(line + Environment.NewLine);
+        }
+        catch (ObjectDisposedException) { }
     }
 
     private void SetBusy(bool busy)
     {
+        if (IsDisposed)
+            return;
         _btnRunSelected.Enabled = !busy;
         _btnRunAll.Enabled = !busy;
     }

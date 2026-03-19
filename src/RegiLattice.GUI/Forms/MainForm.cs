@@ -1262,7 +1262,9 @@ public partial class MainForm : Form
 
     // Sprint 42 — hardware & network monitors
     private void OnOpenHardwareTemp() => ShowManagerDialog(new HardwareTemperatureDialog());
+
     private void OnOpenNetBandwidth() => ShowManagerDialog(new NetworkBandwidthDialog());
+
     private void OnOpenMacAddress() => ShowManagerDialog(new MacAddressDialog());
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
@@ -1384,12 +1386,22 @@ public partial class MainForm : Form
                     // Purge working sets via EmptyWorkingSet (same as MemoryCleanerDialog)
                     foreach (var proc in System.Diagnostics.Process.GetProcesses())
                     {
-                        try { proc.MinWorkingSet = proc.MinWorkingSet; }
-                        catch { /* ignore access-denied processes */ }
-                        finally { proc.Dispose(); }
+                        try
+                        {
+                            proc.MinWorkingSet = proc.MinWorkingSet;
+                        }
+                        catch
+                        { /* ignore access-denied processes */
+                        }
+                        finally
+                        {
+                            proc.Dispose();
+                        }
                     }
                 }
-                catch { /* ignore */ }
+                catch
+                { /* ignore */
+                }
             });
         }
     }

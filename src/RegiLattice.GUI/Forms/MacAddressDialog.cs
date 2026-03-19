@@ -23,8 +23,7 @@ namespace RegiLattice.GUI.Forms;
 [SupportedOSPlatform("windows")]
 internal sealed class MacAddressDialog : BaseDialog
 {
-    private sealed record AdapterInfo(
-        string Name, string MacAddress, string Description, bool IsPhysical, string PnpId);
+    private sealed record AdapterInfo(string Name, string MacAddress, string Description, bool IsPhysical, string PnpId);
 
     private readonly ListView _listView = new()
     {
@@ -41,10 +40,32 @@ internal sealed class MacAddressDialog : BaseDialog
         TextAlign = ContentAlignment.MiddleLeft,
         Padding = new Padding(6, 0, 0, 0),
     };
-    private readonly Button _btnRefresh = new() { Text = "\u21BB  Refresh", Width = 100, Height = 30 };
-    private readonly Button _btnRandomize = new() { Text = "\uD83C\uDFB2  Randomize MAC", Width = 140, Height = 30, Enabled = false };
-    private readonly Button _btnCopy = new() { Text = "Copy MAC", Width = 90, Height = 30, Enabled = false };
-    private readonly Button _btnClose = new() { Text = "Close", Width = 80, Height = 30 };
+    private readonly Button _btnRefresh = new()
+    {
+        Text = "\u21BB  Refresh",
+        Width = 100,
+        Height = 30,
+    };
+    private readonly Button _btnRandomize = new()
+    {
+        Text = "\uD83C\uDFB2  Randomize MAC",
+        Width = 140,
+        Height = 30,
+        Enabled = false,
+    };
+    private readonly Button _btnCopy = new()
+    {
+        Text = "Copy MAC",
+        Width = 90,
+        Height = 30,
+        Enabled = false,
+    };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 80,
+        Height = 30,
+    };
 
     private readonly List<AdapterInfo> _adapters = [];
 
@@ -74,8 +95,9 @@ internal sealed class MacAddressDialog : BaseDialog
         btnPanel.Controls.AddRange([_btnClose, _btnCopy, _btnRandomize, _btnRefresh]);
 
         var warnLabel = CreateWarningBanner(
-            "MAC randomization requires administrator rights and a NIC that supports " +
-            "the NetworkAddress registry override. Disable/re-enable the adapter to apply.");
+            "MAC randomization requires administrator rights and a NIC that supports "
+                + "the NetworkAddress registry override. Disable/re-enable the adapter to apply."
+        );
 
         Controls.Add(_listView);
         Controls.Add(_statusLabel);
@@ -106,7 +128,8 @@ internal sealed class MacAddressDialog : BaseDialog
 
     private void OnCopy(object? sender, EventArgs e)
     {
-        if (_listView.SelectedIndices.Count == 0) return;
+        if (_listView.SelectedIndices.Count == 0)
+            return;
         int idx = _listView.SelectedIndices[0];
         if (idx < _adapters.Count)
         {
@@ -132,7 +155,8 @@ internal sealed class MacAddressDialog : BaseDialog
             var item = new ListViewItem(a.Name);
             item.SubItems.Add(FormatMac(a.MacAddress));
             item.SubItems.Add(a.Description);
-            if (!a.IsPhysical) item.ForeColor = Color.Gray;
+            if (!a.IsPhysical)
+                item.ForeColor = Color.Gray;
             _listView.Items.Add(item);
         }
         _listView.EndUpdate();
@@ -148,8 +172,7 @@ internal sealed class MacAddressDialog : BaseDialog
         try
         {
             using var mos = new ManagementObjectSearcher(
-                "SELECT Name, MACAddress, Description, PNPDeviceID, PhysicalAdapter " +
-                "FROM Win32_NetworkAdapter WHERE MACAddress IS NOT NULL"
+                "SELECT Name, MACAddress, Description, PNPDeviceID, PhysicalAdapter " + "FROM Win32_NetworkAdapter WHERE MACAddress IS NOT NULL"
             );
             foreach (ManagementObject obj in mos.Get())
             {
@@ -161,26 +184,31 @@ internal sealed class MacAddressDialog : BaseDialog
                 results.Add(new AdapterInfo(name, mac, desc, physical, pnp));
             }
         }
-        catch (ManagementException) { /* ignore */ }
+        catch (ManagementException)
+        { /* ignore */
+        }
         return results;
     }
 
     private async Task RandomizeMacAsync()
     {
-        if (_listView.SelectedIndices.Count == 0) return;
+        if (_listView.SelectedIndices.Count == 0)
+            return;
         int idx = _listView.SelectedIndices[0];
-        if (idx >= _adapters.Count) return;
+        if (idx >= _adapters.Count)
+            return;
 
         var adapter = _adapters[idx];
         var confirm = MessageBox.Show(
-            $"Randomize MAC address for:\n\n{adapter.Name}\nCurrent: {FormatMac(adapter.MacAddress)}\n\n" +
-            "This writes to the registry NetworkAddress key and disables/re-enables the adapter.\n" +
-            "Administrator rights are required. Continue?",
+            $"Randomize MAC address for:\n\n{adapter.Name}\nCurrent: {FormatMac(adapter.MacAddress)}\n\n"
+                + "This writes to the registry NetworkAddress key and disables/re-enables the adapter.\n"
+                + "Administrator rights are required. Continue?",
             "Confirm MAC Randomization",
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Warning
         );
-        if (confirm != DialogResult.Yes) return;
+        if (confirm != DialogResult.Yes)
+            return;
 
         _btnRandomize.Enabled = false;
         _statusLabel.Text = "Randomizing MAC…";
@@ -189,7 +217,8 @@ internal sealed class MacAddressDialog : BaseDialog
         _statusLabel.Text = msg;
         _btnRandomize.Enabled = true;
 
-        if (success) await RefreshAsync();
+        if (success)
+            await RefreshAsync();
     }
 
     private static (bool Success, string Message) ApplyRandomMac(AdapterInfo adapter)
@@ -204,9 +233,7 @@ internal sealed class MacAddressDialog : BaseDialog
         string newMac = BitConverter.ToString(macBytes).Replace("-", string.Empty);
 
         // Write via netsh (simplest cross-device approach — sets NetworkAddress via registry)
-        var (exitCode, _, _) = ShellRunner.Run(
-            "netsh",
-            ["interface", "set", "interface", adapter.Name, "admin=disable"]);
+        var (exitCode, _, _) = ShellRunner.Run("netsh", ["interface", "set", "interface", adapter.Name, "admin=disable"]);
         if (exitCode != 0)
             return (false, $"Failed to disable adapter '{adapter.Name}' (exit {exitCode})");
 
@@ -233,15 +260,16 @@ internal sealed class MacAddressDialog : BaseDialog
 
     private static string? FindAdapterRegPath(string pnpId)
     {
-        if (string.IsNullOrEmpty(pnpId)) return null;
+        if (string.IsNullOrEmpty(pnpId))
+            return null;
         const string classKey = @"SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002BE10318}";
         using var classRoot = Registry.LocalMachine.OpenSubKey(classKey);
-        if (classRoot == null) return null;
+        if (classRoot == null)
+            return null;
         foreach (string sub in classRoot.GetSubKeyNames())
         {
             using var subKey = classRoot.OpenSubKey(sub);
-            if (subKey?.GetValue("MatchingDeviceId") is string id &&
-                string.Equals(id, pnpId, StringComparison.OrdinalIgnoreCase))
+            if (subKey?.GetValue("MatchingDeviceId") is string id && string.Equals(id, pnpId, StringComparison.OrdinalIgnoreCase))
                 return $@"{classKey}\{sub}";
         }
         return null;
@@ -249,9 +277,11 @@ internal sealed class MacAddressDialog : BaseDialog
 
     private static string FormatMac(string raw)
     {
-        if (string.IsNullOrEmpty(raw)) return "(unknown)";
+        if (string.IsNullOrEmpty(raw))
+            return "(unknown)";
         // Already formatted (AA:BB:CC...) or raw 12-char
-        if (raw.Contains(':') || raw.Contains('-')) return raw;
+        if (raw.Contains(':') || raw.Contains('-'))
+            return raw;
         if (raw.Length == 12)
             return string.Join(":", Enumerable.Range(0, 6).Select(i => raw.Substring(i * 2, 2)));
         return raw;
