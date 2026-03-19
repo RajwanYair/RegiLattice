@@ -95,7 +95,7 @@ internal sealed class UsbPowerDialog : BaseDialog
                 0,
                 1,
                 "Allows Windows to suspend idle USB devices when on AC power to save energy. "
-                + "Disable to prevent audio dropouts, mouse disconnects, or USB device instability."
+                    + "Disable to prevent audio dropouts, mouse disconnects, or USB device instability."
             ),
             new UsbSetting(
                 "USB Selective Suspend (Battery)",
@@ -112,7 +112,7 @@ internal sealed class UsbPowerDialog : BaseDialog
                 0,
                 1,
                 "Allows the USB hub driver to power off ports with idle devices. "
-                + "Useful for reducing power draw. Disable if connected USB devices lose connection unexpectedly."
+                    + "Useful for reducing power draw. Disable if connected USB devices lose connection unexpectedly."
             ),
             new UsbSetting(
                 "USB 3.0 Link Power Management",
@@ -121,7 +121,7 @@ internal sealed class UsbPowerDialog : BaseDialog
                 0,
                 1,
                 "Controls USB 3.0 link power management. When enabled, USB 3.0 links can enter "
-                + "lower-power U1/U2 states. Disable if you experience USB 3.0 device disconnections."
+                    + "lower-power U1/U2 states. Disable if you experience USB 3.0 device disconnections."
             ),
             new UsbSetting(
                 "Allow wake from USB (WoL via USB)",
@@ -130,7 +130,7 @@ internal sealed class UsbPowerDialog : BaseDialog
                 0,
                 1,
                 "Allows USB devices (keyboard, mouse) to wake the system from sleep. "
-                + "Disable to prevent accidental wake from vibration or USB noise."
+                    + "Disable to prevent accidental wake from vibration or USB noise."
             ),
         ]);
     }
@@ -180,9 +180,11 @@ internal sealed class UsbPowerDialog : BaseDialog
                 : s.RegPath;
 
             using var key = Registry.LocalMachine.OpenSubKey(hive);
-            if (key is null) return "Not set";
+            if (key is null)
+                return "Not set";
             var val = key.GetValue(s.ValueName);
-            if (val is int i) return i == s.EnabledValue ? "Enabled" : "Disabled";
+            if (val is int i)
+                return i == s.EnabledValue ? "Enabled" : "Disabled";
             return "Not set";
         }
         catch
@@ -246,7 +248,8 @@ internal sealed class UsbPowerDialog : BaseDialog
 
     private void OnSelectionChanged(object? sender, EventArgs e)
     {
-        if (_list.SelectedItems.Count == 0) return;
+        if (_list.SelectedItems.Count == 0)
+            return;
         if (_list.SelectedItems[0].Tag is UsbSetting s)
             _descBox.Text = s.Note;
     }

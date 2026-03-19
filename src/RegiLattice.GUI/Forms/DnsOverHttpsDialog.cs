@@ -25,22 +25,47 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
     // ── DoH Provider definitions ──────────────────────────────────────────────
     private sealed record DoHProvider(string Name, string Template, string Primary, string Secondary, string Description);
 
-    private static readonly IReadOnlyList<DoHProvider> Providers = [
-        new DoHProvider("Cloudflare (1.1.1.1)", "https://cloudflare-dns.com/dns-query", "1.1.1.1", "1.0.0.1",
+    private static readonly IReadOnlyList<DoHProvider> Providers =
+    [
+        new DoHProvider(
+            "Cloudflare (1.1.1.1)",
+            "https://cloudflare-dns.com/dns-query",
+            "1.1.1.1",
+            "1.0.0.1",
             "Cloudflare's privacy-first DNS with no logging of personal data. Fast, global CDN-backed resolver. "
-            + "Also provides 1.1.1.2 (malware blocking) and 1.1.1.3 (malware + adult content)."),
-        new DoHProvider("Google (8.8.8.8)", "https://dns.google/dns-query", "8.8.8.8", "8.8.4.4",
-            "Google Public DNS — widely used, reliable, fast. Google may log queries for service improvement. "
-            + "Good performance worldwide."),
-        new DoHProvider("Quad9 (9.9.9.9)", "https://dns.quad9.net/dns-query", "9.9.9.9", "149.112.112.112",
+                + "Also provides 1.1.1.2 (malware blocking) and 1.1.1.3 (malware + adult content)."
+        ),
+        new DoHProvider(
+            "Google (8.8.8.8)",
+            "https://dns.google/dns-query",
+            "8.8.8.8",
+            "8.8.4.4",
+            "Google Public DNS — widely used, reliable, fast. Google may log queries for service improvement. " + "Good performance worldwide."
+        ),
+        new DoHProvider(
+            "Quad9 (9.9.9.9)",
+            "https://dns.quad9.net/dns-query",
+            "9.9.9.9",
+            "149.112.112.112",
             "Quad9 blocks malicious domains using threat intelligence from IBM X-Force and other providers. "
-            + "Based in Switzerland, strong privacy policy with no logging of IP addresses."),
-        new DoHProvider("NextDNS", "https://dns.nextdns.io", "45.90.28.0", "45.90.30.0",
+                + "Based in Switzerland, strong privacy policy with no logging of IP addresses."
+        ),
+        new DoHProvider(
+            "NextDNS",
+            "https://dns.nextdns.io",
+            "45.90.28.0",
+            "45.90.30.0",
             "NextDNS is a customizable DNS service with parental controls, ad blocking, and detailed query logs. "
-            + "Free tier for 300K queries/month. Requires a free account for full features."),
-        new DoHProvider("AdGuard DNS", "https://dns.adguard.com/dns-query", "94.140.14.14", "94.140.15.15",
+                + "Free tier for 300K queries/month. Requires a free account for full features."
+        ),
+        new DoHProvider(
+            "AdGuard DNS",
+            "https://dns.adguard.com/dns-query",
+            "94.140.14.14",
+            "94.140.15.15",
             "AdGuard DNS blocks ads, trackers, and malware at the DNS level. "
-            + "No logging of your IP address or queries. Good for ad-free browsing without a browser extension."),
+                + "No logging of your IP address or queries. Good for ad-free browsing without a browser extension."
+        ),
     ];
 
     // ── Controls ──────────────────────────────────────────────────────────────
@@ -83,8 +108,9 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
         Dock = DockStyle.Top,
         Height = 50,
         Padding = new Padding(8, 6, 8, 0),
-        Text = "Windows 11 supports DNS-over-HTTPS natively. Select a provider below and click Configure. "
-             + "This writes the DoH template to the registry. Open Settings → Network → DNS to verify.",
+        Text =
+            "Windows 11 supports DNS-over-HTTPS natively. Select a provider below and click Configure. "
+            + "This writes the DoH template to the registry. Open Settings → Network → DNS to verify.",
     };
 
     // ── Construction ──────────────────────────────────────────────────────────
@@ -128,15 +154,19 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
 
         foreach (var p in Providers)
         {
-            bool isActive = activeTemplate != null && activeTemplate.Contains(
-                p.Template.Replace("https://", "").Split('/')[0], StringComparison.OrdinalIgnoreCase);
+            bool isActive =
+                activeTemplate != null
+                && activeTemplate.Contains(p.Template.Replace("https://", "").Split('/')[0], StringComparison.OrdinalIgnoreCase);
             var lvi = new ListViewItem(p.Name) { Tag = p };
             lvi.SubItems.Add(p.Primary);
             lvi.SubItems.Add(p.Secondary);
             lvi.SubItems.Add(isActive ? "✓ Active" : "—");
             if (isActive)
             {
-                lvi.Font = new Font(SystemFonts.DefaultFont ?? SystemFonts.MessageBoxFont, FontStyle.Bold);
+                lvi.Font = new Font(
+                    SystemFonts.DefaultFont ?? SystemFonts.MessageBoxFont ?? new Font(FontFamily.GenericSansSerif, 9f),
+                    FontStyle.Bold
+                );
                 lvi.ForeColor = Color.ForestGreen;
             }
             _providerList.Items.Add(lvi);
@@ -158,7 +188,10 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
             using var key = Registry.LocalMachine.OpenSubKey(DnsClientPath);
             return key?.GetValue("DohTemplate") as string;
         }
-        catch { return null; }
+        catch
+        {
+            return null;
+        }
     }
 
     // ── Apply / Disable ───────────────────────────────────────────────────────
@@ -172,8 +205,12 @@ internal sealed class DnsOverHttpsDialog : BaseDialog
 
         if (!Elevation.IsAdmin())
         {
-            MessageBox.Show("Administrator rights required to configure DNS settings.", "Access Denied",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(
+                "Administrator rights required to configure DNS settings.",
+                "Access Denied",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
             return;
         }
 

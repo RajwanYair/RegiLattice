@@ -23,12 +23,22 @@ namespace RegiLattice.GUI.Forms;
 internal sealed class SleepTimerDialog : BaseDialog
 {
     // ── Controls ──────────────────────────────────────────────────────────────
-    private readonly RadioButton _rbSleep = new() { Text = "Sleep (Suspend to RAM)", Checked = true, AutoSize = true };
+    private readonly RadioButton _rbSleep = new()
+    {
+        Text = "Sleep (Suspend to RAM)",
+        Checked = true,
+        AutoSize = true,
+    };
     private readonly RadioButton _rbHibernate = new() { Text = "Hibernate (Suspend to Disk)", AutoSize = true };
     private readonly RadioButton _rbShutdown = new() { Text = "Shutdown", AutoSize = true };
     private readonly RadioButton _rbMonitorOff = new() { Text = "Monitor Off Only", AutoSize = true };
 
-    private readonly RadioButton _rbCountdown = new() { Text = "Countdown:", Checked = true, AutoSize = true };
+    private readonly RadioButton _rbCountdown = new()
+    {
+        Text = "Countdown:",
+        Checked = true,
+        AutoSize = true,
+    };
     private readonly NumericUpDown _nudMinutes = new()
     {
         Minimum = 1,
@@ -37,7 +47,12 @@ internal sealed class SleepTimerDialog : BaseDialog
         Width = 70,
         Increment = 5,
     };
-    private readonly Label _lblMinutes = new() { Text = "minutes", AutoSize = true, Margin = new Padding(4, 3, 0, 0) };
+    private readonly Label _lblMinutes = new()
+    {
+        Text = "minutes",
+        AutoSize = true,
+        Margin = new Padding(4, 3, 0, 0),
+    };
 
     private readonly RadioButton _rbAtTime = new() { Text = "At specific time:", AutoSize = true };
     private readonly DateTimePicker _timePicker = new()
@@ -49,7 +64,12 @@ internal sealed class SleepTimerDialog : BaseDialog
     };
 
     private readonly Button _btnStart = new() { Text = "Start Timer", Width = 100 };
-    private readonly Button _btnCancel = new() { Text = "Cancel Timer", Width = 100, Enabled = false };
+    private readonly Button _btnCancel = new()
+    {
+        Text = "Cancel Timer",
+        Width = 100,
+        Enabled = false,
+    };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
 
     private readonly Label _statusLabel = new()
@@ -94,13 +114,25 @@ internal sealed class SleepTimerDialog : BaseDialog
     private void BuildLayout()
     {
         // Action group
-        var grpAction = new GroupBox { Text = "Action", Dock = DockStyle.Top, Height = 110, Padding = new Padding(8) };
+        var grpAction = new GroupBox
+        {
+            Text = "Action",
+            Dock = DockStyle.Top,
+            Height = 110,
+            Padding = new Padding(8),
+        };
         var actionFlow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown };
         actionFlow.Controls.AddRange([_rbSleep, _rbHibernate, _rbShutdown, _rbMonitorOff]);
         grpAction.Controls.Add(actionFlow);
 
         // Timing group
-        var grpTiming = new GroupBox { Text = "When", Dock = DockStyle.Top, Height = 100, Padding = new Padding(8) };
+        var grpTiming = new GroupBox
+        {
+            Text = "When",
+            Dock = DockStyle.Top,
+            Height = 100,
+            Padding = new Padding(8),
+        };
         var timingFlow = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown };
 
         var countdownRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true };
@@ -175,7 +207,8 @@ internal sealed class SleepTimerDialog : BaseDialog
         _uiTimer = new System.Windows.Forms.Timer { Interval = 1000 };
         _uiTimer.Tick += (_, _) =>
         {
-            if (!_timerRunning) return;
+            if (!_timerRunning)
+                return;
             double remaining = (_targetTime - DateTime.Now).TotalSeconds;
             if (remaining <= 0)
             {
@@ -206,8 +239,13 @@ internal sealed class SleepTimerDialog : BaseDialog
         StopUiTimer();
         if (!_rbMonitorOff.Checked)
         {
-            try { Process.Start(new ProcessStartInfo("shutdown.exe", "/a") { CreateNoWindow = true, UseShellExecute = false }); }
-            catch { /* ignore */ }
+            try
+            {
+                Process.Start(new ProcessStartInfo("shutdown.exe", "/a") { CreateNoWindow = true, UseShellExecute = false });
+            }
+            catch
+            { /* ignore */
+            }
         }
     }
 
@@ -225,9 +263,12 @@ internal sealed class SleepTimerDialog : BaseDialog
 
     private string BuildShutdownArgs(int seconds)
     {
-        if (_rbSleep.Checked) return $"/h /f /t {seconds}"; // hybrid sleep
-        if (_rbHibernate.Checked) return $"/h /f";           // immediate hibernate
-        if (_rbShutdown.Checked) return $"/s /f /t {seconds}";
+        if (_rbSleep.Checked)
+            return $"/h /f /t {seconds}"; // hybrid sleep
+        if (_rbHibernate.Checked)
+            return $"/h /f"; // immediate hibernate
+        if (_rbShutdown.Checked)
+            return $"/s /f /t {seconds}";
         return $"/s /f /t {seconds}";
     }
 
@@ -237,8 +278,17 @@ internal sealed class SleepTimerDialog : BaseDialog
         var t = new System.Windows.Forms.Timer { Interval = delaySeconds * 1000 };
         t.Tick += (_, _) =>
         {
-            t.Stop(); t.Dispose();
-            SendMessage(Handle, 0x0112 /*WM_SYSCOMMAND*/, new IntPtr(0xF170 /*SC_MONITORPOWER*/), new IntPtr(2));
+            t.Stop();
+            t.Dispose();
+            SendMessage(
+                Handle,
+                0x0112 /*WM_SYSCOMMAND*/
+                ,
+                new IntPtr(
+                    0xF170 /*SC_MONITORPOWER*/
+                ),
+                new IntPtr(2)
+            );
         };
         t.Start();
     }
@@ -248,9 +298,12 @@ internal sealed class SleepTimerDialog : BaseDialog
 
     private string GetActionLabel()
     {
-        if (_rbSleep.Checked) return "Sleep";
-        if (_rbHibernate.Checked) return "Hibernate";
-        if (_rbShutdown.Checked) return "Shutdown";
+        if (_rbSleep.Checked)
+            return "Sleep";
+        if (_rbHibernate.Checked)
+            return "Hibernate";
+        if (_rbShutdown.Checked)
+            return "Shutdown";
         return "Monitor Off";
     }
 }

@@ -74,6 +74,18 @@ internal static class Program
                 "apppermissions" => new AppPermissionsDialog(),
                 "dnsoverhttps" => new DnsOverHttpsDialog(),
 
+                // Network tools (Sprint 33)
+                "netrepair" => new NetworkRepairDialog(),
+                "dnsswitcher" => new DnsSwitcherDialog(),
+                "netadapter" => new NetworkAdapterDialog(),
+                "wifiprofiles" => new WiFiProfileDialog(),
+
+                // Security & system tools (Sprint 34)
+                "firewallrules" => new FirewallRulesDialog(),
+                "proxyconfig" => new ProxyConfigDialog(),
+                "shellextensions" => new ShellExtensionDialog(),
+                "bootanalyzer" => new BootTimeAnalyzerDialog(),
+
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),
                 "preferences" => CreateStandalonePreferences(),

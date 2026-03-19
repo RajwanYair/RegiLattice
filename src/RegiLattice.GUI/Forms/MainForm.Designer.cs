@@ -56,6 +56,14 @@ partial class MainForm
     private ToolStripMenuItem _mnuTelemetryDash = null!;
     private ToolStripMenuItem _mnuAppPermissions = null!;
     private ToolStripMenuItem _mnuDnsOverHttps = null!;
+    private ToolStripMenuItem _mnuNetRepair = null!;
+    private ToolStripMenuItem _mnuDnsSwitcher = null!;
+    private ToolStripMenuItem _mnuNetAdapter = null!;
+    private ToolStripMenuItem _mnuWiFiProfiles = null!;
+    private ToolStripMenuItem _mnuFirewallRules = null!;
+    private ToolStripMenuItem _mnuProxyConfig = null!;
+    private ToolStripMenuItem _mnuShellExtensions = null!;
+    private ToolStripMenuItem _mnuBootAnalyzer = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -147,6 +155,14 @@ partial class MainForm
         _mnuTelemetryDash = new ToolStripMenuItem("Telemetry Dashboard...") { Image = AppIcons.PrivacyMenuBitmap };
         _mnuAppPermissions = new ToolStripMenuItem("App Permissions...") { Image = AppIcons.PrivacyMenuBitmap };
         _mnuDnsOverHttps = new ToolStripMenuItem("DNS-over-HTTPS Setup...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuNetRepair = new ToolStripMenuItem("Network Repair Wizard...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuDnsSwitcher = new ToolStripMenuItem("DNS Server Quick-Switch...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuNetAdapter = new ToolStripMenuItem("Network Adapter Manager...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuWiFiProfiles = new ToolStripMenuItem("Wi-Fi Profile Manager...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuFirewallRules = new ToolStripMenuItem("Firewall Rules...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuProxyConfig = new ToolStripMenuItem("Proxy Configuration...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuShellExtensions = new ToolStripMenuItem("Shell Extension Manager...") { Image = AppIcons.ExplorerMenuBitmap };
+        _mnuBootAnalyzer = new ToolStripMenuItem("Boot Time Analyzer...") { Image = AppIcons.PerformanceMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -180,6 +196,16 @@ partial class MainForm
             _mnuTelemetryDash,
             _mnuAppPermissions,
             _mnuDnsOverHttps,
+            new ToolStripSeparator(),
+            _mnuNetRepair,
+            _mnuDnsSwitcher,
+            _mnuNetAdapter,
+            _mnuWiFiProfiles,
+            new ToolStripSeparator(),
+            _mnuFirewallRules,
+            _mnuProxyConfig,
+            _mnuShellExtensions,
+            _mnuBootAnalyzer,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -235,6 +261,14 @@ partial class MainForm
         _mnuTelemetryDash.Click       += (_, _) => OnOpenTelemetryDashboard();
         _mnuAppPermissions.Click      += (_, _) => OnOpenAppPermissions();
         _mnuDnsOverHttps.Click        += (_, _) => OnOpenDnsOverHttps();
+        _mnuNetRepair.Click            += (_, _) => OnOpenNetworkRepair();
+        _mnuDnsSwitcher.Click          += (_, _) => OnOpenDnsSwitcher();
+        _mnuNetAdapter.Click           += (_, _) => OnOpenNetworkAdapter();
+        _mnuWiFiProfiles.Click         += (_, _) => OnOpenWiFiProfiles();
+        _mnuFirewallRules.Click       += (_, _) => OnOpenFirewallRules();
+        _mnuProxyConfig.Click         += (_, _) => OnOpenProxyConfig();
+        _mnuShellExtensions.Click     += (_, _) => OnOpenShellExtensions();
+        _mnuBootAnalyzer.Click        += (_, _) => OnOpenBootAnalyzer();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

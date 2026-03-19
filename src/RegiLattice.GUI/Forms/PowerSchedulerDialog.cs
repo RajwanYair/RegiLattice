@@ -56,8 +56,18 @@ internal sealed class PowerSchedulerDialog : BaseDialog
         WrapContents = false,
     };
     private readonly Button _btnAdd = new() { Text = "Add", Width = 76 };
-    private readonly Button _btnEdit = new() { Text = "Edit", Width = 76, Enabled = false };
-    private readonly Button _btnDelete = new() { Text = "Delete", Width = 76, Enabled = false };
+    private readonly Button _btnEdit = new()
+    {
+        Text = "Edit",
+        Width = 76,
+        Enabled = false,
+    };
+    private readonly Button _btnDelete = new()
+    {
+        Text = "Delete",
+        Width = 76,
+        Enabled = false,
+    };
     private readonly Button _btnApplyNow = new() { Text = "Apply Now", Width = 90 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
     private readonly Label _statusLabel = new()
@@ -128,39 +138,49 @@ internal sealed class PowerSchedulerDialog : BaseDialog
         if (_schedules.Count > 0)
             return;
 
-        _schedules.Add(new PlanSchedule
-        {
-            Name = "Work Hours",
-            StartTime = new TimeOnly(9, 0),
-            EndTime = new TimeOnly(17, 0),
-            PlanGuid = PowerPlanManager.Balanced,
-            PlanName = "Balanced",
-            Enabled = false,
-        });
-        _schedules.Add(new PlanSchedule
-        {
-            Name = "Gaming Hours",
-            StartTime = new TimeOnly(18, 0),
-            EndTime = new TimeOnly(23, 0),
-            PlanGuid = PowerPlanManager.HighPerformance,
-            PlanName = "High Performance",
-            Enabled = false,
-        });
-        _schedules.Add(new PlanSchedule
-        {
-            Name = "Night / Sleep",
-            StartTime = new TimeOnly(23, 0),
-            EndTime = new TimeOnly(7, 0),
-            PlanGuid = PowerPlanManager.PowerSaver,
-            PlanName = "Power Saver",
-            Enabled = false,
-        });
+        _schedules.Add(
+            new PlanSchedule
+            {
+                Name = "Work Hours",
+                StartTime = new TimeOnly(9, 0),
+                EndTime = new TimeOnly(17, 0),
+                PlanGuid = PowerPlanManager.Balanced,
+                PlanName = "Balanced",
+                Enabled = false,
+            }
+        );
+        _schedules.Add(
+            new PlanSchedule
+            {
+                Name = "Gaming Hours",
+                StartTime = new TimeOnly(18, 0),
+                EndTime = new TimeOnly(23, 0),
+                PlanGuid = PowerPlanManager.HighPerformance,
+                PlanName = "High Performance",
+                Enabled = false,
+            }
+        );
+        _schedules.Add(
+            new PlanSchedule
+            {
+                Name = "Night / Sleep",
+                StartTime = new TimeOnly(23, 0),
+                EndTime = new TimeOnly(7, 0),
+                PlanGuid = PowerPlanManager.PowerSaver,
+                PlanName = "Power Saver",
+                Enabled = false,
+            }
+        );
     }
 
     // ── ListView ──────────────────────────────────────────────────────────────
     private void PopulateList()
     {
-        if (InvokeRequired) { Invoke(PopulateList); return; }
+        if (InvokeRequired)
+        {
+            Invoke(PopulateList);
+            return;
+        }
 
         _list.SuspendLayout();
         _list.BeginUpdate();
@@ -195,12 +215,7 @@ internal sealed class PowerSchedulerDialog : BaseDialog
     // ── Timer ─────────────────────────────────────────────────────────────────
     private void StartTimer()
     {
-        _checkTimer = new System.Threading.Timer(
-            _ => _ = ApplyCurrentScheduleAsync(),
-            null,
-            TimeSpan.FromMinutes(1),
-            TimeSpan.FromMinutes(1)
-        );
+        _checkTimer = new System.Threading.Timer(_ => _ = ApplyCurrentScheduleAsync(), null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
     }
 
     private async Task ApplyCurrentScheduleAsync()
@@ -249,7 +264,11 @@ internal sealed class PowerSchedulerDialog : BaseDialog
 
     private void SetStatus(string text)
     {
-        if (InvokeRequired) { Invoke(() => SetStatus(text)); return; }
+        if (InvokeRequired)
+        {
+            Invoke(() => SetStatus(text));
+            return;
+        }
         _statusLabel.Text = text;
     }
 
@@ -302,11 +321,31 @@ internal sealed class PowerSchedulerDialog : BaseDialog
     private sealed class ScheduleEditDialog : Form
     {
         private readonly TextBox _name = new() { Width = 200 };
-        private readonly DateTimePicker _start = new() { Format = DateTimePickerFormat.Time, ShowUpDown = true, Width = 90 };
-        private readonly DateTimePicker _end = new() { Format = DateTimePickerFormat.Time, ShowUpDown = true, Width = 90 };
+        private readonly DateTimePicker _start = new()
+        {
+            Format = DateTimePickerFormat.Time,
+            ShowUpDown = true,
+            Width = 90,
+        };
+        private readonly DateTimePicker _end = new()
+        {
+            Format = DateTimePickerFormat.Time,
+            ShowUpDown = true,
+            Width = 90,
+        };
         private readonly ComboBox _planCombo = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 220 };
-        private readonly Button _ok = new() { Text = "OK", DialogResult = DialogResult.OK, Width = 80 };
-        private readonly Button _cancel = new() { Text = "Cancel", DialogResult = DialogResult.Cancel, Width = 80 };
+        private readonly Button _ok = new()
+        {
+            Text = "OK",
+            DialogResult = DialogResult.OK,
+            Width = 80,
+        };
+        private readonly Button _cancel = new()
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Width = 80,
+        };
 
         internal PlanSchedule? Result { get; private set; }
 
@@ -315,7 +354,8 @@ internal sealed class PowerSchedulerDialog : BaseDialog
             Text = existing is null ? "Add Schedule" : "Edit Schedule";
             FormBorderStyle = FormBorderStyle.FixedDialog;
             StartPosition = FormStartPosition.CenterParent;
-            MaximizeBox = false; MinimizeBox = false;
+            MaximizeBox = false;
+            MinimizeBox = false;
             AutoSize = true;
             Padding = new Padding(12);
 
@@ -329,20 +369,35 @@ internal sealed class PowerSchedulerDialog : BaseDialog
                 _start.Value = DateTime.Today.Add(existing.StartTime.ToTimeSpan());
                 _end.Value = DateTime.Today.Add(existing.EndTime.ToTimeSpan());
                 var match = plans.FirstOrDefault(p => p.Guid == existing.PlanGuid);
-                if (match != null) _planCombo.SelectedItem = match;
+                if (match != null)
+                    _planCombo.SelectedItem = match;
             }
             else
             {
-                if (_planCombo.Items.Count > 0) _planCombo.SelectedIndex = 0;
+                if (_planCombo.Items.Count > 0)
+                    _planCombo.SelectedIndex = 0;
             }
 
-            var table = new TableLayoutPanel { ColumnCount = 2, AutoSize = true, Dock = DockStyle.Fill };
+            var table = new TableLayoutPanel
+            {
+                ColumnCount = 2,
+                AutoSize = true,
+                Dock = DockStyle.Fill,
+            };
             table.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
             void AddRow(string label, Control ctrl)
             {
-                table.Controls.Add(new Label { Text = label, AutoSize = true, Anchor = AnchorStyles.Left | AnchorStyles.Right, Margin = new Padding(0, 6, 8, 0) });
+                table.Controls.Add(
+                    new Label
+                    {
+                        Text = label,
+                        AutoSize = true,
+                        Anchor = AnchorStyles.Left | AnchorStyles.Right,
+                        Margin = new Padding(0, 6, 8, 0),
+                    }
+                );
                 table.Controls.Add(ctrl);
             }
             AddRow("Name:", _name);
@@ -350,10 +405,20 @@ internal sealed class PowerSchedulerDialog : BaseDialog
             AddRow("End Time:", _end);
             AddRow("Power Plan:", _planCombo);
 
-            var btnRow = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, AutoSize = true, Dock = DockStyle.Bottom };
+            var btnRow = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.RightToLeft,
+                AutoSize = true,
+                Dock = DockStyle.Bottom,
+            };
             btnRow.Controls.AddRange([_cancel, _ok]);
 
-            var panel = new Panel { AutoSize = true, Dock = DockStyle.Fill, Padding = new Padding(0, 0, 0, 8) };
+            var panel = new Panel
+            {
+                AutoSize = true,
+                Dock = DockStyle.Fill,
+                Padding = new Padding(0, 0, 0, 8),
+            };
             panel.Controls.AddRange([table, btnRow]);
             Controls.Add(panel);
 

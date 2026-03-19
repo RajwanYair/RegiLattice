@@ -606,20 +606,45 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 6 | Tools menu: Ad Removal Wizard, Telemetry Dashboard, App Permissions, DNS-over-HTTPS entries added | ✅ |
 | 7 | 1 921 tests passing | ✅ |
 
-### Phase 4 — Network & Connectivity Tools (Sprint 27–28)
+### Sprint 33 — Network Tools Part 1 ✅
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 31 | One-click network repair wizard (TCP/IP, Winsock, DNS reset) | HIGH | NetAdapter Repair |
-| 32 | DNS server quick-switch (Cloudflare, Google, Quad9, custom) | HIGH | Original |
-| 33 | Network adapter diagnostics panel | MEDIUM | NetAdapter Repair |
-| 34 | Wi-Fi profile management (export/import/delete) | MEDIUM | Original |
-| 35 | Proxy configuration wizard | MEDIUM | Original |
-| 36 | VPN quick-connect from system tray | MEDIUM | Original |
-| 37 | Firewall rule manager (simplified view of Windows Firewall) | MEDIUM | Original |
-| 38 | Port scanner / connectivity tester | LOW | Original |
-| 39 | Network bandwidth monitor | LOW | Original |
-| 40 | MAC address randomization toggle | LOW | Original |
+| # | Task | Status |
+|---|------|--------|
+| 1 | `NetworkRepairDialog` — 8-item repair wizard (DNS flush, IP release/renew, TCP auto-tuning, Winsock, TCP/IP stack, IPv6, Firewall reset) via `cmd.exe /c`; colour-coded log | ✅ |
+| 2 | `DnsSwitcherDialog` — DNS quick-switch with 8 presets (Cloudflare, Cloudflare malware/family, Google, Quad9, OpenDNS, AdGuard, Comodo, DHCP auto-revert) + adapter picker | ✅ |
+| 3 | `NetworkAdapterDialog` — adapter list with WMI `Win32_NetworkAdapter` + `NetworkInterface` fallback; enable/disable; ping gateway/Cloudflare/DNS diagnostics | ✅ |
+| 4 | `WiFiProfileDialog` — Wi-Fi saved profile list via `netsh wlan show profiles`; export (key=clear), import XML, delete with confirm | ✅ |
+| 5 | All 4 dialogs registered in `Program.cs ResolveManagerArg()`: `netrepair`/`dnsswitcher`/`netadapter`/`wifiprofiles` | ✅ |
+| 6 | Tools menu: Network Repair Wizard, DNS Server Quick-Switch, Network Adapter Manager, Wi-Fi Profile Manager entries added | ✅ |
+| 7 | Build: 0 errors, 0 warnings | ✅ |
+
+### Sprint 34 — Network Tools Part 2 & System Tools ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `FirewallRulesDialog` — Windows Firewall rule viewer (inbound/outbound tabs) via `netsh advfirewall`; enable/disable rules; search filter; colour-coded Allow/Block | ✅ |
+| 2 | `ProxyConfigDialog` — WinINet proxy R/W (`HKCU Internet Settings`): enable toggle, server, bypass list, local bypass; WinHTTP import-from-IE / reset-direct | ✅ |
+| 3 | `ShellExtensionDialog` — Shell extension manager: enumerates `HKLM…Shell Extensions\Approved`; toggles enabled/disabled via `(disabled)` prefix; DLL path resolution | ✅ |
+| 4 | `BootTimeAnalyzerDialog` — reads `Microsoft-Windows-Diagnostics-Performance/Operational` event log; Event ID 100 (boot history) + 101-103 (startup degradation); top slowdowns | ✅ |
+| 5 | All 4 dialogs registered in `Program.cs ResolveManagerArg()`: `firewallrules`/`proxyconfig`/`shellextensions`/`bootanalyzer` | ✅ |
+| 6 | Tools menu: Firewall Rules, Proxy Configuration, Shell Extension Manager, Boot Time Analyzer entries added | ✅ |
+| 7 | Phase 5 items 44 (Boot Time Analyzer) and 46 (Shell Extension Manager) also completed | ✅ |
+| 8 | Build: 0 errors, 0 warnings | ✅ |
+
+### Phase 4 — Network & Connectivity Tools (Sprint 33–34) ✅
+
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 31 | One-click network repair wizard (TCP/IP, Winsock, DNS reset) | HIGH | NetAdapter Repair | ✅ Sprint 33 |
+| 32 | DNS server quick-switch (Cloudflare, Google, Quad9, custom) | HIGH | Original | ✅ Sprint 33 |
+| 33 | Network adapter diagnostics panel | MEDIUM | NetAdapter Repair | ✅ Sprint 33 |
+| 34 | Wi-Fi profile management (export/import/delete) | MEDIUM | Original | ✅ Sprint 33 |
+| 35 | Proxy configuration wizard | MEDIUM | Original | ✅ Sprint 34 |
+| 36 | Firewall rule manager (simplified view of Windows Firewall) | MEDIUM | Original | ✅ Sprint 34 |
+| 37 | Port scanner / connectivity tester | LOW | Original | 🔄 Future |
+| 38 | Network bandwidth monitor | LOW | Original | 🔄 Future |
+| 39 | VPN quick-connect from system tray | MEDIUM | Original | 🔄 Future |
+| 40 | MAC address randomization toggle | LOW | Original | 🔄 Future |
 
 ### Phase 5 — Startup & Service Management (Sprint 29–30) ✅
 
@@ -628,9 +653,9 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 41 | Startup manager — review and disable startup items | HIGH | MS PC Manager | ✅ Sprint 28 |
 | 42 | Service manager — disable/enable Windows services with descriptions | HIGH | Original | ✅ Sprint 29 |
 | 43 | Scheduled task manager — view and toggle system tasks | MEDIUM | Original | ✅ Sprint 28 |
-| 44 | Boot time analyzer — identify slow-starting services | MEDIUM | Original | 🔄 Pending |
+| 44 | Boot time analyzer — identify slow-starting services | MEDIUM | Original | ✅ Sprint 34 |
 | 45 | Context menu manager — add/remove/sort right-click items | MEDIUM | Original | ✅ Sprint 30 |
-| 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original | 🔄 Pending |
+| 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original | ✅ Sprint 34 |
 | 47 | Installed programs quick-uninstaller | LOW | MS PC Manager | ✅ Sprint 30 |
 | 48 | Temporary file cleaner with size preview | LOW | MS PC Manager | ✅ Sprint 30 |
 | 49 | Windows Update pause/resume controls | LOW | Original | 🔄 Pending |
@@ -651,20 +676,20 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Pending |
 | 60 | Screen brightness scheduler (time-based) | LOW | Original | 🔄 Pending |
 
-### Phase 7 — Privacy & Ad Removal (Sprint 33–34)
+### Phase 7 — Privacy & Ad Removal (Sprint 32–34) ✅
 
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
 | 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB | ✅ Sprint 32 |
-| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager | 🔄 Pending |
-| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original | 🔄 Pending |
+| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager | 🔄 Sprint 34 |
+| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original | 🔄 Sprint 35 |
 | 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original | ✅ Sprint 32 |
 | 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original | ✅ Sprint 29 |
 | 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original | ✅ Sprint 30 |
-| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original | 🔄 Pending |
-| 68 | DNS-over-HTTPS quick setup | LOW | Original | 🔄 Pending |
-| 69 | Location services granular control | LOW | Original | 🔄 Pending |
-| 70 | App permission manager (camera, microphone, location per-app) | LOW | Original | 🔄 Pending |
+| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original | 🔄 Sprint 35 |
+| 68 | DNS-over-HTTPS quick setup | LOW | Original | ✅ Sprint 32 |
+| 69 | Location services granular control | LOW | Original | ✅ Sprint 32 |
+| 70 | App permission manager (camera, microphone, location per-app) | LOW | Original | ✅ Sprint 32 |
 
 ### Phase 8 — Plugin & Extensibility Improvements (Sprint 35–36)
 

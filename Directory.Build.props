@@ -16,6 +16,9 @@
     <!-- Disable auto-generated AssemblyInfo for ALL projects — prevents OneDrive file-lock
          on the .cache file. Version is set via <Version> above. -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Suppress CA1416 globally — this is a Windows-only project. All projects
+         target net10.0-windows and will never run on non-Windows platforms. -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true' and '$(IsTestProject)' == 'true'">

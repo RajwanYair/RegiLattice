@@ -81,7 +81,11 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
         BuildLayout();
         LoadCurrentState();
 
-        _btnSelectAll.Click += (_, _) => { foreach (ListViewItem i in _list.Items) i.Checked = true; };
+        _btnSelectAll.Click += (_, _) =>
+        {
+            foreach (ListViewItem i in _list.Items)
+                i.Checked = true;
+        };
         _btnApply.Click += OnApply;
         _btnRestoreDefaults.Click += OnRestoreDefaults;
         _btnClose.Click += (_, _) => Close();
@@ -109,84 +113,118 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
                 "Diagnostic Data",
                 "Diagnostic Data Level",
                 "Sets the Windows diagnostic data level. 0 = Security (minimum, Enterprise only), "
-                + "1 = Basic (required diagnostic data), 3 = Full (enhanced/optional). "
-                + "RegiLattice sets this to 1 (Basic) to minimize data sent while keeping Windows Update working.",
-                Telemetry, "AllowTelemetry", 1, 3
+                    + "1 = Basic (required diagnostic data), 3 = Full (enhanced/optional). "
+                    + "RegiLattice sets this to 1 (Basic) to minimize data sent while keeping Windows Update working.",
+                Telemetry,
+                "AllowTelemetry",
+                1,
+                3
             ),
             new TelemetryControl(
                 "Diagnostic Data",
                 "Diagnostic Data (User Policy Override)",
                 "Same as above but via the user-accessible policy path. Both need to be set for full effect.",
-                TelemetryHklm, "AllowTelemetry", 1, 3
+                TelemetryHklm,
+                "AllowTelemetry",
+                1,
+                3
             ),
             new TelemetryControl(
                 "Activity History",
                 "Windows Activity History",
                 "Disables Windows Activity History and Timeline — stops logging apps, files, and web pages "
-                + "you viewed. Prevents this data from syncing to Microsoft cloud via Connected Experiences.",
-                ActivityFeed, "EnableActivityFeed", 0, 1
+                    + "you viewed. Prevents this data from syncing to Microsoft cloud via Connected Experiences.",
+                ActivityFeed,
+                "EnableActivityFeed",
+                0,
+                1
             ),
             new TelemetryControl(
                 "Activity History",
                 "Upload Activity History to Microsoft",
                 "Prevents Windows from uploading your activity history to Microsoft servers for Timeline sync.",
-                ActivityFeed, "PublishUserActivities", 0, 1
+                ActivityFeed,
+                "PublishUserActivities",
+                0,
+                1
             ),
             new TelemetryControl(
                 "Location",
                 "Location Services (System)",
-                "Disables Windows location services at the system level via Group Policy. "
-                + "Apps will not be able to request your location.",
-                LocationHklm, "DisableLocation", 1, 0
+                "Disables Windows location services at the system level via Group Policy. " + "Apps will not be able to request your location.",
+                LocationHklm,
+                "DisableLocation",
+                1,
+                0
             ),
             new TelemetryControl(
                 "Error Reporting",
                 "Windows Error Reporting",
                 "Disables automatic submission of crash reports and application error data to Microsoft. "
-                + "Error reports can contain stack traces, memory dumps, and process lists.",
-                ErrorReporting, "Disabled", 1, 0
+                    + "Error reports can contain stack traces, memory dumps, and process lists.",
+                ErrorReporting,
+                "Disabled",
+                1,
+                0
             ),
             new TelemetryControl(
                 "Error Reporting",
                 "Error Reporting Consent",
                 "Sets Windows Error Reporting consent to 'Not send' (2). "
-                + "This is the additional consent flag that controls whether reports are queued or sent.",
-                ErrorReporting, "AutoApproveOSDumps", 0, 1
+                    + "This is the additional consent flag that controls whether reports are queued or sent.",
+                ErrorReporting,
+                "AutoApproveOSDumps",
+                0,
+                1
             ),
             new TelemetryControl(
                 "CEIP",
                 "Customer Experience Improvement Program",
                 "Opts out of the Windows Customer Experience Improvement Program (CEIP/SQM). "
-                + "CEIP collects usage statistics about how you use Windows and sends them to Microsoft.",
-                CEIP, "CEIPEnable", 0, 1
+                    + "CEIP collects usage statistics about how you use Windows and sends them to Microsoft.",
+                CEIP,
+                "CEIPEnable",
+                0,
+                1
             ),
             new TelemetryControl(
                 "Feedback",
                 "Feedback Frequency",
                 "Disables Windows Feedback notifications (the 'How did that go?' dialogs). "
-                + "0 = Never. Setting this prevents Microsoft from soliciting usage surveys.",
-                FeedbackHkcu, "NumberOfSIUFInPeriod", 0, 1
+                    + "0 = Never. Setting this prevents Microsoft from soliciting usage surveys.",
+                FeedbackHkcu,
+                "NumberOfSIUFInPeriod",
+                0,
+                1
             ),
             new TelemetryControl(
                 "App Diagnostics",
                 "App Diagnostic Access",
                 "Denies apps' access to diagnostic information about other running apps. "
-                + "This includes process lists, app usage times, and battery consumption data.",
-                AppDiag, "LetAppsAccessDiagnosticInformation", 2, 0
+                    + "This includes process lists, app usage times, and battery consumption data.",
+                AppDiag,
+                "LetAppsAccessDiagnosticInformation",
+                2,
+                0
             ),
             new TelemetryControl(
                 "Search",
                 "SafeSearch and Bing in Search",
                 "Disables Bing integration and web search in the Windows Search bar. "
-                + "Keystrokes typed in search will not be sent to Microsoft's Bing servers.",
-                Search, "BingSearchEnabled", 0, 1
+                    + "Keystrokes typed in search will not be sent to Microsoft's Bing servers.",
+                Search,
+                "BingSearchEnabled",
+                0,
+                1
             ),
             new TelemetryControl(
                 "Search",
                 "Cortana Allowed",
-                "Disables Cortana via the Windows Search policy key. "
-                + "Cortana sends voice, search, and usage data to Microsoft.",
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0, 1
+                "Disables Cortana via the Windows Search policy key. " + "Cortana sends voice, search, and usage data to Microsoft.",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search",
+                "AllowCortana",
+                0,
+                1
             ),
         ]);
     }
@@ -226,7 +264,8 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
         _list.EndUpdate();
         int alreadyPrivate = 0;
         foreach (ListViewItem lvi in _list.Items)
-            if (lvi.ForeColor == Color.ForestGreen) alreadyPrivate++;
+            if (lvi.ForeColor == Color.ForestGreen)
+                alreadyPrivate++;
         _statusLabel.Text = $"{alreadyPrivate}/{_controls.Count} settings already set to private.";
     }
 
@@ -235,23 +274,24 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
         try
         {
             bool isHkcu = ctrl.RegPath.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase);
-            string subKey = isHkcu
-                ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length)
-                : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
-            using var key = isHkcu
-                ? Registry.CurrentUser.OpenSubKey(subKey)
-                : Registry.LocalMachine.OpenSubKey(subKey);
-            if (key is null) return false;
+            string subKey = isHkcu ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length) : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
+            using var key = isHkcu ? Registry.CurrentUser.OpenSubKey(subKey) : Registry.LocalMachine.OpenSubKey(subKey);
+            if (key is null)
+                return false;
             var val = key.GetValue(ctrl.ValueName);
             return val is int i && i == ctrl.PrivateValue;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     // ── Apply ─────────────────────────────────────────────────────────────────
     private void OnApply(object? sender, EventArgs e)
     {
-        int applied = 0, failed = 0;
+        int applied = 0,
+            failed = 0;
 
         foreach (ListViewItem lvi in _list.Items)
         {
@@ -261,9 +301,7 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
             try
             {
                 bool isHkcu = ctrl.RegPath.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase);
-                string subKey = isHkcu
-                    ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length)
-                    : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
+                string subKey = isHkcu ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length) : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
 
                 using var key = isHkcu
                     ? Registry.CurrentUser.CreateSubKey(subKey, writable: true)
@@ -295,9 +333,7 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
             try
             {
                 bool isHkcu = ctrl.RegPath.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase);
-                string subKey = isHkcu
-                    ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length)
-                    : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
+                string subKey = isHkcu ? ctrl.RegPath.Substring("HKEY_CURRENT_USER\\".Length) : ctrl.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
                 using var key = isHkcu
                     ? Registry.CurrentUser.OpenSubKey(subKey, writable: true)
                     : Registry.LocalMachine.OpenSubKey(subKey, writable: true);
@@ -309,7 +345,9 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
                     restored++;
                 }
             }
-            catch { /* ignore */ }
+            catch
+            { /* ignore */
+            }
         }
         _statusLabel.Text = $"{restored} setting(s) restored to Windows defaults.";
     }

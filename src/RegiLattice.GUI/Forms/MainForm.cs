@@ -1223,6 +1223,22 @@ public partial class MainForm : Form
 
     private void OnOpenDnsOverHttps() => ShowManagerDialog(new DnsOverHttpsDialog());
 
+    private void OnOpenNetworkRepair() => ShowManagerDialog(new NetworkRepairDialog());
+
+    private void OnOpenDnsSwitcher() => ShowManagerDialog(new DnsSwitcherDialog());
+
+    private void OnOpenNetworkAdapter() => ShowManagerDialog(new NetworkAdapterDialog());
+
+    private void OnOpenWiFiProfiles() => ShowManagerDialog(new WiFiProfileDialog());
+
+    private void OnOpenFirewallRules() => ShowManagerDialog(new FirewallRulesDialog());
+
+    private void OnOpenProxyConfig() => ShowManagerDialog(new ProxyConfigDialog());
+
+    private void OnOpenShellExtensions() => ShowManagerDialog(new ShellExtensionDialog());
+
+    private void OnOpenBootAnalyzer() => ShowManagerDialog(new BootTimeAnalyzerDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
