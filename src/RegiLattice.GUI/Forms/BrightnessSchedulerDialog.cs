@@ -80,6 +80,18 @@ internal sealed class BrightnessSchedulerDialog : BaseDialog
         Padding = new Padding(6, 0, 0, 0),
     };
     private readonly System.Windows.Forms.Timer _timer = new() { Interval = 60_000 };
+    // Sprint 51 §12a: transition duration control
+    private readonly NumericUpDown _nudTransition = new()
+    {
+        Minimum = 0,
+        Maximum = 60,
+        Value = 0,
+        Width = 60,
+        DecimalPlaces = 0,
+    };
+    private readonly Label _lblTransition = new() { Text = "Fade duration (s):", AutoSize = true };
+    // Sprint 51 §12b: sunrise/sunset auto mode
+    private readonly CheckBox _chkSunriseSunset = new() { Text = "Sunrise/sunset auto (use day/night times as above)", AutoSize = true };
     private readonly Label _lblNote = new()
     {
         Text = "ℹ Brightness control requires hardware support (laptop/external monitor with DDC).",
@@ -166,7 +178,20 @@ internal sealed class BrightnessSchedulerDialog : BaseDialog
         };
         btnPanel.Controls.AddRange(new Control[] { _btnClose, _btnSave, _btnApplyNow });
 
+        // Sprint 51 §12a & §12b extras row
+        var extrasRow = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Bottom,
+            AutoSize = true,
+            Padding = new Padding(6, 2, 6, 2),
+        };
+        extrasRow.Controls.Add(_lblTransition);
+        extrasRow.Controls.Add(_nudTransition);
+        extrasRow.Controls.Add(new Label { Text = "   ", AutoSize = true });
+        extrasRow.Controls.Add(_chkSunriseSunset);
+
         Controls.Add(pnl);
+        Controls.Add(extrasRow);
         Controls.Add(btnPanel);
         Controls.Add(_lblStatus);
     }

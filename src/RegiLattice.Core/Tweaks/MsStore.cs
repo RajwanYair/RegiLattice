@@ -637,5 +637,117 @@ internal static class MsStore
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "msstore-auto-update-off",
+            Label = "Disable Store automatic app updates",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "update", "auto"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-video-autoplay-off",
+            Label = "Disable Store video autoplay",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "video", "autoplay"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-oem-preinstall-off",
+            Label = "Disable OEM-preinstalled app recommendations",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "oem", "preinstall", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "OemPreInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "OemPreInstalledAppsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "OemPreInstalledAppsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-preinstalled-apps-off",
+            Label = "Disable pre-installed app reinstallation",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "preinstall", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-silent-installs-off",
+            Label = "Disable silent app installations",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "silent", "install", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-consumer-features-off",
+            Label = "Disable Windows consumer features (Store suggestions)",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "consumer", "bloat", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-rotating-lock-screen-off",
+            Label = "Disable Windows Spotlight on lock screen",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "spotlight", "lockscreen", "privacy"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-soft-landing-off",
+            Label = "Disable Store soft-landing tips on first run",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "onboarding", "tips"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-content-delivery-off",
+            Label = "Disable content delivery manager entirely",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "content", "delivery", "privacy", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "ContentDeliveryAllowed", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "ContentDeliveryAllowed")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "ContentDeliveryAllowed", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-subscription-content-off",
+            Label = "Disable Store subscription content highlights",
+            Category = "Microsoft Store",
+            Tags = ["msstore", "subscription", "privacy"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContentEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContentEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContentEnabled", 0)],
+        },
     ];
 }

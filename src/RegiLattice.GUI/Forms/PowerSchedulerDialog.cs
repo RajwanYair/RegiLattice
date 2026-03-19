@@ -70,6 +70,11 @@ internal sealed class PowerSchedulerDialog : BaseDialog
     };
     private readonly Button _btnApplyNow = new() { Text = "Apply Now", Width = 90 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    // Sprint 51 §9a: apply tweak profile on power plan switch
+    private readonly Button _btnApplyProfile = new() { Text = "Profile on Plan Switch…", Width = 160 };
+    // Sprint 51 §9b: schedule history log
+    private readonly Button _btnPlanHistory = new() { Text = "Schedule History", Width = 130 };
+    private readonly List<string> _planSwitchLog = [];
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -128,7 +133,9 @@ internal sealed class PowerSchedulerDialog : BaseDialog
         ]);
         ListViewColumnSorter.AttachTo(_list);
 
-        _btnPanel.Controls.AddRange([_btnAdd, _btnEdit, _btnDelete, _btnApplyNow, _btnClose]);
+        _btnApplyProfile.Click += OnConfigureProfileOnSwitch;
+        _btnPlanHistory.Click += OnShowPlanHistory;
+        _btnPanel.Controls.AddRange([_btnAdd, _btnEdit, _btnDelete, _btnApplyNow, _btnApplyProfile, _btnPlanHistory, _btnClose]);
         Controls.AddRange([_list, _statusLabel, _btnPanel]);
     }
 
@@ -289,6 +296,53 @@ internal sealed class PowerSchedulerDialog : BaseDialog
             _schedules.Add(dlg.Result);
             PopulateList();
         }
+    }
+
+    // Sprint 51 §9a — configure which profile to apply when power plan changes.
+    private void OnConfigureProfileOnSwitch(object? sender, EventArgs e)
+    {
+        var profiles = TweakEngine.Profiles.Select(p => p.Name).ToArray();
+        if (profiles.Length == 0)
+        {
+            MessageBox.Show("No profiles available.", "Profile on Plan Switch", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        using var dlg = new Form
+        {
+            Text = "Apply Profile on Plan Switch",
+            Size = new Size(360, 180),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false,
+            MinimizeBox = false,
+            StartPosition = FormStartPosition.CenterParent,
+        };
+        var combo = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Bounds = new Rectangle(16, 50, 220, 28) };
+        combo.Items.AddRange(profiles.Cast<object>().ToArray());
+        var cfg = AppConfig.Load();
+        int idx = Array.IndexOf(profiles, cfg.ProfileOnPlanSwitch ?? "");
+        combo.SelectedIndex = Math.Max(0, idx);
+        var lblHint = new Label { Text = "Switch to this profile when power plan changes:", Bounds = new Rectangle(16, 20, 300, 22), AutoSize = false };
+        var btnOk = new Button { Text = "Save", DialogResult = DialogResult.OK, Bounds = new Rectangle(260, 50, 72, 28) };
+        dlg.Controls.AddRange([lblHint, combo, btnOk]);
+        dlg.AcceptButton = btnOk;
+        if (dlg.ShowDialog(this) == DialogResult.OK && combo.SelectedItem is string chosen)
+        {
+            cfg.ProfileOnPlanSwitch = chosen;
+            cfg.Save();
+            _planSwitchLog.Insert(0, $"{DateTime.Now:HH:mm:ss} — 'Profile on switch' set to '{chosen}'");
+            SetStatus($"Profile-on-switch set to '{chosen}'.");
+        }
+    }
+
+    // Sprint 51 §9b — show schedule history log.
+    private void OnShowPlanHistory(object? sender, EventArgs e)
+    {
+        if (_planSwitchLog.Count == 0)
+        {
+            MessageBox.Show("No plan-switch history recorded this session.", "Schedule History", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+        MessageBox.Show(string.Join("\n", _planSwitchLog.Take(20)), "Schedule History (last 20)", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void OnEdit(object? sender, EventArgs e)

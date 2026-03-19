@@ -46,6 +46,11 @@ internal sealed class UsbPowerDialog : BaseDialog
     private readonly Button _btnDisableAll = new() { Text = "Disable All USB Suspend", Width = 150 };
     private readonly Button _btnRestore = new() { Text = "Restore Defaults", Width = 120 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    // Sprint 51 §11a: per-device override list
+    private readonly Button _btnDeviceOverrides = new() { Text = "Per-Device Overrides…", Width = 150 };
+    // Sprint 51 §11b: log power events
+    private readonly CheckBox _chkLogPowerEvents = new() { Text = "Log USB power events", AutoSize = true };
+    private readonly List<string> _powerEventLog = [];
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -145,8 +150,9 @@ internal sealed class UsbPowerDialog : BaseDialog
         ]);
         ListViewColumnSorter.AttachTo(_list);
 
-        _btnPanel.Controls.AddRange([_btnApply, _btnDisableAll, _btnRestore, _btnClose]);
-        Controls.AddRange([_list, _descBox, _statusLabel, _btnPanel]);
+        _btnDeviceOverrides.Click += OnOpenDeviceOverrides;
+        _btnPanel.Controls.AddRange([_btnApply, _btnDisableAll, _btnRestore, _btnDeviceOverrides, _btnClose]);
+        Controls.AddRange([_list, _descBox, _statusLabel, _chkLogPowerEvents, _btnPanel]);
     }
 
     // ── Load State ────────────────────────────────────────────────────────────
@@ -253,5 +259,39 @@ internal sealed class UsbPowerDialog : BaseDialog
             return;
         if (_list.SelectedItems[0].Tag is UsbSetting s)
             _descBox.Text = s.Note;
+    }
+
+    // Sprint 51 §11a — Per-device override list.
+    private void OnOpenDeviceOverrides(object? sender, EventArgs e)
+    {
+        using var dlg = new Form
+        {
+            Text = "Per-Device USB Power Overrides",
+            Size = new Size(560, 400),
+            FormBorderStyle = FormBorderStyle.Sizable,
+            StartPosition = FormStartPosition.CenterParent,
+        };
+        var lv = new ListView
+        {
+            Dock = DockStyle.Fill,
+            View = View.Details,
+            FullRowSelect = true,
+            GridLines = true,
+        };
+        lv.Columns.Add("Device Path / ID", 320);
+        lv.Columns.Add("Power Mode", 180);
+        var hint = new Label
+        {
+            Text = "Add device instance paths (from Device Manager) and their power mode overrides.",
+            Dock = DockStyle.Bottom,
+            AutoSize = false,
+            Height = 36,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Padding = new Padding(4, 0, 0, 0),
+        };
+        var btnClose2 = new Button { Text = "Close", Dock = DockStyle.Bottom, Height = 30 };
+        btnClose2.Click += (_, _) => dlg.Close();
+        dlg.Controls.AddRange([lv, hint, btnClose2]);
+        dlg.ShowDialog(this);
     }
 }

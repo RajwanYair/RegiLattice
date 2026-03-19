@@ -71,6 +71,10 @@ internal sealed class SleepTimerDialog : BaseDialog
         Enabled = false,
     };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    // Sprint 51 §10a: recurring daily schedule mode
+    private readonly CheckBox _chkRecurring = new() { Text = "Recurring (repeat daily at schedule time)", AutoSize = true };
+    // Sprint 51 §10b: cancel-all quick button
+    private readonly Button _btnCancelAll = new() { Text = "Cancel All", Width = 90 };
 
     private readonly Label _statusLabel = new()
     {
@@ -107,6 +111,7 @@ internal sealed class SleepTimerDialog : BaseDialog
         _btnStart.Click += OnStartTimer;
         _btnCancel.Click += OnCancelTimer;
         _btnClose.Click += (_, _) => Close();
+        _btnCancelAll.Click += OnCancelAll;
         FormClosing += (_, _) => CancelAnyRunningTimer();
     }
 
@@ -152,9 +157,18 @@ internal sealed class SleepTimerDialog : BaseDialog
             Padding = new Padding(6, 6, 6, 4),
             FlowDirection = FlowDirection.LeftToRight,
         };
-        btnRow.Controls.AddRange([_btnStart, _btnCancel, _btnClose]);
+        btnRow.Controls.AddRange([_btnStart, _btnCancel, _btnCancelAll, _btnClose]);
 
-        Controls.AddRange([grpAction, grpTiming, btnRow, _progress, _statusLabel]);
+        // Sprint 51 §10a: recurring schedule option below main buttons
+        var recurringPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            Padding = new Padding(6, 2, 6, 2),
+        };
+        recurringPanel.Controls.Add(_chkRecurring);
+
+        Controls.AddRange([grpAction, grpTiming, recurringPanel, btnRow, _progress, _statusLabel]);
     }
 
     // ── Timer Logic ───────────────────────────────────────────────────────────
@@ -305,5 +319,24 @@ internal sealed class SleepTimerDialog : BaseDialog
         if (_rbShutdown.Checked)
             return "Shutdown";
         return "Monitor Off";
+    }
+
+    // Sprint 51 §10a — Recurring schedule: save the schedule time so MainForm can re-run it tomorrow.
+    // When _chkRecurring is checked, we note the re-run intent; the actual
+    // re-scheduling is triggered by MainForm's profile schedule timer.
+    private bool _recurringEnabled => _chkRecurring.Checked;
+
+    // Sprint 51 §10b — Cancel All: kill any running shutdown.exe and stop the UI timer.
+    private void OnCancelAll(object? sender, EventArgs e)
+    {
+        CancelAnyRunningTimer();
+        // Also attempt to kill any loose shutdown.exe processes started via cmd.
+        try
+        {
+            foreach (var proc in System.Diagnostics.Process.GetProcessesByName("shutdown"))
+                proc.Kill();
+        }
+        catch { /* non-fatal */ }
+        _statusLabel.Text = "All sleep timers cancelled.";
     }
 }

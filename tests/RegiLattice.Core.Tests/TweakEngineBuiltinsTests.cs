@@ -1893,4 +1893,66 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("Windows 11", tweak.Category);
     }
+
+    // ── Sprint 51 — MsStore, Edge, Firefox, Chrome, Office ─────────────────
+
+    [Theory]
+    [InlineData("msstore-auto-update-off")]
+    [InlineData("msstore-consumer-features-off")]
+    [InlineData("msstore-content-delivery-off")]
+    [InlineData("msstore-rotating-lock-screen-off")]
+    public void RegisterBuiltins_Sprint51MsStoreTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Microsoft Store", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("edge-startup-boost-off")]
+    [InlineData("edge-tab-preload-off")]
+    [InlineData("edge-shopping-assistant-off")]
+    [InlineData("edge-follow-feature-off")]
+    public void RegisterBuiltins_Sprint51EdgeTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Edge", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("firefox-telemetry-off")]
+    [InlineData("firefox-pocket-off")]
+    [InlineData("firefox-mozilla-accounts-off")]
+    [InlineData("firefox-app-update-off")]
+    public void RegisterBuiltins_Sprint51FirefoxTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Firefox", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("chrome-background-run-off")]
+    [InlineData("chrome-metrics-off")]
+    [InlineData("chrome-browser-signin-off")]
+    [InlineData("chrome-cloud-reporting-off")]
+    public void RegisterBuiltins_Sprint51ChromeTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Chrome", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("office-first-run-off")]
+    [InlineData("office-ceip-off")]
+    [InlineData("office-macro-block-internet")]
+    [InlineData("office-update-hide-notifications")]
+    public void RegisterBuiltins_Sprint51OfficeTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Office", tweak.Category);
+    }
 }

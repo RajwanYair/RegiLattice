@@ -141,6 +141,15 @@ public sealed class AppConfig
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 
+    // ── Profile Scheduler ────────────────────────────────────────────────
+    /// <summary>List of scheduled profile switches persisted with the config.</summary>
+    [JsonPropertyName("profile_schedules")]
+    public List<ProfileScheduleEntry> ProfileSchedules { get; set; } = [];
+
+    /// <summary>Profile name to apply automatically when the power plan changes (empty = disabled).</summary>
+    [JsonPropertyName("profile_on_plan_switch")]
+    public string? ProfileOnPlanSwitch { get; set; }
+
     public static string DefaultConfigPath => Path.Combine(ConfigDir, "config.json");
 
     public static AppConfig Load(string? path = null)
@@ -166,4 +175,23 @@ public sealed class AppConfig
         var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(path, json);
     }
+}
+
+/// <summary>Represents one scheduled profile-switch entry persisted in AppConfig.</summary>
+public sealed record ProfileScheduleEntry
+{
+    [JsonPropertyName("profile")]
+    public required string Profile { get; init; }
+
+    [JsonPropertyName("trigger")]
+    public required string Trigger { get; init; }  // "daily", "on_boot", "on_login"
+
+    [JsonPropertyName("time")]
+    public string Time { get; init; } = "";  // "HH:mm" for daily trigger
+
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; init; } = true;
+
+    [JsonPropertyName("created_at")]
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 }

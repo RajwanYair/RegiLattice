@@ -40,6 +40,9 @@ public partial class MainForm : Form
     private readonly System.Windows.Forms.Timer _searchDebounceTimer = new() { Interval = 250 };
     private string _lastSearchText = string.Empty;
 
+    // Profile schedule timer — checks AppConfig.ProfileSchedules every 60 s.
+    private readonly System.Windows.Forms.Timer _profileScheduleTimer = new() { Interval = 60_000 };
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -58,6 +61,7 @@ public partial class MainForm : Form
             AppTheme.SetFontSize(cfg.FontSize);
 
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
+        _profileScheduleTimer.Tick += OnProfileScheduleTick;
         ApplyTheme();
 
         // Restore log panel and detail panel dimensions from config
@@ -94,6 +98,7 @@ public partial class MainForm : Form
     {
         base.OnLoad(e);
         _monitorTimer.Start();
+        _profileScheduleTimer.Start();
         await InitialiseEngineAsync();
 
         if (WhatsNewDialog.ShouldShow())
@@ -107,6 +112,7 @@ public partial class MainForm : Form
     protected override void OnFormClosing(FormClosingEventArgs e)
     {
         _monitorTimer.Stop();
+        _profileScheduleTimer.Stop();
 
         // Warn user about pending reboot tweaks
         if (_pendingRebootIds.Count > 0)
@@ -122,6 +128,8 @@ public partial class MainForm : Form
 
         _searchDebounceTimer.Stop();
         _searchDebounceTimer.Tick -= OnSearchDebounceTick;
+        _profileScheduleTimer.Stop();
+        _profileScheduleTimer.Tick -= OnProfileScheduleTick;
 
         _trayIcon.Visible = false;
         _cts.Cancel();
@@ -1180,6 +1188,13 @@ public partial class MainForm : Form
         dlg.ShowDialog(this);
     }
 
+    private void OnOpenProfileScheduler()
+    {
+        using var dlg = new ProfileSchedulerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
     private void OnOpenPowerPlan()
     {
         using var dlg = new PowerPlanDialog();
@@ -1405,6 +1420,36 @@ public partial class MainForm : Form
                 { /* ignore */
                 }
             });
+        }
+    }
+
+    // Sprint 51 §3 — check profile schedules every 60 s and auto-switch if due.
+    private void OnProfileScheduleTick(object? sender, EventArgs e)
+    {
+        try
+        {
+            var cfg = AppConfig.Load();
+            if (cfg.ProfileSchedules.Count == 0)
+                return;
+
+            string now = DateTime.Now.ToString("HH:mm");
+            foreach (var schedule in cfg.ProfileSchedules)
+            {
+                if (!schedule.Enabled)
+                    continue;
+                if (schedule.Trigger != "daily" || schedule.Time != now)
+                    continue;
+
+                // Switch the profile filter in the combo box on the UI thread.
+                if (_profileCombo.Items.Contains(schedule.Profile))
+                {
+                    _profileCombo.SelectedItem = schedule.Profile;
+                    AppendLog($"[Profile Scheduler] Auto-switched to profile '{schedule.Profile}' at {now}.");
+                }
+            }
+        }
+        catch
+        { /* non-fatal — ignore any config I/O errors */
         }
     }
 
