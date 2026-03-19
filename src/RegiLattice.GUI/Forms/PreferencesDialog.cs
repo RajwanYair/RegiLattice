@@ -77,7 +77,7 @@ internal sealed class PreferencesDialog : Form
         _themeCombo.SelectedItem = config.Theme;
 
         _localeCombo = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 200 };
-        _localeCombo.Items.AddRange(new object[] { "en", "de" });
+        _localeCombo.Items.AddRange(Locale.AvailableLocales.Cast<object>().ToArray());
         _localeCombo.SelectedItem = config.Locale;
 
         _detailHeight = new NumericUpDown
