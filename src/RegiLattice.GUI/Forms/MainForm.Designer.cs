@@ -65,6 +65,9 @@ partial class MainForm
     private ToolStripMenuItem _mnuShellExtensions = null!;
     private ToolStripMenuItem _mnuBootAnalyzer = null!;
     private ToolStripMenuItem _mnuWuControl = null!;
+    private ToolStripMenuItem _mnuNotifMgr = null!;
+    private ToolStripMenuItem _mnuBrowserCache = null!;
+    private ToolStripMenuItem _mnuDriverChecker = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -165,6 +168,9 @@ partial class MainForm
         _mnuShellExtensions = new ToolStripMenuItem("Shell Extension Manager...") { Image = AppIcons.ExplorerMenuBitmap };
         _mnuBootAnalyzer = new ToolStripMenuItem("Boot Time Analyzer...") { Image = AppIcons.PerformanceMenuBitmap };
         _mnuWuControl = new ToolStripMenuItem("Windows Update Control...") { Image = AppIcons.WindowsHealthMenuBitmap };
+        _mnuNotifMgr = new ToolStripMenuItem("Notification Manager...") { Image = AppIcons.PrivacyMenuBitmap };
+        _mnuBrowserCache = new ToolStripMenuItem("Browser Cache Cleaner...") { Image = AppIcons.CleanupMenuBitmap };
+        _mnuDriverChecker = new ToolStripMenuItem("Driver Update Checker...") { Image = AppIcons.PerformanceMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -209,6 +215,9 @@ partial class MainForm
             _mnuShellExtensions,
             _mnuBootAnalyzer,
             _mnuWuControl,
+            _mnuNotifMgr,
+            _mnuBrowserCache,
+            _mnuDriverChecker,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -273,6 +282,9 @@ partial class MainForm
         _mnuShellExtensions.Click     += (_, _) => OnOpenShellExtensions();
         _mnuBootAnalyzer.Click        += (_, _) => OnOpenBootAnalyzer();
         _mnuWuControl.Click            += (_, _) => OnOpenWuControl();
+        _mnuNotifMgr.Click             += (_, _) => OnOpenNotifMgr();
+        _mnuBrowserCache.Click         += (_, _) => OnOpenBrowserCache();
+        _mnuDriverChecker.Click        += (_, _) => OnOpenDriverChecker();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

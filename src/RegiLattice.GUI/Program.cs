@@ -86,6 +86,9 @@ internal static class Program
                 "shellextensions" => new ShellExtensionDialog(),
                 "bootanalyzer" => new BootTimeAnalyzerDialog(),
                 "wucontrol" => new WindowsUpdateControlDialog(),
+                "notifmgr" => new NotificationManagerDialog(),
+                "browsercache" => new BrowserCacheCleanerDialog(),
+                "driverchecker" => new DriverUpdateCheckerDialog(),
 
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),
