@@ -5,10 +5,10 @@
 
 using System;
 using System.Drawing;
+using System.Management;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Management;
 
 namespace RegiLattice.GUI.Forms;
 
@@ -76,9 +76,9 @@ internal sealed class BatteryHealthDialog : BaseDialog
         Controls.Add(_statusLabel);
         Controls.Add(btnPanel);
 
-        _btnRefresh.Click    += async (_, _) => await RefreshAsync();
+        _btnRefresh.Click += async (_, _) => await RefreshAsync();
         _btnOpenReport.Click += OnOpenReport;
-        _btnClose.Click      += (_, _) => Close();
+        _btnClose.Click += (_, _) => Close();
 
         AppTheme.Apply(this);
     }
@@ -130,28 +130,32 @@ internal sealed class BatteryHealthDialog : BaseDialog
             using var searcher = new ManagementObjectSearcher("SELECT * FROM BatteryStaticData");
             foreach (ManagementObject obj in searcher.Get())
             {
-                string name       = obj["Name"]?.ToString() ?? "Battery";
-                ulong designCap   = obj["DesignedCapacity"] is ulong dc ? dc : 0;
-                ulong fullCap     = obj["FullChargedCapacity"] is ulong fc ? fc : 0;
-                int health        = designCap > 0 ? (int)(fullCap * 100 / designCap) : 0;
-                string cycleStr   = obj["CycleCount"]?.ToString() ?? "—";
+                string name = obj["Name"]?.ToString() ?? "Battery";
+                ulong designCap = obj["DesignedCapacity"] is ulong dc ? dc : 0;
+                ulong fullCap = obj["FullChargedCapacity"] is ulong fc ? fc : 0;
+                int health = designCap > 0 ? (int)(fullCap * 100 / designCap) : 0;
+                string cycleStr = obj["CycleCount"]?.ToString() ?? "—";
 
                 // Dynamic data
                 ulong currentCap = 0;
                 string chargeRate = "—";
-                string voltage    = "—";
+                string voltage = "—";
                 try
                 {
                     using var dyn = new ManagementObjectSearcher("SELECT * FROM BatteryStatus WHERE Tag='" + obj["Tag"] + "'");
                     foreach (ManagementObject d in dyn.Get())
                     {
                         currentCap = d["RemainingCapacity"] is ulong rc ? rc : 0;
-                        voltage    = d["Voltage"] is ulong v ? $"{v / 1000.0:F2} V" : "—";
-                        chargeRate = d["ChargeRate"] is ulong cr ? $"+{cr} mW"
-                                   : d["DischargeRate"] is ulong dr ? $"-{dr} mW" : "—";
+                        voltage = d["Voltage"] is ulong v ? $"{v / 1000.0:F2} V" : "—";
+                        chargeRate =
+                            d["ChargeRate"] is ulong cr ? $"+{cr} mW"
+                            : d["DischargeRate"] is ulong dr ? $"-{dr} mW"
+                            : "—";
                     }
                 }
-                catch (Exception) { /* ignore dynamic fallback */ }
+                catch (Exception)
+                { /* ignore dynamic fallback */
+                }
 
                 int chargePct = fullCap > 0 ? (int)(currentCap * 100 / fullCap) : 0;
 
@@ -162,16 +166,27 @@ internal sealed class BatteryHealthDialog : BaseDialog
                     panels.Add(BuildBatteryPanel(name, designCap, fullCap, health, chargePct, cycleStr, chargeRate, voltage));
             }
         }
-        catch (Exception) { /* WMI not available — return empty list */ }
+        catch (Exception)
+        { /* WMI not available — return empty list */
+        }
         return panels;
     }
 
-    private Panel BuildBatteryPanel(string name, ulong designCap, ulong fullCap, int health,
-        int chargePct, string cycles, string chargeRate, string voltage)
+    private Panel BuildBatteryPanel(
+        string name,
+        ulong designCap,
+        ulong fullCap,
+        int health,
+        int chargePct,
+        string cycles,
+        string chargeRate,
+        string voltage
+    )
     {
-        Color healthColor = health >= 80 ? Color.FromArgb(166, 227, 161)
-                          : health >= 60 ? Color.FromArgb(249, 226, 175)
-                          :                Color.FromArgb(243, 139, 168);
+        Color healthColor =
+            health >= 80 ? Color.FromArgb(166, 227, 161)
+            : health >= 60 ? Color.FromArgb(249, 226, 175)
+            : Color.FromArgb(243, 139, 168);
 
         var panel = new Panel
         {
@@ -184,48 +199,77 @@ internal sealed class BatteryHealthDialog : BaseDialog
         var lblName = new Label
         {
             Text = $"\uD83D\uDD0B {name}",
-            AutoSize = true, Location = new Point(8, 8),
-            Font = AppTheme.Bold, ForeColor = AppTheme.Fg, BackColor = Color.Transparent,
+            AutoSize = true,
+            Location = new Point(8, 8),
+            Font = AppTheme.Bold,
+            ForeColor = AppTheme.Fg,
+            BackColor = Color.Transparent,
         };
         var lblHealth = new Label
         {
             Text = $"Health: {health}%  |  Design: {designCap} mWh  |  Full charge: {fullCap} mWh",
-            AutoSize = true, Location = new Point(8, 30),
-            Font = AppTheme.Regular, ForeColor = healthColor, BackColor = Color.Transparent,
+            AutoSize = true,
+            Location = new Point(8, 30),
+            Font = AppTheme.Regular,
+            ForeColor = healthColor,
+            BackColor = Color.Transparent,
         };
         var lblStats = new Label
         {
             Text = $"Current: {chargePct}%  |  Cycles: {cycles}  |  Voltage: {voltage}  |  Rate: {chargeRate}",
-            AutoSize = true, Location = new Point(8, 50),
-            Font = AppTheme.Regular, ForeColor = AppTheme.FgDim, BackColor = Color.Transparent,
+            AutoSize = true,
+            Location = new Point(8, 50),
+            Font = AppTheme.Regular,
+            ForeColor = AppTheme.FgDim,
+            BackColor = Color.Transparent,
         };
 
         // Health bar
-        var healthBarBg = new Panel { Location = new Point(8, 72), Width = panel.Width - 30, Height = 12, BackColor = AppTheme.Overlay };
+        var healthBarBg = new Panel
+        {
+            Location = new Point(8, 72),
+            Width = panel.Width - 30,
+            Height = 12,
+            BackColor = AppTheme.Overlay,
+        };
         healthBarBg.Paint += (_, e) =>
         {
             int fillW = health > 0 ? Math.Max(2, (int)(healthBarBg.Width * health / 100.0)) : 0;
             using var brush = new System.Drawing.Drawing2D.LinearGradientBrush(
                 new Rectangle(0, 0, Math.Max(1, fillW), healthBarBg.Height),
-                Color.FromArgb(180, healthColor), healthColor,
-                System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
+                Color.FromArgb(180, healthColor),
+                healthColor,
+                System.Drawing.Drawing2D.LinearGradientMode.Horizontal
+            );
             e.Graphics.FillRectangle(brush, 0, 0, fillW, healthBarBg.Height);
         };
         var lblHealthTitle = new Label
         {
-            Text = "Battery Health", AutoSize = true, Location = new Point(8, 90),
-            Font = AppTheme.Regular, ForeColor = AppTheme.FgDim, BackColor = Color.Transparent,
+            Text = "Battery Health",
+            AutoSize = true,
+            Location = new Point(8, 90),
+            Font = AppTheme.Regular,
+            ForeColor = AppTheme.FgDim,
+            BackColor = Color.Transparent,
         };
         // Charge bar
-        var chargeBarBg = new Panel { Location = new Point(8, 108), Width = panel.Width - 30, Height = 12, BackColor = AppTheme.Overlay };
+        var chargeBarBg = new Panel
+        {
+            Location = new Point(8, 108),
+            Width = panel.Width - 30,
+            Height = 12,
+            BackColor = AppTheme.Overlay,
+        };
         chargeBarBg.Paint += (_, e) =>
         {
             int fillW = chargePct > 0 ? Math.Max(2, (int)(chargeBarBg.Width * chargePct / 100.0)) : 0;
             Color chgColor = Color.FromArgb(137, 180, 250); // blue accent
             using var brush = new System.Drawing.Drawing2D.LinearGradientBrush(
                 new Rectangle(0, 0, Math.Max(1, fillW), chargeBarBg.Height),
-                Color.FromArgb(180, chgColor), chgColor,
-                System.Drawing.Drawing2D.LinearGradientMode.Horizontal);
+                Color.FromArgb(180, chgColor),
+                chgColor,
+                System.Drawing.Drawing2D.LinearGradientMode.Horizontal
+            );
             e.Graphics.FillRectangle(brush, 0, 0, fillW, chargeBarBg.Height);
         };
 
@@ -238,13 +282,15 @@ internal sealed class BatteryHealthDialog : BaseDialog
         try
         {
             string reportPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "battery-report.html");
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = "cmd.exe",
-                Arguments = $"/c powercfg /batteryreport /output \"{reportPath}\" && start \"\" \"{reportPath}\"",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            });
+            System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c powercfg /batteryreport /output \"{reportPath}\" && start \"\" \"{reportPath}\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            );
             _statusLabel.Text = "Battery report generated and opened.";
         }
         catch (Exception ex)

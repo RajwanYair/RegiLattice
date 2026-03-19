@@ -4,6 +4,50 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 42
+
+### Added — Hardware & Network Tools
+
+- **`HardwareTemperatureDialog`** — WMI thermal zone polling (`MSAcpi_ThermalZoneTemperature` in `root\WMI`),
+  GPU via `Win32_VideoController`; colour-coded bars (green <60°C, amber 60–80°C, red ≥80°C); 3-second
+  auto-refresh checkbox; graceful fallback when WMI unavailable; exposes `hwtempmon` in `--tool`
+- **`NetworkBandwidthDialog`** — real-time NIC bandwidth monitor via `IPv4Statistics` delta-calc;
+  1-second polling timer; per-adapter ↑ send / ↓ recv with B/s, KB/s, MB/s auto-scale; exposes
+  `netbandwidth` in `--tool`
+- **`MacAddressDialog`** — WMI `Win32_NetworkAdapter` MAC address viewer + randomizer:
+  generates locally-administered unicast MAC, writes to registry `NetworkAddress` key under
+  `HKLM\SYSTEM\CurrentControlSet\Control\Class\{4D36E972…}`, re-enables adapter via `netsh`;
+  Copy-to-clipboard button; admin warning banner; exposes `macaddress` in `--tool`
+- **Phase 2 #13** — Automatic memory cleaning on threshold: `AppConfig.AutoCleanMemoryThreshold` (int,
+  0=disabled); `OnMonitorTimerTick` purges all process working sets if `memPct >= threshold`
+- **Phase 2 #14** — System tray tooltip shows live RAM %: `_trayIcon.Text = $"RegiLattice — RAM: {memPct}%"`
+- **Phase 2 #17** — Network connectivity status indicator: `_netLabel` in status strip, colour-coded
+  green ✓ / red ✗ via `NetworkInterface.GetIsNetworkAvailable()`, refreshed every monitor tick
+- **AppIcons** — `ThermometerMenuBitmap`, `BandwidthMenuBitmap`, `MacAddressMenuBitmap` with
+  custom `DrawThermometerIcon`, `DrawBandwidthIcon`, `DrawMacAddressIcon` rendering
+
+### Added — 29 New Tweaks
+
+- **`EventLogging.cs`** — 10 new tweaks: limit Application/System/Setup event log sizes, disable
+  PowerShell script-block & module logging, disable WER event log entries, disable forwarded events
+  (Wecsvc), disable DNS client event tracing, disable NT Kernel Logger ETW session, disable logon
+  failure audit
+- **`ProxyVpn.cs`** — 10 new tweaks: disable WinHTTP WPAD auto-discovery, disable IE/WinINet proxy
+  bypass, disable VPN split tunneling (RAS), disable RAS AutoDial service, disable IPv6 Teredo,
+  disable WinINet AutoDetect, disable 6to4 tunneling, disable IP-HTTPS adapter, disable NCSI probing,
+  disable TCP timestamps
+- **`PowerShellTweaks.cs`** — 9 new tweaks: set execution policy to RemoteSigned, enable PS Remoting,
+  opt out of PowerShell telemetry, enable Constrained Language Mode, disable transcription logging,
+  enable Protected Event Logging, disable clipboard history policy, set system-managed page file,
+  enable TLS 1.2 for .NET apps
+
+### Tests
+
+- +29 `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` covering all new tweak IDs
+- Total: **2 796 tweaks** (+29), **1 740 tests** (+29 passing)
+
+---
+
 ## [Unreleased] — Sprint 41
 
 ### Fixed
@@ -130,8 +174,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - Indentation of ListView event handler wiring in `MainForm.Designer.cs` (cosmetic)
-
-
 
 ### Added — Sprint 21: 50 New Tweaks & +10% Coverage Goal Exceeded
 
@@ -515,7 +557,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Sprint 8 — Consolidation, Validation & CLI Enhancements
 
 - Untrack archive/ (151 files, 84,575 line deletions) + current-ids.txt from git
-- Delete .mypy_cache (16 MB) and __pycache__ (3 MB) from disk
+- Delete `.mypy_cache` (16 MB) and `__pycache__` (3 MB) from disk
 - Core: `ValidateTweaks()` — checks empty IDs/Labels/Categories, broken DependsOn, circular deps
 - Core: `ResolveDependencies(id)` — topological-sort dependency resolution
 - Core: `Dependents(id)` — reverse dependency lookup

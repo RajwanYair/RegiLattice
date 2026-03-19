@@ -75,6 +75,9 @@ partial class MainForm
     private ToolStripMenuItem _mnuDiskSpace = null!;
     private ToolStripMenuItem _mnuPortScan = null!;
     private ToolStripMenuItem _mnuBatteryHealth = null!;
+    private ToolStripMenuItem _mnuHwTempMon = null!;
+    private ToolStripMenuItem _mnuNetBandwidth = null!;
+    private ToolStripMenuItem _mnuMacAddress = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -100,6 +103,7 @@ partial class MainForm
     private ToolStripStatusLabel _progressLabel = null!;
     private ToolStripProgressBar _progressBar = null!;    private ToolStripStatusLabel _cpuLabel = null!;
     private ToolStripStatusLabel _memLabel = null!;
+    private ToolStripStatusLabel _netLabel = null!;
     private System.Windows.Forms.Timer _monitorTimer = null!;
     private readonly SystemMonitor _sysMonitor = new();
     // ── Tray icon ──────────────────────────────────────────────────────────
@@ -184,6 +188,9 @@ partial class MainForm
         _mnuDiskSpace   = new ToolStripMenuItem("Disk Space Analyser...") { Image = AppIcons.PerformanceMenuBitmap };
         _mnuPortScan    = new ToolStripMenuItem("Port / Connectivity Tester...") { Image = AppIcons.NetworkMenuBitmap };
         _mnuBatteryHealth = new ToolStripMenuItem("Battery Health...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuHwTempMon   = new ToolStripMenuItem("Hardware Temperature...") { Image = AppIcons.ThermometerMenuBitmap };
+        _mnuNetBandwidth = new ToolStripMenuItem("Network Bandwidth Monitor...") { Image = AppIcons.BandwidthMenuBitmap };
+        _mnuMacAddress  = new ToolStripMenuItem("MAC Address Manager...") { Image = AppIcons.MacAddressMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -238,6 +245,9 @@ partial class MainForm
             _mnuDiskSpace,
             _mnuPortScan,
             _mnuBatteryHealth,
+            _mnuHwTempMon,
+            _mnuNetBandwidth,
+            _mnuMacAddress,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -311,6 +321,9 @@ partial class MainForm
         _mnuDiskSpace.Click            += (_, _) => OnOpenDiskSpace();
         _mnuPortScan.Click             += (_, _) => OnOpenPortScanner();
         _mnuBatteryHealth.Click        += (_, _) => OnOpenBatteryHealth();
+        _mnuHwTempMon.Click            += (_, _) => OnOpenHardwareTemp();
+        _mnuNetBandwidth.Click         += (_, _) => OnOpenNetBandwidth();
+        _mnuMacAddress.Click           += (_, _) => OnOpenMacAddress();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
@@ -564,8 +577,9 @@ partial class MainForm
         _progressBar = new ToolStripProgressBar { Visible = false, Size = new Size(180, 16), Style = ProgressBarStyle.Marquee };
         _cpuLabel = new ToolStripStatusLabel("CPU: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
         _memLabel = new ToolStripStatusLabel("RAM: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
+        _netLabel = new ToolStripStatusLabel("Net: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
         _statusStrip = new StatusStrip { SizingGrip = false };
-        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel });
+        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel, new ToolStripSeparator(), _netLabel });
         _statusStrip.Dock = DockStyle.Bottom;
 
         // ── System monitor timer ───────────────────────────────────────────

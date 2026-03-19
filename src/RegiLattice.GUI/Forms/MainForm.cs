@@ -1260,6 +1260,11 @@ public partial class MainForm : Form
 
     private void OnOpenBatteryHealth() => ShowManagerDialog(new BatteryHealthDialog());
 
+    // Sprint 42 — hardware & network monitors
+    private void OnOpenHardwareTemp() => ShowManagerDialog(new HardwareTemperatureDialog());
+    private void OnOpenNetBandwidth() => ShowManagerDialog(new NetworkBandwidthDialog());
+    private void OnOpenMacAddress() => ShowManagerDialog(new MacAddressDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
@@ -1338,6 +1343,13 @@ public partial class MainForm : Form
         _cpuLabel.Text = $"CPU: {cpu}%";
         _memLabel.Text = $"RAM: {usedMb / 1024.0:F1}/{totalMb / 1024.0:F0} GB ({memPct}%)";
 
+        // Phase 2 #17 — network connectivity indicator
+        bool isOnline = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        _netLabel.Text = isOnline ? "Net: \u2713" : "Net: \u2717";
+
+        // Phase 2 #14 — update tray icon tooltip with RAM %
+        _trayIcon.Text = $"RegiLattice \u2014 RAM: {memPct}%";
+
         if (AppConfig.Load().MonitorColorCoded)
         {
             _cpuLabel.ForeColor = cpu switch
@@ -1352,11 +1364,33 @@ public partial class MainForm : Form
                 >= 60 => Color.FromArgb(255, 184, 108),
                 _ => Color.FromArgb(80, 250, 123),
             };
+            _netLabel.ForeColor = isOnline ? Color.FromArgb(80, 250, 123) : Color.FromArgb(255, 85, 85);
         }
         else
         {
             _cpuLabel.ForeColor = _statusLabel.ForeColor;
             _memLabel.ForeColor = _statusLabel.ForeColor;
+            _netLabel.ForeColor = _statusLabel.ForeColor;
+        }
+
+        // Phase 2 #13 — auto memory clean when RAM exceeds configured threshold
+        var cfg = AppConfig.Load();
+        if (cfg.AutoCleanMemoryThreshold > 0 && memPct >= cfg.AutoCleanMemoryThreshold)
+        {
+            _ = Task.Run(static () =>
+            {
+                try
+                {
+                    // Purge working sets via EmptyWorkingSet (same as MemoryCleanerDialog)
+                    foreach (var proc in System.Diagnostics.Process.GetProcesses())
+                    {
+                        try { proc.MinWorkingSet = proc.MinWorkingSet; }
+                        catch { /* ignore access-denied processes */ }
+                        finally { proc.Dispose(); }
+                    }
+                }
+                catch { /* ignore */ }
+            });
         }
     }
 
