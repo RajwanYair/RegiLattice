@@ -94,7 +94,10 @@ internal sealed class DiskSpaceDialog : BaseDialog
         {
             drives = await Task.Run(() => DriveInfo.GetDrives().Where(d => d.IsReady).ToArray(), token);
         }
-        catch (OperationCanceledException) { return; }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
         catch (Exception ex)
         {
             _statusLabel.Text = $"Error: {ex.Message}";
@@ -102,7 +105,8 @@ internal sealed class DiskSpaceDialog : BaseDialog
             return;
         }
 
-        if (token.IsCancellationRequested) return;
+        if (token.IsCancellationRequested)
+            return;
 
         _drivePanel.SuspendLayout();
         foreach (DriveInfo drive in drives.OrderBy(d => d.Name))
@@ -110,24 +114,25 @@ internal sealed class DiskSpaceDialog : BaseDialog
         _drivePanel.ResumeLayout(true);
 
         long totalFree = drives.Sum(d => d.AvailableFreeSpace);
-        long totalAll  = drives.Sum(d => d.TotalSize);
+        long totalAll = drives.Sum(d => d.TotalSize);
         _statusLabel.Text = $"{drives.Length} drive(s) — {FormatBytes(totalFree)} free of {FormatBytes(totalAll)} total";
         _btnRefresh.Enabled = true;
     }
 
     private Panel BuildDriveRow(DriveInfo drive)
     {
-        long total    = drive.TotalSize;
-        long free     = drive.AvailableFreeSpace;
-        long used     = total - free;
-        int  pct      = total > 0 ? (int)(used * 100L / total) : 0;
-        string label  = $"{drive.Name}  [{drive.DriveType}]  {drive.VolumeLabel}";
-        string sizes  = $"{FormatBytes(used)} used / {FormatBytes(free)} free / {FormatBytes(total)} total  ({pct}%)";
+        long total = drive.TotalSize;
+        long free = drive.AvailableFreeSpace;
+        long used = total - free;
+        int pct = total > 0 ? (int)(used * 100L / total) : 0;
+        string label = $"{drive.Name}  [{drive.DriveType}]  {drive.VolumeLabel}";
+        string sizes = $"{FormatBytes(used)} used / {FormatBytes(free)} free / {FormatBytes(total)} total  ({pct}%)";
 
         // Colour: green <70%, amber <90%, red ≥90%
-        Color barColor = pct >= 90 ? Color.FromArgb(243, 139, 168)   // red
-                       : pct >= 70 ? Color.FromArgb(249, 226, 175)   // amber
-                       :             Color.FromArgb(166, 227, 161);  // green
+        Color barColor =
+            pct >= 90 ? Color.FromArgb(243, 139, 168) // red
+            : pct >= 70 ? Color.FromArgb(249, 226, 175) // amber
+            : Color.FromArgb(166, 227, 161); // green
 
         var row = new Panel
         {
@@ -139,8 +144,13 @@ internal sealed class DiskSpaceDialog : BaseDialog
         };
         row.MouseDoubleClick += (_, _) =>
         {
-            try { System.Diagnostics.Process.Start("explorer.exe", drive.Name); }
-            catch (Exception) { /* ignore */ }
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", drive.Name);
+            }
+            catch (Exception)
+            { /* ignore */
+            }
         };
 
         var lblName = new Label
@@ -176,7 +186,8 @@ internal sealed class DiskSpaceDialog : BaseDialog
                 new Rectangle(0, 0, Math.Max(1, fillW), bar.Height),
                 Color.FromArgb(180, barColor),
                 barColor,
-                LinearGradientMode.Horizontal);
+                LinearGradientMode.Horizontal
+            );
             e.Graphics.FillRectangle(brush, 0, 0, fillW, bar.Height);
         };
 
@@ -186,9 +197,12 @@ internal sealed class DiskSpaceDialog : BaseDialog
 
     private static string FormatBytes(long bytes)
     {
-        if (bytes >= 1_099_511_627_776L) return $"{bytes / 1_099_511_627_776.0:F1} TB";
-        if (bytes >= 1_073_741_824L)     return $"{bytes / 1_073_741_824.0:F1} GB";
-        if (bytes >= 1_048_576L)         return $"{bytes / 1_048_576.0:F0} MB";
+        if (bytes >= 1_099_511_627_776L)
+            return $"{bytes / 1_099_511_627_776.0:F1} TB";
+        if (bytes >= 1_073_741_824L)
+            return $"{bytes / 1_073_741_824.0:F1} GB";
+        if (bytes >= 1_048_576L)
+            return $"{bytes / 1_048_576.0:F0} MB";
         return $"{bytes / 1024.0:F0} KB";
     }
 

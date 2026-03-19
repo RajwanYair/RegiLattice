@@ -496,6 +496,72 @@ internal static class AppIcons
     internal static Bitmap ExportMenuBitmap => MenuBitmap("menu-export", DrawExportIcon);
     internal static Bitmap ExplorerMenuBitmap => MenuBitmap("menu-explorer", DrawExplorerIcon);
     internal static Bitmap CleanupMenuBitmap => MenuBitmap("menu-cleanup", DrawCleanupIcon);
+    internal static Bitmap ThermometerMenuBitmap => MenuBitmap("menu-thermometer", DrawThermometerIcon);
+    internal static Bitmap BandwidthMenuBitmap => MenuBitmap("menu-bandwidth", DrawBandwidthIcon);
+    internal static Bitmap MacAddressMenuBitmap => MenuBitmap("menu-macaddress", DrawMacAddressIcon);
+
+    private static void DrawThermometerIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 90, 50),
+            Color.FromArgb(180, 30, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        using var pen = new Pen(Color.White, 1.5f);
+        int cx = s / 2;
+        // thermometer tube
+        g.DrawLine(pen, cx, 4, cx, s - 7);
+        // bulb
+        g.DrawEllipse(pen, cx - 3, s - 9, 6, 6);
+        // tick marks
+        g.DrawLine(pen, cx - 4, 7, cx - 1, 7);
+        g.DrawLine(pen, cx - 4, 11, cx - 1, 11);
+        g.DrawLine(pen, cx - 4, 15, cx - 1, 15);
+    }
+
+    private static void DrawBandwidthIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(40, 180, 255),
+            Color.FromArgb(0, 100, 200),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        using var pen = new Pen(Color.White, 1.5f);
+        // up arrow
+        int cx = s / 2 - 4;
+        g.DrawLine(pen, cx, s - 5, cx, 7);
+        g.DrawLine(pen, cx - 3, 11, cx, 7);
+        g.DrawLine(pen, cx + 3, 11, cx, 7);
+        // down arrow
+        cx = s / 2 + 4;
+        g.DrawLine(pen, cx, 5, cx, s - 8);
+        g.DrawLine(pen, cx - 3, s - 12, cx, s - 8);
+        g.DrawLine(pen, cx + 3, s - 12, cx, s - 8);
+    }
+
+    private static void DrawMacAddressIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(100, 100, 220),
+            Color.FromArgb(50, 50, 160),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        using var pen = new Pen(Color.White, 1.5f);
+        int m = 4;
+        int row = s / 4;
+        // Draw a simple NIC chip shape
+        g.DrawRectangle(pen, m, row, s - m * 2, s - row * 2);
+        g.DrawLine(pen, m - 1, row + 3, m + 2, row + 3);
+        g.DrawLine(pen, m - 1, row + 7, m + 2, row + 7);
+        g.DrawLine(pen, s - m - 2, row + 3, s - m + 1, row + 3);
+        g.DrawLine(pen, s - m - 2, row + 7, s - m + 1, row + 7);
+    }
 
     private static void DrawExplorerIcon(Graphics g, int s)
     {

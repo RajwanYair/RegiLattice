@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-05-31 · v3.5.0 · 2 767 tweaks · 92 categories · 1 711 tests
+> Last updated: 2026-06-02 · v3.5.0 · 2 796 tweaks · 92 categories · 1 740 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 767 verified across 92 categories |
-| Tests | 1 711 total, all passing (1 skipped integration), 4-thread parallel |
+| Tweaks | 2 796 verified across 92 categories |
+| Tests | 1 740 total, all passing (1 skipped integration), 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -433,33 +433,33 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### Phase 2 — System Monitoring & Diagnostics (Sprint 19–20)
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | ✅ Sprint 19 | Mem Reduct |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | MEDIUM | Mem Reduct | ✅ Sprint 19 |
 | 12 | Memory cache cleaner — working set purge via Native API | HIGH | Mem Reduct | ✅ Sprint 41 |
-| 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct | 🔄 Future |
-| 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct | 🔄 Future |
-| 15 | CPU usage monitor in status bar | ✅ Sprint 19 | Original |
+| 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct | ✅ Sprint 42 |
+| 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct | ✅ Sprint 42 |
+| 15 | CPU usage monitor in status bar | HIGH | Original | ✅ Sprint 19 |
 | 16 | Disk usage overview panel (per-drive space breakdown) | MEDIUM | MS PC Manager | ✅ Sprint 41 |
-| 17 | Network connectivity status indicator | LOW | NetAdapter Repair | 🔄 Future |
+| 17 | Network connectivity status indicator | LOW | NetAdapter Repair | ✅ Sprint 42 |
 | 18 | Battery health monitor for laptops | LOW | Original | ✅ Sprint 41 |
-| 19 | System uptime display in About dialog | ✅ Sprint 19 | Original |
-| 20 | Hardware temperature monitoring (CPU/GPU) via WMI | LOW | Original |
+| 19 | System uptime display in About dialog | LOW | Original | ✅ Sprint 19 |
+| 20 | Hardware temperature monitoring (CPU/GPU) via WMI | LOW | Original | ✅ Sprint 42 |
 
-### Phase 3 — Visual Appearance Tweaks (Sprint 21–22)
+### Phase 3 — Visual Appearance Tweaks (Sprint 24) ✅
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 21 | Title bar color customization (active/inactive) | HIGH | Winaero Tweaker |
-| 22 | Scrollbar width/height adjustment | HIGH | Winaero Tweaker |
-| 23 | System font replacement (menus, dialogs, title bars) | HIGH | Winaero Tweaker |
-| 24 | Icon spacing adjustment (horizontal/vertical) | MEDIUM | Winaero Tweaker |
-| 25 | Window border width customization | MEDIUM | Winaero Tweaker |
-| 26 | Menu animation speed control | MEDIUM | Winaero Tweaker |
-| 27 | Tooltip delay adjustment | MEDIUM | Winaero Tweaker |
-| 28 | Alt+Tab appearance switch (Win10 vs Win11 style) | MEDIUM | ExplorerPatcher |
-| 29 | Accent color customization for Start/Taskbar/Title bars | LOW | WindowBlinds |
-| 30 | Dark mode per-app overrides | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 21 | Title bar color customization (active/inactive) | HIGH | Winaero Tweaker | ✅ Sprint 24 |
+| 22 | Scrollbar width/height adjustment | HIGH | Winaero Tweaker | ✅ Sprint 24 |
+| 23 | System font replacement (menus, dialogs, title bars) | HIGH | Winaero Tweaker | ✅ Sprint 24 |
+| 24 | Icon spacing adjustment (horizontal/vertical) | MEDIUM | Winaero Tweaker | ✅ Sprint 24 |
+| 25 | Window border width customization | MEDIUM | Winaero Tweaker | ✅ Sprint 24 |
+| 26 | Menu animation speed control | MEDIUM | Winaero Tweaker | ✅ Sprint 24 |
+| 27 | Tooltip delay adjustment | MEDIUM | Winaero Tweaker | ✅ Sprint 24 |
+| 28 | Alt+Tab appearance switch (Win10 vs Win11 style) | MEDIUM | ExplorerPatcher | ✅ Sprint 24 |
+| 29 | Accent color customization for Start/Taskbar/Title bars | LOW | WindowBlinds | ✅ Sprint 24 |
+| 30 | Dark mode per-app overrides | LOW | Original | ✅ Sprint 24 |
 
 ### Sprint 20 — Sprint 22: Refactoring, Performance & CI Hardening ✅
 
@@ -646,6 +646,26 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 2 | `_btnUndoLast` ToolStripButton — undoes last apply/remove by calling inverse engine op | ✅ |
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
+
+### Sprint 42 — Hardware Monitors, Network Tools + Tweak Expansion ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `HardwareTemperatureDialog` — WMI thermal zone polling, GPU via `Win32_VideoController`, colour-coded bars (green <60°C, amber 60-80°C, red ≥80°C), 3-second auto-refresh (Phase 2 item 20) | ✅ |
+| 2 | `NetworkBandwidthDialog` — real-time NIC send/recv rate via `IPv4Statistics` delta calc, 1s timer, B/s/KB/s/MB/s auto-scale (Phase 4 item 38) | ✅ |
+| 3 | `MacAddressDialog` — WMI `Win32_NetworkAdapter` viewer + MAC randomizer: locally-administered unicast MAC, registry `NetworkAddress` key write, netsh adapter disable/enable (Phase 4 item 40) | ✅ |
+| 4 | All 3 new dialogs registered in `Program.cs ResolveManagerArg()`: `hwtempmon`/`netbandwidth`/`macaddress` | ✅ |
+| 5 | All 3 new dialogs wired into Tools menu + `MainForm` `OnOpen*` handlers | ✅ |
+| 6 | `AppIcons.cs` — `ThermometerMenuBitmap`, `BandwidthMenuBitmap`, `MacAddressMenuBitmap` with `DrawThermometerIcon`, `DrawBandwidthIcon`, `DrawMacAddressIcon` | ✅ |
+| 7 | **Phase 2 item #13** — auto-clean memory on threshold: `AppConfig.AutoCleanMemoryThreshold`, `OnMonitorTimerTick` purges working sets if `memPct >= threshold` | ✅ |
+| 8 | **Phase 2 item #14** — tray tooltip shows RAM %: `_trayIcon.Text = $"RegiLattice — RAM: {memPct}%"` | ✅ |
+| 9 | **Phase 2 item #17** — network connectivity status label in status strip: `_netLabel`, colour-coded green/red via `NetworkInterface.GetIsNetworkAvailable()` | ✅ |
+| 10 | `EventLogging.cs` — 10 new tweaks: `evtlog-disable-application-log`, `-system-log`, `-security-audit-logon`, `-powershell-scriptblock-logging`, `-module-logging`, `-windows-error-reporting-log`, `-setup-log`, `-forwarded-log`, `-dns-client-log`, `-kernel-event-tracing` | ✅ |
+| 11 | `ProxyVpn.cs` — 10 new tweaks: `proxy-disable-winhttp-autoproxy`, `-ie-proxy-bypass`, `-vpn-split-tunneling`, `-ras-autodial`, `-ipv6-teredo`, `-connection-auto-tuning`, `-6to4-tunneling`, `-ip-tunnel-adapter`, `-network-connectivity-test`, `-tcp-timestamps` | ✅ |
+| 12 | `PowerShellTweaks.cs` — 9 new tweaks: `ps-disable-execution-policy-restriction`, `ps-enable-remoting`, `ps-disable-telemetry`, `ps-enable-constrained-language-mode`, `ps-set-transcript-logging`, `ps-enable-protected-event-logging`, `ps-disable-clipboard-history-via-ps`, `ps-optimize-page-file`, `ps-enable-tls12` | ✅ |
+| 13 | 29 new `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` for all new tweak IDs | ✅ |
+| 14 | Total: **2 796 tweaks** (+29), **1 740 tests** (+29 passing) | ✅ |
+
 ### Sprint 41 — System Monitor Tools + Tweak Expansion ✅
 
 | # | Task | Status |
@@ -721,9 +741,9 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 35 | Proxy configuration wizard | MEDIUM | Original | ✅ Sprint 34 |
 | 36 | Firewall rule manager (simplified view of Windows Firewall) | MEDIUM | Original | ✅ Sprint 34 |
 | 37 | Port scanner / connectivity tester | LOW | Original | ✅ Sprint 41 |
-| 38 | Network bandwidth monitor | LOW | Original | 🔄 Future |
+| 38 | Network bandwidth monitor | LOW | Original | ✅ Sprint 42 |
 | 39 | VPN quick-connect from system tray | MEDIUM | Original | 🔄 Future |
-| 40 | MAC address randomization toggle | LOW | Original | 🔄 Future |
+| 40 | MAC address randomization toggle | LOW | Original | ✅ Sprint 42 |
 
 ### Phase 5 — Startup & Service Management (Sprint 29–30) ✅
 

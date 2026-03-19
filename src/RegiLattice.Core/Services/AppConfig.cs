@@ -114,6 +114,13 @@ public sealed class AppConfig
     [JsonPropertyName("monitor_color_coded")]
     public bool MonitorColorCoded { get; set; } = true;
 
+    /// <summary>
+    /// RAM percentage threshold (0–100) above which auto memory clean fires.
+    /// 0 = disabled.
+    /// </summary>
+    [JsonPropertyName("auto_clean_memory_threshold")]
+    public int AutoCleanMemoryThreshold { get; set; } = 0;
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 

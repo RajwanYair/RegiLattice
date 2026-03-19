@@ -27,13 +27,13 @@ internal sealed class PortScannerDialog : BaseDialog
     // ── Preset port sets ─────────────────────────────────────────────────────
     private static readonly Dictionary<string, int[]> _presets = new()
     {
-        ["Web (80, 443)"]           = [80, 443],
-        ["SSH / RDP (22, 3389)"]    = [22, 3389],
-        ["FTP (21, 990)"]           = [21, 990],
+        ["Web (80, 443)"] = [80, 443],
+        ["SSH / RDP (22, 3389)"] = [22, 3389],
+        ["FTP (21, 990)"] = [21, 990],
         ["Mail (25, 110, 143, 587)"] = [25, 110, 143, 587],
         ["Database (1433, 3306, 5432, 27017)"] = [1433, 3306, 5432, 27017],
         ["DNS / DHCP (53, 67, 68)"] = [53, 67, 68],
-        ["Common Top 20"]           = [21, 22, 23, 25, 53, 80, 110, 135, 139, 143, 443, 445, 993, 995, 1723, 3306, 3389, 5900, 8080, 8443],
+        ["Common Top 20"] = [21, 22, 23, 25, 53, 80, 110, 135, 139, 143, 443, 445, 993, 995, 1723, 3306, 3389, 5900, 8080, 8443],
     };
 
     // ── Controls ─────────────────────────────────────────────────────────────
@@ -49,11 +49,7 @@ internal sealed class PortScannerDialog : BaseDialog
         Width = 240,
         Anchor = AnchorStyles.Left | AnchorStyles.Right,
     };
-    private readonly ComboBox _presetCombo = new()
-    {
-        DropDownStyle = ComboBoxStyle.DropDownList,
-        Width = 240,
-    };
+    private readonly ComboBox _presetCombo = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 240 };
     private readonly Button _btnScan = new()
     {
         Text = "\uD83D\uDD0D  Scan",
@@ -112,11 +108,38 @@ internal sealed class PortScannerDialog : BaseDialog
         grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-        grid.Controls.Add(new Label { Text = "Host / IP:", TextAlign = ContentAlignment.MiddleLeft, AutoSize = true }, 0, 0);
-        grid.Controls.Add(_txtHost,  1, 0);
-        grid.Controls.Add(new Label { Text = "Ports (CSV):", TextAlign = ContentAlignment.MiddleLeft, AutoSize = true }, 0, 1);
+        grid.Controls.Add(
+            new Label
+            {
+                Text = "Host / IP:",
+                TextAlign = ContentAlignment.MiddleLeft,
+                AutoSize = true,
+            },
+            0,
+            0
+        );
+        grid.Controls.Add(_txtHost, 1, 0);
+        grid.Controls.Add(
+            new Label
+            {
+                Text = "Ports (CSV):",
+                TextAlign = ContentAlignment.MiddleLeft,
+                AutoSize = true,
+            },
+            0,
+            1
+        );
         grid.Controls.Add(_txtPorts, 1, 1);
-        grid.Controls.Add(new Label { Text = "Preset:", TextAlign = ContentAlignment.MiddleLeft, AutoSize = true }, 0, 2);
+        grid.Controls.Add(
+            new Label
+            {
+                Text = "Preset:",
+                TextAlign = ContentAlignment.MiddleLeft,
+                AutoSize = true,
+            },
+            0,
+            2
+        );
 
         foreach (string key in _presets.Keys)
             _presetCombo.Items.Add(key);
@@ -146,12 +169,12 @@ internal sealed class PortScannerDialog : BaseDialog
         Controls.Add(btnPanel);
 
         _presetCombo.SelectedIndexChanged += OnPresetSelected;
-        _btnScan.Click  += async (_, _) => await ScanAsync();
-        _btnPing.Click  += async (_, _) => await PingAsync();
+        _btnScan.Click += async (_, _) => await ScanAsync();
+        _btnPing.Click += async (_, _) => await PingAsync();
         _btnClose.Click += (_, _) => Close();
 
-        _txtHost.BackColor  = AppTheme.Overlay;
-        _txtHost.ForeColor  = AppTheme.Fg;
+        _txtHost.BackColor = AppTheme.Overlay;
+        _txtHost.ForeColor = AppTheme.Fg;
         _txtPorts.BackColor = AppTheme.Overlay;
         _txtPorts.ForeColor = AppTheme.Fg;
         _presetCombo.BackColor = AppTheme.Surface;
@@ -168,16 +191,15 @@ internal sealed class PortScannerDialog : BaseDialog
     private async Task PingAsync()
     {
         string host = _txtHost.Text.Trim();
-        if (string.IsNullOrEmpty(host)) return;
+        if (string.IsNullOrEmpty(host))
+            return;
         _statusLabel.Text = $"Pinging {host}…";
         _btnPing.Enabled = false;
         try
         {
             using var ping = new Ping();
             var reply = await Task.Run(() => ping.Send(host, 3000));
-            _statusLabel.Text = reply.Status == IPStatus.Success
-                ? $"Ping {host}: {reply.RoundtripTime} ms — Alive"
-                : $"Ping {host}: {reply.Status}";
+            _statusLabel.Text = reply.Status == IPStatus.Success ? $"Ping {host}: {reply.RoundtripTime} ms — Alive" : $"Ping {host}: {reply.Status}";
         }
         catch (Exception ex)
         {
@@ -192,15 +214,11 @@ internal sealed class PortScannerDialog : BaseDialog
     private async Task ScanAsync()
     {
         string host = _txtHost.Text.Trim();
-        if (string.IsNullOrEmpty(host)) return;
+        if (string.IsNullOrEmpty(host))
+            return;
 
         var portStrs = _txtPorts.Text.Split([',', ' ', ';'], StringSplitOptions.RemoveEmptyEntries);
-        var ports = portStrs
-            .Select(s => int.TryParse(s.Trim(), out int p) ? (int?)p : null)
-            .OfType<int>()
-            .Distinct()
-            .OrderBy(p => p)
-            .ToArray();
+        var ports = portStrs.Select(s => int.TryParse(s.Trim(), out int p) ? (int?)p : null).OfType<int>().Distinct().OrderBy(p => p).ToArray();
 
         if (ports.Length == 0)
         {
@@ -217,35 +235,46 @@ internal sealed class PortScannerDialog : BaseDialog
         var token = _cts.Token;
 
         int done = 0;
-        var tasks = ports.Select(async port =>
-        {
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            string status;
-            try
+        var tasks = ports
+            .Select(async port =>
             {
-                if (token.IsCancellationRequested) return;
-                using var tcpClient = new TcpClient();
-                await tcpClient.ConnectAsync(host, port).WaitAsync(TimeSpan.FromSeconds(2), token);
-                sw.Stop();
-                status = "OPEN";
-            }
-            catch (OperationCanceledException) { return; }
-            catch (Exception) { sw.Stop(); status = "CLOSED"; }
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                string status;
+                try
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+                    using var tcpClient = new TcpClient();
+                    await tcpClient.ConnectAsync(host, port).WaitAsync(TimeSpan.FromSeconds(2), token);
+                    sw.Stop();
+                    status = "OPEN";
+                }
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
+                catch (Exception)
+                {
+                    sw.Stop();
+                    status = "CLOSED";
+                }
 
-            if (token.IsCancellationRequested) return;
+                if (token.IsCancellationRequested)
+                    return;
 
-            string svc = WellKnownService(port);
-            string latency = status == "OPEN" ? $"{sw.ElapsedMilliseconds} ms" : "—";
+                string svc = WellKnownService(port);
+                string latency = status == "OPEN" ? $"{sw.ElapsedMilliseconds} ms" : "—";
 
-            if (InvokeRequired)
-            {
-                Invoke(() => AddResult(port, svc, status, latency, Interlocked.Increment(ref done), ports.Length));
-            }
-            else
-            {
-                AddResult(port, svc, status, latency, Interlocked.Increment(ref done), ports.Length);
-            }
-        }).ToList();
+                if (InvokeRequired)
+                {
+                    Invoke(() => AddResult(port, svc, status, latency, Interlocked.Increment(ref done), ports.Length));
+                }
+                else
+                {
+                    AddResult(port, svc, status, latency, Interlocked.Increment(ref done), ports.Length);
+                }
+            })
+            .ToList();
 
         await Task.WhenAll(tasks);
 
@@ -269,35 +298,36 @@ internal sealed class PortScannerDialog : BaseDialog
         _statusLabel.Text = $"Scanning — {done} / {total}…";
     }
 
-    private static string WellKnownService(int port) => port switch
-    {
-        21    => "FTP",
-        22    => "SSH",
-        23    => "Telnet",
-        25    => "SMTP",
-        53    => "DNS",
-        67    => "DHCP",
-        80    => "HTTP",
-        110   => "POP3",
-        135   => "RPC",
-        139   => "NetBIOS",
-        143   => "IMAP",
-        443   => "HTTPS",
-        445   => "SMB",
-        587   => "SMTP/TLS",
-        993   => "IMAP/SSL",
-        995   => "POP3/SSL",
-        1433  => "MS SQL",
-        1723  => "PPTP",
-        3306  => "MySQL",
-        3389  => "RDP",
-        5432  => "PostgreSQL",
-        5900  => "VNC",
-        8080  => "HTTP-alt",
-        8443  => "HTTPS-alt",
-        27017 => "MongoDB",
-        _     => "—",
-    };
+    private static string WellKnownService(int port) =>
+        port switch
+        {
+            21 => "FTP",
+            22 => "SSH",
+            23 => "Telnet",
+            25 => "SMTP",
+            53 => "DNS",
+            67 => "DHCP",
+            80 => "HTTP",
+            110 => "POP3",
+            135 => "RPC",
+            139 => "NetBIOS",
+            143 => "IMAP",
+            443 => "HTTPS",
+            445 => "SMB",
+            587 => "SMTP/TLS",
+            993 => "IMAP/SSL",
+            995 => "POP3/SSL",
+            1433 => "MS SQL",
+            1723 => "PPTP",
+            3306 => "MySQL",
+            3389 => "RDP",
+            5432 => "PostgreSQL",
+            5900 => "VNC",
+            8080 => "HTTP-alt",
+            8443 => "HTTPS-alt",
+            27017 => "MongoDB",
+            _ => "—",
+        };
 
     protected override void Dispose(bool disposing)
     {

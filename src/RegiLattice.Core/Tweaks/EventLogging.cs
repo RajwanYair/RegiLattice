@@ -359,5 +359,164 @@ internal static class EventLogging
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
         },
+        new TweakDef
+        {
+            Id = "evtlog-disable-application-log",
+            Label = "Limit Application Event Log Size",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the Application event log maximum size to 1 MB and enables auto-overwrite to free disk space.",
+            Tags = ["event-log", "disk", "maintenance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application", "MaxSize", 1048576),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application", "Retention", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application", "MaxSize", 20971520),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application", "Retention", 0),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Application", "MaxSize", 1048576)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-system-log",
+            Label = "Limit System Event Log Size",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the System event log maximum size to 1 MB and enables auto-overwrite.",
+            Tags = ["event-log", "disk", "maintenance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "Retention", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 20971520),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-security-audit-logon",
+            Label = "Disable Logon Failure Audit",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables auditing of failed logon attempts in the Security event log. Reduces event log spam on unattended machines.",
+            Tags = ["event-log", "security", "audit", "logon"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects", 0)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-powershell-scriptblock-logging",
+            Label = "Disable PowerShell Script Block Logging",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables PowerShell script block logging in the event log. Reduces privacy exposure from logged command content.",
+            Tags = ["event-log", "powershell", "privacy", "logging"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-module-logging",
+            Label = "Disable PowerShell Module Logging",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables PowerShell module logging, preventing every module command from being recorded in the event log.",
+            Tags = ["event-log", "powershell", "module", "logging"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging", 0)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-windows-error-reporting-log",
+            Label = "Disable WER Event Log Entries",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Error Reporting from writing crash and hang events to the Application event log.",
+            Tags = ["event-log", "wer", "crash", "diagnostics"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-setup-log",
+            Label = "Limit Setup Event Log Size",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Limits the Setup event log to 1 MB with auto-overwrite, preventing unbounded growth on frequently updated systems.",
+            Tags = ["event-log", "disk", "setup", "maintenance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Setup"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Setup", "MaxSize", 1048576),
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Setup", "Retention", 0),
+            ],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Setup", "MaxSize", 20971520)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\Setup", "MaxSize", 1048576)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-forwarded-log",
+            Label = "Disable Forwarded Events Log",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Windows Event Log Forwarding service (Wecsvc) used to forward events to a remote collector. Not needed on standalone PCs.",
+            Tags = ["event-log", "forwarding", "network", "svc"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-dns-client-log",
+            Label = "Disable DNS Resolver Event Tracing",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables DNS client operational event logging in the Microsoft-Windows-DNS-Client/Operational channel to reduce disk I/O.",
+            Tags = ["event-log", "dns", "network", "tracing"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 0)],
+        },
+        new TweakDef
+        {
+            Id = "evtlog-disable-kernel-event-tracing",
+            Label = "Disable NT Kernel Logger Session",
+            Category = "Event Logging",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets the NT Kernel Logger ETW session to not auto-start, reducing baseline CPU and disk overhead.",
+            Tags = ["event-log", "etw", "kernel", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NtKernelLogger"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NtKernelLogger", "Start", 0)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NtKernelLogger", "Start", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\NtKernelLogger", "Start", 0)],
+        },
     ];
 }

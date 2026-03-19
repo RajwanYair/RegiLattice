@@ -351,5 +351,146 @@ internal static class PowerShellTweaks
                 ),
             DetectAction = () => false,
         },
+        new TweakDef
+        {
+            Id = "ps-disable-execution-policy-restriction",
+            Label = "Set PowerShell Execution Policy to RemoteSigned",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Sets the machine-scope execution policy to RemoteSigned, allowing local scripts to run without signed status.",
+            Tags = ["powershell", "execution-policy", "scripts", "security"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope LocalMachine -Force"),
+            DetectAction = () =>
+            {
+                var (exit, stdout, _) = ShellRunner.Run("powershell", ["-NoProfile", "-Command", "(Get-ExecutionPolicy -Scope LocalMachine).ToString()"]);
+                return exit == 0 && stdout.Trim() == "RemoteSigned";
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-enable-remoting",
+            Label = "Enable PowerShell Remoting",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Enables PowerShell Remoting (WinRM) for remote session management. Required for remote administration.",
+            Tags = ["powershell", "remoting", "winrm", "remote"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Enable-PSRemoting -Force -SkipNetworkProfileCheck"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Disable-PSRemoting -Force"),
+            DetectAction = () =>
+            {
+                var (exit, _, _) = ShellRunner.Run("powershell", ["-NoProfile", "-Command", "(Get-Service WinRM).Status"]);
+                return exit == 0;
+            },
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-telemetry",
+            Label = "Disable PowerShell Telemetry",
+            Category = "PowerShell",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Sets POWERSHELL_TELEMETRY_OPTOUT=1 for the current user to opt out of PowerShell telemetry submission to Microsoft.",
+            Tags = ["powershell", "telemetry", "privacy"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("[System.Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT','1','User')"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("[System.Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT',$null,'User')"),
+            DetectAction = () => System.Environment.GetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", System.EnvironmentVariableTarget.User) == "1",
+        },
+        new TweakDef
+        {
+            Id = "ps-enable-constrained-language-mode",
+            Label = "Enable PowerShell Constrained Language Mode",
+            Category = "PowerShell",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Restricts PowerShell to Constrained Language Mode via environment variable, limiting access to arbitrary .NET types. Hardens against living-off-the-land attacks.",
+            Tags = ["powershell", "security", "constrained", "hardening"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("[System.Environment]::SetEnvironmentVariable('__PSLockdownPolicy','4','Machine')"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("[System.Environment]::SetEnvironmentVariable('__PSLockdownPolicy',$null,'Machine')"),
+            DetectAction = () => System.Environment.GetEnvironmentVariable("__PSLockdownPolicy", System.EnvironmentVariableTarget.Machine) == "4",
+        },
+        new TweakDef
+        {
+            Id = "ps-set-transcript-logging",
+            Label = "Disable PowerShell Transcription Logging",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables PowerShell transcript logging which records all session input/output to disk. Reduces privacy exposure.",
+            Tags = ["powershell", "transcription", "logging", "privacy"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription' -Name 'EnableTranscripting' -Value 0 -Type DWord -Force"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription' -Name 'EnableTranscripting' -ErrorAction SilentlyContinue"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "ps-enable-protected-event-logging",
+            Label = "Enable Protected Event Logging",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Enables Protected Event Logging (PEL) which encrypts event log content using a certificate. Prevents credential exposure in logs.",
+            Tags = ["powershell", "event-log", "security", "encryption"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\ProtectedEventLogging' -Name 'EnableProtectedEventLogging' -Value 1 -Type DWord -Force"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\ProtectedEventLogging' -Name 'EnableProtectedEventLogging' -Value 0 -Type DWord -Force"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "ps-disable-clipboard-history-via-ps",
+            Label = "Disable Clipboard History via Policy",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables Win+V clipboard history via group policy registry key, preventing clipboard contents from being saved.",
+            Tags = ["powershell", "clipboard", "privacy", "policy"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("New-Item -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' -Force | New-ItemProperty -Name 'AllowClipboardHistory' -Value 0 -PropertyType DWord -Force"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' -Name 'AllowClipboardHistory' -ErrorAction SilentlyContinue"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "ps-optimize-page-file",
+            Label = "Set Page File to System-Managed",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Configures the page file to be automatically managed by Windows for optimal memory performance.",
+            Tags = ["powershell", "pagefile", "memory", "performance"],
+            ApplyAction = _ => ShellRunner.RunPowerShell(
+                "$cs = Get-WmiObject Win32_ComputerSystem; $cs.AutomaticManagedPagefile = $true; $cs.Put()"),
+            RemoveAction = _ => ShellRunner.RunPowerShell(
+                "$cs = Get-WmiObject Win32_ComputerSystem; $cs.AutomaticManagedPagefile = $false; $cs.Put()"),
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "ps-enable-tls12",
+            Label = "Enable TLS 1.2 for .NET Applications",
+            Category = "PowerShell",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Configures the .NET Framework 4.x to use TLS 1.2 by default for all outgoing HTTPS connections.",
+            Tags = ["powershell", "tls", "security", "network", "dotnet"],
+            ApplyAction = _ => ShellRunner.RunPowerShell(
+                "@('HKLM:\\SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319','HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\.NETFramework\\v4.0.30319') | " +
+                "ForEach-Object { New-Item -Path $_ -Force | New-ItemProperty -Name 'SystemDefaultTlsVersions' -Value 1 -PropertyType DWord -Force | Out-Null; " +
+                "New-ItemProperty -Path $_ -Name 'SchUseStrongCrypto' -Value 1 -PropertyType DWord -Force | Out-Null }"),
+            RemoveAction = _ => ShellRunner.RunPowerShell(
+                "@('HKLM:\\SOFTWARE\\Microsoft\\.NETFramework\\v4.0.30319','HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\.NETFramework\\v4.0.30319') | " +
+                "ForEach-Object { Remove-ItemProperty -Path $_ -Name 'SystemDefaultTlsVersions','SchUseStrongCrypto' -ErrorAction SilentlyContinue }"),
+            DetectAction = () => false,
+        },
     ];
 }

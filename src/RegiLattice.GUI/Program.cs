@@ -100,6 +100,11 @@ internal static class Program
                 "portscan" => new PortScannerDialog(),
                 "batteryhealth" => new BatteryHealthDialog(),
 
+                // Hardware & network monitors (Sprint 42)
+                "hwtempmon"    => new HardwareTemperatureDialog(),
+                "netbandwidth" => new NetworkBandwidthDialog(),
+                "macaddress"   => new MacAddressDialog(),
+
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),
                 "preferences" => CreateStandalonePreferences(),

@@ -5,6 +5,7 @@ using RegiLattice.Core.Registry;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;
+
 /// <summary>Tests that require RegisterBuiltins — share a single engine via IClassFixture.</summary>
 public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 {
@@ -152,6 +153,15 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("ps-disable-connected-user-experience", TweakKind.ServiceControl)]
     [InlineData("ps-disable-dmwappush-service", TweakKind.ServiceControl)]
     [InlineData("ps-optimize-network-adapter", TweakKind.PowerShell)]
+    [InlineData("ps-disable-execution-policy-restriction", TweakKind.PowerShell)]
+    [InlineData("ps-enable-remoting", TweakKind.PowerShell)]
+    [InlineData("ps-disable-telemetry", TweakKind.PowerShell)]
+    [InlineData("ps-enable-constrained-language-mode", TweakKind.PowerShell)]
+    [InlineData("ps-set-transcript-logging", TweakKind.PowerShell)]
+    [InlineData("ps-enable-protected-event-logging", TweakKind.PowerShell)]
+    [InlineData("ps-disable-clipboard-history-via-ps", TweakKind.PowerShell)]
+    [InlineData("ps-optimize-page-file", TweakKind.PowerShell)]
+    [InlineData("ps-enable-tls12", TweakKind.PowerShell)]
     public void RegisterBuiltins_PsTweakExists(string id, TweakKind expectedKind)
     {
         var tweak = _engine.GetTweak(id);
@@ -606,6 +616,16 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("proxy-disable-web-proxy-auto-config")]
     [InlineData("proxy-enable-dns-over-https")]
     [InlineData("proxy-disable-wifi-sense")]
+    [InlineData("proxy-disable-winhttp-autoproxy")]
+    [InlineData("proxy-disable-ie-proxy-bypass")]
+    [InlineData("proxy-disable-vpn-split-tunneling")]
+    [InlineData("proxy-disable-ras-autodial")]
+    [InlineData("proxy-disable-ipv6-teredo")]
+    [InlineData("proxy-disable-connection-auto-tuning")]
+    [InlineData("proxy-disable-6to4-tunneling")]
+    [InlineData("proxy-disable-ip-tunnel-adapter")]
+    [InlineData("proxy-disable-network-connectivity-test")]
+    [InlineData("proxy-disable-tcp-timestamps")]
     public void RegisterBuiltins_ProxyVpnTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -635,6 +655,16 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("evtlog-enable-powershell-transcription")]
     [InlineData("evtlog-enable-command-line-auditing")]
     [InlineData("evtlog-disable-srum")]
+    [InlineData("evtlog-disable-application-log")]
+    [InlineData("evtlog-disable-system-log")]
+    [InlineData("evtlog-disable-security-audit-logon")]
+    [InlineData("evtlog-disable-powershell-scriptblock-logging")]
+    [InlineData("evtlog-disable-module-logging")]
+    [InlineData("evtlog-disable-windows-error-reporting-log")]
+    [InlineData("evtlog-disable-setup-log")]
+    [InlineData("evtlog-disable-forwarded-log")]
+    [InlineData("evtlog-disable-dns-client-log")]
+    [InlineData("evtlog-disable-kernel-event-tracing")]
     public void RegisterBuiltins_EventLoggingTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -1003,8 +1033,20 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     {
         var engine = new TweakEngine(new RegistrySession(dryRun: true));
         engine.Register([
-            new TweakDef { Id = "fn-1", Label = "T", Category = "CatA", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-1", "V", 1)] },
-            new TweakDef { Id = "fn-2", Label = "T", Category = "CatB", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-2", "V", 1)] },
+            new TweakDef
+            {
+                Id = "fn-1",
+                Label = "T",
+                Category = "CatA",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fn-2",
+                Label = "T",
+                Category = "CatB",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fn-2", "V", 1)],
+            },
         ]);
         engine.Freeze();
 
@@ -1017,9 +1059,27 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     {
         var engine = new TweakEngine(new RegistrySession(dryRun: true));
         engine.Register([
-            new TweakDef { Id = "fnc-1", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-1", "V", 1)] },
-            new TweakDef { Id = "fnc-2", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-2", "V", 1)] },
-            new TweakDef { Id = "fnc-3", Label = "T", Category = "Test", ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-3", "V", 1)] },
+            new TweakDef
+            {
+                Id = "fnc-1",
+                Label = "T",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fnc-2",
+                Label = "T",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-2", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fnc-3",
+                Label = "T",
+                Category = "Test",
+                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\fnc-3", "V", 1)],
+            },
         ]);
         engine.Freeze();
 
@@ -1088,7 +1148,10 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
             Category = "Test",
             CorpSafe = true,
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\upd-custom", "V", 1)],
-            UpdateAction = (_) => { called = true; },
+            UpdateAction = (_) =>
+            {
+                called = true;
+            },
         };
         engine.Register([td]);
 
