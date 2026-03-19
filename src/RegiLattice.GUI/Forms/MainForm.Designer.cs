@@ -128,9 +128,9 @@ partial class MainForm
         var mnuExportPs1 = new ToolStripMenuItem("Export as PowerShell (.ps1)...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.E };
         var mnuExportJson = new ToolStripMenuItem("Export selected IDs as JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.J };
         var mnuExportReg = new ToolStripMenuItem("Export as .REG file...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.R };
-        var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I };
-        var mnuExit = new ToolStripMenuItem("Exit");
-        var mnuPreferences = new ToolStripMenuItem("Preferences…") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.P };
+        var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I, Image = AppIcons.ImportMenuBitmap };
+        var mnuExit = new ToolStripMenuItem("Exit") { Image = AppIcons.ExitMenuBitmap };
+        var mnuPreferences = new ToolStripMenuItem("Preferences…") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.P, Image = AppIcons.PreferencesMenuBitmap };
 
         mnuExportPs1.Image = AppIcons.ExportMenuBitmap;
         mnuExportJson.Image = AppIcons.ExportMenuBitmap;
@@ -266,10 +266,10 @@ partial class MainForm
         var mnuView = new ToolStripMenuItem("&View") { Image = AppIcons.ViewMenuBitmap };
         mnuView.DropDownItems.AddRange(new ToolStripItem[] { mnuToggleLog, new ToolStripSeparator(), mnuExpandAll });
 
-        var mnuAbout = new ToolStripMenuItem("About RegiLattice...");
-        var mnuHwInfo = new ToolStripMenuItem("Hardware Info...");
-        var mnuWhatsNew = new ToolStripMenuItem("What's New...");
-        var mnuCheckUpdates = new ToolStripMenuItem("Check for Updates...");
+        var mnuAbout = new ToolStripMenuItem("About RegiLattice...") { Image = AppIcons.AboutMenuBitmap };
+        var mnuHwInfo = new ToolStripMenuItem("Hardware Info...") { Image = AppIcons.HwInfoMenuBitmap };
+        var mnuWhatsNew = new ToolStripMenuItem("What's New...") { Image = AppIcons.WhatsNewMenuBitmap };
+        var mnuCheckUpdates = new ToolStripMenuItem("Check for Updates...") { Image = AppIcons.CheckUpdatesMenuBitmap };
         var mnuHelp = new ToolStripMenuItem("&Help") { Image = AppIcons.HelpMenuBitmap };
         mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, mnuCheckUpdates, new ToolStripSeparator(), mnuAbout });
 
