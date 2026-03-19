@@ -23,7 +23,7 @@ namespace RegiLattice.GUI.Forms;
 internal sealed class BatterySaverDialog : BaseDialog
 {
     private const string PowerKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power";
-    private const string BatterySaverThresholdName = "EnergyEstimationEnabled";   // proxy key
+    private const string BatterySaverThresholdName = "EnergyEstimationEnabled"; // proxy key
 
     // ── Controls ──────────────────────────────────────────────────────────────
     private readonly CheckBox _chkEnable = new()
@@ -160,7 +160,8 @@ internal sealed class BatterySaverDialog : BaseDialog
         try
         {
             using var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Power");
-            if (key is null) return;
+            if (key is null)
+                return;
 
             // Battery saver threshold (Windows stores it as percentage * 100)
             var rawThreshold = key.GetValue("BatterySaverPercent");
@@ -187,8 +188,12 @@ internal sealed class BatterySaverDialog : BaseDialog
     {
         if (!Elevation.IsAdmin())
         {
-            MessageBox.Show("Administrator rights are required to change battery settings.", "Access Denied",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(
+                "Administrator rights are required to change battery settings.",
+                "Access Denied",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
             return;
         }
 

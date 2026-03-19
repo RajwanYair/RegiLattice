@@ -82,8 +82,16 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
         BuildLayout();
         LoadCurrentState();
 
-        _btnSelectAll.Click += (_, _) => { foreach (ListViewItem i in _list.Items) i.Checked = true; };
-        _btnClearAll.Click += (_, _) => { foreach (ListViewItem i in _list.Items) i.Checked = false; };
+        _btnSelectAll.Click += (_, _) =>
+        {
+            foreach (ListViewItem i in _list.Items)
+                i.Checked = true;
+        };
+        _btnClearAll.Click += (_, _) =>
+        {
+            foreach (ListViewItem i in _list.Items)
+                i.Checked = false;
+        };
         _btnApply.Click += OnApply;
         _btnRestore.Click += OnRestore;
         _btnClose.Click += (_, _) => Close();
@@ -99,91 +107,128 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
         const string Personalization = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager";
         const string ExplorerPolicies = @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer";
         const string SearchPolicies = @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
-        const string StartMenu = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
-        const string Feeds = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds";
 
         _items.AddRange([
             new AdItem(
                 "Start Menu Recommended Content",
                 "Removes 'Recommended' app suggestions and recently opened files from the Start menu. "
-                + "Windows 11 Start Menu shows personalized app suggestions powered by cloud data. "
-                + "Setting this to 0 prevents these suggestions from appearing.",
-                Personalization, "SubscribedContent-338389Enabled", 0, 1
+                    + "Windows 11 Start Menu shows personalized app suggestions powered by cloud data. "
+                    + "Setting this to 0 prevents these suggestions from appearing.",
+                Personalization,
+                "SubscribedContent-338389Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Start Menu App Suggestions",
                 "Disables Microsoft Store app suggestions that appear in the Start menu. "
-                + "These are ads for paid apps that Microsoft rotates periodically.",
-                Personalization, "SystemPaneSuggestionsEnabled", 0, 1
+                    + "These are ads for paid apps that Microsoft rotates periodically.",
+                Personalization,
+                "SystemPaneSuggestionsEnabled",
+                0,
+                1
             ),
             new AdItem(
                 "Lock Screen Tips and Fun Facts",
                 "Removes 'Windows spotlight' tips, fun facts, and ads that appear on the lock screen. "
-                + "Windows uses this placement to promote Microsoft services and Bing searches.",
-                Personalization, "RotatingLockScreenOverlayEnabled", 0, 1
+                    + "Windows uses this placement to promote Microsoft services and Bing searches.",
+                Personalization,
+                "RotatingLockScreenOverlayEnabled",
+                0,
+                1
             ),
             new AdItem(
                 "Lock Screen Trivia and Ads",
                 "Disables the trivia/tips overlay on lock screen images (Windows Spotlight).",
-                Personalization, "SubscribedContent-338387Enabled", 0, 1
+                Personalization,
+                "SubscribedContent-338387Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Notification Ads (Action Center)",
-                "Prevents Windows from showing promotional notifications in Action Center, "
-                + "such as Microsoft 365 upsells and OneDrive prompts.",
-                Personalization, "SubscribedContent-338393Enabled", 0, 1
+                "Prevents Windows from showing promotional notifications in Action Center, " + "such as Microsoft 365 upsells and OneDrive prompts.",
+                Personalization,
+                "SubscribedContent-338393Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Settings App Suggestions",
-                "Removes suggested app and feature tips from the Windows Settings app. "
-                + "These appear as banner cards promoted by Microsoft.",
-                Personalization, "SubscribedContent-353694Enabled", 0, 1
+                "Removes suggested app and feature tips from the Windows Settings app. " + "These appear as banner cards promoted by Microsoft.",
+                Personalization,
+                "SubscribedContent-353694Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Taskbar News and Interests Widget",
                 "Hides the News and Interests / Widgets button on the taskbar. "
-                + "This feature shows MSN news, weather, and ads fetched from the internet.",
-                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2, 0
+                    + "This feature shows MSN news, weather, and ads fetched from the internet.",
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Feeds",
+                "ShellFeedsTaskbarViewMode",
+                2,
+                0
             ),
             new AdItem(
                 "Search Box Bing Suggestions",
                 "Disables web search results and Bing suggestions in the Windows search box. "
-                + "Keeps local search results only and stops sending keystrokes to Microsoft servers.",
-                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0, 1
+                    + "Keeps local search results only and stops sending keystrokes to Microsoft servers.",
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search",
+                "BingSearchEnabled",
+                0,
+                1
             ),
             new AdItem(
                 "Search Box Trending Searches",
-                "Removes 'trending' MSN/Bing search suggestions from the search popup. "
-                + "These include sponsored topics and news headlines.",
-                SearchPolicies, "EnableDynamicContentInWSB", 0, 1
+                "Removes 'trending' MSN/Bing search suggestions from the search popup. " + "These include sponsored topics and news headlines.",
+                SearchPolicies,
+                "EnableDynamicContentInWSB",
+                0,
+                1
             ),
             new AdItem(
                 "Explorer Ads in Sync Provider",
                 "Disables ads shown in the File Explorer navigation pane by cloud sync providers "
-                + "(typically OneDrive / Microsoft 365 promotional banners).",
-                ExplorerPolicies, "ShowSyncProviderNotifications", 0, 1
+                    + "(typically OneDrive / Microsoft 365 promotional banners).",
+                ExplorerPolicies,
+                "ShowSyncProviderNotifications",
+                0,
+                1
             ),
             new AdItem(
                 "Cortana Welcome Tips",
                 "Disables the Cortana welcome experience and first-run tips that appear after login.",
-                Personalization, "SubscribedContent-310093Enabled", 0, 1
+                Personalization,
+                "SubscribedContent-310093Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Windows Welcome Experience (Feature Highlights)",
                 "Disables the 'What's new in Windows' welcome screen that appears after updates, "
-                + "which often highlights Microsoft services and OneDrive upsells.",
-                Personalization, "SubscribedContent-338388Enabled", 0, 1
+                    + "which often highlights Microsoft services and OneDrive upsells.",
+                Personalization,
+                "SubscribedContent-338388Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "Timeline Suggestions",
                 "Disables Windows Timeline activity suggestions powered by Microsoft Graph, "
-                + "which can include AI-powered suggestions based on your activity.",
-                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SuggestedContent-338393Enabled", 0, 1
+                    + "which can include AI-powered suggestions based on your activity.",
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                "SuggestedContent-338393Enabled",
+                0,
+                1
             ),
             new AdItem(
                 "My People Promotional Content",
                 "Disables promotional badges and suggestions in the My People feature on the taskbar.",
-                Personalization, "SubscribedContent-314563Enabled", 0, 1
+                Personalization,
+                "SubscribedContent-314563Enabled",
+                0,
+                1
             ),
         ]);
     }
@@ -231,11 +276,15 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
                 : (Registry.LocalMachine, item.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length));
 
             using var key = hiveKey.Item1.OpenSubKey(hiveKey.Item2);
-            if (key is null) return false;
+            if (key is null)
+                return false;
             var val = key.GetValue(item.ValueName);
             return val is int i && i == item.DisabledValue;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     // ── Apply ─────────────────────────────────────────────────────────────────
@@ -252,9 +301,7 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
             try
             {
                 bool isHkcu = item.RegPath.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase);
-                string subKey = isHkcu
-                    ? item.RegPath.Substring("HKEY_CURRENT_USER\\".Length)
-                    : item.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
+                string subKey = isHkcu ? item.RegPath.Substring("HKEY_CURRENT_USER\\".Length) : item.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
 
                 using var key = isHkcu
                     ? Registry.CurrentUser.CreateSubKey(subKey, writable: true)
@@ -273,7 +320,8 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
             }
         }
 
-        _statusLabel.Text = $"✓ {applied} ad type(s) disabled. {(failed > 0 ? $"{failed} failed." : "")} Sign out or restart Explorer to see changes.";
+        _statusLabel.Text =
+            $"✓ {applied} ad type(s) disabled. {(failed > 0 ? $"{failed} failed." : "")} Sign out or restart Explorer to see changes.";
     }
 
     private void OnRestore(object? sender, EventArgs e)
@@ -286,9 +334,7 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
             try
             {
                 bool isHkcu = item.RegPath.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase);
-                string subKey = isHkcu
-                    ? item.RegPath.Substring("HKEY_CURRENT_USER\\".Length)
-                    : item.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
+                string subKey = isHkcu ? item.RegPath.Substring("HKEY_CURRENT_USER\\".Length) : item.RegPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
 
                 using var key = isHkcu
                     ? Registry.CurrentUser.CreateSubKey(subKey, writable: true)
@@ -299,7 +345,9 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
                 lvi.ForeColor = SystemColors.WindowText;
                 restored++;
             }
-            catch { /* ignore */ }
+            catch
+            { /* ignore */
+            }
         }
         _statusLabel.Text = $"{restored} setting(s) restored to Windows defaults.";
     }

@@ -97,103 +97,112 @@ internal sealed class AppPermissionsDialog : BaseDialog
                 "Hardware",
                 "Camera Access",
                 "Controls whether apps can access the camera. "
-                + "Block = all apps (including desktop apps via policy) are denied camera access. "
-                + "0 = User-controlled, 1 = Allow (user choice), 2 = Block (deny all).",
-                AppPrivacy, "LetAppsAccessCamera"
+                    + "Block = all apps (including desktop apps via policy) are denied camera access. "
+                    + "0 = User-controlled, 1 = Allow (user choice), 2 = Block (deny all).",
+                AppPrivacy,
+                "LetAppsAccessCamera"
             ),
             new PermissionItem(
                 "Hardware",
                 "Microphone Access",
-                "Controls whether apps can access the microphone. "
-                + "Blocking microphone access prevents voice recording and voice calls in apps.",
-                AppPrivacy, "LetAppsAccessMicrophone"
+                "Controls whether apps can access the microphone. " + "Blocking microphone access prevents voice recording and voice calls in apps.",
+                AppPrivacy,
+                "LetAppsAccessMicrophone"
             ),
             new PermissionItem(
                 "Location",
                 "Location Access",
                 "Controls whether apps can access the device's precise geographic location. "
-                + "Blocking prevents apps from using GPS/network-based location data.",
-                AppPrivacy, "LetAppsAccessLocation"
+                    + "Blocking prevents apps from using GPS/network-based location data.",
+                AppPrivacy,
+                "LetAppsAccessLocation"
             ),
             new PermissionItem(
                 "Communication",
                 "Contacts Access",
                 "Controls whether apps can read, create, or edit contacts in your address book. "
-                + "Block prevents apps from harvesting your contact list.",
-                AppPrivacy, "LetAppsAccessContacts"
+                    + "Block prevents apps from harvesting your contact list.",
+                AppPrivacy,
+                "LetAppsAccessContacts"
             ),
             new PermissionItem(
                 "Communication",
                 "Calendar Access",
                 "Controls whether apps can access your calendar events and appointments.",
-                AppPrivacy, "LetAppsAccessCalendar"
+                AppPrivacy,
+                "LetAppsAccessCalendar"
             ),
             new PermissionItem(
                 "Communication",
                 "Email Access",
                 "Controls whether apps can access and send email via your accounts.",
-                AppPrivacy, "LetAppsAccessEmail"
+                AppPrivacy,
+                "LetAppsAccessEmail"
             ),
             new PermissionItem(
                 "Communication",
                 "Messaging (SMS/MMS)",
                 "Controls whether apps can read or send SMS and MMS messages.",
-                AppPrivacy, "LetAppsAccessMessaging"
+                AppPrivacy,
+                "LetAppsAccessMessaging"
             ),
-            new PermissionItem(
-                "Communication",
-                "Phone Calls",
-                "Controls whether apps can make phone calls.",
-                AppPrivacy, "LetAppsAccessPhone"
-            ),
+            new PermissionItem("Communication", "Phone Calls", "Controls whether apps can make phone calls.", AppPrivacy, "LetAppsAccessPhone"),
             new PermissionItem(
                 "Hardware",
                 "Motion & Activity Sensors",
                 "Controls whether apps can access motion and fitness sensor data (accelerometer, gyroscope).",
-                AppPrivacy, "LetAppsAccessMotion"
+                AppPrivacy,
+                "LetAppsAccessMotion"
             ),
             new PermissionItem(
                 "Hardware",
                 "Background Sensor Activity",
                 "Controls whether apps can access sensors while running in the background.",
-                AppPrivacy, "LetAppsRunInBackground"
+                AppPrivacy,
+                "LetAppsRunInBackground"
             ),
             new PermissionItem(
                 "Identity",
                 "Account Information",
                 "Controls whether apps can access account name, picture, and other account info.",
-                AppPrivacy, "LetAppsAccessAccountInfo"
+                AppPrivacy,
+                "LetAppsAccessAccountInfo"
             ),
             new PermissionItem(
                 "Identity",
                 "User Notification History",
                 "Controls whether apps can access your notification history.",
-                AppPrivacy, "LetAppsAccessNotifications"
+                AppPrivacy,
+                "LetAppsAccessNotifications"
             ),
             new PermissionItem(
                 "Hardware",
                 "Radios (Bluetooth, etc.)",
                 "Controls whether apps can access and control wireless radios (Bluetooth, NFC, etc.).",
-                AppPrivacy, "LetAppsAccessRadios"
+                AppPrivacy,
+                "LetAppsAccessRadios"
             ),
             new PermissionItem(
                 "Files",
                 "Documents Library",
                 "Controls whether apps can access the Documents folder.",
-                AppPrivacy, "LetAppsAccessDocumentsLibrary"
+                AppPrivacy,
+                "LetAppsAccessDocumentsLibrary"
             ),
             new PermissionItem(
                 "Files",
                 "Pictures & Videos Libraries",
                 "Controls whether apps can access your Pictures and Videos folders.",
-                AppPrivacy, "LetAppsAccessPicturesLibrary"
+                AppPrivacy,
+                "LetAppsAccessPicturesLibrary"
             ),
             new PermissionItem(
                 "Diagnostics",
                 "App Diagnostic Information",
                 "Controls whether apps can access diagnostic information about other running apps "
-                + "(process list, memory usage, battery drain data).",
-                AppPrivacy, "LetAppsAccessDiagnosticInformation"
+                    + "(process list, memory usage, battery drain data).",
+                AppPrivacy,
+                "LetAppsAccessDiagnosticInformation"
             ),
         ]);
     }
@@ -234,7 +243,8 @@ internal sealed class AppPermissionsDialog : BaseDialog
         _list.EndUpdate();
         int blocked = 0;
         foreach (ListViewItem lvi in _list.Items)
-            if (lvi.ForeColor == Color.DarkOrange) blocked++;
+            if (lvi.ForeColor == Color.DarkOrange)
+                blocked++;
         _statusLabel.Text = $"{blocked}/{_permissions.Count} permissions currently blocked by policy.";
     }
 
@@ -244,13 +254,19 @@ internal sealed class AppPermissionsDialog : BaseDialog
         {
             string subKey = perm.PolicyKeyPath.Substring("HKEY_LOCAL_MACHINE\\".Length);
             using var key = Registry.LocalMachine.OpenSubKey(subKey);
-            if (key is null) return "Not set (User-controlled)";
+            if (key is null)
+                return "Not set (User-controlled)";
             var val = key.GetValue(perm.PolicyValueName);
             if (val is int i)
-                return i == perm.BlockValue ? "Blocked" : i == perm.AllowValue ? "Allowed" : $"Value={i}";
+                return i == perm.BlockValue ? "Blocked"
+                    : i == perm.AllowValue ? "Allowed"
+                    : $"Value={i}";
             return "Not set (User-controlled)";
         }
-        catch { return "Error reading"; }
+        catch
+        {
+            return "Error reading";
+        }
     }
 
     // ── Apply ─────────────────────────────────────────────────────────────────
@@ -276,7 +292,10 @@ internal sealed class AppPermissionsDialog : BaseDialog
                 lvi.ForeColor = Color.DarkOrange;
                 blocked++;
             }
-            catch { lvi.SubItems[2].Text = "Error"; }
+            catch
+            {
+                lvi.SubItems[2].Text = "Error";
+            }
         }
 
         _statusLabel.Text = $"✓ {blocked} permission(s) blocked. Changes take effect at next app launch.";
@@ -307,7 +326,9 @@ internal sealed class AppPermissionsDialog : BaseDialog
                     allowed++;
                 }
             }
-            catch { /* ignore */ }
+            catch
+            { /* ignore */
+            }
         }
 
         _statusLabel.Text = $"{allowed} permission policy restriction(s) removed (user-controlled).";
