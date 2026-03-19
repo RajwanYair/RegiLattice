@@ -39,6 +39,18 @@ internal sealed class BatteryHealthDialog : BaseDialog
         Width = 120,
         Height = 30,
     };
+    private readonly Button _btnExportHtml = new()
+    {
+        Text = "\uD83D\uDCE4  Export HTML…",
+        Width = 120,
+        Height = 30,
+    };
+    private readonly Button _btnPowerChart = new()
+    {
+        Text = "\uD83D\uDCCA  Capacity Chart",
+        Width = 120,
+        Height = 30,
+    };
     private readonly Button _btnClose = new()
     {
         Text = "Close",
@@ -70,7 +82,7 @@ internal sealed class BatteryHealthDialog : BaseDialog
             WrapContents = false,
             Padding = new Padding(8, 6, 8, 6),
         };
-        btnPanel.Controls.AddRange([_btnClose, _btnOpenReport, _btnRefresh]);
+        btnPanel.Controls.AddRange([_btnClose, _btnPowerChart, _btnExportHtml, _btnOpenReport, _btnRefresh]);
 
         Controls.Add(_batteryPanel);
         Controls.Add(_statusLabel);
@@ -78,6 +90,8 @@ internal sealed class BatteryHealthDialog : BaseDialog
 
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
         _btnOpenReport.Click += OnOpenReport;
+        _btnExportHtml.Click += OnExportHtml;
+        _btnPowerChart.Click += OnShowPowerChart;
         _btnClose.Click += (_, _) => Close();
 
         AppTheme.Apply(this);
@@ -297,5 +311,118 @@ internal sealed class BatteryHealthDialog : BaseDialog
         {
             _statusLabel.Text = $"Could not generate report: {ex.Message}";
         }
+    }
+
+    private void OnExportHtml(object? sender, EventArgs e)
+    {
+        using var sfd = new SaveFileDialog
+        {
+            Title = "Export Battery Report",
+            Filter = "HTML Files (*.html)|*.html|All Files (*.*)|*.*",
+            FileName = $"battery-report-{DateTime.Now:yyyyMMdd}.html",
+            DefaultExt = "html",
+        };
+        if (sfd.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        string path = sfd.FileName;
+        try
+        {
+            using var proc = new System.Diagnostics.Process();
+            proc.StartInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "powercfg.exe",
+                Arguments = $"/batteryreport /output \"{path}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardError = true,
+            };
+            proc.Start();
+            proc.WaitForExit();
+
+            if (proc.ExitCode == 0 && System.IO.File.Exists(path))
+            {
+                _statusLabel.Text = $"Report saved to: {path}";
+                if (MessageBox.Show(this, $"Report saved.\nOpen now?", "Export Complete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true });
+            }
+            else
+            {
+                _statusLabel.Text = "Export failed — run as administrator for powercfg access.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"Export error: {ex.Message}";
+        }
+    }
+
+    private void OnShowPowerChart(object? sender, EventArgs e)
+    {
+        // Collect capacity data from WMI
+        var entries = new System.Collections.Generic.List<(string Label, long Value, long Max, Color Color)>();
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\cimv2", "SELECT * FROM Win32_Battery");
+            foreach (ManagementObject mo in searcher.Get())
+            {
+                string name = mo["Name"]?.ToString() ?? "Battery";
+                long design = Convert.ToInt64(mo["DesignCapacity"] ?? 0L);
+                long full = Convert.ToInt64(mo["FullChargeCapacity"] ?? 0L);
+                long current = Convert.ToInt64(mo["EstimatedChargeRemaining"] ?? 0L);
+                if (design > 0)
+                {
+                    long maxVal = Math.Max(design, full);
+                    entries.Add(($"{name} — Design Capacity", design, maxVal, Color.FromArgb(70, 130, 180)));
+                    entries.Add(($"{name} — Full Charge Capacity", full, maxVal, Color.FromArgb(60, 180, 80)));
+                    entries.Add(($"{name} — Current Charge ({current}%)", current * full / 100, maxVal, Color.FromArgb(220, 150, 40)));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Cannot read WMI data:\n{ex.Message}", "Chart Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (entries.Count == 0)
+        {
+            MessageBox.Show(this, "No battery capacity data available.", "Capacity Chart",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        int chartH = entries.Count * 44 + 30;
+        using var chartDlg = new Form
+        {
+            Text = "Battery Capacity Chart",
+            Size = new Size(500, Math.Min(chartH + 80, 480)),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false,
+        };
+
+        var chartPanel = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
+        chartPanel.Paint += (_, pe) =>
+        {
+            int barAreaW = chartPanel.ClientSize.Width - 24;
+            int y = 12;
+            using var labelFont = new Font(SystemFonts.DefaultFont.FontFamily, 8f);
+            foreach (var (label, value, max, color) in entries)
+            {
+                int fillW = max > 0 ? (int)(value * (barAreaW - 160) / max) : 0;
+                pe.Graphics.DrawString(label, labelFont, Brushes.Gray, new Point(8, y));
+                y += 15;
+                using var brush = new SolidBrush(color);
+                pe.Graphics.FillRectangle(Brushes.LightGray, 8, y, barAreaW - 160, 18);
+                pe.Graphics.FillRectangle(brush, 8, y, Math.Max(2, fillW), 18);
+                pe.Graphics.DrawString($"{value:N0} mWh", labelFont, Brushes.Black, new Point(barAreaW - 150, y + 2));
+                y += 26;
+            }
+        };
+        chartDlg.Controls.Add(chartPanel);
+        chartDlg.ShowDialog(this);
     }
 }

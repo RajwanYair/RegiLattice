@@ -130,6 +130,8 @@ internal static class Program
             return RunExportGpo(a.ExportGpo);
         if (a.NewPack is not null)
             return RunNewPack(a.NewPack);
+        if (a.Manager is not null)
+            return RunManager(a.Manager);
         if (a.Gui)
             return RunGui();
         if (a.Menu)
@@ -1654,6 +1656,44 @@ internal static class Program
         }
     }
 
+    private static int RunManager(string target)
+    {
+        switch (target.Trim().ToLowerInvariant())
+        {
+            case "scheduledtweaks":
+                return RunScheduledTweaksManager();
+            default:
+                Console.WriteLine(Red($"\u274c Unknown manager target: '{target}'."));
+                Console.WriteLine("Available managers: scheduledtweaks");
+                return 1;
+        }
+    }
+
+    private static int RunScheduledTweaksManager()
+    {
+        var svc = new RegiLattice.Core.Services.ScheduledTweakService();
+        svc.Load();
+
+        if (svc.Schedules.Count == 0)
+        {
+            Console.WriteLine(Dim("No scheduled tweaks configured."));
+            Console.WriteLine(Dim("Use the GUI \u2192 Tools \u2192 Scheduled Tweak Manager to add schedules."));
+            return 0;
+        }
+
+        Console.WriteLine(Green($"\u25a0 Scheduled Tweaks ({svc.Schedules.Count})"));
+        Console.WriteLine(new string('\u2500', 60));
+        foreach (var s in svc.Schedules)
+        {
+            string status = s.Enabled ? Green("[enabled] ") : Dim("[disabled]");
+            string lastRun = s.LastRun.HasValue ? s.LastRun.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "never";
+            string interval = s.Trigger == RegiLattice.Core.Services.ScheduleTrigger.Timer
+                ? $" every {s.IntervalMinutes}m" : "";
+            Console.WriteLine($"  {status} {s.TweakId,-40} {s.Trigger}{interval}  (last: {lastRun})");
+        }
+        return 0;
+    }
+
     private static int RunExportGpo(string outputPath)
     {
         Console.WriteLine($"Exporting Group Policy ADMX template\u2026");
@@ -2029,6 +2069,10 @@ internal static class Program
                 case "--new-pack":
                     if (++i < args.Length)
                         p.NewPack = args[i];
+                    break;
+                case "--manager":
+                    if (++i < args.Length)
+                        p.Manager = args[i];
                     break;
 
                 default:

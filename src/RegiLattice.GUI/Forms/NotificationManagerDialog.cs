@@ -53,6 +53,18 @@ internal sealed class NotificationManagerDialog : BaseDialog
         Width = 90,
         Height = 28,
     };
+    private readonly Button _btnDndSchedule = new()
+    {
+        Text = "DND Schedule\u2026",
+        Width = 110,
+        Height = 28,
+    };
+    private readonly Button _btnNotifHistory = new()
+    {
+        Text = "\uD83D\uDCDC  History",
+        Width = 90,
+        Height = 28,
+    };
     private readonly Button _btnClose = new()
     {
         Text = "Close",
@@ -137,16 +149,18 @@ internal sealed class NotificationManagerDialog : BaseDialog
         _btnEnableApp.Click += (_, _) => SetAppNotif(true);
         _btnDisableApp.Click += (_, _) => SetAppNotif(false);
         _btnRefresh.Click += (_, _) => LoadStatus();
+        _btnDndSchedule.Click += OnDndSchedule;
+        _btnNotifHistory.Click += OnShowNotifHistory;
         _btnClose.Click += (_, _) => Close();
         int bx = 8;
-        foreach (Button b in new[] { _btnEnableApp, _btnDisableApp, _btnRefresh })
+        foreach (Button b in new[] { _btnEnableApp, _btnDisableApp, _btnDndSchedule, _btnNotifHistory, _btnRefresh })
         {
             b.Location = new Point(bx, 5);
             bx += b.Width + 6;
         }
         _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
         btnPanel.Resize += (_, _) => _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
-        btnPanel.Controls.AddRange(new Control[] { _btnEnableApp, _btnDisableApp, _btnRefresh, _btnClose });
+        btnPanel.Controls.AddRange(new Control[] { _btnEnableApp, _btnDisableApp, _btnDndSchedule, _btnNotifHistory, _btnRefresh, _btnClose });
         grpApps.Controls.Add(_appList);
         grpApps.Controls.Add(btnPanel);
 
@@ -294,6 +308,7 @@ internal sealed class NotificationManagerDialog : BaseDialog
             );
             appKey?.SetValue("Enabled", enable ? 1 : 0, RegistryValueKind.DWord);
             _lblStatus.Text = $"✓ Notifications {(enable ? "enabled" : "disabled")} for {appDisplayName}.";
+            RecordHistory($"Notifications {(enable ? "enabled" : "disabled")} for '{appDisplayName}'");
             LoadAppList();
         }
         catch (UnauthorizedAccessException)
@@ -316,5 +331,123 @@ internal sealed class NotificationManagerDialog : BaseDialog
         string name = bang > 0 ? appId[..bang] : appId;
         int under = name.LastIndexOf('_');
         return under > 0 ? name[..under] : name;
+    }
+
+    // ── History log ───────────────────────────────────────────────────────────
+    private readonly System.Collections.Generic.List<string> _notifHistory = [];
+
+    private void RecordHistory(string action)
+        => _notifHistory.Add($"[{DateTime.Now:HH:mm:ss}]  {action}");
+
+    private void OnShowNotifHistory(object? sender, EventArgs e)
+    {
+        using var dlg = new Form
+        {
+            Text = "Notification Manager History",
+            Size = new Size(580, 380),
+            FormBorderStyle = FormBorderStyle.Sizable,
+            StartPosition = FormStartPosition.CenterParent,
+        };
+
+        var txt = new TextBox
+        {
+            Dock = DockStyle.Fill,
+            Multiline = true,
+            ScrollBars = ScrollBars.Vertical,
+            ReadOnly = true,
+            Font = new Font("Consolas", 9f),
+            Text = _notifHistory.Count > 0
+                ? string.Join(Environment.NewLine, _notifHistory)
+                : "No actions recorded yet this session.\n\nActions are logged whenever you enable or disable app notifications using this dialog.",
+        };
+
+        var btnOk = new Button { Text = "Close", Dock = DockStyle.Bottom, Height = 32 };
+        btnOk.Click += (_, _) => dlg.Close();
+        dlg.Controls.Add(txt);
+        dlg.Controls.Add(btnOk);
+        dlg.ShowDialog(this);
+    }
+
+    // ── DND Schedule ──────────────────────────────────────────────────────────
+    private static readonly string DndSchedulePath =
+        System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "RegiLattice", "dnd-schedule.json");
+
+    private void OnDndSchedule(object? sender, EventArgs e)
+    {
+        // Load existing schedule
+        TimeOnly startTime = new(22, 0), endTime = new(7, 0);
+        bool enabled = false;
+        try
+        {
+            if (System.IO.File.Exists(DndSchedulePath))
+            {
+                var doc = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(DndSchedulePath));
+                var root = doc.RootElement;
+                if (root.TryGetProperty("enabled", out var pe)) enabled = pe.GetBoolean();
+                if (root.TryGetProperty("start", out var ps) && TimeOnly.TryParse(ps.GetString(), out var ts)) startTime = ts;
+                if (root.TryGetProperty("end", out var pe2) && TimeOnly.TryParse(pe2.GetString(), out var te)) endTime = te;
+            }
+        }
+        catch { /* ignore corrupt file */ }
+
+        using var dlg = new Form
+        {
+            Text = "DND (Do Not Disturb) Schedule",
+            Size = new Size(360, 220),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false, MinimizeBox = false,
+        };
+
+        var chkEnabled = new CheckBox { Text = "Enable DND schedule", AutoSize = true, Location = new Point(12, 16), Checked = enabled };
+
+        var lblStart = new Label { Text = "Quiet hours start:", Location = new Point(12, 48), AutoSize = true };
+        var dtpStart = new DateTimePicker
+        {
+            Location = new Point(140, 44), Width = 130,
+            Format = DateTimePickerFormat.Time, ShowUpDown = true,
+            Value = DateTime.Today.Add(startTime.ToTimeSpan()),
+        };
+
+        var lblEnd = new Label { Text = "Quiet hours end:", Location = new Point(12, 82), AutoSize = true };
+        var dtpEnd = new DateTimePicker
+        {
+            Location = new Point(140, 78), Width = 130,
+            Format = DateTimePickerFormat.Time, ShowUpDown = true,
+            Value = DateTime.Today.Date.Add(endTime.ToTimeSpan()),
+        };
+
+        var btnSave = new Button { Text = "Save", DialogResult = DialogResult.OK, Location = new Point(190, 145), Width = 75 };
+        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(275, 145), Width = 65 };
+        dlg.AcceptButton = btnSave;
+        dlg.CancelButton = btnCancel;
+        dlg.Controls.AddRange([chkEnabled, lblStart, dtpStart, lblEnd, dtpEnd, btnSave, btnCancel]);
+
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        var schedule = new
+        {
+            enabled = chkEnabled.Checked,
+            start = dtpStart.Value.ToString("HH:mm"),
+            end = dtpEnd.Value.ToString("HH:mm"),
+            saved_at = DateTime.Now.ToString("o"),
+        };
+
+        try
+        {
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(DndSchedulePath)!);
+            System.IO.File.WriteAllText(DndSchedulePath,
+                System.Text.Json.JsonSerializer.Serialize(schedule,
+                    new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+
+            RecordHistory($"DND schedule saved: {schedule.start}–{schedule.end} (enabled={schedule.enabled})");
+            _lblStatus.Text = $"DND schedule saved: {schedule.start}\u2013{schedule.end}";
+        }
+        catch (Exception ex)
+        {
+            _lblStatus.Text = $"Could not save DND schedule: {ex.Message}";
+        }
     }
 }
