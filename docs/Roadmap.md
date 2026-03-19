@@ -638,6 +638,18 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 1 | `WindowsUpdateControlDialog` — pause/resume Feature + Quality updates via registry; duration selector (7–35 d); Check Now + Open Settings quick actions | ✅ |
 | 2 | Wired into Tools menu + `Program.cs` (`--manager wucontrol`) | ✅ |
 
+### Sprint 39 — Plugin URL Install, Tag Filter & Conflict Detector ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `PackManager.InstallFromUrlAsync(url)` — download pack JSON from HTTPS URL, validate, install; URL must be http/https (security check) | ✅ |
+| 2 | `PackManager.DetectConflicts()` — cross-pack duplicate registry key detector; returns `PackConflict` records | ✅ |
+| 3 | `PackConflict` record added to `PackDef.cs` (RegistryPath, ValueName, ConflictingPacks) | ✅ |
+| 4 | `MarketplaceDialog` — tag filter ComboBox in Browse tab (populated from index on first load) | ✅ |
+| 5 | `MarketplaceDialog` — “Install from URL…” button with inline prompt dialog | ✅ |
+| 6 | `MarketplaceDialog` — “Detect Conflicts” button in Installed tab; shows detailed conflict report | ✅ |
+| 7 | Phase 8 items 77, 78, 80 (tag filter, URL install, conflict detector) completed | ✅ |
+
 ### Sprint 38 — French & Spanish Locales ✅
 
 | # | Task | Status |
@@ -737,15 +749,15 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
 | 71 | Plugin sandboxing — isolated execution of third-party packs | HIGH | Original | 🔄 Future |
-| 72 | Plugin auto-update — check marketplace for newer versions | HIGH | Original | 🔄 Sprint 39 |
+| 72 | Plugin auto-update — check marketplace for newer versions | HIGH | Original | ✅ Sprint 36 |
 | 73 | Plugin rating and review system | MEDIUM | Original | 🔄 Future |
 | 74 | Plugin dependency resolution (pack A requires pack B) | MEDIUM | Original | 🔄 Future |
 | 75 | Plugin template generator (CLI command to scaffold a new pack) | MEDIUM | Original | 🔄 Future |
 | 76 | Community plugin submission workflow (GitHub PR-based) | MEDIUM | Original | 🔄 Future |
-| 77 | Plugin categories and tags in marketplace browser | LOW | Original | 🔄 Sprint 39 |
-| 78 | Plugin install from URL (direct .json download) | LOW | Original | 🔄 Sprint 39 |
+| 77 | Plugin categories and tags in marketplace browser | LOW | Original | ✅ Sprint 39 |
+| 78 | Plugin install from URL (direct .json download) | LOW | Original | ✅ Sprint 39 |
 | 79 | Plugin changelog viewer in marketplace | LOW | Original | 🔄 Future |
-| 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original | 🔄 Sprint 39 |
+| 80 | Plugin conflict detector (two packs modifying same registry keys) | LOW | Original | ✅ Sprint 39 |
 
 ### Phase 9 — Advanced Features & Automation (Sprint 40)
 

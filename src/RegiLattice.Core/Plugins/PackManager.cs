@@ -209,6 +209,69 @@ public sealed class PackManager
 
     // ── Helpers ──────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Install a pack from a direct URL pointing to a pack JSON file.
+    /// Downloads, validates (via PackLoader), and installs as a local pack.
+    /// </summary>
+    public async Task<(PackDef Pack, IReadOnlyList<TweakDef> Tweaks)> InstallFromUrlAsync(
+        string url, CancellationToken ct = default)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+            throw new ArgumentException($"Invalid or non-HTTP(S) URL: {url}", nameof(url));
+
+        var json = await s_http.GetStringAsync(uri, ct);
+        var (pack, tweaks) = PackLoader.LoadFromJson(json);
+
+        var packDir = Path.Combine(s_packsDir, pack.Name);
+        Directory.CreateDirectory(packDir);
+        await File.WriteAllTextAsync(Path.Combine(packDir, "pack.json"), json, ct);
+
+        var meta = JsonSerializer.Serialize(pack, s_jsonOptions);
+        await File.WriteAllTextAsync(Path.Combine(packDir, "meta.json"), meta, ct);
+
+        return (pack, tweaks);
+    }
+
+    /// <summary>
+    /// Detect registry key conflicts between installed packs.
+    /// Returns a list of (RegistryPath, PackName[]) pairs where two or more packs
+    /// modify the same registry key/value combination.
+    /// </summary>
+    public IReadOnlyList<PackConflict> DetectConflicts()
+    {
+        var installed = InstalledPacks();
+        // path\0name → list of pack names that touch it
+        var keyOwners = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var pack in installed)
+        {
+            var tweaks = LoadInstalledPack(pack.Name);
+            if (tweaks is null) continue;
+
+            foreach (var tweak in tweaks)
+            {
+                foreach (var op in tweak.ApplyOps)
+                {
+                    string key = $"{op.Path}\0{op.Name}";
+                    if (!keyOwners.TryGetValue(key, out var owners))
+                        keyOwners[key] = owners = new List<string>();
+                    if (!owners.Contains(pack.Name, StringComparer.OrdinalIgnoreCase))
+                        owners.Add(pack.Name);
+                }
+            }
+        }
+
+        return keyOwners
+            .Where(kv => kv.Value.Count > 1)
+            .Select(kv =>
+            {
+                var parts = kv.Key.Split('\0', 2);
+                return new PackConflict(parts[0], parts.Length > 1 ? parts[1] : "", kv.Value);
+            })
+            .ToList();
+    }
+
     /// <summary>Simple semver comparison (major.minor.patch).</summary>
     internal static int CompareVersions(string a, string b)
     {
