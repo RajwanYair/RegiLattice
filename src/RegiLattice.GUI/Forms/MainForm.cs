@@ -1366,6 +1366,7 @@ public partial class MainForm : Form
         _btnApply.Enabled = !busy;
         _btnRemove.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
+        _btnUndoLast.Enabled = !busy && TweakHistory.Count > 0;
         if (message is not null)
             SetStatus(message);
     }
@@ -1467,6 +1468,65 @@ public partial class MainForm : Form
     private async void OnApplyClicked(object? sender, EventArgs e) => await ApplySelectedAsync();
 
     private async void OnRemoveClicked(object? sender, EventArgs e) => await RemoveSelectedAsync();
+
+    private async Task OnUndoLastAsync()
+    {
+        var recent = TweakHistory.Recent(1);
+        if (recent.Count == 0)
+        {
+            SetStatus("Nothing to undo.");
+            return;
+        }
+
+        HistoryEntry last = recent[0];
+        TweakDef? tweak = _engine.AllTweaks().FirstOrDefault(t =>
+            t.Id.Equals(last.TweakId, StringComparison.OrdinalIgnoreCase));
+
+        if (tweak is null)
+        {
+            SetStatus($"Tweak '{last.TweakId}' not found \u2014 cannot undo.");
+            AppendLog($"\u26A0 Undo skipped: tweak '{last.TweakId}' is not registered.");
+            return;
+        }
+
+        bool force = _forceCheck.Checked;
+
+        if (!_logPanel.Visible)
+            _logPanel.Visible = true;
+
+        string inverseLabel = last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase) ? "removing" : "re-applying";
+        AppendLog($"\u21A9 Undoing last op \u2014 {inverseLabel} '{tweak.Label}' ({tweak.Id})");
+        SetBusy(true, $"Undoing: {tweak.Label}\u2026", totalSteps: 1);
+        try
+        {
+            var result = await Task.Run(() =>
+                last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase)
+                    ? _engine.Remove(tweak, forceCorp: force)
+                    : _engine.Apply(tweak, forceCorp: force),
+                _cts.Token
+            );
+
+            _statusCache[tweak.Id] = _engine.DetectStatus(tweak);
+            PopulateTree();
+            RefreshListView();
+            UpdateCounters();
+
+            string icon = result is TweakResult.Applied or TweakResult.NotApplied ? "\u2705" : "\u26A0";
+            AppendLog($"{icon} Undo result for '{tweak.Id}': {result}");
+            SetStatus($"Undo complete: {tweak.Label} \u2192 {result}");
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex)
+        {
+            SetStatus($"Undo error: {ex.Message}");
+            AppendLog($"\u274C Undo error: {ex.Message}");
+        }
+        finally
+        {
+            SetBusy(false);
+            _btnUndoLast.Enabled = TweakHistory.Count > 0;
+        }
+    }
 
     private async void OnRefreshClicked(object? sender, EventArgs e) => await RefreshStatusAsync();
 
@@ -1695,6 +1755,27 @@ public partial class MainForm : Form
             string pendingNote = isPending ? "\n\u26A0 Restart/reboot needed for this change to take effect." : "";
             string expected = td.GetExpectedResult();
 
+            // Before/After registry value preview (first 2 SetValue ops only)
+            string beforeAfter = "";
+            if (td.Kind == TweakKind.Registry || td.Kind == TweakKind.GroupPolicy)
+            {
+                var setOps = td.ApplyOps.Where(o => o.Kind == RegOpKind.SetValue).Take(2).ToList();
+                if (setOps.Count > 0)
+                {
+                    var lines = new System.Text.StringBuilder("\n\U0001F50D Before \u2192 After:");
+                    foreach (RegOp op in setOps)
+                    {
+                        object? curVal = null;
+                        try { curVal = Microsoft.Win32.Registry.GetValue(op.Path, op.Name, null); }
+                        catch (Exception) { /* ignore — registry access requires admin or key may not exist */ }
+                        string curStr = curVal is null ? "(not set)" : curVal.ToString() ?? "(null)";
+                        string willStr = op.Value?.ToString() ?? "(null)";
+                        lines.Append($"\n  {op.Name}: {curStr}  \u2192  {willStr}");
+                    }
+                    beforeAfter = lines.ToString();
+                }
+            }
+
             // Use RTF approach for reliable rendering with dark backgrounds
             UpdateDetailBox(
                 $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
@@ -1703,6 +1784,7 @@ public partial class MainForm : Form
                     + $"Registry: {keys}\n"
                     + $"Description: {desc}\n"
                     + $"\U0001F4CB Expected: {expected}"
+                    + beforeAfter
                     + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
                     + pendingNote,
                 isPending ? AppTheme.Yellow : AppTheme.Fg
