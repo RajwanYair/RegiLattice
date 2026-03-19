@@ -48,6 +48,14 @@ partial class MainForm
     private ToolStripMenuItem _mnuHostsFileMgr = null!;
     private ToolStripMenuItem _mnuTempCleaner = null!;
     private ToolStripMenuItem _mnuInstalledApps = null!;
+    private ToolStripMenuItem _mnuPowerScheduler = null!;
+    private ToolStripMenuItem _mnuSleepTimer = null!;
+    private ToolStripMenuItem _mnuBatterySaver = null!;
+    private ToolStripMenuItem _mnuUsbPower = null!;
+    private ToolStripMenuItem _mnuAdRemoval = null!;
+    private ToolStripMenuItem _mnuTelemetryDash = null!;
+    private ToolStripMenuItem _mnuAppPermissions = null!;
+    private ToolStripMenuItem _mnuDnsOverHttps = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -131,6 +139,14 @@ partial class MainForm
         _mnuHostsFileMgr  = new ToolStripMenuItem("Hosts File Manager...") { Image = AppIcons.NetworkMenuBitmap };
         _mnuTempCleaner   = new ToolStripMenuItem("Temp File Cleaner...") { Image = AppIcons.CleanupMenuBitmap };
         _mnuInstalledApps = new ToolStripMenuItem("Installed Applications...") { Image = AppIcons.MarketplaceMenuBitmap };
+        _mnuPowerScheduler = new ToolStripMenuItem("Power Plan Scheduler...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuSleepTimer = new ToolStripMenuItem("Sleep / Hibernate Timer...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuBatterySaver = new ToolStripMenuItem("Battery Saver Settings...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuUsbPower = new ToolStripMenuItem("USB Power & Selective Suspend...") { Image = AppIcons.ServiceMenuBitmap };
+        _mnuAdRemoval = new ToolStripMenuItem("Ad & Tip Removal Wizard...") { Image = AppIcons.PrivacyMenuBitmap };
+        _mnuTelemetryDash = new ToolStripMenuItem("Telemetry Dashboard...") { Image = AppIcons.PrivacyMenuBitmap };
+        _mnuAppPermissions = new ToolStripMenuItem("App Permissions...") { Image = AppIcons.PrivacyMenuBitmap };
+        _mnuDnsOverHttps = new ToolStripMenuItem("DNS-over-HTTPS Setup...") { Image = AppIcons.NetworkMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -154,6 +170,16 @@ partial class MainForm
             _mnuHostsFileMgr,
             _mnuTempCleaner,
             _mnuInstalledApps,
+            new ToolStripSeparator(),
+            _mnuPowerScheduler,
+            _mnuSleepTimer,
+            _mnuBatterySaver,
+            _mnuUsbPower,
+            new ToolStripSeparator(),
+            _mnuAdRemoval,
+            _mnuTelemetryDash,
+            _mnuAppPermissions,
+            _mnuDnsOverHttps,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -201,6 +227,14 @@ partial class MainForm
         _mnuHostsFileMgr.Click        += (_, _) => OnOpenHostsFileManager();
         _mnuTempCleaner.Click         += (_, _) => OnOpenTempFileCleaner();
         _mnuInstalledApps.Click       += (_, _) => OnOpenInstalledApps();
+        _mnuPowerScheduler.Click      += (_, _) => OnOpenPowerScheduler();
+        _mnuSleepTimer.Click          += (_, _) => OnOpenSleepTimer();
+        _mnuBatterySaver.Click        += (_, _) => OnOpenBatterySaver();
+        _mnuUsbPower.Click            += (_, _) => OnOpenUsbPower();
+        _mnuAdRemoval.Click           += (_, _) => OnOpenAdRemoval();
+        _mnuTelemetryDash.Click       += (_, _) => OnOpenTelemetryDashboard();
+        _mnuAppPermissions.Click      += (_, _) => OnOpenAppPermissions();
+        _mnuDnsOverHttps.Click        += (_, _) => OnOpenDnsOverHttps();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

@@ -1207,6 +1207,22 @@ public partial class MainForm : Form
 
     private void OnOpenInstalledApps() => ShowManagerDialog(new InstalledAppsDialog());
 
+    private void OnOpenPowerScheduler() => ShowManagerDialog(new PowerSchedulerDialog());
+
+    private void OnOpenSleepTimer() => ShowManagerDialog(new SleepTimerDialog());
+
+    private void OnOpenBatterySaver() => ShowManagerDialog(new BatterySaverDialog());
+
+    private void OnOpenUsbPower() => ShowManagerDialog(new UsbPowerDialog());
+
+    private void OnOpenAdRemoval() => ShowManagerDialog(new AdRemovalWizardDialog());
+
+    private void OnOpenTelemetryDashboard() => ShowManagerDialog(new TelemetryDashboardDialog());
+
+    private void OnOpenAppPermissions() => ShowManagerDialog(new AppPermissionsDialog());
+
+    private void OnOpenDnsOverHttps() => ShowManagerDialog(new DnsOverHttpsDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()

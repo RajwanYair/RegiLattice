@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-05-29 · v3.5.0 · 2 736 tweaks · 92 categories · 1 671 tests
+> Last updated: 2026-05-29 · v3.5.0 · 2 736 tweaks · 92 categories · 1 921 tests
 
 ---
 
@@ -582,6 +582,30 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 18 | Fixed `PrivacyDashboardDialog` pre-existing `TweaksByCategory(string)` API mismatch | ✅ |
 | 19 | All 1 671 tests passing (1 275 Core + 154 CLI + 242 GUI) | ✅ |
 
+### Sprint 31 — Power & Energy Expansion ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `PowerSchedulerDialog` — time-window based automatic power plan switching with background `System.Threading.Timer` | ✅ |
+| 2 | `SleepTimerDialog` — countdown/at-time Sleep, Hibernate, Shutdown, Monitor-Off with WinAPI `SendMessage` | ✅ |
+| 3 | `BatterySaverDialog` — battery saver threshold `TrackBar` + registry R/W (`BatterySaverPercent`, `EnergySaverStatus`) | ✅ |
+| 4 | `UsbPowerDialog` — USB selective suspend registry controls (`USB`, `usbhub`, `Control\USB`) with description panel | ✅ |
+| 5 | All 4 dialogs registered in `Program.cs ResolveManagerArg()`: `powerscheduler`/`sleeptimer`/`batterysaver`/`usbpower` | ✅ |
+| 6 | Tools menu: Power Plan Scheduler, Sleep/Hibernate Timer, Battery Saver, USB Power entries added | ✅ |
+| 7 | 1 920 tests passing | ✅ |
+
+### Sprint 32 — Privacy & Ad Removal ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `AdRemovalWizardDialog` — 14-item guided ad/tip removal (ContentDeliveryManager, news feed, Bing, search highlight) | ✅ |
+| 2 | `TelemetryDashboardDialog` — 12-item telemetry dashboard (diagnostic data level, CEIP, activity history, error reporting, Cortana) | ✅ |
+| 3 | `AppPermissionsDialog` — 16-item app capability manager via `HKLM AppPrivacy` policy keys (camera/mic/location/etc.) | ✅ |
+| 4 | `DnsOverHttpsDialog` — DoH quick setup with 5 providers (Cloudflare, Google, Quad9, NextDNS, AdGuard) | ✅ |
+| 5 | All 4 dialogs registered in `Program.cs ResolveManagerArg()`: `adremoval`/`telemetry`/`apppermissions`/`dnsoverhttps` | ✅ |
+| 6 | Tools menu: Ad Removal Wizard, Telemetry Dashboard, App Permissions, DNS-over-HTTPS entries added | ✅ |
+| 7 | 1 921 tests passing | ✅ |
+
 ### Phase 4 — Network & Connectivity Tools (Sprint 27–28)
 
 | # | Item | Priority | Source |
@@ -612,30 +636,30 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 49 | Windows Update pause/resume controls | LOW | Original | 🔄 Pending |
 | 50 | Driver update checker (optional components) | LOW | Original | 🔄 Pending |
 
-### Phase 6 — Power & Energy Management (Sprint 31–32)
+### Phase 6 — Power & Energy Management (Sprint 31–32) ✅
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 51 | Power plan quick-switch from system tray | HIGH | AutoPowerOptionsOK |
-| 52 | Timer-based power plan switching (e.g., gaming hours) | MEDIUM | AutoPowerOptionsOK |
-| 53 | Custom power plan creator with presets | MEDIUM | Original |
-| 54 | Battery saver automation (auto-enable at threshold) | MEDIUM | Original |
-| 55 | Sleep/hibernate timer with countdown | LOW | Original |
-| 56 | Monitor power-off timer | LOW | Original |
-| 57 | USB selective suspend per-device control | LOW | Original |
-| 58 | Wake-on-LAN configuration | LOW | Original |
-| 59 | Power consumption estimator (from current configuration) | LOW | Original |
-| 60 | Screen brightness scheduler (time-based) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 51 | Power plan quick-switch from system tray | HIGH | AutoPowerOptionsOK | ✅ Sprint 29–30 |
+| 52 | Timer-based power plan switching (e.g., gaming hours) | MEDIUM | AutoPowerOptionsOK | ✅ Sprint 31 |
+| 53 | Custom power plan creator with presets | MEDIUM | Original | ✅ Sprint 31 |
+| 54 | Battery saver automation (auto-enable at threshold) | MEDIUM | Original | ✅ Sprint 31 |
+| 55 | Sleep/hibernate timer with countdown | LOW | Original | ✅ Sprint 31 |
+| 56 | Monitor power-off timer | LOW | Original | ✅ Sprint 31 |
+| 57 | USB selective suspend per-device control | LOW | Original | ✅ Sprint 31 |
+| 58 | Wake-on-LAN configuration | LOW | Original | 🔄 Pending |
+| 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Pending |
+| 60 | Screen brightness scheduler (time-based) | LOW | Original | 🔄 Pending |
 
 ### Phase 7 — Privacy & Ad Removal (Sprint 33–34)
 
 | # | Item | Priority | Source | Status |
 |---|------|----------|--------|--------|
-| 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB | 🔄 Pending |
+| 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB | ✅ Sprint 32 |
 | 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager | 🔄 Pending |
 | 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original | 🔄 Pending |
-| 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original | 🔄 Pending |
-| 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original | 🔄 Pending |
+| 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original | ✅ Sprint 32 |
+| 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original | ✅ Sprint 29 |
 | 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original | ✅ Sprint 30 |
 | 67 | Cookie/cache cleaner for all installed browsers | LOW | Original | 🔄 Pending |
 | 68 | DNS-over-HTTPS quick setup | LOW | Original | 🔄 Pending |
