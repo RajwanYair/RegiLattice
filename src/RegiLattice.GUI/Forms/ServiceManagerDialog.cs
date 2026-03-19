@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,6 +67,8 @@ internal sealed class ServiceManagerDialog : BaseDialog
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 72 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 72 };
+    private readonly Button _btnPresets = new() { Text = "Presets ▾", Width = 88 };
+    private readonly ContextMenuStrip _presetMenu = new();
     private readonly Button _btnRestart = new()
     {
         Text = "Restart",
@@ -171,14 +174,16 @@ internal sealed class ServiceManagerDialog : BaseDialog
         _btnClose.Click += (_, _) => Close();
         _btnRestart.Click += async (_, _) => await RestartServiceAsync();
         _btnSetAuto.Click += async (_, _) => await SetStartTypeAsync(ServiceStartMode.Automatic);
+        BuildPresetMenu();
+        _btnPresets.Click += (_, e) => _presetMenu.Show(_btnPresets, new Point(0, _btnPresets.Height));
 
-        _btnPanel.Controls.AddRange([_btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto, _btnClose]);
+        _btnPanel.Controls.AddRange([_btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto, _btnPresets, _btnClose]);
 
         int x = 0;
-        foreach (Button b in new[] { _btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto })
+        foreach (Button b in new[] { _btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto, _btnPresets })
         {
             b.Location = new Point(x, 6);
-            x += 78;
+            x += b.Width + 4;
         }
         _btnClose.Location = new Point(_btnPanel.Width - 78, 6);
         _btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -323,7 +328,29 @@ internal sealed class ServiceManagerDialog : BaseDialog
     {
         ServiceEntry? entry = SelectedEntry();
         UpdateButtons(entry);
-        _descBox.Text = entry?.Description ?? string.Empty;
+        if (entry is null)
+        {
+            _descBox.Text = string.Empty;
+            return;
+        }
+        try
+        {
+            using var sc = new ServiceController(entry.ServiceName);
+            var dependsOn = sc.ServicesDependedOn.Select(s => s.ServiceName).ToArray();
+            var dependents = sc.DependentServices.Select(s => s.ServiceName).ToArray();
+            var sb = new System.Text.StringBuilder();
+            if (!string.IsNullOrEmpty(entry.Description))
+                sb.AppendLine(entry.Description);
+            if (dependsOn.Length > 0)
+                sb.AppendLine($"Depends on: {string.Join(", ", dependsOn)}");
+            if (dependents.Length > 0)
+                sb.AppendLine($"Required by: {string.Join(", ", dependents)}");
+            _descBox.Text = sb.ToString().TrimEnd();
+        }
+        catch
+        {
+            _descBox.Text = entry.Description;
+        }
     }
 
     private void UpdateButtons(ServiceEntry? entry)
@@ -409,4 +436,93 @@ internal sealed class ServiceManagerDialog : BaseDialog
             ServiceControllerStatus.Paused => Color.DarkOrange,
             _ => SystemColors.WindowText,
         };
+
+    // ── Preset profiles ───────────────────────────────────────────────────────
+
+    private static readonly Dictionary<string, (string Label, string[] Disable, string[] Enable)> s_servicePresets = new()
+    {
+        ["Gaming"] = (
+            "Gaming — stop telemetry & indexing for max performance",
+            ["DiagTrack", "dmwappushservice", "WSearch", "SysMain", "PcaSvc"],
+            []
+        ),
+        ["Privacy"] = (
+            "Privacy — stop data-collection services",
+            ["DiagTrack", "dmwappushservice", "wisvc", "WerSvc", "PcaSvc", "MapsBroker"],
+            []
+        ),
+        ["Minimal"] = (
+            "Minimal — stop non-essential background services",
+            ["DiagTrack", "dmwappushservice", "WSearch", "SysMain", "PcaSvc", "WerSvc", "wisvc", "Fax", "RetailDemo"],
+            []
+        ),
+        ["Restore Defaults"] = (
+            "Restore Defaults — re-enable common services",
+            [],
+            ["DiagTrack", "WSearch", "SysMain", "PcaSvc", "WerSvc"]
+        ),
+    };
+
+    private void BuildPresetMenu()
+    {
+        foreach (var (name, (label, _, _)) in s_servicePresets)
+        {
+            var item = _presetMenu.Items.Add($"{name}: {label}");
+            string captured = name;
+            item.Click += async (_, _) => await ApplyServicePresetAsync(captured);
+        }
+    }
+
+    private async Task ApplyServicePresetAsync(string presetName)
+    {
+        if (!s_servicePresets.TryGetValue(presetName, out var preset))
+            return;
+        if (!Elevation.IsAdmin())
+        {
+            MessageBox.Show("Administrator rights required to apply service presets.", "Service Manager", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        var result = MessageBox.Show(
+            $"Apply '{presetName}' preset?\n\nDisable: {(preset.Disable.Length > 0 ? string.Join(", ", preset.Disable) : "none")}\nEnable: {(preset.Enable.Length > 0 ? string.Join(", ", preset.Enable) : "none")}",
+            "Service Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        if (result != DialogResult.Yes)
+            return;
+
+        SetBusy(true, $"Applying '{presetName}' preset…");
+        int changed = 0;
+        try
+        {
+            await Task.Run(() =>
+            {
+                foreach (string svc in preset.Disable)
+                {
+                    try
+                    {
+                        ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Disabled).GetAwaiter().GetResult();
+                        changed++;
+                    }
+                    catch { /* service may not exist */ }
+                }
+                foreach (string svc in preset.Enable)
+                {
+                    try
+                    {
+                        ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Manual).GetAwaiter().GetResult();
+                        changed++;
+                    }
+                    catch { }
+                }
+            }, _cts.Token);
+            SetStatus($"Preset '{presetName}' applied — {changed} service(s) changed.");
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Preset failed: {ex.Message}");
+        }
+        finally
+        {
+            SetBusy(false);
+            await LoadServicesAsync();
+        }
+    }
 }

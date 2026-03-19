@@ -59,6 +59,20 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
         Padding = new Padding(6, 0, 0, 0),
     };
 
+    // History + Cookie clean options
+    private readonly CheckBox _chkHistory = new()
+    {
+        Text = "Clear History",
+        AutoSize = true,
+        Checked = false,
+    };
+    private readonly CheckBox _chkCookies = new()
+    {
+        Text = "Clear Cookies",
+        AutoSize = true,
+        Checked = false,
+    };
+
     private List<BrowserProfile> _profiles = [];
 
     // Known browser cache path patterns relative to %LOCALAPPDATA% or %APPDATA%
@@ -91,12 +105,14 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };
         _btnScan.Location = new Point(8, 5);
         _btnClean.Location = new Point(104, 5);
+        _chkHistory.Location = new Point(244, 9);
+        _chkCookies.Location = new Point(350, 9);
         _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
         btnPanel.Resize += (_, _) => _btnClose.Location = new Point(btnPanel.Width - _btnClose.Width - 8, 5);
         _btnScan.Click += async (_, _) => await ScanAsync();
         _btnClean.Click += async (_, _) => await CleanAsync();
         _btnClose.Click += (_, _) => Close();
-        btnPanel.Controls.AddRange(new Control[] { _btnScan, _btnClean, _btnClose });
+        btnPanel.Controls.AddRange(new Control[] { _btnScan, _btnClean, _chkHistory, _chkCookies, _btnClose });
 
         Controls.Add(_list);
         Controls.Add(btnPanel);
@@ -183,6 +199,9 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             return;
         }
 
+        bool cleanHistory = _chkHistory.Checked;
+        bool cleanCookies = _chkCookies.Checked;
+
         _btnScan.Enabled = false;
         _btnClean.Enabled = false;
         _lblStatus.Text = $"Cleaning {toClean.Count} profile(s)…";
@@ -194,10 +213,43 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             {
                 try
                 {
+                    // Clean cache
                     if (Directory.Exists(p.CachePath))
                     {
                         freed += DirectorySize(p.CachePath);
                         DeleteDirectoryContents(p.CachePath);
+                    }
+
+                    // Clean history (Chromium: History file; Firefox: places.sqlite)
+                    if (cleanHistory)
+                    {
+                        string historyFile = Path.Combine(p.ProfilePath, "History");
+                        string placesFile = Path.Combine(p.ProfilePath, "places.sqlite");
+                        foreach (string f in new[] { historyFile, placesFile })
+                        {
+                            try { if (File.Exists(f)) { freed += new FileInfo(f).Length; File.Delete(f); } }
+                            catch { }
+                        }
+                        // Chromium favicons and visited links
+                        foreach (string extra in new[] { "Visited Links", "Favicons" })
+                        {
+                            string ef = Path.Combine(p.ProfilePath, extra);
+                            try { if (File.Exists(ef)) { freed += new FileInfo(ef).Length; File.Delete(ef); } }
+                            catch { }
+                        }
+                    }
+
+                    // Clean cookies (Chromium: Network/Cookies or Cookies; Firefox: cookies.sqlite)
+                    if (cleanCookies)
+                    {
+                        string networkCookies = Path.Combine(p.ProfilePath, "Network", "Cookies");
+                        string chromiumCookies = Path.Combine(p.ProfilePath, "Cookies");
+                        string firefoxCookies = Path.Combine(p.ProfilePath, "cookies.sqlite");
+                        foreach (string f in new[] { networkCookies, chromiumCookies, firefoxCookies })
+                        {
+                            try { if (File.Exists(f)) { freed += new FileInfo(f).Length; File.Delete(f); } }
+                            catch { }
+                        }
                     }
                 }
                 catch
@@ -208,7 +260,10 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             return freed;
         });
 
-        _lblStatus.Text = $"✓ Cleaned {toClean.Count} profile(s) — freed ~{FormatSize(freedBytes)}.";
+        var what = new List<string> { "cache" };
+        if (cleanHistory) what.Add("history");
+        if (cleanCookies) what.Add("cookies");
+        _lblStatus.Text = $"✓ Cleaned {string.Join(", ", what)} for {toClean.Count} profile(s) — freed ~{FormatSize(freedBytes)}.";
         await ScanAsync();
     }
 

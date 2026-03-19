@@ -76,6 +76,8 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 80 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    private readonly Button _btnExportCsv = new() { Text = "Export CSV", Width = 90 };
+    private readonly Button _btnSelectAll = new() { Text = "Select All", Width = 86 };
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -141,8 +143,10 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
         _btnDisable.Click += async (_, _) => await SetSelectedStatusAsync(enable: false);
         _btnRefresh.Click += async (_, _) => await LoadEntriesAsync();
         _btnClose.Click += (_, _) => Close();
+        _btnExportCsv.Click += (_, _) => ExportCsv();
+        _btnSelectAll.Click += (_, _) => ToggleSelectAll();
 
-        _btnPanel.Controls.AddRange(new Control[] { _btnEnable, _btnDisable, _btnRefresh, _btnClose });
+        _btnPanel.Controls.AddRange(new Control[] { _btnEnable, _btnDisable, _btnRefresh, _btnExportCsv, _btnSelectAll, _btnClose });
 
         Controls.Add(_list);
         Controls.Add(_topPanel);
@@ -312,5 +316,45 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
             _ => null,
         };
         return (root, sub);
+    }
+
+    private void ExportCsv()
+    {
+        if (_allEntries.Count == 0)
+        {
+            _statusLabel.Text = "Nothing to export.";
+            return;
+        }
+        using var dlg = new SaveFileDialog
+        {
+            Title = "Export Context Menu Entries",
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            FileName = "context-menu-entries.csv",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+        try
+        {
+            var lines = new System.Collections.Generic.List<string> { "Name,CLSID,Group,Status,RegistryPath" };
+            foreach (var e in _allEntries)
+                lines.Add($"\"{EscCsv(e.Name)}\",\"{EscCsv(e.Clsid)}\",\"{EscCsv(e.Group)}\",\"{(e.Enabled ? "Enabled" : "Disabled")}\",\"{EscCsv(e.RegistryPath)}\"");
+            File.WriteAllLines(dlg.FileName, lines, System.Text.Encoding.UTF8);
+            _statusLabel.Text = $"Exported {_allEntries.Count} entries to {Path.GetFileName(dlg.FileName)}";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private static string EscCsv(string value) => value.Replace("\"", "\"\"");
+
+    private bool _allSelected;
+    private void ToggleSelectAll()
+    {
+        _allSelected = !_allSelected;
+        _btnSelectAll.Text = _allSelected ? "Deselect All" : "Select All";
+        foreach (ListViewItem item in _list.Items)
+            item.Selected = _allSelected;
     }
 }

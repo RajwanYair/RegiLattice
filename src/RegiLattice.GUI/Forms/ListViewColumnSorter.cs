@@ -34,24 +34,58 @@ internal sealed class ListViewColumnSorter : IComparer
     }
 
     /// <summary>
-    /// Attaches click-to-sort to <paramref name="list"/>.
-    /// Clicking a column header sorts ascending; clicking again reverses to descending.
+    /// Attaches 3-state click-to-sort to <paramref name="list"/>.
+    /// 1st click on a column: sort ascending.
+    /// 2nd click same column: sort descending.
+    /// 3rd click same column: restore original insertion order.
+    /// Clicking a different column always starts ascending.
     /// Call once after all columns have been defined.
     /// </summary>
     internal static void AttachTo(ListView list)
     {
         var sorter = new ListViewColumnSorter();
-        list.ListViewItemSorter = sorter;
+        List<ListViewItem>? unsortedCache = null;
+        int lastColumn = -1;
+        int pressCount = 0;
+
         list.ColumnClick += (_, e) =>
         {
-            if (sorter.ColumnIndex == e.Column)
-                sorter.Order = sorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            else
+            // Snapshot original insertion order before the very first sort.
+            unsortedCache ??= [.. list.Items.Cast<ListViewItem>()];
+
+            if (e.Column != lastColumn)
             {
+                // Different column — start fresh: ascending, reset cycle.
+                lastColumn = e.Column;
+                pressCount = 1;
                 sorter.ColumnIndex = e.Column;
                 sorter.Order = SortOrder.Ascending;
+                list.ListViewItemSorter = sorter;
+                list.Sort();
             }
-            list.Sort();
+            else
+            {
+                pressCount++;
+                if (pressCount == 2)
+                {
+                    // 2nd press — descending.
+                    sorter.Order = SortOrder.Descending;
+                    list.Sort();
+                }
+                else
+                {
+                    // 3rd press — restore original insertion order.
+                    pressCount = 0;
+                    lastColumn = -1;
+                    list.ListViewItemSorter = null;
+                    list.BeginUpdate();
+                    list.Items.Clear();
+                    foreach (ListViewItem item in unsortedCache!)
+                        list.Items.Add(item);
+                    list.EndUpdate();
+                    unsortedCache = null; // re-snapshot on next sort cycle
+                }
+            }
         };
     }
 }

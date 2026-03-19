@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading;
 using RegiLattice.Core;
 
 namespace RegiLattice.GUI.Forms;
@@ -123,6 +125,12 @@ internal sealed class DnsSwitcherDialog : BaseDialog
         Width = 130,
         Height = 28,
     };
+    private readonly Button _btnBenchmark = new()
+    {
+        Text = "⏱ Benchmark",
+        Width = 106,
+        Height = 28,
+    };
     private readonly Button _btnClose = new()
     {
         Text = "Close",
@@ -131,6 +139,11 @@ internal sealed class DnsSwitcherDialog : BaseDialog
         DialogResult = DialogResult.Cancel,
     };
     private readonly Panel _btnPanel = new() { Dock = DockStyle.Bottom, Height = 38 };
+
+    // Custom DNS entry panel
+    private readonly TextBox _customPrimary = new() { Width = 130, PlaceholderText = "Primary IP", Height = 24 };
+    private readonly TextBox _customSecondary = new() { Width = 130, PlaceholderText = "Secondary IP", Height = 24 };
+    private readonly Button _btnUseCustom = new() { Text = "Use Custom", Width = 96, Height = 26 };
 
     public DnsSwitcherDialog()
         : base("DNS Server Quick-Switch", new Size(900, 620), resizable: true)
@@ -153,9 +166,11 @@ internal sealed class DnsSwitcherDialog : BaseDialog
 
         _btnApply.Click += async (_, _) => await ApplyAsync();
         _btnRefreshAdapters.Click += (_, _) => PopulateAdapters();
+        _btnBenchmark.Click += async (_, _) => await BenchmarkAsync();
         _btnClose.Click += (_, _) => Close();
+        _btnUseCustom.Click += async (_, _) => await ApplyCustomDnsAsync();
 
-        _btnPanel.Controls.AddRange([_btnApply, _btnRefreshAdapters, _btnClose]);
+        _btnPanel.Controls.AddRange([_btnApply, _btnRefreshAdapters, _btnBenchmark, _btnClose]);
 
         if (!Elevation.IsAdmin())
             Controls.Add(CreateAdminBanner("⚠  Administrator rights required to change DNS settings."));
@@ -274,6 +289,14 @@ internal sealed class DnsSwitcherDialog : BaseDialog
             TextAlign = ContentAlignment.BottomLeft,
         };
 
+        // Custom DNS bar (docked bottom, above button panel)
+        var customPanel = new Panel { Dock = DockStyle.Bottom, Height = 36, Padding = new Padding(4, 4, 4, 0) };
+        var customLabel = new Label { Text = "Custom:", AutoSize = true, Location = new Point(4, 8) };
+        _customPrimary.Location = new Point(60, 5);
+        _customSecondary.Location = new Point(196, 5);
+        _btnUseCustom.Location = new Point(332, 4);
+        customPanel.Controls.AddRange(new Control[] { customLabel, _customPrimary, _customSecondary, _btnUseCustom });
+
         var leftPanel = new Panel { Dock = DockStyle.Left, Width = 260 };
         leftPanel.Controls.Add(_adapterList);
         leftPanel.Controls.Add(adapterLabel);
@@ -286,18 +309,98 @@ internal sealed class DnsSwitcherDialog : BaseDialog
         Controls.Add(rightPanel);
         Controls.Add(leftPanel);
         Controls.Add(_statusLabel);
+        Controls.Add(customPanel);
         Controls.Add(_btnPanel);
     }
 
     private void LayoutButtons()
     {
         int x = 8;
-        foreach (Button b in new[] { _btnApply, _btnRefreshAdapters })
+        foreach (Button b in new[] { _btnApply, _btnRefreshAdapters, _btnBenchmark })
         {
             b.Location = new Point(x, 5);
             x += b.Width + 6;
         }
         _btnClose.Location = new Point(_btnPanel.Width - _btnClose.Width - 8, 5);
         _btnPanel.Resize += (_, _) => _btnClose.Location = new Point(_btnPanel.Width - _btnClose.Width - 8, 5);
+    }
+
+    private async Task BenchmarkAsync()
+    {
+        _btnBenchmark.Enabled = false;
+        _statusLabel.Text = "Benchmarking DNS servers…";
+        var results = new System.Text.StringBuilder();
+        results.AppendLine("DNS Benchmark Results (avg ping over 3 probes):");
+
+        await Task.Run(() =>
+        {
+            foreach (DnsPreset p in Presets)
+            {
+                if (string.IsNullOrEmpty(p.Primary))
+                    continue;
+                long total = 0;
+                int success = 0;
+                for (int i = 0; i < 3; i++)
+                {
+                    try
+                    {
+                        using var ping = new Ping();
+                        var reply = ping.Send(p.Primary, 1500);
+                        if (reply.Status == IPStatus.Success)
+                        {
+                            total += reply.RoundtripTime;
+                            success++;
+                        }
+                        Thread.Sleep(50);
+                    }
+                    catch { }
+                }
+                string latency = success > 0 ? $"{total / success} ms" : "timeout";
+                results.AppendLine($"  {p.Name,40}  {latency,10}  ({p.Primary})");
+            }
+        });
+
+        _descBox.Text = results.ToString();
+        _statusLabel.Text = "Benchmark complete. Select a preset below to apply.";
+        _btnBenchmark.Enabled = true;
+    }
+
+    private async Task ApplyCustomDnsAsync()
+    {
+        string primary = _customPrimary.Text.Trim();
+        string secondary = _customSecondary.Text.Trim();
+        if (string.IsNullOrEmpty(primary))
+        {
+            _statusLabel.Text = "⚠  Enter a primary DNS IP address.";
+            return;
+        }
+        if (_adapterList.SelectedItem is null)
+        {
+            _statusLabel.Text = "⚠  Select a network adapter first.";
+            return;
+        }
+        string adapterEntry = _adapterList.SelectedItem.ToString()!;
+        string adapterName = adapterEntry[2..].Split('[')[0].Trim();
+        _btnUseCustom.Enabled = false;
+        _statusLabel.Text = $"Applying custom DNS {primary} to \"{adapterName}\"…";
+        try
+        {
+            await Task.Run(() =>
+            {
+                RunNetsh($"interface ip set dns \"{adapterName}\" static {primary} primary");
+                if (!string.IsNullOrEmpty(secondary))
+                    RunNetsh($"interface ip add dns \"{adapterName}\" {secondary} index=2");
+                RunNetsh("flushdns", "ipconfig");
+            });
+            _statusLabel.Text = $"✓ Custom DNS {primary} applied to \"{adapterName}\"";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"✗ Failed: {ex.Message}";
+        }
+        finally
+        {
+            _btnUseCustom.Enabled = true;
+        }
     }
 }
