@@ -1,0 +1,306 @@
+// RegiLattice.GUI — Forms/TempFileCleanerDialog.cs
+// Sprint 30: Scan well-known temp locations, preview sizes, and selectively delete.
+
+#nullable enable
+
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.Versioning;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using RegiLattice.Core;
+using RegiLattice.Core.Services;
+
+namespace RegiLattice.GUI.Forms;
+
+/// <summary>Scans Windows temporary-file locations, shows disk savings, and cleans selected groups.</summary>
+[SupportedOSPlatform("windows")]
+internal sealed class TempFileCleanerDialog : BaseDialog
+{
+    // ── Well-known locations ──────────────────────────────────────────────────
+    private static readonly (string Label, Func<string> GetPath)[] Locations =
+    [
+        ("User Temp (%TEMP%)", () => Path.GetTempPath()),
+        ("Windows Temp", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Temp")),
+        ("Windows Prefetch", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Prefetch")),
+        (
+            "SoftwareDistribution\\Download",
+            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"SoftwareDistribution\Download")
+        ),
+        ("Recycle Bin", () => @"C:\$Recycle.Bin"),
+    ];
+
+    // ── Model ─────────────────────────────────────────────────────────────────
+    private sealed class ScanGroup
+    {
+        public required string Label { get; init; }
+        public required string Path { get; init; }
+        public long FileBytes { get; set; }
+        public int FileCount { get; set; }
+        public bool Selected { get; set; } = true;
+        public string SizeDisplay => FormatBytes(FileBytes);
+    }
+
+    // ── Controls ─────────────────────────────────────────────────────────────
+    private readonly ListView _list = new()
+    {
+        Dock = DockStyle.Fill,
+        FullRowSelect = true,
+        CheckBoxes = true,
+        View = View.Details,
+        GridLines = true,
+    };
+    private readonly FlowLayoutPanel _btnPanel = new()
+    {
+        Dock = DockStyle.Bottom,
+        Height = 42,
+        FlowDirection = FlowDirection.LeftToRight,
+        WrapContents = false,
+        Padding = new Padding(6, 6, 6, 4),
+    };
+    private readonly Button _btnScan = new() { Text = "Scan", Width = 80 };
+    private readonly Button _btnClean = new()
+    {
+        Text = "Clean Selected",
+        Width = 110,
+        Enabled = false,
+    };
+    private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    private readonly ProgressBar _progress = new()
+    {
+        Dock = DockStyle.Bottom,
+        Height = 6,
+        Style = ProgressBarStyle.Marquee,
+        Visible = false,
+    };
+    private readonly Label _statusLabel = new()
+    {
+        Dock = DockStyle.Bottom,
+        Height = 22,
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(6, 0, 0, 0),
+    };
+
+    private readonly List<ScanGroup> _groups = [];
+    private CancellationTokenSource _cts = new();
+
+    internal TempFileCleanerDialog()
+        : base("Temporary File Cleaner", new Size(620, 420), resizable: true)
+    {
+        BuildControls();
+    }
+
+    // ── Construction ──────────────────────────────────────────────────────────
+    private void BuildControls()
+    {
+        if (!Elevation.IsAdmin())
+            Controls.Add(CreateWarningBanner("Windows Temp / Prefetch / SoftwareDistribution require administrator privileges."));
+
+        _list.Columns.AddRange([
+            new ColumnHeader { Text = "Location", Width = 280 },
+            new ColumnHeader { Text = "File Count", Width = 90 },
+            new ColumnHeader { Text = "Size", Width = 100 },
+            new ColumnHeader { Text = "Path", Width = 300 },
+        ]);
+
+        _btnScan.Click += async (_, _) => await ScanAsync();
+        _btnClean.Click += async (_, _) => await CleanAsync();
+        _btnClose.Click += (_, _) => Close();
+
+        _btnPanel.Controls.AddRange(new Control[] { _btnScan, _btnClean, _btnClose });
+
+        Controls.Add(_list);
+        Controls.Add(_statusLabel);
+        Controls.Add(_progress);
+        Controls.Add(_btnPanel);
+    }
+
+    protected override async void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        await ScanAsync();
+    }
+
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        _cts.Cancel();
+        base.OnFormClosed(e);
+    }
+
+    // ── Scan ──────────────────────────────────────────────────────────────────
+    private async Task ScanAsync()
+    {
+        _btnScan.Enabled = false;
+        _btnClean.Enabled = false;
+        _progress.Visible = true;
+        _statusLabel.Text = "Scanning…";
+
+        _cts.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        _groups.Clear();
+        foreach (var (label, getPath) in Locations)
+        {
+            string path;
+            try
+            {
+                path = getPath();
+            }
+            catch
+            {
+                continue;
+            }
+            _groups.Add(new ScanGroup { Label = label, Path = path });
+        }
+
+        await Task.Run(
+            () =>
+            {
+                foreach (var g in _groups)
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+                    try
+                    {
+                        if (!Directory.Exists(g.Path))
+                            continue;
+                        var files = Directory.EnumerateFiles(g.Path, "*", SearchOption.AllDirectories);
+                        foreach (var f in files)
+                        {
+                            if (token.IsCancellationRequested)
+                                return;
+                            try
+                            {
+                                g.FileBytes += new FileInfo(f).Length;
+                                g.FileCount++;
+                            }
+                            catch
+                            { /* locked / inaccessible */
+                            }
+                        }
+                    }
+                    catch
+                    { /* directory inaccessible */
+                    }
+                }
+            },
+            token
+        );
+
+        if (token.IsCancellationRequested)
+            return;
+
+        RefreshList();
+
+        long total = _groups.Sum(g => g.FileBytes);
+        _statusLabel.Text = $"Scan complete. Potential savings: {FormatBytes(total)} across {_groups.Count} locations.";
+        _btnScan.Enabled = true;
+        _btnClean.Enabled = _groups.Any(g => g.FileCount > 0);
+        _progress.Visible = false;
+    }
+
+    // ── Clean ─────────────────────────────────────────────────────────────────
+    private async Task CleanAsync()
+    {
+        var toClean = _groups.Where(g => g.Selected && g.FileCount > 0).ToList();
+        if (toClean.Count == 0)
+            return;
+
+        long estimatedBytes = toClean.Sum(g => g.FileBytes);
+        var confirm = MessageBox.Show(
+            $"Delete approximately {FormatBytes(estimatedBytes)} of temporary files?\n\n" + "This cannot be undone.",
+            "Confirm Cleanup",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning
+        );
+        if (confirm != DialogResult.Yes)
+            return;
+
+        _btnScan.Enabled = false;
+        _btnClean.Enabled = false;
+        _progress.Visible = true;
+        _statusLabel.Text = "Cleaning…";
+
+        int deleted = 0;
+        long freed = 0;
+        await Task.Run(() =>
+        {
+            foreach (var g in toClean)
+            {
+                if (!Directory.Exists(g.Path))
+                    continue;
+                try
+                {
+                    foreach (var f in Directory.EnumerateFiles(g.Path, "*", SearchOption.AllDirectories))
+                    {
+                        try
+                        {
+                            long size = new FileInfo(f).Length;
+                            File.Delete(f);
+                            deleted++;
+                            freed += size;
+                        }
+                        catch
+                        { /* locked / in-use */
+                        }
+                    }
+                    // Remove empty sub-directories but not the root
+                    foreach (var dir in Directory.EnumerateDirectories(g.Path, "*", SearchOption.AllDirectories).OrderByDescending(d => d.Length))
+                    {
+                        try
+                        {
+                            Directory.Delete(dir);
+                        }
+                        catch { }
+                    }
+                }
+                catch
+                { /* access denied at root */
+                }
+            }
+        });
+
+        _statusLabel.Text = $"Cleaned {deleted} files, freed {FormatBytes(freed)}.";
+        _progress.Visible = false;
+        await ScanAsync(); // Re-scan to refresh sizes
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    private void RefreshList()
+    {
+        _list.BeginUpdate();
+        _list.Items.Clear();
+        foreach (var g in _groups)
+        {
+            var item = new ListViewItem(g.Label) { Tag = g, Checked = g.Selected };
+            item.SubItems.Add(g.FileCount.ToString("N0"));
+            item.SubItems.Add(g.SizeDisplay);
+            item.SubItems.Add(g.Path);
+            if (g.FileCount == 0)
+                item.ForeColor = SystemColors.GrayText;
+            _list.Items.Add(item);
+        }
+        _list.EndUpdate();
+
+        // Sync checkbox state to model
+        _list.ItemChecked += (_, e) =>
+        {
+            if (e.Item.Tag is ScanGroup g)
+                g.Selected = e.Item.Checked;
+        };
+    }
+
+    private static string FormatBytes(long bytes) =>
+        bytes switch
+        {
+            >= 1_073_741_824 => $"{bytes / 1_073_741_824.0:F1} GB",
+            >= 1_048_576 => $"{bytes / 1_048_576.0:F1} MB",
+            >= 1_024 => $"{bytes / 1_024.0:F1} KB",
+            _ => $"{bytes} B",
+        };
+}

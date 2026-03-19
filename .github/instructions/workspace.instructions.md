@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 3.4.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 3.5.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -92,20 +92,21 @@ new TweakDef
 
 Auto-detected from category/registry paths, or explicitly set via `KindHint`:
 
-| Kind | Typical Pattern | Example Category | TweakDef Fields Used |
-|------|-----------------|------------------|----------------------|
-| `Registry` | RegOps on HKCU/HKLM | Privacy, Performance | `ApplyOps`, `RemoveOps`, `DetectOps` |
-| `PowerShell` | PSH cmdlet/script block | PowerShell Tweaks | `ApplyAction`, `RemoveAction`, `DetectAction` |
-| `SystemCommand` | bcdedit, dism, netsh | Boot, Network Opt. | `ApplyAction`, `RemoveAction` |
-| `ServiceControl` | sc.exe, Set-Service | Services | `ApplyAction`, `RemoveAction`, `DetectAction` |
-| `ScheduledTask` | schtasks cmd | Scheduled Tasks | `ApplyAction`, `RemoveAction`, `DetectAction` |
-| `FileConfig` | JSON, INI, .wslconfig | WSL, Win Terminal | `ApplyAction`, `RemoveAction`, `DetectAction` |
-| `GroupPolicy` | HKLM\...\Policies\... | Security, Hardening | `ApplyOps` with policy paths |
-| `PackageManager` | scoop, pip, winget | Package Management | `ApplyAction`, `UpdateAction`, `DetectAction` |
+| Kind             | Typical Pattern         | Example Category     | TweakDef Fields Used                          |
+| ---------------- | ----------------------- | -------------------- | --------------------------------------------- |
+| `Registry`       | RegOps on HKCU/HKLM     | Privacy, Performance | `ApplyOps`, `RemoveOps`, `DetectOps`          |
+| `PowerShell`     | PSH cmdlet/script block | PowerShell Tweaks    | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `SystemCommand`  | bcdedit, dism, netsh    | Boot, Network Opt.   | `ApplyAction`, `RemoveAction`                 |
+| `ServiceControl` | sc.exe, Set-Service     | Services             | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `ScheduledTask`  | schtasks cmd            | Scheduled Tasks      | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `FileConfig`     | JSON, INI, .wslconfig   | WSL, Win Terminal    | `ApplyAction`, `RemoveAction`, `DetectAction` |
+| `GroupPolicy`    | HKLM\...\Policies\...   | Security, Hardening  | `ApplyOps` with policy paths                  |
+| `PackageManager` | scoop, pip, winget      | Package Management   | `ApplyAction`, `UpdateAction`, `DetectAction` |
 
 ### Registry Access via RegistrySession
 
 All registry operations go through `RegistrySession` which provides:
+
 - DryRun mode (no actual writes)
 - JSON backup before destructive operations
 - Structured logging
@@ -142,6 +143,7 @@ Expose `IReadOnlyList<T>` (not `List<T>`) for all public collection properties.
 ## Build & Test Commands
 
 Build and package configuration is centralized in:
+
 - `Directory.Build.props`
 - `Directory.Packages.props`
 
@@ -208,6 +210,7 @@ BasePackageManagerDialog (abstract)
 ```
 
 The base class provides:
+
 - `SplitContainer` with resizable pane (top: ListView + buttons, bottom: RichTextBox log)
 - Prereq banner with async install flow
 - `AppendLog()`, `SetBusy()`, `SetStatus()`, `SetOutdated()`, `RebuildQuickInstallButtons()`

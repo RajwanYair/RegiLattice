@@ -66,6 +66,38 @@ public sealed class AppConfig
     [JsonPropertyName("launch_minimized")]
     public bool LaunchMinimized { get; set; }
 
+    // ── Advanced display / behaviour ─────────────────────────────────────
+    /// <summary>
+    /// When true, the tree-view pane width is remembered across sessions.
+    /// </summary>
+    [JsonPropertyName("remember_splitter")]
+    public bool RememberSplitter { get; set; } = true;
+
+    /// <summary>Last-saved tree splitter distance (pixels).</summary>
+    [JsonPropertyName("splitter_distance")]
+    public int SplitterDistance { get; set; }
+
+    /// <summary>
+    /// When true, tweaks that are already applied are shown with a visual indicator
+    /// but the checkbox is unchecked (prevents accidental re-apply).
+    /// </summary>
+    [JsonPropertyName("skip_applied_on_batch")]
+    public bool SkipAppliedOnBatch { get; set; } = true;
+
+    /// <summary>
+    /// Maximum number of tweak history entries to retain.
+    /// Configurable so power users can increase the rolling window.
+    /// </summary>
+    [JsonPropertyName("history_max_entries")]
+    public int HistoryMaxEntries { get; set; } = 500;
+
+    /// <summary>
+    /// When true, the status bar CPU/RAM monitor colours change based on load level
+    /// (green → yellow → red above 80%).
+    /// </summary>
+    [JsonPropertyName("monitor_color_coded")]
+    public bool MonitorColorCoded { get; set; } = true;
+
     /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
     public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 

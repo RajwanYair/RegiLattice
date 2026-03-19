@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <!-- Match GUI project TFM so test project can reference it -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>RegiLattice.GUI.Tests</RootNamespace>
     <IsTestProject>true</IsTestProject>

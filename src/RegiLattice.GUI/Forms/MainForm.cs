@@ -57,14 +57,28 @@ public partial class MainForm : Form
         if (Math.Abs(cfg.FontSize - AppTheme.BaseFontSize) > 0.01f)
             AppTheme.SetFontSize(cfg.FontSize);
 
-        _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         ApplyTheme();
 
         // Restore log panel and detail panel dimensions from config
         _logPanel.Visible = cfg.ShowLogPanel;
-        _logPanel.Height = cfg.LogPanelHeight;
-        _detailPanel.Height = cfg.DetailPanelHeight;
+        _logPanel.Height = Math.Max(60, cfg.LogPanelHeight);
+        _detailPanel.Height = Math.Max(80, cfg.DetailPanelHeight);
+
+        // Restore splitter position if configured
+        if (cfg.RememberSplitter && cfg.SplitterDistance > 0)
+            _split.SplitterDistance = Math.Clamp(cfg.SplitterDistance, 150, 600);
+
+        // Persist splitter position on move
+        _split.SplitterMoved += (_, _) =>
+        {
+            var c = AppConfig.Load();
+            if (c.RememberSplitter)
+            {
+                c.SplitterDistance = _split.SplitterDistance;
+                c.Save();
+            }
+        };
 
         // Start minimized to tray if configured
         if (cfg.LaunchMinimized)
@@ -184,9 +198,10 @@ public partial class MainForm : Form
         // Detail panel with accent left border
         _detailPanel.BackColor = AppTheme.Surface;
         _detailPanel.Padding = new Padding(8, 6, 8, 6);
-        _detailBox.BackColor = AppTheme.Surface;
+        _detailBox.BackColor = AppTheme.Surface; // must be set AFTER ReadOnly to prevent Windows override
         _detailBox.ForeColor = AppTheme.FgDim;
         _detailBox.Font = AppTheme.Regular;
+        _detailBox.Refresh();
 
         // Re-colour tree nodes
         foreach (TreeNode node in _treeView.Nodes)
@@ -513,6 +528,19 @@ public partial class MainForm : Form
         var selected = GetCheckedTweaks();
         if (selected.Count == 0)
             return;
+
+        // Optionally skip tweaks already detected as applied
+        var cfg = AppConfig.Load();
+        if (cfg.SkipAppliedOnBatch)
+        {
+            var statusMap = _engine.StatusMap(parallel: false, ids: selected.Select(t => t.Id).ToList());
+            selected = selected.Where(t => !statusMap.TryGetValue(t.Id, out var s) || s != TweakResult.Applied).ToList();
+            if (selected.Count == 0)
+            {
+                SetStatus("All selected tweaks are already applied.");
+                return;
+            }
+        }
 
         bool force = _forceCheck.Checked;
 
@@ -1145,6 +1173,40 @@ public partial class MainForm : Form
         dlg.ShowDialog(this);
     }
 
+    private void OnOpenScheduledTaskManager()
+    {
+        using var dlg = new ScheduledTaskManagerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenPowerPlan()
+    {
+        using var dlg = new PowerPlanDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenPrivacyDashboard()
+    {
+        using var dlg = new PrivacyDashboardDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenContextMenuManager() => ShowManagerDialog(new ContextMenuManagerDialog());
+
+    private void OnOpenHostsFileManager() => ShowManagerDialog(new HostsFileManagerDialog());
+
+    private void OnOpenTempFileCleaner()
+    {
+        using var dlg = new TempFileCleanerDialog();
+        AppTheme.Apply(dlg);
+        dlg.ShowDialog(this);
+    }
+
+    private void OnOpenInstalledApps() => ShowManagerDialog(new InstalledAppsDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
@@ -1222,6 +1284,27 @@ public partial class MainForm : Form
         var (usedMb, totalMb, memPct) = SystemMonitor.GetMemoryUsage();
         _cpuLabel.Text = $"CPU: {cpu}%";
         _memLabel.Text = $"RAM: {usedMb / 1024.0:F1}/{totalMb / 1024.0:F0} GB ({memPct}%)";
+
+        if (AppConfig.Load().MonitorColorCoded)
+        {
+            _cpuLabel.ForeColor = cpu switch
+            {
+                >= 80 => Color.FromArgb(255, 85, 85), // red
+                >= 60 => Color.FromArgb(255, 184, 108), // amber
+                _ => Color.FromArgb(80, 250, 123), // green (Dracula-ish)
+            };
+            _memLabel.ForeColor = memPct switch
+            {
+                >= 80 => Color.FromArgb(255, 85, 85),
+                >= 60 => Color.FromArgb(255, 184, 108),
+                _ => Color.FromArgb(80, 250, 123),
+            };
+        }
+        else
+        {
+            _cpuLabel.ForeColor = _statusLabel.ForeColor;
+            _memLabel.ForeColor = _statusLabel.ForeColor;
+        }
     }
 
     private void SetBusy(bool busy, string? message = null, int totalSteps = 0)
@@ -1349,23 +1432,6 @@ public partial class MainForm : Form
 
     private void OnProfileChanged(object? sender, EventArgs e) => PopulateTree();
 
-    private void OnThemeChanged(object? sender, EventArgs e)
-    {
-        if (_themeCombo.SelectedItem is not string name)
-            return;
-        AppTheme.SetTheme(name);
-        AppIcons.InvalidateCache();
-        Icon = AppIcons.AppIcon;
-        RefreshMenuImages();
-        ApplyTheme();
-        PopulateTree();
-
-        // Persist choice
-        var cfg = AppConfig.Load();
-        cfg.Theme = name;
-        cfg.Save();
-    }
-
     private void OnOpenPreferences()
     {
         var cfg = AppConfig.Load();
@@ -1382,7 +1448,6 @@ public partial class MainForm : Form
             AppIcons.InvalidateCache();
             Icon = AppIcons.AppIcon;
             RefreshMenuImages();
-            _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
         }
 
         // Apply font size if changed — requires full theme re-apply
@@ -1397,8 +1462,8 @@ public partial class MainForm : Form
         }
 
         // Apply panel dimensions
-        _detailPanel.Height = cfg.DetailPanelHeight;
-        _logPanel.Height = cfg.LogPanelHeight;
+        _detailPanel.Height = Math.Max(80, cfg.DetailPanelHeight);
+        _logPanel.Height = Math.Max(60, cfg.LogPanelHeight);
         _logPanel.Visible = cfg.ShowLogPanel;
 
         // Apply monitor timer
@@ -1586,27 +1651,40 @@ public partial class MainForm : Form
             // Build multi-line detail with full description that wraps to window width
             string desc = td.Description.Length > 0 ? td.Description : "(no description)";
             string pendingNote = isPending ? "\n\u26A0 Restart/reboot needed for this change to take effect." : "";
-
             string expected = td.GetExpectedResult();
 
-            _detailBox.Text =
+            // Use RTF approach for reliable rendering with dark backgrounds
+            UpdateDetailBox(
                 $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
-                + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
-                + $"Tags: {tags}\n"
-                + $"Registry: {keys}\n"
-                + $"Description: {desc}\n"
-                + $"\U0001F4CB Expected Result: {expected}"
-                + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
-                + pendingNote;
-            _detailBox.ForeColor = isPending ? AppTheme.Yellow : AppTheme.Fg;
-            _detailPanel.Invalidate();
+                    + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
+                    + $"Tags: {tags}\n"
+                    + $"Registry: {keys}\n"
+                    + $"Description: {desc}\n"
+                    + $"\U0001F4CB Expected: {expected}"
+                    + (td.SideEffects.Length > 0 ? $"\n\u26A0 Side Effects: {td.SideEffects}" : "")
+                    + pendingNote,
+                isPending ? AppTheme.Yellow : AppTheme.Fg
+            );
         }
         else
         {
-            _detailBox.Text = "\U0001F4CB Select a tweak to see details.";
-            _detailBox.ForeColor = AppTheme.FgDim;
-            _detailPanel.Invalidate();
+            UpdateDetailBox("\U0001F4CB Select a tweak to see details.", AppTheme.FgDim);
         }
+    }
+
+    /// <summary>
+    /// Safely updates the detail RichTextBox, ensuring BackColor is always correct
+    /// (ReadOnly = true on some Windows versions can override BackColor to gray).
+    /// </summary>
+    private void UpdateDetailBox(string text, Color foreColor)
+    {
+        _detailBox.SuspendLayout();
+        _detailBox.BackColor = AppTheme.Surface; // reinforce — Windows may reset this
+        _detailBox.ForeColor = foreColor;
+        _detailBox.Text = text;
+        _detailBox.ResumeLayout(false);
+        _detailBox.Invalidate();
+        _detailPanel.Invalidate();
     }
 
     private void OnGlobalKeyDown(object? sender, KeyEventArgs e)

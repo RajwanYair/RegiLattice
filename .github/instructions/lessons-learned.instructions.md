@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-16 (v3.4.0, C# 13 / .NET 10.0-windows, 2 510 tweaks, 89 categories)
+> Last updated: 2026-03-18 (v3.5.0, C# 13 / .NET 10.0-windows, 2 736 tweaks, 92 categories)
 
 ---
 
@@ -33,6 +33,7 @@ public void ThemeDef_HasCorrectDefaults()
 ### ✅ Test theme records and data models instead of UI controls
 
 WinForms controls require a message pump and are fragile in xUnit. Focus tests on:
+
 - `ThemeDef` records (pure data, no UI dependency)
 - Package name validation logic
 - TweakDef model properties and computed values
@@ -144,6 +145,7 @@ ApplyOps = new List<RegOp> { RegOp.SetDword(...) },
 ## P/Invoke — Only 4 Calls Allowed
 
 The entire codebase uses exactly 4 P/Invoke calls:
+
 1. `GetComputerNameExW` in `CorporateGuard.cs` — AD domain detection
 2. `GlobalMemoryStatusEx` in `HardwareInfo.cs` — RAM detection
 3. `GetSystemTimes` in `SystemMonitor.cs` — CPU usage (idle/kernel/user delta)
@@ -212,7 +214,7 @@ All references to the GitHub account must use `RajwanYair`:
 
 ## Version & Metadata
 
-- Version lives in `.csproj` files — `<Version>3.4.0</Version>`
+- Version lives in `Directory.Build.props` — `<Version>3.5.0</Version>`
 - Do not duplicate version strings — single source of truth per project
 - GitHub URLs: `https://github.com/RajwanYair/RegiLattice`
 
@@ -349,12 +351,14 @@ Components that are trivially 100%: TweakDef model, RegOp factories, all ~90 twe
 module static Tweaks properties (just declarative data), ProfileDef, PackDef.
 
 Components that are NOT easily testable:
+
 - Package managers (ChocolateyManager, PipManager, WinGetManager) — require external tools
 - ShellRunner — runs real processes
 - PackManager async methods — require network/filesystem
 - CorporateGuard P/Invoke paths — environment-dependent
 
 Safe to test against real registry (read-only):
+
 - `RegistrySession.ReadDword/ReadString` on well-known HKCU keys
 - `KeyExists/ValueExists` on known paths like `HKCU\Software`
 - `ListSubKeys/ListValueNames` on populated keys

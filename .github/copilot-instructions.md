@@ -2,21 +2,21 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-18 (v3.4.0, 2 736 tweaks, 92 categories, 1 645 tests).
+> Last verified: 2026-03-18 (v3.5.0, 2 736 tweaks, 92 categories, 1 671 tests).
 
 ## Companion Instruction Files
 
 All files below are auto-loaded into every Copilot chat session via `.vscode/settings.json`:
 
-| File | Scope | Purpose |
-|------|-------|---------|
-| `.github/copilot-instructions.md` | `**` | This file — project overview and shell rules |
-| `.github/instructions/workspace.instructions.md` | `**` | Solution structure, architecture, build commands |
-| `.github/instructions/csharp.instructions.md` | `**/*.cs` | C# 13 coding standards and patterns |
-| `.github/instructions/testing.instructions.md` | `**/tests/**` | xUnit test patterns, coverage targets |
-| `.github/instructions/git-workflow.instructions.md` | `**` | Commit/push strategy, conventional commits |
-| `.github/instructions/lessons-learned.instructions.md` | `**/*.cs` | Hard-won migration insights, common pitfalls |
-| `.github/instructions/cicd.instructions.md` | `**/*.yml` | GitHub Actions, release workflow |
+| File                                                   | Scope         | Purpose                                          |
+| ------------------------------------------------------ | ------------- | ------------------------------------------------ |
+| `.github/copilot-instructions.md`                      | `**`          | This file — project overview and shell rules     |
+| `.github/instructions/workspace.instructions.md`       | `**`          | Solution structure, architecture, build commands |
+| `.github/instructions/csharp.instructions.md`          | `**/*.cs`     | C# 13 coding standards and patterns              |
+| `.github/instructions/testing.instructions.md`         | `**/tests/**` | xUnit test patterns, coverage targets            |
+| `.github/instructions/git-workflow.instructions.md`    | `**`          | Commit/push strategy, conventional commits       |
+| `.github/instructions/lessons-learned.instructions.md` | `**/*.cs`     | Hard-won migration insights, common pitfalls     |
+| `.github/instructions/cicd.instructions.md`            | `**/*.yml`    | GitHub Actions, release workflow                 |
 
 ### Environment Bootstrap
 
@@ -40,28 +40,29 @@ Before running ANY terminal command, verify it does NOT contain: `tail`, `grep`,
 `echo ... >>`, `export`, `&&`, `bash`, `sh`, `zsh`, `python3`, or any other
 Unix/POSIX utility.
 
-| BANNED (Unix/bash)               | REQUIRED (PowerShell)                                 |
-| -------------------------------- | ----------------------------------------------------- |
-| `tail -n 20 file`                | `Get-Content file \| Select-Object -Last 20`          |
-| `tail -f file`                   | `Get-Content file -Wait`                              |
-| `grep pattern file`              | `Select-String -Pattern 'pattern' file`               |
-| `grep -r pattern .`              | `Get-ChildItem -Recurse \| Select-String 'pattern'`   |
-| `ls -la` / `ls`                  | `Get-ChildItem` (or `gci`)                            |
-| `cat file`                       | `Get-Content file`                                    |
-| `rm -rf dir`                     | `Remove-Item -Recurse -Force dir`                     |
-| `cp src dst`                     | `Copy-Item src dst`                                   |
-| `mv src dst`                     | `Move-Item src dst`                                   |
-| `mkdir dir`                      | `New-Item dir -ItemType Directory`                    |
-| `touch file`                     | `New-Item file -ItemType File`                        |
-| `wc -l file`                     | `(Get-Content file).Count`                            |
-| `which cmd`                      | `Get-Command cmd`                                     |
-| `echo text >> file`              | `Add-Content file 'text'`                             |
-| `find . -name "*.py"`            | `Get-ChildItem -Recurse -Filter '*.py'`               |
-| `diff a b`                       | `Compare-Object (Get-Content a) (Get-Content b)`      |
-| `export VAR=val`                 | `$env:VAR = 'val'`                                    |
-| `&&` chaining                    | `;` or `if ($LASTEXITCODE -eq 0) { ... }`             |
+| BANNED (Unix/bash)    | REQUIRED (PowerShell)                               |
+| --------------------- | --------------------------------------------------- |
+| `tail -n 20 file`     | `Get-Content file \| Select-Object -Last 20`        |
+| `tail -f file`        | `Get-Content file -Wait`                            |
+| `grep pattern file`   | `Select-String -Pattern 'pattern' file`             |
+| `grep -r pattern .`   | `Get-ChildItem -Recurse \| Select-String 'pattern'` |
+| `ls -la` / `ls`       | `Get-ChildItem` (or `gci`)                          |
+| `cat file`            | `Get-Content file`                                  |
+| `rm -rf dir`          | `Remove-Item -Recurse -Force dir`                   |
+| `cp src dst`          | `Copy-Item src dst`                                 |
+| `mv src dst`          | `Move-Item src dst`                                 |
+| `mkdir dir`           | `New-Item dir -ItemType Directory`                  |
+| `touch file`          | `New-Item file -ItemType File`                      |
+| `wc -l file`          | `(Get-Content file).Count`                          |
+| `which cmd`           | `Get-Command cmd`                                   |
+| `echo text >> file`   | `Add-Content file 'text'`                           |
+| `find . -name "*.py"` | `Get-ChildItem -Recurse -Filter '*.py'`             |
+| `diff a b`            | `Compare-Object (Get-Content a) (Get-Content b)`    |
+| `export VAR=val`      | `$env:VAR = 'val'`                                  |
+| `&&` chaining         | `;` or `if ($LASTEXITCODE -eq 0) { ... }`           |
 
 Rules:
+
 1. Every shell command MUST be valid PowerShell syntax — no exceptions.
 2. No `bash`, `sh`, `zsh`, `fish`, or Unix coreutil invocations.
 3. Use `dotnet` CLI for build/test/run — never `python` or `python3`.
@@ -73,17 +74,17 @@ Rules:
 
 ## Quick Facts
 
-| Key         | Value                                                            |
-| ----------- | ---------------------------------------------------------------- |
-| Language    | C# 13 / .NET 10.0-windows (x64)                                 |
-| Build       | `dotnet build` / MSBuild via `RegiLattice.sln`                   |
-| Test        | xUnit 2.9.2 — 1,645 tests across 17 test files               |
-| GUI         | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version     | 3.4.0                                                            |
-| Install     | `dotnet build RegiLattice.sln -c Release`                        |
-| Tweaks      | 2 736 across 92 categories (93 module files)                      |
-| Tests       | 1,645 passing (1248 Core + 154 CLI + 242 GUI)                    |
-| NuGet       | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2            |
+| Key      | Value                                                                    |
+| -------- | ------------------------------------------------------------------------ |
+| Language | C# 13 / .NET 10.0-windows (x64)                                          |
+| Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
+| Test     | xUnit 2.9.2 — 1,645 tests across 17 test files                           |
+| GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
+| Version  | 3.5.0                                                                    |
+| Install  | `dotnet build RegiLattice.sln -c Release`                                |
+| Tweaks   | 2 736 across 92 categories (93 module files)                             |
+| Tests    | 1,671 passing (1275 Core + 154 CLI + 242 GUI)                            |
+| NuGet    | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2                     |
 
 ## Git Workflow (IMPORTANT)
 
@@ -233,28 +234,28 @@ public sealed class TweakDef
 
 ### TweakKind — 8 Operation Variants
 
-| Kind | Typical Pattern | Example Category |
-|------|-----------------|------------------|
-| `Registry` | RegOps on HKCU/HKLM | Privacy, Performance, Explorer |
-| `PowerShell` | PSH cmdlet or script block | PowerShell Tweaks |
-| `SystemCommand` | bcdedit, dism, netsh, fsutil | Boot, Network Optimization |
-| `ServiceControl` | sc.exe, Set-Service | Services |
-| `ScheduledTask` | schtasks, Register-ScheduledTask | Scheduled Tasks |
-| `FileConfig` | JSON, INI, .wslconfig | WSL, Windows Terminal |
-| `GroupPolicy` | HKLM\...\Policies\... paths | Security, Hardening |
-| `PackageManager` | scoop, pip, chocolatey, winget | Package Management |
+| Kind             | Typical Pattern                  | Example Category               |
+| ---------------- | -------------------------------- | ------------------------------ |
+| `Registry`       | RegOps on HKCU/HKLM              | Privacy, Performance, Explorer |
+| `PowerShell`     | PSH cmdlet or script block       | PowerShell Tweaks              |
+| `SystemCommand`  | bcdedit, dism, netsh, fsutil     | Boot, Network Optimization     |
+| `ServiceControl` | sc.exe, Set-Service              | Services                       |
+| `ScheduledTask`  | schtasks, Register-ScheduledTask | Scheduled Tasks                |
+| `FileConfig`     | JSON, INI, .wslconfig            | WSL, Windows Terminal          |
+| `GroupPolicy`    | HKLM\...\Policies\... paths      | Security, Hardening            |
+| `PackageManager` | scoop, pip, chocolatey, winget   | Package Management             |
 
 ### TweakResult — 7 Outcomes
 
-| Result | Meaning |
-|--------|---------|
-| `Applied` | Tweak is active |
-| `NotApplied` | Tweak is not active |
-| `Unknown` | Detection failed or inconclusive |
-| `Error` | Exception during apply/remove/detect |
-| `SkippedCorp` | Blocked by CorporateGuard |
-| `SkippedBuild` | MinBuild not met |
-| `SkippedHw` | IsApplicable returned false |
+| Result         | Meaning                              |
+| -------------- | ------------------------------------ |
+| `Applied`      | Tweak is active                      |
+| `NotApplied`   | Tweak is not active                  |
+| `Unknown`      | Detection failed or inconclusive     |
+| `Error`        | Exception during apply/remove/detect |
+| `SkippedCorp`  | Blocked by CorporateGuard            |
+| `SkippedBuild` | MinBuild not met                     |
+| `SkippedHw`    | IsApplicable returned false          |
 
 ### RegOp Factory Methods (12)
 
@@ -309,13 +310,13 @@ RegOp.CheckKeyMissing(path)
 
 ### 5 Profiles
 
-| Profile    | Categories | Description                                    |
-| ---------- | ---------- | ---------------------------------------------- |
-| `business` | 39         | Productivity, security, cloud & workflow       |
-| `gaming`   | 31         | GPU, performance, low-latency, distraction-free|
-| `privacy`  | 31         | Telemetry, tracking, cloud & browser data      |
-| `minimal`  | 22         | Fast, clean system essentials                  |
-| `server`   | 28         | Hardened, headless, uptime & remote mgmt       |
+| Profile    | Categories | Description                                     |
+| ---------- | ---------- | ----------------------------------------------- |
+| `business` | 39         | Productivity, security, cloud & workflow        |
+| `gaming`   | 31         | GPU, performance, low-latency, distraction-free |
+| `privacy`  | 31         | Telemetry, tracking, cloud & browser data       |
+| `minimal`  | 22         | Fast, clean system essentials                   |
+| `server`   | 28         | Hardened, headless, uptime & remote mgmt        |
 
 ### Corporate Guard
 
@@ -348,38 +349,38 @@ Override: `--force` CLI flag or GUI "Force" checkbox.
 
 ## CLI Commands (25+)
 
-| Command | Description |
-|---------|-------------|
-| `apply <id>` | Apply a single tweak |
-| `remove <id>` | Remove/revert a single tweak |
-| `update <id>` | Update a tweak (runs UpdateAction or falls back to Apply) |
-| `status <id>` | Check current status |
-| `--list` | List all tweaks |
-| `--search <query>` | Full-text search |
-| `--show-categories` | List all categories |
-| `--show-tags` | List all tags |
-| `--profile <name>` | Apply a profile |
-| `--list-profiles` | List available profiles |
-| `--category <name> apply\|remove` | Batch by category |
-| `--snapshot <file>` | Save state to JSON |
-| `--restore <file>` | Restore from snapshot |
-| `--snapshot-diff <a> <b>` | Compare snapshots |
-| `--export-json <file>` | Export as JSON |
-| `--export-reg <file>` | Export as .REG |
-| `--import-json <file>` | Import selection |
-| `--validate` | Integrity check |
-| `--stats` | Statistics summary |
-| `--doctor` | System health check |
-| `--hwinfo` | Hardware detection |
-| `--report` | Full report |
-| `--check` | Admin status check |
-| `--gui` | Launch WinForms GUI |
-| `--menu` | Interactive console menu |
-| `--dry-run` | Preview mode |
-| `--force` | Override corporate guard |
-| `--config <path>` | Custom config file |
-| `--depends-on <id>` | Show dependency chain for a tweak |
-| `--no-color` | Disable ANSI colour output |
+| Command                           | Description                                               |
+| --------------------------------- | --------------------------------------------------------- |
+| `apply <id>`                      | Apply a single tweak                                      |
+| `remove <id>`                     | Remove/revert a single tweak                              |
+| `update <id>`                     | Update a tweak (runs UpdateAction or falls back to Apply) |
+| `status <id>`                     | Check current status                                      |
+| `--list`                          | List all tweaks                                           |
+| `--search <query>`                | Full-text search                                          |
+| `--show-categories`               | List all categories                                       |
+| `--show-tags`                     | List all tags                                             |
+| `--profile <name>`                | Apply a profile                                           |
+| `--list-profiles`                 | List available profiles                                   |
+| `--category <name> apply\|remove` | Batch by category                                         |
+| `--snapshot <file>`               | Save state to JSON                                        |
+| `--restore <file>`                | Restore from snapshot                                     |
+| `--snapshot-diff <a> <b>`         | Compare snapshots                                         |
+| `--export-json <file>`            | Export as JSON                                            |
+| `--export-reg <file>`             | Export as .REG                                            |
+| `--import-json <file>`            | Import selection                                          |
+| `--validate`                      | Integrity check                                           |
+| `--stats`                         | Statistics summary                                        |
+| `--doctor`                        | System health check                                       |
+| `--hwinfo`                        | Hardware detection                                        |
+| `--report`                        | Full report                                               |
+| `--check`                         | Admin status check                                        |
+| `--gui`                           | Launch WinForms GUI                                       |
+| `--menu`                          | Interactive console menu                                  |
+| `--dry-run`                       | Preview mode                                              |
+| `--force`                         | Override corporate guard                                  |
+| `--config <path>`                 | Custom config file                                        |
+| `--depends-on <id>`               | Show dependency chain for a tweak                         |
+| `--no-color`                      | Disable ANSI colour output                                |
 
 ## Tweak ID Naming Convention
 
@@ -387,52 +388,52 @@ All tweak IDs follow the pattern: `{category_slug}-{descriptive-name}`
 
 Canonical category slugs:
 
-| Slug       | Category                    | Slug       | Category              |
-| ---------- | --------------------------- | ---------- | --------------------- |
-| `acc`      | Accessibility               | `lo`       | LibreOffice           |
-| `adobe`    | Adobe                       | `lock`     | Lock Screen & Login   |
-| `ai`       | AI / Copilot                | `m365`     | M365 Copilot          |
-| `audio`    | Audio                       | `maint`    | Maintenance           |
-| `backup`   | Backup & Recovery           | `media`    | Multimedia            |
-| `boot`     | Boot                        | `mem`      | Memory                |
-| `browser`  | Browser Common              | `msstore`  | Microsoft Store       |
-| `bt`       | Bluetooth                   | `net`      | Network               |
-| `chrome`   | Chrome                      | `netopt`   | Network Optimization  |
-| `cleanup`  | Disk Cleanup                | `night`    | Night Light & Display |
-| `clip`     | Clipboard & Drag-Drop       | `notif`    | Notifications         |
-| `cloud`    | Cloud Storage               | `od`       | OneDrive              |
-| `cmd`      | Command Line                | `office`   | Office                |
-| `comm`     | Communication               | `perf`     | Performance           |
-| `compat`   | App Compatibility           | `phone`    | Phone Link            |
-| `cortana`  | Cortana & Search            | `pkg`      | Package Management    |
-| `crash`    | Crash & Diagnostics         | `power`    | Power                 |
-| `ctx`      | Context Menu                | `printing` | Printing              |
-| `debloat`  | Debloat                     | `priv`     | Privacy               |
-| `dev`      | Dev Drive / Developer       | `proxy`    | Proxy & VPN           |
-| `display`  | Display                     | `ps`       | PowerShell            |
-| `dns`      | DNS & Networking Advanced   | `pwrmgmt`  | Power Management      |
-| `edge`     | Edge                        | `rdp`      | Remote Desktop        |
-| `enc`      | Encryption                  | `recall`   | Windows Recall        |
-| `evtlog`   | Event Logging               | `recovery` | Recovery              |
-| `explorer` | Explorer                    | `restore`  | System Restore        |
-| `firefox`  | Firefox                     | `schtask`  | Scheduled Tasks       |
-| `font`     | Fonts                       | `scoop`    | Scoop Tools           |
-| `fs`       | File System                 | `sec`      | Security              |
-| `fw`       | Firewall                    | `shell`    | Shell                 |
-| `game`     | Gaming                      | `snap`     | Snap & Multitasking   |
-| `gpu`      | GPU / Graphics              | `speech`   | Voice Access & Speech |
-| `harden`   | Hardening                   | `ss`       | Screensaver & Lock    |
-| `idx`      | Indexing & Search           | `ssd`      | SSD Optimization      |
-| `input`    | Input                       | `startup`  | Startup               |
-| `java`     | Java                        | `stor`     | Storage               |
-| `svc`      | Services                    | `sys`      | System                |
-| `tb`       | Taskbar                     | `telem`    | Telemetry Advanced    |
-| `term`     | Windows Terminal             | `touch`    | Touch & Pen           |
-| `uac`      | User Account                | `virt`     | Virtualization        |
-| `usb`      | USB & Peripherals           | `vnc`      | RealVNC               |
-| `vscode`   | VS Code                     | `w11`      | Windows 11            |
-| `widgets`  | Widgets & News              | `wsl`      | WSL                   |
-| `wu`       | Windows Update              |            |                       |
+| Slug       | Category                  | Slug       | Category              |
+| ---------- | ------------------------- | ---------- | --------------------- |
+| `acc`      | Accessibility             | `lo`       | LibreOffice           |
+| `adobe`    | Adobe                     | `lock`     | Lock Screen & Login   |
+| `ai`       | AI / Copilot              | `m365`     | M365 Copilot          |
+| `audio`    | Audio                     | `maint`    | Maintenance           |
+| `backup`   | Backup & Recovery         | `media`    | Multimedia            |
+| `boot`     | Boot                      | `mem`      | Memory                |
+| `browser`  | Browser Common            | `msstore`  | Microsoft Store       |
+| `bt`       | Bluetooth                 | `net`      | Network               |
+| `chrome`   | Chrome                    | `netopt`   | Network Optimization  |
+| `cleanup`  | Disk Cleanup              | `night`    | Night Light & Display |
+| `clip`     | Clipboard & Drag-Drop     | `notif`    | Notifications         |
+| `cloud`    | Cloud Storage             | `od`       | OneDrive              |
+| `cmd`      | Command Line              | `office`   | Office                |
+| `comm`     | Communication             | `perf`     | Performance           |
+| `compat`   | App Compatibility         | `phone`    | Phone Link            |
+| `cortana`  | Cortana & Search          | `pkg`      | Package Management    |
+| `crash`    | Crash & Diagnostics       | `power`    | Power                 |
+| `ctx`      | Context Menu              | `printing` | Printing              |
+| `debloat`  | Debloat                   | `priv`     | Privacy               |
+| `dev`      | Dev Drive / Developer     | `proxy`    | Proxy & VPN           |
+| `display`  | Display                   | `ps`       | PowerShell            |
+| `dns`      | DNS & Networking Advanced | `pwrmgmt`  | Power Management      |
+| `edge`     | Edge                      | `rdp`      | Remote Desktop        |
+| `enc`      | Encryption                | `recall`   | Windows Recall        |
+| `evtlog`   | Event Logging             | `recovery` | Recovery              |
+| `explorer` | Explorer                  | `restore`  | System Restore        |
+| `firefox`  | Firefox                   | `schtask`  | Scheduled Tasks       |
+| `font`     | Fonts                     | `scoop`    | Scoop Tools           |
+| `fs`       | File System               | `sec`      | Security              |
+| `fw`       | Firewall                  | `shell`    | Shell                 |
+| `game`     | Gaming                    | `snap`     | Snap & Multitasking   |
+| `gpu`      | GPU / Graphics            | `speech`   | Voice Access & Speech |
+| `harden`   | Hardening                 | `ss`       | Screensaver & Lock    |
+| `idx`      | Indexing & Search         | `ssd`      | SSD Optimization      |
+| `input`    | Input                     | `startup`  | Startup               |
+| `java`     | Java                      | `stor`     | Storage               |
+| `svc`      | Services                  | `sys`      | System                |
+| `tb`       | Taskbar                   | `telem`    | Telemetry Advanced    |
+| `term`     | Windows Terminal          | `touch`    | Touch & Pen           |
+| `uac`      | User Account              | `virt`     | Virtualization        |
+| `usb`      | USB & Peripherals         | `vnc`      | RealVNC               |
+| `vscode`   | VS Code                   | `w11`      | Windows 11            |
+| `widgets`  | Widgets & News            | `wsl`      | WSL                   |
+| `wu`       | Windows Update            |            |                       |
 
 ## Test Infrastructure
 
@@ -470,39 +471,39 @@ Canonical category slugs:
 
 ## File-by-File Quick Ref
 
-| File / Namespace | Purpose | Key Exports |
-| --- | --- | --- |
-| `TweakEngine.cs` | Central engine | `Register`, `AllTweaks`, `Categories`, `Search`, `Filter`, `Apply`, `StatusMap`, `Profiles`, `Freeze` |
-| `SnapshotManager.cs` | Snapshot management | `Save()`, `Load()`, `Restore()` |
-| `TweakValidator.cs` | Tweak validation | `Validate()` (static — checks IDs, labels, deps, circular refs) |
-| `DependencyResolver.cs` | Dependency resolution | `Resolve()`, `Dependents()` (static — topological sort) |
-| `TweakDef.cs` | Tweak model | `TweakDef`, `RegOp`, `TweakScope`, `TweakResult`, `RegOpKind` |
-| `ProfileDef.cs` | Profile model | `ProfileDef` (Name, Description, ApplyCategories, SkipCategories) |
-| `ProfileDefinitions.cs` | 5 profiles | `All` static list |
-| `RegistrySession.cs` | Registry wrapper | `SetDword`, `ReadDword`, `Execute`, `Evaluate`, `Backup`, `DryRun` |
-| `PackDef.cs` | Pack model | `PackDef` record (Name, Version, Author, TweakCount, Tags, Sha256) |
-| `PackLoader.cs` | Pack loader | `LoadFromJson`, `ValidatePackJson`, `ComputeSha256` |
-| `PackManager.cs` | Pack manager | `InstallPackAsync`, `UninstallPack`, `InstalledPacks`, `CheckUpdatesAsync` |
-| `PackIndex.cs` | Marketplace index | `FromJson`, `ToJson`, `Packs` |
-| `CorporateGuard.cs` | Corp detection | `IsCorporateNetwork()`, `Status()`, `IsGpoManaged()` |
-| `Elevation.cs` | UAC helpers | `IsAdmin()`, `RequestElevation()` |
-| `HardwareInfo.cs` | Hardware detection | `Detect()`, `Summary()`, `SuggestProfile()` |
-| `Analytics.cs` | Usage analytics | `RecordApply()`, `RecordRemove()`, `GetStats()` |
-| `AppConfig.cs` | Configuration | `Load()`, `ForceCorpGuard`, `Theme`, `Locale` |
-| `Locale.cs` | i18n (en, de) | `T()`, `SetLocale()`, `CurrentLocale`, `AvailableLocales` |
-| `Ratings.cs` | Rating system | `Rate()`, `GetRating()`, `AllRatings()`, `TopRated()` |
-| `ConfigExporter.cs` | Config export/import | `Export()`, `ExportApplied()`, `Import()`, `Validate()` |
-| `Favorites.cs` | Favorite tweaks | `Add()`, `Remove()`, `Toggle()`, `IsFavorite()`, `All()`, `Flush()` |
-| `TweakHistory.cs` | Operation history | `RecordApply()`, `RecordRemove()`, `RecordUpdate()`, `Recent()`, `ForTweak()` |
-| `ShellRunner.cs` (Core) | Process execution | `RunPowerShell()`, `RunCommand()` (safe subprocess wrapper) |
-| `ChocolateyManager.cs` (Core) | Chocolatey integration | Package install, list, update via choco CLI |
-| `PipManager.cs` (Core) | pip integration | Package install, list, update via pip CLI |
-| `WinGetManager.cs` (Core) | WinGet integration | Package install, list, update via winget CLI |
-| `SystemMonitor.cs` (Core) | System monitoring | `GetCpuUsagePercent()`, `GetMemoryUsage()`, `GetUptime()` (P/Invoke) |
-| `Theme.cs` (GUI) | Theme engine | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record |
-| `AppIcons.cs` (GUI) | Icon generation | Programmatic bitmap/icon creation for menus and tray |
-| `MainForm.cs` (GUI) | Main window | Category list, search, filters, profiles, tweak operations, tray icon |
-| `PackageNameValidator.cs` (GUI) | Name validation | Shared regex validation for all package manager dialogs |
-| `Program.cs` (CLI) | CLI entry | 25+ commands via args parsing |
-| `CliArgs.cs` (CLI) | CLI argument model | Mode, Tweak, ShowList, Force, DryRun, etc. |
-| `ConsoleColorizer.cs` (CLI) | ANSI colour helpers | `Green()`, `Red()`, `Yellow()`, `Dim()`, `NoColor` |
+| File / Namespace                | Purpose                | Key Exports                                                                                           |
+| ------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| `TweakEngine.cs`                | Central engine         | `Register`, `AllTweaks`, `Categories`, `Search`, `Filter`, `Apply`, `StatusMap`, `Profiles`, `Freeze` |
+| `SnapshotManager.cs`            | Snapshot management    | `Save()`, `Load()`, `Restore()`                                                                       |
+| `TweakValidator.cs`             | Tweak validation       | `Validate()` (static — checks IDs, labels, deps, circular refs)                                       |
+| `DependencyResolver.cs`         | Dependency resolution  | `Resolve()`, `Dependents()` (static — topological sort)                                               |
+| `TweakDef.cs`                   | Tweak model            | `TweakDef`, `RegOp`, `TweakScope`, `TweakResult`, `RegOpKind`                                         |
+| `ProfileDef.cs`                 | Profile model          | `ProfileDef` (Name, Description, ApplyCategories, SkipCategories)                                     |
+| `ProfileDefinitions.cs`         | 5 profiles             | `All` static list                                                                                     |
+| `RegistrySession.cs`            | Registry wrapper       | `SetDword`, `ReadDword`, `Execute`, `Evaluate`, `Backup`, `DryRun`                                    |
+| `PackDef.cs`                    | Pack model             | `PackDef` record (Name, Version, Author, TweakCount, Tags, Sha256)                                    |
+| `PackLoader.cs`                 | Pack loader            | `LoadFromJson`, `ValidatePackJson`, `ComputeSha256`                                                   |
+| `PackManager.cs`                | Pack manager           | `InstallPackAsync`, `UninstallPack`, `InstalledPacks`, `CheckUpdatesAsync`                            |
+| `PackIndex.cs`                  | Marketplace index      | `FromJson`, `ToJson`, `Packs`                                                                         |
+| `CorporateGuard.cs`             | Corp detection         | `IsCorporateNetwork()`, `Status()`, `IsGpoManaged()`                                                  |
+| `Elevation.cs`                  | UAC helpers            | `IsAdmin()`, `RequestElevation()`                                                                     |
+| `HardwareInfo.cs`               | Hardware detection     | `Detect()`, `Summary()`, `SuggestProfile()`                                                           |
+| `Analytics.cs`                  | Usage analytics        | `RecordApply()`, `RecordRemove()`, `GetStats()`                                                       |
+| `AppConfig.cs`                  | Configuration          | `Load()`, `ForceCorpGuard`, `Theme`, `Locale`                                                         |
+| `Locale.cs`                     | i18n (en, de)          | `T()`, `SetLocale()`, `CurrentLocale`, `AvailableLocales`                                             |
+| `Ratings.cs`                    | Rating system          | `Rate()`, `GetRating()`, `AllRatings()`, `TopRated()`                                                 |
+| `ConfigExporter.cs`             | Config export/import   | `Export()`, `ExportApplied()`, `Import()`, `Validate()`                                               |
+| `Favorites.cs`                  | Favorite tweaks        | `Add()`, `Remove()`, `Toggle()`, `IsFavorite()`, `All()`, `Flush()`                                   |
+| `TweakHistory.cs`               | Operation history      | `RecordApply()`, `RecordRemove()`, `RecordUpdate()`, `Recent()`, `ForTweak()`                         |
+| `ShellRunner.cs` (Core)         | Process execution      | `RunPowerShell()`, `RunCommand()` (safe subprocess wrapper)                                           |
+| `ChocolateyManager.cs` (Core)   | Chocolatey integration | Package install, list, update via choco CLI                                                           |
+| `PipManager.cs` (Core)          | pip integration        | Package install, list, update via pip CLI                                                             |
+| `WinGetManager.cs` (Core)       | WinGet integration     | Package install, list, update via winget CLI                                                          |
+| `SystemMonitor.cs` (Core)       | System monitoring      | `GetCpuUsagePercent()`, `GetMemoryUsage()`, `GetUptime()` (P/Invoke)                                  |
+| `Theme.cs` (GUI)                | Theme engine           | `SetTheme()`, `DetectSystemTheme()`, `AvailableThemes()`, `ThemeDef` record                           |
+| `AppIcons.cs` (GUI)             | Icon generation        | Programmatic bitmap/icon creation for menus and tray                                                  |
+| `MainForm.cs` (GUI)             | Main window            | Category list, search, filters, profiles, tweak operations, tray icon                                 |
+| `PackageNameValidator.cs` (GUI) | Name validation        | Shared regex validation for all package manager dialogs                                               |
+| `Program.cs` (CLI)              | CLI entry              | 25+ commands via args parsing                                                                         |
+| `CliArgs.cs` (CLI)              | CLI argument model     | Mode, Tweak, ShowList, Force, DryRun, etc.                                                            |
+| `ConsoleColorizer.cs` (CLI)     | ANSI colour helpers    | `Green()`, `Red()`, `Yellow()`, `Dim()`, `NoColor`                                                    |

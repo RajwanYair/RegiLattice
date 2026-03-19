@@ -24,7 +24,7 @@ internal sealed class WhatsNewDialog : Form
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
 
-        string version = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.4.0";
+        string version = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
 
         // ── Title ──────────────────────────────────────────────────────────
         var lblTitle = new Label
@@ -107,7 +107,7 @@ internal sealed class WhatsNewDialog : Form
     internal static bool ShouldShow()
     {
         var cfg = AppConfig.Load();
-        string current = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.4.0";
+        string current = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
         return !string.Equals(cfg.LastSeenVersion, current, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -115,7 +115,7 @@ internal sealed class WhatsNewDialog : Form
     internal static void MarkSeen()
     {
         var cfg = AppConfig.Load();
-        cfg.LastSeenVersion = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.4.0";
+        cfg.LastSeenVersion = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
         cfg.Save();
     }
 
@@ -126,29 +126,23 @@ internal sealed class WhatsNewDialog : Form
         sb.AppendLine(new string('─', 50));
         sb.AppendLine();
         sb.AppendLine("✨ New Features:");
-        sb.AppendLine("  • Search result highlighting — matched text is bold/accent in ListView");
-        sb.AppendLine("  • Recently Applied — virtual category shows your last 50 applied tweaks");
-        sb.AppendLine("  • What's New dialog — shown on first launch after version upgrade");
-        sb.AppendLine("  • Preferences dialog — 4 tabs for full GUI configuration");
-        sb.AppendLine();
-        sb.AppendLine("🎨 New Tweak Categories:");
-        sb.AppendLine("  • Window Appearance — 51 tweaks for title bars, scrollbars, fonts, icons");
-        sb.AppendLine("  • System Optimization — 40 tweaks for memory, I/O, kernel tuning");
-        sb.AppendLine("  • Desktop Customization — 37 tweaks for Explorer, taskbar, Start menu");
+        sb.AppendLine("  • Network Tools — DNS quick-switch (Cloudflare, Google, Quad9), TCP/IP + Winsock reset");
+        sb.AppendLine("  • Startup Manager — view and toggle HKCU/HKLM Run entries and Startup folders");
+        sb.AppendLine("  • Service Manager — searchable service list with Start/Stop/Enable/Disable controls");
+        sb.AppendLine("  • Preferences dialog — font size, accent colour, log panel, tray behaviour");
         sb.AppendLine();
         sb.AppendLine("📊 Stats:");
-        sb.AppendLine("  • Total tweaks: 2,700+");
-        sb.AppendLine("  • Categories: 92+");
+        sb.AppendLine("  • Total tweaks: 2,736");
+        sb.AppendLine("  • Categories: 92");
         sb.AppendLine("  • Themes: 11");
-        sb.AppendLine("  • Tests: 1,600+");
+        sb.AppendLine("  • Tests: 1,671");
         sb.AppendLine();
         sb.AppendLine("🔧 Improvements:");
-        sb.AppendLine("  • Faster shutdown via reduced hung app and service timeouts");
-        sb.AppendLine("  • NTFS optimisations (8.3 names, last access, long paths)");
-        sb.AppendLine("  • Explorer performance (separate process, Quick Access control)");
-        sb.AppendLine("  • Visual effects granular control (per-effect toggles)");
+        sb.AppendLine("  • BaseDialog consolidation — all tool dialogs share common layout/icon/chrome");
+        sb.AppendLine("  • What's New dialog shown on first launch after upgrade");
+        sb.AppendLine("  • InternalsVisibleTo fix — all 1,671 tests now pass reliably");
         sb.AppendLine();
-        sb.AppendLine("💡 Tip: Use Ctrl+F to search across all categories.");
+        sb.AppendLine("💡 Tip: Use Tools menu to access Network Tools, Startup Manager, and Service Manager.");
         return sb.ToString();
     }
 }

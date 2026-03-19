@@ -2,11 +2,17 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
+    <!-- Override Directory.Build.props: pin to Win10 2004+ SDK so SupportedOSPlatformVersion is valid -->
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <RootNamespace>RegiLattice.GUI</RootNamespace>
     <AssemblyName>RegiLattice.GUI</AssemblyName>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <StartupObject>RegiLattice.GUI.Program</StartupObject>
     <Description>RegiLattice — WinForms GUI</Description>
+    <!-- Windows 10 2004+ minimum: suppresses CA1416 false-positives on WinForms APIs -->
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <!-- Suppress CA1416 for this explicitly Windows-only WinForms project -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

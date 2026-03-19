@@ -20,7 +20,7 @@ public sealed class TweakConfig
     public string Created { get; set; } = DateTimeOffset.UtcNow.ToString("o");
 
     [JsonPropertyName("regilattice_version")]
-    public string RegiLatticeVersion { get; set; } = "3.4.0";
+    public string RegiLatticeVersion { get; set; } = "3.5.0";
 
     [JsonPropertyName("tweaks")]
     public List<string> Tweaks { get; set; } = [];

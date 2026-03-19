@@ -8,21 +8,24 @@ using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using RegiLattice.Core.Plugins;
 using RegiLattice.Core.Registry;
-
 using RegiLattice.Core.Services;
 
 namespace RegiLattice.CLI;
 
 internal static class Program
 {
-    private static readonly string Version = "3.4.0";
+    private static readonly string Version = "3.5.0";
     private static TweakEngine _engine = null!;
     private static RegistrySession _session = null!;
 
     private static string Green(string s) => ConsoleColorizer.Green(s);
+
     private static string Red(string s) => ConsoleColorizer.Red(s);
+
     private static string Yellow(string s) => ConsoleColorizer.Yellow(s);
+
     private static string Dim(string s) => ConsoleColorizer.Dim(s);
+
     private static string ColourisedStatus(TweakResult status) => ConsoleColorizer.ColourisedStatus(status);
 
     [STAThread]
@@ -1891,5 +1894,4 @@ internal static class Program
     }
 
     private static string PlatformSummaryStatic() => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
-
 }
