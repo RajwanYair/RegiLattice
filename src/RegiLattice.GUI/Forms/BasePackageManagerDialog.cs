@@ -75,6 +75,7 @@ internal abstract class BasePackageManagerDialog : Form
         BuildLayout();
         Load += async (_, _) =>
         {
+            AppTheme.Apply3D(this);
             if (_prereqMet)
                 await RefreshAsync();
         };
@@ -135,8 +136,8 @@ internal abstract class BasePackageManagerDialog : Form
 
         // ── Log panel (bottom half of SplitContainer) ────────────────────
         _rtbLog.ReadOnly = true;
-        _rtbLog.BackColor = AppTheme.Surface;
-        _rtbLog.ForeColor = AppTheme.FgDim;
+        _rtbLog.BackColor = AppTheme.LogBg;
+        _rtbLog.ForeColor = AppTheme.LogFg;
         _rtbLog.Font = AppTheme.Mono;
         _rtbLog.Dock = DockStyle.Fill;
         _rtbLog.BorderStyle = BorderStyle.None;

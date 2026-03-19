@@ -437,4 +437,108 @@ internal static class AppTheme
 
         TextRenderer.DrawText(g, text, font, rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
     }
+
+    // ── 3D depth and log colour helpers ───────────────────────────────────
+
+    /// <summary>Fixed background for terminal-style log views (independent of current theme).</summary>
+    internal static readonly Color LogBg = Color.FromArgb(6, 10, 6);
+
+    /// <summary>Fixed foreground for terminal-style log views (phosphor green, independent of current theme).</summary>
+    internal static readonly Color LogFg = Color.FromArgb(0, 218, 50);
+
+    /// <summary>
+    /// Recursively apply 3D depth effects to all controls rooted at <paramref name="root"/>:
+    /// raised bevel borders on panels, luminous edge on buttons, and green-on-black
+    /// for terminal-style <see cref="RichTextBox"/> log controls.
+    /// Safe to call multiple times — each panel/button is only styled once (guarded by Tag).
+    /// </summary>
+    internal static void Apply3D(Control root)
+    {
+        Apply3DToSingle(root);
+        foreach (Control c in root.Controls)
+            Apply3D(c);
+    }
+
+    private static void Apply3DToSingle(Control c)
+    {
+        // Terminal-style log RichTextBox → black bg + phosphor green
+        if (
+            c is RichTextBox rtb
+            && (
+                rtb.Font.FontFamily.Name.Equals("Consolas", StringComparison.OrdinalIgnoreCase)
+                || rtb.Font.FontFamily.Name.Contains("Mono", StringComparison.OrdinalIgnoreCase)
+            )
+        )
+        {
+            StyleLogRtb(rtb);
+            return;
+        }
+
+        // Buttons → luminous raised border
+        if (c is Button btn)
+        {
+            Style3DButton(btn);
+            return;
+        }
+
+        // Panels (not layout containers, not trivially small) → bevel card border
+        if (c is Panel pnl && pnl is not FlowLayoutPanel && pnl is not TableLayoutPanel && pnl.Height > 3 && pnl.Width > 3)
+        {
+            StyleRaisedPanel(pnl);
+        }
+    }
+
+    /// <summary>Force a <see cref="RichTextBox"/> to the terminal green-on-black colour scheme.</summary>
+    internal static void StyleLogRtb(RichTextBox rtb)
+    {
+        rtb.BackColor = LogBg;
+        rtb.ForeColor = LogFg;
+    }
+
+    /// <summary>
+    /// Paint a double-layer raised bevel border on a panel to simulate 3D depth.
+    /// Top and left edges get a bright highlight; bottom and right get a dark shadow.
+    /// </summary>
+    internal static void StyleRaisedPanel(Panel panel)
+    {
+        const string Tag3D = "3d-raised";
+        if (panel.Tag?.ToString() == Tag3D)
+            return; // prevent double-attach
+        panel.Tag = Tag3D;
+        panel.Paint += (sender, e) =>
+        {
+            if (sender is not Panel p)
+                return;
+            var r = p.ClientRectangle;
+            if (r.Width < 6 || r.Height < 6)
+                return;
+            var g = e.Graphics;
+            // Outer bevel
+            using var hlOuter = new Pen(Color.FromArgb(55, 255, 255, 255), 1f);
+            using var shOuter = new Pen(Color.FromArgb(70, 0, 0, 0), 1f);
+            g.DrawLine(hlOuter, r.Left, r.Top, r.Right - 1, r.Top);
+            g.DrawLine(hlOuter, r.Left, r.Top, r.Left, r.Bottom - 1);
+            g.DrawLine(shOuter, r.Left, r.Bottom - 1, r.Right - 1, r.Bottom - 1);
+            g.DrawLine(shOuter, r.Right - 1, r.Top, r.Right - 1, r.Bottom - 1);
+            // Inner softer bevel
+            using var hlInner = new Pen(Color.FromArgb(28, 255, 255, 255), 1f);
+            using var shInner = new Pen(Color.FromArgb(35, 0, 0, 0), 1f);
+            g.DrawLine(hlInner, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
+            g.DrawLine(hlInner, r.Left + 1, r.Top + 1, r.Left + 1, r.Bottom - 2);
+            g.DrawLine(shInner, r.Left + 1, r.Bottom - 2, r.Right - 2, r.Bottom - 2);
+            g.DrawLine(shInner, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 2);
+        };
+    }
+
+    /// <summary>Add a luminous border to a button to give it a raised appearance.</summary>
+    internal static void Style3DButton(Button btn)
+    {
+        const string Tag3D = "3d-raised";
+        if (btn.Tag?.ToString() == Tag3D)
+            return; // prevent double-attach
+        btn.Tag = Tag3D;
+        btn.FlatStyle = FlatStyle.Flat;
+        btn.FlatAppearance.BorderSize = 1;
+        btn.FlatAppearance.BorderColor = Color.FromArgb(80, 255, 255, 255);
+    }
 }
