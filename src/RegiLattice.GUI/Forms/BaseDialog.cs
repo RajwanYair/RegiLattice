@@ -55,6 +55,15 @@ internal abstract class BaseDialog : Form
         AppTheme.Apply(this);
     }
 
+    /// <summary>
+    /// Apply 3D depth effects after all derived-class controls have been added.
+    /// </summary>
+    protected override void OnLoad(EventArgs e)
+    {
+        AppTheme.Apply3D(this);
+        base.OnLoad(e);
+    }
+
     // ── Shared factory helpers ────────────────────────────────────────────────
 
     /// <summary>Creates a bold, accent-coloured section header label.</summary>

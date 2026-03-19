@@ -63,8 +63,7 @@ public partial class MainForm : Form
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         _profileScheduleTimer.Tick += OnProfileScheduleTick;
         ApplyTheme();
-
-        // Restore log panel and detail panel dimensions from config
+        AppTheme.Apply3D(this);
         _logPanel.Visible = cfg.ShowLogPanel;
         _logPanel.Height = Math.Max(60, cfg.LogPanelHeight);
         _detailPanel.Height = Math.Max(80, cfg.DetailPanelHeight);
@@ -196,8 +195,8 @@ public partial class MainForm : Form
         _searchBox.BackColor = AppTheme.Overlay;
         _searchBox.ForeColor = AppTheme.Fg;
 
-        _logBox.BackColor = AppTheme.Bg;
-        _logBox.ForeColor = AppTheme.Green;
+        _logBox.BackColor = AppTheme.LogBg;
+        _logBox.ForeColor = AppTheme.LogFg;
 
         _listContextMenu.BackColor = AppTheme.Surface;
         _listContextMenu.ForeColor = AppTheme.Fg;
