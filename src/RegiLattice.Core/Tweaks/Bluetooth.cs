@@ -527,12 +527,16 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables absolute volume control over Bluetooth. Prevents device from controlling system volume directly. Default: enabled.",
+            Description =
+                "Disables absolute volume control over Bluetooth. Prevents device from controlling system volume directly. Default: enabled.",
             Tags = ["bluetooth", "audio", "volume"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisableAbsoluteVolume", 1),
+            ],
         },
         new TweakDef
         {
@@ -541,7 +545,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Applies a Group Policy restriction to disable Bluetooth Low Energy peripheral advertisement scanning. Reduces background radio activity. Default: enabled.",
+            Description =
+                "Applies a Group Policy restriction to disable Bluetooth Low Energy peripheral advertisement scanning. Reduces background radio activity. Default: enabled.",
             Tags = ["bluetooth", "le", "advertising", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowAdvertising", 0)],
@@ -574,7 +579,10 @@ internal static class Bluetooth
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisablePlayerStateNAL", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisablePlayerStateNAL")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisablePlayerStateNAL", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "DisablePlayerStateNAL", 1),
+            ],
         },
         new TweakDef
         {
@@ -597,7 +605,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Prevents the system from being discoverable via Bluetooth by other devices. Improves privacy in public spaces. Default: enabled.",
+            Description =
+                "Prevents the system from being discoverable via Bluetooth by other devices. Improves privacy in public spaces. Default: enabled.",
             Tags = ["bluetooth", "discovery", "privacy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowDiscoverableMode", 0)],
@@ -611,7 +620,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables pre-pairing of Microsoft Bluetooth peripherals. Prevents automatic silent pairing with Microsoft hardware. Default: enabled.",
+            Description =
+                "Disables pre-pairing of Microsoft Bluetooth peripherals. Prevents automatic silent pairing with Microsoft hardware. Default: enabled.",
             Tags = ["bluetooth", "pairing", "microsoft"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowPrepairing", 0)],
@@ -625,7 +635,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables strict power management for the Bluetooth radio. Reduces power consumption when idle. Default: normal power management.",
+            Description =
+                "Enables strict power management for the Bluetooth radio. Reduces power consumption when idle. Default: normal power management.",
             Tags = ["bluetooth", "power", "battery"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHUSB\Parameters", "StrictIdleTimeout", 1)],
@@ -653,7 +664,8 @@ internal static class Bluetooth
             Category = "Bluetooth",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Bluetooth Hands-Free Profile (HFP) audio service. Audio stays on headset rather than switching to mono HFP mode. Default: enabled.",
+            Description =
+                "Disables the Bluetooth Hands-Free Profile (HFP) audio service. Audio stays on headset rather than switching to mono HFP mode. Default: enabled.",
             Tags = ["bluetooth", "audio", "hands-free", "hfp"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFSrv"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFSrv", "Start", 4)],

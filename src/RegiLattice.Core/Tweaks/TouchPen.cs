@@ -432,9 +432,18 @@ internal static class TouchPen
             Description = "Disables suggested app recommendations inside the Windows Ink Workspace. Default: enabled.",
             Tags = ["touch", "pen", "ink", "suggestions"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -443,7 +452,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic pop-up of the touch handwriting panel when a text field is focussed with a pen. Default: auto-show enabled.",
+            Description =
+                "Disables automatic pop-up of the touch handwriting panel when a text field is focussed with a pen. Default: auto-show enabled.",
             Tags = ["touch", "pen", "handwriting"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
@@ -457,7 +467,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic deployment of the touch keyboard when a text field is tapped. Useful when using an external keyboard with touch input. Default: auto-deploy.",
+            Description =
+                "Disables automatic deployment of the touch keyboard when a text field is tapped. Useful when using an external keyboard with touch input. Default: auto-deploy.",
             Tags = ["touch", "keyboard", "auto"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
@@ -471,7 +482,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables word suggestions shown above the touch keyboard. Reduces distraction and speeds up touch typing. Default: suggestions enabled.",
+            Description =
+                "Disables word suggestions shown above the touch keyboard. Reduces distraction and speeds up touch typing. Default: suggestions enabled.",
             Tags = ["touch", "keyboard", "suggestions", "autocomplete"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "EnableHwKeyboardAutocorrect", 0)],
@@ -499,7 +511,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Tablet PC Input Service which supports pen and touch functionality on non-tablet PCs. Frees resources on desktop systems. Default: enabled.",
+            Description =
+                "Disables the Tablet PC Input Service which supports pen and touch functionality on non-tablet PCs. Frees resources on desktop systems. Default: enabled.",
             Tags = ["touch", "tablet-pc", "services"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TabletInputService"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TabletInputService", "Start", 4)],
@@ -530,9 +543,18 @@ internal static class TouchPen
             Description = "Disables predictive touch movement smoothing. Reduces latency for precise stylus work. Default: prediction enabled.",
             Tags = ["touch", "pen", "prediction", "latency"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Precision Touchpad", "TouchPredictionEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -544,9 +566,22 @@ internal static class TouchPen
             Description = "Removes the pen workspace icon from the taskbar notification area. Default: visible when pen is attached.",
             Tags = ["touch", "pen", "taskbar", "ink"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace",
+                    "PenWorkspaceButtonDesiredVisibility",
+                    0
+                ),
+            ],
         },
     ];
 }

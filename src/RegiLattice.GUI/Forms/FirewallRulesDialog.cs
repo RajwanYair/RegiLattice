@@ -71,8 +71,18 @@ internal sealed class FirewallRulesDialog : BaseDialog
         Width = 75,
         Height = 28,
         DialogResult = DialogResult.Cancel,
+    };    private readonly Button _btnQuickAdd = new()
+    {
+        Text = "\u002B Quick-Add Rule",
+        Width = 130,
+        Height = 28,
     };
-    private readonly Panel _btnPanel = new() { Dock = DockStyle.Bottom, Height = 38 };
+    private readonly Button _btnExportCsv = new()
+    {
+        Text = "\U0001F4BE Export CSV",
+        Width = 110,
+        Height = 28,
+    };    private readonly Panel _btnPanel = new() { Dock = DockStyle.Bottom, Height = 38 };
     private readonly Panel _searchPanel = new() { Dock = DockStyle.Top, Height = 34 };
 
     private List<FirewallRule> _inbound = [];
@@ -131,8 +141,10 @@ internal sealed class FirewallRulesDialog : BaseDialog
         _btnDisable.Click += async (_, _) => await SetRuleStateAsync(enabled: false);
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
         _btnClose.Click += (_, _) => Close();
+        _btnQuickAdd.Click += OnQuickAddRule;
+        _btnExportCsv.Click += OnExportCsv;
 
-        _btnPanel.Controls.AddRange([_btnEnable, _btnDisable, _btnRefresh, _btnClose]);
+        _btnPanel.Controls.AddRange([_btnEnable, _btnDisable, _btnRefresh, _btnQuickAdd, _btnExportCsv, _btnClose]);
 
         Controls.Add(_tabs);
         Controls.Add(_searchPanel);
@@ -146,7 +158,7 @@ internal sealed class FirewallRulesDialog : BaseDialog
     private void LayoutButtons()
     {
         int x = 8;
-        foreach (Button b in new[] { _btnEnable, _btnDisable, _btnRefresh })
+        foreach (Button b in new[] { _btnEnable, _btnDisable, _btnRefresh, _btnQuickAdd, _btnExportCsv })
         {
             b.Location = new Point(x, 5);
             x += b.Width + 6;
@@ -313,5 +325,104 @@ internal sealed class FirewallRulesDialog : BaseDialog
         string output = proc.StandardOutput.ReadToEnd();
         proc.WaitForExit();
         return output;
+    }
+
+    private void OnQuickAddRule(object? sender, EventArgs e)
+    {
+        // Build a minimal input dialog
+        using var dlg = new Form
+        {
+            Text = "Quick-Add Firewall Rule",
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false,
+            MinimizeBox = false,
+            ClientSize = new Size(360, 200),
+            BackColor = Color.FromArgb(30, 30, 40),
+            ForeColor = Color.White,
+        };
+
+        var MakeLabel = (string t, int y) => new Label { Text = t, Location = new Point(10, y), AutoSize = true, ForeColor = Color.LightGray };
+        var MakeBox = (int x, int y, int w) => new TextBox { Location = new Point(x, y), Width = w, BackColor = Color.FromArgb(40, 40, 55), ForeColor = Color.White };
+
+        var txtName = MakeBox(90, 14, 250);
+        var txtPort = MakeBox(90, 52, 100);
+        var cmbProto = new ComboBox { Location = new Point(210, 52), Width = 130, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(40, 40, 55), ForeColor = Color.White };
+        cmbProto.Items.AddRange(["TCP", "UDP", "Any"]);
+        cmbProto.SelectedIndex = 0;
+        var cmbDir = new ComboBox { Location = new Point(90, 90), Width = 130, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(40, 40, 55), ForeColor = Color.White };
+        cmbDir.Items.AddRange(["Inbound", "Outbound"]);
+        cmbDir.SelectedIndex = 0;
+        var cmbAction = new ComboBox { Location = new Point(230, 90), Width = 110, DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.FromArgb(40, 40, 55), ForeColor = Color.White };
+        cmbAction.Items.AddRange(["Allow", "Block"]);
+        cmbAction.SelectedIndex = 0;
+
+        var btnOk = new Button { Text = "Add Rule", DialogResult = DialogResult.OK, Location = new Point(180, 155), Width = 90, Height = 28 };
+        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(280, 155), Width = 70, Height = 28 };
+
+        dlg.Controls.AddRange(new Control[]
+        {
+            MakeLabel("Rule name:", 17), txtName,
+            MakeLabel("Port:", 55), txtPort, cmbProto,
+            MakeLabel("Direction:", 93), cmbDir, cmbAction,
+            btnOk, btnCancel,
+        });
+        dlg.AcceptButton = btnOk;
+        dlg.CancelButton = btnCancel;
+
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        string name = txtName.Text.Trim();
+        string port = txtPort.Text.Trim();
+        string proto = cmbProto.SelectedItem!.ToString()!.ToLowerInvariant();
+        string dir = cmbDir.SelectedIndex == 0 ? "in" : "out";
+        string action = cmbAction.SelectedItem!.ToString()!.ToLowerInvariant();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            _statusLabel.Text = "\u274c Rule name cannot be empty.";
+            return;
+        }
+
+        try
+        {
+            string portArg = string.IsNullOrWhiteSpace(port) ? "" : $" localport={port}";
+            string protoArg = proto == "any" ? "" : $" protocol={proto}";
+            RunNetsh($"advfirewall firewall add rule name=\"{name}\" dir={dir} action={action}{protoArg}{portArg} enable=yes");
+            _statusLabel.Text = $"\u2705 Rule \u2018{name}\u2019 added ({dir}/{action}).";
+            _ = RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"\u274c {ex.Message}";
+        }
+    }
+
+    private void OnExportCsv(object? sender, EventArgs e)
+    {
+        using var sfd = new SaveFileDialog
+        {
+            Title = "Export Firewall Rules as CSV",
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            FileName = "firewall-rules.csv",
+        };
+        if (sfd.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        try
+        {
+            var lines = new List<string> { "Direction,Name,Action,Enabled,Profile,Protocol,LocalPort,Program" };
+            foreach (FirewallRule r in _inbound)
+                lines.Add($"Inbound,\"{r.Name}\",{r.Action},{r.Enabled},{r.Profile},{r.Protocol},{r.LocalPort},\"{r.Program}\"");
+            foreach (FirewallRule r in _outbound)
+                lines.Add($"Outbound,\"{r.Name}\",{r.Action},{r.Enabled},{r.Profile},{r.Protocol},{r.LocalPort},\"{r.Program}\"");
+            File.WriteAllLines(sfd.FileName, lines, System.Text.Encoding.UTF8);
+            _statusLabel.Text = $"\u2705 Exported {lines.Count - 1} rules to {System.IO.Path.GetFileName(sfd.FileName)}.";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"\u274c {ex.Message}";
+        }
     }
 }

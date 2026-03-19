@@ -1557,12 +1557,10 @@ public sealed class AnalyticsSprintTests
 public sealed class AppConfigSprint47Tests
 {
     [Fact]
-    public void Default_AutoBackupOnApply_IsTrue() =>
-        Assert.True(new AppConfig().AutoBackupOnApply);
+    public void Default_AutoBackupOnApply_IsTrue() => Assert.True(new AppConfig().AutoBackupOnApply);
 
     [Fact]
-    public void Default_SnapshotOnProfileChange_IsTrue() =>
-        Assert.True(new AppConfig().SnapshotOnProfileChange);
+    public void Default_SnapshotOnProfileChange_IsTrue() => Assert.True(new AppConfig().SnapshotOnProfileChange);
 
     [Fact]
     public void SaveLoadRoundTrip_AutoBackupOnApply_False()
@@ -1606,7 +1604,8 @@ public sealed class NetworkManagerSprint47Tests
     [Fact]
     public void PingResult_Parse_TypicalOutput_ExtractsPacketCounts()
     {
-        const string stdout = "\r\nPinging 1.1.1.1 with 32 bytes of data:\r\nReply from 1.1.1.1: bytes=32 time=5ms TTL=58\r\nReply from 1.1.1.1: bytes=32 time=4ms TTL=58\r\n\r\nPing statistics for 1.1.1.1:\r\n    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),\r\nApproximate round trip times in milli-seconds:\r\n    Minimum = 4ms, Maximum = 5ms, Average = 4ms\r\n";
+        const string stdout =
+            "\r\nPinging 1.1.1.1 with 32 bytes of data:\r\nReply from 1.1.1.1: bytes=32 time=5ms TTL=58\r\nReply from 1.1.1.1: bytes=32 time=4ms TTL=58\r\n\r\nPing statistics for 1.1.1.1:\r\n    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),\r\nApproximate round trip times in milli-seconds:\r\n    Minimum = 4ms, Maximum = 5ms, Average = 4ms\r\n";
         var result = PingResult.Parse("1.1.1.1", stdout);
         Assert.Equal("1.1.1.1", result.Host);
         Assert.Equal(2, result.Sent);
@@ -1673,13 +1672,14 @@ public sealed class ServiceManagerSprint47Tests
             await ServiceManager.ExportToCsvAsync(path);
             Assert.True(File.Exists(path));
             var lines = await File.ReadAllLinesAsync(path);
-            Assert.True(lines.Length >= 2);               // header + at least 1 service
+            Assert.True(lines.Length >= 2); // header + at least 1 service
             Assert.Contains("ServiceName", lines[0]);
             Assert.Contains("DisplayName", lines[0]);
         }
         finally
         {
-            if (File.Exists(path)) File.Delete(path);
+            if (File.Exists(path))
+                File.Delete(path);
         }
     }
 }

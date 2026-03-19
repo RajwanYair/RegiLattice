@@ -468,6 +468,13 @@ public sealed class ParseArgsTests
         Assert.NotNull(result);
         Assert.Equal("csv", result.OutputFormat);
     }
+
+    [Fact]
+    public void ParseArgs_NewPack_SetsNewPackProperty()
+    {
+        var a = Program.ParseArgs(["--new-pack", "my-custom-pack"]);
+        Assert.Equal("my-custom-pack", a.NewPack);
+    }
 }
 
 /// <summary>Tests for the ConsoleColorizer utility.</summary>
@@ -884,4 +891,5 @@ public sealed class ConsoleColorizerSprintTests
             ConsoleColorizer.NoColor = false;
         }
     }
+
 }

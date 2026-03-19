@@ -31,8 +31,12 @@ public sealed record PingResult(string Host, int Sent, int Received, int Lost, d
     /// <summary>Parses the stdout of a Windows <c>ping -n N host</c> command.</summary>
     internal static PingResult Parse(string host, string stdout)
     {
-        int sent = 0, received = 0, lost = 0;
-        double avg = 0, min = 0, max = 0;
+        int sent = 0,
+            received = 0,
+            lost = 0;
+        double avg = 0,
+            min = 0,
+            max = 0;
 
         foreach (string line in stdout.Split('\n'))
         {
@@ -48,8 +52,9 @@ public sealed record PingResult(string Host, int Sent, int Received, int Lost, d
                     int.TryParse(m[2].Value, out lost);
                 }
             }
-            else if (l.StartsWith("Minimum", StringComparison.OrdinalIgnoreCase) ||
-                     l.StartsWith("Minimum".ToLower(), StringComparison.OrdinalIgnoreCase))
+            else if (
+                l.StartsWith("Minimum", StringComparison.OrdinalIgnoreCase) || l.StartsWith("Minimum".ToLower(), StringComparison.OrdinalIgnoreCase)
+            )
             {
                 // "Minimum = 1ms, Maximum = 4ms, Average = 2ms"
                 var m = System.Text.RegularExpressions.Regex.Matches(l, @"(\d+)ms");
@@ -216,9 +221,7 @@ public static class NetworkManager
         if (count < 1 || count > 100)
             throw new ArgumentOutOfRangeException(nameof(count), "count must be 1–100.");
 
-        var (_, stdout, _) = await ShellRunner
-            .RunAsync("ping", ["-n", count.ToString(), host], ct)
-            .ConfigureAwait(false);
+        var (_, stdout, _) = await ShellRunner.RunAsync("ping", ["-n", count.ToString(), host], ct).ConfigureAwait(false);
 
         return PingResult.Parse(host, stdout);
     }
@@ -237,14 +240,16 @@ public static class NetworkManager
                 continue;
 
             var stats = ni.GetIPStatistics();
-            result.Add(new NetworkInterfaceStats(
-                Name: ni.Name,
-                BytesSent: stats.BytesSent,
-                BytesReceived: stats.BytesReceived,
-                PacketsSent: stats.UnicastPacketsSent,
-                PacketsReceived: stats.UnicastPacketsReceived,
-                Errors: stats.IncomingPacketsWithErrors + stats.OutgoingPacketsWithErrors
-            ));
+            result.Add(
+                new NetworkInterfaceStats(
+                    Name: ni.Name,
+                    BytesSent: stats.BytesSent,
+                    BytesReceived: stats.BytesReceived,
+                    PacketsSent: stats.UnicastPacketsSent,
+                    PacketsReceived: stats.UnicastPacketsReceived,
+                    Errors: stats.IncomingPacketsWithErrors + stats.OutgoingPacketsWithErrors
+                )
+            );
         }
         return result;
     }

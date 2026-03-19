@@ -54,4 +54,5 @@ internal sealed class CliArgs
     public int HistoryCount { get; set; } = 20;
     public string? Compliance { get; set; }
     public string? ExportGpo { get; set; }
+    public string? NewPack { get; set; }
 }

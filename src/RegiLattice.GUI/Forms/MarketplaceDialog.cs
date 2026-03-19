@@ -23,6 +23,15 @@ internal sealed class MarketplaceDialog : Form
 
     private readonly PackManager _pm = new();
     private CancellationTokenSource _cts = new();
+    private PackDef? _selectedPack;
+
+    // Rating controls
+    private readonly Label _lblRating = new() { AutoSize = true, Padding = new Padding(0, 4, 8, 0) };
+    private readonly NumericUpDown _numRating = new() { Minimum = 1, Maximum = 5, Width = 50, Value = 3 };
+    private readonly Button _btnRate = new() { Text = "Rate ★", Width = 72, Height = 26, Enabled = false };
+
+    // Changelog tab
+    private readonly RichTextBox _txtChangelog = new();
 
     internal MarketplaceDialog()
     {
@@ -171,18 +180,49 @@ internal sealed class MarketplaceDialog : Form
 
         // ── Tabs ───────────────────────────────────────────────────────
         _tabs.Dock = DockStyle.Fill;
-        _tabs.TabPages.AddRange([browseTab, installedTab]);
+
+        // ── Changelog tab ─────────────────────────────────────────────
+        var changelogTab = new TabPage("Changelog") { BackColor = AppTheme.Bg };
+        _txtChangelog.Dock = DockStyle.Fill;
+        _txtChangelog.ReadOnly = true;
+        _txtChangelog.BackColor = AppTheme.Surface;
+        _txtChangelog.ForeColor = AppTheme.FgDim;
+        _txtChangelog.Font = AppTheme.Mono;
+        _txtChangelog.BorderStyle = BorderStyle.None;
+        _txtChangelog.Text = "Select a pack to view its changelog.";
+        changelogTab.Controls.Add(_txtChangelog);
+
+        _tabs.TabPages.AddRange([browseTab, installedTab, changelogTab]);
         _tabs.SelectedIndexChanged += async (_, _) =>
         {
             if (_tabs.SelectedIndex == 1)
                 RefreshInstalled();
-            else
+            else if (_tabs.SelectedIndex == 0)
                 await RefreshBrowseAsync();
         };
+
+        // ── Rating panel (above details) ──────────────────────────────
+        _lblRating.Text = "Not rated";
+        _numRating.BackColor = AppTheme.Surface;
+        _numRating.ForeColor = AppTheme.Fg;
+        StyleButton(_btnRate, "Rate ★");
+        _btnRate.Width = 72;
+        _btnRate.Click += OnRatePack;
+
+        var ratingPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 32,
+            FlowDirection = FlowDirection.LeftToRight,
+            BackColor = AppTheme.Bg,
+            Padding = new Padding(6, 2, 0, 0),
+        };
+        ratingPanel.Controls.AddRange([new Label { Text = "Your rating:", AutoSize = true, Padding = new Padding(0, 4, 4, 0), ForeColor = AppTheme.FgDim }, _numRating, _btnRate, _lblRating]);
 
         SuspendLayout();
         Controls.Add(_tabs);
         Controls.Add(_txtDetails);
+        Controls.Add(ratingPanel);
         Controls.Add(_lblStatus);
         Controls.Add(lblTitle);
         ResumeLayout(true);
@@ -476,20 +516,28 @@ internal sealed class MarketplaceDialog : Form
     {
         if (_lstBrowse.SelectedItems.Count == 0)
         {
+            _selectedPack = null;
             _txtDetails.Clear();
+            _btnRate.Enabled = false;
             return;
         }
-        ShowPackDetails((PackDef)_lstBrowse.SelectedItems[0].Tag!);
+        _selectedPack = (PackDef)_lstBrowse.SelectedItems[0].Tag!;
+        ShowPackDetails(_selectedPack);
+        _btnRate.Enabled = true;
     }
 
     private void OnInstalledSelectionChanged(object? sender, EventArgs e)
     {
         if (_lstInstalled.SelectedItems.Count == 0)
         {
+            _selectedPack = null;
             _txtDetails.Clear();
+            _btnRate.Enabled = false;
             return;
         }
-        ShowPackDetails((PackDef)_lstInstalled.SelectedItems[0].Tag!);
+        _selectedPack = (PackDef)_lstInstalled.SelectedItems[0].Tag!;
+        ShowPackDetails(_selectedPack);
+        _btnRate.Enabled = true;
     }
 
     private void ShowPackDetails(PackDef p)
@@ -500,6 +548,22 @@ internal sealed class MarketplaceDialog : Form
             + $"Categories: {string.Join(", ", p.Categories)}\n"
             + $"Tags: {string.Join(", ", p.Tags)}\n"
             + $"{p.Description}";
+
+        _txtChangelog.Text = string.IsNullOrWhiteSpace(p.Changelog)
+            ? "(No changelog provided for this pack.)"
+            : p.Changelog;
+
+        var rating = RegiLattice.Core.Services.Ratings.GetRating($"pack:{p.Name}");
+        _lblRating.Text = rating is not null ? $"  Your rating: {rating.Stars}\u2605" : "  Not rated";
+        _numRating.Value = rating?.Stars is >= 1 and <= 5 ? rating.Stars : 3;
+    }
+
+    private void OnRatePack(object? sender, EventArgs e)
+    {
+        if (_selectedPack is null) return;
+        int stars = (int)_numRating.Value;
+        RegiLattice.Core.Services.Ratings.Rate($"pack:{_selectedPack.Name}", stars);
+        _lblRating.Text = $"  Your rating: {stars}\u2605";
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────

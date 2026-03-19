@@ -104,8 +104,8 @@ public static class Favorites
             throw new FileNotFoundException("Favorites import file not found.", filePath);
 
         string json = File.ReadAllText(filePath);
-        var ids = JsonSerializer.Deserialize<List<string>>(json)
-            ?? throw new InvalidOperationException("Favorites file does not contain a JSON array.");
+        var ids =
+            JsonSerializer.Deserialize<List<string>>(json) ?? throw new InvalidOperationException("Favorites file does not contain a JSON array.");
 
         int added = 0;
         lock (Lock)

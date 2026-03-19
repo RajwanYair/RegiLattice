@@ -128,6 +128,8 @@ internal static class Program
             return RunCompliance(a.Compliance);
         if (a.ExportGpo is not null)
             return RunExportGpo(a.ExportGpo);
+        if (a.NewPack is not null)
+            return RunNewPack(a.NewPack);
         if (a.Gui)
             return RunGui();
         if (a.Menu)
@@ -1580,6 +1582,78 @@ internal static class Program
         return 1;
     }
 
+    private static int RunNewPack(string packName)
+    {
+        // Sanitise the pack name to a safe filename slug
+        string slug = System.Text.RegularExpressions.Regex.Replace(
+            packName.Trim().ToLowerInvariant(), @"[^a-z0-9\-_]+", "-");
+        slug = System.Text.RegularExpressions.Regex.Replace(slug, @"-{2,}", "-").Trim('-');
+        if (slug.Length == 0)
+        {
+            Console.WriteLine(Red("\u274c Pack name must contain at least one alphanumeric character."));
+            return 1;
+        }
+
+        string outputPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), $"{slug}.pack.json");
+        if (File.Exists(outputPath))
+        {
+            Console.WriteLine(Red($"\u274c File already exists: {outputPath}"));
+            return 1;
+        }
+
+        string template = """
+            {
+              "name": "PACK_SLUG",
+              "displayName": "PACK_DISPLAY_NAME",
+              "version": "1.0.0",
+              "author": "Your Name",
+              "description": "A short description of what this pack does.",
+              "minRegiLatticeVersion": "3.7.0",
+              "minWindowsBuild": 0,
+              "categories": ["My Category"],
+              "tags": ["custom", "example"],
+              "tweaks": [
+                {
+                  "id": "PACK_SLUG-example-tweak",
+                  "label": "Example Tweak",
+                  "category": "My Category",
+                  "description": "Describe what this tweak does. Default: off.",
+                  "needsAdmin": true,
+                  "corpSafe": true,
+                  "minBuild": 0,
+                  "tags": ["example"],
+                  "applyOps": [
+                    { "kind": "SetDword", "path": "HKEY_CURRENT_USER\\Software\\Example", "name": "ExampleValue", "dwordValue": 1 }
+                  ],
+                  "removeOps": [
+                    { "kind": "DeleteValue", "path": "HKEY_CURRENT_USER\\Software\\Example", "name": "ExampleValue" }
+                  ],
+                  "detectOps": [
+                    { "kind": "CheckDword", "path": "HKEY_CURRENT_USER\\Software\\Example", "name": "ExampleValue", "dwordValue": 1 }
+                  ]
+                }
+              ]
+            }
+            """;
+
+        template = template
+            .Replace("PACK_SLUG", slug)
+            .Replace("PACK_DISPLAY_NAME", packName.Trim());
+
+        try
+        {
+            File.WriteAllText(outputPath, template, System.Text.Encoding.UTF8);
+            Console.WriteLine(Green($"\u2705  Pack template created: {outputPath}"));
+            Console.WriteLine($"    Edit the file and install with: regilattice marketplace install {outputPath}");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
     private static int RunExportGpo(string outputPath)
     {
         Console.WriteLine($"Exporting Group Policy ADMX template\u2026");
@@ -1951,6 +2025,10 @@ internal static class Program
                 case "--export-gpo":
                     if (++i < args.Length)
                         p.ExportGpo = args[i];
+                    break;
+                case "--new-pack":
+                    if (++i < args.Length)
+                        p.NewPack = args[i];
                     break;
 
                 default:

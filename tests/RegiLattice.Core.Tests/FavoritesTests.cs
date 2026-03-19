@@ -229,7 +229,7 @@ public sealed class FavoritesTests : IDisposable
             await File.WriteAllTextAsync(path, "[\"existing-fav\",\"new-fav-1\",\"new-fav-2\"]");
             int added = Favorites.ImportFromJson(path);
 
-            Assert.Equal(2, added);                        // existing-fav not counted
+            Assert.Equal(2, added); // existing-fav not counted
             Assert.True(Favorites.IsFavorite("new-fav-1"));
             Assert.True(Favorites.IsFavorite("new-fav-2"));
             Assert.Equal(3, Favorites.Count);
@@ -244,8 +244,6 @@ public sealed class FavoritesTests : IDisposable
     [Fact]
     public void ImportFromJson_MissingFile_ThrowsFileNotFound()
     {
-        Assert.Throws<FileNotFoundException>(
-            () => Favorites.ImportFromJson(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".json"))
-        );
+        Assert.Throws<FileNotFoundException>(() => Favorites.ImportFromJson(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".json")));
     }
 }

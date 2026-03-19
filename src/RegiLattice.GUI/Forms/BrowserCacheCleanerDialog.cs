@@ -227,14 +227,28 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
                         string placesFile = Path.Combine(p.ProfilePath, "places.sqlite");
                         foreach (string f in new[] { historyFile, placesFile })
                         {
-                            try { if (File.Exists(f)) { freed += new FileInfo(f).Length; File.Delete(f); } }
+                            try
+                            {
+                                if (File.Exists(f))
+                                {
+                                    freed += new FileInfo(f).Length;
+                                    File.Delete(f);
+                                }
+                            }
                             catch { }
                         }
                         // Chromium favicons and visited links
                         foreach (string extra in new[] { "Visited Links", "Favicons" })
                         {
                             string ef = Path.Combine(p.ProfilePath, extra);
-                            try { if (File.Exists(ef)) { freed += new FileInfo(ef).Length; File.Delete(ef); } }
+                            try
+                            {
+                                if (File.Exists(ef))
+                                {
+                                    freed += new FileInfo(ef).Length;
+                                    File.Delete(ef);
+                                }
+                            }
                             catch { }
                         }
                     }
@@ -247,7 +261,14 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
                         string firefoxCookies = Path.Combine(p.ProfilePath, "cookies.sqlite");
                         foreach (string f in new[] { networkCookies, chromiumCookies, firefoxCookies })
                         {
-                            try { if (File.Exists(f)) { freed += new FileInfo(f).Length; File.Delete(f); } }
+                            try
+                            {
+                                if (File.Exists(f))
+                                {
+                                    freed += new FileInfo(f).Length;
+                                    File.Delete(f);
+                                }
+                            }
                             catch { }
                         }
                     }
@@ -261,8 +282,10 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
         });
 
         var what = new List<string> { "cache" };
-        if (cleanHistory) what.Add("history");
-        if (cleanCookies) what.Add("cookies");
+        if (cleanHistory)
+            what.Add("history");
+        if (cleanCookies)
+            what.Add("cookies");
         _lblStatus.Text = $"✓ Cleaned {string.Join(", ", what)} for {toClean.Count} profile(s) — freed ~{FormatSize(freedBytes)}.";
         await ScanAsync();
     }
