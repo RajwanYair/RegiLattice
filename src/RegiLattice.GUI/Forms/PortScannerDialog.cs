@@ -68,6 +68,18 @@ internal sealed class PortScannerDialog : BaseDialog
         Width = 80,
         Height = 30,
     };
+    private readonly Button _btnSaveProfile = new()
+    {
+        Text = "\U0001F4BE Save Profile",
+        Width = 110,
+        Height = 30,
+    };
+    private readonly Button _btnLoadProfile = new()
+    {
+        Text = "\U0001F4C2 Load Profile",
+        Width = 110,
+        Height = 30,
+    };
     private readonly ListView _results = new()
     {
         Dock = DockStyle.Fill,
@@ -162,7 +174,7 @@ internal sealed class PortScannerDialog : BaseDialog
             WrapContents = false,
             Padding = new Padding(8, 6, 8, 6),
         };
-        btnPanel.Controls.AddRange([_btnClose, _btnScan, _btnPing]);
+        btnPanel.Controls.AddRange([_btnClose, _btnScan, _btnPing, _btnLoadProfile, _btnSaveProfile]);
 
         Controls.Add(_results);
         Controls.Add(grid);
@@ -173,6 +185,8 @@ internal sealed class PortScannerDialog : BaseDialog
         _btnScan.Click += async (_, _) => await ScanAsync();
         _btnPing.Click += async (_, _) => await PingAsync();
         _btnClose.Click += (_, _) => Close();
+        _btnSaveProfile.Click += OnSaveProfile;
+        _btnLoadProfile.Click += OnLoadProfile;
 
         _txtHost.BackColor = AppTheme.Overlay;
         _txtHost.ForeColor = AppTheme.Fg;
@@ -335,5 +349,123 @@ internal sealed class PortScannerDialog : BaseDialog
         if (disposing)
             _cts.Dispose();
         base.Dispose(disposing);
+    }
+
+    // ── Scan profile persistence ─────────────────────────────────
+
+    private static string ProfilesDir =>
+        System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice", "scan-profiles");
+
+    private void OnSaveProfile(object? sender, EventArgs e)
+    {
+        string host = _txtHost.Text.Trim();
+        string ports = _txtPorts.Text.Trim();
+        if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(ports))
+        {
+            _statusLabel.Text = "\u274c Enter a host and ports before saving a profile.";
+            return;
+        }
+
+        using var input = new Form
+        {
+            Text = "Save Scan Profile",
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false,
+            MinimizeBox = false,
+            ClientSize = new Size(340, 110),
+            BackColor = AppTheme.Bg,
+            ForeColor = AppTheme.Fg,
+        };
+        var lbl = new Label { Text = "Profile name:", Location = new Point(10, 16), AutoSize = true };
+        var txt = new TextBox { Location = new Point(100, 12), Width = 220, BackColor = AppTheme.Overlay, ForeColor = AppTheme.Fg };
+        var ok = new Button { Text = "Save", DialogResult = DialogResult.OK, Location = new Point(150, 65), Width = 75 };
+        var cancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(235, 65), Width = 75 };
+        input.Controls.AddRange(new Control[] { lbl, txt, ok, cancel });
+        input.AcceptButton = ok;
+        input.CancelButton = cancel;
+
+        if (input.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        string name = txt.Text.Trim();
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            _statusLabel.Text = "\u274c Profile name cannot be empty.";
+            return;
+        }
+
+        try
+        {
+            Directory.CreateDirectory(ProfilesDir);
+            string slug = System.Text.RegularExpressions.Regex.Replace(name.ToLowerInvariant(), @"[^a-z0-9\-_]+", "-").Trim('-');
+            string path = System.IO.Path.Combine(ProfilesDir, $"{slug}.json");
+            var obj = new { name, host, ports };
+            File.WriteAllText(path, System.Text.Json.JsonSerializer.Serialize(obj, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+            _statusLabel.Text = $"\u2705 Profile \u2018{name}\u2019 saved.";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"\u274c {ex.Message}";
+        }
+    }
+
+    private void OnLoadProfile(object? sender, EventArgs e)
+    {
+        try
+        {
+            Directory.CreateDirectory(ProfilesDir);
+            var files = Directory.GetFiles(ProfilesDir, "*.json");
+            if (files.Length == 0)
+            {
+                _statusLabel.Text = "\u274c No saved profiles found.";
+                return;
+            }
+
+            // Build a selection dialog
+            using var dlg = new Form
+            {
+                Text = "Load Scan Profile",
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                ClientSize = new Size(340, 220),
+                BackColor = AppTheme.Bg,
+                ForeColor = AppTheme.Fg,
+            };
+            var list = new ListBox { Dock = DockStyle.Fill, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg };
+            var profileMap = new Dictionary<string, string>(); // display name -> file path
+            foreach (string f in files)
+            {
+                try
+                {
+                    var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(f));
+                    string displayName = doc.RootElement.TryGetProperty("name", out var n) ? n.GetString() ?? f : f;
+                    profileMap[displayName] = f;
+                    list.Items.Add(displayName);
+                }
+                catch { list.Items.Add(System.IO.Path.GetFileNameWithoutExtension(f)); profileMap[System.IO.Path.GetFileNameWithoutExtension(f)] = f; }
+            }
+            var ok = new Button { Text = "Load", DialogResult = DialogResult.OK, Dock = DockStyle.Bottom, Height = 32 };
+            dlg.Controls.AddRange(new Control[] { list, ok });
+            dlg.AcceptButton = ok;
+
+            if (dlg.ShowDialog(this) != DialogResult.OK || list.SelectedItem is null)
+                return;
+
+            string selected = list.SelectedItem.ToString()!;
+            if (!profileMap.TryGetValue(selected, out string? filePath))
+                return;
+
+            var data = System.Text.Json.JsonDocument.Parse(File.ReadAllText(filePath)).RootElement;
+            if (data.TryGetProperty("host", out var h)) _txtHost.Text = h.GetString() ?? "";
+            if (data.TryGetProperty("ports", out var p)) _txtPorts.Text = p.GetString() ?? "";
+            _statusLabel.Text = $"\u2705 Profile \u2018{selected}\u2019 loaded.";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"\u274c {ex.Message}";
+        }
     }
 }

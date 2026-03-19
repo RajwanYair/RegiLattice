@@ -99,8 +99,8 @@ public static class StartupManager
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(command);
 
-        using Win32.RegistryKey? key = Win32.Registry.CurrentUser.OpenSubKey(RegRunUser, writable: true)
-            ?? Win32.Registry.CurrentUser.CreateSubKey(RegRunUser);
+        using Win32.RegistryKey? key =
+            Win32.Registry.CurrentUser.OpenSubKey(RegRunUser, writable: true) ?? Win32.Registry.CurrentUser.CreateSubKey(RegRunUser);
 
         if (key is null)
             throw new InvalidOperationException("Unable to open the HKCU Run key.");

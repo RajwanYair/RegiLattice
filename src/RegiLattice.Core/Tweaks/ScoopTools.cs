@@ -549,5 +549,155 @@ internal static class ScoopTools
             DetectAction = () =>
                 Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "wget")),
         },
+        new TweakDef
+        {
+            Id = "scoop-zoxide",
+            Label = "Install zoxide via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs zoxide — a smarter cd command that learns your most-used directories and jumps to them intelligently.",
+            Tags = ["scoop", "zoxide", "navigation", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install zoxide"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall zoxide"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "zoxide")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-lsd",
+            Label = "Install lsd via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs lsd — a modern ls replacement with icons, colours, and tree view.",
+            Tags = ["scoop", "lsd", "files", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install lsd"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall lsd"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "lsd")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-sd",
+            Label = "Install sd via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs sd — a modern sed/awk replacement for intuitive find-and-replace operations.",
+            Tags = ["scoop", "sd", "text", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install sd"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall sd"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "sd")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-procs",
+            Label = "Install procs via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs procs — a modern replacement for ps that shows processes with colour-coded resource usage.",
+            Tags = ["scoop", "procs", "processes", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install procs"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall procs"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "procs")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-bottom",
+            Label = "Install bottom via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs bottom (btm) — a graphical system monitor for CPU, RAM, disk, and network.",
+            Tags = ["scoop", "bottom", "monitor", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install bottom"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall bottom"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "bottom")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-xh",
+            Label = "Install xh via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs xh — a friendly and fast HTTP client similar to HTTPie.",
+            Tags = ["scoop", "xh", "http", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install xh"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall xh"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "xh")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-gping",
+            Label = "Install gping via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs gping — a graphical ping tool that displays network latency as a real-time graph.",
+            Tags = ["scoop", "gping", "network", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gping"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gping"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gping")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-tokei",
+            Label = "Install tokei via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs tokei — a fast code statistics tool that counts lines of code by language.",
+            Tags = ["scoop", "tokei", "code", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tokei"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tokei"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tokei")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-tealdeer",
+            Label = "Install tealdeer via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs tealdeer — a fast Rust-based tldr pages client for quick command summaries.",
+            Tags = ["scoop", "tealdeer", "tldr", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tealdeer"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tealdeer"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tealdeer")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-carapace-bin",
+            Label = "Install carapace-bin via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs carapace-bin — a multi-shell completion engine supporting PowerShell, bash, zsh, and more.",
+            Tags = ["scoop", "carapace", "completion", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install carapace-bin"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall carapace-bin"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "carapace-bin")),
+        },
     ];
 }

@@ -141,9 +141,24 @@ internal sealed class DnsSwitcherDialog : BaseDialog
     private readonly Panel _btnPanel = new() { Dock = DockStyle.Bottom, Height = 38 };
 
     // Custom DNS entry panel
-    private readonly TextBox _customPrimary = new() { Width = 130, PlaceholderText = "Primary IP", Height = 24 };
-    private readonly TextBox _customSecondary = new() { Width = 130, PlaceholderText = "Secondary IP", Height = 24 };
-    private readonly Button _btnUseCustom = new() { Text = "Use Custom", Width = 96, Height = 26 };
+    private readonly TextBox _customPrimary = new()
+    {
+        Width = 130,
+        PlaceholderText = "Primary IP",
+        Height = 24,
+    };
+    private readonly TextBox _customSecondary = new()
+    {
+        Width = 130,
+        PlaceholderText = "Secondary IP",
+        Height = 24,
+    };
+    private readonly Button _btnUseCustom = new()
+    {
+        Text = "Use Custom",
+        Width = 96,
+        Height = 26,
+    };
 
     public DnsSwitcherDialog()
         : base("DNS Server Quick-Switch", new Size(900, 620), resizable: true)
@@ -290,8 +305,18 @@ internal sealed class DnsSwitcherDialog : BaseDialog
         };
 
         // Custom DNS bar (docked bottom, above button panel)
-        var customPanel = new Panel { Dock = DockStyle.Bottom, Height = 36, Padding = new Padding(4, 4, 4, 0) };
-        var customLabel = new Label { Text = "Custom:", AutoSize = true, Location = new Point(4, 8) };
+        var customPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 36,
+            Padding = new Padding(4, 4, 4, 0),
+        };
+        var customLabel = new Label
+        {
+            Text = "Custom:",
+            AutoSize = true,
+            Location = new Point(4, 8),
+        };
         _customPrimary.Location = new Point(60, 5);
         _customSecondary.Location = new Point(196, 5);
         _btnUseCustom.Location = new Point(332, 4);
@@ -356,7 +381,7 @@ internal sealed class DnsSwitcherDialog : BaseDialog
                     catch { }
                 }
                 string latency = success > 0 ? $"{total / success} ms" : "timeout";
-                results.AppendLine($"  {p.Name,40}  {latency,10}  ({p.Primary})");
+                results.AppendLine($"  {p.Name, 40}  {latency, 10}  ({p.Primary})");
             }
         });
 

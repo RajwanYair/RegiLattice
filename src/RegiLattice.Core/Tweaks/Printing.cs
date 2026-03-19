@@ -518,7 +518,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Internet Printing Protocol (IPP) client feature. Prevents connecting to web-hosted printers. Default: enabled.",
+            Description =
+                "Disables the Internet Printing Protocol (IPP) client feature. Prevents connecting to web-hosted printers. Default: enabled.",
             Tags = ["printing", "internet", "ipp", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPrinting", 1)],
@@ -532,7 +533,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Stops Windows from automatically changing the default printer to the most recently used one. Default: Windows manages default printer.",
+            Description =
+                "Stops Windows from automatically changing the default printer to the most recently used one. Default: Windows manages default printer.",
             Tags = ["printing", "default-printer"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
@@ -546,7 +548,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows Update from automatically downloading printer drivers. Avoids unwanted driver changes. Default: auto-download enabled.",
+            Description =
+                "Prevents Windows Update from automatically downloading printer drivers. Avoids unwanted driver changes. Default: auto-download enabled.",
             Tags = ["printing", "driver", "windows-update"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting", 1)],
@@ -563,9 +566,29 @@ internal static class Printing
             Description = "Suppresses toast notifications for print job completion. Default: notifications enabled.",
             Tags = ["printing", "notifications"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.PrintDialog",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -588,7 +611,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the LPR (Line Printer Remote) port monitor. Not needed on modern networks without legacy Unix/Linux printers. Default: enabled.",
+            Description =
+                "Disables the LPR (Line Printer Remote) port monitor. Not needed on modern networks without legacy Unix/Linux printers. Default: enabled.",
             Tags = ["printing", "lpr", "legacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lpdsvc"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lpdsvc", "Start", 4)],
@@ -602,7 +626,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Restricts Point and Print to approved servers only. Mitigates PrintNightmare-class vulnerabilities. Default: unrestricted.",
+            Description =
+                "Restricts Point and Print to approved servers only. Mitigates PrintNightmare-class vulnerabilities. Default: unrestricted.",
             Tags = ["printing", "security", "point-and-print", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "Restricted", 1)],
@@ -630,7 +655,8 @@ internal static class Printing
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables automatic restart of the print spooler on failure. Useful in hardened server environments. Default: auto-restart enabled.",
+            Description =
+                "Disables automatic restart of the print spooler on failure. Useful in hardened server environments. Default: auto-restart enabled.",
             Tags = ["printing", "spooler", "services", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "FailureActions", 0)],

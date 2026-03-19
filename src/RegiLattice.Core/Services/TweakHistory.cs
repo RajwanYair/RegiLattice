@@ -167,22 +167,29 @@ public static class TweakHistory
         lock (Lock)
         {
             var list = LoadList();
-            int apply = 0, remove = 0, update = 0;
+            int apply = 0,
+                remove = 0,
+                update = 0;
             var freq = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var e in list)
             {
                 switch (e.Action.ToLowerInvariant())
                 {
-                    case "apply": apply++; break;
-                    case "remove": remove++; break;
-                    case "update": update++; break;
+                    case "apply":
+                        apply++;
+                        break;
+                    case "remove":
+                        remove++;
+                        break;
+                    case "update":
+                        update++;
+                        break;
                 }
                 freq[e.TweakId] = freq.GetValueOrDefault(e.TweakId, 0) + 1;
             }
 
-            var top = freq.OrderByDescending(kv => kv.Value).Take(5)
-                         .Select(kv => (kv.Key, kv.Value)).ToList();
+            var top = freq.OrderByDescending(kv => kv.Value).Take(5).Select(kv => (kv.Key, kv.Value)).ToList();
 
             return new HistorySummaryStats(list.Count, apply, remove, update, top);
         }

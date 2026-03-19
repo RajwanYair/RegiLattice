@@ -541,12 +541,34 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables Cortana from being invoked via voice commands. Prevents background microphone listening for \"Hey Cortana\". Default: enabled.",
+            Description =
+                "Disables Cortana from being invoked via voice commands. Prevents background microphone listening for \"Hey Cortana\". Default: enabled.",
             Tags = ["speech", "cortana", "privacy", "microphone"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps", "AgentActivationEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps", "AgentActivationEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps", "AgentActivationEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -555,7 +577,8 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic downloading of Narrator natural (neural TTS) voices. Saves bandwidth and disk space. Default: auto-download.",
+            Description =
+                "Disables automatic downloading of Narrator natural (neural TTS) voices. Saves bandwidth and disk space. Default: auto-download.",
             Tags = ["speech", "narrator", "tts", "download"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NaturalVoicesDownloadEnabled", 0)],
@@ -583,11 +606,19 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Prevents Voice Access from starting automatically at login. Voice Access can still be launched manually. Default: starts with Windows.",
+            Description =
+                "Prevents Voice Access from starting automatically at login. Voice Access can still be launched manually. Default: starts with Windows.",
             Tags = ["speech", "voice-access", "startup"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"],
             ApplyOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "VoiceAccessNativeUI")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "VoiceAccessNativeUI", @"C:\Windows\System32\VoiceAccUtil.exe")],
+            RemoveOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
+                    "VoiceAccessNativeUI",
+                    @"C:\Windows\System32\VoiceAccUtil.exe"
+                ),
+            ],
             DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "VoiceAccessNativeUI")],
         },
         new TweakDef
@@ -597,7 +628,8 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Narrator Home screen that appears on Narrator start. Narrator starts directly in screen-reading mode. Default: Home screen shown.",
+            Description =
+                "Disables the Narrator Home screen that appears on Narrator start. Narrator starts directly in screen-reading mode. Default: Home screen shown.",
             Tags = ["speech", "narrator", "accessibility"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "DontShowNarratorHome", 1)],
@@ -611,7 +643,8 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets Narrator text verbosity to minimum — only reads essential information. Reduces audio clutter. Default: medium verbosity.",
+            Description =
+                "Sets Narrator text verbosity to minimum — only reads essential information. Reduces audio clutter. Default: medium verbosity.",
             Tags = ["speech", "narrator", "verbosity"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "VerbosityHighlightedText", 1)],
@@ -639,7 +672,8 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables cloud-based speech recognition that sends voice to Microsoft servers. Uses only local speech engine. Default: online recognition enabled.",
+            Description =
+                "Disables cloud-based speech recognition that sends voice to Microsoft servers. Uses only local speech engine. Default: online recognition enabled.",
             Tags = ["speech", "privacy", "cloud", "recognition"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Privacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Privacy", "UserInputRestricted", 1)],
@@ -653,7 +687,8 @@ internal static class Speech
             Category = "Voice Access & Speech",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Narrator quick-start feature at the login screen. Prevents accidental Narrator activation. Default: quick-start available.",
+            Description =
+                "Disables the Narrator quick-start feature at the login screen. Prevents accidental Narrator activation. Default: quick-start available.",
             Tags = ["speech", "narrator", "startup", "login"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "WinEnterLaunchEnabled", 0)],

@@ -21,6 +21,7 @@ public sealed record PackDef
     public string DownloadUrl { get; init; } = "";
     public string MinRegiLatticeVersion { get; init; } = "3.3.0";
     public int MinWindowsBuild { get; init; }
+    public string Changelog { get; init; } = "";
 }
 
 /// <summary>

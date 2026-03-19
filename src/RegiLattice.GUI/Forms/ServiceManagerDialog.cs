@@ -446,21 +446,13 @@ internal sealed class ServiceManagerDialog : BaseDialog
             ["DiagTrack", "dmwappushservice", "WSearch", "SysMain", "PcaSvc"],
             []
         ),
-        ["Privacy"] = (
-            "Privacy — stop data-collection services",
-            ["DiagTrack", "dmwappushservice", "wisvc", "WerSvc", "PcaSvc", "MapsBroker"],
-            []
-        ),
+        ["Privacy"] = ("Privacy — stop data-collection services", ["DiagTrack", "dmwappushservice", "wisvc", "WerSvc", "PcaSvc", "MapsBroker"], []),
         ["Minimal"] = (
             "Minimal — stop non-essential background services",
             ["DiagTrack", "dmwappushservice", "WSearch", "SysMain", "PcaSvc", "WerSvc", "wisvc", "Fax", "RetailDemo"],
             []
         ),
-        ["Restore Defaults"] = (
-            "Restore Defaults — re-enable common services",
-            [],
-            ["DiagTrack", "WSearch", "SysMain", "PcaSvc", "WerSvc"]
-        ),
+        ["Restore Defaults"] = ("Restore Defaults — re-enable common services", [], ["DiagTrack", "WSearch", "SysMain", "PcaSvc", "WerSvc"]),
     };
 
     private void BuildPresetMenu()
@@ -479,12 +471,20 @@ internal sealed class ServiceManagerDialog : BaseDialog
             return;
         if (!Elevation.IsAdmin())
         {
-            MessageBox.Show("Administrator rights required to apply service presets.", "Service Manager", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(
+                "Administrator rights required to apply service presets.",
+                "Service Manager",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
             return;
         }
         var result = MessageBox.Show(
             $"Apply '{presetName}' preset?\n\nDisable: {(preset.Disable.Length > 0 ? string.Join(", ", preset.Disable) : "none")}\nEnable: {(preset.Enable.Length > 0 ? string.Join(", ", preset.Enable) : "none")}",
-            "Service Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            "Service Preset",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question
+        );
         if (result != DialogResult.Yes)
             return;
 
@@ -492,27 +492,32 @@ internal sealed class ServiceManagerDialog : BaseDialog
         int changed = 0;
         try
         {
-            await Task.Run(() =>
-            {
-                foreach (string svc in preset.Disable)
+            await Task.Run(
+                () =>
                 {
-                    try
+                    foreach (string svc in preset.Disable)
                     {
-                        ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Disabled).GetAwaiter().GetResult();
-                        changed++;
+                        try
+                        {
+                            ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Disabled).GetAwaiter().GetResult();
+                            changed++;
+                        }
+                        catch
+                        { /* service may not exist */
+                        }
                     }
-                    catch { /* service may not exist */ }
-                }
-                foreach (string svc in preset.Enable)
-                {
-                    try
+                    foreach (string svc in preset.Enable)
                     {
-                        ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Manual).GetAwaiter().GetResult();
-                        changed++;
+                        try
+                        {
+                            ServiceManager.SetStartTypeAsync(svc, ServiceStartMode.Manual).GetAwaiter().GetResult();
+                            changed++;
+                        }
+                        catch { }
                     }
-                    catch { }
-                }
-            }, _cts.Token);
+                },
+                _cts.Token
+            );
             SetStatus($"Preset '{presetName}' applied — {changed} service(s) changed.");
         }
         catch (Exception ex)

@@ -337,7 +337,9 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
         {
             var lines = new System.Collections.Generic.List<string> { "Name,CLSID,Group,Status,RegistryPath" };
             foreach (var e in _allEntries)
-                lines.Add($"\"{EscCsv(e.Name)}\",\"{EscCsv(e.Clsid)}\",\"{EscCsv(e.Group)}\",\"{(e.Enabled ? "Enabled" : "Disabled")}\",\"{EscCsv(e.RegistryPath)}\"");
+                lines.Add(
+                    $"\"{EscCsv(e.Name)}\",\"{EscCsv(e.Clsid)}\",\"{EscCsv(e.Group)}\",\"{(e.Enabled ? "Enabled" : "Disabled")}\",\"{EscCsv(e.RegistryPath)}\""
+                );
             File.WriteAllLines(dlg.FileName, lines, System.Text.Encoding.UTF8);
             _statusLabel.Text = $"Exported {_allEntries.Count} entries to {Path.GetFileName(dlg.FileName)}";
         }
@@ -350,6 +352,7 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
     private static string EscCsv(string value) => value.Replace("\"", "\"\"");
 
     private bool _allSelected;
+
     private void ToggleSelectAll()
     {
         _allSelected = !_allSelected;

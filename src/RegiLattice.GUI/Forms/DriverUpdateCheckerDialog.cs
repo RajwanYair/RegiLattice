@@ -245,7 +245,9 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         {
             var lines = new List<string> { "Device Name,Driver Name,Manufacturer,Version,Install Date,Device Class,Status" };
             foreach (var d in _allDrivers)
-                lines.Add($"\"{EscCsv(d.DeviceName)}\",\"{EscCsv(d.DriverName)}\",\"{EscCsv(d.Manufacturer)}\",\"{EscCsv(d.Version)}\",\"{EscCsv(d.Date)}\",\"{EscCsv(d.DeviceClass)}\",\"{EscCsv(d.Status)}\"");
+                lines.Add(
+                    $"\"{EscCsv(d.DeviceName)}\",\"{EscCsv(d.DriverName)}\",\"{EscCsv(d.Manufacturer)}\",\"{EscCsv(d.Version)}\",\"{EscCsv(d.Date)}\",\"{EscCsv(d.DeviceClass)}\",\"{EscCsv(d.Status)}\""
+                );
             File.WriteAllLines(dlg.FileName, lines, System.Text.Encoding.UTF8);
             _lblStatus.Text = $"Exported {_allDrivers.Count} drivers to {Path.GetFileName(dlg.FileName)}";
         }

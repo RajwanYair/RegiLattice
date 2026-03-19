@@ -72,6 +72,27 @@ internal sealed class WakeOnLanDialog : BaseDialog
 
     private List<AdapterInfo> _adapters = [];
 
+    // Manual WoL sender
+    private readonly TextBox _txtSendMac = new()
+    {
+        PlaceholderText = "AA:BB:CC:DD:EE:FF",
+        Width = 170,
+    };
+    private readonly Button _btnSendWol = new()
+    {
+        Text = "\u2192 Send WoL Packet",
+        Width = 130,
+        Height = 26,
+    };
+
+    // WoL history
+    private readonly ListBox _lstWolHistory = new()
+    {
+        Height = 72,
+        Dock = DockStyle.Fill,
+        HorizontalScrollbar = true,
+    };
+
     public WakeOnLanDialog()
         : base("Wake-on-LAN Configuration", new Size(860, 520), resizable: true)
     {
@@ -102,8 +123,32 @@ internal sealed class WakeOnLanDialog : BaseDialog
         _btnClose.Click += (_, _) => Close();
         btnPanel.Controls.AddRange(new Control[] { _btnEnable, _btnDisable, _btnRefresh, _btnClose });
 
+        // ── Manual WoL sender panel ──────────────────────────────
+        _txtSendMac.BackColor = Color.FromArgb(30, 30, 40);
+        _txtSendMac.ForeColor = Color.White;
+        _btnSendWol.Click += OnSendWolPacket;
+        var sendPanel = new Panel { Dock = DockStyle.Bottom, Height = 34, Padding = new Padding(6, 4, 6, 0) };
+        var sendLabel = new Label { Text = "Manual WoL:", AutoSize = true, Location = new Point(6, 8) };
+        _txtSendMac.Location = new Point(88, 4);
+        _btnSendWol.Location = new Point(264, 4);
+        sendPanel.Controls.AddRange(new Control[] { sendLabel, _txtSendMac, _btnSendWol });
+
+        // ── WoL history panel ────────────────────────────────────
+        _lstWolHistory.BackColor = Color.FromArgb(25, 25, 35);
+        _lstWolHistory.ForeColor = Color.LightGray;
+        var histContainer = new GroupBox
+        {
+            Text = "WoL Send History",
+            Dock = DockStyle.Bottom,
+            Height = 100,
+            ForeColor = Color.LightGray,
+        };
+        histContainer.Controls.Add(_lstWolHistory);
+
         Controls.Add(_list);
         Controls.Add(btnPanel);
+        Controls.Add(sendPanel);
+        Controls.Add(histContainer);
         Controls.Add(_lblStatus);
         Controls.Add(_lblNote);
 
@@ -231,5 +276,56 @@ internal sealed class WakeOnLanDialog : BaseDialog
     {
         var bytes = addr.GetAddressBytes();
         return string.Join(":", bytes.Select(b => b.ToString("X2")));
+    }
+
+    private void OnSendWolPacket(object? sender, EventArgs e)
+    {
+        string raw = _txtSendMac.Text.Trim();
+        if (string.IsNullOrEmpty(raw))
+        {
+            // Auto-fill from selected adapter if available
+            if (_list.SelectedItems.Count > 0)
+            {
+                int idx = _list.SelectedIndices[0];
+                if (idx < _adapters.Count)
+                    raw = _adapters[idx].MacAddress;
+            }
+        }
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            _lblStatus.Text = "\u274c Enter a MAC address or select an adapter first.";
+            return;
+        }
+
+        try
+        {
+            // Normalise: remove separators, expect 12 hex digits
+            string hex = raw.Replace(":", "").Replace("-", "").Replace(".", "").ToUpperInvariant();
+            if (hex.Length != 12 || !hex.All(c => "0123456789ABCDEF".Contains(c)))
+            {
+                _lblStatus.Text = "\u274c Invalid MAC address format.";
+                return;
+            }
+
+            // Build magic packet: 6 × 0xFF then 16 × MAC (102 bytes)
+            var mac = Enumerable.Range(0, 6).Select(i => Convert.ToByte(hex.Substring(i * 2, 2), 16)).ToArray();
+            var packet = new byte[102];
+            for (int i = 0; i < 6; i++) packet[i] = 0xFF;
+            for (int rep = 0; rep < 16; rep++)
+                Array.Copy(mac, 0, packet, 6 + rep * 6, 6);
+
+            using var udp = new System.Net.Sockets.UdpClient();
+            udp.EnableBroadcast = true;
+            udp.Connect(System.Net.IPAddress.Broadcast, 9);
+            udp.Send(packet, packet.Length);
+
+            string entry = $"{DateTime.Now:HH:mm:ss}  WoL \u2714  {raw}";
+            _lstWolHistory.Items.Insert(0, entry);
+            _lblStatus.Text = $"\u2705 Magic packet sent to {raw}.";
+        }
+        catch (Exception ex)
+        {
+            _lblStatus.Text = $"\u274c {ex.Message}";
+        }
     }
 }

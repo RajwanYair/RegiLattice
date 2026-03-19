@@ -153,10 +153,7 @@ public static class ServiceManager
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         var services = GetAllServices();
-        var lines = new List<string>(services.Count + 1)
-        {
-            "ServiceName,DisplayName,Status,StartType,CanStop"
-        };
+        var lines = new List<string>(services.Count + 1) { "ServiceName,DisplayName,Status,StartType,CanStop" };
         foreach (var s in services)
         {
             static string safe(string v) => v.Contains(',') || v.Contains('"') ? $"\"{v.Replace("\"", "\"\"")}\"" : v;

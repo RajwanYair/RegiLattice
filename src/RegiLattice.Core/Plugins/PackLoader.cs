@@ -60,6 +60,7 @@ public static class PackLoader
             Tags = raw.Tags ?? [],
             MinRegiLatticeVersion = raw.MinRegiLatticeVersion ?? "3.3.0",
             MinWindowsBuild = raw.MinWindowsBuild,
+            Changelog = raw.Changelog ?? "",
         };
 
         var tweaks = new List<TweakDef>();
@@ -255,6 +256,9 @@ public static class PackLoader
 
         [JsonPropertyName("tweaks")]
         public List<RawTweak>? Tweaks { get; set; }
+
+        [JsonPropertyName("changelog")]
+        public string? Changelog { get; set; }
     }
 
     internal sealed class RawTweak

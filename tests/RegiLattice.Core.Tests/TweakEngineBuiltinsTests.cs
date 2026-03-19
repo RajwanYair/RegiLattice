@@ -1769,4 +1769,66 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("Storage", tweak.Category);
     }
+
+    // ── Sprint 49 ─────────────────────────────────────────────────────────────
+
+    [Theory]
+    [InlineData("scoop-zoxide")]
+    [InlineData("scoop-lsd")]
+    [InlineData("scoop-bottom")]
+    [InlineData("scoop-xh")]
+    public void RegisterBuiltins_Sprint49ScoopTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Scoop Tools", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("ai-disable-click-to-do")]
+    [InlineData("ai-disable-auto-super-resolution")]
+    [InlineData("ai-disable-windows-ai-master")]
+    [InlineData("ai-restrict-implicit-text-collection")]
+    public void RegisterBuiltins_Sprint49CopilotTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("AI / Copilot", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("dev-devdrive-filter-native")]
+    [InlineData("dev-devdrive-ntfs-quota-off")]
+    [InlineData("dev-devdrive-no-compress-policy")]
+    [InlineData("dev-devdrive-perf-mode-high")]
+    public void RegisterBuiltins_Sprint49DevDriveTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Dev Drive / Developer Tools", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("java-set-proxy-direct")]
+    [InlineData("java-set-cache-max-100mb")]
+    [InlineData("java-set-connect-timeout-10s")]
+    [InlineData("java-enable-strict-security")]
+    public void RegisterBuiltins_Sprint49JavaTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Java", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("reg-set-hive-checkpoint-60s")]
+    [InlineData("reg-enable-hive-autorepair")]
+    [InlineData("reg-enable-reg-journal")]
+    [InlineData("reg-set-hive-prealloc")]
+    public void RegisterBuiltins_Sprint49RegistryTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Registry Management", tweak.Category);
+    }
 }
