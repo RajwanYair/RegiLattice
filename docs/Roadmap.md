@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-05-29 · v3.5.0 · 2 736 tweaks · 92 categories · 1 921 tests
+> Last updated: 2026-05-31 · v3.5.0 · 2 767 tweaks · 92 categories · 1 711 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 736 verified across 92 categories |
-| Tests | 1 671 total, all passing (1 skipped integration), 4-thread parallel |
+| Tweaks | 2 767 verified across 92 categories |
+| Tests | 1 711 total, all passing (1 skipped integration), 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -436,13 +436,13 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | # | Item | Priority | Source |
 |---|------|----------|--------|
 | 11 | Real-time memory stats in GUI status bar (RAM usage, cache) | ✅ Sprint 19 | Mem Reduct |
-| 12 | Memory cache cleaner — working set purge via Native API | HIGH | Mem Reduct |
-| 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct |
-| 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct |
+| 12 | Memory cache cleaner — working set purge via Native API | HIGH | Mem Reduct | ✅ Sprint 41 |
+| 13 | Automatic memory cleaning on threshold (e.g., >80% RAM) | MEDIUM | Mem Reduct | 🔄 Future |
+| 14 | System tray memory usage indicator (icon or percentage) | MEDIUM | Mem Reduct | 🔄 Future |
 | 15 | CPU usage monitor in status bar | ✅ Sprint 19 | Original |
-| 16 | Disk usage overview panel (per-drive space breakdown) | MEDIUM | MS PC Manager |
-| 17 | Network connectivity status indicator | LOW | NetAdapter Repair |
-| 18 | Battery health monitor for laptops | LOW | Original |
+| 16 | Disk usage overview panel (per-drive space breakdown) | MEDIUM | MS PC Manager | ✅ Sprint 41 |
+| 17 | Network connectivity status indicator | LOW | NetAdapter Repair | 🔄 Future |
+| 18 | Battery health monitor for laptops | LOW | Original | ✅ Sprint 41 |
 | 19 | System uptime display in About dialog | ✅ Sprint 19 | Original |
 | 20 | Hardware temperature monitoring (CPU/GPU) via WMI | LOW | Original |
 
@@ -646,6 +646,23 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 2 | `_btnUndoLast` ToolStripButton — undoes last apply/remove by calling inverse engine op | ✅ |
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
+### Sprint 41 — System Monitor Tools + Tweak Expansion ✅
+
+| # | Task | Status |
+|---|------|---------|
+| 1 | Fix 3 build errors in `MemoryCleanerDialog.cs` (`ApplyToForm→Apply`, static `SystemMonitor.GetMemoryUsage()`, 3-tuple) | ✅ |
+| 2 | `MemoryCleanerDialog` wired into `Program.cs ResolveManagerArg()`: `memorycleaner` | ✅ |
+| 3 | `MemoryCleanerDialog` menu item + handler added to `MainForm` (`Tools → Memory Cleaner`) | ✅ |
+| 4 | `DiskSpaceDialog` — per-drive usage bars (green/amber/red), double-click to open in Explorer, async refresh (Phase 2 item 16) | ✅ |
+| 5 | `PortScannerDialog` — TCP port connectivity tester, 7 preset groups, async parallel scan, ping test, WellKnownService map (Phase 4 item 37) | ✅ |
+| 6 | `BatteryHealthDialog` — WMI battery health %, charge %, cycle count, discharge rate; powercfg /batteryreport (Phase 2 item 18) | ✅ |
+| 7 | All 3 new dialogs registered in `Program.cs ResolveManagerArg()`: `diskspace`/`portscan`/`batteryhealth` | ✅ |
+| 8 | All 3 new dialogs wired into Tools menu + `MainForm` `OnOpen*` handlers | ✅ |
+| 9 | `DiskCleanup.cs` — 10 new tweaks (recent-docs, recent-programs, search-history, swap-file, auto-maintenance, volume-shadow-copy, internet-temp-auto, wer-queue, superfetch-write, windows-update-cache-limit) | ✅ |
+| 10 | `UserAccount.cs` — 11 new tweaks (account-picture, guest-account, biometrics-policy, smartcard-removal-lock, windows-hello-for-business, lock-on-screensaver, ms-account-logon, password-complexity, offline-files, fast-user-switching, linked-connections) | ✅ |
+| 11 | `AppCompatibility.cs` — 10 new tweaks (wer-server, compat-telemetry-runner, user-choice-protection, vdm, app-repkg-service, install-service, jit-debugger, dep-always-on, error-reporting-ui, ie-compat-view) | ✅ |
+| 12 | 31 new `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` for all new tweak IDs | ✅ |
+| 13 | Total: **2 767 tweaks** (+31), **1 711 tests** (+31 passing) | ✅ |
 
 ### Sprint 39 — Plugin URL Install, Tag Filter & Conflict Detector ✅
 
@@ -703,7 +720,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 34 | Wi-Fi profile management (export/import/delete) | MEDIUM | Original | ✅ Sprint 33 |
 | 35 | Proxy configuration wizard | MEDIUM | Original | ✅ Sprint 34 |
 | 36 | Firewall rule manager (simplified view of Windows Firewall) | MEDIUM | Original | ✅ Sprint 34 |
-| 37 | Port scanner / connectivity tester | LOW | Original | 🔄 Future |
+| 37 | Port scanner / connectivity tester | LOW | Original | ✅ Sprint 41 |
 | 38 | Network bandwidth monitor | LOW | Original | 🔄 Future |
 | 39 | VPN quick-connect from system tray | MEDIUM | Original | 🔄 Future |
 | 40 | MAC address randomization toggle | LOW | Original | 🔄 Future |

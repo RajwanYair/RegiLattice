@@ -124,9 +124,19 @@ public sealed class LocaleTests
     public void SetLocale_French_HasAllRequiredKeys()
     {
         Locale.SetLocale("fr");
-        var requiredKeys = new[] { "apply_all", "remove_all", "status_applied", "status_not_applied",
-            "confirm_apply", "confirm_remove", "tweaks_loaded", "detection_complete",
-            "admin_required", "corporate_warning" };
+        var requiredKeys = new[]
+        {
+            "apply_all",
+            "remove_all",
+            "status_applied",
+            "status_not_applied",
+            "confirm_apply",
+            "confirm_remove",
+            "tweaks_loaded",
+            "detection_complete",
+            "admin_required",
+            "corporate_warning",
+        };
         foreach (var key in requiredKeys)
             Assert.NotEqual(key, Locale.T(key)); // key itself means missing translation
         Locale.SetLocale("en");
@@ -136,9 +146,19 @@ public sealed class LocaleTests
     public void SetLocale_Spanish_HasAllRequiredKeys()
     {
         Locale.SetLocale("es");
-        var requiredKeys = new[] { "apply_all", "remove_all", "status_applied", "status_not_applied",
-            "confirm_apply", "confirm_remove", "tweaks_loaded", "detection_complete",
-            "admin_required", "corporate_warning" };
+        var requiredKeys = new[]
+        {
+            "apply_all",
+            "remove_all",
+            "status_applied",
+            "status_not_applied",
+            "confirm_apply",
+            "confirm_remove",
+            "tweaks_loaded",
+            "detection_complete",
+            "admin_required",
+            "corporate_warning",
+        };
         foreach (var key in requiredKeys)
             Assert.NotEqual(key, Locale.T(key));
         Locale.SetLocale("en");
@@ -1241,10 +1261,7 @@ public sealed class CorporateGuardBranchTests
     public void IsGpoManaged_MixedPaths_ChecksAll()
     {
         // First entry has \Policies\ → should return true immediately
-        var result = CorporateGuard.IsGpoManaged([
-            @"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion",
-            @"HKLM\SOFTWARE\Policies\Microsoft\Windows",
-        ]);
+        var result = CorporateGuard.IsGpoManaged([@"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion", @"HKLM\SOFTWARE\Policies\Microsoft\Windows"]);
         // At least one has Policies — result depends on which is evaluated first
         Assert.IsType<bool>(result);
     }

@@ -318,5 +318,178 @@ internal static class UserAccount
             RemoveOps = [RegOp.SetDword(UacKey, "PromptOnSecureDesktop", 0)],
             DetectOps = [RegOp.CheckDword(UacKey, "PromptOnSecureDesktop", 1)],
         },
+        new TweakDef
+        {
+            Id = "uac-disable-account-picture",
+            Label = "Disable Account Picture Change by Users",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents standard users from changing their account picture, keeping a consistent corporate appearance.",
+            Tags = ["uac", "account", "policy", "corporate"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoChangingWallPaper", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoChangingWallPaper")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoChangingWallPaper", 1)],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-guest-account",
+            Label = "Disable Guest Account",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the built-in Guest account, preventing unauthenticated local access to the machine.",
+            Tags = ["uac", "security", "guest", "hardening"],
+            ApplyAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.Run("net", ["user", "Guest", "/active:no"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.Run("net", ["user", "Guest", "/active:yes"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("net", ["user", "Guest"]);
+                return stdout.Contains("Account active               No", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-biometrics-policy",
+            Label = "Disable Biometric Authentication Policy",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Biometric Service usage through Group Policy, preventing fingerprint and face login.",
+            Tags = ["uac", "biometrics", "policy", "security"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-smartcard-removal-lock",
+            Label = "Disable Smart Card Removal Lock",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from locking the workstation when a smart card is removed from the reader.",
+            Tags = ["uac", "smartcard", "policy", "lock"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
+            ApplyOps = [RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption", "0")],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption")],
+            DetectOps = [RegOp.CheckString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption", "0")],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-windows-hello-for-business",
+            Label = "Disable Windows Hello for Business",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Hello for Business enrollment, preventing PIN/biometric login provisioning via Azure AD or AD.",
+            Tags = ["uac", "hello", "pin", "azure-ad", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "uac-lock-workstation-on-screensaver",
+            Label = "Lock Workstation on Screensaver Resume",
+            Category = "User Account",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Requires a password when the screensaver exits, ensuring the session is locked after inactivity.",
+            Tags = ["uac", "security", "screensaver", "lock", "hardening"],
+            RegistryKeys = [$@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+            RemoveOps = [RegOp.SetString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
+            DetectOps = [RegOp.CheckString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-microsoft-account-logon",
+            Label = "Disable Microsoft Account User Authentication",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Blocks Microsoft (Live) accounts from being used for local logon, enforcing local-only or domain accounts.",
+            Tags = ["uac", "microsoft-account", "policy", "security", "privacy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser", 3)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser", 3)],
+        },
+        new TweakDef
+        {
+            Id = "uac-enforce-password-complexity",
+            Label = "Enforce Password Complexity",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enforces password complexity requirements (uppercase, lowercase, digits, special chars) via local security policy.",
+            Tags = ["uac", "password", "security", "policy", "hardening"],
+            ApplyAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.Run("secedit", ["/configure", "/db", "secedit.sdb", "/cfg", "%windir%\\inf\\defltbase.inf", "/areas", "SECURITYPOLICY", "/quiet"]);
+            },
+            RemoveAction = _ => { },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("secedit", ["/export", "/cfg", "%temp%\\rl_secedit.cfg", "/quiet"]);
+                return stdout.Contains("PasswordComplexity = 1", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-offline-files",
+            Label = "Disable Offline Files (Client-Side Caching)",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Offline Files (CSC), reducing background syncing and disk usage for non-domain machines.",
+            Tags = ["uac", "offline-files", "csc", "network", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-fast-user-switching",
+            Label = "Disable Fast User Switching",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables fast user switching from the logon screen, preventing users from switching sessions without signing out.",
+            Tags = ["uac", "fast-user-switching", "policy", "security"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
+        },
+        new TweakDef
+        {
+            Id = "uac-disable-linked-connections",
+            Label = "Disable Linked Connections (Admin Share Elevation)",
+            Category = "User Account",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents the OS from creating elevated duplicate network connections for admin tokens, stopping credential elevation leakage over the network.",
+            Tags = ["uac", "network", "admin", "security"],
+            SideEffects = "May break mapped drives when opened from an elevated process.",
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLinkedConnections", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLinkedConnections")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLinkedConnections", 0)],
+        },
     ];
 }

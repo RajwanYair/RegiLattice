@@ -317,6 +317,17 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("cleanup-disable-hibernation")]
     [InlineData("cleanup-compact-os")]
     [InlineData("cleanup-disable-reserved-storage")]
+    // Sprint 41 additions
+    [InlineData("cleanup-disable-recent-docs")]
+    [InlineData("cleanup-disable-recent-programs")]
+    [InlineData("cleanup-disable-search-history")]
+    [InlineData("cleanup-disable-swap-file")]
+    [InlineData("cleanup-disable-auto-maintenance")]
+    [InlineData("cleanup-disable-volume-shadow-copy")]
+    [InlineData("cleanup-disable-internet-temp-auto")]
+    [InlineData("cleanup-disable-wer-queue")]
+    [InlineData("cleanup-disable-superfetch-write")]
+    [InlineData("cleanup-limit-disk-usage-windows-update")]
     public void RegisterBuiltins_DiskCleanupTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -457,6 +468,17 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("compat-disable-background-apps")]
     [InlineData("compat-disable-tips-suggestions")]
     [InlineData("compat-disable-shim-database")]
+    // Sprint 41 additions
+    [InlineData("compat-disable-wer-server-connection")]
+    [InlineData("compat-disable-compat-telemetry-runner")]
+    [InlineData("compat-disable-user-choice-protection")]
+    [InlineData("compat-disable-vdm-allowed")]
+    [InlineData("compat-disable-app-repkg-service")]
+    [InlineData("compat-disable-install-service")]
+    [InlineData("compat-disable-just-in-time-debugging")]
+    [InlineData("compat-enable-dep-always-on")]
+    [InlineData("compat-disable-error-reporting-ui")]
+    [InlineData("compat-disable-ie-compat-view")]
     public void RegisterBuiltins_AppCompatibilityTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);
@@ -485,6 +507,18 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("uac-standard-user-prompt-credentials")]
     [InlineData("uac-disable-remote-uac")]
     [InlineData("uac-enable-secure-desktop")]
+    // Sprint 41 additions
+    [InlineData("uac-disable-account-picture")]
+    [InlineData("uac-disable-guest-account")]
+    [InlineData("uac-disable-biometrics-policy")]
+    [InlineData("uac-disable-smartcard-removal-lock")]
+    [InlineData("uac-disable-windows-hello-for-business")]
+    [InlineData("uac-lock-workstation-on-screensaver")]
+    [InlineData("uac-disable-microsoft-account-logon")]
+    [InlineData("uac-enforce-password-complexity")]
+    [InlineData("uac-disable-offline-files")]
+    [InlineData("uac-disable-fast-user-switching")]
+    [InlineData("uac-disable-linked-connections")]
     public void RegisterBuiltins_UserAccountTweakExists(string id)
     {
         var tweak = _engine.GetTweak(id);

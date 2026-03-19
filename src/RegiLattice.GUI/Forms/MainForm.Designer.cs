@@ -71,6 +71,10 @@ partial class MainForm
     private ToolStripMenuItem _mnuDriverChecker = null!;
     private ToolStripMenuItem _mnuWakeOnLan = null!;
     private ToolStripMenuItem _mnuBrightness = null!;
+    private ToolStripMenuItem _mnuMemoryCleaner = null!;
+    private ToolStripMenuItem _mnuDiskSpace = null!;
+    private ToolStripMenuItem _mnuPortScan = null!;
+    private ToolStripMenuItem _mnuBatteryHealth = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -176,6 +180,10 @@ partial class MainForm
         _mnuDriverChecker = new ToolStripMenuItem("Driver Update Checker...") { Image = AppIcons.PerformanceMenuBitmap };
         _mnuWakeOnLan   = new ToolStripMenuItem("Wake-on-LAN Configuration...") { Image = AppIcons.NetworkMenuBitmap };
         _mnuBrightness  = new ToolStripMenuItem("Brightness Scheduler...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuMemoryCleaner = new ToolStripMenuItem("Memory Cache Cleaner...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuDiskSpace   = new ToolStripMenuItem("Disk Space Analyser...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuPortScan    = new ToolStripMenuItem("Port / Connectivity Tester...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuBatteryHealth = new ToolStripMenuItem("Battery Health...") { Image = AppIcons.PerformanceMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -225,6 +233,11 @@ partial class MainForm
             _mnuDriverChecker,
             _mnuWakeOnLan,
             _mnuBrightness,
+            new ToolStripSeparator(),
+            _mnuMemoryCleaner,
+            _mnuDiskSpace,
+            _mnuPortScan,
+            _mnuBatteryHealth,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -294,6 +307,10 @@ partial class MainForm
         _mnuDriverChecker.Click        += (_, _) => OnOpenDriverChecker();
         _mnuWakeOnLan.Click            += (_, _) => OnOpenWakeOnLan();
         _mnuBrightness.Click           += (_, _) => OnOpenBrightness();
+        _mnuMemoryCleaner.Click        += (_, _) => OnOpenMemoryCleaner();
+        _mnuDiskSpace.Click            += (_, _) => OnOpenDiskSpace();
+        _mnuPortScan.Click             += (_, _) => OnOpenPortScanner();
+        _mnuBatteryHealth.Click        += (_, _) => OnOpenBatteryHealth();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

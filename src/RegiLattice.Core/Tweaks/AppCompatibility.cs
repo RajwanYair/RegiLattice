@@ -296,5 +296,176 @@ internal static class AppCompatibility
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePropPage")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePropPage", 1)],
         },
+        new TweakDef
+        {
+            Id = "compat-disable-wer-server-connection",
+            Label = "Disable WER Server Connection",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows Error Reporting from connecting to Microsoft servers to upload crash dumps and diagnostic data.",
+            Tags = ["compatibility", "crash", "wer", "privacy", "telemetry"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-compat-telemetry-runner",
+            Label = "Disable CompatTelRunner Scheduled Tasks",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Microsoft Compatibility Appraiser and CompatTelRunner tasks that upload telemetry during idle time.",
+            Tags = ["compatibility", "telemetry", "scheduled-task", "privacy"],
+            ApplyAction = dryRun =>
+            {
+                if (!dryRun)
+                {
+                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/DISABLE"]);
+                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\ProgramDataUpdater", "/DISABLE"]);
+                }
+            },
+            RemoveAction = dryRun =>
+            {
+                if (!dryRun)
+                {
+                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/ENABLE"]);
+                    ShellRunner.Run("schtasks", ["/Change", "/TN", @"Microsoft\Windows\Application Experience\ProgramDataUpdater", "/ENABLE"]);
+                }
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("schtasks", ["/Query", "/TN", @"Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser", "/FO", "LIST"]);
+                return stdout.Contains("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-user-choice-protection",
+            Label = "Disable User Choice Protection Driver (UCPD)",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the User Choice Protection Driver that Microsoft installs to prevent changing default browser/app associations via registry.",
+            Tags = ["compatibility", "defaults", "ucpd", "browser"],
+            SideEffects = "Microsoft may re-enable this periodically via Windows Update.",
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\UCPD"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\UCPD", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\UCPD", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\UCPD", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-vdm-allowed",
+            Label = "Disable 16-bit DOS Application Support (VDM)",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Virtual DOS Machine (NTVDM/VDM) that allows 16-bit legacy applications to run on 64-bit Windows.",
+            Tags = ["compatibility", "legacy", "vdm", "dos", "security"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "VDMDisallowed", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "VDMDisallowed")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "VDMDisallowed", 1)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-app-repkg-service",
+            Label = "Disable App Repackaging Service",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Application Repackage Service used for automatic compatibility assessment, reducing background CPU usage.",
+            Tags = ["compatibility", "performance", "background", "service"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppReadiness"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppReadiness", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppReadiness", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppReadiness", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-install-service",
+            Label = "Disable Application Identity Service",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Application Identity service (AppIDSvc) used by AppLocker for code integrity checks.",
+            Tags = ["compatibility", "applocker", "service", "appid"],
+            SideEffects = "AppLocker policies will not function if this service is disabled.",
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppIDSvc"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppIDSvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppIDSvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AppIDSvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-just-in-time-debugging",
+            Label = "Disable Just-In-Time (JIT) Debugger",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes the JIT debugger entry so that application crashes don't prompt 'Would you like to debug?' dialog boxes.",
+            Tags = ["compatibility", "debugging", "crash", "ux"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug"],
+            ApplyOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger")],
+            RemoveOps = [RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger", @"vsjitdebugger.exe -p %ld -e %ld")],
+            DetectOps = [RegOp.CheckMissing($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Debugger")],
+        },
+        new TweakDef
+        {
+            Id = "compat-enable-dep-always-on",
+            Label = "Enable DEP Always-On (All Programs)",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Forces Data Execution Prevention (DEP/NX) for all processes, not just Windows system components, increasing exploit mitigation.",
+            Tags = ["compatibility", "dep", "security", "exploit", "hardening"],
+            SideEffects = "Some very old or poorly-written applications may crash with DEP enabled.",
+            ApplyAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.Run("bcdedit", ["/set", "nx", "AlwaysOn"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                if (!dryRun)
+                    ShellRunner.Run("bcdedit", ["/set", "nx", "OptIn"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("nx                      AlwaysOn", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-error-reporting-ui",
+            Label = "Disable Error Reporting UI Dialog",
+            Category = "App Compatibility",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Suppresses the 'Report problem to Microsoft?' dialog box shown after application crashes.",
+            Tags = ["compatibility", "wer", "crash", "ux", "privacy"],
+            RegistryKeys = [$@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
+            ApplyOps = [RegOp.SetDword($@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI")],
+            DetectOps = [RegOp.CheckDword($@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
+        },
+        new TweakDef
+        {
+            Id = "compat-disable-ie-compat-view",
+            Label = "Disable IE Compatibility View List Updates",
+            Category = "App Compatibility",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables automatic updates to the IE Compatibility View List from Microsoft, preventing background internet checks.",
+            Tags = ["compatibility", "ie", "internet-explorer", "privacy", "network"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Internet Explorer\BrowserEmulation"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Internet Explorer\BrowserEmulation", "DisableIECompatView", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Internet Explorer\BrowserEmulation", "DisableIECompatView")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Internet Explorer\BrowserEmulation", "DisableIECompatView", 1)],
+        },
     ];
 }
