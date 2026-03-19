@@ -72,6 +72,11 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 80 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 80 };
+    private readonly Button _btnCreateTask = new()
+    {
+        Text = "Create Task…",
+        Width = 100,
+    };
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -109,6 +114,7 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
         _btnDisable.Click += async (_, _) => await ApplyOperationAsync(ScheduledTaskManager.DisableAsync).ConfigureAwait(false);
         _btnDelete.Click += async (_, _) => await ConfirmDeleteAsync().ConfigureAwait(false);
         _btnRunNow.Click += async (_, _) => await ApplyOperationAsync(ScheduledTaskManager.RunNowAsync).ConfigureAwait(false);
+        _btnCreateTask.Click += OnCreateSimpleTask;
         _searchBox.TextChanged += (_, _) => ApplyFilter();
         _filterCombo.SelectedIndexChanged += (_, _) => ApplyFilter();
         _list.SelectedIndexChanged += (_, _) => UpdateButtons();
@@ -150,7 +156,7 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
             _filterCombo,
         ]);
 
-        _btnPanel.Controls.AddRange([_btnEnable, _btnDisable, _btnRunNow, _btnDelete, _btnRefresh, _btnClose]);
+        _btnPanel.Controls.AddRange([_btnCreateTask, _btnEnable, _btnDisable, _btnRunNow, _btnDelete, _btnRefresh, _btnClose]);
 
         Controls.AddRange([_list, _statusLabel, _btnPanel, _topPanel, _adminBanner]);
     }
@@ -287,6 +293,121 @@ internal sealed class ScheduledTaskManagerDialog : BaseDialog
         _statusLabel.ForeColor = AppTheme.Fg;
         _topPanel.BackColor = AppTheme.Surface;
         _btnPanel.BackColor = AppTheme.Surface;
+    }
+
+    private void OnCreateSimpleTask(object? sender, EventArgs e)
+    {
+        using var dlg = new Form
+        {
+            Text = "Create Simple Scheduled Task",
+            Size = new Size(430, 270),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            MaximizeBox = false,
+            MinimizeBox = false,
+        };
+
+        var lblName = new Label { Text = "Task name:", Location = new Point(12, 16), AutoSize = true };
+        var txtName = new TextBox { Location = new Point(120, 12), Width = 280, Text = "MyTask" };
+
+        var lblPath = new Label { Text = "Program/script:", Location = new Point(12, 48), AutoSize = true };
+        var txtPath = new TextBox { Location = new Point(120, 44), Width = 230 };
+        var btnBrowse = new Button { Text = "…", Location = new Point(356, 43), Width = 44 };
+        btnBrowse.Click += (_, _) =>
+        {
+            using var ofd = new OpenFileDialog { Filter = "Executables (*.exe;*.bat;*.ps1)|*.exe;*.bat;*.ps1|All Files (*.*)|*.*" };
+            if (ofd.ShowDialog(dlg) == DialogResult.OK)
+                txtPath.Text = ofd.FileName;
+        };
+
+        var lblTrigger = new Label { Text = "Trigger:", Location = new Point(12, 82), AutoSize = true };
+        var cboTrigger = new ComboBox
+        {
+            Location = new Point(120, 78),
+            Width = 160,
+            DropDownStyle = ComboBoxStyle.DropDownList,
+        };
+        cboTrigger.Items.AddRange(["Once", "Daily", "AtLogon", "AtStartup"]);
+        cboTrigger.SelectedIndex = 2; // AtLogon default
+
+        var lblTime = new Label { Text = "Start time:", Location = new Point(12, 116), AutoSize = true };
+        var dtpTime = new DateTimePicker
+        {
+            Location = new Point(120, 112),
+            Width = 160,
+            Format = DateTimePickerFormat.Time,
+            ShowUpDown = true,
+            Value = DateTime.Today.AddHours(9),
+        };
+
+        cboTrigger.SelectedIndexChanged += (_, _) =>
+        {
+            bool needsTime = cboTrigger.SelectedIndex <= 1; // Once/Daily
+            lblTime.Visible = needsTime;
+            dtpTime.Visible = needsTime;
+        };
+        lblTime.Visible = false;
+        dtpTime.Visible = false;
+
+        var btnOk = new Button { Text = "Create", DialogResult = DialogResult.OK, Location = new Point(230, 195), Width = 80 };
+        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(320, 195), Width = 80 };
+        dlg.AcceptButton = btnOk;
+        dlg.CancelButton = btnCancel;
+
+        dlg.Controls.AddRange([lblName, txtName, lblPath, txtPath, btnBrowse,
+            lblTrigger, cboTrigger, lblTime, dtpTime, btnOk, btnCancel]);
+
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        string taskName = txtName.Text.Trim();
+        string programPath = txtPath.Text.Trim();
+        if (string.IsNullOrWhiteSpace(taskName) || string.IsNullOrWhiteSpace(programPath))
+        {
+            MessageBox.Show(this, "Task name and program path are required.", "Validation Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        string trigger = cboTrigger.SelectedItem?.ToString() ?? "AtLogon";
+        string stArg = trigger is "Once" or "Daily"
+            ? $" /ST {dtpTime.Value:HH:mm}"
+            : "";
+
+        try
+        {
+            using var proc = new System.Diagnostics.Process();
+            proc.StartInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "schtasks.exe",
+                Arguments = $"/Create /F /TN \"{taskName}\" /TR \"{programPath}\" /SC {trigger}{stArg}",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+            proc.Start();
+            string output = proc.StandardOutput.ReadToEnd();
+            string error = proc.StandardError.ReadToEnd();
+            proc.WaitForExit();
+
+            if (proc.ExitCode == 0)
+            {
+                _statusLabel.Text = $"Task '{taskName}' created successfully.";
+                _ = RefreshAsync();
+            }
+            else
+            {
+                string msg = string.IsNullOrWhiteSpace(error) ? output : error;
+                MessageBox.Show(this, $"schtasks failed:\n{msg}", "Create Task Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Could not create task: {ex.Message}", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     protected override void Dispose(bool disposing)

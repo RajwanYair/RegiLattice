@@ -55,4 +55,5 @@ internal sealed class CliArgs
     public string? Compliance { get; set; }
     public string? ExportGpo { get; set; }
     public string? NewPack { get; set; }
+    public string? Manager { get; set; }
 }

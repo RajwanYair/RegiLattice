@@ -553,7 +553,7 @@ internal sealed class MarketplaceDialog : Form
             ? "(No changelog provided for this pack.)"
             : p.Changelog;
 
-        var rating = RegiLattice.Core.Services.Ratings.GetRating($"pack:{p.Name}");
+        var rating = RegiLattice.Core.Ratings.GetRating($"pack:{p.Name}");
         _lblRating.Text = rating is not null ? $"  Your rating: {rating.Stars}\u2605" : "  Not rated";
         _numRating.Value = rating?.Stars is >= 1 and <= 5 ? rating.Stars : 3;
     }
@@ -562,7 +562,7 @@ internal sealed class MarketplaceDialog : Form
     {
         if (_selectedPack is null) return;
         int stars = (int)_numRating.Value;
-        RegiLattice.Core.Services.Ratings.Rate($"pack:{_selectedPack.Name}", stars);
+        RegiLattice.Core.Ratings.Rate($"pack:{_selectedPack.Name}", stars);
         _lblRating.Text = $"  Your rating: {stars}\u2605";
     }
 

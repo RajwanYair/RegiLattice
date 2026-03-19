@@ -1831,4 +1831,66 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("Registry Management", tweak.Category);
     }
+
+    // ── Sprint 50 ─────────────────────────────────────────────────────────────
+
+    [Theory]
+    [InlineData("game-dvr-allow-capture-off")]
+    [InlineData("game-hpet-disable-reg")]
+    [InlineData("game-fse-behavior-optimize")]
+    [InlineData("game-audio-latency-1ms")]
+    public void RegisterBuiltins_Sprint50GamingTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Gaming", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("gpu-tasks-gpu-priority")]
+    [InlineData("gpu-hw-sched-policy")]
+    [InlineData("gpu-hdr-auto-color")]
+    [InlineData("gpu-opengl-flip-interval")]
+    public void RegisterBuiltins_Sprint50GpuTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("GPU / Graphics", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("boot-fast-startup-gpo")]
+    [InlineData("boot-hyperv-launch-off")]
+    [InlineData("boot-legacy-f8-menu")]
+    [InlineData("boot-bcd-nx-optin")]
+    public void RegisterBuiltins_Sprint50BootTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Boot", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("sys-pagefile-encrypt-off")]
+    [InlineData("sys-gdi-batch-limit")]
+    [InlineData("sys-large-pages-enable")]
+    [InlineData("sys-idle-task-priority")]
+    public void RegisterBuiltins_Sprint50SystemTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("System", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("w11-taskbar-combine-never")]
+    [InlineData("w11-clock-seconds")]
+    [InlineData("w11-search-box-hidden")]
+    [InlineData("w11-settings-ads-off")]
+    public void RegisterBuiltins_Sprint50Win11TweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Windows 11", tweak.Category);
+    }
 }

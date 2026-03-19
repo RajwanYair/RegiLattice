@@ -760,5 +760,197 @@ internal static class Boot
                 return stdout.Contains("sos", StringComparison.OrdinalIgnoreCase) && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "boot-fast-startup-gpo",
+            Label = "Enable Fast Startup via Group Policy",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets HiberbootEnabled=1 in the Windows System policy key to enforce fast startup at GPO level. Complements the standard fast startup registry setting. Default: not set.",
+            Tags = ["boot", "fast-startup", "policy", "hibernate"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "HiberbootEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "HiberbootEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "HiberbootEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-global-wait-timeout",
+            Label = "Set Global Shutdown Wait Timeout to 5s",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets WaitForIdleState=5 in the system Timeout key. Controls how long Windows waits for the system to become idle before shutdown completes. Default: 2.",
+            Tags = ["boot", "shutdown", "timeout", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout", "WaitForIdleState", 5)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout", "WaitForIdleState")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout", "WaitForIdleState", 5)],
+        },
+        new TweakDef
+        {
+            Id = "boot-menu-timeout-policy",
+            Label = "Set Boot Menu Display Timeout Policy to 10s",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets BootTimeoutSeconds=10 in the Windows System policy key. Controls the boot menu display time at policy level. Default: not set (uses BCD value).",
+            Tags = ["boot", "menu", "timeout", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BootTimeoutSeconds", 10)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BootTimeoutSeconds")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BootTimeoutSeconds", 10)],
+        },
+        new TweakDef
+        {
+            Id = "boot-hyperv-launch-off",
+            Label = "Disable Hyper-V Hypervisor Launch",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Runs 'bcdedit /set hypervisorlaunchtype off' to disable the Hyper-V hypervisor at boot. Improves native performance on bare-metal gaming/workstation installs. Default: auto.",
+            Tags = ["boot", "hyper-v", "bcd", "performance"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "hypervisorlaunchtype", "off"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "hypervisorlaunchtype", "auto"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("hypervisorlaunchtype", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Off", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-test-signing-off",
+            Label = "Disable Test Signing Mode",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs 'bcdedit /set testsigning off' to disable test-signing mode. Prevents unsigned test drivers from loading. Default: off.",
+            Tags = ["boot", "bcd", "security", "test-signing"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "testsigning", "off"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "testsigning", "on"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("testsigning", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("No", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-report-ok",
+            Label = "Enable Boot-OK Reporting to Winlogon",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets ReportBootOk=1 in Winlogon to signal that the current boot is clean and should be saved as the last known good configuration. Default: 1.",
+            Tags = ["boot", "winlogon", "last-known-good", "recovery"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ReportBootOk", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ReportBootOk")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ReportBootOk", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-kernel-debug-filter",
+            Label = "Suppress Kernel Debug Print Filter",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets DEFAULT=0x0 in the Debug Print Filter to suppress kernel debug messages, reducing DbgPrint overhead on retail builds. Default: 0x8 or not set.",
+            Tags = ["boot", "kernel", "debug", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter", "DEFAULT", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter", "DEFAULT")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter", "DEFAULT", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-winre-policy-allow",
+            Label = "Allow Windows Recovery Environment Policy",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets DisableWinRE=0 in WinRE policy to ensure the Windows Recovery Environment remains accessible. Prevents accidental policy lockout of recovery tools. Default: 0.",
+            Tags = ["boot", "recovery", "winre", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE", "DisableWinRE", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE", "DisableWinRE")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE", "DisableWinRE", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-legacy-f8-menu",
+            Label = "Enable Legacy F8 Boot Menu",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs 'bcdedit /set {bootmgr} displaybootmenu yes' to enable the legacy F8 boot menu. Allows access to safe mode and other startup options. Default: off on modern Windows.",
+            Tags = ["boot", "bcd", "safe-mode", "f8"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "{bootmgr}", "displaybootmenu", "yes"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "{bootmgr}", "displaybootmenu", "no"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
+                return stdout.Contains("displaybootmenu", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("Yes", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "boot-bcd-nx-optin",
+            Label = "Set Data Execution Prevention to OptIn",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Runs 'bcdedit /set nx OptIn' to enable DEP (Data Execution Prevention) only for OS-protected processes. Balances security and compatibility. Default: OptIn.",
+            Tags = ["boot", "bcd", "dep", "security"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "nx", "OptIn"]);
+            },
+            RemoveAction = dryRun =>
+            {
+                Elevation.AssertAdmin(dryRun);
+                Elevation.RunElevated("bcdedit", ["/set", "nx", "OptIn"]);
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
+                return stdout.Contains("nx", StringComparison.OrdinalIgnoreCase)
+                    && stdout.Contains("OptIn", StringComparison.OrdinalIgnoreCase);
+            },
+        },
     ];
 }
