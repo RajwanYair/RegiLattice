@@ -197,56 +197,94 @@ partial class MainForm
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
         var mnuInvert2 = new ToolStripMenuItem("Invert Selection");
 
-        var mnuTools = new ToolStripMenuItem("&Tools");
-        mnuTools.DropDownItems.AddRange(new ToolStripItem[]
+        // ── Tools submenus ─────────────────────────────────────────────────
+        var subSysDiag = new ToolStripMenuItem("System &Diagnostics");
+        subSysDiag.DropDownItems.AddRange(new ToolStripItem[]
         {
-            _mnuToolVersions,
             _mnuWinHealth,
-            _mnuNetTools,
+            _mnuToolVersions,
+            _mnuBootAnalyzer,
+            _mnuWuControl,
+            _mnuDriverChecker,
+            new ToolStripSeparator(),
+            _mnuBatteryHealth,
+            _mnuHwTempMon,
+        });
+
+        var subSysMgmt = new ToolStripMenuItem("System &Management");
+        subSysMgmt.DropDownItems.AddRange(new ToolStripItem[]
+        {
             _mnuStartupMgr,
             _mnuServiceMgr,
             _mnuSchedTaskMgr,
-            _mnuPowerPlan,
-            _mnuPrivacyDash,
             new ToolStripSeparator(),
-            _mnuContextMenuMgr,
-            _mnuHostsFileMgr,
-            _mnuTempCleaner,
             _mnuInstalledApps,
-            new ToolStripSeparator(),
+            _mnuContextMenuMgr,
+            _mnuShellExtensions,
+        });
+
+        var subPower = new ToolStripMenuItem("&Power && Energy");
+        subPower.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            _mnuPowerPlan,
             _mnuPowerScheduler,
             _mnuSleepTimer,
+            new ToolStripSeparator(),
             _mnuBatterySaver,
             _mnuUsbPower,
-            new ToolStripSeparator(),
+            _mnuBrightness,
+        });
+
+        var subPrivSec = new ToolStripMenuItem("&Privacy && Security");
+        subPrivSec.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            _mnuPrivacyDash,
             _mnuAdRemoval,
             _mnuTelemetryDash,
             _mnuAppPermissions,
-            _mnuDnsOverHttps,
-            new ToolStripSeparator(),
-            _mnuNetRepair,
-            _mnuDnsSwitcher,
-            _mnuNetAdapter,
-            _mnuWiFiProfiles,
             new ToolStripSeparator(),
             _mnuFirewallRules,
-            _mnuProxyConfig,
-            _mnuShellExtensions,
-            _mnuBootAnalyzer,
-            _mnuWuControl,
             _mnuNotifMgr,
-            _mnuBrowserCache,
-            _mnuDriverChecker,
-            _mnuWakeOnLan,
-            _mnuBrightness,
+        });
+
+        var subNetwork = new ToolStripMenuItem("&Network");
+        subNetwork.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            _mnuNetTools,
+            _mnuNetRepair,
             new ToolStripSeparator(),
+            _mnuNetAdapter,
+            _mnuWiFiProfiles,
+            _mnuHostsFileMgr,
+            _mnuProxyConfig,
+            new ToolStripSeparator(),
+            _mnuDnsSwitcher,
+            _mnuDnsOverHttps,
+            new ToolStripSeparator(),
+            _mnuPortScan,
+            _mnuNetBandwidth,
+            _mnuWakeOnLan,
+            _mnuMacAddress,
+        });
+
+        var subCleanup = new ToolStripMenuItem("&Cleanup && Performance");
+        subCleanup.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            _mnuTempCleaner,
+            _mnuBrowserCache,
             _mnuMemoryCleaner,
             _mnuDiskSpace,
-            _mnuPortScan,
-            _mnuBatteryHealth,
-            _mnuHwTempMon,
-            _mnuNetBandwidth,
-            _mnuMacAddress,
+        });
+
+        var mnuTools = new ToolStripMenuItem("&Tools");
+        mnuTools.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            subSysDiag,
+            subSysMgmt,
+            subPower,
+            subPrivSec,
+            subNetwork,
+            subCleanup,
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
