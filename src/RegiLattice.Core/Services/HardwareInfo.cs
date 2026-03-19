@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/HardwareInfo.cs
+﻿// RegiLattice.Core — Services/HardwareInfo.cs
 // Hardware detection using WMI and P/Invoke.
 
 using System.Collections.Concurrent;

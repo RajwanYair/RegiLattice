@@ -1,4 +1,4 @@
-using RegiLattice.Core.Models;
+﻿using RegiLattice.Core.Models;
 using RegiLattice.Core.Registry;
 using Xunit;
 

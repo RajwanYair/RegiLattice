@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using RegiLattice.Core.Models;
 using Xunit;
 

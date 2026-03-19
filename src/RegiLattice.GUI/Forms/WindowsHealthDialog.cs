@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/WindowsHealthDialog.cs
+﻿// RegiLattice.GUI — Forms/WindowsHealthDialog.cs
 // Windows Health & Maintenance dialog — runs DISM, SFC, disk, network and power diagnostics.
 
 using RegiLattice.GUI.PackageManagers;

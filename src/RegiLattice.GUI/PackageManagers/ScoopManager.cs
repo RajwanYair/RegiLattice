@@ -1,4 +1,4 @@
-namespace RegiLattice.GUI.PackageManagers;
+﻿namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps scoop CLI operations with input validation.</summary>
 internal static class ScoopManager

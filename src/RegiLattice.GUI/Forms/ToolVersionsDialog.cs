@@ -1,4 +1,4 @@
-using RegiLattice.Core;
+﻿using RegiLattice.Core;
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;

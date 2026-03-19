@@ -647,6 +647,21 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
 
+### Sprint 44 — CRLF Fix + Japanese Locale + 50 New Tweaks ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Normalise CRLF→LF across 152 C# source files matching `.gitattributes` `*.cs eol=lf` | ✅ |
+| 2 | Japanese locale (`ja`) — 51-key translation added to `Locale.cs`; `BuiltInLocales["ja"] = Ja`; 6 built-in locales now | ✅ |
+| 3 | `PhoneLink.cs` — 10 new tweaks: `phone-disable-alljoyn-router`, `-wpd-service`, `-link-to-windows-banner`, `-continue-on-pc`, `-phone-activation-policy`, `-device-assoc-svc`, `-cdp-prompt`, `-roam-trigger-consent`, `-hotspot-auth`, `-windows-hello-companion` | ✅ |
+| 4 | `OneDrive.cs` — 10 new tweaks: `od-disable-kfm-opt-in-prompt`, `-kfm-silent-redirect`, `-delay-update-ring`, `-sharepoint-sync`, `-app-sync`, `od-limit-mass-delete-threshold`, `od-disable-hydration-on-access`, `-auto-update`, `-file-explorer-hub`, `od-block-external-collab` | ✅ |
+| 5 | `Notifications.cs` — 10 new tweaks: `notif-disable-low-disk-alert`, `-defender-user-notif`, `-reboot-required`, `-balloon-tips`, `-smartscreen-user`, `-taskbar-suggestions`, `-oem-preinstall-suggestions`, `-tips-and-tricks`, `-clear-recent-on-exit`, `-no-logged-users-reboot` | ✅ |
+| 6 | `Gaming.cs` — 10 new tweaks: `game-set-sfio-priority-high`, `game-disable-ndu-service`, `game-set-system-responsiveness-zero`, `game-set-network-throttling-off`, `game-set-gpu-priority-8`, `game-set-latency-sensitivity-high`, `game-set-background-only-false`, `game-set-priority-6`, `game-disable-xbox-accessory-svc`, `game-increase-max-user-port` | ✅ |
+| 7 | `Maintenance.cs` — 10 new tweaks: `maint-clear-recent-docs-on-exit`, `-reduce-service-shutdown-timeout`, `-reduce-app-kill-timeout`, `-enable-long-paths`, `-disable-desktop-cleanup-wizard`, `-disable-hang-boot-timeout`, `-auto-end-tasks-on-shutdown`, `-disable-crash-on-audit-fail`, `-disable-show-recent-in-explorer`, `-disable-frequent-in-explorer` | ✅ |
+| 8 | `TweakEngineBuiltinsTests.cs` — 5 new `[Theory]` test methods; 50 new `[InlineData]` entries; Core tests 1344→1394 | ✅ |
+| 9 | Build: 0 errors, 0 warnings; all 1394 Core tests passing | ✅ |
+| 10 | Total: **2 896 tweaks** (+50), locale count 6 (en/de/fr/es/he/ja) | ✅ |
+
 ### Sprint 43 — Bug Fixes + Package Manager Menu + Hebrew + 50 New Tweaks ✅
 
 | # | Task | Status |
@@ -845,7 +860,7 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 |---|------|----------|--------|--------|
 | 91 | French locale (3rd language) | HIGH | Original | ✅ Sprint 38 |
 | 92 | Spanish locale (4th language) | HIGH | Original | ✅ Sprint 38 |
-| 93 | Japanese locale (5th language) | MEDIUM | Original | 🔄 Future |
+| 93 | Japanese locale (5th language) | MEDIUM | Original | ✅ Sprint 44 |
 | 94 | Chocolatey package submission | MEDIUM | Planned (P3) | 🔄 Future |
 | 95 | Microsoft Store listing | MEDIUM | Original | 🔄 Future |
 | 96 | Code signing for published binaries | MEDIUM | Planned (P2) | 🔄 Future |

@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/WinGetManager.cs
+﻿// RegiLattice.Core — Services/WinGetManager.cs
 // WinGet (Windows Package Manager) wrapper.
 
 using System.Text.RegularExpressions;

@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/ListViewColumnSorter.cs
+﻿// RegiLattice.GUI — Forms/ListViewColumnSorter.cs
 // Provides click-to-sort and per-column filter dropdown for the main ListView.
 
 using System.Collections;

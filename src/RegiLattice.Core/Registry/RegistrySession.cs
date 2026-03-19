@@ -1,4 +1,4 @@
-// RegiLattice.Core — Registry/RegistrySession.cs
+﻿// RegiLattice.Core — Registry/RegistrySession.cs
 // Windows registry wrapper using Microsoft.Win32.Registry.
 // Replaces the Python RegistrySession entirely — zero subprocess, zero P/Invoke.
 

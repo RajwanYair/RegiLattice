@@ -1,4 +1,4 @@
-// RegiLattice.CLI — Program.cs
+﻿// RegiLattice.CLI — Program.cs
 // RegiLattice command-line interface.
 // All features: apply, remove, list, status, search, profiles, snapshots, doctor, etc.
 

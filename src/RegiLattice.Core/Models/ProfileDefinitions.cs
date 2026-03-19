@@ -1,4 +1,4 @@
-// RegiLattice.Core — Models/ProfileDefinitions.cs
+﻿// RegiLattice.Core — Models/ProfileDefinitions.cs
 // Static profile data — replaces Python _PROFILES dict.
 
 namespace RegiLattice.Core.Models;

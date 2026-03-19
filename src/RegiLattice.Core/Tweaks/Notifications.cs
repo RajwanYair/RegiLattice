@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -725,6 +725,146 @@ internal static class Notifications
                     0
                 ),
             ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-low-disk-alert",
+            Label = "Disable Low Disk Space Alert",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Windows popup warnings about low disk space on drives. Default: Enabled.",
+            Tags = ["notifications", "disk", "low-disk", "alert"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-defender-user-notif",
+            Label = "Suppress Windows Defender Notifications",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description = "Suppresses Windows Defender security notifications that appear during scans and threat detections.",
+            Tags = ["notifications", "defender", "antivirus", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-reboot-required",
+            Label = "Disable Windows Update Reboot Required Notification",
+            Category = "Notifications",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Windows Update from nagging users to reboot when an update is pending installation.",
+            Tags = ["notifications", "windows-update", "reboot", "nagging"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable", 1)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-balloon-tips",
+            Label = "Disable System Tray Balloon Tips",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables legacy balloon tips from system tray icons. Default: enabled. Modern toast notifications are not affected.",
+            Tags = ["notifications", "balloon", "tray", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-smartscreen-user",
+            Label = "Disable SmartScreen Evaluation Notifications (User)",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description = "Disables per-user SmartScreen web content evaluation, suppressing SmartScreen block and warning notifications.",
+            Tags = ["notifications", "smartscreen", "browser", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-taskbar-suggestions",
+            Label = "Disable Taskbar & Start Suggestions",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Microsoft-promoted content appearing in the taskbar system pane. Removes commercial suggestions from the system tray area.",
+            Tags = ["notifications", "taskbar", "suggestions", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-oem-preinstall-suggestions",
+            Label = "Disable OEM Preinstalled App Suggestions",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from suggesting OEM preinstalled applications and cloud app links via notification banners.",
+            Tags = ["notifications", "oem", "preinstall", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-tips-and-tricks",
+            Label = "Disable Windows Tips and Tricks Notifications",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Turns off Windows tips, tricks, and personalised suggestions shown in notifications and the Start menu.",
+            Tags = ["notifications", "tips", "tricks", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-clear-recent-on-exit",
+            Label = "Clear Recent Items List on Exit",
+            Category = "Notifications",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Automatically clears Recent Documents (MRU) lists each time the user logs off. Prevents leaving access trail.",
+            Tags = ["notifications", "recent-docs", "privacy", "mru"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-no-logged-users-reboot",
+            Label = "Allow Reboot with Logged-On Users (Windows Update)",
+            Category = "Notifications",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Windows Update from rebooting while a user is logged on. Eliminates surprise forced-reboot notifications.",
+            Tags = ["notifications", "windows-update", "reboot", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers", 1)],
         },
     ];
 }
