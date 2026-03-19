@@ -3,6 +3,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using RegiLattice.Core;
 
 namespace RegiLattice.GUI.Forms;
 
@@ -10,9 +11,16 @@ namespace RegiLattice.GUI.Forms;
 /// Base class for all non-main-window dialogs.
 /// Applies common settings: border style, centering, taskbar hiding,
 /// maximize/minimize box suppression, and an optional app icon.
+/// Supports both embedded (shown from MainForm) and standalone (launched via --tool) modes.
 /// </summary>
 internal abstract class BaseDialog : Form
 {
+    // Tracks whether this dialog was started in standalone mode
+    // (Application.Run called on it directly, not shown from a parent form).
+#pragma warning disable CS0414 // assigned but never read — consumed by EnableStandaloneMode
+    private bool _standaloneMode;
+#pragma warning restore CS0414
+
     /// <summary>
     /// Initialises common dialog properties.
     /// </summary>
@@ -27,16 +35,29 @@ internal abstract class BaseDialog : Form
         Text = title;
         Size = size;
         FormBorderStyle = resizable ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
+        MaximizeBox = resizable;
         MinimizeBox = false;
-        StartPosition = FormStartPosition.CenterParent;
+        StartPosition = FormStartPosition.CenterScreen;
         ShowInTaskbar = false;
         Icon = AppIcons.AppIcon;
     }
 
+    /// <summary>
+    /// Configures this dialog for standalone mode: shows in taskbar,
+    /// allows the window state to be minimised, and applies the current theme.
+    /// Call this before <see cref="Application.Run(Form)"/>.
+    /// </summary>
+    internal void EnableStandaloneMode()
+    {
+        _standaloneMode = true;
+        ShowInTaskbar = true;
+        MinimizeBox = true;
+        AppTheme.Apply(this);
+    }
+
     // ── Shared factory helpers ────────────────────────────────────────────────
 
-    /// <summary>Creates a bold section header label.</summary>
+    /// <summary>Creates a bold, accent-coloured section header label.</summary>
     protected static Label CreateSectionHeader(string text) =>
         new()
         {
@@ -71,4 +92,52 @@ internal abstract class BaseDialog : Form
 
     /// <summary>Creates a standard dialog action button.</summary>
     protected static Button CreateButton(string text, int width = 86) => new() { Text = text, Width = width };
+
+    /// <summary>
+    /// Creates a themed admin/elevation banner panel.
+    /// Shows a blue info strip explaining that elevation is needed.
+    /// </summary>
+    /// <param name="message">The message to display in the banner.</param>
+    protected static Panel CreateAdminBanner(string message = "Some operations require administrator privileges.")
+    {
+        var banner = new Panel
+        {
+            Dock = DockStyle.Top,
+            Height = 28,
+            BackColor = Color.FromArgb(50, 120, 200),
+        };
+        var lbl = new Label
+        {
+            Dock = DockStyle.Fill,
+            Text = "\uD83D\uDEE1 " + message,
+            ForeColor = Color.White,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Padding = new Padding(6, 0, 0, 0),
+        };
+        banner.Controls.Add(lbl);
+        return banner;
+    }
+
+    /// <summary>
+    /// Creates a warning banner panel (amber).
+    /// </summary>
+    protected static Panel CreateWarningBanner(string message)
+    {
+        var banner = new Panel
+        {
+            Dock = DockStyle.Top,
+            Height = 28,
+            BackColor = Color.FromArgb(180, 120, 0),
+        };
+        var lbl = new Label
+        {
+            Dock = DockStyle.Fill,
+            Text = "\u26A0 " + message,
+            ForeColor = Color.White,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Padding = new Padding(6, 0, 0, 0),
+        };
+        banner.Controls.Add(lbl);
+        return banner;
+    }
 }

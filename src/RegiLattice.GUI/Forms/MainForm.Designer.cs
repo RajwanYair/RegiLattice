@@ -23,8 +23,6 @@ partial class MainForm
     private ToolStripButton _btnSelectAll = null!;
     private ToolStripButton _btnDeselectAll = null!;
     private ToolStripButton _btnInvert = null!;
-    private ToolStripLabel _themeLabel = null!;
-    private ToolStripComboBox _themeCombo = null!;
     private ToolStripButton _btnSettings = null!;
 
     // ── Kind filter ────────────────────────────────────────────────────────
@@ -43,6 +41,13 @@ partial class MainForm
     private ToolStripMenuItem _mnuNetTools = null!;
     private ToolStripMenuItem _mnuStartupMgr = null!;
     private ToolStripMenuItem _mnuServiceMgr = null!;
+    private ToolStripMenuItem _mnuSchedTaskMgr = null!;
+    private ToolStripMenuItem _mnuPowerPlan = null!;
+    private ToolStripMenuItem _mnuPrivacyDash = null!;
+    private ToolStripMenuItem _mnuContextMenuMgr = null!;
+    private ToolStripMenuItem _mnuHostsFileMgr = null!;
+    private ToolStripMenuItem _mnuTempCleaner = null!;
+    private ToolStripMenuItem _mnuInstalledApps = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -119,6 +124,13 @@ partial class MainForm
         _mnuNetTools = new ToolStripMenuItem("Network Tools...") { Image = AppIcons.NetworkMenuBitmap };
         _mnuStartupMgr = new ToolStripMenuItem("Startup Manager...") { Image = AppIcons.StartupMenuBitmap };
         _mnuServiceMgr = new ToolStripMenuItem("Service Manager...") { Image = AppIcons.ServiceMenuBitmap };
+        _mnuSchedTaskMgr = new ToolStripMenuItem("Scheduled Task Manager...") { Image = AppIcons.ServiceMenuBitmap };
+        _mnuPowerPlan = new ToolStripMenuItem("Power Plan Manager...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuPrivacyDash = new ToolStripMenuItem("Privacy Dashboard...") { Image = AppIcons.PrivacyMenuBitmap };
+        _mnuContextMenuMgr = new ToolStripMenuItem("Context Menu Manager...") { Image = AppIcons.ExplorerMenuBitmap };
+        _mnuHostsFileMgr  = new ToolStripMenuItem("Hosts File Manager...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuTempCleaner   = new ToolStripMenuItem("Temp File Cleaner...") { Image = AppIcons.CleanupMenuBitmap };
+        _mnuInstalledApps = new ToolStripMenuItem("Installed Applications...") { Image = AppIcons.MarketplaceMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -134,6 +146,14 @@ partial class MainForm
             _mnuNetTools,
             _mnuStartupMgr,
             _mnuServiceMgr,
+            _mnuSchedTaskMgr,
+            _mnuPowerPlan,
+            _mnuPrivacyDash,
+            new ToolStripSeparator(),
+            _mnuContextMenuMgr,
+            _mnuHostsFileMgr,
+            _mnuTempCleaner,
+            _mnuInstalledApps,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -174,6 +194,13 @@ partial class MainForm
         _mnuNetTools.Click += (_, _) => OnOpenNetworkTools();
         _mnuStartupMgr.Click += (_, _) => OnOpenStartupManager();
         _mnuServiceMgr.Click += (_, _) => OnOpenServiceManager();
+        _mnuSchedTaskMgr.Click += (_, _) => OnOpenScheduledTaskManager();
+        _mnuPowerPlan.Click += (_, _) => OnOpenPowerPlan();
+        _mnuPrivacyDash.Click       += (_, _) => OnOpenPrivacyDashboard();
+        _mnuContextMenuMgr.Click      += (_, _) => OnOpenContextMenuManager();
+        _mnuHostsFileMgr.Click        += (_, _) => OnOpenHostsFileManager();
+        _mnuTempCleaner.Click         += (_, _) => OnOpenTempFileCleaner();
+        _mnuInstalledApps.Click       += (_, _) => OnOpenInstalledApps();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
@@ -227,15 +254,7 @@ partial class MainForm
         _btnDeselectAll = new ToolStripButton("\u2610 None") { ToolTipText = "Deselect all (Ctrl+D)", DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnInvert = new ToolStripButton("\U0001F504 Invert") { ToolTipText = "Invert selection (Ctrl+I)", DisplayStyle = ToolStripItemDisplayStyle.Text };
 
-        // Theme combo stays in toolbar for quick switching AND appears in Preferences dialog
-        _themeLabel = new ToolStripLabel("Theme:");
-        _themeCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Quick-switch colour theme (also in Preferences)", Width = 140 };
-        foreach (string t in AppTheme.AvailableThemes())
-            _themeCombo.Items.Add(t);
-        _themeCombo.SelectedItem = AppTheme.CurrentThemeName();
-        _themeCombo.SelectedIndexChanged += OnThemeChanged;
-
-        // Settings / Preferences button
+        // Settings / Preferences button (theme is now managed exclusively through Preferences)
         _btnSettings = new ToolStripButton("\u2699 Settings")
         {
             ToolTipText = "Open Preferences dialog (Ctrl+Shift+P)",
@@ -278,8 +297,6 @@ partial class MainForm
             _kindLabel, _kindCombo,
             new ToolStripSeparator(),
             _btnSelectAll, _btnDeselectAll, _btnInvert,
-            new ToolStripSeparator(),
-            _themeLabel, _themeCombo,
             new ToolStripSeparator(),
             _btnSettings,
         });
@@ -365,18 +382,19 @@ partial class MainForm
         // ── Detail panel (bottom of Panel2) ────────────────────────────────
         _detailBox = new RichTextBox
         {
-            BackColor = AppTheme.Surface,
-            ForeColor = AppTheme.FgDim,
-            Font = AppTheme.Regular,
-            ReadOnly = true,
+            ReadOnly = true,                         // set FIRST so BackColor is not overridden
             BorderStyle = BorderStyle.None,
-            ScrollBars = RichTextBoxScrollBars.None,
+            ScrollBars = RichTextBoxScrollBars.Vertical,
             Multiline = true,
             WordWrap = true,
             Dock = DockStyle.Fill,
             TabStop = false,
             Text = "\U0001F4CB Select a tweak to see details.",
         };
+        // Reinforce colors AFTER ReadOnly is set to prevent Windows from using System defaults
+        _detailBox.BackColor = AppTheme.Surface;
+        _detailBox.ForeColor = AppTheme.FgDim;
+        _detailBox.Font = AppTheme.Regular;
         // Prevent the default white RichTextBox context menu from stealing focus
         _detailBox.MouseClick += (_, _) => _listView.Focus();
         _detailPanel = new Panel

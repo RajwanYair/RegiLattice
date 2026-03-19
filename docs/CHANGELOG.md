@@ -4,7 +4,7 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [3.5.0] — 2026-03-18
 
 ### Added — Sprint 27: Network Tools
 

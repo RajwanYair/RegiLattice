@@ -35,10 +35,14 @@ internal sealed class PreferencesDialog : Form
     private readonly CheckBox _chkForceCorp;
     private readonly CheckBox _chkAutoRefreshOnStartup;
     private readonly CheckBox _chkLaunchMinimized;
+    private readonly CheckBox _chkSkipAppliedOnBatch;
+    private readonly CheckBox _chkRememberSplitter;
 
     // Performance
     private readonly NumericUpDown _maxWorkers;
     private readonly CheckBox _chkStatusMonitor;
+    private readonly NumericUpDown _historyMaxEntries;
+    private readonly CheckBox _chkMonitorColorCoded;
 
     // Data
     private readonly CheckBox _chkAutoBackup;
@@ -176,6 +180,18 @@ internal sealed class PreferencesDialog : Form
             Checked = config.LaunchMinimized,
             AutoSize = true,
         };
+        _chkSkipAppliedOnBatch = new CheckBox
+        {
+            Text = "Skip already-applied tweaks in batch operations",
+            Checked = config.SkipAppliedOnBatch,
+            AutoSize = true,
+        };
+        _chkRememberSplitter = new CheckBox
+        {
+            Text = "Remember splitter position between sessions",
+            Checked = config.RememberSplitter,
+            AutoSize = true,
+        };
 
         var behaviourPanel = new FlowLayoutPanel
         {
@@ -191,6 +207,8 @@ internal sealed class PreferencesDialog : Form
         behaviourPanel.Controls.Add(_chkConfirmRemove);
         behaviourPanel.Controls.Add(_chkShowInapplicable);
         behaviourPanel.Controls.Add(_chkForceCorp);
+        behaviourPanel.Controls.Add(_chkSkipAppliedOnBatch);
+        behaviourPanel.Controls.Add(_chkRememberSplitter);
 
         tabBehaviour.Controls.Add(behaviourPanel);
 
@@ -210,21 +228,39 @@ internal sealed class PreferencesDialog : Form
             Checked = config.StatusBarMonitor,
             AutoSize = true,
         };
+        _historyMaxEntries = new NumericUpDown
+        {
+            Minimum = 50,
+            Maximum = 5000,
+            Increment = 50,
+            Value = Math.Clamp(config.HistoryMaxEntries, 50, 5000),
+            Width = 80,
+        };
+        _chkMonitorColorCoded = new CheckBox
+        {
+            Text = "Color-code CPU/RAM monitor (green/yellow/red)",
+            Checked = config.MonitorColorCoded,
+            AutoSize = true,
+        };
 
         var perfPanel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 3,
+            RowCount = 5,
             Padding = new Padding(12),
         };
-        perfPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
+        perfPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
         perfPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
         perfPanel.Controls.Add(CreateLabel("Max parallel workers:"), 0, 0);
         perfPanel.Controls.Add(_maxWorkers, 1, 0);
-        perfPanel.Controls.Add(_chkStatusMonitor, 0, 1);
+        perfPanel.Controls.Add(CreateLabel("History max entries:"), 0, 1);
+        perfPanel.Controls.Add(_historyMaxEntries, 1, 1);
+        perfPanel.Controls.Add(_chkStatusMonitor, 0, 2);
         perfPanel.SetColumnSpan(_chkStatusMonitor, 2);
+        perfPanel.Controls.Add(_chkMonitorColorCoded, 0, 3);
+        perfPanel.SetColumnSpan(_chkMonitorColorCoded, 2);
 
         tabPerformance.Controls.Add(perfPanel);
 
@@ -325,9 +361,13 @@ internal sealed class PreferencesDialog : Form
         _config.ConfirmRemove = _chkConfirmRemove.Checked;
         _config.ShowInapplicable = _chkShowInapplicable.Checked;
         _config.ForceCorp = _chkForceCorp.Checked;
+        _config.SkipAppliedOnBatch = _chkSkipAppliedOnBatch.Checked;
+        _config.RememberSplitter = _chkRememberSplitter.Checked;
 
         _config.MaxWorkers = (int)_maxWorkers.Value;
         _config.StatusBarMonitor = _chkStatusMonitor.Checked;
+        _config.HistoryMaxEntries = (int)_historyMaxEntries.Value;
+        _config.MonitorColorCoded = _chkMonitorColorCoded.Checked;
 
         _config.AutoBackup = _chkAutoBackup.Checked;
         _config.CheckToolUpdates = _chkToolUpdates.Checked;

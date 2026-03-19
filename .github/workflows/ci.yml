@@ -41,11 +41,15 @@ jobs:
 
       - name: Test with coverage
         run: >-
-          dotnet test RegiLattice.sln -c Release --no-build
+          dotnet test
+          tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
+          tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj
+          tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj
+          -c Release --no-build
           --settings tests/.runsettings
-          --blame-hang-timeout 60s
+          --blame-hang-timeout 30s
           --collect:"XPlat Code Coverage"
-          --logger "console;verbosity=normal"
+          --logger "console;verbosity=minimal"
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4

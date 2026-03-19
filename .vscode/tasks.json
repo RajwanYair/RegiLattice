@@ -29,7 +29,7 @@
     {
       "label": "test: All",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test RegiLattice.sln --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build }; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build } }",
       "group": {
         "kind": "test",
         "isDefault": true
@@ -98,7 +98,7 @@
     {
       "label": "verify: Release Gate",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Release -m:1; if ($LASTEXITCODE -eq 0) { dotnet test RegiLattice.sln -c Release --settings tests/.runsettings --blame-hang-timeout 60s --logger \"console;verbosity=normal\" --no-build; dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui; dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli }",
+      "command": "dotnet build RegiLattice.sln -c Release -m:1; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Release --settings tests/.runsettings --blame-hang-timeout 30s --logger \"console;verbosity=minimal\" --no-build; dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/gui; dotnet publish src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish/release/cli }",
       "group": "build",
       "problemMatcher": "$msCompile",
       "presentation": {

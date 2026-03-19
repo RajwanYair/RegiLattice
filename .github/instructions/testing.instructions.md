@@ -13,12 +13,12 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 ## Test Projects
 
-| Project | Tests | Covers |
-|---------|-------|--------|
-| `RegiLattice.Core.Tests` | 784 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
-| `RegiLattice.CLI.Tests` | 111 | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer) |
-| `RegiLattice.GUI.Tests` | 410 | Theme, PackageManagerValidation, PackageNameValidator, AppIcons |
-| **Total** | **1,305** | |
+| Project                  | Tests     | Covers                                                                                                                                                                         |
+| ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `RegiLattice.Core.Tests` | 784       | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
+| `RegiLattice.CLI.Tests`  | 111       | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
+| `RegiLattice.GUI.Tests`  | 410       | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
+| **Total**                | **1,305** |                                                                                                                                                                                |
 
 ## Running Tests
 
@@ -188,30 +188,30 @@ reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -repor
 
 ### Coverage Targets
 
-| Component | Target | Actual (v3.4.0) | Notes |
-|-----------|--------|------------------|-------|
-| TweakDef model | 95%+ | 100% | Pure logic, fully testable |
-| TweakEngine | 90%+ | 87% | Core business logic |
-| RegistrySession | 80%+ | 70% | DryRun mode for safe testing |
-| Services | 85%+ | 60–85% | Mock P/Invoke and WMI |
-| GUI (Theme) | 90%+ | 90%+ | Theme records are pure data |
-| GUI (Forms) | 60%+ | 60%+ | WinForms hard to unit test |
-| **Overall (Core)** | **80%+** | **94.9% line** | 56.8% branch |
+| Component          | Target   | Actual (v3.5.0) | Notes                        |
+| ------------------ | -------- | --------------- | ---------------------------- |
+| TweakDef model     | 95%+     | 100%            | Pure logic, fully testable   |
+| TweakEngine        | 90%+     | 87%             | Core business logic          |
+| RegistrySession    | 80%+     | 70%             | DryRun mode for safe testing |
+| Services           | 85%+     | 60–85%          | Mock P/Invoke and WMI        |
+| GUI (Theme)        | 90%+     | 90%+            | Theme records are pure data  |
+| GUI (Forms)        | 60%+     | 60%+            | WinForms hard to unit test   |
+| **Overall (Core)** | **80%+** | **94.9% line**  | 56.8% branch                 |
 
 ### Coverage by TweakKind
 
 Tweak modules are grouped by `TweakKind`. Coverage patterns differ by kind:
 
-| TweakKind | Testable? | Coverage Strategy |
-|-----------|-----------|-------------------|
-| `Registry` | ✅ Yes (95%+) | Pure RegOp declarations — tested via `RegisterBuiltins()` + tweak count/ID/category assertions |
-| `PowerShell` | ⚠️ Partial (69%) | `ApplyAction`/`DetectAction` delegates call PSH — test registration + structure only |
-| `SystemCommand` | ⚠️ Partial (62%) | `ApplyAction` runs bcdedit/dism/netsh — test registration only, no execution in CI |
-| `ServiceControl` | ⚠️ Partial (52%) | `ApplyAction` runs sc.exe — test tweak metadata only |
-| `ScheduledTask` | ⚠️ Partial (52%) | `ApplyAction` runs schtasks — test tweak metadata only |
-| `FileConfig` | ⚠️ Partial | Writes to .wslconfig / JSON — test registration + structure |
-| `GroupPolicy` | ✅ Yes (95%+) | Uses RegOps on `Policies\` paths — same as Registry kind |
-| `PackageManager` | ❌ No (0%) | Requires external tools (scoop, pip, winget) — skip in CI |
+| TweakKind        | Testable?        | Coverage Strategy                                                                              |
+| ---------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| `Registry`       | ✅ Yes (95%+)    | Pure RegOp declarations — tested via `RegisterBuiltins()` + tweak count/ID/category assertions |
+| `PowerShell`     | ⚠️ Partial (69%) | `ApplyAction`/`DetectAction` delegates call PSH — test registration + structure only           |
+| `SystemCommand`  | ⚠️ Partial (62%) | `ApplyAction` runs bcdedit/dism/netsh — test registration only, no execution in CI             |
+| `ServiceControl` | ⚠️ Partial (52%) | `ApplyAction` runs sc.exe — test tweak metadata only                                           |
+| `ScheduledTask`  | ⚠️ Partial (52%) | `ApplyAction` runs schtasks — test tweak metadata only                                         |
+| `FileConfig`     | ⚠️ Partial       | Writes to .wslconfig / JSON — test registration + structure                                    |
+| `GroupPolicy`    | ✅ Yes (95%+)    | Uses RegOps on `Policies\` paths — same as Registry kind                                       |
+| `PackageManager` | ❌ No (0%)       | Requires external tools (scoop, pip, winget) — skip in CI                                      |
 
 ### Intentionally Untested Components
 

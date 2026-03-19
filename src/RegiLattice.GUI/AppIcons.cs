@@ -70,6 +70,8 @@ internal static class AppIcons
     internal static Bitmap NetworkMenuBitmap => MenuBitmap("menu-network", DrawNetworkIcon);
     internal static Bitmap StartupMenuBitmap => MenuBitmap("menu-startup", DrawStartupIcon);
     internal static Bitmap ServiceMenuBitmap => MenuBitmap("menu-service", DrawServiceIcon);
+    internal static Bitmap PerformanceMenuBitmap => MenuBitmap("menu-perf", DrawPerformanceIcon);
+    internal static Bitmap PrivacyMenuBitmap => MenuBitmap("menu-privacy", DrawPrivacyIcon);
 
     /// <summary>Invalidate the cache (call after theme change).</summary>
     /// <remarks>
@@ -492,6 +494,42 @@ internal static class AppIcons
     internal static Bitmap RemoveMenuBitmap => MenuBitmap("menu-remove", DrawRemoveIcon);
     internal static Bitmap RefreshMenuBitmap => MenuBitmap("menu-refresh", DrawRefreshIcon);
     internal static Bitmap ExportMenuBitmap => MenuBitmap("menu-export", DrawExportIcon);
+    internal static Bitmap ExplorerMenuBitmap => MenuBitmap("menu-explorer", DrawExplorerIcon);
+    internal static Bitmap CleanupMenuBitmap => MenuBitmap("menu-cleanup", DrawCleanupIcon);
+
+    private static void DrawExplorerIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 200, 40),
+            Color.FromArgb(200, 130, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        // Draw a simple folder shape
+        using var pen = new Pen(Color.White, 1.5f);
+        int m = s / 4;
+        g.DrawRectangle(pen, m, m + 2, s - m * 2, s - m * 2 - 2);
+        g.DrawLine(pen, m, m + 2, m + (s - m * 2) / 3, m - 1);
+        g.DrawLine(pen, m + (s - m * 2) / 3, m - 1, m + (s - m * 2) / 2, m + 2);
+    }
+
+    private static void DrawCleanupIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(100, 200, 100),
+            Color.FromArgb(40, 130, 40),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        // Draw a broom / sweep symbol
+        using var pen = new Pen(Color.White, 1.5f);
+        int cx = s / 2;
+        g.DrawLine(pen, cx - 3, 4, cx + 3, s - 5); // handle
+        g.DrawLine(pen, cx - 5, s - 5, cx + 5, s - 5); // head
+        g.DrawLine(pen, cx - 4, s - 4, cx + 4, s - 4);
+    }
 
     // ── Category colour-coded icon pairs (colour + symbol) ──────────────
 
@@ -581,5 +619,65 @@ internal static class AppIcons
                 g.FillEllipse(brush, 3, 3, s - 6, s - 6);
             }
         );
+    }
+
+    /// <summary>Performance icon: amber-to-orange gradient with a lightning bolt glyph.</summary>
+    private static void DrawPerformanceIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 200, 0),
+            Color.FromArgb(255, 100, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var fgBrush = new SolidBrush(Color.White);
+
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+
+        // Lightning bolt: top-right diagonal then bottom-left
+        int cx = s / 2;
+        var bolt = new[]
+        {
+            new Point(cx + 3, 3),
+            new Point(cx - 1, s / 2 - 1),
+            new Point(cx + 3, s / 2 - 1),
+            new Point(cx - 3, s - 3),
+            new Point(cx + 1, s / 2 + 1),
+            new Point(cx - 3, s / 2 + 1),
+        };
+        g.FillPolygon(fgBrush, bolt);
+    }
+
+    /// <summary>Privacy icon: purple-to-indigo gradient with a shield glyph.</summary>
+    private static void DrawPrivacyIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(150, 60, 220),
+            Color.FromArgb(60, 20, 160),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var fgPen = new Pen(Color.White, 1.5f);
+        using var fgBrush = new SolidBrush(Color.White);
+
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+
+        // Shield: rounded-top rectangle with pointed bottom
+        int m = 3,
+            w = s - m * 2,
+            cx = s / 2;
+        var shield = new[]
+        {
+            new Point(m, m + 3),
+            new Point(m, s / 2 + 2),
+            new Point(cx, s - m),
+            new Point(m + w, s / 2 + 2),
+            new Point(m + w, m + 3),
+            new Point(cx, m),
+        };
+        g.DrawPolygon(fgPen, shield);
+        // Lock icon inside shield
+        g.DrawEllipse(fgPen, cx - 2, s / 2 - 4, 5, 4);
+        g.FillRectangle(fgBrush, cx - 3, s / 2, 7, 5);
     }
 }

@@ -3,9 +3,17 @@
   <RunConfiguration>
     <!-- Run the 3 test assemblies in parallel (one per project) -->
     <MaxCpuCount>3</MaxCpuCount>
-    <!-- 300 s total session hard limit (1370+ tests need headroom) -->
-    <TestSessionTimeout>300000</TestSessionTimeout>
-    <!-- 30 s per individual test — generous for slow CI systems -->
-    <TestCaseTimeout>30000</TestCaseTimeout>
+    <!-- 60 s total session hard limit per assembly (each project runs separately, not as solution) -->
+    <TestSessionTimeout>60000</TestSessionTimeout>
+    <!-- 20 s per individual test — generous for slow CI systems -->
+    <TestCaseTimeout>20000</TestCaseTimeout>
+    <!--
+      IMPORTANT: Always run per-project, NOT solution-level:
+        dotnet test tests/RegiLattice.Core.Tests/...
+        dotnet test tests/RegiLattice.CLI.Tests/...
+        dotnet test tests/RegiLattice.GUI.Tests/...
+      Running 'dotnet test RegiLattice.sln' stalls vstest discovery on non-test projects.
+      The 'test: All' VS Code task and CI workflows both use per-project runs.
+    -->
   </RunConfiguration>
 </RunSettings>

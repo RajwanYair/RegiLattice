@@ -1,18 +1,18 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-19 · v3.4.0 · 2 736 tweaks · 92 categories · 1 670 tests
+> Last updated: 2026-05-29 · v3.5.0 · 2 736 tweaks · 92 categories · 1 671 tests
 
 ---
 
-## Current State (as of v3.4.0)
+## Current State (as of v3.5.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
 | Tweaks | 2 736 verified across 92 categories |
-| Tests | 1 645 total, all passing (1 skipped integration), 4-thread parallel |
-| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live CPU/RAM status bar |
+| Tests | 1 671 total, all passing (1 skipped integration), 4-thread parallel |
+| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
 | CI/CD | GitHub Actions: build + test + coverage + release + CodeQL |
@@ -558,6 +558,30 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 2 | Helper factory methods: `CreateSectionHeader()`, `CreateLabel()`, `CreateButtonRow()`, `CreateButton()` | ✅ |
 | 3 | Migrated `NetworkToolsDialog`, `StartupManagerDialog`, `ServiceManagerDialog` to `: BaseDialog` | ✅ |
 
+### Sprint 30 — System Utilities & UX Enhancements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `BaseDialog.EnableStandaloneMode()` — all dialogs launchable via `--tool <name>` with correct title bar + minimize button | ✅ |
+| 2 | `BaseDialog.CreateAdminBanner()` / `CreateWarningBanner()` — consistent banner factories for all dialogs | ✅ |
+| 3 | `BaseDialog.StartPosition = CenterScreen`, `MaximizeBox = resizable` — UX consistency | ✅ |
+| 4 | Removed theme combo from toolbar — theme selection moved exclusively to Preferences dialog | ✅ |
+| 5 | `AppConfig` enriched: `RememberSplitter`, `SplitterDistance`, `SkipAppliedOnBatch`, `HistoryMaxEntries`, `MonitorColorCoded` | ✅ |
+| 6 | `PreferencesDialog` — Behaviour tab: `SkipAppliedOnBatch`, `RememberSplitter` checkboxes | ✅ |
+| 7 | `PreferencesDialog` — Performance tab: `HistoryMaxEntries` spinner, `MonitorColorCoded` checkbox | ✅ |
+| 8 | `MainForm` — splitter position persisted to config on move, restored on startup | ✅ |
+| 9 | `MainForm.ApplySelectedAsync` — respects `SkipAppliedOnBatch` config flag | ✅ |
+| 10 | `MainForm.OnMonitorTimerTick` — color-coded CPU/RAM labels (green/amber/red) when `MonitorColorCoded` enabled | ✅ |
+| 11 | `ContextMenuManagerDialog` — view/enable/disable Windows shell context-menu handlers from registry | ✅ |
+| 12 | `HostsFileManagerDialog` — read/add/toggle/delete hosts file entries with inline add dialog | ✅ |
+| 13 | `TempFileCleanerDialog` — scan %TEMP%, Windows\Temp, Prefetch, SoftwareDistribution, Recycle Bin with size preview | ✅ |
+| 14 | `InstalledAppsDialog` — installed programs viewer with column-sort + launch native uninstaller | ✅ |
+| 15 | `AppIcons.ExplorerMenuBitmap` / `CleanupMenuBitmap` — programmatic menu icons for new dialogs | ✅ |
+| 16 | Tools menu: Context Menu Manager, Hosts File Manager, Temp File Cleaner, Installed Applications entries | ✅ |
+| 17 | `Program.cs ResolveManagerArg` — contextmenu, hostsfile, tempcleaner, installedapps standalone launch support | ✅ |
+| 18 | Fixed `PrivacyDashboardDialog` pre-existing `TweaksByCategory(string)` API mismatch | ✅ |
+| 19 | All 1 671 tests passing (1 275 Core + 154 CLI + 242 GUI) | ✅ |
+
 ### Phase 4 — Network & Connectivity Tools (Sprint 27–28)
 
 | # | Item | Priority | Source |
@@ -573,20 +597,20 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 39 | Network bandwidth monitor | LOW | Original |
 | 40 | MAC address randomization toggle | LOW | Original |
 
-### Phase 5 — Startup & Service Management (Sprint 29–30)
+### Phase 5 — Startup & Service Management (Sprint 29–30) ✅
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 41 | Startup manager — review and disable startup items | HIGH | MS PC Manager |
-| 42 | Service manager — disable/enable Windows services with descriptions | HIGH | Original |
-| 43 | Scheduled task manager — view and toggle system tasks | MEDIUM | Original |
-| 44 | Boot time analyzer — identify slow-starting services | MEDIUM | Original |
-| 45 | Context menu manager — add/remove/sort right-click items | MEDIUM | Original |
-| 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original |
-| 47 | Installed programs quick-uninstaller | LOW | MS PC Manager |
-| 48 | Temporary file cleaner with size preview | LOW | MS PC Manager |
-| 49 | Windows Update pause/resume controls | LOW | Original |
-| 50 | Driver update checker (optional components) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 41 | Startup manager — review and disable startup items | HIGH | MS PC Manager | ✅ Sprint 28 |
+| 42 | Service manager — disable/enable Windows services with descriptions | HIGH | Original | ✅ Sprint 29 |
+| 43 | Scheduled task manager — view and toggle system tasks | MEDIUM | Original | ✅ Sprint 28 |
+| 44 | Boot time analyzer — identify slow-starting services | MEDIUM | Original | 🔄 Pending |
+| 45 | Context menu manager — add/remove/sort right-click items | MEDIUM | Original | ✅ Sprint 30 |
+| 46 | Shell extension manager — enable/disable Explorer extensions | MEDIUM | Original | 🔄 Pending |
+| 47 | Installed programs quick-uninstaller | LOW | MS PC Manager | ✅ Sprint 30 |
+| 48 | Temporary file cleaner with size preview | LOW | MS PC Manager | ✅ Sprint 30 |
+| 49 | Windows Update pause/resume controls | LOW | Original | 🔄 Pending |
+| 50 | Driver update checker (optional components) | LOW | Original | 🔄 Pending |
 
 ### Phase 6 — Power & Energy Management (Sprint 31–32)
 
@@ -605,18 +629,18 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 
 ### Phase 7 — Privacy & Ad Removal (Sprint 33–34)
 
-| # | Item | Priority | Source |
-|---|------|----------|--------|
-| 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB |
-| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager |
-| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original |
-| 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original |
-| 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original |
-| 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original |
-| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original |
-| 68 | DNS-over-HTTPS quick setup | LOW | Original |
-| 69 | Location services granular control | LOW | Original |
-| 70 | App permission manager (camera, microphone, location per-app) | LOW | Original |
+| # | Item | Priority | Source | Status |
+|---|------|----------|--------|--------|
+| 61 | Desktop ad removal wizard — guided OFGB-like step-by-step flow | HIGH | OFGB | 🔄 Pending |
+| 62 | Pop-up/toolbar blocker for system notifications | HIGH | MS PC Manager | 🔄 Pending |
+| 63 | Browser tracking protection overview (all installed browsers) | MEDIUM | Original | 🔄 Pending |
+| 64 | Telemetry dashboard — visualize what data Windows sends | MEDIUM | Original | 🔄 Pending |
+| 65 | Privacy score — rate current system privacy level (0-100) | MEDIUM | Original | 🔄 Pending |
+| 66 | Hosts file manager — block domains via hosts file GUI | MEDIUM | Original | ✅ Sprint 30 |
+| 67 | Cookie/cache cleaner for all installed browsers | LOW | Original | 🔄 Pending |
+| 68 | DNS-over-HTTPS quick setup | LOW | Original | 🔄 Pending |
+| 69 | Location services granular control | LOW | Original | 🔄 Pending |
+| 70 | App permission manager (camera, microphone, location per-app) | LOW | Original | 🔄 Pending |
 
 ### Phase 8 — Plugin & Extensibility Improvements (Sprint 35–36)
 
