@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 /// <summary>
 /// Shared registry hive constants used across all tweak modules.

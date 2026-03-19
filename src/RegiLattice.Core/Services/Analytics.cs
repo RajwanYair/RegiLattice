@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/Analytics.cs
+﻿// RegiLattice.Core — Services/Analytics.cs
 // Local-only usage analytics — replaces Python analytics.py.
 
 using System.Text.Json;

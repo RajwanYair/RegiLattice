@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/Ratings.cs
+﻿// RegiLattice.Core — Services/Ratings.cs
 // Local tweak rating system — replaces Python ratings.py.
 
 using System.Text.Json;

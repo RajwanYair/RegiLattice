@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -571,6 +571,146 @@ internal static class Gaming
                     "High"
                 ),
             ],
+        },
+        new TweakDef
+        {
+            Id = "game-set-sfio-priority-high",
+            Label = "Set Game SFIO Priority to High",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Raises the Synchronous File I/O priority for the Games multimedia profile. Reduces stuttering caused by disk I/O during gaming.",
+            Tags = ["gaming", "sfio", "io", "performance", "multimedia-profile"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "SFIO Priority", "High")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "SFIO Priority", "Normal")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "SFIO Priority", "High")],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-ndu-service",
+            Label = "Disable Network Data Usage Monitor (NDU)",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Network Data Usage (NDU) monitoring service, which can cause latency spikes in network-intensive games.",
+            Tags = ["gaming", "network", "ndu", "latency", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "game-set-system-responsiveness-zero",
+            Label = "Maximise CPU Time for Games (SystemResponsiveness=0)",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets SystemResponsiveness to 0 in the multimedia system profile, giving games up to 100% of CPU scheduling time instead of the default 20%.",
+            Tags = ["gaming", "cpu", "performance", "multimedia-profile"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "SystemResponsiveness", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "SystemResponsiveness", 20)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "SystemResponsiveness", 0)],
+        },
+        new TweakDef
+        {
+            Id = "game-set-network-throttling-off",
+            Label = "Disable Network Throttling Index for Games",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets NetworkThrottlingIndex to max (0xFFFFFFFF) removing Windows network throttling during multimedia/gaming to improve throughput.",
+            Tags = ["gaming", "network", "throttling", "latency", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", 10)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
+        },
+        new TweakDef
+        {
+            Id = "game-set-gpu-priority-8",
+            Label = "Set High GPU Priority for Games",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Raises GPU scheduling priority to 8 for the Games multimedia profile, giving game rendering tasks preferential GPU access.",
+            Tags = ["gaming", "gpu", "priority", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 8)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GPU Priority", 8)],
+        },
+        new TweakDef
+        {
+            Id = "game-set-latency-sensitivity-high",
+            Label = "Set High Latency Sensitivity for Games",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Marks the Games multimedia task as Latency Sensitive=High, allowing Windows scheduler to handle it with lowest possible scheduling latency.",
+            Tags = ["gaming", "latency", "scheduler", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitivity", "High")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitivity", "Medium")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitivity", "High")],
+        },
+        new TweakDef
+        {
+            Id = "game-set-background-only-false",
+            Label = "Prevent Games from Running as Background Only",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets Background Only=False for the Games multimedia profile task, ensuring games receive full foreground priority scheduling.",
+            Tags = ["gaming", "background", "priority", "scheduling"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Background Only", "False")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Background Only", "True")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Background Only", "False")],
+        },
+        new TweakDef
+        {
+            Id = "game-set-priority-6",
+            Label = "Set Game Task CPU Priority to 6",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Raises the CPU priority weight for the Games multimedia profile task from 2 to 6, giving game threads more scheduling time.",
+            Tags = ["gaming", "cpu", "priority", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Priority", 6)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Priority", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Priority", 6)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-xbox-accessory-svc",
+            Label = "Disable Xbox Accessory Management Service",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables the Xbox Accessory Management service (XboxGipSvc). Saves resources when no Xbox controllers are used.",
+            Tags = ["gaming", "xbox", "service", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "game-increase-max-user-port",
+            Label = "Increase Max UDP/TCP Port Range for Gaming",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the ephemeral TCP/UDP port ceiling to 65534, allowing game servers to open more simultaneous connections without port exhaustion.",
+            Tags = ["gaming", "network", "ports", "tcp", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534)],
         },
     ];
 }

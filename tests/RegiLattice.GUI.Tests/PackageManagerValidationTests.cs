@@ -1,4 +1,4 @@
-using RegiLattice.GUI.PackageManagers;
+﻿using RegiLattice.GUI.PackageManagers;
 using Xunit;
 
 namespace RegiLattice.GUI.Tests;

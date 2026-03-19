@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/Locale.cs
+﻿// RegiLattice.Core — Services/Locale.cs
 // i18n string table — replaces Python locale.py.
 
 namespace RegiLattice.Core;
@@ -270,6 +270,58 @@ public static class Locale
         ["import_complete"] = "\u05d9\u05d5\u05d1\u05d0\u05d5 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05de-{1}.",
     };
 
+    private static readonly Dictionary<string, string> Ja = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["apply_all"] = "\u3059\u3079\u3066\u9069\u7528",
+        ["remove_all"] = "\u3059\u3079\u3066\u524a\u9664",
+        ["search_placeholder"] = "\u8abf\u6574\u3092\u691c\u7d22\u2026",
+        ["status_applied"] = "\u9069\u7528\u6e08\u307f",
+        ["status_not_applied"] = "\u30c7\u30d5\u30a9\u30eb\u30c8",
+        ["status_unknown"] = "\u4e0d\u660e",
+        ["status_error"] = "\u30a8\u30e9\u30fc",
+        ["status_skipped_corp"] = "\u30b9\u30ad\u30c3\u30d7 (\u6cd5\u4eba)",
+        ["status_skipped_build"] = "\u30b9\u30ad\u30c3\u30d7 (Build)",
+        ["filter_all"] = "\u3059\u3079\u3066",
+        ["filter_applied"] = "\u9069\u7528\u6e08\u307f",
+        ["filter_default"] = "\u30c7\u30d5\u30a9\u30eb\u30c8",
+        ["filter_unknown"] = "\u4e0d\u660e",
+        ["scope_user"] = "\u30e6\u30fc\u30b6\u30fc (HKCU)",
+        ["scope_machine"] = "\u30de\u30b7\u30f3 (HKLM)",
+        ["scope_both"] = "\u4e21\u65b9",
+        ["scope_all"] = "\u3059\u3079\u3066\u306e\u30b9\u30b3\u30fc\u30d7",
+        ["profile_business"] = "\u30d3\u30b8\u30cd\u30b9",
+        ["profile_gaming"] = "\u30b2\u30fc\u30df\u30f3\u30b0",
+        ["profile_privacy"] = "\u30d7\u30e9\u30a4\u30d0\u30b7\u30fc",
+        ["profile_minimal"] = "\u30df\u30cb\u30de\u30eb",
+        ["profile_server"] = "\u30b5\u30fc\u30d0\u30fc",
+        ["btn_apply"] = "\u9078\u629e\u3092\u9069\u7528",
+        ["btn_remove"] = "\u9078\u629e\u3092\u524a\u9664",
+        ["btn_select_all"] = "\u3059\u3079\u3066\u9078\u629e",
+        ["btn_deselect_all"] = "\u9078\u629e\u3092\u89e3\u9664",
+        ["btn_invert"] = "\u9078\u629e\u3092\u53cd\u8ee2",
+        ["btn_refresh"] = "\u30b9\u30c6\u30fc\u30bf\u30b9\u3092\u66f4\u65b0",
+        ["btn_export_ps1"] = "PS1 \u3092\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
+        ["btn_export_json"] = "JSON \u3092\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
+        ["btn_import_json"] = "JSON \u3092\u30a4\u30f3\u30dd\u30fc\u30c8",
+        ["menu_file"] = "\u30d5\u30a1\u30a4\u30eb",
+        ["menu_tools"] = "\u30c4\u30fc\u30eb",
+        ["menu_view"] = "\u8868\u793a",
+        ["menu_help"] = "\u30d8\u30eb\u30d7",
+        ["about_title"] = "RegiLattice \u306b\u3064\u3044\u3066",
+        ["scoop_manager"] = "Scoop \u30de\u30cd\u30fc\u30b8\u30e3\u30fc",
+        ["psmodule_manager"] = "PowerShell \u30e2\u30b8\u30e5\u30fc\u30eb",
+        ["pip_manager"] = "pip \u30d1\u30c3\u30b1\u30fc\u30b8",
+        ["log_panel"] = "\u30ed\u30b0\u30d1\u30cd\u30eb\u306e\u5207\u308a\u66ff\u3048",
+        ["corporate_warning"] = "\u6cd5\u4eba\u74b0\u5883\u304c\u691c\u51fa\u3055\u308c\u307e\u3057\u305f\u3002\u4e00\u90e8\u306e\u8abf\u6574\u306f\u30d6\u30ed\u30c3\u30af\u3055\u308c\u3066\u3044\u307e\u3059\u3002",
+        ["admin_required"] = "\u7ba1\u7406\u8005\u6a29\u9650\u304c\u5fc5\u8981\u3067\u3059\u3002",
+        ["confirm_apply"] = "\u9078\u629e\u3057\u305f {0} \u500b\u306e\u8abf\u6574\u3092\u9069\u7528\u3057\u307e\u3059\u304b\uff1f",
+        ["confirm_remove"] = "\u9078\u629e\u3057\u305f {0} \u500b\u306e\u8abf\u6574\u3092\u524a\u9664\u3057\u307e\u3059\u304b\uff1f",
+        ["tweaks_loaded"] = "{1} \u30ab\u30c6\u30b4\u30ea\u306b {0} \u500b\u306e\u8abf\u6574\u3092\u8aad\u307f\u8fbc\u307f\u307e\u3057\u305f\u3002",
+        ["detection_complete"] = "\u30b9\u30c6\u30fc\u30bf\u30b9\u691c\u51fa\u304c\u5b8c\u4e86\u3057\u307e\u3057\u305f\u3002",
+        ["export_complete"] = "{0} \u306b\u30a8\u30af\u30b9\u30dd\u30fc\u30c8\u3057\u307e\u3057\u305f\u3002",
+        ["import_complete"] = "{1} \u304b\u3089 {0} \u500b\u306e\u8abf\u6574\u3092\u30a4\u30f3\u30dd\u30fc\u30c8\u3057\u307e\u3057\u305f\u3002",
+    };
+
     private static readonly Dictionary<string, Dictionary<string, string>> BuiltInLocales = new(StringComparer.OrdinalIgnoreCase)
     {
         ["en"] = En,
@@ -277,6 +329,7 @@ public static class Locale
         ["fr"] = Fr,
         ["es"] = Es,
         ["he"] = He,
+        ["ja"] = Ja,
     };
 
     private static Dictionary<string, string> _active = new(En);

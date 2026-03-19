@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/ScoopManagerDialog.cs
+﻿// RegiLattice.GUI — Forms/ScoopManagerDialog.cs
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;

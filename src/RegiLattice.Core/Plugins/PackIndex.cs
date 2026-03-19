@@ -1,4 +1,4 @@
-// RegiLattice.Core — Plugins/PackIndex.cs
+﻿// RegiLattice.Core — Plugins/PackIndex.cs
 // Model for the remote marketplace index (index.json hosted on GitHub).
 
 using System.Text.Json;

@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -598,6 +598,146 @@ internal static class Maintenance
                     1
                 ),
             ],
+        },
+        new TweakDef
+        {
+            Id = "maint-clear-recent-docs-on-exit",
+            Label = "Clear Recent Documents List on Logoff",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Automatically clears the Recent Documents (MRU) history when the user logs off, preventing access trail accumulation.",
+            Tags = ["maintenance", "recent-docs", "privacy", "mru", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-reduce-service-shutdown-timeout",
+            Label = "Reduce Service Shutdown Timeout (2s)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reduces the time Windows waits for services to stop during shutdown to 2000 ms (default: 12000 ms). Significantly speeds up shutdown.",
+            Tags = ["maintenance", "shutdown", "performance", "timeout"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "12000")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
+        },
+        new TweakDef
+        {
+            Id = "maint-reduce-app-kill-timeout",
+            Label = "Reduce Application Kill Timeout on Shutdown (2s)",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces time Windows waits for apps to respond during shutdown before force-killing them to 2 seconds (default: 20s).",
+            Tags = ["maintenance", "shutdown", "performance", "timeout"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
+        },
+        new TweakDef
+        {
+            Id = "maint-enable-long-paths",
+            Label = "Enable Long Path Support (260+ Characters)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables Win32 long path support allowing file paths beyond the 260-character MAX_PATH limit. Requires a reboot.",
+            Tags = ["maintenance", "filesystem", "long-paths", "developer"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-disable-desktop-cleanup-wizard",
+            Label = "Disable Desktop Cleanup Wizard",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the 'Clean up Desktop Wizard' that prompts to remove rarely used desktop icons. Default: enabled.",
+            Tags = ["maintenance", "desktop", "cleanup", "wizard"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\CleanupWiz"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\CleanupWiz", "NoRun", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\CleanupWiz", "NoRun")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\CleanupWiz", "NoRun", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-disable-hang-boot-timeout",
+            Label = "Reduce Hung-App Boot Timeout (Auto Kill)",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the HungAppTimeout to 2000 ms so Windows auto-closes unresponsive apps faster on shutdown.",
+            Tags = ["maintenance", "shutdown", "performance", "timeout"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "2000")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "2000")],
+        },
+        new TweakDef
+        {
+            Id = "maint-auto-end-tasks-on-shutdown",
+            Label = "Auto-End Tasks on Shutdown (No Prompt)",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables AutoEndTasks so Windows automatically terminates applications that are blocking shutdown without asking the user.",
+            Tags = ["maintenance", "shutdown", "performance", "auto-kill"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
+        },
+        new TweakDef
+        {
+            Id = "maint-disable-crash-on-audit-fail",
+            Label = "Disable Crash-on-Audit-Full (Security)",
+            Category = "Maintenance",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from shutting down immediately when the security audit log is full. Avoids unexpected reboots when audit logs fill up.",
+            Tags = ["maintenance", "audit", "security", "stability"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
+        },
+        new TweakDef
+        {
+            Id = "maint-disable-show-recent-in-explorer",
+            Label = "Hide Recent Files in Quick Access",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Hides the 'Recent Files' section from the File Explorer Quick Access panel. Files are still accessible via direct navigation.",
+            Tags = ["maintenance", "explorer", "recent-files", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
+        },
+        new TweakDef
+        {
+            Id = "maint-disable-frequent-in-explorer",
+            Label = "Hide Frequent Folders in Quick Access",
+            Category = "Maintenance",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Hides the 'Frequent Folders' section from File Explorer Quick Access, giving a cleaner navigation pane.",
+            Tags = ["maintenance", "explorer", "frequent-folders", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
         },
     ];
 }

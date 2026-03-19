@@ -1442,4 +1442,104 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
             $"Expected ≥30 Desktop Customization tweaks, got {byCat["Desktop Customization"].Count}"
         );
     }
+
+    // ── Sprint 44: Phone Link (new tweaks) ─────────────────────────────────
+
+    [Theory]
+    [InlineData("phone-disable-alljoyn-router")]
+    [InlineData("phone-disable-wpd-service")]
+    [InlineData("phone-disable-link-to-windows-banner")]
+    [InlineData("phone-disable-continue-on-pc")]
+    [InlineData("phone-disable-phone-activation-policy")]
+    [InlineData("phone-disable-device-assoc-svc")]
+    [InlineData("phone-disable-cdp-prompt")]
+    [InlineData("phone-disable-roam-trigger-consent")]
+    [InlineData("phone-disable-hotspot-auth")]
+    [InlineData("phone-disable-windows-hello-companion")]
+    public void RegisterBuiltins_PhoneLinkTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Phone Link", tweak.Category);
+    }
+
+    // ── Sprint 44: OneDrive (new tweaks) ───────────────────────────────────
+
+    [Theory]
+    [InlineData("od-disable-kfm-opt-in-prompt")]
+    [InlineData("od-disable-kfm-silent-redirect")]
+    [InlineData("od-disable-delay-update-ring")]
+    [InlineData("od-disable-sharepoint-sync")]
+    [InlineData("od-disable-app-sync")]
+    [InlineData("od-limit-mass-delete-threshold")]
+    [InlineData("od-disable-hydration-on-access")]
+    [InlineData("od-disable-auto-update")]
+    [InlineData("od-disable-file-explorer-hub")]
+    [InlineData("od-block-external-collab")]
+    public void RegisterBuiltins_OneDriveTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("OneDrive", tweak.Category);
+    }
+
+    // ── Sprint 44: Notifications (new tweaks) ──────────────────────────────
+
+    [Theory]
+    [InlineData("notif-disable-low-disk-alert")]
+    [InlineData("notif-disable-defender-user-notif")]
+    [InlineData("notif-disable-reboot-required")]
+    [InlineData("notif-disable-balloon-tips")]
+    [InlineData("notif-disable-smartscreen-user")]
+    [InlineData("notif-disable-taskbar-suggestions")]
+    [InlineData("notif-disable-oem-preinstall-suggestions")]
+    [InlineData("notif-disable-tips-and-tricks")]
+    [InlineData("notif-disable-clear-recent-on-exit")]
+    [InlineData("notif-disable-no-logged-users-reboot")]
+    public void RegisterBuiltins_NotificationsTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Notifications", tweak.Category);
+    }
+
+    // ── Sprint 44: Gaming (new tweaks) ─────────────────────────────────────
+
+    [Theory]
+    [InlineData("game-set-sfio-priority-high")]
+    [InlineData("game-disable-ndu-service")]
+    [InlineData("game-set-system-responsiveness-zero")]
+    [InlineData("game-set-network-throttling-off")]
+    [InlineData("game-set-gpu-priority-8")]
+    [InlineData("game-set-latency-sensitivity-high")]
+    [InlineData("game-set-background-only-false")]
+    [InlineData("game-set-priority-6")]
+    [InlineData("game-disable-xbox-accessory-svc")]
+    [InlineData("game-increase-max-user-port")]
+    public void RegisterBuiltins_GamingTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Gaming", tweak.Category);
+    }
+
+    // ── Sprint 44: Maintenance (new tweaks) ────────────────────────────────
+
+    [Theory]
+    [InlineData("maint-clear-recent-docs-on-exit")]
+    [InlineData("maint-reduce-service-shutdown-timeout")]
+    [InlineData("maint-reduce-app-kill-timeout")]
+    [InlineData("maint-enable-long-paths")]
+    [InlineData("maint-disable-desktop-cleanup-wizard")]
+    [InlineData("maint-disable-hang-boot-timeout")]
+    [InlineData("maint-auto-end-tasks-on-shutdown")]
+    [InlineData("maint-disable-crash-on-audit-fail")]
+    [InlineData("maint-disable-show-recent-in-explorer")]
+    [InlineData("maint-disable-frequent-in-explorer")]
+    public void RegisterBuiltins_MaintenanceTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Maintenance", tweak.Category);
+    }
 }

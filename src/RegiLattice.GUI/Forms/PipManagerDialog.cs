@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/PipManagerDialog.cs
+﻿// RegiLattice.GUI — Forms/PipManagerDialog.cs
 using RegiLattice.GUI.PackageManagers;
 using Elevation = RegiLattice.Core.Elevation;
 

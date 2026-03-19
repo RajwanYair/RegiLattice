@@ -1,4 +1,4 @@
-using RegiLattice.Core.Services;
+﻿using RegiLattice.Core.Services;
 using Xunit;
 
 namespace RegiLattice.Core.Tests;

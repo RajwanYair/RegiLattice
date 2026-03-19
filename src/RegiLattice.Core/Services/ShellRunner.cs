@@ -1,4 +1,4 @@
-// RegiLattice.Core — Services/ShellRunner.cs
+﻿// RegiLattice.Core — Services/ShellRunner.cs
 // Safe process runner for command-based tweaks.
 
 using System.Diagnostics;

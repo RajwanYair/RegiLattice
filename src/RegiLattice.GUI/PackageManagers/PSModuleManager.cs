@@ -1,4 +1,4 @@
-namespace RegiLattice.GUI.PackageManagers;
+﻿namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps PowerShell module management via PSGet.</summary>
 internal static class PSModuleManager

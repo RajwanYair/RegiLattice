@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/BasePackageManagerDialog.cs
+﻿// RegiLattice.GUI — Forms/BasePackageManagerDialog.cs
 // Abstract base for all five package manager dialogs.
 // Provides: SplitContainer layout with resizable log panel, shared controls,
 //           prereq banner (with async install flow), quick-install strip,

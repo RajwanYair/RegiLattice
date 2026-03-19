@@ -1,4 +1,4 @@
-// Sprint 23 — Coverage expansion for TweakEngine result branches, IsApplicableOnHardware,
+﻿// Sprint 23 — Coverage expansion for TweakEngine result branches, IsApplicableOnHardware,
 // Update(), ApplyBatch/RemoveBatch, Filter(query:), DetectStatus error path, ExportJson,
 // GetScope, ResolveDependencies, Dependents, and Freeze post-registration paths.
 

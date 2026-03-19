@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/PSModuleManagerDialog.cs
+﻿// RegiLattice.GUI — Forms/PSModuleManagerDialog.cs
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;
