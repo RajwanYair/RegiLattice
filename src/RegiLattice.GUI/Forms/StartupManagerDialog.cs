@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using RegiLattice.Core;
@@ -71,6 +72,18 @@ internal sealed class StartupManagerDialog : BaseDialog
         TextAlign = ContentAlignment.MiddleCenter,
         Font = new Font("Segoe UI", 9f, FontStyle.Regular),
     };
+    private readonly Button _btnExportCsv = new()
+    {
+        Text = "Export CSV",
+        Width = 85,
+        Enabled = false,
+    };
+    private readonly Button _btnOpenLocation = new()
+    {
+        Text = "Open Loc.",
+        Width = 80,
+        Enabled = false,
+    };
 
     private IReadOnlyList<StartupEntry> _entries = Array.Empty<StartupEntry>();
 
@@ -122,6 +135,12 @@ internal sealed class StartupManagerDialog : BaseDialog
         }
         _btnClose.Location = new Point(_btnPanel.Width - 86, 6);
         _btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+
+        _btnExportCsv.Location = new Point(x, 6);
+        _btnOpenLocation.Location = new Point(x + 91, 6);
+        _btnPanel.Controls.AddRange([_btnExportCsv, _btnOpenLocation]);
+        _btnExportCsv.Click += (_, _) => ExportCsv();
+        _btnOpenLocation.Click += (_, _) => OpenFileLocation();
     }
 
     private void BuildAdminBanner()
@@ -166,6 +185,7 @@ internal sealed class StartupManagerDialog : BaseDialog
         _list.EndUpdate();
         SetStatus($"{_entries.Count} startup entries loaded.");
         UpdateButtons(null);
+        _btnExportCsv.Enabled = _entries.Count > 0;
     }
 
     // ── Actions ──────────────────────────────────────────────────────────────
@@ -239,6 +259,55 @@ internal sealed class StartupManagerDialog : BaseDialog
     }
 
     private void SetStatus(string text) => _statusLabel.Text = text;
+
+    private void ExportCsv()
+    {
+        using var dlg = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*", FileName = "startup-entries.csv" };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+        try
+        {
+            var lines = new List<string> { "Name,Status,Location,Command" };
+            foreach (var e in _entries)
+            {
+                string status = e.IsEnabled ? "Enabled" : "Disabled";
+                string loc = LocationLabel(e.Location);
+                string cmd = e.Command.Replace("\"", "\"\"");
+                lines.Add($"\"{e.Name}\",\"{status}\",\"{loc}\",\"{cmd}\"");
+            }
+            File.WriteAllLines(dlg.FileName, lines);
+            SetStatus($"Exported {_entries.Count} entries to {Path.GetFileName(dlg.FileName)}");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed:\n{ex.Message}", "Export CSV", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
+
+    private void OpenFileLocation()
+    {
+        if (SelectedEntry() is not StartupEntry entry)
+            return;
+        string cmd = entry.Command.Trim().Trim('"');
+        int spaceIdx = cmd.IndexOf(' ');
+        string exe = spaceIdx > 0 ? cmd[..spaceIdx] : cmd;
+        string? dir = Path.GetDirectoryName(exe);
+        if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", dir);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Cannot open location:\n{ex.Message}", "Open Location", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        else
+        {
+            MessageBox.Show($"Directory not found:\n{dir ?? "(unknown)"}", "Open Location", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
 
     private static string LocationLabel(StartupLocation loc) =>
         loc switch

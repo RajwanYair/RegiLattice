@@ -647,6 +647,23 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
 
+### Sprint 45 — 50 New Tweaks + Services + Dialog Enhancements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `Audio.cs` — 10 new tweaks: `audio-disable-comms-ducking`, `-set-pro-audio-priority`, `-disable-audio-idle-powerdown`, `-set-avrcp-volume-sync`, `-set-audio-latency-mode`, `-enable-audio-log-off`, `-set-endpoint-builder-manual`, `-disable-voice-typing-toast`, `-set-render-clock-rate`, `-set-capture-clock-rate` | ✅ |
+| 2 | `Gaming.cs` — 10 new tweaks: `game-disable-msmq-service`, `-disable-gameinput-service`, `-set-dxgi-flip-model`, `-enable-game-bar-perf-counter`, `-disable-diagtrack-autologger`, `-set-xgip-service-manual`, `-disable-ndu-adapter`, `-set-games-sfio-priority-high`, `-set-mouse-fix-off`, `-set-games-affinity-all-cpus` | ✅ |
+| 3 | `Security.cs` — 10 new tweaks: `sec-require-ldap-signing`, `-disable-rdp-clipboard-sync`, `-disable-rdp-drive-mapping`, `-enforce-smb-ntlmv2-auth`, `-disable-printer-spooler-network`, `-enable-run-as-different-user`, `-disable-office-macros-internet`, `-disable-wsh-scripting`, `-restrict-lsass-credential-dump`, `-disable-named-pipe-impersonation` | ✅ |
+| 4 | `WindowsUpdate.cs` — 10 new tweaks: `wu-disable-automatic-updates`, `-set-schedule-day-saturday`, `-disable-store-app-auto-updates`, `-set-update-service-manual`, `-require-admin-for-updates`, `-disable-metered-update-download`, `-disable-reboot-required-notification`, `-set-feature-update-channel-general`, `-set-orchestrator-service-manual`, `-disable-third-party-preview` | ✅ |
+| 5 | `RemoteDesktop.cs` — 10 new tweaks: `rdp-set-max-connections-unlimited`, `-set-color-depth-32`, `-disable-smart-card-redirection`, `-set-remote-assistance-off`, `-set-audio-play-on-server`, `-disable-com-port-redirect`, `-enforce-tls-security-layer`, `-limit-single-monitor`, `-set-connection-timeout-8h`, `-disable-lpt-port-redirect` | ✅ |
+| 6 | `UpdateCheckService.cs` + `ComplianceService.cs` + `GroupPolicyExporter.cs` — 3 new Core services | ✅ |
+| 7 | `UpdateCheckerDialog.cs` — Help → Check for Updates GUI dialog | ✅ |
+| 8 | CLI `--compliance <snapshot>` + `--export-gpo <path>` commands | ✅ |
+| 9 | 6 dialog enhancements (+2 features each): StartupManager, ServiceManager, DiskSpace, WindowsUpdateControl, MemoryCleaner, NetworkTools | ✅ |
+| 10 | `TweakEngineBuiltinsTests.cs` — 5 new `[Theory]` methods; 50 new `[InlineData]` entries; Core tests 1394→1444 | ✅ |
+| 11 | Build: 0 errors, 0 warnings; all 50 Sprint 45 tests passing | ✅ |
+| 12 | Total: **2 946 tweaks** (+50) | ✅ |
+
 ### Sprint 44 — CRLF Fix + Japanese Locale + 50 New Tweaks ✅
 
 | # | Task | Status |

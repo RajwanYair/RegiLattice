@@ -481,5 +481,210 @@ internal static class Security
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
         },
+        new TweakDef
+        {
+            Id = "sec-require-ldap-signing",
+            Label = "Require LDAP Client Signing",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Requires LDAP clients to request packet signing. Value 2 = require signing. Prevents LDAP relay attacks where a man-in-the-middle could intercept authentication.",
+            Tags = ["security", "ldap", "signing", "active-directory", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-rdp-clipboard-sync",
+            Label = "Disable RDP Clipboard Redirection",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents clipboard contents from being redirected between RDP client and server sessions, reducing data exfiltration risk over remote connections.",
+            Tags = ["security", "rdp", "clipboard", "data-loss", "redirection"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-rdp-drive-mapping",
+            Label = "Disable RDP Drive Redirection",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents local drives from being mapped and accessible in Remote Desktop sessions, preventing file transfer through RDP drive redirection.",
+            Tags = ["security", "rdp", "drive", "redirection", "data-loss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-enforce-smb-ntlmv2-auth",
+            Label = "Enforce NTLMv2 Only for SMB Authentication",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures the SMB server to accept only NTLMv2 challenge/response authentication, blocking downgrade to LAN Manager or NTLMv1 authentication.",
+            Tags = ["security", "smb", "ntlmv2", "authentication", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-printer-spooler-network",
+            Label = "Disable Print Spooler Remote Network Access",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Restricts the Print Spooler from accepting remote print connections, mitigating PrintNightmare-style vulnerabilities (CVE-2021-34527 class). Local printing still works.",
+            Tags = ["security", "print-spooler", "printnightmare", "vulnerability", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint", 2)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint", 2),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-enable-run-as-different-user",
+            Label = "Enable Run As Different User in Explorer",
+            Category = "Security",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Restores the 'Run as different user' option in Windows Explorer context menus, enabling least-privilege execution for administrative tasks without logging off.",
+            Tags = ["security", "run-as", "privilege", "admin", "explorer"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart", 1)],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-office-macros-internet",
+            Label = "Block Office Macros from Internet Sources",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Office applications from running macros in files downloaded from the internet, closing a major malware delivery vector (macro-based attacks).",
+            Tags = ["security", "office", "macros", "malware", "internet", "phishing"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Excel\Security", "blockcontentexecutionfrominternet", 1),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\PowerPoint\Security",
+                    "blockcontentexecutionfrominternet",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Excel\Security", "blockcontentexecutionfrominternet"),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\PowerPoint\Security",
+                    "blockcontentexecutionfrominternet"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-wsh-scripting",
+            Label = "Disable Windows Script Host",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables Windows Script Host (WSH) to prevent execution of .vbs, .js, and .wsf scripts system-wide. Blocks a common malware delivery method.",
+            Tags = ["security", "wsh", "vbscript", "jscript", "scripting", "malware"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings", "Enabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\Settings", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "sec-restrict-lsass-credential-dump",
+            Label = "Add LSA Additional PPL Run-as-Light Protection",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures LSA to run as a Protected Process Light (PPL) supplementary policy, making it significantly harder for credential dumping tools (e.g. Mimikatz) to extract passwords.",
+            Tags = ["security", "lsa", "ppl", "credential", "dump", "mimikatz", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\lsass.exe"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\lsass.exe",
+                    "AuditLevel",
+                    8
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\lsass.exe",
+                    "AuditLevel"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\lsass.exe",
+                    "AuditLevel",
+                    8
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "sec-disable-named-pipe-impersonation",
+            Label = "Restrict Named Pipe Impersonation",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Restricts anonymous access to named pipes and shares, preventing token impersonation attacks via named pipes by unauthenticated processes.",
+            Tags = ["security", "named-pipe", "impersonation", "anonymous", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", 0)],
+        },
     ];
 }

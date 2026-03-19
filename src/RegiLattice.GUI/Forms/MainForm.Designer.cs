@@ -269,8 +269,9 @@ partial class MainForm
         var mnuAbout = new ToolStripMenuItem("About RegiLattice...");
         var mnuHwInfo = new ToolStripMenuItem("Hardware Info...");
         var mnuWhatsNew = new ToolStripMenuItem("What's New...");
+        var mnuCheckUpdates = new ToolStripMenuItem("Check for Updates...");
         var mnuHelp = new ToolStripMenuItem("&Help") { Image = AppIcons.HelpMenuBitmap };
-        mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, new ToolStripSeparator(), mnuAbout });
+        mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, mnuCheckUpdates, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
         _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuPkgMgr, mnuTools, mnuView, mnuHelp });
@@ -338,6 +339,7 @@ partial class MainForm
         mnuAbout.Click += (_, _) => OnAbout();
         mnuHwInfo.Click += (_, _) => OnHardwareInfo();
         mnuWhatsNew.Click += (_, _) => new WhatsNewDialog().ShowDialog(this);
+        mnuCheckUpdates.Click += (_, _) => OnCheckForUpdates();
 
         // ── ToolStrip ──────────────────────────────────────────────────────
         _btnApply = new ToolStripButton("Apply") { ToolTipText = "Apply selected tweaks (Ctrl+Enter)", Image = AppIcons.ApplyMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };

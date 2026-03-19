@@ -374,7 +374,8 @@ internal static class PhoneLink
             Category = "Phone Link",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the AllJoyn Router Service used for IoT and phone device discovery protocols. Frees resources if Phone Link is unused.",
+            Description =
+                "Disables the AllJoyn Router Service used for IoT and phone device discovery protocols. Frees resources if Phone Link is unused.",
             Tags = ["phone-link", "alljoyn", "service", "iot"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 4)],
@@ -388,7 +389,8 @@ internal static class PhoneLink
             Category = "Phone Link",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows Portable Devices (WPD) service used for MTP/PTP phone connections. Frees resources if no phone/camera is connected via USB.",
+            Description =
+                "Disables Windows Portable Devices (WPD) service used for MTP/PTP phone connections. Frees resources if no phone/camera is connected via USB.",
             Tags = ["phone-link", "wpd", "mtp", "service"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WPDSvc"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WPDSvc", "Start", 4)],
@@ -419,9 +421,18 @@ internal static class PhoneLink
             Description = "Hides the 'Continue on PC' option in share menus on mobile devices paired with this PC.",
             Tags = ["phone-link", "continue-on-pc", "cross-device", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "ContinueOnPCConversionEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -444,7 +455,8 @@ internal static class PhoneLink
             Category = "Phone Link",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Device Association Framework Provider Host service (DeviceAssociationService) used for pairing phones and peripheral devices.",
+            Description =
+                "Disables the Device Association Framework Provider Host service (DeviceAssociationService) used for pairing phones and peripheral devices.",
             Tags = ["phone-link", "device-pairing", "service", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DAssocSvc"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DAssocSvc", "Start", 4)],
@@ -475,9 +487,18 @@ internal static class PhoneLink
             Description = "Revokes consent for CDP service activation triggers that roam across paired devices.",
             Tags = ["phone-link", "cdp", "roaming", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "CdpServiceActivationTriggerConsented", 0),
+            ],
         },
         new TweakDef
         {
@@ -486,7 +507,8 @@ internal static class PhoneLink
             Category = "Phone Link",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables automatic Wi-Fi hotspot authentication between linked devices. Prevents phone hotspot data from being shared automatically.",
+            Description =
+                "Disables automatic Wi-Fi hotspot authentication between linked devices. Prevents phone hotspot data from being shared automatically.",
             Tags = ["phone-link", "wifi", "hotspot", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HotspotAuthentication"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HotspotAuthentication", "AllowHotspot", 0)],

@@ -1269,6 +1269,8 @@ public partial class MainForm : Form
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
+    private void OnCheckForUpdates() => ShowManagerDialog(new UpdateCheckerDialog());
+
     private void OnAbout()
     {
         bool isCorp = CorporateGuard.IsCorporateNetwork();

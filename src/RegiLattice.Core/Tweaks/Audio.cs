@@ -840,5 +840,295 @@ internal static class Audio
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableAutoDeviceSwitch")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "EnableAutoDeviceSwitch", 1)],
         },
+        new TweakDef
+        {
+            Id = "audio-disable-comms-ducking",
+            Label = "Disable Communication Audio Ducking",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from automatically lowering the volume of other sounds during VoIP calls. Default: reduce by 80%. Recommended: Do nothing.",
+            Tags = ["audio", "ducking", "voip", "volume", "calls"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio\UserPreference"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio\UserPreference", "UserPreferenceDucking", 3)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio\UserPreference", "UserPreferenceDucking")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio\UserPreference", "UserPreferenceDucking", 3)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-pro-audio-priority",
+            Label = "Set Pro Audio Task to Maximum Priority",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Assigns the highest scheduling priority and GPU priority to the Pro Audio task profile for minimal latency in DAW/recording software.",
+            Tags = ["audio", "pro-audio", "daw", "latency", "priority"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority",
+                    1
+                ),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "GPU Priority",
+                    8
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Scheduling Category",
+                    "High"
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "SFIO Priority",
+                    "High"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "GPU Priority"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Scheduling Category"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "SFIO Priority"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "Priority",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-audio-idle-powerdown",
+            Label = "Disable Audio Device Power-Down on Idle",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents the audio subsystem from entering low-power idle state, eliminating the pop/click that occurs when audio wakes up after silence.",
+            Tags = ["audio", "power", "idle", "pop", "click", "crackling"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 0)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-avrcp-volume-sync",
+            Label = "Disable Bluetooth AVRCP Volume Sync",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables automatic volume synchronisation between the Bluetooth AVRCP controller and Windows media volume. Useful when Bluetooth devices control their own volume independently.",
+            Tags = ["audio", "bluetooth", "avrcp", "volume", "sync"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "IsAbsoluteVolumeSupported", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "IsAbsoluteVolumeSupported"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Bluetooth\Audio\AVRCP\CT", "IsAbsoluteVolumeSupported", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-audio-latency-mode",
+            Label = "Set Audio Engine to Low-Latency Mode",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures the Windows Audio Engine to use the lowest achievable latency period. Reduces audio buffering at the cost of slightly higher CPU usage.",
+            Tags = ["audio", "latency", "engine", "buffer", "wasapi"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyMode", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyMode"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NoLazyMode", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-enable-audio-log-off",
+            Label = "Mute Audio Service Log Event Verbosity",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables the Windows Audio service to run with reduced EventLog verbosity. Suppresses diagnostic spew to the System event log from audiodg.exe.",
+            Tags = ["audio", "logging", "events", "diagnostics", "audiodg"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audiosrv\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audiosrv\Parameters", "ServiceDllUnloadOnStop", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audiosrv\Parameters", "ServiceDllUnloadOnStop")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audiosrv\Parameters", "ServiceDllUnloadOnStop", 1)],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-endpoint-builder-manual",
+            Label = "Set Audio Endpoint Builder to Manual Start",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Sets the Windows Audio Endpoint Builder service to manual start. This reduces idle startup time when audio hardware is not actively in use.",
+            Tags = ["audio", "endpoint-builder", "service", "startup", "ram"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AudioEndpointBuilder"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AudioEndpointBuilder", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AudioEndpointBuilder", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AudioEndpointBuilder", "Start", 3)],
+        },
+        new TweakDef
+        {
+            Id = "audio-disable-voice-typing-toast",
+            Label = "Disable Voice Typing Microphone Toast",
+            Category = "Audio",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Suppresses the toast notification prompting users to try Voice Typing when a microphone is connected.",
+            Tags = ["audio", "voice", "typing", "toast", "notification"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.VoiceTyping"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.VoiceTyping",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.VoiceTyping",
+                    "Enabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.VoiceTyping",
+                    "Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-render-clock-rate",
+            Label = "Set Audio Render Clock Rate to 10000ns",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the audio rendering clock period to 10000 (100ns units = 1ms), the minimum supported by Windows Audio. Reduces audio callback jitter.",
+            Tags = ["audio", "clock", "render", "latency", "jitter"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Clock Rate",
+                    10000
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Clock Rate"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
+                    "Clock Rate",
+                    10000
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "audio-set-capture-clock-rate",
+            Label = "Set Audio Capture Clock Rate to 10000ns",
+            Category = "Audio",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the audio capture (recording) clock period to 10000 (100ns units = 1ms), matching the render clock for consistent low-latency recording.",
+            Tags = ["audio", "clock", "capture", "recording", "latency"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Clock Rate",
+                    10000
+                ),
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Priority",
+                    1
+                ),
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Scheduling Category",
+                    "High"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Clock Rate"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Priority"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Scheduling Category"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Capture",
+                    "Clock Rate",
+                    10000
+                ),
+            ],
+        },
     ];
 }

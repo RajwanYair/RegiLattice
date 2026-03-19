@@ -4,6 +4,34 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — Sprint 45
+
+### Added
+
+- **50 new tweaks** across 5 modules (+10 each):
+  - **`Audio.cs`** (+10): `audio-disable-comms-ducking`, `-set-pro-audio-priority`, `-disable-audio-idle-powerdown`, `-set-avrcp-volume-sync`, `-set-audio-latency-mode`, `-enable-audio-log-off`, `-set-endpoint-builder-manual`, `-disable-voice-typing-toast`, `-set-render-clock-rate`, `-set-capture-clock-rate`
+  - **`Gaming.cs`** (+10): `game-disable-msmq-service`, `-disable-gameinput-service`, `-set-dxgi-flip-model`, `-enable-game-bar-perf-counter`, `-disable-diagtrack-autologger`, `-set-xgip-service-manual`, `-disable-ndu-adapter`, `-set-games-sfio-priority-high`, `-set-mouse-fix-off`, `-set-games-affinity-all-cpus`
+  - **`Security.cs`** (+10): `sec-require-ldap-signing`, `-disable-rdp-clipboard-sync`, `-disable-rdp-drive-mapping`, `-enforce-smb-ntlmv2-auth`, `-disable-printer-spooler-network`, `-enable-run-as-different-user`, `-disable-office-macros-internet`, `-disable-wsh-scripting`, `-restrict-lsass-credential-dump`, `-disable-named-pipe-impersonation`
+  - **`WindowsUpdate.cs`** (+10): `wu-disable-automatic-updates`, `-set-schedule-day-saturday`, `-disable-store-app-auto-updates`, `-set-update-service-manual`, `-require-admin-for-updates`, `-disable-metered-update-download`, `-disable-reboot-required-notification`, `-set-feature-update-channel-general`, `-set-orchestrator-service-manual`, `-disable-third-party-preview`
+  - **`RemoteDesktop.cs`** (+10): `rdp-set-max-connections-unlimited`, `-set-color-depth-32`, `-disable-smart-card-redirection`, `-set-remote-assistance-off`, `-set-audio-play-on-server`, `-disable-com-port-redirect`, `-enforce-tls-security-layer`, `-limit-single-monitor`, `-set-connection-timeout-8h`, `-disable-lpt-port-redirect`
+- **`UpdateCheckService.cs`** — GitHub Releases API checker; returns `UpdateInfo` record (`UpdateAvailable`, `CurrentVersion`, `LatestVersion`, `ReleaseNotes`, `DownloadUrl`)
+- **`ComplianceService.cs`** — compare live registry state against a saved snapshot; returns `ComplianceReport` with `Drifted` list and `IsCompliant` flag
+- **`GroupPolicyExporter.cs`** — exports `TweakKind.GroupPolicy` tweaks to `.admx` + companion `.adml` file pair
+- **`UpdateCheckerDialog.cs`** — GUI dialog for Help → Check for Updates; shows current vs latest version, release notes, download link
+- **Help → Check for Updates** menu item wired in `MainForm`
+- **CLI `--compliance <snapshot>`** — detects configuration drift against a snapshot file; exits 1 if non-compliant
+- **CLI `--export-gpo <path>`** — exports Group Policy tweaks as ADMX/ADML pair
+- **StartupManagerDialog +2**: Export CSV button + Open File Location button
+- **ServiceManagerDialog +2**: Restart Service button + Set to Automatic button
+- **DiskSpaceDialog +2**: Clean TEMP button + live TEMP folder size label
+- **WindowsUpdateControlDialog +2**: Update History button (ms-settings deeplink) + Reset WU Components button
+- **MemoryCleanerDialog +2**: Auto-clean checkbox + threshold spinner with 30-second polling timer
+- **NetworkToolsDialog +2**: Ping tab (multi-host concurrent ping) + Traceroute tab (live `tracert` output)
+- **`TweakEngineBuiltinsTests.cs`** — 5 new `[Theory]` methods; 50 new `[InlineData]` entries covering all Sprint 45 tweaks
+- Total: **2 946 tweaks** (+50)
+
+---
+
 ## [Unreleased] — Sprint 44
 
 ### Fixed

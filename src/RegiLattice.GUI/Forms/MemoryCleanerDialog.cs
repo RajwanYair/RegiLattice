@@ -77,6 +77,19 @@ internal sealed class MemoryCleanerDialog : BaseDialog
         Height = 32,
     };
 
+    // Auto-clean controls
+    private readonly CheckBox _chkAutoClean = new() { Text = "Auto-clean when free RAM <", AutoSize = true };
+    private readonly NumericUpDown _nudThreshold = new()
+    {
+        Minimum = 100,
+        Maximum = 8192,
+        Value = 512,
+        Width = 70,
+        Increment = 128,
+    };
+    private readonly Label _lblThresholdMb = new() { Text = "MB", AutoSize = true };
+    private readonly System.Windows.Forms.Timer _autoTimer = new() { Interval = 30_000 };
+
     private CancellationTokenSource _cts = new();
 
     internal MemoryCleanerDialog()
@@ -131,13 +144,29 @@ internal sealed class MemoryCleanerDialog : BaseDialog
         };
         btnPanel.Controls.AddRange([_btnClose, _btnClean]);
 
+        // Auto-clean threshold row
+        var autoPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 32,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            Padding = new Padding(8, 4, 8, 0),
+        };
+        autoPanel.Controls.Add(_chkAutoClean);
+        autoPanel.Controls.Add(_nudThreshold);
+        autoPanel.Controls.Add(_lblThresholdMb);
+
         Controls.Add(statsPanel);
+        Controls.Add(autoPanel);
         Controls.Add(btnPanel);
         Controls.Add(_statusLabel);
         Controls.Add(_progressBar);
 
         _btnClean.Click += async (_, _) => await CleanAsync();
         _btnClose.Click += (_, _) => Close();
+        _autoTimer.Tick += OnAutoCleanTick;
+        FormClosed += (_, _) => _autoTimer.Dispose();
 
         AppTheme.Apply(this);
     }
@@ -220,5 +249,19 @@ internal sealed class MemoryCleanerDialog : BaseDialog
         _lblAfter.Text = $"{afterMb} MB";
         _lblFreed.Text = freedMb > 0 ? $"\u2705  Freed approximately {freedMb} MB" : "\u2705  Working sets trimmed (OS may reclaim pages lazily)";
         _statusLabel.Text = $"Clean complete — {beforeMb} MB → {afterMb} MB";
+    }
+
+    private async void OnAutoCleanTick(object? sender, EventArgs e)
+    {
+        if (!_chkAutoClean.Checked)
+            return;
+        var (_, available, _) = SystemMonitor.GetMemoryUsage();
+        if (available <= (long)_nudThreshold.Value)
+        {
+            _statusLabel.Text = $"Auto-clean triggered (free RAM: {available} MB)";
+            _autoTimer.Stop();
+            await CleanAsync();
+            _autoTimer.Start();
+        }
     }
 }

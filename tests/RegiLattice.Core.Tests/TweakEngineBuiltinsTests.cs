@@ -1542,4 +1542,104 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("Maintenance", tweak.Category);
     }
+
+    // ── Sprint 45: Audio (new tweaks) ──────────────────────────────────────
+
+    [Theory]
+    [InlineData("audio-disable-comms-ducking")]
+    [InlineData("audio-set-pro-audio-priority")]
+    [InlineData("audio-disable-audio-idle-powerdown")]
+    [InlineData("audio-set-avrcp-volume-sync")]
+    [InlineData("audio-set-audio-latency-mode")]
+    [InlineData("audio-enable-audio-log-off")]
+    [InlineData("audio-set-endpoint-builder-manual")]
+    [InlineData("audio-disable-voice-typing-toast")]
+    [InlineData("audio-set-render-clock-rate")]
+    [InlineData("audio-set-capture-clock-rate")]
+    public void RegisterBuiltins_Sprint45AudioTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Audio", tweak.Category);
+    }
+
+    // ── Sprint 45: Gaming (new tweaks) ─────────────────────────────────────
+
+    [Theory]
+    [InlineData("game-disable-msmq-service")]
+    [InlineData("game-disable-gameinput-service")]
+    [InlineData("game-set-dxgi-flip-model")]
+    [InlineData("game-enable-game-bar-perf-counter")]
+    [InlineData("game-disable-diagtrack-autologger")]
+    [InlineData("game-set-xgip-service-manual")]
+    [InlineData("game-disable-ndu-adapter")]
+    [InlineData("game-set-games-sfio-priority-high")]
+    [InlineData("game-set-mouse-fix-off")]
+    [InlineData("game-set-games-affinity-all-cpus")]
+    public void RegisterBuiltins_Sprint45GamingTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Gaming", tweak.Category);
+    }
+
+    // ── Sprint 45: Security (new tweaks) ───────────────────────────────────
+
+    [Theory]
+    [InlineData("sec-require-ldap-signing")]
+    [InlineData("sec-disable-rdp-clipboard-sync")]
+    [InlineData("sec-disable-rdp-drive-mapping")]
+    [InlineData("sec-enforce-smb-ntlmv2-auth")]
+    [InlineData("sec-disable-printer-spooler-network")]
+    [InlineData("sec-enable-run-as-different-user")]
+    [InlineData("sec-disable-office-macros-internet")]
+    [InlineData("sec-disable-wsh-scripting")]
+    [InlineData("sec-restrict-lsass-credential-dump")]
+    [InlineData("sec-disable-named-pipe-impersonation")]
+    public void RegisterBuiltins_Sprint45SecurityTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Security", tweak.Category);
+    }
+
+    // ── Sprint 45: Windows Update (new tweaks) ─────────────────────────────
+
+    [Theory]
+    [InlineData("wu-disable-automatic-updates")]
+    [InlineData("wu-set-schedule-day-saturday")]
+    [InlineData("wu-disable-store-app-auto-updates")]
+    [InlineData("wu-set-update-service-manual")]
+    [InlineData("wu-require-admin-for-updates")]
+    [InlineData("wu-disable-metered-update-download")]
+    [InlineData("wu-disable-reboot-required-notification")]
+    [InlineData("wu-set-feature-update-channel-general")]
+    [InlineData("wu-set-orchestrator-service-manual")]
+    [InlineData("wu-disable-third-party-preview")]
+    public void RegisterBuiltins_Sprint45WindowsUpdateTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Windows Update", tweak.Category);
+    }
+
+    // ── Sprint 45: Remote Desktop (new tweaks) ─────────────────────────────
+
+    [Theory]
+    [InlineData("rdp-set-max-connections-unlimited")]
+    [InlineData("rdp-set-color-depth-32")]
+    [InlineData("rdp-disable-smart-card-redirection")]
+    [InlineData("rdp-set-remote-assistance-off")]
+    [InlineData("rdp-set-audio-play-on-server")]
+    [InlineData("rdp-disable-com-port-redirect")]
+    [InlineData("rdp-enforce-tls-security-layer")]
+    [InlineData("rdp-limit-single-monitor")]
+    [InlineData("rdp-set-connection-timeout-8h")]
+    [InlineData("rdp-disable-lpt-port-redirect")]
+    public void RegisterBuiltins_Sprint45RemoteDesktopTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Remote Desktop", tweak.Category);
+    }
 }

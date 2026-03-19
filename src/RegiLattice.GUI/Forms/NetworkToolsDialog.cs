@@ -32,6 +32,50 @@ internal sealed class NetworkToolsDialog : BaseDialog
 
     private CancellationTokenSource _cts = new();
 
+    // Ping tab controls
+    private readonly TextBox _pingHostsBox = new()
+    {
+        Multiline = true,
+        ScrollBars = ScrollBars.Vertical,
+        PlaceholderText = "Enter hosts, one per line (e.g. 8.8.8.8)",
+        Height = 72,
+        Dock = DockStyle.Top,
+        Font = new System.Drawing.Font("Consolas", 9f),
+    };
+    private readonly RichTextBox _pingLog = new()
+    {
+        ReadOnly = true,
+        BorderStyle = BorderStyle.None,
+        Dock = DockStyle.Fill,
+    };
+    private readonly Button _btnPingAll = new()
+    {
+        Text = "\uD83D\uDD01 Ping All",
+        Width = 110,
+        Height = 30,
+    };
+
+    // Traceroute tab controls
+    private readonly TextBox _traceHostBox = new()
+    {
+        PlaceholderText = "Host to trace (e.g. google.com)",
+        Dock = DockStyle.Top,
+        Height = 26,
+        Font = new System.Drawing.Font("Consolas", 9f),
+    };
+    private readonly RichTextBox _traceLog = new()
+    {
+        ReadOnly = true,
+        BorderStyle = BorderStyle.None,
+        Dock = DockStyle.Fill,
+    };
+    private readonly Button _btnTrace = new()
+    {
+        Text = "\uD83D\uDD0D Trace Route",
+        Width = 120,
+        Height = 30,
+    };
+
     internal NetworkToolsDialog()
         : base("Network Tools", new Size(560, 480))
     {
@@ -165,8 +209,50 @@ internal sealed class NetworkToolsDialog : BaseDialog
         tabRepair.Controls.Add(_repairLog);
         tabRepair.Controls.Add(repairTopPanel);
 
-        // ── Tabs & close button ──────────────────────────────────────────
-        _tabs.TabPages.AddRange([tabDns, tabRepair]);
+        // ── Ping Tab ───────────────────────────────────────────
+        var tabPing = new TabPage("Ping");
+        var pingTopPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            Padding = new Padding(8, 6, 8, 4),
+        };
+        var pingBtnRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true };
+        pingBtnRow.Controls.Add(_btnPingAll);
+        pingTopPanel.Controls.Add(_pingHostsBox);
+        pingTopPanel.Controls.Add(pingBtnRow);
+        _pingLog.BackColor = AppTheme.Bg;
+        _pingLog.ForeColor = AppTheme.Green;
+        _pingLog.Font = AppTheme.Mono;
+        tabPing.Controls.Add(_pingLog);
+        tabPing.Controls.Add(pingTopPanel);
+        _btnPingAll.Click += async (_, _) => await RunPingAllAsync();
+
+        // ── Traceroute Tab ───────────────────────────────────
+        var tabTrace = new TabPage("Traceroute");
+        var traceTopPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            Padding = new Padding(8, 6, 8, 4),
+        };
+        var traceBtnRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true };
+        traceBtnRow.Controls.Add(_btnTrace);
+        traceTopPanel.Controls.Add(_traceHostBox);
+        traceTopPanel.Controls.Add(traceBtnRow);
+        _traceLog.BackColor = AppTheme.Bg;
+        _traceLog.ForeColor = AppTheme.Green;
+        _traceLog.Font = AppTheme.Mono;
+        tabTrace.Controls.Add(_traceLog);
+        tabTrace.Controls.Add(traceTopPanel);
+        _btnTrace.Click += async (_, _) => await RunTraceAsync();
+
+        // ── Tabs & close button ─────────────────────────────────────
+        _tabs.TabPages.AddRange([tabDns, tabRepair, tabPing, tabTrace]);
 
         var btnClose = new Button
         {
@@ -335,6 +421,8 @@ internal sealed class NetworkToolsDialog : BaseDialog
         _btnResetTcpIp.Enabled = !busy;
         _btnResetWinsock.Enabled = !busy;
         _btnFullRepair.Enabled = !busy;
+        _btnPingAll.Enabled = !busy;
+        _btnTrace.Enabled = !busy;
         Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
     }
 
@@ -384,4 +472,93 @@ internal sealed class NetworkToolsDialog : BaseDialog
             Anchor = AnchorStyles.Left,
             Padding = new Padding(0, 5, 0, 0),
         };
+
+    private async Task RunPingAllAsync()
+    {
+        var hosts = _pingHostsBox.Text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (hosts.Length == 0)
+        {
+            _pingLog.Text = "Enter at least one host above.";
+            return;
+        }
+        _pingLog.Clear();
+        _pingLog.AppendText($"[{DateTime.Now:HH:mm:ss}] Pinging {hosts.Length} host(s)\u2026\r\n\r\n");
+        SetBusy(true);
+        try
+        {
+            await Task.Run(
+                async () =>
+                {
+                    using var pinger = new System.Net.NetworkInformation.Ping();
+                    foreach (var host in hosts)
+                    {
+                        try
+                        {
+                            var reply = await pinger.SendPingAsync(host, 2000);
+                            string line =
+                                reply.Status == System.Net.NetworkInformation.IPStatus.Success
+                                    ? $"  \u2714  {host, -30} {reply.Address}  {reply.RoundtripTime}ms"
+                                    : $"  \u2718  {host, -30} {reply.Status}";
+                            Invoke(() => _pingLog.AppendText(line + "\r\n"));
+                        }
+                        catch (Exception ex)
+                        {
+                            Invoke(() => _pingLog.AppendText($"  \u2718  {host, -30} {ex.Message}\r\n"));
+                        }
+                    }
+                },
+                _cts.Token
+            );
+        }
+        catch (OperationCanceledException) { }
+        finally
+        {
+            SetBusy(false);
+        }
+    }
+
+    private async Task RunTraceAsync()
+    {
+        var host = _traceHostBox.Text.Trim();
+        if (string.IsNullOrEmpty(host))
+        {
+            _traceLog.Text = "Enter a host to trace above.";
+            return;
+        }
+        _traceLog.Clear();
+        _traceLog.AppendText($"[{DateTime.Now:HH:mm:ss}] Tracing route to: {host}\r\n\r\n");
+        SetBusy(true);
+        try
+        {
+            await Task.Run(
+                async () =>
+                {
+                    var psi = new System.Diagnostics.ProcessStartInfo("tracert.exe", $"-d -h 20 {host}")
+                    {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    };
+                    using var proc = System.Diagnostics.Process.Start(psi)!;
+                    while (true)
+                    {
+                        var line = await proc.StandardOutput.ReadLineAsync(_cts.Token).ConfigureAwait(false);
+                        if (line is null)
+                            break;
+                        Invoke(() => _traceLog.AppendText(line + "\r\n"));
+                    }
+                    await proc.WaitForExitAsync(_cts.Token).ConfigureAwait(false);
+                },
+                _cts.Token
+            );
+        }
+        catch (OperationCanceledException)
+        {
+            _traceLog.AppendText("\r\nCancelled.");
+        }
+        finally
+        {
+            SetBusy(false);
+        }
+    }
 }

@@ -2,8 +2,8 @@
 // Windows Update pause/resume controls and update settings management.
 #nullable enable
 
-using Microsoft.Win32;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace RegiLattice.GUI.Forms;
 
@@ -21,14 +21,68 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
     private readonly Label _lblFeatureStatus = new() { AutoSize = true };
     private readonly Label _lblQualityStatus = new() { AutoSize = true };
     private readonly ComboBox _cboPauseDays = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 140 };
-    private readonly Button _btnPauseFeature = new() { Text = "Pause Feature Updates", Width = 175, Height = 28 };
-    private readonly Button _btnPauseQuality = new() { Text = "Pause Quality Updates", Width = 175, Height = 28 };
-    private readonly Button _btnResumeAll = new() { Text = "Resume All Updates", Width = 160, Height = 28 };
-    private readonly Button _btnCheckNow = new() { Text = "Check for Updates Now", Width = 175, Height = 28 };
-    private readonly Button _btnOpenSettings = new() { Text = "Open WU Settings", Width = 155, Height = 28 };
-    private readonly Button _btnRefresh = new() { Text = "⟳ Refresh", Width = 90, Height = 28 };
-    private readonly Button _btnClose = new() { Text = "Close", Width = 75, Height = 28, DialogResult = DialogResult.Cancel };
-    private readonly Label _lblInfo = new() { Dock = DockStyle.Top, Height = 28, TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(8, 0, 0, 0) };
+    private readonly Button _btnPauseFeature = new()
+    {
+        Text = "Pause Feature Updates",
+        Width = 175,
+        Height = 28,
+    };
+    private readonly Button _btnPauseQuality = new()
+    {
+        Text = "Pause Quality Updates",
+        Width = 175,
+        Height = 28,
+    };
+    private readonly Button _btnResumeAll = new()
+    {
+        Text = "Resume All Updates",
+        Width = 160,
+        Height = 28,
+    };
+    private readonly Button _btnCheckNow = new()
+    {
+        Text = "Check for Updates Now",
+        Width = 175,
+        Height = 28,
+    };
+    private readonly Button _btnOpenSettings = new()
+    {
+        Text = "Open WU Settings",
+        Width = 155,
+        Height = 28,
+    };
+    private readonly Button _btnRefresh = new()
+    {
+        Text = "⟳ Refresh",
+        Width = 90,
+        Height = 28,
+    };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 75,
+        Height = 28,
+        DialogResult = DialogResult.Cancel,
+    };
+    private readonly Button _btnUpdateHistory = new()
+    {
+        Text = "Update History",
+        Width = 130,
+        Height = 28,
+    };
+    private readonly Button _btnResetWu = new()
+    {
+        Text = "Reset WU",
+        Width = 100,
+        Height = 28,
+    };
+    private readonly Label _lblInfo = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 28,
+        TextAlign = ContentAlignment.MiddleLeft,
+        Padding = new Padding(8, 0, 0, 0),
+    };
 
     public WindowsUpdateControlDialog()
         : base("Windows Update Control", new Size(620, 480), resizable: false)
@@ -54,8 +108,19 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
         _cboPauseDays.SelectedIndex = 0;
 
         // Status group
-        var grpStatus = new GroupBox { Text = "Current Update Status", Dock = DockStyle.Fill, Height = 100 };
-        var statusLayout = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 2, Padding = new Padding(8, 6, 0, 0) };
+        var grpStatus = new GroupBox
+        {
+            Text = "Current Update Status",
+            Dock = DockStyle.Fill,
+            Height = 100,
+        };
+        var statusLayout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            RowCount = 2,
+            ColumnCount = 2,
+            Padding = new Padding(8, 6, 0, 0),
+        };
         statusLayout.Controls.Add(new Label { Text = "Feature Updates:", AutoSize = true }, 0, 0);
         statusLayout.Controls.Add(_lblFeatureStatus, 1, 0);
         statusLayout.Controls.Add(new Label { Text = "Quality Updates:", AutoSize = true }, 0, 1);
@@ -63,20 +128,60 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
         grpStatus.Controls.Add(statusLayout);
 
         // Controls group
-        var grpControl = new GroupBox { Text = "Pause / Resume", Dock = DockStyle.Fill, Height = 160 };
-        var durRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true, WrapContents = false, Padding = new Padding(8, 8, 0, 0) };
-        durRow.Controls.Add(new Label { Text = "Pause for:", AutoSize = true, Margin = new Padding(0, 4, 8, 0) });
+        var grpControl = new GroupBox
+        {
+            Text = "Pause / Resume",
+            Dock = DockStyle.Fill,
+            Height = 160,
+        };
+        var durRow = new FlowLayoutPanel
+        {
+            FlowDirection = FlowDirection.LeftToRight,
+            AutoSize = true,
+            WrapContents = false,
+            Padding = new Padding(8, 8, 0, 0),
+        };
+        durRow.Controls.Add(
+            new Label
+            {
+                Text = "Pause for:",
+                AutoSize = true,
+                Margin = new Padding(0, 4, 8, 0),
+            }
+        );
         durRow.Controls.Add(_cboPauseDays);
-        var btnRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, AutoSize = true, WrapContents = false, Padding = new Padding(8, 4, 0, 0) };
+        var btnRow = new FlowLayoutPanel
+        {
+            FlowDirection = FlowDirection.LeftToRight,
+            AutoSize = true,
+            WrapContents = false,
+            Padding = new Padding(8, 4, 0, 0),
+        };
         btnRow.Controls.AddRange(new Control[] { _btnPauseFeature, _btnPauseQuality, _btnResumeAll });
-        var controlContent = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, Dock = DockStyle.Fill, WrapContents = false };
+        var controlContent = new FlowLayoutPanel
+        {
+            FlowDirection = FlowDirection.TopDown,
+            Dock = DockStyle.Fill,
+            WrapContents = false,
+        };
         controlContent.Controls.AddRange(new Control[] { durRow, btnRow });
         grpControl.Controls.Add(controlContent);
 
         // Quick actions group
-        var grpActions = new GroupBox { Text = "Quick Actions", Dock = DockStyle.Fill, Height = 80 };
-        var actRow = new FlowLayoutPanel { FlowDirection = FlowDirection.LeftToRight, Dock = DockStyle.Fill, Padding = new Padding(8, 8, 0, 0), WrapContents = false };
-        actRow.Controls.AddRange(new Control[] { _btnCheckNow, _btnOpenSettings, _btnRefresh, _btnClose });
+        var grpActions = new GroupBox
+        {
+            Text = "Quick Actions",
+            Dock = DockStyle.Fill,
+            Height = 80,
+        };
+        var actRow = new FlowLayoutPanel
+        {
+            FlowDirection = FlowDirection.LeftToRight,
+            Dock = DockStyle.Fill,
+            Padding = new Padding(8, 8, 0, 0),
+            WrapContents = false,
+        };
+        actRow.Controls.AddRange(new Control[] { _btnCheckNow, _btnOpenSettings, _btnUpdateHistory, _btnResetWu, _btnRefresh, _btnClose });
         grpActions.Controls.Add(actRow);
 
         outer.Controls.Add(_lblInfo, 0, 0);
@@ -93,6 +198,8 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
         _btnResumeAll.Click += (_, _) => ResumeAllUpdates();
         _btnCheckNow.Click += (_, _) => CheckNow();
         _btnOpenSettings.Click += (_, _) => Process.Start(new ProcessStartInfo("ms-settings:windowsupdate") { UseShellExecute = true });
+        _btnUpdateHistory.Click += (_, _) => Process.Start(new ProcessStartInfo("ms-settings:windowsupdate-history") { UseShellExecute = true });
+        _btnResetWu.Click += (_, _) => ResetWuComponents();
         _btnRefresh.Click += (_, _) => LoadStatus();
         _btnClose.Click += (_, _) => Close();
     }
@@ -131,7 +238,8 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
     private static DateTime? ReadPauseDate(string valueName)
     {
         string? val = Registry.GetValue(WuSettingsKey, valueName, null)?.ToString();
-        if (string.IsNullOrEmpty(val)) return null;
+        if (string.IsNullOrEmpty(val))
+            return null;
         return DateTime.TryParse(val, out DateTime dt) ? dt : (DateTime?)null;
     }
 
@@ -173,7 +281,15 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
     {
         try
         {
-            foreach (string v in new[] { "PauseFeatureUpdatesStartTime", "PauseFeatureUpdatesEndTime", "PauseQualityUpdatesStartTime", "PauseQualityUpdatesEndTime" })
+            foreach (
+                string v in new[]
+                {
+                    "PauseFeatureUpdatesStartTime",
+                    "PauseFeatureUpdatesEndTime",
+                    "PauseQualityUpdatesStartTime",
+                    "PauseQualityUpdatesEndTime",
+                }
+            )
             {
                 Registry.SetValue(WuSettingsKey, v, "", RegistryValueKind.String);
             }
@@ -196,6 +312,27 @@ internal sealed class WindowsUpdateControlDialog : BaseDialog
         catch
         {
             Process.Start(new ProcessStartInfo("ms-settings:windowsupdate") { UseShellExecute = true });
+        }
+    }
+
+    private void ResetWuComponents()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo("net", "stop wuauserv") { CreateNoWindow = true, UseShellExecute = false });
+            Process.Start(new ProcessStartInfo("net", "stop bits") { CreateNoWindow = true, UseShellExecute = false });
+            Process.Start(new ProcessStartInfo("net", "start wuauserv") { CreateNoWindow = true, UseShellExecute = false });
+            Process.Start(new ProcessStartInfo("net", "start bits") { CreateNoWindow = true, UseShellExecute = false });
+            _lblInfo.Text = "\u2713 Windows Update components reset. Try checking for updates now.";
+            LoadStatus();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            _lblInfo.Text = "\u2717 Access denied. Run as administrator.";
+        }
+        catch (Exception ex)
+        {
+            _lblInfo.Text = $"\u2717 Reset failed: {ex.Message}";
         }
     }
 }

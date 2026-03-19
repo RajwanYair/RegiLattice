@@ -124,6 +124,10 @@ internal static class Program
             return RunFavoriteRemove(a.FavoriteRemove);
         if (a.ShowHistory)
             return RunHistory(a.HistoryCount);
+        if (a.Compliance is not null)
+            return RunCompliance(a.Compliance);
+        if (a.ExportGpo is not null)
+            return RunExportGpo(a.ExportGpo);
         if (a.Gui)
             return RunGui();
         if (a.Menu)
@@ -1537,6 +1541,67 @@ internal static class Program
         return 0;
     }
 
+    // ── Compliance / GPO Export ──────────────────────────────────────────
+
+    private static int RunCompliance(string snapshotPath)
+    {
+        if (!File.Exists(snapshotPath))
+        {
+            Console.WriteLine($"\u274c Snapshot file not found: {snapshotPath}");
+            return 2;
+        }
+
+        Console.WriteLine($"Checking compliance against snapshot: {snapshotPath}\n");
+        var report = ComplianceService.CheckFromFile(_engine, snapshotPath, parallelDetect: true);
+
+        if (report.TotalChecked < 0)
+        {
+            Console.WriteLine($"\u274c Failed to load snapshot: {snapshotPath}");
+            return 2;
+        }
+
+        Console.WriteLine($"  Checked : {report.TotalChecked} tweak(s)");
+        Console.WriteLine($"  Drifted : {report.ViolationCount}");
+        Console.WriteLine($"  At      : {report.CheckedAt:yyyy-MM-dd HH:mm:ss}\n");
+
+        if (report.IsCompliant)
+        {
+            Console.WriteLine(Green("\u2705  All applied tweaks are still active — system is compliant."));
+            return 0;
+        }
+
+        Console.WriteLine(Yellow($"\u26a0  {report.ViolationCount} compliance violation(s):\n"));
+        foreach (var d in report.Drifted)
+        {
+            string arrow = $"{d.BaselineStatus} \u2192 {d.CurrentStatus}";
+            Console.WriteLine($"  {Red(d.TweakId), -50} {d.Label}");
+            Console.WriteLine($"    Category: {d.Category, -30} Change: {arrow}");
+        }
+        return 1;
+    }
+
+    private static int RunExportGpo(string outputPath)
+    {
+        Console.WriteLine($"Exporting Group Policy ADMX template\u2026");
+        try
+        {
+            GroupPolicyExporter.Export(_engine, outputPath);
+            Console.WriteLine(Green($"\u2705  Exported to: {outputPath}"));
+            string admlPath = System.IO.Path.Combine(
+                System.IO.Path.GetDirectoryName(outputPath) ?? ".",
+                "en-US",
+                System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(outputPath), ".adml")
+            );
+            Console.WriteLine($"    Companion ADML: {admlPath}");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
     // ── Favorites ────────────────────────────────────────────────────────
 
     private static int RunFavorites()
@@ -1878,6 +1943,14 @@ internal static class Program
                         p.HistoryCount = hcount;
                         i++;
                     }
+                    break;
+                case "--compliance":
+                    if (++i < args.Length)
+                        p.Compliance = args[i];
+                    break;
+                case "--export-gpo":
+                    if (++i < args.Length)
+                        p.ExportGpo = args[i];
                     break;
 
                 default:
