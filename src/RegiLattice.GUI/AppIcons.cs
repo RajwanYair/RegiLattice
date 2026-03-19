@@ -746,4 +746,127 @@ internal static class AppIcons
         g.DrawEllipse(fgPen, cx - 2, s / 2 - 4, 5, 4);
         g.FillRectangle(fgBrush, cx - 3, s / 2, 7, 5);
     }
+
+    // ── Additional icon bitmaps added for v3.6.0 ─────────────────────────
+
+    internal static Bitmap AboutMenuBitmap => MenuBitmap("menu-about", DrawAboutIcon);
+    internal static Bitmap HwInfoMenuBitmap => MenuBitmap("menu-hwinfo", DrawHwInfoIcon);
+    internal static Bitmap WhatsNewMenuBitmap => MenuBitmap("menu-whatsnew", DrawWhatsNewIcon);
+    internal static Bitmap CheckUpdatesMenuBitmap => MenuBitmap("menu-checkupdates", DrawCheckUpdatesIcon);
+    internal static Bitmap ExitMenuBitmap => MenuBitmap("menu-exit", DrawExitIcon);
+    internal static Bitmap PreferencesMenuBitmap => MenuBitmap("menu-prefs", DrawPreferencesIcon);
+    internal static Bitmap ImportMenuBitmap => MenuBitmap("menu-import", DrawImportIcon);
+
+    /// <summary>About icon: teal circle with lowercase "i".</summary>
+    private static void DrawAboutIcon(Graphics g, int s)
+    {
+        using var bg = new SolidBrush(Color.FromArgb(0, 160, 200));
+        using var fg = new SolidBrush(Color.White);
+        g.FillEllipse(bg, 2, 2, s - 4, s - 4);
+        using var font = new Font("Segoe UI", 7f, FontStyle.Bold);
+        g.DrawString("i", font, fg, (s / 2) - 2f, (s / 2) - 5f);
+    }
+
+    /// <summary>Hardware info icon: dark gray PCB chip with gold pins.</summary>
+    private static void DrawHwInfoIcon(Graphics g, int s)
+    {
+        using var chipBrush = new SolidBrush(Color.FromArgb(60, 60, 60));
+        using var pinBrush = new SolidBrush(Color.FromArgb(200, 160, 0));
+        int m = 4,
+            w = s - m * 2;
+        g.FillRectangle(chipBrush, m, m, w, w);
+        // Pins left
+        for (int i = 0; i < 3; i++)
+            g.FillRectangle(pinBrush, 1, m + 2 + i * 3, m - 1, 2);
+        // Pins right
+        for (int i = 0; i < 3; i++)
+            g.FillRectangle(pinBrush, s - m, m + 2 + i * 3, m - 1, 2);
+    }
+
+    /// <summary>What's New icon: yellow star on dark background.</summary>
+    private static void DrawWhatsNewIcon(Graphics g, int s)
+    {
+        using var bg = new SolidBrush(Color.FromArgb(40, 40, 60));
+        using var star = new SolidBrush(Color.FromArgb(255, 200, 0));
+        g.FillRectangle(bg, 2, 2, s - 4, s - 4);
+        int cx = s / 2,
+            cy = s / 2,
+            r = s / 2 - 3;
+        var pts = new System.Collections.Generic.List<Point>();
+        for (int i = 0; i < 10; i++)
+        {
+            double angle = Math.PI / 2 + i * Math.PI / 5;
+            int rad = (i % 2 == 0) ? r : r / 2;
+            pts.Add(new Point(cx + (int)(rad * Math.Cos(angle)), cy - (int)(rad * Math.Sin(angle))));
+        }
+        g.FillPolygon(star, pts.ToArray());
+    }
+
+    /// <summary>Check Updates icon: green sync arrows.</summary>
+    private static void DrawCheckUpdatesIcon(Graphics g, int s)
+    {
+        using var bg = new SolidBrush(Color.FromArgb(0, 140, 70));
+        using var fg = new Pen(Color.White, 2f);
+        g.FillEllipse(bg, 2, 2, s - 4, s - 4);
+        int cx = s / 2,
+            cy = s / 2,
+            r = s / 2 - 4;
+        g.DrawArc(fg, cx - r, cy - r, r * 2, r * 2, 30, 240);
+        // Arrow head
+        g.DrawLine(fg, cx + r - 1, cy - 2, cx + r + 2, cy + 2);
+        g.DrawLine(fg, cx + r - 1, cy - 2, cx + r - 4, cy - 2);
+    }
+
+    /// <summary>Exit icon: red door with arrow.</summary>
+    private static void DrawExitIcon(Graphics g, int s)
+    {
+        using var door = new SolidBrush(Color.FromArgb(180, 40, 40));
+        using var arrow = new SolidBrush(Color.White);
+        g.FillRectangle(door, 3, 2, s - 8, s - 4);
+        // Arrow pointing right (exit)
+        var tri = new[] { new Point(s - 5, s / 2), new Point(s - 10, s / 2 - 3), new Point(s - 10, s / 2 + 3) };
+        g.FillPolygon(arrow, tri);
+        g.FillRectangle(arrow, s - 13, s / 2 - 1, 5, 3);
+    }
+
+    /// <summary>Preferences icon: gear (cog).</summary>
+    private static void DrawPreferencesIcon(Graphics g, int s)
+    {
+        using var bg = new SolidBrush(Color.FromArgb(80, 80, 100));
+        using var fg = new SolidBrush(Color.FromArgb(210, 210, 230));
+        g.FillEllipse(bg, 2, 2, s - 4, s - 4);
+        int cx = s / 2,
+            cy = s / 2,
+            r = s / 2 - 3,
+            ir = r - 3;
+        using var pen = new Pen(fg, 2f);
+        for (int i = 0; i < 8; i++)
+        {
+            double a1 = i * Math.PI / 4,
+                a2 = a1 + Math.PI / 8;
+            g.DrawLine(
+                pen,
+                cx + (int)(r * Math.Cos(a1)),
+                cy + (int)(r * Math.Sin(a1)),
+                cx + (int)((r + 2) * Math.Cos(a2)),
+                cy + (int)((r + 2) * Math.Sin(a2))
+            );
+        }
+        g.FillEllipse(new SolidBrush(AppTheme.Bg), cx - ir + 1, cy - ir + 1, (ir - 1) * 2, (ir - 1) * 2);
+    }
+
+    /// <summary>Import icon: green downward arrow into a tray.</summary>
+    private static void DrawImportIcon(Graphics g, int s)
+    {
+        using var bg = new SolidBrush(Color.FromArgb(0, 160, 80));
+        using var fg = new SolidBrush(Color.White);
+        g.FillRectangle(bg, 2, 2, s - 4, s - 4);
+        int cx = s / 2;
+        // Tray at bottom
+        g.FillRectangle(fg, 3, s - 6, s - 6, 2);
+        // Down arrow
+        var tri = new[] { new Point(cx, s - 8), new Point(cx - 3, s - 13), new Point(cx + 3, s - 13) };
+        g.FillPolygon(fg, tri);
+        g.FillRectangle(fg, cx - 1, 3, 3, s - 14);
+    }
 }

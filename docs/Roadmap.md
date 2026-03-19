@@ -1,17 +1,17 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-06-02 · v3.5.0 · 2 846 tweaks · 92 categories · 1 740 tests
+> Last updated: 2026-03-19 · v3.6.0 · 2 946 tweaks · 92 categories · 1 840 tests
 
 ---
 
-## Current State (as of v3.5.0)
+## Current State (as of v3.6.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 2 846 verified across 92 categories |
-| Tests | 1 740 total, all passing (1 skipped integration), 4-thread parallel |
+| Tweaks | 2 946 verified across 92 categories |
+| Tests | 2 088 total, all passing, 4-thread parallel |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, percentage progress, live color-coded CPU/RAM status bar |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
@@ -646,6 +646,24 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 2 | `_btnUndoLast` ToolStripButton — undoes last apply/remove by calling inverse engine op | ✅ |
 | 3 | `OnUndoLastAsync()` — reads `TweakHistory.Recent(1)`, determines inverse action, runs via `Task.Run` | ✅ |
 | 4 | `SetBusy()` updated: `_btnUndoLast.Enabled = !busy && TweakHistory.Count > 0` | ✅ |
+
+### Sprint 46 — v3.6.0 Release ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Bump version `3.5.0 → 3.6.0` (`Directory.Build.props` + `installer/Package.wxs`) | ✅ |
+| 2 | About dialog: `[Debug]`/`[Release]` build config label in version line | ✅ |
+| 3 | About dialog: GitHub Releases `LinkLabel` — opens releases page in browser | ✅ |
+| 4 | `AppIcons.cs`: 7 new 16×16 programmatic menu icons (About, HwInfo, WhatsNew, CheckUpdates, Exit, Preferences, Import) | ✅ |
+| 5 | `MainForm.Designer.cs`: wire icons to all Help + File menu items (7 gaps filled) | ✅ |
+| 6 | README.md: update badges, tweak count, test count, and download link to v3.6.0 | ✅ |
+| 7 | Roadmap.md + CHANGELOG.md: Sprint 46 entry + `[3.6.0]` release section | ✅ |
+| 8 | GitHub metadata: `SECURITY.md` at root, `FUNDING.yml`, keyword-rich README | ✅ |
+| 9 | Docs archive: move stale tool-reference `.md` files to `docs/archive/` | ✅ |
+| 10 | Clean Release build: `0 errors, 0 warnings` | ✅ |
+| 11 | MSI installer: `RegiLattice-3.6.0-win-x64.msi` built and verified | ✅ |
+| 12 | All `2 088 tests` passing | ✅ |
+| 13 | `git tag v3.6.0` + push + GitHub release created | ✅ |
 
 ### Sprint 45 — 50 New Tweaks + Services + Dialog Enhancements ✅
 

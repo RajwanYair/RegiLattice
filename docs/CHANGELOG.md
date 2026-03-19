@@ -4,6 +4,15 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.6.0] — 2026-03-19
+
+### Added
+
+- **v3.6.0 release prep**: bumped version, clean Release build, MSI install package
+- **About dialog**: shows `[Debug]` / `[Release]` build configuration; added clickable GitHub Releases link
+- **Menu icons**: 7 new 16×16 programmatic icons in `AppIcons` — About, Hardware Info, What's New, Check Updates, Exit, Preferences, Import; all Help and File menu items now have icons
+- **Sprint 46 (v3.6.0 release)**: CHANGELOG, Roadmap, README, GitHub metadata updated; copilot-instructions.md updated to v3.6.0; full test suite passing; MSI built
+
 ## [Unreleased] — Sprint 45
 
 ### Added
