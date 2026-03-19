@@ -1239,6 +1239,8 @@ public partial class MainForm : Form
 
     private void OnOpenBootAnalyzer() => ShowManagerDialog(new BootTimeAnalyzerDialog());
 
+    private void OnOpenWuControl() => ShowManagerDialog(new WindowsUpdateControlDialog());
+
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
     private void OnAbout()
