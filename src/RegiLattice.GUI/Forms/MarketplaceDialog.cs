@@ -1,3 +1,4 @@
+using System.Net.Http;
 using RegiLattice.Core.Plugins;
 
 namespace RegiLattice.GUI.Forms;
@@ -9,12 +10,15 @@ internal sealed class MarketplaceDialog : Form
     private readonly ListView _lstBrowse = new();
     private readonly ListView _lstInstalled = new();
     private readonly TextBox _txtSearch = new();
+    private readonly ComboBox _cmbTagFilter = new() { Width = 130, DropDownStyle = ComboBoxStyle.DropDownList };
     private readonly Label _lblStatus = new();
     private readonly Button _btnInstall = new();
     private readonly Button _btnUninstall = new();
     private readonly Button _btnUpdate = new();
     private readonly Button _btnRefresh = new();
     private readonly Button _btnInstallFile = new();
+    private readonly Button _btnInstallUrl = new();
+    private readonly Button _btnConflicts = new();
     private readonly RichTextBox _txtDetails = new();
 
     private readonly PackManager _pm = new();
@@ -66,6 +70,26 @@ internal sealed class MarketplaceDialog : Form
         _txtSearch.ForeColor = AppTheme.Fg;
         _txtSearch.TextChanged += async (_, _) => await RefreshBrowseAsync();
 
+        // tag filter ComboBox (populated after index load)
+        _cmbTagFilter.Items.Add("All Tags");
+        _cmbTagFilter.SelectedIndex = 0;
+        _cmbTagFilter.BackColor = AppTheme.Surface;
+        _cmbTagFilter.ForeColor = AppTheme.Fg;
+        _cmbTagFilter.SelectedIndexChanged += async (_, _) => await RefreshBrowseAsync();
+
+        var searchRow = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top, Height = 32, FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false, Padding = new Padding(0),
+        };
+        _txtSearch.Dock = DockStyle.None;
+        _txtSearch.Width = 280;
+        _txtSearch.Height = 26;
+        _txtSearch.Margin = new Padding(0, 3, 4, 0);
+        _cmbTagFilter.Height = 26;
+        _cmbTagFilter.Margin = new Padding(0, 3, 0, 0);
+        searchRow.Controls.AddRange(new Control[] { _txtSearch, _cmbTagFilter });
+
         ConfigureListView(_lstBrowse);
         _lstBrowse.Columns.Add("Name", 180);
         _lstBrowse.Columns.Add("Version", 80);
@@ -86,13 +110,15 @@ internal sealed class MarketplaceDialog : Form
         StyleButton(_btnInstall, "\u2714 Install");
         StyleButton(_btnRefresh, "\U0001F504 Refresh");
         StyleButton(_btnInstallFile, "\U0001F4C1 Install from File…");
+        StyleButton(_btnInstallUrl, "\U0001F310 Install from URL\u2026");
         _btnInstall.Click += async (_, _) => await InstallSelectedAsync();
         _btnRefresh.Click += async (_, _) => await RefreshBrowseAsync();
         _btnInstallFile.Click += OnInstallFromFile;
-        browseButtons.Controls.AddRange([_btnInstall, _btnRefresh, _btnInstallFile]);
+        _btnInstallUrl.Click += async (_, _) => await OnInstallFromUrlAsync();
+        browseButtons.Controls.AddRange([_btnInstall, _btnRefresh, _btnInstallFile, _btnInstallUrl]);
 
         browsePanel.Controls.Add(_lstBrowse);
-        browsePanel.Controls.Add(_txtSearch);
+        browsePanel.Controls.Add(searchRow);
         browseTab.Controls.Add(browsePanel);
         browseTab.Controls.Add(browseButtons);
 
@@ -119,9 +145,11 @@ internal sealed class MarketplaceDialog : Form
         };
         StyleButton(_btnUninstall, "\u2716 Uninstall");
         StyleButton(_btnUpdate, "\u2B06 Update");
+        StyleButton(_btnConflicts, "\u26A0 Detect Conflicts");
         _btnUninstall.Click += OnUninstallSelected;
         _btnUpdate.Click += async (_, _) => await UpdateSelectedAsync();
-        installedButtons.Controls.AddRange([_btnUninstall, _btnUpdate]);
+        _btnConflicts.Click += OnDetectConflicts;
+        installedButtons.Controls.AddRange([_btnUninstall, _btnUpdate, _btnConflicts]);
 
         installedPanel.Controls.Add(_lstInstalled);
         installedTab.Controls.Add(installedPanel);
@@ -166,20 +194,31 @@ internal sealed class MarketplaceDialog : Form
         try
         {
             var query = _txtSearch.Text.Trim();
-            IReadOnlyList<PackDef> packs;
+            var selectedTag = _cmbTagFilter.SelectedItem as string ?? "All Tags";
 
-            if (string.IsNullOrWhiteSpace(query))
+            PackIndex index = await _pm.FetchIndexAsync(_cts.Token);
+
+            // Populate tag filter on first load
+            if (_cmbTagFilter.Items.Count == 1)
             {
-                var index = await _pm.FetchIndexAsync(_cts.Token);
-                packs = index.Packs;
+                var allTags = index.Packs.SelectMany(p => p.Tags).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(t => t);
+                _cmbTagFilter.BeginUpdate();
+                foreach (var tag in allTags)
+                    _cmbTagFilter.Items.Add(tag);
+                _cmbTagFilter.EndUpdate();
             }
-            else
-            {
-                packs = await _pm.SearchPacksAsync(query, _cts.Token);
-            }
+
+            IEnumerable<PackDef> packs = string.IsNullOrWhiteSpace(query)
+                ? index.Packs
+                : await _pm.SearchPacksAsync(query, _cts.Token);
+
+            if (selectedTag != "All Tags")
+                packs = packs.Where(p => p.Tags.Any(t => t.Equals(selectedTag, StringComparison.OrdinalIgnoreCase)));
+
+            var packList = packs.ToList();
 
             _lstBrowse.BeginUpdate();
-            foreach (var p in packs)
+            foreach (var p in packList)
             {
                 var item = new ListViewItem(p.Name) { Tag = p };
                 item.SubItems.AddRange([p.Version, p.TweakCount.ToString(), p.Author, p.Description]);
@@ -187,7 +226,7 @@ internal sealed class MarketplaceDialog : Form
             }
             _lstBrowse.EndUpdate();
 
-            _lblStatus.Text = $"{packs.Count} packs available.";
+            _lblStatus.Text = $"{packList.Count} packs available.";
             _lblStatus.ForeColor = AppTheme.Green;
         }
         catch (HttpRequestException ex)
@@ -241,6 +280,78 @@ internal sealed class MarketplaceDialog : Form
             _lblStatus.Text = $"\u274c {ex.Message}";
             _lblStatus.ForeColor = AppTheme.Red;
         }
+    }
+
+    private async Task OnInstallFromUrlAsync()
+    {
+        string? url = PromptInput("Install Pack from URL", "Enter the direct URL to the pack JSON file:");
+        if (string.IsNullOrWhiteSpace(url)) return;
+
+        _lblStatus.Text = "Downloading pack…";
+        _lblStatus.ForeColor = AppTheme.Fg;
+
+        try
+        {
+            var (pack, tweaks) = await _pm.InstallFromUrlAsync(url.Trim(), _cts.Token);
+            _lblStatus.Text = $"\u2705 Installed '{pack.DisplayName}' v{pack.Version} ({tweaks.Count} tweaks).";
+            _lblStatus.ForeColor = AppTheme.Green;
+            RefreshInstalled();
+        }
+        catch (ArgumentException ex)
+        {
+            _lblStatus.Text = $"\u274c Invalid URL: {ex.Message}";
+            _lblStatus.ForeColor = AppTheme.Red;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or InvalidOperationException)
+        {
+            _lblStatus.Text = $"\u274c {ex.Message}";
+            _lblStatus.ForeColor = AppTheme.Red;
+        }
+    }
+
+    private string? PromptInput(string title, string prompt)
+    {
+        using var form = new Form
+        {
+            Text = title, FormBorderStyle = FormBorderStyle.FixedDialog,
+            StartPosition = FormStartPosition.CenterParent,
+            ClientSize = new Size(480, 110), MaximizeBox = false, MinimizeBox = false,
+            Font = AppTheme.Regular, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg,
+        };
+        var lbl = new Label { Text = prompt, Location = new Point(12, 12), Width = 456, AutoSize = false, Height = 22 };
+        var txt = new TextBox { Location = new Point(12, 38), Width = 456, Height = 26, BackColor = AppTheme.Overlay, ForeColor = AppTheme.Fg };
+        var ok  = new Button { Text = "OK",     DialogResult = DialogResult.OK,     Location = new Point(300, 74), Width = 80 };
+        var no  = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(388, 74), Width = 80 };
+        form.AcceptButton = ok;
+        form.CancelButton = no;
+        form.Controls.AddRange(new Control[] { lbl, txt, ok, no });
+        return form.ShowDialog(this) == DialogResult.OK ? txt.Text : null;
+    }
+
+    private void OnDetectConflicts(object? sender, EventArgs e)
+    {
+        var conflicts = _pm.DetectConflicts();
+        if (conflicts.Count == 0)
+        {
+            MessageBox.Show(this, "No conflicts detected between installed packs.", "Conflict Detector",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"Found {conflicts.Count} registry key conflict(s):\n");
+        foreach (var c in conflicts)
+            sb.AppendLine($"  {c.RegistryPath}\\{c.ValueName}\n    \u2192 Packs: {string.Join(", ", c.ConflictingPacks)}");
+
+        using var details = new Form
+        {
+            Text = $"\u26A0 {conflicts.Count} Conflict(s) Found",
+            Size = new Size(620, 400), StartPosition = FormStartPosition.CenterParent,
+            Font = AppTheme.Regular, BackColor = AppTheme.Bg, ForeColor = AppTheme.Fg,
+        };
+        var rtb = new RichTextBox { Dock = DockStyle.Fill, ReadOnly = true, BackColor = AppTheme.Surface, ForeColor = AppTheme.Fg, Font = AppTheme.Mono, Text = sb.ToString() };
+        details.Controls.Add(rtb);
+        details.ShowDialog(this);
     }
 
     // ── Installed ──────────────────────────────────────────────────────

@@ -22,3 +22,12 @@ public sealed record PackDef
     public string MinRegiLatticeVersion { get; init; } = "3.3.0";
     public int MinWindowsBuild { get; init; }
 }
+
+/// <summary>
+/// Describes a registry key/value pair that is modified by two or more installed packs.
+/// </summary>
+public sealed record PackConflict(
+    string RegistryPath,
+    string ValueName,
+    IReadOnlyList<string> ConflictingPacks
+);
