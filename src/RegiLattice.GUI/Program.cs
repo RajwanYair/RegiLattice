@@ -62,6 +62,18 @@ internal static class Program
                 "tempcleaner" => new TempFileCleanerDialog(),
                 "installedapps" => new InstalledAppsDialog(),
 
+                // Power & energy (Sprint 31)
+                "powerscheduler" => new PowerSchedulerDialog(),
+                "sleeptimer" => new SleepTimerDialog(),
+                "batterysaver" => new BatterySaverDialog(),
+                "usbpower" => new UsbPowerDialog(),
+
+                // Privacy & ad removal (Sprint 32)
+                "adremoval" => new AdRemovalWizardDialog(),
+                "telemetry" => new TelemetryDashboardDialog(),
+                "apppermissions" => new AppPermissionsDialog(),
+                "dnsoverhttps" => new DnsOverHttpsDialog(),
+
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),
                 "preferences" => CreateStandalonePreferences(),

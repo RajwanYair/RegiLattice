@@ -298,16 +298,17 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
     private static (RegistryKey? Hive, string SubKey) SplitHive(string path)
     {
         int idx = path.IndexOf('\\');
-        if (idx < 0) return (null, path);
+        if (idx < 0)
+            return (null, path);
         string hive = path[..idx].ToUpperInvariant();
-        string sub  = path[(idx + 1)..];
+        string sub = path[(idx + 1)..];
         RegistryKey? root = hive switch
         {
-            "HKEY_CLASSES_ROOT"   or "HKCR" => Registry.ClassesRoot,
-            "HKEY_LOCAL_MACHINE"  or "HKLM" => Registry.LocalMachine,
-            "HKEY_CURRENT_USER"   or "HKCU" => Registry.CurrentUser,
-            "HKEY_USERS"          or "HKU"  => Registry.Users,
-            _                               => null,
+            "HKEY_CLASSES_ROOT" or "HKCR" => Registry.ClassesRoot,
+            "HKEY_LOCAL_MACHINE" or "HKLM" => Registry.LocalMachine,
+            "HKEY_CURRENT_USER" or "HKCU" => Registry.CurrentUser,
+            "HKEY_USERS" or "HKU" => Registry.Users,
+            _ => null,
         };
         return (root, sub);
     }
