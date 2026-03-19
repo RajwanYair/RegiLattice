@@ -364,7 +364,8 @@ internal static class OneDrive
             Category = "OneDrive",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks OneDrive from silently redirecting known folders (Desktop, Documents, Pictures) to cloud storage without prompting.",
+            Description =
+                "Blocks OneDrive from silently redirecting known folders (Desktop, Documents, Pictures) to cloud storage without prompting.",
             Tags = ["onedrive", "known-folder-move", "kfm", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "KFMBlockOptOut", 1)],
@@ -434,7 +435,8 @@ internal static class OneDrive
             Category = "OneDrive",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents OneDrive from automatically downloading cloud-only placeholder files when opened by an app. Avoids unexpected bandwidth usage.",
+            Description =
+                "Prevents OneDrive from automatically downloading cloud-only placeholder files when opened by an app. Avoids unexpected bandwidth usage.",
             Tags = ["onedrive", "hydration", "files-on-demand", "bandwidth"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "PreventOneDriveFilesOnDemandPreview", 1)],
@@ -448,7 +450,8 @@ internal static class OneDrive
             Category = "OneDrive",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents OneDrive client from auto-updating in the background. Useful in managed environments where updates are controlled centrally.",
+            Description =
+                "Prevents OneDrive client from auto-updating in the background. Useful in managed environments where updates are controlled centrally.",
             Tags = ["onedrive", "update", "autoupdate", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "DisableAutoUpdate", 1)],
@@ -465,9 +468,30 @@ internal static class OneDrive
             Description = "Hides the OneDrive folder entry from the File Explorer navigation pane without disabling the sync process.",
             Tags = ["onedrive", "explorer", "sidebar", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}", "System.IsPinnedToNameSpaceTree", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}", "System.IsPinnedToNameSpaceTree", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}", "System.IsPinnedToNameSpaceTree", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+                    "System.IsPinnedToNameSpaceTree",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+                    "System.IsPinnedToNameSpaceTree",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+                    "System.IsPinnedToNameSpaceTree",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {

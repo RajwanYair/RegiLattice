@@ -508,5 +508,183 @@ internal static class WindowsUpdate
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ExcludeWUDriversInQualityUpdate", 1),
             ],
         },
+        new TweakDef
+        {
+            Id = "wu-disable-automatic-updates",
+            Label = "Disable Automatic Update Downloads",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Prevents Windows Update from automatically downloading updates. Updates will still be detected but must be manually approved and installed. Default: auto-download enabled.",
+            Tags = ["windows-update", "automatic", "download", "control"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wu-set-schedule-day-saturday",
+            Label = "Schedule Updates for Saturday Installation",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures Windows Update to install scheduled updates on Saturday at 3:00 AM, minimising disruption during working hours.",
+            Tags = ["windows-update", "schedule", "maintenance", "saturday"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "ScheduledInstallDay", 7),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "ScheduledInstallTime", 3),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AUOptions", 4),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "ScheduledInstallDay"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "ScheduledInstallTime"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AUOptions"),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "ScheduledInstallDay", 7)],
+        },
+        new TweakDef
+        {
+            Id = "wu-disable-store-app-auto-updates",
+            Label = "Disable Microsoft Store App Auto-Updates",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Prevents the Microsoft Store from automatically updating installed applications in the background. You retain control over when app updates are applied.",
+            Tags = ["windows-update", "store", "apps", "auto-update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wu-set-update-service-manual",
+            Label = "Set Windows Update Service to Manual Start",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Changes the Windows Update service (wuauserv) to manual start so it only runs when you initiate a check, preventing background update scans from consuming resources.",
+            Tags = ["windows-update", "service", "manual", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wuauserv"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wuauserv", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wuauserv", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wuauserv", "Start", 3)],
+        },
+        new TweakDef
+        {
+            Id = "wu-require-admin-for-updates",
+            Label = "Require Admin Approval for Update Installation",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows Update from installing updates without explicit administrator approval. Useful on shared systems to maintain control over when patches are applied.",
+            Tags = ["windows-update", "admin", "approval", "control"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ElevateNonAdmins", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ElevateNonAdmins")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ElevateNonAdmins", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wu-disable-metered-update-download",
+            Label = "Block Updates on Metered Connections",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows Update from downloading updates when the network connection is marked as metered (mobile hotspot, limited data plans), saving mobile data costs.",
+            Tags = ["windows-update", "metered", "mobile", "data", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings", "DownloadMode", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings", "DownloadMode"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings", "DownloadMode", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "wu-disable-reboot-required-notification",
+            Label = "Disable Post-Update Reboot Notifications",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Suppresses the nagging 'Restart Required' toast notifications that appear after Windows Update installs patches. Reboots can still be performed manually.",
+            Tags = ["windows-update", "reboot", "notification", "toast"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationConfig", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationConfig"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationConfig", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "wu-set-feature-update-channel-general",
+            Label = "Set Windows Update Channel to General Availability",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Pins the Windows Update servicing channel to General Availability / Semi-Annual Channel, avoiding early feature updates that may be less stable.",
+            Tags = ["windows-update", "channel", "feature", "stable", "semi-annual"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel", 16)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel", 16)],
+        },
+        new TweakDef
+        {
+            Id = "wu-set-orchestrator-service-manual",
+            Label = "Set Update Orchestrator Service to Manual",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Changes the Update Orchestrator Service (UsoSvc) to manual start, preventing it from waking the system for updates outside your active hours.",
+            Tags = ["windows-update", "orchestrator", "schedule", "wake", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc", "Start", 3)],
+        },
+        new TweakDef
+        {
+            Id = "wu-disable-third-party-preview",
+            Label = "Disable Third-Party Windows Update Preview Consent",
+            Category = "Windows Update",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks the consent dialog that prompts users to participate in Windows Update previews from third-party software publishers.",
+            Tags = ["windows-update", "preview", "third-party", "consent"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DisableWindowsUpdateAccess", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DisableWindowsUpdateAccess")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DisableWindowsUpdateAccess", 0)],
+        },
     ];
 }

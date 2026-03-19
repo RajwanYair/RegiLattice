@@ -66,6 +66,18 @@ internal sealed class ServiceManagerDialog : BaseDialog
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 72 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 72 };
+    private readonly Button _btnRestart = new()
+    {
+        Text = "Restart",
+        Width = 72,
+        Enabled = false,
+    };
+    private readonly Button _btnSetAuto = new()
+    {
+        Text = "Set Auto",
+        Width = 72,
+        Enabled = false,
+    };
     private readonly RichTextBox _descBox = new()
     {
         Dock = DockStyle.Bottom,
@@ -156,11 +168,13 @@ internal sealed class ServiceManagerDialog : BaseDialog
         _btnDisable.Click += async (_, _) => await SetStartTypeAsync(ServiceStartMode.Disabled);
         _btnRefresh.Click += async (_, _) => await LoadServicesAsync();
         _btnClose.Click += (_, _) => Close();
+        _btnRestart.Click += async (_, _) => await RestartServiceAsync();
+        _btnSetAuto.Click += async (_, _) => await SetStartTypeAsync(ServiceStartMode.Automatic);
 
-        _btnPanel.Controls.AddRange([_btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnClose]);
+        _btnPanel.Controls.AddRange([_btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto, _btnClose]);
 
         int x = 0;
-        foreach (Button b in new[] { _btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh })
+        foreach (Button b in new[] { _btnStart, _btnStop, _btnEnable, _btnDisable, _btnRefresh, _btnRestart, _btnSetAuto })
         {
             b.Location = new Point(x, 6);
             x += 78;
@@ -318,6 +332,8 @@ internal sealed class ServiceManagerDialog : BaseDialog
         _btnStop.Enabled = !_busy && admin && entry is { Status: ServiceControllerStatus.Running, CanStop: true };
         _btnEnable.Enabled = !_busy && admin && entry is { StartType: ServiceStartMode.Disabled };
         _btnDisable.Enabled = !_busy && admin && entry?.StartType is ServiceStartMode.Automatic or ServiceStartMode.Manual;
+        _btnRestart.Enabled = !_busy && admin && entry is { Status: ServiceControllerStatus.Running, CanStop: true };
+        _btnSetAuto.Enabled = !_busy && admin && entry?.StartType is ServiceStartMode.Manual or ServiceStartMode.Disabled;
     }
 
     private void SetBusy(bool busy, string? message = null)
@@ -356,6 +372,33 @@ internal sealed class ServiceManagerDialog : BaseDialog
             ServiceStartMode.System => "System",
             _ => m.ToString(),
         };
+
+    private async Task RestartServiceAsync()
+    {
+        if (SelectedEntry() is not ServiceEntry entry)
+            return;
+        SetBusy(true, $"Restarting {entry.ServiceName}…");
+        try
+        {
+            await ServiceManager.StopAsync(entry.ServiceName, _cts.Token);
+            await ServiceManager.StartAsync(entry.ServiceName, _cts.Token);
+            SetStatus($"Restarted: {entry.ServiceName}");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Could not restart '{entry.ServiceName}':\n{ex.Message}",
+                "Service Manager",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
+        }
+        finally
+        {
+            SetBusy(false);
+            await LoadServicesAsync();
+        }
+    }
 
     private static Color StatusColor(ServiceControllerStatus s) =>
         s switch

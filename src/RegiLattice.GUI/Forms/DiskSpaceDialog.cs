@@ -35,6 +35,18 @@ internal sealed class DiskSpaceDialog : BaseDialog
         Width = 100,
         Height = 30,
     };
+    private readonly Button _btnCleanTemp = new()
+    {
+        Text = "\uD83E\uDDF9 Clean TEMP",
+        Width = 110,
+        Height = 30,
+    };
+    private readonly Label _lblTempSize = new()
+    {
+        AutoSize = true,
+        ForeColor = SystemColors.GrayText,
+        Padding = new Padding(4, 8, 0, 0),
+    };
     private readonly Button _btnClose = new()
     {
         Text = "Close",
@@ -67,16 +79,19 @@ internal sealed class DiskSpaceDialog : BaseDialog
             WrapContents = false,
             Padding = new Padding(8, 6, 8, 6),
         };
-        btnPanel.Controls.AddRange([_btnClose, _btnRefresh]);
+        btnPanel.Controls.AddRange([_btnClose, _btnRefresh, _btnCleanTemp]);
 
         Controls.Add(_drivePanel);
+        Controls.Add(_lblTempSize);
         Controls.Add(_statusLabel);
         Controls.Add(btnPanel);
 
         _btnRefresh.Click += async (_, _) => await RefreshAsync();
+        _btnCleanTemp.Click += async (_, _) => await CleanTempAsync();
         _btnClose.Click += (_, _) => Close();
 
         AppTheme.Apply(this);
+        _ = RefreshTempSizeAsync();
     }
 
     private async Task RefreshAsync()
@@ -211,5 +226,63 @@ internal sealed class DiskSpaceDialog : BaseDialog
         if (disposing)
             _cts.Dispose();
         base.Dispose(disposing);
+    }
+
+    private async Task RefreshTempSizeAsync()
+    {
+        string tempPath = Path.GetTempPath();
+        try
+        {
+            long bytes = await Task.Run(() =>
+                new DirectoryInfo(tempPath)
+                    .EnumerateFiles("*", SearchOption.AllDirectories)
+                    .Sum(f =>
+                    {
+                        try
+                        {
+                            return f.Length;
+                        }
+                        catch
+                        {
+                            return 0L;
+                        }
+                    })
+            );
+            if (!IsDisposed)
+                _lblTempSize.Text = $"  TEMP folder ({tempPath}): {FormatBytes(bytes)}";
+        }
+        catch { }
+    }
+
+    private async Task CleanTempAsync()
+    {
+        _btnCleanTemp.Enabled = false;
+        _statusLabel.Text = "Cleaning TEMP…";
+        string tempPath = Path.GetTempPath();
+        int deleted = 0;
+        await Task.Run(() =>
+        {
+            foreach (var fi in new DirectoryInfo(tempPath).EnumerateFiles("*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    fi.Delete();
+                    deleted++;
+                }
+                catch { }
+            }
+            foreach (var di in new DirectoryInfo(tempPath).EnumerateDirectories())
+            {
+                try
+                {
+                    di.Delete(recursive: true);
+                    deleted++;
+                }
+                catch { }
+            }
+        });
+        _statusLabel.Text = $"Cleaned {deleted} item(s) from TEMP.";
+        _btnCleanTemp.Enabled = true;
+        await RefreshTempSizeAsync();
     }
 }

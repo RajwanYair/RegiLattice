@@ -610,8 +610,14 @@ internal static class Maintenance
             Tags = ["maintenance", "recent-docs", "privacy", "mru", "cleanup"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1),
+            ],
         },
         new TweakDef
         {
@@ -620,7 +626,8 @@ internal static class Maintenance
             Category = "Maintenance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Reduces the time Windows waits for services to stop during shutdown to 2000 ms (default: 12000 ms). Significantly speeds up shutdown.",
+            Description =
+                "Reduces the time Windows waits for services to stop during shutdown to 2000 ms (default: 12000 ms). Significantly speeds up shutdown.",
             Tags = ["maintenance", "shutdown", "performance", "timeout"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
@@ -704,7 +711,8 @@ internal static class Maintenance
             Category = "Maintenance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows from shutting down immediately when the security audit log is full. Avoids unexpected reboots when audit logs fill up.",
+            Description =
+                "Prevents Windows from shutting down immediately when the security audit log is full. Avoids unexpected reboots when audit logs fill up.",
             Tags = ["maintenance", "audit", "security", "stability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
@@ -718,7 +726,8 @@ internal static class Maintenance
             Category = "Maintenance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Hides the 'Recent Files' section from the File Explorer Quick Access panel. Files are still accessible via direct navigation.",
+            Description =
+                "Hides the 'Recent Files' section from the File Explorer Quick Access panel. Files are still accessible via direct navigation.",
             Tags = ["maintenance", "explorer", "recent-files", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
