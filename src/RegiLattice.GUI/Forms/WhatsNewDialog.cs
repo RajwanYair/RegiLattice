@@ -1,5 +1,6 @@
 namespace RegiLattice.GUI.Forms;
 
+using System.Reflection;
 using RegiLattice.Core;
 using RegiLattice.Core.Services;
 
@@ -24,7 +25,7 @@ internal sealed class WhatsNewDialog : Form
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
 
-        string version = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
+        string version = GetCurrentVersion();
 
         // ── Title ──────────────────────────────────────────────────────────
         var lblTitle = new Label
@@ -103,11 +104,20 @@ internal sealed class WhatsNewDialog : Form
         };
     }
 
+    /// <summary>Returns the assembly's informational version (e.g. "3.7.0").</summary>
+    private static string GetCurrentVersion()
+    {
+        var asm = typeof(TweakEngine).Assembly;
+        return asm.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion
+            ?? asm.GetName().Version?.ToString(3)
+            ?? "3.7.0";
+    }
+
     /// <summary>Checks whether the dialog should be shown (version changed since last seen).</summary>
     internal static bool ShouldShow()
     {
         var cfg = AppConfig.Load();
-        string current = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
+        string current = GetCurrentVersion();
         return !string.Equals(cfg.LastSeenVersion, current, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -115,7 +125,7 @@ internal sealed class WhatsNewDialog : Form
     internal static void MarkSeen()
     {
         var cfg = AppConfig.Load();
-        cfg.LastSeenVersion = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
+        cfg.LastSeenVersion = GetCurrentVersion();
         cfg.Save();
     }
 
@@ -125,22 +135,23 @@ internal sealed class WhatsNewDialog : Form
         sb.AppendLine($"RegiLattice v{version}");
         sb.AppendLine(new string('─', 50));
         sb.AppendLine();
-        sb.AppendLine("✨ New Features:");
-        sb.AppendLine("  • Network Tools — DNS quick-switch (Cloudflare, Google, Quad9), TCP/IP + Winsock reset");
-        sb.AppendLine("  • Startup Manager — view and toggle HKCU/HKLM Run entries and Startup folders");
-        sb.AppendLine("  • Service Manager — searchable service list with Start/Stop/Enable/Disable controls");
-        sb.AppendLine("  • Preferences dialog — font size, accent colour, log panel, tray behaviour");
+        sb.AppendLine("✨ New in v3.7.0:");
+        sb.AppendLine("  • Favorites — export/import as JSON (share tweak selections across machines)");
+        sb.AppendLine("  • Tweak History — summary stats + full JSON export");
+        sb.AppendLine("  • Auto-backup before batch apply (configurable via AppConfig.AutoBackupOnApply)");
+        sb.AppendLine("  • Auto-snapshot before profile switch (AppConfig.SnapshotOnProfileChange)");
+        sb.AppendLine("  • Network adapter stats — live per-adapter byte/packet counters");
+        sb.AppendLine("  • Service Manager — export service list to CSV");
+        sb.AppendLine("  • Startup Manager — add registry Run entries + JSON export");
         sb.AppendLine();
         sb.AppendLine("📊 Stats:");
-        sb.AppendLine("  • Total tweaks: 2,736");
-        sb.AppendLine("  • Categories: 92");
+        sb.AppendLine("  • Total tweaks: 3,194");
+        sb.AppendLine("  • Categories: 94");
         sb.AppendLine("  • Themes: 11");
-        sb.AppendLine("  • Tests: 1,671");
+        sb.AppendLine("  • Tests: 1,879");
         sb.AppendLine();
-        sb.AppendLine("🔧 Improvements:");
-        sb.AppendLine("  • BaseDialog consolidation — all tool dialogs share common layout/icon/chrome");
-        sb.AppendLine("  • What's New dialog shown on first launch after upgrade");
-        sb.AppendLine("  • InternalsVisibleTo fix — all 1,671 tests now pass reliably");
+        sb.AppendLine("🔧 Fixes:");
+        sb.AppendLine("  • MSI installer now correctly built and uploaded in GitHub CI release workflow");
         sb.AppendLine();
         sb.AppendLine("💡 Tip: Use Tools menu to access Network Tools, Startup Manager, and Service Manager.");
         return sb.ToString();

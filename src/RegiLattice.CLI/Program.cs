@@ -2,6 +2,7 @@
 // RegiLattice command-line interface.
 // All features: apply, remove, list, status, search, profiles, snapshots, doctor, etc.
 
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core;
@@ -14,7 +15,10 @@ namespace RegiLattice.CLI;
 
 internal static class Program
 {
-    private static readonly string Version = "3.5.0";
+    private static readonly string Version =
+        typeof(TweakEngine).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+        ?? typeof(TweakEngine).Assembly.GetName().Version?.ToString(3)
+        ?? "3.7.0";
     private static TweakEngine _engine = null!;
     private static RegistrySession _session = null!;
 
@@ -1587,8 +1591,7 @@ internal static class Program
     private static int RunNewPack(string packName)
     {
         // Sanitise the pack name to a safe filename slug
-        string slug = System.Text.RegularExpressions.Regex.Replace(
-            packName.Trim().ToLowerInvariant(), @"[^a-z0-9\-_]+", "-");
+        string slug = System.Text.RegularExpressions.Regex.Replace(packName.Trim().ToLowerInvariant(), @"[^a-z0-9\-_]+", "-");
         slug = System.Text.RegularExpressions.Regex.Replace(slug, @"-{2,}", "-").Trim('-');
         if (slug.Length == 0)
         {
@@ -1638,9 +1641,7 @@ internal static class Program
             }
             """;
 
-        template = template
-            .Replace("PACK_SLUG", slug)
-            .Replace("PACK_DISPLAY_NAME", packName.Trim());
+        template = template.Replace("PACK_SLUG", slug).Replace("PACK_DISPLAY_NAME", packName.Trim());
 
         try
         {
@@ -1687,9 +1688,8 @@ internal static class Program
         {
             string status = s.Enabled ? Green("[enabled] ") : Dim("[disabled]");
             string lastRun = s.LastRun.HasValue ? s.LastRun.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "never";
-            string interval = s.Trigger == RegiLattice.Core.Services.ScheduleTrigger.Timer
-                ? $" every {s.IntervalMinutes}m" : "";
-            Console.WriteLine($"  {status} {s.TweakId,-40} {s.Trigger}{interval}  (last: {lastRun})");
+            string interval = s.Trigger == RegiLattice.Core.Services.ScheduleTrigger.Timer ? $" every {s.IntervalMinutes}m" : "";
+            Console.WriteLine($"  {status} {s.TweakId, -40} {s.Trigger}{interval}  (last: {lastRun})");
         }
         return 0;
     }
