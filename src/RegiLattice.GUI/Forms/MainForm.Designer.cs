@@ -104,6 +104,7 @@ partial class MainForm
     private ToolStripProgressBar _progressBar = null!;    private ToolStripStatusLabel _cpuLabel = null!;
     private ToolStripStatusLabel _memLabel = null!;
     private ToolStripStatusLabel _netLabel = null!;
+    private ToolStripStatusLabel _adminBadge = null!;
     private System.Windows.Forms.Timer _monitorTimer = null!;
     private readonly SystemMonitor _sysMonitor = new();
     // ── Tray icon ──────────────────────────────────────────────────────────
@@ -199,8 +200,6 @@ partial class MainForm
         var mnuTools = new ToolStripMenuItem("&Tools");
         mnuTools.DropDownItems.AddRange(new ToolStripItem[]
         {
-            _mnuScoopMgr, _mnuPsMgr, _mnuPipMgr, _mnuWinGetMgr, _mnuChocoMgr,
-            new ToolStripSeparator(),
             _mnuToolVersions,
             _mnuWinHealth,
             _mnuNetTools,
@@ -249,11 +248,17 @@ partial class MainForm
             _mnuNetBandwidth,
             _mnuMacAddress,
             new ToolStripSeparator(),
-            _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
-            new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
             mnuSelectAll2, mnuDeselectAll2, mnuInvert2,
+        });
+
+        var mnuPkgMgr = new ToolStripMenuItem("&Package Manager");
+        mnuPkgMgr.DropDownItems.AddRange(new ToolStripItem[]
+        {
+            _mnuScoopMgr, _mnuPsMgr, _mnuPipMgr, _mnuWinGetMgr, _mnuChocoMgr,
+            new ToolStripSeparator(),
+            _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace\u2026", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
         });
 
         var mnuToggleLog = new ToolStripMenuItem("Toggle Log Panel");
@@ -268,7 +273,7 @@ partial class MainForm
         mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
-        _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuTools, mnuView, mnuHelp });
+        _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuPkgMgr, mnuTools, mnuView, mnuHelp });
         _menuStrip.Dock = DockStyle.Top;
 
         // Wire menu events
@@ -579,7 +584,17 @@ partial class MainForm
         _memLabel = new ToolStripStatusLabel("RAM: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
         _netLabel = new ToolStripStatusLabel("Net: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
         _statusStrip = new StatusStrip { SizingGrip = false };
-        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel, new ToolStripSeparator(), _netLabel });
+        _adminBadge = new ToolStripStatusLabel("🛡 ADMIN")
+        {
+            Spring = false,
+            Font = new Font(AppTheme.Small, FontStyle.Bold),
+            ForeColor = Color.Black,
+            BackColor = Color.Firebrick,
+            Visible = Elevation.IsAdmin(),
+            BorderSides = ToolStripStatusLabelBorderSides.All,
+            BorderStyle = Border3DStyle.Flat,
+        };
+        _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel, new ToolStripSeparator(), _netLabel, new ToolStripSeparator(), _adminBadge });
         _statusStrip.Dock = DockStyle.Bottom;
 
         // ── System monitor timer ───────────────────────────────────────────

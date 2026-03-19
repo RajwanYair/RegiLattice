@@ -27,8 +27,18 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
         AutoScroll = true,
         Padding = new Padding(12, 8, 12, 8),
     };
-    private readonly Button _btnRefresh = new() { Text = "\u21BB  Refresh", Width = 100, Height = 30 };
-    private readonly Button _btnClose = new() { Text = "Close", Width = 80, Height = 30 };
+    private readonly Button _btnRefresh = new()
+    {
+        Text = "\u21BB  Refresh",
+        Width = 100,
+        Height = 30,
+    };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 80,
+        Height = 30,
+    };
     private readonly Label _statusLabel = new()
     {
         Dock = DockStyle.Bottom,
@@ -78,12 +88,18 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
         };
         autoRefresh.CheckedChanged += (_, _) =>
         {
-            if (autoRefresh.Checked) _pollTimer.Start();
-            else _pollTimer.Stop();
+            if (autoRefresh.Checked)
+                _pollTimer.Start();
+            else
+                _pollTimer.Stop();
         };
         Controls.Add(autoRefresh);
 
-        FormClosed += (_, _) => { _pollTimer?.Stop(); _pollTimer?.Dispose(); };
+        FormClosed += (_, _) =>
+        {
+            _pollTimer?.Stop();
+            _pollTimer?.Dispose();
+        };
         AppTheme.Apply(this);
     }
 
@@ -133,10 +149,7 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
         // CPU thermal zones via ACPI
         try
         {
-            using var mos = new ManagementObjectSearcher(
-                "root\\WMI",
-                "SELECT * FROM MSAcpi_ThermalZoneTemperature"
-            );
+            using var mos = new ManagementObjectSearcher("root\\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
             int zoneIndex = 0;
             foreach (ManagementObject obj in mos.Get())
             {
@@ -145,7 +158,8 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
                     double celsius = raw / 10.0 - 273.15;
                     string name = obj["InstanceName"]?.ToString() ?? $"Thermal Zone {zoneIndex}";
                     // Shorten long WMI instance names
-                    if (name.Length > 50) name = "CPU Zone " + zoneIndex;
+                    if (name.Length > 50)
+                        name = "CPU Zone " + zoneIndex;
                     results.Add((name, celsius));
                     zoneIndex++;
                 }
@@ -160,9 +174,7 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
         // GPU info via Win32_VideoController (no direct temp — show adapter name)
         try
         {
-            using var mos = new ManagementObjectSearcher(
-                "SELECT Name, AdapterRAM, CurrentRefreshRate FROM Win32_VideoController"
-            );
+            using var mos = new ManagementObjectSearcher("SELECT Name, AdapterRAM, CurrentRefreshRate FROM Win32_VideoController");
             foreach (ManagementObject obj in mos.Get())
             {
                 string gpuName = obj["Name"]?.ToString() ?? "GPU";
@@ -170,14 +182,21 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
                 results.Add(($"GPU: {gpuName} ({ramMb} MB VRAM)", double.NaN));
             }
         }
-        catch (ManagementException) { /* ignore */ }
+        catch (ManagementException)
+        { /* ignore */
+        }
 
         return results;
     }
 
     private static Panel CreateTempRow(string name, double celsius)
     {
-        var panel = new Panel { Height = 46, Dock = DockStyle.Top, Padding = new Padding(4) };
+        var panel = new Panel
+        {
+            Height = 46,
+            Dock = DockStyle.Top,
+            Padding = new Padding(4),
+        };
 
         var lblName = new Label
         {
@@ -202,9 +221,10 @@ internal sealed class HardwareTemperatureDialog : BaseDialog
         else
         {
             // Color-coded temperature
-            Color barColor = celsius < 60.0 ? Color.FromArgb(30, 180, 60)
-                           : celsius < 80.0 ? Color.FromArgb(220, 150, 0)
-                           : Color.FromArgb(220, 50, 50);
+            Color barColor =
+                celsius < 60.0 ? Color.FromArgb(30, 180, 60)
+                : celsius < 80.0 ? Color.FromArgb(220, 150, 0)
+                : Color.FromArgb(220, 50, 50);
 
             var lblTemp = new Label
             {

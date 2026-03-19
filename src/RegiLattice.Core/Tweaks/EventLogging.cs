@@ -396,10 +396,7 @@ internal static class EventLogging
                 RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576),
                 RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "Retention", 0),
             ],
-            RemoveOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 20971520),
-            ],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 20971520)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576)],
         },
         new TweakDef
@@ -427,8 +424,14 @@ internal static class EventLogging
             Tags = ["event-log", "powershell", "privacy", "logging"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0),
+            ],
         },
         new TweakDef
         {
@@ -483,7 +486,8 @@ internal static class EventLogging
             Category = "Event Logging",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the Windows Event Log Forwarding service (Wecsvc) used to forward events to a remote collector. Not needed on standalone PCs.",
+            Description =
+                "Disables the Windows Event Log Forwarding service (Wecsvc) used to forward events to a remote collector. Not needed on standalone PCs.",
             Tags = ["event-log", "forwarding", "network", "svc"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Wecsvc", "Start", 4)],

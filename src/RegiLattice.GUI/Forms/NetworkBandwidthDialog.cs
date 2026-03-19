@@ -37,7 +37,12 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
         TextAlign = ContentAlignment.MiddleLeft,
         Padding = new Padding(6, 0, 0, 0),
     };
-    private readonly Button _btnClose = new() { Text = "Close", Width = 80, Height = 30 };
+    private readonly Button _btnClose = new()
+    {
+        Text = "Close",
+        Width = 80,
+        Height = 30,
+    };
 
     private readonly Dictionary<string, AdapterSnapshot> _prevSnapshots = new();
     private System.Windows.Forms.Timer? _pollTimer;
@@ -75,7 +80,11 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
         Controls.Add(btnPanel);
 
         _btnClose.Click += (_, _) => Close();
-        FormClosed += (_, _) => { _pollTimer?.Stop(); _pollTimer?.Dispose(); };
+        FormClosed += (_, _) =>
+        {
+            _pollTimer?.Stop();
+            _pollTimer?.Dispose();
+        };
 
         AppTheme.Apply(this);
     }
@@ -95,12 +104,12 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
 
     private void PollOnce()
     {
-        if (!IsHandleCreated) return;
+        if (!IsHandleCreated)
+            return;
 
         var adapters = NetworkInterface
             .GetAllNetworkInterfaces()
-            .Where(n => n.OperationalStatus == OperationalStatus.Up &&
-                        n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+            .Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
             .ToList();
 
         var now = DateTime.UtcNow;
@@ -111,8 +120,14 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
         foreach (var nic in adapters)
         {
             IPv4InterfaceStatistics stats;
-            try { stats = nic.GetIPv4Statistics(); }
-            catch { continue; }
+            try
+            {
+                stats = nic.GetIPv4Statistics();
+            }
+            catch
+            {
+                continue;
+            }
 
             long sent = stats.BytesSent;
             long recv = stats.BytesReceived;
@@ -152,11 +167,12 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
 
     private static string FormatRate(double bytesPerSec)
     {
-        if (bytesPerSec >= 1_048_576) return $"{bytesPerSec / 1_048_576:F1} MB/s";
-        if (bytesPerSec >= 1_024) return $"{bytesPerSec / 1_024:F1} KB/s";
+        if (bytesPerSec >= 1_048_576)
+            return $"{bytesPerSec / 1_048_576:F1} MB/s";
+        if (bytesPerSec >= 1_024)
+            return $"{bytesPerSec / 1_024:F1} KB/s";
         return $"{bytesPerSec:F0} B/s";
     }
 
-    private static string TruncateName(string name, int maxLen) =>
-        name.Length > maxLen ? name[..maxLen] + "…" : name;
+    private static string TruncateName(string name, int maxLen) => name.Length > maxLen ? name[..maxLen] + "…" : name;
 }

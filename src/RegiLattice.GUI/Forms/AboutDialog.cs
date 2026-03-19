@@ -1,3 +1,4 @@
+using System.Reflection;
 using RegiLattice.Core;
 
 namespace RegiLattice.GUI.Forms;
@@ -17,7 +18,9 @@ internal sealed class AboutDialog : Form
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
 
-        string version = typeof(TweakEngine).Assembly.GetName().Version?.ToString() ?? "3.5.0";
+        var asm = typeof(TweakEngine).Assembly;
+        string version =
+            asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? asm.GetName().Version?.ToString() ?? "3.5.0";
         string osVer = Environment.OSVersion.ToString();
         string machineName = Environment.MachineName;
         string userName = Environment.UserName;

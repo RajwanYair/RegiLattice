@@ -434,5 +434,169 @@ internal static class BrowserCommon
             ],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ImportAutofillFormData", 0)],
         },
+        new TweakDef
+        {
+            Id = "browser-disable-cast-icon",
+            Label = "Hide Cast Icon in Browser Toolbar",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes the Google Cast icon from the Chrome and Edge toolbars.",
+            Tags = ["browser", "chrome", "edge", "cast", "toolbar", "ui"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ShowCastIconInToolbar", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ShowCastIconInToolbar", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ShowCastIconInToolbar"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ShowCastIconInToolbar"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ShowCastIconInToolbar", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-signin-interception",
+            Label = "Disable Browser Sign-In Interception (Chrome)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses the Chrome prompt to sign into a Google Account when a new browser profile is detected.",
+            Tags = ["browser", "chrome", "signin", "account", "popup", "privacy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SigninInterceptionEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SigninInterceptionEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SigninInterceptionEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-edge-shopping-assistant",
+            Label = "Disable Edge Shopping Assistant",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge shopping assistant that shows price comparisons on e-commerce websites.",
+            Tags = ["browser", "edge", "shopping", "advertising", "privacy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-edge-follow",
+            Label = "Disable Edge Follow Feature",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Edge Follow feature that lets users subscribe to creators and topics in the sidebar.",
+            Tags = ["browser", "edge", "follow", "social", "sidebar"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeFollowEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-ntp-custom-background",
+            Label = "Disable Custom New Tab Page Background (Chrome)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents users from setting a custom background image on the Chrome new tab page.",
+            Tags = ["browser", "chrome", "ntp", "new-tab", "background", "ui"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "NTPCustomBackgroundEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "NTPCustomBackgroundEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "NTPCustomBackgroundEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-promotional-tabs",
+            Label = "Disable Promotional New Tabs (Chrome)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Chrome from opening promotional content tabs after install or browser updates.",
+            Tags = ["browser", "chrome", "ntp", "promotional", "advertising"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-ntp-spotlight-recommendations",
+            Label = "Disable Chrome NTP Spotlight Recommendations",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes personalized article recommendations and spotlight content from the Chrome new tab page.",
+            Tags = ["browser", "chrome", "ntp", "spotlight", "recommendations", "advertising"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SpotlightExperiencesAndRecommendationsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SpotlightExperiencesAndRecommendationsEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SpotlightExperiencesAndRecommendationsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-first-run-experience",
+            Label = "Disable Browser First-Run Experience",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Skips the welcome/first-run setup wizard on the first launch of Chrome and Edge.",
+            Tags = ["browser", "chrome", "edge", "first-run", "setup", "ui"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SuppressFirstRunDefaultBrowserPrompt", 1),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "SuppressFirstRunDefaultBrowserPrompt"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-autofill-address",
+            Label = "Disable Address Autofill (All Browsers)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables address and shipping information autofill in Chrome and Edge.",
+            Tags = ["browser", "chrome", "edge", "autofill", "privacy", "addresses"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-edge-prelaunch",
+            Label = "Disable Edge Pre-Launch at Startup",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Edge from pre-launching silently at Windows startup to improve boot time.",
+            Tags = ["browser", "edge", "prelaunch", "startup", "performance", "boot"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
+        },
     ];
 }

@@ -21,7 +21,17 @@ public sealed class PackManager
 
     private static readonly string s_indexUrl = "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/index.json";
 
-    private static readonly HttpClient s_http = new() { Timeout = TimeSpan.FromSeconds(30) };
+    private static readonly HttpClient s_http = new(
+        new System.Net.Http.HttpClientHandler
+        {
+            UseDefaultCredentials = true,
+            UseProxy = true,
+            Proxy = System.Net.WebRequest.GetSystemWebProxy(),
+        }
+    )
+    {
+        Timeout = TimeSpan.FromSeconds(30),
+    };
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
@@ -41,9 +51,17 @@ public sealed class PackManager
     /// <summary>Fetch the marketplace index from GitHub.</summary>
     public async Task<PackIndex> FetchIndexAsync(CancellationToken ct = default)
     {
-        var json = await s_http.GetStringAsync(s_indexUrl, ct);
-        _cachedIndex = PackIndex.FromJson(json) ?? new PackIndex();
-        return _cachedIndex;
+        try
+        {
+            var json = await s_http.GetStringAsync(s_indexUrl, ct);
+            _cachedIndex = PackIndex.FromJson(json) ?? new PackIndex();
+        }
+        catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            // Marketplace repo not yet available — return empty index.
+            _cachedIndex = new PackIndex();
+        }
+        return _cachedIndex!;
     }
 
     /// <summary>Return the cached index, or fetch if not yet loaded.</summary>

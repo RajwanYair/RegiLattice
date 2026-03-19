@@ -291,7 +291,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables automatic proxy server discovery via WPAD/WinHTTP. Prevents malicious WPAD responses from hijacking network traffic.",
+            Description =
+                "Disables automatic proxy server discovery via WPAD/WinHTTP. Prevents malicious WPAD responses from hijacking network traffic.",
             Tags = ["proxy", "wpad", "security", "network"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings", "DisableProxyPAC", 1)],
@@ -305,7 +306,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Removes the default bypass list that skips the proxy for local intranet addresses. Enforces all traffic through the configured proxy.",
+            Description =
+                "Removes the default bypass list that skips the proxy for local intranet addresses. Enforces all traffic through the configured proxy.",
             Tags = ["proxy", "wininet", "internet-explorer", "network"],
             RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
             ApplyOps = [RegOp.SetString($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "ProxyOverride", string.Empty)],
@@ -333,7 +335,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the RasAuto service which automatically re-dials dropped connections. Reduces background network activity on desktops.",
+            Description =
+                "Disables the RasAuto service which automatically re-dials dropped connections. Reduces background network activity on desktops.",
             Tags = ["proxy", "vpn", "ras", "autodial", "svc"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\RasAuto"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\RasAuto", "Start", 4)],
@@ -403,7 +406,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the NCSI probe that sends HTTP requests to microsoft.com to detect internet connectivity. Reduces background telemetry.",
+            Description =
+                "Disables the NCSI probe that sends HTTP requests to microsoft.com to detect internet connectivity. Reduces background telemetry.",
             Tags = ["proxy", "ncsi", "network", "telemetry", "privacy"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe", 1)],

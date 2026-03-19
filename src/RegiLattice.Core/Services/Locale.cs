@@ -216,12 +216,67 @@ public static class Locale
         ["import_complete"] = "{0} ajustes importados desde {1}.",
     };
 
+    private static readonly Dictionary<string, string> He = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["apply_all"] = "\u05d4\u05d7\u05dc \u05d4\u05db\u05dc",
+        ["remove_all"] = "\u05d4\u05e1\u05e8 \u05d4\u05db\u05dc",
+        ["search_placeholder"] = "\u05d7\u05e4\u05e9 \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd\u2026",
+        ["status_applied"] = "\u05de\u05d5\u05e4\u05e2\u05dc",
+        ["status_not_applied"] = "\u05d1\u05e8\u05d9\u05e8\u05ea \u05de\u05d7\u05d3\u05dc",
+        ["status_unknown"] = "\u05dc\u05d0 \u05d9\u05d3\u05d5\u05e2",
+        ["status_error"] = "\u05e9\u05d2\u05d9\u05d0\u05d4",
+        ["status_skipped_corp"] = "\u05d3\u05d5\u05dc\u05d2 (\u05d7\u05d1\u05e8\u05d4)",
+        ["status_skipped_build"] = "\u05d3\u05d5\u05dc\u05d2 (Build)",
+        ["filter_all"] = "\u05d4\u05db\u05dc",
+        ["filter_applied"] = "\u05de\u05d5\u05e4\u05e2\u05dc\u05d9\u05dd",
+        ["filter_default"] = "\u05d1\u05e8\u05d9\u05e8\u05ea \u05de\u05d7\u05d3\u05dc",
+        ["filter_unknown"] = "\u05dc\u05d0 \u05d9\u05d3\u05d5\u05e2",
+        ["scope_user"] = "\u05de\u05e9\u05ea\u05de\u05e9 (HKCU)",
+        ["scope_machine"] = "\u05de\u05d7\u05e9\u05d1 (HKLM)",
+        ["scope_both"] = "\u05e9\u05e0\u05d9\u05d4\u05dd",
+        ["scope_all"] = "\u05db\u05dc \u05d4\u05d8\u05d5\u05d5\u05d7\u05d9\u05dd",
+        ["profile_business"] = "\u05e2\u05e1\u05e7\u05d9",
+        ["profile_gaming"] = "\u05d2\u05d9\u05d9\u05de\u05d9\u05e0\u05d2",
+        ["profile_privacy"] = "\u05e4\u05e8\u05d8\u05d9\u05d5\u05ea",
+        ["profile_minimal"] = "\u05de\u05d9\u05e0\u05d9\u05de\u05dc\u05d9",
+        ["profile_server"] = "\u05e9\u05e8\u05ea",
+        ["btn_apply"] = "\u05d4\u05d7\u05dc \u05d1\u05d7\u05d9\u05e8\u05d4",
+        ["btn_remove"] = "\u05d4\u05e1\u05e8 \u05d1\u05d7\u05d9\u05e8\u05d4",
+        ["btn_select_all"] = "\u05d1\u05d7\u05e8 \u05d4\u05db\u05dc",
+        ["btn_deselect_all"] = "\u05d1\u05d8\u05dc \u05d1\u05d7\u05d9\u05e8\u05d4",
+        ["btn_invert"] = "\u05d4\u05e4\u05d5\u05da \u05d1\u05d7\u05d9\u05e8\u05d4",
+        ["btn_refresh"] = "\u05e8\u05e2\u05e0\u05df \u05e1\u05d8\u05d8\u05d5\u05e1",
+        ["btn_export_ps1"] = "\u05d9\u05d9\u05e6\u05d0 PS1",
+        ["btn_export_json"] = "\u05d9\u05d9\u05e6\u05d0 JSON",
+        ["btn_import_json"] = "\u05d9\u05d9\u05d1\u05d0 JSON",
+        ["menu_file"] = "\u05e7\u05d5\u05d1\u05e5",
+        ["menu_tools"] = "\u05db\u05dc\u05d9\u05dd",
+        ["menu_view"] = "\u05ea\u05e6\u05d5\u05d2\u05d4",
+        ["menu_help"] = "\u05e2\u05d6\u05e8\u05d4",
+        ["about_title"] = "\u05d0\u05d5\u05d3\u05d5\u05ea RegiLattice",
+        ["scoop_manager"] = "\u05e0\u05d9\u05d4\u05d5\u05dc Scoop",
+        ["psmodule_manager"] = "\u05de\u05d5\u05d3\u05d5\u05dc\u05d9 PowerShell",
+        ["pip_manager"] = "\u05d7\u05d1\u05d9\u05dc\u05d5\u05ea pip",
+        ["log_panel"] = "\u05d4\u05d7\u05dc\u05e3/\u05d4\u05e1\u05ea\u05e8 \u05dc\u05d5\u05d7 \u05e2\u05d5\u05e7\u05d1\u05d9\u05df",
+        ["corporate_warning"] =
+            "\u05d6\u05d5\u05d4\u05ea\u05d4 \u05e1\u05d1\u05d9\u05d1\u05ea \u05d0\u05e8\u05d2\u05d5\u05df. \u05d7\u05dc\u05e7 \u05de\u05d4\u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d7\u05e1\u05d5\u05de\u05d9\u05dd.",
+        ["admin_required"] = "\u05d3\u05e8\u05d5\u05e9\u05d5\u05ea \u05d4\u05e8\u05e9\u05d0\u05d5\u05ea \u05de\u05e0\u05d4\u05dc.",
+        ["confirm_apply"] = "\u05dc\u05d4\u05d7\u05d9\u05dc {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05e0\u05d1\u05d7\u05e8\u05d9\u05dd?",
+        ["confirm_remove"] = "\u05dc\u05d4\u05e1\u05d9\u05e8 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05e0\u05d1\u05d7\u05e8\u05d9\u05dd?",
+        ["tweaks_loaded"] =
+            "{0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d8\u05d5\u05e2\u05e0\u05d5 \u05d1-{1} \u05e7\u05d8\u05d2\u05d5\u05e8\u05d9\u05d5\u05ea.",
+        ["detection_complete"] = "\u05d6\u05d9\u05d4\u05d5\u05d9 \u05d4\u05e1\u05d8\u05d8\u05d5\u05e1 \u05d4\u05d5\u05e9\u05dc\u05dd.",
+        ["export_complete"] = "\u05d9\u05d5\u05d9\u05d9\u05e6\u05d0 \u05d0\u05dc {0}.",
+        ["import_complete"] = "\u05d9\u05d5\u05d1\u05d0\u05d5 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05de-{1}.",
+    };
+
     private static readonly Dictionary<string, Dictionary<string, string>> BuiltInLocales = new(StringComparer.OrdinalIgnoreCase)
     {
         ["en"] = En,
         ["de"] = De,
         ["fr"] = Fr,
         ["es"] = Es,
+        ["he"] = He,
     };
 
     private static Dictionary<string, string> _active = new(En);
