@@ -84,6 +84,7 @@ internal sealed class ShellExtensionDialog : BaseDialog
             new ColumnHeader { Text = "CLSID", Width = 200 },
             new ColumnHeader { Text = "DLL Path", Width = 340 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
         _list.SelectedIndexChanged += (_, _) => UpdateButtons();
 
         _searchBox.Location = new Point(6, 4);

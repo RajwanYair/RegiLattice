@@ -83,6 +83,7 @@ internal sealed class MacAddressDialog : BaseDialog
             new ColumnHeader { Text = "MAC Address", Width = 150 },
             new ColumnHeader { Text = "Description", Width = 220 },
         ]);
+        ListViewColumnSorter.AttachTo(_listView);
 
         var btnPanel = new FlowLayoutPanel
         {

@@ -241,6 +241,7 @@ internal sealed class AdRemovalWizardDialog : BaseDialog
             new ColumnHeader { Text = "Current Status", Width = 110 },
             new ColumnHeader { Text = "Registry Key", Width = 240 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnPanel.Controls.AddRange([_btnSelectAll, _btnClearAll, _btnApply, _btnRestore, _btnClose]);
         Controls.AddRange([_list, _descBox, _statusLabel, _btnPanel]);

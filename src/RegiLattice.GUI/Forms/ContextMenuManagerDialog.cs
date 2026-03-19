@@ -133,6 +133,7 @@ internal sealed class ContextMenuManagerDialog : BaseDialog
             new ColumnHeader { Text = "Group", Width = 150 },
             new ColumnHeader { Text = "Status", Width = 90 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
         _list.SelectedIndexChanged += OnSelectionChanged;
 
         // Button panel

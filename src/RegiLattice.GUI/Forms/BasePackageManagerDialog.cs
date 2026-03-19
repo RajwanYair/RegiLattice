@@ -119,6 +119,7 @@ internal abstract class BasePackageManagerDialog : Form
         _lstInstalled.BorderStyle = BorderStyle.None;
         _lstInstalled.Dock = DockStyle.Fill;
         _lstInstalled.Columns.AddRange(BuildListColumns());
+        ListViewColumnSorter.AttachTo(_lstInstalled);
         _lstInstalled.SelectedIndexChanged += (_, _) =>
         {
             if (_lstInstalled.SelectedItems.Count == 1 && _lstInstalled.SelectedItems[0].Tag is string nm)

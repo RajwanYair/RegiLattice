@@ -84,6 +84,7 @@ internal sealed class WakeOnLanDialog : BaseDialog
             new ColumnHeader { Text = "WoL Status", Width = 100 },
             new ColumnHeader { Text = "Device ID", Width = 240 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
         _list.SelectedIndexChanged += (_, _) => UpdateButtons();
 
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };

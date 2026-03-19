@@ -150,6 +150,7 @@ internal sealed class PortScannerDialog : BaseDialog
         _results.Columns.Add("Service", 120);
         _results.Columns.Add("Status", 100);
         _results.Columns.Add("Latency", 90);
+        ListViewColumnSorter.AttachTo(_results);
         _results.BackColor = AppTheme.Surface;
         _results.ForeColor = AppTheme.Fg;
 

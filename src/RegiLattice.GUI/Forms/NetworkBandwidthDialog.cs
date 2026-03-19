@@ -64,6 +64,7 @@ internal sealed class NetworkBandwidthDialog : BaseDialog
             new ColumnHeader { Text = "Total ↑ (MB)", Width = 100 },
             new ColumnHeader { Text = "Total ↓ (MB)", Width = 100 },
         ]);
+        ListViewColumnSorter.AttachTo(_listView);
 
         var btnPanel = new FlowLayoutPanel
         {

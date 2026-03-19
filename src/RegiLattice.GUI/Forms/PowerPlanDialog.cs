@@ -132,6 +132,7 @@ internal sealed class PowerPlanDialog : BaseDialog
             new ColumnHeader { Text = "GUID", Width = 280 },
             new ColumnHeader { Text = "Active", Width = 70 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _adminBanner.Controls.Add(_adminLabel);
 

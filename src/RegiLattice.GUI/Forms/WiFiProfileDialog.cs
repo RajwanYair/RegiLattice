@@ -97,6 +97,7 @@ internal sealed class WiFiProfileDialog : BaseDialog
             new ColumnHeader { Text = "Encryption", Width = 100 },
             new ColumnHeader { Text = "Auto-Connect", Width = 100 },
         ]);
+        ListViewColumnSorter.AttachTo(_profileList);
 
         _profileList.SelectedIndexChanged += OnSelectionChanged;
 

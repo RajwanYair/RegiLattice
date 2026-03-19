@@ -98,7 +98,7 @@ internal sealed class SleepTimerDialog : BaseDialog
 
     // ── Construction ──────────────────────────────────────────────────────────
     internal SleepTimerDialog()
-        : base("Sleep / Hibernate Timer", new Size(480, 380), resizable: false)
+        : base("Sleep / Hibernate Timer", new Size(480, 380), resizable: true)
     {
         BuildLayout();
 

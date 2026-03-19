@@ -15,8 +15,8 @@ internal sealed class WhatsNewDialog : Form
     internal WhatsNewDialog()
     {
         Text = "What's New in RegiLattice";
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
+        FormBorderStyle = FormBorderStyle.Sizable;
+        MaximizeBox = true;
         MinimizeBox = false;
         StartPosition = FormStartPosition.CenterParent;
         ClientSize = new Size(580, 500);

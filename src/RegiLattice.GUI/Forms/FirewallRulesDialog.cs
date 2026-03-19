@@ -107,6 +107,7 @@ internal sealed class FirewallRulesDialog : BaseDialog
                 new ColumnHeader { Text = "Program", Width = 200 },
             ]);
             lv.SelectedIndexChanged += OnSelectionChanged;
+            ListViewColumnSorter.AttachTo(lv);
         }
 
         _searchBox.TextChanged += (_, _) => FilterCurrentTab();

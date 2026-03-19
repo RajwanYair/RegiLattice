@@ -86,6 +86,7 @@ internal sealed class BrowserCacheCleanerDialog : BaseDialog
             new ColumnHeader { Text = "Cache Size", Width = 100 },
             new ColumnHeader { Text = "Cache Path", Width = 280 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };
         _btnScan.Location = new Point(8, 5);

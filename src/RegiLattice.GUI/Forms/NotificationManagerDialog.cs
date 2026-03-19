@@ -81,6 +81,7 @@ internal sealed class NotificationManagerDialog : BaseDialog
             new ColumnHeader { Text = "Banners", Width = 80 },
             new ColumnHeader { Text = "Lock Screen", Width = 90 },
         ]);
+        ListViewColumnSorter.AttachTo(_appList);
         _appList.SelectedIndexChanged += (_, _) => UpdateAppButtons();
 
         BuildLayout();

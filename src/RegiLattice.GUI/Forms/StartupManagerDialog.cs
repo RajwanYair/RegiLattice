@@ -144,6 +144,7 @@ internal sealed class StartupManagerDialog : BaseDialog
         _list.Columns.Add("Location", 120);
         _list.Columns.Add("Impact", 70);
         _list.Columns.Add("Command", 310);
+        ListViewColumnSorter.AttachTo(_list);
     }
 
     private void BuildButtons()

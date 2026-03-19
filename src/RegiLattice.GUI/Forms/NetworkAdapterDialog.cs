@@ -105,6 +105,7 @@ internal sealed class NetworkAdapterDialog : BaseDialog
             new ColumnHeader { Text = "Speed", Width = 90 },
             new ColumnHeader { Text = "MAC", Width = 140 },
         ]);
+        ListViewColumnSorter.AttachTo(_adapterList);
 
         _adapterList.SelectedIndexChanged += OnSelectionChanged;
 

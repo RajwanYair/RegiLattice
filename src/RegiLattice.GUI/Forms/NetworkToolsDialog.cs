@@ -86,7 +86,7 @@ internal sealed class NetworkToolsDialog : BaseDialog
     };
 
     internal NetworkToolsDialog()
-        : base("Network Tools", new Size(560, 480))
+        : base("Network Tools", new Size(560, 480), resizable: true)
     {
         _tabs = new TabControl { Dock = DockStyle.Fill };
 

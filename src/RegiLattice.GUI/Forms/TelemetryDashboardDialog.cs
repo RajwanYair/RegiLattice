@@ -238,6 +238,7 @@ internal sealed class TelemetryDashboardDialog : BaseDialog
             new ColumnHeader { Text = "Status", Width = 110 },
             new ColumnHeader { Text = "When Applied", Width = 100 },
         ]);
+        ListViewColumnSorter.AttachTo(_list);
 
         _btnPanel.Controls.AddRange([_btnSelectAll, _btnApply, _btnRestoreDefaults, _btnClose]);
         Controls.AddRange([_list, _descBox, _statusLabel, _btnPanel]);

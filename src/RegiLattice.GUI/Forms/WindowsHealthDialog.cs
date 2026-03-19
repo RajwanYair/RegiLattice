@@ -100,6 +100,7 @@ internal sealed class WindowsHealthDialog : Form
             new ColumnHeader { Text = "Admin", Width = 60 },
             new ColumnHeader { Text = "Status", Width = 90 },
         ]);
+        ListViewColumnSorter.AttachTo(_lstCommands);
 
         // Progress bar
         _progressBar.Dock = DockStyle.Top;

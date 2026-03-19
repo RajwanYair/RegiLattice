@@ -72,12 +72,14 @@ internal sealed class BootTimeAnalyzerDialog : BaseDialog
             new ColumnHeader { Text = "Total Boot (s)", Width = 130 },
             new ColumnHeader { Text = "Post-Boot (s)", Width = 130 },
         ]);
+        ListViewColumnSorter.AttachTo(_bootList);
 
         _slowList.Columns.AddRange([
             new ColumnHeader { Text = "Process / Service", Width = 260 },
             new ColumnHeader { Text = "Delay (ms)", Width = 110 },
             new ColumnHeader { Text = "On Boot", Width = 180 },
         ]);
+        ListViewColumnSorter.AttachTo(_slowList);
 
         var split = new SplitContainer
         {
