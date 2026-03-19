@@ -89,6 +89,8 @@ internal static class Program
                 "notifmgr" => new NotificationManagerDialog(),
                 "browsercache" => new BrowserCacheCleanerDialog(),
                 "driverchecker" => new DriverUpdateCheckerDialog(),
+                "wakeonlan" => new WakeOnLanDialog(),
+                "brightness" => new BrightnessSchedulerDialog(),
 
                 // Other dialogs
                 "marketplace" => new MarketplaceDialog(),

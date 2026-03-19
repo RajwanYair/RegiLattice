@@ -1245,7 +1245,9 @@ public partial class MainForm : Form
 
     private void OnOpenBrowserCache() => ShowManagerDialog(new BrowserCacheCleanerDialog());
 
-    private void OnOpenDriverChecker() => ShowManagerDialog(new DriverUpdateCheckerDialog());
+    private void OnOpenDriverChecker()  => ShowManagerDialog(new DriverUpdateCheckerDialog());
+    private void OnOpenWakeOnLan()       => ShowManagerDialog(new WakeOnLanDialog());
+    private void OnOpenBrightness()      => ShowManagerDialog(new BrightnessSchedulerDialog());
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
