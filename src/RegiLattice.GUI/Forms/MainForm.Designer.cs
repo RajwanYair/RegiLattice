@@ -68,6 +68,8 @@ partial class MainForm
     private ToolStripMenuItem _mnuNotifMgr = null!;
     private ToolStripMenuItem _mnuBrowserCache = null!;
     private ToolStripMenuItem _mnuDriverChecker = null!;
+    private ToolStripMenuItem _mnuWakeOnLan = null!;
+    private ToolStripMenuItem _mnuBrightness = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
@@ -171,6 +173,8 @@ partial class MainForm
         _mnuNotifMgr = new ToolStripMenuItem("Notification Manager...") { Image = AppIcons.PrivacyMenuBitmap };
         _mnuBrowserCache = new ToolStripMenuItem("Browser Cache Cleaner...") { Image = AppIcons.CleanupMenuBitmap };
         _mnuDriverChecker = new ToolStripMenuItem("Driver Update Checker...") { Image = AppIcons.PerformanceMenuBitmap };
+        _mnuWakeOnLan   = new ToolStripMenuItem("Wake-on-LAN Configuration...") { Image = AppIcons.NetworkMenuBitmap };
+        _mnuBrightness  = new ToolStripMenuItem("Brightness Scheduler...") { Image = AppIcons.PerformanceMenuBitmap };
         var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
         var mnuSelectAll2 = new ToolStripMenuItem("Select All");
         var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
@@ -218,6 +222,8 @@ partial class MainForm
             _mnuNotifMgr,
             _mnuBrowserCache,
             _mnuDriverChecker,
+            _mnuWakeOnLan,
+            _mnuBrightness,
             new ToolStripSeparator(),
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace…", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
             new ToolStripSeparator(),
@@ -285,6 +291,8 @@ partial class MainForm
         _mnuNotifMgr.Click             += (_, _) => OnOpenNotifMgr();
         _mnuBrowserCache.Click         += (_, _) => OnOpenBrowserCache();
         _mnuDriverChecker.Click        += (_, _) => OnOpenDriverChecker();
+        _mnuWakeOnLan.Click            += (_, _) => OnOpenWakeOnLan();
+        _mnuBrightness.Click           += (_, _) => OnOpenBrightness();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();

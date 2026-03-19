@@ -638,6 +638,17 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 1 | `WindowsUpdateControlDialog` — pause/resume Feature + Quality updates via registry; duration selector (7–35 d); Check Now + Open Settings quick actions | ✅ |
 | 2 | Wired into Tools menu + `Program.cs` (`--manager wucontrol`) | ✅ |
 
+### Sprint 37 — Wake-on-LAN & Brightness Scheduler ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `WakeOnLanDialog` — enumerate physical NICs via WMI `Win32_NetworkAdapter`; per-adapter WoL toggle via `HKLM\SYSTEM\CurrentControlSet\Enum\<PNP>\Device Parameters\Power Management`; MAC address display | ✅ |
+| 2 | `BrightnessSchedulerDialog` — day/night brightness % with time pickers; WMI `WmiMonitorBrightnessMethods` primary + `powercfg` fallback; settings persisted to `AppConfig` (5 new typed properties) | ✅ |
+| 3 | Both registered in `Program.cs ResolveManagerArg()`: `wakeonlan`/`brightness` | ✅ |
+| 4 | Tools menu entries added for both dialogs | ✅ |
+| 5 | Phase 6 items 58 (WoL) and 60 (Brightness Scheduler) completed; item 59 deferred to Future | ✅ |
+| 6 | `AppConfig` extended with 5 typed brightness properties (`BrightnessSchedulerEnabled`, `BrightnessDayPct`, `BrightnessNightPct`, `BrightnessDayTime`, `BrightnessNightTime`) | ✅ |
+
 ### Sprint 36 — Notifications, Browser Cache & Driver Tools ✅
 
 | # | Task | Status |
@@ -691,9 +702,9 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 | 55 | Sleep/hibernate timer with countdown | LOW | Original | ✅ Sprint 31 |
 | 56 | Monitor power-off timer | LOW | Original | ✅ Sprint 31 |
 | 57 | USB selective suspend per-device control | LOW | Original | ✅ Sprint 31 |
-| 58 | Wake-on-LAN configuration | LOW | Original | 🔄 Sprint 37 |
-| 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Sprint 37 |
-| 60 | Screen brightness scheduler (time-based) | LOW | Original | 🔄 Sprint 37 |
+| 58 | Wake-on-LAN configuration | LOW | Original | ✅ Sprint 37 |
+| 59 | Power consumption estimator (from current configuration) | LOW | Original | 🔄 Future |
+| 60 | Screen brightness scheduler (time-based) | LOW | Original | ✅ Sprint 37 |
 
 ### Phase 7 — Privacy & Ad Removal (Sprint 32–34) ✅
 

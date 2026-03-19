@@ -84,6 +84,22 @@ public sealed class AppConfig
     [JsonPropertyName("skip_applied_on_batch")]
     public bool SkipAppliedOnBatch { get; set; } = true;
 
+    // ── Brightness Scheduler ─────────────────────────────────────────────
+    [JsonPropertyName("brightness_scheduler_enabled")]
+    public bool BrightnessSchedulerEnabled { get; set; }
+
+    [JsonPropertyName("brightness_day_pct")]
+    public int BrightnessDayPct { get; set; } = 80;
+
+    [JsonPropertyName("brightness_night_pct")]
+    public int BrightnessNightPct { get; set; } = 40;
+
+    [JsonPropertyName("brightness_day_time")]
+    public string BrightnessDayTime { get; set; } = "07:00";
+
+    [JsonPropertyName("brightness_night_time")]
+    public string BrightnessNightTime { get; set; } = "21:00";
+
     /// <summary>
     /// Maximum number of tweak history entries to retain.
     /// Configurable so power users can increase the rolling window.
