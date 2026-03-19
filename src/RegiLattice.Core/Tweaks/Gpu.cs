@@ -489,12 +489,33 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets GpuPriority=8 in the Multimedia SystemProfile Tasks\\Games key. Requests highest GPU scheduling priority for game processes via MMCSS. Default: 1 or 2.",
+            Description =
+                "Sets GpuPriority=8 in the Multimedia SystemProfile Tasks\\Games key. Requests highest GPU scheduling priority for game processes via MMCSS. Default: 1 or 2.",
             Tags = ["gpu", "priority", "mmcss", "gaming"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GpuPriority", 8)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GpuPriority")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "GpuPriority", 8)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GpuPriority",
+                    8
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GpuPriority"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
+                    "GpuPriority",
+                    8
+                ),
+            ],
         },
         new TweakDef
         {
@@ -503,7 +524,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets SchedulerPolicy=2 (batch mode) in GraphicsDrivers. Batches GPU work submissions to reduce context-switch overhead. Default: preemptive.",
+            Description =
+                "Sets SchedulerPolicy=2 (batch mode) in GraphicsDrivers. Batches GPU work submissions to reduce context-switch overhead. Default: preemptive.",
             Tags = ["gpu", "wddm", "scheduler", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "SchedulerPolicy", 2)],
@@ -517,7 +539,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets ThreadedOptimizationFlags=1 in GraphicsDrivers to enable driver threading optimizations. Allows the GPU driver to use multiple CPU threads for command processing. Default: off.",
+            Description =
+                "Sets ThreadedOptimizationFlags=1 in GraphicsDrivers to enable driver threading optimizations. Allows the GPU driver to use multiple CPU threads for command processing. Default: off.",
             Tags = ["gpu", "threading", "driver", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "ThreadedOptimizationFlags", 1)],
@@ -531,7 +554,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets DisableHWAcceleration=0 in Avalon.Graphics to ensure WPF/XAML apps use GPU hardware acceleration. Default: 0 (enabled).",
+            Description =
+                "Sets DisableHWAcceleration=0 in Avalon.Graphics to ensure WPF/XAML apps use GPU hardware acceleration. Default: 0 (enabled).",
             Tags = ["gpu", "hwaccel", "wpf", "avalon"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
@@ -545,7 +569,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets EnablePreemption=0 in GraphicsDrivers Scheduler to disable GPU task preemption. Can reduce frame-time variance in latency-sensitive workloads. Default: enabled.",
+            Description =
+                "Sets EnablePreemption=0 in GraphicsDrivers Scheduler to disable GPU task preemption. Can reduce frame-time variance in latency-sensitive workloads. Default: enabled.",
             Tags = ["gpu", "preemption", "scheduler", "latency"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
@@ -559,7 +584,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TdrEngineTimeout=13 seconds in GraphicsDrivers. Controls how long the GPU engine can be unresponsive before reset recovery. Default: 2 seconds.",
+            Description =
+                "Sets TdrEngineTimeout=13 seconds in GraphicsDrivers. Controls how long the GPU engine can be unresponsive before reset recovery. Default: 2 seconds.",
             Tags = ["gpu", "tdr", "timeout", "power"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrEngineTimeout", 13)],
@@ -573,7 +599,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets AutoColorManagement=1 in DWM registry key to enable automatic HDR/color management for connected displays that support it. Default: 0.",
+            Description =
+                "Sets AutoColorManagement=1 in DWM registry key to enable automatic HDR/color management for connected displays that support it. Default: 0.",
             Tags = ["gpu", "hdr", "color", "dwm"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "AutoColorManagement", 1)],
@@ -587,7 +614,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TdrLimitCount=10 in GraphicsDrivers. Allows up to 10 TDR recoveries in 60 seconds before crashing. Useful for overclocked or compute workloads. Default: 5.",
+            Description =
+                "Sets TdrLimitCount=10 in GraphicsDrivers. Allows up to 10 TDR recoveries in 60 seconds before crashing. Useful for overclocked or compute workloads. Default: 5.",
             Tags = ["gpu", "tdr", "stability", "overclock"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitCount", 10)],
@@ -601,7 +629,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets UseNoPlatformUpdateMode=1 in GraphicsDrivers to hint drivers to avoid platform-specific update mode that may conflict with multi-GPU setups. Default: 0.",
+            Description =
+                "Sets UseNoPlatformUpdateMode=1 in GraphicsDrivers to hint drivers to avoid platform-specific update mode that may conflict with multi-GPU setups. Default: 0.",
             Tags = ["gpu", "multi-gpu", "adapter", "rendering"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "UseNoPlatformUpdateMode", 1)],
@@ -615,7 +644,8 @@ internal static class Gpu
             Category = "GPU / Graphics",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets FlipInterval=0 in DirectDraw settings to allow immediate buffer flips without vertical sync wait. Reduces display-pipeline latency for OpenGL/DDraw apps. Default: 1.",
+            Description =
+                "Sets FlipInterval=0 in DirectDraw settings to allow immediate buffer flips without vertical sync wait. Reduces display-pipeline latency for OpenGL/DDraw apps. Default: 1.",
             Tags = ["gpu", "opengl", "directdraw", "vsync"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\DirectDraw"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\DirectDraw", "FlipInterval", 0)],

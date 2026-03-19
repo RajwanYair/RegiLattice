@@ -343,8 +343,10 @@ internal sealed class BatteryHealthDialog : BaseDialog
             if (proc.ExitCode == 0 && System.IO.File.Exists(path))
             {
                 _statusLabel.Text = $"Report saved to: {path}";
-                if (MessageBox.Show(this, $"Report saved.\nOpen now?", "Export Complete",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                if (
+                    MessageBox.Show(this, $"Report saved.\nOpen now?", "Export Complete", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+                    == DialogResult.Yes
+                )
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true });
             }
             else
@@ -382,15 +384,13 @@ internal sealed class BatteryHealthDialog : BaseDialog
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, $"Cannot read WMI data:\n{ex.Message}", "Chart Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, $"Cannot read WMI data:\n{ex.Message}", "Chart Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
         if (entries.Count == 0)
         {
-            MessageBox.Show(this, "No battery capacity data available.", "Capacity Chart",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, "No battery capacity data available.", "Capacity Chart", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 

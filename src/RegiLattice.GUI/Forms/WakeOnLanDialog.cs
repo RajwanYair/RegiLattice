@@ -73,11 +73,7 @@ internal sealed class WakeOnLanDialog : BaseDialog
     private List<AdapterInfo> _adapters = [];
 
     // Manual WoL sender
-    private readonly TextBox _txtSendMac = new()
-    {
-        PlaceholderText = "AA:BB:CC:DD:EE:FF",
-        Width = 170,
-    };
+    private readonly TextBox _txtSendMac = new() { PlaceholderText = "AA:BB:CC:DD:EE:FF", Width = 170 };
     private readonly Button _btnSendWol = new()
     {
         Text = "\u2192 Send WoL Packet",
@@ -127,8 +123,18 @@ internal sealed class WakeOnLanDialog : BaseDialog
         _txtSendMac.BackColor = Color.FromArgb(30, 30, 40);
         _txtSendMac.ForeColor = Color.White;
         _btnSendWol.Click += OnSendWolPacket;
-        var sendPanel = new Panel { Dock = DockStyle.Bottom, Height = 34, Padding = new Padding(6, 4, 6, 0) };
-        var sendLabel = new Label { Text = "Manual WoL:", AutoSize = true, Location = new Point(6, 8) };
+        var sendPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 34,
+            Padding = new Padding(6, 4, 6, 0),
+        };
+        var sendLabel = new Label
+        {
+            Text = "Manual WoL:",
+            AutoSize = true,
+            Location = new Point(6, 8),
+        };
         _txtSendMac.Location = new Point(88, 4);
         _btnSendWol.Location = new Point(264, 4);
         sendPanel.Controls.AddRange(new Control[] { sendLabel, _txtSendMac, _btnSendWol });
@@ -310,7 +316,8 @@ internal sealed class WakeOnLanDialog : BaseDialog
             // Build magic packet: 6 × 0xFF then 16 × MAC (102 bytes)
             var mac = Enumerable.Range(0, 6).Select(i => Convert.ToByte(hex.Substring(i * 2, 2), 16)).ToArray();
             var packet = new byte[102];
-            for (int i = 0; i < 6; i++) packet[i] = 0xFF;
+            for (int i = 0; i < 6; i++)
+                packet[i] = 0xFF;
             for (int rep = 0; rep < 16; rep++)
                 Array.Copy(mac, 0, packet, 6 + rep * 6, 6);
 

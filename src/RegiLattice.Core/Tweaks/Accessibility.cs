@@ -291,29 +291,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-disable-narrator-hotkey",
-            Label = "Disable Narrator Hotkey (Win+Enter)",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Win+Enter keyboard shortcut that launches Narrator. Prevents accidental Narrator activation. Default: Enabled. Recommended: Disabled.",
-            Tags = ["accessibility", "narrator", "hotkey", "keyboard"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "RunNarratorAtLogon", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "RunNarratorAtLogon"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "acc-increase-hover-time",
             Label = "Increase Tooltip Hover Time",
             Category = "Accessibility",

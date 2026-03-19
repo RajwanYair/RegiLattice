@@ -96,7 +96,6 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("perf-disable-startup-delay")]
     [InlineData("perf-disable-low-disk-warning")]
     [InlineData("perf-increase-irp-stack")]
     [InlineData("perf-disable-tips-notifications")]
@@ -303,7 +302,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [Fact]
     public void TweakKind_RegistryTweak_DefaultsToRegistry()
     {
-        var tweak = _engine.GetTweak("perf-disable-startup-delay");
+        var tweak = _engine.GetTweak("startup-disable-startup-delay");
         Assert.NotNull(tweak);
         Assert.Equal(TweakKind.Registry, tweak.Kind);
     }
@@ -470,7 +469,6 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     [InlineData("compat-disable-customer-experience")]
     [InlineData("compat-disable-smart-screen-apps")]
     [InlineData("compat-disable-app-launch-tracking")]
-    [InlineData("compat-disable-startup-delay")]
     [InlineData("compat-disable-autoplay-devices")]
     [InlineData("compat-disable-maintenance-wakeup")]
     [InlineData("compat-set-diagnostic-data-basic")]

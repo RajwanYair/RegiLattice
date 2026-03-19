@@ -82,13 +82,12 @@ internal sealed class ScheduledTweakDialog : BaseDialog
 
     private void BuildLayout()
     {
-        _list.Columns.AddRange(
-        [
-            new ColumnHeader { Text = "Tweak ID",  Width = 260 },
-            new ColumnHeader { Text = "Trigger",   Width = 100 },
-            new ColumnHeader { Text = "Interval",  Width = 90  },
-            new ColumnHeader { Text = "Enabled",   Width = 70  },
-            new ColumnHeader { Text = "Last Run",  Width = 160 },
+        _list.Columns.AddRange([
+            new ColumnHeader { Text = "Tweak ID", Width = 260 },
+            new ColumnHeader { Text = "Trigger", Width = 100 },
+            new ColumnHeader { Text = "Interval", Width = 90 },
+            new ColumnHeader { Text = "Enabled", Width = 70 },
+            new ColumnHeader { Text = "Last Run", Width = 160 },
         ]);
 
         var btnPanel = new FlowLayoutPanel
@@ -111,7 +110,11 @@ internal sealed class ScheduledTweakDialog : BaseDialog
         _btnAdd.Click += OnAddSchedule;
         _btnRemove.Click += OnRemoveSchedule;
         _btnToggle.Click += OnToggleSchedule;
-        _btnRefresh.Click += (_, _) => { _svc.Load(); RefreshList(); };
+        _btnRefresh.Click += (_, _) =>
+        {
+            _svc.Load();
+            RefreshList();
+        };
         _btnClose.Click += (_, _) => Close();
         _list.SelectedIndexChanged += (_, _) => UpdateButtons();
     }
@@ -124,12 +127,8 @@ internal sealed class ScheduledTweakDialog : BaseDialog
 
         foreach (TweakSchedule s in _svc.Schedules)
         {
-            string interval = s.Trigger == ScheduleTrigger.Timer
-                ? $"{s.IntervalMinutes} min"
-                : "—";
-            string lastRun = s.LastRun.HasValue
-                ? s.LastRun.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
-                : "Never";
+            string interval = s.Trigger == ScheduleTrigger.Timer ? $"{s.IntervalMinutes} min" : "—";
+            string lastRun = s.LastRun.HasValue ? s.LastRun.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "Never";
 
             var item = new ListViewItem(s.TweakId) { Tag = s };
             item.SubItems.Add(s.Trigger.ToString());
@@ -165,10 +164,25 @@ internal sealed class ScheduledTweakDialog : BaseDialog
             MinimizeBox = false,
         };
 
-        var lblId = new Label { Text = "Tweak ID:", Location = new Point(12, 18), Width = 90 };
-        var txtId = new TextBox { Location = new Point(110, 15), Width = 240, PlaceholderText = "e.g. perf-disable-animations" };
+        var lblId = new Label
+        {
+            Text = "Tweak ID:",
+            Location = new Point(12, 18),
+            Width = 90,
+        };
+        var txtId = new TextBox
+        {
+            Location = new Point(110, 15),
+            Width = 240,
+            PlaceholderText = "e.g. perf-disable-animations",
+        };
 
-        var lblTrigger = new Label { Text = "Trigger:", Location = new Point(12, 52), Width = 90 };
+        var lblTrigger = new Label
+        {
+            Text = "Trigger:",
+            Location = new Point(12, 52),
+            Width = 90,
+        };
         var cboTrigger = new ComboBox
         {
             Location = new Point(110, 49),
@@ -178,7 +192,12 @@ internal sealed class ScheduledTweakDialog : BaseDialog
         cboTrigger.Items.AddRange(Enum.GetNames<ScheduleTrigger>());
         cboTrigger.SelectedIndex = 0;
 
-        var lblInterval = new Label { Text = "Interval (min):", Location = new Point(12, 86), Width = 95 };
+        var lblInterval = new Label
+        {
+            Text = "Interval (min):",
+            Location = new Point(12, 86),
+            Width = 95,
+        };
         var numInterval = new NumericUpDown
         {
             Location = new Point(110, 83),
@@ -188,11 +207,22 @@ internal sealed class ScheduledTweakDialog : BaseDialog
             Value = 60,
             Enabled = false,
         };
-        cboTrigger.SelectedIndexChanged += (_, _) =>
-            numInterval.Enabled = cboTrigger.SelectedItem?.ToString() == ScheduleTrigger.Timer.ToString();
+        cboTrigger.SelectedIndexChanged += (_, _) => numInterval.Enabled = cboTrigger.SelectedItem?.ToString() == ScheduleTrigger.Timer.ToString();
 
-        var btnOk = new Button { Text = "Add", DialogResult = DialogResult.OK, Location = new Point(190, 160), Width = 75 };
-        var btnCancel = new Button { Text = "Cancel", DialogResult = DialogResult.Cancel, Location = new Point(275, 160), Width = 75 };
+        var btnOk = new Button
+        {
+            Text = "Add",
+            DialogResult = DialogResult.OK,
+            Location = new Point(190, 160),
+            Width = 75,
+        };
+        var btnCancel = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Location = new Point(275, 160),
+            Width = 75,
+        };
         dlg.AcceptButton = btnOk;
         dlg.CancelButton = btnCancel;
 
@@ -228,11 +258,7 @@ internal sealed class ScheduledTweakDialog : BaseDialog
         if (_list.SelectedItems.Count == 0 || _list.SelectedItems[0].Tag is not TweakSchedule s)
             return;
 
-        var result = MessageBox.Show(
-            $"Remove schedule for '{s.TweakId}'?",
-            "Confirm",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question);
+        var result = MessageBox.Show($"Remove schedule for '{s.TweakId}'?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (result != DialogResult.Yes)
             return;

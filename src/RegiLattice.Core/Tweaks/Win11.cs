@@ -858,7 +858,8 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets TaskbarGlomLevel=2 to never combine taskbar buttons, showing each open window as a separate button with label. Default: combine when taskbar is full (0).",
+            Description =
+                "Sets TaskbarGlomLevel=2 to never combine taskbar buttons, showing each open window as a separate button with label. Default: combine when taskbar is full (0).",
             Tags = ["win11", "taskbar", "combine", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
@@ -873,12 +874,22 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets ShowSecondsInSystemClock=1 to display seconds in the taskbar system clock. Useful for monitoring and timing tasks. Default: off.",
+            Description =
+                "Sets ShowSecondsInSystemClock=1 to display seconds in the taskbar system clock. Useful for monitoring and timing tasks. Default: off.",
             Tags = ["win11", "clock", "taskbar", "seconds"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
+            ],
         },
         new TweakDef
         {
@@ -888,7 +899,8 @@ internal static class Win11
             NeedsAdmin = true,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets NoLockScreen=1 in the Personalization policy key to bypass the lock screen and go directly to the sign-in box. Default: 0 (lock screen shown).",
+            Description =
+                "Sets NoLockScreen=1 in the Personalization policy key to bypass the lock screen and go directly to the sign-in box. Default: 0 (lock screen shown).",
             Tags = ["win11", "lock-screen", "policy", "login"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
@@ -903,7 +915,8 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets SearchboxTaskbarMode=0 to hide the search box/icon from the taskbar while keeping Windows Search available via Win+S. Default: 1 (icon only) or 2 (box).",
+            Description =
+                "Sets SearchboxTaskbarMode=0 to hide the search box/icon from the taskbar while keeping Windows Search available via Win+S. Default: 1 (icon only) or 2 (box).",
             Tags = ["win11", "search", "taskbar", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
@@ -918,12 +931,22 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets Start_IrisRecommendations=0 to remove the 'Recommended' files and apps section from the Start menu. Reduces telemetry-driven content. Default: 1.",
+            Description =
+                "Sets Start_IrisRecommendations=0 to remove the 'Recommended' files and apps section from the Start menu. Reduces telemetry-driven content. Default: 1.",
             Tags = ["win11", "start-menu", "recommendations", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
+            ],
         },
         new TweakDef
         {
@@ -933,7 +956,8 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets TaskbarAcrylicOpacity=0 and disables the badge-count wiggle animation on pinned app buttons. Reduces visual noise in the taskbar. Default: enabled.",
+            Description =
+                "Sets TaskbarAcrylicOpacity=0 and disables the badge-count wiggle animation on pinned app buttons. Reduces visual noise in the taskbar. Default: enabled.",
             Tags = ["win11", "taskbar", "animation", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
@@ -948,7 +972,8 @@ internal static class Win11
             NeedsAdmin = true,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets CsEnabled=0 in the power policy to change the default power button behavior. Helps ensure a clean shutdown on systems with connected standby. Default: depends on OEM.",
+            Description =
+                "Sets CsEnabled=0 in the power policy to change the default power button behavior. Helps ensure a clean shutdown on systems with connected standby. Default: depends on OEM.",
             Tags = ["win11", "power", "shutdown", "button"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
@@ -963,12 +988,19 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets Start_ShowClassicMode=0 to hide the full 'All apps' list shortcut from the Start menu, keeping only pinned items visible by default. Default: 0.",
+            Description =
+                "Sets Start_ShowClassicMode=0 to hide the full 'All apps' list shortcut from the Start menu, keeping only pinned items visible by default. Default: 0.",
             Tags = ["win11", "start-menu", "apps", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode", 0),
+            ],
         },
         new TweakDef
         {
@@ -978,7 +1010,8 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets ShellFeedsTaskbarViewMode=2 to disable the News and Interests weather/news button on the taskbar. Reduces telemetry and MSN content loading. Default: 0 (show news).",
+            Description =
+                "Sets ShellFeedsTaskbarViewMode=2 to disable the News and Interests weather/news button on the taskbar. Reduces telemetry and MSN content loading. Default: 0 (show news).",
             Tags = ["win11", "taskbar", "news", "feeds"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
@@ -993,12 +1026,33 @@ internal static class Win11
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets SubscribedContent-338393Enabled=0 to suppress promotional and recommended content displayed in the Windows Settings app. Default: 1 (ads shown).",
+            Description =
+                "Sets SubscribedContent-338393Enabled=0 to suppress promotional and recommended content displayed in the Windows Settings app. Default: 1 (ads shown).",
             Tags = ["win11", "settings", "ads", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338393Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338393Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SubscribedContent-338393Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+            ],
         },
     ];
 }

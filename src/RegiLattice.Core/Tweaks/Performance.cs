@@ -813,23 +813,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-startup-delay",
-            Label = "Disable Startup App Delay",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the artificial delay Windows applies before launching startup applications. Default delay is ~10 seconds.",
-            Tags = ["performance", "startup", "delay", "boot"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-low-disk-warning",
             Label = "Disable Low Disk Space Warning",
             Category = "Performance",

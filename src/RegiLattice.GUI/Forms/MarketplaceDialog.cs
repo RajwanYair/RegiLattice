@@ -27,8 +27,20 @@ internal sealed class MarketplaceDialog : Form
 
     // Rating controls
     private readonly Label _lblRating = new() { AutoSize = true, Padding = new Padding(0, 4, 8, 0) };
-    private readonly NumericUpDown _numRating = new() { Minimum = 1, Maximum = 5, Width = 50, Value = 3 };
-    private readonly Button _btnRate = new() { Text = "Rate ★", Width = 72, Height = 26, Enabled = false };
+    private readonly NumericUpDown _numRating = new()
+    {
+        Minimum = 1,
+        Maximum = 5,
+        Width = 50,
+        Value = 3,
+    };
+    private readonly Button _btnRate = new()
+    {
+        Text = "Rate ★",
+        Width = 72,
+        Height = 26,
+        Enabled = false,
+    };
 
     // Changelog tab
     private readonly RichTextBox _txtChangelog = new();
@@ -217,7 +229,18 @@ internal sealed class MarketplaceDialog : Form
             BackColor = AppTheme.Bg,
             Padding = new Padding(6, 2, 0, 0),
         };
-        ratingPanel.Controls.AddRange([new Label { Text = "Your rating:", AutoSize = true, Padding = new Padding(0, 4, 4, 0), ForeColor = AppTheme.FgDim }, _numRating, _btnRate, _lblRating]);
+        ratingPanel.Controls.AddRange([
+            new Label
+            {
+                Text = "Your rating:",
+                AutoSize = true,
+                Padding = new Padding(0, 4, 4, 0),
+                ForeColor = AppTheme.FgDim,
+            },
+            _numRating,
+            _btnRate,
+            _lblRating,
+        ]);
 
         SuspendLayout();
         Controls.Add(_tabs);
@@ -549,9 +572,7 @@ internal sealed class MarketplaceDialog : Form
             + $"Tags: {string.Join(", ", p.Tags)}\n"
             + $"{p.Description}";
 
-        _txtChangelog.Text = string.IsNullOrWhiteSpace(p.Changelog)
-            ? "(No changelog provided for this pack.)"
-            : p.Changelog;
+        _txtChangelog.Text = string.IsNullOrWhiteSpace(p.Changelog) ? "(No changelog provided for this pack.)" : p.Changelog;
 
         var rating = RegiLattice.Core.Ratings.GetRating($"pack:{p.Name}");
         _lblRating.Text = rating is not null ? $"  Your rating: {rating.Stars}\u2605" : "  Not rated";
@@ -560,7 +581,8 @@ internal sealed class MarketplaceDialog : Form
 
     private void OnRatePack(object? sender, EventArgs e)
     {
-        if (_selectedPack is null) return;
+        if (_selectedPack is null)
+            return;
         int stars = (int)_numRating.Value;
         RegiLattice.Core.Ratings.Rate($"pack:{_selectedPack.Name}", stars);
         _lblRating.Text = $"  Your rating: {stars}\u2605";

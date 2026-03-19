@@ -140,30 +140,6 @@ internal static class Adobe
         },
         new TweakDef
         {
-            Id = "adobe-disable-updater-service",
-            Label = "Disable Adobe Updater Service",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Adobe Updater service via registry policy. Prevents background update checks and downloads.",
-            Tags = ["adobe", "updater", "service", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\AdobeUpdate"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM", "iCheckReader", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bUpdater", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Adobe Acrobat\DC\FeatureLockDown", "bUpdater", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM", "iCheckReader", 3),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bUpdater"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Adobe Acrobat\DC\FeatureLockDown", "bUpdater"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Adobe\Adobe ARM\1.0\ARM", "iCheckReader", 0)],
-        },
-        new TweakDef
-        {
             Id = "adobe-disable-cloud-sync",
             Label = "Disable Adobe Creative Cloud Sync",
             Category = "Adobe",

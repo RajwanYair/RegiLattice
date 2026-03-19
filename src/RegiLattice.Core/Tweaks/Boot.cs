@@ -561,40 +561,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "boot-disable-startup-sound",
-            Label = "Disable Windows Startup Sound",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows startup sound that plays at login. Default: enabled.",
-            Tags = ["boot", "sound", "startup", "audio"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation",
-                    "DisableStartupSound",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "boot-disable-winre",
             Label = "Disable WinRE Partition",
             Category = "Boot",
@@ -767,7 +733,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets HiberbootEnabled=1 in the Windows System policy key to enforce fast startup at GPO level. Complements the standard fast startup registry setting. Default: not set.",
+            Description =
+                "Sets HiberbootEnabled=1 in the Windows System policy key to enforce fast startup at GPO level. Complements the standard fast startup registry setting. Default: not set.",
             Tags = ["boot", "fast-startup", "policy", "hibernate"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "HiberbootEnabled", 1)],
@@ -781,7 +748,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets WaitForIdleState=5 in the system Timeout key. Controls how long Windows waits for the system to become idle before shutdown completes. Default: 2.",
+            Description =
+                "Sets WaitForIdleState=5 in the system Timeout key. Controls how long Windows waits for the system to become idle before shutdown completes. Default: 2.",
             Tags = ["boot", "shutdown", "timeout", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Timeout", "WaitForIdleState", 5)],
@@ -795,7 +763,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets BootTimeoutSeconds=10 in the Windows System policy key. Controls the boot menu display time at policy level. Default: not set (uses BCD value).",
+            Description =
+                "Sets BootTimeoutSeconds=10 in the Windows System policy key. Controls the boot menu display time at policy level. Default: not set (uses BCD value).",
             Tags = ["boot", "menu", "timeout", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BootTimeoutSeconds", 10)],
@@ -809,7 +778,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Runs 'bcdedit /set hypervisorlaunchtype off' to disable the Hyper-V hypervisor at boot. Improves native performance on bare-metal gaming/workstation installs. Default: auto.",
+            Description =
+                "Runs 'bcdedit /set hypervisorlaunchtype off' to disable the Hyper-V hypervisor at boot. Improves native performance on bare-metal gaming/workstation installs. Default: auto.",
             Tags = ["boot", "hyper-v", "bcd", "performance"],
             KindHint = TweakKind.SystemCommand,
             ApplyAction = dryRun =>
@@ -836,7 +806,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Runs 'bcdedit /set testsigning off' to disable test-signing mode. Prevents unsigned test drivers from loading. Default: off.",
+            Description =
+                "Runs 'bcdedit /set testsigning off' to disable test-signing mode. Prevents unsigned test drivers from loading. Default: off.",
             Tags = ["boot", "bcd", "security", "test-signing"],
             KindHint = TweakKind.SystemCommand,
             ApplyAction = dryRun =>
@@ -863,7 +834,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets ReportBootOk=1 in Winlogon to signal that the current boot is clean and should be saved as the last known good configuration. Default: 1.",
+            Description =
+                "Sets ReportBootOk=1 in Winlogon to signal that the current boot is clean and should be saved as the last known good configuration. Default: 1.",
             Tags = ["boot", "winlogon", "last-known-good", "recovery"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ReportBootOk", 1)],
@@ -877,7 +849,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DEFAULT=0x0 in the Debug Print Filter to suppress kernel debug messages, reducing DbgPrint overhead on retail builds. Default: 0x8 or not set.",
+            Description =
+                "Sets DEFAULT=0x0 in the Debug Print Filter to suppress kernel debug messages, reducing DbgPrint overhead on retail builds. Default: 0x8 or not set.",
             Tags = ["boot", "kernel", "debug", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Debug Print Filter", "DEFAULT", 0)],
@@ -891,7 +864,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableWinRE=0 in WinRE policy to ensure the Windows Recovery Environment remains accessible. Prevents accidental policy lockout of recovery tools. Default: 0.",
+            Description =
+                "Sets DisableWinRE=0 in WinRE policy to ensure the Windows Recovery Environment remains accessible. Prevents accidental policy lockout of recovery tools. Default: 0.",
             Tags = ["boot", "recovery", "winre", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRE", "DisableWinRE", 0)],
@@ -905,7 +879,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Runs 'bcdedit /set {bootmgr} displaybootmenu yes' to enable the legacy F8 boot menu. Allows access to safe mode and other startup options. Default: off on modern Windows.",
+            Description =
+                "Runs 'bcdedit /set {bootmgr} displaybootmenu yes' to enable the legacy F8 boot menu. Allows access to safe mode and other startup options. Default: off on modern Windows.",
             Tags = ["boot", "bcd", "safe-mode", "f8"],
             KindHint = TweakKind.SystemCommand,
             ApplyAction = dryRun =>
@@ -932,7 +907,8 @@ internal static class Boot
             Category = "Boot",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Runs 'bcdedit /set nx OptIn' to enable DEP (Data Execution Prevention) only for OS-protected processes. Balances security and compatibility. Default: OptIn.",
+            Description =
+                "Runs 'bcdedit /set nx OptIn' to enable DEP (Data Execution Prevention) only for OS-protected processes. Balances security and compatibility. Default: OptIn.",
             Tags = ["boot", "bcd", "dep", "security"],
             KindHint = TweakKind.SystemCommand,
             ApplyAction = dryRun =>
@@ -948,8 +924,7 @@ internal static class Boot
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{current}"]);
-                return stdout.Contains("nx", StringComparison.OrdinalIgnoreCase)
-                    && stdout.Contains("OptIn", StringComparison.OrdinalIgnoreCase);
+                return stdout.Contains("nx", StringComparison.OrdinalIgnoreCase) && stdout.Contains("OptIn", StringComparison.OrdinalIgnoreCase);
             },
         },
     ];

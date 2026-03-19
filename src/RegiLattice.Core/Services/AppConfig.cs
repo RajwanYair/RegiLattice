@@ -184,10 +184,10 @@ public sealed record ProfileScheduleEntry
     public required string Profile { get; init; }
 
     [JsonPropertyName("trigger")]
-    public required string Trigger { get; init; }  // "daily", "on_boot", "on_login"
+    public required string Trigger { get; init; } // "daily", "on_boot", "on_login"
 
     [JsonPropertyName("time")]
-    public string Time { get; init; } = "";  // "HH:mm" for daily trigger
+    public string Time { get; init; } = ""; // "HH:mm" for daily trigger
 
     [JsonPropertyName("enabled")]
     public bool Enabled { get; init; } = true;
