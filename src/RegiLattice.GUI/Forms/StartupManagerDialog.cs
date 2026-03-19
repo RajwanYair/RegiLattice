@@ -1,4 +1,5 @@
 #nullable enable
+// Sprint 47: +Search filter box, +Impact column.
 
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,15 @@ internal sealed class StartupManagerDialog : BaseDialog
 
     private IReadOnlyList<StartupEntry> _entries = Array.Empty<StartupEntry>();
 
+    // ── Sprint 47 additions ──────────────────────────────────────────
+    private readonly TextBox _searchBox = new() { Width = 240, PlaceholderText = "Filter by name or command…" };
+    private readonly Panel _filterPanel = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 36,
+        Padding = new Padding(6, 6, 6, 0),
+    };
+
     // ── Construction ─────────────────────────────────────────────────────────
 
     internal StartupManagerDialog()
@@ -98,9 +108,27 @@ internal sealed class StartupManagerDialog : BaseDialog
         BuildButtons();
         BuildAdminBanner();
 
+        // Search filter bar
+        var filterLabel = new Label
+        {
+            Text = "Search:",
+            AutoSize = true,
+            Margin = new Padding(0, 8, 4, 0),
+        };
+        var filterFlow = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+        };
+        filterFlow.Controls.AddRange(new Control[] { filterLabel, _searchBox });
+        _filterPanel.Controls.Add(filterFlow);
+        _searchBox.TextChanged += (_, _) => ApplyFilter();
+
         Controls.Add(_list);
         Controls.Add(_statusLabel);
         Controls.Add(_btnPanel);
+        Controls.Add(_filterPanel);
         Controls.Add(_adminBanner);
 
         _list.SelectedIndexChanged += OnSelectionChanged;
@@ -114,7 +142,8 @@ internal sealed class StartupManagerDialog : BaseDialog
         _list.Columns.Add("Name", 180);
         _list.Columns.Add("Status", 70);
         _list.Columns.Add("Location", 120);
-        _list.Columns.Add("Command", 380);
+        _list.Columns.Add("Impact", 70);
+        _list.Columns.Add("Command", 310);
     }
 
     private void BuildButtons()
@@ -177,6 +206,7 @@ internal sealed class StartupManagerDialog : BaseDialog
             var item = new ListViewItem(e.Name) { Tag = e };
             item.SubItems.Add(e.IsEnabled ? "Enabled" : "Disabled");
             item.SubItems.Add(LocationLabel(e.Location));
+            item.SubItems.Add(ImpactLabel(e.Location));
             item.SubItems.Add(e.Command);
             item.ForeColor = e.IsEnabled ? SystemColors.WindowText : SystemColors.GrayText;
             _list.Items.Add(item);
@@ -260,6 +290,32 @@ internal sealed class StartupManagerDialog : BaseDialog
 
     private void SetStatus(string text) => _statusLabel.Text = text;
 
+    private void ApplyFilter()
+    {
+        string query = _searchBox.Text.Trim();
+        _list.BeginUpdate();
+        _list.Items.Clear();
+        var filtered = string.IsNullOrEmpty(query)
+            ? _entries
+            : _entries
+                .Where(e =>
+                    e.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || e.Command.Contains(query, StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
+        foreach (StartupEntry e in filtered)
+        {
+            var item = new ListViewItem(e.Name) { Tag = e };
+            item.SubItems.Add(e.IsEnabled ? "Enabled" : "Disabled");
+            item.SubItems.Add(LocationLabel(e.Location));
+            item.SubItems.Add(ImpactLabel(e.Location));
+            item.SubItems.Add(e.Command);
+            item.ForeColor = e.IsEnabled ? SystemColors.WindowText : SystemColors.GrayText;
+            _list.Items.Add(item);
+        }
+        _list.EndUpdate();
+        _statusLabel.Text = $"{_list.Items.Count} of {_entries.Count} entries shown.";
+    }
+
     private void ExportCsv()
     {
         using var dlg = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*", FileName = "startup-entries.csv" };
@@ -317,5 +373,15 @@ internal sealed class StartupManagerDialog : BaseDialog
             StartupLocation.FolderUser => "Startup Folder (User)",
             StartupLocation.FolderAllUsers => "Startup Folder (All)",
             _ => loc.ToString(),
+        };
+
+    private static string ImpactLabel(StartupLocation loc) =>
+        loc switch
+        {
+            StartupLocation.RegistryMachine => "High",
+            StartupLocation.FolderAllUsers => "High",
+            StartupLocation.FolderUser => "Medium",
+            StartupLocation.RegistryUser => "Low",
+            _ => "?",
         };
 }

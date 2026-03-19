@@ -444,5 +444,216 @@ internal static class Multimedia
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
         },
+        // ── Sprint 47 additions ───────────────────────────────────────────────
+        new TweakDef
+        {
+            Id = "media-disable-wmp-autoplay",
+            Label = "Disable WMP AutoPlay",
+            Category = "Multimedia",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows Media Player from automatically playing media when inserted.",
+            Tags = ["multimedia", "wmp", "autoplay"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\MediaPlayer\Player\Settings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\MediaPlayer\Player\Settings", "AutoStart", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\MediaPlayer\Player\Settings", "AutoStart")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\MediaPlayer\Player\Settings", "AutoStart", 0)],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-wmp-codec-download",
+            Label = "Disable WMP Automatic Codec Download",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows Media Player from automatically downloading codecs from the internet.",
+            Tags = ["multimedia", "wmp", "codecs", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "DisableAutoUpdate", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "DisableAutoUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "DisableAutoUpdate", 1)],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-video-thumbnail-cache",
+            Label = "Disable Video Thumbnail Cache",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Stops Windows from caching video thumbnail images in hidden system folders.",
+            Tags = ["multimedia", "thumbnails", "privacy", "disk"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableThumbnailCache", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableThumbnailCache")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableThumbnailCache", 1)],
+        },
+        new TweakDef
+        {
+            Id = "media-set-system-responsiveness-media",
+            Label = "Optimise System Responsiveness for Media",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets MMCSS SystemResponsiveness to 0 so multimedia threads get maximum CPU time.",
+            Tags = ["multimedia", "performance", "audio", "mmcss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    20
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
+                    "SystemResponsiveness",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-dvd-autorun",
+            Label = "Disable DVD/CD AutoRun",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from automatically running programmes on inserted optical discs.",
+            Tags = ["multimedia", "autorun", "security", "dvd"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "media-enable-hardware-video-decode",
+            Label = "Enable Hardware-Accelerated Video Decode",
+            Category = "Multimedia",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Forces Windows apps to use GPU hardware decoding for video playback to reduce CPU load.",
+            Tags = ["multimedia", "gpu", "performance", "video"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "VideoQualityMode", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "VideoQualityMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "VideoQualityMode", 2)],
+        },
+        new TweakDef
+        {
+            Id = "media-set-pro-audio-latency",
+            Label = "Set Pro Audio Scheduling Latency",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets MMCSS Pro Audio task scheduling key for lower latency; optimises for audio production.",
+            Tags = ["multimedia", "audio", "latency", "pro-audio", "mmcss"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "GPU Priority",
+                    8
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "GPU Priority"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
+                    "GPU Priority",
+                    8
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-casting-extension",
+            Label = "Disable Cast to Device Extension",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Removes the 'Cast to device' option from Explorer context menus.",
+            Tags = ["multimedia", "casting", "context-menu"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
+                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}",
+                    ""
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
+                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
+                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}",
+                    ""
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-media-metadata-streaming",
+            Label = "Disable Media Metadata Internet Lookup",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Media Player from downloading album art and track metadata from the internet.",
+            Tags = ["multimedia", "privacy", "metadata", "wmp"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventCDDVDMetadataRetrieval", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventCDDVDMetadataRetrieval")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventCDDVDMetadataRetrieval", 1)],
+        },
+        new TweakDef
+        {
+            Id = "media-disable-media-usage-reporting",
+            Label = "Disable Media Usage Reporting",
+            Category = "Multimedia",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables anonymous usage reporting sent from Windows Media Player to Microsoft.",
+            Tags = ["multimedia", "privacy", "telemetry", "wmp"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventMusicFileMetadataRetrieval", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventMusicFileMetadataRetrieval"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventMusicFileMetadataRetrieval", 1),
+            ],
+        },
     ];
 }

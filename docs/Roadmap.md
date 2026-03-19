@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-03-19 · v3.6.0 · 2 946 tweaks · 92 categories · 1 840 tests
+> Last updated: 2026-03-19 · v3.6.0 · 2 946 tweaks · 92 categories · 2 088 tests
 
 ---
 
@@ -945,3 +945,305 @@ Make RegiLattice the **reference Windows registry tweak toolkit**:
 - [ ] Web dashboard
 - [x] Localization (German built-in locale)
 - [ ] Chocolatey package submission
+
+---
+
+## Planned Sprints (47 – 96)
+
+> 50-sprint enhancement roadmap. Each sprint delivers ≥50 new tweaks and enhances
+> existing dialogs/managers by ≥2 items each. Sprints are committed individually;
+> roadmap status updated after each.
+
+### Sprint 47 — 50 New Tweaks + 5 Dialog Enhancements ✅
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `Communication.cs` — 10 new tweaks: read-receipts, presence, Teams-in-Outlook, Zoom recording consent, Skype auto-start, Teams dark theme, Teams survey, Discord browser launch, Teams animation, Teams file auto-dl | ✅ |
+| 2 | `Accessibility.cs` — 10 new tweaks: narrator key echo, magnifier follow caret, caret width, mouse trails, pointer shadow, pointer precision, colour filters, high-contrast auto, keyboard blink, audio description | ✅ |
+| 3 | `Multimedia.cs` — 10 new tweaks: WMP autoplay, WMP codec dl, video thumbnail disable, system responsiveness, DVD auto-run disable, hardware video decode, video quality mode, media casting block, auto-remove metadata, audio device sorting | ✅ |
+| 4 | `Clipboard.cs` — 10 new tweaks: clipboard lag reduce, cloud paste block, clipboard format strip, paste as plain text default, clipboard monitor disable, emoji panel disable, GIF panel disable, snip & sketch clipboard, clipboard JSON block, clipboard size limit hint | ✅ |
+| 5 | `VsCode.cs` — 9 new tweaks: policy-crash-reporter, auto-update, policy-extension-gallery, experiment-service, policy-online-services, policy-nls-search, account-sync, github-copilot-chat, output-link-detection | ✅ |
+| 6 | `HostsFileManagerDialog` +2: "Import from URL" HTTPS download + "Export as .bat blocker" | ✅ |
+| 7 | `TempFileCleanerDialog` +2: "User Downloads" scan location + "Age filter" NumericUpDown | ✅ |
+| 8 | `InstalledAppsDialog` +2: "Filter by publisher" ComboBox + "Copy Name" button | ✅ |
+| 9 | `NetworkToolsDialog` +2: "Export Repair Log" button + "Net Interfaces" tab | ✅ |
+| 10 | `StartupManagerDialog` +2: "Search/filter" textbox + "Impact" column (High/Medium/Low) | ✅ |
+| 11 | Tests: +20 `[InlineData]` entries in `TweakEngineBuiltinsTests` — 1464 Core tests passing | ✅ |
+| 12 | Target: **2 996 tweaks** (+50) | ✅ |
+
+### Sprint 48 — 50 New Tweaks + 5 Dialog Enhancements
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `Bluetooth.cs` — 10 new tweaks: BT discovery timeout, BT audio quality, BT log level, BT AVRCP, BT personal area network, BT absolute volume, BT scan interval, BT power management, BT pairing mode, BT LE advertising | 🔄 |
+| 2 | `Printing.cs` — 10 new tweaks: print spooler isolation, print notifications, default printer behaviour, print-to-PDF default, driver update notifications, XPS writer service, print queue auto-clear, printer sharing, printer test page, remote print blocking | 🔄 |
+| 3 | `TouchPen.cs` — 10 new tweaks: pen pressure steps, palm rejection aggression, touch visual feedback, double-tap speed, pen button action, pen hover, flicks disable, touch keyboard auto-show, pen flicks sound, tablet mode trigger | 🔄 |
+| 4 | `Speech.cs` — 10 new tweaks: speech recognition auto-start, voice typing hotkey, voice access startup, speech telemetry, online speech recognition block, voice typing auto-punctuation, voice dictation language, speech improvements sharing, voice typing sound, cortana speech integration | 🔄 |
+| 5 | `Storage.cs` — 10 new tweaks: storage sense frequency, cloud dehydrate threshold, auto temp cleanup, low disk alert, storage reserve, delivery optimisation cache, storage pool auto-balance, duplicate file detection, storage sense SD card, storage sense OneDrive | 🔄 |
+| 6 | `ServiceManagerDialog` +2: "Quick Presets" (Gaming/Privacy/Minimal) + "Service Dependencies" panel | 🔄 |
+| 7 | `DnsSwitcherDialog` +2: "DNS Benchmark" (parallel ping all servers) + "Custom DNS Editor" for user-defined entries | 🔄 |
+| 8 | `ContextMenuManagerDialog` +2: "Export list as CSV" + "Add custom separator" for clean grouping | 🔄 |
+| 9 | `BrowserCacheCleanerDialog` +2: "History cleaner" per-browser + "Cookie cleaner" per-browser | 🔄 |
+| 10 | `DriverUpdateCheckerDialog` +2: "Export driver list as CSV" + "Open Device Manager" shortcut | 🔄 |
+| 11 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 12 | Target: **3 046 tweaks** (+50) | 🔄 |
+
+### Sprint 49 — Plugin Enhancements + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 8 item 75: `PackTemplateGenerator` — CLI `--new-pack <name>` scaffolds JSON pack template | 🔄 |
+| 2 | Phase 8 item 79: Changelog viewer tab in `MarketplaceDialog` — shows pack `Changelog` field | 🔄 |
+| 3 | `Copilot.cs` — 10 new tweaks: AI activity logging, Copilot sidebar, Bing chat, Windows AI samples, recall AI, Copilot data use, Copilot enterprise policy, AI-powered search, online AI services, Windows Insider AI | 🔄 |
+| 4 | `RegistryHives.cs` — 10 new tweaks: registry filter driver, reg hive size limits, reg backup auto, reg compression, remote reg service, reg auditing, registry permissions auto-fix, reg size warning, last write time audit, reg shadow copy | 🔄 |
+| 5 | `ScoopTools.cs` — 10 new tweaks: scoop auto-update, scoop cache limit, scoop virustotal scan, scoop hold updates, scoop shimming mode, scoop private buckets, scoop proxy, scoop parallel dl, scoop cleanup on update, scoop log level | 🔄 |
+| 6 | `DevDrive.cs` — 10 new tweaks: dev drive AV exclusion, dev drive filter config, dev drive performance mode, dev drive allocation, dev drive SMB block, dev drive NTFS disable, dev drive cache size, dev drive user-space quota, dev drive telemetry, dev drive security | 🔄 |
+| 7 | `Java.cs` — 10 new tweaks: Java auto-update, Java telemetry, Java sponsor offers, Java update count, Java SSV helper, Java browser plugin, Java deployment log, Java cache size, Java exception site list, Java control panel icon | 🔄 |
+| 8 | `MarketplaceDialog` +2: Changelog tab + "Rate pack" 1-5 star UI (locally stored) | 🔄 |
+| 9 | `WakeOnLanDialog` +2: "Send WoL packet" with manual MAC entry + "WoL history" log | 🔄 |
+| 10 | `FirewallRulesDialog` +2: "Quick-add rule" dialog (block/allow by port+protocol) + "Export rules as CSV" | 🔄 |
+| 11 | `PortScannerDialog` +2: "Save scan profile" (name + port list) + "Load scan profile" from saved | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 13 | Target: **3 096 tweaks** (+50) | 🔄 |
+
+### Sprint 50 — Scheduled Tweaks + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 9 item 81: `ScheduledTweakService.cs` — persist tweak schedules to JSON; on-boot/login/timer trigger | 🔄 |
+| 2 | `ScheduledTweakDialog.cs` — GUI to add/edit/remove scheduled tweak tasks; trigger selector | 🔄 |
+| 3 | Tools menu + `--manager scheduledtweaks` CLI launch | 🔄 |
+| 4 | `Gaming.cs` — 10 new tweaks: game-dvr-disable, game-bar-shortcuts, game-mode-override, game-delay-reduce, HPET disable, timer resolution, network throttle off, fullscreen optimisations, game audio priority, game CPU priority | 🔄 |
+| 5 | `Gpu.cs` — 10 new tweaks: GPU priority boost, WDDM scheduler, driver threading, hardwareAcceleration, display refresh fix, GPU idle power, HDR auto-switch, GPU overheat action, multi-GPU mode, GPU OpenGL priority | 🔄 |
+| 6 | `Boot.cs` — 10 new tweaks: fast startup v2, boot timeout global, boot menu timeout, hyper-v BCD, test-signing mode, boot log enable, boot debug disable, Windows RE boot, safe mode shortcut, BCD store compact | 🔄 |
+| 7 | `SystemTweaks.cs` — 10 new tweaks: pagefile encryption, memory limits, max worker threads, I/O priority, process CPU affinity, GDI batch limit, heap decommit threshold, virtual memory flush, large page enable, idle task priority | 🔄 |
+| 8 | `Win11.cs` — 10 new tweaks: right-click classic menu, taskbar combined icons, hide Chat icon, show taskbar seconds, show end task, skip lock screen, search box mode, hide recent recommendations, taskbar wiggle, power menu buttons | 🔄 |
+| 9 | `ScheduledTaskManagerDialog` +2: "Create simple task" wizard + "Run task now" button | 🔄 |
+| 10 | `BatteryHealthDialog` +2: "Export battery report HTML" + "Power draw chart" by category | 🔄 |
+| 11 | `HardwareTemperatureDialog` +2: "Alert threshold" sets per sensor + "Temperature history" log (60s) | 🔄 |
+| 12 | `NotificationManagerDialog` +2: "DND schedule" (start/end time) + "Notification history" viewer | 🔄 |
+| 13 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 14 | Target: **3 146 tweaks** (+50) | 🔄 |
+
+### Sprint 51 — Profile Scheduler + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 9 item 84: `ProfileSchedulerDialog.cs` — auto-switch profiles by time-of-day / event | 🔄 |
+| 2 | `AppConfig` extended with `ProfileSchedules` list | 🔄 |
+| 3 | Background timer in `MainForm` checks schedule and switches profile | 🔄 |
+| 4 | `MsStore.cs` — 10 new tweaks: Store auto-update, Store age-rating, Store recommendation, Store purchase approval, Store app recommendations, Store rating prompts, Store push notifications, Store install path, Store telemetry, Store video autoplay | 🔄 |
+| 5 | `Edge.cs` — 10 new tweaks: Edge startup boost, Edge tab preload, Edge media autoplay, Edge password manager policy, Edge vertical tabs default, Edge sidebar default, Edge PDF default viewer, Edge search provider, Edge IE mode, Edge update channel | 🔄 |
+| 6 | `Firefox.cs` — 10 new tweaks: Firefox studies, Firefox data reporting, FF crash reporter, FF update channel, FF WebGL disable, FF DNS-over-HTTPS, FF hardware acceleration, FF telemetry opt-in, FF pocket disable, FF sponsored shortcuts | 🔄 |
+| 7 | `Chrome.cs` — 10 new tweaks: Chrome background run, Chrome notifications default, Chrome media autoplay, Chrome PDF viewer, Chrome safe browsing, Chrome metrics reporting, Chrome spell check, Chrome translate, Chrome auto-sign-in, Chrome extension telemetry | 🔄 |
+| 8 | `Office.cs` — 10 new tweaks: Office first run, Office telemetry agent, Office experiment opt-in, Office document recovery, Office connected services, Office cloud font, Office macro internet, Office customer experience, Office language bar, Office access VBA | 🔄 |
+| 9 | `PowerSchedulerDialog` +2: "Apply tweak profile on plan switch" option + "Schedule history" log | 🔄 |
+| 10 | `SleepTimerDialog` +2: "Recurring schedule" mode (daily at time) + "Cancel all" quick button | 🔄 |
+| 11 | `UsbPowerDialog` +2: "Per-device override list" + "Log power events" option | 🔄 |
+| 12 | `BrightnessSchedulerDialog` +2: "Transition duration" slider + "Sunrise/sunset auto" mode | 🔄 |
+| 13 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 14 | Target: **3 196 tweaks** (+50) | 🔄 |
+
+### Sprint 52 — GPO Export Dialog + Compliance Reporting + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 9 item 88: `GroupPolicyExporterDialog.cs` — GUI for export-GPO with category filter + preview | 🔄 |
+| 2 | Phase 9 item 90: `ComplianceReportDialog.cs` — compare current state vs snapshot baseline; show drift | 🔄 |
+| 3 | CLI `--gpo-export <file>` and `--compliance-report <baseline>` commands wired in | 🔄 |
+| 4 | `Firewall.cs` — 10 new tweaks: block outbound by default policy, firewall log dropped, log accepted, log size, auth IP sec, service restriction, firewall notification mode, global ports, ICMP filter, unicast broadcast | 🔄 |
+| 5 | `Encryption.cs` — 10 new tweaks: NTLMv2 require, LAN manager hash disable, SMB encryption, EFS require, cipher suite restrict, TLS 1.0 disable, SSL 3.0 disable, RPC encrypt, IPsec defaults, Kerberos AES | 🔄 |
+| 6 | `Hardening.cs` — 10 new tweaks: Harden lsass, disable print-nm service, password max age, account lockout, anon SID name, net logon null sessions, SAM account enumeration, remote SAM, restrict anonymous, cmd-line process audit | 🔄 |
+| 7 | `Defender.cs` — 10 new tweaks: Defender cloud check time, MAPS block at first sight, defender PUA, submission samples, network protection mode, defender log level, realtime protection on access, scan archive, scan removable, scan email | 🔄 |
+| 8 | `Security.cs` — 10 new tweaks: LSA run as PPL, Credential Guard, HVCI mode, SMB client signing, SMB server encrypt, DNS client DNSSEC, secure desktop UAC, restrict remote SAM strict, run-as elevation shadow, kernel patch protection | 🔄 |
+| 9 | `WindowsUpdateControlDialog` +2: "Delivery Optimisation toggle" + "Update history viewer" | 🔄 |
+| 10 | `TelemetryDashboardDialog` +2: "Telemetry score" (0-100 visualisation) + "One-click Privacy mode" | 🔄 |
+| 11 | `AppPermissionsDialog` +2: "Bulk deny all" button + "Export permissions as CSV" | 🔄 |
+| 12 | `DnsOverHttpsDialog` +2: "Test DoH connection" + "Import custom DoH template" | 🔄 |
+| 13 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 14 | Target: **3 246 tweaks** (+50) | 🔄 |
+
+### Sprint 53 — VPN Quick-Connect + Power Estimator + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 4 item 39: `VpnQuickConnectDialog.cs` — list VPN connections via rasphone; connect/disconnect; log | 🔄 |
+| 2 | Phase 6 item 59: `PowerConsumptionEstimatorDialog.cs` — estimate wattage from WMI + known TDP values | 🔄 |
+| 3 | `Network.cs` — 10 new tweaks: NetBIOS over TCP, WINS, LMHOSTS lookup, NetBT node type, ISATAP, 6in4, Teredo server, dirct access policy, DHCP media-sense, adapter binding | 🔄 |
+| 4 | `DnsNetworking.cs` — 10 new tweaks: DNS devolution, DNS negative cache TTL, DNS client wait, DNS socket pool size, DNS negative cache limit, DNS multicast, LLMNR policy, mDNS, DNS strict name checking, DNS logging enable | 🔄 |
+| 5 | `ProxyVpn.cs` — 10 new tweaks: WinHTTP proxy bypass, auto proxy detect script, VPN split tunnel type, IKEv2 rekey, RAS autodial budget, IKEv2 DH group, IPsec max SA, IKEv2 fragmentation, L2TP preshared, PPTP MPPE require | 🔄 |
+| 6 | `NetworkOptimization.cs` — 10 new tweaks: TCP receive window scaling, TCP delayed ack, NetDMA, TCP eco-response, DNS client cache flush interval, SNP reduce, NDIS timers, adapter interrupt moderation, RSS queue depth, adapter low latency | 🔄 |
+| 7 | `EventLogging.cs` — 10 new tweaks: event log max size cap, rotate oldest, security audit detail, event log remote, WEVT channel auto, audit account management, audit logon events, audit object access, audit process tracking, event log boot | 🔄 |
+| 8 | `NetworkAdapterDialog` +2: "Speed test (LAN)" via TCP echo + "Adapter statistics" bytes/packets | 🔄 |
+| 9 | `WiFiProfileDialog` +2: "Show signal strength" on refresh + "Forget all unsecured networks" | 🔄 |
+| 10 | `MacAddressDialog` +2: "OUI lookup" (vendor from first 3 bytes) + "MAC change history" log | 🔄 |
+| 11 | `NetworkBandwidthDialog` +2: "Total usage counter" (session total) + "Top process" (WMI query) | 🔄 |
+| 12 | `NetworkRepairDialog` +2: "Scheduled repair" on startup option + "Repair log export" | 🔄 |
+| 13 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 14 | Target: **3 296 tweaks** (+50) | 🔄 |
+
+### Sprint 54 — Plugin Ratings & Dependencies + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 8 item 73: Plugin rating in `MarketplaceDialog` — per-pack star rating stored in `%LOCALAPPDATA%\RegiLattice\ratings.json` | 🔄 |
+| 2 | Phase 8 item 74: Plugin dependency resolution — `PackDef.DependsOn` list; `PackManager.InstallWithDepsAsync()` | 🔄 |
+| 3 | `Performance.cs` — 10 new tweaks: additional CPU boost, RAM pre-fetch, NTFS last-access update, 8.3 filename disable, system file cache, page file min/max, paging exec disable, NTFS compression auto, low-frag heap, large system cache | 🔄 |
+| 4 | `MemoryOptimization.cs` — 10 new tweaks: large page support, NUMA interleave, memory trim, second level cache, pool usage limit, session pool size, paged pool max, non-paged pool max, system cache reserve, virtual memory guard | 🔄 |
+| 5 | `SsdOptimization.cs` — 10 new tweaks: write cache policy, idle unmap, DRAM cache policy, NVMe queue depth, TRIM scheduling, wear levelling, power fail protection, NVMe power state, SSD alignment check, SSD log flush | 🔄 |
+| 6 | `SystemOptimization.cs` — 10 new tweaks: heap terminate on corruption, ASLR entropy, control flow guard, heap front-end allocator, DLL base address randomise, export address filter, import address filter, stack pivot protection, return-oriented prog protect, null page protection | 🔄 |
+| 7 | `DesktopCustomization.cs` — 10 new tweaks: hide desktop icons, JPEG wallpaper quality, wallpaper slide show, quick access pin, recent files in quick access, frequent folders, desktop icon auto-arrange, desktop icon align, lock desktop icons, workspace colour | 🔄 |
+| 8 | `BootTimeAnalyzerDialog` +2: "Export boot report as TXT" + "Top 5 slowest services" callout panel | 🔄 |
+| 9 | `ShellExtensionDialog` +2: "Export list as CSV" + "Highlight suspicious (unsigned) extensions" | 🔄 |
+| 10 | `AdRemovalWizardDialog` +2: "Re-scan" button to detect new ads after Windows Update + "Score bar" (N/14 removed) | 🔄 |
+| 11 | `DiskSpaceDialog` +2: "Open cleanup wizard" shortcut + "Largest folder finder" (Top 5) | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 13 | Target: **3 346 tweaks** (+50) | 🔄 |
+
+### Sprint 55 — Portable Mode + Auto-Update + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 10 item 98: Portable mode — `--portable` flag writes config to `.\RegiLattice.config.json` beside EXE | 🔄 |
+| 2 | Phase 10 item 97: Auto-download in `UpdateCheckerDialog` — "Download & launch new version" button | 🔄 |
+| 3 | `Privacy.cs` — 10 new tweaks: privacy experience, OOBE data collection, location GPS coarse, location GPS GPS, telemetry CEIP, feedback frequency, diagnostics data viewer, connected user experience, advertising ID per-user, feedback hub | 🔄 |
+| 4 | `Cortana.cs` — 10 new tweaks: Cortana locked screen, web search from taskbar, Cortana consent model, Cortana cross-device, Bing preview updates, search content cache, search indexer disable, Cortana speech, search click, Cortana account (old) | 🔄 |
+| 5 | `Widgets.cs` — 10 new tweaks: Widgets feed, Widgets host process, Widgets telemetry, news dashboard, Widgets notification, Widgets cloud service, Widgets API, Widgets default site, Widgets account sign-in, Widgets personalised | 🔄 |
+| 6 | `Copilot.cs` — 10 new tweaks: Copilot feature disable, Copilot data submission, Copilot commercial use, Copilot context share, Copilot suggestions, Copilot conversation history, Copilot plugin access, Copilot enterprise block, Copilot bing integration, Copilot content filter | 🔄 |
+| 7 | `Ms365Copilot.cs` — 10 new tweaks: M365 Copilot audit, M365 service data, M365 optional connected, M365 meeting insights, M365 people insights, M365 item insights, M365 survey request, M365 org data, M365 retention policy, M365 advanced audit | 🔄 |
+| 8 | `UpdateCheckerDialog` +2: "Auto-download" button + "Release notes viewer" panel | 🔄 |
+| 9 | `AboutDialog` +2: "Copy system info to clipboard" button + "Open log file" shortcut | 🔄 |
+| 10 | `WhatsNewDialog` +2: "Full changelog" tab + "Open GitHub releases" link | 🔄 |
+| 11 | `PreferencesDialog` +2: "Import settings from file" + "Export settings to file" in Data tab | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 13 | Target: **3 396 tweaks** (+50) | 🔄 |
+
+### Sprint 56 — PowerShell Module + Korean Locale + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Phase 9 item 87: `archive/python/RegiLattice.psm1` improvements + install instructions | 🔄 |
+| 2 | Korean locale (`ko`) — 51-key translation added to `Locale.cs` | 🔄 |
+| 3 | `PowerShellTweaks.cs` — 10 new tweaks: execution policy user scope, PSReadLine history, module auto-install, require module signing, PS logging level, script block logging detail, module path env, constrained mode auditing, transcript paths, PS6 telemetry | 🔄 |
+| 4 | `CommandLineTweaks.cs` — 10 new tweaks: cmd autocomplete, cmd tab completion, cmd path extensions, cmd ERRORLEVEL persist, cmd legacy console, cmd title bar, cmd buffer size, cmd code page UTF-8, cmd quick-edit mode, cmd shortcut icon | 🔄 |
+| 5 | `Developer.cs` — 10 new tweaks: sandbox enable, Hyper-V check, Windows Subsystem Android, developer licence, dev features toggle, AppX debug, remote tools, ETW log level, windbg just-in-time, dotnet runtime version | 🔄 |
+| 6 | `Startup.cs` — 10 new tweaks: prefetch enable, superfetch level, SIO service on startup, boot auto-resume, hibernate on startup block, splash screen, delay startup programs, startup repair auto trigger, startup event provider, Windows Error startup | 🔄 |
+| 7 | `Recovery.cs` — 10 new tweaks: crash dump type, kernel dump write, memory dump auto delete, mini dump archive, WER max archive count, user-mode crash settings, live dump trigger, crash dump encrypt, BSOD kernel notify, restart manager auto | 🔄 |
+| 8 | `PSModuleManagerDialog` +2: "Install from PSGallery search" input box + "Module update checker" button | 🔄 |
+| 9 | `PipManagerDialog` +2: "Show package details" on click + "Find unused packages" (pip-autoremove wrapper) | 🔄 |
+| 10 | `ChocolateyManagerDialog` +2: "Pin package version" button + "Show package source" column | 🔄 |
+| 11 | `ScoopManagerDialog` +2: "Add bucket" dialog + "Bucket health check" status | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries + 6 Korean locale tests | 🔄 |
+| 13 | Target: **3 446 tweaks** (+50) | 🔄 |
+
+### Sprint 57 — Community Features + Chinese Locale + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Chinese Simplified locale (`zh-CN`) — 51-key translation | 🔄 |
+| 2 | Phase 8 item 76: Community plugin pipeline docs + `PackSubmitHelper.cs` generates PR-ready ZIP | 🔄 |
+| 3 | `Taskbar.cs` — 10 new tweaks: taskbar location, taskbar auto-hide, taskbar badge count, taskbar peek, taskbar notifications area, unlock taskbar, taskbar thumbnail timeout, taskbar pinned app behaviour, taskbar size, Jump List max entries | 🔄 |
+| 4 | `LockScreen.cs` — 10 new tweaks: lock screen spotlight, lock screen apps, lock screen camera, lock screen fun facts, lock screen weather, Cortana on lock screen, lock screen timeout, lock screen toast, lock screen image, keep lock screen logon | 🔄 |
+| 5 | `Screensaver.cs` — 10 new tweaks: screensaver enable, screensaver wait, screensaver secure, screensaver blank, screensaver logon, screensaver energy mode, screensaver on remote, screen blank timeout, screen lock bypass, display power timeout | 🔄 |
+| 6 | `SnapMultitasking.cs` — 10 new tweaks: snap layout assist, snap assist flyout, snap to edges, snap corners, snap hot corner, snap show what can, snap memory per-app, snap aero shake, virtual desktop keep apps, virtual desktop taskbar filter | 🔄 |
+| 7 | `NightLight.cs` — 10 new tweaks: night light enable, night light schedule, night light strength, night light blend in, colour temperature day, colour temperature night, auto-apply at sunset, blue light filter mode, display gamma adjust, SDR brightness | 🔄 |
+| 8 | `ContextMenuManagerDialog` +2: "Disable all selected" batch toggle + "Backup & restore" menu handlers JSON | 🔄 |
+| 9 | `BrowserCacheCleanerDialog` +2: "Scheduled clean on shutdown" option + "Cookie whitelist" management | 🔄 |
+| 10 | `NotificationManagerDialog` +2: "Import focus-assist schedule" + "Per-app rules export" as JSON | 🔄 |
+| 11 | `InstalledAppsDialog` +2: "Last installed date" column + "Bulk uninstall selected" via silent flags | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries + 6 Chinese locale tests | 🔄 |
+| 13 | Target: **3 496 tweaks** (+50) | 🔄 |
+
+### Sprint 58 — Compliance History + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `ComplianceHistoryDialog.cs` — timeline view of compliance drift; export report as HTML | 🔄 |
+| 2 | `ComplianceService` enhanced: `TakeBaselineSnapshot()`, `GetDriftSince(DateTime)`, `ExportHtml()` | 🔄 |
+| 3 | `UserAccount.cs` — 10 new tweaks: password expiry warn, account picture sync, UAC consent prompt, UAC app install detect, UAC elevation prompts, profile cache size, profile load timeout, logon script async, logon hours enforcement, administrator hidden | 🔄 |
+| 4 | `Backup.cs` — 10 new tweaks: system restore max space, restore point frequency, wbadmin config, volume shadow writer, shadow storage expand, backup event log, file history enable, backup target dedupe, backup encryption, backup notification | 🔄 |
+| 5 | `FileSystem.cs` — 10 new tweaks: NTFS cluster size hint, NTFS delete notification, NTFS journal size, FAT32 cluster hint, case-sensitive file names, filename encryption, sparse file support, volume mount point, file compression attr, file object ID | 🔄 |
+| 6 | `DiskCleanup.cs` — 10 new tweaks: hibernate size reduce, page file shrink, component store age, WinSxS cleanup, update cache purge, installer cache flush, temp internet file limit, thumbnail cache size, system file compression, delivery optimisation cleanup | 🔄 |
+| 7 | `SystemRestore.cs` — 10 new tweaks: restore point monitor, shadow copy retention, restore exclude path, restore on system failure, restore point silent, system protection NFS, volume shadow limit, VSS writer timeout, restore point interval, restore notification | 🔄 |
+| 8 | `SnapshotManager` CLI +2: `--snapshot-schedule` for timed snapshots + `--list-snapshots` in CLI | 🔄 |
+| 9 | Config export/import +2: `--export-favorites` and `--import-favorites` CLI commands | 🔄 |
+| 10 | `WinGetManagerDialog` +2: "Package source management" panel + "Installed version vs latest" comparison | 🔄 |
+| 11 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 12 | Target: **3 546 tweaks** (+50) | 🔄 |
+
+### Sprint 59 — System Resource Dashboard + Event Log Viewer + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `SystemResourceDialog.cs` — live CPU/RAM/disk/network combined dashboard with Chart (GDI+) | 🔄 |
+| 2 | `EventLogViewerDialog.cs` — Windows event logs: Application/System/Security; filter by level/source/time | 🔄 |
+| 3 | `Explorer.cs` — 10 new tweaks: recycle bin size, delete confirmation, always show ext, show hidden, compact mode, show folder size, column defaults, status bar, preview pane default, navigation pane auto-expand | 🔄 |
+| 4 | `Shell.cs` — 10 new tweaks: UAC file move, drag-drop elevation, shell delay, slow pop-up menu delay, shell wait timeout, shell max commands, shell preview handler, thumbnail provider timeout, shell worker threads, URL protocol handling | 🔄 |
+| 5 | `ContextMenu.cs` — 10 new tweaks: context menu delay, context menu text input, legacy context menu, extended menu on shift, fast context, slow menu block, drag-drop context, context menu icon size, context menu max items, context menu font | 🔄 |
+| 6 | `IndexingSearch.cs` — 10 new tweaks: indexing locations, index encrypted files, search highlighting, Cortana preview from index, Windows search network, index PST files, search timeout, index service priority, search feature update, search suggestions privacy | 🔄 |
+| 7 | `CloudStorage.cs` — 10 new tweaks: OneDrive smart sync, OneDrive personal vault, Google Drive auto-start, Dropbox smart sync, iCloud auto-start, cloud provider register, cloud layered storage, cloud storage telemetry, cloud sync on metered, cloud hydration policy | 🔄 |
+| 8 | `WindowsHealthDialog` +2: "Event log quick view" tab + "Repair action suggestions" based on events | 🔄 |
+| 9 | `HardwareTemperatureDialog` +2: "Fan speed (RPM)" if WMI available + "Export temperature log" | 🔄 |
+| 10 | `BatteryHealthDialog` +2: "Estimated runtime" calculation + "Charge history" chart | 🔄 |
+| 11 | `SystemMonitor` Core +2: `GetDiskUsage()` + `GetProcessCount()` new methods | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 13 | Target: **3 596 tweaks** (+50) | 🔄 |
+
+### Sprint 60 — Profile Manager Dialog + 50 New Tweaks
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | `ProfileManagerDialog.cs` — visual management for all 5 profiles + user-defined custom profiles | 🔄 |
+| 2 | `ProfileDef` extended: `CreatedAt`, `ModifiedAt`, `IsCustom`, `Color` fields | 🔄 |
+| 3 | `TweakEngine.CreateProfile()`, `DeleteProfile()`, `CloneProfile()` public API | 🔄 |
+| 4 | `Power.cs` — 10 new tweaks: power plan GUID switch, CPU minimum state %, CPU max state %, display timeout AC, display timeout DC, sleep timeout AC, sleep timeout DC, hibernate timeout, hybrid sleep, fast resume | 🔄 |
+| 5 | `PowerManagement.cs` — 10 new tweaks: power throttling, processor performance, cooling mode, parking cores, parking min cores, parking max cores, heterogeneous policy, parking utility threshold, idle threshold, idle demote | 🔄 |
+| 6 | `Performance.cs` — 10 new tweaks: visual effects custom, animation speed, menu fade, combo fade, tooltip fade, smooth scroll, drop shadow, thumbnail quality, DWM animations, AeroGlass | 🔄 |
+| 7 | `Virtualization.cs` — 10 new tweaks: Hyper-V time sync, Hyper-V shutdown, Hyper-V VSS, Hyper-V exchange, Hyper-V heartbeat, Hyper-V dynamic memory, Hyper-V network, WSL disk, Hyper-V guest services, QEMU agent | 🔄 |
+| 8 | `Wsl.cs` — 10 new tweaks: WSL defaultVersion, WSL localhost forwarding, WSL memory reclaim, WSL kernel override, WSL gui apps, WSL nested virtualisation, WSL DNS proxy, WSL interop, WSL append win32 path, WSL drive mount | 🔄 |
+| 9 | `ServiceManagerDialog` +2: "Export service list as CSV" second time (enrich with description) + "Compare services to baseline" diff | 🔄 |
+| 10 | `StartupManagerDialog` +2: "Bulk enable/disable by location" + "Copy startup command to clipboard" | 🔄 |
+| 11 | `ScheduledTaskManagerDialog` +2: "Export task XML" + "Import task XML" | 🔄 |
+| 12 | Tests: +20 `[InlineData]` entries | 🔄 |
+| 13 | Target: **3 646 tweaks** (+50) | 🔄 |
+
+### Sprints 61 – 96 (Planned — Details Added As Implemented)
+
+| Sprint | Theme | Target Tweaks |
+|--------|-------|---------------|
+| 61 | CLI Enhancement Pack — 5 new commands + 50 tweaks | 3 696 |
+| 62 | Hardware Analytics Dashboard + 50 tweaks | 3 746 |
+| 63 | **v3.7.0 Release** — version bump + full changelog | 3 796 |
+| 64 | Interactive Console + 50 tweaks | 3 846 |
+| 65 | Security Hardening Pack + 50 tweaks | 3 896 |
+| 66 | Tweak Comparison View + 50 tweaks | 3 946 |
+| 67 | Bulk Tag Selection + Keyboard Shortcuts + 50 tweaks | 3 996 |
+| 68 | Tweak Tooltips + UX Polish + 50 tweaks | 4 046 |
+| 69 | Network Security Dialog + 50 tweaks | 4 096 |
+| 70 | Registry Explorer Dialog + 50 tweaks | 4 146 |
+| 71 | Disk Health + Defrag Scheduler + 50 tweaks | 4 196 |
+| 72 | Printer Manager + Document Services + 50 tweaks | 4 246 |
+| 73 | Gaming Tools + Xbox Services + 50 tweaks | 4 296 |
+| 74 | Advanced Search + Tag Cloud + 50 tweaks | 4 346 |
+| 75 | **v3.8.0 Release** | 4 396 |
+| 76 | Task Scheduler Integration + 50 tweaks | 4 446 |
+| 77 | Credential Manager + 50 tweaks | 4 496 |
+| 78 | Font Manager + 50 tweaks | 4 546 |
+| 79 | Sandbox Config + Plugin Sandboxing Foundation + 50 tweaks | 4 596 |
+| 80 | Polish + Italian locales + 50 tweaks | 4 646 |
+| 81 | Remote Management Dialog + 50 tweaks | 4 696 |
+| 82 | System Backup & Recovery Tools + 50 tweaks | 4 746 |
+| 83 | Developer Tools Dialog + 50 tweaks | 4 796 |
+| 84 | Touch & Accessibility Expansion + 50 tweaks | 4 846 |
+| 85 | Clean Install Checklist + Recommendations + 50 tweaks | 4 896 |
+| 86 | Windows 11 Features Dialog + 50 tweaks | 4 946 |
+| 87 | USB Device Manager + 50 tweaks | 4 996 |
+| 88 | Tweak Pack Creator Studio + 50 tweaks | 5 046 |
+| 89 | MS Store Manager + Software Inventory + 50 tweaks | 5 096 |
+| 90 | Network Performance Lab + 50 tweaks | 5 146 |
+| 91 | Windows Terminal Manager + 50 tweaks | 5 196 |
+| 92 | Privacy Wizard + Ultra-Pack + 50 tweaks | 5 246 |
+| 93 | System Benchmark Dialog + 50 tweaks | 5 296 |
+| 94 | Arabic + Dutch locales + 50 tweaks | 5 346 |
+| 95 | Comprehensive Testing + Build Quality | 5 346 |
+| 96 | **v4.0.0 Major Release** | 5 346 |

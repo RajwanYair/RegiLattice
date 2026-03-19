@@ -1,5 +1,6 @@
 // RegiLattice.GUI — Forms/HostsFileManagerDialog.cs
 // Sprint 30: Simple hosts-file editor — view, add, toggle, and remove entries.
+// Sprint 47: +Import from URL, +Export as .bat blocker.
 
 #nullable enable
 
@@ -8,7 +9,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Versioning;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -70,6 +73,8 @@ internal sealed class HostsFileManagerDialog : BaseDialog
         Enabled = false,
     };
     private readonly Button _btnRefresh = new() { Text = "Refresh", Width = 76 };
+    private readonly Button _btnImportUrl = new() { Text = "Import URL…", Width = 96 };
+    private readonly Button _btnExportBat = new() { Text = "Export .bat", Width = 88 };
     private readonly Button _btnClose = new() { Text = "Close", Width = 76 };
     private readonly Label _statusLabel = new()
     {
@@ -125,9 +130,13 @@ internal sealed class HostsFileManagerDialog : BaseDialog
         _btnDelete.Click += OnDeleteSelected;
         _btnSave.Click += async (_, _) => await SaveHostsFileAsync();
         _btnRefresh.Click += async (_, _) => await LoadFileAsync();
+        _btnImportUrl.Click += async (_, _) => await OnImportFromUrlAsync();
+        _btnExportBat.Click += OnExportAsBat;
         _btnClose.Click += (_, _) => Close();
 
-        _btnPanel.Controls.AddRange(new Control[] { _btnAdd, _btnToggle, _btnDelete, _btnSave, _btnRefresh, _btnClose });
+        _btnPanel.Controls.AddRange(
+            new Control[] { _btnAdd, _btnToggle, _btnDelete, _btnSave, _btnRefresh, _btnImportUrl, _btnExportBat, _btnClose }
+        );
 
         Controls.Add(_list);
         Controls.Add(_topPanel);
@@ -327,6 +336,97 @@ internal sealed class HostsFileManagerDialog : BaseDialog
         _btnSave.Enabled = _dirty;
     }
 
+    // ── Sprint 47 Enhancements ─────────────────────────────────────────────────
+    private async Task OnImportFromUrlAsync()
+    {
+        using var promptDlg = new HostsUrlPromptDialog();
+        if (promptDlg.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        string url = promptDlg.Url;
+        _statusLabel.Text = "Downloading…";
+        _btnImportUrl.Enabled = false;
+        try
+        {
+            using var http = new HttpClient();
+            http.Timeout = TimeSpan.FromSeconds(15);
+            string content = await http.GetStringAsync(url);
+            var newLines = content.Split(["\r\n", "\n"], StringSplitOptions.None).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+
+            // Merge: append only lines not already present
+            var existing = new HashSet<string>(_rawLines, StringComparer.OrdinalIgnoreCase);
+            int added = 0;
+            var merged = _rawLines.ToList();
+            foreach (string line in newLines)
+            {
+                if (!existing.Contains(line))
+                {
+                    merged.Add(line);
+                    existing.Add(line);
+                    added++;
+                }
+            }
+            _rawLines = [.. merged];
+            _allEntries = ParseLines(_rawLines);
+            FilterList();
+            SetDirty(true);
+            _statusLabel.Text = $"Imported {added} new line(s) from URL.";
+        }
+        catch (HttpRequestException ex)
+        {
+            _statusLabel.Text = $"Download failed: {ex.Message}";
+            MessageBox.Show($"Failed to download:\n{ex.Message}", "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        catch (TaskCanceledException)
+        {
+            _statusLabel.Text = "Download timed out.";
+        }
+        finally
+        {
+            _btnImportUrl.Enabled = true;
+        }
+    }
+
+    private void OnExportAsBat(object? sender, EventArgs e)
+    {
+        if (_allEntries.Count == 0)
+        {
+            _statusLabel.Text = "No entries to export.";
+            return;
+        }
+
+        using var sfd = new SaveFileDialog
+        {
+            Title = "Export as .bat Hosts Blocker",
+            Filter = "Batch file (*.bat)|*.bat|All files (*.*)|*.*",
+            FileName = "apply-hosts-blocklist.bat",
+        };
+        if (sfd.ShowDialog(this) != DialogResult.OK)
+            return;
+
+        var sb = new StringBuilder();
+        sb.AppendLine("@echo off");
+        sb.AppendLine(":: Auto-generated hosts blocker — apply with administrator rights");
+        sb.AppendLine();
+        foreach (var entry in _allEntries.Where(e => e.Enabled))
+        {
+            string comment = string.IsNullOrEmpty(entry.Comment) ? "" : $"  rem {entry.Comment}";
+            sb.AppendLine($"echo {entry.Ip}  {entry.Host}>> \"%SystemRoot%\\System32\\drivers\\etc\\hosts\"");
+        }
+        sb.AppendLine();
+        sb.AppendLine("ipconfig /flushdns");
+        sb.AppendLine("echo Done.");
+        try
+        {
+            File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.ASCII);
+            _statusLabel.Text = $"Exported {_allEntries.Count(e => e.Enabled)} active entries to {Path.GetFileName(sfd.FileName)}";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"Export failed: {ex.Message}";
+        }
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
     private void SetDirty(bool value)
     {
@@ -339,6 +439,66 @@ internal sealed class HostsFileManagerDialog : BaseDialog
         bool any = _list.SelectedItems.Count > 0;
         _btnToggle.Enabled = any;
         _btnDelete.Enabled = any;
+    }
+}
+
+// ── Sprint 47: URL Prompt Dialog ───────────────────────────────────────────────
+[SupportedOSPlatform("windows")]
+internal sealed class HostsUrlPromptDialog : Form
+{
+    internal string Url => _urlBox.Text.Trim();
+
+    private readonly TextBox _urlBox = new() { Width = 400, PlaceholderText = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts" };
+
+    internal HostsUrlPromptDialog()
+    {
+        Text = "Import Hosts from URL";
+        Size = new Size(480, 140);
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        StartPosition = FormStartPosition.CenterParent;
+        MaximizeBox = MinimizeBox = false;
+
+        var layout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 2,
+            RowCount = 2,
+            Padding = new Padding(10),
+        };
+        layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+        layout.Controls.Add(
+            new Label
+            {
+                Text = "URL:",
+                AutoSize = true,
+                Margin = new Padding(0, 8, 4, 0),
+            },
+            0,
+            0
+        );
+        layout.Controls.Add(_urlBox, 1, 0);
+
+        var btnOk = new Button
+        {
+            Text = "Download",
+            DialogResult = DialogResult.OK,
+            Width = 90,
+        };
+        var btnCancel = new Button
+        {
+            Text = "Cancel",
+            DialogResult = DialogResult.Cancel,
+            Width = 80,
+        };
+        var btns = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.RightToLeft };
+        btns.Controls.AddRange(new Control[] { btnCancel, btnOk });
+        layout.Controls.Add(btns, 1, 1);
+
+        Controls.Add(layout);
+        AcceptButton = btnOk;
+        CancelButton = btnCancel;
     }
 }
 
