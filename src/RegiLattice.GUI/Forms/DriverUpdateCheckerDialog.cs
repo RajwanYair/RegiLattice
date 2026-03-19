@@ -65,6 +65,12 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         Height = 28,
         DialogResult = DialogResult.Cancel,
     };
+    private readonly Button _btnExportCsv = new()
+    {
+        Text = "Export CSV",
+        Width = 100,
+        Height = 28,
+    };
     private readonly Label _lblStatus = new()
     {
         Dock = DockStyle.Top,
@@ -106,7 +112,7 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
 
         var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 38 };
         int bx = 8;
-        foreach (Button b in new[] { _btnRefresh, _btnDevMgr, _btnWinUpdate })
+        foreach (Button b in new[] { _btnRefresh, _btnDevMgr, _btnWinUpdate, _btnExportCsv })
         {
             b.Location = new Point(bx, 5);
             bx += b.Width + 6;
@@ -117,9 +123,10 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
         _btnRefresh.Click += async (_, _) => await LoadDriversAsync();
         _btnDevMgr.Click += (_, _) => Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
         _btnWinUpdate.Click += (_, _) => Process.Start(new ProcessStartInfo("ms-settings:windowsupdate") { UseShellExecute = true });
+        _btnExportCsv.Click += (_, _) => ExportCsv();
         _btnClose.Click += (_, _) => Close();
 
-        btnPanel.Controls.AddRange(new Control[] { _btnRefresh, _btnDevMgr, _btnWinUpdate, _btnClose });
+        btnPanel.Controls.AddRange(new Control[] { _btnRefresh, _btnDevMgr, _btnWinUpdate, _btnExportCsv, _btnClose });
 
         Controls.Add(_list);
         Controls.Add(btnPanel);
@@ -218,4 +225,35 @@ internal sealed class DriverUpdateCheckerDialog : BaseDialog
             return dt.ToString("yyyy-MM-dd");
         return wmiDate[..8];
     }
+
+    private void ExportCsv()
+    {
+        if (_allDrivers.Count == 0)
+        {
+            _lblStatus.Text = "No drivers to export. Please refresh first.";
+            return;
+        }
+        using var dlg = new SaveFileDialog
+        {
+            Title = "Export Driver List",
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            FileName = "driver-list.csv",
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK)
+            return;
+        try
+        {
+            var lines = new List<string> { "Device Name,Driver Name,Manufacturer,Version,Install Date,Device Class,Status" };
+            foreach (var d in _allDrivers)
+                lines.Add($"\"{EscCsv(d.DeviceName)}\",\"{EscCsv(d.DriverName)}\",\"{EscCsv(d.Manufacturer)}\",\"{EscCsv(d.Version)}\",\"{EscCsv(d.Date)}\",\"{EscCsv(d.DeviceClass)}\",\"{EscCsv(d.Status)}\"");
+            File.WriteAllLines(dlg.FileName, lines, System.Text.Encoding.UTF8);
+            _lblStatus.Text = $"Exported {_allDrivers.Count} drivers to {Path.GetFileName(dlg.FileName)}";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private static string EscCsv(string value) => value.Replace("\"", "\"\"");
 }

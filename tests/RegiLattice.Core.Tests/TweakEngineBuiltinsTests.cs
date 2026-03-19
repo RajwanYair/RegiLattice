@@ -1702,4 +1702,71 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(tweak);
         Assert.Equal("VS Code", tweak.Category);
     }
+
+    // ── Sprint 48 ─────────────────────────────────────────────────────────────
+
+    [Theory]
+    [InlineData("bt-disable-absolute-volume")]
+    [InlineData("bt-disable-le-advertising-policy")]
+    [InlineData("bt-disable-personal-area-network")]
+    [InlineData("bt-disable-avrcp-metadata")]
+    [InlineData("bt-disable-swift-pair")]
+    public void RegisterBuiltins_Sprint48BluetoothTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Bluetooth", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("printing-disable-ipp-web-client")]
+    [InlineData("printing-disable-auto-default-printer")]
+    [InlineData("printing-disable-point-and-print")]
+    [InlineData("printing-disable-fax-service")]
+    [InlineData("printing-disable-shared-printer-browse")]
+    public void RegisterBuiltins_Sprint48PrintingTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Printing", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("touch-disable-flicks-policy")]
+    [InlineData("touch-disable-handwriting-panel-auto")]
+    [InlineData("touch-disable-touch-keyboard-deploy")]
+    [InlineData("touch-disable-touch-keyboard-suggestions")]
+    [InlineData("touch-disable-pen-workspace-button")]
+    public void RegisterBuiltins_Sprint48TouchPenTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Touch & Pen", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("speech-disable-voice-typing-auto-punctuation")]
+    [InlineData("speech-disable-cortana-voice-activation")]
+    [InlineData("speech-disable-narrator-natural-voice-dl")]
+    [InlineData("speech-disable-voice-access-startup")]
+    [InlineData("speech-restrict-user-input-gpo")]
+    public void RegisterBuiltins_Sprint48SpeechTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Voice Access & Speech", tweak.Category);
+    }
+
+    [Theory]
+    [InlineData("stor-disable-wins-reserved-storage")]
+    [InlineData("stor-set-storage-sense-monthly")]
+    [InlineData("stor-disable-volume-shadow-auto")]
+    [InlineData("stor-disable-ntfs-tunnel-cache")]
+    [InlineData("stor-set-recycle-bin-pct-policy")]
+    public void RegisterBuiltins_Sprint48StorageTweakExists(string id)
+    {
+        var tweak = _engine.GetTweak(id);
+        Assert.NotNull(tweak);
+        Assert.Equal("Storage", tweak.Category);
+    }
 }
