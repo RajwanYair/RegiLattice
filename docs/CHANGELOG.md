@@ -4,6 +4,69 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.0.0] — 2026-03-20
+
+### Major Release — All Capabilities Enabled
+
+v4.0.0 is the first **major release milestone**, consolidating every capability built across
+the v3.x development cycle into a single production-ready package. All features, interfaces,
+and safety systems are fully active — GUI, CLI, MSI installer, 11 themes, 5 profiles,
+corporate guard, dry-run, snapshot, package managers, plugin marketplace, and the
+newly introduced anti-duplication quality layer.
+
+### Added
+
+- **Anti-duplication quality system** (`chore(quality)` commit `877b80b`):
+  - `.github/instructions/no-duplication.instructions.md` — 4-layer prevention rules (IDs, ops, labels, conceptual)
+  - `.github/skills/no-duplication/SKILL.md` — 6-step audit workflow with PowerShell one-liners and resolution guide
+  - `scripts/Audit-Duplications.ps1` — colour-coded audit script covering all 4 duplication layers; `exit 1` on hard violations
+  - **+4 duplication guard tests** in `TweakEngineBuiltinsTests.cs`:
+    - `RegisterBuiltins_DuplicateRegistryOps_BelowRegressionThreshold` (threshold ≤ 1 200)
+    - `RegisterBuiltins_NoCrossModuleLabelAndPathCollision` (threshold ≤ 200, 128 groups detected as existing debt)
+    - `RegisterBuiltins_CategorySlugs_MatchKnownPrefixes` (spot-checks 10 canonical category slug prefixes)
+    - `RegisterBuiltins_DetectDuplicateRegistryOps_ProducesUsableOutput` (scale smoke-test at 3 669 tweaks)
+
+- **Next Phase Master Plan** appended to `docs/Roadmap.md` — 9-phase plan (v3.9 → v4.2) covering:
+  - Phase A: Deduplication sprint (fix 128 cross-module label+path collisions, ~800 duplicate ops)
+  - Phase B: Tweak quality audit (semantic correctness review)
+  - Phase C: GUI UX pass (search improvements, keyboard nav, tray polish)
+  - Phase D: CLI completeness (remaining commands, shell completion)
+  - Phase E: Coverage push (branch coverage from 56.8% toward 70%)
+  - Phase F–I: New tweak categories, localization expansion, plugin ecosystem, release automation
+
+### All v4.0.0 Capabilities at a Glance
+
+| Capability | Status |
+|---|---|
+| **3 669 verified tweaks** across 94 categories | ✅ |
+| **WinForms GUI** with 11 switchable themes | ✅ |
+| **CLI** with 25+ commands | ✅ |
+| **Interactive console menu** | ✅ |
+| **MSI installer** (WiX v6, self-contained win-x64) | ✅ |
+| **Portable EXE** (GUI + CLI, no .NET required) | ✅ |
+| **5 machine profiles** (business, gaming, privacy, minimal, server) | ✅ |
+| **Dry-run mode** — preview without touching registry | ✅ |
+| **Snapshot & diff** — save/restore/compare JSON state | ✅ |
+| **CorporateGuard** — blocks unsafe tweaks on managed machines | ✅ |
+| **UAC auto-elevation** | ✅ |
+| **Package manager dialogs** (WinGet, Scoop, pip, Chocolatey, PSModules) | ✅ |
+| **Plugin marketplace** — JSON Tweak Packs with SHA-256 verification | ✅ |
+| **Dependency resolver** — topological apply order | ✅ |
+| **TweakValidator** — ID/label/dep/circular-dep integrity checks | ✅ |
+| **Anti-duplication system** — 4-layer detection + audit script | ✅ |
+| **Localization** — English + German (48 strings) | ✅ |
+| **Live CPU/RAM monitoring** in About dialog | ✅ |
+| **Automatic JSON backups** before every registry mutation | ✅ |
+| **1 435 tests** across 17 test files (0 failures) | ✅ |
+
+### Stats
+
+- Tweaks: **3 669** across 94 categories (unchanged from v3.8.0)
+- Tests: **1 435** passing (1 018 Core + 175 CLI + 242 GUI) — +21 from v3.8.0
+- Version bumped `3.8.0` → `4.0.0`
+
+---
+
 ## [3.8.0] — 2026-07-21
 
 ### Added
