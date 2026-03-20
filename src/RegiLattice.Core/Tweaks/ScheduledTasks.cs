@@ -318,20 +318,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-disable-maps-update",
-            Label = "Disable Offline Maps Update Task",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic downloading and updating of offline map data. Default: enabled.",
-            Tags = ["scheduled-tasks", "maps", "offline", "update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0)],
-        },
-        new TweakDef
-        {
             Id = "schtask-disable-ngen-log",
             Label = "Disable .NET Framework NGen Log Task",
             Category = "Scheduled Tasks",

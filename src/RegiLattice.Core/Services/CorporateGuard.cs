@@ -113,8 +113,9 @@ public static class CorporateGuard
                 if (key is not null)
                 {
                     var subKeys = key.GetSubKeyNames();
+                    // Return true when more than 5 policy sub-keys exist — indicates non-default GPO presence.
                     if (subKeys.Length > 5)
-                        return true; // Non-default GPO presence
+                        return true;
                 }
             }
             catch { }

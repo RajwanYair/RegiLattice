@@ -492,20 +492,6 @@ internal static class MsStore
         },
         new TweakDef
         {
-            Id = "msstore-disable-auto-app-updates",
-            Label = "Disable Microsoft Store Auto App Updates",
-            Category = "Microsoft Store",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Microsoft Store from automatically updating installed apps. Default: enabled.",
-            Tags = ["msstore", "auto-update", "apps", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
-        },
-        new TweakDef
-        {
             Id = "msstore-disable-push-notifications",
             Label = "Disable Store Push Notifications",
             Category = "Microsoft Store",
@@ -636,18 +622,6 @@ internal static class MsStore
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "msstore-auto-update-off",
-            Label = "Disable Store automatic app updates",
-            Category = "Microsoft Store",
-            Tags = ["msstore", "update", "auto"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
         },
         new TweakDef
         {
