@@ -4,9 +4,9 @@
 
 | Version | Supported |
 |---------|-----------|
-| 3.6.x   | ✅ Active support |
-| 3.5.x   | ⚠️ Security fixes only |
-| < 3.5   | ❌ Not supported |
+| 3.7.x   | ✅ Active support |
+| 3.6.x   | ⚠️ Security fixes only |
+| < 3.6   | ❌ Not supported |
 
 ## Reporting a Vulnerability
 
