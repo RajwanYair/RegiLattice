@@ -954,7 +954,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessMotion=2 (Force Deny) in AppPrivacy policy. Prevents all apps from reading accelerometer, gyroscope, and other motion sensor data.",
+            Description =
+                "Sets LetAppsAccessMotion=2 (Force Deny) in AppPrivacy policy. Prevents all apps from reading accelerometer, gyroscope, and other motion sensor data.",
             Tags = ["privacy", "motion", "sensors", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMotion", 2)],
@@ -968,7 +969,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessPhone=2 (Force Deny) in AppPrivacy policy. Prevents apps from initiating or reading phone calls via the Windows Phone Call subsystem.",
+            Description =
+                "Sets LetAppsAccessPhone=2 (Force Deny) in AppPrivacy policy. Prevents apps from initiating or reading phone calls via the Windows Phone Call subsystem.",
             Tags = ["privacy", "phone", "calls", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessPhone", 2)],
@@ -982,7 +984,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessTrustedDevices=2 (Force Deny). Prevents apps from communicating with paired trusted peripherals such as smartcards and wearables.",
+            Description =
+                "Sets LetAppsAccessTrustedDevices=2 (Force Deny). Prevents apps from communicating with paired trusted peripherals such as smartcards and wearables.",
             Tags = ["privacy", "trusted-devices", "peripherals", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessTrustedDevices", 2)],
@@ -996,7 +999,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsRunInBackground=2 (Force Deny) via AppPrivacy policy. Prevents UWP apps from executing background tasks or receiving push updates when not in use.",
+            Description =
+                "Sets LetAppsRunInBackground=2 (Force Deny) via AppPrivacy policy. Prevents UWP apps from executing background tasks or receiving push updates when not in use.",
             Tags = ["privacy", "background", "apps", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
@@ -1010,7 +1014,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsSyncWithDevices=2 (Force Deny). Prevents apps from synchronising data with USB, Bluetooth, and other peripheral devices without user consent.",
+            Description =
+                "Sets LetAppsSyncWithDevices=2 (Force Deny). Prevents apps from synchronising data with USB, Bluetooth, and other peripheral devices without user consent.",
             Tags = ["privacy", "sync", "devices", "bluetooth"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsSyncWithDevices", 2)],
@@ -1024,7 +1029,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessDocumentsLibrary=2 (Force Deny). Prevents UWP apps from reading or writing files in the user's Documents folder without explicit per-file consent.",
+            Description =
+                "Sets LetAppsAccessDocumentsLibrary=2 (Force Deny). Prevents UWP apps from reading or writing files in the user's Documents folder without explicit per-file consent.",
             Tags = ["privacy", "documents", "library", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessDocumentsLibrary", 2)],
@@ -1038,7 +1044,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessPicturesLibrary=2 (Force Deny). Prevents UWP apps from browsing or modifying files in the Pictures library.",
+            Description =
+                "Sets LetAppsAccessPicturesLibrary=2 (Force Deny). Prevents UWP apps from browsing or modifying files in the Pictures library.",
             Tags = ["privacy", "pictures", "library", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessPicturesLibrary", 2)],
@@ -1080,12 +1087,19 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsActivateWithVoiceAboveLock=2 (Force Deny). Prevents voice assistants from activating when the screen is locked, stopping passive microphone listening.",
+            Description =
+                "Sets LetAppsActivateWithVoiceAboveLock=2 (Force Deny). Prevents voice assistants from activating when the screen is locked, stopping passive microphone listening.",
             Tags = ["privacy", "voice", "lock-screen", "microphone"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2),
+            ],
         },
         new TweakDef
         {
@@ -1094,7 +1108,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessNotifications=2 (Force Deny). Prevents apps from reading the system notification feed, stopping cross-app notification snooping.",
+            Description =
+                "Sets LetAppsAccessNotifications=2 (Force Deny). Prevents apps from reading the system notification feed, stopping cross-app notification snooping.",
             Tags = ["privacy", "notifications", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessNotifications", 2)],
@@ -1108,7 +1123,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LetAppsAccessGazeInput=2 (Force Deny). Prevents apps from reading eye-tracking or gaze input data from supported hardware.",
+            Description =
+                "Sets LetAppsAccessGazeInput=2 (Force Deny). Prevents apps from reading eye-tracking or gaze input data from supported hardware.",
             Tags = ["privacy", "gaze", "eye-tracking", "input", "app-access"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessGazeInput", 2)],
@@ -1122,7 +1138,8 @@ internal static class Privacy
             Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets PublishUserActivities=0 in Windows System policy. Stops the OS from publishing app usage events to the cross-device Timeline/Activity feed, keeping local activity history private.",
+            Description =
+                "Sets PublishUserActivities=0 in Windows System policy. Stops the OS from publishing app usage events to the cross-device Timeline/Activity feed, keeping local activity history private.",
             Tags = ["privacy", "activity-feed", "timeline", "user-data"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities", 0)],

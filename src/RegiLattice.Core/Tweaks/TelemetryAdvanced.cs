@@ -475,7 +475,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableUAR=1 in AppCompat policy. Stops the Application Compatibility engine from recording and uploading user activity data used for app compatibility telemetry.",
+            Description =
+                "Sets DisableUAR=1 in AppCompat policy. Stops the Application Compatibility engine from recording and uploading user activity data used for app compatibility telemetry.",
             Tags = ["telemetry", "app-compat", "user-activity", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
@@ -489,7 +490,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets CEIPEnable=0 in the SQMClient Windows key. Disables the CEIP data-collection component associated with program quality telemetry uploads.",
+            Description =
+                "Sets CEIPEnable=0 in the SQMClient Windows key. Disables the CEIP data-collection component associated with program quality telemetry uploads.",
             Tags = ["telemetry", "ceip", "sqm", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
@@ -503,12 +505,16 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableOneSettingsDownloads=1 in DataCollection policy. Prevents Windows from downloading dynamic telemetry configuration updates (\"OneSettings\") from Microsoft servers.",
+            Description =
+                "Sets DisableOneSettingsDownloads=1 in DataCollection policy. Prevents Windows from downloading dynamic telemetry configuration updates (\"OneSettings\") from Microsoft servers.",
             Tags = ["telemetry", "one-settings", "download", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads", 1),
+            ],
         },
         new TweakDef
         {
@@ -517,12 +523,16 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LimitDiagnosticLogCollection=1. Restricts the additional diagnostic log bundles gathered by Windows Feedback Hub and Windows Error Reporting to the minimum required.",
+            Description =
+                "Sets LimitDiagnosticLogCollection=1. Restricts the additional diagnostic log bundles gathered by Windows Feedback Hub and Windows Error Reporting to the minimum required.",
             Tags = ["telemetry", "diagnostic", "logs", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection", 1),
+            ],
         },
         new TweakDef
         {
@@ -531,12 +541,33 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LimitEnhancedDiagnosticDataWindowsAnalytics=1. Even when Enhanced telemetry is enabled, only the subset required by Windows Analytics for update-health monitoring is uploaded.",
+            Description =
+                "Sets LimitEnhancedDiagnosticDataWindowsAnalytics=1. Even when Enhanced telemetry is enabled, only the subset required by Windows Analytics for update-health monitoring is uploaded.",
             Tags = ["telemetry", "enhanced", "analytics", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitEnhancedDiagnosticDataWindowsAnalytics", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitEnhancedDiagnosticDataWindowsAnalytics")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitEnhancedDiagnosticDataWindowsAnalytics", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                    "LimitEnhancedDiagnosticDataWindowsAnalytics",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                    "LimitEnhancedDiagnosticDataWindowsAnalytics"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                    "LimitEnhancedDiagnosticDataWindowsAnalytics",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -545,12 +576,26 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableDeviceMetadataServiceUrlAccess=1 in DataCollection. Prevents Windows from contacting Microsoft's Device Metadata Service to retrieve driver cosmetic information, eliminating outbound telemetry-adjacent HTTP requests.",
+            Description =
+                "Sets DisableDeviceMetadataServiceUrlAccess=1 in DataCollection. Prevents Windows from contacting Microsoft's Device Metadata Service to retrieve driver cosmetic information, eliminating outbound telemetry-adjacent HTTP requests.",
             Tags = ["telemetry", "device", "metadata", "network", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDeviceMetadataServiceUrlAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDeviceMetadataServiceUrlAccess")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDeviceMetadataServiceUrlAccess", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDeviceMetadataServiceUrlAccess", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDeviceMetadataServiceUrlAccess"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
+                    "DisableDeviceMetadataServiceUrlAccess",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -559,7 +604,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets HttpAcceptLanguageOptOut=1 in the International User Profile key. Sends a generic Accept-Language header to websites instead of the user's locale list, preventing language-based fingerprinting.",
+            Description =
+                "Sets HttpAcceptLanguageOptOut=1 in the International User Profile key. Sends a generic Accept-Language header to websites instead of the user's locale list, preventing language-based fingerprinting.",
             Tags = ["telemetry", "language", "privacy", "fingerprinting"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\International\User Profile"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\International\User Profile", "HttpAcceptLanguageOptOut", 1)],
@@ -573,7 +619,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AllowBuildPreview=0 via PreviewBuilds policy. Prevents the device from enrolling in Windows Insider Program flights, eliminating associated feedback and diagnostic data collection.",
+            Description =
+                "Sets AllowBuildPreview=0 via PreviewBuilds policy. Prevents the device from enrolling in Windows Insider Program flights, eliminating associated feedback and diagnostic data collection.",
             Tags = ["telemetry", "insider", "preview", "builds"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds", "AllowBuildPreview", 0)],
@@ -587,12 +634,19 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableInkingAndTypingPrivacy=1 in DataCollection policy. Prevents Windows from uploading inking and typing samples used to improve handwriting recognition and autocorrect models.",
+            Description =
+                "Sets DisableInkingAndTypingPrivacy=1 in DataCollection policy. Prevents Windows from uploading inking and typing samples used to improve handwriting recognition and autocorrect models.",
             Tags = ["telemetry", "inking", "typing", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableInkingAndTypingPrivacy", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableInkingAndTypingPrivacy")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableInkingAndTypingPrivacy", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableInkingAndTypingPrivacy"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableInkingAndTypingPrivacy", 1),
+            ],
         },
         new TweakDef
         {
@@ -601,12 +655,26 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MicrosoftEdgeDataOptIn=0 in DataCollection policy. Prevents the legacy Edge engine from contributing usage and diagnostic data to Microsoft's browser analytics programme.",
+            Description =
+                "Sets MicrosoftEdgeDataOptIn=0 in DataCollection policy. Prevents the legacy Edge engine from contributing usage and diagnostic data to Microsoft's browser analytics programme.",
             Tags = ["telemetry", "edge", "browser", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "MicrosoftEdgeDataOptIn", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "MicrosoftEdgeDataOptIn")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "MicrosoftEdgeDataOptIn", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "MicrosoftEdgeDataOptIn", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "MicrosoftEdgeDataOptIn"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection",
+                    "MicrosoftEdgeDataOptIn",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -615,7 +683,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DODownloadMode=0 in Delivery Optimisation policy. Restricts Windows Update downloads to direct Microsoft CDN connections only, disabling peer-to-peer seeding that shares bandwidth and data with other devices.",
+            Description =
+                "Sets DODownloadMode=0 in Delivery Optimisation policy. Restricts Windows Update downloads to direct Microsoft CDN connections only, disabling peer-to-peer seeding that shares bandwidth and data with other devices.",
             Tags = ["telemetry", "delivery-optimization", "p2p", "privacy", "network"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
@@ -629,7 +698,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AutoUpdateEnabled=0 in HKLM\\SYSTEM\\Maps. Prevents Windows from silently downloading offline map data updates in the background.",
+            Description =
+                "Sets AutoUpdateEnabled=0 in HKLM\\SYSTEM\\Maps. Prevents Windows from silently downloading offline map data updates in the background.",
             Tags = ["telemetry", "maps", "auto-update", "network", "bandwidth"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\Maps"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\Maps", "AutoUpdateEnabled", 0)],
@@ -643,7 +713,8 @@ internal static class TelemetryAdvanced
             Category = "Telemetry Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisablePrivacyExperience=1 in the OOBE key. Prevents Windows from launching the privacy-settings wizard that prompts users to send diagnostic data after installation or upgrade.",
+            Description =
+                "Sets DisablePrivacyExperience=1 in the OOBE key. Prevents Windows from launching the privacy-settings wizard that prompts users to send diagnostic data after installation or upgrade.",
             Tags = ["telemetry", "oobe", "setup", "privacy", "wizard"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE", "DisablePrivacyExperience", 1)],
