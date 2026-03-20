@@ -1054,5 +1054,155 @@ internal static class Win11
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "w11-disable-explorer-ads",
+            Label = "Disable File Explorer Sync Provider Ads",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables promotional notifications from sync providers (e.g., OneDrive) shown inside File Explorer. Removes subscription and cloud storage upsell banners. Default: enabled.",
+            Tags = ["w11", "explorer", "ads", "onedrive", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0)],
+        },
+        new TweakDef
+        {
+            Id = "w11-set-explorer-open-this-pc",
+            Label = "Open File Explorer to This PC by Default",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures File Explorer to open to 'This PC' (drives) instead of 'Quick Access' or 'Home'. Gives immediate access to disk drives on launch. Default: Quick Access / Home.",
+            Tags = ["w11", "explorer", "this-pc", "default", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-notification-center",
+            Label = "Disable Notification Center (Action Center)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables the Windows 11 Notification Center (Action Center) so no notification panel appears when clicking the system clock/tray. Reduces background notification processing. Default: enabled.",
+            Tags = ["w11", "notifications", "action-center", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableNotificationCenter", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableNotificationCenter")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableNotificationCenter", 1)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-balloon-tips",
+            Label = "Disable Taskbar Balloon Tips / Toast Hints",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables balloon/toast tip notifications shown by the taskbar (e.g., 'You have unused desktop icons'). Cleans up the notification area from informational nags. Default: enabled.",
+            Tags = ["w11", "balloon", "tips", "taskbar", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-lock-screen-camera",
+            Label = "Disable Camera Access on Lock Screen",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the lock screen camera by setting NoLockScreenCamera=1 via Group Policy. Prevents the camera from being accessible while the device is locked. Default: camera accessible on lock screen.",
+            Tags = ["w11", "lock-screen", "camera", "privacy", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-lock-screen-app-notif",
+            Label = "Disable App Notifications on Lock Screen",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables app notification previews shown on the lock screen (DisableLockScreenAppNotifications=1 via Group Policy). Prevents sensitive notification content from being visible while the device is locked. Default: notifications shown.",
+            Tags = ["w11", "lock-screen", "notifications", "privacy", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-first-logon-animation",
+            Label = "Disable First Logon Animated Intro",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the 'Hi, here are some things to get started' first-time logon animation screen. Speeds up new user account first login. Default: animation plays on first login.",
+            Tags = ["w11", "logon", "animation", "performance", "ui"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-shutdown-tracking",
+            Label = "Disable Shutdown Reason Tracker Dialog",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the 'Shutdown Event Tracker' dialog prompting for a reason when shutting down or restarting. Speeds up shutdown workflow. Default: optional on client Windows; mandatory on server OS.",
+            Tags = ["w11", "shutdown", "dialog", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "ShutdownReasonUI", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "ShutdownReasonUI")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "ShutdownReasonUI", 0)],
+        },
+        new TweakDef
+        {
+            Id = "w11-disable-startup-sound",
+            Label = "Disable Windows Startup Sound",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows startup chime sound that plays during user login. Silences the audio on boot for quiet environments. Default: system startup sound plays on login.",
+            Tags = ["w11", "startup", "sound", "audio"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound", 1)],
+        },
+        new TweakDef
+        {
+            Id = "w11-set-wallpaper-quality-100",
+            Label = "Disable Wallpaper JPEG Compression",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets JPEG import quality for desktop wallpapers to 100 (no compression). Prevents Windows from silently re-compressing high-quality wallpaper images when they are applied. Default: 85 (lossy compression).",
+            Tags = ["w11", "wallpaper", "quality", "jpeg", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
+        },
     ];
 }

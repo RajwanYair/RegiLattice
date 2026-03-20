@@ -1277,5 +1277,155 @@ internal static class Gaming
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "game-disable-xbox-auth-manager",
+            Label = "Disable Xbox Live Authentication Manager Service",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Xbox Live Authentication Manager (XblAuthManager) service. Reduces Xbox-related background overhead on PCs that do not use Xbox Live. Default: manual start.",
+            Tags = ["game", "xbox", "service", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-xbox-live-game-save",
+            Label = "Disable Xbox Live Game Save Service",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Xbox Live Game Save (XblGameSave) service which syncs game saves to the Xbox cloud. Removes background upload overhead for non-Xbox users. Default: manual start.",
+            Tags = ["game", "xbox", "cloud", "save", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "game-set-win32-priority-separation",
+            Label = "Optimise Win32 Priority Separation for Games",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets Win32PrioritySeparation=38 (hex 0x26) which configures short, variable timeslices with a 3:1 foreground/background boost ratio. Gives foreground gaming processes more CPU time. Default: 2 (balanced).",
+            Tags = ["game", "cpu", "priority", "latency", "scheduler"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-game-dvr-shadow",
+            Label = "Disable Game DVR Shadow Recording",
+            Category = "Gaming",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the GameDVR shadow recording (background continuous capture) which records the last N seconds of gameplay. Removes persistent capture overhead. Default: enabled when Game Bar is active.",
+            Tags = ["game", "dvr", "shadow", "record", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "ShadowRecord", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "ShadowRecord", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "ShadowRecord", 0)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-background-app-access",
+            Label = "Disable Global Background App Access",
+            Category = "Gaming",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Globally disables background app access for all UWP applications. Prevents background apps from consuming CPU/RAM/network while gaming. Default: individual app settings.",
+            Tags = ["game", "background", "uwp", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-bcast-dvr-svc",
+            Label = "Disable Broadcast DVR User Service",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the BcastDVRUserService which handles Game Bar broadcasting/recording per-session. Eliminates session-level DVR overhead when Game Bar broadcasting is not used. Default: automatic.",
+            Tags = ["game", "bcast", "dvr", "service", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BcastDVRUserService"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BcastDVRUserService", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BcastDVRUserService", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BcastDVRUserService", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "game-set-mmcss-scheduling-high",
+            Label = "Set MMCSS Games Scheduling Category to High",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the MMCSS (Multimedia Class Scheduler) Games task scheduling category to High. Ensures game threads receive the highest available CPU scheduling class. Default: Medium.",
+            Tags = ["game", "mmcss", "scheduling", "cpu", "priority"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Scheduling Category", "High")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Scheduling Category", "Medium")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Scheduling Category", "High")],
+        },
+        new TweakDef
+        {
+            Id = "game-set-mmcss-latency-sensitive",
+            Label = "Set MMCSS Games Task as Latency Sensitive",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Marks the MMCSS Games multimedia task as Latency Sensitive. This hint causes the scheduler to reduce interrupt coalescing and batch delays for game threads. Default: False.",
+            Tags = ["game", "mmcss", "latency", "scheduler"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitive", "True")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitive", "False")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Latency Sensitive", "True")],
+        },
+        new TweakDef
+        {
+            Id = "game-set-mmcss-clock-rate",
+            Label = "Set MMCSS Games Clock Rate to 5000 (0.5ms)",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the MMCSS Games task minimum scheduling clock rate to 5000 (in 100-ns units = 0.5 ms). Reduces the minimum scheduler quantum for game threads to sub-millisecond intervals. Default: 10000 (1ms).",
+            Tags = ["game", "mmcss", "clock", "latency", "scheduler"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Clock Rate", 5000)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Clock Rate", 10000)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games", "Clock Rate", 5000)],
+        },
+        new TweakDef
+        {
+            Id = "game-disable-uwp-bg-access",
+            Label = "Block All UWP Apps from Running in Background (GPO)",
+            Category = "Gaming",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Enforces that all UWP apps are denied background execution via Group Policy (LetAppsRunInBackground=2). Frees CPU/RAM/network for game workloads by preventing any UWP app from running while not in focus. Default: user-controlled.",
+            Tags = ["game", "uwp", "background", "gpo", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
+        },
     ];
 }

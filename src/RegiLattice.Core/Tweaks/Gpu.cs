@@ -652,5 +652,157 @@ internal static class Gpu
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\DirectDraw", "FlipInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\DirectDraw", "FlipInterval", 0)],
         },
+        new TweakDef
+        {
+            Id = "gpu-set-tdr-level-recover",
+            Label = "Set GPU TDR Level to Recover (No Bugcheck)",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets TdrLevel=3 so Windows recovers the GPU engine after a Timeout Detection & Recovery (TDR) event without triggering a bugcheck. Improves stability for overclocked or demanding GPU workloads. Default: 3 on most systems.",
+            Tags = ["gpu", "tdr", "stability", "crash"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLevel", 3)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLevel")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLevel", 3)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-set-tdr-debugging-off",
+            Label = "Disable GPU TDR Crash Dump Generation",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables TDR debug crash dump generation by setting TdrDebugging=0. Prevents large crash dumps when the GPU recovers from a timeout, reducing disk I/O overhead during recovery. Default: 0.",
+            Tags = ["gpu", "tdr", "dump", "debugging"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDebugging", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDebugging")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDebugging", 0)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-enable-vrr-optimize",
+            Label = "Enable Windows 11 VRR Optimisation",
+            Category = "GPU / Graphics",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            MinBuild = 22000,
+            Description =
+                "Enables the Variable Refresh Rate (VRR) optimisation in DWM on Windows 11. Allows the desktop compositor to leverage VRR/FreeSync/G-Sync for smoother UI rendering. Default: off (requires supported display).",
+            Tags = ["gpu", "vrr", "freesync", "gsync", "win11"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "VrrOptimizeEnable", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "VrrOptimizeEnable", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "VrrOptimizeEnable", 1)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-disable-aero-peek",
+            Label = "Disable Aero Peek (Taskbar Transparency Effect)",
+            Category = "GPU / Graphics",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Aero Peek, which shows a live transparent preview of windows when hovering over taskbar thumbnails. Reduces DWM compositing load. Default: enabled.",
+            Tags = ["gpu", "aero", "peek", "dwm", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-set-tdr-ddi-delay",
+            Label = "Set GPU TDR DDI Delay to 0 (Immediate)",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets TdrDdiDelay=0 so the DDI watchdog immediately detects when a DDI call exceeds the allowed time. Allows faster GPU error detection with less latency on recovery. Default: not set (uses kernel default).",
+            Tags = ["gpu", "tdr", "ddi", "watchdog"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDdiDelay", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDdiDelay")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDdiDelay", 0)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-enable-hw-flip-queue",
+            Label = "Enable GPU Hardware Flip Queue",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 19041,
+            Description =
+                "Enables the DirectX Graphics Kernel hardware flip queue via DxgkrnlEnableHwFlipQueue=1. Moves present queue management to hardware, reducing CPU involvement and frame delivery latency. Default: system-managed.",
+            Tags = ["gpu", "flip-queue", "latency", "dx", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "DxgkrnlEnableHwFlipQueue", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "DxgkrnlEnableHwFlipQueue")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "DxgkrnlEnableHwFlipQueue", 1)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-set-tdr-limit-value",
+            Label = "Increase GPU TDR Limit Count (Stability)",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets TdrLimitValue=60 to allow up to 60 GPU timeouts within the TdrLimitTime window before triggering a full system bugcheck. More tolerant under heavy GPU load or overclocking. Default: 5.",
+            Tags = ["gpu", "tdr", "limit", "stability", "overclocking"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitValue", 60)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitValue")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitValue", 60)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-set-tdr-limit-time",
+            Label = "Extend GPU TDR Limit Time Window",
+            Category = "GPU / Graphics",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets TdrLimitTime=60 to extend the TDR limit counting window to 60 seconds. Combined with a higher TdrLimitValue this prevents bugchecks on systems that have occasional GPU hangs under load. Default: 60 (may vary).",
+            Tags = ["gpu", "tdr", "limit", "time", "stability"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime", 60)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime", 60)],
+        },
+        new TweakDef
+        {
+            Id = "gpu-disable-smooth-fonts",
+            Label = "Disable Font Smoothing (GPU Rendering)",
+            Category = "GPU / Graphics",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Windows font smoothing (anti-aliasing). Reduces GPU compositing work for text rendering. Useful on high-DPI displays where sub-pixel rendering is less needed. Default: enabled.",
+            Tags = ["gpu", "font", "smoothing", "rendering", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
+        },
+        new TweakDef
+        {
+            Id = "gpu-disable-cleartype",
+            Label = "Switch Font Smoothing from ClearType to Standard",
+            Category = "GPU / Graphics",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Switches font smoothing from ClearType (sub-pixel, type 2) to standard anti-aliasing (grayscale, type 1). Reduces LCD sub-pixel rendering overhead in DWM. Default: ClearType (type 2) on Windows.",
+            Tags = ["gpu", "cleartype", "font", "rendering"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 1)],
+        },
     ];
 }
