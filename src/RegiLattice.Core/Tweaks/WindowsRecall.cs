@@ -438,20 +438,5 @@ internal static class WindowsRecall
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnSettings")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnSettings", 1)],
         },
-        new TweakDef
-        {
-            Id = "recall-disable-ceip-sqm-policy",
-            Label = "Disable CEIP / SQM Telemetry Policy",
-            Category = "Windows Recall",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 17763,
-            Description = "Disables the Customer Experience Improvement Program at the policy level (SQMClient).",
-            Tags = ["recall", "ai", "ceip", "telemetry", "privacy", "sqm"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\SQMClient\Windows"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-        },
     ];
 }

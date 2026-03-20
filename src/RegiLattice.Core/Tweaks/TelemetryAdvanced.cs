@@ -320,21 +320,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-ceip",
-            Label = "Disable Customer Experience Improvement Program",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Customer Experience Improvement Program (CEIP). Stops sending usage data to Microsoft. Default: opted-in.",
-            Tags = ["telemetry", "ceip", "privacy", "data-collection"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-advertising-id",
             Label = "Disable Advertising ID (Policy)",
             Category = "Telemetry Advanced",

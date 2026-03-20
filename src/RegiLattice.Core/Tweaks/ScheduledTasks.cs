@@ -8,21 +8,6 @@ internal static class ScheduledTasks
     [
         new TweakDef
         {
-            Id = "schtask-task-disable-ceip",
-            Label = "Disable Customer Experience Improvement Program",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows CEIP data collection task. Stops sending usage data to Microsoft. Default: enabled. Recommended: 0 (disabled).",
-            Tags = ["tasks", "ceip", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-        },
-        new TweakDef
-        {
             Id = "schtask-task-disable-appcompat",
             Label = "Disable Application Compatibility Assistant",
             Category = "Scheduled Tasks",

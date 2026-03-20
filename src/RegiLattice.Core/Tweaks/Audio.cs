@@ -132,21 +132,6 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-disable-enhancements-global",
-            Label = "Disable Audio Enhancements Globally",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables all audio processing enhancements system-wide. Reduces audio latency and prevents driver conflicts. Default: Enabled. Recommended: Disabled for music production.",
-            Tags = ["audio", "enhancements", "latency", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio", "DisableAllEnhancements", 1)],
-        },
-        new TweakDef
-        {
             Id = "audio-exclusive-priority",
             Label = "Set Audio Exclusive Mode Priority",
             Category = "Audio",
