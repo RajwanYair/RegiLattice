@@ -4,6 +4,35 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.7.2] — 2026-03-20
+
+### Added
+
+- **64 new tests** covering previously untested code paths (+4.7% branch coverage):
+  - `AppConfigUiPrefsTests` (+44): default-value assertions and save/load roundtrip for
+    23 untested `AppConfig` properties — `MinimizeToTray`, `ConfirmApply`, `ConfirmRemove`,
+    `ShowInapplicable`, `FontSize`, `ShowLogPanel`, `LogPanelHeight`, `AutoRefreshOnStartup`,
+    `LaunchMinimized`, `RememberSplitter`, `SplitterDistance`, `SkipAppliedOnBatch`,
+    `BrightnessSchedulerEnabled` + 4 value fields, `HistoryMaxEntries`, `MonitorColorCoded`,
+    `AutoCleanMemoryThreshold`, `ProfileOnPlanSwitch`, `ProfileSchedules`; plus
+    `ProfileScheduleEntry` record defaults and disabled-entry roundtrip
+  - `ComplianceAndManagerParseTests` (+20): `--compliance`, `--export-gpo`, `--manager`
+    flag parsing with value variants, without-value edge cases, combined-flag tests
+
+### Changed
+
+- **Standing commit rule** reinforced in `.github/copilot-instructions.md`: Git Workflow
+  section now includes the per-sprint mandate and total-count requirement explicitly,
+  making it visible on every session load alongside the quick-facts table
+- Version bumped `3.7.1` → `3.7.2`
+
+### Stats
+
+- Tweaks: **2 991** (unchanged)
+- Tests: **1 431** passing (1 014 Core + 175 CLI + 242 GUI) — was 1 367
+
+---
+
 ## [3.7.1] — 2026-07-18
 
 ### Changed
