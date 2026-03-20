@@ -80,10 +80,10 @@ Rules:
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
 | Test     | xUnit 2.9.2 — 1,367 tests (970 Core + 155 CLI + 242 GUI)                 |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 3.7.2                                                                    |
+| Version  | 3.7.3                                                                    |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
 | Tweaks   | 2 991 across 92 categories (93 module files)                             |
-| Tests    | 1,431 passing (1014 Core + 175 CLI + 242 GUI)                            |
+| Tests    | 1,414 passing (1014 Core + 175 CLI + 225 GUI)                            |
 | NuGet    | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2                     |
 
 ## Git Workflow (IMPORTANT — STANDING RULE)
