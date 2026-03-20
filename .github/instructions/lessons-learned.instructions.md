@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-20 (v3.7.3, C# 13 / .NET 10.0-windows, 2 991 tweaks, 92 categories, 1 414 tests)
+> Last updated: 2026-07-21 (v3.8.0, C# 13 / .NET 10.0-windows, 3 669 tweaks, 94 categories, 1 414 tests)
 
 ---
 
