@@ -105,7 +105,8 @@
     { "file": ".github/instructions/testing.instructions.md" },
     { "file": ".github/instructions/git-workflow.instructions.md" },
     { "file": ".github/instructions/lessons-learned.instructions.md" },
-    { "file": ".github/instructions/cicd.instructions.md" }
+    { "file": ".github/instructions/cicd.instructions.md" },
+    { "file": ".github/instructions/no-duplication.instructions.md" }
   ],
   "chat.promptFiles": true,
   "chat.agent.enabled": true,

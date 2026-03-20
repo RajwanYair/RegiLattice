@@ -17,6 +17,7 @@ All files below are auto-loaded into every Copilot chat session via `.vscode/set
 | `.github/instructions/git-workflow.instructions.md`    | `**`          | Commit/push strategy, conventional commits       |
 | `.github/instructions/lessons-learned.instructions.md` | `**/*.cs`     | Hard-won migration insights, common pitfalls     |
 | `.github/instructions/cicd.instructions.md`            | `**/*.yml`    | GitHub Actions, release workflow                 |
+| `.github/instructions/no-duplication.instructions.md`  | `**/*.cs`     | Duplication detection rules and prevention       |
 
 ### Environment Bootstrap
 
