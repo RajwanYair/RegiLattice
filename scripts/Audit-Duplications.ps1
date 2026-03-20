@@ -35,10 +35,10 @@ function Write-Header([string]$text) {
     Write-Host "══════════════════════════════════════════════════════" -ForegroundColor Cyan
 }
 
-function Write-Pass([string]$text)  { Write-Host "  ✔  $text" -ForegroundColor Green }
-function Write-Warn([string]$text)  { Write-Host "  ⚠  $text" -ForegroundColor Yellow }
-function Write-Fail([string]$text)  { Write-Host "  ✖  $text" -ForegroundColor Red }
-function Write-Info([string]$text)  { Write-Host "     $text" -ForegroundColor DarkGray }
+function Write-Pass([string]$text) { Write-Host "  ✔  $text" -ForegroundColor Green }
+function Write-Warn([string]$text) { Write-Host "  ⚠  $text" -ForegroundColor Yellow }
+function Write-Fail([string]$text) { Write-Host "  ✖  $text" -ForegroundColor Red }
+function Write-Info([string]$text) { Write-Host "     $text" -ForegroundColor DarkGray }
 
 # ── Resolve root dir ─────────────────────────────────────────────────────────
 
@@ -76,8 +76,7 @@ $dupIds = $allIds | Group-Object Id | Where-Object { $_.Count -gt 1 }
 
 if ($dupIds.Count -eq 0) {
     Write-Pass "No duplicate IDs found across $($tweakFiles.Count) modules ($($allIds.Count) total IDs scanned)"
-}
-else {
+} else {
     foreach ($dup in $dupIds | Sort-Object Count -Descending) {
         $files = ($dup.Group | Select-Object -ExpandProperty File) -join ', '
         Write-Fail "DUPLICATE ID '$($dup.Name)' appears $($dup.Count) times: $files"
@@ -115,8 +114,7 @@ $dupRegOps = $regOps | Group-Object Key | Where-Object { $_.Count -gt 1 }
 
 if ($dupRegOps.Count -eq 0) {
     Write-Pass "No duplicate registry operations found ($($regOps.Count) total ops scanned)"
-}
-else {
+} else {
     Write-Warn "$($dupRegOps.Count) registry targets written by multiple tweaks (source-level scan)"
     Write-Info "Note: run 'dotnet test --filter DuplicateRegistryOps' for the exact model-level count"
     Write-Info ""
@@ -155,8 +153,7 @@ $dupLabels = $allLabels | Group-Object Label | Where-Object { $_.Count -gt 1 }
 
 if ($dupLabels.Count -eq 0) {
     Write-Pass "No duplicate labels found ($($allLabels.Count) total labels scanned)"
-}
-else {
+} else {
     Write-Warn "$($dupLabels.Count) label(s) used in multiple modules"
     Write-Info "Note: same label across different modules is OK IF registry paths differ."
     Write-Info "Same label + same RegistryKeys[0] = guaranteed duplicate (must remove)."
@@ -188,8 +185,7 @@ if (Test-Path $InstructionsDir) {
 
     if ($dupInstructions.Count -eq 0) {
         Write-Pass "$($instructionFiles.Count) instruction files — all unique names"
-    }
-    else {
+    } else {
         foreach ($dup in $dupInstructions) {
             Write-Fail "Duplicate instruction filename: $($dup.Name)"
             $hardViolations++
@@ -207,8 +203,7 @@ if (Test-Path $settingsFile) {
 
     if ($dupRefs.Count -eq 0) {
         Write-Pass ".vscode/settings.json — no duplicate instruction references"
-    }
-    else {
+    } else {
         foreach ($dup in $dupRefs) {
             Write-Fail "Duplicate file reference in settings.json: $($dup.Name)"
             $hardViolations++
@@ -226,8 +221,7 @@ if (Test-Path $packagesProps) {
 
     if ($dupPkgs.Count -eq 0) {
         Write-Pass "Directory.Packages.props — no duplicate PackageVersion entries ($($pkgNames.Count) packages)"
-    }
-    else {
+    } else {
         foreach ($dup in $dupPkgs) {
             Write-Fail "Duplicate PackageVersion in Directory.Packages.props: $($dup.Name)"
             $hardViolations++
@@ -242,9 +236,9 @@ if (Test-Path $packagesProps) {
 Write-Header "Audit Summary"
 
 $totalModules = $tweakFiles.Count
-$totalIds     = $allIds.Count
-$totalOps     = $regOps.Count
-$totalLabels  = $allLabels.Count
+$totalIds = $allIds.Count
+$totalOps = $regOps.Count
+$totalLabels = $allLabels.Count
 
 Write-Info "Scanned: $totalModules modules | $totalIds IDs | $totalOps registry ops | $totalLabels labels"
 Write-Info ""
@@ -252,12 +246,10 @@ Write-Info ""
 if ($hardViolations -gt 0) {
     Write-Fail "$hardViolations hard violation(s) found — these MUST be fixed before committing."
     Write-Info "See .github/instructions/no-duplication.instructions.md for resolution guidance."
-}
-elseif ($warnings -gt 0) {
+} elseif ($warnings -gt 0) {
     Write-Warn "$warnings warning(s) found — review the items above and eliminate unnecessary duplicates."
     Write-Info "See .github/skills/no-duplication/SKILL.md for the resolution decision tree."
-}
-else {
+} else {
     Write-Pass "All clean — no duplications detected!"
 }
 

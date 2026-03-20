@@ -609,7 +609,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets HideClock=1 in Explorer policies. Removes the clock and date display from the system tray area of the taskbar, reclaiming tray space.",
+            Description =
+                "Sets HideClock=1 in Explorer policies. Removes the clock and date display from the system tray area of the taskbar, reclaiming tray space.",
             Tags = ["taskbar", "clock", "tray", "hide"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideClock", 1)],
@@ -623,7 +624,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SearchboxTaskbarMode=1 in the Search key. Shows a compact search icon on the taskbar instead of the expanded search box (mode 2) or nothing (mode 0), saving taskbar space.",
+            Description =
+                "Sets SearchboxTaskbarMode=1 in the Search key. Shows a compact search icon on the taskbar instead of the expanded search box (mode 2) or nothing (mode 0), saving taskbar space.",
             Tags = ["taskbar", "search", "icon", "compact"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
@@ -638,7 +640,8 @@ internal static class Taskbar
             NeedsAdmin = false,
             CorpSafe = true,
             MinBuild = 22000,
-            Description = "Sets TaskbarDensity=0 in Explorer Advanced. Switches the Windows 11 taskbar to compact density mode with smaller button padding, reclaiming vertical screen space.",
+            Description =
+                "Sets TaskbarDensity=0 in Explorer Advanced. Switches the Windows 11 taskbar to compact density mode with smaller button padding, reclaiming vertical screen space.",
             Tags = ["taskbar", "compact", "density", "win11"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDensity", 0)],
@@ -652,12 +655,19 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets EnableTaskbarOverflow=0 in Explorer Advanced. Removes the overflow chevron (\"^\") that appears when too many pinned icons exist, preventing hidden icons from piling up out of sight.",
+            Description =
+                "Sets EnableTaskbarOverflow=0 in Explorer Advanced. Removes the overflow chevron (\"^\") that appears when too many pinned icons exist, preventing hidden icons from piling up out of sight.",
             Tags = ["taskbar", "overflow", "icons", "tray"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskbarOverflow", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskbarOverflow", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskbarOverflow", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskbarOverflow", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskbarOverflow", 0),
+            ],
         },
         new TweakDef
         {
@@ -666,7 +676,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ShowStatus=3 in the CTF LangBar key. Hides the language/input method indicator from the system tray. Useful on single-language machines where the bar wastes tray space.",
+            Description =
+                "Sets ShowStatus=3 in the CTF LangBar key. Hides the language/input method indicator from the system tray. Useful on single-language machines where the bar wastes tray space.",
             Tags = ["taskbar", "language", "bar", "tray"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\CTF\LangBar"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\CTF\LangBar", "ShowStatus", 3)],
@@ -680,7 +691,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets HideRecentlyAddedApps=1 in the Explorer policy. Removes the \"Recently added\" section from the top of the Start Menu's app list, reducing distraction after new software installs.",
+            Description =
+                "Sets HideRecentlyAddedApps=1 in the Explorer policy. Removes the \"Recently added\" section from the top of the Start Menu's app list, reducing distraction after new software installs.",
             Tags = ["taskbar", "start-menu", "recently-added", "apps"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "HideRecentlyAddedApps", 1)],
@@ -694,7 +706,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoStartMenuMFUprogramsList=1 in the Explorer policy. Hides the \"Most used\" / frequently-used apps section from the Start Menu, producing a cleaner app list.",
+            Description =
+                "Sets NoStartMenuMFUprogramsList=1 in the Explorer policy. Hides the \"Most used\" / frequently-used apps section from the Start Menu, producing a cleaner app list.",
             Tags = ["taskbar", "start-menu", "most-used", "apps"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoStartMenuMFUprogramsList", 1)],
@@ -708,12 +721,34 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SystemPaneSuggestionsEnabled=0 in ContentDeliveryManager. Removes Microsoft-promoted app suggestions from appearing in the Start Menu's recommended section.",
+            Description =
+                "Sets SystemPaneSuggestionsEnabled=0 in ContentDeliveryManager. Removes Microsoft-promoted app suggestions from appearing in the Start Menu's recommended section.",
             Tags = ["taskbar", "start-menu", "suggestions", "ads"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -722,7 +757,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets TaskbarSd=0 in Explorer Advanced. Removes the tiny \"Show Desktop\" peek button in the bottom-right corner of the taskbar, preventing accidental desktop exposure.",
+            Description =
+                "Sets TaskbarSd=0 in Explorer Advanced. Removes the tiny \"Show Desktop\" peek button in the bottom-right corner of the taskbar, preventing accidental desktop exposure.",
             Tags = ["taskbar", "show-desktop", "button", "hide"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSd", 0)],
@@ -736,7 +772,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets MMTaskbarMode=2 in Explorer Advanced. When multi-monitor taskbars are enabled, each monitor's taskbar shows only the windows that belong to apps on that monitor.",
+            Description =
+                "Sets MMTaskbarMode=2 in Explorer Advanced. When multi-monitor taskbars are enabled, each monitor's taskbar shows only the windows that belong to apps on that monitor.",
             Tags = ["taskbar", "multimonitor", "windows", "display"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 2)],
@@ -750,7 +787,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets Start_TrackProgs=0 in Explorer Advanced. Prevents Windows from recording which programs are launched via Start Menu, disabling the Most Used and Recently Added tracking inputs.",
+            Description =
+                "Sets Start_TrackProgs=0 in Explorer Advanced. Prevents Windows from recording which programs are launched via Start Menu, disabling the Most Used and Recently Added tracking inputs.",
             Tags = ["taskbar", "start-menu", "tracking", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
@@ -764,7 +802,8 @@ internal static class Taskbar
             Category = "Taskbar",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets NoPinningToTaskbar=1 in Explorer policies. Prevents items from being pinned to the taskbar by the user or via setup wizards, locking the taskbar layout.",
+            Description =
+                "Sets NoPinningToTaskbar=1 in Explorer policies. Prevents items from being pinned to the taskbar by the user or via setup wizards, locking the taskbar layout.",
             Tags = ["taskbar", "pinning", "lock", "policy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoPinningToTaskbar", 1)],

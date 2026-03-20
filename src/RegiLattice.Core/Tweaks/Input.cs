@@ -523,7 +523,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets MouseSonar=0 in Control Panel\\Mouse. Disables the feature that briefly shows animated rings around the mouse pointer when Ctrl is pressed to locate it.",
+            Description =
+                "Sets MouseSonar=0 in Control Panel\\Mouse. Disables the feature that briefly shows animated rings around the mouse pointer when Ctrl is pressed to locate it.",
             Tags = ["input", "mouse", "sonar", "animation"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSonar", "0")],
@@ -537,7 +538,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets MouseVanish=0 in Control Panel\\Mouse. Stops Windows from hiding the mouse pointer whenever the user is typing. Useful when working across multiple monitors.",
+            Description =
+                "Sets MouseVanish=0 in Control Panel\\Mouse. Stops Windows from hiding the mouse pointer whenever the user is typing. Useful when working across multiple monitors.",
             Tags = ["input", "mouse", "vanish", "typing"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseVanish", "0")],
@@ -551,7 +553,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets CaretWidth=2 in Desktop. Widens the blinking text insertion caret from the default 1 px to 2 px, making it easier to spot in dense code or document editors.",
+            Description =
+                "Sets CaretWidth=2 in Desktop. Widens the blinking text insertion caret from the default 1 px to 2 px, making it easier to spot in dense code or document editors.",
             Tags = ["input", "caret", "cursor", "accessibility"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 2)],
@@ -565,7 +568,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ToggleHotkey=3 in Keyboard Layout\\Toggle. Disables the hotkey that switches between input languages (default: Left Alt+Shift or Ctrl+Shift), preventing accidental layout changes mid-sentence.",
+            Description =
+                "Sets ToggleHotkey=3 in Keyboard Layout\\Toggle. Disables the hotkey that switches between input languages (default: Left Alt+Shift or Ctrl+Shift), preventing accidental layout changes mid-sentence.",
             Tags = ["input", "keyboard", "language", "hotkey"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Keyboard Layout\Toggle"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Keyboard Layout\Toggle", "ToggleHotkey", "3")],
@@ -579,7 +583,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets MouseHoverHeight=4 in Control Panel\\Mouse. Defines the vertical size of the hover rectangle; keeping it small prevents unintended hover activations on dense UIs.",
+            Description =
+                "Sets MouseHoverHeight=4 in Control Panel\\Mouse. Defines the vertical size of the hover rectangle; keeping it small prevents unintended hover activations on dense UIs.",
             Tags = ["input", "mouse", "hover", "precision"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverHeight", "4")],
@@ -593,12 +598,16 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets TwoFingerTapEnabled=0 in PrecisionTouchPad. Disables the two-finger tap gesture that normally triggers a right-click, useful when two-finger scrolling also fires unintended context menus.",
+            Description =
+                "Sets TwoFingerTapEnabled=0 in PrecisionTouchPad. Disables the two-finger tap gesture that normally triggers a right-click, useful when two-finger scrolling also fires unintended context menus.",
             Tags = ["input", "touchpad", "gesture", "tap"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -607,7 +616,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets EdgeSwipesEnabled=0 in PrecisionTouchPad. Disables swipe-from-edge gestures (open Action Center, Task View, etc.) that can fire accidentally near the trackpad border.",
+            Description =
+                "Sets EdgeSwipesEnabled=0 in PrecisionTouchPad. Disables swipe-from-edge gestures (open Action Center, Task View, etc.) that can fire accidentally near the trackpad border.",
             Tags = ["input", "touchpad", "edge", "swipe"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "EdgeSwipesEnabled", 0)],
@@ -621,12 +631,19 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ThreeFingerTapEnabled=0 in PrecisionTouchPad. Prevents the three-finger tap from opening Cortana/Search, a common source of unintended gesture activations during fast typing.",
+            Description =
+                "Sets ThreeFingerTapEnabled=0 in PrecisionTouchPad. Prevents the three-finger tap from opening Cortana/Search, a common source of unintended gesture activations during fast typing.",
             Tags = ["input", "touchpad", "gesture", "three-finger"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -635,12 +652,16 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets FourFingerTapEnabled=0 in PrecisionTouchPad. Disables the four-finger tap gesture that opens the Action Center, preventing accidental panel opens.",
+            Description =
+                "Sets FourFingerTapEnabled=0 in PrecisionTouchPad. Disables the four-finger tap gesture that opens the Action Center, preventing accidental panel opens.",
             Tags = ["input", "touchpad", "gesture", "four-finger"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -649,12 +670,19 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets RightClickZoneEnabled=0 in PrecisionTouchPad. Removes the dedicated bottom-right corner tap zone that fires a right-click, helping users who accidentally trigger it.",
+            Description =
+                "Sets RightClickZoneEnabled=0 in PrecisionTouchPad. Removes the dedicated bottom-right corner tap zone that fires a right-click, helping users who accidentally trigger it.",
             Tags = ["input", "touchpad", "right-click", "zone"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "RightClickZoneEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "RightClickZoneEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "RightClickZoneEnabled", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "RightClickZoneEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "RightClickZoneEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -663,12 +691,22 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SwipeNavigationEnabled=0 in PrecisionTouchPad. Disables three-finger left/right swipe gestures that navigate back and forward in browsers and File Explorer.",
+            Description =
+                "Sets SwipeNavigationEnabled=0 in PrecisionTouchPad. Disables three-finger left/right swipe gestures that navigate back and forward in browsers and File Explorer.",
             Tags = ["input", "touchpad", "swipe", "navigation"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "SwipeNavigationEnabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -677,7 +715,8 @@ internal static class Input
             Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets PinchZoomEnabled=0 in PrecisionTouchPad. Disables the two-finger pinch gesture that zooms in/out in supported apps and the browser, preventing accidental zoom changes.",
+            Description =
+                "Sets PinchZoomEnabled=0 in PrecisionTouchPad. Disables the two-finger pinch gesture that zooms in/out in supported apps and the browser, preventing accidental zoom changes.",
             Tags = ["input", "touchpad", "pinch", "zoom"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "PinchZoomEnabled", 0)],

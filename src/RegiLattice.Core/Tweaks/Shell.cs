@@ -493,12 +493,19 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets DisableThumbnailCache=1 in Explorer Advanced. Prevents Windows from creating and updating Thumbs.db hidden thumbnail cache files inside folders, keeping directories clean.",
+            Description =
+                "Sets DisableThumbnailCache=1 in Explorer Advanced. Prevents Windows from creating and updating Thumbs.db hidden thumbnail cache files inside folders, keeping directories clean.",
             Tags = ["shell", "explorer", "thumbnail", "cache"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1),
+            ],
         },
         new TweakDef
         {
@@ -507,12 +514,34 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets DisableThumbsDBOnNetworkFolders=1 in Explorer Advanced. Stops Windows from creating Thumbs.db thumbnail cache files on UNC and mapped network drives, which can cause file-locking issues for other users.",
+            Description =
+                "Sets DisableThumbsDBOnNetworkFolders=1 in Explorer Advanced. Stops Windows from creating Thumbs.db thumbnail cache files on UNC and mapped network drives, which can cause file-locking issues for other users.",
             Tags = ["shell", "explorer", "thumbnail", "network"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbsDBOnNetworkFolders", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
+                    "DisableThumbsDBOnNetworkFolders",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
+                    "DisableThumbsDBOnNetworkFolders",
+                    0
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
+                    "DisableThumbsDBOnNetworkFolders",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -521,7 +550,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets InitialKeyboardIndicators=2 in the Keyboard control panel key. Ensures Num Lock is enabled each time the desktop session starts.",
+            Description =
+                "Sets InitialKeyboardIndicators=2 in the Keyboard control panel key. Ensures Num Lock is enabled each time the desktop session starts.",
             Tags = ["shell", "keyboard", "numlock", "startup"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "InitialKeyboardIndicators", "2")],
@@ -535,12 +565,19 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets FolderContentsInfoTip=0 in Explorer Advanced. Removes the tooltip that appears when hovering over a folder showing its file count and size — reduces Explorer popups.",
+            Description =
+                "Sets FolderContentsInfoTip=0 in Explorer Advanced. Removes the tooltip that appears when hovering over a folder showing its file count and size — reduces Explorer popups.",
             Tags = ["shell", "explorer", "tooltip", "info"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0)],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0),
+            ],
         },
         new TweakDef
         {
@@ -549,7 +586,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SharingWizardOn=0 in Explorer Advanced. Removes the simplified sharing wizard from context menus, giving direct access to advanced sharing permissions without the guided wizard.",
+            Description =
+                "Sets SharingWizardOn=0 in Explorer Advanced. Removes the simplified sharing wizard from context menus, giving direct access to advanced sharing permissions without the guided wizard.",
             Tags = ["shell", "explorer", "sharing", "network"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
@@ -563,12 +601,26 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ShowSyncProviderNotifications=0 in Explorer Advanced. Hides the OneDrive, Google Drive, and third-party cloud sync promotional banners and notifications inside Explorer.",
+            Description =
+                "Sets ShowSyncProviderNotifications=0 in Explorer Advanced. Hides the OneDrive, Google Drive, and third-party cloud sync promotional banners and notifications inside Explorer.",
             Tags = ["shell", "explorer", "sync", "notifications", "onedrive"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
+                    "ShowSyncProviderNotifications",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -577,7 +629,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets PersistBrowsers=1 in Explorer Advanced. Restores all previously open Explorer folder windows after a reboot or sign-in, resuming your workspace automatically.",
+            Description =
+                "Sets PersistBrowsers=1 in Explorer Advanced. Restores all previously open Explorer folder windows after a reboot or sign-in, resuming your workspace automatically.",
             Tags = ["shell", "explorer", "folders", "restore"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "PersistBrowsers", 1)],
@@ -591,12 +644,22 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ShowEncryptCompressedColor=1 in Explorer Advanced. Displays encrypted files in green and NTFS-compressed files in blue in Explorer, making protected content visually distinct.",
+            Description =
+                "Sets ShowEncryptCompressedColor=1 in Explorer Advanced. Displays encrypted files in green and NTFS-compressed files in blue in Explorer, making protected content visually distinct.",
             Tags = ["shell", "explorer", "encryption", "color"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
+            ],
         },
         new TweakDef
         {
@@ -605,7 +668,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets EnableBalloonTips=0 in Explorer Advanced. Suppresses the legacy balloon-tip notifications that appear from system tray icons.",
+            Description =
+                "Sets EnableBalloonTips=0 in Explorer Advanced. Suppresses the legacy balloon-tip notifications that appear from system tray icons.",
             Tags = ["shell", "explorer", "balloons", "notifications"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
@@ -619,7 +683,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets LaunchTo=1 in Explorer Advanced. Opens new Explorer windows to the This PC view (showing all drives) instead of Quick Access. Useful for direct disk and drive navigation.",
+            Description =
+                "Sets LaunchTo=1 in Explorer Advanced. Opens new Explorer windows to the This PC view (showing all drives) instead of Quick Access. Useful for direct disk and drive navigation.",
             Tags = ["shell", "explorer", "this-pc", "quick-access"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
@@ -633,12 +698,16 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoRecentDocsHistory=1 in Explorer policies. Prevents Windows from recording history of recently opened files in the shell across all users on the machine via Group Policy.",
+            Description =
+                "Sets NoRecentDocsHistory=1 in Explorer policies. Prevents Windows from recording history of recently opened files in the shell across all users on the machine via Group Policy.",
             Tags = ["shell", "privacy", "recent-docs", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1),
+            ],
         },
         new TweakDef
         {
@@ -647,7 +716,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets SeparateProcess=1 in Explorer Advanced. Forces each Explorer window to run in its own process. A crash in one window will not bring down other open windows.",
+            Description =
+                "Sets SeparateProcess=1 in Explorer Advanced. Forces each Explorer window to run in its own process. A crash in one window will not bring down other open windows.",
             Tags = ["shell", "explorer", "stability", "process"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
@@ -661,7 +731,8 @@ internal static class Shell
             Category = "Shell",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ShowStatusBar=1 in Explorer Advanced. Enables the bottom status bar in Explorer windows that shows selected item counts, sizes, and folder details.",
+            Description =
+                "Sets ShowStatusBar=1 in Explorer Advanced. Enables the bottom status bar in Explorer windows that shows selected item counts, sizes, and folder details.",
             Tags = ["shell", "explorer", "status-bar", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],

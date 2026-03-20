@@ -846,9 +846,10 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var warnings = TweakValidator.DetectDuplicateRegistryOps(_engine.AllTweaks());
         Assert.True(
             warnings.Count <= 1200,
-            $"Duplicate registry targets exceeded regression threshold: {warnings.Count} > 1200. " +
-            $"Run scripts/Audit-Duplications.ps1 to investigate.\n" +
-            $"First 3: {string.Join(" | ", warnings.Take(3))}");
+            $"Duplicate registry targets exceeded regression threshold: {warnings.Count} > 1200. "
+                + $"Run scripts/Audit-Duplications.ps1 to investigate.\n"
+                + $"First 3: {string.Join(" | ", warnings.Take(3))}"
+        );
     }
 
     [Fact]
@@ -859,20 +860,20 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         // Same label + different registry path = acceptable (same feature, different mechanism).
         // Threshold (200) is a regression guard over current technical debt (128 groups exist).
         // REMEDIATION: run scripts/Audit-Duplications.ps1 and review each group below.
-        var collisions = _engine.AllTweaks()
+        var collisions = _engine
+            .AllTweaks()
             .Where(t => t.RegistryKeys.Count > 0)
-            .GroupBy(t => (
-                Label: t.Label.Trim().ToLowerInvariant(),
-                Path: t.RegistryKeys[0].ToLowerInvariant()))
+            .GroupBy(t => (Label: t.Label.Trim().ToLowerInvariant(), Path: t.RegistryKeys[0].ToLowerInvariant()))
             .Where(g => g.Select(t => t.Category).Distinct(StringComparer.OrdinalIgnoreCase).Count() > 1)
             .Select(g => $"'{g.Key.Label}' + '{g.Key.Path}' [{string.Join(", ", g.Select(t => $"{t.Category}/{t.Id}"))}]")
             .ToList();
 
         Assert.True(
             collisions.Count <= 200,
-            $"Cross-category duplicates (same Label + same RegistryKeys[0]) exceeded threshold: " +
-            $"{collisions.Count} > 200. Run scripts/Audit-Duplications.ps1 to investigate.\n" +
-            string.Join("\n", collisions.Take(10)));
+            $"Cross-category duplicates (same Label + same RegistryKeys[0]) exceeded threshold: "
+                + $"{collisions.Count} > 200. Run scripts/Audit-Duplications.ps1 to investigate.\n"
+                + string.Join("\n", collisions.Take(10))
+        );
     }
 
     [Fact]
@@ -898,7 +899,8 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var violations = new List<string>();
         foreach (var (category, prefix) in checkedCategories)
         {
-            if (!_engine.TweaksByCategory().TryGetValue(category, out var tweaks)) continue;
+            if (!_engine.TweaksByCategory().TryGetValue(category, out var tweaks))
+                continue;
             foreach (var t in tweaks)
             {
                 if (!t.Id.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
@@ -908,8 +910,8 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 
         Assert.True(
             violations.Count == 0,
-            $"{violations.Count} tweak(s) have IDs that don't match their canonical category slug:\n" +
-            string.Join("\n", violations.Take(20)));
+            $"{violations.Count} tweak(s) have IDs that don't match their canonical category slug:\n" + string.Join("\n", violations.Take(20))
+        );
     }
 
     [Fact]
@@ -921,7 +923,6 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         var warnings = TweakValidator.DetectDuplicateRegistryOps(_engine.AllTweaks());
         Assert.NotNull(warnings);
         // Each warning must be a non-empty string (well-formed output)
-        Assert.All(warnings, w => Assert.False(string.IsNullOrWhiteSpace(w),
-            "DetectDuplicateRegistryOps returned a null/empty warning string"));
+        Assert.All(warnings, w => Assert.False(string.IsNullOrWhiteSpace(w), "DetectDuplicateRegistryOps returned a null/empty warning string"));
     }
 }

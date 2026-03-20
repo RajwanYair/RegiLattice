@@ -59,7 +59,11 @@
   "terminal.integrated.profiles.windows": {
     "RegiLattice Dev": {
       "source": "PowerShell",
-      "args": ["-NoExit", "-Command", ". '${workspaceFolder}\\.env.ps1'"],
+      "args": [
+        "-NoExit",
+        "-Command",
+        ". '${workspaceFolder}\\.env.ps1'"
+      ],
       "icon": "terminal-powershell"
     },
     "PowerShell": {
@@ -99,14 +103,30 @@
   "github-actions.workflows.pinned.refresh.enabled": false,
   // ── GitHub Copilot ──────────────────────────────────────────────────
   "github.copilot.chat.codeGeneration.instructions": [
-    { "file": ".github/copilot-instructions.md" },
-    { "file": ".github/instructions/workspace.instructions.md" },
-    { "file": ".github/instructions/csharp.instructions.md" },
-    { "file": ".github/instructions/testing.instructions.md" },
-    { "file": ".github/instructions/git-workflow.instructions.md" },
-    { "file": ".github/instructions/lessons-learned.instructions.md" },
-    { "file": ".github/instructions/cicd.instructions.md" },
-    { "file": ".github/instructions/no-duplication.instructions.md" }
+    {
+      "file": ".github/copilot-instructions.md"
+    },
+    {
+      "file": ".github/instructions/workspace.instructions.md"
+    },
+    {
+      "file": ".github/instructions/csharp.instructions.md"
+    },
+    {
+      "file": ".github/instructions/testing.instructions.md"
+    },
+    {
+      "file": ".github/instructions/git-workflow.instructions.md"
+    },
+    {
+      "file": ".github/instructions/lessons-learned.instructions.md"
+    },
+    {
+      "file": ".github/instructions/cicd.instructions.md"
+    },
+    {
+      "file": ".github/instructions/no-duplication.instructions.md"
+    }
   ],
   "chat.promptFiles": true,
   "chat.agent.enabled": true,

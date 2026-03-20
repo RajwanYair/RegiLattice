@@ -4,6 +4,13 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.0.0] — 2026-03-20
+
+- **Major release milestone** — all capabilities fully enabled: GUI, CLI, MSI installer, 11 themes, 5 profiles, CorporateGuard, dry-run, snapshot, package managers, plugin marketplace
+- **Anti-duplication quality system**: `no-duplication.instructions.md`, `SKILL.md`, `scripts/Audit-Duplications.ps1`, +4 duplication guard tests
+- 3 669 tweaks, 94 categories; **1 435 tests** passing (1 018 Core + 175 CLI + 242 GUI)
+- Version bumped `3.8.0` → `4.0.0`
+
 ## [3.7.3] — 2026-03-20
 
 - Title-bar icons added to 7 dialogs (`AboutDialog`, `WhatsNewDialog`, `PreferencesDialog`, and 4 more)
