@@ -502,7 +502,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableStartupSound=1 in the System policy key. Permanently silences the Windows boot sound at the Group Policy level, overriding the per-user audio preference.",
+            Description =
+                "Sets DisableStartupSound=1 in the System policy key. Permanently silences the Windows boot sound at the Group Policy level, overriding the per-user audio preference.",
             Tags = ["uac", "startup", "sound", "policy"],
             RegistryKeys = [$@"{UacKey}"],
             ApplyOps = [RegOp.SetDword($@"{UacKey}", "DisableStartupSound", 1)],
@@ -516,7 +517,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisplayLastLogonInfo=1 in Winlogon. Displays the previous logon date/time and failed logon attempts on the Windows logon screen, allowing users to spot unauthorised access attempts.",
+            Description =
+                "Sets DisplayLastLogonInfo=1 in Winlogon. Displays the previous logon date/time and failed logon attempts on the Windows logon screen, allowing users to spot unauthorised access attempts.",
             Tags = ["uac", "logon", "security", "audit"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "DisplayLastLogonInfo", 1)],
@@ -530,7 +532,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RestrictAnonymousLSA=1 in the LSA key. Prevents anonymous (unauthenticated) callers from enumerating accounts and enumerable information through the LSA policy interface.",
+            Description =
+                "Sets RestrictAnonymousLSA=1 in the LSA key. Prevents anonymous (unauthenticated) callers from enumerating accounts and enumerable information through the LSA policy interface.",
             Tags = ["uac", "lsa", "anonymous", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymousLSA", 1)],
@@ -544,7 +547,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MaximumPasswordAge=30 in Netlogon Parameters. Limits machine account password lifetime to 30 days, ensuring domain-joined computers regularly rotate their machine credentials.",
+            Description =
+                "Sets MaximumPasswordAge=30 in Netlogon Parameters. Limits machine account password lifetime to 30 days, ensuring domain-joined computers regularly rotate their machine credentials.",
             Tags = ["uac", "machine-account", "password", "rotation"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "MaximumPasswordAge", 30)],
@@ -558,12 +562,22 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AddPrinterDrivers=1 in LanMan Print Services Servers. Requires administrator privileges to install new printer drivers, preventing malicious driver installs via the print spooler (PrintNightmare class).",
+            Description =
+                "Sets AddPrinterDrivers=1 in LanMan Print Services Servers. Requires administrator privileges to install new printer drivers, preventing malicious driver installs via the print spooler (PrintNightmare class).",
             Tags = ["uac", "printer", "driver", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers", "AddPrinterDrivers", 1),
+            ],
         },
         new TweakDef
         {
@@ -572,7 +586,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NTLMMinServerSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all inbound NTLM server sessions, blocking weaker LM/NTLMv1 connections.",
+            Description =
+                "Sets NTLMMinServerSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all inbound NTLM server sessions, blocking weaker LM/NTLMv1 connections.",
             Tags = ["uac", "ntlm", "security", "encryption"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinServerSec", 537395200)],
@@ -586,7 +601,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NTLMMinClientSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all outbound NTLM client sessions.",
+            Description =
+                "Sets NTLMMinClientSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all outbound NTLM client sessions.",
             Tags = ["uac", "ntlm", "security", "encryption"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinClientSec", 537395200)],
@@ -600,7 +616,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DontDisplayDomainName=1 in the System policy. Removes the domain name prefix from the username field on the Windows logon screen, reducing information leakage about domain membership.",
+            Description =
+                "Sets DontDisplayDomainName=1 in the System policy. Removes the domain name prefix from the username field on the Windows logon screen, reducing information leakage about domain membership.",
             Tags = ["uac", "logon", "domain", "privacy"],
             RegistryKeys = [$@"{UacKey}"],
             ApplyOps = [RegOp.SetDword($@"{UacKey}", "DontDisplayDomainName", 1)],
@@ -614,7 +631,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets DisableDomainCreds=1 in the LSA key. Prevents Windows from caching domain credentials in the Credential Manager, so previous logon tokens cannot be reused if the machine is compromised.",
+            Description =
+                "Sets DisableDomainCreds=1 in the LSA key. Prevents Windows from caching domain credentials in the Credential Manager, so previous logon tokens cannot be reused if the machine is compromised.",
             Tags = ["uac", "lsa", "credentials", "security"],
             SideEffects = "Users will be prompted for credentials on every network resource access if domain controllers are unavailable.",
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
@@ -629,7 +647,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RequireSignOrSeal=1 in Netlogon Parameters. Mandates digital signing or encryption on all domain secure channel communications, protecting against session hijacking attacks.",
+            Description =
+                "Sets RequireSignOrSeal=1 in Netlogon Parameters. Mandates digital signing or encryption on all domain secure channel communications, protecting against session hijacking attacks.",
             Tags = ["uac", "domain", "netlogon", "signing", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireSignOrSeal", 1)],
@@ -643,7 +662,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets SealSecureChannel=1 in Netlogon Parameters. Enforces encryption (sealing) on all domain secure channel data, preventing eavesdropping on machine-to-DC communications.",
+            Description =
+                "Sets SealSecureChannel=1 in Netlogon Parameters. Enforces encryption (sealing) on all domain secure channel data, preventing eavesdropping on machine-to-DC communications.",
             Tags = ["uac", "domain", "netlogon", "encryption", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "SealSecureChannel", 1)],
@@ -657,7 +677,8 @@ internal static class UserAccount
             Category = "User Account",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RequireStrongKey=1 in Netlogon Parameters. Forces the use of a strong (128-bit) session key for all domain secure channel traffic, rejecting machines that can only negotiate weaker keys.",
+            Description =
+                "Sets RequireStrongKey=1 in Netlogon Parameters. Forces the use of a strong (128-bit) session key for all domain secure channel traffic, rejecting machines that can only negotiate weaker keys.",
             Tags = ["uac", "domain", "netlogon", "key", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 1)],

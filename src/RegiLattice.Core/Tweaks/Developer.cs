@@ -611,7 +611,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets VirtualTerminalLevel=1 in the Console registry key. Enables ANSI escape code processing in the legacy cmd.exe window, which is required by many CLI and developer tools.",
+            Description =
+                "Sets VirtualTerminalLevel=1 in the Console registry key. Enables ANSI escape code processing in the legacy cmd.exe window, which is required by many CLI and developer tools.",
             Tags = ["developer", "console", "ansi", "terminal"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 1)],
@@ -625,7 +626,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets HistoryBufferSize=2000 in the Console registry key. Keeps the last 2000 commands per console window in history (Win+Up to browse), up from the default 50.",
+            Description =
+                "Sets HistoryBufferSize=2000 in the Console registry key. Keeps the last 2000 commands per console window in history (Win+Up to browse), up from the default 50.",
             Tags = ["developer", "console", "history", "productivity"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 2000)],
@@ -639,7 +641,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets CodePage=65001 in the Console key. Makes cmd.exe and PowerShell windows default to UTF-8 encoding, preventing mojibake when printing or piping non-ASCII text.",
+            Description =
+                "Sets CodePage=65001 in the Console key. Makes cmd.exe and PowerShell windows default to UTF-8 encoding, preventing mojibake when printing or piping non-ASCII text.",
             Tags = ["developer", "console", "utf8", "encoding"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "CodePage", 65001)],
@@ -653,7 +656,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DontShowUI=1 in Windows Error Reporting. Silently collects crash data without showing the \"this program has stopped working\" dialog, speeding up developer crash loops.",
+            Description =
+                "Sets DontShowUI=1 in Windows Error Reporting. Silently collects crash data without showing the \"this program has stopped working\" dialog, speeding up developer crash loops.",
             Tags = ["developer", "wer", "crash", "dialog"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
@@ -667,7 +671,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DefaultConsent=1 in WER\\Consent. Sends Windows Error Reports automatically without asking the user for permission, eliminating consent dialogs in development environments.",
+            Description =
+                "Sets DefaultConsent=1 in WER\\Consent. Sends Windows Error Reports automatically without asking the user for permission, eliminating consent dialogs in development environments.",
             Tags = ["developer", "wer", "consent", "crash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1)],
@@ -681,7 +686,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets Auto=0 in AeDebug. Prevents Windows from automatically launching a just-in-time debugger attachment prompt when a process crashes, allowing crash-loop testing to proceed unattended.",
+            Description =
+                "Sets Auto=0 in AeDebug. Prevents Windows from automatically launching a just-in-time debugger attachment prompt when a process crashes, allowing crash-loop testing to proceed unattended.",
             Tags = ["developer", "debugger", "jit", "crash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug"],
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug", "Auto", "0")],
@@ -695,12 +701,22 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets SaveZoneInformation=1 in Attachments policy. Stops Windows from saving Zone.Identifier alternate data streams on downloaded files, eliminating the \"This file came from the internet\" unblock prompt.",
+            Description =
+                "Sets SaveZoneInformation=1 in Attachments policy. Stops Windows from saving Zone.Identifier alternate data streams on downloaded files, eliminating the \"This file came from the internet\" unblock prompt.",
             Tags = ["developer", "download", "zone", "unblock"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation", 1),
+            ],
         },
         new TweakDef
         {
@@ -709,7 +725,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets LegacyDefaultPrinterMode=1 in Windows settings. Prevents Windows 10/11 from silently changing the default printer to the most recently used one, which interrupts developer scripts and CI pipelines that rely on a fixed default printer.",
+            Description =
+                "Sets LegacyDefaultPrinterMode=1 in Windows settings. Prevents Windows 10/11 from silently changing the default printer to the most recently used one, which interrupts developer scripts and CI pipelines that rely on a fixed default printer.",
             Tags = ["developer", "printer", "default", "productivity"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
@@ -723,7 +740,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets HideFileExt=0 in Explorer Advanced. Forces Explorer to display file extensions for all files, removing a common source of confusion when working with source files.",
+            Description =
+                "Sets HideFileExt=0 in Explorer Advanced. Forces Explorer to display file extensions for all files, removing a common source of confusion when working with source files.",
             Tags = ["developer", "explorer", "extensions", "files"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
@@ -737,7 +755,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets Hidden=1 in Explorer Advanced. Makes dotfiles, hidden config files, and .git folders visible in Explorer, which is essential for development work.",
+            Description =
+                "Sets Hidden=1 in Explorer Advanced. Makes dotfiles, hidden config files, and .git folders visible in Explorer, which is essential for development work.",
             Tags = ["developer", "explorer", "hidden", "files"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
@@ -751,7 +770,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ShowSuperHidden=1 in Explorer Advanced. Reveals system-protected files (Thumbs.db, desktop.ini, hiberfil.sys) in Explorer. Useful when diagnosing file system or boot issues.",
+            Description =
+                "Sets ShowSuperHidden=1 in Explorer Advanced. Reveals system-protected files (Thumbs.db, desktop.ini, hiberfil.sys) in Explorer. Useful when diagnosing file system or boot issues.",
             Tags = ["developer", "explorer", "system-files", "hidden"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
@@ -765,7 +785,8 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets FullPath=1 in Explorer CabinetState. Forces Explorer to show the complete directory path in the title bar and address bar instead of just the folder name.",
+            Description =
+                "Sets FullPath=1 in Explorer CabinetState. Forces Explorer to show the complete directory path in the title bar and address bar instead of just the folder name.",
             Tags = ["developer", "explorer", "path", "title-bar"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
@@ -779,12 +800,22 @@ internal static class Developer
             Category = "Dev Drive / Developer",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets HideZoneInfoOnProperties=1 in Attachments policy. Removes the Security tab \"This file came from another computer\" checkbox and security info from file property dialogs.",
+            Description =
+                "Sets HideZoneInfoOnProperties=1 in Attachments policy. Removes the Security tab \"This file came from another computer\" checkbox and security info from file property dialogs.",
             Tags = ["developer", "zone", "security", "explorer"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "HideZoneInfoOnProperties", 1),
+            ],
         },
     ];
 }
