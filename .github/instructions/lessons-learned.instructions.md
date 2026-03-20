@@ -502,3 +502,16 @@ Assert.Contains(profile, ["business", "gaming", "privacy"]);
 // ✅ GOOD — explicit array
 Assert.Contains(profile, new[] { "business", "gaming", "privacy" });
 ```
+
+---
+
+## Stuck pwsh Terminal — Open a New Shell
+
+If a `pwsh` terminal appears stuck (no output, cursor frozen, command not returning),
+do **not** retry the same command or wait indefinitely. Open a new terminal shell and
+run the next command there. The stuck shell can be killed separately.
+
+Common causes: a `dotnet test` process hanging on a finalizer, a background build lock,
+or the OneDrive file-system watcher delaying process exit.
+
+**Rule**: One stuck shell = open a fresh shell. Never block progress waiting for it.
