@@ -493,7 +493,6 @@ internal static class DnsNetworking
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableDnsSec")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableDnsSec", 1)],
         },
-
         // ── Sprint 18 — 10 new DNS & Networking Advanced tweaks ────────────
         new TweakDef
         {
@@ -516,7 +515,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures prefix policy to prefer IPv4 name resolution over IPv6, reducing latency on networks without native v6. Default: IPv6 preferred.",
+            Description =
+                "Configures prefix policy to prefer IPv4 name resolution over IPv6, reducing latency on networks without native v6. Default: IPv6 preferred.",
             Tags = ["dns", "ipv4", "ipv6", "priority", "latency"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
@@ -530,7 +530,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows from sending DNS queries to all adapters simultaneously. Reduces DNS leaks on VPN connections. Default: enabled.",
+            Description =
+                "Prevents Windows from sending DNS queries to all adapters simultaneously. Reduces DNS leaks on VPN connections. Default: enabled.",
             Tags = ["dns", "multi-homed", "vpn", "leak", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
@@ -586,7 +587,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Prevents Windows from walking up the domain suffix hierarchy when resolving names. Reduces information leakage. Default: enabled.",
+            Description =
+                "Prevents Windows from walking up the domain suffix hierarchy when resolving names. Reduces information leakage. Default: enabled.",
             Tags = ["dns", "devolution", "suffix", "privacy", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution", 0)],
@@ -600,7 +602,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Forces the DNS client to only resolve fully qualified domain names. Prevents unqualified name lookups. Default: not required.",
+            Description =
+                "Forces the DNS client to only resolve fully qualified domain names. Prevents unqualified name lookups. Default: not required.",
             Tags = ["dns", "fqdn", "security", "resolution", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "QueryAdapterName", 1)],
@@ -628,7 +631,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents sending the same DNS query across multiple network adapters simultaneously. Reduces traffic and VPN DNS leaks. Default: enabled.",
+            Description =
+                "Prevents sending the same DNS query across multiple network adapters simultaneously. Reduces traffic and VPN DNS leaks. Default: enabled.",
             Tags = ["dns", "parallel", "adapters", "vpn", "leak"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableParallelAandAAAA", 1)],

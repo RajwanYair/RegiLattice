@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>x64</Platforms>
     <Version>3.7.1</Version>
+    <AssemblyVersion>3.7.1.0</AssemblyVersion>
+    <FileVersion>3.7.1.0</FileVersion>
+    <InformationalVersion>3.7.1</InformationalVersion>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
@@ -13,9 +16,10 @@
          Critical for network drives (OneDrive) to avoid AssemblyInfoInputs.cache locking
          when multiple assemblies are built in rapid succession. -->
     <UseSharedCompilation>false</UseSharedCompilation>
-    <!-- Disable auto-generated AssemblyInfo for ALL projects — prevents OneDrive file-lock
-         on the .cache file. Version is set via <Version> above. -->
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- GenerateAssemblyInfo is enabled — version attributes (AssemblyVersion, FileVersion,
+         InformationalVersion) are embedded via the auto-generated AssemblyInfo.
+         UseSharedCompilation=false (above) prevents the Roslyn server from holding
+         file handles on the .cache file, so the OneDrive lock issue is avoided. -->
     <!-- Suppress CA1416 globally — this is a Windows-only project. All projects
          target net10.0-windows and will never run on non-Windows platforms. -->
     <NoWarn>$(NoWarn);CA1416</NoWarn>
