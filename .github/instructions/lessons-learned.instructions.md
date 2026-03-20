@@ -515,3 +515,23 @@ Common causes: a `dotnet test` process hanging on a finalizer, a background buil
 or the OneDrive file-system watcher delaying process exit.
 
 **Rule**: One stuck shell = open a fresh shell. Never block progress waiting for it.
+
+---
+
+## Prefer MCP / Copilot Tools Over the Real Shell
+
+When a dedicated tool exists for an operation, **always use it** instead of running
+a terminal command. Fall back to the shell only when no tool covers the operation.
+
+| Operation                         | Preferred tool                              | Avoid              |
+| --------------------------------- | ------------------------------------------- | ------------------ |
+| Read a file                       | `read_file` / `mcp_filesystem_read_file`    | `Get-Content`      |
+| Write / create a file             | `create_file` / `replace_string_in_file`    | `Set-Content`      |
+| Search text in files              | `grep_search` / `semantic_search`           | `Select-String`    |
+| List directory contents           | `list_dir` / `mcp_filesystem_list_directory`| `Get-ChildItem`    |
+| Git status / log / diff           | `mcp_gitkraken_git_*` tools                 | `git` in terminal  |
+| Run tests                         | `runTests` tool                             | `dotnet test`      |
+| Get compile/lint errors           | `get_errors`                                | `dotnet build`     |
+
+**Why**: MCP and Copilot tools are faster, produce structured output, avoid shell
+encoding issues, don't consume a terminal slot, and never get stuck.
