@@ -135,13 +135,13 @@ Version follows **Semantic Versioning**: `MAJOR.MINOR.PATCH`
 When bumping:
 
 1. Update `Directory.Build.props` — ALL four version properties must be kept in sync:
-   ```xml
-   <Version>X.Y.Z</Version>
-   <AssemblyVersion>X.Y.Z.0</AssemblyVersion>
-   <FileVersion>X.Y.Z.0</FileVersion>
-   <InformationalVersion>X.Y.Z</InformationalVersion>
-   ```
-   No `Properties/AssemblyInfo.cs` exists — `Directory.Build.props` is the single source of truth.
+    ```xml
+    <Version>X.Y.Z</Version>
+    <AssemblyVersion>X.Y.Z.0</AssemblyVersion>
+    <FileVersion>X.Y.Z.0</FileVersion>
+    <InformationalVersion>X.Y.Z</InformationalVersion>
+    ```
+    No `Properties/AssemblyInfo.cs` exists — `Directory.Build.props` is the single source of truth.
 2. Update `installer/Package.wxs` → `Version="X.Y.Z.0"`
 3. Add `## [X.Y.Z] — YYYY-MM-DD` section to `docs/CHANGELOG.md`
 4. Update `Readme.md` version badge and tweak/test counts if changed

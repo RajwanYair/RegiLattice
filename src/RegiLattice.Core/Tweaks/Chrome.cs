@@ -277,20 +277,6 @@ internal static class Chrome
         },
         new TweakDef
         {
-            Id = "chrome-disable-chrome-bg",
-            Label = "Disable Chrome Background Mode",
-            Category = "Chrome",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Chrome from running in the background after all windows are closed.",
-            Tags = ["chrome", "browser", "background", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "chrome-disable-chrome-signin",
             Label = "Disable Chrome Sign-In",
             Category = "Chrome",
@@ -542,54 +528,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 2)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-metrics-off",
-            Label = "Disable Chrome metrics and usage reporting",
-            Category = "Chrome",
-            Tags = ["chrome", "metrics", "telemetry", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-spell-check-off",
-            Label = "Disable Chrome spellcheck web service",
-            Category = "Chrome",
-            Tags = ["chrome", "spellcheck", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SpellCheckServiceEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SpellCheckServiceEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SpellCheckServiceEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-translate-off",
-            Label = "Disable automatic translation in Chrome",
-            Category = "Chrome",
-            Tags = ["chrome", "translate", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-browser-signin-off",
-            Label = "Disable Chrome browser sign-in to Google",
-            Category = "Chrome",
-            Tags = ["chrome", "signin", "google", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin", 0)],
         },
         new TweakDef
         {

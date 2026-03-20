@@ -557,6 +557,9 @@ internal static class SystemTweaks
                     "PhysicalMemoryAllocationPolicy"
                 ),
             ],
+            // NOTE: No RemoveOps — this tweak deletes a cap value that was set by the user or
+            // OEM. We cannot safely restore to an unknown prior value; re-enabling any limit
+            // would require knowing what it was. Removal is intentionally one-directional.
             RemoveOps = [],
             DetectOps =
             [

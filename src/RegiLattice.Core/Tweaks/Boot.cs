@@ -432,6 +432,8 @@ internal static class Boot
                 Elevation.AssertAdmin(admin);
                 Elevation.RunElevated("verifier", ["/reset"]);
             },
+            // NOTE: No RemoveAction — "reset" is a one-shot diagnostic action. There is no
+            // meaningful inverse; re-enabling verifier requires choosing specific drivers.
             DetectAction = () =>
             {
                 var (_, stdout, _) = Elevation.RunElevated("verifier", ["/query"]);

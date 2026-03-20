@@ -214,12 +214,12 @@ All references to the GitHub account must use `RajwanYair`:
 ## Version & Metadata
 
 - Version lives in `Directory.Build.props` — update **all four** properties together:
-  ```xml
-  <Version>X.Y.Z</Version>
-  <AssemblyVersion>X.Y.Z.0</AssemblyVersion>
-  <FileVersion>X.Y.Z.0</FileVersion>
-  <InformationalVersion>X.Y.Z</InformationalVersion>
-  ```
+    ```xml
+    <Version>X.Y.Z</Version>
+    <AssemblyVersion>X.Y.Z.0</AssemblyVersion>
+    <FileVersion>X.Y.Z.0</FileVersion>
+    <InformationalVersion>X.Y.Z</InformationalVersion>
+    ```
 - **No manual `Properties/AssemblyInfo.cs`** — was deleted in v3.7.1. Version attributes are
   embedded exclusively via MSBuild auto-generated AssemblyInfo (`GenerateAssemblyInfo=true`).
 - Do not duplicate version strings — single source of truth is `Directory.Build.props`
@@ -407,7 +407,9 @@ When porting or bulk-adding tweaks, it is easy to accidentally copy the wrong re
 key from a nearby tweak. Two categories of copy-paste bugs found:
 
 ### Semantic value mismatch
+
 `EnableAutoDoh` in `HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters`:
+
 - Value `2` = **Automatic** (try DoH, fall back to plain DNS if unavailable)
 - Value `3` = **Require/Enforce** (fail DNS resolution if DoH is unavailable)
 
@@ -420,9 +422,11 @@ ApplyOps = [RegOp.SetDword(@"HKLM\SYSTEM\..\Dnscache\Parameters", "EnableAutoDoh
 ```
 
 ### Completely wrong key
+
 `evtlog-disable-dns-client-log` was incorrectly writing to `Dnscache\Parameters\EnableAutoDoh`
 (which controls DNS-over-HTTPS, not event tracing). The correct key to disable the DNS
 client operational event channel is:
+
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-DNS-Client/Operational
   Enabled = 0
@@ -441,6 +445,7 @@ The same registry operation can be silently duplicated across unrelated modules
 Duplicate tweaks confuse users and dilute the ID namespace.
 
 **Detection scan**:
+
 ```powershell
 # Find duplicate registry key+valuename combinations across all tweak modules
 Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'SetDword|SetString' |
@@ -448,6 +453,7 @@ Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'SetDword|SetStrin
 ```
 
 **Cases found and removed (v3.7.1)**:
+
 - `msstore-disable-auto-app-updates` + `msstore-auto-update-off` → both duplicated
   `msstore-disable-auto-update` (`WindowsStore\AutoDownload=2`)
 - `schtask-disable-maps-update` → subset of `schtask-task-disable-maps-update`
@@ -456,6 +462,7 @@ Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'SetDword|SetStrin
   Maps auto-download has nothing to do with Windows Recall
 
 **Rules**:
+
 - Keep the tweak in the **semantically correct** module, not wherever it was first written
 - When two tweaks target the same registry key+value, keep the one with better description, correct CorpSafe, and matching category slug
 - The simpler (fewer ops) duplicate is almost always the one to remove
@@ -521,15 +528,15 @@ or the OneDrive file-system watcher delaying process exit.
 When a dedicated tool exists for an operation, **always use it** instead of running
 a terminal command. Fall back to the shell only when no tool covers the operation.
 
-| Operation                         | Preferred tool                              | Avoid              |
-| --------------------------------- | ------------------------------------------- | ------------------ |
-| Read a file                       | `read_file` / `mcp_filesystem_read_file`    | `Get-Content`      |
-| Write / create a file             | `create_file` / `replace_string_in_file`    | `Set-Content`      |
-| Search text in files              | `grep_search` / `semantic_search`           | `Select-String`    |
-| List directory contents           | `list_dir` / `mcp_filesystem_list_directory`| `Get-ChildItem`    |
-| Git status / log / diff           | `mcp_gitkraken_git_*` tools                 | `git` in terminal  |
-| Run tests                         | `runTests` tool                             | `dotnet test`      |
-| Get compile/lint errors           | `get_errors`                                | `dotnet build`     |
+| Operation               | Preferred tool                               | Avoid             |
+| ----------------------- | -------------------------------------------- | ----------------- |
+| Read a file             | `read_file` / `mcp_filesystem_read_file`     | `Get-Content`     |
+| Write / create a file   | `create_file` / `replace_string_in_file`     | `Set-Content`     |
+| Search text in files    | `grep_search` / `semantic_search`            | `Select-String`   |
+| List directory contents | `list_dir` / `mcp_filesystem_list_directory` | `Get-ChildItem`   |
+| Git status / log / diff | `mcp_gitkraken_git_*` tools                  | `git` in terminal |
+| Run tests               | `runTests` tool                              | `dotnet test`     |
+| Get compile/lint errors | `get_errors`                                 | `dotnet build`    |
 
 **Why**: MCP and Copilot tools are faster, produce structured output, avoid shell
 encoding issues, don't consume a terminal slot, and never get stuck.
