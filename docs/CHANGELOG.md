@@ -4,6 +4,30 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.7.3] — 2026-03-20
+
+### Fixed / Polished
+
+- **Title-bar icons** added to 7 dialogs that were missing them:
+  `AboutDialog`, `WhatsNewDialog`, `PreferencesDialog`, `HostsAddDialog`,
+  `HostsUrlPromptDialog`, `ScheduleEditDialog`, `AddProfileScheduleDialog`
+
+### Chore
+
+- `Readme.md` renamed to `README.md` (universal GitHub/open-source convention)
+- Root-level `CONTRIBUTING.md` and `CHANGELOG.md` stubs added — GitHub auto-links
+  the Contribute and Changelog community-health buttons from root or `.github/`
+- `PULL_REQUEST_TEMPLATE.md` test count corrected: `203+` → `1,431+`
+- `github.copilot` base extension added to `.vscode/extensions.json`
+
+### Stats
+
+- Tweaks: **2 991** (unchanged)
+- Tests: **1 414** passing (1 014 Core + 175 CLI + 225 GUI)
+- Version bumped `3.7.2` → `3.7.3`
+
+---
+
 ## [3.7.2] — 2026-03-20
 
 ### Added

@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [3.7.3] — 2026-03-20
+
+- Title-bar icons added to 7 dialogs (`AboutDialog`, `WhatsNewDialog`, `PreferencesDialog`, and 4 more)
+- Repo standards: `README.md` rename, root `CONTRIBUTING.md`/`CHANGELOG.md` stubs, PR-template test count fix
+- Tests: **1 414** passing
+
 ## [3.7.2] — 2026-03-20
 
 - **64 new tests** covering previously untested code paths (+4.7% branch coverage)
