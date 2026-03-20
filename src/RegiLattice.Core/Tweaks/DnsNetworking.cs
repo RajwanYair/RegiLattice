@@ -646,7 +646,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the DNS resolver socket pool to 2 500 sockets (CERT-recommended). A larger pool randomises source ports, mitigating DNS cache-poisoning attacks.",
+            Description =
+                "Sets the DNS resolver socket pool to 2 500 sockets (CERT-recommended). A larger pool randomises source ports, mitigating DNS cache-poisoning attacks.",
             Tags = ["dns", "security", "cache-poisoning", "socket", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "SocketPoolSize", 2500)],
@@ -660,12 +661,26 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents the DNS client from dynamically registering PTR (reverse lookup) records. Reduces DNS noise and avoids exposing the hostname via reverse lookups.",
+            Description =
+                "Prevents the DNS client from dynamically registering PTR (reverse lookup) records. Reduces DNS noise and avoids exposing the hostname via reverse lookups.",
             Tags = ["dns", "ptr", "privacy", "registration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "DisableReverseAddressRegistrations", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "DisableReverseAddressRegistrations")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "DisableReverseAddressRegistrations", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "DisableReverseAddressRegistrations", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "DisableReverseAddressRegistrations"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters",
+                    "DisableReverseAddressRegistrations",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -674,7 +689,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Applies the DNSClient GPO policy to disable dynamic DNS registration. The workstation will not automatically update its A or AAAA records in DNS.",
+            Description =
+                "Applies the DNSClient GPO policy to disable dynamic DNS registration. The workstation will not automatically update its A or AAAA records in DNS.",
             Tags = ["dns", "dynamic-update", "gpo", "privacy", "registration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableDynamicUpdate", 1)],
@@ -688,12 +704,16 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Raises MaximumUdpDatagramSize to 4 096 bytes. Required to receive full DNSSEC-signed responses over UDP without falling back to TCP.",
+            Description =
+                "Raises MaximumUdpDatagramSize to 4 096 bytes. Required to receive full DNSSEC-signed responses over UDP without falling back to TCP.",
             Tags = ["dns", "dnssec", "udp", "performance", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumUdpDatagramSize", 4096)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumUdpDatagramSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumUdpDatagramSize", 4096)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumUdpDatagramSize", 4096),
+            ],
         },
         new TweakDef
         {
@@ -702,12 +722,16 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets ServerPriorityTimeLimit to 400 ms. The resolver will try the next server in its list sooner when the current preferred server is slow.",
+            Description =
+                "Sets ServerPriorityTimeLimit to 400 ms. The resolver will try the next server in its list sooner when the current preferred server is slow.",
             Tags = ["dns", "timeout", "performance", "server-priority"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "ServerPriorityTimeLimit", 400)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "ServerPriorityTimeLimit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "ServerPriorityTimeLimit", 400)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "ServerPriorityTimeLimit", 400),
+            ],
         },
         new TweakDef
         {
@@ -716,7 +740,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets CacheHashTableSize to 4 096 buckets. A larger hash table reduces collision chains in the DNS cache, improving cache lookup speed under heavy load.",
+            Description =
+                "Sets CacheHashTableSize to 4 096 buckets. A larger hash table reduces collision chains in the DNS cache, improving cache lookup speed under heavy load.",
             Tags = ["dns", "cache", "performance", "hash-table"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "CacheHashTableSize", 4096)],
@@ -730,7 +755,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MaxHostnameTtl to 3 600 seconds (1 hour). Prevents the DNS cache from holding stale hostname entries for excessively long periods.",
+            Description =
+                "Sets MaxHostnameTtl to 3 600 seconds (1 hour). Prevents the DNS cache from holding stale hostname entries for excessively long periods.",
             Tags = ["dns", "cache", "ttl", "hostname"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxHostnameTtl", 3600)],
@@ -749,7 +775,10 @@ internal static class DnsNetworking
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxAddressQueryTimeout", 30000)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxAddressQueryTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxAddressQueryTimeout", 30000)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxAddressQueryTimeout", 30000),
+            ],
         },
         new TweakDef
         {
@@ -758,7 +787,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RegisterAdapterName=0 to stop the DNS client from registering individual adapter names. Reduces DNS record clutter on multi-homed hosts.",
+            Description =
+                "Sets RegisterAdapterName=0 to stop the DNS client from registering individual adapter names. Reduces DNS record clutter on multi-homed hosts.",
             Tags = ["dns", "registration", "adapter", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "RegisterAdapterName", 0)],
@@ -772,12 +802,22 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Applies the DNSClient GPO policy to disable reverse-address (PTR) record registration. Provides a policy-enforced version of the Dnscache parameter equivalent.",
+            Description =
+                "Applies the DNSClient GPO policy to disable reverse-address (PTR) record registration. Provides a policy-enforced version of the Dnscache parameter equivalent.",
             Tags = ["dns", "ptr", "gpo", "privacy", "registration"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableReverseAddressRegistrations", 1),
+            ],
         },
         new TweakDef
         {
@@ -786,7 +826,8 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets UpdateSecurityLevel=256 so the DNS client only attempts GSS-API authenticated (secure) dynamic updates. Prevents unauthenticated update attempts on Active Directory-integrated zones.",
+            Description =
+                "Sets UpdateSecurityLevel=256 so the DNS client only attempts GSS-API authenticated (secure) dynamic updates. Prevents unauthenticated update attempts on Active Directory-integrated zones.",
             Tags = ["dns", "security", "update", "gss", "ad"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "UpdateSecurityLevel", 256)],
@@ -800,12 +841,16 @@ internal static class DnsNetworking
             Category = "DNS & Networking Advanced",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MaximumDynamicBackoff to 20 000 ms. Stops the DNS client from waiting more than 20 s between retry attempts for failed dynamic updates.",
+            Description =
+                "Sets MaximumDynamicBackoff to 20 000 ms. Stops the DNS client from waiting more than 20 s between retry attempts for failed dynamic updates.",
             Tags = ["dns", "dynamic-update", "backoff", "timeout"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumDynamicBackoff", 20000)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumDynamicBackoff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumDynamicBackoff", 20000)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaximumDynamicBackoff", 20000),
+            ],
         },
     ];
 }

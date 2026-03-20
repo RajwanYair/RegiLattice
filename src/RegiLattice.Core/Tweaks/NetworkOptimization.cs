@@ -672,7 +672,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Explicitly sets DefaultTTL to 64, matching Linux/macOS defaults. Reduces unnecessary router hops and normalises TTL fingerprinting signatures.",
+            Description =
+                "Explicitly sets DefaultTTL to 64, matching Linux/macOS defaults. Reduces unnecessary router hops and normalises TTL fingerprinting signatures.",
             Tags = ["network", "tcp", "ttl", "performance", "privacy"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "DefaultTTL", 64)],
@@ -686,7 +687,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets Tcp1323Opts=3 to enable both RFC 1323 large window scaling and TCP timestamps. Allows gigabit-scale receive windows and improves round-trip measurements.",
+            Description =
+                "Sets Tcp1323Opts=3 to enable both RFC 1323 large window scaling and TCP timestamps. Allows gigabit-scale receive windows and improves round-trip measurements.",
             Tags = ["network", "tcp", "window-scaling", "timestamps", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "Tcp1323Opts", 3)],
@@ -700,7 +702,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets GlobalMaxTcpWindowSize to 8 388 608 bytes (8 MB). Caps the global TCP receive window ceiling, allowing the auto-tuning algorithm room to grow on high-bandwidth connections.",
+            Description =
+                "Sets GlobalMaxTcpWindowSize to 8 388 608 bytes (8 MB). Caps the global TCP receive window ceiling, allowing the auto-tuning algorithm room to grow on high-bandwidth connections.",
             Tags = ["network", "tcp", "window", "bandwidth", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "GlobalMaxTcpWindowSize", 8388608)],
@@ -714,7 +717,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Ensures EnablePMTUDiscovery=1 is set. Path MTU Discovery allows TCP to negotiate the largest possible packet size along a route, reducing fragmentation overhead.",
+            Description =
+                "Ensures EnablePMTUDiscovery=1 is set. Path MTU Discovery allows TCP to negotiate the largest possible packet size along a route, reducing fragmentation overhead.",
             Tags = ["network", "tcp", "mtu", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "EnablePMTUDiscovery", 1)],
@@ -728,7 +732,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets EnablePMTUBHDetect=0. The blackhole-detection workaround can reduce the window size unnecessarily on modern networks; disabling it keeps PMTU working efficiently.",
+            Description =
+                "Sets EnablePMTUBHDetect=0. The blackhole-detection workaround can reduce the window size unnecessarily on modern networks; disabling it keeps PMTU working efficiently.",
             Tags = ["network", "tcp", "mtu", "blackhole", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "EnablePMTUBHDetect", 0)],
@@ -742,7 +747,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TcpMaxHalfOpen to 100. Caps the number of simultaneous half-open (SYN-sent) connections, complementing SYN-flood attack protection.",
+            Description =
+                "Sets TcpMaxHalfOpen to 100. Caps the number of simultaneous half-open (SYN-sent) connections, complementing SYN-flood attack protection.",
             Tags = ["network", "tcp", "syn", "security", "connections"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxHalfOpen", 100)],
@@ -756,7 +762,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TcpMaxHalfOpenRetried to 80. Once the half-open count exceeds this, the TCP stack starts dropping the oldest half-open connections.",
+            Description =
+                "Sets TcpMaxHalfOpenRetried to 80. Once the half-open count exceeds this, the TCP stack starts dropping the oldest half-open connections.",
             Tags = ["network", "tcp", "syn", "security", "connections"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxHalfOpenRetried", 80)],
@@ -770,7 +777,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TcpMaxSendFree to 65 536 bytes. Provides extra headroom in the TCP send buffer pool, reducing stalls on burst-sending applications.",
+            Description =
+                "Sets TcpMaxSendFree to 65 536 bytes. Provides extra headroom in the TCP send buffer pool, reducing stalls on burst-sending applications.",
             Tags = ["network", "tcp", "send-buffer", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxSendFree", 65536)],
@@ -784,7 +792,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TcpDelAckTicks to 1. Lowers the number of clock ticks before a delayed ACK is sent. Reduces latency for interactive protocols such as SSH and RDP.",
+            Description =
+                "Sets TcpDelAckTicks to 1. Lowers the number of clock ticks before a delayed ACK is sent. Reduces latency for interactive protocols such as SSH and RDP.",
             Tags = ["network", "tcp", "ack", "latency", "gaming"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "TcpDelAckTicks", 1)],
@@ -798,7 +807,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MinUserPort to 49152, aligning with the IANA-recommended ephemeral port range (49152–65535). Reserves the range 1024–49151 for server listen ports.",
+            Description =
+                "Sets MinUserPort to 49152, aligning with the IANA-recommended ephemeral port range (49152–65535). Reserves the range 1024–49151 for server listen ports.",
             Tags = ["network", "ports", "ephemeral", "iana", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "MinUserPort", 49152)],
@@ -812,7 +822,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the AFD ListenBacklog to 200. Increases the queue depth for incoming connection requests before the application accept()s them, reducing connection refusals under burst load.",
+            Description =
+                "Sets the AFD ListenBacklog to 200. Increases the queue depth for incoming connection requests before the application accept()s them, reducing connection refusals under burst load.",
             Tags = ["network", "tcp", "listen", "connections", "server"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\AFD\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "ListenBacklog", 200)],
@@ -826,7 +837,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DefaultMSS to 1 460 bytes, the standard Ethernet MSS (MTU 1500 − 40 bytes). Prevents unnecessary TCP fragmentation on Ethernet-based networks.",
+            Description =
+                "Sets DefaultMSS to 1 460 bytes, the standard Ethernet MSS (MTU 1500 − 40 bytes). Prevents unnecessary TCP fragmentation on Ethernet-based networks.",
             Tags = ["network", "tcp", "mss", "mtu", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "DefaultMSS", 1460)],
@@ -840,7 +852,8 @@ internal static class NetworkOptimization
             Category = "Network Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets TcpMaxConnectRetransmissions to 2. Unreachable hosts are declared unavailable after 2 SYN retries instead of the default, reducing connection hang time.",
+            Description =
+                "Sets TcpMaxConnectRetransmissions to 2. Unreachable hosts are declared unavailable after 2 SYN retries instead of the default, reducing connection hang time.",
             Tags = ["network", "tcp", "syn", "retransmit", "performance"],
             RegistryKeys = [TcpParams],
             ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxConnectRetransmissions", 2)],

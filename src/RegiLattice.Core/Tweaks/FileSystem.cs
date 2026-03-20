@@ -374,7 +374,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
-
         // ── Sprint 20 additions ─────────────────────────────────────────────
 
         new TweakDef
@@ -384,14 +383,34 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Adds additional critical worker threads for the file system. Improves I/O throughput on multi-core systems with many concurrent operations.",
+            Description =
+                "Adds additional critical worker threads for the file system. Improves I/O throughput on multi-core systems with many concurrent operations.",
             Tags = ["filesystem", "performance", "threads", "io"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads", 16)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalCriticalWorkerThreads", 16)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive",
+                    "AdditionalCriticalWorkerThreads",
+                    16
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive",
+                    "AdditionalCriticalWorkerThreads"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive",
+                    "AdditionalCriticalWorkerThreads",
+                    16
+                ),
+            ],
         },
-
         new TweakDef
         {
             Id = "fs-set-additional-delayed-worker-threads",
@@ -402,11 +421,27 @@ internal static class FileSystem
             Description = "Adds additional delayed worker threads for background file system operations. Reduces queuing delays under heavy I/O.",
             Tags = ["filesystem", "performance", "threads", "background"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads", 16)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads", 16)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive",
+                    "AdditionalDelayedWorkerThreads",
+                    16
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive", "AdditionalDelayedWorkerThreads"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Executive",
+                    "AdditionalDelayedWorkerThreads",
+                    16
+                ),
+            ],
         },
-
         new TweakDef
         {
             Id = "fs-disable-notification-change",
@@ -421,7 +456,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableChangeJournal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableChangeJournal", 1)],
         },
-
         new TweakDef
         {
             Id = "fs-optimize-path-cache",
@@ -436,7 +470,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "PathCache")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "PathCache", 128)],
         },
-
         new TweakDef
         {
             Id = "fs-enable-opportunistic-locking",
@@ -444,14 +477,14 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Ensures opportunistic locking (oplock) is enabled for file I/O. Improves read/write performance for network and local files.",
+            Description =
+                "Ensures opportunistic locking (oplock) is enabled for file I/O. Improves read/write performance for network and local files.",
             Tags = ["filesystem", "oplock", "performance", "network"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EnableOplocks", 1)],
         },
-
         new TweakDef
         {
             Id = "fs-disable-ntfs-tunneling",
@@ -459,14 +492,14 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables NTFS file name tunneling. Tunneling preserves short/long name associations across rename/delete cycles. Disabling frees kernel memory.",
+            Description =
+                "Disables NTFS file name tunneling. Tunneling preserves short/long name associations across rename/delete cycles. Disabling frees kernel memory.",
             Tags = ["filesystem", "ntfs", "tunneling", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
         },
-
         new TweakDef
         {
             Id = "fs-set-io-queue-depth",
@@ -474,14 +507,14 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Increases the I/O request packet (IRP) stack size for deeper driver stacks. Improves throughput with advanced storage controllers.",
+            Description =
+                "Increases the I/O request packet (IRP) stack size for deeper driver stacks. Improves throughput with advanced storage controllers.",
             Tags = ["filesystem", "io", "queue", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
         },
-
         new TweakDef
         {
             Id = "fs-enable-win32-long-paths-policy",
@@ -489,14 +522,14 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables long path support (>260 chars) via the Group Policy registry key. Complements the manifest-level opt-in for Win32 applications.",
+            Description =
+                "Enables long path support (>260 chars) via the Group Policy registry key. Complements the manifest-level opt-in for Win32 applications.",
             Tags = ["filesystem", "long-paths", "policy", "developer"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
         },
-
         new TweakDef
         {
             Id = "fs-disable-transacted-installer-rollback",
@@ -511,7 +544,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableTxfLog")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableTxfLog", 1)],
         },
-
         new TweakDef
         {
             Id = "fs-increase-file-handle-limit",
@@ -533,7 +565,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets AutoShareWks=0 so Windows does not automatically create hidden administrative shares (C$, D$, ADMIN$) on workstations. Reduces attack surface for lateral-movement over SMB.",
+            Description =
+                "Sets AutoShareWks=0 so Windows does not automatically create hidden administrative shares (C$, D$, ADMIN$) on workstations. Reduces attack surface for lateral-movement over SMB.",
             Tags = ["filesystem", "smb", "shares", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
@@ -547,7 +580,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets SMB1=0 in LanmanServer parameters to disable the legacy SMB 1.0/CIFS protocol on the server side. SMBv1 is vulnerable to EternalBlue and similar exploits.",
+            Description =
+                "Sets SMB1=0 in LanmanServer parameters to disable the legacy SMB 1.0/CIFS protocol on the server side. SMBv1 is vulnerable to EternalBlue and similar exploits.",
             Tags = ["filesystem", "smb", "smb1", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0)],
@@ -561,7 +595,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the FileHistory GPO policy Disabled=1. Prevents the File History background backup service from continuously monitoring and copying files, reducing drive writes on SSDs.",
+            Description =
+                "Sets the FileHistory GPO policy Disabled=1. Prevents the File History background backup service from continuously monitoring and copying files, reducing drive writes on SSDs.",
             Tags = ["filesystem", "file-history", "backup", "writes", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\FileHistory"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\FileHistory", "Disabled", 1)],
@@ -575,7 +610,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableLocalPage=1 to remove the Previous Versions tab from file properties. Avoids shadow-copy enumeration overhead when browsing file properties.",
+            Description =
+                "Sets DisableLocalPage=1 to remove the Previous Versions tab from file properties. Avoids shadow-copy enumeration overhead when browsing file properties.",
             Tags = ["filesystem", "previous-versions", "shadow-copy", "ui"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PreviousVersions"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableLocalPage", 1)],
@@ -589,7 +625,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets DfsDisable=1 to prevent the DFS client from attempting Distributed File System namespace resolution. Eliminates DFS-related DNS and SMB round-trips on workstations not joined to Active Directory.",
+            Description =
+                "Sets DfsDisable=1 to prevent the DFS client from attempting Distributed File System namespace resolution. Eliminates DFS-related DNS and SMB round-trips on workstations not joined to Active Directory.",
             Tags = ["filesystem", "dfs", "smb", "ad", "network"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DFS"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DFS", "DfsDisable", 1)],
@@ -603,12 +640,22 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NtfsAllowExtendedCharacterIn8dot3Name=1. Enables Unicode/extended character support in NTFS 8.3 short names, improving compatibility with legacy applications that read short names.",
+            Description =
+                "Sets NtfsAllowExtendedCharacterIn8dot3Name=1. Enables Unicode/extended character support in NTFS 8.3 short names, improving compatibility with legacy applications that read short names.",
             Tags = ["filesystem", "ntfs", "8dot3", "unicode", "compatibility"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 1),
+            ],
         },
         new TweakDef
         {
@@ -617,7 +664,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets SafeDllSearchMode=1. Ensures Windows searches System32 before the current working directory when loading DLLs. Mitigates DLL planting / search-order hijacking attacks.",
+            Description =
+                "Sets SafeDllSearchMode=1. Ensures Windows searches System32 before the current working directory when loading DLLs. Mitigates DLL planting / search-order hijacking attacks.",
             Tags = ["filesystem", "dll", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
@@ -631,7 +679,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AutoDisconnect=5 (minutes) in LanmanServer parameters. Reclaims SMB session resources 5 minutes after a client goes idle, freeing server handles and memory.",
+            Description =
+                "Sets AutoDisconnect=5 (minutes) in LanmanServer parameters. Reclaims SMB session resources 5 minutes after a client goes idle, freeing server handles and memory.",
             Tags = ["filesystem", "smb", "server", "connections", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoDisconnect", 5)],
@@ -645,12 +694,22 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets OplockBreakTimeout to 35 seconds in LanmanWorkstation parameters. The client will wait up to 35 s for the server to acknowledge an opportunistic lock break before timing out the request.",
+            Description =
+                "Sets OplockBreakTimeout to 35 seconds in LanmanWorkstation parameters. The client will wait up to 35 s for the server to acknowledge an opportunistic lock break before timing out the request.",
             Tags = ["filesystem", "smb", "oplock", "timeout", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout", 35)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout", 35)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout", 35),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "OplockBreakTimeout", 35),
+            ],
         },
         new TweakDef
         {
@@ -659,12 +718,22 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RequireSecuritySignature=1 in LanmanWorkstation parameters. The SMB client will only connect to servers that support packet signing, preventing NTLM relay attacks on file shares.",
+            Description =
+                "Sets RequireSecuritySignature=1 in LanmanWorkstation parameters. The SMB client will only connect to servers that support packet signing, preventing NTLM relay attacks on file shares.",
             Tags = ["filesystem", "smb", "signing", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
+            ],
         },
         new TweakDef
         {
@@ -673,12 +742,22 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RequireSecuritySignature=1 in LanmanServer parameters. Clients must use signed SMB packets when accessing shares served by this machine.",
+            Description =
+                "Sets RequireSecuritySignature=1 in LanmanServer parameters. Clients must use signed SMB packets when accessing shares served by this machine.",
             Tags = ["filesystem", "smb", "signing", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
+            ],
         },
         new TweakDef
         {
@@ -687,7 +766,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NtfsCompressionDisabled=1. Prevents NTFS from applying per-file or per-directory compression attributes. Eliminates CPU cost from on-the-fly decompression reads on SSDs where storage is not a bottleneck.",
+            Description =
+                "Sets NtfsCompressionDisabled=1. Prevents NTFS from applying per-file or per-directory compression attributes. Eliminates CPU cost from on-the-fly decompression reads on SSDs where storage is not a bottleneck.",
             Tags = ["filesystem", "ntfs", "compression", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsCompressionDisabled", 1)],
@@ -701,12 +781,19 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoLowDiskSpaceChecks=1 via Explorer policy. Suppresses the periodic low disk space balloon notification that appears in the system tray.",
+            Description =
+                "Sets NoLowDiskSpaceChecks=1 via Explorer policy. Suppresses the periodic low disk space balloon notification that appears in the system tray.",
             Tags = ["filesystem", "disk", "notification", "explorer"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
+            ],
         },
         new TweakDef
         {
@@ -715,7 +802,8 @@ internal static class FileSystem
             Category = "File System",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoAutorun=1 via Explorer policy to disable AutoRun on all drive types. Prevents automatic execution of content on USB drives, optical media, and external HDDs.",
+            Description =
+                "Sets NoAutorun=1 via Explorer policy to disable AutoRun on all drive types. Prevents automatic execution of content on USB drives, optical media, and external HDDs.",
             Tags = ["filesystem", "autorun", "security", "usb", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutorun", 1)],

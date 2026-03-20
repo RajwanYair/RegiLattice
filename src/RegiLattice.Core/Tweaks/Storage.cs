@@ -606,8 +606,8 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-set-storage-sense-monthly",
-            Label = "Set Storage Sense to Run Monthly",
+            Id = "stor-set-storage-sense-cadence-monthly",
+            Label = "Set Storage Sense Cadence: Monthly",
             Category = "Storage",
             NeedsAdmin = false,
             CorpSafe = true,
@@ -777,8 +777,8 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-disable-storage-sense",
-            Label = "Disable Storage Sense Entirely",
+            Id = "stor-disable-storage-sense-full",
+            Label = "Disable Storage Sense Entirely (Full)",
             Category = "Storage",
             NeedsAdmin = false,
             CorpSafe = true,
