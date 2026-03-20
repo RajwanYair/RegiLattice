@@ -31,23 +31,24 @@ public record ThemeDef(
 
 ## Current 11 Themes
 
-| Name | Style | Key Accent |
-|------|-------|-----------|
-| Catppuccin Mocha | Dark | Lavender `#CBA6F7` |
+| Name             | Style | Key Accent         |
+| ---------------- | ----- | ------------------ |
+| Catppuccin Mocha | Dark  | Lavender `#CBA6F7` |
 | Catppuccin Latte | Light | Lavender `#7287FD` |
-| Nord | Dark | Blue `#88C0D0` |
-| Dracula | Dark | Purple `#BD93F9` |
-| Tokyo Night | Dark | Blue `#7AA2F7` |
-| Gruvbox Dark | Dark | Orange `#FE8019` |
-| Solarized Dark | Dark | Blue `#268BD2` |
-| One Dark Pro | Dark | Blue `#61AFEF` |
-| Rosé Pine | Dark | Gold `#F6C177` |
-| Everforest | Dark | Green `#A7C080` |
-| Cyberpunk | Dark | Cyan `#00F5FF` |
+| Nord             | Dark  | Blue `#88C0D0`     |
+| Dracula          | Dark  | Purple `#BD93F9`   |
+| Tokyo Night      | Dark  | Blue `#7AA2F7`     |
+| Gruvbox Dark     | Dark  | Orange `#FE8019`   |
+| Solarized Dark   | Dark  | Blue `#268BD2`     |
+| One Dark Pro     | Dark  | Blue `#61AFEF`     |
+| Rosé Pine        | Dark  | Gold `#F6C177`     |
+| Everforest       | Dark  | Green `#A7C080`    |
+| Cyberpunk        | Dark  | Cyan `#00F5FF`     |
 
 ## Adding a New Theme
 
 ### 1. Define the ThemeDef in `Theme.cs`
+
 Look for the `_themes` static list and add a new entry:
 
 ```csharp
@@ -69,9 +70,11 @@ new ThemeDef(
 ```
 
 ### 2. Register in the theme list
+
 The `_themes` list is returned by `AvailableThemes()`. No extra registration needed — just add to the list.
 
 ### 3. Write a test in `tests/RegiLattice.GUI.Tests/ThemeTests.cs`
+
 ```csharp
 [Fact]
 public void Theme_MyNewTheme_HasRequiredProperties()
@@ -89,6 +92,7 @@ public void Theme_MyNewTheme_HasRequiredProperties()
 ## ApplyTheme — How Themes Are Applied
 
 `Theme.ApplyTheme(Control)` recursively walks the control tree:
+
 - Sets `BackColor` / `ForeColor` on panels, labels, buttons, listviews
 - Special handling for `RichTextBox` (BackColor must be set AFTER ReadOnly to avoid Windows override)
 - `MainForm` re-applies after any dynamic control creation

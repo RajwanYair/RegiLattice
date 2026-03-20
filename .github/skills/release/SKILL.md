@@ -87,13 +87,68 @@ git push
 git push --tags
 ```
 
+### 7. Post-release verification (MANDATORY — do not skip)
+
+Wait 3–5 minutes then:
+
+1. Open the GitHub Actions tab: `https://github.com/RajwanYair/RegiLattice/actions/workflows/release.yml`
+2. Confirm the workflow for `vX.Y.Z` shows a green ✅ (not ❌ or ⏳)
+3. Open `https://github.com/RajwanYair/RegiLattice/releases/latest`
+4. Verify the release exists with all expected assets:
+   - `RegiLattice.GUI.exe` (GUI portable)
+   - `RegiLattice.exe` (CLI portable)
+   - `*.msi` (installer — may be absent if WiX build failed, which is OK)
+   - `SHA256SUMS.txt` (checksums)
+
+**Only after these checks pass** is the release complete. Do NOT skip this step — past releases
+failed silently (v3.5.0 succeeded; v3.7.3 workflow failed because the MSI build error cascaded
+and killed the release upload step entirely).
+
 ## GitHub Actions Release Workflow
 
 The tag push triggers `.github/workflows/release.yml` which:
 1. Builds GUI + CLI as self-contained `win-x64` single-file executables
-2. Builds the WiX `.msi` installer
-3. Creates a GitHub Release with all 3 artifacts attached
-4. Release URL: `https://github.com/RajwanYair/RegiLattice/releases`
+2. *Optionally* builds the WiX `.msi` installer (`continue-on-error: true`)
+3. Creates a GitHub Release with all artifacts (`fail_on_unmatched_files: false`)
+
+The MSI build is **non-blocking** — if WiX toolchain fails, the EXEs are still released.
+
+## Recovering a Failed Release
+
+If the workflow fails (or POST-RELEASE VERIFICATION shows no release at the expected tag):
+
+```powershell
+# 1. Fix the workflow/code causing the failure
+# 2. Commit the fix
+git add -A
+git commit -m "fix(ci): fix release workflow issue"
+
+# 3. Delete the broken tag locally and on remote
+git tag -d vX.Y.Z
+git push origin :refs/tags/vX.Y.Z
+
+# 4. Re-create and push the tag — this re-triggers the workflow
+git tag vX.Y.Z
+git push --tags
+```
+
+Alternatively, use `workflow_dispatch` on GitHub Actions UI:
+- Go to Actions → Release → "Run workflow"
+- Select the `vX.Y.Z` tag as the ref
+- Optionally enter the tag name in the `tag_name` input
+
+## README Download Link — Correct Format
+
+The README download link must use the **version number** in the link text, NOT a specific filename.
+The actual uploaded filenames depend on the build and may not include the version:
+
+```markdown
+# ✅ CORRECT — version in text, resolves to actual release page
+👉 **[Download RegiLattice vX.Y.Z](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE)
+
+# ❌ WRONG — hardcodes a specific filename that may not exist or may differ
+👉 **[Download RegiLattice-X.Y.Z-win-x64.msi](https://github.com/.../releases/latest)**
+```
 
 ## What NOT to Do
 
@@ -101,3 +156,5 @@ The tag push triggers `.github/workflows/release.yml` which:
 - **Never leave 4 version properties out of sync** — they all must match `X.Y.Z`
 - **Don't push without tests passing** — 0 failures required
 - **Don't forget `installer/Package.wxs`** — MSI silently embeds the old version otherwise
+- **Don't skip post-release verification** — the workflow can fail silently; always check Actions tab
+- **Don't hardcode a specific MSI filename** in README — it may not exist if WiX build fails
