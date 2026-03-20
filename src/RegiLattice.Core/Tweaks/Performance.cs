@@ -1010,7 +1010,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Aero Peek preview that shows the desktop when hovering over the Show Desktop button. Eliminates the associated DWM composition overhead.",
+            Description =
+                "Disables the Aero Peek preview that shows the desktop when hovering over the Show Desktop button. Eliminates the associated DWM composition overhead.",
             Tags = ["performance", "aero", "animations", "dwm"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek", 0)],
@@ -1024,7 +1025,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the Aero Shake gesture that minimises all background windows when you shake the active window. Prevents accidental mass-minimise.",
+            Description =
+                "Disables the Aero Shake gesture that minimises all background windows when you shake the active window. Prevents accidental mass-minimise.",
             Tags = ["performance", "aero", "shake", "explorer"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
@@ -1038,7 +1040,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables the kernel crash dump (CrashDumpEnabled=0). On systems without debugging needs, skipping the dump saves time on BSOD and recovers disk space from dump files.",
+            Description =
+                "Disables the kernel crash dump (CrashDumpEnabled=0). On systems without debugging needs, skipping the dump saves time on BSOD and recovers disk space from dump files.",
             Tags = ["performance", "bsod", "crash", "dump"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
@@ -1052,7 +1055,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AutoReboot=0 so the system halts on the BSOD screen instead of immediately rebooting. Allows the stop-code and error address to be read.",
+            Description =
+                "Sets AutoReboot=0 so the system halts on the BSOD screen instead of immediately rebooting. Allows the stop-code and error address to be read.",
             Tags = ["performance", "bsod", "crash", "reboot"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
@@ -1066,7 +1070,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Increases MaxCmds to 32 in LanmanWorkstation parameters. Allows more simultaneous outstanding SMB requests, improving file-share throughput under multi-threaded workloads.",
+            Description =
+                "Increases MaxCmds to 32 in LanmanWorkstation parameters. Allows more simultaneous outstanding SMB requests, improving file-share throughput under multi-threaded workloads.",
             Tags = ["performance", "smb", "network", "server"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds", 32)],
@@ -1080,7 +1085,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows Error Reporting (WER) so no problem reports are generated or uploaded. Eliminates background WER crash-harvesting threads.",
+            Description =
+                "Disables Windows Error Reporting (WER) so no problem reports are generated or uploaded. Eliminates background WER crash-harvesting threads.",
             Tags = ["performance", "wer", "crash", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
@@ -1094,7 +1100,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DefaultConsent=4 (\"Never\") in the WER consent key. Even if WER is enabled, no reports are transmitted to Microsoft.",
+            Description =
+                "Sets DefaultConsent=4 (\"Never\") in the WER consent key. Even if WER is enabled, no reports are transmitted to Microsoft.",
             Tags = ["performance", "wer", "consent", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 4)],
@@ -1108,7 +1115,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Removes the drop-shadow rendering from ListView items in Explorer. Small rendering overhead eliminated on large file lists.",
+            Description =
+                "Removes the drop-shadow rendering from ListView items in Explorer. Small rendering overhead eliminated on large file lists.",
             Tags = ["performance", "explorer", "ui", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ListviewShadow", 0)],
@@ -1122,7 +1130,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LogEvent=0 to prevent the CrashControl service from writing a System event log entry on each BSOD. Reduces disk writes during crash recovery.",
+            Description =
+                "Sets LogEvent=0 to prevent the CrashControl service from writing a System event log entry on each BSOD. Reduces disk writes during crash recovery.",
             Tags = ["performance", "bsod", "event-log", "crash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent", 0)],
@@ -1136,7 +1145,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets WaitToKillAppTimeout to 5 000 ms. Unresponsive applications are terminated 5 seconds after shutdown is initiated instead of the default 20 s.",
+            Description =
+                "Sets WaitToKillAppTimeout to 5 000 ms. Unresponsive applications are terminated 5 seconds after shutdown is initiated instead of the default 20 s.",
             Tags = ["performance", "shutdown", "app", "timeout"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", 5000)],
@@ -1150,7 +1160,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets WaitToKillServiceTimeout to 2 000 ms. Services that do not respond to stop requests are forcibly terminated after 2 seconds during system shutdown.",
+            Description =
+                "Sets WaitToKillServiceTimeout to 2 000 ms. Services that do not respond to stop requests are forcibly terminated after 2 seconds during system shutdown.",
             Tags = ["performance", "shutdown", "service", "timeout"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", 2000)],
@@ -1164,7 +1175,8 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables taskbar button animations (TaskbarAnimations=0). Reduces compositor workload from button hover, press, and window show/hide transitions.",
+            Description =
+                "Disables taskbar button animations (TaskbarAnimations=0). Reduces compositor workload from button hover, press, and window show/hide transitions.",
             Tags = ["performance", "taskbar", "animations", "ui"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
@@ -1178,12 +1190,16 @@ internal static class Performance
             Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables the translucent alpha-blend selection rectangle in Explorer list views (ListviewAlphaSelect=0). Eliminates the per-frame alpha compositing cost during rubber-band selection.",
+            Description =
+                "Disables the translucent alpha-blend selection rectangle in Explorer list views (ListviewAlphaSelect=0). Eliminates the per-frame alpha compositing cost during rubber-band selection.",
             Tags = ["performance", "explorer", "ui", "rendering"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ListviewAlphaSelect", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ListviewAlphaSelect")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ListviewAlphaSelect", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ListviewAlphaSelect", 0),
+            ],
         },
     ];
 }

@@ -485,7 +485,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MaxQueueCount=1 in Windows Error Reporting. At most one queued problem report is retained, preventing WER from accumulating large archives of crash data on disk.",
+            Description =
+                "Sets MaxQueueCount=1 in Windows Error Reporting. At most one queued problem report is retained, preventing WER from accumulating large archives of crash data on disk.",
             Tags = ["cleanup", "wer", "crash", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "MaxQueueCount", 1)],
@@ -499,7 +500,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets MinidumpsCount=1 in CrashControl. Only the most recent minidump is kept; older dumps are deleted automatically, preventing gradual accumulation in %SystemRoot%\\Minidump.",
+            Description =
+                "Sets MinidumpsCount=1 in CrashControl. Only the most recent minidump is kept; older dumps are deleted automatically, preventing gradual accumulation in %SystemRoot%\\Minidump.",
             Tags = ["cleanup", "minidump", "crash", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpsCount", 1)],
@@ -513,7 +515,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets FilterPages=1 in CrashControl. Zero-filled memory pages are excluded from crash dump files, significantly reducing dump size on systems with large amounts of idle RAM.",
+            Description =
+                "Sets FilterPages=1 in CrashControl. Zero-filled memory pages are excluded from crash dump files, significantly reducing dump size on systems with large amounts of idle RAM.",
             Tags = ["cleanup", "crash", "dump", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "FilterPages", 1)],
@@ -527,7 +530,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets DisableRollback=1 via Windows Installer policy. Prevents MSI from creating rollback scripts and temporary backup files during installation. Saves significant disk space during large installs but removes the ability to undo a failed installation.",
+            Description =
+                "Sets DisableRollback=1 via Windows Installer policy. Prevents MSI from creating rollback scripts and temporary backup files during installation. Saves significant disk space during large installs but removes the ability to undo a failed installation.",
             Tags = ["cleanup", "installer", "msi", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Installer"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Installer", "DisableRollback", 1)],
@@ -541,7 +545,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DiskPercent=5 in SystemRestore policy. Caps the disk space allocated to System Restore shadow copies at 5%, freeing space currently consumed by older restore-point snapshots.",
+            Description =
+                "Sets DiskPercent=5 in SystemRestore policy. Caps the disk space allocated to System Restore shadow copies at 5%, freeing space currently consumed by older restore-point snapshots.",
             Tags = ["cleanup", "system-restore", "disk-space", "shadow-copy"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DiskPercent", 5)],
@@ -555,7 +560,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DontShowUI=1 in Windows Error Reporting. WER operates silently in the background; no \"Check for Solution\" dialog is shown to the user. Eliminates interactive stalls after crashes.",
+            Description =
+                "Sets DontShowUI=1 in Windows Error Reporting. WER operates silently in the background; no \"Check for Solution\" dialog is shown to the user. Eliminates interactive stalls after crashes.",
             Tags = ["cleanup", "wer", "ui", "dialog"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
@@ -569,7 +575,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets EnableActivityFeed=0 via System policy. Stops Windows from recording app launches, file opens, and web browsing into the Timeline activity database, eliminating ongoing writes to the ActivitiesCache.db on disk.",
+            Description =
+                "Sets EnableActivityFeed=0 via System policy. Stops Windows from recording app launches, file opens, and web browsing into the Timeline activity database, eliminating ongoing writes to the ActivitiesCache.db on disk.",
             Tags = ["cleanup", "activity-history", "timeline", "privacy", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
@@ -583,7 +590,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AllowClipboardHistory=0 via System policy. Prevents Windows from recording clipboard entries to disk. Stops clipboard data from being written to the activity store and synced across devices.",
+            Description =
+                "Sets AllowClipboardHistory=0 via System policy. Prevents Windows from recording clipboard entries to disk. Stops clipboard data from being written to the activity store and synced across devices.",
             Tags = ["cleanup", "clipboard", "privacy", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
@@ -597,7 +605,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AllowWindowsInkWorkspace=0 via policy. Removes the Windows Ink Workspace button and stops its background processes, eliminating related trace files and reducing RAM usage on non-tablet systems.",
+            Description =
+                "Sets AllowWindowsInkWorkspace=0 via policy. Removes the Windows Ink Workspace button and stops its background processes, eliminating related trace files and reducing RAM usage on non-tablet systems.",
             Tags = ["cleanup", "ink", "tablet", "debloat"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
@@ -611,7 +620,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets PreventIndexingRemovableDrive=1 in Windows Search policy. Stops the indexer from crawling USB and removable drives, preventing spurious index updates every time a drive is inserted.",
+            Description =
+                "Sets PreventIndexingRemovableDrive=1 in Windows Search policy. Stops the indexer from crawling USB and removable drives, preventing spurious index updates every time a drive is inserted.",
             Tags = ["cleanup", "search", "indexer", "usb", "removable"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingRemovableDrive", 1)],
@@ -625,7 +635,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RestrictImplicitTextCollection=1 in InputPersonalization. Stops Windows from silently harvesting typed text for handwriting/typing personalisation, eliminating writes to the per-user text data store.",
+            Description =
+                "Sets RestrictImplicitTextCollection=1 in InputPersonalization. Stops Windows from silently harvesting typed text for handwriting/typing personalisation, eliminating writes to the per-user text data store.",
             Tags = ["cleanup", "privacy", "text", "personalization", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\InputPersonalization"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
@@ -639,7 +650,8 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RestrictImplicitInkCollection=1 in InputPersonalization. Stops Windows from recording stylus and touch strokes for handwriting personalisation and sending them to Microsoft.",
+            Description =
+                "Sets RestrictImplicitInkCollection=1 in InputPersonalization. Stops Windows from recording stylus and touch strokes for handwriting personalisation and sending them to Microsoft.",
             Tags = ["cleanup", "privacy", "ink", "handwriting", "personalization"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\InputPersonalization"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
@@ -653,12 +665,33 @@ internal static class DiskCleanup
             Category = "Disk Cleanup",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets AllowEnhancedDiagnosticDataWindowsAnalytics=0 in DataCollection policy. Prevents the enhanced diagnostic upload tier used by Windows Analytics/Update Compliance, reducing background telemetry writes and uploads.",
+            Description =
+                "Sets AllowEnhancedDiagnosticDataWindowsAnalytics=0 in DataCollection policy. Prevents the enhanced diagnostic upload tier used by Windows Analytics/Update Compliance, reducing background telemetry writes and uploads.",
             Tags = ["cleanup", "telemetry", "privacy", "diagnostic", "disk-space"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "AllowEnhancedDiagnosticDataWindowsAnalytics", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "AllowEnhancedDiagnosticDataWindowsAnalytics")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection", "AllowEnhancedDiagnosticDataWindowsAnalytics", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection",
+                    "AllowEnhancedDiagnosticDataWindowsAnalytics",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection",
+                    "AllowEnhancedDiagnosticDataWindowsAnalytics"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection",
+                    "AllowEnhancedDiagnosticDataWindowsAnalytics",
+                    0
+                ),
+            ],
         },
     ];
 }

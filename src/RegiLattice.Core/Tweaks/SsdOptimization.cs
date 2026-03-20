@@ -372,7 +372,6 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 2)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
         },
-
         // ── Sprint 20 additions ─────────────────────────────────────────────
 
         new TweakDef
@@ -389,7 +388,6 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM", 0)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-dipm",
@@ -397,14 +395,14 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables DIPM (Device-Initiated Power Management) on SATA SSDs. Prevents the SSD from entering low-power states that add latency.",
+            Description =
+                "Disables DIPM (Device-Initiated Power Management) on SATA SSDs. Prevents the SSD from entering low-power states that add latency.",
             Tags = ["ssd", "performance", "power", "dipm"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-idle-power-timeout",
@@ -414,12 +412,34 @@ internal static class SsdOptimization
             CorpSafe = true,
             Description = "Sets the disk idle timeout to 0, preventing SSDs from entering sleep mode. Eliminates wake-up latency spikes.",
             Tags = ["ssd", "performance", "power", "timeout"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e", "ValueMax", 0)],
+            RegistryKeys =
+            [
+                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax",
+                    0
+                ),
+            ],
         },
-
         new TweakDef
         {
             Id = "ssd-increase-mft-zone-4",
@@ -434,7 +454,6 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-log-file-flush",
@@ -442,14 +461,14 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Reduces the frequency of NTFS journal log file flushes. Decreases write amplification on SSDs at a small risk of data on power loss.",
+            Description =
+                "Reduces the frequency of NTFS journal log file flushes. Decreases write amplification on SSDs at a small risk of data on power loss.",
             Tags = ["ssd", "ntfs", "log", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-pagefile-encryption",
@@ -457,14 +476,14 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables page file encryption that adds CPU overhead and write amplification on SSDs. Less secure but faster swap performance.",
+            Description =
+                "Disables page file encryption that adds CPU overhead and write amplification on SSDs. Less secure but faster swap performance.",
             Tags = ["ssd", "pagefile", "encryption", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
         },
-
         new TweakDef
         {
             Id = "ssd-optimize-power-scheme",
@@ -472,14 +491,14 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures the active power scheme for SSDs by disabling aggressive power saving that causes latency on modern NVMe drives.",
+            Description =
+                "Configures the active power scheme for SSDs by disabling aggressive power saving that causes latency on modern NVMe drives.",
             Tags = ["ssd", "power", "nvme", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-timestamp-on-directories",
@@ -494,7 +513,6 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
         },
-
         new TweakDef
         {
             Id = "ssd-enable-volatile-write-cache",
@@ -502,14 +520,14 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Enables volatile write caching on SSD controller. Improves sequential write performance but data may be lost on sudden power loss.",
+            Description =
+                "Enables volatile write caching on SSD controller. Improves sequential write performance but data may be lost on sudden power loss.",
             Tags = ["ssd", "write-cache", "performance", "risk"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Enum\SCSI"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 0)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
         },
-
         new TweakDef
         {
             Id = "ssd-disable-content-indexing-global",
@@ -531,12 +549,19 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets ClearPageFileAtShutdown=0 so Windows does not zero-fill the pagefile on every shutdown. Eliminates a large sequential write that significantly increases SSD wear-out and lengthens shutdown time.",
+            Description =
+                "Sets ClearPageFileAtShutdown=0 so Windows does not zero-fill the pagefile on every shutdown. Eliminates a large sequential write that significantly increases SSD wear-out and lengthens shutdown time.",
             Tags = ["ssd", "pagefile", "shutdown", "performance", "wear"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0),
+            ],
         },
         new TweakDef
         {
@@ -545,7 +570,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LowPriorityIO=1 in the Windows Search gatherer parameters. The indexer uses background I/O priority, reducing I/O contention with interactive applications on SSDs.",
+            Description =
+                "Sets LowPriorityIO=1 in the Windows Search gatherer parameters. The indexer uses background I/O priority, reducing I/O contention with interactive applications on SSDs.",
             Tags = ["ssd", "search", "indexer", "io-priority", "performance"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex", "LowPriorityIO", 1)],
@@ -559,7 +585,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets EnableAutoLayout=0. On SSDs the auto-layout rearrangement of boot files provides no latency benefit because seek time is negligible. Eliminates the post-defrag layout phase.",
+            Description =
+                "Sets EnableAutoLayout=0. On SSDs the auto-layout rearrangement of boot files provides no latency benefit because seek time is negligible. Eliminates the post-defrag layout phase.",
             Tags = ["ssd", "boot", "auto-layout", "defrag", "performance"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout", 0)],
@@ -573,7 +600,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the disk service TimeOutValue to 20 seconds. SSDs respond orders of magnitude faster than HDDs; the default 45 s timeout means stalled SSD requests block the queue for far too long.",
+            Description =
+                "Sets the disk service TimeOutValue to 20 seconds. SSDs respond orders of magnitude faster than HDDs; the default 45 s timeout means stalled SSD requests block the queue for far too long.",
             Tags = ["ssd", "timeout", "disk", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue", 20)],
@@ -587,12 +615,16 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets IoPageLockLimit to 1 048 576 bytes (1 MB). Caps the amount of physical memory that can be locked for I/O transfers, keeping more RAM available for application buffers.",
+            Description =
+                "Sets IoPageLockLimit to 1 048 576 bytes (1 MB). Caps the amount of physical memory that can be locked for I/O transfers, keeping more RAM available for application buffers.",
             Tags = ["ssd", "memory", "io", "pool", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576)],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576),
+            ],
         },
         new TweakDef
         {
@@ -601,7 +633,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets GeneralSamplingEnabled=0 in the RAC registry key. Stops the Reliability Analysis Component from periodically sampling system activity and writing entries to the RAC database on the SSD.",
+            Description =
+                "Sets GeneralSamplingEnabled=0 in the RAC registry key. Stops the Reliability Analysis Component from periodically sampling system activity and writing entries to the RAC database on the SSD.",
             Tags = ["ssd", "reliability", "rac", "wear", "writes"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC", "GeneralSamplingEnabled", 0)],
@@ -615,7 +648,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NtfsForceNonPagedPoolAllocation=1. Keeps NTFS internal metadata structures in non-paged pool memory, eliminating paging I/O on the SSD for the file system's own working set.",
+            Description =
+                "Sets NtfsForceNonPagedPoolAllocation=1. Keeps NTFS internal metadata structures in non-paged pool memory, eliminating paging I/O on the SSD for the file system's own working set.",
             Tags = ["ssd", "ntfs", "memory", "paged-pool", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsForceNonPagedPoolAllocation", 1)],
@@ -629,7 +663,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets ReadAheadThreshold=0 in LanmanWorkstation parameters. Disables SMB client read-ahead prefetching. On SSDs random I/O is as fast as sequential, so pre-reading data wastes write bandwidth and cache without benefit.",
+            Description =
+                "Sets ReadAheadThreshold=0 in LanmanWorkstation parameters. Disables SMB client read-ahead prefetching. On SSDs random I/O is as fast as sequential, so pre-reading data wastes write bandwidth and cache without benefit.",
             Tags = ["ssd", "smb", "read-ahead", "network", "performance"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "ReadAheadThreshold", 0)],
@@ -643,7 +678,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets BackOffIfDiskBusy=0 in Windows Search. By default the indexer backs off when disk utilisation is high. On SSDs concurrent I/O is fully supported; disabling backoff lets indexing keep pace.",
+            Description =
+                "Sets BackOffIfDiskBusy=0 in Windows Search. By default the indexer backs off when disk utilisation is high. On SSDs concurrent I/O is fully supported; disabling backoff lets indexing keep pace.",
             Tags = ["ssd", "search", "indexer", "io", "performance"],
             RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows Search"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search", "BackOffIfDiskBusy", 0)],
@@ -657,7 +693,8 @@ internal static class SsdOptimization
             Category = "SSD Optimization",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets NoAutoMount=1 in the MountMgr parameters. Prevents Windows from automatically assigning drive letters and mounting new storage volumes. Avoids unexpected I/O and AutoRun triggers when USB drives are inserted.",
+            Description =
+                "Sets NoAutoMount=1 in the MountMgr parameters. Prevents Windows from automatically assigning drive letters and mounting new storage volumes. Avoids unexpected I/O and AutoRun triggers when USB drives are inserted.",
             Tags = ["ssd", "mount", "volume", "autorun", "security"],
             RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr", "NoAutoMount", 1)],

@@ -712,7 +712,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows from accepting ICMP redirect packets that could silently reroute traffic. Hardens workstations against MITM-style route injection.",
+            Description =
+                "Prevents Windows from accepting ICMP redirect packets that could silently reroute traffic. Hardens workstations against MITM-style route injection.",
             Tags = ["network", "icmp", "security", "routing"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableICMPRedirects", 0)],
@@ -726,7 +727,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the IPv4 Router Discovery (IRDP) mechanism. Prevents the host from updating its default gateway via ICMP Router Advertisements.",
+            Description =
+                "Disables the IPv4 Router Discovery (IRDP) mechanism. Prevents the host from updating its default gateway via ICMP Router Advertisements.",
             Tags = ["network", "icmp", "router", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "PerformRouterDiscovery", 0)],
@@ -754,7 +756,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows from automatically switching to a backup gateway when it detects the primary might be unreachable. Avoids unintended gateway changes on multi-homed systems.",
+            Description =
+                "Prevents Windows from automatically switching to a backup gateway when it detects the primary might be unreachable. Avoids unintended gateway changes on multi-homed systems.",
             Tags = ["network", "gateway", "routing", "stability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "EnableDeadGWDetect", 0)],
@@ -768,7 +771,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableIPSourceRouting=2 to fully block source-routed packets. Prevents attackers from specifying packet routing paths to bypass firewalls.",
+            Description =
+                "Sets DisableIPSourceRouting=2 to fully block source-routed packets. Prevents attackers from specifying packet routing paths to bypass firewalls.",
             Tags = ["network", "ip", "routing", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "DisableIPSourceRouting", 2)],
@@ -824,7 +828,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables TCP SACK (Selective Acknowledgements). Allows the receiver to report non-contiguous received blocks so the sender retransmits only missing segments, improving throughput on lossy links.",
+            Description =
+                "Enables TCP SACK (Selective Acknowledgements). Allows the receiver to report non-contiguous received blocks so the sender retransmits only missing segments, improving throughput on lossy links.",
             Tags = ["network", "tcp", "sack", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "SackOpts", 1)],
@@ -838,7 +843,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables DHCP Media Sense so Windows does not tear down the IP stack when a link-down event is detected. Prevents spurious IP address releases on flapping links.",
+            Description =
+                "Disables DHCP Media Sense so Windows does not tear down the IP stack when a link-down event is detected. Prevents spurious IP address releases on flapping links.",
             Tags = ["network", "dhcp", "media-sense", "stability"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "DisableDHCPMediaSense", 1)],
@@ -852,12 +858,16 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Lowers TcpMaxConnectRetransmissions from the default to 2. Unreachable hosts are timed out and reported more quickly during connection establishment.",
+            Description =
+                "Lowers TcpMaxConnectRetransmissions from the default to 2. Unreachable hosts are timed out and reported more quickly during connection establishment.",
             Tags = ["network", "tcp", "retransmit", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxConnectRetransmissions", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxConnectRetransmissions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxConnectRetransmissions", 2)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpMaxConnectRetransmissions", 2),
+            ],
         },
         new TweakDef
         {
@@ -866,7 +876,8 @@ internal static class Network
             Category = "Network",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets IPEnableRouter=0 to ensure this workstation does not forward IP packets between interfaces. Prevents the machine from inadvertently acting as a router.",
+            Description =
+                "Sets IPEnableRouter=0 to ensure this workstation does not forward IP packets between interfaces. Prevents the machine from inadvertently acting as a router.",
             Tags = ["network", "ip", "routing", "security", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "IPEnableRouter", 0)],

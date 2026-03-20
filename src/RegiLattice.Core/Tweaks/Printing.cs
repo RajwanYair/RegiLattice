@@ -694,13 +694,13 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-disable-fax-service",
-            Label = "Disable Windows Fax and Scan Service",
+            Id = "printing-disable-fax-scan-service",
+            Label = "Disable Windows Fax and Scan Service (WFS)",
             Category = "Printing",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
-                "Disables the Windows Fax and Scan service. Removes fax capability and associated surface area. Default: manual/disabled on most systems.",
+                "Disables the Windows Fax and Scan service (wfs). Removes fax capability and associated surface area. Default: manual/disabled on most systems.",
             Tags = ["printing", "fax", "services"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],

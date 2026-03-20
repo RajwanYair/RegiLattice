@@ -435,7 +435,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Increases MaxConnectionsPerServer to 128 in the HKLM WinINet settings. Allows services using WinINet to open more simultaneous connections to the same origin.",
+            Description =
+                "Increases MaxConnectionsPerServer to 128 in the HKLM WinINet settings. Allows services using WinINet to open more simultaneous connections to the same origin.",
             Tags = ["proxy", "wininet", "connections", "performance"],
             RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPerServer", 128)],
@@ -454,7 +455,10 @@ internal static class ProxyVpn
             RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPer1_0Server", 128)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPer1_0Server")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPer1_0Server", 128)],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPer1_0Server", 128),
+            ],
         },
         new TweakDef
         {
@@ -463,7 +467,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Enables a warning dialog when a redirect downgrades from HTTPS to HTTP. Alerts users to potential MitM or stripping attacks.",
+            Description =
+                "Enables a warning dialog when a redirect downgrades from HTTPS to HTTP. Alerts users to potential MitM or stripping attacks.",
             Tags = ["proxy", "https", "security", "warning", "downgrade"],
             RegistryKeys = [InetKey],
             ApplyOps = [RegOp.SetDword(InetKey, "WarnOnHTTPSToHTTPRedirect", 1)],
@@ -477,12 +482,16 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DisableFirstRunCustomize=1 (HKLM) to suppress the IE first-run customisation wizard. Prevents unwanted home-page changes on managed systems.",
+            Description =
+                "Sets DisableFirstRunCustomize=1 (HKLM) to suppress the IE first-run customisation wizard. Prevents unwanted home-page changes on managed systems.",
             Tags = ["proxy", "ie", "first-run", "debloat"],
             RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main", "DisableFirstRunCustomize", 1)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main", "DisableFirstRunCustomize")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main", "DisableFirstRunCustomize", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main", "DisableFirstRunCustomize", 1),
+            ],
         },
         new TweakDef
         {
@@ -505,7 +514,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Enables a warning when a page moves between Internet Explorer security zones (e.g., Internet → Intranet). Surfaces unexpected zone transitions to the user.",
+            Description =
+                "Enables a warning when a page moves between Internet Explorer security zones (e.g., Internet → Intranet). Surfaces unexpected zone transitions to the user.",
             Tags = ["proxy", "ie", "security-zone", "warning"],
             RegistryKeys = [InetKey],
             ApplyOps = [RegOp.SetDword(InetKey, "WarnOnChangingZone", 1)],
@@ -519,7 +529,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Sets ReceiveTimeout to 30 000 ms in WinINet. Drops stalled HTTP receives after 30 seconds instead of the 5-minute default.",
+            Description =
+                "Sets ReceiveTimeout to 30 000 ms in WinINet. Drops stalled HTTP receives after 30 seconds instead of the 5-minute default.",
             Tags = ["proxy", "ie", "wininet", "timeout", "performance"],
             RegistryKeys = [InetKey],
             ApplyOps = [RegOp.SetDword(InetKey, "ReceiveTimeout", 30000)],
@@ -575,7 +586,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets RunOnceComplete=1 in HKLM IE\\Main to silently mark the IE run-once flow as complete. Suppresses the first-launch settings prompt on managed deployments.",
+            Description =
+                "Sets RunOnceComplete=1 in HKLM IE\\Main to silently mark the IE run-once flow as complete. Suppresses the first-launch settings prompt on managed deployments.",
             Tags = ["proxy", "ie", "run-once", "debloat"],
             RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Explorer\Main", "RunOnceComplete", 1)],
@@ -589,7 +601,8 @@ internal static class ProxyVpn
             Category = "Proxy & VPN",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets DefaultReceiveTimeout to 30 000 ms in the HKLM Internet Settings hive. Applies a machine-wide receive timeout for WinHTTP/WinINet components that read from the HKLM store.",
+            Description =
+                "Sets DefaultReceiveTimeout to 30 000 ms in the HKLM Internet Settings hive. Applies a machine-wide receive timeout for WinHTTP/WinINet components that read from the HKLM store.",
             Tags = ["proxy", "wininet", "winhttp", "timeout", "performance"],
             RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
             ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "DefaultReceiveTimeout", 30000)],
