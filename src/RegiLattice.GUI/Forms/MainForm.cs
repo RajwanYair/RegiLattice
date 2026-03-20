@@ -205,7 +205,8 @@ public partial class MainForm : Form
         // Detail panel with accent left border
         _detailPanel.BackColor = AppTheme.Surface;
         _detailPanel.Padding = new Padding(8, 6, 8, 6);
-        _detailBox.BackColor = AppTheme.Surface; // must be set AFTER ReadOnly to prevent Windows override
+        // NOTE: BackColor must be set AFTER ReadOnly; on some Windows versions ReadOnly forces the color back to the system default.
+        _detailBox.BackColor = AppTheme.Surface;
         _detailBox.ForeColor = AppTheme.FgDim;
         _detailBox.Font = AppTheme.Regular;
         _detailBox.Refresh();
@@ -1911,7 +1912,7 @@ public partial class MainForm : Form
     private void UpdateDetailBox(string text, Color foreColor)
     {
         _detailBox.SuspendLayout();
-        _detailBox.BackColor = AppTheme.Surface; // reinforce — Windows may reset this
+        _detailBox.BackColor = AppTheme.Surface;
         _detailBox.ForeColor = foreColor;
         _detailBox.Text = text;
         _detailBox.ResumeLayout(false);
@@ -2003,7 +2004,8 @@ public partial class MainForm : Form
         long now = Environment.TickCount64;
         if (e.Index == _lastCheckedIndex && (now - _lastCheckedTick) < SystemInformation.DoubleClickTime)
         {
-            e.NewValue = e.CurrentValue; // cancel second toggle in double-click sequence
+            // Cancel the second checkbox toggle that fires during a double-click.
+            e.NewValue = e.CurrentValue;
             _lastCheckedIndex = -1;
             return;
         }

@@ -407,21 +407,6 @@ internal static class WindowsRecall
         },
         new TweakDef
         {
-            Id = "recall-disable-auto-map-downloads",
-            Label = "Disable Automatic Offline Map Downloads",
-            Category = "Windows Recall",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 17763,
-            Description = "Prevents Windows Maps from automatically downloading and updating offline map data in the background.",
-            Tags = ["recall", "maps", "offline", "network", "bandwidth", "background"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Maps"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0)],
-        },
-        new TweakDef
-        {
             Id = "recall-disable-content-delivery-features",
             Label = "Disable ContentDelivery Feature Management",
             Category = "Windows Recall",
