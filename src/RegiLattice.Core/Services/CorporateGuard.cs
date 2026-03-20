@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/CorporateGuard.cs
+// RegiLattice.Core — Services/CorporateGuard.cs
 // Corporate environment detection using .NET APIs (registry, WMI, P/Invoke).
 
 using System.Management;

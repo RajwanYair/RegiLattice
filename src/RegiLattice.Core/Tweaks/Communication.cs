@@ -586,6 +586,8 @@ internal static class Communication
             Tags = ["skype", "startup", "performance"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
             ApplyOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype")],
+            // NOTE: No RemoveOps — we cannot restore a deleted Run entry; the Skype installer
+            // must re-add it. Removal is intentionally one-directional.
             RemoveOps = [],
             DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype")],
         },
