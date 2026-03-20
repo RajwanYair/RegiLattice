@@ -583,5 +583,172 @@ internal static class TouchPen
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id = "touch-disable-autocorrect",
+            Label = "Disable Touch Keyboard Auto-Correct",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables automatic text correction on the touch keyboard. Keeps typed words exactly as entered. Default: autocorrect enabled.",
+            Tags = ["touch", "keyboard", "autocorrect"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 0)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-text-suggestions",
+            Label = "Disable Touch Keyboard Text Suggestions",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables word prediction suggestions on the touch keyboard. Reduces distraction during touch typing. Default: text suggestions enabled.",
+            Tags = ["touch", "keyboard", "suggestions", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-spell-check",
+            Label = "Disable Touch Keyboard Spell Check",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables spell checking on the touch keyboard. Removes red underlines for misspelled words during touch input. Default: spell check enabled.",
+            Tags = ["touch", "keyboard", "spellcheck"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
+        },
+        new TweakDef
+        {
+            Id = "touch-hide-tip-band",
+            Label = "Hide Touch Keyboard Tip Band",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Hides the handwriting panel tip band that appears above the touch keyboard. Gives more screen space during handwriting input. Default: tip band visible.",
+            Tags = ["touch", "keyboard", "handwriting", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
+        },
+        new TweakDef
+        {
+            Id = "touch-restrict-handwriting-personalization",
+            Label = "Restrict Handwriting Personalization via Policy",
+            Category = "Touch & Pen",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Prevents Windows from learning your handwriting style. Disables handwriting personalization data collection. Default: personalization enabled.",
+            Tags = ["touch", "pen", "handwriting", "privacy", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
+                    "PreventHandwritingPersonalization",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
+                    "PreventHandwritingPersonalization"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
+                    "PreventHandwritingPersonalization",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-tablet-mode-auto-switch",
+            Label = "Disable Automatic Tablet Mode Switching",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from automatically switching to tablet mode when a keyboard is detached. Keeps desktop mode at all times. Default: auto-switch enabled on convertibles.",
+            Tags = ["touch", "tablet-mode", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-auto-keyboard-invoke",
+            Label = "Disable Automatic Touch Keyboard Pop-Up",
+            Category = "Touch & Pen",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents the touch keyboard from automatically appearing when a text input field is focused on a touchscreen. Requires manual keyboard invocation. Default: auto-invoke enabled.",
+            Tags = ["touch", "keyboard", "auto-invoke", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard", 1)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-ink-personalization",
+            Label = "Disable Ink Personalisation Data Collection",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Stops Windows from collecting ink input samples to improve handwriting recognition. Removes implicit ink data upload. Default: collection enabled.",
+            Tags = ["touch", "ink", "privacy", "personalization"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-input-personalization",
+            Label = "Disable Text Input Personalisation Data Collection",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Stops Windows from collecting text input samples to improve touch/keyboard recognition. Removes implicit text data upload. Default: collection enabled.",
+            Tags = ["touch", "keyboard", "privacy", "personalization"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
+        },
+        new TweakDef
+        {
+            Id = "touch-disable-edge-gesture",
+            Label = "Disable Touch Edge Gesture Swipe",
+            Category = "Touch & Pen",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the edge swipe gesture that opens Action Center or other system panels on touchscreen devices. Reduces accidental activation. Default: edge gestures enabled.",
+            Tags = ["touch", "gesture", "edge-swipe", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi", "DisabledEdges", 3)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi", "DisabledEdges")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi", "DisabledEdges", 3)],
+        },
     ];
 }

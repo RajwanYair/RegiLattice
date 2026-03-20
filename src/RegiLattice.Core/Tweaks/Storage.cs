@@ -775,5 +775,216 @@ internal static class Storage
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "08", 0),
             ],
         },
+        new TweakDef
+        {
+            Id = "stor-disable-storage-sense",
+            Label = "Disable Storage Sense Entirely",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Storage Sense feature which automatically frees disk space. Takes full manual control of storage cleanup. Default: Storage Sense enabled.",
+            Tags = ["storage", "storage-sense", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0)],
+        },
+        new TweakDef
+        {
+            Id = "stor-enable-cloud-files-cleanup",
+            Label = "Enable Storage Sense Cloud File Cleanup",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures Storage Sense to dehydrate locally cached OneDrive/cloud files not accessed in 30+ days. Frees local disk without deleting files. Default: cloud cleanup disabled.",
+            Tags = ["storage", "storage-sense", "cloud", "onedrive", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "02", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "02", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "02", 1)],
+        },
+        new TweakDef
+        {
+            Id = "stor-disable-recyclebin-auto-clean",
+            Label = "Disable Storage Sense Recycle Bin Auto-Clean",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents Storage Sense from emptying the Recycle Bin automatically. Items remain in the bin until manually deleted. Default: files older than 30 days are auto-deleted.",
+            Tags = ["storage", "storage-sense", "recycle-bin"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 0)],
+        },
+        new TweakDef
+        {
+            Id = "stor-set-storage-sense-monthly",
+            Label = "Set Storage Sense to Run Monthly",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Changes Storage Sense cadence from 'on low disk space' to monthly. Ensures periodic cleanup without triggering on temporary disk pressure. Default: run on low space (0).",
+            Tags = ["storage", "storage-sense", "schedule"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "2048",
+                    30
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "2048",
+                    0
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "2048",
+                    30
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "stor-disable-link-tracking-service",
+            Label = "Disable Distributed Link Tracking Client Service",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Distributed Link Tracking Client (TrkWks) service. Stops Windows from tracking moved/renamed NTFS files across volumes via object identifiers. Default: automatic start.",
+            Tags = ["storage", "ntfs", "services", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TrkWks"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TrkWks", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TrkWks", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TrkWks", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "stor-disable-distributed-link-tracking",
+            Label = "Disable NTFS Distributed Link Tracking",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents NTFS from creating and maintaining object identifiers used by link tracking. Reduces background disk I/O from link maintenance. Default: link tracking enabled.",
+            Tags = ["storage", "ntfs", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 1)],
+        },
+        new TweakDef
+        {
+            Id = "stor-disable-vss-autostart",
+            Label = "Set Volume Shadow Copy Service to Manual",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Changes the Volume Shadow Copy Service (VSS) from automatic to manual start. VSS starts on demand when backups or restore points are triggered. Default: automatic.",
+            Tags = ["storage", "vss", "shadow-copy", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 3)],
+        },
+        new TweakDef
+        {
+            Id = "stor-disable-softprovider-svc",
+            Label = "Set Software Shadow Copy Provider to Manual",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Microsoft Software Shadow Copy Provider (swprv) service to manual start. The service launches automatically when VSS requests a software-based shadow copy. Default: manual (confirmed).",
+            Tags = ["storage", "vss", "shadow-copy", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\swprv"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\swprv", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\swprv", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\swprv", "Start", 3)],
+        },
+        new TweakDef
+        {
+            Id = "stor-set-recyclebin-threshold-30days",
+            Label = "Set Recycle Bin Auto-Clean Threshold to 30 Days",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures Storage Sense to only auto-empty Recycle Bin items older than 30 days. Prevents immediate auto-deletion while still reclaiming space over time. Default: 30 days (if recycle bin cleanup is enabled).",
+            Tags = ["storage", "storage-sense", "recycle-bin", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "512",
+                    30
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "512"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "512",
+                    30
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "stor-set-downloads-no-auto-clean",
+            Label = "Disable Storage Sense Downloads Auto-Clean",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures Storage Sense to never auto-delete files in the Downloads folder based on age (threshold=0). Complements the per-flag disable for full control. Default: 30-day threshold.",
+            Tags = ["storage", "storage-sense", "downloads", "cleanup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "1024",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "1024"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy",
+                    "1024",
+                    0
+                ),
+            ],
+        },
     ];
 }

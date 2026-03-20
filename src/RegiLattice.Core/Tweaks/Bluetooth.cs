@@ -672,5 +672,155 @@ internal static class Bluetooth
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFSrv", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthHFSrv", "Start", 4)],
         },
+        new TweakDef
+        {
+            Id = "bt-disable-file-send-policy",
+            Label = "Disable Bluetooth File Transfer",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Blocks Bluetooth file transfers via Group Policy (AllowFileSend=0). Prevents data exfiltration over Bluetooth. Default: file send allowed.",
+            Tags = ["bluetooth", "file-transfer", "security", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowFileSend", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowFileSend")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowFileSend", 0)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-a2dp-service",
+            Label = "Disable Bluetooth A2DP Audio Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth Advanced Audio Distribution Profile (A2DP) service. Prevents high-quality stereo streaming. Use only if Bluetooth audio is never needed. Default: enabled.",
+            Tags = ["bluetooth", "audio", "a2dp", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthA2dp", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-avrcp-service",
+            Label = "Disable Bluetooth AVRCP Remote Control Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth Audio/Video Remote Control Profile (AVRCP) target service. Removes ability for BT devices to control playback. Default: enabled.",
+            Tags = ["bluetooth", "avrcp", "remote-control", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthAvrcpTg", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-audio-gateway-svc",
+            Label = "Disable Bluetooth HFP Audio Gateway Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth Telephony Audio Gateway (BTAGService) used for headset microphone routing. Prevents BT headsets acting as call devices. Default: enabled.",
+            Tags = ["bluetooth", "audio", "hfp", "gateway", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTAGService", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-pan-service",
+            Label = "Disable Bluetooth Personal Area Network Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Bluetooth PAN (Personal Area Network/tethering) service. Prevents using a phone or device as a BT network gateway. Default: enabled.",
+            Tags = ["bluetooth", "pan", "network", "tethering", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BthPan", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-set-inquiry-length-reduced",
+            Label = "Reduce Bluetooth Inquiry Scan Duration",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Reduces the Bluetooth device inquiry window from the default 12 seconds to 5 seconds. Speeds up device discovery while still finding nearby devices. Default: 12 seconds.",
+            Tags = ["bluetooth", "discovery", "performance", "scan"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 5)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 12)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 5)],
+        },
+        new TweakDef
+        {
+            Id = "bt-set-page-timeout-reduced",
+            Label = "Reduce Bluetooth Page Timeout",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Reduces the Bluetooth page timeout from the default 5000ms to 2000ms. Fails BT connection attempts faster, reducing hang time when connecting to an unavailable device. Default: 5000ms.",
+            Tags = ["bluetooth", "connection", "performance", "timeout"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 2000)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 5000)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 2000)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-rfcomm-service",
+            Label = "Disable Bluetooth RFCOMM Service",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Bluetooth RFCOMM (serial port emulation) service. Removes legacy Bluetooth COM port functionality. Required for some BT printers/GPS devices. Default: enabled.",
+            Tags = ["bluetooth", "rfcomm", "serial", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RFCOMM", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bluetooth-radio-policy",
+            Label = "Disable Bluetooth Radio via Policy",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables Bluetooth entirely via Group Policy (AllowBluetooth=0). Prevents all Bluetooth hardware usage. Best for high-security workstations. Default: Bluetooth allowed.",
+            Tags = ["bluetooth", "radio", "security", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowBluetooth", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowBluetooth")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Bluetooth", "AllowBluetooth", 0)],
+        },
+        new TweakDef
+        {
+            Id = "bt-disable-bt-user-service-autostart",
+            Label = "Set Bluetooth User Service to Manual Start",
+            Category = "Bluetooth",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Bluetooth User Service to manual start instead of automatic. Reduces startup overhead on systems where Bluetooth is rarely used. Default: automatic.",
+            Tags = ["bluetooth", "services", "startup", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService", "Start", 3)],
+        },
     ];
 }

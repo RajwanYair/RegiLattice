@@ -695,5 +695,203 @@ internal static class Speech
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "WinEnterLaunchEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "WinEnterLaunchEnabled", 0)],
         },
+        new TweakDef
+        {
+            Id = "speech-disable-all-voice-activation",
+            Label = "Disable Voice Activation for All Apps",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables voice activation globally for all applications. Prevents apps from listening for wake words in the background. Default: activation permitted per-app.",
+            Tags = ["speech", "voice-activation", "privacy", "microphone"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-online-speech-privacy",
+            Label = "Disable Online Speech Recognition Privacy Consent",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Revokes the cloud speech privacy consent across the system. Blocks Windows from sending voice data to Microsoft's speech recognition service. Default: consent accepted at first use.",
+            Tags = ["speech", "privacy", "cloud", "recognition", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-narrator-intonation",
+            Label = "Disable Narrator Speech Intonation",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables speech intonation in Narrator. The voice reads in a flat, monotone style. Useful for TTS accessibility pipelines that prefer flat audio. Default: intonation on.",
+            Tags = ["speech", "narrator", "accessibility", "tts"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeakIntonation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeakIntonation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeakIntonation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-set-narrator-rate-slow",
+            Label = "Slow Narrator Speech Rate",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets Narrator speech rate to level 3 out of 10 for easier comprehension. Default: rate 5 (medium). Range: 1 (slowest) to 10 (fastest).",
+            Tags = ["speech", "narrator", "accessibility", "rate"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechRate", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechRate", 5)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechRate", 3)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-narrator-punctuation",
+            Label = "Disable Narrator Punctuation Reading",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Stops Narrator from reading punctuation marks aloud (commas, periods, etc.). Produces more natural reading of plain text. Default: punctuation read aloud.",
+            Tags = ["speech", "narrator", "punctuation", "accessibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "VerbosityPunctuation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "VerbosityPunctuation", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "VerbosityPunctuation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-narrator-scan-mode",
+            Label = "Disable Narrator Scan Mode",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Narrator Scan Mode which uses arrow keys to navigate on-screen content. Frees arrow keys for normal application use. Default: scan mode available.",
+            Tags = ["speech", "narrator", "scan-mode", "accessibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NarratorScanModeEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NarratorScanModeEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NarratorScanModeEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-narrator-cursor-highlight",
+            Label = "Disable Narrator Cursor Highlight",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Hides the visual blue cursor highlight box that Narrator draws around the focused element. Reduces visual clutter when using Narrator with a screen. Default: highlight on.",
+            Tags = ["speech", "narrator", "cursor", "accessibility", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "ShowCursorOnNarratorActivation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "ShowCursorOnNarratorActivation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "ShowCursorOnNarratorActivation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-speech-on-desktop",
+            Label = "Disable Speech Input on Desktop via Policy",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Blocks speech recognition and voice commands on the Windows desktop via Group Policy. Prevents microphone from being used for OS-level voice control. Default: speech on desktop allowed.",
+            Tags = ["speech", "policy", "privacy", "microphone"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Speech"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Speech", "AllowSpeechOnDesktop", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Speech", "AllowSpeechOnDesktop")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Speech", "AllowSpeechOnDesktop", 0)],
+        },
+        new TweakDef
+        {
+            Id = "speech-disable-cortana-voice-activate",
+            Label = "Disable Cortana Voice Activation",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables Cortana's voice activation (Hey Cortana) independently of the global voice activation setting. Cortana stops listening for the wake word. Default: voice activation enabled if Cortana installed.",
+            Tags = ["speech", "cortana", "voice-activation", "privacy"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy",
+                    "AgentActivationEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy",
+                    "AgentActivationEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "speech-set-narrator-volume-max",
+            Label = "Set Narrator to Maximum Volume",
+            Category = "Voice Access & Speech",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the Narrator speech volume to maximum level (100). Ensures Narrator is clearly audible in noisy environments. Default volume: 100 (system-dependent).",
+            Tags = ["speech", "narrator", "accessibility", "volume"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechVolume", 100)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechVolume")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "SpeechVolume", 100)],
+        },
     ];
 }
