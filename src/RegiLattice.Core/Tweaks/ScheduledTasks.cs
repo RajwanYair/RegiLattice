@@ -512,5 +512,155 @@ internal static class ScheduledTasks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
         },
+        new TweakDef
+        {
+            Id = "schtask-disable-defender-scheduled-scan",
+            Label = "Disable Windows Defender Scheduled Full Scan (GPO)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Windows Defender automatic full-disk scheduled scan via Group Policy. Reduces background CPU/IO spikes from periodic full scans. Real-time protection remains active. Default: scheduled scan enabled.",
+            Tags = ["scheduled-tasks", "defender", "scan", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "DisableScheduledScanning", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "DisableScheduledScanning")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "DisableScheduledScanning", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-mrt-run",
+            Label = "Block Malicious Removal Tool Execution",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Prevents the Microsoft Windows Malicious Software Removal Tool (MRT) from running via Group Policy (DontRunMRT=1). Stops the monthly MRT execution that scans for specific malware. Default: MRT runs monthly.",
+            Tags = ["scheduled-tasks", "mrt", "malware", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontRunMRT", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontRunMRT")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontRunMRT", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-ngen-32",
+            Label = "Disable .NET NGEN Pre-JIT Service (32-bit)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the 32-bit CLR Optimization Service (clr_optimization_v4.0.30319_32) which background-compiles .NET assemblies at idle. Can cause CPU spikes during gaming or presentations. Default: automatic.",
+            Tags = ["scheduled-tasks", "ngen", "dotnet", "service", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_32"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_32", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_32", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_32", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-ngen-64",
+            Label = "Disable .NET NGEN Pre-JIT Service (64-bit)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the 64-bit CLR Optimization Service (clr_optimization_v4.0.30319_64) which idle-compiles native images for .NET assemblies. Prevents background CPU spikes from the JIT optimization jobs. Default: automatic.",
+            Tags = ["scheduled-tasks", "ngen", "dotnet", "service", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_64"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_64", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_64", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\clr_optimization_v4.0.30319_64", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-app-usage-record",
+            Label = "Disable Application Usage Recording (AppCompat)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Application Compatibility user action recorder (DisableUserActionRecord=1) that logs which apps are run and when. Reduces AppCompat background telemetry data collection. Default: enabled.",
+            Tags = ["scheduled-tasks", "compat", "telemetry", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUserActionRecord", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUserActionRecord")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUserActionRecord", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-inventory",
+            Label = "Disable Application Compatibility Inventory Collection",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the scheduled AppCompat inventory collection task that catalogues installed applications. Reduces background CPU and disk usage from inventory scans. Default: enabled.",
+            Tags = ["scheduled-tasks", "compat", "inventory", "telemetry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-winsat-rating",
+            Label = "Block Windows Experience Index (WinSAT) Task",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks the Windows System Assessment Tool (WinSAT) from running by setting BlockWinSAT=1. WinSAT benchmarks hardware for the Windows Experience Index score; disabling eliminates periodic benchmark runs. Default: enabled.",
+            Tags = ["scheduled-tasks", "winsat", "benchmark", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winsat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winsat", "BlockWinSAT", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winsat", "BlockWinSAT")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winsat", "BlockWinSAT", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-autoplay",
+            Label = "Disable AutoPlay for All Media and Devices (GPO)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables AutoPlay for all media types and devices via Group Policy. Prevents automatic execution of code when USB drives, CDs, or other removable media are inserted. Default: enabled per-device.",
+            Tags = ["scheduled-tasks", "autoplay", "usb", "security", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay", 1)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-fault-tolerant-heap",
+            Label = "Disable Fault Tolerant Heap (FTH)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Fault Tolerant Heap (FTH) service which monitors crashing applications and silently patches their heap allocations to prevent re-crashes. Removes memory overhead and startup interference from FTH monitoring. Default: enabled.",
+            Tags = ["scheduled-tasks", "fth", "heap", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "schtask-disable-spotlight-features",
+            Label = "Disable All Windows Spotlight Features (GPO)",
+            Category = "Scheduled Tasks",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables all Windows Spotlight features globally via Group Policy. Prevents Spotlight from running background tasks to fetch and rotate AI-curated images, tips, and ads. Default: enabled for eligible Windows editions.",
+            Tags = ["scheduled-tasks", "spotlight", "ai", "gpo", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1)],
+        },
     ];
 }

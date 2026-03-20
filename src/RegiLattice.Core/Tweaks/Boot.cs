@@ -929,5 +929,155 @@ internal static class Boot
                 return stdout.Contains("nx", StringComparison.OrdinalIgnoreCase) && stdout.Contains("OptIn", StringComparison.OrdinalIgnoreCase);
             },
         },
+        new TweakDef
+        {
+            Id = "boot-disable-startup-app-delay",
+            Label = "Disable Startup App Launch Delay",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets StartupDelayInMSec=0 to eliminate the artificial delay Windows introduces before launching registered startup applications. Speeds up the post-login experience. Default: 10-second delay.",
+            Tags = ["boot", "startup", "delay", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize", "StartupDelayInMSec", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-livedump",
+            Label = "Disable Kernel Live Dump Collection",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Windows Kernel Live Dump collection (EnableLiveDump=0). Live dumps are taken by heuristics without a full crash; disabling reduces unexpected disk I/O and performance spikes. Default: enabled.",
+            Tags = ["boot", "dump", "kernel", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "EnableLiveDump", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "EnableLiveDump", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "EnableLiveDump", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-crash-alert",
+            Label = "Disable Admin Alert on System Crash",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the administrator alert notification (SendAlert=0) that Windows generates on a fatal system crash. Reduces noise in environments where crashes are monitored externally. Default: 0 (disabled by default on most builds).",
+            Tags = ["boot", "crash", "alert", "admin"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-overwrite-memory-dump",
+            Label = "Always Overwrite Previous Memory Dump",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Forces Windows to always overwrite an existing memory dump file (Overwrite=1) instead of keeping multiple dump files. Prevents disk space accumulation from repeated crashes. Default: 1 (overwrite).",
+            Tags = ["boot", "dump", "disk", "crash"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-enable-nmi-crash-dump",
+            Label = "Enable NMI-Triggered Crash Dump",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables triggering a crash dump via a Non-Maskable Interrupt (NMI) button or debugger. Useful for generating a dump on a completely hung system that cannot respond to other input. Default: disabled.",
+            Tags = ["boot", "nmi", "dump", "debug"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "NMICrashDump", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "NMICrashDump", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "NMICrashDump", 1)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-bsod-beep",
+            Label = "Disable System Beep on BSOD",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the PC speaker beep that Windows emits when a BSOD (blue screen of death) occurs. Reduces noise in server rooms or overnight unattended machines. Default: 1 (beep enabled).",
+            Tags = ["boot", "bsod", "beep", "crash"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Beep", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Beep", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Beep", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-always-keep-dump",
+            Label = "Do Not Permanently Keep Memory Dump",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets AlwaysKeepMemoryDump=0 so Windows does not permanently retain the memory dump even when low on disk. Lets the pagefile cleanup process remove the dump to free space. Default: 0.",
+            Tags = ["boot", "dump", "disk", "cleanup"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AlwaysKeepMemoryDump", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AlwaysKeepMemoryDump")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AlwaysKeepMemoryDump", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-set-system-eventlog-size",
+            Label = "Increase System Event Log Size to 50 MB",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the System event log maximum size to 50 MB (52428800 bytes). Allows retention of more historical system events before wrapping. Default: 20 MB.",
+            Tags = ["boot", "event-log", "system", "size"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 52428800)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 20971520)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 52428800)],
+        },
+        new TweakDef
+        {
+            Id = "boot-disable-boot-status-display",
+            Label = "Disable Boot Status / Spinner Display",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the display of boot status messages (spinner/dots) during startup by clearing DisplayStatusMessages. Produces a cleaner, faster-feeling boot sequence. Default: enabled.",
+            Tags = ["boot", "ui", "spinner", "speed"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 0)],
+        },
+        new TweakDef
+        {
+            Id = "boot-enable-lsa-ppl",
+            Label = "Enable LSASS Protected Process Light (PPL)",
+            Category = "Boot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Runs the Local Security Authority Subsystem (lsass.exe) as a Protected Process Light (PPL) by setting RunAsPPL=1. Prevents non-authorised processes from reading LSASS memory (credential dumping). Requires UEFI Secure Boot. Default: disabled.",
+            Tags = ["boot", "lsass", "security", "ppl", "credential-protection"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
+        },
     ];
 }
