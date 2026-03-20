@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.7.1] — 2026-07-18
+
+### Changed
+
+- **Duplicate tweaks removed**: eliminated 11 confirmed duplicate tweak definitions
+  (3 194 → 3 183 tweaks across 92 categories)
+- **Test suite refactored**: `TweakEngineBuiltinsTests.cs` 1 956 → 480 lines;
+  replaced 617 per-ID `[InlineData]` existence checks with a single
+  `AllRegisteredTweaks_CanBeRetrievedById` Fact iterating all tweaks at runtime
+  — total test count 2 088 → **1 367 passing** (970 Core + 155 CLI + 242 GUI)
+- **Dead code removed**: deleted `RegistryHives.cs` (11 lines) — `Hive.LM`/`Hive.CU`
+  constants confirmed unused across all 93 tweak modules
+- **Roadmap trimmed**: `docs/Roadmap.md` 1 265 → ~430 lines; replaced exhaustive
+  Sprint 1–47b task tables (all completed) with compact sprint digest table
+- **Git workflow instructions updated**: `.github/instructions/git-workflow.instructions.md`
+  updated to use .NET commands; added standing per-sprint commit mandate section
+- Version bumped `3.7.0` → `3.7.1`
+
+---
+
 ## [3.7.0] — 2026-07-17
 
 ### Fixed

@@ -39,14 +39,15 @@ A "session" typically produces 3–10 commits covering distinct chunks of work.
 
 Only after the **full chat session ends** and you have confirmed:
 
-1. All relevant tests pass (`pwsh scripts/test-changed.ps1` or full suite)
-2. Ruff reports no errors (`python -m ruff check regilattice/ tests/`)
-3. No stale debug code, temp files, or `.pyc` leftovers
+1. All relevant tests pass (full `dotnet test` suite, 0 failures)
+2. Release build succeeds with 0 errors, 0 warnings
+3. No stale debug code, temp files, or `.tmp/` leftovers
+4. CHANGELOG.md updated if features/fixes were added
 
 ```powershell
 # End-of-session push flow
-python -m ruff check regilattice/ tests/
-python -m pytest tests/ -q --tb=short
+dotnet build RegiLattice.sln -c Release -m:1 -q
+dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build -c Release --logger "console;verbosity=minimal"
 git push
 ```
 
@@ -125,33 +126,66 @@ Use `git tag v<version>` on release commits for GitHub releases.
 
 **Do not bump the version unless explicitly asked after manual review.**
 
+Version follows **Semantic Versioning**: `MAJOR.MINOR.PATCH`
+
+- `PATCH` bump: bug fixes, dead code removal, refactoring, docs trimming
+- `MINOR` bump: new features, new tweaks, new dialogs/services
+- `MAJOR` bump: breaking API changes or major architectural overhauls
+
 When bumping:
 
-1. Update `VERSION` file
-2. Update `pyproject.toml` → `[project] version`
-3. Update `regilattice/__init__.py` → `__version__`
-4. Add `CHANGELOG.md` entry
-5. Commit: `chore: bump version to v1.x.y`
-6. Tag: `git tag v1.x.y`
+1. Update `Directory.Build.props` → `<Version>X.Y.Z</Version>`
+2. Update `installer/Package.wxs` → `Version="X.Y.Z.0"`
+3. Add `## [X.Y.Z] — YYYY-MM-DD` section to `docs/CHANGELOG.md`
+4. Update `Readme.md` version badge and tweak/test counts if changed
+5. Commit: `chore: bump version to vX.Y.Z`
+6. Tag: `git tag vX.Y.Z`
+7. Push at session end: `git push; git push --tags`
+
+---
+
+## Per-Sprint / Per-Iteration Commit Mandate
+
+> **This is a standing rule that applies to every future session.**
+
+Every sprint or named task phase MUST produce at least one commit **before moving to the next sprint.** Do not batch multiple sprints into one commit. The commit should clearly state:
+
+- What sprint/phase it covers
+- Total tweak count if tweaks were added
+- Total test count if tests were added/changed
+
+```
+feat(tweaks): Sprint 48 — 50 new tweaks (Bluetooth/Printing/TouchPen/Speech/Storage)
+
+Bluetooth.cs +10, Printing.cs +10, TouchPen.cs +10, Speech.cs +10, Storage.cs +10
+5 dialog enhancements (+2 features each)
+Total: 3 046 tweaks, 1 387 tests (0 failures)
+```
 
 ---
 
 ## Quick Reference
 
 ```powershell
-# Commit a logical phase
+# Commit a logical phase / sprint
 git add -A
 git commit -m "feat(tweaks): add 10 network tweaks"
 
 # Amend last commit (before push only)
 git commit --amend --no-edit
 
-# End-of-session push
+# Build + test before committing
+dotnet build RegiLattice.sln -c Debug -m:1 -q
+dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build --logger "console;verbosity=minimal"
+
+# End-of-session push (includes tags)
 git push
+git push --tags
 
-# Check what would be tested for current changes
-pwsh scripts/test-changed.ps1 -WhatIf  # (just lists files, no run)
-
-# Run only changed tests before committing
-pwsh scripts/test-changed.ps1
+# Bump and tag a release
+# 1. Edit Directory.Build.props <Version> and installer/Package.wxs
+git add -A
+git commit -m "chore: bump version to vX.Y.Z"
+git tag vX.Y.Z
+git push; git push --tags
 ```
