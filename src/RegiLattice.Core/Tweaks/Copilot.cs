@@ -615,5 +615,156 @@ internal static class Copilot
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
         },
+        new TweakDef
+        {
+            Id = "ai-disable-spotlight-lock-screen",
+            Label = "Disable Windows Spotlight on Lock Screen",
+            Category = "AI / Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the rotating Windows Spotlight background on the lock screen. Prevents AI-curated images and suggestions from rotating on the lock screen. Default: enabled for eligible editions.",
+            Tags = ["ai", "spotlight", "lock-screen", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-typing-insights",
+            Label = "Disable Typing Insights (AI Learning)",
+            Category = "AI / Copilot",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables Windows typing insights which collects typing patterns to improve AI input predictions. Stops keyboard usage data from being uploaded. Default: enabled.",
+            Tags = ["ai", "typing", "privacy", "keyboard"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-windows-tips",
+            Label = "Disable Windows Tips & Suggestions (GPO)",
+            Category = "AI / Copilot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Windows tips, tricks, and suggestions via Group Policy. Prevents AI-powered soft-landing suggestion prompts from appearing. Default: enabled.",
+            Tags = ["ai", "tips", "suggestions", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-consumer-features",
+            Label = "Disable Windows Consumer AI Features (GPO)",
+            Category = "AI / Copilot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables consumer AI features and auto-installed apps via Group Policy. Effective on Pro/Enterprise editions. Blocks Microsoft from pushing consumer apps to the Start menu. Default: enabled on consumer Windows.",
+            Tags = ["ai", "consumer", "debloat", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-third-party-suggestions",
+            Label = "Disable Third-Party App AI Suggestions (GPO)",
+            Category = "AI / Copilot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables third-party AI-powered app suggestions in the Start menu and lock screen via Group Policy. Default: suggestions enabled on consumer Windows.",
+            Tags = ["ai", "suggestions", "third-party", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableThirdPartySuggestions", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableThirdPartySuggestions")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableThirdPartySuggestions", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-start-menu-suggestions",
+            Label = "Disable AI Start Menu App Suggestions",
+            Category = "AI / Copilot",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables AI-generated app suggestions shown in the Start menu's Recommended section. Removes personalised app promotion. Default: enabled.",
+            Tags = ["ai", "start-menu", "suggestions", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SystemPaneSuggestionsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-lock-screen-overlay",
+            Label = "Disable Lock Screen Spotlight Overlay Facts",
+            Category = "AI / Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Spotlight overlay info shown on the lock screen (\"Learn more\" text, fun facts). Keeps lock screen clean without AI-curated captions. Default: enabled with Spotlight.",
+            Tags = ["ai", "spotlight", "lock-screen", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenOverlayEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenOverlayEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenOverlayEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-live-captions",
+            Label = "Disable Windows Live Captions AI (GPO)",
+            Category = "AI / Copilot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description =
+                "Disables the Windows Live Captions AI accessibility feature via Group Policy. Prevents the real-time AI speech-to-text caption overlay. Default: available on Win 11 22H2+.",
+            Tags = ["ai", "live-captions", "speech", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableLiveCaptions", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableLiveCaptions")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableLiveCaptions", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-spotlight-action-center",
+            Label = "Disable Spotlight in Action Center (GPO)",
+            Category = "AI / Copilot",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Windows Spotlight features in the Action Center (notification panel) via Group Policy. Removes AI-curated content in the notification area. Default: enabled.",
+            Tags = ["ai", "spotlight", "action-center", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnActionCenter", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnActionCenter")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnActionCenter", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ai-disable-content-delivery-autoinstall",
+            Label = "Disable AI-Driven Silent App Auto-Install",
+            Category = "AI / Copilot",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables silent automatic installation of apps recommended by the Content Delivery Manager AI. Prevents Microsoft from quietly installing promoted apps. Default: enabled on consumer Windows.",
+            Tags = ["ai", "debloat", "content-delivery", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SilentInstalledAppsEnabled", 0)],
+        },
     ];
 }

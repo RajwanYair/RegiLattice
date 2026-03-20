@@ -496,5 +496,155 @@ internal static class Ms365Copilot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\osm", "EnableLogging")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\osm", "EnableLogging", 0)],
         },
+        new TweakDef
+        {
+            Id = "m365-disable-office-autoupdate",
+            Label = "Disable Office 365 Automatic Updates",
+            Category = "M365 Copilot",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables automatic Office 365 Click-to-Run updates via Group Policy. Allows IT-controlled update schedules. Note: disabling updates is a security risk; use only in managed environments. Default: auto-update enabled.",
+            Tags = ["m365", "office", "update", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-office-feedback",
+            Label = "Disable Office Feedback (QME Telemetry)",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Office Customer Experience Improvement Program (QME) feedback telemetry per user policy. Stops Office from collecting and sending usage data. Default: enabled.",
+            Tags = ["m365", "office", "feedback", "telemetry"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common", "qmenable", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common", "qmenable")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common", "qmenable", 0)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-smart-lookup",
+            Label = "Disable Smart Lookup / Intelligent Services in Office",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Smart Lookup (Researcher) which sends selected text to Bing for AI-powered context lookups within Word, Excel, and PowerPoint. Default: enabled when connected experiences are on.",
+            Tags = ["m365", "office", "smart-lookup", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disablesmartlookup", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disablesmartlookup")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disablesmartlookup", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-live-preview",
+            Label = "Disable Office Live Preview (Format Hover)",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Live Preview in Office applications which temporarily applies formatting when hovering over styles, themes, and fonts. Reduces rendering load. Default: enabled.",
+            Tags = ["m365", "office", "live-preview", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "enablelivepreview", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "enablelivepreview")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "enablelivepreview", 0)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-mini-toolbar",
+            Label = "Disable Office Mini Toolbar on Selection",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the floating mini formatting toolbar that appears when text is selected in Office applications. Reduces distracting pop-ups for keyboard-focused users. Default: enabled.",
+            Tags = ["m365", "office", "mini-toolbar", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "minitoolbardisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "minitoolbardisabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\toolbars", "minitoolbardisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-translator",
+            Label = "Disable Office Built-In Translator",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the built-in AI translation feature in Office applications that sends text to Microsoft translation services. Prevents text from leaving the document via translation calls. Default: enabled.",
+            Tags = ["m365", "office", "translator", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disabletranslator", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disabletranslator")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disabletranslator", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-word-smart-tags",
+            Label = "Disable Word Smart Tags",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Smart Tags in Microsoft Word which automatically detect and label names, dates, addresses, and other recognised data. Reduces AI-powered automatic document analysis. Default: enabled.",
+            Tags = ["m365", "word", "smart-tags", "ai"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "modernsmarttagsdisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "modernsmarttagsdisabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "modernsmarttagsdisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-insights",
+            Label = "Disable Office Insights (MyAnalytics)",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Office Insights (formerly MyAnalytics / Researcher) which uses AI to analyse work patterns and provide personalised productivity suggestions. Default: enabled for eligible M365 plans.",
+            Tags = ["m365", "insights", "analytics", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disableinsights", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disableinsights")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\general", "disableinsights", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-researcher-tab",
+            Label = "Disable Word Researcher Feature",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Researcher tab in Microsoft Word which uses Bing AI to pull in research content while writing. Prevents content lookups from inside the document editor. Default: enabled.",
+            Tags = ["m365", "word", "researcher", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "disableresearcher", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "disableresearcher")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\word\options", "disableresearcher", 1)],
+        },
+        new TweakDef
+        {
+            Id = "m365-disable-office-roaming",
+            Label = "Disable Office Settings Roaming",
+            Category = "M365 Copilot",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables roaming of Office personalisation settings to the cloud. Prevents theme, template, and preference synchronisation via the Office roaming service. Default: enabled when signed in with M365 account.",
+            Tags = ["m365", "office", "roaming", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\roaming"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\roaming", "enableroaming", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\roaming", "enableroaming")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\office\16.0\common\roaming", "enableroaming", 0)],
+        },
     ];
 }

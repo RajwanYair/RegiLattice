@@ -562,5 +562,159 @@ internal static class DevDrive
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DevDriveFilterControl", "PerformanceMode", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DevDriveFilterControl", "PerformanceMode", 1)],
         },
+        new TweakDef
+        {
+            Id = "dev-sandbox-disable-vgpu",
+            Label = "Disable vGPU in Windows Sandbox",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 19041,
+            Description =
+                "Disables virtualised GPU (vGPU) inside Windows Sandbox. Reduces GPU overhead and sandbox startup time when GPU acceleration is not needed. Default: vGPU enabled.",
+            Tags = ["dev", "sandbox", "vgpu", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowVGPU", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowVGPU")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowVGPU", 0)],
+        },
+        new TweakDef
+        {
+            Id = "dev-sandbox-disable-networking",
+            Label = "Disable Networking in Windows Sandbox",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 19041,
+            Description =
+                "Disables network access inside Windows Sandbox for isolated testing environments. Useful when testing untrusted code or malware analysis. Default: networking enabled.",
+            Tags = ["dev", "sandbox", "network", "isolation", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking", 0)],
+        },
+        new TweakDef
+        {
+            Id = "dev-sandbox-enable-protected-client",
+            Label = "Enable Protected Client Mode in Windows Sandbox",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 19041,
+            Description =
+                "Turns on Protected Client mode for Windows Sandbox, which runs the sandbox with reduced privileges and additional isolation. Increases security at the cost of some compatibility. Default: disabled.",
+            Tags = ["dev", "sandbox", "security", "protected-client"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowProtectedClient", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowProtectedClient")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowProtectedClient", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-offline-files",
+            Label = "Disable Offline Files (CSC) Service",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Client-Side Caching (CSC) service which handles offline file synchronisation. Removes overhead on dev workstations not using corporate file shares. Default: automatic start.",
+            Tags = ["dev", "offline-files", "csc", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CSC"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CSC", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CSC", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CSC", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-app-compat-engine",
+            Label = "Disable Application Compatibility Engine",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Application Compatibility Engine which checks every process launch against a compatibility database. Speeds up process startup on dev machines with modern software only. Default: enabled.",
+            Tags = ["dev", "compat", "performance", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-program-compat-assistant",
+            Label = "Disable Program Compatibility Assistant",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Program Compatibility Assistant that prompts users to run programs in compatibility mode. Removes nag prompts on dev workstations. Default: enabled.",
+            Tags = ["dev", "compat", "assistant", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-program-compat-telemetry",
+            Label = "Disable Application Telemetry (Compat)",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Application Impact Telemetry (AIT) which logs app usage and compatibility events. Reduces background disk and network activity from the compat engine. Default: enabled.",
+            Tags = ["dev", "compat", "telemetry", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable", 0)],
+        },
+        new TweakDef
+        {
+            Id = "dev-disable-wer-service-dev",
+            Label = "Disable Windows Error Reporting Service (Dev)",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Sets the Windows Error Reporting (WerSvc) service to disabled. Stops crash dumps and error telemetry uploads from dev builds. Use debuggers instead for crash analysis. Default: manual start.",
+            Tags = ["dev", "wer", "crash", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "dev-enable-console-ansi",
+            Label = "Enable ANSI VT100 Colour in Console (Dev)",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Enables Virtual Terminal Level processing in the Windows console so ANSI escape codes (colours, cursor movement) work in cmd.exe and PowerShell. Required for colour-aware CLI tools. Default: disabled in cmd.exe.",
+            Tags = ["dev", "console", "ansi", "colour", "terminal"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "VirtualTerminalLevel", 1)],
+        },
+        new TweakDef
+        {
+            Id = "dev-set-high-res-timer",
+            Label = "Enable High-Resolution Timer for Dev Workloads",
+            Category = "Dev Drive / Developer Tools",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            MinBuild = 22621,
+            Description =
+                "Allows high-resolution timer requests globally via the kernel setting introduced in Win 11 22H2. Lets developer tools (profilers, benchmarks) achieve sub-millisecond timing precision without per-process requests. Default: off.",
+            Tags = ["dev", "timer", "performance", "precision"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1)],
+        },
     ];
 }
