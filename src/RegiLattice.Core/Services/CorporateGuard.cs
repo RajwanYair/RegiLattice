@@ -12,8 +12,7 @@ public static class CorporateGuard
 {
     private static Lazy<bool> _cached = new(ComputeIsCorporate, LazyThreadSafetyMode.ExecutionAndPublication);
 
-    private static bool ComputeIsCorporate() =>
-        IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
+    private static bool ComputeIsCorporate() => IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
 
     /// <summary>Returns true if this machine is in a corporate/managed environment.</summary>
     public static bool IsCorporateNetwork() => _cached.Value;
