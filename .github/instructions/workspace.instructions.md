@@ -37,7 +37,7 @@ RegiLattice.sln
 │   │   │                        #   Locale, PipManager, Ratings, ShellRunner,
 │   │   │                        #   SystemMonitor, TweakHistory, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 90 category modules, ~2,610 tweaks
+│   │   └── Tweaks/              # 92 category modules, ~2,991 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
@@ -56,9 +56,9 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 888+ xUnit tests
-│   ├── RegiLattice.CLI.Tests/   # 116+ xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 195+ xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 1,014+ xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 175+ xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 225+ xUnit tests
 ├── .tmp/                        # Intermediate dev files (gitignored)
 └── archive/                     # Archived (untracked)
 ```

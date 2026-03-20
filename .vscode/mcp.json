@@ -26,6 +26,18 @@
       "env": {
         "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
       }
+    },
+    "project-docs": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}\\.github",
+        "${workspaceFolder}\\docs"
+      ],
+      "env": {
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
+      }
     }
   }
 }
