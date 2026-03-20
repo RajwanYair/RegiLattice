@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-20 (v3.7.1, 2 991 tweaks, 92 categories, 1 367 tests).
+> Last verified: 2026-03-20 (v3.7.2, 2 991 tweaks, 92 categories, 1 431 tests).
 
 ## Companion Instruction Files
 
@@ -80,15 +80,20 @@ Rules:
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
 | Test     | xUnit 2.9.2 — 1,367 tests (970 Core + 155 CLI + 242 GUI)                 |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 3.7.1                                                                    |
+| Version  | 3.7.2                                                                    |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
 | Tweaks   | 2 991 across 92 categories (93 module files)                             |
-| Tests    | 1,367 passing (970 Core + 155 CLI + 242 GUI)                             |
+| Tests    | 1,431 passing (1014 Core + 175 CLI + 242 GUI)                            |
 | NuGet    | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2                     |
 
-## Git Workflow (IMPORTANT)
+## Git Workflow (IMPORTANT — STANDING RULE)
+
+> **This mandate applies to EVERY session without exception.**
+> Every sprint, phase, or named task MUST be committed before moving to the next one.
+> Do NOT batch multiple sprints/phases into a single commit — one commit per logical unit.
 
 - **Commit per logical phase/task** during a session (granular local history)
+- **Each commit must state** what phase it covers + total tweak/test counts if changed
 - **Push to GitHub only at end of a chat session** — never mid-session
 - Commit message format: `type(scope): description` (Conventional Commits)
 - Full details: `.github/instructions/git-workflow.instructions.md`
