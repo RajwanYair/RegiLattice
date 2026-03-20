@@ -677,5 +677,175 @@ internal static class Printing
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableBrowsing")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableBrowsing", 1)],
         },
+        new TweakDef
+        {
+            Id = "printing-disable-spooler-service",
+            Label = "Disable Print Spooler Service",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Print Spooler service entirely. Eliminates the attack surface from PrintNightmare and related spooler vulnerabilities. Use only on systems with no printing needs. Default: automatic start.",
+            Tags = ["printing", "spooler", "security", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-fax-service",
+            Label = "Disable Windows Fax and Scan Service",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Fax and Scan service. Removes fax capability and associated surface area. Default: manual/disabled on most systems.",
+            Tags = ["printing", "fax", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-http-printing",
+            Label = "Disable HTTP Printer Sharing",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables sharing printers over HTTP. Prevents the Print Spooler from accepting HTTP-based print jobs. Default: HTTP sharing permitted.",
+            Tags = ["printing", "http", "network", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting", 1)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-web-pnp",
+            Label = "Disable Web-Based Printer Plug and Play",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Web Plug and Play printer discovery (DisableWebPnP). Prevents printers from being located via internet/intranet discovery protocols. Default: web PnP enabled.",
+            Tags = ["printing", "pnp", "network", "discovery"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPnP", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPnP")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPnP", 1)],
+        },
+        new TweakDef
+        {
+            Id = "printing-restrict-driver-to-admins",
+            Label = "Restrict Printer Driver Installation to Admins",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Requires administrator rights to install printer drivers. Prevents standard users from installing untrusted print drivers. Default: users can install drivers.",
+            Tags = ["printing", "drivers", "security", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
+                    "RestrictDriverInstallationToAdministrators",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
+                    "RestrictDriverInstallationToAdministrators"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
+                    "RestrictDriverInstallationToAdministrators",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "printing-block-kernel-mode-drivers",
+            Label = "Block Kernel-Mode Printer Drivers",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Blocks kernel-mode printer drivers from running. Forces all print drivers to user mode (V4 drivers), reducing kernel attack surface. Default: kernel-mode drivers permitted.",
+            Tags = ["printing", "drivers", "security", "kernel"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked", 1)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-ipp-over-usb",
+            Label = "Disable IPP over USB Printing",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Internet Printing Protocol over USB (IPP-USB). Prevents modern USB printers from using the IPP-USB communication path. Default: IPP-USB enabled.",
+            Tags = ["printing", "ipp", "usb"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPOverUSB"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPOverUSB", "DisableIPOverUSB", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPOverUSB", "DisableIPOverUSB")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPOverUSB", "DisableIPOverUSB", 1)],
+        },
+        new TweakDef
+        {
+            Id = "printing-enable-client-side-render",
+            Label = "Enable Client-Side Print Rendering",
+            Category = "Printing",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Enables Enhanced Metafile (EMF) de-spooling so the client renders print jobs locally. Reduces print server CPU and network load. Default: server-side rendering.",
+            Tags = ["printing", "performance", "rendering"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "EMFDespoolingEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "EMFDespoolingEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "EMFDespoolingEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-ad-publish",
+            Label = "Disable Auto-Publish Printers to Active Directory",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents printers from being automatically published to Active Directory. Reduces AD directory pollution on workgroup machines. Default: auto-publish enabled.",
+            Tags = ["printing", "active-directory", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "PublishPrinters", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "PublishPrinters")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "PublishPrinters", 0)],
+        },
+        new TweakDef
+        {
+            Id = "printing-disable-driver-auto-update",
+            Label = "Disable Automatic Printer Driver Updates",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables automatic Windows Update-driven printer driver updates. Prevents unexpected driver changes that can break printing configuration. Default: auto-update enabled.",
+            Tags = ["printing", "drivers", "windows-update"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "AutoUpdateDriverEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "AutoUpdateDriverEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "AutoUpdateDriverEnabled", 0)],
+        },
     ];
 }
