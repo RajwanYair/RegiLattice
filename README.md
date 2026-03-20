@@ -14,7 +14,7 @@ A comprehensive Windows registry tweak toolkit with **3 183 verified tweaks** ac
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice-3.7.3-win-x64.msi](https://github.com/RajwanYair/RegiLattice/releases/latest)** from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v3.7.3](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`

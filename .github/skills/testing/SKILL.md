@@ -8,11 +8,11 @@ argument-hint: "What to test (e.g. 'TweakEngine.Search', 'new service class', 'C
 
 ## Test Projects
 
-| Project | Tests | Covers |
-|---------|-------|--------|
+| Project                         | Tests | Covers                                                                                                                                      |
+| ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tests/RegiLattice.Core.Tests/` | 1 014 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
-| `tests/RegiLattice.CLI.Tests/` | 175 | CLI argument parsing, ConsoleColorizer |
-| `tests/RegiLattice.GUI.Tests/` | 225 | Theme, PackageManagerValidation, AppIcons |
+| `tests/RegiLattice.CLI.Tests/`  | 175   | CLI argument parsing, ConsoleColorizer                                                                                                      |
+| `tests/RegiLattice.GUI.Tests/`  | 225   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
 
 ## Naming Convention
 
@@ -21,6 +21,7 @@ MethodOrClass_Scenario_ExpectedResult
 ```
 
 Examples:
+
 - `Search_WithTelemetryQuery_ReturnsPrivacyTweaks`
 - `Register_DuplicateId_ThrowsArgumentException`
 - `DryRun_SetDword_CapturesOpWithoutWrite`
@@ -65,6 +66,7 @@ public sealed class MyFeatureTests
 ## Critical Testing Rules
 
 ### Registry safety — always DryRun
+
 ```csharp
 var session = new RegistrySession { DryRun = true };
 session.SetDword(@"HKCU\Software\RegiLattice\Test", "X", 42);
@@ -72,6 +74,7 @@ Assert.Single(session.DryOps);  // captured, never written
 ```
 
 ### HasOperations gate — tweaks without ApplyOps are skipped
+
 ```csharp
 // ❌ This tweak will NOT be registered — HasOperations == false
 engine.Register(new TweakDef { Id = "t1", Label = "X", Category = "A" });
@@ -83,6 +86,7 @@ engine.Register(new TweakDef { Id = "t1", ...,
 ```
 
 ### Never create Form instances in tests
+
 ```csharp
 // ❌ BAD — hangs in headless CI
 var form = new MainForm();
@@ -93,6 +97,7 @@ Assert.Equal("Catppuccin Mocha", theme!.Name);
 ```
 
 ### Assert.Contains ambiguity — use explicit array
+
 ```csharp
 // ❌ BAD — CS0121 ambiguous (HashSet vs SortedSet overload)
 Assert.Contains(profile, ["business", "gaming"]);
@@ -119,16 +124,17 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ## Coverage Targets
 
-| Component | Target | Notes |
-|-----------|--------|-------|
-| TweakDef model | 100% | Pure data |
-| TweakEngine | 90%+ | Core business logic |
-| RegistrySession | 80%+ | Use DryRun for write paths |
-| Services | 85%+ | Mock P/Invoke/WMI |
-| GUI theme records | 90%+ | Pure data |
-| GUI Forms | 60%+ | UI hard to unit test |
+| Component         | Target | Notes                      |
+| ----------------- | ------ | -------------------------- |
+| TweakDef model    | 100%   | Pure data                  |
+| TweakEngine       | 90%+   | Core business logic        |
+| RegistrySession   | 80%+   | Use DryRun for write paths |
+| Services          | 85%+   | Mock P/Invoke/WMI          |
+| GUI theme records | 90%+   | Pure data                  |
+| GUI Forms         | 60%+   | UI hard to unit test       |
 
 ## Intentionally Untested (external tools required)
+
 - `ChocolateyManager`, `PipManager`, `WinGetManager` — require installed tool
 - `ShellRunner` — executes real processes
 - `PackManager` async methods — require network

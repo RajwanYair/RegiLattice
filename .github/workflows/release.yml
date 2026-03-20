@@ -4,6 +4,11 @@ on:
   push:
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag to create the release for (e.g. v3.7.3). Required for manual re-runs when the original tag push failed."
+        required: false
+        type: string
 
 concurrency:
   group: release-${{ github.ref }}
@@ -62,20 +67,25 @@ jobs:
           -o publish/cli
 
       - name: Install WiX toolset
+        id: wix_install
+        continue-on-error: true
         run: dotnet tool install --global wix --version 6.0.2
 
       - name: Build MSI installer
+        id: msi_build
+        continue-on-error: true
+        if: steps.wix_install.outcome == 'success'
         run: dotnet build installer/RegiLattice.Installer.wixproj -c Release
 
       - name: Generate checksums
         shell: pwsh
         run: |
-          $exeFiles = @(
-            Get-ChildItem "publish/gui" -File -Filter "*.exe"
-            Get-ChildItem "publish/cli" -File -Filter "*.exe"
-          )
-          $msiFiles = Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
-          $all = @($exeFiles) + @($msiFiles)
+          $all = @()
+          $all += Get-ChildItem "publish/gui" -File -Filter "*.exe" -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish/cli" -File -Filter "*.exe" -ErrorAction SilentlyContinue
+          if (Test-Path "installer/bin/Release") {
+            $all += Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
+          }
           $hashes = foreach ($f in $all) { Get-FileHash $f.FullName -Algorithm SHA256 }
           $hashes | ForEach-Object {
             $rel = $_.Path -replace [regex]::Escape((Get-Location).Path + '\'), '' -replace '\\', '/'
@@ -85,9 +95,11 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.tag_name || github.ref_name }}
           files: |
             publish/gui/RegiLattice.GUI.exe
             publish/cli/RegiLattice.exe
             installer/bin/Release/**/*.msi
             publish/SHA256SUMS.txt
           generate_release_notes: true
+          fail_on_unmatched_files: false
