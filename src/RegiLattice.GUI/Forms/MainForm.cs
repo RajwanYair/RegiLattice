@@ -90,6 +90,38 @@ public partial class MainForm : Form
             _trayIcon.Visible = true;
             ShowInTaskbar = false;
         }
+
+        ApplyAdminRestrictions();
+    }
+
+    // ── Admin-visibility gate ──────────────────────────────────────────────
+    /// <summary>
+    /// Disables menu items whose primary function requires administrator privileges.
+    /// Dialogs that still offer a read-only / view mode without admin (ServiceMgr,
+    /// ScheduledTaskMgr, StartupMgr, HostsFileMgr, etc.) are left enabled — they
+    /// show their own admin banner and disable write controls internally.
+    /// </summary>
+    private void ApplyAdminRestrictions()
+    {
+        if (Elevation.IsAdmin())
+            return;
+
+        ToolStripMenuItem[] adminOnly =
+        [
+            _mnuAppPermissions,  // HKLM permission policies — all operations need admin
+            _mnuBatterySaver,    // powercfg power settings — all operations need admin
+            _mnuDnsOverHttps,    // DNS-over-HTTPS configuration — all operations need admin
+            _mnuDnsSwitcher,     // DNS server switching — requires netsh admin
+            _mnuNetAdapter,      // adapter enable/disable — requires admin
+            _mnuNetRepair,       // netsh/network repair commands — all need admin
+            _mnuPowerPlan,       // power plan switching — requires admin
+            _mnuPowerScheduler,  // power plan scheduler (plan activation needs admin)
+            _mnuUsbPower,        // USB selective suspend — requires admin
+            _mnuWinHealth,       // Windows Health (DISM/SFC/bcdedit) — all commands need admin
+        ];
+
+        foreach (ToolStripMenuItem item in adminOnly)
+            item.Enabled = false;
     }
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
