@@ -4,6 +4,30 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.8.0] — 2026-07-21
+
+### Added
+
+- **678 new tweaks** across 10 sprint cycles (Sprints 48–57), bringing the total to **3 669 verified tweaks** across **94 categories**:
+  - **Sprint 48** — Bluetooth (+10), Printing (+10), Touch & Pen (+10), Voice/Speech (+10), Storage (+10)
+  - **Sprint 49** — AI/Copilot (+10), Scoop Tools (+10), Dev Drive (+10), Java (+10), M365 Copilot (+10)
+  - **Sprint 50** — Gaming (+10), GPU/Graphics (+10), Boot (+10), Windows 11 (+10), Scheduled Tasks (+10)
+  - **Sprint 51** — Microsoft Store (+10), Edge (+10), Firefox (+10), Chrome (+10), Office (+10)
+  - **Sprint 52** — Firewall (+15), Encryption (+12), Hardening (+12) — security hardening module expansion
+  - **Sprint 53** — Network (+15), DNS & Networking Advanced (+15), Proxy & VPN (+10), Network Optimization (+10)
+  - **Sprint 54** — Performance (+10), SSD Optimization (+10), File System (+10), Disk Cleanup (+10)
+  - **Sprint 55** — Privacy (+12), Cortana & Search (+12), Widgets & News (+12), Telemetry Advanced (+12)
+  - **Sprint 56** — Developer (+13), PowerShell Tweaks (+13), Services (+12), User Account (+12): console VT/UTF8, WER/JIT, Defender CFA/network/CPU, SMB signing+encryption, Teredo/6to4/ISATAP, credential/logon security, Netlogon hardening
+  - **Sprint 57** — Shell (+13), Lock Screen (+13), Input (+12), Taskbar (+12): thumbnail cache, spotlight/screensaver policy, PrecisionTouchPad controls, taskbar density, compact mode, logon scripts, NTLM settings
+
+### Stats
+
+- Tweaks: **3 669** (was 2 991, +678)
+- Tests: **1 414** passing (1 014 Core + 175 CLI + 225 GUI) — unchanged
+- Version bumped `3.7.3` → `3.8.0`
+
+---
+
 ## [3.7.3] — 2026-03-20
 
 ### Fixed / Polished
