@@ -699,5 +699,155 @@ internal static class ScoopTools
             DetectAction = () =>
                 Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "carapace-bin")),
         },
+        new TweakDef
+        {
+            Id = "scoop-eza",
+            Label = "Install eza via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs eza — a modern, maintained replacement for ls with colour output, icons, and git integration. Replaces the deprecated exa.",
+            Tags = ["scoop", "eza", "ls", "files", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install eza"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall eza"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "eza")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-yazi",
+            Label = "Install yazi via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs yazi — a blazing-fast terminal file manager written in Rust with async I/O and vim-style navigation.",
+            Tags = ["scoop", "yazi", "file-manager", "terminal", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install yazi"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall yazi"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "yazi")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-helix",
+            Label = "Install Helix editor via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Helix — a post-modern modal text editor inspired by Kakoune and Neovim, with built-in LSP and tree-sitter support.",
+            Tags = ["scoop", "helix", "editor", "modal", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install helix"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall helix"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "helix")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-nushell",
+            Label = "Install Nushell via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Nushell (nu) — a modern shell with structured, type-aware pipelines. Treats output as tables, not plain text.",
+            Tags = ["scoop", "nushell", "shell", "nu", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install nu"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall nu"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "nu")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-zellij",
+            Label = "Install Zellij via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Zellij — a terminal workspace with panes, tabs, and a plugin system. Modern Rust-based tmux alternative.",
+            Tags = ["scoop", "zellij", "terminal", "multiplexer", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install zellij"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall zellij"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "zellij")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-gitoxide",
+            Label = "Install gitoxide (gix) via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs gitoxide — a pure Rust git implementation providing the gix CLI tool for fast, safe git operations.",
+            Tags = ["scoop", "gitoxide", "git", "rust", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gitoxide"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gitoxide"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gitoxide")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-watchexec",
+            Label = "Install watchexec via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs watchexec — a tool that watches files for changes and re-runs a command automatically. Ideal for dev and build workflows.",
+            Tags = ["scoop", "watchexec", "watch", "automation", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install watchexec"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall watchexec"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "watchexec")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-topgrade",
+            Label = "Install topgrade via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs topgrade — a one-command upgrade tool for all package managers, shells, plugins, and tools on the system.",
+            Tags = ["scoop", "topgrade", "upgrade", "maintenance", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install topgrade"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall topgrade"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "topgrade")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-pueue",
+            Label = "Install pueue via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs pueue — a background task queue manager for long-running shell commands with pause, abort, and log features.",
+            Tags = ["scoop", "pueue", "task-queue", "background", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install pueue"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall pueue"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "pueue")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-oha",
+            Label = "Install oha via Scoop",
+            Category = "Scoop Tools",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs oha — a fast HTTP load generator written in Rust for benchmarking web endpoints from the command line.",
+            Tags = ["scoop", "oha", "http", "load-test", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install oha"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall oha"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "oha")),
+        },
     ];
 }
