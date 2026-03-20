@@ -372,8 +372,6 @@ Safe to test against real registry (read-only):
 
 ---
 
----
-
 ## EXE Version Shows 0.0.0.0 — GenerateAssemblyInfo Trap
 
 Setting `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` disables embedding of ALL

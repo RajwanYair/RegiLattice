@@ -83,21 +83,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-disable-game-bar-tips",
-            Label = "Disable Game Bar Startup Tips",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Game Bar startup panel and tips overlay. Removes the popup that appears when launching games. Default: Enabled. Recommended: Disabled.",
-            Tags = ["multimedia", "gamebar", "tips", "overlay"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 0)],
-        },
-        new TweakDef
-        {
             Id = "media-disable-screensaver",
             Label = "Disable Screen Saver",
             Category = "Multimedia",
