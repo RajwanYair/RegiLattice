@@ -16,6 +16,7 @@ internal sealed class WhatsNewDialog : Form
     internal WhatsNewDialog()
     {
         Text = "What's New in RegiLattice";
+        Icon = AppIcons.WhatsNewIcon;
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;
         MinimizeBox = false;

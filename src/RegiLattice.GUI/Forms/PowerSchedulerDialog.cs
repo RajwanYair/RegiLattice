@@ -419,6 +419,7 @@ internal sealed class PowerSchedulerDialog : BaseDialog
         internal ScheduleEditDialog(IReadOnlyList<PowerPlanEntry> plans, PlanSchedule? existing = null)
         {
             Text = existing is null ? "Add Schedule" : "Edit Schedule";
+            Icon = AppIcons.AppIcon;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             StartPosition = FormStartPosition.CenterParent;
             MaximizeBox = false;

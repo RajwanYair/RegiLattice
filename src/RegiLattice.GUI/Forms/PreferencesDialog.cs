@@ -59,6 +59,7 @@ internal sealed class PreferencesDialog : Form
     {
         _config = config;
         Text = "Preferences";
+        Icon = AppIcons.PreferencesIcon;
         Size = new Size(520, 500);
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;

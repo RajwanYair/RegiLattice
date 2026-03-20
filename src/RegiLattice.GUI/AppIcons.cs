@@ -37,6 +37,12 @@ internal static class AppIcons
     /// <summary>Tweak Pack / marketplace icon.</summary>
     internal static Icon MarketplaceIcon => GetOrCreate("marketplace", DrawMarketplaceIcon);
 
+    /// <summary>What's New / changelog star icon.</summary>
+    internal static Icon WhatsNewIcon => GetOrCreate("whatsnew", DrawWhatsNewIcon);
+
+    /// <summary>Preferences / gear icon.</summary>
+    internal static Icon PreferencesIcon => GetOrCreate("prefs", DrawPreferencesIcon);
+
     // ── Small bitmaps for menu items (16×16) ───────────────────────────
 
     private static readonly Dictionary<string, Bitmap> _bmpCache = new(StringComparer.OrdinalIgnoreCase);

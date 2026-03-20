@@ -232,6 +232,7 @@ internal sealed class AddProfileScheduleDialog : Form
     public AddProfileScheduleDialog(string[] profiles)
     {
         Text = "Add Profile Schedule";
+        Icon = AppIcons.AppIcon;
         Size = new Size(380, 260);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
