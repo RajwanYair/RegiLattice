@@ -10,6 +10,7 @@ internal sealed class AboutDialog : Form
     internal AboutDialog(int tweakCount, int categoryCount, bool isCorporate)
     {
         Text = "About RegiLattice";
+        Icon = AppIcons.AppIcon;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;

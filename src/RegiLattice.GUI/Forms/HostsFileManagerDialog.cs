@@ -454,6 +454,7 @@ internal sealed class HostsUrlPromptDialog : Form
     internal HostsUrlPromptDialog()
     {
         Text = "Import Hosts from URL";
+        Icon = AppIcons.AppIcon;
         Size = new Size(480, 140);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
@@ -518,6 +519,7 @@ internal sealed class HostsAddDialog : Form
     internal HostsAddDialog()
     {
         Text = "Add Hosts Entry";
+        Icon = AppIcons.AppIcon;
         Size = new Size(380, 200);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
