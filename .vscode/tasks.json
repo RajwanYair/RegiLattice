@@ -121,65 +121,95 @@
       "type": "shell",
       "command": "dotnet clean src/RegiLattice.Core/RegiLattice.Core.csproj",
       "problemMatcher": [],
-      "presentation": { "reveal": "silent", "panel": "shared" }
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
     },
     {
       "label": "clean: GUI",
       "type": "shell",
       "command": "dotnet clean src/RegiLattice.GUI/RegiLattice.GUI.csproj",
       "problemMatcher": [],
-      "presentation": { "reveal": "silent", "panel": "shared" }
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
     },
     {
       "label": "clean: CLI",
       "type": "shell",
       "command": "dotnet clean src/RegiLattice.CLI/RegiLattice.CLI.csproj",
       "problemMatcher": [],
-      "presentation": { "reveal": "silent", "panel": "shared" }
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
     },
     {
       "label": "clean build: Solution (Debug)",
       "dependsOrder": "sequence",
-      "dependsOn": ["clean: Solution", "build: Solution (Debug)"],
+      "dependsOn": [
+        "clean: Solution",
+        "build: Solution (Debug)"
+      ],
       "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "clean build: Solution (Release)",
       "dependsOrder": "sequence",
-      "dependsOn": ["clean: Solution", "build: Solution (Release)"],
+      "dependsOn": [
+        "clean: Solution",
+        "build: Solution (Release)"
+      ],
       "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "clean build: Core (Debug)",
       "dependsOrder": "sequence",
-      "dependsOn": ["clean: Core"],
+      "dependsOn": [
+        "clean: Core"
+      ],
       "type": "shell",
       "command": "dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Debug",
       "group": "build",
       "problemMatcher": "$msCompile",
-      "presentation": { "reveal": "always", "panel": "shared" }
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     },
     {
       "label": "clean build: GUI (Debug)",
       "dependsOrder": "sequence",
-      "dependsOn": ["clean: GUI"],
+      "dependsOn": [
+        "clean: GUI"
+      ],
       "type": "shell",
       "command": "dotnet build src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Debug",
       "group": "build",
       "problemMatcher": "$msCompile",
-      "presentation": { "reveal": "always", "panel": "shared" }
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     },
     {
       "label": "clean build: CLI (Debug)",
       "dependsOrder": "sequence",
-      "dependsOn": ["clean: CLI"],
+      "dependsOn": [
+        "clean: CLI"
+      ],
       "type": "shell",
       "command": "dotnet build src/RegiLattice.CLI/RegiLattice.CLI.csproj -c Debug",
       "group": "build",
       "problemMatcher": "$msCompile",
-      "presentation": { "reveal": "always", "panel": "shared" }
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }
