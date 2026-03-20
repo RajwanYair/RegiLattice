@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-18 (v3.5.0, C# 13 / .NET 10.0-windows, 2 736 tweaks, 92 categories)
+> Last updated: 2026-03-20 (v3.7.1, C# 13 / .NET 10.0-windows, 2 991 tweaks, 92 categories)
 
 ---
 
@@ -213,8 +213,16 @@ All references to the GitHub account must use `RajwanYair`:
 
 ## Version & Metadata
 
-- Version lives in `Directory.Build.props` — `<Version>3.5.0</Version>`
-- Do not duplicate version strings — single source of truth per project
+- Version lives in `Directory.Build.props` — update **all four** properties together:
+  ```xml
+  <Version>X.Y.Z</Version>
+  <AssemblyVersion>X.Y.Z.0</AssemblyVersion>
+  <FileVersion>X.Y.Z.0</FileVersion>
+  <InformationalVersion>X.Y.Z</InformationalVersion>
+  ```
+- **No manual `Properties/AssemblyInfo.cs`** — was deleted in v3.7.1. Version attributes are
+  embedded exclusively via MSBuild auto-generated AssemblyInfo (`GenerateAssemblyInfo=true`).
+- Do not duplicate version strings — single source of truth is `Directory.Build.props`
 - GitHub URLs: `https://github.com/RajwanYair/RegiLattice`
 
 ---
@@ -361,6 +369,123 @@ Safe to test against real registry (read-only):
 - `RegistrySession.ReadDword/ReadString` on well-known HKCU keys
 - `KeyExists/ValueExists` on known paths like `HKCU\Software`
 - `ListSubKeys/ListValueNames` on populated keys
+
+---
+
+---
+
+## EXE Version Shows 0.0.0.0 — GenerateAssemblyInfo Trap
+
+Setting `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` disables embedding of ALL
+assembly version resources. Even if `<Version>`, `<AssemblyVersion>`, `<FileVersion>` are
+set as MSBuild properties, they are only written into the auto-generated file — they have
+no effect when that generation is off. The PE header stays at `0.0.0.0`.
+
+```xml
+<!-- ❌ BAD — kills version embedding in the EXE/DLL PE header -->
+<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+<!-- ✅ GOOD — UseSharedCompilation=false is the correct OneDrive file-lock guard.
+     Keep GenerateAssemblyInfo at its default (true). -->
+<UseSharedCompilation>false</UseSharedCompilation>
+```
+
+**When was this hit?** The original workaround for OneDrive-hosted builds was
+`GenerateAssemblyInfo=false` + a manual `Properties/AssemblyInfo.cs` in Core. But that
+file was only created for Core (not GUI/CLI) and was left stale at an old version.
+**Fix**: removed `GenerateAssemblyInfo=false`, deleted the manual `AssemblyInfo.cs`,
+added all 4 version properties explicitly to `Directory.Build.props` so they flow
+through auto-gen to all three projects.
+
+**OneDrive cache-lock**: `<UseSharedCompilation>false</UseSharedCompilation>` prevents
+the Roslyn compiler server from holding file handles on `AssemblyInfoInputs.cache`.
+This is the only guard needed — there is no need to also disable assembly info generation.
+
+---
+
+## Wrong Registry Key Copied Across Modules
+
+When porting or bulk-adding tweaks, it is easy to accidentally copy the wrong registry
+key from a nearby tweak. Two categories of copy-paste bugs found:
+
+### Semantic value mismatch
+`EnableAutoDoh` in `HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters`:
+- Value `2` = **Automatic** (try DoH, fall back to plain DNS if unavailable)
+- Value `3` = **Require/Enforce** (fail DNS resolution if DoH is unavailable)
+
+```csharp
+// ❌ BAD — value 2 only tries DoH; falls back to plaintext
+ApplyOps = [RegOp.SetDword(@"HKLM\SYSTEM\..\Dnscache\Parameters", "EnableAutoDoh", 2)],
+
+// ✅ GOOD — value 3 enforces DoH (no plaintext fallback)
+ApplyOps = [RegOp.SetDword(@"HKLM\SYSTEM\..\Dnscache\Parameters", "EnableAutoDoh", 3)],
+```
+
+### Completely wrong key
+`evtlog-disable-dns-client-log` was incorrectly writing to `Dnscache\Parameters\EnableAutoDoh`
+(which controls DNS-over-HTTPS, not event tracing). The correct key to disable the DNS
+client operational event channel is:
+```
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-DNS-Client/Operational
+  Enabled = 0
+  (restore: Enabled = 1)
+```
+
+**Prevention**: When creating tweaks for event log channels, ALWAYS use the
+`\WINEVT\Channels\<provider-name>` path, not the service's `Parameters` key.
+
+---
+
+## Duplicate Tweaks Across Modules — Auditing Pattern
+
+The same registry operation can be silently duplicated across unrelated modules
+(e.g., a Maps auto-update tweak appearing in both ScheduledTasks and WindowsRecall).
+Duplicate tweaks confuse users and dilute the ID namespace.
+
+**Detection scan**:
+```powershell
+# Find duplicate registry key+valuename combinations across all tweak modules
+Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'SetDword|SetString' |
+    ForEach-Object { ($_ -split '"')[1..3] -join '"' } | Group-Object | Where-Object Count -gt 1
+```
+
+**Cases found and removed (v3.7.1)**:
+- `msstore-disable-auto-app-updates` + `msstore-auto-update-off` → both duplicated
+  `msstore-disable-auto-update` (`WindowsStore\AutoDownload=2`)
+- `schtask-disable-maps-update` → subset of `schtask-task-disable-maps-update`
+  (the latter sets both `AutoDownloadAndUpdateMapData` AND `AllowUntriggeredNetworkTrafficOnSettingsPage`)
+- `recall-disable-auto-map-downloads` → misplaced in WindowsRecall module;
+  Maps auto-download has nothing to do with Windows Recall
+
+**Rules**:
+- Keep the tweak in the **semantically correct** module, not wherever it was first written
+- When two tweaks target the same registry key+value, keep the one with better description, correct CorpSafe, and matching category slug
+- The simpler (fewer ops) duplicate is almost always the one to remove
+
+---
+
+## Code Comments — Inline Trailing vs. Standalone
+
+Trailing inline comments (`code; // reason`) on the same line as code are harder to see
+and harder to maintain than standalone comment lines:
+
+```csharp
+// ❌ BAD — trailing inline; easy to miss, can't be multi-line
+_detailBox.BackColor = AppTheme.Surface; // must be set AFTER ReadOnly to prevent Windows override
+e.NewValue = e.CurrentValue; // cancel second toggle in double-click sequence
+
+// ✅ GOOD — standalone comment above the code; always visible, can expand to multiple lines
+// NOTE: BackColor must be set AFTER ReadOnly; on some Windows versions ReadOnly forces
+// the color back to the system default.
+_detailBox.BackColor = AppTheme.Surface;
+
+// Cancel the second checkbox toggle that fires during a double-click.
+e.NewValue = e.CurrentValue;
+```
+
+**Exception**: Short unit-clarifying comments on enum values or single `// NOTE:` on
+property declarations (e.g., `[assembly: ...]`) are acceptable inline.
+XML `WriteEndElement()` comments (`// tagName`) are acceptable for readability in deep XML writers.
 
 ---
 
