@@ -833,4 +833,95 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         engine.Register([td]);
         Assert.Equal(TweakResult.Error, engine.Update(td));
     }
+
+    // ── Duplication guards ───────────────────────────────────────────────────
+
+    [Fact]
+    public void RegisterBuiltins_DuplicateRegistryOps_BelowRegressionThreshold()
+    {
+        // Regression guard: detects shared PATH\ValueName targets written by multiple tweaks.
+        // Current known technical debt: a number of duplicate registry targets exist across modules.
+        // Threshold (1200) is permissive to allow existing debt while blocking NET-NEW additions.
+        // REMEDIATION: run scripts/Audit-Duplications.ps1 to identify and resolve these.
+        var warnings = TweakValidator.DetectDuplicateRegistryOps(_engine.AllTweaks());
+        Assert.True(
+            warnings.Count <= 1200,
+            $"Duplicate registry targets exceeded regression threshold: {warnings.Count} > 1200. " +
+            $"Run scripts/Audit-Duplications.ps1 to investigate.\n" +
+            $"First 3: {string.Join(" | ", warnings.Take(3))}");
+    }
+
+    [Fact]
+    public void RegisterBuiltins_NoCrossModuleLabelAndPathCollision()
+    {
+        // Two tweaks from DIFFERENT categories that share the same lowercased Label AND
+        // the same first RegistryKeys entry are almost certainly functional duplicates.
+        // Same label + different registry path = acceptable (same feature, different mechanism).
+        // Threshold (200) is a regression guard over current technical debt (128 groups exist).
+        // REMEDIATION: run scripts/Audit-Duplications.ps1 and review each group below.
+        var collisions = _engine.AllTweaks()
+            .Where(t => t.RegistryKeys.Count > 0)
+            .GroupBy(t => (
+                Label: t.Label.Trim().ToLowerInvariant(),
+                Path: t.RegistryKeys[0].ToLowerInvariant()))
+            .Where(g => g.Select(t => t.Category).Distinct(StringComparer.OrdinalIgnoreCase).Count() > 1)
+            .Select(g => $"'{g.Key.Label}' + '{g.Key.Path}' [{string.Join(", ", g.Select(t => $"{t.Category}/{t.Id}"))}]")
+            .ToList();
+
+        Assert.True(
+            collisions.Count <= 200,
+            $"Cross-category duplicates (same Label + same RegistryKeys[0]) exceeded threshold: " +
+            $"{collisions.Count} > 200. Run scripts/Audit-Duplications.ps1 to investigate.\n" +
+            string.Join("\n", collisions.Take(10)));
+    }
+
+    [Fact]
+    public void RegisterBuiltins_CategorySlugs_MatchKnownPrefixes()
+    {
+        // Spot-checks that tweaks in key categories use the canonical ID slug.
+        // Catches misfiled or incorrectly prefixed tweaks added in future sprints.
+        // Full slug table: see copilot-instructions.md "Tweak ID Naming Convention".
+        var checkedCategories = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["Privacy"] = "priv-",
+            ["Performance"] = "perf-",
+            ["Gaming"] = "game-",
+            ["Services"] = "svc-",
+            ["Windows Update"] = "wu-",
+            ["Security"] = "sec-",
+            ["Hardening"] = "harden-",
+            ["Startup"] = "startup-",
+            ["Boot"] = "boot-",
+            ["Taskbar"] = "tb-",
+        };
+
+        var violations = new List<string>();
+        foreach (var (category, prefix) in checkedCategories)
+        {
+            if (!_engine.TweaksByCategory().TryGetValue(category, out var tweaks)) continue;
+            foreach (var t in tweaks)
+            {
+                if (!t.Id.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    violations.Add($"  [{category}] '{t.Id}' — expected prefix '{prefix}'");
+            }
+        }
+
+        Assert.True(
+            violations.Count == 0,
+            $"{violations.Count} tweak(s) have IDs that don't match their canonical category slug:\n" +
+            string.Join("\n", violations.Take(20)));
+    }
+
+    [Fact]
+    public void RegisterBuiltins_DetectDuplicateRegistryOps_ProducesUsableOutput()
+    {
+        // Verifies that DetectDuplicateRegistryOps runs against all built-in tweaks
+        // without throwing and returns a readable list (even if non-empty).
+        // This test is a smoke-test ensuring the method works at scale with 3000+ tweaks.
+        var warnings = TweakValidator.DetectDuplicateRegistryOps(_engine.AllTweaks());
+        Assert.NotNull(warnings);
+        // Each warning must be a non-empty string (well-formed output)
+        Assert.All(warnings, w => Assert.False(string.IsNullOrWhiteSpace(w),
+            "DetectDuplicateRegistryOps returned a null/empty warning string"));
+    }
 }
