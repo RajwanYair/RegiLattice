@@ -892,3 +892,153 @@ public sealed class ConsoleColorizerSprintTests
         }
     }
 }
+
+// ── Compliance, ExportGpo, Manager argument parsing ───────────────────────
+
+/// <summary>
+/// Tests for CLI arguments added to support compliance reporting, GPO export,
+/// and package manager selection — properties present in <see cref="CliArgs"/>
+/// but not previously covered by any test class.
+/// </summary>
+public sealed class ComplianceAndManagerParseTests
+{
+    // ── Default values ────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Compliance_DefaultsNull()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Null(result.Compliance);
+    }
+
+    [Fact]
+    public void ParseArgs_ExportGpo_DefaultsNull()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Null(result.ExportGpo);
+    }
+
+    [Fact]
+    public void ParseArgs_Manager_DefaultsNull()
+    {
+        var result = Program.ParseArgs([]);
+        Assert.NotNull(result);
+        Assert.Null(result.Manager);
+    }
+
+    // ── Parsing --compliance ──────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Compliance_SetsProperty()
+    {
+        var result = Program.ParseArgs(["--compliance", "cis"]);
+        Assert.NotNull(result);
+        Assert.Equal("cis", result.Compliance);
+    }
+
+    [Theory]
+    [InlineData("cis")]
+    [InlineData("stig")]
+    [InlineData("custom-policy")]
+    public void ParseArgs_Compliance_VariousValues_ParsesCorrectly(string value)
+    {
+        var result = Program.ParseArgs(["--compliance", value]);
+        Assert.NotNull(result);
+        Assert.Equal(value, result.Compliance);
+    }
+
+    [Fact]
+    public void ParseArgs_Compliance_WithoutValue_StaysNull()
+    {
+        var result = Program.ParseArgs(["--compliance"]);
+        Assert.NotNull(result);
+        Assert.Null(result.Compliance);
+    }
+
+    // ── Parsing --export-gpo ─────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_ExportGpo_SetsProperty()
+    {
+        var result = Program.ParseArgs(["--export-gpo", "policies.reg"]);
+        Assert.NotNull(result);
+        Assert.Equal("policies.reg", result.ExportGpo);
+    }
+
+    [Fact]
+    public void ParseArgs_ExportGpo_WithPath_ParsesCorrectly()
+    {
+        var result = Program.ParseArgs(["--export-gpo", @"C:\output\gpo-export.reg"]);
+        Assert.NotNull(result);
+        Assert.Equal(@"C:\output\gpo-export.reg", result.ExportGpo);
+    }
+
+    [Fact]
+    public void ParseArgs_ExportGpo_WithoutValue_StaysNull()
+    {
+        var result = Program.ParseArgs(["--export-gpo"]);
+        Assert.NotNull(result);
+        Assert.Null(result.ExportGpo);
+    }
+
+    // ── Parsing --manager ─────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Manager_SetsProperty()
+    {
+        var result = Program.ParseArgs(["--manager", "scoop"]);
+        Assert.NotNull(result);
+        Assert.Equal("scoop", result.Manager);
+    }
+
+    [Theory]
+    [InlineData("scoop")]
+    [InlineData("choco")]
+    [InlineData("winget")]
+    [InlineData("pip")]
+    public void ParseArgs_Manager_VariousManagers_ParsesCorrectly(string manager)
+    {
+        var result = Program.ParseArgs(["--manager", manager]);
+        Assert.NotNull(result);
+        Assert.Equal(manager, result.Manager);
+    }
+
+    [Fact]
+    public void ParseArgs_Manager_WithoutValue_StaysNull()
+    {
+        var result = Program.ParseArgs(["--manager"]);
+        Assert.NotNull(result);
+        Assert.Null(result.Manager);
+    }
+
+    // ── Combined argument tests ───────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Compliance_WithForce_BothSet()
+    {
+        var result = Program.ParseArgs(["--compliance", "stig", "--force"]);
+        Assert.NotNull(result);
+        Assert.Equal("stig", result.Compliance);
+        Assert.True(result.Force);
+    }
+
+    [Fact]
+    public void ParseArgs_ExportGpo_WithDryRun_BothSet()
+    {
+        var result = Program.ParseArgs(["--export-gpo", "out.reg", "--dry-run"]);
+        Assert.NotNull(result);
+        Assert.Equal("out.reg", result.ExportGpo);
+        Assert.True(result.DryRun);
+    }
+
+    [Fact]
+    public void ParseArgs_Manager_WithCategory_BothSet()
+    {
+        var result = Program.ParseArgs(["--manager", "winget", "--category", "Package Management"]);
+        Assert.NotNull(result);
+        Assert.Equal("winget", result.Manager);
+        Assert.Equal("Package Management", result.Category);
+    }
+}

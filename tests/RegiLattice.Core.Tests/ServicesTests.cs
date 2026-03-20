@@ -1683,3 +1683,456 @@ public sealed class ServiceManagerSprint47Tests
         }
     }
 }
+
+// ── AppConfig UI preferences — default values and roundtrip ──────────────────
+
+/// <summary>
+/// Tests for the UI-preference properties added in recent sprints.
+/// These were previously untested, leaving branches uncovered in the JSON
+/// serialisation / deserialisation paths.
+/// </summary>
+public sealed class AppConfigUiPrefsTests
+{
+    private static (string dir, string path) TempCfg()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), $"rl-uiprefs-{Guid.NewGuid()}");
+        return (dir, Path.Combine(dir, "cfg.json"));
+    }
+
+    private static void Cleanup(string dir)
+    {
+        try
+        {
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, recursive: true);
+        }
+        catch { }
+    }
+
+    // ── Default value assertions ─────────────────────────────────────────
+
+    [Fact]
+    public void Default_MinimizeToTray_IsTrue() => Assert.True(new AppConfig().MinimizeToTray);
+
+    [Fact]
+    public void Default_ConfirmApply_IsTrue() => Assert.True(new AppConfig().ConfirmApply);
+
+    [Fact]
+    public void Default_ConfirmRemove_IsTrue() => Assert.True(new AppConfig().ConfirmRemove);
+
+    [Fact]
+    public void Default_ShowInapplicable_IsTrue() => Assert.True(new AppConfig().ShowInapplicable);
+
+    [Fact]
+    public void Default_StatusBarMonitor_IsTrue() => Assert.True(new AppConfig().StatusBarMonitor);
+
+    [Fact]
+    public void Default_DetailPanelHeight_Is130() => Assert.Equal(130, new AppConfig().DetailPanelHeight);
+
+    [Fact]
+    public void Default_FontSize_Is9f() => Assert.Equal(9f, new AppConfig().FontSize);
+
+    [Fact]
+    public void Default_ShowLogPanel_IsTrue() => Assert.True(new AppConfig().ShowLogPanel);
+
+    [Fact]
+    public void Default_LogPanelHeight_Is150() => Assert.Equal(150, new AppConfig().LogPanelHeight);
+
+    [Fact]
+    public void Default_AutoRefreshOnStartup_IsTrue() => Assert.True(new AppConfig().AutoRefreshOnStartup);
+
+    [Fact]
+    public void Default_LaunchMinimized_IsFalse() => Assert.False(new AppConfig().LaunchMinimized);
+
+    [Fact]
+    public void Default_RememberSplitter_IsTrue() => Assert.True(new AppConfig().RememberSplitter);
+
+    [Fact]
+    public void Default_SplitterDistance_IsZero() => Assert.Equal(0, new AppConfig().SplitterDistance);
+
+    [Fact]
+    public void Default_SkipAppliedOnBatch_IsTrue() => Assert.True(new AppConfig().SkipAppliedOnBatch);
+
+    [Fact]
+    public void Default_BrightnessSchedulerEnabled_IsFalse() => Assert.False(new AppConfig().BrightnessSchedulerEnabled);
+
+    [Fact]
+    public void Default_BrightnessDayPct_Is80() => Assert.Equal(80, new AppConfig().BrightnessDayPct);
+
+    [Fact]
+    public void Default_BrightnessNightPct_Is40() => Assert.Equal(40, new AppConfig().BrightnessNightPct);
+
+    [Fact]
+    public void Default_BrightnessDayTime_Is0700() => Assert.Equal("07:00", new AppConfig().BrightnessDayTime);
+
+    [Fact]
+    public void Default_BrightnessNightTime_Is2100() => Assert.Equal("21:00", new AppConfig().BrightnessNightTime);
+
+    [Fact]
+    public void Default_HistoryMaxEntries_Is500() => Assert.Equal(500, new AppConfig().HistoryMaxEntries);
+
+    [Fact]
+    public void Default_MonitorColorCoded_IsTrue() => Assert.True(new AppConfig().MonitorColorCoded);
+
+    [Fact]
+    public void Default_AutoCleanMemoryThreshold_IsZero() => Assert.Equal(0, new AppConfig().AutoCleanMemoryThreshold);
+
+    [Fact]
+    public void Default_ProfileSchedules_IsEmpty() => Assert.Empty(new AppConfig().ProfileSchedules);
+
+    [Fact]
+    public void Default_ProfileOnPlanSwitch_IsNull() => Assert.Null(new AppConfig().ProfileOnPlanSwitch);
+
+    // ── Roundtrip tests ──────────────────────────────────────────────────
+
+    [Fact]
+    public void SaveAndLoad_FontSize_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { FontSize = 12f };
+            cfg.Save(path);
+            Assert.Equal(12f, AppConfig.Load(path).FontSize);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_ShowLogPanel_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { ShowLogPanel = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).ShowLogPanel);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_LogPanelHeight_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { LogPanelHeight = 250 };
+            cfg.Save(path);
+            Assert.Equal(250, AppConfig.Load(path).LogPanelHeight);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_LaunchMinimized_True_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { LaunchMinimized = true };
+            cfg.Save(path);
+            Assert.True(AppConfig.Load(path).LaunchMinimized);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_RememberSplitter_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { RememberSplitter = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).RememberSplitter);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_SplitterDistance_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { SplitterDistance = 320 };
+            cfg.Save(path);
+            Assert.Equal(320, AppConfig.Load(path).SplitterDistance);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_BrightnessScheduler_AllFields_RoundTrip()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig
+            {
+                BrightnessSchedulerEnabled = true,
+                BrightnessDayPct = 90,
+                BrightnessNightPct = 30,
+                BrightnessDayTime = "08:00",
+                BrightnessNightTime = "22:00",
+            };
+            cfg.Save(path);
+            var loaded = AppConfig.Load(path);
+            Assert.True(loaded.BrightnessSchedulerEnabled);
+            Assert.Equal(90, loaded.BrightnessDayPct);
+            Assert.Equal(30, loaded.BrightnessNightPct);
+            Assert.Equal("08:00", loaded.BrightnessDayTime);
+            Assert.Equal("22:00", loaded.BrightnessNightTime);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_HistoryMaxEntries_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { HistoryMaxEntries = 1000 };
+            cfg.Save(path);
+            Assert.Equal(1000, AppConfig.Load(path).HistoryMaxEntries);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_MonitorColorCoded_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { MonitorColorCoded = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).MonitorColorCoded);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_AutoCleanMemoryThreshold_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { AutoCleanMemoryThreshold = 80 };
+            cfg.Save(path);
+            Assert.Equal(80, AppConfig.Load(path).AutoCleanMemoryThreshold);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_ProfileOnPlanSwitch_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { ProfileOnPlanSwitch = "gaming" };
+            cfg.Save(path);
+            Assert.Equal("gaming", AppConfig.Load(path).ProfileOnPlanSwitch);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_ProfileSchedules_SingleEntry_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var entry = new ProfileScheduleEntry
+            {
+                Profile = "privacy",
+                Trigger = "daily",
+                Time = "09:00",
+                Enabled = true,
+            };
+            var cfg = new AppConfig { ProfileSchedules = [entry] };
+            cfg.Save(path);
+            var loaded = AppConfig.Load(path);
+            Assert.Single(loaded.ProfileSchedules);
+            Assert.Equal("privacy", loaded.ProfileSchedules[0].Profile);
+            Assert.Equal("daily", loaded.ProfileSchedules[0].Trigger);
+            Assert.Equal("09:00", loaded.ProfileSchedules[0].Time);
+            Assert.True(loaded.ProfileSchedules[0].Enabled);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_ProfileSchedules_MultipleEntries_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig
+            {
+                ProfileSchedules =
+                [
+                    new ProfileScheduleEntry { Profile = "business", Trigger = "on_boot" },
+                    new ProfileScheduleEntry { Profile = "gaming", Trigger = "on_login" },
+                ],
+            };
+            cfg.Save(path);
+            var loaded = AppConfig.Load(path);
+            Assert.Equal(2, loaded.ProfileSchedules.Count);
+            Assert.Equal("business", loaded.ProfileSchedules[0].Profile);
+            Assert.Equal("gaming", loaded.ProfileSchedules[1].Profile);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_SkipAppliedOnBatch_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { SkipAppliedOnBatch = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).SkipAppliedOnBatch);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_ConfirmApply_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { ConfirmApply = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).ConfirmApply);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_MinimizeToTray_False_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { MinimizeToTray = false };
+            cfg.Save(path);
+            Assert.False(AppConfig.Load(path).MinimizeToTray);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    [Fact]
+    public void SaveAndLoad_DetailPanelHeight_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig { DetailPanelHeight = 200 };
+            cfg.Save(path);
+            Assert.Equal(200, AppConfig.Load(path).DetailPanelHeight);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+
+    // ── ProfileScheduleEntry record ──────────────────────────────────────
+
+    [Fact]
+    public void ProfileScheduleEntry_DefaultEnabled_IsTrue()
+    {
+        var entry = new ProfileScheduleEntry { Profile = "minimal", Trigger = "on_boot" };
+        Assert.True(entry.Enabled);
+    }
+
+    [Fact]
+    public void ProfileScheduleEntry_DefaultTime_IsEmpty()
+    {
+        var entry = new ProfileScheduleEntry { Profile = "minimal", Trigger = "on_boot" };
+        Assert.Equal("", entry.Time);
+    }
+
+    [Fact]
+    public void ProfileScheduleEntry_DisabledEntry_RoundTrips()
+    {
+        var (dir, path) = TempCfg();
+        try
+        {
+            var cfg = new AppConfig
+            {
+                ProfileSchedules =
+                [
+                    new ProfileScheduleEntry
+                    {
+                        Profile = "server",
+                        Trigger = "daily",
+                        Enabled = false,
+                    },
+                ],
+            };
+            cfg.Save(path);
+            var loaded = AppConfig.Load(path);
+            Assert.Single(loaded.ProfileSchedules);
+            Assert.False(loaded.ProfileSchedules[0].Enabled);
+        }
+        finally
+        {
+            Cleanup(dir);
+        }
+    }
+}
