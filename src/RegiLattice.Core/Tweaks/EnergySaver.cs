@@ -10,9 +10,11 @@ using RegiLattice.Core.Models;
 
 internal static class EnergySaver
 {
-    // Win11 24H2 Energy Saver unified mode
     private const string EnSaver = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\EnergySaver";
     private const string EnSaverSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\EnergySaver";
+
+    // Battery care / charge-limit feature (Win11 24H2+ on supported hardware)
+    private const string BatteryCare = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power";
 
     // Efficiency Mode (background process throttling, Win11 22H2+)
     private const string EcoQos = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
@@ -189,6 +191,166 @@ internal static class EnergySaver
             ApplyOps = [RegOp.SetDword(EnSaverSys, "PromoNotificationsEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(EnSaverSys, "PromoNotificationsEnabled")],
             DetectOps = [RegOp.CheckDword(EnSaverSys, "PromoNotificationsEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "energy-set-saver-threshold-15pct",
+            Label = "Set Energy Saver Auto-Activate Threshold to 15%",
+            Category = "Energy Saver",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "threshold"],
+            Description =
+                "Lowers the battery percentage at which Windows automatically "
+                + "activates Energy Saver mode from the default 20% to 15%, "
+                + "giving you more unplugged run time at full performance.",
+            ApplyOps = [RegOp.SetDword(EnSaver, "EnergySaverThreshold", 15)],
+            RemoveOps = [RegOp.DeleteValue(EnSaver, "EnergySaverThreshold")],
+            DetectOps = [RegOp.CheckDword(EnSaver, "EnergySaverThreshold", 15)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-auto-saver",
+            Label = "Disable Automatic Energy Saver Activation",
+            Category = "Energy Saver",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "auto"],
+            Description =
+                "Prevents Windows from turning on Energy Saver mode automatically "
+                + "when the battery drops below the configured threshold. "
+                + "You retain full control over when Energy Saver is active.",
+            ApplyOps = [RegOp.SetDword(EnSaver, "AutoEnergySaverEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(EnSaver, "AutoEnergySaverEnabled")],
+            DetectOps = [RegOp.CheckDword(EnSaver, "AutoEnergySaverEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-saver-dim-amount",
+            Label = "Set Energy Saver Screen Dim Amount to Zero",
+            Category = "Energy Saver",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["energy saver", "brightness", "battery", "display"],
+            Description =
+                "Configures the Energy Saver dimming amount to 0% so the screen "
+                + "stays at its current brightness even while Energy Saver is active, "
+                + "superseding the binary on/off tweak for finer control.",
+            ApplyOps = [RegOp.SetDword(EnSaver, "BrightnessDimAmount", 0)],
+            RemoveOps = [RegOp.DeleteValue(EnSaver, "BrightnessDimAmount")],
+            DetectOps = [RegOp.CheckDword(EnSaver, "BrightnessDimAmount", 0)],
+        },
+        new TweakDef
+        {
+            Id = "energy-enable-battery-care",
+            Label = "Enable Battery Care (Charge Limit) Feature",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery care", "battery health", "charging"],
+            Description =
+                "Activates the Windows 11 24H2+ Battery Care feature which limits "
+                + "maximum charge to preserve long-term battery health. "
+                + "Only effective on laptops whose manufacturer exposes this capability.",
+            ApplyOps = [RegOp.SetDword(BatteryCare, "BatteryCareEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(BatteryCare, "BatteryCareEnabled")],
+            DetectOps = [RegOp.CheckDword(BatteryCare, "BatteryCareEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "energy-set-charge-limit-80",
+            Label = "Set Battery Charge Limit to 80%",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery care", "battery health", "charging", "80 percent"],
+            Description =
+                "Caps the maximum battery charge at 80% via the Windows Battery Care "
+                + "registry key. Lithium-ion cells degrade faster above 80%, so this "
+                + "significantly extends the long-term capacity of your battery.",
+            ApplyOps = [RegOp.SetDword(BatteryCare, "ChargingThreshold", 80)],
+            RemoveOps = [RegOp.DeleteValue(BatteryCare, "ChargingThreshold")],
+            DetectOps = [RegOp.CheckDword(BatteryCare, "ChargingThreshold", 80)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-background-tasks-battery",
+            Label = "Disable Background App Tasks While on Battery",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "background apps", "efficiency"],
+            Description =
+                "Instructs the system-level Energy Saver service to suspend "
+                + "non-critical background application tasks when on battery power, "
+                + "reducing CPU wake-ups and extending run time.",
+            ApplyOps = [RegOp.SetDword(EnSaverSys, "BackgroundTasksOnBattery", 0)],
+            RemoveOps = [RegOp.DeleteValue(EnSaverSys, "BackgroundTasksOnBattery")],
+            DetectOps = [RegOp.CheckDword(EnSaverSys, "BackgroundTasksOnBattery", 0)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-network-on-saver",
+            Label = "Restrict Network Activity During Energy Saver",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "network", "background"],
+            Description =
+                "Blocks non-critical network traffic (telemetry, background sync) "
+                + "while Energy Saver is active. Does not affect foreground network "
+                + "connections — only background Windows services.",
+            ApplyOps = [RegOp.SetDword(EnSaverSys, "NetworkActivityOnBattery", 0)],
+            RemoveOps = [RegOp.DeleteValue(EnSaverSys, "NetworkActivityOnBattery")],
+            DetectOps = [RegOp.CheckDword(EnSaverSys, "NetworkActivityOnBattery", 0)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-push-sync-on-saver",
+            Label = "Disable Cloud Sync During Energy Saver",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "sync", "onedrive", "background"],
+            Description =
+                "Prevents Windows from triggering push-sync operations (OneDrive, "
+                + "Mail, Calendar) while Energy Saver is active, reducing disk and "
+                + "network wake activity on battery.",
+            ApplyOps = [RegOp.SetDword(EnSaverSys, "DisableSyncOnEnergySaver", 1)],
+            RemoveOps = [RegOp.DeleteValue(EnSaverSys, "DisableSyncOnEnergySaver")],
+            DetectOps = [RegOp.CheckDword(EnSaverSys, "DisableSyncOnEnergySaver", 1)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-location-on-saver",
+            Label = "Disable Location Services During Energy Saver",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "location", "gps", "privacy"],
+            Description =
+                "Suspends background location polling by non-foreground apps "
+                + "while Energy Saver is active, preserving GPS/cellular radio "
+                + "power on mobile devices.",
+            ApplyOps = [RegOp.SetDword(EnSaverSys, "DisableLocationOnEnergySaver", 1)],
+            RemoveOps = [RegOp.DeleteValue(EnSaverSys, "DisableLocationOnEnergySaver")],
+            DetectOps = [RegOp.CheckDword(EnSaverSys, "DisableLocationOnEnergySaver", 1)],
+        },
+        new TweakDef
+        {
+            Id = "energy-disable-battery-reminder",
+            Label = "Disable Energy Saver Battery Reminder Notifications",
+            Category = "Energy Saver",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["energy saver", "battery", "notifications"],
+            Description =
+                "Stops the system-level Energy Saver engine from generating "
+                + "reminder notifications asking you to plug in or switch to "
+                + "Energy Saver mode.",
+            ApplyOps = [RegOp.SetDword(EnSaverSys, "BatteryReminderEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(EnSaverSys, "BatteryReminderEnabled")],
+            DetectOps = [RegOp.CheckDword(EnSaverSys, "BatteryReminderEnabled", 0)],
         },
     ];
 }

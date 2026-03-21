@@ -187,5 +187,167 @@ internal static class PrinterAdvanced
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableLPRPort")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableLPRPort", 1)],
         },
+        new TweakDef
+        {
+            Id = "prnta-require-https-spooler",
+            Label = "Require HTTPS for Print Spooler Remote Connections",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "spooler", "https", "tls", "security"],
+            Description =
+                "Enforces TLS-encrypted HTTPS for all inbound remote print spooler "
+                + "connections, blocking unencrypted (HTTP) print job submissions "
+                + "across the network. Requires the spooler to present a valid certificate.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "EnableTLSForHTTPSPrinting", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "EnableTLSForHTTPSPrinting")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "EnableTLSForHTTPSPrinting", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-restrict-driver-install-admin",
+            Label = "Restrict Print Driver Installation to Administrators",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "driver", "admin", "security", "privilege escalation"],
+            Description =
+                "Prevents standard users from installing print drivers. "
+                + "Unvetted print drivers run in kernel space and are a documented "
+                + "privilege-escalation vector (PrintNightmare/CVE-2021-34527 family).",
+            ApplyOps = [RegOp.SetDword(PrintPol, "RestrictDriverInstallationToAdministrators", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "RestrictDriverInstallationToAdministrators")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "RestrictDriverInstallationToAdministrators", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-cloud-print",
+            Label = "Disable Microsoft Cloud Print (Print to Cloud)",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "cloud print", "microsoft", "privacy"],
+            Description =
+                "Blocks the Microsoft Cloud Print service (formerly Mopria) from "
+                + "enumerating and uploading spool data to Microsoft cloud endpoints. "
+                + "Keeps all print jobs local.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "DisablePrinterCloudPrint", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisablePrinterCloudPrint")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisablePrinterCloudPrint", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-wsd-multicast-discovery",
+            Label = "Disable WSD Multicast Printer Discovery",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "wsd", "discovery", "multicast", "network"],
+            Description =
+                "Prevents the Web Services on Devices (WSD) listener from responding "
+                + "to multicast discovery probes on the local subnet. "
+                + "Reduces unsolicited network chatter and removes WSD as an attack surface.",
+            ApplyOps = [RegOp.SetDword(WsdPol, "DisableDiscovery", 1)],
+            RemoveOps = [RegOp.DeleteValue(WsdPol, "DisableDiscovery")],
+            DetectOps = [RegOp.CheckDword(WsdPol, "DisableDiscovery", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-win32-spool-com",
+            Label = "Disable Windows 32-Bit Spooler COM Object",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "spooler", "com", "security", "legacy"],
+            Description =
+                "Disables the legacy 32-bit in-process COM spooler extensions. "
+                + "These extensions can be abused to load arbitrary DLLs into the print spooler process "
+                + "under SYSTEM context — a known persistence vector.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "DisableWebPnpDownload", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableWebPnpDownload")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisableWebPnpDownload", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-rpc-over-http-spooler",
+            Label = "Disable RPC-over-HTTP for Spooler (Restrict to Named Pipes)",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "rpc", "http", "spooler", "network", "security"],
+            Description =
+                "Restricts inbound RPC connections to the print spooler to named "
+                + "pipes only, blocking RPC-over-HTTP transport. Reduces remote "
+                + "exploit surface for CVE-2021-1675 / PrintNightmare variants.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "DisableHTTPPrinting", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableHTTPPrinting")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisableHTTPPrinting", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-internet-print-client",
+            Label = "Disable Internet Printing Client",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "internet printing", "ipp", "feature", "security"],
+            Description =
+                "Disables the Windows Internet Printing Client component "
+                + "(connects to HTTP/HTTPS printers by URL). Closes an infrequently "
+                + "used remote printing feature that can be abused for SSRF and "
+                + "credential-relay attacks.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "DisableHTTPPrintingClient", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableHTTPPrintingClient")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisableHTTPPrintingClient", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-wsd-printer-announce",
+            Label = "Disable WSD Printer Announce (Host Advertising)",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "wsd", "announcement", "network", "privacy"],
+            Description =
+                "Stops Windows from broadcasting WSD printer-announcement packets "
+                + "on the network (Hello/Bye messages). Prevents other hosts on "
+                + "the subnet from seeing shared printers.",
+            ApplyOps = [RegOp.SetDword(WsdPol, "DisableAnnouncement", 1)],
+            RemoveOps = [RegOp.DeleteValue(WsdPol, "DisableAnnouncement")],
+            DetectOps = [RegOp.CheckDword(WsdPol, "DisableAnnouncement", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-driver-update-from-wu",
+            Label = "Block Automatic Print Driver Updates via Windows Update",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["printing", "driver", "windows update", "wu", "policy"],
+            Description =
+                "Prevents Windows Update from automatically pushing print driver "
+                + "updates. Automatic driver installs have been weaponised by "
+                + "PrintNightmare-class vulnerabilities; use WSUS or manual approval instead.",
+            ApplyOps = [RegOp.SetDword(PrintPol, "DisableAutoInstallDriverViaPnP", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableAutoInstallDriverViaPnP")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisableAutoInstallDriverViaPnP", 1)],
+        },
+        new TweakDef
+        {
+            Id = "prnta-disable-inbound-print-spooler",
+            Label = "Disable Inbound Remote Print Connections (Spooler Server)",
+            Category = "Printing",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Tags = ["printing", "spooler", "remote", "network", "security"],
+            Description =
+                "Blocks inbound remote connections to the Windows print spooler "
+                + "service. Workstations should not accept remote print jobs; "
+                + "this policy closes the highest-impact PrintNightmare attack path "
+                + "without disabling the spooler entirely (local printing still works).",
+            ApplyOps = [RegOp.SetDword(PrintPol, "NoAddPrinter", 0), RegOp.SetDword(PrintPol, "DisableSpoolerRemote", 1)],
+            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableSpoolerRemote"), RegOp.DeleteValue(PrintPol, "NoAddPrinter")],
+            DetectOps = [RegOp.CheckDword(PrintPol, "DisableSpoolerRemote", 1)],
+        },
     ];
 }

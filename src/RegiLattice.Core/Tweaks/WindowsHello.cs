@@ -163,5 +163,166 @@ internal static class WindowsHello
             RemoveOps = [RegOp.DeleteValue(HelloPol, "DisablePostLogonProvisioning")],
             DetectOps = [RegOp.CheckDword(HelloPol, "DisablePostLogonProvisioning", 1)],
         },
+        new TweakDef
+        {
+            Id = "hello-enforce-anti-spoofing",
+            Label = "Enforce Enhanced Anti-Spoofing for Facial Recognition",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "face recognition", "biometric", "anti-spoofing", "security"],
+            Description =
+                "Requires Windows Hello facial recognition to use enhanced liveness "
+                + "detection, blocking login attempts using photos or masks. "
+                + "Only compatible cameras (IR depth-sensing) with certified drivers can satisfy this policy.",
+            ApplyOps = [RegOp.SetDword(BioFace, "EnhancedAntiSpoofing", 1)],
+            RemoveOps = [RegOp.DeleteValue(BioFace, "EnhancedAntiSpoofing")],
+            DetectOps = [RegOp.CheckDword(BioFace, "EnhancedAntiSpoofing", 1)],
+        },
+        new TweakDef
+        {
+            Id = "hello-set-min-pin-length-8",
+            Label = "Set Minimum Windows Hello PIN Length to 8 Digits",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "pin", "complexity", "policy", "security"],
+            Description =
+                "Raises the minimum Windows Hello for Business PIN length to 8 characters "
+                + "via Group Policy, replacing the insecure 4-digit default. "
+                + "Applies to domain-joined and Entra ID-joined devices.",
+            ApplyOps = [RegOp.SetDword(PinCplx, "MinimumPINLength", 8)],
+            RemoveOps = [RegOp.DeleteValue(PinCplx, "MinimumPINLength")],
+            DetectOps = [RegOp.CheckDword(PinCplx, "MinimumPINLength", 8)],
+        },
+        new TweakDef
+        {
+            Id = "hello-set-max-pin-length-20",
+            Label = "Set Maximum Windows Hello PIN Length to 20 Digits",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "pin", "complexity", "policy", "length"],
+            Description =
+                "Caps the maximum Windows Hello PIN length at 20 characters. "
+                + "Prevents trivially long PINs that bypass complexity checking "
+                + "while still allowing strong passphrases.",
+            ApplyOps = [RegOp.SetDword(PinCplx, "MaximumPINLength", 20)],
+            RemoveOps = [RegOp.DeleteValue(PinCplx, "MaximumPINLength")],
+            DetectOps = [RegOp.CheckDword(PinCplx, "MaximumPINLength", 20)],
+        },
+        new TweakDef
+        {
+            Id = "hello-require-digits-in-pin",
+            Label = "Require Digits in Windows Hello PIN",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "pin", "complexity", "digits", "policy"],
+            Description =
+                "Enforces that at least one digit (0–9) must appear in the "
+                + "Windows Hello PIN, preventing all-alpha PINs on devices that have "
+                + "expanded the PIN character set.",
+            ApplyOps = [RegOp.SetDword(PinCplx, "Digits", 1)],
+            RemoveOps = [RegOp.DeleteValue(PinCplx, "Digits")],
+            DetectOps = [RegOp.CheckDword(PinCplx, "Digits", 1)],
+        },
+        new TweakDef
+        {
+            Id = "hello-require-uppercase-in-pin",
+            Label = "Require Uppercase Letters in Windows Hello PIN",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "pin", "complexity", "uppercase", "policy"],
+            Description =
+                "Requires at least one uppercase letter in the Windows Hello PIN. "
+                + "Effective only when the device policy allows alphanumeric PINs "
+                + "(MinimumPINLength ≥ 4 with letters permitted).",
+            ApplyOps = [RegOp.SetDword(PinCplx, "UppercaseLetters", 1)],
+            RemoveOps = [RegOp.DeleteValue(PinCplx, "UppercaseLetters")],
+            DetectOps = [RegOp.CheckDword(PinCplx, "UppercaseLetters", 1)],
+        },
+        new TweakDef
+        {
+            Id = "hello-require-special-chars-in-pin",
+            Label = "Require Special Characters in Windows Hello PIN",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "pin", "complexity", "special characters", "policy"],
+            Description =
+                "Requires the PIN to include at least one special character. "
+                + "Combined with digit and uppercase requirements this enforces "
+                + "a password-grade PIN on supported Win11 policies.",
+            ApplyOps = [RegOp.SetDword(PinCplx, "SpecialCharacters", 1)],
+            RemoveOps = [RegOp.DeleteValue(PinCplx, "SpecialCharacters")],
+            DetectOps = [RegOp.CheckDword(PinCplx, "SpecialCharacters", 1)],
+        },
+        new TweakDef
+        {
+            Id = "hello-disable-cloud-trust-kerberos",
+            Label = "Disable Cloud Kerberos Trust for Hybrid Hello",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Tags = ["windows hello", "kerberos", "cloud trust", "azure ad", "hybrid"],
+            Description =
+                "Disables the Cloud Trust authentication model for Windows Hello "
+                + "for Business on Entra ID hybrid-joined devices. Forces the "
+                + "traditional on-premises PKI trust path instead of the cloud "
+                + "Kerberos ticket flow.",
+            ApplyOps = [RegOp.SetDword(HelloPol, "UseCloudTrustForOnPremAuth", 0)],
+            RemoveOps = [RegOp.DeleteValue(HelloPol, "UseCloudTrustForOnPremAuth")],
+            DetectOps = [RegOp.CheckDword(HelloPol, "UseCloudTrustForOnPremAuth", 0)],
+        },
+        new TweakDef
+        {
+            Id = "hello-disable-phone-sign-in",
+            Label = "Disable Phone (Companion Device) Sign-In for Hello",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Tags = ["windows hello", "phone", "companion device", "unlock", "security"],
+            Description =
+                "Blocks Windows Hello companion device (phone/wearable) unlock "
+                + "via the Microsoft Account + Bluetooth proximity mechanism. "
+                + "Enforces that each sign-in requires on-device biometric or PIN.",
+            ApplyOps = [RegOp.SetDword(HelloPol, "AllowPhoneLinkDevice", 0)],
+            RemoveOps = [RegOp.DeleteValue(HelloPol, "AllowPhoneLinkDevice")],
+            DetectOps = [RegOp.CheckDword(HelloPol, "AllowPhoneLinkDevice", 0)],
+        },
+        new TweakDef
+        {
+            Id = "hello-disable-web-sign-in",
+            Label = "Disable Web Sign-In for Windows (Hello MSA Flow)",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Tags = ["windows hello", "web sign-in", "msa", "fido2", "account"],
+            Description =
+                "Disables the Web Sign-In credential provider which shows an "
+                + "embedded browser for FIDO2/MSA login. Prevents web-based "
+                + "phishing flows from appearing on the lock screen.",
+            ApplyOps = [RegOp.SetDword(CredProvPol, "EnableWebSignIn", 0)],
+            RemoveOps = [RegOp.DeleteValue(CredProvPol, "EnableWebSignIn")],
+            DetectOps = [RegOp.CheckDword(CredProvPol, "EnableWebSignIn", 0)],
+        },
+        new TweakDef
+        {
+            Id = "hello-disable-biometric-domain-users",
+            Label = "Disable Biometrics for Domain Users",
+            Category = "Windows Hello",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Tags = ["windows hello", "biometric", "domain", "policy", "security"],
+            Description =
+                "Prevents domain-joined users from enrolling in or using Windows "
+                + "Hello biometrics (fingerprint, iris, face) for domain account "
+                + "authentication. Enforces PIN or smart-card only for domain logins.",
+            ApplyOps = [RegOp.SetDword(BioPol, "DomainAccountsEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(BioPol, "DomainAccountsEnabled")],
+            DetectOps = [RegOp.CheckDword(BioPol, "DomainAccountsEnabled", 0)],
+        },
     ];
 }

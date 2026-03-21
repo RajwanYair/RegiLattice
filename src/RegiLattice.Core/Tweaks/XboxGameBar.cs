@@ -10,6 +10,7 @@ internal static class XboxGameBar
 {
     private const string GameBar = @"HKEY_CURRENT_USER\Software\Microsoft\GameBar";
     private const string GameCfg = @"HKEY_CURRENT_USER\System\GameConfigStore";
+    private const string AppCapturePol = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR";
     private const string XNetProv = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Gaming\AllowGameDVR";
     private const string XSvc = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services";
     private const string GamebarPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
@@ -154,6 +155,159 @@ internal static class XboxGameBar
             ApplyOps = [RegOp.SetDword(GameCfg, "Win32GameDVR_EFSEBehavior", 0)],
             RemoveOps = [RegOp.DeleteValue(GameCfg, "Win32GameDVR_EFSEBehavior")],
             DetectOps = [RegOp.CheckDword(GameCfg, "Win32GameDVR_EFSEBehavior", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-app-capture",
+            Label = "Disable Game DVR App Capture",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "capture", "privacy", "performance"],
+            Description =
+                "Disables the background application capture that the Game DVR driver uses "
+                + "to record gameplay footage on demand. Reduces CPU/GPU overhead even when "
+                + "Game Bar itself is disabled at the policy level.",
+            ApplyOps = [RegOp.SetDword(AppCapturePol, "AppCaptureEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppCapturePol, "AppCaptureEnabled")],
+            DetectOps = [RegOp.CheckDword(AppCapturePol, "AppCaptureEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-cursor-in-capture",
+            Label = "Exclude Cursor from Game Captures",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "capture", "cursor"],
+            Description =
+                "Prevents the mouse cursor from being included in Game DVR recordings " + "and screenshots, producing cleaner gameplay footage.",
+            ApplyOps = [RegOp.SetDword(AppCapturePol, "CursorCaptureEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppCapturePol, "CursorCaptureEnabled")],
+            DetectOps = [RegOp.CheckDword(AppCapturePol, "CursorCaptureEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-mic-in-capture",
+            Label = "Disable Microphone in Game DVR Captures",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "capture", "microphone", "audio", "privacy"],
+            Description =
+                "Mutes microphone input from Game DVR recordings so voice chat or " + "background noise is not embedded into saved clips by default.",
+            ApplyOps = [RegOp.SetDword(AppCapturePol, "MicrophoneCaptureEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppCapturePol, "MicrophoneCaptureEnabled")],
+            DetectOps = [RegOp.CheckDword(AppCapturePol, "MicrophoneCaptureEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-audio-capture",
+            Label = "Disable Audio Capture in Game DVR Recordings",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "capture", "audio"],
+            Description =
+                "Turns off background audio capture in Game DVR recordings, including "
+                + "system audio. Useful when you record silently or handle audio in post.",
+            ApplyOps = [RegOp.SetDword(AppCapturePol, "AudioCaptureEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppCapturePol, "AudioCaptureEnabled")],
+            DetectOps = [RegOp.CheckDword(AppCapturePol, "AudioCaptureEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-fse-hook",
+            Label = "Disable Game DVR Fullscreen Exclusivity Hook",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "fullscreen", "fse", "performance"],
+            Description =
+                "Prevents Game DVR from hooking into the fullscreen exclusive "
+                + "(FSE) path used by legacy DirectX games, eliminating a source "
+                + "of frame-rate stutters on older titles.",
+            ApplyOps = [RegOp.SetDword(GameCfg, "GameDVR_HonorUserFSEBehaviorMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(GameCfg, "GameDVR_HonorUserFSEBehaviorMode")],
+            DetectOps = [RegOp.CheckDword(GameCfg, "GameDVR_HonorUserFSEBehaviorMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-dxgi-fse-compat",
+            Label = "Disable Game DVR DXGI Fullscreen Compatibility Mode",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "fullscreen", "dxgi", "performance"],
+            Description =
+                "Stops Game DVR from forcing DXGI-based games into its FSE "
+                + "compatibility wrapper, which can cap frame rates and introduce "
+                + "latency on DX11/DX12 titles.",
+            ApplyOps = [RegOp.SetDword(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible", 0)],
+            RemoveOps = [RegOp.DeleteValue(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible")],
+            DetectOps = [RegOp.CheckDword(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-startup-panel",
+            Label = "Disable Game Bar Startup Tip Panel",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "game bar", "startup"],
+            Description =
+                "Hides the introductory tip panel that appears the first time " + "Game Bar is opened after an OS update or new installation.",
+            ApplyOps = [RegOp.SetDword(GameBar, "ShowStartupPanel", 0)],
+            RemoveOps = [RegOp.DeleteValue(GameBar, "ShowStartupPanel")],
+            DetectOps = [RegOp.CheckDword(GameBar, "ShowStartupPanel", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-nexus-bar",
+            Label = "Disable Game Bar Nexus Pop-up Panel",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "game bar", "nexus", "ui"],
+            Description =
+                "Disables the Nexus (circular game-bar widget) pop-up panel that "
+                + "appears at the edge of the screen when a game is detected, "
+                + "removing a persistent UI intrusion during gameplay.",
+            ApplyOps = [RegOp.SetDword(GameBar, "UseNexusForGameBarEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(GameBar, "UseNexusForGameBarEnabled")],
+            DetectOps = [RegOp.CheckDword(GameBar, "UseNexusForGameBarEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-enable-game-mode-all-games",
+            Label = "Allow Game Mode for All Games (Enable AllowAutoGameMode)",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "game mode", "performance"],
+            Description =
+                "Sets the Game Bar flag that allows Windows Game Mode to "
+                + "auto-activate for any process that registers as a game, "
+                + "giving it CPU/GPU scheduling priority.",
+            ApplyOps = [RegOp.SetDword(GameBar, "AllowAutoGameMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(GameBar, "AllowAutoGameMode")],
+            DetectOps = [RegOp.CheckDword(GameBar, "AllowAutoGameMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "xbgb-disable-efs-feature-hooks",
+            Label = "Disable Game DVR Extended FSE Feature Flags",
+            Category = "Xbox / Game Bar",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Tags = ["gaming", "xbox", "fse", "fullscreen", "performance"],
+            Description =
+                "Zeroes the extended fullscreen-exclusive feature flags "
+                + "(EFSEFeatureFlags) used by Game DVR hooks, preventing "
+                + "unwanted interference with exclusive-fullscreen rendering paths.",
+            ApplyOps = [RegOp.SetDword(GameCfg, "GameDVR_EFSEFeatureFlags", 0)],
+            RemoveOps = [RegOp.DeleteValue(GameCfg, "GameDVR_EFSEFeatureFlags")],
+            DetectOps = [RegOp.CheckDword(GameCfg, "GameDVR_EFSEFeatureFlags", 0)],
         },
     ];
 }
