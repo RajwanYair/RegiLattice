@@ -108,16 +108,16 @@ public partial class MainForm : Form
 
         ToolStripMenuItem[] adminOnly =
         [
-            _mnuAppPermissions,  // HKLM permission policies — all operations need admin
-            _mnuBatterySaver,    // powercfg power settings — all operations need admin
-            _mnuDnsOverHttps,    // DNS-over-HTTPS configuration — all operations need admin
-            _mnuDnsSwitcher,     // DNS server switching — requires netsh admin
-            _mnuNetAdapter,      // adapter enable/disable — requires admin
-            _mnuNetRepair,       // netsh/network repair commands — all need admin
-            _mnuPowerPlan,       // power plan switching — requires admin
-            _mnuPowerScheduler,  // power plan scheduler (plan activation needs admin)
-            _mnuUsbPower,        // USB selective suspend — requires admin
-            _mnuWinHealth,       // Windows Health (DISM/SFC/bcdedit) — all commands need admin
+            _mnuAppPermissions, // HKLM permission policies — all operations need admin
+            _mnuBatterySaver, // powercfg power settings — all operations need admin
+            _mnuDnsOverHttps, // DNS-over-HTTPS configuration — all operations need admin
+            _mnuDnsSwitcher, // DNS server switching — requires netsh admin
+            _mnuNetAdapter, // adapter enable/disable — requires admin
+            _mnuNetRepair, // netsh/network repair commands — all need admin
+            _mnuPowerPlan, // power plan switching — requires admin
+            _mnuPowerScheduler, // power plan scheduler (plan activation needs admin)
+            _mnuUsbPower, // USB selective suspend — requires admin
+            _mnuWinHealth, // Windows Health (DISM/SFC/bcdedit) — all commands need admin
         ];
 
         foreach (ToolStripMenuItem item in adminOnly)
@@ -131,6 +131,26 @@ public partial class MainForm : Form
         _monitorTimer.Start();
         _profileScheduleTimer.Start();
         await InitialiseEngineAsync();
+
+        if (FirstRunWizardDialog.ShouldShow())
+        {
+            using var wiz = new FirstRunWizardDialog();
+            if (wiz.ShowDialog(this) == DialogResult.OK)
+            {
+                // Save the profile choice and dry-run preference from the wizard.
+                var cfg = AppConfig.Load();
+                if (!string.IsNullOrEmpty(wiz.SelectedProfile))
+                    cfg.DefaultProfile = wiz.SelectedProfile;
+                cfg.DryRun = wiz.EnableDryRun;
+                cfg.Save();
+                FirstRunWizardDialog.MarkSeen();
+            }
+            else
+            {
+                // User skipped — still mark seen so wizard doesn't reappear.
+                FirstRunWizardDialog.MarkSeen();
+            }
+        }
 
         if (WhatsNewDialog.ShouldShow())
         {
@@ -1315,6 +1335,13 @@ public partial class MainForm : Form
     private void OnOpenMacAddress() => ShowManagerDialog(new MacAddressDialog());
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
+
+    private void OnOpenProfileWizard()
+    {
+        using var dlg = new ProfileWizardDialog();
+        if (dlg.ShowDialog(this) == DialogResult.OK)
+            AppendLog($"Profile wizard: '{dlg.RecommendedProfile}' saved as default profile.");
+    }
 
     private void OnCheckForUpdates() => ShowManagerDialog(new UpdateCheckerDialog());
 

@@ -87,7 +87,8 @@ public sealed class TweakEngine
             scopeList.Add(td);
 
             // Build search index once, reused by Search() and Filter(query: ...).
-            var searchText = $"{td.Id} {td.Label} {td.Category} {td.Description} {td.GetExpectedResult()} {string.Join(' ', td.Tags)}".ToLowerInvariant();
+            var searchText =
+                $"{td.Id} {td.Label} {td.Category} {td.Description} {td.GetExpectedResult()} {string.Join(' ', td.Tags)}".ToLowerInvariant();
             _searchPairs.Add((searchText, td));
             _tweakSearchText[td.Id] = searchText;
         }
@@ -168,15 +169,123 @@ public sealed class TweakEngine
 
     // ── Search ──────────────────────────────────────────────────────────
 
+    // NLP synonym map: user-friendly term → canonical indexed term(s).
+    // Expands informal queries so users can type naturally (e.g. "speed" finds "performance" tweaks).
+    private static readonly IReadOnlyDictionary<string, string[]> _synonyms = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+    {
+        // Performance synonyms
+        ["fast"] = ["performance", "perf", "speed"],
+        ["faster"] = ["performance", "perf", "speed"],
+        ["speed"] = ["performance", "perf"],
+        ["slow"] = ["performance", "perf", "optimize"],
+        ["boost"] = ["performance", "gaming", "gpu"],
+        ["optimize"] = ["performance", "perf", "ssd", "memory"],
+        ["lag"] = ["performance", "gaming", "latency"],
+        ["latency"] = ["network", "gaming", "performance"],
+        ["ram"] = ["memory", "mem", "virtual"],
+        ["memory"] = ["memory", "mem", "ram"],
+        ["cpu"] = ["performance", "processor", "perf"],
+        ["disk"] = ["storage", "ssd", "filesystem", "file system"],
+        // Privacy synonyms
+        ["spy"] = ["telemetry", "privacy", "tracking"],
+        ["spying"] = ["telemetry", "privacy", "tracking"],
+        ["tracking"] = ["telemetry", "privacy", "tracking"],
+        ["telemetry"] = ["telemetry", "diagnostics"],
+        ["private"] = ["privacy", "priv", "telemetry"],
+        ["data"] = ["privacy", "telemetry", "cloud"],
+        ["microsoft"] = ["telemetry", "cortana", "onedrive", "edge"],
+        // Bloatware / cleanup synonyms
+        ["bloat"] = ["debloat", "uninstall", "remove"],
+        ["bloatware"] = ["debloat", "uninstall", "remove"],
+        ["junk"] = ["debloat", "cleanup", "temp"],
+        ["clean"] = ["cleanup", "debloat", "temp", "disk"],
+        ["cleaner"] = ["cleanup", "temp", "disk"],
+        ["ads"] = ["advertising", "debloat", "tips", "notification"],
+        ["advert"] = ["advertising", "debloat", "tips"],
+        // Network synonyms
+        ["wifi"] = ["network", "wireless", "wi-fi"],
+        ["internet"] = ["network", "dns", "proxy"],
+        ["vpn"] = ["proxy", "vpn", "network"],
+        ["bandwidth"] = ["network", "netopt", "optimization"],
+        ["connection"] = ["network", "dns", "netopt"],
+        ["firewall"] = ["firewall", "fw", "security"],
+        ["dns"] = ["dns", "network", "doh"],
+        // Security synonyms
+        ["safe"] = ["security", "hardening", "encryption"],
+        ["secure"] = ["security", "hardening", "sec"],
+        ["harden"] = ["hardening", "security", "gpo"],
+        ["antivirus"] = ["defender", "security", "malware"],
+        ["malware"] = ["defender", "security", "firewall"],
+        ["uac"] = ["user account", "uac", "elevation"],
+        // Gaming synonyms
+        ["game"] = ["gaming", "gpu", "performance", "latency"],
+        ["games"] = ["gaming", "gpu", "game mode"],
+        ["fps"] = ["gaming", "gpu", "performance", "game"],
+        ["gaming"] = ["gaming", "gpu", "game bar"],
+        // Startup / boot synonyms
+        ["startup"] = ["startup", "boot", "autostart"],
+        ["boot"] = ["boot", "startup", "bcd"],
+        ["autostart"] = ["startup", "boot"],
+        ["launch"] = ["startup", "boot", "autostart"],
+        // Power synonyms
+        ["battery"] = ["power", "battery", "energy"],
+        ["power"] = ["power", "energy", "sleep"],
+        ["sleep"] = ["sleep", "hibernate", "power"],
+        ["hibernate"] = ["hibernate", "sleep", "power"],
+        // UI / appearance synonyms
+        ["theme"] = ["appearance", "dark", "light", "visual"],
+        ["dark"] = ["dark mode", "appearance", "theme"],
+        ["taskbar"] = ["taskbar", "tb", "shell"],
+        ["notification"] = ["notification", "notif", "toast"],
+        ["animation"] = ["animation", "visual", "performance"],
+        // Explorer synonyms
+        ["explorer"] = ["explorer", "shell", "context menu", "file"],
+        ["file"] = ["explorer", "filesystem", "file system", "storage"],
+        ["folder"] = ["explorer", "filesystem", "shell"],
+        ["search"] = ["search", "indexing", "cortana"],
+        // Update synonyms
+        ["update"] = ["windows update", "wu", "patch"],
+        ["patch"] = ["windows update", "wu", "update"],
+        // Input synonyms
+        ["mouse"] = ["input", "mouse", "pointer"],
+        ["keyboard"] = ["input", "keyboard", "hotkey"],
+        ["touchpad"] = ["input", "touch", "touchpad"],
+        // Service synonyms
+        ["service"] = ["services", "svc", "background"],
+        ["background"] = ["services", "svc", "startup"],
+        // Misc
+        ["clipboard"] = ["clipboard", "clip", "copy paste"],
+        ["fonts"] = ["fonts", "font", "text"],
+        ["printer"] = ["printing", "print", "spooler"],
+    };
+
+    /// <summary>
+    /// Expands a raw query token using the NLP synonym map.
+    /// Returns all canonical terms to search for (including the original token).
+    /// </summary>
+    private static IReadOnlyList<string> ExpandSynonyms(string token)
+    {
+        if (_synonyms.TryGetValue(token, out var synonyms))
+        {
+            var expanded = new List<string> { token };
+            expanded.AddRange(synonyms);
+            return expanded;
+        }
+        return [token];
+    }
+
     public IReadOnlyList<TweakDef> Search(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             return _allTweaks;
         var lower = query.ToLowerInvariant();
         var tokens = lower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (tokens.Length == 1)
-            return _searchPairs.Where(p => p.Lower.Contains(tokens[0])).Select(p => p.Tweak).ToList();
-        return _searchPairs.Where(p => tokens.All(t => p.Lower.Contains(t))).Select(p => p.Tweak).ToList();
+
+        // Expand each token through the synonym map, then match tweaks
+        // where ALL expanded-token groups are satisfied (AND logic between groups).
+        var expandedGroups = tokens.Select(ExpandSynonyms).ToList();
+
+        return _searchPairs.Where(p => expandedGroups.All(group => group.Any(term => p.Lower.Contains(term)))).Select(p => p.Tweak).ToList();
     }
 
     public IReadOnlyList<TweakDef> Filter(
@@ -419,8 +528,7 @@ public sealed class TweakEngine
 
     public Dictionary<string, string> LoadSnapshot(string path) => SnapshotManager.Load(path);
 
-    public Dictionary<string, TweakResult> RestoreSnapshot(string path, bool forceCorp = false) =>
-        Snapshots.Restore(path, forceCorp);
+    public Dictionary<string, TweakResult> RestoreSnapshot(string path, bool forceCorp = false) => Snapshots.Restore(path, forceCorp);
 
     // ── Windows Build ───────────────────────────────────────────────────
 
@@ -447,8 +555,7 @@ public sealed class TweakEngine
 
     public Dictionary<string, int> CategoryCounts() => _cachedCategoryCounts ?? _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
-    public Dictionary<TweakScope, int> ScopeCounts() =>
-        _cachedScopeCounts ?? _tweaksByScope.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
+    public Dictionary<TweakScope, int> ScopeCounts() => _cachedScopeCounts ?? _tweaksByScope.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
 
     // ── Export for GUI ──────────────────────────────────────────────────
 
@@ -474,8 +581,7 @@ public sealed class TweakEngine
 
     // ── Validation (delegated to TweakValidator) ──────────────────────
 
-    public IReadOnlyList<string> ValidateTweaks() =>
-        TweakValidator.Validate(_allTweaks, GetTweak);
+    public IReadOnlyList<string> ValidateTweaks() => TweakValidator.Validate(_allTweaks, GetTweak);
 
     public IReadOnlyList<string> DetectDuplicateRegistryOps() => TweakValidator.DetectDuplicateRegistryOps(_allTweaks);
 
@@ -487,8 +593,7 @@ public sealed class TweakEngine
         return DependencyResolver.Resolve(td, GetTweak);
     }
 
-    public IReadOnlyList<TweakDef> Dependents(string tweakId) =>
-        DependencyResolver.Dependents(tweakId, _allTweaks);
+    public IReadOnlyList<TweakDef> Dependents(string tweakId) => DependencyResolver.Dependents(tweakId, _allTweaks);
 
     // ── Batch operations with progress ──────────────────────────────────
 

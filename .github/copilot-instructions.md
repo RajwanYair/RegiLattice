@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-20 (v4.0.0, 3 669 tweaks, 94 categories, 1 435 tests).
+> Last verified: 2026-07-22 (v4.1.0, 3 719 tweaks, 99 categories, 1 538 tests).
 
 ## Companion Instruction Files
 
@@ -79,12 +79,12 @@ Rules:
 | -------- | ------------------------------------------------------------------------ |
 | Language | C# 13 / .NET 10.0-windows (x64)                                          |
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
-| Test     | xUnit 2.9.2 — 1,435 tests (1018 Core + 175 CLI + 242 GUI)                |
+| Test     | xUnit 2.9.2 — 1,538 tests (1121 Core + 175 CLI + 242 GUI)                |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 4.0.0                                                                    |
+| Version  | 4.1.0                                                                    |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 3 669 across 94 categories (94 module files)                             |
-| Tests    | 1 435 passing (1018 Core + 175 CLI + 242 GUI)                            |
+| Tweaks   | 3 719 across 99 categories (99 module files)                             |
+| Tests    | 1 538 passing (1121 Core + 175 CLI + 242 GUI)                            |
 | NuGet    | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2                     |
 
 ## Git Workflow (IMPORTANT — STANDING RULE)
@@ -172,7 +172,7 @@ RegiLattice.sln
 │       ├── CliArgs.cs             # CLI argument model (extracted from Program)
 │       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/    # 1014 xUnit tests
+│   ├── RegiLattice.Core.Tests/    # 1121 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -185,9 +185,9 @@ RegiLattice.sln
 │   │   ├── FavoritesTests.cs
 │   │   ├── TweakHistoryTests.cs
 │   │   └── ConfigExporterTests.cs
-│   ├── RegiLattice.CLI.Tests/     # 111 xUnit tests
+│   ├── RegiLattice.CLI.Tests/     # 175 xUnit tests
 │   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
-│   └── RegiLattice.GUI.Tests/    # 410 xUnit tests
+│   └── RegiLattice.GUI.Tests/    # 242 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs

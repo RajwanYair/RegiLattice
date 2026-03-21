@@ -138,9 +138,6 @@ public sealed class AppConfig
     [JsonPropertyName("snapshot_on_profile_change")]
     public bool SnapshotOnProfileChange { get; set; } = true;
 
-    /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice</summary>
-    public static string ConfigDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
-
     // ── Profile Scheduler ────────────────────────────────────────────────
     /// <summary>List of scheduled profile switches persisted with the config.</summary>
     [JsonPropertyName("profile_schedules")]
@@ -149,6 +146,70 @@ public sealed class AppConfig
     /// <summary>Profile name to apply automatically when the power plan changes (empty = disabled).</summary>
     [JsonPropertyName("profile_on_plan_switch")]
     public string? ProfileOnPlanSwitch { get; set; }
+
+    /// <summary>
+    /// When <see langword="true"/> (default), the First-Run Wizard has not yet been
+    /// shown to the user.  Set to <see langword="false"/> after the wizard completes.
+    /// </summary>
+    [JsonPropertyName("first_run_wizard_pending")]
+    public bool FirstRunWizardPending { get; set; } = true;
+
+    /// <summary>
+    /// Profile name shown pre-selected in the GUI toolbar on startup
+    /// (e.g., "minimal", "privacy", "gaming").  Does not auto-apply the profile.
+    /// </summary>
+    [JsonPropertyName("default_profile")]
+    public string DefaultProfile { get; set; } = "minimal";
+
+    /// <summary>
+    /// When <see langword="true"/>, the GUI and engine operate in dry-run mode:
+    /// all registry operations are captured but never written.
+    /// Persisted so the preference survives restarts.
+    /// </summary>
+    [JsonPropertyName("dry_run")]
+    public bool DryRun { get; set; }
+
+    // ── Portable mode ────────────────────────────────────────────────────────
+    // When enabled, ALL data (config, backups, snapshots, history, favorites …)
+    // is rooted at .\data\ relative to the executable instead of %LOCALAPPDATA%.
+    // Activate by calling SetPortable(true) early in the entry point, or by
+    // placing a sentinel file <exe-dir>\data\.portable before launch.
+
+    private static bool _isPortable;
+
+    /// <summary>
+    /// Returns <see langword="true"/> when the application is running in portable
+    /// mode.  In this mode every data-path property returns a path beneath
+    /// <see cref="PortableDataDir"/> rather than <c>%LOCALAPPDATA%\RegiLattice</c>.
+    /// </summary>
+    public static bool IsPortable => _isPortable;
+
+    /// <summary>
+    /// Root directory for all data in portable mode: <c>&lt;exe-dir&gt;\data\</c>.
+    /// </summary>
+    public static string PortableDataDir => Path.Combine(AppContext.BaseDirectory, "data");
+
+    /// <summary>
+    /// Activates or deactivates portable mode.  Call before any config paths are
+    /// resolved — typically at the very start of <c>Main()</c>.
+    /// </summary>
+    public static void SetPortable(bool value) => _isPortable = value;
+
+    /// <summary>
+    /// Auto-detects portable mode from a sentinel file
+    /// <c>&lt;exe-dir&gt;\data\.portable</c>.  Call once at startup before any
+    /// other config access.
+    /// </summary>
+    public static void AutoDetectPortable()
+    {
+        var sentinel = Path.Combine(AppContext.BaseDirectory, "data", ".portable");
+        if (File.Exists(sentinel))
+            _isPortable = true;
+    }
+
+    /// <summary>Default config directory: %LOCALAPPDATA%\RegiLattice (or portable root).</summary>
+    public static string ConfigDir =>
+        _isPortable ? PortableDataDir : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
 
     public static string DefaultConfigPath => Path.Combine(ConfigDir, "config.json");
 

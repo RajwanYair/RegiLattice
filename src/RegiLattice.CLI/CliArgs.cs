@@ -56,4 +56,24 @@ internal sealed class CliArgs
     public string? ExportGpo { get; set; }
     public string? NewPack { get; set; }
     public string? Manager { get; set; }
+
+    // ── Sprint 59/60 – portable & silent modes ───────────────────────────
+    /// <summary>
+    /// When true, all data is rooted at .\data\ relative to the executable
+    /// instead of %LOCALAPPDATA%\RegiLattice (portable-mode).
+    /// </summary>
+    public bool Portable { get; set; }
+
+    /// <summary>
+    /// When true, no Console output is produced; results are written to
+    /// <see cref="LogFile"/> as a JSON array of operation records.
+    /// Exit code: 0 = all applied/no-op, 1 = any failure.
+    /// </summary>
+    public bool Silent { get; set; }
+
+    /// <summary>
+    /// Optional path for the JSON result log written in --silent mode.
+    /// When left empty and --silent is active, results are discarded (exit code only).
+    /// </summary>
+    public string? LogFile { get; set; }
 }

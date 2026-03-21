@@ -137,6 +137,22 @@ public sealed class TweakDef
     /// </summary>
     public string? PackSource { get; init; }
 
+    // ── Impact & safety metadata (Phase C — Intelligence Engine) ────────
+
+    /// <summary>
+    /// Estimated benefit magnitude when this tweak is applied (1 = minimal, 5 = major).
+    /// Used by the Health Score dashboard and Smart Scan recommendation engine.
+    /// Defaults to 3 (moderate) if not explicitly set.
+    /// </summary>
+    public int ImpactScore { get; init; } = 3;
+
+    /// <summary>
+    /// Safety rating indicating how risky applying this tweak is (1 = risky, 5 = very safe).
+    /// Used by the recommendation engine to surface safe Quick Wins first.
+    /// Defaults to 4 (safe for most users) if not explicitly set.
+    /// </summary>
+    public int SafetyRating { get; init; } = 4;
+
     /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
     public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
 
@@ -296,8 +312,11 @@ public sealed class TweakDef
             _ => "",
         };
 
-        bool needsRestart = NeedsAdmin || RegistryKeys.Any(k => k.Contains("HKLM", StringComparison.OrdinalIgnoreCase)
-            || k.Contains("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase));
+        bool needsRestart =
+            NeedsAdmin
+            || RegistryKeys.Any(k =>
+                k.Contains("HKLM", StringComparison.OrdinalIgnoreCase) || k.Contains("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase)
+            );
         string restartNote = needsRestart ? " A restart or sign-out may be needed for changes to take full effect." : "";
 
         return action + categoryNote + restartNote;
