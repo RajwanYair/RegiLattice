@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-07-22 · v4.1.0 · 3 719 tweaks · 99 categories · 1 538 tests
+> Last updated: 2026-07-22 · v4.2.0 · 3 868 tweaks · 107 categories · 1 647 tests
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 3 719 verified across 99 categories |
-| Tests | 1 538 (1 121 Core + 175 CLI + 242 GUI), all passing |
+| Tweaks | 3 868 verified across 107 categories |
+| Tests | 1 647 (1 230 Core + 175 CLI + 242 GUI), all passing |
 | GUI | WinForms with 11 themes, system theme auto-detection, tray icon, progress bar, live CPU/RAM status bar, 59 dialog forms |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
 | Services | 27 Core services (AutoUpdater, HealthScoreService, ConflictDetector, ComplianceService, ScheduledTweak, UpdateCheck, GroupPolicyExporter, etc.) |

@@ -4,6 +4,32 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.2.0] — 2026-03-21
+
+### Sprint 77 — Remote Management, SSH Hardening, Kiosk/Shared PC, Active Directory, Hyper-V Advanced
+
+#### Added
+
+- **RemoteManagement.cs**: 10 WinRM policy hardening + RPC restriction tweaks (`rmt-*`)
+  - Disable WinRM service, block unencrypted/Basic/Digest/CredSSP auth, restrict RPC clients, require RPC auth endpoint isolation, limit WinRM shell memory
+- **SshHardening.cs**: 10 OpenSSH `sshd_config` hardening tweaks (`ssh-*`) — gated on `C:\ProgramData\ssh\sshd_config`
+  - Limit max auth tries (3), login grace time (30 s), deny empty passwords, disable forwarding (agent/TCP/X11), restrict max sessions (2), enable StrictModes, enforce strong ciphers + MACs
+- **KioskSharedPc.cs**: 10 Windows Shared PC / Kiosk configuration tweaks (`kiosk-*`)
+  - Enable SharedPC mode, guest account model, auto-delete on sign-out, disk-level thresholds, disable fast user switching, no local password reset, enable education policies, disable lock-screen camera/slideshow
+- **ActiveDirectory.cs**: 10 AD domain client hardening tweaks (`ad-*`)
+  - Disable NT4 crypto, restrict Kerberos to AES, enable Kerberos armoring (FAST), max token size, scavenge interval, negative cache period, disable mailslot discovery, block single-label DNS, restrict connected-user enumeration
+- **HyperVAdvanced.cs**: Expanded from 10 to 20 tweaks (+10 `hyperv-*`)
+  - Disable auto-checkpoints, require network credentials, allow SR-IOV, enable bandwidth management, disable VM broadcast, cap max VMs (8), reserve 512 MB host memory, remove default switch, enforce strict network isolation
+- 4 new categories: **Remote Management**, **SSH Configuration**, **Kiosk & Shared PC**, **Active Directory**
+
+#### Stats
+
+- Tweaks: **3 868** across **107 categories**
+- Tests: **1 647** (1 230 Core + 175 CLI + 242 GUI), all passing
+- Version bumped `4.1.0` → `4.2.0`
+
+---
+
 ## [4.1.0] — 2026-07-22
 
 ### Sprints 57–67 — Intelligence, Portability, Automation & New Tweaks
