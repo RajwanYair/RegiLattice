@@ -1,4 +1,4 @@
-﻿using RegiLattice.Core.Models;
+using RegiLattice.Core.Models;
 
 namespace RegiLattice.CLI;
 
@@ -85,4 +85,11 @@ internal sealed class CliArgs
 
     /// <summary>Output directory for the generated PowerShell module files.</summary>
     public string? PsModuleOutput { get; set; }
+
+    // ── Sprint 72 – HTML report ───────────────────────────────────────────
+    /// <summary>
+    /// When non-null, writes a full HTML tweak-status report to this path
+    /// then exits.  The report includes summary cards and per-category tables.
+    /// </summary>
+    public string? HtmlReport { get; set; }
 }
