@@ -6,7 +6,6 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
-
 /// <summary>Tests for TweakEngine: registration, lookup, search, profiles, dry-run ops.</summary>
 public sealed class TweakEngineTests
 {
@@ -1693,11 +1692,7 @@ public sealed class TweakEngineTests
     public void RegisterPack_RegistersTweaks()
     {
         var engine = TestHelpers.CreateEngine();
-        var packTweaks = new List<TweakDef>
-        {
-            TestHelpers.MakeTweak("pack-t-1", "PackCat"),
-            TestHelpers.MakeTweak("pack-t-2", "PackCat"),
-        };
+        var packTweaks = new List<TweakDef> { TestHelpers.MakeTweak("pack-t-1", "PackCat"), TestHelpers.MakeTweak("pack-t-2", "PackCat") };
         engine.RegisterPack(packTweaks);
         Assert.Equal(2, engine.TweakCount);
         Assert.NotNull(engine.GetTweak("pack-t-1"));
@@ -2248,9 +2243,12 @@ public sealed class TweakEngineSprint24Tests
         int directMatches = results.Count(t =>
             t.Label.Contains("telemetry", StringComparison.OrdinalIgnoreCase)
             || t.Description.Contains("telemetry", StringComparison.OrdinalIgnoreCase)
-            || t.Tags.Any(tag => tag.Contains("telemetry", StringComparison.OrdinalIgnoreCase)));
-        Assert.True(directMatches > 0,
-            $"Search 'telemetry' returned {results.Count} results but none directly contain 'telemetry' in label/desc/tags.");
+            || t.Tags.Any(tag => tag.Contains("telemetry", StringComparison.OrdinalIgnoreCase))
+        );
+        Assert.True(
+            directMatches > 0,
+            $"Search 'telemetry' returned {results.Count} results but none directly contain 'telemetry' in label/desc/tags."
+        );
     }
 
     [Fact]
