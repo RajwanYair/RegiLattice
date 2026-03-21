@@ -386,6 +386,7 @@ The gaps to close: trust (signing), distribution (auto-update/portable), intelli
 ---
 
 ### Phase A — Distribution & Trust (v3.9.0) — Partial ✅
+
 > Goal: Remove every friction point between a new user and their first successful tweak.
 
 | # | Item | Priority | Effort |
@@ -405,6 +406,7 @@ The gaps to close: trust (signing), distribution (auto-update/portable), intelli
 ---
 
 ### Phase B — UX Modernization (v3.9.x)
+
 > Goal: A UI that feels native to Windows 11 and fast with 3 669 tweaks.
 
 | # | Item | Priority | Effort |
@@ -426,6 +428,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 ---
 
 ### Phase C — Intelligence Engine (v4.0.0) — Partial ✅
+
 > Goal: The only tweak tool that tells you *what* to apply and *why* — not just an endless list.
 
 | # | Item | Priority | Effort |
@@ -444,6 +447,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 ---
 
 ### Phase D — Enterprise & Automation (v4.0.x)
+
 > Goal: Make RegiLattice the go-to tool for IT admins deploying Windows 11 at scale.
 
 | # | Item | Priority | Effort |
@@ -465,6 +469,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 ---
 
 ### Phase E — Platform Modernization (v4.1.0)
+
 > Goal: A UI that Windows 11 users recognize as native — Fluent Design, Mica, rounded corners.
 
 | # | Item | Priority | Effort |
@@ -482,6 +487,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 ---
 
 ### Phase F — Community & Ecosystem (v4.1.x)
+
 > Goal: Make RegiLattice the center of gravity for Windows tweak knowledge.
 
 | # | Item | Priority | Effort |
@@ -498,6 +504,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 ---
 
 ### Phase G — AI & Natural Language (v4.2.0) — Partial ✅
+
 > Goal: Let non-technical users describe what they want in plain English.
 
 | # | Item | Priority | Effort |

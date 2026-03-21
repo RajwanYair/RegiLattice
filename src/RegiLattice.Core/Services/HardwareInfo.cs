@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/HardwareInfo.cs
+// RegiLattice.Core — Services/HardwareInfo.cs
 // Hardware detection using WMI and P/Invoke.
 
 using System.Collections.Concurrent;
@@ -374,11 +374,7 @@ public static class HardwareInfo
             var tpmScope = new ManagementScope(@"\\.\.root\CIMv2\Security\MicrosoftTpm");
             tpmScope.Options.Timeout = TimeSpan.FromSeconds(5);
             var tpmOpts = new System.Management.EnumerationOptions { Timeout = TimeSpan.FromSeconds(5) };
-            using var searcher = new ManagementObjectSearcher(
-                tpmScope,
-                new ObjectQuery("SELECT IsActivated_InitialValue FROM Win32_Tpm"),
-                tpmOpts
-            );
+            using var searcher = new ManagementObjectSearcher(tpmScope, new ObjectQuery("SELECT IsActivated_InitialValue FROM Win32_Tpm"), tpmOpts);
             foreach (var obj in searcher.Get())
                 return Convert.ToBoolean(obj["IsActivated_InitialValue"]);
         }

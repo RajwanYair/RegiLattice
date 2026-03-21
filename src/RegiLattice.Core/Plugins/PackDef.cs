@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Plugins/PackDef.cs
+// RegiLattice.Core — Plugins/PackDef.cs
 // Immutable model for a Tweak Pack (community plugin).
 
 namespace RegiLattice.Core.Plugins;

@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -590,7 +590,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables automatic text correction on the touch keyboard. Keeps typed words exactly as entered. Default: autocorrect enabled.",
+            Description =
+                "Disables automatic text correction on the touch keyboard. Keeps typed words exactly as entered. Default: autocorrect enabled.",
             Tags = ["touch", "keyboard", "autocorrect"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 0)],
@@ -604,7 +605,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables word prediction suggestions on the touch keyboard. Reduces distraction during touch typing. Default: text suggestions enabled.",
+            Description =
+                "Disables word prediction suggestions on the touch keyboard. Reduces distraction during touch typing. Default: text suggestions enabled.",
             Tags = ["touch", "keyboard", "suggestions", "privacy"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
@@ -618,7 +620,8 @@ internal static class TouchPen
             Category = "Touch & Pen",
             NeedsAdmin = false,
             CorpSafe = true,
-            Description = "Disables spell checking on the touch keyboard. Removes red underlines for misspelled words during touch input. Default: spell check enabled.",
+            Description =
+                "Disables spell checking on the touch keyboard. Removes red underlines for misspelled words during touch input. Default: spell check enabled.",
             Tags = ["touch", "keyboard", "spellcheck"],
             RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
@@ -651,28 +654,11 @@ internal static class TouchPen
                 "Prevents Windows from learning your handwriting style. Disables handwriting personalization data collection. Default: personalization enabled.",
             Tags = ["touch", "pen", "handwriting", "privacy", "policy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
-                    "PreventHandwritingPersonalization",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
-                    "PreventHandwritingPersonalization"
-                ),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization")],
             DetectOps =
             [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC",
-                    "PreventHandwritingPersonalization",
-                    1
-                ),
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization", 1),
             ],
         },
         new TweakDef

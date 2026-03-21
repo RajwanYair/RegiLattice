@@ -1,9 +1,8 @@
-﻿namespace RegiLattice.GUI.PackageManagers;
+namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps winget CLI operations with input validation.</summary>
 internal static class WinGetManager
 {
-
     internal static bool IsWinGetInstalled()
     {
         try

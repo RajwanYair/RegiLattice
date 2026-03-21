@@ -423,7 +423,7 @@ newly introduced anti-duplication quality layer.
 
 ---
 
-## [Unreleased] — Sprint 42
+## [Unreleased] — Sprint 42 (Hardware Tools)
 
 ### Added — Hardware & Network Tools
 
@@ -929,7 +929,7 @@ newly introduced anti-duplication quality layer.
   graphs (3), Analytics persistence (5), CLI update parsing (2)
 - Total: **2,316 tweaks**, **658 tests** (529 Core + 58 CLI + 71 GUI)
 
-### Added
+### Added (Sprint 8)
 
 - **System theme auto-detection** — GUI follows Windows dark/light mode on startup,
   `Theme.DetectSystemTheme()` reads `AppsUseLightTheme` registry value
@@ -949,7 +949,7 @@ newly introduced anti-duplication quality layer.
 - **2 system theme tests** in ThemeTests.cs: `DetectSystemTheme_ReturnsValidThemeKey`,
   `DetectSystemTheme_ThemeKeyExistsInAvailable`
 
-### Changed
+### Changed (Sprint 8)
 
 - **Test parallelism** — `.runsettings` `MaxCpuCount` 1→4 (4 assemblies parallel),
   `TestSessionTimeout` 300s→60s; all `xunit.runner.json` now include

@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -353,7 +353,6 @@ internal static class Recovery
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PagingFiles", 0),
             ],
         },
-
         // ── Sprint 18 — 10 new Recovery tweaks ────────────────────────────
         new TweakDef
         {
@@ -362,7 +361,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents Windows from automatically restarting after a BSOD. Shows the blue screen until manual reboot so you can read the error. Default: auto-restart.",
+            Description =
+                "Prevents Windows from automatically restarting after a BSOD. Shows the blue screen until manual reboot so you can read the error. Default: auto-restart.",
             Tags = ["recovery", "bsod", "restart", "crash", "debugging"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
@@ -376,7 +376,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Windows boot logging to %SystemRoot%\\ntbtlog.txt. Useful for diagnosing driver loading failures. Default: disabled.",
+            Description =
+                "Enables Windows boot logging to %SystemRoot%\\ntbtlog.txt. Useful for diagnosing driver loading failures. Default: disabled.",
             Tags = ["recovery", "boot", "logging", "driver", "diagnostic"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
@@ -390,7 +391,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures crash dumps as small memory dumps (256 KB). Saves disk space while preserving essential debugging data. Default: automatic.",
+            Description =
+                "Configures crash dumps as small memory dumps (256 KB). Saves disk space while preserving essential debugging data. Default: automatic.",
             Tags = ["recovery", "minidump", "crash-dump", "disk-space", "bsod"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
@@ -404,7 +406,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables automatic startup repair in Windows Recovery Environment. Prevents boot loops when auto-repair repeatedly fails. Default: enabled.",
+            Description =
+                "Disables automatic startup repair in Windows Recovery Environment. Prevents boot loops when auto-repair repeatedly fails. Default: enabled.",
             Tags = ["recovery", "winre", "auto-repair", "boot-loop", "startup"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "BootExecuteAutoRepair", 0)],
@@ -436,7 +439,10 @@ internal static class Recovery
             Tags = ["recovery", "minidump", "folder", "path", "organisation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetExpandString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpDir", @"C:\Minidumps")],
-            RemoveOps = [RegOp.SetExpandString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpDir", @"%SystemRoot%\Minidump")],
+            RemoveOps =
+            [
+                RegOp.SetExpandString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpDir", @"%SystemRoot%\Minidump"),
+            ],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpDir", @"C:\Minidumps")],
         },
         new TweakDef
@@ -460,7 +466,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Suppresses the 'Your PC did not start correctly' startup repair recommendation. Default: prompt shown after improper shutdown.",
+            Description =
+                "Suppresses the 'Your PC did not start correctly' startup repair recommendation. Default: prompt shown after improper shutdown.",
             Tags = ["recovery", "startup-repair", "prompt", "boot", "ux"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 0)],
@@ -474,7 +481,8 @@ internal static class Recovery
             Category = "Recovery",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Displays an alert dialog when a system failure occurs, rather than silently restarting. Helpful for attended servers. Default: no popup.",
+            Description =
+                "Displays an alert dialog when a system failure occurs, rather than silently restarting. Helpful for attended servers. Default: no popup.",
             Tags = ["recovery", "system-failure", "popup", "alert", "server"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 1)],

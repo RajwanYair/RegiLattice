@@ -1,4 +1,4 @@
-﻿using RegiLattice.Core.Models;
+using RegiLattice.Core.Models;
 
 namespace RegiLattice.Core;
 
@@ -28,9 +28,7 @@ public static class DependencyResolver
     /// <summary>
     /// Find all tweaks that depend on the given tweak ID (reverse dependency lookup).
     /// </summary>
-    public static IReadOnlyList<TweakDef> Dependents(
-        string tweakId,
-        IReadOnlyList<TweakDef> allTweaks) =>
+    public static IReadOnlyList<TweakDef> Dependents(string tweakId, IReadOnlyList<TweakDef> allTweaks) =>
         allTweaks.Where(t => t.DependsOn.Contains(tweakId, StringComparer.OrdinalIgnoreCase)).ToList();
 
     private static void TopoVisit(
@@ -38,7 +36,8 @@ public static class DependencyResolver
         HashSet<string> visited,
         HashSet<string> inStack,
         List<TweakDef> result,
-        Func<string, TweakDef?> tweakLookup)
+        Func<string, TweakDef?> tweakLookup
+    )
     {
         if (inStack.Contains(td.Id))
             throw new InvalidOperationException($"Circular dependency detected involving '{td.Id}'");

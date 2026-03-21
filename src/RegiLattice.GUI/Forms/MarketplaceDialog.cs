@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using RegiLattice.Core.Plugins;
 
 namespace RegiLattice.GUI.Forms;

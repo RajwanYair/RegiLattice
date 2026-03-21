@@ -1,4 +1,4 @@
-﻿using RegiLattice.Core;
+using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using Xunit;
 
@@ -7,7 +7,6 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Direct tests for <see cref="TweakValidator"/> — integrity checks and circular dep detection.</summary>
 public sealed class TweakValidatorTests
 {
-
     // ── Valid tweaks ────────────────────────────────────────────────────
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.GUI.PackageManagers;
+namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>
 /// Checks installed versions of external tools used by package managers and tweaks.

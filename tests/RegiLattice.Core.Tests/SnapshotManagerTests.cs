@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using RegiLattice.Core.Registry;
@@ -9,7 +9,6 @@ namespace RegiLattice.Core.Tests;
 /// <summary>Direct tests for <see cref="SnapshotManager"/> — save, load, restore snapshot logic.</summary>
 public sealed class SnapshotManagerTests
 {
-
     // ── Save ────────────────────────────────────────────────────────────
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using System.IO;
 using RegiLattice.Core.Models;
@@ -707,7 +707,8 @@ internal static class ScoopTools
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
-            Description = "Installs eza — a modern, maintained replacement for ls with colour output, icons, and git integration. Replaces the deprecated exa.",
+            Description =
+                "Installs eza — a modern, maintained replacement for ls with colour output, icons, and git integration. Replaces the deprecated exa.",
             Tags = ["scoop", "eza", "ls", "files", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install eza"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall eza"),
@@ -737,7 +738,8 @@ internal static class ScoopTools
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
-            Description = "Installs Helix — a post-modern modal text editor inspired by Kakoune and Neovim, with built-in LSP and tree-sitter support.",
+            Description =
+                "Installs Helix — a post-modern modal text editor inspired by Kakoune and Neovim, with built-in LSP and tree-sitter support.",
             Tags = ["scoop", "helix", "editor", "modal", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install helix"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall helix"),
@@ -797,7 +799,8 @@ internal static class ScoopTools
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
-            Description = "Installs watchexec — a tool that watches files for changes and re-runs a command automatically. Ideal for dev and build workflows.",
+            Description =
+                "Installs watchexec — a tool that watches files for changes and re-runs a command automatically. Ideal for dev and build workflows.",
             Tags = ["scoop", "watchexec", "watch", "automation", "install"],
             ApplyAction = _ => ShellRunner.RunPowerShell("scoop install watchexec"),
             RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall watchexec"),

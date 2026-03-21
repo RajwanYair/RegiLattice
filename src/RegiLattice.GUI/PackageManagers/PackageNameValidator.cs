@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace RegiLattice.GUI.PackageManagers;
 
@@ -22,9 +22,7 @@ internal static partial class PackageNameValidator
         var regex = allowBrackets ? ExtendedNameRegex() : StandardNameRegex();
         if (string.IsNullOrWhiteSpace(name) || !regex.IsMatch(name))
         {
-            string allowed = allowBrackets
-                ? "only letters, digits, '.', '_', '-', '[]' allowed."
-                : "only letters, digits, '.', '_', '-' allowed.";
+            string allowed = allowBrackets ? "only letters, digits, '.', '_', '-', '[]' allowed." : "only letters, digits, '.', '_', '-' allowed.";
             throw new ArgumentException($"Invalid {toolName} name '{name}': {allowed}");
         }
         return name;
