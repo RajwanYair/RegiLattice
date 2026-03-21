@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+    IgnorableNamespaces="uap rescap">
+
+  <!-- Version is replaced by CI during the release workflow -->
+  <Identity
+      Name="YairRajwan.RegiLattice"
+      Publisher="CN=YairRajwan"
+      Version="1.0.0.0"
+      ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>RegiLattice</DisplayName>
+    <PublisherDisplayName>YairRajwan</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <Description>Windows Registry Tweak Toolkit — 3 800+ verified tweaks across 107 categories</Description>
+  </Properties>
+
+  <Dependencies>
+    <!-- Windows 10 2004 (20H1) minimum; tested up to Windows 11 22H2 -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application
+        Id="RegiLatticeGUI"
+        Executable="RegiLattice.GUI.exe"
+        EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+          DisplayName="RegiLattice"
+          Description="Windows Registry Tweak Toolkit"
+          BackgroundColor="transparent"
+          Square150x150Logo="Assets\Square150x150Logo.png"
+          Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <!--
+    runFullTrust is required for registry writes (HKLM) and UAC elevation.
+    Note: this MSIX is unsigned. Installation requires sideloading to be
+    enabled in Windows Settings → Privacy & Security → For Developers →
+    "Install apps from any source". Code signing is planned for a future release.
+  -->
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+
+</Package>
