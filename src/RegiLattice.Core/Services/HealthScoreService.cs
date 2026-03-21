@@ -232,4 +232,30 @@ public sealed class HealthScoreService
     public IReadOnlyList<TweakDef> StabilityTweaks() => Filter(_stabilityTokens);
 
     private IReadOnlyList<TweakDef> Filter(string[] tokens) => _engine.AllTweaks().Where(td => IsInBucket(td, tokens)).ToList();
+
+    // ── Score preview ────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Computes the score delta that would result from applying ALL currently
+    /// unapplied tweaks in <paramref name="category"/>.
+    /// Returns <c>(Before, After)</c> so callers can compute deltas per dimension.
+    /// If the category is empty or all its tweaks are already applied, both
+    /// scores will be identical.
+    /// </summary>
+    public (HealthScore Before, HealthScore After) PreviewCategoryImpact(string category, IReadOnlyDictionary<string, TweakResult> currentStatusMap)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(category);
+        ArgumentNullException.ThrowIfNull(currentStatusMap);
+
+        var before = Compute(currentStatusMap);
+
+        // Build a simulated map where all tweaks in the category are Applied.
+        var simulated = new Dictionary<string, TweakResult>(currentStatusMap, StringComparer.OrdinalIgnoreCase);
+        if (_engine.TweaksByCategory().TryGetValue(category, out var tweaksInCat))
+            foreach (var td in tweaksInCat)
+                simulated[td.Id] = TweakResult.Applied;
+
+        var after = Compute(simulated);
+        return (before, after);
+    }
 }
