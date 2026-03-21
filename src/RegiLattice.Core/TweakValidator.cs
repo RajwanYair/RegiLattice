@@ -12,9 +12,7 @@ public static class TweakValidator
     /// Validate a collection of tweaks and return a list of issues found.
     /// Checks: empty IDs/Labels, broken DependsOn references, duplicate IDs, empty ops.
     /// </summary>
-    public static IReadOnlyList<string> Validate(
-        IReadOnlyList<TweakDef> allTweaks,
-        Func<string, TweakDef?> tweakLookup)
+    public static IReadOnlyList<string> Validate(IReadOnlyList<TweakDef> allTweaks, Func<string, TweakDef?> tweakLookup)
     {
         var errors = new List<string>();
         var seenIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -31,6 +29,12 @@ public static class TweakValidator
 
             if (string.IsNullOrWhiteSpace(td.Category))
                 errors.Add($"{td.Id}: empty Category");
+
+            if (td.ImpactScore is < 1 or > 5)
+                errors.Add($"{td.Id}: ImpactScore {td.ImpactScore} is out of range 1–5");
+
+            if (td.SafetyRating is < 1 or > 5)
+                errors.Add($"{td.Id}: SafetyRating {td.SafetyRating} is out of range 1–5");
 
             foreach (var dep in td.DependsOn)
             {
@@ -68,13 +72,10 @@ public static class TweakValidator
         {
             foreach (var op in td.ApplyOps)
             {
-                if (op.Kind is RegOpKind.CheckValue or RegOpKind.CheckMissing
-                    or RegOpKind.CheckKeyMissing)
+                if (op.Kind is RegOpKind.CheckValue or RegOpKind.CheckMissing or RegOpKind.CheckKeyMissing)
                     continue;
 
-                var key = string.IsNullOrEmpty(op.Name)
-                    ? op.Path
-                    : $@"{op.Path}\{op.Name}";
+                var key = string.IsNullOrEmpty(op.Name) ? op.Path : $@"{op.Path}\{op.Name}";
 
                 if (!regTargets.TryGetValue(key, out var ids))
                 {

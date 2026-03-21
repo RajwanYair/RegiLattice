@@ -4,6 +4,53 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.1.0] — 2026-07-22
+
+### Sprints 57–67 — Intelligence, Portability, Automation & New Tweaks
+
+#### Added
+
+- **ImpactScore & SafetyRating metadata** (Sprint 57): New `int ImpactScore` and `int SafetyRating` fields on `TweakDef` (1–5 scale). GUI shows color-coded Impact/Safety badges. CLI displays in `--list` output.
+- **NLP synonym search** (Sprint 58): `TweakEngine.Search()` now expands query tokens through a built-in synonym map (60+ entries: fast→performance, spy→telemetry, bloat→debloat, etc.). Multi-token AND logic with expanded groups.
+- **Portable mode** (Sprint 59): `--portable` flag + `AppConfig.SetPortable()`. Redirects all `%LOCALAPPDATA%` paths to `.\data\` in the executable directory. Auto-detected via sentinel file `data\.portable`.
+- **Silent mode CLI** (Sprint 60): `--silent` suppresses all console output; JSON operation log written to `--log-file <path>`. Exit codes: 0 = success, 1 = failure/partial.
+- **AutoUpdater service** (Sprint 61): `AutoUpdater.cs` — polls GitHub Releases v3 API, compares semantic versions, returns `UpdateInfo` record. `IsNewer()` handles `v`-prefixed version strings.
+- **HealthScoreService** (Sprint 62): `HealthScoreService.cs` — computes weighted Privacy/Performance/Security/Stability scores (0–100) from `StatusMap()`. Returns `HealthScore` record with `OverallLabel` ("Excellent"/"Good"/"Fair"/"Needs Work"/"Poor").
+- **50 new tweaks across 5 new categories** (Sprint 63):
+  - `XboxGameBar.cs` — 10 tweaks (Xbox / Game Bar category)
+  - `WindowsHello.cs` — 10 tweaks (Windows Hello category)
+  - `SmartAppControl.cs` — 10 tweaks (Smart App Control category)
+  - `EnergySaver.cs` — 10 tweaks (Energy Saver category)
+  - `CopilotPlus.cs` — 10 tweaks (Copilot+ Features category)
+- **FirstRunWizardDialog** (Sprint 64): 3-step wizard shown on first launch — profile selection, dry-run toggle, feature tour. Writes initial config to `config.json`.
+- **ProfileWizardDialog** (Sprint 65): 5-question wizard generates a personalized `TweakProfile`. Questions cover gaming, privacy, performance priority, hardware type, and corporate environment.
+- **ConflictDetector service** (Sprint 66): `ConflictDetector.cs` — maintains a static lookup table of known-conflicting tweak pairs. `Detect()` returns conflicts given a set of tweak IDs; `ConflictsFor()` checks a single ID against applied tweaks.
+- **NLP synonym map fix**: Removed `"privacy"` from the `"telemetry"` synonym expansion to prevent AND-search false positives (e.g., searching "privacy telemetry" now correctly returns only tweaks matching both terms).
+
+#### Tests (Sprint 67)
+
+- `HealthScoreServiceTests.cs` — 13 tests: score computation, bucket helpers, range validation, label mapping
+- `AppConfigPortableTests.cs` — 8 tests: default state, SetPortable, ConfigDir redirect, auto-detection
+- `ConflictDetectorTests.cs` — 14 tests: AllConflicts, Detect symmetry/known pairs, ConflictsFor
+- `NewTweakModulesTests.cs` — 8 tests: category registration, ID uniqueness, validator clean
+- `AutoUpdaterTests.cs` — tests: IsNewer comparisons, CheckAsync mock
+- `TweakDefMetadataTests.cs` — tests: ImpactScore/SafetyRating model
+- `TweakEngineSearchNlpTests.cs` — tests: synonym expansion, multi-token AND, empty/whitespace behavior
+- **Fixed**: `Search_SingleToken_ReturnsRelevantTweaks` — relaxed to allow synonym-expanded results while verifying at least one direct match
+- **Fixed**: `Search_MultiToken_AllTokensMustMatch` — resolved by correcting synonym map overlap
+
+#### Total (v4.1.0)
+
+| Metric | v4.0.0 | v4.1.0 |
+|--------|--------|--------|
+| Tweaks | 3,669 | **3,719** |
+| Categories | 94 | **99** |
+| Tests | 1,435 | **1,538** (1121 Core + 175 CLI + 242 GUI) |
+| Core services | 24 | **27** (+ AutoUpdater, HealthScoreService, ConflictDetector) |
+| New dialogs | — | **2** (FirstRunWizard, ProfileWizard) |
+
+---
+
 ## [4.0.0] — 2026-03-20
 
 ### Major Release — All Capabilities Enabled

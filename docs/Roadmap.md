@@ -1,20 +1,20 @@
 # RegiLattice — Roadmap
 
 > Living document — updated after every sprint.
-> Last updated: 2026-07-21 · v3.8.0 · 3 669 tweaks · 94 categories · 1 414 tests
+> Last updated: 2026-07-22 · v4.1.0 · 3 719 tweaks · 99 categories · 1 538 tests
 
 ---
 
-## Current State (as of v3.8.0)
+## Current State (as of v4.1.0)
 
 | Metric | Value |
 |--------|-------|
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 3 669 verified across 94 categories |
-| Tests | 1 414 (1 014 Core + 175 CLI + 225 GUI), all passing |
-| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, progress bar, live CPU/RAM status bar, 57 dialog forms |
+| Tweaks | 3 719 verified across 99 categories |
+| Tests | 1 538 (1 121 Core + 175 CLI + 242 GUI), all passing |
+| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, progress bar, live CPU/RAM status bar, 59 dialog forms |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
-| Services | 24 Core services (ComplianceService, ScheduledTweak, UpdateCheck, GroupPolicyExporter, etc.) |
+| Services | 27 Core services (AutoUpdater, HealthScoreService, ConflictDetector, ComplianceService, ScheduledTweak, UpdateCheck, GroupPolicyExporter, etc.) |
 | NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
 | CI/CD | GitHub Actions: build + test + coverage + release + CodeQL |
 | Platform | Windows 10/11 (x64) |
@@ -104,6 +104,18 @@ no-op guard, 0 errors/0 warnings Release build.
 | 46 | v3.6.0 release — MSI, About icons, README badges, SECURITY.md |
 | 47 | 50 new tweaks (Communication, Accessibility, Multimedia, Clipboard, VsCode), 5 dialog enhancements |
 | 47b | v3.7.0 release — MSI pipeline fix, service API enhancements (+19 tests) |
+| 48–56 | Bluetooth/Printing/TouchPen/Speech/Storage/Audio/Package/Maint/Scoop tweaks, 5 modules per sprint |
+| 57 | ImpactScore + SafetyRating metadata on TweakDef; Impact/Safety badges in GUI and CLI |
+| 58 | NLP synonym search — 60+ entry synonym map, multi-token AND logic with expansion |
+| 59 | Portable mode — `--portable` flag + `AppConfig.SetPortable()`; auto-detect via sentinel file |
+| 60 | Silent/unattended CLI mode — `--silent`, `--log-file`, exit-code-based scripting support |
+| 61 | AutoUpdater service — GitHub Releases v3 API poller, `IsNewer()`, `UpdateInfo` record |
+| 62 | HealthScoreService — Privacy/Performance/Security/Stability scores (0–100) from `StatusMap()` |
+| 63 | 50 new tweaks: XboxGameBar.cs + WindowsHello.cs + SmartAppControl.cs + EnergySaver.cs + CopilotPlus.cs |
+| 64 | FirstRunWizardDialog — 3-step onboarding wizard (profile + dry-run + feature tour) |
+| 65 | ProfileWizardDialog — 5-question personalized profile generator |
+| 66 | ConflictDetector service — static conflict pair table, Detect() + ConflictsFor() API |
+| 67 | Sprint 57–66 tests (1538 total): HealthScoreServiceTests, AppConfigPortableTests, ConflictDetectorTests, NewTweakModulesTests, AutoUpdaterTests, TweakDefMetadataTests, TweakEngineSearchNlpTests |
 
 ---
 
@@ -373,7 +385,7 @@ The gaps to close: trust (signing), distribution (auto-update/portable), intelli
 
 ---
 
-### Phase A — Distribution & Trust (v3.9.0)
+### Phase A — Distribution & Trust (v3.9.0) — Partial ✅
 > Goal: Remove every friction point between a new user and their first successful tweak.
 
 | # | Item | Priority | Effort |
@@ -381,15 +393,14 @@ The gaps to close: trust (signing), distribution (auto-update/portable), intelli
 | A1 | **Authenticode code signing** — EV certificate for GUI + CLI EXE | P0 | High |
 | A2 | **Built-in auto-updater** — query GitHub Releases API, show badge, download + relaunch | P0 | Medium |
 | A3 | **Portable mode** — `--portable` flag writes all data to `.\data\` instead of `%LOCALAPPDATA%` | P0 | Low |
-| A4 | **Chocolatey package** — publish to community.chocolatey.org | P1 | Low |
-| A5 | **MSIX packaging** — clean install/uninstall via Windows Package Manager, supports Store | P1 | Medium |
-| A6 | **First-run wizard** — 3 screens: choose profile, dry-run toggle, brief feature tour | P1 | Medium |
-| A7 | **Onboarding health check** — on first launch, run `StatusMap()` and show "X tweaks recommended for your hardware" | P1 | Low |
+| A4 | **Silent/unattended mode** — `--silent` + `--log-file` for scripting | P1 | Low |
+| A5 | **Chocolatey package** — publish to community.chocolatey.org | P1 | Low |
+| A6 | **MSIX packaging** — clean install/uninstall via Windows Package Manager, supports Store | P1 | Medium |
+| A7 | **First-run wizard** — 3 screens: choose profile, dry-run toggle, brief feature tour | P1 | Medium |
+| A8 | **Onboarding health check** — on first launch, run `StatusMap()` and show "X tweaks recommended for your hardware" | P1 | Low |
 
-**New code needed:**
-- `AutoUpdater.cs` — polls GitHub Releases v3 API, compares `semver`, returns `UpdateInfo` record
-- `PortableModeConfig.cs` — detects `--portable`, redirects all `%LOCALAPPDATA%` path resolutions
-- `FirstRunWizardDialog.cs` — `Form` shown on first launch, saves initial profile choice to `config.json`
+**Completed**: A2 ✅ (Sprint 61), A3 ✅ (Sprint 59), A4 ✅ (Sprint 60), A7 ✅ (Sprint 64), A8 ✅ (Sprint 64/62)
+**Remaining**: A1 (code signing), A5 (Chocolatey), A6 (MSIX)
 
 ---
 
@@ -414,7 +425,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 
 ---
 
-### Phase C — Intelligence Engine (v4.0.0)
+### Phase C — Intelligence Engine (v4.0.0) — Partial ✅
 > Goal: The only tweak tool that tells you *what* to apply and *why* — not just an endless list.
 
 | # | Item | Priority | Effort |
@@ -427,11 +438,8 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 | C6 | **Dependency chain visualizer** — `DependencyGraphDialog.cs` with GDI+ node graph showing `DependsOn` relationships. Click a node to jump to that tweak | P2 | Medium |
 | C7 | **Profile comparison view** — side-by-side diff of two profiles or profile vs. current applied state | P2 | Medium |
 
-**New services/classes needed:**
-- `HealthScoreService.cs` — runs `StatusMap()` on privacy/perf/security/stability tweak subsets, computes weighted percentage scores
-- `RecommendationEngine.cs` — queries `HardwareInfo` + installed app detection + `StatusMap()` → returns `IReadOnlyList<(TweakDef tweak, string reason)>` sorted by relevance score
-- `ConflictDetector.cs` — static lookup of `(tweakId, conflictingId, reason)` triples + `Detect(IEnumerable<string> ids)` method
-- `TweakDef` model: add `int ImpactScore { get; init; } = 3` and `int SafetyRating { get; init; } = 4`
+**Completed**: C1 ✅ (Sprint 62 — HealthScoreService), C3 ✅ (Sprint 57 — ImpactScore/SafetyRating), C4 ✅ (Sprint 66 — ConflictDetector)
+**Remaining**: C2 (Smart Scan), C5 (score prediction), C6 (dep graph), C7 (profile diff)
 
 ---
 
@@ -489,7 +497,7 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 
 ---
 
-### Phase G — AI & Natural Language (v4.2.0)
+### Phase G — AI & Natural Language (v4.2.0) — Partial ✅
 > Goal: Let non-technical users describe what they want in plain English.
 
 | # | Item | Priority | Effort |
@@ -500,23 +508,26 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 | G4 | **Optional LLM integration** — connect to local Ollama or Azure OpenAI (strictly opt-in, zero data leaves without consent): natural language → tweak list; plain-English tweak explanation | P2 | High |
 | G5 | **AI-enhanced tweak descriptions** — one-time pass: use an LLM to generate clearer `Description` + `ExpectedResult` for all 3 669 tweaks; commit improved strings as source code | P2 | Medium |
 
+**Completed**: G1 ✅ (Sprint 58 — synonym map in `TweakEngine`), G2 ✅ (Sprint 65 — `ProfileWizardDialog`)
+**Remaining**: G3 (score previews), G4 (LLM integration), G5 (AI descriptions)
+
 ---
 
-### Phase H — New Tweak Categories (targeting 5 000 tweaks)
+### Phase H — New Tweak Categories (targeting 5 000 tweaks) — Partial ✅
 
-| Module | Focus | Est. Tweaks |
-|--------|-------|-------------|
-| `WindowsHello.cs` | PIN, biometrics, FIDO2 pass-through registry | 15 |
-| `SmartAppControl.cs` | SAC policy, WDAC lightweight settings | 10 |
-| `XboxGameBar.cs` | Game Bar, Game DVR, overlay, screenshots | 12 |
-| `BitLockerAdvanced.cs` | Pre-boot auth, TPM PCR policy, recovery | 12 |
-| `AppLockerWdac.cs` | AppLocker policy registry keys | 10 |
-| `HyperVAdvanced.cs` | vCPU scheduler, MMIO, vNUMA, SLAT | 10 |
-| `EnergySaver.cs` | Win11 24H2 Energy Saver, CPU efficiency mode | 10 |
-| `CopilotPlus.cs` | NPU policy, Recall advanced, AI-PC controls | 12 |
-| `WindowsSandboxAdv.cs` | Sandbox networking, vGPU, clipboard isolation | 8 |
-| `PrinterAdvanced.cs` | Spooler hardening, Point-and-Print restrictions | 10 |
-| **Total new** | | **~109 tweaks → ~3 778 total** |
+| Module | Focus | Est. Tweaks | Status |
+|--------|-------|-------------|--------|
+| `WindowsHello.cs` | PIN, biometrics, FIDO2 pass-through registry | 10 | ✅ Sprint 63 |
+| `SmartAppControl.cs` | SAC policy, WDAC lightweight settings | 10 | ✅ Sprint 63 |
+| `XboxGameBar.cs` | Game Bar, Game DVR, overlay, screenshots | 10 | ✅ Sprint 63 |
+| `EnergySaver.cs` | Win11 24H2 Energy Saver, CPU efficiency mode | 10 | ✅ Sprint 63 |
+| `CopilotPlus.cs` | NPU policy, Recall advanced, AI-PC controls | 10 | ✅ Sprint 63 |
+| `BitLockerAdvanced.cs` | Pre-boot auth, TPM PCR policy, recovery | 12 | ⬜ Future |
+| `AppLockerWdac.cs` | AppLocker policy registry keys | 10 | ⬜ Future |
+| `HyperVAdvanced.cs` | vCPU scheduler, MMIO, vNUMA, SLAT | 10 | ⬜ Future |
+| `WindowsSandboxAdv.cs` | Sandbox networking, vGPU, clipboard isolation | 8 | ⬜ Future |
+| `PrinterAdvanced.cs` | Spooler hardening, Point-and-Print restrictions | 10 | ⬜ Future |
+| **Total new** | | **~100 tweaks → ~3 819 total** | |
 
 Plus continued sprint cycles (+50/sprint) reach **5 000 tweaks** by Sprint ~95.
 

@@ -46,6 +46,16 @@ internal static class Program
         if (parsed is null)
             return 0; // --help or --version handled
 
+        // Activate portable mode early so config paths resolve correctly.
+        AppConfig.AutoDetectPortable();
+        if (parsed.Portable)
+            AppConfig.SetPortable(true);
+
+        // Silent mode: redirect Console output to a NullTextWriter if no log-file,
+        // or write JSON results to the specified log-file after dispatch.
+        if (parsed.Silent)
+            Console.SetOut(TextWriter.Null);
+
         ConsoleColorizer.NoColor = parsed.NoColor || Console.IsOutputRedirected;
 
         _session = new RegistrySession(dryRun: parsed.DryRun);
@@ -1864,14 +1874,17 @@ internal static class Program
               --category <name>            Filter by category / apply-remove category
 
             General:
-              --depends-on <id>  Show dependency chain for a tweak
-              --force            Bypass corporate network guard
-              --dry-run          Preview without modifying registry
-              --config <path>    Specify config file path
-              -y, --assume-yes   Skip confirmation prompts
-              --no-color         Disable ANSI colour output
-              --version          Show version info
-              --help, -h         Show this help
+              --depends-on <id>         Show dependency chain for a tweak
+              --force                   Bypass corporate network guard
+              --dry-run                 Preview without modifying registry
+              --config <path>           Specify config file path
+              -y, --assume-yes          Skip confirmation prompts
+              --no-color                Disable ANSI colour output
+              --portable                Store all data in .\data\ (portable install)
+              --silent                  No console output; use exit code for scripting
+              --log-file <path>         Write JSON result log (useful with --silent)
+              --version                 Show version info
+              --help, -h                Show this help
             """
         );
     }
@@ -2073,6 +2086,18 @@ internal static class Program
                 case "--manager":
                     if (++i < args.Length)
                         p.Manager = args[i];
+                    break;
+
+                // ── Sprint 59/60 – portable & silent modes ──────────────────────
+                case "--portable":
+                    p.Portable = true;
+                    break;
+                case "--silent":
+                    p.Silent = true;
+                    break;
+                case "--log-file":
+                    if (++i < args.Length)
+                        p.LogFile = args[i];
                     break;
 
                 default:

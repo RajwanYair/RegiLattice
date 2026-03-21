@@ -79,6 +79,7 @@ partial class MainForm
     private ToolStripMenuItem _mnuNetBandwidth = null!;
     private ToolStripMenuItem _mnuMacAddress = null!;
     private ToolStripMenuItem _mnuMarketplace = null!;
+    private ToolStripMenuItem _mnuProfileWizard = null!;
 
     // ── Main layout ────────────────────────────────────────────────────────
     private SplitContainer _split = null!;
@@ -286,6 +287,8 @@ partial class MainForm
             subNetwork,
             subCleanup,
             new ToolStripSeparator(),
+            _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…"),
+            new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
             mnuSelectAll2, mnuDeselectAll2, mnuInvert2,
@@ -368,6 +371,7 @@ partial class MainForm
         _mnuHwTempMon.Click            += (_, _) => OnOpenHardwareTemp();
         _mnuNetBandwidth.Click         += (_, _) => OnOpenNetBandwidth();
         _mnuMacAddress.Click           += (_, _) => OnOpenMacAddress();
+        _mnuProfileWizard.Click += (_, _) => OnOpenProfileWizard();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
         mnuDeselectAll2.Click += (_, _) => DeselectAllListItems();
