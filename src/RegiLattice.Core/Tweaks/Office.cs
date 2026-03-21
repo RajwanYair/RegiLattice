@@ -47,8 +47,16 @@ internal static class Office
             Description = "Skips the Office Start screen and opens directly to a blank document (all versions).",
             Tags = ["office", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableBootToOfficeStart", 1), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "ShownFirstRunOptin", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableBootToOfficeStart"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "ShownFirstRunOptin")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableBootToOfficeStart", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "ShownFirstRunOptin", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableBootToOfficeStart"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "ShownFirstRunOptin"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\General", "DisableBootToOfficeStart", 1)],
         },
         new TweakDef
@@ -61,8 +69,16 @@ internal static class Office
             Description = "Disables cloud-powered Office features (Designer, Editor, etc.) across all versions.",
             Tags = ["office", "privacy", "cloud"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled", 2), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled", 2),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2)],
         },
         new TweakDef
@@ -90,8 +106,16 @@ internal static class Office
                 "Lowers macro security to 'Enable all' and trusts the VBA project object model (Word, Excel, PowerPoint, Access, Outlook, Publisher).",
             Tags = ["office", "macros", "security"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 1), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "AccessVBOM", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "AccessVBOM")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 1),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "AccessVBOM", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "AccessVBOM"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 1)],
         },
         new TweakDef
@@ -132,8 +156,16 @@ internal static class Office
             Description = "Removes the 'Send a Smile' / feedback button from the Office ribbon.",
             Tags = ["office", "feedback", "ux"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0)],
         },
         new TweakDef
@@ -218,8 +250,16 @@ internal static class Office
                 "Disables optional connected experiences in Office 365. Prevents cloud-powered features like LinkedIn integration and 3D maps. Default: Enabled. Recommended: Disabled for privacy.",
             Tags = ["office", "connected", "privacy", "cloud"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled", 2), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled", 2),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "ControllerConnectedServicesEnabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Privacy", "DisconnectedState", 2)],
         },
         new TweakDef
@@ -233,8 +273,16 @@ internal static class Office
                 "Disables Office feedback survey prompts and the feedback button. Prevents interruptions during work. Default: Enabled. Recommended: Disabled.",
             Tags = ["office", "feedback", "survey", "notifications"],
             RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0), RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "Enabled"), RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail")],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "Enabled"),
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Feedback", "IncludeEmail"),
+            ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Common\Feedback", "Enabled", 0)],
         },
         new TweakDef
@@ -600,9 +648,18 @@ internal static class Office
             Tags = ["office", "word", "protected-view", "security"],
             NeedsAdmin = false,
             CorpSafe = false,
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableInternetFilesInPV", 1),
+            ],
         },
         new TweakDef
         {
@@ -613,8 +670,14 @@ internal static class Office
             NeedsAdmin = false,
             CorpSafe = false,
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableAttachmentsInPV", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableAttachmentsInPV")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableAttachmentsInPV", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableAttachmentsInPV"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security\ProtectedView", "DisableAttachmentsInPV", 1),
+            ],
         },
         new TweakDef
         {

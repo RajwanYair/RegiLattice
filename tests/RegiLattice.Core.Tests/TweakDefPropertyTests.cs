@@ -73,10 +73,7 @@ public sealed class TweakDefPropertyTests
         var pattern = new Regex(@"^[a-z][a-z0-9\-]+$", RegexOptions.Compiled);
         foreach (var td in _engine.AllTweaks())
         {
-            Assert.True(
-                pattern.IsMatch(td.Id),
-                $"Tweak id '{td.Id}' does not follow kebab-case convention (lowercase letters, digits, hyphens)."
-            );
+            Assert.True(pattern.IsMatch(td.Id), $"Tweak id '{td.Id}' does not follow kebab-case convention (lowercase letters, digits, hyphens).");
         }
     }
 
@@ -90,10 +87,7 @@ public sealed class TweakDefPropertyTests
         foreach (var td in _engine.AllTweaks())
         {
             var result = td.GetExpectedResult();
-            Assert.False(
-                string.IsNullOrWhiteSpace(result),
-                $"Tweak '{td.Id}' returned null/empty from GetExpectedResult()."
-            );
+            Assert.False(string.IsNullOrWhiteSpace(result), $"Tweak '{td.Id}' returned null/empty from GetExpectedResult().");
         }
     }
 
@@ -135,18 +129,13 @@ public sealed class TweakDefPropertyTests
     [Fact]
     public void AllTweaks_DependsOn_ReferencesRegisteredIds()
     {
-        var allIds = _engine.AllTweaks()
-                            .Select(t => t.Id)
-                            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var allIds = _engine.AllTweaks().Select(t => t.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         foreach (var td in _engine.AllTweaks())
         {
             foreach (var dep in td.DependsOn)
             {
-                Assert.True(
-                    allIds.Contains(dep),
-                    $"Tweak '{td.Id}' depends on '{dep}' which is not registered."
-                );
+                Assert.True(allIds.Contains(dep), $"Tweak '{td.Id}' depends on '{dep}' which is not registered.");
             }
         }
     }
@@ -185,10 +174,7 @@ public sealed class TweakDefPropertyTests
         var categories = _engine.Categories().ToHashSet(StringComparer.OrdinalIgnoreCase);
         foreach (var td in _engine.AllTweaks())
         {
-            Assert.True(
-                categories.Contains(td.Category),
-                $"Tweak '{td.Id}' has Category '{td.Category}' not found in engine.Categories()."
-            );
+            Assert.True(categories.Contains(td.Category), $"Tweak '{td.Id}' has Category '{td.Category}' not found in engine.Categories().");
         }
     }
 
@@ -265,11 +251,13 @@ public sealed class TweakDefPropertyTests
     public void Filter_ScopeUser_NeverReturnsMachineTweaks()
     {
         var filtered = _engine.Filter(scope: TweakScope.User);
-        Assert.All(filtered, t =>
-            Assert.True(
-                t.Scope == TweakScope.User || t.Scope == TweakScope.Both,
-                $"Tweak '{t.Id}' has Scope={t.Scope} but was returned by Filter(scope:User)."
-            )
+        Assert.All(
+            filtered,
+            t =>
+                Assert.True(
+                    t.Scope == TweakScope.User || t.Scope == TweakScope.Both,
+                    $"Tweak '{t.Id}' has Scope={t.Scope} but was returned by Filter(scope:User)."
+                )
         );
     }
 
@@ -287,19 +275,16 @@ public sealed class TweakDefPropertyTests
 
         // Scenario 1: empty map → all zeros → Overall == 0
         var emptyScore = svc.Compute(new Dictionary<string, TweakResult>());
-        Assert.Equal((emptyScore.Privacy + emptyScore.Performance + emptyScore.Security + emptyScore.Stability) / 4,
-                     emptyScore.Overall);
+        Assert.Equal((emptyScore.Privacy + emptyScore.Performance + emptyScore.Security + emptyScore.Stability) / 4, emptyScore.Overall);
 
         // Scenario 2: all applied
         var allApplied = allTweaks.ToDictionary(t => t.Id, _ => TweakResult.Applied);
         var fullScore = svc.Compute(allApplied);
-        Assert.Equal((fullScore.Privacy + fullScore.Performance + fullScore.Security + fullScore.Stability) / 4,
-                     fullScore.Overall);
+        Assert.Equal((fullScore.Privacy + fullScore.Performance + fullScore.Security + fullScore.Stability) / 4, fullScore.Overall);
 
         // Scenario 3: only privacy tweaks applied
         var privacyOnly = svc.PrivacyTweaks().ToDictionary(t => t.Id, _ => TweakResult.Applied);
         var partialScore = svc.Compute(privacyOnly);
-        Assert.Equal((partialScore.Privacy + partialScore.Performance + partialScore.Security + partialScore.Stability) / 4,
-                     partialScore.Overall);
+        Assert.Equal((partialScore.Privacy + partialScore.Performance + partialScore.Security + partialScore.Stability) / 4, partialScore.Overall);
     }
 }
