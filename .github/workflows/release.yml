@@ -20,7 +20,7 @@ permissions:
 jobs:
   build-and-release:
     runs-on: windows-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -67,15 +67,62 @@ jobs:
           -o publish/cli
 
       - name: Install WiX toolset
-        id: wix_install
-        continue-on-error: true
-        run: dotnet tool install --global wix --version 6.0.2
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 6.0.2
+          if ($LASTEXITCODE -ne 0) { dotnet tool update --global wix --version 6.0.2 }
 
       - name: Build MSI installer
-        id: msi_build
-        continue-on-error: true
-        if: steps.wix_install.outcome == 'success'
         run: dotnet build installer/RegiLattice.Installer.wixproj -c Release
+
+      - name: Generate MSIX assets
+        shell: pwsh
+        run: |
+          Add-Type -AssemblyName System.Drawing
+          $dir = 'publish/msix-staging/Assets'
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          $bg = [System.Drawing.Color]::FromArgb(30, 30, 46)   # Catppuccin Mocha
+          @(
+              @{ n='Square44x44Logo.png';   w=44;  h=44  },
+              @{ n='Square150x150Logo.png'; w=150; h=150 },
+              @{ n='Wide310x150Logo.png';   w=310; h=150 },
+              @{ n='StoreLogo.png';         w=50;  h=50  },
+              @{ n='SplashScreen.png';      w=620; h=300 }
+          ) | ForEach-Object {
+              $bmp = New-Object System.Drawing.Bitmap $_.w, $_.h
+              $g   = [System.Drawing.Graphics]::FromImage($bmp)
+              $g.Clear($bg); $g.Dispose()
+              $bmp.Save("$dir/$($_.n)", [System.Drawing.Imaging.ImageFormat]::Png)
+              $bmp.Dispose()
+          }
+          Write-Host 'Generated 5 MSIX visual assets (Catppuccin Mocha #1e1e2e)'
+
+      - name: Stage MSIX content
+        shell: pwsh
+        run: |
+          $tag  = '${{ inputs.tag_name || github.ref_name }}'
+          $ver  = $tag.TrimStart('v') + '.0'   # MSIX requires 4-part version
+          $root = 'publish/msix-staging'
+          Copy-Item publish/gui/RegiLattice.GUI.exe $root/
+          $xml  = (Get-Content installer/AppxManifest.xml -Raw) `
+                    -replace '(?<=<Identity[^>]+Version=")[^"]+', $ver
+          [IO.File]::WriteAllText("$root/AppxManifest.xml", $xml, [Text.Encoding]::UTF8)
+          Write-Host "MSIX content staged — version $ver"
+
+      - name: Build MSIX
+        shell: pwsh
+        run: |
+          $mxp = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin' -Recurse `
+                     -Filter makeappx.exe -ErrorAction SilentlyContinue |
+                 Where-Object FullName -Match x64 |
+                 Sort-Object FullName -Descending |
+                 Select-Object -First 1 -ExpandProperty FullName
+          if (-not $mxp) { Write-Error 'makeappx.exe not found on runner'; exit 1 }
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          $out = "publish/RegiLattice-$tag-win-x64.msix"
+          & $mxp pack /d publish/msix-staging /p $out /nv
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Write-Host "MSIX: $out ($([math]::Round((Get-Item $out).Length / 1MB, 1)) MB)"
 
       - name: Generate checksums
         shell: pwsh
@@ -83,6 +130,7 @@ jobs:
           $all = @()
           $all += Get-ChildItem "publish/gui" -File -Filter "*.exe" -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish/cli" -File -Filter "*.exe" -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish"     -File -Filter "*.msix" -ErrorAction SilentlyContinue
           if (Test-Path "installer/bin/Release") {
             $all += Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
           }
@@ -100,6 +148,7 @@ jobs:
             publish/gui/RegiLattice.GUI.exe
             publish/cli/RegiLattice.exe
             installer/bin/Release/**/*.msi
+            publish/*.msix
             publish/SHA256SUMS.txt
           generate_release_notes: true
           fail_on_unmatched_files: false
