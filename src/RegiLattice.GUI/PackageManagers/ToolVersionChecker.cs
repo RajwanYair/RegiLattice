@@ -237,4 +237,42 @@ internal static class ToolVersionChecker
         }
         return "python";
     }
+
+    /// <summary>
+    /// Returns a recommended install command and documentation URL for a given tool name.
+    /// Returns (null, null) for unknown tools.
+    /// </summary>
+    internal static (string? Command, string? Url) GetInstallGuide(string toolName) =>
+        toolName switch
+        {
+            "PowerShell" => ("winget install Microsoft.PowerShell --accept-source-agreements", "https://aka.ms/install-powershell"),
+            "Python" => (
+                "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
+                "https://www.python.org/downloads/"
+            ),
+            "winget" => (
+                "Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe",
+                "https://aka.ms/getwinget"
+            ),
+            "Scoop" => ("Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex", "https://scoop.sh"),
+            "Chocolatey" => (
+                "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))",
+                "https://chocolatey.org/install"
+            ),
+            "Git" => ("winget install Git.Git --accept-source-agreements", "https://git-scm.com/download/win"),
+            "Node.js" => ("winget install OpenJS.NodeJS.LTS --accept-source-agreements", "https://nodejs.org/en/download/"),
+            ".NET SDK" => ("winget install Microsoft.DotNet.SDK.9 --accept-source-agreements", "https://dotnet.microsoft.com/download"),
+            "GitHub CLI" => ("winget install GitHub.cli --accept-source-agreements", "https://cli.github.com"),
+            "CMake" => ("winget install Kitware.CMake --accept-source-agreements", "https://cmake.org/download/"),
+            "Ninja" => ("scoop install ninja", "https://ninja-build.org"),
+            "Perl" => ("winget install StrawberryPerl.StrawberryPerl --accept-source-agreements", "https://strawberryperl.com"),
+            "Docker" => (
+                "winget install Docker.DockerDesktop --accept-source-agreements",
+                "https://docs.docker.com/desktop/install/windows-install/"
+            ),
+            "Rust" => ("winget install Rustlang.Rustup --accept-source-agreements", "https://www.rust-lang.org/tools/install"),
+            "Go" => ("winget install GoLang.Go --accept-source-agreements", "https://go.dev/dl/"),
+            "Java" => ("winget install EclipseAdoptium.Temurin.21.JDK --accept-source-agreements", "https://adoptium.net"),
+            _ => (null, null),
+        };
 }

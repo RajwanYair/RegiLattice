@@ -13,16 +13,21 @@ internal sealed class ChocolateyManagerDialog : BasePackageManagerDialog
     protected override string PrereqInstallingText => "Installing Chocolatey (may need admin)...";
     protected override string PrereqInstallButtonText => "Install Choco";
     protected override string UpgradeText => "Upgrade";
+    protected override string PrereqInstallHint =>
+        "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))";
+    protected override string PrereqInstallUrl => "https://chocolatey.org/install";
     protected override IReadOnlyList<string> PopularPackages => ChocolateyManager.PopularPackages;
+
     protected override bool CheckPrereq() => ChocolateyManager.IsChocoInstalled();
+
     protected override Task InstallPrereqAsync(CancellationToken ct) => ChocolateyManager.InstallChocoAsync(ct);
 
     protected override ColumnHeader[] BuildListColumns() =>
-    [
-        new ColumnHeader { Text = "Package", Width = 220 },
-        new ColumnHeader { Text = "Version", Width = 140 },
-        new ColumnHeader { Text = "Status", Width = 140 },
-    ];
+        [
+            new ColumnHeader { Text = "Package", Width = 220 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ];
 
     protected override async Task RefreshCoreAsync(CancellationToken ct)
     {
@@ -77,12 +82,9 @@ internal sealed class ChocolateyManagerDialog : BasePackageManagerDialog
         }
     }
 
-    protected override Task InstallCoreAsync(string name, CancellationToken ct) =>
-        ChocolateyManager.InstallAsync(name, ct);
+    protected override Task InstallCoreAsync(string name, CancellationToken ct) => ChocolateyManager.InstallAsync(name, ct);
 
-    protected override Task RemoveCoreAsync(string name, CancellationToken ct) =>
-        ChocolateyManager.UninstallAsync(name, ct);
+    protected override Task RemoveCoreAsync(string name, CancellationToken ct) => ChocolateyManager.UninstallAsync(name, ct);
 
-    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) =>
-        ChocolateyManager.UpgradeAsync(name, ct);
+    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) => ChocolateyManager.UpgradeAsync(name, ct);
 }

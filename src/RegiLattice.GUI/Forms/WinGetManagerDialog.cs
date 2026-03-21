@@ -15,16 +15,20 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
     protected override string PrereqInstallingText => "Registering App Installer...";
     protected override string PrereqInstallButtonText => "Install WinGet";
     protected override string UpgradeText => "Upgrade";
+    protected override string PrereqInstallHint => "Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe";
+    protected override string PrereqInstallUrl => "https://aka.ms/getwinget";
     protected override IReadOnlyList<string> PopularPackages => WinGetManager.PopularPackages;
+
     protected override bool CheckPrereq() => WinGetManager.IsWinGetInstalled();
+
     protected override Task InstallPrereqAsync(CancellationToken ct) => WinGetManager.InstallWinGetAsync(ct);
 
     protected override ColumnHeader[] BuildListColumns() =>
-    [
-        new ColumnHeader { Text = "Package", Width = 300 },
-        new ColumnHeader { Text = "Version", Width = 140 },
-        new ColumnHeader { Text = "Status", Width = 140 },
-    ];
+        [
+            new ColumnHeader { Text = "Package", Width = 300 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ];
 
     protected override void AddExtraButtons(Panel ctrlPanel, ref int x)
     {
@@ -117,12 +121,9 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
         }
     }
 
-    protected override Task InstallCoreAsync(string name, CancellationToken ct) =>
-        WinGetManager.InstallAsync(name, ct);
+    protected override Task InstallCoreAsync(string name, CancellationToken ct) => WinGetManager.InstallAsync(name, ct);
 
-    protected override Task RemoveCoreAsync(string name, CancellationToken ct) =>
-        WinGetManager.UninstallAsync(name, ct);
+    protected override Task RemoveCoreAsync(string name, CancellationToken ct) => WinGetManager.UninstallAsync(name, ct);
 
-    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) =>
-        WinGetManager.UpgradeAsync(name, ct);
+    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) => WinGetManager.UpgradeAsync(name, ct);
 }

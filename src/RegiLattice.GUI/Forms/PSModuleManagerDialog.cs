@@ -15,16 +15,20 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
     protected override string PrereqInstallingText => "Installing PowerShellGet...";
     protected override string PrereqInstallButtonText => "Install PSGet";
     protected override string UpgradeText => "Update";
+    protected override string PrereqInstallHint => "Install-Module PowerShellGet -Force -AllowClobber -Scope CurrentUser";
+    protected override string PrereqInstallUrl => "https://learn.microsoft.com/en-us/powershell/scripting/gallery/installing-psget";
     protected override IReadOnlyList<string> PopularPackages => PSModuleManager.PopularModules;
+
     protected override bool CheckPrereq() => PSModuleManager.IsPowerShellGetAvailable();
+
     protected override Task InstallPrereqAsync(CancellationToken ct) => PSModuleManager.InstallPowerShellGetAsync(ct);
 
     protected override ColumnHeader[] BuildListColumns() =>
-    [
-        new ColumnHeader { Text = "Module", Width = 240 },
-        new ColumnHeader { Text = "Version", Width = 140 },
-        new ColumnHeader { Text = "Status", Width = 140 },
-    ];
+        [
+            new ColumnHeader { Text = "Module", Width = 240 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ];
 
     protected override Control? BuildScopePanel()
     {
@@ -35,7 +39,13 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
             BackColor = AppTheme.Surface,
             Padding = new Padding(8, 4, 8, 4),
         };
-        var lbl = new Label { Text = "Scope:", AutoSize = true, Location = new Point(8, 8), ForeColor = AppTheme.Fg };
+        var lbl = new Label
+        {
+            Text = "Scope:",
+            AutoSize = true,
+            Location = new Point(8, 8),
+            ForeColor = AppTheme.Fg,
+        };
         _cmbScope.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbScope.Items.AddRange(["CurrentUser", "AllUsers"]);
         _cmbScope.SelectedIndex = 0;
@@ -100,8 +110,7 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
         return PSModuleManager.InstallAsync(name, scope, ct);
     }
 
-    protected override Task RemoveCoreAsync(string name, CancellationToken ct) =>
-        PSModuleManager.RemoveAsync(name, ct);
+    protected override Task RemoveCoreAsync(string name, CancellationToken ct) => PSModuleManager.RemoveAsync(name, ct);
 
     protected override Task UpgradeCoreAsync(string name, CancellationToken ct)
     {

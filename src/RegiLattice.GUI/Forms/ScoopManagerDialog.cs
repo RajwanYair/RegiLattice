@@ -13,16 +13,20 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
     protected override string PrereqInstallingText => "Installing Scoop...";
     protected override string PrereqInstallButtonText => "Install Scoop";
     protected override string UpgradeText => "Upgrade";
+    protected override string PrereqInstallHint => "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex";
+    protected override string PrereqInstallUrl => "https://scoop.sh";
     protected override IReadOnlyList<string> PopularPackages => ScoopManager.PopularTools;
+
     protected override bool CheckPrereq() => ScoopManager.IsScoopInstalled();
+
     protected override Task InstallPrereqAsync(CancellationToken ct) => ScoopManager.InstallScoopAsync(ct);
 
     protected override ColumnHeader[] BuildListColumns() =>
-    [
-        new ColumnHeader { Text = "Package", Width = 220 },
-        new ColumnHeader { Text = "Version", Width = 140 },
-        new ColumnHeader { Text = "Status", Width = 140 },
-    ];
+        [
+            new ColumnHeader { Text = "Package", Width = 220 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ];
 
     protected override async Task RefreshCoreAsync(CancellationToken ct)
     {
@@ -77,12 +81,9 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
         }
     }
 
-    protected override Task InstallCoreAsync(string name, CancellationToken ct) =>
-        ScoopManager.InstallAsync(name, ct);
+    protected override Task InstallCoreAsync(string name, CancellationToken ct) => ScoopManager.InstallAsync(name, ct);
 
-    protected override Task RemoveCoreAsync(string name, CancellationToken ct) =>
-        ScoopManager.UninstallAsync(name, ct);
+    protected override Task RemoveCoreAsync(string name, CancellationToken ct) => ScoopManager.UninstallAsync(name, ct);
 
-    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) =>
-        ScoopManager.UpgradeAsync(name, ct);
+    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) => ScoopManager.UpgradeAsync(name, ct);
 }
