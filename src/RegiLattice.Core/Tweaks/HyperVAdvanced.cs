@@ -219,5 +219,158 @@ internal static class HyperVAdvanced
                 ),
             ],
         },
+        new TweakDef
+        {
+            Id          = "hyperv-no-auto-checkpoints",
+            Label       = "Disable Automatic VM Checkpoints",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets DisableAutomaticCheckpoints = 1 via Hyper-V policy. Prevents Hyper-V from silently "
+                + "creating a checkpoint before major operations (shutdown, upgrade). Auto-checkpoints accumulate "
+                + "on the host disk and can fill volumes on busy dev machines. Default: automatic checkpoints enabled.",
+            Tags         = ["hyperv", "virtualization", "checkpoint", "disk", "policy"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "DisableAutomaticCheckpoints", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "DisableAutomaticCheckpoints")],
+            DetectOps = [RegOp.CheckDword(HvPol, "DisableAutomaticCheckpoints", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-require-net-creds",
+            Label       = "Require Credentials for VM Network Configuration",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets RequireCredentialsForNetworkConfiguration = 1 via Hyper-V policy. Forces re-authentication "
+                + "before modifying virtual switch bindings or VM network adapters, preventing privilege escalation "
+                + "through unauthorized network reconfiguration.",
+            Tags         = ["hyperv", "virtualization", "network", "credentials", "security"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "RequireCredentialsForNetworkConfiguration", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "RequireCredentialsForNetworkConfiguration")],
+            DetectOps = [RegOp.CheckDword(HvPol, "RequireCredentialsForNetworkConfiguration", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-allow-sriov",
+            Label       = "Allow SR-IOV Virtual Functions for Hyper-V NICs",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = false,
+            Description =
+                "Sets AllowSriovNetworking = 1 via Hyper-V policy. Permits SR-IOV (Single Root I/O Virtualisation) "
+                + "virtual functions to be exposed to VMs, enabling near-native NIC performance by bypassing the virtual switch "
+                + "for latency-sensitive VM workloads. Requires SR-IOV capable hardware. Default: not set.",
+            Tags         = ["hyperv", "virtualization", "sriov", "network", "performance"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "AllowSriovNetworking", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "AllowSriovNetworking")],
+            DetectOps = [RegOp.CheckDword(HvPol, "AllowSriovNetworking", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-vm-bw-management",
+            Label       = "Enable VM Network Bandwidth Management",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets EnableVMNetworkBandwidthManagement = 1 via Hyper-V policy. Allows the Hyper-V virtual switch "
+                + "to enforce per-VM minimum and maximum bandwidth limits (QoS). Prevents a single noisy VM from "
+                + "saturating the physical NIC and degrading other VMs.",
+            Tags         = ["hyperv", "virtualization", "network", "bandwidth", "qos"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "EnableVMNetworkBandwidthManagement", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "EnableVMNetworkBandwidthManagement")],
+            DetectOps = [RegOp.CheckDword(HvPol, "EnableVMNetworkBandwidthManagement", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-no-vm-broadcast",
+            Label       = "Block VM-to-Host Broadcast Traffic",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets DisableVMtoBroadcast = 1 via Hyper-V policy. Prevents VMs from flooding the management OS NIC "
+                + "with broadcast/multicast frames, reducing noisy-neighbour impact on the host network stack and improving "
+                + "VM-to-VM isolation.",
+            Tags         = ["hyperv", "virtualization", "network", "broadcast", "isolation"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "DisableVMtoBroadcast", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "DisableVMtoBroadcast")],
+            DetectOps = [RegOp.CheckDword(HvPol, "DisableVMtoBroadcast", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-max-vms-8",
+            Label       = "Cap Maximum Running VMs to 8",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = false,
+            Description =
+                "Sets MaxVirtualMachines = 8 in the Hyper-V Virtualization key. Limits the number of concurrently "
+                + "running virtual machines to 8, preventing runaway VM sprawl from exhausting host RAM and CPU on "
+                + "workstation deployments. Remove to revert to no limit.",
+            Tags         = ["hyperv", "virtualization", "limit", "resource", "workstation"],
+            RegistryKeys = [HvWorker],
+            ApplyOps  = [RegOp.SetDword(HvWorker, "MaxVirtualMachines", 8)],
+            RemoveOps = [RegOp.DeleteValue(HvWorker, "MaxVirtualMachines")],
+            DetectOps = [RegOp.CheckDword(HvWorker, "MaxVirtualMachines", 8)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-host-memory-reserve-512",
+            Label       = "Reserve 512 MB RAM for Hyper-V Host OS",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = false,
+            Description =
+                "Sets HostMemoryReserve = 512 (MB) in the Hyper-V scheduler key. Guarantees that at least 512 MB "
+                + "of physical RAM is always available to the management OS, preventing VM memory pressure from "
+                + "starving the host and causing system instability.",
+            Tags         = ["hyperv", "virtualization", "memory", "host", "reserve"],
+            RegistryKeys = [HvSched],
+            ApplyOps  = [RegOp.SetDword(HvSched, "HostMemoryReserve", 512)],
+            RemoveOps = [RegOp.DeleteValue(HvSched, "HostMemoryReserve")],
+            DetectOps = [RegOp.CheckDword(HvSched, "HostMemoryReserve", 512)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-no-default-switch",
+            Label       = "Disable Hyper-V Default Switch (NAT)",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets DisableDefaultSwitch = 1 via Hyper-V policy. Removes the 'Default Switch' NAT virtual switch "
+                + "that Windows creates automatically. The Default Switch IP range (172.x) can conflict with VPN and "
+                + "corporate network ranges. Disable when using custom external or internal switches only.",
+            Tags         = ["hyperv", "virtualization", "switch", "nat", "network", "vpn"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "DisableDefaultSwitch", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "DisableDefaultSwitch")],
+            DetectOps = [RegOp.CheckDword(HvPol, "DisableDefaultSwitch", 1)],
+        },
+        new TweakDef
+        {
+            Id          = "hyperv-strict-network-isolation",
+            Label       = "Enable Strict VM Network Isolation",
+            Category    = "Hyper-V Advanced",
+            NeedsAdmin  = true,
+            CorpSafe    = true,
+            Description =
+                "Sets EnableStrictIsolation = 1 via Hyper-V policy. Enables strict inter-VM network isolation mode "
+                + "on the virtual switch, ensuring that VMs on the same host cannot communicate unless explicitly "
+                + "connected to a shared virtual switch. Strengthens tenant separation on multi-VM hosts.",
+            Tags         = ["hyperv", "virtualization", "network", "isolation", "security"],
+            RegistryKeys = [HvPol],
+            ApplyOps  = [RegOp.SetDword(HvPol, "EnableStrictIsolation", 1)],
+            RemoveOps = [RegOp.DeleteValue(HvPol, "EnableStrictIsolation")],
+            DetectOps = [RegOp.CheckDword(HvPol, "EnableStrictIsolation", 1)],
+        },
     ];
 }
