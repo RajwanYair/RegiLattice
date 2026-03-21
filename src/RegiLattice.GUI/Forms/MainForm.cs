@@ -40,6 +40,14 @@ public partial class MainForm : Form
     private readonly System.Windows.Forms.Timer _searchDebounceTimer = new() { Interval = 250 };
     private string _lastSearchText = string.Empty;
 
+    // Tooltip that shows score-change preview when hovering over a category node.
+    private readonly ToolTip _catScoreTip = new()
+    {
+        AutoPopDelay = 8000,
+        InitialDelay = 600,
+        ReshowDelay = 300,
+    };
+
     // Profile schedule timer — checks AppConfig.ProfileSchedules every 60 s.
     private readonly System.Windows.Forms.Timer _profileScheduleTimer = new() { Interval = 60_000 };
 
@@ -62,6 +70,7 @@ public partial class MainForm : Form
 
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         _profileScheduleTimer.Tick += OnProfileScheduleTick;
+        _treeView.NodeMouseHover += OnTreeNodeScoreHover;
         ApplyTheme();
         AppTheme.Apply3D(this);
         _logPanel.Visible = cfg.ShowLogPanel;
@@ -1541,6 +1550,44 @@ public partial class MainForm : Form
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────
+    /// <summary>
+    /// Shows a health-score preview tooltip when the mouse hovers over a category node.
+    /// Computes the before/after score assuming all tweaks in the category are applied.
+    /// </summary>
+    private void OnTreeNodeScoreHover(object? sender, TreeNodeMouseHoverEventArgs e)
+    {
+        if (e.Node?.Tag is not string cat || cat == "__recent__")
+            return;
+
+        var svc = new HealthScoreService(_engine);
+        var (before, after) = svc.PreviewCategoryImpact(cat, _statusCache);
+
+        int deltaOver = after.Overall - before.Overall;
+        if (deltaOver == 0)
+        {
+            _catScoreTip.SetToolTip(_treeView, $"{cat}: All tweaks already applied — no score change.");
+            return;
+        }
+
+        int deltaPriv = after.Privacy - before.Privacy;
+        int deltaPerf = after.Performance - before.Performance;
+        int deltaSec = after.Security - before.Security;
+        int deltaStab = after.Stability - before.Stability;
+
+        var sb = new StringBuilder();
+        sb.AppendLine($"Applying all '{cat}' tweaks would change your health score:");
+        if (deltaPriv != 0)
+            sb.AppendLine($"  Privacy:     {deltaPriv:+0;-0} pts");
+        if (deltaPerf != 0)
+            sb.AppendLine($"  Performance: {deltaPerf:+0;-0} pts");
+        if (deltaSec != 0)
+            sb.AppendLine($"  Security:    {deltaSec:+0;-0} pts");
+        if (deltaStab != 0)
+            sb.AppendLine($"  Stability:   {deltaStab:+0;-0} pts");
+        sb.Append($"  Overall:     {deltaOver:+0;-0} pts  ({before.Overall}% → {after.Overall}%)");
+        _catScoreTip.SetToolTip(_treeView, sb.ToString());
+    }
+
     private async void OnTreeAfterSelect(object? sender, TreeViewEventArgs e)
     {
         if (e.Node?.Tag is not string cat)
