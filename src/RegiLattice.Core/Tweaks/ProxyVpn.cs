@@ -445,7 +445,7 @@ internal static class ProxyVpn
         },
         new TweakDef
         {
-            Id = "proxy-set-max-conn-per-1_0",
+            Id = "proxy-set-max-conn-per-1-0",
             Label = "Increase Max Connections Per HTTP/1.0 Server (WinINet)",
             Category = "Proxy & VPN",
             NeedsAdmin = true,
