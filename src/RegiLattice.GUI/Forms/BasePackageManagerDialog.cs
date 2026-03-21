@@ -4,6 +4,8 @@
 //           prereq banner (with async install flow), quick-install strip,
 //           AppendLog, SetBusy/SetStatus/SetOutdated, and shared async wrappers.
 
+using System.Diagnostics;
+
 namespace RegiLattice.GUI.Forms;
 
 /// <summary>
@@ -44,6 +46,13 @@ internal abstract class BasePackageManagerDialog : Form
     protected abstract IReadOnlyList<string> PopularPackages { get; }
     protected abstract ColumnHeader[] BuildListColumns();
     protected abstract string UpgradeText { get; } // "Upgrade" or "Update"
+
+    // ── Virtual: prereq install guidance shown in banner ─────────────────
+    /// <summary>Optional PowerShell command to install the prereq manually. Shown in banner when tool is missing.</summary>
+    protected virtual string? PrereqInstallHint => null;
+
+    /// <summary>Optional URL for the tool's official download/documentation page.</summary>
+    protected virtual string? PrereqInstallUrl => null;
 
     // ── Abstract: per-tool async operations ──────────────────────────────
     protected abstract Task RefreshCoreAsync(CancellationToken ct);
@@ -239,24 +248,30 @@ internal abstract class BasePackageManagerDialog : Form
 
     private Panel BuildPrereqBanner()
     {
+        bool hasHint = !string.IsNullOrEmpty(PrereqInstallHint);
+        bool hasUrl = !string.IsNullOrEmpty(PrereqInstallUrl);
+        int bannerHeight = _prereqMet ? 34 : (hasHint ? 98 : 38);
+
         var panel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 34,
+            Height = bannerHeight,
             BackColor = _prereqMet ? Color.FromArgb(20, AppTheme.Green) : Color.FromArgb(20, AppTheme.Red),
             Padding = new Padding(8, 4, 8, 4),
         };
+
         var lbl = new Label
         {
             Text = _prereqMet ? $"✅ {PrereqReadyText}" : $"❌ {PrereqMissingText}",
             AutoSize = true,
-            Location = new Point(8, 8),
+            Location = new Point(8, 9),
             ForeColor = _prereqMet ? AppTheme.Green : AppTheme.Red,
         };
         panel.Controls.Add(lbl);
+
         if (!_prereqMet)
         {
-            var btn = new Button
+            var btnAuto = new Button
             {
                 Text = PrereqInstallButtonText,
                 BackColor = AppTheme.Accent,
@@ -265,11 +280,11 @@ internal abstract class BasePackageManagerDialog : Form
                 Size = new Size(120, 25),
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
             };
-            btn.Location = new Point(panel.ClientSize.Width - btn.Width - 8, 4);
-            btn.Click += async (_, _) =>
+            btnAuto.Location = new Point(panel.ClientSize.Width - btnAuto.Width - 8, 5);
+            btnAuto.Click += async (_, _) =>
             {
-                btn.Enabled = false;
-                btn.Text = "Installing...";
+                btnAuto.Enabled = false;
+                btnAuto.Text = "Installing...";
                 lbl.Text = $"⏳ {PrereqInstallingText}";
                 lbl.ForeColor = AppTheme.Yellow;
                 panel.BackColor = Color.FromArgb(20, AppTheme.Yellow);
@@ -280,7 +295,7 @@ internal abstract class BasePackageManagerDialog : Form
                     lbl.Text = $"✅ {PrereqReadyText}";
                     lbl.ForeColor = AppTheme.Green;
                     panel.BackColor = Color.FromArgb(20, AppTheme.Green);
-                    btn.Visible = false;
+                    btnAuto.Visible = false;
                     SetMainEnabled(true);
                     await RefreshAsync();
                 }
@@ -289,11 +304,83 @@ internal abstract class BasePackageManagerDialog : Form
                     lbl.Text = $"❌ Install failed: {ex.Message}";
                     lbl.ForeColor = AppTheme.Red;
                     panel.BackColor = Color.FromArgb(20, AppTheme.Red);
-                    btn.Enabled = true;
-                    btn.Text = "Retry";
+                    btnAuto.Enabled = true;
+                    btnAuto.Text = "Retry";
                 }
             };
-            panel.Controls.Add(btn);
+            panel.Controls.Add(btnAuto);
+
+            if (hasHint)
+            {
+                var lblCmd = new Label
+                {
+                    Text = "Run in PowerShell to install manually:",
+                    AutoSize = true,
+                    Location = new Point(8, 38),
+                    ForeColor = AppTheme.FgDim,
+                    Font = AppTheme.Regular,
+                };
+
+                var txtCmd = new TextBox
+                {
+                    Text = PrereqInstallHint,
+                    ReadOnly = true,
+                    Location = new Point(8, 58),
+                    Height = 22,
+                    Width = 400,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                    BackColor = AppTheme.Surface,
+                    ForeColor = AppTheme.Fg,
+                    Font = AppTheme.Mono,
+                    BorderStyle = BorderStyle.FixedSingle,
+                };
+
+                var btnCopy = new Button
+                {
+                    Text = "📋",
+                    BackColor = AppTheme.Overlay,
+                    ForeColor = AppTheme.Fg,
+                    FlatStyle = FlatStyle.Flat,
+                    Size = new Size(28, 22),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                    Location = new Point(0, 58),
+                };
+                string capturedHint = PrereqInstallHint!;
+                btnCopy.Click += (_, _) => Clipboard.SetText(capturedHint);
+
+                Button? btnDocs = null;
+                if (hasUrl)
+                {
+                    btnDocs = new Button
+                    {
+                        Text = "🌐",
+                        BackColor = AppTheme.Overlay,
+                        ForeColor = AppTheme.Fg,
+                        FlatStyle = FlatStyle.Flat,
+                        Size = new Size(28, 22),
+                        Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                        Location = new Point(0, 58),
+                    };
+                    string capturedUrl = PrereqInstallUrl!;
+                    btnDocs.Click += (_, _) => Process.Start(new ProcessStartInfo(capturedUrl) { UseShellExecute = true });
+                    panel.Controls.Add(btnDocs);
+                }
+
+                void LayoutHintRow(int w)
+                {
+                    int right = w - 8;
+                    if (btnDocs is not null)
+                    {
+                        btnDocs.Location = new Point(right - btnDocs.Width, 58);
+                        right = btnDocs.Left - 4;
+                    }
+                    btnCopy.Location = new Point(right - btnCopy.Width, 58);
+                    txtCmd.Width = btnCopy.Left - txtCmd.Left - 4;
+                }
+
+                panel.Resize += (_, _) => LayoutHintRow(panel.ClientSize.Width);
+                panel.Controls.AddRange([lblCmd, txtCmd, btnCopy]);
+            }
         }
         return panel;
     }

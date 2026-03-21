@@ -16,16 +16,20 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
     protected override string PrereqInstallingText => "Installing Python via winget...";
     protected override string PrereqInstallButtonText => "Install Python";
     protected override string UpgradeText => "Upgrade";
+    protected override string PrereqInstallHint => "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements";
+    protected override string PrereqInstallUrl => "https://www.python.org/downloads/";
     protected override IReadOnlyList<string> PopularPackages => PipManager.PopularPackages;
+
     protected override bool CheckPrereq() => PipManager.IsPipInstalled();
+
     protected override Task InstallPrereqAsync(CancellationToken ct) => PipManager.InstallPythonAsync(ct);
 
     protected override ColumnHeader[] BuildListColumns() =>
-    [
-        new ColumnHeader { Text = "Package", Width = 220 },
-        new ColumnHeader { Text = "Version", Width = 140 },
-        new ColumnHeader { Text = "Status", Width = 140 },
-    ];
+        [
+            new ColumnHeader { Text = "Package", Width = 220 },
+            new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Status", Width = 140 },
+        ];
 
     protected override Control? BuildScopePanel()
     {
@@ -36,7 +40,13 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             BackColor = AppTheme.Surface,
             Padding = new Padding(8, 4, 8, 4),
         };
-        var lbl = new Label { Text = "Scope:", AutoSize = true, Location = new Point(8, 8), ForeColor = AppTheme.Fg };
+        var lbl = new Label
+        {
+            Text = "Scope:",
+            AutoSize = true,
+            Location = new Point(8, 8),
+            ForeColor = AppTheme.Fg,
+        };
         _cmbScope.DropDownStyle = ComboBoxStyle.DropDownList;
         _cmbScope.Items.AddRange(["All packages", "User-level only"]);
         _cmbScope.SelectedIndex = 0;
@@ -104,12 +114,9 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
         }
     }
 
-    protected override Task InstallCoreAsync(string name, CancellationToken ct) =>
-        PipManager.InstallAsync(name, ct);
+    protected override Task InstallCoreAsync(string name, CancellationToken ct) => PipManager.InstallAsync(name, ct);
 
-    protected override Task RemoveCoreAsync(string name, CancellationToken ct) =>
-        PipManager.UninstallAsync(name, ct);
+    protected override Task RemoveCoreAsync(string name, CancellationToken ct) => PipManager.UninstallAsync(name, ct);
 
-    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) =>
-        PipManager.UpgradeAsync(name, ct);
+    protected override Task UpgradeCoreAsync(string name, CancellationToken ct) => PipManager.UpgradeAsync(name, ct);
 }
