@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Plugins/PackManager.cs
+// RegiLattice.Core — Plugins/PackManager.cs
 // Manages installation, removal, listing, and updating of Tweak Packs.
 
 using System.Net.Http;

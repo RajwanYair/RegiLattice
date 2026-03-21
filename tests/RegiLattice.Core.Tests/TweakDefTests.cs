@@ -1,4 +1,4 @@
-﻿using RegiLattice.Core;
+using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using RegiLattice.Core.Registry;
 using Xunit;
@@ -248,7 +248,13 @@ public sealed class ExpectedResultTests
     [Fact]
     public void ExpectedResult_DefaultsToEmpty()
     {
-        var td = new TweakDef { Id = "test-default", Label = "Test", Category = "Test", RegistryKeys = [@"HKCU\Test"] };
+        var td = new TweakDef
+        {
+            Id = "test-default",
+            Label = "Test",
+            Category = "Test",
+            RegistryKeys = [@"HKCU\Test"],
+        };
         Assert.Equal("", td.ExpectedResult);
     }
 

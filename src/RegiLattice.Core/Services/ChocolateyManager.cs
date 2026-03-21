@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/ChocolateyManager.cs
+// RegiLattice.Core — Services/ChocolateyManager.cs
 // Chocolatey package manager wrapper.
 
 using System.Text.RegularExpressions;

@@ -45,7 +45,6 @@ function Write-Info([string]$text) { Write-Host "     $text" -ForegroundColor Da
 $Root = $PSScriptRoot ? (Split-Path $PSScriptRoot -Parent) : (Get-Location).Path
 $TweaksDir = Join-Path $Root 'src\RegiLattice.Core\Tweaks'
 $InstructionsDir = Join-Path $Root '.github\instructions'
-$SkillsDir = Join-Path $Root '.github\skills'
 
 if (-not (Test-Path $TweaksDir)) {
     Write-Error "Tweaks directory not found: $TweaksDir`nRun this script from the repo root."
@@ -66,8 +65,8 @@ $allIds = @()
 
 foreach ($file in $tweakFiles) {
     $content = Get-Content $file.FullName -Raw
-    $matches = [regex]::Matches($content, 'Id\s*=\s*"([^"]+)"')
-    foreach ($m in $matches) {
+    $found = [regex]::Matches($content, 'Id\s*=\s*"([^"]+)"')
+    foreach ($m in $found) {
         $allIds += [PSCustomObject]@{ Id = $m.Groups[1].Value; File = $file.Name }
     }
 }
@@ -143,8 +142,8 @@ $allLabels = @()
 
 foreach ($file in $tweakFiles) {
     $content = Get-Content $file.FullName -Raw
-    $matches = [regex]::Matches($content, 'Label\s*=\s*"([^"]+)"')
-    foreach ($m in $matches) {
+    $found = [regex]::Matches($content, 'Label\s*=\s*"([^"]+)"')
+    foreach ($m in $found) {
         $allLabels += [PSCustomObject]@{ Label = $m.Groups[1].Value; File = $file.Name }
     }
 }

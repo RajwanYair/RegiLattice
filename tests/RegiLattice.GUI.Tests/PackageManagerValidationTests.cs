@@ -1,4 +1,4 @@
-﻿using RegiLattice.GUI.PackageManagers;
+using RegiLattice.GUI.PackageManagers;
 using Xunit;
 
 namespace RegiLattice.GUI.Tests;
@@ -186,8 +186,7 @@ public sealed class PackageManagerValidationTests
     [InlineData("7zip")]
     [InlineData("posh-git")]
     [InlineData("My.Package_2")]
-    public void PackageNameValidator_Standard_Valid(string name) =>
-        Assert.Equal(name, PackageNameValidator.Validate(name, "test"));
+    public void PackageNameValidator_Standard_Valid(string name) => Assert.Equal(name, PackageNameValidator.Validate(name, "test"));
 
     [Theory]
     [InlineData("")]

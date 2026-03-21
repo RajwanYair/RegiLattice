@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/PipManager.cs
+// RegiLattice.Core — Services/PipManager.cs
 // pip (Python) package management wrapper.
 
 using System.Text.Json;

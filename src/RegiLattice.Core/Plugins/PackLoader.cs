@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Plugins/PackLoader.cs
+// RegiLattice.Core — Plugins/PackLoader.cs
 // Deserialises pack.json files into TweakDef arrays with validation.
 
 using System.Security.Cryptography;

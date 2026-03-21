@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -507,9 +507,18 @@ internal static class Ms365Copilot
                 "Disables automatic Office 365 Click-to-Run updates via Group Policy. Allows IT-controlled update schedules. Note: disabling updates is a security risk; use only in managed environments. Default: auto-update enabled.",
             Tags = ["m365", "office", "update", "gpo"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\officeupdate", "enableautomaticupdates", 0),
+            ],
         },
         new TweakDef
         {

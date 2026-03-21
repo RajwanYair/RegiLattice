@@ -1,4 +1,4 @@
-﻿// RegiLattice.GUI — Forms/ChocolateyManagerDialog.cs
+// RegiLattice.GUI — Forms/ChocolateyManagerDialog.cs
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;

@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.GUI.PackageManagers;
+namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>
 /// Runs Windows system health and maintenance commands (DISM, SFC, disk cleanup, etc.).

@@ -1,4 +1,4 @@
-﻿// RegiLattice.GUI — Forms/WinGetManagerDialog.cs
+// RegiLattice.GUI — Forms/WinGetManagerDialog.cs
 using RegiLattice.GUI.PackageManagers;
 
 namespace RegiLattice.GUI.Forms;

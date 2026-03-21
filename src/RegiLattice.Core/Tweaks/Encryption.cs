@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -731,7 +731,6 @@ internal static class Encryption
                 ),
             ],
         },
-
         // ── Sprint 18 — 10 new Encryption tweaks ──────────────────────────
         new TweakDef
         {
@@ -743,9 +742,18 @@ internal static class Encryption
             Description = "Disables the insecure DES cipher in SChannel. Prevents use of weak 56-bit encryption. Default: enabled.",
             Tags = ["encryption", "des", "cipher", "weak", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -757,9 +765,18 @@ internal static class Encryption
             Description = "Requires strong cryptographic key usage for all SChannel connections. Default: not enforced.",
             Tags = ["encryption", "schannel", "strong-key", "hardening"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection", 2)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ForceStrongKeyProtection", 2),
+            ],
         },
         new TweakDef
         {
@@ -773,7 +790,10 @@ internal static class Encryption
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ServerCacheTime", 3600)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ServerCacheTime")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ServerCacheTime", 3600)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "ServerCacheTime", 3600),
+            ],
         },
         new TweakDef
         {
@@ -782,12 +802,22 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables weak export-grade 40-bit and 56-bit RC2/RC4 cipher suites. Prevents FREAK/Logjam-style attacks. Default: enabled.",
+            Description =
+                "Disables weak export-grade 40-bit and 56-bit RC2/RC4 cipher suites. Prevents FREAK/Logjam-style attacks. Default: enabled.",
             Tags = ["encryption", "export", "cipher", "freak", "logjam", "weak"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -798,10 +828,33 @@ internal static class Encryption
             CorpSafe = true,
             Description = "Enables OCSP stapling to improve TLS certificate revocation checking performance. Default: depends on server.",
             Tags = ["encryption", "ocsp", "tls", "certificate", "revocation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config", "CryptnetCachedOcspSwitchToCrlCount", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config", "CryptnetCachedOcspSwitchToCrlCount")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config", "CryptnetCachedOcspSwitchToCrlCount", 0)],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config",
+                    "CryptnetCachedOcspSwitchToCrlCount",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config",
+                    "CryptnetCachedOcspSwitchToCrlCount"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\OID\EncodingType 0\CertDllCreateCertificateChainEngine\Config",
+                    "CryptnetCachedOcspSwitchToCrlCount",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -810,12 +863,16 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables MD5 hash algorithm for TLS signature verification. MD5 is cryptographically broken. Default: may be enabled for compatibility.",
+            Description =
+                "Disables MD5 hash algorithm for TLS signature verification. MD5 is cryptographically broken. Default: may be enabled for compatibility.",
             Tags = ["encryption", "md5", "tls", "hash", "broken", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -824,7 +881,8 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enforces strict certificate padding verification in WinVerifyTrust. Prevents CVE-2013-3900 binary planting attacks. Default: not enforced.",
+            Description =
+                "Enforces strict certificate padding verification in WinVerifyTrust. Prevents CVE-2013-3900 binary planting attacks. Default: not enforced.",
             Tags = ["encryption", "certificate", "padding", "winverifytrust", "cve"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography\Wintrust\Config"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography\Wintrust\Config", "EnableCertPaddingCheck", 1)],
@@ -838,12 +896,22 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables legacy TLS renegotiation to prevent man-in-the-middle prefix injection attacks (CVE-2009-3555). Default: allowed.",
+            Description =
+                "Disables legacy TLS renegotiation to prevent man-in-the-middle prefix injection attacks (CVE-2009-3555). Default: allowed.",
             Tags = ["encryption", "tls", "renegotiation", "mitm", "cve"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "AllowInsecureRenegoClients", 0),
+            ],
         },
         new TweakDef
         {
@@ -852,12 +920,22 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables the TLS Extended Master Secret extension (RFC 7627). Strengthens session key derivation. Default: may be disabled.",
+            Description =
+                "Enables the TLS Extended Master Secret extension (RFC 7627). Strengthens session key derivation. Default: may be disabled.",
             Tags = ["encryption", "tls", "master-secret", "rfc7627", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL", "DisableExtendedMasterSecret", 0),
+            ],
         },
         new TweakDef
         {
@@ -866,12 +944,33 @@ internal static class Encryption
             Category = "Encryption",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the 3DES/Triple DES cipher suite. 3DES is vulnerable to SWEET32 birthday attacks. Default: enabled for compatibility.",
+            Description =
+                "Disables the 3DES/Triple DES cipher suite. 3DES is vulnerable to SWEET32 birthday attacks. Default: enabled for compatibility.",
             Tags = ["encryption", "3des", "cipher", "sweet32", "weak"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -881,9 +980,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls10", "schannel", "weak"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -893,9 +1012,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls10", "schannel", "server", "weak"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -905,9 +1044,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls11", "schannel", "weak"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -917,9 +1076,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls11", "schannel", "server", "weak"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -929,9 +1108,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "ssl", "ssl20", "schannel", "weak", "legacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -941,9 +1140,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "ssl", "ssl20", "schannel", "server", "weak"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -953,9 +1172,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls10", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "DisabledByDefault", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "DisabledByDefault")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "DisabledByDefault", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "DisabledByDefault"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -965,9 +1204,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls11", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "DisabledByDefault", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "DisabledByDefault")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "DisabledByDefault", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "DisabledByDefault"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -977,9 +1236,18 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "rc2", "cipher", "weak", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 128/128", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -989,9 +1257,18 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "rc2", "cipher", "weak", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 56/128", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -1001,9 +1278,18 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "rc2", "cipher", "weak", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC2 40/128", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -1015,7 +1301,10 @@ internal static class Encryption
             Tags = ["encryption", "md4", "hash", "weak", "schannel"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD4", "Enabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD4", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD4", "Enabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD4", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -1027,7 +1316,10 @@ internal static class Encryption
             Tags = ["encryption", "md2", "hash", "weak", "schannel"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD2", "Enabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD2", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD2", "Enabled", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD2", "Enabled", 0),
+            ],
         },
         new TweakDef
         {
@@ -1037,9 +1329,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "pct", "legacy", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client", "Enabled", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\PCT 1.0\Client",
+                    "Enabled",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1049,9 +1361,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls12", "schannel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client", "DisabledByDefault", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client", "DisabledByDefault")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client", "DisabledByDefault", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client",
+                    "DisabledByDefault",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client",
+                    "DisabledByDefault"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client",
+                    "DisabledByDefault",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1061,9 +1393,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls12", "schannel", "server"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server", "DisabledByDefault", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server", "DisabledByDefault")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server", "DisabledByDefault", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server",
+                    "DisabledByDefault",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server",
+                    "DisabledByDefault"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server",
+                    "DisabledByDefault",
+                    0
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1073,9 +1425,29 @@ internal static class Encryption
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["encryption", "tls", "tls10", "schannel", "server"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "DisabledByDefault", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "DisabledByDefault")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server", "DisabledByDefault", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "DisabledByDefault"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server",
+                    "DisabledByDefault",
+                    1
+                ),
+            ],
         },
     ];
 }

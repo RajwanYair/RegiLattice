@@ -1,9 +1,8 @@
-﻿namespace RegiLattice.GUI.PackageManagers;
+namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps scoop CLI operations with input validation.</summary>
 internal static class ScoopManager
 {
-
     internal static bool IsScoopInstalled()
     {
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");

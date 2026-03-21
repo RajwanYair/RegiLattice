@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/SystemMonitor.cs
+// RegiLattice.Core — Services/SystemMonitor.cs
 // Live system monitoring: CPU usage, memory usage, uptime.
 
 using System.Runtime.InteropServices;

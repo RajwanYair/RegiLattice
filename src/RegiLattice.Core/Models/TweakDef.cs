@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Models/TweakDef.cs
+// RegiLattice.Core — Models/TweakDef.cs
 // C# tweak definition model.
 
 namespace RegiLattice.Core.Models;

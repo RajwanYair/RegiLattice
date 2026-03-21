@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -442,7 +442,6 @@ internal static class Hardening
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
         },
-
         // ── Sprint 18 — 10 new Hardening tweaks ───────────────────────────
         new TweakDef
         {
@@ -451,7 +450,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Disables Web Proxy Auto-Discovery Protocol service. WPAD can be exploited for MITM attacks on untrusted networks. Default: enabled.",
+            Description =
+                "Disables Web Proxy Auto-Discovery Protocol service. WPAD can be exploited for MITM attacks on untrusted networks. Default: enabled.",
             Tags = ["hardening", "wpad", "proxy", "mitm", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
@@ -465,7 +465,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets LAN Manager authentication level to 'Send NTLMv2 response only. Refuse LM & NTLM'. Prevents weak hash capture. Default: negotiate.",
+            Description =
+                "Sets LAN Manager authentication level to 'Send NTLMv2 response only. Refuse LM & NTLM'. Prevents weak hash capture. Default: negotiate.",
             Tags = ["hardening", "ntlm", "lanman", "authentication", "hash"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
@@ -496,9 +497,18 @@ internal static class Hardening
             Description = "Enables Structured Exception Handler Overwrite Protection. Prevents SEH-based buffer overflow exploits. Default: varies.",
             Tags = ["hardening", "sehop", "exploit", "buffer-overflow", "mitigation"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0),
+            ],
         },
         new TweakDef
         {
@@ -507,7 +517,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Forces all images to be randomised regardless of /DYNAMICBASE flag. Hardens against ROP/JOP attacks. Default: opt-in only.",
+            Description =
+                "Forces all images to be randomised regardless of /DYNAMICBASE flag. Hardens against ROP/JOP attacks. Default: opt-in only.",
             Tags = ["hardening", "aslr", "mitigation", "exploit", "memory"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationOptions", 256)],
@@ -535,7 +546,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Ensures Control Flow Guard is enabled system-wide. CFG prevents exploitation of indirect call targets. Default: on in modern Windows.",
+            Description =
+                "Ensures Control Flow Guard is enabled system-wide. CFG prevents exploitation of indirect call targets. Default: on in modern Windows.",
             Tags = ["hardening", "cfg", "control-flow", "mitigation", "exploit"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "EnableCfg", 1)],
@@ -549,12 +561,16 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables AutoPlay/AutoRun on all drive types including USB. Prevents malware auto-execution from removable media. Default: enabled for some drives.",
+            Description =
+                "Disables AutoPlay/AutoRun on all drive types including USB. Prevents malware auto-execution from removable media. Default: enabled for some drives.",
             Tags = ["hardening", "autoplay", "autorun", "usb", "malware"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
+            ],
         },
         new TweakDef
         {
@@ -563,12 +579,19 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Restricts anonymous access to named pipes. Reduces lateral movement and IPC exploitation risk. Default: some pipes accessible.",
+            Description =
+                "Restricts anonymous access to named pipes. Reduces lateral movement and IPC exploitation risk. Default: some pipes accessible.",
             Tags = ["hardening", "named-pipes", "anonymous", "lateral-movement", "ipc"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1),
+            ],
         },
         new TweakDef
         {
@@ -577,7 +600,8 @@ internal static class Hardening
             Category = "Hardening",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Blocks outgoing NTLM authentication to remote servers. Forces Kerberos or modern auth. Prevents credential relay. Default: allow all.",
+            Description =
+                "Blocks outgoing NTLM authentication to remote servers. Forces Kerberos or modern auth. Prevents credential relay. Default: allow all.",
             Tags = ["hardening", "ntlm", "kerberos", "credential-relay", "authentication"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "RestrictSendingNTLMTraffic", 2)],

@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Models/ProfileDef.cs
+// RegiLattice.Core — Models/ProfileDef.cs
 // Profile definitions matching Python's _PROFILES dict.
 
 namespace RegiLattice.Core.Models;

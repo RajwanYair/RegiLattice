@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -820,7 +820,6 @@ internal static class Firewall
                 ),
             ],
         },
-
         // ── Sprint 18 — 10 new Firewall tweaks ────────────────────────────
         new TweakDef
         {
@@ -829,12 +828,33 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents the firewall from responding to multicast and broadcast traffic on all profiles. Reduces network visibility. Default: respond.",
+            Description =
+                "Prevents the firewall from responding to multicast and broadcast traffic on all profiles. Reduces network visibility. Default: respond.",
             Tags = ["firewall", "multicast", "broadcast", "stealth", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableUnicastResponsesToMulticastBroadcast", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableUnicastResponsesToMulticastBroadcast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableUnicastResponsesToMulticastBroadcast", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableUnicastResponsesToMulticastBroadcast",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableUnicastResponsesToMulticastBroadcast"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableUnicastResponsesToMulticastBroadcast",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -846,9 +866,29 @@ internal static class Firewall
             Description = "Enables dropped packet and successful connection logging for the domain firewall profile. Default: logging off.",
             Tags = ["firewall", "logging", "domain", "audit", "monitoring"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging", "LogDroppedPackets", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging", "LogDroppedPackets")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging", "LogDroppedPackets", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
+                    "LogDroppedPackets",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
+                    "LogDroppedPackets"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
+                    "LogDroppedPackets",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -857,12 +897,34 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets default outbound action to block on the public firewall profile. Only explicitly allowed apps can send traffic. Default: allow.",
+            Description =
+                "Sets default outbound action to block on the public firewall profile. Only explicitly allowed apps can send traffic. Default: allow.",
             Tags = ["firewall", "outbound", "public", "block", "restrictive"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile", "DefaultOutboundAction", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile", "DefaultOutboundAction", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile", "DefaultOutboundAction", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
+                    "DefaultOutboundAction",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
+                    "DefaultOutboundAction",
+                    0
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
+                    "DefaultOutboundAction",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -874,9 +936,29 @@ internal static class Firewall
             Description = "Enables dropped packet logging for the private (home) firewall profile. Default: logging off.",
             Tags = ["firewall", "logging", "private", "audit", "home"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogDroppedPackets", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogDroppedPackets")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogDroppedPackets", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogDroppedPackets",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogDroppedPackets"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogDroppedPackets",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -885,12 +967,33 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Blocks inbound NetBIOS name service (UDP 137-138) via firewall policy. Reduces SMB relay and NBNS poisoning risk. Default: allowed.",
+            Description =
+                "Blocks inbound NetBIOS name service (UDP 137-138) via firewall policy. Reduces SMB relay and NBNS poisoning risk. Default: allowed.",
             Tags = ["firewall", "netbios", "inbound", "smb", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockNetBIOS-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=17|LPort=137-138|Name=RegiLattice Block NetBIOS Inbound|")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockNetBIOS-In")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockNetBIOS-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=17|LPort=137-138|Name=RegiLattice Block NetBIOS Inbound|")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockNetBIOS-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=17|LPort=137-138|Name=RegiLattice Block NetBIOS Inbound|"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockNetBIOS-In"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockNetBIOS-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=17|LPort=137-138|Name=RegiLattice Block NetBIOS Inbound|"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -899,12 +1002,33 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks inbound SMB (TCP 445) on the public firewall profile. Prevents remote file sharing exploits on untrusted networks. Default: allowed.",
+            Description =
+                "Blocks inbound SMB (TCP 445) on the public firewall profile. Prevents remote file sharing exploits on untrusted networks. Default: allowed.",
             Tags = ["firewall", "smb", "inbound", "public", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockSMB-Public-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=445|Profile=Public|Name=RegiLattice Block SMB Public Inbound|")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockSMB-Public-In")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockSMB-Public-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=445|Profile=Public|Name=RegiLattice Block SMB Public Inbound|")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockSMB-Public-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=445|Profile=Public|Name=RegiLattice Block SMB Public Inbound|"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockSMB-Public-In"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockSMB-Public-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=445|Profile=Public|Name=RegiLattice Block SMB Public Inbound|"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -916,9 +1040,29 @@ internal static class Firewall
             Description = "Suppresses Windows Firewall notification pop-ups when a program is blocked. Default: notifications shown.",
             Tags = ["firewall", "notifications", "popup", "quiet", "ux"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableNotifications", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile", "DisableNotifications", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableNotifications",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableNotifications"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
+                    "DisableNotifications",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -930,9 +1074,30 @@ internal static class Firewall
             Description = "Increases the maximum firewall log file size from 4 MB (default) to 32 MB for better audit trail retention.",
             Tags = ["firewall", "logging", "log-size", "audit", "retention"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogFileMaxSize", 32768)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogFileMaxSize", 4096)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging", "LogFileMaxSize", 32768)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogFileMaxSize",
+                    32768
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogFileMaxSize",
+                    4096
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
+                    "LogFileMaxSize",
+                    32768
+                ),
+            ],
         },
         new TweakDef
         {
@@ -941,12 +1106,34 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = false,
-            Description = "Sets default outbound action to block on the domain firewall profile. Strict egress filtering for corp environments. Default: allow.",
+            Description =
+                "Sets default outbound action to block on the domain firewall profile. Strict egress filtering for corp environments. Default: allow.",
             Tags = ["firewall", "outbound", "domain", "egress", "restrictive"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile", "DefaultOutboundAction", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile", "DefaultOutboundAction", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile", "DefaultOutboundAction", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
+                    "DefaultOutboundAction",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
+                    "DefaultOutboundAction",
+                    0
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
+                    "DefaultOutboundAction",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -955,12 +1142,33 @@ internal static class Firewall
             Category = "Firewall",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks inbound RPC (TCP 135) on the public firewall profile. Prevents DCOM/RPC exploits on untrusted networks. Default: allowed.",
+            Description =
+                "Blocks inbound RPC (TCP 135) on the public firewall profile. Prevents DCOM/RPC exploits on untrusted networks. Default: allowed.",
             Tags = ["firewall", "rpc", "dcom", "inbound", "public", "security"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockRPC-Public-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=135|Profile=Public|Name=RegiLattice Block RPC Public Inbound|")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockRPC-Public-In")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules", "RegiLattice-BlockRPC-Public-In", "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=135|Profile=Public|Name=RegiLattice Block RPC Public Inbound|")],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockRPC-Public-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=135|Profile=Public|Name=RegiLattice Block RPC Public Inbound|"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockRPC-Public-In"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules",
+                    "RegiLattice-BlockRPC-Public-In",
+                    "v2.30|Action=Block|Active=TRUE|Dir=In|Protocol=6|LPort=135|Profile=Public|Name=RegiLattice Block RPC Public Inbound|"
+                ),
+            ],
         },
         new TweakDef
         {
@@ -972,7 +1180,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "domain", "policy-merge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalPolicyMerge", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalPolicyMerge")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalPolicyMerge", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalPolicyMerge", 0),
+            ],
         },
         new TweakDef
         {
@@ -983,8 +1194,14 @@ internal static class Firewall
             CorpSafe = true,
             Tags = ["firewall", "gpo", "private", "policy-merge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "AllowLocalPolicyMerge", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "AllowLocalPolicyMerge")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "AllowLocalPolicyMerge", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "AllowLocalPolicyMerge"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "AllowLocalPolicyMerge", 0),
+            ],
         },
         new TweakDef
         {
@@ -996,7 +1213,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "public", "policy-merge"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalPolicyMerge", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalPolicyMerge")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalPolicyMerge", 0)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalPolicyMerge", 0),
+            ],
         },
         new TweakDef
         {
@@ -1008,7 +1228,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "inbound", "domain"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "DefaultInboundAction", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "DefaultInboundAction")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "DefaultInboundAction", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "DefaultInboundAction", 1),
+            ],
         },
         new TweakDef
         {
@@ -1020,7 +1243,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "inbound", "private"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultInboundAction", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultInboundAction")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultInboundAction", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultInboundAction", 1),
+            ],
         },
         new TweakDef
         {
@@ -1030,9 +1256,15 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "domain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "LogFileSize", 32767)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "LogFileSize", 32767),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "LogFileSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "LogFileSize", 32767)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "LogFileSize", 32767),
+            ],
         },
         new TweakDef
         {
@@ -1042,9 +1274,15 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "private"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "LogFileSize", 32767)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "LogFileSize", 32767),
+            ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "LogFileSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "LogFileSize", 32767)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "LogFileSize", 32767),
+            ],
         },
         new TweakDef
         {
@@ -1054,9 +1292,22 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "dropped", "domain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogDroppedPackets", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogDroppedPackets")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogDroppedPackets", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogDroppedPackets", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogDroppedPackets"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging",
+                    "EnableLogDroppedPackets",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1066,9 +1317,29 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "dropped", "private"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "EnableLogDroppedPackets", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "EnableLogDroppedPackets")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging", "EnableLogDroppedPackets", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging",
+                    "EnableLogDroppedPackets",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging",
+                    "EnableLogDroppedPackets"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging",
+                    "EnableLogDroppedPackets",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1078,9 +1349,29 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "success", "domain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogSuccessfulConnections", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogSuccessfulConnections")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging", "EnableLogSuccessfulConnections", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging",
+                    "EnableLogSuccessfulConnections",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging",
+                    "EnableLogSuccessfulConnections"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging",
+                    "EnableLogSuccessfulConnections",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1090,9 +1381,29 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "logging", "success", "public"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging", "EnableLogSuccessfulConnections", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging", "EnableLogSuccessfulConnections")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging", "EnableLogSuccessfulConnections", 1)],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging",
+                    "EnableLogSuccessfulConnections",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging",
+                    "EnableLogSuccessfulConnections"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging",
+                    "EnableLogSuccessfulConnections",
+                    1
+                ),
+            ],
         },
         new TweakDef
         {
@@ -1103,8 +1414,14 @@ internal static class Firewall
             CorpSafe = false,
             Tags = ["firewall", "gpo", "outbound", "private"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultOutboundAction", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultOutboundAction")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultOutboundAction", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultOutboundAction"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DefaultOutboundAction", 1),
+            ],
         },
         new TweakDef
         {
@@ -1116,7 +1433,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "exceptions", "public"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "DoNotAllowExceptions", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "DoNotAllowExceptions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "DoNotAllowExceptions", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "DoNotAllowExceptions", 1),
+            ],
         },
         new TweakDef
         {
@@ -1128,7 +1448,10 @@ internal static class Firewall
             Tags = ["firewall", "gpo", "exceptions", "private"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DoNotAllowExceptions", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DoNotAllowExceptions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DoNotAllowExceptions", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile", "DoNotAllowExceptions", 1),
+            ],
         },
         new TweakDef
         {
@@ -1138,9 +1461,18 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "ipsec", "domain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile", "AllowLocalIPsecPolicyMerge", 0),
+            ],
         },
         new TweakDef
         {
@@ -1150,9 +1482,18 @@ internal static class Firewall
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["firewall", "gpo", "ipsec", "public"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge", 0)],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile", "AllowLocalIPsecPolicyMerge", 0),
+            ],
         },
         new TweakDef
         {

@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — Services/Locale.cs
+// RegiLattice.Core — Services/Locale.cs
 // i18n string table — replaces Python locale.py.
 
 namespace RegiLattice.Core;

@@ -1,4 +1,4 @@
-﻿using RegiLattice.Core;
+using RegiLattice.Core;
 using RegiLattice.Core.Services;
 using Xunit;
 

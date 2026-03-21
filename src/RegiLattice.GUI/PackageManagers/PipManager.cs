@@ -1,11 +1,10 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace RegiLattice.GUI.PackageManagers;
 
 /// <summary>Wraps pip CLI operations with input validation.</summary>
 internal static class PipManager
 {
-
     /// <summary>Finds python executable (python, python3, py).</summary>
     internal static string? FindPython()
     {

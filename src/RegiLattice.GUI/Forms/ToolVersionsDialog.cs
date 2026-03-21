@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using RegiLattice.Core;
 using RegiLattice.GUI.PackageManagers;
 

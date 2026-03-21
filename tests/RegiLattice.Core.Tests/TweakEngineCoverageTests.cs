@@ -1,4 +1,4 @@
-﻿// Sprint 23 — Coverage expansion for TweakEngine result branches, IsApplicableOnHardware,
+// Sprint 23 — Coverage expansion for TweakEngine result branches, IsApplicableOnHardware,
 // Update(), ApplyBatch/RemoveBatch, Filter(query:), DetectStatus error path, ExportJson,
 // GetScope, ResolveDependencies, Dependents, and Freeze post-registration paths.
 
@@ -63,7 +63,10 @@ public sealed class ApplyResultBranchTests
             Label = "Action",
             Category = "Test",
             CorpSafe = true,
-            ApplyAction = _ => { called = true; },
+            ApplyAction = _ =>
+            {
+                called = true;
+            },
         };
         engine.Register([td]);
         var result = engine.Apply(td, forceCorp: true);
@@ -108,7 +111,10 @@ public sealed class RemoveResultBranchTests
             Category = "Test",
             CorpSafe = true,
             ApplyAction = _ => { },
-            RemoveAction = _ => { called = true; },
+            RemoveAction = _ =>
+            {
+                called = true;
+            },
         };
         engine.Register([td]);
         var result = engine.Remove(td, forceCorp: true);
@@ -190,7 +196,10 @@ public sealed class UpdateBranchTests
             Category = "Test",
             CorpSafe = true,
             ApplyAction = _ => { },
-            UpdateAction = _ => { called = true; },
+            UpdateAction = _ =>
+            {
+                called = true;
+            },
         };
         engine.Register([td]);
         var result = engine.Update(td, forceCorp: true);
@@ -230,7 +239,10 @@ public sealed class UpdateBranchTests
             Category = "Test",
             CorpSafe = false,
             ApplyAction = _ => { },
-            UpdateAction = _ => { called = true; },
+            UpdateAction = _ =>
+            {
+                called = true;
+            },
         };
         engine.Register([td]);
 
@@ -251,9 +263,30 @@ public sealed class BatchOperationTests
         var engine = TestHelpers.CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "bat-a1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a1", "V", 1)] },
-            new TweakDef { Id = "bat-a2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a2", "V", 1)] },
-            new TweakDef { Id = "bat-a3", Label = "C", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a3", "V", 1)] },
+            new TweakDef
+            {
+                Id = "bat-a1",
+                Label = "A",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "bat-a2",
+                Label = "B",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a2", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "bat-a3",
+                Label = "C",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-a3", "V", 1)],
+            },
         };
         engine.Register(tweaks);
         var results = engine.ApplyBatch(tweaks, forceCorp: true, parallel: false);
@@ -265,14 +298,17 @@ public sealed class BatchOperationTests
     public void ApplyBatch_Parallel_ProcessesAll()
     {
         var engine = TestHelpers.CreateEngine();
-        var tweaks = Enumerable.Range(1, 8).Select(i => new TweakDef
-        {
-            Id = $"bat-par-{i}",
-            Label = $"P{i}",
-            Category = "X",
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword($@"HKCU\Software\bat-par-{i}", "V", 1)],
-        }).ToList();
+        var tweaks = Enumerable
+            .Range(1, 8)
+            .Select(i => new TweakDef
+            {
+                Id = $"bat-par-{i}",
+                Label = $"P{i}",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword($@"HKCU\Software\bat-par-{i}", "V", 1)],
+            })
+            .ToList();
         engine.Register(tweaks);
         var results = engine.ApplyBatch(tweaks, forceCorp: true, parallel: true);
         Assert.Equal(8, results.Count);
@@ -285,8 +321,24 @@ public sealed class BatchOperationTests
         var engine = TestHelpers.CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "bat-r1", Label = "A", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-r1", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\bat-r1", "V")] },
-            new TweakDef { Id = "bat-r2", Label = "B", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-r2", "V", 1)], RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\bat-r2", "V")] },
+            new TweakDef
+            {
+                Id = "bat-r1",
+                Label = "A",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-r1", "V", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\bat-r1", "V")],
+            },
+            new TweakDef
+            {
+                Id = "bat-r2",
+                Label = "B",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-r2", "V", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\bat-r2", "V")],
+            },
         };
         engine.Register(tweaks);
         var results = engine.RemoveBatch(tweaks, forceCorp: true, parallel: false);
@@ -298,15 +350,18 @@ public sealed class BatchOperationTests
     public void RemoveBatch_Parallel_ProcessesAll()
     {
         var engine = TestHelpers.CreateEngine();
-        var tweaks = Enumerable.Range(1, 6).Select(i => new TweakDef
-        {
-            Id = $"bat-rpar-{i}",
-            Label = $"R{i}",
-            Category = "X",
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword($@"HKCU\Software\bat-rpar-{i}", "V", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\bat-rpar-{i}", "V")],
-        }).ToList();
+        var tweaks = Enumerable
+            .Range(1, 6)
+            .Select(i => new TweakDef
+            {
+                Id = $"bat-rpar-{i}",
+                Label = $"R{i}",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword($@"HKCU\Software\bat-rpar-{i}", "V", 1)],
+                RemoveOps = [RegOp.DeleteValue($@"HKCU\Software\bat-rpar-{i}", "V")],
+            })
+            .ToList();
         engine.Register(tweaks);
         var results = engine.RemoveBatch(tweaks, forceCorp: true, parallel: true);
         Assert.Equal(6, results.Count);
@@ -319,12 +374,18 @@ public sealed class BatchOperationTests
         var engine = TestHelpers.CreateEngine();
         var tweaks = new[]
         {
-            new TweakDef { Id = "bat-prog1", Label = "P1", Category = "X", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-prog1", "V", 1)] },
+            new TweakDef
+            {
+                Id = "bat-prog1",
+                Label = "P1",
+                Category = "X",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\bat-prog1", "V", 1)],
+            },
         };
         engine.Register(tweaks);
         var calls = new List<(int done, int total, string id, TweakResult r)>();
-        var results = engine.ApplyBatch(tweaks, forceCorp: true,
-            onProgress: (done, total, id, r) => calls.Add((done, total, id, r)));
+        var results = engine.ApplyBatch(tweaks, forceCorp: true, onProgress: (done, total, id, r) => calls.Add((done, total, id, r)));
         Assert.Single(calls);
         Assert.Equal(1, calls[0].done);
         Assert.Equal(1, calls[0].total);
@@ -380,11 +441,7 @@ public sealed class StatusMapSubsetTests
     public void StatusMap_WithIdSubset_ReturnsOnlyRequestedIds()
     {
         var engine = TestHelpers.CreateEngine();
-        engine.Register([
-            TestHelpers.MakeTweak("ssub-1"),
-            TestHelpers.MakeTweak("ssub-2"),
-            TestHelpers.MakeTweak("ssub-3"),
-        ]);
+        engine.Register([TestHelpers.MakeTweak("ssub-1"), TestHelpers.MakeTweak("ssub-2"), TestHelpers.MakeTweak("ssub-3")]);
         var map = engine.StatusMap(parallel: false, ids: ["ssub-1", "ssub-3"]);
         Assert.Equal(2, map.Count);
         Assert.True(map.ContainsKey("ssub-1"));
@@ -396,11 +453,7 @@ public sealed class StatusMapSubsetTests
     public void StatusMap_ParallelWithIds_ReturnsOnlyRequestedIds()
     {
         var engine = TestHelpers.CreateEngine();
-        engine.Register([
-            TestHelpers.MakeTweak("spar-1"),
-            TestHelpers.MakeTweak("spar-2"),
-            TestHelpers.MakeTweak("spar-3"),
-        ]);
+        engine.Register([TestHelpers.MakeTweak("spar-1"), TestHelpers.MakeTweak("spar-2"), TestHelpers.MakeTweak("spar-3")]);
         var map = engine.StatusMap(parallel: true, ids: ["spar-2"]);
         Assert.Single(map);
         Assert.True(map.ContainsKey("spar-2"));
@@ -445,9 +498,27 @@ public sealed class SearchMultiTokenTests
     {
         var engine = TestHelpers.CreateEngine();
         engine.Register([
-            new TweakDef { Id = "mts-perf-1", Label = "Performance Tweak 1", Category = "Performance", ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-perf-1", "V", 1)] },
-            new TweakDef { Id = "mts-perf-2", Label = "Performance Tweak 2", Category = "Performance", ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-perf-2", "V", 1)] },
-            new TweakDef { Id = "mts-other", Label = "Other", Category = "Other", ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-other", "V", 1)] },
+            new TweakDef
+            {
+                Id = "mts-perf-1",
+                Label = "Performance Tweak 1",
+                Category = "Performance",
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-perf-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "mts-perf-2",
+                Label = "Performance Tweak 2",
+                Category = "Performance",
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-perf-2", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "mts-other",
+                Label = "Other",
+                Category = "Other",
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\mts-other", "V", 1)],
+            },
         ]);
         var results = engine.Search("performance");
         Assert.Equal(2, results.Count);
@@ -463,8 +534,24 @@ public sealed class FilterQueryBranchTests
     {
         var engine = TestHelpers.CreateEngine();
         engine.Register([
-            new TweakDef { Id = "fq-disk", Label = "Disk Cleanup", Category = "Performance", Description = "Frees disk space", Tags = ["disk"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-disk", "V", 1)] },
-            new TweakDef { Id = "fq-mem", Label = "Memory Tweak", Category = "Performance", Description = "Reduces memory footprint", Tags = ["memory"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-mem", "V", 1)] },
+            new TweakDef
+            {
+                Id = "fq-disk",
+                Label = "Disk Cleanup",
+                Category = "Performance",
+                Description = "Frees disk space",
+                Tags = ["disk"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-disk", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fq-mem",
+                Label = "Memory Tweak",
+                Category = "Performance",
+                Description = "Reduces memory footprint",
+                Tags = ["memory"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fq-mem", "V", 1)],
+            },
         ]);
         var results = engine.Filter(query: "disk");
         Assert.Single(results);
@@ -485,8 +572,22 @@ public sealed class FilterQueryBranchTests
     {
         var engine = TestHelpers.CreateEngine();
         engine.Register([
-            new TweakDef { Id = "fqc-1", Label = "Alpha Disk", Category = "CatA", Tags = ["disk"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\fqc-1", "V", 1)] },
-            new TweakDef { Id = "fqc-2", Label = "Beta Disk", Category = "CatB", Tags = ["disk"], ApplyOps = [RegOp.SetDword(@"HKCU\Software\fqc-2", "V", 1)] },
+            new TweakDef
+            {
+                Id = "fqc-1",
+                Label = "Alpha Disk",
+                Category = "CatA",
+                Tags = ["disk"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fqc-1", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "fqc-2",
+                Label = "Beta Disk",
+                Category = "CatB",
+                Tags = ["disk"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\fqc-2", "V", 1)],
+            },
         ]);
         // "disk" in both, but filtered by CatA
         var results = engine.Filter(category: "CatA", query: "disk");
@@ -659,10 +760,7 @@ public sealed class ExportJsonTests
     public void ExportJson_WritesValidJson()
     {
         var engine = TestHelpers.CreateEngine();
-        engine.Register([
-            TestHelpers.MakeTweak("ej-1", "Privacy"),
-            TestHelpers.MakeTweak("ej-2", "Performance"),
-        ]);
+        engine.Register([TestHelpers.MakeTweak("ej-1", "Privacy"), TestHelpers.MakeTweak("ej-2", "Performance")]);
         var path = Path.Combine(Path.GetTempPath(), $"rl-export-{Guid.NewGuid():N}.json");
         try
         {
@@ -731,10 +829,7 @@ public sealed class GetScopeTests
             Label = "Both",
             Category = "Test",
             RegistryKeys = [@"HKCU\Software\gs-both", @"HKLM\SOFTWARE\gs-both"],
-            ApplyOps = [
-                RegOp.SetDword(@"HKCU\Software\gs-both", "V", 1),
-                RegOp.SetDword(@"HKLM\SOFTWARE\gs-both", "V", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\gs-both", "V", 1), RegOp.SetDword(@"HKLM\SOFTWARE\gs-both", "V", 1)],
         };
         engine.Register([td]);
         Assert.Equal(TweakScope.Both, engine.GetScope(td));
@@ -844,8 +939,22 @@ public sealed class FreezeBehaviorTests
     {
         var engine = TestHelpers.CreateEngine();
         engine.Register([
-            new TweakDef { Id = "frz-sc-u", Label = "U", Category = "X", RegistryKeys = [@"HKCU\T"], ApplyOps = [RegOp.SetDword(@"HKCU\T", "V", 1)] },
-            new TweakDef { Id = "frz-sc-m", Label = "M", Category = "X", RegistryKeys = [@"HKLM\T"], ApplyOps = [RegOp.SetDword(@"HKLM\T", "V", 1)] },
+            new TweakDef
+            {
+                Id = "frz-sc-u",
+                Label = "U",
+                Category = "X",
+                RegistryKeys = [@"HKCU\T"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\T", "V", 1)],
+            },
+            new TweakDef
+            {
+                Id = "frz-sc-m",
+                Label = "M",
+                Category = "X",
+                RegistryKeys = [@"HKLM\T"],
+                ApplyOps = [RegOp.SetDword(@"HKLM\T", "V", 1)],
+            },
         ]);
         engine.Freeze();
 
@@ -865,7 +974,14 @@ public sealed class TweaksForProfileTests
         var engine = TestHelpers.CreateEngine();
         // business profile has Privacy category
         engine.Register([
-            new TweakDef { Id = "tfp-priv1", Label = "P1", Category = "Privacy", CorpSafe = true, ApplyOps = [RegOp.SetDword(@"HKCU\Software\tfp-priv1", "V", 1)] },
+            new TweakDef
+            {
+                Id = "tfp-priv1",
+                Label = "P1",
+                Category = "Privacy",
+                CorpSafe = true,
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\tfp-priv1", "V", 1)],
+            },
         ]);
         // GetProfile should be case-insensitive
         var tweaks1 = engine.TweaksForProfile("BUSINESS");

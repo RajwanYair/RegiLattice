@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -705,10 +705,7 @@ internal static class Speech
             Description =
                 "Disables voice activation globally for all applications. Prevents apps from listening for wake words in the background. Default: activation permitted per-app.",
             Tags = ["speech", "voice-activation", "privacy", "microphone"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-            ],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
             ApplyOps =
             [
                 RegOp.SetDword(
@@ -849,10 +846,7 @@ internal static class Speech
             Description =
                 "Disables Cortana's voice activation (Hey Cortana) independently of the global voice activation setting. Cortana stops listening for the wake word. Default: voice activation enabled if Cortana installed.",
             Tags = ["speech", "cortana", "voice-activation", "privacy"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy",
-            ],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\Microsoft.Windows.Cortana_cw5n1h2txyewy"],
             ApplyOps =
             [
                 RegOp.SetDword(
