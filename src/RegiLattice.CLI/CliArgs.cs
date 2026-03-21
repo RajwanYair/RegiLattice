@@ -76,4 +76,13 @@ internal sealed class CliArgs
     /// When left empty and --silent is active, results are discarded (exit code only).
     /// </summary>
     public string? LogFile { get; set; }
+
+    // ── Sprint 70 – PowerShell module generation ─────────────────────────
+    /// <summary>
+    /// When true, generates RegiLattice.psd1 / RegiLattice.psm1 in <see cref="PsModuleOutput"/>.
+    /// </summary>
+    public bool GeneratePsModule { get; set; }
+
+    /// <summary>Output directory for the generated PowerShell module files.</summary>
+    public string? PsModuleOutput { get; set; }
 }

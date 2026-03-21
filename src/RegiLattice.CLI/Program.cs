@@ -142,6 +142,8 @@ internal static class Program
             return RunCompliance(a.Compliance);
         if (a.ExportGpo is not null)
             return RunExportGpo(a.ExportGpo);
+        if (a.GeneratePsModule)
+            return RunGeneratePsModule(a.PsModuleOutput);
         if (a.NewPack is not null)
             return RunNewPack(a.NewPack);
         if (a.Manager is not null)
@@ -1726,6 +1728,27 @@ internal static class Program
         }
     }
 
+    // ── PowerShell Module Generation ─────────────────────────────────────
+
+    private static int RunGeneratePsModule(string? outputDir)
+    {
+        outputDir ??= System.IO.Path.Combine(AppContext.BaseDirectory, "PowerShell");
+        var coreAssembly = typeof(TweakEngine).Assembly.Location;
+        Console.WriteLine($"Generating PowerShell module\u2026");
+        try
+        {
+            PowerShellModuleGenerator.Generate(outputDir, coreAssembly);
+            Console.WriteLine(Green($"\u2705  Module generated at: {outputDir}"));
+            Console.WriteLine($"    Import with: Import-Module '{System.IO.Path.Combine(outputDir, "RegiLattice.psd1")}'");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
     // ── Favorites ────────────────────────────────────────────────────────
 
     private static int RunFavorites()
@@ -2098,6 +2121,13 @@ internal static class Program
                 case "--log-file":
                     if (++i < args.Length)
                         p.LogFile = args[i];
+                    break;
+
+                // ── Sprint 70 – PowerShell module generation ─────────────────
+                case "--generate-ps-module":
+                    p.GeneratePsModule = true;
+                    if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
+                        p.PsModuleOutput = args[++i];
                     break;
 
                 default:
