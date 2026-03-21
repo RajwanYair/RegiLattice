@@ -501,6 +501,7 @@ internal sealed class HostsUrlPromptDialog : Form
         Controls.Add(layout);
         AcceptButton = btnOk;
         CancelButton = btnCancel;
+        AppTheme.Apply3D(this);
     }
 }
 
@@ -588,5 +589,6 @@ internal sealed class HostsAddDialog : Form
         Controls.Add(layout);
         AcceptButton = btnOk;
         CancelButton = btnCancel;
+        AppTheme.Apply3D(this);
     }
 }

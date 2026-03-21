@@ -248,6 +248,7 @@ internal sealed class MarketplaceDialog : Form
         Controls.Add(ratingPanel);
         Controls.Add(_lblStatus);
         Controls.Add(lblTitle);
+        AppTheme.Apply3D(this);
         ResumeLayout(true);
     }
 

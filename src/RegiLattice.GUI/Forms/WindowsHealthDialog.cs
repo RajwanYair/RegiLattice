@@ -174,6 +174,7 @@ internal sealed class WindowsHealthDialog : Form
 
         // Order: bottom-up for Dock layout
         Controls.AddRange([_txtLog, ctrlPanel, lblLog, _progressBar, _lstCommands, _lblStatus, adminPanel, lblTitle]);
+        AppTheme.Apply3D(this);
     }
 
     private void PopulateCommands()

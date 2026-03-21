@@ -200,6 +200,7 @@ internal sealed class ColumnFilterPopup : Form
 
         btnPanel.Controls.AddRange([_btnApply, _btnClear, btnCancel]);
         Controls.AddRange([_checkedList, _txtSearch, btnPanel]);
+        AppTheme.Apply3D(this);
 
         Deactivate += (_, _) => Close();
     }

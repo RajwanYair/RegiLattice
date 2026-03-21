@@ -183,6 +183,7 @@ internal sealed class ProfileWizardDialog : Form
         };
 
         Controls.AddRange([header, body]);
+        AppTheme.Apply3D(this);
     }
 
     // ── Question logic ───────────────────────────────────────────────────────

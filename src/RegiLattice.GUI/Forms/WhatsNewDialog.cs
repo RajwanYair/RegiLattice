@@ -93,6 +93,7 @@ internal sealed class WhatsNewDialog : Form
         Controls.Add(lblTitle);
 
         AcceptButton = btnOk;
+        AppTheme.Apply3D(this);
 
         FormClosed += (_, _) =>
         {

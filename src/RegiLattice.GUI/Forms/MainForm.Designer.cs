@@ -193,13 +193,13 @@ partial class MainForm
         _mnuHwTempMon   = new ToolStripMenuItem("Hardware Temperature...") { Image = AppIcons.ThermometerMenuBitmap };
         _mnuNetBandwidth = new ToolStripMenuItem("Network Bandwidth Monitor...") { Image = AppIcons.BandwidthMenuBitmap };
         _mnuMacAddress  = new ToolStripMenuItem("MAC Address Manager...") { Image = AppIcons.MacAddressMenuBitmap };
-        var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status");
-        var mnuSelectAll2 = new ToolStripMenuItem("Select All");
-        var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All");
-        var mnuInvert2 = new ToolStripMenuItem("Invert Selection");
+        var mnuToolsRefresh = new ToolStripMenuItem("Refresh Status") { Image = AppIcons.RefreshMenuBitmap };
+        var mnuSelectAll2 = new ToolStripMenuItem("Select All") { Image = AppIcons.ApplyMenuBitmap };
+        var mnuDeselectAll2 = new ToolStripMenuItem("Deselect All") { Image = AppIcons.RemoveMenuBitmap };
+        var mnuInvert2 = new ToolStripMenuItem("Invert Selection") { Image = AppIcons.InvertSelectionMenuBitmap };
 
         // ── Tools submenus ─────────────────────────────────────────────────
-        var subSysDiag = new ToolStripMenuItem("System &Diagnostics");
+        var subSysDiag = new ToolStripMenuItem("System &Diagnostics") { Image = AppIcons.ToolVersionsMenuBitmap };
         subSysDiag.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuWinHealth,
@@ -212,7 +212,7 @@ partial class MainForm
             _mnuHwTempMon,
         });
 
-        var subSysMgmt = new ToolStripMenuItem("System &Management");
+        var subSysMgmt = new ToolStripMenuItem("System &Management") { Image = AppIcons.ServiceMenuBitmap };
         subSysMgmt.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuStartupMgr,
@@ -224,7 +224,7 @@ partial class MainForm
             _mnuShellExtensions,
         });
 
-        var subPower = new ToolStripMenuItem("&Power && Energy");
+        var subPower = new ToolStripMenuItem("&Power && Energy") { Image = AppIcons.PowerMenuBitmap };
         subPower.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuPowerPlan,
@@ -236,7 +236,7 @@ partial class MainForm
             _mnuBrightness,
         });
 
-        var subPrivSec = new ToolStripMenuItem("&Privacy && Security");
+        var subPrivSec = new ToolStripMenuItem("&Privacy && Security") { Image = AppIcons.PrivacyMenuBitmap };
         subPrivSec.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuPrivacyDash,
@@ -248,7 +248,7 @@ partial class MainForm
             _mnuNotifMgr,
         });
 
-        var subNetwork = new ToolStripMenuItem("&Network");
+        var subNetwork = new ToolStripMenuItem("&Network") { Image = AppIcons.NetworkMenuBitmap };
         subNetwork.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuNetTools,
@@ -268,7 +268,7 @@ partial class MainForm
             _mnuMacAddress,
         });
 
-        var subCleanup = new ToolStripMenuItem("&Cleanup && Performance");
+        var subCleanup = new ToolStripMenuItem("&Cleanup && Performance") { Image = AppIcons.CleanupMenuBitmap };
         subCleanup.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuTempCleaner,
@@ -287,7 +287,7 @@ partial class MainForm
             subNetwork,
             subCleanup,
             new ToolStripSeparator(),
-            _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…"),
+            _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…") { Image = AppIcons.WizardMenuBitmap },
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
@@ -302,8 +302,8 @@ partial class MainForm
             _mnuMarketplace = new ToolStripMenuItem("Tweak Pack Marketplace\u2026", AppIcons.MarketplaceMenuBitmap, (_, _) => OnOpenMarketplace()),
         });
 
-        var mnuToggleLog = new ToolStripMenuItem("Toggle Log Panel");
-        var mnuExpandAll = new ToolStripMenuItem("Expand All Categories");
+        var mnuToggleLog = new ToolStripMenuItem("Toggle Log Panel") { Image = AppIcons.LogMenuBitmap };
+        var mnuExpandAll = new ToolStripMenuItem("Expand All Categories") { Image = AppIcons.ExpandMenuBitmap };
         var mnuView = new ToolStripMenuItem("&View") { Image = AppIcons.ViewMenuBitmap };
         mnuView.DropDownItems.AddRange(new ToolStripItem[] { mnuToggleLog, new ToolStripSeparator(), mnuExpandAll });
 

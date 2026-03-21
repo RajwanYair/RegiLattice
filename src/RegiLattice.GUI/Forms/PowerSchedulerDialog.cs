@@ -492,6 +492,7 @@ internal sealed class PowerSchedulerDialog : BaseDialog
 
             AcceptButton = _ok;
             CancelButton = _cancel;
+            AppTheme.Apply3D(this);
             _ok.Click += (_, _) =>
             {
                 if (string.IsNullOrWhiteSpace(_name.Text))

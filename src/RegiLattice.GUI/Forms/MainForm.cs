@@ -1811,6 +1811,7 @@ public partial class MainForm : Form
         _mnuStartupMgr.Image = AppIcons.StartupMenuBitmap;
         _mnuServiceMgr.Image = AppIcons.ServiceMenuBitmap;
         _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
+        _mnuProfileWizard.Image = AppIcons.WizardMenuBitmap;
     }
 
     private void OnSearchDebounceTick(object? sender, EventArgs e)
