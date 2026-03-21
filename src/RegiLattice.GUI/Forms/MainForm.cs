@@ -2107,8 +2107,42 @@ public partial class MainForm : Form
     }
 
     // ── ListView hover tooltip ─────────────────────────────────────────────
+
+    // Tooltip text for each column header (index-aligned with _listView.Columns).
+    private static readonly string[] ColumnHeaderTooltips =
+    [
+        "Tweak label — click header to sort alphabetically",
+        "Operation kind: Registry · PowerShell · System Cmd · Service · Sched Task · File Config · Group Policy · Package Mgr",
+        "Current state: Applied ✓ · Not Applied ✗ · Unknown ? · Error !",
+        "Registry scope: USER = HKCU (current user only) · MACHINE = HKLM (all users) · BOTH = both hives",
+        "Admin required: Yes = needs elevated privileges · No = can run as standard user",
+        "Corp safe: Yes = safe on managed/domain-joined machines · No = may conflict with Group Policy",
+        "Full description of what the tweak does and the expected outcome",
+    ];
+
     private void OnListViewMouseMove(object? sender, MouseEventArgs e)
     {
+        // Column header zone — show per-column explanation tooltip.
+        int headerHeight =
+            _listView.Items.Count > 0
+                ? _listView.GetItemRect(0).Top
+                : (AppTheme.Regular.Height + 8);
+
+        if (e.Y >= 0 && e.Y < headerHeight)
+        {
+            int colIdx = GetColumnAtX(e.X);
+            string colKey = $"__hdr_{colIdx}";
+            if (colKey == _lastTooltipId)
+                return;
+            _lastTooltipId = colKey;
+            string tip =
+                colIdx >= 0 && colIdx < ColumnHeaderTooltips.Length
+                    ? ColumnHeaderTooltips[colIdx]
+                    : "";
+            _listItemTip.SetToolTip(_listView, tip);
+            return;
+        }
+
         var hit = _listView.HitTest(e.X, e.Y);
         if (hit.Item?.Tag is TweakDef td)
         {
@@ -2124,6 +2158,19 @@ public partial class MainForm : Form
             _lastTooltipId = null;
             _listItemTip.SetToolTip(_listView, string.Empty);
         }
+    }
+
+    /// <summary>Returns the zero-based column index at the given x coordinate, or -1 if past the last column.</summary>
+    private int GetColumnAtX(int x)
+    {
+        int cumX = 0;
+        for (int i = 0; i < _listView.Columns.Count; i++)
+        {
+            cumX += _listView.Columns[i].Width;
+            if (x < cumX)
+                return i;
+        }
+        return -1;
     }
 
     private static string BuildItemTooltip(TweakDef td)

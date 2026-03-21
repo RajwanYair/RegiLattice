@@ -388,12 +388,12 @@ partial class MainForm
         _btnRemove = new ToolStripButton("Remove") { ToolTipText = "Remove selected tweaks (Ctrl+Del)", Image = AppIcons.RemoveMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
         _btnRefresh = new ToolStripButton("Refresh") { ToolTipText = "Reload all tweaks (F5)", Image = AppIcons.RefreshMenuBitmap, DisplayStyle = ToolStripItemDisplayStyle.ImageAndText };
 
-        _filterLabel = new ToolStripLabel("Status:");
+        _filterLabel = new ToolStripLabel("Status:") { ToolTipText = "Filter tweaks by their current applied status" };
         _filterCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter tweaks by status" };
         _filterCombo.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Default", "Pending", "Unknown", "Errors" });
         _filterCombo.SelectedIndex = 0;
 
-        _profileLabel = new ToolStripLabel("Profile:");
+        _profileLabel = new ToolStripLabel("Profile:") { ToolTipText = "Select a profile to highlight relevant tweaks for that use case" };
         _profileCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Select a tweak profile" };
         _profileCombo.Items.AddRange(new object[] { "(None)", "business", "gaming", "privacy", "minimal", "server" });
         _profileCombo.SelectedIndex = 0;
@@ -417,7 +417,7 @@ partial class MainForm
             DisplayStyle = ToolStripItemDisplayStyle.Text,
         };
 
-        _scopeLabel = new ToolStripLabel("Scope:");
+        _scopeLabel = new ToolStripLabel("Scope:") { ToolTipText = "Filter tweaks by registry scope (HKCU vs HKLM)" };
         _scopeCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter by registry scope", Width = 110 };
         _scopeCombo.Items.AddRange(new object[] { "All Scopes", "User (HKCU)", "Machine (HKLM)" });
         _scopeCombo.SelectedIndex = 0;
@@ -442,7 +442,7 @@ partial class MainForm
         };
         _btnUndoLast.Click += async (_, _) => await OnUndoLastAsync();
 
-        _kindLabel = new ToolStripLabel("Kind:");
+        _kindLabel = new ToolStripLabel("Kind:") { ToolTipText = "Filter tweaks by their operation kind (Registry, PowerShell, Service, etc.)" };
         _kindCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter by tweak kind", Width = 130 };
         _kindCombo.Items.AddRange(new object[] { "All Kinds", "Registry", "PowerShell", "System Cmd", "Service", "Sched Task", "File Config", "Group Policy", "Package Mgr" });
         _kindCombo.SelectedIndex = 0;
@@ -622,12 +622,12 @@ partial class MainForm
         _logPanel.Controls.Add(_logBox);
 
         // ── StatusStrip ────────────────────────────────────────────────────
-        _statusLabel = new ToolStripStatusLabel("Ready") { Spring = false, Font = AppTheme.Small };
-        _progressLabel = new ToolStripStatusLabel("") { Spring = true, TextAlign = ContentAlignment.MiddleLeft, Font = AppTheme.Small };
+        _statusLabel = new ToolStripStatusLabel("Ready") { Spring = false, Font = AppTheme.Small, AutoToolTip = true, ToolTipText = "Current operation status" };
+        _progressLabel = new ToolStripStatusLabel("") { Spring = true, TextAlign = ContentAlignment.MiddleLeft, Font = AppTheme.Small, AutoToolTip = true, ToolTipText = "Progress of the current batch operation" };
         _progressBar = new ToolStripProgressBar { Visible = false, Size = new Size(180, 16), Style = ProgressBarStyle.Marquee };
-        _cpuLabel = new ToolStripStatusLabel("CPU: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
-        _memLabel = new ToolStripStatusLabel("RAM: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
-        _netLabel = new ToolStripStatusLabel("Net: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent };
+        _cpuLabel = new ToolStripStatusLabel("CPU: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent, AutoToolTip = true, ToolTipText = "CPU usage — updated every 2 seconds" };
+        _memLabel = new ToolStripStatusLabel("RAM: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent, AutoToolTip = true, ToolTipText = "RAM usage (used / total) — updated every 2 seconds" };
+        _netLabel = new ToolStripStatusLabel("Net: --") { Spring = false, Font = AppTheme.Small, ForeColor = AppTheme.Accent, AutoToolTip = true, ToolTipText = "Network connectivity status — updated every 2 seconds" };
         _statusStrip = new StatusStrip { SizingGrip = false };
         _adminBadge = new ToolStripStatusLabel("🛡 ADMIN")
         {
@@ -638,6 +638,8 @@ partial class MainForm
             Visible = Elevation.IsAdmin(),
             BorderSides = ToolStripStatusLabelBorderSides.All,
             BorderStyle = Border3DStyle.Flat,
+            AutoToolTip = true,
+            ToolTipText = "Running with administrator privileges — all registry operations are available",
         };
         _statusStrip.Items.AddRange(new ToolStripItem[] { _statusLabel, _progressLabel, _progressBar, new ToolStripSeparator(), _cpuLabel, _memLabel, new ToolStripSeparator(), _netLabel, new ToolStripSeparator(), _adminBadge });
         _statusStrip.Dock = DockStyle.Bottom;
