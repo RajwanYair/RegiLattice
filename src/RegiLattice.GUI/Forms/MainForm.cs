@@ -48,6 +48,15 @@ public partial class MainForm : Form
         ReshowDelay = 300,
     };
 
+    // Tooltip that shows full tweak details when hovering over a ListView item.
+    private readonly ToolTip _listItemTip = new()
+    {
+        AutoPopDelay = 9000,
+        InitialDelay = 400,
+        ReshowDelay = 200,
+    };
+    private string? _lastTooltipId;
+
     // Profile schedule timer — checks AppConfig.ProfileSchedules every 60 s.
     private readonly System.Windows.Forms.Timer _profileScheduleTimer = new() { Interval = 60_000 };
 
@@ -2088,6 +2097,55 @@ public partial class MainForm : Form
             e.Handled = true;
             return;
         }
+        if (e.Control && e.KeyCode == Keys.W)
+        {
+            _treeView.CollapseAll();
+            e.Handled = true;
+            return;
+        }
+    }
+
+    // ── ListView hover tooltip ─────────────────────────────────────────────
+    private void OnListViewMouseMove(object? sender, MouseEventArgs e)
+    {
+        var hit = _listView.HitTest(e.X, e.Y);
+        if (hit.Item?.Tag is TweakDef td)
+        {
+            if (td.Id == _lastTooltipId)
+                return;
+            _lastTooltipId = td.Id;
+            _listItemTip.SetToolTip(_listView, BuildItemTooltip(td));
+        }
+        else
+        {
+            if (_lastTooltipId is null)
+                return;
+            _lastTooltipId = null;
+            _listItemTip.SetToolTip(_listView, string.Empty);
+        }
+    }
+
+    private static string BuildItemTooltip(TweakDef td)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.Append('[').Append(td.Category).Append("]  ").AppendLine(td.Label);
+        if (!string.IsNullOrWhiteSpace(td.Description))
+        {
+            string desc = td.Description.Length > 140 ? string.Concat(td.Description.AsSpan(0, 137), "...") : td.Description;
+            sb.AppendLine(desc);
+        }
+        string tagsLine = td.Tags.Count > 0 ? string.Join(", ", td.Tags) : "none";
+        sb.AppendLine($"Tags: {tagsLine}");
+        string scope = td.Scope switch
+        {
+            TweakScope.User => "User",
+            TweakScope.Machine => "Machine",
+            _ => "Both",
+        };
+        sb.Append($"Admin: {(td.NeedsAdmin ? "Yes" : "No")}  |  Scope: {scope}  |  Corp-safe: {(td.CorpSafe ? "Yes" : "No")}");
+        if (!string.IsNullOrWhiteSpace(td.SourceUrl))
+            sb.AppendLine().Append("Source: ").Append(td.SourceUrl);
+        return sb.ToString();
     }
 
     private void OnListViewMouseDoubleClick(object? sender, MouseEventArgs e)

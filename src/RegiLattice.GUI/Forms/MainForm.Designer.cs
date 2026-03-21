@@ -553,7 +553,8 @@ partial class MainForm
 
         // ── ListView event handlers ────────────────────────────────────────
         _listView.MouseDoubleClick += OnListViewMouseDoubleClick;
-        _listView.ItemCheck += OnListViewItemCheck;
+        _listView.MouseMove        += OnListViewMouseMove;
+        _listView.ItemCheck        += OnListViewItemCheck;
 
         // ── SplitContainer ─────────────────────────────────────────────────
         _split = new SplitContainer { Dock = DockStyle.Fill, SplitterDistance = 220 };
