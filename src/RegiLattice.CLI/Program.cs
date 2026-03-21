@@ -1,4 +1,4 @@
-﻿// RegiLattice.CLI — Program.cs
+// RegiLattice.CLI — Program.cs
 // RegiLattice command-line interface.
 // All features: apply, remove, list, status, search, profiles, snapshots, doctor, etc.
 
@@ -144,6 +144,8 @@ internal static class Program
             return RunExportGpo(a.ExportGpo);
         if (a.GeneratePsModule)
             return RunGeneratePsModule(a.PsModuleOutput);
+        if (a.HtmlReport is not null)
+            return RunHtmlReport(a.HtmlReport);
         if (a.NewPack is not null)
             return RunNewPack(a.NewPack);
         if (a.Manager is not null)
@@ -1730,6 +1732,25 @@ internal static class Program
 
     // ── PowerShell Module Generation ─────────────────────────────────────
 
+    // ── HTML report ──────────────────────────────────────────────────────
+
+    private static int RunHtmlReport(string outputPath)
+    {
+        Console.Write("Detecting status\u2026");
+        var smap = _engine.StatusMap(parallel: true);
+        Console.WriteLine(" done.");
+
+        var svc = new HealthScoreService(_engine);
+        var score = svc.Compute(smap);
+
+        var gen = new HtmlReportGenerator(_engine);
+        gen.Generate(outputPath, smap, score);
+
+        Console.WriteLine(Green($"\u2705 HTML report written to {outputPath}"));
+        Console.WriteLine($"   {_engine.TweakCount} tweaks, health score: {score.Overall}% ({score.OverallLabel})");
+        return 0;
+    }
+
     private static int RunGeneratePsModule(string? outputDir)
     {
         outputDir ??= System.IO.Path.Combine(AppContext.BaseDirectory, "PowerShell");
@@ -2121,6 +2142,12 @@ internal static class Program
                 case "--log-file":
                     if (++i < args.Length)
                         p.LogFile = args[i];
+                    break;
+
+                // ── Sprint 72 – HTML report ────────────────────────────────
+                case "--html-report":
+                    if (++i < args.Length)
+                        p.HtmlReport = args[i];
                     break;
 
                 // ── Sprint 70 – PowerShell module generation ─────────────────
