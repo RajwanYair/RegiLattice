@@ -167,6 +167,7 @@ internal sealed class ToolVersionsDialog : Form
         _installGuidePanel.Resize += (_, _) => LayoutGuideRow(_installGuidePanel.ClientSize.Width);
         _installGuidePanel.Controls.AddRange([_lblGuideTitle, _txtGuideCmd, _btnGuideCopy, _btnGuideDocs]);
         Controls.Add(_installGuidePanel);
+        AppTheme.Apply3D(this);
     }
 
     private void BuildContextMenu()

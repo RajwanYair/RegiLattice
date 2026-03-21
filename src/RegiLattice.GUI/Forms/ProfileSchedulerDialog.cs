@@ -308,6 +308,7 @@ internal sealed class AddProfileScheduleDialog : Form
 
         Controls.Add(table);
         Controls.Add(btnRow);
+        AppTheme.Apply3D(this);
     }
 
     private void OnOk(object? sender, EventArgs e)

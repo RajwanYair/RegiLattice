@@ -875,4 +875,123 @@ internal static class AppIcons
         g.FillPolygon(fg, tri);
         g.FillRectangle(fg, cx - 1, 3, 3, s - 14);
     }
+
+    // ── Tools / View submenu icons ────────────────────────────────────────
+
+    internal static Bitmap PowerMenuBitmap => MenuBitmap("menu-power", DrawPowerIcon);
+    internal static Bitmap WizardMenuBitmap => MenuBitmap("menu-wizard", DrawWizardIcon);
+    internal static Bitmap InvertSelectionMenuBitmap => MenuBitmap("menu-invertsel", DrawInvertSelectionIcon);
+    internal static Bitmap LogMenuBitmap => MenuBitmap("menu-log", DrawLogIcon);
+    internal static Bitmap ExpandMenuBitmap => MenuBitmap("menu-expand", DrawExpandIcon);
+
+    /// <summary>Power button icon: navy-to-blue gradient with a power ring and vertical bar glyph.</summary>
+    private static void DrawPowerIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(20, 80, 160),
+            Color.FromArgb(5, 40, 100),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        using var pen = new Pen(Color.FromArgb(80, 200, 255), 1.5f);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+        int cx = s / 2,
+            cy = s / 2,
+            r = s / 2 - 4;
+        // Open power ring (gap at top)
+        g.DrawArc(pen, cx - r, cy - r + 1, r * 2, r * 2, 120, 300);
+        // Vertical bar through gap
+        g.DrawLine(pen, cx, cy - r, cx, cy - 1);
+    }
+
+    /// <summary>Wizard/wand icon: gold-to-amber gradient with a diagonal wand and sparkle tip.</summary>
+    private static void DrawWizardIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 200, 40),
+            Color.FromArgb(200, 120, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var pen = new Pen(Color.White, 1.5f);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+        // Wand handle: diagonal line bottom-left to top-right
+        g.DrawLine(pen, 5, s - 5, s - 5, 4);
+        // Star sparkle at tip (top-right)
+        int tx = s - 5,
+            ty = 4;
+        g.DrawLine(pen, tx - 2, ty, tx + 2, ty);
+        g.DrawLine(pen, tx, ty - 2, tx, ty + 2);
+        g.DrawLine(pen, tx - 1, ty - 1, tx + 1, ty + 1);
+        g.DrawLine(pen, tx + 1, ty - 1, tx - 1, ty + 1);
+    }
+
+    /// <summary>Invert selection icon: teal gradient with a split filled/empty rectangle and swap arrow.</summary>
+    private static void DrawInvertSelectionIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(0, 180, 180),
+            Color.FromArgb(0, 100, 140),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var pen = new Pen(Color.White, 1.5f);
+        using var fill = new SolidBrush(Color.White);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 5);
+        // Left square: filled (selected)
+        g.FillRectangle(fill, 4, 4, 5, 6);
+        // Right square: outline only (unselected → will become selected after invert)
+        g.DrawRectangle(pen, s - 10, 4, 5, 6);
+        // Horizontal swap arrow below
+        int ay = s / 2 + 3;
+        g.DrawLine(pen, 4, ay, s - 5, ay);
+        g.DrawLine(pen, 4, ay, 7, ay - 2);
+        g.DrawLine(pen, 4, ay, 7, ay + 2);
+        g.DrawLine(pen, s - 5, ay, s - 8, ay - 2);
+        g.DrawLine(pen, s - 5, ay, s - 8, ay + 2);
+    }
+
+    /// <summary>Log panel icon: dark-blue gradient with three horizontal list lines.</summary>
+    private static void DrawLogIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(30, 100, 200),
+            Color.FromArgb(10, 50, 130),
+            System.Drawing.Drawing2D.LinearGradientMode.Vertical
+        );
+        using var pen = new Pen(Color.White, 1.2f);
+        using var accentBrush = new SolidBrush(Color.FromArgb(100, 200, 255));
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        // Three horizontal text lines
+        for (int i = 0; i < 4; i++)
+            g.DrawLine(pen, 6, 5 + i * 3, s - 5, 5 + i * 3);
+        // Small cyan bullets at the left of each line
+        for (int i = 0; i < 4; i++)
+            g.FillRectangle(accentBrush, 4, 4 + i * 3, 1, 1);
+    }
+
+    /// <summary>Expand categories icon: amber gradient with outward corner arrows.</summary>
+    private static void DrawExpandIcon(Graphics g, int s)
+    {
+        using var gradient = new System.Drawing.Drawing2D.LinearGradientBrush(
+            new Rectangle(0, 0, s, s),
+            Color.FromArgb(255, 180, 0),
+            Color.FromArgb(200, 100, 0),
+            System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal
+        );
+        using var pen = new Pen(Color.White, 1.5f);
+        AppTheme.FillRoundedRect(g, gradient, new Rectangle(2, 2, s - 4, s - 4), 4);
+        // Four corner arrows pointing outward (expand gesture)
+        int m = 4,
+            d = 3;
+        g.DrawLine(pen, m, m, m + d, m); // top-left → right
+        g.DrawLine(pen, m, m, m, m + d); // top-left → down
+        g.DrawLine(pen, s - m, m, s - m - d, m); // top-right → left
+        g.DrawLine(pen, s - m, m, s - m, m + d); // top-right → down
+        g.DrawLine(pen, m, s - m, m + d, s - m); // bottom-left → right
+        g.DrawLine(pen, m, s - m, m, s - m - d); // bottom-left → up
+        g.DrawLine(pen, s - m, s - m, s - m - d, s - m); // bottom-right → left
+        g.DrawLine(pen, s - m, s - m, s - m, s - m - d); // bottom-right → up
+    }
 }

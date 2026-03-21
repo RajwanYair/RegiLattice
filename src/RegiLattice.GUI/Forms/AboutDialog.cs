@@ -173,5 +173,6 @@ internal sealed class AboutDialog : Form
         AcceptButton = btnOk;
 
         Controls.AddRange([lblTitle, txtInfo, lblHardware, txtHardware, lblShortcuts, txtShortcuts, lnkGitHub, btnOk]);
+        AppTheme.Apply3D(this);
     }
 }

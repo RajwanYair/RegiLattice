@@ -178,6 +178,7 @@ internal sealed class FirstRunWizardDialog : Form
 
         Controls.AddRange([header, footer, pageHost]);
         ShowPage(0);
+        AppTheme.Apply3D(this);
     }
 
     // ── Page builders ────────────────────────────────────────────────────────

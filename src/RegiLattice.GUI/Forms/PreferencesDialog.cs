@@ -343,6 +343,7 @@ internal sealed class PreferencesDialog : Form
         CancelButton = _btnCancel;
 
         ApplyTheme();
+        AppTheme.Apply3D(this);
     }
 
     /// <summary>Applies config changes when user clicks OK. Returns true if applied.</summary>
