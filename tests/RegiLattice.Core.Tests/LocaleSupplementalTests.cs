@@ -143,7 +143,8 @@ public sealed class LocaleSupplementalTests : IDisposable
         }
         finally
         {
-            if (File.Exists(tempFile)) File.Delete(tempFile);
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
         }
     }
 
@@ -161,19 +162,22 @@ public sealed class LocaleSupplementalTests : IDisposable
         string tempFile = Path.GetTempFileName();
         try
         {
-            File.WriteAllLines(tempFile,
-            [
-                "# comment line",
-                "",                       // blank
-                "malformed line",         // no '=' separator
-                "apply_all=VALID_VALUE",
-            ]);
+            File.WriteAllLines(
+                tempFile,
+                [
+                    "# comment line",
+                    "", // blank
+                    "malformed line", // no '=' separator
+                    "apply_all=VALID_VALUE",
+                ]
+            );
             Locale.LoadLocaleFile(tempFile);
             Assert.Equal("VALID_VALUE", Locale.T("apply_all"));
         }
         finally
         {
-            if (File.Exists(tempFile)) File.Delete(tempFile);
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
         }
     }
 

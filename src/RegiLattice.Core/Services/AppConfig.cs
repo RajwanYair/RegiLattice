@@ -213,6 +213,73 @@ public sealed class AppConfig
 
     public static string DefaultConfigPath => Path.Combine(ConfigDir, "config.json");
 
+    /// <summary>
+    /// Validates all config fields and returns a list of human-readable error messages.
+    /// Returns an empty list when configuration is valid.
+    /// </summary>
+    public IReadOnlyList<string> Validate()
+    {
+        var errors = new List<string>();
+
+        if (MaxWorkers < 1 || MaxWorkers > 32)
+            errors.Add($"max_workers must be between 1 and 32 (current: {MaxWorkers}).");
+
+        if (string.IsNullOrWhiteSpace(Theme))
+            errors.Add("theme cannot be empty.");
+
+        if (string.IsNullOrWhiteSpace(Locale))
+            errors.Add("locale cannot be empty.");
+
+        if (FontSize < 6f || FontSize > 36f)
+            errors.Add($"font_size must be between 6 and 36 (current: {FontSize:F1}).");
+
+        if (DetailPanelHeight is < 50 or > 1600)
+            errors.Add($"detail_panel_height must be between 50 and 1600 (current: {DetailPanelHeight}).");
+
+        if (LogPanelHeight is < 50 or > 1600)
+            errors.Add($"log_panel_height must be between 50 and 1600 (current: {LogPanelHeight}).");
+
+        if (HistoryMaxEntries < 10 || HistoryMaxEntries > 100_000)
+            errors.Add($"history_max_entries must be between 10 and 100 000 (current: {HistoryMaxEntries}).");
+
+        if (AutoCleanMemoryThreshold < 0 || AutoCleanMemoryThreshold > 100)
+            errors.Add($"auto_clean_memory_threshold must be between 0 and 100 (current: {AutoCleanMemoryThreshold}).");
+
+        if (BrightnessDayPct < 0 || BrightnessDayPct > 100)
+            errors.Add($"brightness_day_pct must be between 0 and 100 (current: {BrightnessDayPct}).");
+
+        if (BrightnessNightPct < 0 || BrightnessNightPct > 100)
+            errors.Add($"brightness_night_pct must be between 0 and 100 (current: {BrightnessNightPct}).");
+
+        if (!string.IsNullOrEmpty(BrightnessDayTime) && !IsValidHhmm(BrightnessDayTime))
+            errors.Add($"brightness_day_time must be in HH:mm format (current: '{BrightnessDayTime}').");
+
+        if (!string.IsNullOrEmpty(BrightnessNightTime) && !IsValidHhmm(BrightnessNightTime))
+            errors.Add($"brightness_night_time must be in HH:mm format (current: '{BrightnessNightTime}').");
+
+        if (!string.IsNullOrWhiteSpace(BackupDir) && BackupDir.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+            errors.Add($"backup_dir contains invalid path characters.");
+
+        foreach (ProfileScheduleEntry entry in ProfileSchedules)
+        {
+            if (string.IsNullOrWhiteSpace(entry.Profile))
+                errors.Add("A profile_schedule entry has an empty profile name.");
+            if (string.IsNullOrWhiteSpace(entry.Trigger))
+                errors.Add("A profile_schedule entry has an empty trigger.");
+            if (entry.Trigger == "daily" && !string.IsNullOrEmpty(entry.Time) && !IsValidHhmm(entry.Time))
+                errors.Add($"A daily profile_schedule has invalid time format '{entry.Time}' (expected HH:mm).");
+        }
+
+        return errors.AsReadOnly();
+    }
+
+    private static bool IsValidHhmm(string s)
+    {
+        if (s.Length != 5 || s[2] != ':')
+            return false;
+        return int.TryParse(s.AsSpan(0, 2), out int hh) && int.TryParse(s.AsSpan(3, 2), out int mm) && hh is >= 0 and <= 23 && mm is >= 0 and <= 59;
+    }
+
     public static AppConfig Load(string? path = null)
     {
         path ??= DefaultConfigPath;
