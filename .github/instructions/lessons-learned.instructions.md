@@ -602,6 +602,45 @@ dotnet build RegiLattice.sln -c Release -m:1 -q  # may fail once with GenerateTa
 dotnet build RegiLattice.sln -c Release -m:1 -q  # succeeds on second attempt
 ```
 
+### Symptom 4 — `GenerateTargetFrameworkMonikerAttribute` after nuclear delete (ALL projects)
+
+```
+MSBUILD : error Building target "GenerateTargetFrameworkMonikerAttribute" completely.
+```
+
+This fires on **all three projects** (Core, CLI, GUI) after the nuclear cache clear.
+The root cause is the Roslyn **build server** retaining stale project-output state.
+Simply retrying the solution build does NOT fix it — the server is still running with
+stale knowledge.
+
+**Fix**: shut down the build server, then warm up each project individually before
+attempting the solution-level build:
+
+```powershell
+# 1. Kill the stale Roslyn build server
+dotnet build-server shutdown
+
+# 2. Warm up each project in dependency order (Core first, test projects last)
+dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj       -c Release -m:1 -q
+dotnet build src/RegiLattice.CLI/RegiLattice.CLI.csproj         -c Release -m:1 -q
+dotnet build src/RegiLattice.GUI/RegiLattice.GUI.csproj         -c Release -m:1 -q
+dotnet build tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Debug -m:1 -q
+dotnet build tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj  -c Debug -m:1 -q
+dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj  -c Debug -m:1 -q
+
+# 3. Now solution-level builds succeed
+dotnet build RegiLattice.sln -c Release -m:1 -q
+```
+
+**Why per-project first?** Each individual `dotnet build <project>.csproj` warms up
+the `GenerateTargetFrameworkMonikerAttribute` and `CoreGenerateAssemblyInfo` targets
+for exactly that project before the solution-level scheduler tries to run them in
+parallel across all projects.
+
+**When to use**: If the three-retry nuclear sequence (Symptoms 1–3) still leaves the
+build failing on `GenerateTargetFrameworkMonikerAttribute`, always follow with
+`dotnet build-server shutdown` + the per-project warm-up above.
+
 ### Fastest reliable pattern
 
 Use the VS Code **build task** (`"test: Core"` or `"build: Solution (Debug)"`) instead of
@@ -797,3 +836,61 @@ Always insert a blank line after any `####` heading you add to `docs/CHANGELOG.m
 **Violation found (Sprint 105 build-fix)**: Three `####` headings in the `[4.3.0]`
 entry had no blank line below them, causing MD022 warnings in the Problems panel.
 Fixed in commit `08868e7`.
+
+---
+
+## Flaky Tests — `DateTime.Now` in Generated Output
+
+Any test that calls a method which internally embeds `DateTime.Now` **twice** (e.g., once
+to generate a file, once to build in-memory) can produce a 1-second mismatch between the
+two timestamps. This makes the test fail non-deterministically around second boundaries.
+
+**Pattern found in**: `HtmlReportGeneratorTests.Generate_FileContentsMatchBuild`  
+`HtmlReportGenerator.Build()` embeds `DateTime.Now` as a formatted string. When the test
+calls `gen.Generate(path, map)` (writes file) and then `gen.Build(map)` (returns string)
+in quick succession, the two calls can straddle a clock second.
+
+**Fix — strip the timestamp before comparing**:
+
+```csharp
+static string StripTimestamp(string html) =>
+    System.Text.RegularExpressions.Regex.Replace(
+        html,
+        @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
+        "TIMESTAMP"
+    );
+
+Assert.Equal(StripTimestamp(built), StripTimestamp(written));
+```
+
+**General rule**: Whenever a test compares two independently generated strings where
+either could contain `DateTime.Now` / `DateTime.UtcNow`, strip or replace all
+timestamp-like patterns before the `Assert.Equal`. The stripping should be as narrow
+as possible (match only the known format) to catch real content differences.
+
+---
+
+## Flaky Tests — Performance Budget Tests Must Scale with Tweak Count
+
+`Search_CompletesUnder50ms` and similar wall-clock assertions were written when the
+codebase had ~3 000 tweaks. As the tweak count grows, baseline search time grows
+proportionally. A budget that was safe at 3 000 tweaks fails non-deterministically at
+4 000+ tweaks.
+
+**Pattern found in**: `TweakEngineBuiltinsTests.Search_CompletesUnder50ms`
+
+Original: `Assert.True(sw.ElapsedMilliseconds < 50, ...)`  
+Fixed to: `Assert.True(sw.ElapsedMilliseconds < 150, ...)` with a comment:
+
+```csharp
+// Budget relaxed from 50ms → 150ms: 4 058 tweaks with synonym expansion;
+// baseline ~60ms on dev machine. Increase threshold if tweak count grows past 6 000.
+Assert.True(sw.ElapsedMilliseconds < 150, $"Search took {sw.ElapsedMilliseconds}ms (budget: 150ms)");
+```
+
+**Rule**: Every performance-budget test **must** include a comment with:
+1. What the budget was before relaxation and why it was changed
+2. The approximate tweak/item count at time of writing
+3. When the threshold should be re-evaluated
+
+This makes future budget relaxations deliberate instead of surprising.
