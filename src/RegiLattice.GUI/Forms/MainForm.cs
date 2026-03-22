@@ -1354,6 +1354,8 @@ public partial class MainForm : Form
 
     private void OnOpenMarketplace() => ShowManagerDialog(new MarketplaceDialog());
 
+    private void OnOpenSmartScan() => ShowManagerDialog(new SmartScanDialog(_engine, _statusCache.Count > 0 ? _statusCache : null));
+
     private void OnOpenProfileWizard()
     {
         using var dlg = new ProfileWizardDialog();
@@ -1860,6 +1862,7 @@ public partial class MainForm : Form
         _mnuHwTempMon.Image = AppIcons.ThermometerMenuBitmap;
         _mnuNetBandwidth.Image = AppIcons.BandwidthMenuBitmap;
         _mnuMacAddress.Image = AppIcons.MacAddressMenuBitmap;
+        _mnuSmartScan.Image = AppIcons.WizardMenuBitmap;
         _mnuProfileWizard.Image = AppIcons.WizardMenuBitmap;
     }
 
