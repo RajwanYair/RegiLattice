@@ -1652,7 +1652,7 @@ internal static class Program
         }
 
         // Find the most recent snapshot in the data directory
-        string dataRoot = AppConfig.DataRoot;
+        string dataRoot = AppConfig.ConfigDir;
         string[] snapshots = Directory.Exists(dataRoot)
             ? Directory
                 .GetFiles(dataRoot, "*.json")

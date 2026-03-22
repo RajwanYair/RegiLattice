@@ -37,7 +37,7 @@ public static class ComplianceHistory
     // ── Path resolution ─────────────────────────────────────────────────────
 
     /// <summary>Returns the path to the compliance history JSON file.</summary>
-    public static string HistoryPath => Path.Combine(AppConfig.DataRoot, "compliance-history.json");
+    public static string HistoryPath => Path.Combine(AppConfig.ConfigDir, "compliance-history.json");
 
     // ── Public API ──────────────────────────────────────────────────────────
 

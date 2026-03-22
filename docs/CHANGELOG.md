@@ -43,13 +43,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   - Disable Print Spooler, RpcAuthnLevelPrivacyEnabled enforcement, point-and-print restrictions, inbound SMB printing, outbound print events, network printer discovery, Web Services for Printers; restrict driver installation, operator users, HTTPS printing
 
 #### Enhanced (existing modules)
+
 - **AutoRunPolicy.cs**, **SecurityAuditPolicy.cs**, **TimeSync.cs**, **TouchpadGestures.cs**, **VirtualDesktops.cs**, **WindowsSearchAdv.cs**: additional tweaks, corrections, and de-duplication
 
 #### Fixed
+
 - `WifiNetworking.cs`: `WiFiService` → `WifiService` (6× CS0103 capitalization error)
 - `UserActivity.cs`: replaced duplicate `activity-disable-timeline-view` with distinct `activity-disable-cdp` (different registry key)
 
 #### Stats
+
 - Tweaks: **4 058** across **116 categories** (121 module files)
 - Tests: **1 833** (1 325 Core + 266 CLI + 242 GUI), all passing
 - Version bumped `4.2.0` → `4.3.0`
