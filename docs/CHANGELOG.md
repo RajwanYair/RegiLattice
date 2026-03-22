@@ -6,6 +6,19 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [4.3.0] — 2026-05-02
 
+### Sprints 99–104 — Dialogs, Services, PowerShell Module & Notifications
+
+#### Added
+
+- **SmartScanService.cs** (Sprint 99): `Scan()` / `ScanAsync()` — filters unapplied tweaks, scores by ImpactScore × SafetyRating, returns top 25 `ScanRecommendation` records. IsQuickWin flag for Impact ≥ 4 && Safety ≥ 4.
+- **SmartScanDialog** (Sprint 99): ListView of top 25 recommendations; Quick Wins highlighted in green; "Apply All Quick Wins" + per-row Apply buttons; progress bar.
+- **ProfileCompareDialog** (Sprint 100): Side-by-side diff of any two built-in profiles. ComboBox pair, colour-coded ListView (Added/Removed/Shared rows), Export HTML (Catppuccin dark theme). Added via Tools menu.
+- **DependencyGraphDialog** (Sprint 101): TreeView-based dependency explorer. Searchable ListBox with ★ markers on tweaks that have DependsOn. "Depends on" + "Needed by" branches for any selected tweak. Clickable tree nodes for navigation. Added via Tools menu.
+- **ComplianceReportExporter.cs** (Sprint 102): `RegiLattice.Core.Services` — `ExportHtml()` + `BuildHtml()`. Groups tweaks by category, computes applied/pending/unknown counts, health score %. Catppuccin dark HTML with `WebUtility.HtmlEncode`. Wired to File → Export Compliance Report….
+- **PowerShell module scaffold** (Sprint 103): `powershell/RegiLattice.psd1` (manifest v4.3.0) + `powershell/RegiLattice.psm1` — CLI-wrapping script module with 5 cmdlets: `Get-RLTweak`, `Get-RLTweakStatus`, `Invoke-RLApply`, `Invoke-RLRemove`, `Get-RLHealthScore`. Pipeline-native `PSCustomObject` output, `Update-TypeData` format defaults, aliases `grt`/`grts`/`ira`/`irr`. `PowerShellModuleGenerator.cs` bumped to v4.3.0.
+- **JumpListService.cs** (Sprint 104): Scaffold for Windows 11 taskbar Jump List integration. No-op until MSIX installer provides AUMID; structured for future COM `ICustomDestinationList` wiring.
+- **ToastNotificationService.cs** (Sprint 104): WinRT `ToastNotificationManager` toast delivery with automatic fallback to `NotifyIcon.ShowBalloonTip()`. `ShowApplyComplete()` fired after every batch-apply in `MainForm`.
+
 ### Sprints 88-96 — 9 New Modules + Existing Module Enhancements
 
 #### Added

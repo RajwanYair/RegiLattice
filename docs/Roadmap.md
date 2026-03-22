@@ -441,8 +441,8 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 | C6 | **Dependency chain visualizer** — `DependencyGraphDialog.cs` with GDI+ node graph showing `DependsOn` relationships. Click a node to jump to that tweak | P2 | Medium |
 | C7 | **Profile comparison view** — side-by-side diff of two profiles or profile vs. current applied state | P2 | Medium |
 
-**Completed**: C1 ✅ (Sprint 62 — HealthScoreService), C3 ✅ (Sprint 57 — ImpactScore/SafetyRating), C4 ✅ (Sprint 66 — ConflictDetector)
-**Remaining**: C2 (Smart Scan), C5 (score prediction), C6 (dep graph), C7 (profile diff)
+**Completed**: C1 ✅ (Sprint 62 — HealthScoreService), C2 ✅ (Sprint 99 — SmartScanService + SmartScanDialog), C3 ✅ (Sprint 57 — ImpactScore/SafetyRating), C4 ✅ (Sprint 66 — ConflictDetector), C6 ✅ (Sprint 101 — DependencyGraphDialog), C7 ✅ (Sprint 100 — ProfileCompareDialog)
+**Remaining**: C5 (score prediction)
 
 ---
 
@@ -452,9 +452,9 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 
 | # | Item | Priority | Effort |
 |---|------|----------|--------|
-| D1 | **PowerShell module** (`RegiLattice.psd1`) — cmdlets: `Get-Tweak`, `Get-TweakStatus`, `Apply-Tweak`, `Remove-Tweak`, `New-Profile`, `Get-HealthScore`. Pipeline-aware output objects, `Format-Table` defaults, tab completion via `ArgumentCompleter` | P0 | High |
+| D1 | **PowerShell module** (`RegiLattice.psd1`) — cmdlets: `Get-Tweak`, `Get-TweakStatus`, `Apply-Tweak`, `Remove-Tweak`, `New-Profile`, `Get-HealthScore`. Pipeline-aware output objects, `Format-Table` defaults, tab completion via `ArgumentCompleter` | ✅ Sprint 103 | High |
 | D2 | **Full compliance drift detection** — extend `ComplianceService`: scheduled daily scan, Windows toast notification on drift, `ComplianceHistory` log, `--compliance-report auto` CLI flag | P0 | Medium |
-| D3 | **HTML/PDF compliance report** — printable report listing applied/unapplied tweaks per category, health score trend chart, drift since last snapshot. Export from GUI + CLI | P1 | Medium |
+| D3 | **HTML/PDF compliance report** — printable report listing applied/unapplied tweaks per category, health score trend chart, drift since last snapshot. Export from GUI + CLI | ✅ Sprint 102 | Medium |
 | D4 | **ADMX/ADML GPO export** — for all Registry-kind tweaks: generate `.admx` + `.adml` deployable via Group Policy. Extends existing `GroupPolicyExporter.cs` | P1 | High |
 | D5 | **Intune OMA-URI export** — map applied Registry tweaks to Intune Custom Configuration Profile JSON (`./Vendor/MSFT/Policy/Config/...` OMA-URI paths where applicable) | P1 | Medium |
 | D6 | **Silent/unattended mode** — `RegiLattice.exe --silent --profile gaming --log result.json` — zero UI, JSON output log, exit code 0/1 for CI pipeline integration | P1 | Low |
@@ -478,8 +478,8 @@ Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForm
 | E2 | **WinUI 3 migration** (strategic) — rewrite GUI project targeting WinAppSDK 1.7+. Full Mica, `ToggleSwitch`, `NavigationView`, `InfoBar`, animated. Win11-native look | P1 | Very High |
 | E3 | **Modern NavigationView** — replace current tab/panel with left-rail nav: Dashboard, Tweaks, Profiles, Tools, Marketplace, Settings | P1 | High |
 | E4 | **MSIX packaging** — `.msix` alongside MSI for Microsoft Store submission | P1 | Medium |
-| E5 | **Windows 11 Jumplist** — taskbar right-click: "Apply Gaming Profile", "Run Smart Scan", "Open Dashboard" | P2 | Low |
-| E6 | **Toast notifications** — Action Center: compliance drift, scheduled tweak done, update available | P2 | Low |
+| E5 | **Windows 11 Jumplist** — taskbar right-click: "Apply Gaming Profile", "Run Smart Scan", "Open Dashboard" | ✅ Sprint 104 scaffold | Low |
+| E6 | **Toast notifications** — Action Center: compliance drift, scheduled tweak done, update available | ✅ Sprint 104 | Low |
 | E7 | **Full keyboard/screen reader accessibility** — `AutomationProperties` on all custom controls; keyboard-only full navigation | P2 | Medium |
 
 **Recommended path**: WinForms polish (E1) first in v3.9.x for quick visual wins, WinUI 3 (E2–E3) as dedicated v4.1.0 effort spanning 6–8 sprints.
