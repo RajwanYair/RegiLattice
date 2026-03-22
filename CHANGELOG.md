@@ -4,6 +4,15 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.4.0] — 2026-03-22
+
+- **Sprint 106**: 5 new security/hardening modules — WdacCodeIntegrity, BitLockerRemovable, DeviceInstallPolicies, LapsSecurity, NtlmAuthentication (+50 tweaks)
+- **New categories**: WDAC & Code Integrity, BitLocker To Go, Device Installation Policies, Local Admin Password (LAPS), NTLM Authentication
+- **Build**: 0 errors, 0 warnings (Release x64, .NET 10)
+- 4 108 tweaks, 121 categories, 126 module files
+- **1 858 tests** passing (1 325 Core + 291 CLI + 242 GUI)
+- Version bumped `4.3.0` → `4.4.0`
+
 ## [4.3.0] — 2026-03-22
 
 - **Sprints 99–105**: SmartScanDialog, ProfileCompareDialog, DependencyGraphDialog, ComplianceReportExporter, PowerShell module scaffold, JumpListService, ToastNotificationService, ComplianceHistory drift log

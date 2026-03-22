@@ -15,8 +15,7 @@ internal static class NtlmAuthentication
 {
     private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
     private const string Msv10 = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0";
-    private const string Netlogon =
-        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
+    private const string Netlogon = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -106,7 +105,8 @@ internal static class NtlmAuthentication
             ImpactScore = 5,
             SafetyRating = 2,
             Tags = ["ntlm", "restriction", "outgoing", "block", "lateral-movement"],
-            SideEffects = "Blocks all outgoing NTLM authentication. Services using NTLM for remote connections will fail. Enable only where Kerberos is exclusively available.",
+            SideEffects =
+                "Blocks all outgoing NTLM authentication. Services using NTLM for remote connections will fail. Enable only where Kerberos is exclusively available.",
             Description =
                 "Sets RestrictSendingNTLMTraffic=2 in the LSA key. "
                 + "Completely blocks all outgoing NTLM authentication from this machine. "

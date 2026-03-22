@@ -15,20 +15,15 @@ using RegiLattice.Core.Models;
 
 internal static class DeviceInstallPolicies
 {
-    private const string Restrictions =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
+    private const string Restrictions = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
 
-    private const string Settings =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Settings";
+    private const string Settings = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Settings";
 
-    private const string DriverSearching =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DriverSearching";
+    private const string DriverSearching = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DriverSearching";
 
-    private const string DeviceMetadata =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Device Metadata";
+    private const string DeviceMetadata = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Device Metadata";
 
-    private const string DeviceInstaller =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Installer";
+    private const string DeviceInstaller = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Installer";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -47,7 +42,8 @@ internal static class DeviceInstallPolicies
                 + "Prevents Windows from installing any device driver for a removable device class. "
                 + "Blocks USB storage drives, external HDDs, SD card readers, and other removable media "
                 + "from being added to the system as new devices.",
-            SideEffects = "Prevents installation of new USB storage and removable media devices. Existing already-installed devices continue to work.",
+            SideEffects =
+                "Prevents installation of new USB storage and removable media devices. Existing already-installed devices continue to work.",
             ApplyOps = [RegOp.SetDword(Restrictions, "DenyRemovableDevices", 1)],
             RemoveOps = [RegOp.DeleteValue(Restrictions, "DenyRemovableDevices")],
             DetectOps = [RegOp.CheckDword(Restrictions, "DenyRemovableDevices", 1)],
