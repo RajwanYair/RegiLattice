@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.4.0] — 2026-05-11
+
+### Sprint 106 — 50 New Security & Hardening Tweaks (WDAC/ASR, BitLocker To Go, Device Install, LAPS, NTLM)
+
+#### Added
+
+- **WdacCodeIntegrity.cs** (`wdac-asr-*`) — 10 individual WDAC/Defender ASR rule tweaks, each enabling a specific ASR GUID in block mode (Office child processes, LSASS dump, ransomware, WMI persistence, PSExec/WMI, USB untrusted, email executables, obfuscated scripts, Adobe child, Office code injection)
+- **BitLockerRemovable.cs** (`btogo-*`) — 10 BitLocker To Go policy tweaks for removable data volumes (deny write unencrypted, enable RDV, passphrase complexity/length, AES-128-XTS, disable hardware encryption, smart card auth, recovery password/key backup)
+- **DeviceInstallPolicies.cs** (`dinst-*`) — 10 device installation restriction policy tweaks (deny removable install, device ID block list, class GUID block list, retroactive application, admin override, disable Windows Update driver search, disable co-installers, WER suppression, metadata download block)
+- **LapsSecurity.cs** (`laps-*`) — 10 Windows LAPS (built-in, April 2023+) policy tweaks (Azure AD/Entra backup, AD backup, 14-day max age, 20-char min length, max complexity, password encryption, post-auth reset+logoff, 24h grace period, 12-entry encrypted history, disable legacy LAPS)
+- **NtlmAuthentication.cs** (`ntlma-*`) — 10 NTLM authentication hardening tweaks (NTLMMinClientSec/ServerSec 0x20080000, Netlogon channel sign+seal, deny all outgoing NTLM, domain NTLM audit, in-domain NTLM audit/restrict, MSV1_0 audit, block null session fallback, require NTLMv2 at MSV1_0 level)
+
+#### Stats
+
+- Total tweaks: **4,108** (+50 vs 4.3.0)
+- Categories: **121** (+5 new: WDAC & Code Integrity, BitLocker To Go, Device Installation Policies, Local Admin Password (LAPS), NTLM Authentication)
+- Tests: **1,858** passing (0 failures)
+
+---
+
 ## [4.3.0] — 2026-03-22
 
 ### Sprints 99–105 — Dialogs, Services, PowerShell Module, Notifications & Compliance History
