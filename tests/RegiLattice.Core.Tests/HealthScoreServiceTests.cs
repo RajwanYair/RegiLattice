@@ -9,14 +9,16 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for Sprint 62: HealthScoreService.</summary>
-public sealed class HealthScoreServiceTests
+public sealed class HealthScoreServiceTests : IClassFixture<BuiltinsFixture>
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public HealthScoreServiceTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
+
+    private TweakEngine BuildEngine() => _engine;
 
     // ── Compute with empty map ────────────────────────────────────────────
 

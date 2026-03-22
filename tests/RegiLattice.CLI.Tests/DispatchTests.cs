@@ -24,50 +24,49 @@ public sealed class CliDispatchCollection : ICollectionFixture<DispatchTestFixtu
 /// </summary>
 public sealed class DispatchTestFixture
 {
-    public TweakEngine Engine  { get; }
+    public TweakEngine Engine { get; }
     public RegistrySession Session { get; }
 
-    public const string KnownId         = "disp-alpha";
-    public const string KnownId2        = "disp-beta";
-    public const string KnownId3        = "disp-gamma";
-    public const string KnownCategory   = "Dispatch Test";
-    public const string KnownCategory2  = "Other Test";
-    public const string KnownTag        = "disptest";
+    public const string KnownId = "disp-alpha";
+    public const string KnownId2 = "disp-beta";
+    public const string KnownId3 = "disp-gamma";
+    public const string KnownCategory = "Dispatch Test";
+    public const string KnownCategory2 = "Other Test";
+    public const string KnownTag = "disptest";
 
     public DispatchTestFixture()
     {
         Session = new RegistrySession(dryRun: true);
-        Engine  = new TweakEngine(Session);
+        Engine = new TweakEngine(Session);
 
-        Engine.Register(
-        [
+        Engine.Register([
             new TweakDef
             {
-                Id       = KnownId,
-                Label    = "Alpha Dispatch Tweak",
+                Id = KnownId,
+                Label = "Alpha Dispatch Tweak",
                 Category = KnownCategory,
-                Tags     = [KnownTag, "alpha"],
-                ApplyOps  = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Alpha", 1)],
+                Tags = [KnownTag, "alpha"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Alpha", 1)],
                 RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\RegiLattice\DispTest", "Alpha")],
                 DetectOps = [RegOp.CheckDword(@"HKCU\Software\RegiLattice\DispTest", "Alpha", 1)],
             },
             new TweakDef
             {
-                Id       = KnownId2,
-                Label    = "Beta Dispatch Tweak",
+                Id = KnownId2,
+                Label = "Beta Dispatch Tweak",
                 Category = KnownCategory,
-                Tags     = [KnownTag, "beta"],
-                ApplyOps  = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Beta", 1)],
+                Tags = [KnownTag, "beta"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Beta", 1)],
                 RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\RegiLattice\DispTest", "Beta")],
                 DetectOps = [RegOp.CheckDword(@"HKCU\Software\RegiLattice\DispTest", "Beta", 1)],
             },
             new TweakDef
             {
-                Id       = KnownId3,
-                Label    = "Gamma Dispatch Tweak",
+                Id = KnownId3,
+                Label = "Gamma Dispatch Tweak",
                 Category = KnownCategory2,
-                Tags     = [KnownTag, "gamma"],
-                ApplyOps  = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Gamma", 0)],
+                Tags = [KnownTag, "gamma"],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\RegiLattice\DispTest", "Gamma", 0)],
                 RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\RegiLattice\DispTest", "Gamma")],
                 DetectOps = [RegOp.CheckDword(@"HKCU\Software\RegiLattice\DispTest", "Gamma", 0)],
             },
@@ -124,11 +123,11 @@ public sealed class RunListProfilesTests(DispatchTestFixture fixture) : Dispatch
     public void Dispatch_ListProfiles_OutputContainsKnownProfileNames()
     {
         Program.Dispatch(new CliArgs { ListProfiles = true });
-        Assert.Contains("gaming",   Output, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("privacy",  Output, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("minimal",  Output, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("gaming", Output, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("privacy", Output, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("minimal", Output, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("business", Output, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("server",   Output, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("server", Output, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -136,7 +135,7 @@ public sealed class RunListProfilesTests(DispatchTestFixture fixture) : Dispatch
     {
         Program.Dispatch(new CliArgs { ListProfiles = true });
         // Header row contains "Tweaks" or "Profile"
-        Assert.Matches(@"\d+", Output);  // at least one digit (tweak count)
+        Assert.Matches(@"\d+", Output); // at least one digit (tweak count)
     }
 }
 
@@ -160,9 +159,9 @@ public sealed class RunValidateTests(DispatchTestFixture fixture) : DispatchTest
         Program.Dispatch(new CliArgs { Validate = true });
         // Either "passed validation" or "3 tweaks passed" or similar
         Assert.True(
-            Output.Contains("passed", StringComparison.OrdinalIgnoreCase) ||
-            Output.Contains("tweak",  StringComparison.OrdinalIgnoreCase),
-            $"Unexpected validate output: {Output}");
+            Output.Contains("passed", StringComparison.OrdinalIgnoreCase) || Output.Contains("tweak", StringComparison.OrdinalIgnoreCase),
+            $"Unexpected validate output: {Output}"
+        );
     }
 }
 
@@ -184,7 +183,7 @@ public sealed class RunStatsTests(DispatchTestFixture fixture) : DispatchTestBas
     public void Dispatch_Stats_OutputContainsTweakCount()
     {
         Program.Dispatch(new CliArgs { Stats = true });
-        Assert.Contains("3", Output);  // 3 tweaks registered in fixture
+        Assert.Contains("3", Output); // 3 tweaks registered in fixture
     }
 
     [Fact]
@@ -232,8 +231,15 @@ public sealed class RunCategoriesTests(DispatchTestFixture fixture) : DispatchTe
 
     private static bool IsValidJson(string s)
     {
-        try { JsonDocument.Parse(s.Trim()); return true; }
-        catch { return false; }
+        try
+        {
+            JsonDocument.Parse(s.Trim());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
@@ -276,8 +282,7 @@ public sealed class RunStatusTests(DispatchTestFixture fixture) : DispatchTestBa
     [Fact]
     public void Dispatch_Status_KnownId_ReturnsZero()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId });
+        int exit = Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId });
         Assert.Equal(0, exit);
     }
 
@@ -291,8 +296,7 @@ public sealed class RunStatusTests(DispatchTestFixture fixture) : DispatchTestBa
     [Fact]
     public void Dispatch_Status_UnknownId_ReturnsTwoExitCode()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { Mode = "status", Tweak = "nonexistent-tweak-xyz-999" });
+        int exit = Program.Dispatch(new CliArgs { Mode = "status", Tweak = "nonexistent-tweak-xyz-999" });
         Assert.Equal(2, exit);
     }
 
@@ -314,8 +318,7 @@ public sealed class RunDependsOnTests(DispatchTestFixture fixture) : DispatchTes
     [Fact]
     public void Dispatch_DependsOn_KnownId_ReturnsZero()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { DependsOn = DispatchTestFixture.KnownId });
+        int exit = Program.Dispatch(new CliArgs { DependsOn = DispatchTestFixture.KnownId });
         Assert.Equal(0, exit);
     }
 
@@ -329,8 +332,7 @@ public sealed class RunDependsOnTests(DispatchTestFixture fixture) : DispatchTes
     [Fact]
     public void Dispatch_DependsOn_UnknownId_ReturnsTwoExitCode()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { DependsOn = "does-not-exist-997" });
+        int exit = Program.Dispatch(new CliArgs { DependsOn = "does-not-exist-997" });
         Assert.Equal(2, exit);
     }
 
@@ -352,8 +354,7 @@ public sealed class RunSearchTests(DispatchTestFixture fixture) : DispatchTestBa
     [Fact]
     public void Dispatch_Search_Found_ReturnsZero()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { Search = "alpha", OutputFormat = "json" });
+        int exit = Program.Dispatch(new CliArgs { Search = "alpha", OutputFormat = "json" });
         Assert.Equal(0, exit);
     }
 
@@ -367,8 +368,7 @@ public sealed class RunSearchTests(DispatchTestFixture fixture) : DispatchTestBa
     [Fact]
     public void Dispatch_Search_NotFound_ReturnsZero()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { Search = "xyznomatchxyz", OutputFormat = "table" });
+        int exit = Program.Dispatch(new CliArgs { Search = "xyznomatchxyz", OutputFormat = "table" });
         Assert.Equal(0, exit);
     }
 
@@ -384,8 +384,7 @@ public sealed class RunSearchTests(DispatchTestFixture fixture) : DispatchTestBa
     {
         Program.Dispatch(new CliArgs { Search = DispatchTestFixture.KnownTag, OutputFormat = "json" });
         string trimmed = Output.Trim();
-        Assert.True(trimmed.StartsWith('[') || trimmed.StartsWith('{'),
-            $"Expected JSON output, got: {trimmed[..Math.Min(80, trimmed.Length)]}");
+        Assert.True(trimmed.StartsWith('[') || trimmed.StartsWith('{'), $"Expected JSON output, got: {trimmed[..Math.Min(80, trimmed.Length)]}");
     }
 
     [Fact]
@@ -417,7 +416,7 @@ public sealed class RunFavoritesTests : IDisposable
         // Snapshot, then fully reset (nullifies cache + deletes file) so each test
         // starts from a provably clean state regardless of prior test order.
         _savedFavorites = RegiLattice.Core.Services.Favorites.All();
-        RegiLattice.Core.Services.Favorites.Reset();  // _cache=null, file deleted
+        RegiLattice.Core.Services.Favorites.Reset(); // _cache=null, file deleted
 
         _originalOut = Console.Out;
         _out = new StringWriter();
@@ -437,6 +436,7 @@ public sealed class RunFavoritesTests : IDisposable
             RegiLattice.Core.Services.Favorites.Add(id);
         RegiLattice.Core.Services.Favorites.Flush();
     }
+
     [Fact]
     public void Dispatch_Favorites_Empty_ReturnsZero()
     {
@@ -454,7 +454,7 @@ public sealed class RunFavoritesTests : IDisposable
         using var localOut = new StringWriter();
         Console.SetOut(localOut);
         Program.Dispatch(new CliArgs { ShowFavorites = true });
-        Console.SetOut(_originalOut);          // restore so _out capture continues
+        Console.SetOut(_originalOut); // restore so _out capture continues
         Assert.Contains("No favorites", localOut.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
@@ -489,8 +489,7 @@ public sealed class RunFavoritesTests : IDisposable
     [Fact]
     public void Dispatch_FavoriteRemove_ReturnsZero()
     {
-        int exit = Program.Dispatch(
-            new CliArgs { FavoriteRemove = DispatchTestFixture.KnownId });
+        int exit = Program.Dispatch(new CliArgs { FavoriteRemove = DispatchTestFixture.KnownId });
         Assert.Equal(0, exit);
     }
 
@@ -520,7 +519,7 @@ public sealed class RunHistoryTests(DispatchTestFixture fixture) : DispatchTestB
     public void Dispatch_History_NonEmptyOutput()
     {
         Program.Dispatch(new CliArgs { ShowHistory = true, HistoryCount = 10 });
-        Assert.NotNull(Output);  // may be "No history" or actual entries
+        Assert.NotNull(Output); // may be "No history" or actual entries
     }
 }
 
@@ -650,36 +649,42 @@ public sealed class RunListTests(DispatchTestFixture fixture) : DispatchTestBase
     [Fact]
     public void Dispatch_List_WithCategory_ValidCategory_ReturnsZero()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            ShowList = true,
-            Category = DispatchTestFixture.KnownCategory,
-            OutputFormat = "json",
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                ShowList = true,
+                Category = DispatchTestFixture.KnownCategory,
+                OutputFormat = "json",
+            }
+        );
         Assert.Equal(0, exit);
     }
 
     [Fact]
     public void Dispatch_List_WithCategory_UnknownCategory_ReturnsTwoExitCode()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            ShowList = true,
-            Category = "NonExistentCategory9999",
-            OutputFormat = "json",
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                ShowList = true,
+                Category = "NonExistentCategory9999",
+                OutputFormat = "json",
+            }
+        );
         Assert.Equal(2, exit);
     }
 
     [Fact]
     public void Dispatch_List_WithCategory_UnknownCategory_OutputContainsNoTweaks()
     {
-        Program.Dispatch(new CliArgs
-        {
-            ShowList = true,
-            Category = "NonExistentCategory9999",
-            OutputFormat = "json",
-        });
+        Program.Dispatch(
+            new CliArgs
+            {
+                ShowList = true,
+                Category = "NonExistentCategory9999",
+                OutputFormat = "json",
+            }
+        );
         Assert.Contains("No tweaks", Output, StringComparison.OrdinalIgnoreCase);
     }
 }
@@ -723,55 +728,80 @@ public sealed class RunActionTests(DispatchTestFixture fixture) : DispatchTestBa
     [Fact]
     public void Dispatch_Apply_UnknownTweak_ReturnsTwoExitCode()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Mode = "apply", Tweak = "no-such-tweak-8877",
-            AssumeYes = true, Force = true, DryRun = true,
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = "no-such-tweak-8877",
+                AssumeYes = true,
+                Force = true,
+                DryRun = true,
+            }
+        );
         Assert.Equal(2, exit);
     }
 
     [Fact]
     public void Dispatch_Apply_UnknownTweak_OutputContainsUnknown()
     {
-        Program.Dispatch(new CliArgs
-        {
-            Mode = "apply", Tweak = "no-such-tweak-8877",
-            AssumeYes = true, Force = true, DryRun = true,
-        });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = "no-such-tweak-8877",
+                AssumeYes = true,
+                Force = true,
+                DryRun = true,
+            }
+        );
         Assert.Contains("Unknown", Output, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
     public void Dispatch_Apply_KnownTweak_DryRun_ReturnsZeroOrOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Mode = "apply", Tweak = DispatchTestFixture.KnownId,
-            AssumeYes = true, Force = true, DryRun = true,
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                DryRun = true,
+            }
+        );
         Assert.True(exit == 0 || exit == 1, $"Expected 0 or 1, got {exit}");
     }
 
     [Fact]
     public void Dispatch_Apply_KnownTweak_DryRun_OutputContainsDryRun()
     {
-        Program.Dispatch(new CliArgs
-        {
-            Mode = "apply", Tweak = DispatchTestFixture.KnownId,
-            AssumeYes = true, Force = true, DryRun = true,
-        });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                DryRun = true,
+            }
+        );
         Assert.Contains("Dry-run", Output, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
     public void Dispatch_Remove_KnownTweak_DryRun_ReturnsZeroOrOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Mode = "remove", Tweak = DispatchTestFixture.KnownId,
-            AssumeYes = true, Force = true, DryRun = true,
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "remove",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                DryRun = true,
+            }
+        );
         Assert.True(exit == 0 || exit == 1, $"Expected 0 or 1, got {exit}");
     }
 }
@@ -794,7 +824,8 @@ public sealed class RunExportJsonTests(DispatchTestFixture fixture) : DispatchTe
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -809,7 +840,8 @@ public sealed class RunExportJsonTests(DispatchTestFixture fixture) : DispatchTe
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -824,7 +856,8 @@ public sealed class RunExportJsonTests(DispatchTestFixture fixture) : DispatchTe
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 }
@@ -847,7 +880,8 @@ public sealed class RunSaveSnapshotTests(DispatchTestFixture fixture) : Dispatch
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -862,7 +896,8 @@ public sealed class RunSaveSnapshotTests(DispatchTestFixture fixture) : Dispatch
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -877,7 +912,8 @@ public sealed class RunSaveSnapshotTests(DispatchTestFixture fixture) : Dispatch
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 }
@@ -903,18 +939,15 @@ public sealed class RunSnapshotDiffTests(DispatchTestFixture fixture) : Dispatch
         string snap = CreateTempSnapshot("A");
         try
         {
-            Out.GetStringBuilder().Clear();  // reset output from snapshot creation
-            int exit = Program.Dispatch(new CliArgs
-            {
-                SnapshotDiffA = snap,
-                SnapshotDiffB = snap,
-            });
+            Out.GetStringBuilder().Clear(); // reset output from snapshot creation
+            int exit = Program.Dispatch(new CliArgs { SnapshotDiffA = snap, SnapshotDiffB = snap });
             Assert.Equal(0, exit);
             Assert.Contains("No differences", Output, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
-            if (File.Exists(snap)) File.Delete(snap);
+            if (File.Exists(snap))
+                File.Delete(snap);
         }
     }
 }
@@ -946,7 +979,7 @@ public sealed class RunNewPackTests(DispatchTestFixture fixture) : DispatchTestB
     {
         // Use a temp dir as working directory so cleanup is easy
         string origDir = Directory.GetCurrentDirectory();
-        string tmpDir  = Path.Combine(Path.GetTempPath(), $"newpack-{Guid.NewGuid():N}");
+        string tmpDir = Path.Combine(Path.GetTempPath(), $"newpack-{Guid.NewGuid():N}");
         Directory.CreateDirectory(tmpDir);
         try
         {
@@ -954,8 +987,7 @@ public sealed class RunNewPackTests(DispatchTestFixture fixture) : DispatchTestB
             int exit = Program.Dispatch(new CliArgs { NewPack = "my-test-pack" });
             Assert.Equal(0, exit);
             Assert.Contains("created", Output, StringComparison.OrdinalIgnoreCase);
-            Assert.True(Directory.GetFiles(tmpDir, "*.pack.json").Length > 0,
-                "Expected a .pack.json file to be created");
+            Assert.True(Directory.GetFiles(tmpDir, "*.pack.json").Length > 0, "Expected a .pack.json file to be created");
         }
         finally
         {
@@ -1017,20 +1049,14 @@ public sealed class RunComplianceTests(DispatchTestFixture fixture) : DispatchTe
     [Fact]
     public void Dispatch_Compliance_MissingFile_ReturnsTwoExitCode()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Compliance = Path.Combine(Path.GetTempPath(), "no-such-file-9988.json"),
-        });
+        int exit = Program.Dispatch(new CliArgs { Compliance = Path.Combine(Path.GetTempPath(), "no-such-file-9988.json") });
         Assert.Equal(2, exit);
     }
 
     [Fact]
     public void Dispatch_Compliance_MissingFile_OutputContainsNotFound()
     {
-        Program.Dispatch(new CliArgs
-        {
-            Compliance = Path.Combine(Path.GetTempPath(), "no-such-file-9988.json"),
-        });
+        Program.Dispatch(new CliArgs { Compliance = Path.Combine(Path.GetTempPath(), "no-such-file-9988.json") });
         Assert.Contains("not found", Output, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -1049,7 +1075,8 @@ public sealed class RunComplianceTests(DispatchTestFixture fixture) : DispatchTe
         }
         finally
         {
-            if (File.Exists(snap)) File.Delete(snap);
+            if (File.Exists(snap))
+                File.Delete(snap);
         }
     }
 }
@@ -1065,76 +1092,49 @@ public sealed class MarketplaceErrorPathTests(DispatchTestFixture fixture) : Dis
     public void Dispatch_Marketplace_Install_NullArg_ReturnsOne()
     {
         // "install" without a pack name returns usage / 1
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "install",
-            MarketplaceArg = null,
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "install", MarketplaceArg = null });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_Uninstall_NullArg_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "uninstall",
-            MarketplaceArg = null,
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "uninstall", MarketplaceArg = null });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_Search_EmptyQuery_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "search",
-            MarketplaceArg = null,
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "search", MarketplaceArg = null });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_InstallFile_MissingPath_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "install-file",
-            MarketplaceArg = @"C:\does-not-exist-ever\pack.json",
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "install-file", MarketplaceArg = @"C:\does-not-exist-ever\pack.json" });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_Unknown_Command_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "totally-fake-command",
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "totally-fake-command" });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_Info_NullArg_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "info",
-            MarketplaceArg = null,
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "info", MarketplaceArg = null });
         Assert.Equal(1, exit);
     }
 
     [Fact]
     public void Dispatch_Marketplace_Update_NullArg_ReturnsOne()
     {
-        int exit = Program.Dispatch(new CliArgs
-        {
-            Marketplace = "update",
-            MarketplaceArg = null,
-        });
+        int exit = Program.Dispatch(new CliArgs { Marketplace = "update", MarketplaceArg = null });
         Assert.Equal(1, exit);
     }
 
@@ -1195,7 +1195,8 @@ public sealed class RunExportRegTests(DispatchTestFixture fixture) : DispatchTes
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1210,7 +1211,8 @@ public sealed class RunExportRegTests(DispatchTestFixture fixture) : DispatchTes
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1226,7 +1228,8 @@ public sealed class RunExportRegTests(DispatchTestFixture fixture) : DispatchTes
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 }

@@ -18,37 +18,25 @@ public sealed class ScheduledTaskManagerTests
 
     private static IReadOnlyList<ScheduledTaskEntry> InvokeParseCsvOutput(string csv)
     {
-        var method = typeof(ScheduledTaskManager).GetMethod(
-            "ParseCsvOutput",
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
+        var method = typeof(ScheduledTaskManager).GetMethod("ParseCsvOutput", BindingFlags.NonPublic | BindingFlags.Static)!;
         return (IReadOnlyList<ScheduledTaskEntry>)method.Invoke(null, [csv])!;
     }
 
     private static ScheduledTaskStatus InvokeParseStatus(string s)
     {
-        var method = typeof(ScheduledTaskManager).GetMethod(
-            "ParseStatus",
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
+        var method = typeof(ScheduledTaskManager).GetMethod("ParseStatus", BindingFlags.NonPublic | BindingFlags.Static)!;
         return (ScheduledTaskStatus)method.Invoke(null, [s])!;
     }
 
     private static string[] InvokeSplitCsvLine(string line)
     {
-        var method = typeof(ScheduledTaskManager).GetMethod(
-            "SplitCsvLine",
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
+        var method = typeof(ScheduledTaskManager).GetMethod("SplitCsvLine", BindingFlags.NonPublic | BindingFlags.Static)!;
         return (string[])method.Invoke(null, [line])!;
     }
 
     private static string InvokeEscapeTaskName(string name)
     {
-        var method = typeof(ScheduledTaskManager).GetMethod(
-            "EscapeTaskName",
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
+        var method = typeof(ScheduledTaskManager).GetMethod("EscapeTaskName", BindingFlags.NonPublic | BindingFlags.Static)!;
         return (string)method.Invoke(null, [name])!;
     }
 
@@ -74,9 +62,7 @@ public sealed class ScheduledTaskManagerTests
     [Fact]
     public void DisplayName_WithBackslashedPath_ReturnsLastSegment()
     {
-        var entry = new ScheduledTaskEntry(
-            "\\Microsoft\\Windows\\Work Folders\\Sync", "", ScheduledTaskStatus.Ready, "", "", ""
-        );
+        var entry = new ScheduledTaskEntry("\\Microsoft\\Windows\\Work Folders\\Sync", "", ScheduledTaskStatus.Ready, "", "", "");
 
         Assert.Equal("Sync", entry.DisplayName);
     }
@@ -91,9 +77,7 @@ public sealed class ScheduledTaskManagerTests
     [Fact]
     public void DisplayName_RootLevelTask_ReturnsName()
     {
-        var entry = new ScheduledTaskEntry(
-            "\\TopLevelTask", "", ScheduledTaskStatus.Disabled, "", "", ""
-        );
+        var entry = new ScheduledTaskEntry("\\TopLevelTask", "", ScheduledTaskStatus.Disabled, "", "", "");
         Assert.Equal("TopLevelTask", entry.DisplayName);
     }
 
@@ -224,9 +208,7 @@ public sealed class ScheduledTaskManagerTests
     [Fact]
     public void ParseCsvOutput_MultipleRows_SortedAlphabetically()
     {
-        string csv =
-            "\"\\ZTasks\\Zebra\",\"N/A\",\"Ready\",\"\",\"\",\"0\",\"\"\n"
-            + "\"\\ATasks\\Alpha\",\"N/A\",\"Ready\",\"\",\"\",\"0\",\"\"";
+        string csv = "\"\\ZTasks\\Zebra\",\"N/A\",\"Ready\",\"\",\"\",\"0\",\"\"\n" + "\"\\ATasks\\Alpha\",\"N/A\",\"Ready\",\"\",\"\",\"0\",\"\"";
 
         var tasks = InvokeParseCsvOutput(csv);
 

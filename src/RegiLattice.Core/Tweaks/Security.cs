@@ -688,3 +688,372 @@ internal static class Security
         },
     ];
 }
+
+// ── Kiosk & Shared PC ─────────────────────────────────────────────────────────
+// Merged from KioskSharedPc.cs (kiosk mode and shared PC configuration)
+
+internal static class KioskSharedPc
+{
+    private const string SharedPc = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SharedPC";
+    private const string WinSysPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
+    private const string LockPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
+    private const string LogonPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "kiosk-enable-shared-pc-mode",
+            Label = "Enable Shared PC Mode",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets EnableSharedPCMode = 1 in the SharedPC registry key. Activates Windows Shared PC mode, "
+                + "which auto-manages accounts, disk, and sign-in for multi-user shared devices such as school "
+                + "or library computers. Default: 0 (disabled).",
+            Tags = ["kiosk", "shared-pc", "education", "public", "multi-user"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "EnableSharedPCMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "EnableSharedPCMode")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "EnableSharedPCMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-account-model-guest",
+            Label = "Use Guest-Only Account Model for Shared PC",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets AccountModel = 0 (guest only) in the SharedPC key. In guest mode, users sign in with "
+                + "a temporary guest account that is deleted on sign-out, ensuring no profile data persists. Default: 0.",
+            Tags = ["kiosk", "shared-pc", "guest", "account", "privacy"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "AccountModel", 0)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "AccountModel")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "AccountModel", 0)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-delete-on-signout",
+            Label = "Delete Guest Profiles on Sign-Out",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DeletionPolicy = 1 (delete immediately on sign-out) in the SharedPC key. "
+                + "Guest profiles are removed as soon as the user signs out, keeping disk clear on shared devices.",
+            Tags = ["kiosk", "shared-pc", "profile", "cleanup", "privacy"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "DeletionPolicy", 1)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "DeletionPolicy")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "DeletionPolicy", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-disk-level-deletion-25",
+            Label = "Auto-Delete Profiles at 25% Free Disk",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DiskLevelDeletion = 25 in the SharedPC key. When free disk falls below 25% of total disk, "
+                + "SharedPC policy begins deleting the oldest cached accounts, reclaiming space automatically.",
+            Tags = ["kiosk", "shared-pc", "disk", "cleanup", "automatic"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "DiskLevelDeletion", 25)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "DiskLevelDeletion")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "DiskLevelDeletion", 25)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-disk-level-caching-50",
+            Label = "Stop Caching New Profiles at 50% Free Disk",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DiskLevelCaching = 50 in the SharedPC key. When free disk drops below 50%, Shared PC mode "
+                + "stops caching new user profiles to prevent the drive from filling up.",
+            Tags = ["kiosk", "shared-pc", "disk", "caching", "profile"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "DiskLevelCaching", 50)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "DiskLevelCaching")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "DiskLevelCaching", 50)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-disable-fast-user-switching",
+            Label = "Disable Fast User Switching",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets HideFastUserSwitching = 1 via Windows System policy. Removes the user account switcher "
+                + "button from the lock screen and Start menu. Useful for kiosk or single-user session scenarios. Default: 0.",
+            Tags = ["kiosk", "shared-pc", "user-switching", "lock-screen", "policy"],
+            RegistryKeys = [WinSysPol],
+            ApplyOps = [RegOp.SetDword(WinSysPol, "HideFastUserSwitching", 1)],
+            RemoveOps = [RegOp.DeleteValue(WinSysPol, "HideFastUserSwitching")],
+            DetectOps = [RegOp.CheckDword(WinSysPol, "HideFastUserSwitching", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-no-local-password-reset",
+            Label = "Block Local Password Reset from Lock Screen",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisablePasswordReveal = 1 via Windows System policy. Prevents users on lock screen "
+                + "from clicking 'Forgot my PIN / password' to initiate a self-service reset, important for "
+                + "kiosk machines using fixed managed accounts.",
+            Tags = ["kiosk", "password", "lock-screen", "reset", "policy"],
+            RegistryKeys = [WinSysPol],
+            ApplyOps = [RegOp.SetDword(WinSysPol, "DisablePasswordReveal", 1)],
+            RemoveOps = [RegOp.DeleteValue(WinSysPol, "DisablePasswordReveal")],
+            DetectOps = [RegOp.CheckDword(WinSysPol, "DisablePasswordReveal", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-enable-edu-policies",
+            Label = "Apply Education / Shared PC Baseline Policies",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets SetEduPolicies = 1 in the SharedPC key. Enables the full set of Education-mode policies: "
+                + "Start menu simplification, sign-in type restriction, and content filtering baselines "
+                + "recommended for classroom and lab deployments.",
+            Tags = ["kiosk", "shared-pc", "education", "policy", "classroom"],
+            RegistryKeys = [SharedPc],
+            ApplyOps = [RegOp.SetDword(SharedPc, "SetEduPolicies", 1)],
+            RemoveOps = [RegOp.DeleteValue(SharedPc, "SetEduPolicies")],
+            DetectOps = [RegOp.CheckDword(SharedPc, "SetEduPolicies", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-disable-lock-screen-camera",
+            Label = "Disable Camera Access on Lock Screen",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets NoLockScreenCamera = 1 via the Personalization policy key. Prevents apps and the system "
+                + "from activating the camera while the device is locked. Reduces physical surveillance risk "
+                + "in public kiosk settings. Default: 0 (camera may be used on lock screen).",
+            Tags = ["kiosk", "camera", "lock-screen", "privacy", "policy"],
+            RegistryKeys = [LockPol],
+            ApplyOps = [RegOp.SetDword(LockPol, "NoLockScreenCamera", 1)],
+            RemoveOps = [RegOp.DeleteValue(LockPol, "NoLockScreenCamera")],
+            DetectOps = [RegOp.CheckDword(LockPol, "NoLockScreenCamera", 1)],
+        },
+        new TweakDef
+        {
+            Id = "kiosk-disable-lock-screen-slideshow",
+            Label = "Disable Lock Screen Slideshow",
+            Category = "Kiosk & Shared PC",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets NoLockScreenSlideshow = 1 via the Personalization policy key. Stops the lock screen "
+                + "from cycling through user photos or Spotlight images, ensuring a static and controlled "
+                + "appearance on kiosk or shared devices. Default: 0.",
+            Tags = ["kiosk", "lock-screen", "slideshow", "appearance", "policy"],
+            RegistryKeys = [LockPol],
+            ApplyOps = [RegOp.SetDword(LockPol, "NoLockScreenSlideshow", 1)],
+            RemoveOps = [RegOp.DeleteValue(LockPol, "NoLockScreenSlideshow")],
+            DetectOps = [RegOp.CheckDword(LockPol, "NoLockScreenSlideshow", 1)],
+        },
+    ];
+}
+
+// ── Active Directory ──────────────────────────────────────────────────────────
+// Merged from ActiveDirectory.cs (AD domain membership hardening, Netlogon, Kerberos)
+
+internal static class ActiveDirectory
+{
+    private const string Netlogon = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
+    private const string KerbParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
+    private const string KerbPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Kerberos\Parameters";
+    private const string AdWinSysPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "ad-enable-machine-password-change",
+            Label = "Ensure Machine Account Password Changes Are Enabled",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisablePasswordChange = 0 in Netlogon\\Parameters. Explicitly ensures that the Netlogon "
+                + "service does NOT disable automatic domain machine account password rotation. Some misguided "
+                + "hardening scripts set this to 1, which prevents the machine credential from ever rotating and "
+                + "leaves a permanent compromisable static password in place.",
+            Tags = ["ad", "netlogon", "machine-account", "password", "domain"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "DisablePasswordChange", 0)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "DisablePasswordChange")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "DisablePasswordChange", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ad-kerberos-max-token-size",
+            Label = "Set Kerberos Maximum Token Size (65535 bytes)",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets MaxTokenSize = 65535 in SYSTEM\\Control\\Lsa\\Kerberos\\Parameters. "
+                + "Raises the Kerberos token buffer to 65535 bytes (from the default 12000 bytes). "
+                + "Required on machines where users belong to many AD groups; prevents 'HTTP 400 header too large' "
+                + "and Kerberos authentication failures caused by oversized PAC tokens.",
+            Tags = ["ad", "kerberos", "token", "authentication", "groups"],
+            RegistryKeys = [KerbParams],
+            ApplyOps = [RegOp.SetDword(KerbParams, "MaxTokenSize", 65535)],
+            RemoveOps = [RegOp.DeleteValue(KerbParams, "MaxTokenSize")],
+            DetectOps = [RegOp.CheckDword(KerbParams, "MaxTokenSize", 65535)],
+        },
+        new TweakDef
+        {
+            Id = "ad-no-negative-cache-period",
+            Label = "Disable Domain-Controller Negative Cache",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets NegativeCachePeriod = 0 in Netlogon\\Parameters. Disables the negative cache that causes "
+                + "authentication failures to be remembered for a period without retrying the DC. Prevents stale "
+                + "DC failure records from blocking valid logins in environments with intermittent DC connectivity.",
+            Tags = ["ad", "netlogon", "dc", "cache", "authentication"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "NegativeCachePeriod", 0)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "NegativeCachePeriod")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "NegativeCachePeriod", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ad-netlogon-scavenge-interval",
+            Label = "Set Netlogon SRV Record Scavenge Interval (5 Minutes)",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ScavengeInterval = 300 seconds in Netlogon\\Parameters. Controls how often Netlogon "
+                + "rechecks stale DNS SRV records for domain controllers. 300 seconds ensures fresh DC "
+                + "data after a failover or site rebalance, reducing the duration of DC discovery failures. Default: 300.",
+            Tags = ["ad", "netlogon", "dns", "dc-failover", "scavenge"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "ScavengeInterval", 300)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "ScavengeInterval")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "ScavengeInterval", 300)],
+        },
+        new TweakDef
+        {
+            Id = "ad-no-nt4-crypto",
+            Label = "Disallow NT4-Era Legacy Secure Channel Cryptography",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets AllowNT4Crypto = 0 in Netlogon\\Parameters. Prevents Netlogon from falling back to "
+                + "obsolete NT4 cryptographic algorithms on the secure channel when negotiating with older DCs. "
+                + "All current domain controllers (Server 2008+) support modern Netlogon crypto. Default: 0.",
+            Tags = ["ad", "netlogon", "crypto", "nt4", "secure-channel", "hardening"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "AllowNT4Crypto", 0)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "AllowNT4Crypto")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "AllowNT4Crypto", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ad-kerberos-aes-encryption",
+            Label = "Require AES Kerberos Encryption (Disable RC4/DES)",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets SupportedEncryptionTypes = 2147483640 in SYSTEM\\Control\\Lsa\\Kerberos\\Parameters. "
+                + "Enables all AES (AES-128-CTS-HMAC-SHA1-96, AES-256-CTS-HMAC-SHA1-96) and disables RC4-HMAC, "
+                + "DES-CBC-MD5, and DES-CBC-CRC. Kerberos RC4 is vulnerable to AS-REP roasting and pass-the-hash. "
+                + "Requires all DCs and services to support AES (Server 2008+).",
+            Tags = ["ad", "kerberos", "aes", "rc4", "encryption", "hardening"],
+            RegistryKeys = [KerbParams],
+            ApplyOps = [RegOp.SetDword(KerbParams, "SupportedEncryptionTypes", 2147483640)],
+            RemoveOps = [RegOp.DeleteValue(KerbParams, "SupportedEncryptionTypes")],
+            DetectOps = [RegOp.CheckDword(KerbParams, "SupportedEncryptionTypes", 2147483640)],
+        },
+        new TweakDef
+        {
+            Id = "ad-kerberos-armoring-fast",
+            Label = "Enable Kerberos FAST Armoring (Claim-based)",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets EnableFAST = 1 in SOFTWARE\\Policies\\Microsoft\\Kerberos\\Parameters. Enables "
+                + "Kerberos Flexible Authentication Secure Tunneling (FAST / RFC 6113). FAST wraps "
+                + "authentication exchanges in an encrypted tunnel, protecting pre-authentication data from "
+                + "offline password attacks. Requires Server 2012+ DCs.",
+            Tags = ["ad", "kerberos", "fast", "armoring", "authentication", "hardening"],
+            RegistryKeys = [KerbPol],
+            ApplyOps = [RegOp.SetDword(KerbPol, "EnableFAST", 1)],
+            RemoveOps = [RegOp.DeleteValue(KerbPol, "EnableFAST")],
+            DetectOps = [RegOp.CheckDword(KerbPol, "EnableFAST", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ad-no-mailslot-discovery",
+            Label = "Disable Netlogon Mailslot DC Discovery",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets MailslotDiscovery = 0 in Netlogon\\Parameters. Forces Netlogon to use DNS-based SRV "
+                + "record lookups for domain controller discovery instead of legacy NetBIOS mailslot broadcasts. "
+                + "Eliminates unnecessary broadcast traffic and reduces NetBIOS attack surface. Default: 1 (mailslot enabled).",
+            Tags = ["ad", "netlogon", "dc-discovery", "mailslot", "netbios", "network"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "MailslotDiscovery", 0)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "MailslotDiscovery")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "MailslotDiscovery", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ad-no-single-label-dns",
+            Label = "Disable Single-Label DNS Domain DC Discovery",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets AllowSingleLabelDnsDomain = 0 in Netlogon\\Parameters. Prevents the Netlogon service "
+                + "from querying DNS for domain controllers using bare single-label hostnames (e.g. 'corp' rather "
+                + "than 'corp.example.com'). Single-label DNS queries can be intercepted or resolved to rogue hosts. Default: not set.",
+            Tags = ["ad", "netlogon", "dns", "single-label", "security", "domain"],
+            RegistryKeys = [Netlogon],
+            ApplyOps = [RegOp.SetDword(Netlogon, "AllowSingleLabelDnsDomain", 0)],
+            RemoveOps = [RegOp.DeleteValue(Netlogon, "AllowSingleLabelDnsDomain")],
+            DetectOps = [RegOp.CheckDword(Netlogon, "AllowSingleLabelDnsDomain", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ad-no-enumerate-connected-users",
+            Label = "Hide Connected/Domain Users on Sign-In Screen",
+            Category = "Active Directory",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DontEnumerateConnectedUsers = 1 via Windows System policy. Prevents the sign-in screen "
+                + "from enumerating and displaying accounts of users currently connected over RDP or other "
+                + "remote sessions, reducing information disclosure to local attackers or screen-watchers.",
+            Tags = ["ad", "logon", "enumeration", "privacy", "policy", "domain"],
+            RegistryKeys = [AdWinSysPol],
+            ApplyOps = [RegOp.SetDword(AdWinSysPol, "DontEnumerateConnectedUsers", 1)],
+            RemoveOps = [RegOp.DeleteValue(AdWinSysPol, "DontEnumerateConnectedUsers")],
+            DetectOps = [RegOp.CheckDword(AdWinSysPol, "DontEnumerateConnectedUsers", 1)],
+        },
+    ];
+}

@@ -29,7 +29,7 @@
     {
       "label": "test: All",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build }; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build } }",
+      "command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build }; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity minimal --blame-hang-timeout 30s --no-build } }",
       "group": {
         "kind": "test",
         "isDefault": true
@@ -43,7 +43,7 @@
     {
       "label": "test: Core",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+      "command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -54,7 +54,7 @@
     {
       "label": "test: GUI",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+      "command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {
@@ -65,7 +65,7 @@
     {
       "label": "test: CLI",
       "type": "shell",
-      "command": "dotnet build RegiLattice.sln -c Debug -m:1 -q; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
+      "command": "dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal; if ($LASTEXITCODE -eq 0) { dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build }",
       "group": "test",
       "problemMatcher": "$msCompile",
       "presentation": {

@@ -10,14 +10,17 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for Sprint 72: ComplianceService check logic.</summary>
-public sealed class ComplianceServiceTests
+public sealed class ComplianceServiceTests : IClassFixture<BuiltinsFixture>
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public ComplianceServiceTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
+
+    // helper so existing test bodies need no changes
+    private TweakEngine BuildEngine() => _engine;
 
     // ── Argument validation ───────────────────────────────────────────────
 

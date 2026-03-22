@@ -9,14 +9,16 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for Sprint 63: 5 new tweak modules (50 new tweaks total).</summary>
-public sealed class NewTweakModulesTests
+public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public NewTweakModulesTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
+
+    private TweakEngine BuildEngine() => _engine;
 
     // ── Per-module registration count ────────────────────────────────────
 

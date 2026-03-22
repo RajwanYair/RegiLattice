@@ -12,14 +12,37 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
-    <!-- Prevent MSBuild Roslyn compiler server from holding file handles across builds.
-         Critical for network drives (OneDrive) to avoid AssemblyInfoInputs.cache locking
-         when multiple assemblies are built in rapid succession. -->
+    <!-- ── Build output redirection (OneDrive lock workaround) ─────────────
+         Redirect obj/ and bin/ to %TEMP%\RegiLattice-build\<ProjectName> so
+         MSBuild never touches OneDrive-synced paths during compilation.
+         This eliminates AssemblyInfoInputs.cache locking, Roslyn server file-
+         handle contention, and OneDrive re-upload churn on every build.
+
+         Layout under %TEMP%\RegiLattice-build\:
+           <ProjectName>\obj\   ← BaseIntermediateOutputPath
+           <ProjectName>\bin\   ← BaseOutputPath
+
+         CI: GITHUB_ACTIONS is always set, so the same env-var expansion works
+         on both developer machines and GitHub Actions runners automatically. -->
+    <RegiLatticeLocalBuildRoot>$(TEMP)\RegiLattice-build\$(MSBuildProjectName)</RegiLatticeLocalBuildRoot>
+    <BaseIntermediateOutputPath>$(RegiLatticeLocalBuildRoot)\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(RegiLatticeLocalBuildRoot)\bin\</BaseOutputPath>
+
+    <!-- Keep UseSharedCompilation=false as a belt-and-suspenders guard for
+         any edge cases where the above redirect does not apply (e.g. custom
+         project files that override BaseIntermediateOutputPath). -->
     <UseSharedCompilation>false</UseSharedCompilation>
-    <!-- GenerateAssemblyInfo is enabled — version attributes (AssemblyVersion, FileVersion,
-         InformationalVersion) are embedded via the auto-generated AssemblyInfo.
-         UseSharedCompilation=false (above) prevents the Roslyn server from holding
-         file handles on the .cache file, so the OneDrive lock issue is avoided. -->
+
+    <!-- Exclude local obj/ and bin/ directories from compile globs.
+         The SDK normally excludes $(BaseIntermediateOutputPath)** and
+         $(BaseOutputPath)** from Compile/Content/None globs. After
+         redirecting those paths to %TEMP%, the old in-repo obj/ and bin/
+         directories are no longer covered. Without this, any stale
+         auto-generated .cs files remaining in src/<Project>/obj/ are
+         double-compiled, causing CS0579 duplicate attribute errors on
+         clean or first-run builds. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+
     <!-- Suppress CA1416 globally — this is a Windows-only project. All projects
          target net10.0-windows and will never run on non-Windows platforms. -->
     <NoWarn>$(NoWarn);CA1416</NoWarn>
