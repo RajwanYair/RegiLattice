@@ -292,6 +292,7 @@ public partial class MainForm : Form
         foreach (TreeNode node in _treeView.Nodes)
             node.ForeColor = AppTheme.Fg;
 
+        RefreshMenuImages();
         ResumeLayout(true);
         _listView.Invalidate();
     }
@@ -1804,7 +1805,6 @@ public partial class MainForm : Form
             AppTheme.SetTheme(cfg.Theme);
             AppIcons.InvalidateCache();
             Icon = AppIcons.AppIcon;
-            RefreshMenuImages();
         }
 
         // Apply font size if changed — requires full theme re-apply
