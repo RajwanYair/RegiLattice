@@ -79,7 +79,17 @@ internal static class Program
 
     // ── Dispatch ────────────────────────────────────────────────────────
 
-    private static int Dispatch(CliArgs a)
+    /// <summary>
+    /// Initialises the static engine and session fields for unit testing without calling Main().
+    /// Must be called before invoking <see cref="Dispatch"/> in tests.
+    /// </summary>
+    internal static void InitForTesting(TweakEngine engine, RegistrySession? session = null)
+    {
+        _session = session ?? new RegistrySession(dryRun: true);
+        _engine  = engine;
+    }
+
+    internal static int Dispatch(CliArgs a)
     {
         // Standalone flags (order matters — first match wins)
         if (a.Doctor)
