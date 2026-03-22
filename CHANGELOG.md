@@ -11,7 +11,7 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **New CLI flags**: `--compliance-history`, `--compliance-report auto`
 - **Build**: 0 errors, 0 warnings (Release x64, .NET 10)
 - 4 058 tweaks, 116 categories, 121 module files
-- **1 833 tests** passing (1 325 Core + 266 CLI + 242 GUI)
+- **1 858 tests** passing (1 325 Core + 291 CLI + 242 GUI)
 - Version bumped `4.2.0` → `4.3.0`
 
 ## [4.2.0] — 2026-03-21
