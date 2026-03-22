@@ -473,6 +473,7 @@ public sealed class ParseArgsTests
     public void ParseArgs_NewPack_SetsNewPackProperty()
     {
         var a = Program.ParseArgs(["--new-pack", "my-custom-pack"]);
+        Assert.NotNull(a);
         Assert.Equal("my-custom-pack", a.NewPack);
     }
 }
