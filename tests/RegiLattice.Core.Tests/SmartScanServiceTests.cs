@@ -136,8 +136,10 @@ public sealed class SmartScanServiceTests : IClassFixture<BuiltinsFixture>
         var corpRec = SmartScanService.Scan(_engine, statusMap: null, forceCorpSafe: true).Recommendations;
         var corpIds = corpRec.Select(r => r.Tweak.Id).ToHashSet();
         var allIds = allRec.Select(r => r.Tweak.Id).ToHashSet();
-        Assert.True(corpIds.IsSubsetOf(allIds) || corpRec.Count <= allRec.Count,
-            "CorpSafe scan should produce at most as many recommendations as the unconstrained scan");
+        Assert.True(
+            corpIds.IsSubsetOf(allIds) || corpRec.Count <= allRec.Count,
+            "CorpSafe scan should produce at most as many recommendations as the unconstrained scan"
+        );
     }
 
     // ── Status map filtering ────────────────────────────────────────────────
