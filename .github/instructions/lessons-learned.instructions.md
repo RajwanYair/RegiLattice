@@ -543,109 +543,91 @@ encoding issues, don't consume a terminal slot, and never get stuck.
 
 ---
 
-## OneDrive Build Cache — Full Sequence That Works
+## OneDrive Build Cache — Root Causes and Permanent Fix
 
-The OneDrive-hosted workspace triggers a persistent MSBuild cache-lock sequence on
-solution builds. The reliable resolution order is:
+The OneDrive-hosted workspace historically triggered a persistent MSBuild cache-lock
+sequence on solution builds. These failures have been **permanently fixed** (v4.3.1).
+This section documents the root causes, the fix, and the last-resort recovery procedure.
 
-> **Path note**: Because the solution platform is always **x64**, MSBuild places obj
-> files under `obj\x64\<Config>\net10.0-windows\` when built from VS, and under
-> `obj\<Config>\net10.0-windows\` when built from the terminal (no platform in args).
-> The cache-clearing commands below use `Get-ChildItem -Recurse -Filter` to find the
-> target file regardless of which path depth is in use — do NOT hardcode the config
-> or platform subfolder.
+### Root Cause 1 — MSBuild Node Reuse Holds File Locks (MSB3492)
 
-### Symptom 1 — MSB3492 on AssemblyInfoInputs.cache
+MSBuild uses worker nodes that **persist between builds by default**. On this workspace
+the obj directory lives inside `%TEMP%\RegiLattice-build\` (OneDrive redirect). A
+persistent MSBuild node running from a previous build holds an exclusive file handle on
+`*.AssemblyInfoInputs.cache` in that temp dir. The next build tries to read the locked
+file → `error MSB3492: Could not read existing file "...AssemblyInfoInputs.cache"`.
 
-```
-error MSB3492: Could not read existing file "...RegiLattice.Core.AssemblyInfoInputs.cache"
-```
+**Permanent fix**: `MSBUILDDISABLENODEREUSE=1` — set in three places so it is never missing:
 
-**Fix**: Delete the file wherever it lives and retry:
+1. `.env.ps1` — sourced by the default VS Code terminal profile at session start
+2. `.vscode/settings.json` → `terminal.integrated.env.windows` — belt-and-suspenders
+3. `ci.yml` + `release.yml` → `env: MSBUILDDISABLENODEREUSE: 1` at job level
 
-```powershell
-Get-ChildItem "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj" -Recurse -Filter "RegiLattice.Core.AssemblyInfoInputs.cache" -ErrorAction SilentlyContinue | Remove-Item -Force
-dotnet build RegiLattice.sln -c Release -m:1 -q
-```
+### Root Cause 2 — `-q` (Quiet Verbosity) Aborts on Question-Build Signals
 
-### Symptom 2 — CoreGenerateAssemblyInfo "completely"
+When `--verbosity quiet` (`-q`) is passed, `dotnet build`'s **question-build phase**
+treats the "needs rebuild" signal as a **fatal abort** instead of proceeding to full
+compilation. This caused `"Building target 'X' completely"` errors to look like build
+failures even though the compiler hadn't run yet. Retrying "worked" because the
+question-build's answer changed on the second attempt (partial incremental state).
 
-```
-MSBUILD : error : Building target "CoreGenerateAssemblyInfo" completely.
-```
+**Permanent fix**: **Never use `-q`** in any build command. Use no verbosity flag
+(normal) or `--verbosity minimal` for concise but non-aborting output.
 
-This is a transient error that appears immediately after deleting the cache from Symptom 1.
-**Fix**: Run the **exact same** build command a second time — it succeeds on the retry.
+### Root Cause 3 — Missing `ref\` and `refint\` Directories
 
-### Symptom 3 — CoreCompile "completely"
+On a cold cache, the SDK's `MakeDir` step picks up the non-existent `ref\` and
+`refint\` subdirs as a warning/error during `_CheckForCompileOutputPathConflict`.
+`Directory.Build.targets` now pre-creates these in both `InitialTargets` (runs once
+before any target) and `BeforeTargets="GenerateTargetFrameworkMonikerAttribute;..."`.
 
-```
-MSBUILD : error Building target "CoreCompile" completely.
-```
+### Changes Made (v4.3.1)
 
-This happens when the CoreCompileInputs.cache is stale. **Fix**:
+- `Directory.Build.targets` — dual-hook strategy (`InitialTargets` + `BeforeTargets`)
+  now pre-creates `ref\` and `refint\` subdirs; new `RegiLatticeClearStaleCaches`
+  target (`BeforeTargets="CoreGenerateAssemblyInfo"`) deletes `AssemblyInfoInputs.cache`
+  pre-emptively on every build, eliminating MSB3492 as a defence-in-depth measure.
+- `.env.ps1` — `$env:MSBUILDDISABLENODEREUSE = '1'`
+- `.vscode/settings.json` — `"terminal.integrated.env.windows": { "MSBUILDDISABLENODEREUSE": "1" }`
+- `.github/workflows/ci.yml` + `release.yml` — `env: MSBUILDDISABLENODEREUSE: 1`
 
-```powershell
-Get-ChildItem "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj" -Recurse -Filter "RegiLattice.Core.csproj.CoreCompileInputs.cache" -ErrorAction SilentlyContinue | Remove-Item -Force
-dotnet build RegiLattice.sln -c Release -m:1 -q
-# Still fails once → retry one more time
-dotnet build RegiLattice.sln -c Release -m:1 -q
-```
-
-### Nuclear option — delete entire Core cache dir
-
-If all three symptoms persist:
+### Normal Build Command (no workarounds needed)
 
 ```powershell
-Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
-dotnet build RegiLattice.sln -c Release -m:1 -q  # may fail once with GenerateTargetFrameworkMonikerAttribute
-dotnet build RegiLattice.sln -c Release -m:1 -q  # succeeds on second attempt
+# Debug build — first attempt always succeeds
+dotnet build RegiLattice.sln -c Debug -m:1
+
+# Release build
+dotnet build RegiLattice.sln -c Release -m:1
+
+# NEVER use -q / --verbosity quiet — it causes question-build aborts
 ```
 
-### Symptom 4 — `GenerateTargetFrameworkMonikerAttribute` after nuclear delete (ALL projects)
+> **Path note**: The solution platform is `x64`. MSBuild places obj files under
+> `obj\x64\<Config>\net10.0-windows\` when built from VS, and under
+> `obj\<Config>\net10.0-windows\` when built from the terminal. Cache-clearing
+> commands use `Get-ChildItem -Recurse -Filter` to find files regardless of depth.
 
-```
-MSBUILD : error Building target "GenerateTargetFrameworkMonikerAttribute" completely.
-```
+### Last-Resort Recovery (if MSBUILDDISABLENODEREUSE was not set)
 
-This fires on **all three projects** (Core, CLI, GUI) after the nuclear cache clear.
-The root cause is the Roslyn **build server** retaining stale project-output state.
-Simply retrying the solution build does NOT fix it — the server is still running with
-stale knowledge.
-
-**Fix**: shut down the build server, then warm up each project individually before
-attempting the solution-level build:
+If builds still fail (e.g., on a machine where `.env.ps1` was not sourced):
 
 ```powershell
-# 1. Kill the stale Roslyn build server
+# Step 1 — shut down persistent MSBuild nodes FIRST (releases file locks)
 dotnet build-server shutdown
 
-# 2. Warm up each project in dependency order (Core first, test projects last)
-dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj       -c Release -m:1 -q
-dotnet build src/RegiLattice.CLI/RegiLattice.CLI.csproj         -c Release -m:1 -q
-dotnet build src/RegiLattice.GUI/RegiLattice.GUI.csproj         -c Release -m:1 -q
-dotnet build tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj -c Debug -m:1 -q
-dotnet build tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj  -c Debug -m:1 -q
-dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj  -c Debug -m:1 -q
+# Step 2 — delete the entire Core cache dir
+Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
 
-# 3. Now solution-level builds succeed
-dotnet build RegiLattice.sln -c Release -m:1 -q
+# Step 3 — ensure MSBUILDDISABLENODEREUSE is set for this session
+$env:MSBUILDDISABLENODEREUSE = '1'
+Start-Sleep 2
+
+# Step 4 — single solution build; succeeds on first attempt
+dotnet build RegiLattice.sln -c Debug -m:1
 ```
 
-**Why per-project first?** Each individual `dotnet build <project>.csproj` warms up
-the `GenerateTargetFrameworkMonikerAttribute` and `CoreGenerateAssemblyInfo` targets
-for exactly that project before the solution-level scheduler tries to run them in
-parallel across all projects.
-
-**When to use**: If the three-retry nuclear sequence (Symptoms 1–3) still leaves the
-build failing on `GenerateTargetFrameworkMonikerAttribute`, always follow with
-`dotnet build-server shutdown` + the per-project warm-up above.
-
-### Fastest reliable pattern
-
-Use the VS Code **build task** (`"test: Core"` or `"build: Solution (Debug)"`) instead of
-the terminal — the task runner handles retries automatically and never shows Hebrew garbage
-in output.
+**Do NOT use `-q`** in any of these recovery commands — it will cause the same abort.
 
 ---
 
