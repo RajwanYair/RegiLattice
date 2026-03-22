@@ -81,6 +81,7 @@ partial class MainForm
     private ToolStripMenuItem _mnuMarketplace = null!;
     private ToolStripMenuItem _mnuProfileWizard = null!;
     private ToolStripMenuItem _mnuSmartScan = null!;
+    private ToolStripMenuItem _mnuProfileCompare = null!;
 
     // ── Top-level and grouped sub-menus (need refresh on theme change) ─────
     private ToolStripMenuItem _mnuTools = null!;
@@ -297,7 +298,7 @@ partial class MainForm
             _subPrivSec,
             _subNetwork,
             _subCleanup,
-            new ToolStripSeparator(),            _mnuSmartScan = new ToolStripMenuItem("\u26A1 Smart Scan\u2026") { Image = AppIcons.WizardMenuBitmap },            _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…") { Image = AppIcons.WizardMenuBitmap },
+            new ToolStripSeparator(),            _mnuSmartScan = new ToolStripMenuItem("\u26A1 Smart Scan\u2026") { Image = AppIcons.WizardMenuBitmap },            _mnuProfileCompare = new ToolStripMenuItem("\uD83D\uDD0D Profile Comparison\u2026") { Image = AppIcons.WizardMenuBitmap },            _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…") { Image = AppIcons.WizardMenuBitmap },
             new ToolStripSeparator(),
             mnuToolsRefresh,
             new ToolStripSeparator(),
@@ -382,6 +383,7 @@ partial class MainForm
         _mnuNetBandwidth.Click         += (_, _) => OnOpenNetBandwidth();
         _mnuMacAddress.Click           += (_, _) => OnOpenMacAddress();
         _mnuSmartScan.Click += (_, _) => OnOpenSmartScan();
+        _mnuProfileCompare.Click += (_, _) => OnOpenProfileCompare();
         _mnuProfileWizard.Click += (_, _) => OnOpenProfileWizard();
         mnuToolsRefresh.Click += async (_, _) => await RefreshStatusAsync();
         mnuSelectAll2.Click += (_, _) => SelectAllListItems();
