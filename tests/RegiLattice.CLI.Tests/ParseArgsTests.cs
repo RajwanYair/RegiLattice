@@ -472,9 +472,231 @@ public sealed class ParseArgsTests
     [Fact]
     public void ParseArgs_NewPack_SetsNewPackProperty()
     {
-        var a = Program.ParseArgs(["--new-pack", "my-custom-pack"]);
+        var result = Program.ParseArgs(["--new-pack", "my-custom-pack"]);
+        Assert.NotNull(result);
+        Assert.NotNull(result.NewPack);
+        Assert.Equal("my-custom-pack", result.NewPack);
+    }
+
+    // ── Portable / Silent / LogFile ─────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Portable_SetsPortableTrue()
+    {
+        var a = Program.ParseArgs(["--portable"]);
         Assert.NotNull(a);
-        Assert.Equal("my-custom-pack", a.NewPack);
+        Assert.True(a.Portable);
+    }
+
+    [Fact]
+    public void ParseArgs_Silent_SetsSilentTrue()
+    {
+        var a = Program.ParseArgs(["--silent"]);
+        Assert.NotNull(a);
+        Assert.True(a.Silent);
+    }
+
+    [Fact]
+    public void ParseArgs_LogFile_SetsLogFilePath()
+    {
+        var a = Program.ParseArgs(["--log-file", "output.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("output.json", a.LogFile);
+    }
+
+    [Fact]
+    public void ParseArgs_Portable_DefaultsFalse()
+    {
+        var a = Program.ParseArgs([]);
+        Assert.NotNull(a);
+        Assert.False(a.Portable);
+    }
+
+    [Fact]
+    public void ParseArgs_Silent_DefaultsFalse()
+    {
+        var a = Program.ParseArgs([]);
+        Assert.NotNull(a);
+        Assert.False(a.Silent);
+    }
+
+    // ── Favorites ───────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Favorites_SetsShowFavoritesTrue()
+    {
+        var a = Program.ParseArgs(["--favorites"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowFavorites);
+    }
+
+    [Fact]
+    public void ParseArgs_FavoriteAdd_SetsFavoriteAddId()
+    {
+        var a = Program.ParseArgs(["--favorite-add", "priv-disable-telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal("priv-disable-telemetry", a.FavoriteAdd);
+    }
+
+    [Fact]
+    public void ParseArgs_FavoriteRemove_SetsFavoriteRemoveId()
+    {
+        var a = Program.ParseArgs(["--favorite-remove", "priv-disable-telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal("priv-disable-telemetry", a.FavoriteRemove);
+    }
+
+    [Fact]
+    public void ParseArgs_FavoriteAdd_WithoutValue_StaysNull()
+    {
+        var a = Program.ParseArgs(["--favorite-add"]);
+        Assert.NotNull(a);
+        Assert.Null(a.FavoriteAdd);
+    }
+
+    // ── History ─────────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_History_SetsShowHistoryTrue()
+    {
+        var a = Program.ParseArgs(["--history"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowHistory);
+    }
+
+    [Fact]
+    public void ParseArgs_History_DefaultCount_IsTwenty()
+    {
+        var a = Program.ParseArgs(["--history"]);
+        Assert.NotNull(a);
+        Assert.Equal(20, a.HistoryCount);
+    }
+
+    [Fact]
+    public void ParseArgs_History_WithCount_SetsHistoryCount()
+    {
+        var a = Program.ParseArgs(["--history", "50"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowHistory);
+        Assert.Equal(50, a.HistoryCount);
+    }
+
+    [Fact]
+    public void ParseArgs_HistoryCount_DefaultIsTwenty()
+    {
+        var a = Program.ParseArgs([]);
+        Assert.NotNull(a);
+        Assert.Equal(20, a.HistoryCount);
+    }
+
+    // ── Compliance ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Compliance_SetsCompliancePath()
+    {
+        var a = Program.ParseArgs(["--compliance", "snapshot.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("snapshot.json", a.Compliance);
+    }
+
+    [Fact]
+    public void ParseArgs_ComplianceHistory_SetsComplianceHistoryTrue()
+    {
+        var a = Program.ParseArgs(["--compliance-history"]);
+        Assert.NotNull(a);
+        Assert.True(a.ComplianceHistory);
+    }
+
+    [Fact]
+    public void ParseArgs_ComplianceReport_SetsComplianceReportMode()
+    {
+        var a = Program.ParseArgs(["--compliance-report", "auto"]);
+        Assert.NotNull(a);
+        Assert.Equal("auto", a.ComplianceReportMode);
+    }
+
+    [Fact]
+    public void ParseArgs_ComplianceHistory_DefaultsFalse()
+    {
+        var a = Program.ParseArgs([]);
+        Assert.NotNull(a);
+        Assert.False(a.ComplianceHistory);
+    }
+
+    // ── Export GPO / Manager ────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_ExportGpo_SetsExportGpoPath()
+    {
+        var a = Program.ParseArgs(["--export-gpo", "policy.admx"]);
+        Assert.NotNull(a);
+        Assert.Equal("policy.admx", a.ExportGpo);
+    }
+
+    [Fact]
+    public void ParseArgs_Manager_SetsManagerTarget()
+    {
+        var a = Program.ParseArgs(["--manager", "scheduledtweaks"]);
+        Assert.NotNull(a);
+        Assert.Equal("scheduledtweaks", a.Manager);
+    }
+
+    // ── Config export / import ──────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_ExportConfig_SetsExportConfigPath()
+    {
+        var a = Program.ParseArgs(["--export-config", "config.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("config.json", a.ExportConfig);
+    }
+
+    [Fact]
+    public void ParseArgs_ImportConfig_SetsImportConfigPath()
+    {
+        var a = Program.ParseArgs(["--import-config", "config.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("config.json", a.ImportConfig);
+    }
+
+    // ── HTML report ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_HtmlReport_SetsHtmlReportPath()
+    {
+        var a = Program.ParseArgs(["--html-report", "report.html"]);
+        Assert.NotNull(a);
+        Assert.Equal("report.html", a.HtmlReport);
+    }
+
+    // ── PowerShell module generation ────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_GeneratePsModule_SetsGeneratePsModuleTrue()
+    {
+        var a = Program.ParseArgs(["--generate-ps-module"]);
+        Assert.NotNull(a);
+        Assert.True(a.GeneratePsModule);
+    }
+
+    [Fact]
+    public void ParseArgs_GeneratePsModule_WithDir_SetsPsModuleOutput()
+    {
+        var a = Program.ParseArgs(["--generate-ps-module", @"C:\modules"]);
+        Assert.NotNull(a);
+        Assert.True(a.GeneratePsModule);
+        Assert.Equal(@"C:\modules", a.PsModuleOutput);
+    }
+
+    [Fact]
+    public void ParseArgs_GeneratePsModule_WithFlag_DoesNotConsumeFlag()
+    {
+        // The next arg starts with '--' so should NOT be treated as output dir
+        var a = Program.ParseArgs(["--generate-ps-module", "--force"]);
+        Assert.NotNull(a);
+        Assert.True(a.GeneratePsModule);
+        Assert.Null(a.PsModuleOutput);
+        Assert.True(a.Force);
     }
 }
 

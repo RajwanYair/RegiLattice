@@ -179,11 +179,7 @@ public sealed class HtmlReportGeneratorTests : IClassFixture<BuiltinsFixture>
             // Content must match except for the embedded DateTime.Now timestamp
             // (Generate and Build are called independently — they can differ by 1 second).
             static string StripTimestamp(string html) =>
-                System.Text.RegularExpressions.Regex.Replace(
-                    html,
-                    @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-                    "TIMESTAMP"
-                );
+                System.Text.RegularExpressions.Regex.Replace(html, @"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}", "TIMESTAMP");
             Assert.Equal(StripTimestamp(built), StripTimestamp(written));
         }
         finally
