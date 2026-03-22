@@ -548,17 +548,24 @@ encoding issues, don't consume a terminal slot, and never get stuck.
 The OneDrive-hosted workspace triggers a persistent MSBuild cache-lock sequence on
 solution builds. The reliable resolution order is:
 
+> **Path note**: Because the solution platform is always **x64**, MSBuild places obj
+> files under `obj\x64\<Config>\net10.0-windows\` when built from VS, and under
+> `obj\<Config>\net10.0-windows\` when built from the terminal (no platform in args).
+> The cache-clearing commands below use `Get-ChildItem -Recurse -Filter` to find the
+> target file regardless of which path depth is in use — do NOT hardcode the config
+> or platform subfolder.
+
 ### Symptom 1 — MSB3492 on AssemblyInfoInputs.cache
 
 ```
 error MSB3492: Could not read existing file "...RegiLattice.Core.AssemblyInfoInputs.cache"
 ```
 
-**Fix**: Delete the file and retry:
+**Fix**: Delete the file wherever it lives and retry:
 
 ```powershell
-Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.AssemblyInfoInputs.cache" -Force -ErrorAction SilentlyContinue
-dotnet build RegiLattice.sln -c Debug -m:1 -q
+Get-ChildItem "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj" -Recurse -Filter "RegiLattice.Core.AssemblyInfoInputs.cache" -ErrorAction SilentlyContinue | Remove-Item -Force
+dotnet build RegiLattice.sln -c Release -m:1 -q
 ```
 
 ### Symptom 2 — CoreGenerateAssemblyInfo "completely"
@@ -579,10 +586,10 @@ MSBUILD : error Building target "CoreCompile" completely.
 This happens when the CoreCompileInputs.cache is stale. **Fix**:
 
 ```powershell
-Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.csproj.CoreCompileInputs.cache" -Force
-dotnet build RegiLattice.sln -c Debug -m:1 -q
+Get-ChildItem "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj" -Recurse -Filter "RegiLattice.Core.csproj.CoreCompileInputs.cache" -ErrorAction SilentlyContinue | Remove-Item -Force
+dotnet build RegiLattice.sln -c Release -m:1 -q
 # Still fails once → retry one more time
-dotnet build RegiLattice.sln -c Debug -m:1 -q
+dotnet build RegiLattice.sln -c Release -m:1 -q
 ```
 
 ### Nuclear option — delete entire Core cache dir
@@ -591,8 +598,8 @@ If all three symptoms persist:
 
 ```powershell
 Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
-dotnet build RegiLattice.sln -c Debug -m:1 -q  # may fail once with GenerateTargetFrameworkMonikerAttribute
-dotnet build RegiLattice.sln -c Debug -m:1 -q  # succeeds on second attempt
+dotnet build RegiLattice.sln -c Release -m:1 -q  # may fail once with GenerateTargetFrameworkMonikerAttribute
+dotnet build RegiLattice.sln -c Release -m:1 -q  # succeeds on second attempt
 ```
 
 ### Fastest reliable pattern
@@ -719,6 +726,7 @@ string path = Path.Combine(AppConfig.DataRoot, "compliance-history.json");
 ```
 
 **What `ConfigDir` returns**:
+
 - Normal mode: `%LOCALAPPDATA%\RegiLattice`
 - Portable mode: `<exe-dir>\data\`
 
@@ -770,10 +778,13 @@ and will show as Problems panel warnings if violated.
 
 ```markdown
 <!-- ❌ BAD — MD022: no blank line between heading and content -->
+
 #### Enhanced
+
 - item one
 
 <!-- ✅ GOOD — blank line separates heading from list -->
+
 #### Enhanced
 
 - item one
