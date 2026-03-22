@@ -221,4 +221,82 @@ public sealed class UserProfileServiceTests : IDisposable
         Assert.Equal(created.Description, fetched.Description);
         Assert.Equal(created.TweakIds, fetched.TweakIds);
     }
+
+    // ── Update description branches ───────────────────────────────────────
+
+    [Fact]
+    public void Update_WithNullDescription_KeepsExistingDescription()
+    {
+        UserProfileService.Create("upd-desc-test", "original desc", FewTweakIds);
+        // Passing null description → should keep "original desc"
+        var updated = UserProfileService.Update("upd-desc-test", FewTweakIds, description: null);
+        Assert.Equal("original desc", updated.Description);
+    }
+
+    [Fact]
+    public void Update_WithExplicitDescription_UpdatesDescription()
+    {
+        UserProfileService.Create("upd-desc-explicit", "original", FewTweakIds);
+        var updated = UserProfileService.Update("upd-desc-explicit", FewTweakIds, description: "new desc");
+        Assert.Equal("new desc", updated.Description);
+    }
+
+    // ── SanitizeName — invalid chars replaced ────────────────────────────
+
+    [Fact]
+    public void Create_NameWithInvalidFileChar_CanBeFoundByOriginalName()
+    {
+        // ':' is invalid in Windows filenames → SanitizeName replaces it with '_'
+        // but the UserProfile.Name property stores the original trimmed value.
+        const string rawName = "my:test-profile";
+        var profile = UserProfileService.Create(rawName, "desc", FewTweakIds);
+        Assert.Equal(rawName, profile.Name);
+        // Exists() also resolves via SanitizeName → should find the file
+        Assert.True(UserProfileService.Exists(rawName));
+    }
+
+    // ── GetProfiles: directory does not exist ────────────────────────────
+
+    [Fact]
+    public void GetProfiles_DirectoryNotYetCreated_ReturnsEmpty()
+    {
+        // Delete the profiles directory to guarantee the early-return branch fires.
+        string dir = UserProfileService.ProfilesDir;
+        if (Directory.Exists(dir))
+            Directory.Delete(dir, recursive: true);
+
+        var profiles = UserProfileService.GetProfiles();
+        Assert.Empty(profiles);
+    }
+
+    // ── GetProfiles: corrupted JSON skipped ──────────────────────────────
+
+    [Fact]
+    public void GetProfiles_CorruptedFile_CorruptedEntrySkipped()
+    {
+        // Write a valid profile then a corrupt one; GetProfiles should return only the valid one.
+        UserProfileService.Create("good-profile", "desc", FewTweakIds);
+        string corruptPath = System.IO.Path.Combine(UserProfileService.ProfilesDir, "corrupt.json");
+        System.IO.File.WriteAllText(corruptPath, "{ INVALID JSON <<<");
+
+        var profiles = UserProfileService.GetProfiles();
+        Assert.Single(profiles);
+        Assert.Equal("good-profile", profiles[0].Name);
+    }
+
+    // ── Rename: source not found ─────────────────────────────────────────
+
+    [Fact]
+    public void Rename_SourceNotFound_ThrowsInvalidOperationException()
+    {
+        Assert.Throws<InvalidOperationException>(() => UserProfileService.Rename("no-such", "new-name"));
+    }
+
+    // ── Clone: source not found ───────────────────────────────────────────
+
+    [Fact]
+    public void Clone_SourceNotFound_ThrowsInvalidOperationException()
+    {
+        Assert.Throws<InvalidOperationException>(() => UserProfileService.Clone("no-such", "cloned"));
+    }
 }
