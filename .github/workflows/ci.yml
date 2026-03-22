@@ -45,10 +45,7 @@ jobs:
 
       - name: Test with coverage
         run: >-
-          dotnet test
-          tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
-          tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj
-          tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj
+          dotnet test RegiLattice.sln
           -c Release --no-build
           --settings tests/.runsettings
           --blame-hang-timeout 30s
