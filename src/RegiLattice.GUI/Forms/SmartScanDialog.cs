@@ -19,7 +19,12 @@ internal sealed class SmartScanDialog : Form
     private readonly IReadOnlyDictionary<string, TweakResult>? _statusCache;
 
     // ── Controls ─────────────────────────────────────────────────────────────
-    private readonly ListView _lstRecs = new() { FullRowSelect = true, MultiSelect = true, View = View.Details };
+    private readonly ListView _lstRecs = new()
+    {
+        FullRowSelect = true,
+        MultiSelect = true,
+        View = View.Details,
+    };
     private readonly Label _lblSummary = new();
     private readonly Label _lblStatus = new();
     private readonly Button _btnApplyQuickWins = new();
@@ -35,10 +40,7 @@ internal sealed class SmartScanDialog : Form
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
-    internal SmartScanDialog(
-        TweakEngine engine,
-        IReadOnlyDictionary<string, TweakResult>? statusCache = null
-    )
+    internal SmartScanDialog(TweakEngine engine, IReadOnlyDictionary<string, TweakResult>? statusCache = null)
     {
         _engine = engine;
         _statusCache = statusCache;
@@ -94,7 +96,12 @@ internal sealed class SmartScanDialog : Form
         _lblStatus.ForeColor = AppTheme.FgDim;
 
         // Button row
-        var btnPanel = new Panel { Dock = DockStyle.Bottom, Height = 50, BackColor = AppTheme.Surface };
+        var btnPanel = new Panel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 50,
+            BackColor = AppTheme.Surface,
+        };
         ConfigureButton(_btnApplyQuickWins, "\u2714 Apply Quick Wins", AppTheme.Green, 180, new Point(8, 10));
         ConfigureButton(_btnApplySelected, "\u25B6 Apply Selected", AppTheme.Accent, 150, new Point(196, 10));
         ConfigureButton(_btnRescan, "\U0001F504 Rescan", AppTheme.FgDim, 100, new Point(354, 10));
@@ -210,8 +217,8 @@ internal sealed class SmartScanDialog : Form
         _lstRecs.EndUpdate();
 
         int qw = result.QuickWinsCount;
-        _lblSummary.Text = $"Scanned {result.ScannedCount} tweaks — {result.Recommendations.Count} recommendations"
-            + (qw > 0 ? $", {qw} Quick Wins" : "");
+        _lblSummary.Text =
+            $"Scanned {result.ScannedCount} tweaks — {result.Recommendations.Count} recommendations" + (qw > 0 ? $", {qw} Quick Wins" : "");
         _btnApplyQuickWins.Enabled = qw > 0;
         _btnApplySelected.Enabled = false;
         SetStatus("Scan complete.");
@@ -224,10 +231,7 @@ internal sealed class SmartScanDialog : Form
         if (_lastResult is null)
             return;
 
-        List<TweakDef> targets = _lastResult
-            .Recommendations.Where(r => r.IsQuickWin)
-            .Select(r => r.Tweak)
-            .ToList();
+        List<TweakDef> targets = _lastResult.Recommendations.Where(r => r.IsQuickWin).Select(r => r.Tweak).ToList();
 
         await ApplyBatchAsync(targets, "Quick Win");
     }
@@ -275,11 +279,7 @@ internal sealed class SmartScanDialog : Form
                 }
             });
 
-            SetStatus(
-                failed == 0
-                    ? $"Applied {applied} tweaks successfully."
-                    : $"Applied {applied}, failed {failed}."
-            );
+            SetStatus(failed == 0 ? $"Applied {applied} tweaks successfully." : $"Applied {applied}, failed {failed}.");
 
             // Re-run scan to update recommendations.
             await RunScanAsync();
@@ -296,10 +296,7 @@ internal sealed class SmartScanDialog : Form
     {
         _btnApplySelected.Enabled = _lstRecs.SelectedItems.Count > 0;
 
-        if (
-            _lstRecs.SelectedItems.Count == 1
-            && _lstRecs.SelectedItems[0].Tag is ScanRecommendation rec
-        )
+        if (_lstRecs.SelectedItems.Count == 1 && _lstRecs.SelectedItems[0].Tag is ScanRecommendation rec)
         {
             _lblDetailText.Text = rec.Reason;
         }

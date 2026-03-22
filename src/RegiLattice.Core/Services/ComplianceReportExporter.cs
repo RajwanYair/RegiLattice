@@ -21,10 +21,7 @@ public static class ComplianceReportExporter
     ///     Known tweak statuses.  Tweaks missing from this map are treated as Unknown.
     /// </param>
     /// <param name="outputPath">Destination .html file path.</param>
-    public static void ExportHtml(
-        TweakEngine engine,
-        IReadOnlyDictionary<string, TweakResult>? statusMap,
-        string outputPath)
+    public static void ExportHtml(TweakEngine engine, IReadOnlyDictionary<string, TweakResult>? statusMap, string outputPath)
     {
         ArgumentNullException.ThrowIfNull(engine);
         ArgumentException.ThrowIfNullOrWhiteSpace(outputPath);
@@ -36,29 +33,30 @@ public static class ComplianceReportExporter
     /// <summary>
     /// Generates the HTML report and returns it as a string.
     /// </summary>
-    public static string BuildHtml(
-        TweakEngine engine,
-        IReadOnlyDictionary<string, TweakResult>? statusMap = null)
+    public static string BuildHtml(TweakEngine engine, IReadOnlyDictionary<string, TweakResult>? statusMap = null)
     {
         ArgumentNullException.ThrowIfNull(engine);
 
-        IReadOnlyDictionary<string, TweakResult> status =
-            statusMap ?? new Dictionary<string, TweakResult>();
+        IReadOnlyDictionary<string, TweakResult> status = statusMap ?? new Dictionary<string, TweakResult>();
 
         // ── Aggregate stats per category ──────────────────────────────
         var allTweaks = engine.AllTweaks();
         int totalTweaks = allTweaks.Count;
-        int applied = 0, pending = 0, unknown = 0;
+        int applied = 0,
+            pending = 0,
+            unknown = 0;
 
-        var byCategory = new Dictionary<string, List<(TweakDef Tweak, TweakResult Status)>>(
-            StringComparer.OrdinalIgnoreCase);
+        var byCategory = new Dictionary<string, List<(TweakDef Tweak, TweakResult Status)>>(StringComparer.OrdinalIgnoreCase);
 
         foreach (TweakDef td in allTweaks)
         {
             TweakResult r = status.ContainsKey(td.Id) ? status[td.Id] : TweakResult.Unknown;
-            if (r == TweakResult.Applied) applied++;
-            else if (r == TweakResult.NotApplied) pending++;
-            else unknown++;
+            if (r == TweakResult.Applied)
+                applied++;
+            else if (r == TweakResult.NotApplied)
+                pending++;
+            else
+                unknown++;
 
             if (!byCategory.TryGetValue(td.Category, out var list))
             {
@@ -103,7 +101,9 @@ public static class ComplianceReportExporter
 
         // Header
         sb.AppendLine("<h1>RegiLattice Compliance Report</h1>");
-        sb.AppendLine($"<p class=\"meta\">Generated: {DateTime.Now:yyyy-MM-dd HH:mm} — {totalTweaks:N0} tweaks across {byCategory.Count} categories</p>");
+        sb.AppendLine(
+            $"<p class=\"meta\">Generated: {DateTime.Now:yyyy-MM-dd HH:mm} — {totalTweaks:N0} tweaks across {byCategory.Count} categories</p>"
+        );
 
         // Summary cards
         sb.AppendLine("<div class=\"summary\">");
@@ -124,8 +124,7 @@ public static class ComplianceReportExporter
             int catTotal = rows.Count;
 
             sb.AppendLine($"<h2>{System.Net.WebUtility.HtmlEncode(cat)}</h2>");
-            sb.AppendLine($"<table><tr>" +
-                          $"<th>Tweak</th><th>Status</th><th>Scope</th><th>Admin</th><th>Description</th></tr>");
+            sb.AppendLine($"<table><tr>" + $"<th>Tweak</th><th>Status</th><th>Scope</th><th>Admin</th><th>Description</th></tr>");
 
             foreach ((TweakDef td, TweakResult r) in rows.OrderBy(x => x.Tweak.Label, StringComparer.OrdinalIgnoreCase))
             {
@@ -142,12 +141,14 @@ public static class ComplianceReportExporter
                     _ => "<span class=\"badge b-unknown\">Unknown</span>",
                 };
 
-                sb.AppendLine($"<tr class=\"{rowCss}\">" +
-                              $"<td>{System.Net.WebUtility.HtmlEncode(td.Label)}</td>" +
-                              $"<td>{badge}</td>" +
-                              $"<td>{td.Scope}</td>" +
-                              $"<td>{(td.NeedsAdmin ? "Yes" : "No")}</td>" +
-                              $"<td>{System.Net.WebUtility.HtmlEncode(td.Description)}</td></tr>");
+                sb.AppendLine(
+                    $"<tr class=\"{rowCss}\">"
+                        + $"<td>{System.Net.WebUtility.HtmlEncode(td.Label)}</td>"
+                        + $"<td>{badge}</td>"
+                        + $"<td>{td.Scope}</td>"
+                        + $"<td>{(td.NeedsAdmin ? "Yes" : "No")}</td>"
+                        + $"<td>{System.Net.WebUtility.HtmlEncode(td.Description)}</td></tr>"
+                );
             }
 
             sb.AppendLine("</table>");

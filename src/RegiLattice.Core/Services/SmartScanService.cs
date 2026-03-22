@@ -60,11 +60,7 @@ public static class SmartScanService
     /// <param name="forceCorpSafe">
     /// When <c>true</c>, only <see cref="TweakDef.CorpSafe"/> tweaks are included.
     /// </param>
-    public static ScanResult Scan(
-        TweakEngine engine,
-        IReadOnlyDictionary<string, TweakResult>? statusMap = null,
-        bool forceCorpSafe = false
-    )
+    public static ScanResult Scan(TweakEngine engine, IReadOnlyDictionary<string, TweakResult>? statusMap = null, bool forceCorpSafe = false)
     {
         ArgumentNullException.ThrowIfNull(engine);
 
@@ -97,12 +93,14 @@ public static class SmartScanService
             int priority = td.ImpactScore * td.SafetyRating;
             string reason = BuildReason(td);
 
-            candidates.Add(new ScanRecommendation
-            {
-                Tweak = td,
-                Reason = reason,
-                PriorityScore = priority,
-            });
+            candidates.Add(
+                new ScanRecommendation
+                {
+                    Tweak = td,
+                    Reason = reason,
+                    PriorityScore = priority,
+                }
+            );
         }
 
         // Sort descending by priority, then alphabetically as a tiebreaker.

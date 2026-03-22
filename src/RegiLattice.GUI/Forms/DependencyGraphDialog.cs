@@ -60,7 +60,12 @@ internal sealed class DependencyGraphDialog : Form
         Font = new Font("Segoe UI", 9f);
 
         // ── Left panel (tweak selector) ───────────────────────────────
-        var pnlLeft = new Panel { Dock = DockStyle.Left, Width = 280, Padding = new Padding(8) };
+        var pnlLeft = new Panel
+        {
+            Dock = DockStyle.Left,
+            Width = 280,
+            Padding = new Padding(8),
+        };
 
         _txtSearch = new TextBox
         {
@@ -144,7 +149,8 @@ internal sealed class DependencyGraphDialog : Form
 
     private void LoadAllTweaks()
     {
-        _allTweaks = _engine.AllTweaks()
+        _allTweaks = _engine
+            .AllTweaks()
             .OrderBy(t => t.Category, StringComparer.OrdinalIgnoreCase)
             .ThenBy(t => t.Label, StringComparer.OrdinalIgnoreCase)
             .ToList();
@@ -155,11 +161,14 @@ internal sealed class DependencyGraphDialog : Form
     {
         _filtered = _allTweaks
             .Where(t =>
-                (!onlyWithDeps || t.DependsOn.Count > 0) &&
-                (string.IsNullOrWhiteSpace(query) ||
-                 t.Label.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                 t.Id.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                 t.Category.Contains(query, StringComparison.OrdinalIgnoreCase)))
+                (!onlyWithDeps || t.DependsOn.Count > 0)
+                && (
+                    string.IsNullOrWhiteSpace(query)
+                    || t.Label.Contains(query, StringComparison.OrdinalIgnoreCase)
+                    || t.Id.Contains(query, StringComparison.OrdinalIgnoreCase)
+                    || t.Category.Contains(query, StringComparison.OrdinalIgnoreCase)
+                )
+            )
             .ToList();
 
         _lstAll.SuspendLayout();
@@ -187,11 +196,7 @@ internal sealed class DependencyGraphDialog : Form
         _tree.BeginUpdate();
         _tree.Nodes.Clear();
 
-        var rootNode = new TreeNode($"⬡  {root.Label}  [{root.Category}]")
-        {
-            Tag = root.Id,
-            NodeFont = new Font(_tree.Font, FontStyle.Bold),
-        };
+        var rootNode = new TreeNode($"⬡  {root.Label}  [{root.Category}]") { Tag = root.Id, NodeFont = new Font(_tree.Font, FontStyle.Bold) };
 
         // ── Prerequisites (what this tweak depends on) ─────────────────
         var depsNode = new TreeNode("▶  Depends on (prerequisites):");
@@ -244,9 +249,10 @@ internal sealed class DependencyGraphDialog : Form
         _tree.ResumeLayout(true);
 
         // Update detail panel
-        _lblDetail.Text = $"ID: {root.Id}\n" +
-                          $"Category: {root.Category}   |   NeedsAdmin: {root.NeedsAdmin}   |   Scope: {root.Scope}\n" +
-                          (string.IsNullOrEmpty(root.Description) ? "" : root.Description);
+        _lblDetail.Text =
+            $"ID: {root.Id}\n"
+            + $"Category: {root.Category}   |   NeedsAdmin: {root.NeedsAdmin}   |   Scope: {root.Scope}\n"
+            + (string.IsNullOrEmpty(root.Description) ? "" : root.Description);
     }
 
     private void OnNodeClick(TreeNodeMouseClickEventArgs e)
@@ -302,6 +308,7 @@ internal sealed class DependencyGraphDialog : Form
         _btnClose.FlatAppearance.BorderSize = 0;
 
         foreach (Control c in Controls)
-            if (c is Panel p) p.BackColor = AppTheme.Surface;
+            if (c is Panel p)
+                p.BackColor = AppTheme.Surface;
     }
 }
