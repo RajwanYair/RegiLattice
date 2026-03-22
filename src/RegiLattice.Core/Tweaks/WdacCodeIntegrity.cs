@@ -11,8 +11,7 @@ using RegiLattice.Core.Models;
 
 internal static class WdacCodeIntegrity
 {
-    private const string AsrRules =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules";
+    private const string AsrRules = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

@@ -6,15 +6,15 @@
 ![Tests](https://img.shields.io/badge/tests-1858%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-4.3.0-blue)
+![Version](https://img.shields.io/badge/version-4.4.0-blue)
 
-A comprehensive Windows registry tweak toolkit with **4 058 verified tweaks** across **116 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive Windows registry tweak toolkit with **4 108 verified tweaks** across **121 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10** for native performance on Windows 10/11.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v4.3.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v4.4.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -29,7 +29,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 
 ## Highlights
 
-- **4 058 verified tweaks** across 116 categories — each fully reversible with apply + remove
+- **4 108 verified tweaks** across 121 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -95,9 +95,9 @@ graph LR
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
 
-## Tweak Categories (116)
+## Tweak Categories (121)
 
-116 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
+121 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
@@ -117,7 +117,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (1 833 tests)
+# Run tests (1 858 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -229,7 +229,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 93 category modules, 3 183 tweaks
+│   │   └── Tweaks/                          # 126 module files, 4 108 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -278,7 +278,7 @@ RegiLattice/
 │   │   ├── FavoritesTests.cs
 │   │   ├── TweakHistoryTests.cs
 │   │   └── ConfigExporterTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 266 xUnit tests
+│   ├── RegiLattice.CLI.Tests/               # 291 xUnit tests
 │   │   └── ParseArgsTests.cs
 │   └── RegiLattice.GUI.Tests/               # 242 xUnit tests
 │       ├── ThemeTests.cs
