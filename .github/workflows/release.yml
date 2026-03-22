@@ -67,15 +67,18 @@ jobs:
           -o publish/cli
 
       - name: Install WiX toolset
+        continue-on-error: true
         shell: pwsh
         run: |
           dotnet tool install --global wix --version 6.0.2
           if ($LASTEXITCODE -ne 0) { dotnet tool update --global wix --version 6.0.2 }
 
       - name: Build MSI installer
+        continue-on-error: true
         run: dotnet build installer/RegiLattice.Installer.wixproj -c Release
 
       - name: Generate MSIX assets
+        continue-on-error: true
         shell: pwsh
         run: |
           Add-Type -AssemblyName System.Drawing
@@ -98,6 +101,7 @@ jobs:
           Write-Host 'Generated 5 MSIX visual assets (Catppuccin Mocha #1e1e2e)'
 
       - name: Stage MSIX content
+        continue-on-error: true
         shell: pwsh
         run: |
           $tag  = '${{ inputs.tag_name || github.ref_name }}'
@@ -110,6 +114,7 @@ jobs:
           Write-Host "MSIX content staged — version $ver"
 
       - name: Build MSIX
+        continue-on-error: true
         shell: pwsh
         run: |
           $mxp = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin' -Recurse `
