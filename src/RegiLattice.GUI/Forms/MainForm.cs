@@ -2194,6 +2194,27 @@ public partial class MainForm : Form
             e.Handled = true;
             return;
         }
+        // Space — toggle the focused tweak's checkbox (skip when search box is active)
+        if (e.KeyCode == Keys.Space && !e.Control && !e.Alt && !e.Shift && _btnApply.Enabled)
+        {
+            if (!_searchBox.TextBox.Focused)
+            {
+                var focused = _listView.FocusedItem;
+                if (focused is not null)
+                {
+                    focused.Checked = !focused.Checked;
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+        // Ctrl+Z — undo last applied / removed tweak
+        if (e.Control && e.KeyCode == Keys.Z && _btnUndoLast.Enabled)
+        {
+            _ = OnUndoLastAsync();
+            e.Handled = true;
+            return;
+        }
     }
 
     // ── ListView hover tooltip ─────────────────────────────────────────────
