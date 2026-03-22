@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-07-22 (v4.2.0, 3 868 tweaks, 107 categories, 1 647 tests).
+> Last verified: 2026-03-22 (v4.2.0, ~4 058 tweaks, 115+ categories, 1 325 tests).
 
 ## Companion Instruction Files
 
@@ -474,6 +474,11 @@ Canonical category slugs:
 - **Duplicate IDs**: `TweakEngine.Register()` will throw on duplicate IDs. Each `Id` must be unique across ALL modules.
 - **RegOp paths**: Use full hive names `HKEY_LOCAL_MACHINE\...` or `HKEY_CURRENT_USER\...` (abbreviations `HKLM\...` / `HKCU\...` also accepted).
 - **P/Invoke**: Only 4 P/Invoke calls in the entire codebase — `GetComputerNameExW` (CorporateGuard), `GlobalMemoryStatusEx` (HardwareInfo), `GetSystemTimes` + `GlobalMemoryStatusEx` (SystemMonitor). Prefer `Microsoft.Win32.Registry` for all registry access.
+- **Module already exists**: Before creating any new tweak module, always `list_dir` the `Tweaks/` directory or `Test-Path` the file. `create_file` fails silently if the file already exists; if it does exist, read it first and edit rather than recreate.
+- **Intra-module duplicate ops**: After writing all 10 tweaks in a new module, scan for duplicate `PATH\ValueName` pairs within the same file. The last 1–2 tweaks are the most likely copy-paste victims. Fix by using a distinct policy key.
+- **`get_errors` shows CSharpier whitespace diffs**: "Replace ⏎ with ..." / "Delete ·" diagnostics are CSharpier formatting issues, not CS compiler errors. Ignore them when diagnosing build failures — only act on CS-prefixed errors.
+- **OneDrive CoreCompile cache lock**: If `dotnet build` fails with `Building target "CoreCompile" completely`, delete `$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.csproj.CoreCompileInputs.cache` and retry. If it persists, delete the whole `$env:TEMP\RegiLattice-build\RegiLattice.Core` dir and retry twice. The build task (`build: Solution (Debug)`) in VS Code handles this automatically.
+- **Terminal Hebrew character injection**: A `ב` prefix on commands (e.g., `בdotnet`) is a VS Code terminal buffer artefact — the actual command still runs. Check `$LASTEXITCODE` to confirm success; do not retry just because of the prefix error.
 
 ## File-by-File Quick Ref
 

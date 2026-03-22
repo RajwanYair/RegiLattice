@@ -9,17 +9,13 @@ using RegiLattice.Core.Models;
 
 internal static class VirtualDesktops
 {
-    private const string VdKey =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops";
+    private const string VdKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops";
 
-    private const string TaskView =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+    private const string TaskView = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
 
-    private const string TaskViewPolicy =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
+    private const string TaskViewPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
 
-    private const string AltTabKey =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+    private const string AltTabKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -144,15 +140,9 @@ internal static class VirtualDesktops
                 "Disables the Windows Timeline feature in Task View that tracks your "
                 + "recent activity and documents. Prevents activity history collection "
                 + "and removes the timeline from Task View.",
-            ApplyOps = [RegOp.SetDword(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "EnableActivityFeed", 0)],
-            RemoveOps = [RegOp.DeleteValue(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "EnableActivityFeed")],
-            DetectOps = [RegOp.CheckDword(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "EnableActivityFeed", 0)],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
         },
         new TweakDef
         {
@@ -168,15 +158,9 @@ internal static class VirtualDesktops
                 "Prevents Timeline activity history from being uploaded to Microsoft cloud "
                 + "servers (requires a Microsoft account). Activity remains local only even "
                 + "if Timeline is still enabled.",
-            ApplyOps = [RegOp.SetDword(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "UploadUserActivities", 0)],
-            RemoveOps = [RegOp.DeleteValue(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "UploadUserActivities")],
-            DetectOps = [RegOp.CheckDword(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System",
-                "UploadUserActivities", 0)],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities", 0)],
         },
         new TweakDef
         {

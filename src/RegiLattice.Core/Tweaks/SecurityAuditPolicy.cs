@@ -10,20 +10,15 @@ using RegiLattice.Core.Models;
 
 internal static class SecurityAuditPolicy
 {
-    private const string Lsa =
-        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
+    private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
 
-    private const string LsaPolicy =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
+    private const string LsaPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
 
-    private const string AuditPolicy =
-        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Audit";
+    private const string AuditPolicy = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Audit";
 
-    private const string KerberosParams =
-        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
+    private const string KerberosParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
 
-    private const string NetLogon =
-        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
+    private const string NetLogon = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -205,15 +200,9 @@ internal static class SecurityAuditPolicy
                 + "domain users from signing in if the DC is unreachable. Hardens against "
                 + "offline credential extraction attacks. WARNING: domain logon requires "
                 + "network connectivity to DC.",
-            ApplyOps = [RegOp.SetString(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon",
-                "CachedLogonsCount", "0")],
-            RemoveOps = [RegOp.SetString(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon",
-                "CachedLogonsCount", "10")],
-            DetectOps = [RegOp.CheckString(
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon",
-                "CachedLogonsCount", "0")],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "10")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "0")],
         },
     ];
 }

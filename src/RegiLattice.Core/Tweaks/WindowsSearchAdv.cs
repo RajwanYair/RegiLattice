@@ -10,17 +10,13 @@ using RegiLattice.Core.Models;
 
 internal static class WindowsSearchAdv
 {
-    private const string SearchPolicy =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
+    private const string SearchPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
 
-    private const string SearchUser =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search";
+    private const string SearchUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search";
 
-    private const string SearchInternal =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search";
+    private const string SearchInternal = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search";
 
-    private const string SearchResults =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
+    private const string SearchResults = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

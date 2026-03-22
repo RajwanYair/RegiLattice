@@ -9,17 +9,13 @@ using RegiLattice.Core.Models;
 
 internal static class AutoRunPolicy
 {
-    private const string AutoRunUser =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
+    private const string AutoRunUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
 
-    private const string AutoRunSys =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
+    private const string AutoRunSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
 
-    private const string AutoPlayUser =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers";
+    private const string AutoPlayUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers";
 
-    private const string AutoRunPolicy2 =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
+    private const string AutoRunPolicy2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
