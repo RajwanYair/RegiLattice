@@ -92,4 +92,14 @@ internal sealed class CliArgs
     /// then exits.  The report includes summary cards and per-category tables.
     /// </summary>
     public string? HtmlReport { get; set; }
+
+    // ── Sprint 105 – compliance history ─────────────────────────────────────
+    /// <summary>When true, prints the compliance check history log and exits.</summary>
+    public bool ComplianceHistory { get; set; }
+
+    /// <summary>
+    /// When non-null and equals "auto", runs a compliance check against the most
+    /// recent snapshot in the data directory and saves the result to history.
+    /// </summary>
+    public string? ComplianceReportMode { get; set; }
 }

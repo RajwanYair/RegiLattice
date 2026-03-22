@@ -150,6 +150,10 @@ internal static class Program
             return RunHistory(a.HistoryCount);
         if (a.Compliance is not null)
             return RunCompliance(a.Compliance);
+        if (a.ComplianceHistory)
+            return RunComplianceHistory();
+        if (a.ComplianceReportMode is not null)
+            return RunComplianceAuto(a.ComplianceReportMode);
         if (a.ExportGpo is not null)
             return RunExportGpo(a.ExportGpo);
         if (a.GeneratePsModule)
@@ -1592,6 +1596,9 @@ internal static class Program
             return 2;
         }
 
+        // Persist result to compliance history log
+        ComplianceHistory.AddEntry(report, snapshotPath);
+
         Console.WriteLine($"  Checked : {report.TotalChecked} tweak(s)");
         Console.WriteLine($"  Drifted : {report.ViolationCount}");
         Console.WriteLine($"  At      : {report.CheckedAt:yyyy-MM-dd HH:mm:ss}\n");
@@ -1610,6 +1617,59 @@ internal static class Program
             Console.WriteLine($"    Category: {d.Category, -30} Change: {arrow}");
         }
         return 1;
+    }
+
+    // ── Sprint 105 – compliance history ─────────────────────────────────────
+
+    private static int RunComplianceHistory()
+    {
+        var history = ComplianceHistory.GetHistory();
+        if (history.Count == 0)
+        {
+            Console.WriteLine(Dim("No compliance check history found. Run --compliance <snapshot> first."));
+            return 0;
+        }
+
+        Console.WriteLine($"Compliance Check History ({history.Count} entries)\n");
+        Console.WriteLine($"  {"Date", -22} {"Checked", -10} {"Violations", -12} {"Status", -12} Snapshot");
+        Console.WriteLine(new string('-', 90));
+
+        foreach (var e in history.AsEnumerable().Reverse().Take(30))
+        {
+            string status = e.IsCompliant ? Green("Compliant") : Red($"Drifted ({e.ViolationCount})");
+            string snap = e.SnapshotPath is not null ? Path.GetFileName(e.SnapshotPath) : Dim("(none)");
+            Console.WriteLine($"  {e.CheckedAt:yyyy-MM-dd HH:mm:ss}  {e.TotalChecked, -10} {e.ViolationCount, -12} {status, -20} {snap}");
+        }
+        return 0;
+    }
+
+    private static int RunComplianceAuto(string mode)
+    {
+        if (!string.Equals(mode, "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine(Red($"\u274c Unknown compliance mode: '{mode}'. Use 'auto'."));
+            return 1;
+        }
+
+        // Find the most recent snapshot in the data directory
+        string dataRoot = AppConfig.DataRoot;
+        string[] snapshots = Directory.Exists(dataRoot)
+            ? Directory
+                .GetFiles(dataRoot, "*.json")
+                .Where(f => !Path.GetFileName(f).StartsWith("compliance", StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .ToArray()
+            : [];
+
+        if (snapshots.Length == 0)
+        {
+            Console.WriteLine(Yellow($"\u26a0  No snapshot found in {dataRoot}. Save a snapshot first with --snapshot."));
+            return 2;
+        }
+
+        string latestSnapshot = snapshots[0];
+        Console.WriteLine($"Auto compliance check against: {latestSnapshot}\n");
+        return RunCompliance(latestSnapshot);
     }
 
     private static int RunNewPack(string packName)
@@ -2128,6 +2188,13 @@ internal static class Program
                 case "--compliance":
                     if (++i < args.Length)
                         p.Compliance = args[i];
+                    break;
+                case "--compliance-history":
+                    p.ComplianceHistory = true;
+                    break;
+                case "--compliance-report":
+                    if (++i < args.Length)
+                        p.ComplianceReportMode = args[i];
                     break;
                 case "--export-gpo":
                     if (++i < args.Length)

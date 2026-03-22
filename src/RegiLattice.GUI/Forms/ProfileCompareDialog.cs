@@ -134,8 +134,23 @@ internal sealed class ProfileCompareDialog : Form
             Dock = DockStyle.Fill,
             Padding = new Padding(10, 0, 0, 0),
         };
-        _btnExportHtml = new Button { Text = "Export HTML…", Width = 110, Height = 30, Anchor = AnchorStyles.Right | AnchorStyles.Top, Top = 8, Left = pnlBottom.Width - 240 };
-        _btnClose = new Button { Text = "Close", Width = 80, Height = 30, Anchor = AnchorStyles.Right | AnchorStyles.Top, Top = 8 };
+        _btnExportHtml = new Button
+        {
+            Text = "Export HTML…",
+            Width = 110,
+            Height = 30,
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
+            Top = 8,
+            Left = pnlBottom.Width - 240,
+        };
+        _btnClose = new Button
+        {
+            Text = "Close",
+            Width = 80,
+            Height = 30,
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
+            Top = 8,
+        };
         pnlBottom.Controls.AddRange([_lblSummary, _btnExportHtml, _btnClose]);
 
         // Anchor action buttons properly after layout
@@ -177,16 +192,13 @@ internal sealed class ProfileCompareDialog : Form
             return;
         }
 
-        var tweaksA = new HashSet<string>(
-            _engine.TweaksForProfile(nameA).Select(t => t.Id),
-            StringComparer.OrdinalIgnoreCase);
-        var tweaksB = new HashSet<string>(
-            _engine.TweaksForProfile(nameB).Select(t => t.Id),
-            StringComparer.OrdinalIgnoreCase);
+        var tweaksA = new HashSet<string>(_engine.TweaksForProfile(nameA).Select(t => t.Id), StringComparer.OrdinalIgnoreCase);
+        var tweaksB = new HashSet<string>(_engine.TweaksForProfile(nameB).Select(t => t.Id), StringComparer.OrdinalIgnoreCase);
 
         // Union of all tweak IDs from both profiles, deduplicated, sorted by category then label
         var allIds = tweaksA.Union(tweaksB, StringComparer.OrdinalIgnoreCase).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var allTweaks = _engine.AllTweaks()
+        var allTweaks = _engine
+            .AllTweaks()
             .Where(t => allIds.Contains(t.Id))
             .OrderBy(t => t.Category, StringComparer.OrdinalIgnoreCase)
             .ThenBy(t => t.Label, StringComparer.OrdinalIgnoreCase)
@@ -206,7 +218,9 @@ internal sealed class ProfileCompareDialog : Form
         _listView.Columns[3].Text = $"In {nameA}";
         _listView.Columns[4].Text = $"In {nameB}";
 
-        int onlyInA = 0, onlyInB = 0, inBoth = 0;
+        int onlyInA = 0,
+            onlyInB = 0,
+            inBoth = 0;
 
         for (int i = 0; i < _rows.Count; i++)
         {
@@ -233,10 +247,7 @@ internal sealed class ProfileCompareDialog : Form
                 onlyInB++;
             }
 
-            var item = new ListViewItem((i + 1).ToString())
-            {
-                BackColor = rowColor,
-            };
+            var item = new ListViewItem((i + 1).ToString()) { BackColor = rowColor };
             item.SubItems.Add(tweak.Label);
             item.SubItems.Add(tweak.Category);
             item.SubItems.Add(inA ? "✓" : "–");
@@ -248,9 +259,9 @@ internal sealed class ProfileCompareDialog : Form
         _listView.ResumeLayout(true);
 
         _lblSummary.Text =
-            $"Total: {_rows.Count} tweaks   |   In {nameA}: {onlyInA + inBoth}   |   " +
-            $"In {nameB}: {onlyInB + inBoth}   |   Shared: {inBoth}   |   " +
-            $"Unique to {nameA}: {onlyInA}   |   Unique to {nameB}: {onlyInB}";
+            $"Total: {_rows.Count} tweaks   |   In {nameA}: {onlyInA + inBoth}   |   "
+            + $"In {nameB}: {onlyInB + inBoth}   |   Shared: {inBoth}   |   "
+            + $"Unique to {nameA}: {onlyInA}   |   Unique to {nameB}: {onlyInB}";
     }
 
     // ── HTML Export ────────────────────────────────────────────────────
@@ -317,9 +328,11 @@ internal sealed class ProfileCompareDialog : Form
             string status = (inA && inB) ? "Shared" : (inA ? $"Only in {nameA}" : $"Only in {nameB}");
             string tickA = inA ? "<td class=\"tick\">✓</td>" : "<td class=\"dash\">–</td>";
             string tickB = inB ? "<td class=\"tick\">✓</td>" : "<td class=\"dash\">–</td>";
-            sb.AppendLine($"<tr class=\"{css}\"><td>{i + 1}</td><td>{System.Net.WebUtility.HtmlEncode(tweak.Label)}</td>" +
-                          $"<td>{System.Net.WebUtility.HtmlEncode(tweak.Category)}</td>{tickA}{tickB}" +
-                          $"<td>{status}</td></tr>");
+            sb.AppendLine(
+                $"<tr class=\"{css}\"><td>{i + 1}</td><td>{System.Net.WebUtility.HtmlEncode(tweak.Label)}</td>"
+                    + $"<td>{System.Net.WebUtility.HtmlEncode(tweak.Category)}</td>{tickA}{tickB}"
+                    + $"<td>{status}</td></tr>"
+            );
         }
 
         sb.AppendLine("</table>");

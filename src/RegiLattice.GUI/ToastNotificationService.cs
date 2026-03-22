@@ -70,6 +70,25 @@ public sealed class ToastNotificationService
     /// <summary>Shows a generic informational notification.</summary>
     public void ShowInfo(string title, string message) => Show(title, message);
 
+    /// <summary>Shows a compliance drift notification when tweaks have reverted unexpectedly.</summary>
+    public void ShowComplianceDrift(int violations)
+    {
+        string title = "\u26A0 Compliance Drift Detected";
+        string message =
+            violations == 1
+                ? "1 previously-applied tweak has reverted. Open RegiLattice to review."
+                : $"{violations} previously-applied tweaks have reverted. Open RegiLattice to review.";
+        Show(title, message);
+    }
+
+    /// <summary>Shows an update-available notification.</summary>
+    public void ShowUpdateAvailable(string version)
+    {
+        string title = "\u2B06 RegiLattice Update Available";
+        string message = $"Version {version} is available. Open RegiLattice to download.";
+        Show(title, message);
+    }
+
     // -------------------------------------------------------------------------
     //  Internal helpers
     // -------------------------------------------------------------------------
