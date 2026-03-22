@@ -453,7 +453,7 @@ partial class MainForm
 
         _btnUndoLast = new ToolStripButton("↩ Undo Last")
         {
-            ToolTipText = "Undo the last tweak apply/remove operation",
+            ToolTipText = "Undo the last tweak apply/remove operation (Ctrl+Z)",
             DisplayStyle = ToolStripItemDisplayStyle.Text,
             Enabled = false,
         };
