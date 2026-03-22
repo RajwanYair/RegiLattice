@@ -12,6 +12,14 @@ internal sealed class ToolVersionsDialog : Form
     private readonly Button _btnRefresh = new();
     private readonly CheckBox _chkUpdates = new();
     private readonly bool _checkUpdates;
+    private readonly ProgressBar _progressBar = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 6,
+        Style = ProgressBarStyle.Marquee,
+        MarqueeAnimationSpeed = 30,
+        Visible = false,
+    };
 
     // ── Install guide panel (shown when a not-found tool is selected) ─────────────
     private readonly Panel _installGuidePanel = new();
@@ -99,7 +107,7 @@ internal sealed class ToolVersionsDialog : Form
         _chkUpdates.AutoSize = true;
 
         ctrlPanel.Controls.AddRange([_btnRefresh, _chkUpdates]);
-        Controls.AddRange([_lstTools, ctrlPanel, _lblStatus, lblTitle]);
+        Controls.AddRange([_lstTools, ctrlPanel, _progressBar, _lblStatus, lblTitle]);
 
         // wire selection change to show/hide install guide
         _lstTools.SelectedIndexChanged += OnToolSelectionChanged;
@@ -252,6 +260,7 @@ internal sealed class ToolVersionsDialog : Form
         _lblStatus.Text = checkUpdates ? "Checking tool versions and available updates..." : "Checking tool versions...";
         _lblStatus.ForeColor = AppTheme.FgDim;
         _lstTools.Items.Clear();
+        _progressBar.Visible = true;
 
         try
         {
@@ -300,6 +309,7 @@ internal sealed class ToolVersionsDialog : Form
         }
         finally
         {
+            _progressBar.Visible = false;
             _btnRefresh.Enabled = true;
         }
     }

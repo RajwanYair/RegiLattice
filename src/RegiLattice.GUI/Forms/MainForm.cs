@@ -1587,6 +1587,8 @@ public partial class MainForm : Form
         _btnUndoLast.Enabled = !busy && TweakHistory.Count > 0;
         if (message is not null)
             SetStatus(message);
+        else if (!busy)
+            _progressLabel.Text = string.Empty;
     }
 
     private void SetProgress(int current)
