@@ -9,14 +9,11 @@ using RegiLattice.Core.Models;
 
 internal static class TouchpadGestures
 {
-    private const string Ptp =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad";
+    private const string Ptp = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad";
 
-    private const string PtpSettings =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Settings";
+    private const string PtpSettings = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Settings";
 
-    private const string EaseTouchpad =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status";
+    private const string EaseTouchpad = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

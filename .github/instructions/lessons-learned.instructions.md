@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-07-21 (v3.8.0, C# 13 / .NET 10.0-windows, 3 669 tweaks, 94 categories, 1 414 tests)
+> Last updated: 2026-03-22 (v4.2.0, C# 13 / .NET 10.0-windows, ~4 058+ tweaks, 115+ categories, 1 325+ tests)
 
 ---
 
@@ -540,3 +540,165 @@ a terminal command. Fall back to the shell only when no tool covers the operatio
 
 **Why**: MCP and Copilot tools are faster, produce structured output, avoid shell
 encoding issues, don't consume a terminal slot, and never get stuck.
+
+---
+
+## OneDrive Build Cache — Full Sequence That Works
+
+The OneDrive-hosted workspace triggers a persistent MSBuild cache-lock sequence on
+solution builds. The reliable resolution order is:
+
+### Symptom 1 — MSB3492 on AssemblyInfoInputs.cache
+
+```
+error MSB3492: Could not read existing file "...RegiLattice.Core.AssemblyInfoInputs.cache"
+```
+
+**Fix**: Delete the file and retry:
+
+```powershell
+Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.AssemblyInfoInputs.cache" -Force -ErrorAction SilentlyContinue
+dotnet build RegiLattice.sln -c Debug -m:1 -q
+```
+
+### Symptom 2 — CoreGenerateAssemblyInfo "completely"
+
+```
+MSBUILD : error : Building target "CoreGenerateAssemblyInfo" completely.
+```
+
+This is a transient error that appears immediately after deleting the cache from Symptom 1.
+**Fix**: Run the **exact same** build command a second time — it succeeds on the retry.
+
+### Symptom 3 — CoreCompile "completely"
+
+```
+MSBUILD : error Building target "CoreCompile" completely.
+```
+
+This happens when the CoreCompileInputs.cache is stale. **Fix**:
+
+```powershell
+Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.csproj.CoreCompileInputs.cache" -Force
+dotnet build RegiLattice.sln -c Debug -m:1 -q
+# Still fails once → retry one more time
+dotnet build RegiLattice.sln -c Debug -m:1 -q
+```
+
+### Nuclear option — delete entire Core cache dir
+
+If all three symptoms persist:
+
+```powershell
+Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
+dotnet build RegiLattice.sln -c Debug -m:1 -q  # may fail once with GenerateTargetFrameworkMonikerAttribute
+dotnet build RegiLattice.sln -c Debug -m:1 -q  # succeeds on second attempt
+```
+
+### Fastest reliable pattern
+
+Use the VS Code **build task** (`"test: Core"` or `"build: Solution (Debug)"`) instead of
+the terminal — the task runner handles retries automatically and never shows Hebrew garbage
+in output.
+
+---
+
+## Terminal Hebrew Character Injection — Ignore, Don't Retry
+
+Some terminals in this workspace prepend Hebrew characters (e.g., `בcd`, `בdotnet`) to
+the first invocation in a new shell. This is a VS Code terminal input buffer artefact,
+not a command error.
+
+**Symptoms**:
+
+- `בcd: The term 'בcd' is not recognized...` → the `cd` command was fine; the previous
+  command in the buffer was injected first
+- `ExitCode: 0` immediately follows the error → the _real_ command ran correctly
+
+**Rules**:
+
+- Do NOT retry just because of these prefix errors — check `$LASTEXITCODE` or the
+  output after the error line to know if the actual command succeeded
+- If a fresh terminal is needed, open a new one rather than reusing a shell showing
+  this artefact
+
+---
+
+## `get_errors` Tool Returns CSharpier Formatting Diagnostics, Not Build Errors
+
+When `get_errors` reports "Replace ⏎ with ..." or "Delete ·" errors in `.cs` files,
+these are **CSharpier code-style whitespace differences**, not C# compiler errors
+(CS-prefixed). The file compiles correctly despite them.
+
+**Rule**: Ignore formatting-only `get_errors` output when diagnosing build failures.
+Only act on errors that:
+
+- Have a CS-prefix (`CS0121`, `CS1009`, etc.)
+- Reference a specific line with a missing symbol, type mismatch, or syntax error
+
+Real compiler errors from `dotnet build` are the authoritative source. Use the
+terminal build output; `get_errors` is useful for real compile-time type/symbol errors
+but fires on formatting differences too.
+
+---
+
+## Check Whether a Tweak Module Already Exists Before `create_file`
+
+`create_file` returns `"File already exists"` if the file is already in the Tweaks/
+directory. This happens because:
+
+- A prior session created the file
+- CSharpier or a formatter already generated it
+- The sprint list was inaccurate about what was already done
+
+**Rule**: Before calling `create_file` for a new sprint module, always check:
+
+```powershell
+Test-Path "src/RegiLattice.Core/Tweaks/<ModuleName>.cs"
+```
+
+Or use `list_dir` on the Tweaks directory to confirm the file doesn't exist.
+If it does exist, read it first and edit rather than recreate.
+
+---
+
+## Intra-Module Duplicate Registry Ops — Last TweakDef Pattern
+
+When filling the last 1–2 entries in a new 10-tweak module, copy-paste from nearby
+tweaks can produce functionally identical registry ops (same path + value name) as an
+earlier tweak in the **same module**, not just across modules.
+
+**Example**: `UserActivity.cs` — `activity-disable-publishing` and `activity-disable-timeline-view`
+both set `HKLM\...\System\EnableActivityFeed=0`. The fix:
+
+- Audit all 10 entries of a new module after writing them
+- For the duplicate, find a **different policy key** that achieves a related but distinct goal
+  (e.g., `EnableCdp=0` instead of a second `EnableActivityFeed=0`)
+- The `activity-disable-cdp` fix in `UserActivity.cs` (v4.2.x) is the canonical example
+
+**Quick scan for within-module duplication**:
+
+```powershell
+# Show all ApplyOps path+value pairs in one file — spot duplicates visually
+Select-String -Path src/RegiLattice.Core/Tweaks/UserActivity.cs -Pattern '"HKEY[^"]*"' |
+    Select-Object -ExpandProperty Line
+```
+
+---
+
+## `Remove-Item` in Agent Terminal — Pre-Approved via settings.json
+
+`Remove-Item` is configured in `.vscode/settings.json` as an approved agent terminal
+command and will **not** prompt for approval:
+
+```json
+"github.copilot.chat.agent.terminal.allowList": {
+    "Remove-Item": true
+}
+```
+
+This means cache-clearing commands like the following run without interruption:
+
+```powershell
+Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
+```

@@ -130,6 +130,9 @@
   ],
   "chat.promptFiles": true,
   "chat.agent.enabled": true,
+  "github.copilot.chat.agent.terminal.allowList": {
+    "Remove-Item": true
+  },
   // ── Testing ─────────────────────────────────────────────────────────
   "dotnet.unitTests.runSettingsPath": "tests/.runsettings"
 }
