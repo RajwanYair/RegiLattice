@@ -17,7 +17,7 @@ namespace RegiLattice.Core.Services;
 public static class PowerShellModuleGenerator
 {
     private const string ModuleName = "RegiLattice";
-    private const string ModuleVersion = "1.0.0";
+    private const string ModuleVersion = "4.3.0";
     private const string CorePathToken = "CORE_PATH_PLACEHOLDER";
 
     /// <summary>
