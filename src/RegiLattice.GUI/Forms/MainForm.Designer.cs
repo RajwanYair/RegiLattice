@@ -142,6 +142,7 @@ partial class MainForm
         var mnuExportPs1 = new ToolStripMenuItem("Export as PowerShell (.ps1)...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.E };
         var mnuExportJson = new ToolStripMenuItem("Export selected IDs as JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.J };
         var mnuExportReg = new ToolStripMenuItem("Export as .REG file...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.R };
+        var mnuExportCompliance = new ToolStripMenuItem("Export Compliance Report\u2026") { Image = AppIcons.ExportMenuBitmap };
         var mnuImportJson = new ToolStripMenuItem("Import tweak IDs from JSON...") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.I, Image = AppIcons.ImportMenuBitmap };
         var mnuExit = new ToolStripMenuItem("Exit") { Image = AppIcons.ExitMenuBitmap };
         var mnuPreferences = new ToolStripMenuItem("Preferences…") { ShortcutKeys = Keys.Control | Keys.Shift | Keys.P, Image = AppIcons.PreferencesMenuBitmap };
@@ -153,7 +154,7 @@ partial class MainForm
         var mnuFile = new ToolStripMenuItem("&File") { Image = AppIcons.FileMenuBitmap };
         mnuFile.DropDownItems.AddRange(new ToolStripItem[]
         {
-            mnuExportPs1, mnuExportJson, mnuExportReg, mnuImportJson,
+            mnuExportPs1, mnuExportJson, mnuExportReg, mnuImportJson, mnuExportCompliance,
             new ToolStripSeparator(),
             mnuPreferences,
             new ToolStripSeparator(),
@@ -332,6 +333,7 @@ partial class MainForm
 
         // Wire menu events
         mnuExportPs1.Click += (_, _) => OnExportPs1();
+        mnuExportCompliance.Click += (_, _) => OnExportComplianceReport();
         mnuExportJson.Click += (_, _) => OnExportJson();
         mnuExportReg.Click += (_, _) => OnExportReg();
         mnuImportJson.Click += (_, _) => OnImportJson();
