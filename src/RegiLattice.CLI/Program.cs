@@ -156,6 +156,8 @@ internal static class Program
             return RunComplianceAuto(a.ComplianceReportMode);
         if (a.ExportGpo is not null)
             return RunExportGpo(a.ExportGpo);
+        if (a.ExportIntune is not null)
+            return RunExportIntune(a.ExportIntune);
         if (a.GeneratePsModule)
             return RunGeneratePsModule(a.PsModuleOutput);
         if (a.HtmlReport is not null)
@@ -1800,6 +1802,27 @@ internal static class Program
         }
     }
 
+    // ── Intune OMA-URI Export ────────────────────────────────────────────
+
+    private static int RunExportIntune(string outputPath)
+    {
+        Console.WriteLine("Exporting Intune OMA-URI configuration\u2026");
+        try
+        {
+            var doc = IntuneOmaUriExporter.Build(_engine);
+            IntuneOmaUriExporter.Export(_engine, outputPath);
+            Console.WriteLine(Green($"\u2705  Exported {doc.MappedCount} settings to: {outputPath}"));
+            if (doc.UnmappedCount > 0)
+                Console.WriteLine($"    Unmapped tweaks (non-registry/binary): {doc.UnmappedCount}");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(Red($"\u274c {ex.Message}"));
+            return 2;
+        }
+    }
+
     // ── PowerShell Module Generation ─────────────────────────────────────
 
     // ── HTML report ──────────────────────────────────────────────────────
@@ -1955,6 +1978,8 @@ internal static class Program
             Export / Import:
               --export-json <path>   Export tweak definitions to JSON
               --export-reg <path>    Export registry state to .reg file
+              --export-gpo <path>    Export HKLM tweaks as ADMX Group Policy template
+              --export-intune <path> Export HKLM tweaks as Intune OMA-URI JSON
               --import-json <path>   Import tweak IDs from JSON (use with apply/remove)
               --export-config <path> Export applied tweak selections to shareable JSON config
               --import-config <path> Import & apply tweaks from a config file
@@ -2202,6 +2227,10 @@ internal static class Program
                 case "--export-gpo":
                     if (++i < args.Length)
                         p.ExportGpo = args[i];
+                    break;
+                case "--export-intune":
+                    if (++i < args.Length)
+                        p.ExportIntune = args[i];
                     break;
                 case "--new-pack":
                     if (++i < args.Length)
