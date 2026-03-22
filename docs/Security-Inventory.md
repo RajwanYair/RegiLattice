@@ -5,9 +5,9 @@ RegiLattice C# codebase, the source of each argument, and the security rationale
 
 ---
 
-## P/Invoke Calls (2 total)
+## P/Invoke Calls (4 total)
 
-The codebase uses only 2 P/Invoke calls. All registry access is via `Microsoft.Win32.Registry`.
+The codebase uses only 4 P/Invoke calls. All registry access is via `Microsoft.Win32.Registry`.
 
 ### `CorporateGuard.cs`
 
@@ -26,6 +26,16 @@ The codebase uses only 2 P/Invoke calls. All registry access is via `Microsoft.W
 
 - **Arguments**: Pre-allocated `MEMORYSTATUSEX` struct with hardcoded `dwLength`
 - **Security**: Read-only operation, no user input
+
+### `SystemMonitor.cs`
+
+| Call site | DLL | Function | Purpose |
+|-----------|-----|----------|---------|
+| `GetCpuUsagePercent()` | `kernel32.dll` | `GetSystemTimes` | Measure CPU idle/kernel/user time |
+| `GetMemoryUsage()` | `kernel32.dll` | `GlobalMemoryStatusEx` | Live RAM usage monitoring |
+
+- **Arguments**: Pre-allocated structs with hardcoded sizes
+- **Security**: Read-only operations, no user input, only queried on a timer
 
 ---
 
@@ -61,12 +71,25 @@ All registry operations use `Microsoft.Win32.Registry` (managed API).
 
 ## External Process Invocations
 
-The C# codebase does **not** use `System.Diagnostics.Process` or `ProcessStartInfo`
-for any operations. All functionality is implemented via:
+`ShellRunner.cs` (Core) provides a safe process runner used by command-based tweaks
+(`SystemCommand`, `ServiceControl`, `ScheduledTask`, `PowerShell`, and `PackageManager` kinds).
+
+| Class | File | Method | Security notes |
+|-------|------|--------|---------------|
+| `ShellRunner` | `Services/ShellRunner.cs` | `RunAsync(fileName, args)` | Uses `ArgumentList` (no shell injection); never passes user input directly |
+| `ShellRunner` | `Services/ShellRunner.cs` | `RunPowerShellAsync(script)` | Wraps `RunAsync` with `powershell.exe -NoProfile -NonInteractive -Command`; scripts are hardcoded in `TweakDef.ApplyAction` delegates |
+
+**Security properties of ShellRunner**:
+- `ArgumentList` (not `Arguments`) — arguments are parameterized, never shell-interpolated
+- `UseShellExecute = false` — no implicit cmd.exe wrapper
+- Scripts and executable names are hardcoded constants in tweak modules; no user input reaches `RunAsync`
+- `CreateNoWindow = true` — no visible terminal spawned
+
+All other functionality is implemented via:
 
 1. `Microsoft.Win32.Registry` — for registry read/write
 2. `System.Management` — for WMI queries
-3. P/Invoke — for the 2 kernel32.dll calls listed above
+3. P/Invoke — for the 4 kernel32.dll calls listed above
 
 ---
 

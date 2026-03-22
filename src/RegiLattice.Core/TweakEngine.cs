@@ -1,4 +1,4 @@
-// RegiLattice.Core — TweakEngine.cs
+﻿// RegiLattice.Core — TweakEngine.cs
 // Central engine: manages all tweaks, profiles, search, batch operations, snapshots.
 // Replaces Python tweaks/__init__.py entirely.
 
@@ -297,15 +297,15 @@ public sealed class TweakEngine
         string? query = null
     )
     {
-        IEnumerable<TweakDef> results = _allTweaks;
+        // Use _tweaksByCat as the starting set if a category is specified — avoids a full O(n) scan.
+        IEnumerable<TweakDef> results = category is not null ? (_tweaksByCat.TryGetValue(category, out var catList) ? catList : []) : _allTweaks;
+
         if (corpSafe.HasValue)
             results = results.Where(t => t.CorpSafe == corpSafe.Value);
         if (needsAdmin.HasValue)
             results = results.Where(t => t.NeedsAdmin == needsAdmin.Value);
         if (scope.HasValue)
             results = results.Where(t => t.Scope == scope.Value);
-        if (category is not null)
-            results = results.Where(t => t.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
         if (minBuild.HasValue)
             results = results.Where(t => t.MinBuild <= minBuild.Value);
         if (query is not null)
@@ -512,8 +512,15 @@ public sealed class TweakEngine
         var profile = GetProfile(name);
         if (profile is null)
             return [];
+        // Harvest from per-category buckets — avoids a full O(n) scan of _allTweaks.
         var cats = new HashSet<string>(profile.ApplyCategories, StringComparer.OrdinalIgnoreCase);
-        return _allTweaks.Where(t => cats.Contains(t.Category)).ToList();
+        var result = new List<TweakDef>();
+        foreach (var cat in cats)
+        {
+            if (_tweaksByCat.TryGetValue(cat, out var bucket))
+                result.AddRange(bucket);
+        }
+        return result;
     }
 
     public Dictionary<string, TweakResult> ApplyProfile(string name, bool forceCorp = false, bool parallel = false) =>

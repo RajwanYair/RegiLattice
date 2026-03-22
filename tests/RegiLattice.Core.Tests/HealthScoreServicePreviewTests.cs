@@ -11,14 +11,16 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for Sprint 71: HealthScoreService.PreviewCategoryImpact.</summary>
-public sealed class HealthScoreServicePreviewTests
+public sealed class HealthScoreServicePreviewTests : IClassFixture<BuiltinsFixture>
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public HealthScoreServicePreviewTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
+
+    private TweakEngine BuildEngine() => _engine;
 
     // ── Argument validation ───────────────────────────────────────────────
 

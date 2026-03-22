@@ -2123,10 +2123,7 @@ public partial class MainForm : Form
     private void OnListViewMouseMove(object? sender, MouseEventArgs e)
     {
         // Column header zone — show per-column explanation tooltip.
-        int headerHeight =
-            _listView.Items.Count > 0
-                ? _listView.GetItemRect(0).Top
-                : (AppTheme.Regular.Height + 8);
+        int headerHeight = _listView.Items.Count > 0 ? _listView.GetItemRect(0).Top : (AppTheme.Regular.Height + 8);
 
         if (e.Y >= 0 && e.Y < headerHeight)
         {
@@ -2135,10 +2132,7 @@ public partial class MainForm : Form
             if (colKey == _lastTooltipId)
                 return;
             _lastTooltipId = colKey;
-            string tip =
-                colIdx >= 0 && colIdx < ColumnHeaderTooltips.Length
-                    ? ColumnHeaderTooltips[colIdx]
-                    : "";
+            string tip = colIdx >= 0 && colIdx < ColumnHeaderTooltips.Length ? ColumnHeaderTooltips[colIdx] : "";
             _listItemTip.SetToolTip(_listView, tip);
             return;
         }

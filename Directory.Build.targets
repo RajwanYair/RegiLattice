@@ -1,0 +1,52 @@
+<Project InitialTargets="RegiLatticeEnsureBuildDirs">
+  <!--
+    Pre-create build output directories before any SDK target needs them.
+
+    WHY THIS EXISTS
+    ───────────────
+    BaseIntermediateOutputPath and BaseOutputPath are redirected to
+    %TEMP%\RegiLattice-build\<ProjectName> (see Directory.Build.props) so
+    that MSBuild never touches OneDrive-synced obj/ paths.
+
+    On a *clean* first build (TEMP dir empty or just wiped) the
+    GenerateTargetFrameworkMonikerAttribute target fails because it tries
+    to write .NETCoreApp,...AssemblyAttributes.cs into IntermediateOutputPath
+    before that directory exists, producing:
+
+        MSBUILD : error Building target "GenerateTargetFrameworkMonikerAttribute" completely.
+
+    WHY BeforeTargets DID NOT WORK
+    ──────────────────────────────
+    MSBuild's "question build" mode (the fast up-to-date check that runs
+    before the actual build in solution-level builds) evaluates targets in
+    isolation — BeforeTargets/AfterTargets ordering is NOT honoured in that
+    evaluation pass. So MakeDir could not be guaranteed to fire before
+    GenerateTargetFrameworkMonikerAttribute in question-build context.
+
+    THE FIX — InitialTargets
+    ────────────────────────
+    InitialTargets are the ONLY MSBuild hook guaranteed to run before
+    DefaultTargets, explicitly requested targets, AND the question-build
+    scan. Declaring RegiLatticeEnsureBuildDirs in InitialTargets ensures
+    the directories are created in EVERY evaluation context.
+    MakeDir is idempotent — a no-op on paths that already exist.
+  -->
+  <Target Name="RegiLatticeEnsureBuildDirs"
+    Condition="'$(UsingMicrosoftNETSdk)' == 'true'">
+    <PropertyGroup>
+      <!-- Compute the TFM-specific intermediate path from all-static property
+           components rather than relying on $(IntermediateOutputPath) which
+           may not yet have the Config\TFM suffix at BeforeTargets eval time.
+           We also include $(IntermediateOutputPath) directly as belt-and-
+           suspenders for the case where the SDK already populated it. -->
+      <_RLIntermPath>$(BaseIntermediateOutputPath)$(Configuration)\$(TargetFramework)\</_RLIntermPath>
+    </PropertyGroup>
+    <!-- A single MakeDir call with semicolon-delimited list is more efficient
+         than four separate calls; MakeDir creates the full path recursively.
+         Including both $(_RLIntermPath) and $(IntermediateOutputPath) covers
+         two timing windows: before and after the SDK sets IntermediateOutputPath. -->
+    <MakeDir
+      Directories="$(BaseIntermediateOutputPath);$(_RLIntermPath);$(IntermediateOutputPath);$(BaseOutputPath);$(OutDir)"
+      ContinueOnError="WarnAndContinue" />
+  </Target>
+</Project>

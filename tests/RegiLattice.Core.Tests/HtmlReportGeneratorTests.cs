@@ -11,14 +11,16 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for Sprint 72: HtmlReportGenerator.</summary>
-public sealed class HtmlReportGeneratorTests
+public sealed class HtmlReportGeneratorTests : IClassFixture<BuiltinsFixture>
 {
-    private static TweakEngine BuildEngine()
+    private readonly TweakEngine _engine;
+
+    public HtmlReportGeneratorTests(BuiltinsFixture fixture)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        return engine;
+        _engine = fixture.Engine;
     }
+
+    private TweakEngine BuildEngine() => _engine;
 
     // ── Argument validation ───────────────────────────────────────────────
 

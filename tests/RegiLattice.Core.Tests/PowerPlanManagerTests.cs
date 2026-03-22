@@ -16,10 +16,7 @@ public sealed class PowerPlanManagerTests
     // Reflection helper — accesses the private static ParseListOutput method.
     private static IReadOnlyList<PowerPlanEntry> ParseListOutput(string output)
     {
-        var method = typeof(PowerPlanManager).GetMethod(
-            "ParseListOutput",
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
+        var method = typeof(PowerPlanManager).GetMethod("ParseListOutput", BindingFlags.NonPublic | BindingFlags.Static)!;
         return (IReadOnlyList<PowerPlanEntry>)method.Invoke(null, [output])!;
     }
 
@@ -28,37 +25,25 @@ public sealed class PowerPlanManagerTests
     [Fact]
     public void HighPerformance_GUID_MatchesKnownValue()
     {
-        Assert.Equal(
-            new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"),
-            PowerPlanManager.HighPerformance
-        );
+        Assert.Equal(new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"), PowerPlanManager.HighPerformance);
     }
 
     [Fact]
     public void Balanced_GUID_MatchesKnownValue()
     {
-        Assert.Equal(
-            new Guid("381b4222-f694-41f0-9685-ff5bb260df2e"),
-            PowerPlanManager.Balanced
-        );
+        Assert.Equal(new Guid("381b4222-f694-41f0-9685-ff5bb260df2e"), PowerPlanManager.Balanced);
     }
 
     [Fact]
     public void PowerSaver_GUID_MatchesKnownValue()
     {
-        Assert.Equal(
-            new Guid("a1841308-3541-4fab-bc81-f71556f20b4a"),
-            PowerPlanManager.PowerSaver
-        );
+        Assert.Equal(new Guid("a1841308-3541-4fab-bc81-f71556f20b4a"), PowerPlanManager.PowerSaver);
     }
 
     [Fact]
     public void UltimatePerfMode_GUID_MatchesKnownValue()
     {
-        Assert.Equal(
-            new Guid("e9a42b02-d5df-448d-aa00-03f14749eb61"),
-            PowerPlanManager.UltimatePerfMode
-        );
+        Assert.Equal(new Guid("e9a42b02-d5df-448d-aa00-03f14749eb61"), PowerPlanManager.UltimatePerfMode);
     }
 
     [Fact]
@@ -114,8 +99,7 @@ public sealed class PowerPlanManagerTests
     [Fact]
     public void ParseListOutput_SingleActivePlan_ParsedCorrectly()
     {
-        string output =
-            "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced) *\r\n";
+        string output = "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced) *\r\n";
 
         var plans = ParseListOutput(output);
 
@@ -128,8 +112,7 @@ public sealed class PowerPlanManagerTests
     [Fact]
     public void ParseListOutput_SingleInactivePlan_ParsedCorrectly()
     {
-        string output =
-            "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)\r\n";
+        string output = "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)\r\n";
 
         var plans = ParseListOutput(output);
 
@@ -159,8 +142,7 @@ public sealed class PowerPlanManagerTests
     [Fact]
     public void ParseListOutput_PlanNameWithSpaces_TrimmedCorrectly()
     {
-        string output =
-            "Power Scheme GUID: e9a42b02-d5df-448d-aa00-03f14749eb61  (Ultimate Performance)\r\n";
+        string output = "Power Scheme GUID: e9a42b02-d5df-448d-aa00-03f14749eb61  (Ultimate Performance)\r\n";
 
         var plans = ParseListOutput(output);
 
@@ -171,8 +153,7 @@ public sealed class PowerPlanManagerTests
     [Fact]
     public void ParseListOutput_UppercaseGuid_ParsedCorrectly()
     {
-        string output =
-            "Power Scheme GUID: 381B4222-F694-41F0-9685-FF5BB260DF2E  (Balanced)\r\n";
+        string output = "Power Scheme GUID: 381B4222-F694-41F0-9685-FF5BB260DF2E  (Balanced)\r\n";
 
         var plans = ParseListOutput(output);
 

@@ -86,7 +86,7 @@ internal static class Program
     internal static void InitForTesting(TweakEngine engine, RegistrySession? session = null)
     {
         _session = session ?? new RegistrySession(dryRun: true);
-        _engine  = engine;
+        _engine = engine;
     }
 
     internal static int Dispatch(CliArgs a)

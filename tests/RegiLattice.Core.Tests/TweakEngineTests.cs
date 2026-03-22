@@ -7,8 +7,12 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for TweakEngine: registration, lookup, search, profiles, dry-run ops.</summary>
-public sealed class TweakEngineTests
+public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
 {
+    private readonly TweakEngine _builtins;
+
+    public TweakEngineTests(BuiltinsFixture fixture) => _builtins = fixture.Engine;
+
     // ── Registration ────────────────────────────────────────────────────
     [Fact]
     public void Register_AddsTweaks()
@@ -909,17 +913,13 @@ public sealed class TweakEngineTests
     [Fact]
     public void TweaksForProfile_InvalidName_ReturnsEmpty()
     {
-        var engine = TestHelpers.CreateEngine();
-        engine.RegisterBuiltins();
-        Assert.Empty(engine.TweaksForProfile("nonexistent-profile"));
+        Assert.Empty(_builtins.TweaksForProfile("nonexistent-profile"));
     }
 
     [Fact]
     public void TweaksForProfile_ValidName_ReturnsNonEmpty()
     {
-        var engine = TestHelpers.CreateEngine();
-        engine.RegisterBuiltins();
-        var tweaks = engine.TweaksForProfile("privacy");
+        var tweaks = _builtins.TweaksForProfile("privacy");
         Assert.NotEmpty(tweaks);
         // All returned tweaks should be in the privacy profile's categories
         var profile = TweakEngine.Profiles.First(p => p.Name == "privacy");
@@ -2107,15 +2107,17 @@ public sealed class TweakEngineTests
 
 // ── Sprint 24: ApplyProfile, CategoryCounts, ScopeCounts, utility paths ──
 
-public sealed class TweakEngineSprint24Tests
+public sealed class TweakEngineSprint24Tests : IClassFixture<BuiltinsFixture>
 {
+    private readonly TweakEngine _engine;
+
+    public TweakEngineSprint24Tests(BuiltinsFixture fixture) => _engine = fixture.Engine;
+
     [Fact]
     public void ApplyProfile_ValidProfile_ReturnsResultsForEachTweak()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
         // Verify profile resolution works (returns tweaks without applying - avoids spawning processes)
-        var tweaks = engine.TweaksForProfile("privacy");
+        var tweaks = _engine.TweaksForProfile("privacy");
         Assert.NotEmpty(tweaks);
         Assert.All(tweaks, t => Assert.NotEmpty(t.Id));
     }
@@ -2123,64 +2125,50 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void ApplyProfile_InvalidProfile_ReturnsEmpty()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var results = engine.ApplyProfile("nonexistent-xyz-profile");
+        var results = _engine.ApplyProfile("nonexistent-xyz-profile");
         Assert.Empty(results);
     }
 
     [Fact]
     public void CategoryCounts_SumsToAllTweaksCount()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var total = engine.CategoryCounts().Values.Sum();
-        Assert.Equal(engine.AllTweaks().Count, total);
+        var total = _engine.CategoryCounts().Values.Sum();
+        Assert.Equal(_engine.AllTweaks().Count, total);
     }
 
     [Fact]
     public void ScopeCounts_SumsToAllTweaksCount()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var total = engine.ScopeCounts().Values.Sum();
-        Assert.Equal(engine.AllTweaks().Count, total);
+        var total = _engine.ScopeCounts().Values.Sum();
+        Assert.Equal(_engine.AllTweaks().Count, total);
     }
 
     [Fact]
     public void CategoryCounts_AllCategoriesPresent()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var cats = engine.Categories().ToHashSet();
-        Assert.All(engine.CategoryCounts().Keys, k => Assert.Contains(k, cats));
+        var cats = _engine.Categories().ToHashSet();
+        Assert.All(_engine.CategoryCounts().Keys, k => Assert.Contains(k, cats));
     }
 
     [Fact]
     public void ScopeCounts_ContainsUserAndMachine()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var counts = engine.ScopeCounts();
+        var counts = _engine.ScopeCounts();
         Assert.True(counts.ContainsKey(TweakScope.User) || counts.ContainsKey(TweakScope.Machine));
     }
 
     [Fact]
     public void GetScope_KnownId_ReturnsScope()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var first = engine.AllTweaks()[0];
-        var scope = engine.GetScope(first);
+        var first = _engine.AllTweaks()[0];
+        var scope = _engine.GetScope(first);
         Assert.True(Enum.IsDefined(typeof(TweakScope), scope));
     }
 
     [Fact]
     public void TweaksByScope_User_ContainsAtLeastOneTweak()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var userTweaks = engine.TweaksByScope(TweakScope.User);
+        var userTweaks = _engine.TweaksByScope(TweakScope.User);
         Assert.NotEmpty(userTweaks);
         Assert.All(userTweaks, t => Assert.Equal(TweakScope.User, t.Scope));
     }
@@ -2188,9 +2176,7 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void TweaksByScope_Machine_ContainsAtLeastOneTweak()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var machineTweaks = engine.TweaksByScope(TweakScope.Machine);
+        var machineTweaks = _engine.TweaksByScope(TweakScope.Machine);
         Assert.NotEmpty(machineTweaks);
         Assert.All(machineTweaks, t => Assert.Equal(TweakScope.Machine, t.Scope));
     }
@@ -2198,9 +2184,7 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void TweaksByTag_ReturnsOnlyMatchingTag()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var tagged = engine.TweaksByTag("privacy");
+        var tagged = _engine.TweaksByTag("privacy");
         Assert.NotEmpty(tagged);
         Assert.All(tagged, t => Assert.Contains("privacy", t.Tags, StringComparer.OrdinalIgnoreCase));
     }
@@ -2208,9 +2192,7 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void Filter_ByCorpSafe_True_ReturnsOnlyCorpSafe()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var corpSafe = engine.Filter(corpSafe: true);
+        var corpSafe = _engine.Filter(corpSafe: true);
         Assert.NotEmpty(corpSafe);
         Assert.All(corpSafe, t => Assert.True(t.CorpSafe));
     }
@@ -2218,9 +2200,7 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void Filter_ByNeedsAdmin_False_ReturnsOnlyNonAdmin()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var nonAdmin = engine.Filter(needsAdmin: false);
+        var nonAdmin = _engine.Filter(needsAdmin: false);
         Assert.NotEmpty(nonAdmin);
         Assert.All(nonAdmin, t => Assert.False(t.NeedsAdmin));
     }
@@ -2234,9 +2214,7 @@ public sealed class TweakEngineSprint24Tests
     [Fact]
     public void Search_SingleToken_ReturnsRelevantTweaks()
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        var results = engine.Search("telemetry");
+        var results = _engine.Search("telemetry");
         Assert.NotEmpty(results);
         // NLP synonym expansion intentionally returns related tweaks beyond literal matches.
         // Verify that at least the majority of results directly reference the query term.

@@ -7,5 +7,6 @@
   "MD041": false,
   "MD024": {
     "siblings_only": true
-  }
+  },
+  "ignores": [".github/CODEOWNERS"]
 }
