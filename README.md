@@ -36,6 +36,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **5 machine profiles** — business, gaming, privacy, minimal, server
 - **Dry-run mode** — preview changes without touching the registry (`--dry-run`)
 - **Snapshot & diff** — save/restore tweak state (JSON), compare snapshots (`--snapshot-diff`)
+- **Compliance history** — rolling drift log; `--compliance-history` + `--compliance-report auto` CLI flags
 - **Validation & stats** — `--validate` checks all TweakDef integrity; `--stats` shows scope/admin/corp breakdown
 - **JSON export** — `--export-json` for scripting; `--export-reg` for .REG file generation
 - **Composable filters** — `Filter()` engine API supports scope, category, min-build, tags, corp-safe, and free-text query
@@ -45,7 +46,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **1 647 tests** across 17 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **1 833 tests** across 17 test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -94,9 +95,9 @@ graph LR
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
 
-## Tweak Categories (89)
+## Tweak Categories (116)
 
-89 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
+116 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
@@ -116,7 +117,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (1 647 tests)
+# Run tests (1 833 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -264,7 +265,7 @@ RegiLattice/
 │       ├── CliArgs.cs                       # CLI argument model
 │       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 1444 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 1 325 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs
@@ -277,9 +278,9 @@ RegiLattice/
 │   │   ├── FavoritesTests.cs
 │   │   ├── TweakHistoryTests.cs
 │   │   └── ConfigExporterTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 154 xUnit tests
+│   ├── RegiLattice.CLI.Tests/               # 266 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 490 xUnit tests
+│   └── RegiLattice.GUI.Tests/               # 242 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs

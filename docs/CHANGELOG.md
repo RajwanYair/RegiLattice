@@ -4,9 +4,9 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [4.3.0] — 2026-05-02
+## [4.3.0] — 2026-03-22
 
-### Sprints 99–104 — Dialogs, Services, PowerShell Module & Notifications
+### Sprints 99–105 — Dialogs, Services, PowerShell Module, Notifications & Compliance History
 
 #### Added
 
@@ -18,6 +18,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **PowerShell module scaffold** (Sprint 103): `powershell/RegiLattice.psd1` (manifest v4.3.0) + `powershell/RegiLattice.psm1` — CLI-wrapping script module with 5 cmdlets: `Get-RLTweak`, `Get-RLTweakStatus`, `Invoke-RLApply`, `Invoke-RLRemove`, `Get-RLHealthScore`. Pipeline-native `PSCustomObject` output, `Update-TypeData` format defaults, aliases `grt`/`grts`/`ira`/`irr`. `PowerShellModuleGenerator.cs` bumped to v4.3.0.
 - **JumpListService.cs** (Sprint 104): Scaffold for Windows 11 taskbar Jump List integration. No-op until MSIX installer provides AUMID; structured for future COM `ICustomDestinationList` wiring.
 - **ToastNotificationService.cs** (Sprint 104): WinRT `ToastNotificationManager` toast delivery with automatic fallback to `NotifyIcon.ShowBalloonTip()`. `ShowApplyComplete()` fired after every batch-apply in `MainForm`.
+- **ComplianceHistory.cs** (Sprint 105): `RegiLattice.Core.Services` — rolling compliance log persisted to `compliance-history.json` (90-entry cap). Records `ComplianceHistoryEntry` per check (date, total checked, violation count, drifted IDs, snapshot path). `AddEntry()` auto-wired in `RunCompliance()`.
+- **--compliance-history CLI flag** (Sprint 105): Prints last 30 compliance entries with date/checked/violations columns.
+- **--compliance-report auto CLI flag** (Sprint 105): Auto-locates the latest snapshot in `ConfigDir`, runs a compliance check against it, and prints the drift report.
+- **Toast extensions** (Sprint 105): `ShowComplianceDrift(violations)` and `ShowUpdateAvailable(version)` added to `ToastNotificationService`.
 
 ### Sprints 88-96 — 9 New Modules + Existing Module Enhancements
 
@@ -55,6 +59,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Tweaks: **4 058** across **116 categories** (121 module files)
 - Tests: **1 833** (1 325 Core + 266 CLI + 242 GUI), all passing
+- Build: **0 errors, 0 warnings** (Release x64)
 - Version bumped `4.2.0` → `4.3.0`
 
 ---

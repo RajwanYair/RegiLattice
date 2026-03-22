@@ -4,6 +4,22 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.3.0] — 2026-03-22
+
+- **Sprints 99–105**: SmartScanDialog, ProfileCompareDialog, DependencyGraphDialog, ComplianceReportExporter, PowerShell module scaffold, JumpListService, ToastNotificationService, ComplianceHistory drift log
+- **9 new tweak modules** (Sprints 88–96): NetworkInterface, SystemShutdown, MicrosoftAccount, DeviceGuardVbs, WindowsInk, CloudExperience, UserActivity, WifiNetworking, PrintSpoolerSecurity
+- **New CLI flags**: `--compliance-history`, `--compliance-report auto`
+- **Build**: 0 errors, 0 warnings (Release x64, .NET 10)
+- 4 058 tweaks, 116 categories, 121 module files
+- **1 833 tests** passing (1 325 Core + 266 CLI + 242 GUI)
+- Version bumped `4.2.0` → `4.3.0`
+
+## [4.2.0] — 2026-03-21
+
+- Sprint 77: RemoteManagement, SshHardening, KioskSharedPc, ActiveDirectory modules (+40 tweaks); HyperVAdvanced expanded +10
+- 3 868 tweaks across 107 categories; **1 647 tests** passing
+- Version bumped `4.1.0` → `4.2.0`
+
 ## [4.0.0] — 2026-03-20
 
 - **Major release milestone** — all capabilities fully enabled: GUI, CLI, MSI installer, 11 themes, 5 profiles, CorporateGuard, dry-run, snapshot, package managers, plugin marketplace
