@@ -122,6 +122,7 @@ public static class GroupPolicyExporter
 
         w.WriteEndElement(); // policyDefinitions
         w.WriteEndDocument();
+        w.Flush();
         return sb.ToString();
     }
 
@@ -187,6 +188,7 @@ public static class GroupPolicyExporter
         w.WriteEndElement(); // resources
         w.WriteEndElement(); // policyDefinitionResources
         w.WriteEndDocument();
+        w.Flush();
         return sb.ToString();
     }
 
