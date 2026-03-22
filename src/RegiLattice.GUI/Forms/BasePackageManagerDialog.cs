@@ -1,4 +1,4 @@
-// RegiLattice.GUI — Forms/BasePackageManagerDialog.cs
+﻿// RegiLattice.GUI — Forms/BasePackageManagerDialog.cs
 // Abstract base for all five package manager dialogs.
 // Provides: SplitContainer layout with resizable log panel, shared controls,
 //           prereq banner (with async install flow), quick-install strip,
@@ -27,6 +27,14 @@ internal abstract class BasePackageManagerDialog : Form
     protected readonly Button _btnUpgrade = new(); // may show "Update" for PSModule
     protected readonly Button _btnClose = new();
     private readonly RichTextBox _rtbLog = new();
+    private readonly ProgressBar _progressBar = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 6,
+        Style = ProgressBarStyle.Marquee,
+        MarqueeAnimationSpeed = 30,
+        Visible = false,
+    };
 
     // ── Shared state ──────────────────────────────────────────────────────
     protected HashSet<string> _installedNames = new(StringComparer.OrdinalIgnoreCase);
@@ -236,7 +244,7 @@ internal abstract class BasePackageManagerDialog : Form
         ctrlPanel.Controls.AddRange([_txtName, _btnInstall, _btnRemove, _btnUpgrade, _btnRefresh, _btnClose]);
 
         // ── Compose: last-added DockStyle.Top ends up topmost ────────────
-        Controls.AddRange([split, ctrlPanel, _lblOutdated, _lblStatus]);
+        Controls.AddRange([split, ctrlPanel, _lblOutdated, _progressBar, _lblStatus]);
         var scopePanel = BuildScopePanel();
         if (scopePanel is not null)
             Controls.Add(scopePanel);
@@ -430,20 +438,58 @@ internal abstract class BasePackageManagerDialog : Form
     }
 
     // ── Busy / enable ─────────────────────────────────────────────────────
-    protected void SetBusy(bool busy, string? message = null)
+    protected void SetBusy(bool busy, string? message = null, int totalSteps = 0)
     {
         if (InvokeRequired)
         {
-            Invoke(() => SetBusy(busy, message));
+            Invoke(() => SetBusy(busy, message, totalSteps));
             return;
         }
         _btnInstall.Enabled = !busy;
         _btnRemove.Enabled = !busy;
         _btnUpgrade.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
+        if (!busy)
+        {
+            _progressBar.Visible = false;
+            _progressBar.Style = ProgressBarStyle.Marquee;
+        }
+        else if (totalSteps > 0)
+        {
+            _progressBar.Style = ProgressBarStyle.Blocks;
+            _progressBar.Minimum = 0;
+            _progressBar.Maximum = totalSteps;
+            _progressBar.Value = 0;
+            _progressBar.Visible = true;
+        }
+        else
+        {
+            _progressBar.Style = ProgressBarStyle.Marquee;
+            _progressBar.MarqueeAnimationSpeed = 30;
+            _progressBar.Visible = true;
+        }
         if (message is not null)
         {
             _lblStatus.Text = message;
+            _lblStatus.ForeColor = AppTheme.FgDim;
+        }
+        else if (!busy)
+        {
+            _lblStatus.Text = string.Empty;
+        }
+    }
+
+    protected void SetProgress(int current, int total)
+    {
+        if (InvokeRequired)
+        {
+            Invoke(() => SetProgress(current, total));
+            return;
+        }
+        if (_progressBar.Style == ProgressBarStyle.Blocks && current <= total)
+        {
+            _progressBar.Value = current;
+            _lblStatus.Text = $"Package {current} of {total}...";
             _lblStatus.ForeColor = AppTheme.FgDim;
         }
     }
@@ -518,12 +564,16 @@ internal abstract class BasePackageManagerDialog : Form
         var names = GetSelectedOrTypedNames();
         if (names.Count == 0)
             return;
-        SetBusy(true, $"Removing {names.Count} package(s)...");
+        SetBusy(true, $"Removing {names.Count} package(s)...", totalSteps: names.Count);
         AppendLog($"Removing: {string.Join(", ", names)}");
         try
         {
+            int i = 0;
             foreach (string name in names)
             {
+                i++;
+                SetProgress(i, names.Count);
+                _lblStatus.Text = $"Removing {i}/{names.Count}: {name}";
                 await RemoveCoreAsync(name, _cts.Token);
                 AppendLog($"Removed: {name}", AppTheme.Red);
             }
@@ -545,12 +595,16 @@ internal abstract class BasePackageManagerDialog : Form
         var names = GetSelectedOrTypedNames();
         if (names.Count == 0)
             return;
-        SetBusy(true, $"{UpgradeText}ing {names.Count} package(s)...");
+        SetBusy(true, $"{UpgradeText}ing {names.Count} package(s)...", totalSteps: names.Count);
         AppendLog($"{UpgradeText}: {string.Join(", ", names)}");
         try
         {
+            int i = 0;
             foreach (string name in names)
             {
+                i++;
+                SetProgress(i, names.Count);
+                _lblStatus.Text = $"{UpgradeText}ing {i}/{names.Count}: {name}";
                 await UpgradeCoreAsync(name, _cts.Token);
                 AppendLog($"{UpgradeText}d: {name}", AppTheme.Yellow);
             }
