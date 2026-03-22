@@ -1824,7 +1824,10 @@ internal static class Program
     private static int RunGeneratePsModule(string? outputDir)
     {
         outputDir ??= System.IO.Path.Combine(AppContext.BaseDirectory, "PowerShell");
-        var coreAssembly = typeof(TweakEngine).Assembly.Location;
+        // Assembly.Location returns empty string in single-file published apps (IL3000).
+        // Use AppContext.BaseDirectory to locate the Core DLL; the generator will fail
+        // gracefully if the DLL is not present as a separate file.
+        var coreAssembly = System.IO.Path.Combine(AppContext.BaseDirectory, "RegiLattice.Core.dll");
         Console.WriteLine($"Generating PowerShell module\u2026");
         try
         {

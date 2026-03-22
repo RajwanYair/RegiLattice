@@ -58,7 +58,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 #### Stats
 
 - Tweaks: **4 058** across **116 categories** (121 module files)
-- Tests: **1 833** (1 325 Core + 266 CLI + 242 GUI), all passing
+- Tests: **1 858** (1 325 Core + 291 CLI + 242 GUI), all passing
 - Build: **0 errors, 0 warnings** (Release x64)
 - Version bumped `4.2.0` → `4.3.0`
 

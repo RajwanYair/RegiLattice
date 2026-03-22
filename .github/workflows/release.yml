@@ -133,6 +133,30 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "MSIX: $out ($([math]::Round((Get-Item $out).Length / 1MB, 1)) MB)"
 
+      - name: Validate required release artifacts
+        shell: pwsh
+        run: |
+          # Mandatory: GUI and CLI EXEs must exist — fail the release if either is missing.
+          $missing = @()
+          if (-not (Test-Path 'publish/gui/RegiLattice.GUI.exe')) { $missing += 'publish/gui/RegiLattice.GUI.exe' }
+          if (-not (Test-Path 'publish/cli/RegiLattice.exe'))     { $missing += 'publish/cli/RegiLattice.exe'     }
+          if ($missing.Count -gt 0) {
+            Write-Error "Required release artifacts missing — aborting release:`n  $($missing -join "`n  ")"
+            exit 1
+          }
+          $guiMb = [math]::Round((Get-Item 'publish/gui/RegiLattice.GUI.exe').Length / 1MB, 1)
+          $cliMb = [math]::Round((Get-Item 'publish/cli/RegiLattice.exe').Length / 1MB, 1)
+          Write-Host "Required artifacts present:"
+          Write-Host "  GUI exe : publish/gui/RegiLattice.GUI.exe  ($guiMb MB)"
+          Write-Host "  CLI exe : publish/cli/RegiLattice.exe  ($cliMb MB)"
+          # Report optional artifacts (MSI / MSIX)
+          $msi  = Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi'  -ErrorAction SilentlyContinue | Select-Object -First 1
+          $msix = Get-ChildItem 'publish'               -Filter   '*.msix'        -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($msi)  { Write-Host "  MSI     : $($msi.FullName)  ($([math]::Round($msi.Length/1MB,1)) MB)" }
+          else       { Write-Host "  MSI     : not built (WiX optional — skipped)" }
+          if ($msix) { Write-Host "  MSIX    : $($msix.FullName)  ($([math]::Round($msix.Length/1MB,1)) MB)" }
+          else       { Write-Host "  MSIX    : not built (makeappx optional — skipped)" }
+
       - name: Generate checksums
         shell: pwsh
         run: |
