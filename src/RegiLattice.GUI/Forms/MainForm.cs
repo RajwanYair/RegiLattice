@@ -1358,6 +1358,8 @@ public partial class MainForm : Form
 
     private void OnOpenProfileCompare() => ShowManagerDialog(new ProfileCompareDialog(_engine));
 
+    private void OnOpenDepGraph() => ShowManagerDialog(new DependencyGraphDialog(_engine));
+
     private void OnOpenProfileWizard()
     {
         using var dlg = new ProfileWizardDialog();
@@ -1866,6 +1868,7 @@ public partial class MainForm : Form
         _mnuMacAddress.Image = AppIcons.MacAddressMenuBitmap;
         _mnuSmartScan.Image = AppIcons.WizardMenuBitmap;
         _mnuProfileCompare.Image = AppIcons.WizardMenuBitmap;
+        _mnuDepGraph.Image = AppIcons.WizardMenuBitmap;
         _mnuProfileWizard.Image = AppIcons.WizardMenuBitmap;
     }
 
