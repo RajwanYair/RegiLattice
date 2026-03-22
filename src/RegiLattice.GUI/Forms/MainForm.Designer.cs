@@ -81,6 +81,16 @@ partial class MainForm
     private ToolStripMenuItem _mnuMarketplace = null!;
     private ToolStripMenuItem _mnuProfileWizard = null!;
 
+    // ── Top-level and grouped sub-menus (need refresh on theme change) ─────
+    private ToolStripMenuItem _mnuTools = null!;
+    private ToolStripMenuItem _mnuPkgMgr = null!;
+    private ToolStripMenuItem _subSysDiag = null!;
+    private ToolStripMenuItem _subSysMgmt = null!;
+    private ToolStripMenuItem _subPower = null!;
+    private ToolStripMenuItem _subPrivSec = null!;
+    private ToolStripMenuItem _subNetwork = null!;
+    private ToolStripMenuItem _subCleanup = null!;
+
     // ── Main layout ────────────────────────────────────────────────────────
     private SplitContainer _split = null!;
     private TreeView _treeView = null!;
@@ -199,8 +209,8 @@ partial class MainForm
         var mnuInvert2 = new ToolStripMenuItem("Invert Selection") { Image = AppIcons.InvertSelectionMenuBitmap };
 
         // ── Tools submenus ─────────────────────────────────────────────────
-        var subSysDiag = new ToolStripMenuItem("System &Diagnostics") { Image = AppIcons.ToolVersionsMenuBitmap };
-        subSysDiag.DropDownItems.AddRange(new ToolStripItem[]
+        _subSysDiag = new ToolStripMenuItem("System &Diagnostics") { Image = AppIcons.ToolVersionsMenuBitmap };
+        _subSysDiag.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuWinHealth,
             _mnuToolVersions,
@@ -212,8 +222,8 @@ partial class MainForm
             _mnuHwTempMon,
         });
 
-        var subSysMgmt = new ToolStripMenuItem("System &Management") { Image = AppIcons.ServiceMenuBitmap };
-        subSysMgmt.DropDownItems.AddRange(new ToolStripItem[]
+        _subSysMgmt = new ToolStripMenuItem("System &Management") { Image = AppIcons.ServiceMenuBitmap };
+        _subSysMgmt.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuStartupMgr,
             _mnuServiceMgr,
@@ -224,8 +234,8 @@ partial class MainForm
             _mnuShellExtensions,
         });
 
-        var subPower = new ToolStripMenuItem("&Power && Energy") { Image = AppIcons.PowerMenuBitmap };
-        subPower.DropDownItems.AddRange(new ToolStripItem[]
+        _subPower = new ToolStripMenuItem("&Power && Energy") { Image = AppIcons.PowerMenuBitmap };
+        _subPower.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuPowerPlan,
             _mnuPowerScheduler,
@@ -236,8 +246,8 @@ partial class MainForm
             _mnuBrightness,
         });
 
-        var subPrivSec = new ToolStripMenuItem("&Privacy && Security") { Image = AppIcons.PrivacyMenuBitmap };
-        subPrivSec.DropDownItems.AddRange(new ToolStripItem[]
+        _subPrivSec = new ToolStripMenuItem("&Privacy && Security") { Image = AppIcons.PrivacyMenuBitmap };
+        _subPrivSec.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuPrivacyDash,
             _mnuAdRemoval,
@@ -248,8 +258,8 @@ partial class MainForm
             _mnuNotifMgr,
         });
 
-        var subNetwork = new ToolStripMenuItem("&Network") { Image = AppIcons.NetworkMenuBitmap };
-        subNetwork.DropDownItems.AddRange(new ToolStripItem[]
+        _subNetwork = new ToolStripMenuItem("&Network") { Image = AppIcons.NetworkMenuBitmap };
+        _subNetwork.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuNetTools,
             _mnuNetRepair,
@@ -268,8 +278,8 @@ partial class MainForm
             _mnuMacAddress,
         });
 
-        var subCleanup = new ToolStripMenuItem("&Cleanup && Performance") { Image = AppIcons.CleanupMenuBitmap };
-        subCleanup.DropDownItems.AddRange(new ToolStripItem[]
+        _subCleanup = new ToolStripMenuItem("&Cleanup && Performance") { Image = AppIcons.CleanupMenuBitmap };
+        _subCleanup.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuTempCleaner,
             _mnuBrowserCache,
@@ -277,15 +287,15 @@ partial class MainForm
             _mnuDiskSpace,
         });
 
-        var mnuTools = new ToolStripMenuItem("&Tools");
-        mnuTools.DropDownItems.AddRange(new ToolStripItem[]
+        _mnuTools = new ToolStripMenuItem("&Tools") { Image = AppIcons.ToolVersionsMenuBitmap };
+        _mnuTools.DropDownItems.AddRange(new ToolStripItem[]
         {
-            subSysDiag,
-            subSysMgmt,
-            subPower,
-            subPrivSec,
-            subNetwork,
-            subCleanup,
+            _subSysDiag,
+            _subSysMgmt,
+            _subPower,
+            _subPrivSec,
+            _subNetwork,
+            _subCleanup,
             new ToolStripSeparator(),
             _mnuProfileWizard = new ToolStripMenuItem("Profile Recommendation Wizard…") { Image = AppIcons.WizardMenuBitmap },
             new ToolStripSeparator(),
@@ -294,8 +304,8 @@ partial class MainForm
             mnuSelectAll2, mnuDeselectAll2, mnuInvert2,
         });
 
-        var mnuPkgMgr = new ToolStripMenuItem("&Package Manager");
-        mnuPkgMgr.DropDownItems.AddRange(new ToolStripItem[]
+        _mnuPkgMgr = new ToolStripMenuItem("&Package Manager") { Image = AppIcons.MarketplaceMenuBitmap };
+        _mnuPkgMgr.DropDownItems.AddRange(new ToolStripItem[]
         {
             _mnuScoopMgr, _mnuPsMgr, _mnuPipMgr, _mnuWinGetMgr, _mnuChocoMgr,
             new ToolStripSeparator(),
@@ -315,7 +325,7 @@ partial class MainForm
         mnuHelp.DropDownItems.AddRange(new ToolStripItem[] { mnuWhatsNew, mnuHwInfo, mnuCheckUpdates, new ToolStripSeparator(), mnuAbout });
 
         _menuStrip = new MenuStrip();
-        _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuPkgMgr, mnuTools, mnuView, mnuHelp });
+        _menuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, _mnuPkgMgr, _mnuTools, mnuView, mnuHelp });
         _menuStrip.Dock = DockStyle.Top;
 
         // Wire menu events
