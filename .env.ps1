@@ -12,7 +12,15 @@
 # ─────────────────────────────────────────────────────────────────────────────
 #$env:REGILATTICE_ENV_LOADED = '1'
 
-# Guard: only run once per session
+# ── MSBuild reliability: disable cross-build node reuse ─────────────────────
+# Always set — before the idempotency guard — so every terminal/session
+# benefits even when .env.ps1 is sourced more than once (guard would short-
+# circuit at line below).  Without this, persistent MSBuild worker nodes
+# hold file handles on %TEMP%\RegiLattice-build\**\*.cache files and cause
+# MSB3492 ("Could not read cache file") on the next build.
+$env:MSBUILDDISABLENODEREUSE = '1'
+
+# Guard: only run once per session (PATH extensions etc. are expensive)
 if ($env:REGILATTICE_ENV_LOADED -eq '1') { return }
 
 # ── Helper: append a directory to PATH only if it exists and isn't there yet ─
@@ -101,10 +109,10 @@ $env:REGILATTICE_ENV_LOADED = '1'
 if (-not (Get-Alias -Name 'rlbuild' -ErrorAction SilentlyContinue)) {
     Set-Alias -Name 'rlbuild'  -Value { dotnet build RegiLattice.sln }.GetSteppablePipeline -Option ReadOnly -ErrorAction SilentlyContinue
 }
-function Invoke-RLBuild   { dotnet build RegiLattice.sln @args }
-function Invoke-RLTest    { dotnet test  RegiLattice.sln --logger "console;verbosity=normal" @args }
-function Invoke-RLGui     { dotnet run --project src/RegiLattice.GUI @args }
-function Invoke-RLCli     { dotnet run --project src/RegiLattice.CLI -- @args }
+function Invoke-RLBuild { dotnet build RegiLattice.sln @args }
+function Invoke-RLTest { dotnet test  RegiLattice.sln --logger "console;verbosity=normal" @args }
+function Invoke-RLGui { dotnet run --project src/RegiLattice.GUI @args }
+function Invoke-RLCli { dotnet run --project src/RegiLattice.CLI -- @args }
 
 # ── Tab completion for common dotnet arguments ──────────────────────
 $_rlTestProjects = @(
@@ -118,7 +126,7 @@ Register-ArgumentCompleter -CommandName 'dotnet' -ScriptBlock {
     $cmdText = $commandAst.ToString()
     if ($cmdText -match 'dotnet\s+test\s+') {
         $_rlTestProjects | Where-Object { $_ -like "$wordToComplete*" } |
-            ForEach-Object { [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_) }
+        ForEach-Object { [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_) }
     }
 }
 
@@ -137,7 +145,7 @@ function global:prompt {
     $duration = ''
     if ((Get-History -Count 1 -ErrorAction SilentlyContinue) -is [Microsoft.PowerShell.Commands.HistoryInfo]) {
         $last = Get-History -Count 1
-        $ms   = ($last.EndExecutionTime - $last.StartExecutionTime).TotalMilliseconds
+        $ms = ($last.EndExecutionTime - $last.StartExecutionTime).TotalMilliseconds
         if ($ms -ge 1000) { $duration = " ($([math]::Round($ms / 1000, 1))s)" }
         elseif ($ms -ge 100) { $duration = " ($([int]$ms)ms)" }
     }

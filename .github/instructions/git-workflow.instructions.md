@@ -46,7 +46,7 @@ Only after the **full chat session ends** and you have confirmed:
 
 ```powershell
 # End-of-session push flow
-dotnet build RegiLattice.sln -c Release -m:1 -q
+dotnet build RegiLattice.sln -c Release -m:1
 dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build -c Release --logger "console;verbosity=minimal"
 git push
 ```
@@ -182,7 +182,7 @@ git commit -m "feat(tweaks): add 10 network tweaks"
 git commit --amend --no-edit
 
 # Build + test before committing
-dotnet build RegiLattice.sln -c Debug -m:1 -q
+dotnet build RegiLattice.sln -c Debug -m:1
 dotnet test RegiLattice.sln --settings tests/.runsettings --blame-hang-timeout 60s --no-build --logger "console;verbosity=minimal"
 
 # End-of-session push (includes tags)

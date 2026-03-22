@@ -84,6 +84,15 @@
     "workbench.action.togglePanel"
   ],
   "terminal.integrated.enableImages": true,
+  // ── Build reliability env vars ──────────────────────────────────────────
+  // MSBUILDDISABLENODEREUSE=1 prevents MSBuild worker nodes from staying alive
+  // between builds and holding exclusive file handles on *.cache files in
+  // %TEMP%\RegiLattice-build, which causes MSB3492 errors on subsequent builds.
+  // Applied to ALL terminals here as a belt-and-suspenders guard in case a
+  // session is opened without sourcing .env.ps1.
+  "terminal.integrated.env.windows": {
+    "MSBUILDDISABLENODEREUSE": "1"
+  },
   // Ensure Copilot chat agent terminals also see dotnet tools
   "github.copilot.chat.terminalChatLocation": "terminal",
   // ── Git ─────────────────────────────────────────────────────────────

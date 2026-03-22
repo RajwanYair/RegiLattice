@@ -18,6 +18,10 @@ jobs:
   build-and-test:
     runs-on: windows-latest
     timeout-minutes: 45
+    env:
+      # Prevent MSBuild worker nodes from persisting between steps and holding
+      # file handles on *.cache files, which would cause MSB3492 errors.
+      MSBUILDDISABLENODEREUSE: 1
 
     steps:
       - uses: actions/checkout@v4

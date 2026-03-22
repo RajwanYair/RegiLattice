@@ -15,38 +15,66 @@
 
         MSBUILD : error Building target "GenerateTargetFrameworkMonikerAttribute" completely.
 
-    WHY BeforeTargets DID NOT WORK
-    ──────────────────────────────
-    MSBuild's "question build" mode (the fast up-to-date check that runs
-    before the actual build in solution-level builds) evaluates targets in
-    isolation — BeforeTargets/AfterTargets ordering is NOT honoured in that
-    evaluation pass. So MakeDir could not be guaranteed to fire before
-    GenerateTargetFrameworkMonikerAttribute in question-build context.
+    DUAL HOOK STRATEGY
+    ──────────────────
+    InitialTargets:  Guaranteed to run before DefaultTargets and the
+                     question-build scan. Handles the cold-start case
+                     (TEMP dir empty / cache wiped).
 
-    THE FIX — InitialTargets
-    ────────────────────────
-    InitialTargets are the ONLY MSBuild hook guaranteed to run before
-    DefaultTargets, explicitly requested targets, AND the question-build
-    scan. Declaring RegiLatticeEnsureBuildDirs in InitialTargets ensures
-    the directories are created in EVERY evaluation context.
-    MakeDir is idempotent — a no-op on paths that already exist.
+    BeforeTargets:   Belt-and-suspenders for the normal build path. Even
+                     though BeforeTargets ordering is NOT honoured in
+                     question-build mode, it fires in the actual build
+                     execution, covering any edge case where InitialTargets
+                     already ran but the dirs were deleted between the
+                     question-build pass and the actual compile pass.
+
+    MakeDir is fully idempotent — silently exits if dirs already exist.
+
+    MSB3492 PREVENTION
+    ──────────────────
+    When MSBUILDDISABLENODEREUSE=1 is NOT set, the MSBuild worker node
+    process persists between builds and holds an exclusive file handle on
+    AssemblyInfoInputs.cache. The next build's CoreGenerateAssemblyInfo
+    tries to READ the existing (locked) cache → MSB3492.
+
+    RegiLatticeClearStaleCaches (below) deletes the cache file before
+    CoreGenerateAssemblyInfo reads it; if the file is still locked the
+    delete is a no-op (ContinueOnError) and MSB3492 may still fire, but
+    MSBUILDDISABLENODEREUSE=1 (set in .env.ps1 and terminal env) prevents
+    the lock in the first place.
   -->
+
+  <!-- ── Directory pre-creation ──────────────────────────────────────────── -->
   <Target Name="RegiLatticeEnsureBuildDirs"
+    BeforeTargets="GenerateTargetFrameworkMonikerAttribute;CoreGenerateAssemblyInfo;GenerateAssemblyInfo;_CheckForCompileOutputPathConflict"
     Condition="'$(UsingMicrosoftNETSdk)' == 'true'">
     <PropertyGroup>
       <!-- Compute the TFM-specific intermediate path from all-static property
-           components rather than relying on $(IntermediateOutputPath) which
-           may not yet have the Config\TFM suffix at BeforeTargets eval time.
-           We also include $(IntermediateOutputPath) directly as belt-and-
-           suspenders for the case where the SDK already populated it. -->
+           components. Including $(IntermediateOutputPath) as belt-and-suspenders
+           for the case where the SDK already populated it. -->
       <_RLIntermPath>$(BaseIntermediateOutputPath)$(Configuration)\$(TargetFramework)\</_RLIntermPath>
     </PropertyGroup>
-    <!-- A single MakeDir call with semicolon-delimited list is more efficient
-         than four separate calls; MakeDir creates the full path recursively.
-         Including both $(_RLIntermPath) and $(IntermediateOutputPath) covers
-         two timing windows: before and after the SDK sets IntermediateOutputPath. -->
+    <!-- Pre-create obj/<Config>/<TFM>/, ref/, refint/ and bin/ in one call.
+         ref/ and refint/ are needed by the SDK's reference assembly targets;
+         without pre-creation the SDK emits "Creating directory" warnings. -->
     <MakeDir
-      Directories="$(BaseIntermediateOutputPath);$(_RLIntermPath);$(IntermediateOutputPath);$(BaseOutputPath);$(OutDir)"
+      Directories="$(BaseIntermediateOutputPath);$(_RLIntermPath);$(_RLIntermPath)ref;$(_RLIntermPath)refint;$(IntermediateOutputPath);$(BaseOutputPath);$(OutDir)"
+      ContinueOnError="WarnAndContinue" />
+  </Target>
+
+  <!-- ── Stale-cache cleanup (prevents MSB3492) ──────────────────────────── -->
+  <Target Name="RegiLatticeClearStaleCaches"
+    BeforeTargets="CoreGenerateAssemblyInfo"
+    Condition="'$(UsingMicrosoftNETSdk)' == 'true'">
+    <!-- Proactively delete the AssemblyInfoInputs cache before
+         CoreGenerateAssemblyInfo tries to read it. If the file does not
+         exist the Delete task is a harmless no-op; if it does exist and is
+         NOT locked, the delete ensures a clean regeneration without MSB3492.
+         If it IS locked (node reuse holds a handle), the delete fails silently
+         (ContinueOnError) — MSBUILDDISABLENODEREUSE=1 is the primary guard
+         against that scenario. -->
+    <Delete
+      Files="$(IntermediateOutputPath)$(MSBuildProjectName).AssemblyInfoInputs.cache"
       ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>
