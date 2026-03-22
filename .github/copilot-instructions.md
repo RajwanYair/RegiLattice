@@ -28,8 +28,8 @@ Dot-source `.env.ps1` at the project root to ensure **all** CLI tools are on PAT
 ```
 
 This is auto-loaded by the default VS Code terminal profile (`RegiLattice Dev`).
-See `Win11_tools.engineer‑friendly.tool.md` and `SCOOP.engineer‑friendly.tool.md`
-in the repo root for the full tool reference.
+See `docs/archive/Win11_tools.engineer‑friendly.tool.md` and `docs/archive/SCOOP.engineer‑friendly.tool.md`
+for the full tool reference (local only — not tracked in git).
 
 ## ⛔ CRITICAL: PowerShell ONLY — NO Unix/Bash Commands
 
