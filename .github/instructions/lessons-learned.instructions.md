@@ -845,7 +845,7 @@ Any test that calls a method which internally embeds `DateTime.Now` **twice** (e
 to generate a file, once to build in-memory) can produce a 1-second mismatch between the
 two timestamps. This makes the test fail non-deterministically around second boundaries.
 
-**Pattern found in**: `HtmlReportGeneratorTests.Generate_FileContentsMatchBuild`  
+**Pattern found in**: `HtmlReportGeneratorTests.Generate_FileContentsMatchBuild`
 `HtmlReportGenerator.Build()` embeds `DateTime.Now` as a formatted string. When the test
 calls `gen.Generate(path, map)` (writes file) and then `gen.Build(map)` (returns string)
 in quick succession, the two calls can straddle a clock second.
@@ -879,7 +879,7 @@ proportionally. A budget that was safe at 3 000 tweaks fails non-deterministical
 
 **Pattern found in**: `TweakEngineBuiltinsTests.Search_CompletesUnder50ms`
 
-Original: `Assert.True(sw.ElapsedMilliseconds < 50, ...)`  
+Original: `Assert.True(sw.ElapsedMilliseconds < 50, ...)`
 Fixed to: `Assert.True(sw.ElapsedMilliseconds < 150, ...)` with a comment:
 
 ```csharp
@@ -889,6 +889,7 @@ Assert.True(sw.ElapsedMilliseconds < 150, $"Search took {sw.ElapsedMilliseconds}
 ```
 
 **Rule**: Every performance-budget test **must** include a comment with:
+
 1. What the budget was before relaxation and why it was changed
 2. The approximate tweak/item count at time of writing
 3. When the threshold should be re-evaluated
