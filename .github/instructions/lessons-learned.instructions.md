@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-22 (v4.2.0, C# 13 / .NET 10.0-windows, ~4 058+ tweaks, 115+ categories, 1 325+ tests)
+> Last updated: 2026-03-22 (v4.3.0, C# 13 / .NET 10.0-windows, ~4 058+ tweaks, 116+ categories, 1 833 tests)
 
 ---
 
@@ -702,3 +702,87 @@ This means cache-clearing commands like the following run without interruption:
 ```powershell
 Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force -ErrorAction SilentlyContinue
 ```
+
+---
+
+## `AppConfig.ConfigDir` — NOT `AppConfig.DataRoot`
+
+`AppConfig` exposes `ConfigDir` as the canonical data-directory property.
+`DataRoot` does **not exist** on `AppConfig`; using it produces `CS0117`.
+
+```csharp
+// ✅ GOOD — correct property for all services that persist data
+string path = Path.Combine(AppConfig.ConfigDir, "compliance-history.json");
+
+// ❌ BAD — CS0117: 'AppConfig' does not contain a definition for 'DataRoot'
+string path = Path.Combine(AppConfig.DataRoot, "compliance-history.json");
+```
+
+**What `ConfigDir` returns**:
+- Normal mode: `%LOCALAPPDATA%\RegiLattice`
+- Portable mode: `<exe-dir>\data\`
+
+Every Core service that stores persistent data (SnapshotManager, ComplianceHistory,
+Favorites, TweakHistory, Ratings, Analytics …) uses `AppConfig.ConfigDir`.
+When creating a new service, grep existing usages to confirm the correct property:
+
+```powershell
+Select-String -Pattern 'AppConfig\.' -Path src/RegiLattice.Core/Services/*.cs | Select-Object -First 5
+```
+
+**How was this caught?** Sprint 105's `ComplianceHistory.cs` and `Program.cs:RunComplianceAuto`
+both used `DataRoot` → `CS0117` on Release build. Fixed to `ConfigDir` in commit `08868e7`.
+
+---
+
+## `ParseArgs()` Returns `CliArgs?` — Always Guard with `Assert.NotNull()`
+
+`Program.ParseArgs()` (CLI entry point) returns `CliArgs?` (nullable). Every xUnit test
+that calls it must guard with `Assert.NotNull()` **before** accessing any property,
+or the compiler emits `CS8602: Dereference of a possibly null reference`.
+
+```csharp
+// ❌ BAD — CS8602: accessing .NewPack on a possibly-null CliArgs?
+var a = ParseArgs(new[] { "--new-pack", "my-custom-pack" });
+Assert.Equal("my-custom-pack", a.NewPack);
+
+// ✅ GOOD — null-guard satisfies nullable flow analysis
+var a = ParseArgs(new[] { "--new-pack", "my-custom-pack" });
+Assert.NotNull(a);                               // <-- required
+Assert.Equal("my-custom-pack", a.NewPack);
+```
+
+**Why `Assert.NotNull` works**: xUnit's `Assert.NotNull<T>(T?)` is annotated with
+`[MemberNotNull]` / `[DoesNotReturnIf(false)]` semantics that C#'s nullable flow
+analysis understands — after the call the variable is treated as non-null.
+
+**Standing rule**: EVERY test in `ParseArgsTests.cs` that captures the return value of
+`ParseArgs(...)` must have `Assert.NotNull(result)` as its very first assertion.
+All existing tests follow this pattern — do not break it when adding new tests.
+
+---
+
+## MD022 — CHANGELOG.md Headings Need a Blank Line Below Them
+
+Markdownlint rule **MD022** requires every ATX heading (`#` through `######`) to be
+surrounded by blank lines. The rule is enforced by the VS Code markdownlint extension
+and will show as Problems panel warnings if violated.
+
+```markdown
+<!-- ❌ BAD — MD022: no blank line between heading and content -->
+#### Enhanced
+- item one
+
+<!-- ✅ GOOD — blank line separates heading from list -->
+#### Enhanced
+
+- item one
+```
+
+**When this triggers**: Sprint CHANGELOG entries tend to use `####` sub-headings
+(`#### Enhanced`, `#### Fixed`, `#### Stats`) followed immediately by bullets or text.
+Always insert a blank line after any `####` heading you add to `docs/CHANGELOG.md`.
+
+**Violation found (Sprint 105 build-fix)**: Three `####` headings in the `[4.3.0]`
+entry had no blank line below them, causing MD022 warnings in the Problems panel.
+Fixed in commit `08868e7`.

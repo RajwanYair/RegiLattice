@@ -479,6 +479,9 @@ Canonical category slugs:
 - **`get_errors` shows CSharpier whitespace diffs**: "Replace ⏎ with ..." / "Delete ·" diagnostics are CSharpier formatting issues, not CS compiler errors. Ignore them when diagnosing build failures — only act on CS-prefixed errors.
 - **OneDrive CoreCompile cache lock**: If `dotnet build` fails with `Building target "CoreCompile" completely`, delete `$env:TEMP\RegiLattice-build\RegiLattice.Core\obj\Debug\net10.0-windows\RegiLattice.Core.csproj.CoreCompileInputs.cache` and retry. If it persists, delete the whole `$env:TEMP\RegiLattice-build\RegiLattice.Core` dir and retry twice. The build task (`build: Solution (Debug)`) in VS Code handles this automatically.
 - **Terminal Hebrew character injection**: A `ב` prefix on commands (e.g., `בdotnet`) is a VS Code terminal buffer artefact — the actual command still runs. Check `$LASTEXITCODE` to confirm success; do not retry just because of the prefix error.
+- **`AppConfig.ConfigDir` not `DataRoot`**: The correct data-directory property on `AppConfig` is `ConfigDir` (returns `%LOCALAPPDATA%\RegiLattice` or portable path). `DataRoot` does **not exist** and causes `CS0117`. All Core services that persist data use `AppConfig.ConfigDir` — check existing usages before writing a new service.
+- **`ParseArgs()` returns `CliArgs?` — null-guard every test**: `ParseArgs()` in CLI `Program.cs` returns a nullable `CliArgs?`. Every xUnit test that calls it must have `Assert.NotNull(result)` before accessing any property, or `CS8602` fires. All tests in `ParseArgsTests.cs` follow this pattern — maintain it when adding new tests.
+- **MD022 in CHANGELOG.md**: Every `####` heading in `docs/CHANGELOG.md` must be followed by a blank line before any content (bullets, text). Markdownlint rule MD022 will surface as VS Code Problems warnings if missing. Always add a blank line after `#### Enhanced`, `#### Fixed`, `#### Stats` etc.
 
 ## File-by-File Quick Ref
 
