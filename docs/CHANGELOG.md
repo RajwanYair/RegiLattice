@@ -4,6 +4,45 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.3.0] — 2026-05-02
+
+### Sprints 88-96 — 9 New Modules + Existing Module Enhancements
+
+#### Added
+
+- **NetworkInterface.cs**: 10 TCP/IP NIC adapter tuning tweaks (`nic-*`)
+  - Disable packet coalescing, adapter power management, EEE, Large Send Offload, Checksum Offload, NDIS RSS, jumbo frames; set Rx/Tx buffers, interrupt coalescing; disable AutoNegotiation
+- **SystemShutdown.cs**: 10 shutdown & restart behavior tweaks (`shdn-*`)
+  - Fast startup, hibernate, hybrid sleep, automatic maintenance wakeup, crash auto-restart, BSOD on hang, shutdown timeout, force shutdown on close, UPS sleep, clean boot
+- **MicrosoftAccount.cs**: 10 MSA sync, privacy & linked-devices tweaks (`msa-*`)
+  - Disable MSA sign-in policy, consumer experience, Settings sync, account notifications, linked phone, suggested contacts, cloud clipboard, Cortana MSA usage, connected account registration
+- **DeviceGuardVbs.cs**: 10 HVCI/VBS/Credential Guard hardening tweaks (`vbs-*`)
+  - Enable Credential Guard, HVCI, enforced HVCI, VBS, Secure Boot, kernel DMA protection, kernel-mode code integrity, require trusted launch; disable DMA remapping; block vulnerable drivers
+- **WindowsInk.cs**: 10 Ink Workspace, pen & touch-input tweaks (`ink-*`)
+  - Disable Ink Workspace, suggested apps in Ink, touch feedback, flicks, pen flicks, tablet mode roaming, touch keyboard auto-launch, handwriting personalization, pen workspace; enforce handwriting input on compatible devices
+- **CloudExperience.cs**: 10 OOBE, cloud-content & Microsoft Account tweaks (`oobe-*`)
+  - Disable OOBE improvements, pre-installed bloatware, consumer features, Cortana during OOBE, privacy experience, Windows Spotlight, lock-screen widgets, user preferences collection, cloud consumer account state, advertising ID
+- **UserActivity.cs**: 10 timeline, recent docs & CDP tweaks (`activity-*`)
+  - Disable activity feed publishing, timeline, cross-device sharing (CDP), connected devices platform, recent items, quick-access frequent folders, notification Center, auto-open Downloads, search highlights, last-access timestamp
+- **WifiNetworking.cs**: 10 Wi-Fi Sense, metered networks & 802.11 tweaks (`wifi-*`)
+  - Disable Wi-Fi Sense hotspot sharing, random hardware addresses, BT coexistence interference, WLAN AutoConfig triggers; enable 802.11d, 802.11h; cap scan retries, set throttle limit; enforce WPA3 preference; disable SSID broadcasting
+- **PrintSpoolerSecurity.cs**: 10 PrintNightmare mitigations & spooler hardening tweaks (`spool-*`)
+  - Disable Print Spooler, RpcAuthnLevelPrivacyEnabled enforcement, point-and-print restrictions, inbound SMB printing, outbound print events, network printer discovery, Web Services for Printers; restrict driver installation, operator users, HTTPS printing
+
+#### Enhanced (existing modules)
+- **AutoRunPolicy.cs**, **SecurityAuditPolicy.cs**, **TimeSync.cs**, **TouchpadGestures.cs**, **VirtualDesktops.cs**, **WindowsSearchAdv.cs**: additional tweaks, corrections, and de-duplication
+
+#### Fixed
+- `WifiNetworking.cs`: `WiFiService` → `WifiService` (6× CS0103 capitalization error)
+- `UserActivity.cs`: replaced duplicate `activity-disable-timeline-view` with distinct `activity-disable-cdp` (different registry key)
+
+#### Stats
+- Tweaks: **4 058** across **116 categories** (121 module files)
+- Tests: **1 833** (1 325 Core + 266 CLI + 242 GUI), all passing
+- Version bumped `4.2.0` → `4.3.0`
+
+---
+
 ## [4.2.0] — 2026-03-21
 
 ### Sprint 77 — Remote Management, SSH Hardening, Kiosk/Shared PC, Active Directory, Hyper-V Advanced
