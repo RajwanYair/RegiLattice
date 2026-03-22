@@ -1800,17 +1800,66 @@ public partial class MainForm : Form
     /// <summary>Re-assign menu item images after the AppIcons bitmap cache has been invalidated.</summary>
     private void RefreshMenuImages()
     {
+        // Top-level and sub-group headers
+        _mnuTools.Image = AppIcons.ToolVersionsMenuBitmap;
+        _mnuPkgMgr.Image = AppIcons.MarketplaceMenuBitmap;
+        _subSysDiag.Image = AppIcons.ToolVersionsMenuBitmap;
+        _subSysMgmt.Image = AppIcons.ServiceMenuBitmap;
+        _subPower.Image = AppIcons.PowerMenuBitmap;
+        _subPrivSec.Image = AppIcons.PrivacyMenuBitmap;
+        _subNetwork.Image = AppIcons.NetworkMenuBitmap;
+        _subCleanup.Image = AppIcons.CleanupMenuBitmap;
+
+        // Package manager items
         _mnuScoopMgr.Image = AppIcons.ScoopMenuBitmap;
         _mnuPsMgr.Image = AppIcons.PSModuleMenuBitmap;
         _mnuPipMgr.Image = AppIcons.PipMenuBitmap;
         _mnuWinGetMgr.Image = AppIcons.WinGetMenuBitmap;
         _mnuChocoMgr.Image = AppIcons.ChocolateyMenuBitmap;
+        _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
+
+        // Tools items
         _mnuToolVersions.Image = AppIcons.ToolVersionsMenuBitmap;
         _mnuWinHealth.Image = AppIcons.WindowsHealthMenuBitmap;
         _mnuNetTools.Image = AppIcons.NetworkMenuBitmap;
         _mnuStartupMgr.Image = AppIcons.StartupMenuBitmap;
         _mnuServiceMgr.Image = AppIcons.ServiceMenuBitmap;
-        _mnuMarketplace.Image = AppIcons.MarketplaceMenuBitmap;
+        _mnuSchedTaskMgr.Image = AppIcons.ServiceMenuBitmap;
+        _mnuPowerPlan.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuPrivacyDash.Image = AppIcons.PrivacyMenuBitmap;
+        _mnuContextMenuMgr.Image = AppIcons.ExplorerMenuBitmap;
+        _mnuHostsFileMgr.Image = AppIcons.NetworkMenuBitmap;
+        _mnuTempCleaner.Image = AppIcons.CleanupMenuBitmap;
+        _mnuInstalledApps.Image = AppIcons.MarketplaceMenuBitmap;
+        _mnuPowerScheduler.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuSleepTimer.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuBatterySaver.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuUsbPower.Image = AppIcons.ServiceMenuBitmap;
+        _mnuAdRemoval.Image = AppIcons.PrivacyMenuBitmap;
+        _mnuTelemetryDash.Image = AppIcons.PrivacyMenuBitmap;
+        _mnuAppPermissions.Image = AppIcons.PrivacyMenuBitmap;
+        _mnuDnsOverHttps.Image = AppIcons.NetworkMenuBitmap;
+        _mnuNetRepair.Image = AppIcons.NetworkMenuBitmap;
+        _mnuDnsSwitcher.Image = AppIcons.NetworkMenuBitmap;
+        _mnuNetAdapter.Image = AppIcons.NetworkMenuBitmap;
+        _mnuWiFiProfiles.Image = AppIcons.NetworkMenuBitmap;
+        _mnuFirewallRules.Image = AppIcons.NetworkMenuBitmap;
+        _mnuProxyConfig.Image = AppIcons.NetworkMenuBitmap;
+        _mnuShellExtensions.Image = AppIcons.ExplorerMenuBitmap;
+        _mnuBootAnalyzer.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuWuControl.Image = AppIcons.WindowsHealthMenuBitmap;
+        _mnuNotifMgr.Image = AppIcons.PrivacyMenuBitmap;
+        _mnuBrowserCache.Image = AppIcons.CleanupMenuBitmap;
+        _mnuDriverChecker.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuWakeOnLan.Image = AppIcons.NetworkMenuBitmap;
+        _mnuBrightness.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuMemoryCleaner.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuDiskSpace.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuPortScan.Image = AppIcons.NetworkMenuBitmap;
+        _mnuBatteryHealth.Image = AppIcons.PerformanceMenuBitmap;
+        _mnuHwTempMon.Image = AppIcons.ThermometerMenuBitmap;
+        _mnuNetBandwidth.Image = AppIcons.BandwidthMenuBitmap;
+        _mnuMacAddress.Image = AppIcons.MacAddressMenuBitmap;
         _mnuProfileWizard.Image = AppIcons.WizardMenuBitmap;
     }
 
