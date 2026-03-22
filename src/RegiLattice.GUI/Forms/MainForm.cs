@@ -1360,6 +1360,33 @@ public partial class MainForm : Form
 
     private void OnOpenDepGraph() => ShowManagerDialog(new DependencyGraphDialog(_engine));
 
+    private void OnExportComplianceReport()
+    {
+        using var sfd = new SaveFileDialog
+        {
+            Title = "Export Compliance Report",
+            Filter = "HTML file (*.html)|*.html",
+            FileName = $"regilattice-compliance-{DateTime.Now:yyyyMMdd}.html",
+        };
+        if (sfd.ShowDialog(this) != DialogResult.OK)
+            return;
+        try
+        {
+            ComplianceReportExporter.ExportHtml(
+                _engine,
+                _statusCache.Count > 0 ? _statusCache : null,
+                sfd.FileName);
+            AppendLog($"Compliance report saved: {sfd.FileName}");
+            MessageBox.Show($"Report saved:\n{sfd.FileName}", "Export Complete",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (IOException ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
     private void OnOpenProfileWizard()
     {
         using var dlg = new ProfileWizardDialog();
