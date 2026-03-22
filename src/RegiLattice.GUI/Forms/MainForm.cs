@@ -60,6 +60,9 @@ public partial class MainForm : Form
     // Profile schedule timer — checks AppConfig.ProfileSchedules every 60 s.
     private readonly System.Windows.Forms.Timer _profileScheduleTimer = new() { Interval = 60_000 };
 
+    // Toast notification service — initialized after _trayIcon is created in InitializeComponent.
+    private ToastNotificationService? _toast;
+
     // ── Construction ───────────────────────────────────────────────────────
     public MainForm()
     {
@@ -110,6 +113,10 @@ public partial class MainForm : Form
         }
 
         ApplyAdminRestrictions();
+
+        // Notification services — must be initialised AFTER InitializeComponent so _trayIcon exists.
+        _toast = new ToastNotificationService(_trayIcon);
+        _ = JumpListService.UpdateAsync();
     }
 
     // ── Admin-visibility gate ──────────────────────────────────────────────
@@ -678,6 +685,7 @@ public partial class MainForm : Form
             if (success > 0)
             {
                 AppendLog($"\u26A0 {success} tweak(s) applied — a reboot or restart may be required for changes to take effect.");
+                _toast?.ShowApplyComplete(success, selected.Count);
             }
         }
         catch (OperationCanceledException) { }
@@ -1372,18 +1380,13 @@ public partial class MainForm : Form
             return;
         try
         {
-            ComplianceReportExporter.ExportHtml(
-                _engine,
-                _statusCache.Count > 0 ? _statusCache : null,
-                sfd.FileName);
+            ComplianceReportExporter.ExportHtml(_engine, _statusCache.Count > 0 ? _statusCache : null, sfd.FileName);
             AppendLog($"Compliance report saved: {sfd.FileName}");
-            MessageBox.Show($"Report saved:\n{sfd.FileName}", "Export Complete",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Report saved:\n{sfd.FileName}", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (IOException ex)
         {
-            MessageBox.Show($"Export failed: {ex.Message}", "Export Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
