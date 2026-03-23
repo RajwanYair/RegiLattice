@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.5] — 2026-05-14
+
+- **Sprint 135 (T6.6)**: Stryker.NET mutation testing — `stryker-config.json` (15 Core files, break=55%), `dotnet-stryker 4.14.0` in tools manifest, `Run-MutationTests.ps1`, `mutation-testing` CI job (main-branch only).
+- Tests: 2,660 passing (unchanged)
+- Version bump: `4.6.4` → `4.6.5`
+
 ## [4.6.4] — 2026-05-14
 
 - **Sprint 134 (T6.3)**: Virtual registry integration tests — `VirtualRegistryTests.cs` (15 tests, GUID-scoped HKCU isolation, real Apply→Detect→Remove cycle, DryRun guard). No admin required, passes in CI.

@@ -4,6 +4,28 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.5] — 2026-05-14
+
+### Sprint 135 — Stryker.NET Mutation Testing Setup (T6.6)
+
+#### Added
+
+- **`stryker-config.json`** (project root): Stryker.NET 4.14.0 configuration for `RegiLattice.Core`.
+  - `mutation-level: Standard` — covers arithmetic, boolean, boundary, and null mutations.
+  - Thresholds: `high=80%`, `low=60%`, `break=55%` — CI fails if kill score drops below 55%.
+  - Target files: 15 Core source files (TweakEngine, TweakDef, RegistrySession, TweakValidator, DependencyResolver, SnapshotManager, AppConfig, Favorites, Ratings, TweakHistory, ConfigExporter, PackLoader, PackManager, PackSignatureVerifier, PluginSandbox).
+  - Reports: HTML + JSON output to `.tmp/stryker-output/` (gitignored).
+- **`.config/dotnet-tools.json`** — `dotnet-stryker 4.14.0` added as a local tool alongside CSharpier.
+- **`scripts/Run-MutationTests.ps1`**: PowerShell developer script for local mutation test runs with restore, build, and friendly output.
+- **`ci.yml` — `mutation-testing` job**: Runs Stryker on main-branch pushes only (not PRs). Uploads HTML report as a CI artifact. Break threshold enforces 55% minimum kill score.
+
+#### Stats
+
+- Total tweaks: **4,158** (unchanged)
+- Tests: **2,660 passing** (unchanged)
+
+---
+
 ## [4.6.4] — 2026-05-14
 
 ### Sprint 134 — Virtual Registry Integration Tests (T6.3)

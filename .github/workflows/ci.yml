@@ -65,3 +65,49 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: "**/coverage.cobertura.xml"
           fail_ci_if_error: false
+
+  mutation-testing:
+    # Mutation testing is expensive (~15 min). Run only on main-branch pushes,
+    # not on every PR. Uses dotnet-stryker with the stryker-config.json at root.
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      MSBUILDDISABLENODEREUSE: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore RegiLattice.sln
+
+      - name: Install dotnet-stryker
+        run: dotnet tool restore
+
+      - name: Build (for mutation)
+        run: dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Debug
+
+      - name: Run Stryker mutation tests
+        # Break threshold is 55% — CI fails if mutation score drops below that.
+        # Target: 60%+ kill score on Core library (T6.6).
+        run: dotnet stryker --config-file stryker-config.json
+
+      - name: Upload Stryker HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stryker-report
+          path: .tmp/stryker-output/
+          if-no-files-found: warn
