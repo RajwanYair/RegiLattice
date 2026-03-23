@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.9] — 2026-05-15
+
+### Sprint 139 — 50 New Tweaks: 5 New Modules (T8.3)
+
+#### Added
+
+- **ShellRestrictionsPolicy** (`shellrst`, 10 tweaks) — Shell restrictions via `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer`: NoRun, NoFind, NoClose, NoLogoff, NoDesktop, NoDrivesPage, NoCplApplets, NoDispCPL, DisallowRun, NoNetHood.
+- **BitsTransferPolicy** (`bitspol`, 10 tweaks) — BITS background transfer limits via `HKLM\SOFTWARE\Policies\Microsoft\Windows\BITS`: JobInactivityTimeout, MaxJobsPerMachine, MaxJobsPerUser, MaxJobFilesPerJob, MaxRangesPerFile, MaxDownloadTime, MaxInternetBandwidth, EnableBITSMaxBandwidth, DisablePeerCachingClient, DisablePeerCachingServer.
+- **OfflineFilesSyncPolicy** (`offsync`, 10 tweaks) — Offline Files sync governance via `NetCache` and `SyncMgr` policy paths: NoMakeAvailableOffline, PurgeAtLogoff, BackgroundSyncEnabled, DefaultCacheSize, GoOfflineAction, EventLoggingLevel, DisableSyncActivity, TurnOffSyncOnCostedNetwork, DisableFileSyncClient, HideOptionsForSyncProvider.
+- **MsiInstallerPolicy** (`msipol`, 10 tweaks) — Windows Installer hardening via `HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer`: DisablePatch, DisableBrowse, DisableMSI, TransformsSecure, SafeForScripting, EnforceUpgradeComponentRules, LimitSystemRestoreCheckpointing, DisableLockdownBrowseUI, DisableForbidPatch, DisableMedia.
+- **SmbServerPolicy** (`smbsrv`, 10 tweaks) — SMB server security and performance via `LanmanServer\Parameters`: AutoShareServer, AutoShareWks, EnableOpLocks, EnableForcedLogoff, IRPStackSize, MaxMpxCt, MaxWorkItems, EnableRaw, SizReqBuf, DiskSpaceThreshold.
+
+#### Stats
+
+- Total tweaks: ~4 258 across ~141 categories
+- Total tests: 2 052 (0 failures)
+
+---
+
 ## [4.6.8] — 2026-05-15
 
 ### Sprint 138 — 50 New Tweaks: 5 New Modules (T8.2)
