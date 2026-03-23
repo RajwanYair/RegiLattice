@@ -4,6 +4,32 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.7] — 2026-05-14
+
+### Sprint 137 — 50 New Tweaks: 5 New Modules (T8.2)
+
+#### Added
+
+- `NetworkDiscovery.cs` — 10 tweaks (netdisc): LLTD mapper/responder, mDNS,
+  NetBIOS P-Node, UPnP Host, SSDP, FDResPub service disablement
+- `CertificatePolicy.cs` — 10 tweaks (certpol): .NET 4 + .NET 2 SchUseStrongCrypto
+  (64-bit + WoW64), SystemDefaultTlsVersions, Wintrust certificate padding check, root
+  CA auto-update, IE certificate revocation enforcement
+- `PowerShellPolicy.cs` — 10 tweaks (pspolicy): ScriptBlockLogging,
+  InvocationLogging, ModuleLogging, Transcription (on + header + output path),
+  PS2 engine disable, protected event logging, EnableScripts + AllSigned execution policy
+- `DefenderAdvanced.cs` — 10 tweaks (defadv): cloud block level High,
+  BAFS extended timeout, MAPS advanced membership, auto sample submission,
+  behavior/IOAV/script scanning enable, archive + email scanning, scan time randomisation
+- `EventLogGpoPolicy.cs` — 10 tweaks (evtgpo): GPO-path event log sizes
+  (Application 128 MB, Security 1 GB, System 128 MB, Setup 64 MB, ForwardedEvents 256 MB)
+  and overwrite-when-full retention policy for all 5 channels
+
+#### Stats
+
+- Total tweaks: **4,258** (+50)
+- Tests: **2,052 Core / 2,660 total** — 0 failures
+
 ## [4.6.6] — 2026-05-14
 
 ### Sprint 136 — 50 New Tweaks: 5 New Modules (T8.2)

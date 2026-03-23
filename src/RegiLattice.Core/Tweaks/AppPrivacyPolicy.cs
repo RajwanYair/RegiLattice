@@ -134,9 +134,7 @@ internal static class AppPrivacyPolicy
             CorpSafe = true,
             ImpactScore = 2,
             SafetyRating = 5,
-            Description =
-                "Blocks all UWP apps from accessing the phone/dialer at the machine level. "
-                + "LetAppsAccessPhone=2.",
+            Description = "Blocks all UWP apps from accessing the phone/dialer at the machine level. " + "LetAppsAccessPhone=2.",
             Tags = ["phone", "calls", "policy", "app privacy", "uwp"],
             RegistryKeys = [Policy],
             ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessPhone", 2)],
@@ -153,8 +151,7 @@ internal static class AppPrivacyPolicy
             ImpactScore = 2,
             SafetyRating = 5,
             Description =
-                "Prevents all UWP apps from reading or writing to the system task list "
-                + "(Cortana reminders, to-do lists). LetAppsAccessTasks=2.",
+                "Prevents all UWP apps from reading or writing to the system task list " + "(Cortana reminders, to-do lists). LetAppsAccessTasks=2.",
             Tags = ["tasks", "to-do", "policy", "app privacy", "uwp"],
             RegistryKeys = [Policy],
             ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessTasks", 2)],
@@ -170,9 +167,7 @@ internal static class AppPrivacyPolicy
             CorpSafe = true,
             ImpactScore = 2,
             SafetyRating = 5,
-            Description =
-                "Blocks all UWP apps from sending or reading SMS and MMS messages at "
-                + "the machine level. LetAppsAccessMessaging=2.",
+            Description = "Blocks all UWP apps from sending or reading SMS and MMS messages at " + "the machine level. LetAppsAccessMessaging=2.",
             Tags = ["sms", "messaging", "policy", "app privacy", "uwp"],
             RegistryKeys = [Policy],
             ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessMessaging", 2)],
@@ -188,9 +183,7 @@ internal static class AppPrivacyPolicy
             CorpSafe = true,
             ImpactScore = 2,
             SafetyRating = 5,
-            Description =
-                "Machine policy denying all UWP apps access to the user's Video library "
-                + "folder. LetAppsAccessVideoLibrary=2.",
+            Description = "Machine policy denying all UWP apps access to the user's Video library " + "folder. LetAppsAccessVideoLibrary=2.",
             Tags = ["video", "library", "files", "policy", "app privacy", "uwp"],
             RegistryKeys = [Policy],
             ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessVideoLibrary", 2)],

@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.7] — 2026-05-14
+
+- **Sprint 137 (T8.2)**: 50 new tweaks across 5 new modules — `NetworkDiscovery.cs` (netdisc, 10), `CertificatePolicy.cs` (certpol, 10), `PowerShellPolicy.cs` (pspolicy, 10), `DefenderAdvanced.cs` (defadv, 10), `EventLogGpoPolicy.cs` (evtgpo, 10).
+- New categories: Network Discovery, Certificate Policy, PowerShell Policy, Defender Advanced, Event Log Policy.
+- Total: 4,258 tweaks, 2,052 Core tests (0 failures).
+
 ## [4.6.6] — 2026-05-14
 
 - **Sprint 136 (T8.2)**: 50 new tweaks across 5 new modules — `Biometrics.cs` (bio, 10), `WinRmHardening.cs` (winrm, 10), `LocationSensors.cs` (loc, 10), `SettingSyncAdv.cs` (ssync, 10), `AppPrivacyPolicy.cs` (appp, 10).
