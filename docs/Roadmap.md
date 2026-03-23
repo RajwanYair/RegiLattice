@@ -1,7 +1,7 @@
 # RegiLattice — Roadmap
 
-> Last updated: 2026-03-23 · v4.7.0 · 4 528 tweaks · 168 categories · 2 660 tests
-> ✅ **M4 complete** (v4.7.0, Sprints 130–139). Next: Sprint 140 (v4.7.x).
+> Last updated: 2026-03-25 · v4.8.0 · 4 628 tweaks · 178 categories · 2 661 tests
+> ✅ **M4 complete** (v4.7.0, Sprints 130–139). ✅ **Sprints 140–141 complete** (v4.8.0). Next: Sprint 142.
 
 ---
 
@@ -9,10 +9,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Version | **4.7.0** |
+| Version | **4.8.0** |
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | **4 528** across **168 categories** (163 module files) |
-| Tests | **2 660** passing (2 052 Core + 301 CLI + 307 GUI), 0 failures |
+| Tweaks | **4 628** across **178 categories** (173 module files) |
+| Tests | **2 661** passing (2 052 Core + 301 CLI + 308 GUI), 0 failures |
 | Branch Coverage | **75%+** — M4 gate ✅ |
 | GUI | WinForms · 11 themes · 62+ dialogs · live CPU/RAM · tray icon |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
@@ -237,10 +237,10 @@ GUI controls have no `AccessibleName`/`AccessibleDescription`. `Locale.T()` now 
 
 ## Success Metrics
 
-| Metric | v4.5.0 Baseline | v4.7.0 Now ✅ | M5 Target |
+| Metric | v4.5.0 Baseline | v4.8.0 Now ✅ | M5 Target |
 |--------|-----------------|------------|----------|
-| Tweaks | **4 108** | **4 528** | 5 000+ |
-| Tests | ~2 540 | **2 660** | 2 750+ |
+| Tweaks | **4 108** | **4 628** | 5 000+ |
+| Tests | ~2 540 | **2 661** | 2 750+ |
 | Branch Coverage | 75.14% | 75%+ | **80%+** |
 | Live GUI Controls | ~4 000 (FLP) | ~30 (virtual) | ~30 |
 | Code Signed | 🔄 | ✅ | ✅ |

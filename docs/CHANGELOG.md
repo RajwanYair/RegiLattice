@@ -4,6 +4,66 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.8.0] — 2026-03-25 (Sprints 140–141)
+
+### Highlights
+
+Sprints 140–141 release. Adds **100 new tweaks** across **10 new categories** covering
+advanced AMSI/script policy, IE compatibility hardening, logon cache policy, Bluetooth
+advertising control, process mitigation (SEHOP/ASLR/Spectre/LSA-PPL), remote assistance
+policy, network hardened paths, USB storage policy, kiosk assigned access, and application
+restart/crash control.
+
+### Added
+
+#### Tweaks (100 new — 10 modules × 10 tweaks each)
+
+- **AMSI & Script Policy** (`amsi-*`, `AmsiScriptPolicy.cs`) — PowerShell ScriptBlock logging,
+  module logging, transcription, constrained language mode, WScript disable, Defender cloud
+  protection level/timeout, PS v2 disable.
+- **IE Compatibility Policy** (`iecompat-*`, `IECompatPolicy.cs`) — IE Enterprise Mode / IE-in-Edge
+  disable, IE first-run, cookie/homepage/autocomplete lockdown, IE zone elevation (IEHarden),
+  IE add-on install prompt, Edge HTTPS upgrades, Edge password manager.
+- **Logon Cache Policy** (`lgncache-*`, `LogonCachePolicy.cs`) — CachedLogonsCount 2/0,
+  smart-card remove lock, password-expiry warning (14 days), ForceUnlockLogon, Netlogon
+  RequireStrongKey/RequireSignOrSeal/SealSecureChannel/SignSecureChannel, disable domain
+  password cache.
+- **Bluetooth Advertising Policy** (`btadv-*`, `BluetoothAdvPolicy.cs`) — advertising,
+  promiscuous mode, pairing notifications, connectable timeout, file transfer, phonebook
+  access, encryption enforcement, remote audio, discoverable state, shared experiences.
+- **Application Restart Policy** (`apprstrt-*`, `ApplicationRestartPolicy.cs`) — AeDebug auto
+  (JIT debugger), auto-reboot on BSOD, crash dump type (kernel), event logging, WER
+  reporting/queue/throttle/consent, dump size limit, overwrite existing dump.
+- **Process Mitigation Policy** (`prctmtg-*`, `ProcessMitigationPolicy.cs`) — SEHOP
+  (exception chain validation), heap termination on corruption, mandatory ASLR (MoveImages),
+  bottom-up + high-entropy ASLR, kernel stack cookies, LSA RunAsPPL, safe DLL search mode,
+  Spectre mitigations (BpbEnabled), clear page file at shutdown.
+- **Remote Assistance Policy** (`rast-*`, `RemoteAssistancePolicy.cs`) — RA disable,
+  shadow/ticket control, firewall rules, helper configuration.
+- **Network Hardened Paths** (`nethpth-*`, `NetworkHardenedPaths.cs`) — UNC hardened paths
+  with RequireMutualAuthentication/RequireIntegrity/RequirePrivacy flags.
+- **USB Storage Policy** (`usbstor-*`, `UsbStoragePolicy.cs`) — USBSTOR start/write-protect,
+  removable storage per-class ACL policies.
+- **Kiosk Assigned Access** (`kiosk-*`, `KioskAssignedAccess.cs`) — kiosk/assigned-access
+  lock screen and session policy controls.
+
+#### Fixes
+
+- **Race condition fix** in `RatingsTests` / `RatingsFileExistsBranchTests` — added
+  `[Collection("Ratings")]` to both classes so the file-delete in `RatingsFileExistsBranchTests`
+  no longer races with `Rate_ValidStars_CreatesRating`.
+- **WFO1000 suppression** in `RegiLattice.GUI.csproj` — added `WFO1000` to `<NoWarn>` to
+  suppress the .NET 10 WinForms SDK false-positive on `[DesignerSerializationVisibility]`.
+
+### Stats
+
+- Tweaks: **4 628** (+100 from v4.7.0)
+- Categories: **178** (+10)
+- Module files: **173** (+10)
+- Tests: **2 661** (2 052 Core + 301 CLI + 308 GUI, 0 failures)
+
+---
+
 ## [4.7.0] — 2026-03-23 (M4 Milestone)
 
 ### Highlights

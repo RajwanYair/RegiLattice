@@ -4,6 +4,16 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.8.0] — 2026-03-25 (Sprints 140–141)
+
+- **Sprints 140–141**: 100 new tweaks across 10 new modules — `AmsiScriptPolicy.cs`, `IECompatPolicy.cs`, `LogonCachePolicy.cs`, `BluetoothAdvPolicy.cs`, `ApplicationRestartPolicy.cs`, `ProcessMitigationPolicy.cs`, `RemoteAssistancePolicy.cs`, `NetworkHardenedPaths.cs`, `UsbStoragePolicy.cs`, `KioskAssignedAccess.cs`.
+- **4 628 tweaks** across **178 categories** (173 module files).
+- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+- Fix: parallel test race in `RatingsFileExistsBranchTests` / `RatingsTests` via `[Collection("Ratings")]`.
+- Fix: WFO1000 false-positive suppressed in GUI project (`NoWarn`).
+
+---
+
 ## [4.7.0] — 2026-03-23 (M4 Milestone)
 
 - **M4 milestone release** (Sprints 130–139): 420 new tweaks, plugin signing & sandbox, Chocolatey distribution, virtual registry tests, Stryker.NET mutation testing infrastructure.
