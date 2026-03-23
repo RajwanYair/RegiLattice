@@ -75,6 +75,7 @@ public sealed class SnapshotNullJsonBranchTests
 //      · Deserialize returns null → `?.AsReadOnly()` returns null (null-conditional T)
 //      · null?.AsReadOnly() == null → `?? []` fires (null-coalescing T)
 
+[Collection("ComplianceHistory")]
 public sealed class ComplianceHistoryNullJsonBranchTests : IDisposable
 {
     private readonly string _historyPath = ComplianceHistory.HistoryPath;

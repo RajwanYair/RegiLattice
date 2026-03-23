@@ -10,6 +10,7 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
+[Collection("ComplianceHistory")]
 public sealed class ComplianceHistoryTests : IDisposable
 {
     // ── Isolation helpers ───────────────────────────────────────────────────
