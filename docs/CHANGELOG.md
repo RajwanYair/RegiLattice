@@ -4,6 +4,59 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.9.0] — 2026-03-26 (Sprints 142–151)
+
+### Highlights
+
+Sprints 142–151 release. Adds **100 new tweaks** across **10 new categories** covering
+LLTD network discovery, Windows Media Player policy, device provisioning, Windows Maps
+Connected Search, diagnostic data pipeline, system restore GPO, modern Start menu layout,
+cloud content/Spotlight policy, additional app privacy capabilities, and UAC advanced
+logon/display controls.
+
+### Added
+
+#### Tweaks (100 new — 10 modules × 10 tweaks each)
+
+- **Network Map Discovery Policy** (`netlltd-*`, `NetworkLltdPolicy.cs`) — LLTDIO enable/disable
+  on domain/private/public networks; Rspndr responder control; Peernet/PeerToPeer disabled.
+- **Windows Media Player Policy** (`wmply-*`, `WindowsMediaPolicyAdv.cs`) — HKLM screensaver,
+  metadata retrieval (CD/DVD, music, radio) suppression, preset/codec/protocol auto-download
+  disable and user-scope overrides.
+- **Device Provisioning Policy** (`devprov-*`, `DeviceProvisioningPolicy.cs`) — OOBE network,
+  first-logon animation, privacy settings page; HomeGroup creation; WorkplaceJoin workplace
+  join/device registration; CloudContent Find My Device, SoftLanding, tailored experience.
+- **Windows Maps Policy** (`wmaps-*`, `WindowsMapsPolicy.cs`) — Maps auto-download disable;
+  HKLM + HKCU Connected Search privacy, SafeSearch enforcement, Search Highlights, Cortana AAD.
+- **Diagnostic Data Viewer Policy** (`diagdvr-*`, `DiagnosticDataViewerPolicy.cs`) — DataViewer
+  disable, device health attestation, diagnostic log limits, enterprise auth proxy, settings auditing,
+  Update Compliance/WUfB/Desktop Analytics/commercial data pipeline controls.
+- **System Restore Policy** (`srgpo-*`, `SystemRestoreGpoPolicy.cs`) — GPO DisableSR/DisableConfig;
+  VSC session/global intervals, disk percent cap, system checkpoints, scan interval,
+  optimistic restore, restore-point creation frequency, incremental restoration prevention.
+- **Start Menu Modern Policy** (`smmod-*`, `StartMenuModernPolicy.cs`) — StartMenuExperience
+  recent/recommended apps/items, People Bar, MSA notification; Explorer frequent programs,
+  recent docs, preview/details panes, machine-boot uninstall.
+- **Cloud Content Policy** (`ccpol-*`, `CloudContentPolicy.cs`) — HKLM consumer features,
+  third-party suggestions, cloud-optimised content; Spotlight (features, welcome screen, settings,
+  third-party suggestions) at both HKLM and HKCU scope.
+- **App Privacy Policy Advanced** (`appprv2-*`, `AppPrivacyPolicyAdv.cs`) — LetApps* Force-Deny
+  for call history, calendar, contacts, radios, trusted devices, diagnostic info, email, gaze input,
+  voice activation, and voice activation above lock screen.
+- **User Account Control Advanced Policy** (`uacadv-*`, `UserAccountControlAdvPolicy.cs`) — automatic
+  restart sign-on, network selection UI, failed unlock display, locked user ID display, MSA optional,
+  shutdown without logon, lock workstation/change password disable, legal notice caption, Task Manager
+  disable.
+
+### Stats
+
+- Tweaks: **4 728** (+100 from v4.8.0)
+- Categories: **188** (+10)
+- Module files: **183** (+10)
+- Tests: **2 661** (2 052 Core + 301 CLI + 308 GUI, 0 failures)
+
+---
+
 ## [4.8.0] — 2026-03-25 (Sprints 140–141)
 
 ### Highlights
