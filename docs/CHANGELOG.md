@@ -4,6 +4,59 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.7.0] — 2026-03-23 (M4 Milestone)
+
+### Highlights
+
+M4 milestone release (Sprints 130–139). This is the first fully published GitHub release
+since v4.6.0 (M3). It contains **420 new tweaks**, new plugin infrastructure, Chocolatey
+distribution and mutation-testing improvements.
+
+### Added
+
+#### Distribution
+
+- **Chocolatey package** (`chocolatey/`) — full `regilattice.nuspec` + install/uninstall scripts.
+  GitHub Actions release workflow now auto-builds a `.nupkg` and a SHA-256–verified zip on every tag push.
+
+#### Plugin System
+
+- **RSA-SHA256 pack signing** (`PackSignatureVerifier.cs`) — cryptographic signature
+  verification for JSON Tweak Packs; prevents tampered community packs from loading.
+- **Plugin sandbox via named pipe** (`PluginSandbox.cs`) — pack sub-processes run in
+  a restricted environment and communicate through a named pipe, isolating the host process
+  from untrusted code.
+
+#### Testing
+
+- **Virtual Registry integration tests** (`VirtualRegistryTests.cs`) — full end-to-end
+  engine tests that operate on a virtual registry overlay instead of the real HKCU/HKLM.
+- **Stryker.NET mutation testing** (`scripts/Run-MutationTests.ps1`, `.config/dotnet-tools.json`)
+  — infrastructure for mutation coverage quality gates.
+
+#### Tweaks (420 new across 40 new categories)
+
+| Sprint | Modules | New tweaks |
+|--------|---------|------------|
+| 136 | AppVirtualization, BranchCache, InternetZonePolicy, SensorPolicy, LocationSensors | 50 |
+| 137 | NetworkDiscovery, CertificatePolicy, PowerShellPolicy, DefenderAdvanced, EventLogPolicy | 50 |
+| 138 | SmartScreenPolicy, CredentialCachingPolicy, WindowsTimePolicy, FirewallLogPolicy, LogonPolicy | 50 |
+| 139 | ShellRestrictionsPolicy, BitsTransferPolicy, OfflineFilesSyncPolicy, MsiInstallerPolicy, SmbServerPolicy | 50 |
+| Various (130–135) | AppPrivacyPolicy, CertificateServices, NetworkConnections, and 17 more | 220 |
+
+#### Bug Fixes
+
+- **`Ratings.Save()` cross-process retry** — added 5-attempt retry loop (60×n ms backoff)
+  to handle `IOException` when test projects run in parallel and race on `ratings.json`.
+
+### Stats
+
+- Total tweaks: **4 528** across **168 categories** (163 module files)
+- Total tests: **2 660** passing — 2 052 Core + 301 CLI + 307 GUI (0 failures)
+- Version bumped `4.6.0` → `4.7.0`
+
+---
+
 ## [4.6.9] — 2026-05-15
 
 ### Sprint 139 — 50 New Tweaks: 5 New Modules (T8.3)
