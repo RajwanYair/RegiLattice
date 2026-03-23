@@ -103,4 +103,32 @@ internal sealed class CliArgs
     /// recent snapshot in the data directory and saves the result to history.
     /// </summary>
     public string? ComplianceReportMode { get; set; }
+
+    // ── Sprint 127 – custom user profiles ───────────────────────────────
+    /// <summary>Name of the user profile to create (--profile-create).</summary>
+    public string? ProfileCreate { get; set; }
+
+    /// <summary>Name of the user profile to delete (--profile-delete).</summary>
+    public string? ProfileDelete { get; set; }
+
+    /// <summary>Source profile name for clone/rename (--profile-clone, --profile-rename).</summary>
+    public string? ProfileFrom { get; set; }
+
+    /// <summary>When true, the ProfileFrom/Profile pair is used for a clone operation.</summary>
+    public bool IsProfileClone { get; set; }
+
+    /// <summary>When true, the ProfileFrom/Profile pair is used for a rename operation.</summary>
+    public bool IsProfileRename { get; set; }
+
+    /// <summary>
+    /// Comma-separated tweak IDs used during profile creation or update
+    /// (--profile-tweaks id1,id2,id3).
+    /// </summary>
+    public string? ProfileTweaks { get; set; }
+
+    /// <summary>Optional description text for --profile-create.</summary>
+    public string? ProfileDesc { get; set; }
+
+    /// <summary>When true, lists only user-defined (custom) profiles.</summary>
+    public bool ListUserProfiles { get; set; }
 }

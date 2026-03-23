@@ -39,7 +39,12 @@ internal sealed class PackCreatorDialog : BaseDialog
     private readonly TextBox _txtName = new() { Width = 300, PlaceholderText = "my-pack (kebab-case)" };
     private readonly TextBox _txtDisplayName = new() { Width = 300, PlaceholderText = "My Awesome Pack" };
     private readonly TextBox _txtAuthor = new() { Width = 200, PlaceholderText = "GitHub username" };
-    private readonly TextBox _txtVersion = new() { Width = 120, Text = "1.0.0", PlaceholderText = "1.0.0" };
+    private readonly TextBox _txtVersion = new()
+    {
+        Width = 120,
+        Text = "1.0.0",
+        PlaceholderText = "1.0.0",
+    };
 
     // Step 2 — Tweak selection
     private readonly TextBox _txtSearch = new() { Width = 280, PlaceholderText = "Search tweaks…" };
@@ -85,20 +90,48 @@ internal sealed class PackCreatorDialog : BaseDialog
     };
 
     // Step 5 — Export / Submit
-    private readonly Label _lblValidation = new() { AutoSize = false, Dock = DockStyle.Top, Height = 80, ForeColor = Color.Tomato };
-    private readonly Button _btnExport = new() { Text = "Export .rlpack…", Width = 160, Height = 34 };
-    private readonly Button _btnOpenUrl = new() { Text = "Open Submission URL", Width = 200, Height = 34 };
+    private readonly Label _lblValidation = new()
+    {
+        AutoSize = false,
+        Dock = DockStyle.Top,
+        Height = 80,
+        ForeColor = Color.Tomato,
+    };
+    private readonly Button _btnExport = new()
+    {
+        Text = "Export .rlpack…",
+        Width = 160,
+        Height = 34,
+    };
+    private readonly Button _btnOpenUrl = new()
+    {
+        Text = "Open Submission URL",
+        Width = 200,
+        Height = 34,
+    };
     private readonly Label _lblExportStatus = new() { AutoSize = true };
 
     // ── NavBar ────────────────────────────────────────────────────────────
 
-    private readonly Button _btnPrev = new() { Text = "← Back", Width = 90, Height = 30, Enabled = false };
-    private readonly Button _btnNext = new() { Text = "Next →", Width = 90, Height = 30 };
+    private readonly Button _btnPrev = new()
+    {
+        Text = "← Back",
+        Width = 90,
+        Height = 30,
+        Enabled = false,
+    };
+    private readonly Button _btnNext = new()
+    {
+        Text = "Next →",
+        Width = 90,
+        Height = 30,
+    };
     private readonly Label _lblStep = new() { AutoSize = true, Font = new Font("Segoe UI", 9, FontStyle.Bold) };
 
     // ── Constructor ───────────────────────────────────────────────────────
 
-    public PackCreatorDialog(TweakEngine engine) : base("Pack Creator Studio", new Size(760, 580), resizable: true)
+    public PackCreatorDialog(TweakEngine engine)
+        : base("Pack Creator Studio", new Size(760, 580), resizable: true)
     {
         _engine = engine;
         BuildLayout();
@@ -182,8 +215,18 @@ internal sealed class PackCreatorDialog : BaseDialog
         _lstSelected.Columns.Add("Category", 140);
         _lstSelected.DoubleClick += LstSelected_DoubleClick;
 
-        Button btnAdd = new() { Text = "Add →", Width = 80, Height = 28 };
-        Button btnRemove = new() { Text = "← Remove", Width = 90, Height = 28 };
+        Button btnAdd = new()
+        {
+            Text = "Add →",
+            Width = 80,
+            Height = 28,
+        };
+        Button btnRemove = new()
+        {
+            Text = "← Remove",
+            Width = 90,
+            Height = 28,
+        };
         btnAdd.Click += (_, _) => AddSelected();
         btnRemove.Click += (_, _) => RemoveSelected();
 
@@ -212,11 +255,7 @@ internal sealed class PackCreatorDialog : BaseDialog
         Panel right = new() { Dock = DockStyle.Fill };
         right.Controls.Add(_lstSelected);
 
-        TableLayoutPanel split = new()
-        {
-            Dock = DockStyle.Fill,
-            ColumnCount = 3,
-        };
+        TableLayoutPanel split = new() { Dock = DockStyle.Fill, ColumnCount = 3 };
         split.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45));
         split.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100));
         split.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55));
@@ -288,21 +327,20 @@ internal sealed class PackCreatorDialog : BaseDialog
 
     // ── Helpers ───────────────────────────────────────────────────────────
 
-    private static Label Label(string text) => new()
-    {
-        Text = text,
-        AutoSize = true,
-        Anchor = AnchorStyles.Left,
-        Padding = new Padding(0, 6, 8, 0),
-    };
+    private static Label Label(string text) =>
+        new()
+        {
+            Text = text,
+            AutoSize = true,
+            Anchor = AnchorStyles.Left,
+            Padding = new Padding(0, 6, 8, 0),
+        };
 
     private void PopulateAvailableTweaks(string query)
     {
         _lstAvailable.BeginUpdate();
         _lstAvailable.Items.Clear();
-        IEnumerable<TweakDef> tweaks = string.IsNullOrWhiteSpace(query)
-            ? _engine.AllTweaks()
-            : _engine.Search(query);
+        IEnumerable<TweakDef> tweaks = string.IsNullOrWhiteSpace(query) ? _engine.AllTweaks() : _engine.Search(query);
         foreach (TweakDef t in tweaks.OrderBy(x => x.Category).ThenBy(x => x.Label))
         {
             if (_selectedIds.Contains(t.Id))
@@ -342,19 +380,20 @@ internal sealed class PackCreatorDialog : BaseDialog
 
     private void LstSelected_DoubleClick(object? sender, EventArgs e) => RemoveSelected();
 
-    private PackDef BuildPackDef() => new PackDef
-    {
-        Name = _txtName.Text.Trim(),
-        DisplayName = _txtDisplayName.Text.Trim(),
-        Author = _txtAuthor.Text.Trim(),
-        Version = _txtVersion.Text.Trim(),
-        Description = _txtDescription.Text.Trim(),
-        DownloadUrl = _txtDownloadUrl.Text.Trim(),
-        Sha256 = _txtSha256.Text.Trim().ToLowerInvariant(),
-        TweakCount = _selectedIds.Count,
-        Categories = _txtCategories.Text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
-        Tags = _txtTags.Text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
-    };
+    private PackDef BuildPackDef() =>
+        new PackDef
+        {
+            Name = _txtName.Text.Trim(),
+            DisplayName = _txtDisplayName.Text.Trim(),
+            Author = _txtAuthor.Text.Trim(),
+            Version = _txtVersion.Text.Trim(),
+            Description = _txtDescription.Text.Trim(),
+            DownloadUrl = _txtDownloadUrl.Text.Trim(),
+            Sha256 = _txtSha256.Text.Trim().ToLowerInvariant(),
+            TweakCount = _selectedIds.Count,
+            Categories = _txtCategories.Text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+            Tags = _txtTags.Text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+        };
 
     private string BuildJsonPreview()
     {

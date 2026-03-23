@@ -1037,6 +1037,102 @@ public sealed class CliArgEdgeCaseTests
         Assert.NotNull(result);
         Assert.Equal("gaming", result.Profile);
     }
+
+    // ── Sprint 127 — user profile CRUD args ─────────────────────────────
+
+    [Fact]
+    public void ParseArgs_ProfileCreate_SetsName()
+    {
+        var result = Program.ParseArgs(["--profile-create", "my-work"]);
+        Assert.NotNull(result);
+        Assert.Equal("my-work", result.ProfileCreate);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileCreate_WithTweaksAndDesc_SetsAll()
+    {
+        var result = Program.ParseArgs(
+            ["--profile-create", "my-work", "--profile-tweaks", "perf-disable-animations,priv-disable-telemetry", "--profile-desc", "Work setup"]
+        );
+        Assert.NotNull(result);
+        Assert.Equal("my-work", result.ProfileCreate);
+        Assert.Equal("perf-disable-animations,priv-disable-telemetry", result.ProfileTweaks);
+        Assert.Equal("Work setup", result.ProfileDesc);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileDelete_SetsName()
+    {
+        var result = Program.ParseArgs(["--profile-delete", "old-profile"]);
+        Assert.NotNull(result);
+        Assert.Equal("old-profile", result.ProfileDelete);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileDelete_WithoutValue_StaysNull()
+    {
+        var result = Program.ParseArgs(["--profile-delete"]);
+        Assert.NotNull(result);
+        Assert.Null(result.ProfileDelete);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileClone_SetsBothNames_AndIsProfileCloneTrue()
+    {
+        var result = Program.ParseArgs(["--profile-clone", "source-prof", "dest-prof"]);
+        Assert.NotNull(result);
+        Assert.Equal("source-prof", result.ProfileFrom);
+        Assert.Equal("dest-prof", result.Profile);
+        Assert.True(result.IsProfileClone);
+        Assert.False(result.IsProfileRename);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileRename_SetsBothNames_AndIsProfileRenameTrue()
+    {
+        var result = Program.ParseArgs(["--profile-rename", "old-name", "new-name"]);
+        Assert.NotNull(result);
+        Assert.Equal("old-name", result.ProfileFrom);
+        Assert.Equal("new-name", result.Profile);
+        Assert.True(result.IsProfileRename);
+        Assert.False(result.IsProfileClone);
+    }
+
+    [Fact]
+    public void ParseArgs_ListUserProfiles_SetsFlag()
+    {
+        var result = Program.ParseArgs(["--list-user-profiles"]);
+        Assert.NotNull(result);
+        Assert.True(result.ListUserProfiles);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileTweaks_SetsValue()
+    {
+        var result = Program.ParseArgs(["--profile-tweaks", "a,b,c"]);
+        Assert.NotNull(result);
+        Assert.Equal("a,b,c", result.ProfileTweaks);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileDesc_SetsValue()
+    {
+        var result = Program.ParseArgs(["--profile-desc", "My description"]);
+        Assert.NotNull(result);
+        Assert.Equal("My description", result.ProfileDesc);
+    }
+
+    [Fact]
+    public void ParseArgs_ProfileCreate_Default_ProfileCreateIsNull()
+    {
+        var result = Program.ParseArgs(["--list"]);
+        Assert.NotNull(result);
+        Assert.Null(result.ProfileCreate);
+        Assert.Null(result.ProfileDelete);
+        Assert.False(result.IsProfileClone);
+        Assert.False(result.IsProfileRename);
+        Assert.False(result.ListUserProfiles);
+    }
 }
 
 // ── Sprint 24: ConsoleColorizer additional coverage ───────────────────────
