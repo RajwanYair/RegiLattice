@@ -4,6 +4,13 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.6] — 2026-05-14
+
+- **Sprint 136 (T8.2)**: 50 new tweaks across 5 new modules — `Biometrics.cs` (bio, 10), `WinRmHardening.cs` (winrm, 10), `LocationSensors.cs` (loc, 10), `SettingSyncAdv.cs` (ssync, 10), `AppPrivacyPolicy.cs` (appp, 10).
+- New categories: Biometrics, WinRM Hardening, Location & Sensors, Settings Sync, App Privacy Policy.
+- Total tweaks: **4,208** (+50). Tests: 2,660 passing.
+- Version bump: `4.6.5` → `4.6.6`
+
 ## [4.6.5] — 2026-05-14
 
 - **Sprint 135 (T6.6)**: Stryker.NET mutation testing — `stryker-config.json` (15 Core files, break=55%), `dotnet-stryker 4.14.0` in tools manifest, `Run-MutationTests.ps1`, `mutation-testing` CI job (main-branch only).

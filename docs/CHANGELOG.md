@@ -4,6 +4,44 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.6] — 2026-05-14
+
+### Sprint 136 — 50 New Tweaks: 5 New Modules (T8.2)
+
+#### Added
+
+- **`Biometrics.cs`** (10 tweaks, category "Biometrics", slug `bio`): Windows Hello for Business and biometric hardware group-policy controls.
+  - `bio-disable-biometrics` — disable Windows Biometric Service (GPO).
+  - `bio-disable-biometrics-domain` — block domain/AAD biometric sign-in.
+  - `bio-disable-biometric-sign-in` — Credential Provider level disable.
+  - `bio-enable-facial-anti-spoofing` — Enhanced Anti-Spoofing (ISO PAD).
+  - `bio-whfb-require-tpm` — require TPM for WHFB key storage.
+  - `bio-whfb-pin-min-length` — minimum PIN = 8 chars.
+  - `bio-whfb-pin-require-digits` — PIN must contain digits.
+  - `bio-whfb-pin-require-uppercase` — PIN must contain uppercase.
+  - `bio-whfb-pin-require-lowercase` — PIN must contain lowercase.
+  - `bio-whfb-pin-expiry` — PIN expires every 90 days.
+- **`WinRmHardening.cs`** (10 tweaks, category "WinRM Hardening", slug `winrm`): WS-Management authentication hardening.
+  - Client-side: deny basic, plaintext, Digest, NTLM, CredSSP auth.
+  - Service-side: deny basic, plaintext, NTLM; disable RunAs; allow Kerberos.
+- **`LocationSensors.cs`** (10 tweaks, category "Location & Sensors", slug `loc`): Location scripting, sensor framework, and per-app policies.
+  - Complements `priv-disable-location` (OS service) and `aperm-deny-location` (user GUID).
+  - Covers: DisableLocationScripting, DisableSensors, DisableWindowsLocationProvider, LetAppsAccessLocation=2, LetAppsAccessMotion=2, Windows Search location, Wi-Fi auto-connect, user ConsentStore deny, IE geolocation block.
+- **`SettingSyncAdv.cs`** (10 tweaks, category "Settings Sync", slug `ssync`): Granular SettingSync policies beyond the MicrosoftAccount.cs master toggle.
+  - Desktop theme, Start layout, browser, language, accessibility, personalization, Windows settings sync disable.
+  - Typing/text personalization (RestrictImplicitTextCollection), handwriting/ink collection, machine-policy input personalization off.
+- **`AppPrivacyPolicy.cs`** (10 tweaks, category "App Privacy Policy", slug `appp`): Machine-level `HKLM AppPrivacy` LetApps\* force-deny policies.
+  - Covers: camera, microphone, notifications, account info, background run, device sync, phone, tasks, messaging, video library.
+  - Distinct from `AppPermissions.cs` which uses HKCU DeviceAccess GUIDs (per-user).
+
+#### Stats
+
+- Total tweaks: **4,208** (+50)
+- Tests: **2,660 passing** (0 failures)
+- New categories: Biometrics, WinRM Hardening, Location & Sensors, Settings Sync, App Privacy Policy
+
+---
+
 ## [4.6.5] — 2026-05-14
 
 ### Sprint 135 — Stryker.NET Mutation Testing Setup (T6.6)

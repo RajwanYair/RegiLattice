@@ -205,7 +205,7 @@ public sealed class VirtualRegistryTests : IDisposable
             Label = "IT Virtual Registry Engine Cycle",
             Category = "Test",
             NeedsAdmin = false,
-            CorpSafe = true,  // must be true so CorporateGuard doesn't block in corporate CI
+            CorpSafe = true, // must be true so CorporateGuard doesn't block in corporate CI
             Tags = ["integration", "virtual-registry"],
             ApplyOps = [RegOp.SetDword(P(), valueName, 1)],
             RemoveOps = [RegOp.DeleteValue(P(), valueName)],
