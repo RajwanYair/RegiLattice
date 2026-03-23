@@ -4,6 +4,14 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.9.0] — 2026-03-26 (Sprints 142–151)
+
+- **Sprints 142–151**: 100 new tweaks across 10 new modules — `NetworkLltdPolicy.cs`, `WindowsMediaPolicyAdv.cs`, `DeviceProvisioningPolicy.cs`, `WindowsMapsPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `SystemRestoreGpoPolicy.cs`, `StartMenuModernPolicy.cs`, `CloudContentPolicy.cs`, `AppPrivacyPolicyAdv.cs`, `UserAccountControlAdvPolicy.cs`.
+- **4 728 tweaks** across **188 categories** (183 module files).
+- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+
+---
+
 ## [4.8.0] — 2026-03-25 (Sprints 140–141)
 
 - **Sprints 140–141**: 100 new tweaks across 10 new modules — `AmsiScriptPolicy.cs`, `IECompatPolicy.cs`, `LogonCachePolicy.cs`, `BluetoothAdvPolicy.cs`, `ApplicationRestartPolicy.cs`, `ProcessMitigationPolicy.cs`, `RemoteAssistancePolicy.cs`, `NetworkHardenedPaths.cs`, `UsbStoragePolicy.cs`, `KioskAssignedAccess.cs`.
