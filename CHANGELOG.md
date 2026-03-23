@@ -4,10 +4,17 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.1] — 2026-05-12
+
+- **Sprint 130 (T5.3)**: Chocolatey package (`regilattice.nuspec` + install/uninstall scripts + VERIFICATION.txt). Release workflow now packs a zip, builds `.nupkg`, and pushes to Chocolatey Community Repository. Scoop manifest updated to v4.6.0 with improved bin aliases. MSIX manifest description updated.
+- Version bump: `4.6.0` → `4.6.1`
+
 ## [4.6.0] — 2026-05-12
 
-- **Sprints 122–128 (M3 Milestone)**: ToggleSwitchControl, Visual Refresh (RoundedPanel/FluentIcons/CategoryExpandButton), Pack Creator Studio Dialog, PackSubmissionService + GitHub issue template, 4 new locales (zh-CN/ko/ar/pt-BR), CLI tab completion + user profile CRUD, Compliance Trend Dashboard
-- Test suite hang fix: removed 837 external-process sweep tests that exceeded the 20 s per-test budget
+- **Sprints 122–129 (M3 Milestone)**: ToggleSwitchControl, Visual Refresh (RoundedPanel/FluentIcons/CategoryExpandButton), Pack Creator Studio Dialog, PackSubmissionService + GitHub issue template, 4 new locales (zh-CN/ko/ar/pt-BR), CLI tab completion + user profile CRUD, Compliance Trend Dashboard
+- **Sprint 129 (T8.2)**: +50 policy tweaks — BranchCache, InternetZonePolicy, NetworkConnectionsPolicy, AppVirtualization, SensorPolicy (5 new modules)
+- Test suite hang fix: removed 837 external-process sweep tests; test isolation fix for ComplianceHistory race condition
+- Total: 4,158 tweaks · 126 categories · 2,007 tests
 - **2 007 tests** passing (0 consistent failures)
 - 4 108 tweaks, 121 categories
 - Version bumped `4.5.0` → `4.6.0`

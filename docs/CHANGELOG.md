@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.1] — 2026-05-12
+
+### Sprint 130 — Chocolatey Package & Distribution Improvements (T5.3)
+
+#### Added
+
+- **Chocolatey package** (T5.3): `chocolatey/regilattice.nuspec` — full package descriptor with title, authors, tags, release notes URL, and description. `chocolatey/tools/chocolateyInstall.ps1` — zip-based install with SHA-256 verification, auto-shimming of `RegiLattice.exe` and `RegiLattice.GUI.exe`. `chocolateyUninstall.ps1` with optional `/PurgeData` parameter. `VERIFICATION.txt` for Chocolatey Community Repository trust audit.
+- **Release workflow — Chocolatey build step**: CI now packs a `RegiLattice-<version>-win-x64.zip` from the published EXEs, injects the download URL + SHA-256 into `chocolateyInstall.ps1`, runs `choco pack`, and pushes the `.nupkg` to the Chocolatey Community Repository if `CHOCOLATEY_API_KEY` is set. The `.nupkg` and `.zip` are also uploaded as GitHub Release assets.
+- **Release workflow — expanded SHA256SUMS**: Checksum file now covers `.zip` and `.nupkg` artifacts in addition to EXEs and MSI/MSIX.
+- **Scoop manifest updated**: `scoop/regilattice.json` bumped to v4.6.0, improved `bin` aliases (`regilattice` → CLI, `regilattice-gui` → GUI), expanded `notes` array with dry-run tip.
+- **MSIX description updated**: `installer/AppxManifest.xml` description updated to reflect 4,158 tweaks / 126 categories.
+
+#### Stats
+
+- Total tweaks: **4,158** (unchanged)
+- Tests: **2,007 passing**
+- Distribution channels: GitHub · Scoop · WinGet + **Chocolatey** (new)
+- Version: `4.6.1`
+
+---
+
 ## [4.6.0] — 2026-05-12
 
 ### M3 Milestone — GUI Polish, i18n, Marketplace & Security Policies (Sprints 122–129)

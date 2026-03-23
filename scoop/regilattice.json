@@ -1,18 +1,18 @@
 {
-    "version": "4.3.0",
-    "description": "Windows registry tweak toolkit with 4,058 tweaks across 116 categories. GUI + CLI.",
+    "version": "4.6.0",
+    "description": "Windows registry tweak toolkit with 4,158 tweaks across 126 categories. GUI + CLI.",
     "homepage": "https://github.com/RajwanYair/RegiLattice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v4.3.0/RegiLattice-win-x64.zip",
+            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v4.6.0/RegiLattice-v4.6.0-win-x64.zip",
             "hash": "0000000000000000000000000000000000000000000000000000000000000000"
         }
     },
     "extract_dir": "RegiLattice",
     "bin": [
-        "RegiLattice.CLI.exe",
-        "RegiLattice.GUI.exe"
+        ["RegiLattice.exe",     "regilattice"],
+        ["RegiLattice.GUI.exe", "regilattice-gui"]
     ],
     "shortcuts": [
         [
@@ -24,9 +24,13 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v$version/RegiLattice-win-x64.zip"
+                "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v$version/RegiLattice-v$version-win-x64.zip"
             }
         }
     },
-    "notes": "Run 'RegiLattice.CLI --help' for CLI usage or launch RegiLattice.GUI for the graphical interface."
+    "notes": [
+        "Run 'regilattice --help' for CLI usage or launch RegiLattice.GUI for the graphical interface.",
+        "Administrator privileges are required to apply HKLM (machine-scope) tweaks.",
+        "Use '--dry-run' to preview changes before applying: regilattice --dry-run apply <id>"
+    ]
 }

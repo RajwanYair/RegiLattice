@@ -161,6 +161,8 @@ jobs:
           $all += Get-ChildItem "publish/gui" -File -Filter "*.exe" -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish/cli" -File -Filter "*.exe" -ErrorAction SilentlyContinue
           $all += Get-ChildItem "publish"     -File -Filter "*.msix" -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish"     -File -Filter "*.zip"  -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish"     -File -Filter "*.nupkg" -ErrorAction SilentlyContinue
           if (Test-Path "installer/bin/Release") {
             $all += Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
           }
@@ -170,6 +172,50 @@ jobs:
             "{0}  {1}" -f $_.Hash.ToLowerInvariant(), $rel
           } | Set-Content publish/SHA256SUMS.txt
 
+      - name: Build Chocolatey package
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          $ver = $tag.TrimStart('v')
+
+          # Inject real download URL + SHA-256 into chocolateyInstall.ps1
+          $guiSha = (Get-FileHash "publish/gui/RegiLattice.GUI.exe" -Algorithm SHA256).Hash.ToLowerInvariant()
+          $cliSha = (Get-FileHash "publish/cli/RegiLattice.exe"     -Algorithm SHA256).Hash.ToLowerInvariant()
+
+          # For Chocolatey we package a zip of both EXEs
+          $zipName = "RegiLattice-$tag-win-x64.zip"
+          $zipPath = "publish/$zipName"
+          Compress-Archive -Path publish/gui/RegiLattice.GUI.exe, publish/cli/RegiLattice.exe `
+                           -DestinationPath $zipPath -Force
+          $zipSha = (Get-FileHash $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+          $zipUrl = "https://github.com/RajwanYair/RegiLattice/releases/download/$tag/$zipName"
+
+          # Patch the install script and nuspec
+          $installPs1 = Get-Content "chocolatey/tools/chocolateyInstall.ps1" -Raw
+          $installPs1 = $installPs1 -replace 'RELEASE_URL_PLACEHOLDER',    $zipUrl
+          $installPs1 = $installPs1 -replace 'RELEASE_SHA256_PLACEHOLDER', $zipSha
+          [IO.File]::WriteAllText("chocolatey/tools/chocolateyInstall.ps1", $installPs1, [Text.Encoding]::UTF8)
+
+          $nuspec = Get-Content "chocolatey/regilattice.nuspec" -Raw
+          $nuspec = $nuspec -replace '<version>[^<]+</version>', "<version>$ver</version>"
+          [IO.File]::WriteAllText("chocolatey/regilattice.nuspec", $nuspec, [Text.Encoding]::UTF8)
+
+          choco pack chocolatey/regilattice.nuspec --output-directory publish/
+          Write-Host "Chocolatey package built: publish/regilattice.$ver.nupkg"
+
+      - name: Push to Chocolatey Community Repository
+        continue-on-error: true
+        if: env.CHOCOLATEY_API_KEY != ''
+        env:
+          CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+        shell: pwsh
+        run: |
+          $nupkg = Get-ChildItem "publish" -Filter "regilattice.*.nupkg" | Select-Object -First 1
+          if (-not $nupkg) { Write-Warning 'No .nupkg found — skipping push.'; exit 0 }
+          choco push $nupkg.FullName --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY
+          Write-Host "Pushed $($nupkg.Name) to Chocolatey"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -177,6 +223,8 @@ jobs:
           files: |
             publish/gui/RegiLattice.GUI.exe
             publish/cli/RegiLattice.exe
+            publish/RegiLattice-*-win-x64.zip
+            publish/regilattice.*.nupkg
             installer/bin/Release/**/*.msi
             publish/*.msix
             publish/SHA256SUMS.txt

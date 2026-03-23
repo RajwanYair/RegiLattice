@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chocolatey package specification for RegiLattice.
+  Maintained by: RajwanYair <https://github.com/RajwanYair/RegiLattice>
+
+  Release process:
+    1. CI builds the package via `choco pack` during the release workflow.
+    2. The .nupkg is pushed to the Chocolatey Community Repository (or the
+       RegiLattice Chocolatey-private feed) using the CHOCOLATEY_API_KEY secret.
+    3. After moderation approval the package becomes installable via:
+         choco install regilattice
+-->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>regilattice</id>
+    <!-- Version is replaced by the release workflow during choco pack -->
+    <version>4.6.0</version>
+    <packageSourceUrl>https://github.com/RajwanYair/RegiLattice/tree/main/chocolatey</packageSourceUrl>
+    <owners>RajwanYair</owners>
+    <title>RegiLattice</title>
+    <authors>RajwanYair</authors>
+    <projectUrl>https://github.com/RajwanYair/RegiLattice</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/RajwanYair/RegiLattice/main/docs/assets/icon128.png</iconUrl>
+    <copyright>2024-2026 RajwanYair</copyright>
+    <licenseUrl>https://github.com/RajwanYair/RegiLattice/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/RajwanYair/RegiLattice</projectSourceUrl>
+    <docsUrl>https://github.com/RajwanYair/RegiLattice/blob/main/docs/Development.md</docsUrl>
+    <bugTrackerUrl>https://github.com/RajwanYair/RegiLattice/issues</bugTrackerUrl>
+    <tags>registry tweaks windows optimization privacy performance security gui cli admin</tags>
+    <summary>Windows Registry Tweak Toolkit — 4,158 tweaks across 126 categories</summary>
+    <description><![CDATA[
+## RegiLattice
+
+A comprehensive Windows registry tuning toolkit featuring **4,158 expert-curated tweaks** across **126 categories** — from privacy hardening and performance optimisation to security policies and enterprise management.
+
+### Features
+
+- **Graphical UI** (WinForms) with 11 colour themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk)
+- **Command-Line Interface** with 25+ commands for scripting and automation
+- **DryRun mode** — preview all changes before applying
+- **5 preset profiles**: Privacy, Gaming, Performance, Business, Server
+- **Corporate Guard** — auto-detects managed environments and blocks unsafe tweaks
+- **Snapshot & restore** — export/import current registry state as JSON
+- **Scheduled compliance monitoring** with trend dashboard and drift alerts
+- **10+ locales** including en, de, fr, ja, es, zh-CN, ko, ar, pt-BR, pl
+- **Plugin marketplace** for community Tweak Packs
+- **Export to ADMX/ADML and Intune OMA-URI** for enterprise deployment
+
+### Installation notes
+
+- Administrator privileges required for `HKLM` tweaks (UAC elevation prompt shown automatically)
+- The GUI can also be launched without admin rights for preview/browsing only
+- `regilattice --dry-run` performs a safe preview of any command
+    ]]></description>
+    <releaseNotes>https://github.com/RajwanYair/RegiLattice/blob/main/docs/CHANGELOG.md</releaseNotes>
+    <dependencies />
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
