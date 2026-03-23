@@ -1,6 +1,6 @@
 #nullable enable
-using RegiLattice.Core.Models;
 using System.Collections.Generic;
+using RegiLattice.Core.Models;
 
 namespace RegiLattice.Core.Tweaks;
 
@@ -13,17 +13,13 @@ namespace RegiLattice.Core.Tweaks;
 // SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpServer
 internal static class WindowsTimeGpoPolicy
 {
-    private const string W32Params =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
+    private const string W32Params = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
 
-    private const string W32Config =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
+    private const string W32Config = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
 
-    private const string NtpClient =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpClient";
+    private const string NtpClient = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpClient";
 
-    private const string NtpServer =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpServer";
+    private const string NtpServer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpServer";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -53,23 +49,9 @@ internal static class WindowsTimeGpoPolicy
                 "Sets W32Time to synchronise from the NTP pool servers via GPO. "
                 + "NtpServer=0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9.",
             Tags = ["time", "ntp", "pool", "servers", "policy"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    W32Params,
-                    "NtpServer",
-                    "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9"
-                ),
-            ],
+            ApplyOps = [RegOp.SetString(W32Params, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9")],
             RemoveOps = [RegOp.DeleteValue(W32Params, "NtpServer")],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    W32Params,
-                    "NtpServer",
-                    "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9"
-                ),
-            ],
+            DetectOps = [RegOp.CheckString(W32Params, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9")],
         },
         new TweakDef
         {
