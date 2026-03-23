@@ -110,11 +110,7 @@ public sealed class IntuneExportDocument
 /// </summary>
 public static class IntuneOmaUriExporter
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
     /// <summary>Builds the export document without writing to disk.</summary>
     /// <param name="engine">Fully registered <see cref="TweakEngine"/>.</param>
@@ -142,8 +138,7 @@ public static class IntuneOmaUriExporter
                         TweakId = td.Id,
                         Label = td.Label,
                         Kind = td.Kind.ToString(),
-                        Reason =
-                            $"TweakKind is {td.Kind}; only Registry and GroupPolicy tweaks are OMA-URI mappable.",
+                        Reason = $"TweakKind is {td.Kind}; only Registry and GroupPolicy tweaks are OMA-URI mappable.",
                     }
                 );
                 continue;
@@ -170,11 +165,7 @@ public static class IntuneOmaUriExporter
             }
         }
 
-        return new IntuneExportDocument
-        {
-            Settings = settings,
-            UnmappedTweaks = unmapped.Count > 0 ? unmapped : null,
-        };
+        return new IntuneExportDocument { Settings = settings, UnmappedTweaks = unmapped.Count > 0 ? unmapped : null };
     }
 
     /// <summary>Exports all mappable tweaks to <paramref name="outputPath"/> as pretty-printed JSON.</summary>
@@ -208,8 +199,7 @@ public static class IntuneOmaUriExporter
                 continue; // unknown hive — skip
 
             if (
-                op.ValueKind
-                is not (RegistryValueKind.DWord or RegistryValueKind.QWord or RegistryValueKind.String or RegistryValueKind.ExpandString)
+                op.ValueKind is not (RegistryValueKind.DWord or RegistryValueKind.QWord or RegistryValueKind.String or RegistryValueKind.ExpandString)
             )
                 continue; // binary/multi-sz not mappable
 
@@ -225,8 +215,7 @@ public static class IntuneOmaUriExporter
                     OmaUri = omaUri,
                     DataType = dataType,
                     Value = value,
-                    Description =
-                        td.Description.Length is > 0 and <= 120 ? td.Description : null,
+                    Description = td.Description.Length is > 0 and <= 120 ? td.Description : null,
                 }
             );
         }
@@ -235,12 +224,10 @@ public static class IntuneOmaUriExporter
     }
 
     private static bool IsHklm(string path) =>
-        path.StartsWith("HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase)
-        || path.StartsWith("HKLM\\", StringComparison.OrdinalIgnoreCase);
+        path.StartsWith("HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase) || path.StartsWith("HKLM\\", StringComparison.OrdinalIgnoreCase);
 
     private static bool IsHkcu(string path) =>
-        path.StartsWith("HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase)
-        || path.StartsWith("HKCU\\", StringComparison.OrdinalIgnoreCase);
+        path.StartsWith("HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase) || path.StartsWith("HKCU\\", StringComparison.OrdinalIgnoreCase);
 
     private static string BuildOmaUri(string regPath, string valueName, bool isHklm)
     {
@@ -258,9 +245,7 @@ public static class IntuneOmaUriExporter
         // Convert backslashes to forward slashes
         keyPath = keyPath.Replace('\\', '/');
 
-        string prefix = isHklm
-            ? "./Device/Vendor/MSFT/Registry/HKLM"
-            : "./User/Vendor/MSFT/Registry/HKCU";
+        string prefix = isHklm ? "./Device/Vendor/MSFT/Registry/HKLM" : "./User/Vendor/MSFT/Registry/HKCU";
 
         return $"{prefix}/{keyPath}/{valueName}";
     }

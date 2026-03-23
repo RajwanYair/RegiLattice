@@ -55,8 +55,7 @@ public sealed class TweakDefBranchCoverageTests
         var td = Make("Enable TRIM", "SSD Optimization");
         string result = td.GetExpectedResult();
         Assert.True(
-            result.Contains("speed", StringComparison.OrdinalIgnoreCase)
-                || result.Contains("responsiveness", StringComparison.OrdinalIgnoreCase),
+            result.Contains("speed", StringComparison.OrdinalIgnoreCase) || result.Contains("responsiveness", StringComparison.OrdinalIgnoreCase),
             $"Expected 'speed' or 'responsiveness' in: {result}"
         );
     }
@@ -150,8 +149,7 @@ public sealed class TweakDefBranchCoverageTests
         var td = Make("Disable Startup Delay", "Startup");
         string result = td.GetExpectedResult();
         Assert.True(
-            result.Contains("startup", StringComparison.OrdinalIgnoreCase)
-                || result.Contains("boot", StringComparison.OrdinalIgnoreCase),
+            result.Contains("startup", StringComparison.OrdinalIgnoreCase) || result.Contains("boot", StringComparison.OrdinalIgnoreCase),
             $"Expected 'startup' or 'boot' in: {result}"
         );
     }
@@ -311,11 +309,7 @@ public sealed class TweakDefBranchCoverageTests
             Id = "br-scope-both-full",
             Label = "T",
             Category = "C",
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\Software\Test",
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Test",
-            ],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Test", @"HKEY_LOCAL_MACHINE\SOFTWARE\Test"],
         };
         Assert.Equal(TweakScope.Both, td.Scope);
     }

@@ -85,6 +85,7 @@ public partial class MainForm : Form
         _treeView.NodeMouseHover += OnTreeNodeScoreHover;
         ApplyTheme();
         AppTheme.Apply3D(this);
+        ApplyLocalization();
         _logPanel.Visible = cfg.ShowLogPanel;
         _logPanel.Height = Math.Max(60, cfg.LogPanelHeight);
         _detailPanel.Height = Math.Max(80, cfg.DetailPanelHeight);
@@ -230,6 +231,106 @@ public partial class MainForm : Form
         WindowState = FormWindowState.Normal;
         _trayIcon.Visible = false;
         Activate();
+    }
+
+    // ── Localization ───────────────────────────────────────────────────────
+    /// <summary>
+    /// Applies the current locale's translated strings to all field-backed
+    /// controls in MainForm. Call this once after construction and whenever
+    /// the user switches locale at runtime.
+    /// </summary>
+    internal void ApplyLocalization()
+    {
+        // Window title
+        Text = Locale.T("app_window_title");
+
+        // ── Toolbar ──────────────────────────────────────────────────────
+        _btnApply.Text = Locale.T("toolbar_apply");
+        _btnRemove.Text = Locale.T("toolbar_remove");
+        _btnRefresh.Text = Locale.T("toolbar_refresh");
+        _btnSettings.Text = "\u2699 " + Locale.T("toolbar_settings");
+        _btnUndoLast.Text = "\u21A9 " + Locale.T("toolbar_undo");
+        _filterLabel.Text = Locale.T("label_filter");
+        _profileLabel.Text = Locale.T("label_profile");
+        _scopeLabel.Text = Locale.T("label_scope");
+        _kindLabel.Text = Locale.T("label_kind");
+        _btnSelectAll.Text = Locale.T("btn_select_all_short");
+        _btnDeselectAll.Text = Locale.T("btn_deselect_all_short");
+        _btnInvert.Text = Locale.T("btn_invert_short");
+        _forceCheck.ToolTipText = Locale.T("tip_force_check");
+        _searchBox.ToolTipText = Locale.T("tip_search_box");
+        _searchClear.ToolTipText = Locale.T("tip_search_clear");
+        _filterLabel.ToolTipText = Locale.T("tip_filter_label");
+        _scopeLabel.ToolTipText = Locale.T("tip_scope_label");
+        _profileCombo.ToolTipText = Locale.T("profile_combo_tip");
+        _scopeCombo.ToolTipText = Locale.T("scope_combo_tip");
+
+        // ── Package Manager menu ─────────────────────────────────────────
+        _mnuScoopMgr.Text = Locale.T("scoop_manager");
+        _mnuPsMgr.Text = Locale.T("psmodule_manager");
+        _mnuPipMgr.Text = Locale.T("pip_manager");
+        _mnuWinGetMgr.Text = Locale.T("mnu_winget_mgr");
+        _mnuChocoMgr.Text = Locale.T("mnu_choco_mgr");
+        _mnuToolVersions.Text = Locale.T("mnu_tool_versions");
+        _mnuMarketplace.Text = Locale.T("mnu_marketplace");
+
+        // ── System Diagnostics ───────────────────────────────────────────
+        _mnuWinHealth.Text = Locale.T("mnu_win_health");
+        _mnuBootAnalyzer.Text = Locale.T("mnu_boot_analyzer");
+        _mnuWuControl.Text = Locale.T("mnu_win_update");
+        _mnuDriverChecker.Text = Locale.T("mnu_driver_checker");
+        _mnuBatteryHealth.Text = Locale.T("mnu_battery_health");
+        _mnuHwTempMon.Text = Locale.T("mnu_hw_temp");
+
+        // ── System Management ────────────────────────────────────────────
+        _mnuStartupMgr.Text = Locale.T("mnu_startup_mgr");
+        _mnuServiceMgr.Text = Locale.T("mnu_service_mgr");
+        _mnuSchedTaskMgr.Text = Locale.T("mnu_sched_task_mgr");
+        _mnuInstalledApps.Text = Locale.T("mnu_installed_apps");
+        _mnuContextMenuMgr.Text = Locale.T("mnu_context_menu_mgr");
+        _mnuShellExtensions.Text = Locale.T("mnu_shell_ext");
+
+        // ── Power & Energy ───────────────────────────────────────────────
+        _mnuPowerPlan.Text = Locale.T("mnu_power_plan");
+        _mnuPowerScheduler.Text = Locale.T("mnu_power_scheduler");
+        _mnuSleepTimer.Text = Locale.T("mnu_sleep_timer");
+        _mnuBatterySaver.Text = Locale.T("mnu_battery_saver");
+        _mnuUsbPower.Text = Locale.T("mnu_usb_power");
+        _mnuBrightness.Text = Locale.T("mnu_brightness");
+
+        // ── Privacy & Security ────────────────────────────────────────────
+        _mnuPrivacyDash.Text = Locale.T("mnu_privacy_dash");
+        _mnuAdRemoval.Text = Locale.T("mnu_ad_removal");
+        _mnuTelemetryDash.Text = Locale.T("mnu_telemetry_dash");
+        _mnuAppPermissions.Text = Locale.T("mnu_app_perms");
+        _mnuFirewallRules.Text = Locale.T("mnu_firewall_rules");
+        _mnuNotifMgr.Text = Locale.T("mnu_notif_mgr");
+
+        // ── Network ──────────────────────────────────────────────────────
+        _mnuNetTools.Text = Locale.T("mnu_net_tools");
+        _mnuNetRepair.Text = Locale.T("mnu_net_repair");
+        _mnuNetAdapter.Text = Locale.T("mnu_net_adapter");
+        _mnuWiFiProfiles.Text = Locale.T("mnu_wifi_profiles");
+        _mnuHostsFileMgr.Text = Locale.T("mnu_hosts_file_mgr");
+        _mnuProxyConfig.Text = Locale.T("mnu_proxy_config");
+        _mnuDnsSwitcher.Text = Locale.T("mnu_dns_switch");
+        _mnuDnsOverHttps.Text = Locale.T("mnu_dns_https");
+        _mnuPortScan.Text = Locale.T("mnu_port_scan");
+        _mnuNetBandwidth.Text = Locale.T("mnu_net_bandwidth");
+        _mnuWakeOnLan.Text = Locale.T("mnu_wol");
+        _mnuMacAddress.Text = Locale.T("mnu_mac_addr");
+
+        // ── Cleanup & Performance ─────────────────────────────────────────
+        _mnuTempCleaner.Text = Locale.T("mnu_temp_cleaner");
+        _mnuBrowserCache.Text = Locale.T("mnu_browser_cache");
+        _mnuMemoryCleaner.Text = Locale.T("mnu_memory_cleaner");
+        _mnuDiskSpace.Text = Locale.T("mnu_disk_space");
+
+        // ── Smart Tools ───────────────────────────────────────────────────
+        _mnuSmartScan.Text = Locale.T("mnu_smart_scan");
+        _mnuProfileCompare.Text = Locale.T("mnu_profile_compare");
+        _mnuDepGraph.Text = Locale.T("mnu_dep_graph");
+        _mnuProfileWizard.Text = Locale.T("mnu_profile_wizard");
     }
 
     // ── Theme ──────────────────────────────────────────────────────────────

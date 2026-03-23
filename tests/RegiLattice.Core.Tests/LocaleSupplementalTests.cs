@@ -205,4 +205,122 @@ public sealed class LocaleSupplementalTests : IDisposable
         var ex = Record.Exception(() => Locale.T("nonexistent_key", "arg1", "arg2"));
         Assert.Null(ex);
     }
+
+    // ── Sprint 120: expanded key set (200+ keys) ────────────────────────────
+
+    [Fact]
+    public void AvailableKeys_EnglishHasAtLeast200Keys()
+    {
+        Locale.SetLocale("en");
+        Assert.True(Locale.AvailableKeys.Count >= 200, $"Expected >=200 keys, got {Locale.AvailableKeys.Count}");
+    }
+
+    [Theory]
+    [InlineData("toolbar_apply")]
+    [InlineData("toolbar_remove")]
+    [InlineData("toolbar_refresh")]
+    [InlineData("label_filter")]
+    [InlineData("label_profile")]
+    [InlineData("label_scope")]
+    [InlineData("label_kind")]
+    [InlineData("btn_select_all_short")]
+    [InlineData("btn_deselect_all_short")]
+    [InlineData("btn_invert_short")]
+    public void ToolbarKeys_PresentInEnglish(string key)
+    {
+        Locale.SetLocale("en");
+        Assert.Contains(key, Locale.AvailableKeys);
+    }
+
+    [Theory]
+    [InlineData("mnu_win_health")]
+    [InlineData("mnu_net_tools")]
+    [InlineData("mnu_smart_scan")]
+    [InlineData("mnu_privacy_dash")]
+    [InlineData("mnu_temp_cleaner")]
+    [InlineData("mnu_hosts_file_mgr")]
+    [InlineData("mnu_dns_https")]
+    [InlineData("mnu_profile_wizard")]
+    public void MenuToolsKeys_PresentInEnglish(string key)
+    {
+        Locale.SetLocale("en");
+        Assert.Contains(key, Locale.AvailableKeys);
+    }
+
+    [Theory]
+    [InlineData("status_ready")]
+    [InlineData("status_loading")]
+    [InlineData("status_applying")]
+    [InlineData("status_n_selected")]
+    [InlineData("status_admin_no")]
+    public void StatusBarKeys_PresentInEnglish(string key)
+    {
+        Locale.SetLocale("en");
+        Assert.Contains(key, Locale.AvailableKeys);
+    }
+
+    [Theory]
+    [InlineData("msg_reboot_pending")]
+    [InlineData("msg_no_selection")]
+    [InlineData("msg_apply_done")]
+    [InlineData("msg_remove_done")]
+    [InlineData("msg_batch_done")]
+    public void MessageKeys_PresentInEnglish(string key)
+    {
+        Locale.SetLocale("en");
+        Assert.Contains(key, Locale.AvailableKeys);
+    }
+
+    [Fact]
+    public void StatusNSelected_FormatsCount()
+    {
+        Locale.SetLocale("en");
+        string result = Locale.T("status_n_selected", 7);
+        Assert.Contains("7", result);
+    }
+
+    [Fact]
+    public void MsgApplyDone_FormatsTweakCount()
+    {
+        Locale.SetLocale("en");
+        string result = Locale.T("msg_apply_done", 3);
+        Assert.Contains("3", result);
+    }
+
+    [Fact]
+    public void MsgBatchDone_FormatsTwoArgs()
+    {
+        Locale.SetLocale("en");
+        string result = Locale.T("msg_batch_done", 5, 2);
+        Assert.Contains("5", result);
+        Assert.Contains("2", result);
+    }
+
+    [Theory]
+    [InlineData("toolbar_apply")]
+    [InlineData("toolbar_remove")]
+    [InlineData("status_ready")]
+    [InlineData("col_label")]
+    [InlineData("ctx_apply_sel")]
+    public void NewKeys_PresentInAllSixLocales(string key)
+    {
+        foreach (string locale in new[] { "en", "de", "fr", "es", "he", "ja" })
+        {
+            Locale.SetLocale(locale);
+            Assert.Contains(key, Locale.AvailableKeys);
+        }
+    }
+
+    [Fact]
+    public void NewGermanKeys_AreTranslated()
+    {
+        Locale.SetLocale("en");
+        string enValue = Locale.T("toolbar_apply");
+
+        Locale.SetLocale("de");
+        string deValue = Locale.T("toolbar_apply");
+
+        // German "toolbar_apply" should differ from English "Apply"
+        Assert.NotEqual(enValue, deValue);
+    }
 }
