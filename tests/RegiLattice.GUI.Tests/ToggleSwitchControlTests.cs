@@ -96,8 +96,7 @@ public sealed class ToggleSwitchControlTests
     public void ApplyTheme_DoesNotThrow()
     {
         using var ctrl = new Controls.ToggleSwitchControl();
-        var ex = Record.Exception(() =>
-            ctrl.ApplyTheme(Color.Blue, Color.DimGray, Color.White));
+        var ex = Record.Exception(() => ctrl.ApplyTheme(Color.Blue, Color.DimGray, Color.White));
         Assert.Null(ex);
     }
 

@@ -136,8 +136,7 @@ public sealed class FluentIconsTests
     {
         using Bitmap bmp = new Bitmap(32, 32);
         using Graphics g = Graphics.FromImage(bmp);
-        var ex = Record.Exception(() =>
-            FluentIcons.DrawGlyph(g, FluentIcons.Shield, Color.White, PointF.Empty, 14f));
+        var ex = Record.Exception(() => FluentIcons.DrawGlyph(g, FluentIcons.Shield, Color.White, PointF.Empty, 14f));
         Assert.Null(ex);
     }
 }
@@ -179,7 +178,7 @@ public sealed class CategoryExpandButtonTests
         using var btn = new Controls.CategoryExpandButton();
         int fired = 0;
         btn.ExpandedChanged += (_, _) => fired++;
-        btn.Expanded = true;  // already true
+        btn.Expanded = true; // already true
         Assert.Equal(0, fired);
     }
 
@@ -187,8 +186,7 @@ public sealed class CategoryExpandButtonTests
     public void ApplyTheme_DoesNotThrow()
     {
         using var btn = new Controls.CategoryExpandButton();
-        var ex = Record.Exception(() =>
-            btn.ApplyTheme(Color.White, Color.FromArgb(137, 180, 250)));
+        var ex = Record.Exception(() => btn.ApplyTheme(Color.White, Color.FromArgb(137, 180, 250)));
         Assert.Null(ex);
     }
 
