@@ -4,6 +4,14 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.8] — 2026-05-15
+
+- **Sprint 138 (T8.2)**: 50 new tweaks across 5 new modules — `SmartScreenPolicy.cs` (smartscr, 10), `CredentialCachingPolicy.cs` (credcache, 10), `WindowsTimeGpoPolicy.cs` (timepol, 10), `FirewallLogPolicy.cs` (fwlog, 10), `LogonGpoPolicy.cs` (logonpol, 10).
+- New categories: SmartScreen Policy, Credential Caching Policy, Time Service Policy, Firewall Log Policy, Logon Policy.
+- Tweaks: **4,308** | Categories: **141** | Core tests: **2,052** (0 failures).
+
+---
+
 ## [4.6.7] — 2026-05-14
 
 - **Sprint 137 (T8.2)**: 50 new tweaks across 5 new modules — `NetworkDiscovery.cs` (netdisc, 10), `CertificatePolicy.cs` (certpol, 10), `PowerShellPolicy.cs` (pspolicy, 10), `DefenderAdvanced.cs` (defadv, 10), `EventLogGpoPolicy.cs` (evtgpo, 10).
