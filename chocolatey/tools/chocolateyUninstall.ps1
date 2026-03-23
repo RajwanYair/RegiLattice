@@ -5,7 +5,7 @@
 
 $ErrorActionPreference = 'Stop'
 $packageName = 'regilattice'
-$toolsDir    = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 # Honour optional /PurgeData parameter
 $pp = Get-PackageParameters

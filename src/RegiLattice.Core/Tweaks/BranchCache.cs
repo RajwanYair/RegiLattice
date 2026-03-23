@@ -140,16 +140,8 @@ internal static class BranchCache
                 + "immediately available for BranchCache clients without generating hashes on-demand. "
                 + "Best applied to file servers at the main office. Sets HashPublicationForPeerDist=1 "
                 + "and HashSupportVersion=2 for SHA-256.",
-            ApplyOps =
-            [
-                RegOp.SetDword(Svc, "HashPublicationForPeerDist", 1),
-                RegOp.SetDword(Svc, "HashSupportVersion", 2),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(Svc, "HashPublicationForPeerDist"),
-                RegOp.DeleteValue(Svc, "HashSupportVersion"),
-            ],
+            ApplyOps = [RegOp.SetDword(Svc, "HashPublicationForPeerDist", 1), RegOp.SetDword(Svc, "HashSupportVersion", 2)],
+            RemoveOps = [RegOp.DeleteValue(Svc, "HashPublicationForPeerDist"), RegOp.DeleteValue(Svc, "HashSupportVersion")],
             DetectOps = [RegOp.CheckDword(Svc, "HashPublicationForPeerDist", 1)],
         },
         new TweakDef

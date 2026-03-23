@@ -47,8 +47,10 @@ public static class PackSignatureVerifier
     /// </returns>
     public static bool Verify(ReadOnlySpan<byte> packJsonUtf8, string signatureBase64, string publicKeyPem)
     {
-        if (string.IsNullOrWhiteSpace(signatureBase64)) return false;
-        if (string.IsNullOrWhiteSpace(publicKeyPem)) return false;
+        if (string.IsNullOrWhiteSpace(signatureBase64))
+            return false;
+        if (string.IsNullOrWhiteSpace(publicKeyPem))
+            return false;
 
         byte[] signature;
         try
@@ -87,11 +89,7 @@ public static class PackSignatureVerifier
     /// <param name="publicKeyPem">
     /// Author public key, looked up from the marketplace index. Null means unknown.
     /// </param>
-    public static PackTrustLevel DetermineTrustLevel(
-        string packJson,
-        PackDef pack,
-        string? signatureBase64,
-        string? publicKeyPem)
+    public static PackTrustLevel DetermineTrustLevel(string packJson, PackDef pack, string? signatureBase64, string? publicKeyPem)
     {
         // If SHA-256 was provided, verify it first.
         if (!string.IsNullOrWhiteSpace(pack.Sha256))

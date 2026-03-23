@@ -810,7 +810,7 @@ public sealed class PackSignatureVerifierTests
     public void Verify_DifferentKeyPair_ReturnsFalse()
     {
         var (_, priv1) = PackSignatureVerifier.GenerateKeyPair(2048);
-        var (pub2, _)  = PackSignatureVerifier.GenerateKeyPair(2048);
+        var (pub2, _) = PackSignatureVerifier.GenerateKeyPair(2048);
         string sig = PackSignatureVerifier.Sign(SamplePackJson, priv1);
 
         Assert.False(PackSignatureVerifier.Verify(SamplePackJson, sig, pub2));
@@ -839,7 +839,10 @@ public sealed class PackSignatureVerifierTests
 
         var pack = new PackDef
         {
-            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Name = "test",
+            DisplayName = "Test",
+            Version = "1.0.0",
+            Author = "A",
             Sha256 = hash,
             SignatureUrl = "https://example.com/test.rlpack.sig",
         };
@@ -855,7 +858,10 @@ public sealed class PackSignatureVerifierTests
         string hash = PackLoader.ComputeSha256(SamplePackJson);
         var pack = new PackDef
         {
-            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Name = "test",
+            DisplayName = "Test",
+            Version = "1.0.0",
+            Author = "A",
             Sha256 = hash,
         };
 
@@ -869,7 +875,10 @@ public sealed class PackSignatureVerifierTests
     {
         var pack = new PackDef
         {
-            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Name = "test",
+            DisplayName = "Test",
+            Version = "1.0.0",
+            Author = "A",
             Sha256 = "0000000000000000000000000000000000000000000000000000000000000000",
         };
 
@@ -883,7 +892,10 @@ public sealed class PackSignatureVerifierTests
     {
         var pack = new PackDef
         {
-            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Name = "test",
+            DisplayName = "Test",
+            Version = "1.0.0",
+            Author = "A",
         };
 
         var level = PackSignatureVerifier.DetermineTrustLevel(SamplePackJson, pack, null, null);
@@ -929,7 +941,10 @@ public sealed class PackSignatureVerifierTests
     {
         var pack = new PackDef
         {
-            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Name = "test",
+            DisplayName = "Test",
+            Version = "1.0.0",
+            Author = "A",
         };
 
         Assert.Equal("", pack.SignatureUrl);
@@ -937,3 +952,247 @@ public sealed class PackSignatureVerifierTests
     }
 }
 
+// ── PluginSandbox tests (T7.4) ───────────────────────────────────────────────
+
+/// <summary>
+/// Tests for <see cref="PluginSandbox"/>: DTO conversions, JSON protocol
+/// serialization, and failure handling (Sprint 132–133).
+/// </summary>
+public sealed class PluginSandboxTests
+{
+    private static readonly System.Text.Json.JsonSerializerOptions s_json = new()
+    {
+        PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+    };
+
+    // ── ToDto unit tests ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void ToDto_SetDword_MapsCorrectly()
+    {
+        var op = RegOp.SetDword(@"HKCU\Software\Test", "Value", 42);
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Single(dto);
+        Assert.Equal("setdword", dto[0].Kind);
+        Assert.Equal(@"HKCU\Software\Test", dto[0].Path);
+        Assert.Equal("Value", dto[0].Name);
+        Assert.Equal(42, dto[0].DwordValue);
+    }
+
+    [Fact]
+    public void ToDto_SetString_MapsCorrectly()
+    {
+        var op = RegOp.SetString(@"HKCU\Software\Test", "Name", "hello");
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Single(dto);
+        Assert.Equal("setstring", dto[0].Kind);
+        Assert.Equal("hello", dto[0].StringValue);
+    }
+
+    [Fact]
+    public void ToDto_SetBinary_EncodesBase64()
+    {
+        byte[] data = [0x01, 0x02, 0x03];
+        var op = RegOp.SetBinary(@"HKCU\Software\Test", "Bin", data);
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("setbinary", dto[0].Kind);
+        Assert.Equal(Convert.ToBase64String(data), dto[0].BinaryValue);
+    }
+
+    [Fact]
+    public void ToDto_SetMultiSz_MapsArray()
+    {
+        var op = RegOp.SetMultiSz(@"HKCU\Software\Test", "Multi", ["a", "b", "c"]);
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("setmultisz", dto[0].Kind);
+        Assert.NotNull(dto[0].MultiSzValue);
+        Assert.Equal(["a", "b", "c"], dto[0].MultiSzValue!.ToArray());
+    }
+
+    [Fact]
+    public void ToDto_SetQword_MapsCorrectly()
+    {
+        var op = RegOp.SetQword(@"HKCU\Software\Test", "BigVal", 123456789012345L);
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("setqword", dto[0].Kind);
+        Assert.Equal(123456789012345L, dto[0].QwordValue);
+    }
+
+    [Fact]
+    public void ToDto_SetExpandString_MapsCorrectly()
+    {
+        var op = RegOp.SetExpandString(@"HKCU\Software\Test", "Expand", @"%TEMP%\file.log");
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("setexpandstring", dto[0].Kind);
+        Assert.Equal(@"%TEMP%\file.log", dto[0].StringValue);
+    }
+
+    [Fact]
+    public void ToDto_DeleteValue_MapsCorrectly()
+    {
+        var op = RegOp.DeleteValue(@"HKCU\Software\Test", "OldValue");
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Single(dto);
+        Assert.Equal("deletevalue", dto[0].Kind);
+        Assert.Equal("OldValue", dto[0].Name);
+    }
+
+    [Fact]
+    public void ToDto_DeleteTree_MapsCorrectly()
+    {
+        var op = RegOp.DeleteTree(@"HKCU\Software\OldApp");
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Single(dto);
+        Assert.Equal("deletetree", dto[0].Kind);
+        Assert.Equal(@"HKCU\Software\OldApp", dto[0].Path);
+    }
+
+    [Fact]
+    public void ToDto_CheckDword_MapsCorrectly()
+    {
+        var op = RegOp.CheckDword(@"HKCU\Software\Test", "Flag", 1);
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("checkdword", dto[0].Kind);
+        Assert.Equal(1, dto[0].DwordValue);
+    }
+
+    [Fact]
+    public void ToDto_CheckMissing_MapsCorrectly()
+    {
+        var op = RegOp.CheckMissing(@"HKCU\Software\Test", "Ghost");
+        var dto = PluginSandbox.ToDto([op]);
+
+        Assert.Equal("checkmissing", dto[0].Kind);
+        Assert.Equal("Ghost", dto[0].Name);
+    }
+
+    // ── FromDto round-trip ───────────────────────────────────────────────────
+
+    [Fact]
+    public void FromDto_AllRegularKinds_RoundTrip()
+    {
+        IReadOnlyList<RegOp> ops =
+        [
+            RegOp.SetDword(@"HKCU\Test", "D", 7),
+            RegOp.SetString(@"HKCU\Test", "S", "val"),
+            RegOp.SetExpandString(@"HKCU\Test", "E", @"%WINDIR%\file"),
+            RegOp.SetQword(@"HKCU\Test", "Q", 999L),
+            RegOp.SetBinary(@"HKCU\Test", "B", [0xAB, 0xCD]),
+            RegOp.SetMultiSz(@"HKCU\Test", "M", ["x", "y"]),
+            RegOp.DeleteValue(@"HKCU\Test", "Del"),
+            RegOp.DeleteTree(@"HKCU\Test\Sub"),
+            RegOp.CheckDword(@"HKCU\Test", "CD", 3),
+            RegOp.CheckString(@"HKCU\Test", "CS", "expected"),
+            RegOp.CheckMissing(@"HKCU\Test", "CM"),
+            RegOp.CheckKeyMissing(@"HKCU\Test\Ghost"),
+        ];
+
+        var dtos = PluginSandbox.ToDto(ops);
+        var restored = PluginSandbox.FromDto(dtos);
+
+        Assert.Equal(ops.Count, restored.Count);
+        for (int i = 0; i < ops.Count; i++)
+        {
+            Assert.Equal(ops[i].Path, restored[i].Path);
+            Assert.Equal(ops[i].Name, restored[i].Name);
+        }
+    }
+
+    // ── JSON protocol serialization tests ────────────────────────────────────
+
+    [Fact]
+    public void Request_SerializesAndDeserializes_RoundTrip()
+    {
+        var request = new PluginSandboxRequest
+        {
+            DryRun = true,
+            Ops = PluginSandbox.ToDto([RegOp.SetDword(@"HKCU\Test", "V", 99)]),
+        };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(request, s_json);
+        var restored = System.Text.Json.JsonSerializer.Deserialize<PluginSandboxRequest>(json, s_json);
+
+        Assert.NotNull(restored);
+        Assert.True(restored!.DryRun);
+        Assert.Single(restored.Ops);
+        Assert.Equal("setdword", restored.Ops[0].Kind);
+        Assert.Equal(99, restored.Ops[0].DwordValue);
+    }
+
+    [Fact]
+    public void Response_SerializesAndDeserializes_RoundTrip()
+    {
+        var response = new PluginSandboxResponse { Success = true, ErrorMessage = "" };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(response, s_json);
+        var restored = System.Text.Json.JsonSerializer.Deserialize<PluginSandboxResponse>(json, s_json);
+
+        Assert.NotNull(restored);
+        Assert.True(restored!.Success);
+        Assert.Equal("", restored.ErrorMessage);
+    }
+
+    [Fact]
+    public void Response_Error_SerializesAndDeserializes()
+    {
+        var response = new PluginSandboxResponse { Success = false, ErrorMessage = "Test error" };
+
+        string json = System.Text.Json.JsonSerializer.Serialize(response, s_json);
+        var restored = System.Text.Json.JsonSerializer.Deserialize<PluginSandboxResponse>(json, s_json);
+
+        Assert.NotNull(restored);
+        Assert.False(restored!.Success);
+        Assert.Equal("Test error", restored.ErrorMessage);
+    }
+
+    // ── ExecuteAsync error-path test (no real process) ───────────────────────
+
+    [Fact]
+    public async Task ExecuteAsync_NonExistentExecutable_ReturnsFailed()
+    {
+        var ops = new[] { RegOp.SetDword(@"HKCU\Test", "V", 1) };
+        var result = await PluginSandbox.ExecuteAsync(
+            ops,
+            dryRun: true,
+            executablePath: @"C:\This\Does\Not\Exist\regilattice.exe",
+            timeoutSeconds: 5
+        );
+
+        Assert.False(result.Success);
+    }
+
+    // ── PluginSandboxResult model tests ──────────────────────────────────────
+
+    [Fact]
+    public void PluginSandboxResult_DefaultValues()
+    {
+        var result = new PluginSandboxResult();
+
+        Assert.False(result.Success);
+        Assert.Equal("", result.ErrorMessage);
+        Assert.False(result.TimedOut);
+    }
+
+    [Fact]
+    public void PluginSandboxResult_TimedOut_SetCorrectly()
+    {
+        var result = new PluginSandboxResult
+        {
+            Success = false,
+            TimedOut = true,
+            ErrorMessage = "Timed out after 30 seconds.",
+        };
+
+        Assert.True(result.TimedOut);
+        Assert.False(result.Success);
+    }
+}

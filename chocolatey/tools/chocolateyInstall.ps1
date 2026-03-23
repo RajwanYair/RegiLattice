@@ -6,17 +6,17 @@ $ErrorActionPreference = 'Stop'
 # These values are replaced by the release workflow during `choco pack`:
 #   - $url64    → download URL from the GitHub Release
 #   - $checksum → SHA-256 of the .zip file
-$packageName   = 'regilattice'
-$toolsDir      = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$packageName = 'regilattice'
+$toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
-$url64     = 'RELEASE_URL_PLACEHOLDER'   # replaced by release.yml
-$checksum  = 'RELEASE_SHA256_PLACEHOLDER' # replaced by release.yml
+$url64 = 'RELEASE_URL_PLACEHOLDER'   # replaced by release.yml
+$checksum = 'RELEASE_SHA256_PLACEHOLDER' # replaced by release.yml
 
 $packageArgs = @{
-    packageName   = $packageName
-    unzipLocation = $toolsDir
-    url64bit      = $url64
-    checksum64    = $checksum
+    packageName    = $packageName
+    unzipLocation  = $toolsDir
+    url64bit       = $url64
+    checksum64     = $checksum
     checksumType64 = 'sha256'
     # Not using url32bit — RegiLattice is x64-only (.NET 10.0-windows x64).
 }
