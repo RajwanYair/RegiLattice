@@ -16,19 +16,20 @@ public sealed class PackCreatorDialogTests
 {
     // ── Common fixtures ───────────────────────────────────────────────────
 
-    private static PackDef ValidPack(int tweakCount = 5) => new PackDef
-    {
-        Name = "test-creator-pack",
-        DisplayName = "Test Creator Pack",
-        Version = "1.0.0",
-        Author = "someone",
-        Description = "Tests the Pack Creator Studio dialog logic end-to-end.",
-        TweakCount = tweakCount,
-        DownloadUrl = "https://example.com/pack.json",
-        Sha256 = new string('a', 64),
-        Categories = ["Performance", "Privacy"],
-        Tags = ["perf", "privacy"],
-    };
+    private static PackDef ValidPack(int tweakCount = 5) =>
+        new PackDef
+        {
+            Name = "test-creator-pack",
+            DisplayName = "Test Creator Pack",
+            Version = "1.0.0",
+            Author = "someone",
+            Description = "Tests the Pack Creator Studio dialog logic end-to-end.",
+            TweakCount = tweakCount,
+            DownloadUrl = "https://example.com/pack.json",
+            Sha256 = new string('a', 64),
+            Categories = ["Performance", "Privacy"],
+            Tags = ["perf", "privacy"],
+        };
 
     // ── Validation bridging ───────────────────────────────────────────────
 
@@ -65,15 +66,18 @@ public sealed class PackCreatorDialogTests
     {
         // Mirror what PackCreatorDialog.BuildJsonPreview does using System.Text.Json
         PackDef pack = ValidPack();
-        string json = System.Text.Json.JsonSerializer.Serialize(new
-        {
-            pack.Name,
-            pack.DisplayName,
-            pack.Version,
-            pack.Author,
-            pack.Description,
-            pack.TweakCount,
-        }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        string json = System.Text.Json.JsonSerializer.Serialize(
+            new
+            {
+                pack.Name,
+                pack.DisplayName,
+                pack.Version,
+                pack.Author,
+                pack.Description,
+                pack.TweakCount,
+            },
+            new System.Text.Json.JsonSerializerOptions { WriteIndented = true }
+        );
 
         Assert.Contains("test-creator-pack", json);
     }
@@ -139,7 +143,13 @@ public sealed class PackCreatorDialogTests
     [Fact]
     public void PackDef_Categories_DefaultsToEmpty()
     {
-        PackDef pack = new PackDef { Name = "x", DisplayName = "X", Version = "1.0.0", Author = "a" };
+        PackDef pack = new PackDef
+        {
+            Name = "x",
+            DisplayName = "X",
+            Version = "1.0.0",
+            Author = "a",
+        };
         Assert.Empty(pack.Categories);
         Assert.Empty(pack.Tags);
     }

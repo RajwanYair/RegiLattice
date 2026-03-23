@@ -98,6 +98,16 @@ internal static class Program
             return RunHwInfo();
         if (a.ListProfiles)
             return RunListProfiles();
+        if (a.ListUserProfiles)
+            return RunListUserProfiles();
+        if (a.ProfileCreate is not null)
+            return RunProfileCreate(a);
+        if (a.ProfileDelete is not null)
+            return RunProfileDelete(a.ProfileDelete);
+        if (a.IsProfileClone && a.ProfileFrom is not null && a.Profile is not null)
+            return RunProfileClone(a.ProfileFrom, a.Profile);
+        if (a.IsProfileRename && a.ProfileFrom is not null && a.Profile is not null)
+            return RunProfileRename(a.ProfileFrom, a.Profile);
         if (a.Validate)
             return RunValidate();
         if (a.Stats)
@@ -290,7 +300,111 @@ internal static class Program
             int count = _engine.TweaksForProfile(p.Name).Count;
             Console.WriteLine($"{p.Name, -12} {count, -8} {p.Description}");
         }
+
+        var userProfiles = UserProfileService.GetProfiles();
+        if (userProfiles.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("User-defined profiles:");
+            Console.WriteLine(new string('-', 60));
+            foreach (var up in userProfiles)
+                Console.WriteLine($"{up.Name, -12} {up.TweakIds.Count, -8} {up.Description}");
+        }
+
         return 0;
+    }
+
+    // ── User-profile management (Sprint 127) ────────────────────────────
+
+    private static int RunListUserProfiles()
+    {
+        var profiles = UserProfileService.GetProfiles();
+        if (profiles.Count == 0)
+        {
+            Console.WriteLine("No user-defined profiles found.");
+            return 0;
+        }
+
+        Console.WriteLine($"{"Profile", -20} {"Tweaks", -8} {"Created", -22} Description");
+        Console.WriteLine(new string('-', 72));
+        foreach (var up in profiles)
+        {
+            Console.WriteLine(
+                $"{up.Name, -20} {up.TweakIds.Count, -8} {up.CreatedAt.ToLocalTime():yyyy-MM-dd HH:mm, -22} {up.Description}"
+            );
+        }
+
+        return 0;
+    }
+
+    private static int RunProfileCreate(CliArgs a)
+    {
+        string name = a.ProfileCreate!;
+        var tweakIds = a.ProfileTweaks is not null
+            ? a.ProfileTweaks.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToArray()
+            : Array.Empty<string>();
+        string desc = a.ProfileDesc ?? "";
+
+        // Validate tweak IDs exist (warn, don't block)
+        var unknown = tweakIds.Where(id => _engine.GetTweak(id) is null).ToList();
+        if (unknown.Count > 0)
+            Console.WriteLine($"{Yellow("warn")} Unknown tweak IDs: {string.Join(", ", unknown)}");
+
+        try
+        {
+            var profile = UserProfileService.Create(name, desc, tweakIds);
+            Console.WriteLine($"{Green("✔")} Profile '{profile.Name}' created with {tweakIds.Length} tweak(s).");
+            Console.WriteLine($"  Saved to: {UserProfileService.ProfilePath(name)}");
+            return 0;
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"{Red("✘")} {ex.Message}");
+            return 1;
+        }
+    }
+
+    private static int RunProfileDelete(string name)
+    {
+        if (!UserProfileService.Exists(name))
+        {
+            Console.WriteLine($"{Red("✘")} Profile '{name}' not found.");
+            return 1;
+        }
+
+        UserProfileService.Delete(name);
+        Console.WriteLine($"{Green("✔")} Profile '{name}' deleted.");
+        return 0;
+    }
+
+    private static int RunProfileClone(string source, string target)
+    {
+        try
+        {
+            var cloned = UserProfileService.Clone(source, target);
+            Console.WriteLine($"{Green("✔")} Profile '{source}' cloned to '{cloned.Name}' ({cloned.TweakIds.Count} tweaks).");
+            return 0;
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"{Red("✘")} {ex.Message}");
+            return 1;
+        }
+    }
+
+    private static int RunProfileRename(string oldName, string newName)
+    {
+        try
+        {
+            var renamed = UserProfileService.Rename(oldName, newName);
+            Console.WriteLine($"{Green("✔")} Profile renamed '{oldName}' → '{renamed.Name}'.");
+            return 0;
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"{Red("✘")} {ex.Message}");
+            return 1;
+        }
     }
 
     // ── Validate ────────────────────────────────────────────────────────
@@ -2264,6 +2378,43 @@ internal static class Program
                     p.GeneratePsModule = true;
                     if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
                         p.PsModuleOutput = args[++i];
+                    break;
+
+                // ── Sprint 127 – custom user profiles ────────────────────────
+                case "--profile-create":
+                    if (++i < args.Length)
+                        p.ProfileCreate = args[i];
+                    break;
+                case "--profile-delete":
+                    if (++i < args.Length)
+                        p.ProfileDelete = args[i];
+                    break;
+                case "--profile-clone":
+                    if (i + 2 < args.Length)
+                    {
+                        p.ProfileFrom = args[++i];
+                        p.Profile = args[++i];
+                        p.IsProfileClone = true;
+                    }
+                    break;
+                case "--profile-rename":
+                    if (i + 2 < args.Length)
+                    {
+                        p.ProfileFrom = args[++i];
+                        p.Profile = args[++i];
+                        p.IsProfileRename = true;
+                    }
+                    break;
+                case "--profile-tweaks":
+                    if (++i < args.Length)
+                        p.ProfileTweaks = args[i];
+                    break;
+                case "--profile-desc":
+                    if (++i < args.Length)
+                        p.ProfileDesc = args[i];
+                    break;
+                case "--list-user-profiles":
+                    p.ListUserProfiles = true;
                     break;
 
                 default:
