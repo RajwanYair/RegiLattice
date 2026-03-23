@@ -25,9 +25,9 @@ public sealed class LocaleSupplementalTests : IDisposable
     // ── Built-in locale catalogue ───────────────────────────────────────────
 
     [Fact]
-    public void AvailableLocales_ContainsSixBuiltIns()
+    public void AvailableLocales_ContainsTenBuiltIns()
     {
-        Assert.Equal(6, Locale.AvailableLocales.Count);
+        Assert.Equal(10, Locale.AvailableLocales.Count);
     }
 
     [Fact]
@@ -40,6 +40,10 @@ public sealed class LocaleSupplementalTests : IDisposable
         Assert.Contains("es", locales);
         Assert.Contains("he", locales);
         Assert.Contains("ja", locales);
+        Assert.Contains("zh-CN", locales);
+        Assert.Contains("ko", locales);
+        Assert.Contains("ar", locales);
+        Assert.Contains("pt-BR", locales);
     }
 
     // ── Hebrew locale ───────────────────────────────────────────────────────
@@ -305,7 +309,7 @@ public sealed class LocaleSupplementalTests : IDisposable
     [InlineData("ctx_apply_sel")]
     public void NewKeys_PresentInAllSixLocales(string key)
     {
-        foreach (string locale in new[] { "en", "de", "fr", "es", "he", "ja" })
+        foreach (string locale in new[] { "en", "de", "fr", "es", "he", "ja", "zh-CN", "ko", "ar", "pt-BR" })
         {
             Locale.SetLocale(locale);
             Assert.Contains(key, Locale.AvailableKeys);
@@ -323,5 +327,162 @@ public sealed class LocaleSupplementalTests : IDisposable
 
         // German "toolbar_apply" should differ from English "Apply"
         Assert.NotEqual(enValue, deValue);
+    }
+
+    // ── Chinese Simplified (zh-CN) ─────────────────────────────────────────
+
+    [Fact]
+    public void SetLocale_ZhCn_TranslatesApplyAll()
+    {
+        Locale.SetLocale("zh-CN");
+        Assert.Equal("\u5168\u90e8\u5e94\u7528", Locale.T("apply_all"));
+    }
+
+    [Fact]
+    public void SetLocale_ZhCn_TranslatesStatusReady()
+    {
+        Locale.SetLocale("zh-CN");
+        Assert.Equal("\u5c31\u7dd2", Locale.T("status_ready"));
+    }
+
+    [Fact]
+    public void SetLocale_ZhCn_TranslatesMenuFile()
+    {
+        Locale.SetLocale("zh-CN");
+        Assert.Equal("\u6587\u4ef6", Locale.T("menu_file"));
+    }
+
+    [Fact]
+    public void SetLocale_ZhCn_BtnOkAndCancel()
+    {
+        Locale.SetLocale("zh-CN");
+        Assert.Equal("\u786e\u5b9a", Locale.T("btn_ok"));
+        Assert.Equal("\u53d6\u6d88", Locale.T("btn_cancel"));
+    }
+
+    // ── Korean (ko) ────────────────────────────────────────────────────────
+
+    [Fact]
+    public void SetLocale_Ko_TranslatesApplyAll()
+    {
+        Locale.SetLocale("ko");
+        Assert.Equal("\uc804\uccb4 \uc801\uc6a9", Locale.T("apply_all"));
+    }
+
+    [Fact]
+    public void SetLocale_Ko_TranslatesStatusApplied()
+    {
+        Locale.SetLocale("ko");
+        Assert.Equal("\uc801\uc6a9\ub428", Locale.T("status_applied"));
+    }
+
+    [Fact]
+    public void SetLocale_Ko_BtnOkAndCancel()
+    {
+        Locale.SetLocale("ko");
+        Assert.Equal("\ud655\uc778", Locale.T("btn_ok"));
+        Assert.Equal("\ucde8\uc18c", Locale.T("btn_cancel"));
+    }
+
+    // ── Arabic (ar) ────────────────────────────────────────────────────────
+
+    [Fact]
+    public void SetLocale_Ar_TranslatesApplyAll()
+    {
+        Locale.SetLocale("ar");
+        Assert.Equal("\u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u0643\u0644", Locale.T("apply_all"));
+    }
+
+    [Fact]
+    public void SetLocale_Ar_TranslatesMenuFile()
+    {
+        Locale.SetLocale("ar");
+        Assert.Equal("\u0645\u0644\u0641", Locale.T("menu_file"));
+    }
+
+    [Fact]
+    public void SetLocale_Ar_BtnOkAndCancel()
+    {
+        Locale.SetLocale("ar");
+        Assert.Equal("\u0645\u0648\u0627\u0641\u0642", Locale.T("btn_ok"));
+        Assert.Equal("\u0625\u0644\u063a\u0627\u0621", Locale.T("btn_cancel"));
+    }
+
+    [Fact]
+    public void SetLocale_Ar_StatusReady_IsJahiz()
+    {
+        Locale.SetLocale("ar");
+        Assert.Equal("\u062c\u0627\u0647\u0632", Locale.T("status_ready"));
+    }
+
+    // ── Portuguese Brazil (pt-BR) ──────────────────────────────────────────
+
+    [Fact]
+    public void SetLocale_PtBr_TranslatesApplyAll()
+    {
+        Locale.SetLocale("pt-BR");
+        Assert.Equal("Aplicar todos", Locale.T("apply_all"));
+    }
+
+    [Fact]
+    public void SetLocale_PtBr_TranslatesStatusReady()
+    {
+        Locale.SetLocale("pt-BR");
+        Assert.Equal("Pronto", Locale.T("status_ready"));
+    }
+
+    [Fact]
+    public void SetLocale_PtBr_BtnCancelIsPortuguese()
+    {
+        Locale.SetLocale("pt-BR");
+        Assert.Equal("Cancelar", Locale.T("btn_cancel"));
+    }
+
+    [Fact]
+    public void SetLocale_PtBr_MenuFileIsArquivo()
+    {
+        Locale.SetLocale("pt-BR");
+        Assert.Equal("Arquivo", Locale.T("menu_file"));
+    }
+
+    // ── All 10 locales smoke test ──────────────────────────────────────────
+
+    [Theory]
+    [InlineData("zh-CN")]
+    [InlineData("ko")]
+    [InlineData("ar")]
+    [InlineData("pt-BR")]
+    public void NewLocale_TranslatesApplyAll_NotRawKey(string locale)
+    {
+        Locale.SetLocale(locale);
+        string val = Locale.T("apply_all");
+        Assert.NotEqual("apply_all", val);
+        Assert.False(string.IsNullOrWhiteSpace(val));
+    }
+
+    [Theory]
+    [InlineData("zh-CN")]
+    [InlineData("ko")]
+    [InlineData("ar")]
+    [InlineData("pt-BR")]
+    public void NewLocale_TranslatesBtnOk_NotRawKey(string locale)
+    {
+        Locale.SetLocale(locale);
+        string val = Locale.T("btn_ok");
+        Assert.NotEqual("btn_ok", val);
+    }
+
+    [Theory]
+    [InlineData("zh-CN")]
+    [InlineData("ko")]
+    [InlineData("ar")]
+    [InlineData("pt-BR")]
+    public void NewLocale_RoundTrip_BackToEnglishWorks(string locale)
+    {
+        string enBefore = Locale.T("apply_all");
+        Locale.SetLocale(locale);
+        Locale.SetLocale("en");
+        string enAfter = Locale.T("apply_all");
+        Assert.Equal(enBefore, enAfter);
     }
 }
