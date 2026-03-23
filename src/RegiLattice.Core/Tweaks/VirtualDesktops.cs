@@ -17,6 +17,8 @@ internal static class VirtualDesktops
 
     private const string AltTabKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
 
+    private const string DwmKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM";
+
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
         new TweakDef
@@ -197,6 +199,186 @@ internal static class VirtualDesktops
             ApplyOps = [RegOp.SetDword(TaskView, "TaskView", 0)],
             RemoveOps = [RegOp.SetDword(TaskView, "TaskView", 1)],
             DetectOps = [RegOp.CheckDword(TaskView, "TaskView", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-set-taskbar-multimonitor-all",
+            Label = "Show All Desktop Windows on All Monitor Taskbars",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "windows"],
+            Description =
+                "Configures multi-monitor taskbars to show buttons for windows "
+                + "from all virtual desktops (MMTaskbarMode=0). The default shows "
+                + "only the current desktop on each monitor's taskbar.",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "MMTaskbarMode")],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-set-taskbar-multimonitor-local-only",
+            Label = "Show Only Local Monitor Windows on Each Monitor Taskbar",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "focus"],
+            Description =
+                "Configures multi-monitor taskbars to show only windows that are "
+                + "open on that specific monitor (MMTaskbarMode=2). Reduces clutter "
+                + "on multi-monitor setups.",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarMode", 2)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "MMTaskbarMode")],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarMode", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-aero-peek",
+            Label = "Disable Aero Peek (Desktop Peek Overlay)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "aero", "peek", "dwm", "transparency"],
+            Description =
+                "Disables the Aero Peek feature that toggles window transparency to "
+                + "show the desktop when hovering over the 'Show Desktop' corner button. "
+                + "Removes the glass overlay effect (EnableAeroPeek=0).",
+            ApplyOps = [RegOp.SetDword(DwmKey, "EnableAeroPeek", 0)],
+            RemoveOps = [RegOp.SetDword(DwmKey, "EnableAeroPeek", 1)],
+            DetectOps = [RegOp.CheckDword(DwmKey, "EnableAeroPeek", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-snap-fill",
+            Label = "Disable Snap Fill (Auto-Fill Adjacent Window After Snap)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "snap", "fill", "layout"],
+            Description =
+                "Prevents Windows from prompting you to fill the remaining screen area "
+                + "after snapping a window. Only the snapped window moves; no assist popup "
+                + "appears for the other half (SnapFill=0).",
+            ApplyOps = [RegOp.SetDword(TaskView, "SnapFill", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "SnapFill", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "SnapFill", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-snap-revert",
+            Label = "Disable Snap Revert (Don't Move Partner Window When Moving Dragged Window)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "snap", "revert", "layout"],
+            Description =
+                "When dragging a snapped window away from its position, disables the "
+                + "automatic reverting of the paired window to its pre-snap size and position "
+                + "(SnapRevert=0). Gives more predictable behavior.",
+            ApplyOps = [RegOp.SetDword(TaskView, "SnapRevert", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "SnapRevert", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "SnapRevert", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-taskbar-grouping",
+            Label = "Never Group Taskbar Buttons",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "grouping", "buttons"],
+            Description =
+                "Prevents the taskbar from grouping multiple windows of the same app "
+                + "into a single button. Each open window gets its own dedicated button "
+                + "regardless of how many are open (TaskbarGlomLevel=2).",
+            ApplyOps = [RegOp.SetDword(TaskView, "TaskbarGlomLevel", 2)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "TaskbarGlomLevel")],
+            DetectOps = [RegOp.CheckDword(TaskView, "TaskbarGlomLevel", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-enable-background-per-desktop",
+            Label = "Enable Unique Wallpaper Per Virtual Desktop",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "wallpaper", "background", "personalization"],
+            Description =
+                "Allows each virtual desktop to have its own wallpaper that changes "
+                + "automatically when you switch desktops. Enables the per-desktop background "
+                + "feature (BackgroundChangesOnDesktopSwitch=1).",
+            ApplyOps = [RegOp.SetDword(VdKey, "BackgroundChangesOnDesktopSwitch", 1)],
+            RemoveOps = [RegOp.SetDword(VdKey, "BackgroundChangesOnDesktopSwitch", 0)],
+            DetectOps = [RegOp.CheckDword(VdKey, "BackgroundChangesOnDesktopSwitch", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-alt-tab-thumbnails",
+            Label = "Delay Alt+Tab Thumbnail Preview (Effectively Disable Hover Thumbnails)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "alt-tab", "thumbnails", "hover", "performance"],
+            Description =
+                "Sets the taskbar thumbnail hover delay to 30 seconds, effectively "
+                + "preventing thumbnail previews from appearing while still keeping the "
+                + "feature technically enabled (ExtendedUIHoverTime=30000 ms).",
+            ApplyOps = [RegOp.SetDword(TaskView, "ExtendedUIHoverTime", 30000)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "ExtendedUIHoverTime")],
+            DetectOps = [RegOp.CheckDword(TaskView, "ExtendedUIHoverTime", 30000)],
+        },
+        new TweakDef
+        {
+            Id = "vd-show-taskbar-on-secondary-monitors",
+            Label = "Show Taskbar on All Monitors (Multi-Monitor)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "secondary"],
+            Description =
+                "Enables the extended taskbar on secondary monitors so each display "
+                + "shows its own taskbar. Useful when the multi-monitor taskbar was "
+                + "previously disabled (MMTaskbarEnabled=1).",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(TaskView, "MMTaskbarEnabled", 0)],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-taskbar-end-task-button",
+            Label = "Disable End Task Button on Taskbar (Windows 11 23H2+)",
+            Category = "Virtual Desktops",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "end-task", "windows 11"],
+            Description =
+                "Removes the 'End Task' button that appears in the right-click context "
+                + "menu for taskbar buttons in Windows 11 version 23H2 and later. "
+                + "Prevents accidental process termination (TaskbarEndTask=0).",
+            ApplyOps = [RegOp.SetDword(TaskView, "TaskbarEndTask", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "TaskbarEndTask", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "TaskbarEndTask", 0)],
         },
     ];
 }

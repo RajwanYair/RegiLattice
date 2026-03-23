@@ -329,9 +329,7 @@ internal static class Program
         Console.WriteLine(new string('-', 72));
         foreach (var up in profiles)
         {
-            Console.WriteLine(
-                $"{up.Name, -20} {up.TweakIds.Count, -8} {up.CreatedAt.ToLocalTime():yyyy-MM-dd HH:mm, -22} {up.Description}"
-            );
+            Console.WriteLine($"{up.Name, -20} {up.TweakIds.Count, -8} {up.CreatedAt.ToLocalTime():yyyy-MM-dd HH:mm, -22} {up.Description}");
         }
 
         return 0;

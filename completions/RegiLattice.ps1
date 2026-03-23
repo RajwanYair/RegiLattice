@@ -81,8 +81,8 @@ Register-ArgumentCompleter -Native -CommandName @('regilattice', 'rl', 'RegiLatt
         '--category' {
             # Attempt fast category list from engine (requires regilattice on PATH)
             $cats = & regilattice --categories --no-color 2>$null |
-                Where-Object { $_ -match '^\s+\S' } |
-                ForEach-Object { $_.Trim().Split(' ')[0] }
+            Where-Object { $_ -match '^\s+\S' } |
+            ForEach-Object { $_.Trim().Split(' ')[0] }
             return _rl_complete_from $wordToComplete $cats
         }
         '--scope' { return _rl_complete_from $wordToComplete @('user', 'machine', 'both') }
@@ -98,8 +98,7 @@ Register-ArgumentCompleter -Native -CommandName @('regilattice', 'rl', 'RegiLatt
             $hasSubCmd = $tokens | Where-Object { $_ -in $_rl_subcommands }
             if (-not $hasSubCmd) {
                 $all = @($_rl_subcommands) + @($_rl_flags)
-            }
-            else {
+            } else {
                 $all = $_rl_flags
             }
             return _rl_complete_from $wordToComplete $all
