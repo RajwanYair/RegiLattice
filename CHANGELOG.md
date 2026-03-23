@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.2] — 2026-05-13
+
+- **Sprint 131 (T7.3)**: Pack RSA-SHA256 signing — `PackSignatureVerifier.cs`, `PackTrustLevel` enum, `PackDef.SignatureUrl`/`TrustLevel`, `PackIndex.AuthorKeys`/`GetAuthorPublicKey()`. 13 new tests.
+- Tests: 2,020 passing
+- Version bump: `4.6.1` → `4.6.2`
+
 ## [4.6.1] — 2026-05-12
 
 - **Sprint 130 (T5.3)**: Chocolatey package (`regilattice.nuspec` + install/uninstall scripts + VERIFICATION.txt). Release workflow now packs a zip, builds `.nupkg`, and pushes to Chocolatey Community Repository. Scoop manifest updated to v4.6.0 with improved bin aliases. MSIX manifest description updated.

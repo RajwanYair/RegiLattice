@@ -769,3 +769,171 @@ public sealed class PluginTests
         Locale.LoadLocaleFile(@"C:\nonexistent\path\fake-locale.txt");
     }
 }
+
+// ── PackSignatureVerifier tests (T7.3) ──────────────────────────────────────
+
+/// <summary>Tests for RSA-SHA256 pack signature verification (Sprint 131, T7.3).</summary>
+public sealed class PackSignatureVerifierTests
+{
+    private const string SamplePackJson = """{"name":"test","version":"1.0.0","author":"A","tweaks":[]}""";
+
+    [Fact]
+    public void GenerateKeyPair_ReturnsNonEmptyPems()
+    {
+        var (pub, priv) = PackSignatureVerifier.GenerateKeyPair(2048);
+
+        Assert.False(string.IsNullOrWhiteSpace(pub));
+        Assert.False(string.IsNullOrWhiteSpace(priv));
+        Assert.Contains("PUBLIC KEY", pub);
+        Assert.Contains("PRIVATE KEY", priv);
+    }
+
+    [Fact]
+    public void Sign_And_Verify_RoundTrip_ReturnsTrue()
+    {
+        var (pub, priv) = PackSignatureVerifier.GenerateKeyPair(2048);
+        string sig = PackSignatureVerifier.Sign(SamplePackJson, priv);
+
+        Assert.True(PackSignatureVerifier.Verify(SamplePackJson, sig, pub));
+    }
+
+    [Fact]
+    public void Verify_TamperedContent_ReturnsFalse()
+    {
+        var (pub, priv) = PackSignatureVerifier.GenerateKeyPair(2048);
+        string sig = PackSignatureVerifier.Sign(SamplePackJson, priv);
+
+        Assert.False(PackSignatureVerifier.Verify(SamplePackJson + " ", sig, pub));
+    }
+
+    [Fact]
+    public void Verify_DifferentKeyPair_ReturnsFalse()
+    {
+        var (_, priv1) = PackSignatureVerifier.GenerateKeyPair(2048);
+        var (pub2, _)  = PackSignatureVerifier.GenerateKeyPair(2048);
+        string sig = PackSignatureVerifier.Sign(SamplePackJson, priv1);
+
+        Assert.False(PackSignatureVerifier.Verify(SamplePackJson, sig, pub2));
+    }
+
+    [Fact]
+    public void Verify_EmptySignature_ReturnsFalse()
+    {
+        var (pub, _) = PackSignatureVerifier.GenerateKeyPair(2048);
+        Assert.False(PackSignatureVerifier.Verify(SamplePackJson, "", pub));
+    }
+
+    [Fact]
+    public void Verify_InvalidBase64Signature_ReturnsFalse()
+    {
+        var (pub, _) = PackSignatureVerifier.GenerateKeyPair(2048);
+        Assert.False(PackSignatureVerifier.Verify(SamplePackJson, "!!!notbase64!!!", pub));
+    }
+
+    [Fact]
+    public void DetermineTrustLevel_WithValidSignature_ReturnsSigned()
+    {
+        var (pub, priv) = PackSignatureVerifier.GenerateKeyPair(2048);
+        string sig = PackSignatureVerifier.Sign(SamplePackJson, priv);
+        string hash = PackLoader.ComputeSha256(SamplePackJson);
+
+        var pack = new PackDef
+        {
+            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Sha256 = hash,
+            SignatureUrl = "https://example.com/test.rlpack.sig",
+        };
+
+        var level = PackSignatureVerifier.DetermineTrustLevel(SamplePackJson, pack, sig, pub);
+
+        Assert.Equal(PackTrustLevel.Signed, level);
+    }
+
+    [Fact]
+    public void DetermineTrustLevel_HashOnlyNoSig_ReturnsHashVerified()
+    {
+        string hash = PackLoader.ComputeSha256(SamplePackJson);
+        var pack = new PackDef
+        {
+            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Sha256 = hash,
+        };
+
+        var level = PackSignatureVerifier.DetermineTrustLevel(SamplePackJson, pack, null, null);
+
+        Assert.Equal(PackTrustLevel.HashVerified, level);
+    }
+
+    [Fact]
+    public void DetermineTrustLevel_WrongHash_ReturnsNone()
+    {
+        var pack = new PackDef
+        {
+            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+            Sha256 = "0000000000000000000000000000000000000000000000000000000000000000",
+        };
+
+        var level = PackSignatureVerifier.DetermineTrustLevel(SamplePackJson, pack, null, null);
+
+        Assert.Equal(PackTrustLevel.None, level);
+    }
+
+    [Fact]
+    public void DetermineTrustLevel_NoHashNoSig_ReturnsNone()
+    {
+        var pack = new PackDef
+        {
+            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+        };
+
+        var level = PackSignatureVerifier.DetermineTrustLevel(SamplePackJson, pack, null, null);
+
+        Assert.Equal(PackTrustLevel.None, level);
+    }
+
+    [Fact]
+    public void PackIndex_GetAuthorPublicKey_ReturnsMatchingKey()
+    {
+        var (pub, _) = PackSignatureVerifier.GenerateKeyPair(2048);
+        var index = new PackIndex
+        {
+            Version = 1,
+            Packs = [],
+            AuthorKeys = [new AuthorKey { Author = "TestAuthor", PublicKeyPem = pub }],
+        };
+
+        string? found = index.GetAuthorPublicKey("TestAuthor");
+        string? notFound = index.GetAuthorPublicKey("OtherAuthor");
+
+        Assert.Equal(pub, found);
+        Assert.Null(notFound);
+    }
+
+    [Fact]
+    public void PackIndex_GetAuthorPublicKey_CaseInsensitive()
+    {
+        var (pub, _) = PackSignatureVerifier.GenerateKeyPair(2048);
+        var index = new PackIndex
+        {
+            Version = 1,
+            Packs = [],
+            AuthorKeys = [new AuthorKey { Author = "TestAuthor", PublicKeyPem = pub }],
+        };
+
+        Assert.Equal(pub, index.GetAuthorPublicKey("testauthor"));
+        Assert.Equal(pub, index.GetAuthorPublicKey("TESTAUTHOR"));
+    }
+
+    [Fact]
+    public void PackDef_SignatureUrl_DefaultsToEmpty()
+    {
+        var pack = new PackDef
+        {
+            Name = "test", DisplayName = "Test", Version = "1.0.0", Author = "A",
+        };
+
+        Assert.Equal("", pack.SignatureUrl);
+        Assert.Equal(PackTrustLevel.None, pack.TrustLevel);
+    }
+}
+
