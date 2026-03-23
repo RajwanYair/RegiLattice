@@ -1,584 +1,270 @@
 # RegiLattice — Roadmap
 
-> Living document — updated after every sprint.
-> Last updated: 2026-07-22 · v4.2.0 · 3 868 tweaks · 107 categories · 1 647 tests
+> Single source of truth — `Roadmap-v5.md` is archived and redirects here.
+> Last updated: 2026-03-23 · v4.5.0 · 4 108 tweaks · 121 categories · ~2 540 tests
+> ✅ **M2 complete** (Q2 / v4.5.0). Q3 starts with Sprint 122.
 
 ---
 
-## Current State (as of v4.1.0)
+## Current State
 
 | Metric | Value |
 |--------|-------|
+| Version | **4.5.0** |
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | 3 868 verified across 107 categories |
-| Tests | 1 647 (1 230 Core + 175 CLI + 242 GUI), all passing |
-| GUI | WinForms with 11 themes, system theme auto-detection, tray icon, progress bar, live CPU/RAM status bar, 59 dialog forms |
+| Tweaks | **4 108** across **121 categories** (126 module files) |
+| Tests | **~2 540** passing (2 007 Core + 291 CLI + 242 GUI), 0 failures |
+| Branch Coverage | **75.14%** — M2 gate ✅ |
+| GUI | WinForms · 11 themes · 62+ dialogs · live CPU/RAM · tray icon |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
-| Services | 27 Core services (AutoUpdater, HealthScoreService, ConflictDetector, ComplianceService, ScheduledTweak, UpdateCheck, GroupPolicyExporter, etc.) |
-| NuGet | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2 |
-| CI/CD | GitHub Actions: build + test + coverage + release + CodeQL |
-| Platform | Windows 10/11 (x64) |
+| Services | 32 Core services |
+| Locales | 6 (en, de, fr, es, ja, he) — 200+ GUI string keys |
+| CLI | 30+ commands · PowerShell module (`RegiLattice.psd1`) |
+| Enterprise | ADMX/ADML export · Intune OMA-URI export |
+| Distribution | GitHub Releases · Scoop (auto-SHA) · WinGet · MSI (WiX) |
+| CI/CD | GitHub Actions: build + test + coverage + CodeQL + release + SHA256SUMS |
+| Benchmarks | BenchmarkDotNet suite established (Sprint 121) |
 | Repo | [github.com/RajwanYair/RegiLattice](https://github.com/RajwanYair/RegiLattice) |
 
 ---
 
-## Long-Term Vision
+## Vision
 
-Make RegiLattice the **reference Windows registry tweak toolkit**:
+Make RegiLattice the **reference Windows registry tweak toolkit** — production-grade, enterprise-ready, and accessible:
 
-- Production-grade packaging distributed via winget, scoop, and GitHub Releases
-- Modern WinForms GUI that rivals dedicated system administration tools
-- Full corporate-environment safety and detection
-- Extensible plugin system with sandboxing
-- World-class CI/CD pipeline with automated testing and coverage
-- Comprehensive documentation and developer experience
-
----
-
-## Completed Sprints
-
-### v1.x — Python Foundation (archived)
-
-- Built initial Python prototype with tkinter GUI
-- ~1 490 tweaks across 69 categories
-- 5 application profiles, Corporate Guard, Plugin marketplace concept
-
-### v2.0.0 — C# Migration
-
-Full C# rewrite: Core library, 68 tweak modules, WinForms GUI (4 themes),
-CLI (25+ commands), 203 xUnit tests, all services ported.
-
-### v3.0.0 — Quality Audit
-
-Removed 468 non-functional stubs, added TweakKind + CategoryIcons, TweakEngine
-no-op guard, 0 errors/0 warnings Release build.
-
-### Sprints 1 – 47b (v3.1.0 → v3.7.0)
-
-| Sprint(s) | Key Deliverables |
-|-----------|-----------------|
-| 1 | GitHub Actions CI, coverlet, 648 Core tests, snapshot tests |
-| 2 | Async GUI, progress bar, tray icon, system theme, DPI-aware |
-| 3 | FrozenDictionary, cache Categories/ScopeCounts, parallel StatusMap |
-| 4 | Self-contained publish, winget manifest, WiX MSI, Scoop bucket |
-| 5 | JSON Plugin/Pack system with marketplace, German locale |
-| 6 | Documentation overhaul, CHANGELOG, Scoop manifest |
-| 7 | RegisterBuiltins perf profiling, 15 new tweaks (Recall, Debloat, Proxy) |
-| 8 | Untrack archive/, ValidateTweaks, ResolveDependencies, Dependents, CLI --depends-on/--no-color |
-| 9 | `update <id>` CLI, Analytics integration, Filter/Update/Dependency tests |
-| 10 | Snapshot tests, ExportJson, RegistrySession read ops, HardwareInfo & CorporateGuard tests |
-| 11 | GUI log panel default-visible, all instruction files updated, 94.9% line coverage |
-| 12 | Extract SnapshotManager, TweakValidator, DependencyResolver, CliArgs, ConsoleColorizer, PackageNameValidator |
-| 13 | SnapshotManagerTests, TweakValidatorTests, DependencyResolverTests (+76 tests) |
-| 14 | TweakEngineBuiltinsTests (shared fixture), +173 tests (972 total) |
-| 15 | GUI test optimisation, 50 new tweaks (PowerManagement, CommandLine, Developer, Hardening, NetworkOpt) |
-| 16 | Security audit (removed Telnet/TFTP/EFS tweaks), TweakValidator duplicate-registry detection |
-| 17 | ConfigExporter, Favorites, TweakHistory services; 7 CLI commands; 50 tweaks; 40 tests |
-| 18 | 7 new themes (11 total), AppIcons gradient overhaul, 50 tweaks (DNS, Enc, FW, Hardening, Recovery) |
-| 19 | SystemMonitor (CPU/RAM/uptime P/Invoke), live status bar, 50 tweaks, 7 monitor tests |
-| 20–22 | MSBuild centralisation, Locale hot cache, debounce timer, CI hardening, SHA256, 2 610 tweaks |
-| 23 | TweakEngineCoverageTests (+62 tests), CorporateGuard Lazy refactor |
-| 24 | Search highlighting, WhatsNew, WindowAppearance.cs (51 tweaks), PreferencesDialog |
-| 25 | SystemOptimization.cs (39 tweaks), DesktopCustomization.cs (36 tweaks), 92 categories |
-| 26 | WhatsNewDialog auto-show, detail panel fix, hang fix, 1 645 tests |
-| 27 | NetworkManager service, NetworkToolsDialog (DNS quick-switch, TCP/IP repair) |
-| 28 | StartupManager service + dialog |
-| 29 | ServiceManager service + dialog (ServiceController NuGet) |
-| 29–30 | BaseDialog consolidation, all 3 tool dialogs migrated |
-| 30 | 8 new tool dialogs (ContextMenu, HostsFile, TempCleaner, InstalledApps, etc.), AppConfig enriched |
-| 31 | PowerScheduler, SleepTimer, BatterySaver, UsbPower dialogs |
-| 32 | AdRemovalWizard, TelemetryDashboard, AppPermissions, DnsOverHttps dialogs |
-| 33 | NetworkRepair, DnsSwitcher, NetworkAdapter, WiFiProfile dialogs |
-| 34 | FirewallRules, ProxyConfig, ShellExtension, BootTimeAnalyzer dialogs |
-| 35 | WindowsUpdateControl dialog |
-| 36 | NotificationManager, BrowserCacheCleaner, DriverUpdateChecker dialogs |
-| 37 | WakeOnLan + BrightnessScheduler dialogs |
-| 38 | French + Spanish locales (4 built-in) |
-| 39 | Plugin URL install, conflict detector, marketplace tag filter |
-| 40 | Before/After registry preview, Undo Last button |
-| 41 | DiskSpace, PortScanner, BatteryHealth dialogs; 31 new tweaks |
-| 42 | HardwareTemperature, NetworkBandwidth, MacAddress dialogs; 29 new tweaks |
-| 43 | Version fix, ObjectDisposedException fix, Package Manager menu split, Hebrew locale, 50 tweaks |
-| 44 | CRLF normalisation, Japanese locale (6 total), 50 new tweaks |
-| 45 | 50 new tweaks (Audio, Gaming, Security, WindowsUpdate, RemoteDesktop), UpdateChecker + ComplianceService |
-| 46 | v3.6.0 release — MSI, About icons, README badges, SECURITY.md |
-| 47 | 50 new tweaks (Communication, Accessibility, Multimedia, Clipboard, VsCode), 5 dialog enhancements |
-| 47b | v3.7.0 release — MSI pipeline fix, service API enhancements (+19 tests) |
-| 48–56 | Bluetooth/Printing/TouchPen/Speech/Storage/Audio/Package/Maint/Scoop tweaks, 5 modules per sprint |
-| 57 | ImpactScore + SafetyRating metadata on TweakDef; Impact/Safety badges in GUI and CLI |
-| 58 | NLP synonym search — 60+ entry synonym map, multi-token AND logic with expansion |
-| 59 | Portable mode — `--portable` flag + `AppConfig.SetPortable()`; auto-detect via sentinel file |
-| 60 | Silent/unattended CLI mode — `--silent`, `--log-file`, exit-code-based scripting support |
-| 61 | AutoUpdater service — GitHub Releases v3 API poller, `IsNewer()`, `UpdateInfo` record |
-| 62 | HealthScoreService — Privacy/Performance/Security/Stability scores (0–100) from `StatusMap()` |
-| 63 | 50 new tweaks: XboxGameBar.cs + WindowsHello.cs + SmartAppControl.cs + EnergySaver.cs + CopilotPlus.cs |
-| 64 | FirstRunWizardDialog — 3-step onboarding wizard (profile + dry-run + feature tour) |
-| 65 | ProfileWizardDialog — 5-question personalized profile generator |
-| 66 | ConflictDetector service — static conflict pair table, Detect() + ConflictsFor() API |
-| 67 | Sprint 57–66 tests (1538 total): HealthScoreServiceTests, AppConfigPortableTests, ConflictDetectorTests, NewTweakModulesTests, AutoUpdaterTests, TweakDefMetadataTests, TweakEngineSearchNlpTests |
+- **Deepest coverage**: 4 108+ tweaks vs. ~400 for nearest competitor
+- **Zero-lag GUI**: Virtual scrolling handles 5 000+ tweaks with ~30 live controls
+- **Trusted distribution**: Code-signed, auto-updating via GitHub / Scoop / WinGet / Chocolatey / MSIX
+- **Enterprise-ready**: Compliance automation, ADMX/GPO/Intune export, fleet deployment templates
+- **Accessible & global**: WCAG 2.1 AA, 10+ locales, screen-reader navigable
 
 ---
 
-## Competitive Analysis Summary
+## Development History
 
-> Research from 2026-03-16 covering 13 top Win11 tweak tools.
-
-| Tool | Type | Focus | Stars/Reach |
-|------|------|-------|-------------|
-| Winaero Tweaker | All-in-one | Hundreds of registry/UI tweaks | Millions of users |
-| ExplorerPatcher | Shell patcher | Win10 taskbar/Start on Win11 | 31.9k★ |
-| TranslucentTB | Taskbar transparency | Taskbar visual effects | 19.1k★ |
-| Mem Reduct | Memory cleaner | Cache clearing | 8.9k★ |
-| Open-Shell | Start menu | Classic Start menu | 8.7k★ |
-| OFGB | Ad remover | Win11 ads only | 7.5k★ |
-| StartAllBack | Start + taskbar | Win7/10 UI on Win11 | Paid |
-| NetAdapter Repair | Network fixer | TCP/IP/Winsock reset | Free |
-| MS PC Manager | System optimizer | Cleanup + boost | Free (MS) |
-
-### RegiLattice Unique Strengths
-
-- Most tweaks: 2 995 across 92 categories + declarative TweakDef model
-- 5 profile system, plugin marketplace, Corporate Guard
-- Dependency resolution, snapshot/restore, DryRun preview
-- CLI + GUI, 11 themes, live system monitoring
-- Validation engine + full test suite (1 879 tests, 95% line coverage)
+| Era | Version | Highlights |
+|-----|---------|------------|
+| Python prototype | v1.x | ~1 490 tweaks · tkinter GUI · 5 profiles · plugin concept |
+| C# migration | v2.0.0 | 68 modules · WinForms GUI (4 themes) · CLI (25+ cmds) · 203 tests |
+| Quality & features | v3.0–v3.7 | TweakKind · CI/CD · 11 themes · 85 dialogs · 3 868 tweaks · 1 647 tests |
+| Services & intelligence | v3.8–v4.2 | ImpactScore · NLP search · HealthScore · ConflictDetector · AutoUpdater · ProfileWizard |
+| Compliance & power tools | v4.3.0 | ComplianceHistory · PowerShell module · ToastNotifications · SmartScan · 1 858 tests |
+| Security tweaks | v4.4.0 ✅ M1 | WDAC/ASR · BitLocker To Go · LAPS · NTLM · DeviceInstall — **4 108 tweaks** · 121 categories |
+| Enterprise & trust | v4.5.0 ✅ M2 | ADMX/ADML + Intune export · auto-updater install · 200+ locale keys · 75.14% branch coverage · BenchmarkDotNet |
 
 ---
 
-## Future Roadmap — 100 Enhancement Items (10 Phases)
+## Strategic Themes (T1 – T8)
 
-### Phase 1 — UX & Config Management ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 1 | Import/export tweak selections as JSON config file | ✅ Sprint 17 |
-| 2 | Tweak favorites/bookmarks | ✅ Sprint 17 |
-| 3 | Tweak history panel with undo | ✅ Sprint 17 |
-| 4 | Search result highlighting | ✅ Sprint 24 |
-| 5 | Recently applied tweaks section | ✅ Sprint 24 |
-| 6 | Tweak comparison view | 🔄 Future |
-| 7 | Bulk select by tag | 🔄 Future |
-| 8 | Keyboard shortcuts | 🔄 Future |
-| 9 | "What's New" dialog on version upgrade | ✅ Sprint 26 |
-| 10 | Tweak tooltip with full description | 🔄 Future |
-
-### Phase 2 — System Monitoring & Diagnostics ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 11 | Real-time memory stats in status bar | ✅ Sprint 19 |
-| 12 | Memory cache cleaner | ✅ Sprint 41 |
-| 13 | Auto memory cleaning on threshold | ✅ Sprint 42 |
-| 14 | System tray memory usage indicator | ✅ Sprint 42 |
-| 15 | CPU usage monitor in status bar | ✅ Sprint 19 |
-| 16 | Disk usage overview panel | ✅ Sprint 41 |
-| 17 | Network connectivity status indicator | ✅ Sprint 42 |
-| 18 | Battery health monitor | ✅ Sprint 41 |
-| 19 | System uptime in About dialog | ✅ Sprint 19 |
-| 20 | Hardware temperature monitoring | ✅ Sprint 42 |
-
-### Phase 3 — Visual Appearance Tweaks ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 21–30 | Title bar, scrollbar, fonts, icons, borders, animations, accent colours | ✅ Sprint 24 |
-
-### Phase 4 — Network & Connectivity Tools ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 31 | One-click network repair wizard | ✅ Sprint 33 |
-| 32 | DNS server quick-switch | ✅ Sprint 33 |
-| 33 | Network adapter diagnostics | ✅ Sprint 33 |
-| 34 | Wi-Fi profile management | ✅ Sprint 33 |
-| 35 | Proxy configuration wizard | ✅ Sprint 34 |
-| 36 | Firewall rule manager | ✅ Sprint 34 |
-| 37 | Port scanner / connectivity tester | ✅ Sprint 41 |
-| 38 | Network bandwidth monitor | ✅ Sprint 42 |
-| 39 | VPN quick-connect from tray | 🔄 Future |
-| 40 | MAC address randomization | ✅ Sprint 42 |
-
-### Phase 5 — Startup & Service Management ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 41 | Startup manager | ✅ Sprint 28 |
-| 42 | Service manager | ✅ Sprint 29 |
-| 43 | Scheduled task manager | ✅ Sprint 28 |
-| 44 | Boot time analyzer | ✅ Sprint 34 |
-| 45 | Context menu manager | ✅ Sprint 30 |
-| 46 | Shell extension manager | ✅ Sprint 34 |
-| 47 | Installed programs quick-uninstaller | ✅ Sprint 30 |
-| 48 | Temporary file cleaner | ✅ Sprint 30 |
-| 49 | Windows Update pause/resume | ✅ Sprint 35 |
-| 50 | Driver update checker | ✅ Sprint 36 |
-
-### Phase 6 — Power & Energy Management ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 51 | Power plan quick-switch from tray | ✅ Sprint 29–30 |
-| 52 | Timer-based power plan switching | ✅ Sprint 31 |
-| 53 | Custom power plan creator | ✅ Sprint 31 |
-| 54 | Battery saver automation | ✅ Sprint 31 |
-| 55 | Sleep/hibernate timer | ✅ Sprint 31 |
-| 56 | Monitor power-off timer | ✅ Sprint 31 |
-| 57 | USB selective suspend | ✅ Sprint 31 |
-| 58 | Wake-on-LAN configuration | ✅ Sprint 37 |
-| 59 | Power consumption estimator | 🔄 Future |
-| 60 | Screen brightness scheduler | ✅ Sprint 37 |
-
-### Phase 7 — Privacy & Ad Removal ✅
-
-| # | Item | Status |
-|---|------|--------|
-| 61 | Desktop ad removal wizard | ✅ Sprint 32 |
-| 62 | Notification manager | ✅ Sprint 36 |
-| 63 | Browser cache & cookie cleaner | ✅ Sprint 36 |
-| 64 | Telemetry dashboard | ✅ Sprint 32 |
-| 65 | Privacy score | ✅ Sprint 29 |
-| 66 | Hosts file manager | ✅ Sprint 30 |
-| 67 | Browser privacy overview | ✅ Sprint 36 |
-| 68 | DNS-over-HTTPS quick setup | ✅ Sprint 32 |
-| 69 | Location services control | ✅ Sprint 32 |
-| 70 | App permission manager | ✅ Sprint 32 |
-
-### Phase 8 — Plugin & Extensibility Improvements
-
-| # | Item | Status |
-|---|------|--------|
-| 71 | Plugin sandboxing | 🔄 Future |
-| 72 | Plugin auto-update | ✅ Sprint 36 |
-| 73 | Plugin rating and review | 🔄 Future |
-| 74 | Plugin dependency resolution | 🔄 Future |
-| 75 | Plugin template generator | 🔄 Future |
-| 76 | Community plugin submission workflow | 🔄 Future |
-| 77 | Plugin categories/tags in marketplace | ✅ Sprint 39 |
-| 78 | Plugin install from URL | ✅ Sprint 39 |
-| 79 | Plugin changelog viewer | 🔄 Future |
-| 80 | Plugin conflict detector | ✅ Sprint 39 |
-
-### Phase 9 — Advanced Features & Automation
-
-| # | Item | Status |
-|---|------|--------|
-| 81 | Scheduled tweak application | 🔄 Future |
-| 82 | Before/after preview | ✅ Sprint 40 |
-| 83 | Tweak rollback queue | ✅ Sprint 40 |
-| 84 | Profile scheduler | 🔄 Future |
-| 85 | REST API | 🔄 Future |
-| 86 | Web dashboard | 🔄 Future |
-| 87 | PowerShell module wrapper | 🔄 Future |
-| 88 | Group Policy export (.admx/.adml) | 🔄 Future |
-| 89 | Intune/SCCM integration | 🔄 Future |
-| 90 | Compliance reporting (drift detection) | 🔄 Future |
-
-### Phase 10 — Localization, Packaging & Community
-
-| # | Item | Status |
-|---|------|--------|
-| 91 | French locale | ✅ Sprint 38 |
-| 92 | Spanish locale | ✅ Sprint 38 |
-| 93 | Japanese locale | ✅ Sprint 44 |
-| 94 | Chocolatey package | 🔄 Future |
-| 95 | Microsoft Store listing | 🔄 Future |
-| 96 | Code signing | 🔄 Future |
-| 97 | Auto-update mechanism | 🔄 Future |
-| 98 | Portable mode | 🔄 Future |
-| 99 | Community tweak submission form | 🔄 Future |
-| 100 | Documentation site (mkdocs/docfx) | 🔄 Future |
+> Status legend: ✅ Done · 🔄 In progress · ⬜ Planned
 
 ---
 
-## Prioritized Backlog
+### T1 — GUI Performance & UX Modernization *(P0 — Q3–Q4)*
 
-### P0 — Critical ✅
+`MainForm` instantiates a WinForms `Control` per tweak (~4 108 live objects). Virtual scrolling reduces this to ~30 visible rows at any time — the single highest-impact change remaining.
 
-- [x] GitHub Actions CI workflow (.NET build + test)
-- [x] Self-contained single-file publish
-- [x] Async GUI operations (no UI thread blocking)
-
-### P1 — High Value ✅
-
-- [x] Coverage reporting with coverlet
-- [x] CLI test coverage, DPI-aware GUI scaling
-- [x] Parallel `StatusMap()` optimization + FrozenDictionary
-- [x] winget manifest, GitHub Releases automation
-
-### P2 — Medium Value
-
-- [x] Snapshot round-trip tests
-- [x] System theme auto-detection, export to .REG
-- [x] Plugin system (JSON Tweak Packs with marketplace)
-- [x] User-defined tweaks via JSON, Scoop bucket
-- [ ] Lazy module loading, Code signing
-
-### P3 — Nice to Have
-
-- [x] Tray icon, German/French/Spanish/Japanese locales
-- [ ] Scheduled tweak application, REST API, Web dashboard, Chocolatey
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T1.1 | **Virtual ListView** — replace `FlowLayoutPanel` with `VirtualMode` `ListView`; owner-draw rows with toggle, label, scope/kind badges | ⬜ | 122–123 |
+| T1.2 | **Tweak detail side panel** — full description, registry paths, tags, impact score, dependency chain, last-applied timestamp | ⬜ | 124 |
+| T1.3 | **Keyboard shortcuts** — `Ctrl+F`, `Space` toggle, `Ctrl+Z` undo, `F5` refresh, `Ctrl+A`, `Escape` | ⬜ | 124 |
+| T1.4 | **Multi-select operations** — `Shift+Click`, `Ctrl+Click`, context menu: Apply / Remove / Export Selected | ⬜ | 124 |
+| T1.5 | **Animated toggle switch control** — custom GDI+ `ToggleSwitchControl`, theme-aware, DPI-safe | ⬜ | 131 |
+| T1.6 | **WinForms visual polish** — rounded panels, Segoe Fluent Icons, Mica-like tinted `Form.BackColor` | ⬜ | 131 |
+| T1.7 | **Tag chip filter sidebar** — clickable tag chips replacing dropdown; count badges; AND logic | ⬜ | 132 |
+| T1.8 | **Rich hover tooltips** — description, expected result, safety badge; 400 ms show / 5 s hide | ⬜ | 132 |
 
 ---
 
-## Planned Sprints (48 – 96)
+### T2 — Accessibility & Internationalization *(P0 — Q3)*
 
-> Each sprint targets ≥50 new tweaks and enhances existing dialogs by ≥2 items.
+GUI controls have no `AccessibleName`/`AccessibleDescription`. `Locale.T()` now covers 200+ keys but `.resx` migration and 4 additional locales remain.
 
-| Sprint | Theme | Target Tweaks |
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T2.1 | **Accessibility audit** — `AccessibleName` + `AccessibleDescription` on every interactive control across all 62+ dialogs; explicit `TabIndex` | ⬜ | 124 |
+| T2.2 | **Keyboard-only navigation** — full tab order, `&` accelerators on all buttons/menus, Narrator verification | ⬜ | 124 |
+| T2.3 | **Locale string extraction** — 200+ keys covering all GUI labels, dialogs, error messages across 6 languages | ✅ | Sprint 120 |
+| T2.4 | **Migrate to `.resx` ResourceManager** — replace hand-rolled `Dictionary` in `Locale.cs`; enables satellite assemblies | ⬜ | 126 |
+| T2.5 | **4 new locales** — zh-CN, ko, ar (RTL layout), pt-BR → 10 total | ⬜ | 126 |
+| T2.6 | **High-contrast theme** — uses system high-contrast colours, large fonts, thick borders | ⬜ | 126 |
+
+---
+
+### T3 — CLI Overhaul & Scripting Power *(P1 — Q3)*
+
+53 properties in `CliArgs.cs`, hand-rolled parser. Subcommands and JSON output were planned for Q1 but deferred to Q3 in favour of enterprise features.
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T3.1 | **Subcommand structure** — `regilattice tweak apply <id>`, `profile apply gaming`; old `--flags` remain as aliases | ⬜ | 127 |
+| T3.2 | **Structured JSON output** — `--output json` on all commands; documented exit codes 0/1/2/3 | ⬜ | 127 |
+| T3.3 | **Grouped `--help`** — sections: Tweak Ops / Profiles / Snapshots / Diagnostics / Advanced; per-command help | ⬜ | 127 |
+| T3.4 | **Tab completion** — `Register-ArgumentCompleter` for PowerShell; bash completion script | ⬜ | 127 |
+| T3.5 | **Interactive TUI overhaul** — arrow-key nav, search-as-you-type, ANSI (no external lib) | ⬜ | 128 |
+| T3.6 | **Batch file support** — `--batch <file>` reads `.txt`/`.json` tweak ID list; per-tweak results | ⬜ | 128 |
+
+---
+
+### T4 — Enterprise & Compliance Automation *(P1 — partially done)*
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T4.1 | **ADMX/ADML Group Policy export** — valid XML for all HKLM Registry-kind tweaks, importable in `gpedit.msc` | ✅ | 116–117 |
+| T4.2 | **Intune OMA-URI export** — CSP-mapped JSON for Intune Custom Profiles; unmappable flagged with `[NOT_MAPPABLE]` | ✅ | 118–119 |
+| T4.3 | **Scheduled compliance scans** — daily/weekly drift check, toast on violation, optional `--compliance-auto-fix` | ⬜ | 128 |
+| T4.4 | **Compliance trend dashboard** — `ComplianceTrendDialog` line chart from `ComplianceHistory`; export PNG | ⬜ | 128 |
+| T4.5 | **Baseline policy templates** — 4 built-in: CIS L1 Desktop, CIS L1 Server, DISA STIG Win11, RegiLattice Recommended | ⬜ | 129 |
+| T4.6 | **Multi-machine deployment template** — GitHub Actions workflow to provision dev machines via Scoop + profile apply | ⬜ | 129 |
+
+---
+
+### T5 — Distribution, Trust & Release Pipeline *(P1 — partially done)*
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T5.1 | **Authenticode code signing** — EV cert; sign GUI + CLI + MSI in CI; PFX in GitHub Secrets | 🔄 | 114 |
+| T5.2 | **Auto-updater: download + guided install** — download MSI → verify SHA-256 → "Install & Restart" on user click | ✅ | Sprint 115 |
+| T5.3 | **Chocolatey community package** — `.nuspec` + `chocolateyinstall.ps1`; CI auto-submit on tagged release | ⬜ | 130 |
+| T5.4 | **MSIX packaging** — alongside MSI; Windows 11 Store submission test flight | ⬜ | 130 |
+| T5.5 | **Release pipeline hardening** — SHA256SUMS.txt, smoke test CLI `--list`/`--validate`, auto-generate release notes | ✅ | Sprint 117 |
+| T5.6 | **Scoop auto-update on release** — CI computes SHA-256, auto-commits to scoop bucket | ✅ | Sprint 117 |
+
+---
+
+### T6 — Testing Excellence & Quality Gates *(P1 — mostly done)*
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T6.1 | **Branch coverage → 75%** — targeted tests for TweakEngine, RegistrySession, CorporateGuard branches | ✅ | Sprint 121 (75.14%) |
+| T6.2 | **Dedicated tests for untested services** — `SmartScanServiceTests`, `LocaleTests`, `ComplianceHistoryTests` | ✅ | Sprint 113 |
+| T6.3 | **Virtual registry integration tests** — `RegLoadKey`/`RegUnLoadKey` isolated hive; real Apply↔Remove cycle in CI | ⬜ | 134 |
+| T6.4 | **BenchmarkDotNet performance suite** — `RegisterBuiltins`, `Search`, `StatusMap`, `Filter` baselines; CI regression gate | ✅ | Sprint 121 |
+| T6.5 | **Property-based tests (FsCheck)** — invariants on all 4 108 tweaks: non-null ID, valid hive paths, no dup ops | ✅ | Sprint 121 |
+| T6.6 | **Mutation testing (Stryker.NET)** — 60%+ mutation kill score on Core library | ⬜ | 135 |
+| T6.7 | **`AppConfig.Validate()`** — `MaxWorkers` ∈ [1,128], `Theme`/`Locale` ∈ known sets; tests for all edge cases | ✅ | Sprint 113 |
+
+---
+
+### T7 — Plugin Ecosystem & Community *(P2 — Q3–Q4)*
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T7.1 | **Curated online marketplace** — `RajwanYair/RegiLattice-Packs` CDN; 5 starter packs (Privacy, Gaming, Corporate, Minimal, Developer) | ⬜ | 125 |
+| T7.2 | **Pack Creator Studio dialog** — wizard: name → select tweaks → metadata → preview/validate → export `.rlpack` | ⬜ | 125 |
+| T7.3 | **Pack GPG signing** — optional `.rlpack.sig`; "Verified" badge in `MarketplaceDialog` for signed packs | ⬜ | 131 |
+| T7.4 | **Plugin sandboxing** — third-party `ApplyAction` delegates in isolated process via named pipes; 30 s timeout | ⬜ | 132–133 |
+| T7.5 | **Community submission workflow** — GitHub Issue template; CI schema validation; auto-merge on approval | ⬜ | 125 |
+| T7.6 | **Pack dependency resolution** — `PackManager` resolves `DependsOn` pack chain before install | ⬜ | 125 |
+
+---
+
+### T8 — Tweak Expansion & Intelligence *(P2 — ongoing)*
+
+| ID | Task | Status | Sprint |
+|----|------|--------|--------|
+| T8.1 | **5 new tweak modules** — WdacCodeIntegrity, BitLockerRemovable, DeviceInstallPolicies, LapsSecurity, NtlmAuthentication (50 tweaks) | ✅ | Sprint 106 (v4.4.0) |
+| T8.2 | **Sprint tweak additions** — +50 tweaks per sprint; 4 108 → 5 000+ by Sprint ~137 | 🔄 | Ongoing |
+| T8.3 | **Score-change preview on hover** — predicted score delta (Privacy/Perf/Sec) shown in tooltip before applying | ⬜ | 137 |
+| T8.4 | **AI-enhanced tweak descriptions** — one-time LLM pass for all 4 108 tweaks; commit improved strings | ⬜ | 136 |
+| T8.5 | **Custom user-defined profiles** — "Save Current as Profile"; `regilattice profile create <name>` CLI | ⬜ | 127 |
+
+---
+
+## Sprint Plan
+
+### Q1 — Foundation (Sprints 106–113) ✅ → v4.4.0
+
+| Sprint | Key Deliverables |
+|--------|-----------------|
+| 106 | 50 security tweaks: WDAC/ASR, BitLocker To Go, Device Install, LAPS, NTLM (T8.1) |
+| 107–108 | Accessibility audit pass, `AppConfig.Validate()`, keyboard navigation verification |
+| 109–110 | CLI restructure, detail side panel |
+| 111–112 | Branch coverage push → 65%+, keyboard shortcuts, multi-select |
+| 113 | `SmartScanServiceTests` + `LocaleTests` + new tweak modules → **4 108 tweaks · 121 categories** |
+
+**M1 Deliverable: v4.4.0** — 4 108 tweaks · 121 categories · 1 858 tests · accessibility audit.
+
+---
+
+### Q2 — Enterprise & Trust (Sprints 114–121) ✅ → v4.5.0
+
+| Sprint | Key Deliverables |
+|--------|-----------------|
+| 114 | Code signing setup + CI integration (T5.1) |
+| 115 | Auto-updater: download + install + SHA-256 verification (T5.2) |
+| 116–117 | ADMX/ADML export full pipeline · release hardening · Scoop auto-update (T4.1, T5.5, T5.6) |
+| 118–119 | Intune OMA-URI export + CLI `--export-intune` (T4.2) |
+| 120 | Locale string extraction — 200+ keys across all 6 languages (T2.3) |
+| 121 | Branch coverage 75.14% · BenchmarkDotNet suite · FsCheck property tests (T6.1, T6.4, T6.5) |
+
+**M2 Deliverable: v4.5.0** — ADMX/Intune export · auto-updater install · 200+ locale keys · 75.14% branch coverage · benchmarks · ~2 540 tests.
+
+---
+
+### Q3 — Polish & Community (Sprints 122–129) 🔄 Starting Now → v4.6.0
+
+| Sprint | Theme | Exit Criteria |
 |--------|-------|---------------|
-| 48 | Bluetooth, Printing, TouchPen, Speech, Storage tweaks + 5 dialog enhancements | 3 046 |
-| 49 | Plugin template generator + changelog viewer, Copilot/ScoopTools/DevDrive/Java tweaks | 3 096 |
-| 50 | Scheduled tweaks service + dialog, Gaming/GPU/Boot/Win11 tweaks | 3 146 |
-| 51 | Profile scheduler, MsStore/Edge/Firefox/Chrome/Office tweaks | 3 196 |
-| 52 | GPO export dialog, compliance reporting, Firewall/Enc/Hardening tweaks | 3 246 |
-| 53 | VPN quick-connect, power estimator, Network/DNS/Proxy tweaks | 3 296 |
-| 54 | Plugin ratings + dependencies, Performance/Memory/SSD/Desktop tweaks | 3 346 |
-| 55 | Portable mode, auto-update, Privacy/Cortana/Widgets/Copilot tweaks | 3 396 |
-| 56 | PowerShell module, Korean locale, PowerShell/CommandLine/Developer tweaks | 3 446 |
-| 57 | Chinese (zh-CN) locale, community pipeline, Taskbar/LockScreen/NightLight tweaks | 3 496 |
-| 58 | Compliance history dialog, UserAccount/Backup/FileSystem/DiskCleanup tweaks | 3 546 |
-| 59 | System resource dashboard, event log viewer, Explorer/Shell/CloudStorage tweaks | 3 596 |
-| 60 | Profile manager dialog, Power/PowerManagement/Virtualization/WSL tweaks | 3 646 |
-| 61 | CLI enhancement pack + 50 tweaks | 3 696 |
-| 62 | Hardware analytics dashboard + 50 tweaks | 3 746 |
-| 63 | **v3.7.0 Release** — full changelog + 50 tweaks | 3 796 |
-| 64–74 | Interactive console, security packs, bulk tag, tooltips, network security, registry explorer, disk health, printer manager, gaming tools, advanced search, **v3.8.0** | 4 096–4 396 |
-| 75 | **v3.8.0 Release** ✅ | 3 669 |
-| 76–95 | Task scheduler, credential manager, font manager, plugin sandboxing, Polish/Italian/Korean/Arabic/Dutch locales, remote management, developer tools, touch/accessibility, USB manager, pack creator studio, Store manager, benchmarks | 4 000–4 800 |
-| 96 | **v4.0.0 Major Release** | 5 000+ |
+| **122** | T1.1 — Virtual ListView (part 1: rendering, category headers, scroll, DPI) | < 30 live Controls for 4 108 tweaks; smooth 60 fps scroll |
+| **123** | T1.1 — Virtual ListView (part 2: toggle, apply/remove, status, search integration) | Full functional parity with old `FlowLayoutPanel`; all GUI tests pass |
+| **124** | T2.1+T2.2 — Accessibility audit (MainForm + top 20 dialogs) + keyboard nav | Narrator reads tweak labels; every feature reachable keyboard-only |
+| **125** | T7.1+T7.2+T7.5+T7.6 — Online marketplace (5 packs) + Pack Creator Studio + submission | `MarketplaceDialog` lists packs from GitHub CDN; install/uninstall works |
+| **126** | T2.4+T2.5+T2.6 — `.resx` migration + 4 new locales (zh-CN, ko, ar, pt-BR) + high-contrast | 10 locales total; Arabic RTL renders correctly |
+| **127** | T3.1+T3.3+T3.4+T8.5 — CLI subcommands + grouped help + tab completion + custom profiles | `regilattice tweak apply <id>` works; PowerShell tab completion for IDs |
+| **128** | T4.3+T4.4+T3.5+T3.6 — Scheduled compliance + trend dashboard + TUI + batch file | Daily compliance toast on drift; trend chart in GUI |
+| **129** | T4.5+T4.6+T8.2 — Compliance baselines + deployment template + ~50 tweaks | ~4 208 tweaks; CIS/STIG baselines ship |
+
+**M3 Deliverable: v4.6.0** — Virtual scrolling · online marketplace · 10 locales · compliance automation · ~4 208 tweaks.
 
 ---
 
-## ★ Next Phase Master Plan — "World-Class Windows 11 Configurator"
+### Q4 — Scale & Harden (Sprints 130–137) ⬜ Planned → v5.0.0
 
-> Strategic plan for v3.9.0 → v4.0.0 → v4.x.
-> Objective: Outcompete every Windows tweak tool across trust, UX, intelligence, automation, and community.
-> Created: 2026-07-21 · Baseline: v3.8.0 · 3 669 tweaks · 94 categories
-> Status legend: ⬜ Not started · 🔄 In progress · ✅ Done
+| Sprint | Theme | Exit Criteria |
+|--------|-------|---------------|
+| **130** | T5.3+T5.4 — Chocolatey package + MSIX packaging | `choco install regilattice` works; MSIX installs cleanly on Win11 |
+| **131** | T1.5+T1.6+T7.3 — Animated toggle switch + visual polish + Pack GPG signing | Toggle renders in all 11 themes; signed packs show "Verified" badge |
+| **132–133** | T7.4 — Plugin sandboxing (2 sprints) | Third-party `ApplyAction` crashes contained; 30 s timeout enforced |
+| **134** | T6.3 — Virtual registry integration tests | Apply→Detect→Remove round-trip on isolated hive passes in CI |
+| **135** | T6.6 — Stryker.NET mutation testing | 60%+ mutation kill score on Core library |
+| **136** | T8.2+T8.4 — 100 tweaks + AI-enhanced descriptions | ~4 608 tweaks |
+| **137** | T8.2+T8.3 — 100 tweaks + score-change preview on hover | ~4 808 tweaks; predicted score delta shown in tooltip |
 
----
-
-### Competitive Gap Analysis
-
-| Capability | RegiLattice | Winaero Tweaker | Chris Titus WinUtil | O&O ShutUp10++ |
-|---|---|---|---|---|
-| Tweak depth | **3 669 ✅** | ~400 | ~200 | ~200 |
-| DryRun preview | ✅ | ❌ | ❌ | ❌ |
-| Registry backup | ✅ | ✅ | ❌ | ✅ |
-| CLI interface | ✅ | ❌ | Partial | ❌ |
-| Plugin ecosystem | ✅ | ❌ | ❌ | ❌ |
-| Corporate Guard | ✅ | ❌ | ❌ | ❌ |
-| Code signing | ❌ → Phase A | ✅ | N/A | ✅ |
-| Auto-updater | Detect-only | ✅ | ✅ | ✅ |
-| Portable mode | ❌ → Phase A | ✅ | ✅ | ✅ |
-| Health/score dashboard | Basic | ❌ | ❌ | Simple |
-| Intelligent recommendations | ❌ → Phase C | ❌ | ❌ | ❌ |
-| PowerShell module | ❌ → Phase D | ❌ | ❌ | ❌ |
-| GPO/Intune export | Partial | ❌ | ❌ | ❌ |
-| WinUI 3 / Fluent UI | ❌ → Phase E | ❌ | Partial | ❌ |
-| Compliance reporting | Partial | ❌ | ❌ | ❌ |
-| Community marketplace | ✅ (local) | ❌ | GitHub | ❌ |
-| AI/NLP search | ❌ → Phase G | ❌ | ❌ | ❌ |
-
-**Key insight**: RegiLattice leads on depth, safety, and extensibility.
-The gaps to close: trust (signing), distribution (auto-update/portable), intelligence (health score/recommendations), modern UI, enterprise automation.
+**M4 Deliverable: v5.0.0** — 5 000+ tweaks · MSIX + Chocolatey + signed · plugin sandboxing · mutation tested · 2 500+ tests.
 
 ---
 
-### Phase A — Distribution & Trust (v3.9.0) — Partial ✅
+## Success Metrics
 
-> Goal: Remove every friction point between a new user and their first successful tweak.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| A1 | **Authenticode code signing** — EV certificate for GUI + CLI EXE | P0 | High |
-| A2 | **Built-in auto-updater** — query GitHub Releases API, show badge, download + relaunch | P0 | Medium |
-| A3 | **Portable mode** — `--portable` flag writes all data to `.\data\` instead of `%LOCALAPPDATA%` | P0 | Low |
-| A4 | **Silent/unattended mode** — `--silent` + `--log-file` for scripting | P1 | Low |
-| A5 | **Chocolatey package** — publish to community.chocolatey.org | P1 | Low |
-| A6 | **MSIX packaging** — clean install/uninstall via Windows Package Manager, supports Store | P1 | Medium |
-| A7 | **First-run wizard** — 3 screens: choose profile, dry-run toggle, brief feature tour | P1 | Medium |
-| A8 | **Onboarding health check** — on first launch, run `StatusMap()` and show "X tweaks recommended for your hardware" | P1 | Low |
-
-**Completed**: A2 ✅ (Sprint 61), A3 ✅ (Sprint 59), A4 ✅ (Sprint 60), A7 ✅ (Sprint 64), A8 ✅ (Sprint 64/62)
-**Remaining**: A1 (code signing), A5 (Chocolatey), A6 (MSIX)
+| Metric | v4.5.0 Now | M3 (v4.6.0) | M4 (v5.0.0) |
+|--------|-----------|-------------|------------|
+| Tweaks | **4 108** | ~4 208 | **5 000+** |
+| Tests | **~2 540** | 2 350+ | **2 500+** |
+| Branch Coverage | **75.14%** | 75%+ | **80%+** |
+| Live GUI Controls | ~4 000 (FLP) | **~30** (virtual) | ~30 |
+| Code Signed | 🔄 | ✅ | ✅ |
+| Accessibility | ⬜ | ✅ Partial | ✅ Full |
+| Locales | **6** | **10** | 10 |
+| Plugin Marketplace | Local | **Online** | Online + Signed |
+| Distribution | GitHub + Scoop + WinGet + MSI | + MSIX + Choco | ✅ All channels |
 
 ---
 
-### Phase B — UX Modernization (v3.9.x)
+## Technical Investigations
 
-> Goal: A UI that feels native to Windows 11 and fast with 3 669 tweaks.
+Items requiring proof-of-concept before sprint commitment:
 
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| B1 | **Virtual scrolling** — replace `FlowLayoutPanel` with owner-drawn `VirtualMode` `ListView`. Renders 3 669 tweaks instantly (from ~30 visible Controls instead of 3 669 live Controls) | P0 | High |
-| B2 | **Tweak detail side panel** — slide-out panel: full description, registry paths, tags, impact rating, dependency chain, last applied timestamp | P0 | Medium |
-| B3 | **Animated toggle switch control** — custom `ToggleSwitchControl` (smooth ON/OFF animation) replaces checkboxes | P1 | Medium |
-| B4 | **Card / List view toggle** — card mode: tweak name + one-line desc + impact badge + toggle; list mode: current behavior | P1 | Medium |
-| B5 | **Complete keyboard shortcut scheme** — `Ctrl+F` focus search, `Space` toggle selected, `Ctrl+Z` undo last, `F5` refresh, `Ctrl+A` select all | P1 | Low |
-| B6 | **Multi-select operations** — `Shift+Click`, `Ctrl+Click`, right-click menu: Apply Selected / Remove Selected / Add to Profile | P1 | Low |
-| B7 | **Rich tweak tooltips** — hover popup: description, expected result, registry path, safety rating | P2 | Low |
-| B8 | **Tag chip filter sidebar** — clickable tag chips replacing the current dropdown filter | P2 | Medium |
-| B9 | **Drag-to-profile** — drag tweaks from the main list onto a profile name in the sidebar | P2 | High |
-| B10 | **Bulk select by tag** — right-click a tag chip → "Select all X tweaks with this tag" | P2 | Low |
+| # | Item | Action |
+|---|------|--------|
+| 1 | **WinUI 3 migration** — native Mica/ToggleSwitch but is a full GUI rewrite. WinForms polish (T1.5–T1.6) may be sufficient. | Build single-page prototype; decide v5.1 vs v6.0. |
+| 2 | **EV code signing vendor** — DigiCert / Sectigo / GlobalSign; may need Azure Key Vault HSM rather than file-based PFX. | Confirm GitHub Secrets vs cloud HSM before Sprint 130 procurement. |
+| 3 | **Intune CSP coverage** — not all HKLM paths have OMA-URI equivalents; actual coverage may be below 60%. | Cross-reference `RegOp` paths against Microsoft CSP reference; measure before T4.2 follow-ups. |
+| 4 | **Virtual registry hive in CI** — `RegLoadKey` requires elevation; `windows-latest` runner may not support it. | Test elevated CI step; fall back to in-memory registry mock if blocked. |
+| 5 | **RTL layout (Arabic)** — WinForms needs `RightToLeftLayout = true`; some custom-drawn controls may break. | Test all 62+ dialogs with RTL before committing to T2.5 Arabic locale. |
+| 6 | **Named-pipe sandboxing latency** — per-`SetDword` overhead via pipes may be unacceptable for batch ops. | Benchmark 100 `SetDword` calls via pipe vs direct call; consider `AppDomain` if > 200 ms. |
 
-**Architecture note — B1 is the most critical performance fix:**
-Current `FlowLayoutPanel` instantiates a `Control` per tweak (3 669 live WinForms objects). Switching to `ListView` with `VirtualMode = true` + `DrawItem` overrides reduces live controls to ~30 (viewport), cutting UI thread pressure by ~99%.
 
 ---
 
-### Phase C — Intelligence Engine (v4.0.0) — Partial ✅
-
-> Goal: The only tweak tool that tells you *what* to apply and *why* — not just an endless list.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| C1 | **System Health Score Dashboard** — four weighted sub-scores: Privacy (0-100), Performance (0-100), Security (0-100), Stability (0-100) derived live from `StatusMap()`. New Dashboard tab with `CircleProgress` rings | P0 | High |
-| C2 | **Smart Scan & Quick Wins** — async on startup: detect installed apps, hardware, locale → surface the 20 highest-impact unapplied tweaks for *this specific machine*. "These 8 tweaks are safe and will boost your Privacy score by +34" | P0 | Medium |
-| C3 | **Impact & Safety metadata on TweakDef** — new fields: `int ImpactScore` (1-5, benefit magnitude) and `int SafetyRating` (1-5, risk level). GUI shows color-coded badges. CLI shows in `--list`. Add to all 3 669 tweaks | P0 | Medium |
-| C4 | **Conflict detection engine** — `ConflictDetector.cs` maintains known-conflicting tweak pairs. Warn before apply: "This conflicts with `svc-disable-winsearch` which you already applied" | P1 | Medium |
-| C5 | **Before/After score prediction** — before applying a batch, show "Predicted change: Privacy +28, Performance +12, Security +5" | P1 | Low |
-| C6 | **Dependency chain visualizer** — `DependencyGraphDialog.cs` with GDI+ node graph showing `DependsOn` relationships. Click a node to jump to that tweak | P2 | Medium |
-| C7 | **Profile comparison view** — side-by-side diff of two profiles or profile vs. current applied state | P2 | Medium |
-
-**Completed**: C1 ✅ (Sprint 62 — HealthScoreService), C2 ✅ (Sprint 99 — SmartScanService + SmartScanDialog), C3 ✅ (Sprint 57 — ImpactScore/SafetyRating), C4 ✅ (Sprint 66 — ConflictDetector), C6 ✅ (Sprint 101 — DependencyGraphDialog), C7 ✅ (Sprint 100 — ProfileCompareDialog)
-**Remaining**: C5 (score prediction)
-
----
-
-### Phase D — Enterprise & Automation (v4.0.x)
-
-> Goal: Make RegiLattice the go-to tool for IT admins deploying Windows 11 at scale.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| D1 | **PowerShell module** (`RegiLattice.psd1`) — cmdlets: `Get-Tweak`, `Get-TweakStatus`, `Apply-Tweak`, `Remove-Tweak`, `New-Profile`, `Get-HealthScore`. Pipeline-aware output objects, `Format-Table` defaults, tab completion via `ArgumentCompleter` | ✅ Sprint 103 | High |
-| D2 | **Full compliance drift detection** — extend `ComplianceService`: scheduled daily scan, Windows toast notification on drift, `ComplianceHistory` log, `--compliance-report auto` CLI flag | P0 | Medium |
-| D3 | **HTML/PDF compliance report** — printable report listing applied/unapplied tweaks per category, health score trend chart, drift since last snapshot. Export from GUI + CLI | ✅ Sprint 102 | Medium |
-| D4 | **ADMX/ADML GPO export** — for all Registry-kind tweaks: generate `.admx` + `.adml` deployable via Group Policy. Extends existing `GroupPolicyExporter.cs` | P1 | High |
-| D5 | **Intune OMA-URI export** — map applied Registry tweaks to Intune Custom Configuration Profile JSON (`./Vendor/MSFT/Policy/Config/...` OMA-URI paths where applicable) | P1 | Medium |
-| D6 | **Silent/unattended mode** — `RegiLattice.exe --silent --profile gaming --log result.json` — zero UI, JSON output log, exit code 0/1 for CI pipeline integration | P1 | Low |
-| D7 | **Local REST API** — `RegiLattice.exe --serve 8765` starts `HttpListener`: `GET /tweaks`, `POST /tweaks/{id}/apply`, `GET /health-score`, `GET /profiles` — for RPA/automation | P2 | High |
-| D8 | **GitHub Actions workflow template** — ship `.github/workflow-templates/regilattice-configure.yml` for provisioning dev machines in CI | P2 | Low |
-
-**New services/classes needed:**
-- `PowerShellModuleGenerator.cs` (`dotnet publish` post-step) — emits `.psd1` and `.psm1` wrapping the Core library
-- `IntuneExporter.cs` — translates `RegOp` HKLM paths to Intune OMA-URI; handles CSP path mapping
-- `RegiLatticeApiServer.cs` — `HttpListener`-based; routes parsed with simple string matching; serializes with `System.Text.Json`
-
----
-
-### Phase E — Platform Modernization (v4.1.0)
-
-> Goal: A UI that Windows 11 users recognize as native — Fluent Design, Mica, rounded corners.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| E1 | **WinForms deep polish** (immediate, lower risk) — custom `RoundedPanel`, `ShadowBorder`, `GlassCard` controls; smooth animations via `System.Threading.Timer`; Segoe Fluent Icons; Mica-like blur approximation | P0 | Medium |
-| E2 | **WinUI 3 migration** (strategic) — rewrite GUI project targeting WinAppSDK 1.7+. Full Mica, `ToggleSwitch`, `NavigationView`, `InfoBar`, animated. Win11-native look | P1 | Very High |
-| E3 | **Modern NavigationView** — replace current tab/panel with left-rail nav: Dashboard, Tweaks, Profiles, Tools, Marketplace, Settings | P1 | High |
-| E4 | **MSIX packaging** — `.msix` alongside MSI for Microsoft Store submission | P1 | Medium |
-| E5 | **Windows 11 Jumplist** — taskbar right-click: "Apply Gaming Profile", "Run Smart Scan", "Open Dashboard" | ✅ Sprint 104 scaffold | Low |
-| E6 | **Toast notifications** — Action Center: compliance drift, scheduled tweak done, update available | ✅ Sprint 104 | Low |
-| E7 | **Full keyboard/screen reader accessibility** — `AutomationProperties` on all custom controls; keyboard-only full navigation | P2 | Medium |
-
-**Recommended path**: WinForms polish (E1) first in v3.9.x for quick visual wins, WinUI 3 (E2–E3) as dedicated v4.1.0 effort spanning 6–8 sprints.
-
----
-
-### Phase F — Community & Ecosystem (v4.1.x)
-
-> Goal: Make RegiLattice the center of gravity for Windows tweak knowledge.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| F1 | **Curated online pack marketplace** — `RajwanYair/RegiLattice-Packs` GitHub repo as CDN. Launch categories: "Privacy First", "Gaming", "Work from Home", "Corporate Hardened", "Minimal" | P0 | Medium |
-| F2 | **Pack Creator Studio** — GUI wizard: name/desc → add tweaks (drag from main list) → set tags → preview + validate → export `.rlpack` JSON | P1 | High |
-| F3 | **Deep-link URLs** — `regilattice://apply?id=priv-disable-telemetry` protocol handler + "Copy Share Link" button | P1 | Medium |
-| F4 | **Community safety ratings** — crowd-sourced "X users apply this safely" count. Opt-in analytics aggregate stored in marketplace CDN | P2 | High |
-| F5 | **Plugin sandboxing** — run `ApplyAction` delegates from packs in separate process via named pipes, contain crashes from third-party packs | P2 | High |
-| F6 | **Pack signing** — SHA256 + optional GPG signature on marketplace packs; verification dialog before install | P2 | Medium |
-| F7 | **More locales** — Chinese (zh-CN/zh-TW), Korean, Arabic (RTL layout), Polish, Italian, Dutch, Portuguese. Migrate to `.resx` `ResourceManager` | P2 | Medium per locale |
-| F8 | **Documentation site** — `docfx` auto-generated from XML doc comments + hand-written guides, hosted on GitHub Pages (`RajwanYair.github.io/RegiLattice`) | P2 | Medium |
-
----
-
-### Phase G — AI & Natural Language (v4.2.0) — Partial ✅
-
-> Goal: Let non-technical users describe what they want in plain English.
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| G1 | **NLP search with synonym expansion** — pre-built synonym map in `SearchService` (no external AI): "fast/performance/speed" → `perf` tags, "private/tracking" → `priv` tags, "clean/bloat" → `debloat`. Replaces simple substring match | P0 | Low |
-| G2 | **Profile wizard (5 questions)** — "Are you a gamer? Does your PC run hot? How important is privacy 1-5?" → weighted scoring → generates a custom one-time `TweakProfile` | P1 | Medium |
-| G3 | **Score-change previews on hover** — hover a category header: "Applying all 14 Privacy tweaks here would raise your Privacy score by +23 pts" | P1 | Low |
-| G4 | **Optional LLM integration** — connect to local Ollama or Azure OpenAI (strictly opt-in, zero data leaves without consent): natural language → tweak list; plain-English tweak explanation | P2 | High |
-| G5 | **AI-enhanced tweak descriptions** — one-time pass: use an LLM to generate clearer `Description` + `ExpectedResult` for all 3 669 tweaks; commit improved strings as source code | P2 | Medium |
-
-**Completed**: G1 ✅ (Sprint 58 — synonym map in `TweakEngine`), G2 ✅ (Sprint 65 — `ProfileWizardDialog`)
-**Remaining**: G3 (score previews), G4 (LLM integration), G5 (AI descriptions)
-
----
-
-### Phase H — New Tweak Categories (targeting 5 000 tweaks) — Partial ✅
-
-| Module | Focus | Est. Tweaks | Status |
-|--------|-------|-------------|--------|
-| `WindowsHello.cs` | PIN, biometrics, FIDO2 pass-through registry | 10 | ✅ Sprint 63 |
-| `SmartAppControl.cs` | SAC policy, WDAC lightweight settings | 10 | ✅ Sprint 63 |
-| `XboxGameBar.cs` | Game Bar, Game DVR, overlay, screenshots | 10 | ✅ Sprint 63 |
-| `EnergySaver.cs` | Win11 24H2 Energy Saver, CPU efficiency mode | 10 | ✅ Sprint 63 |
-| `CopilotPlus.cs` | NPU policy, Recall advanced, AI-PC controls | 10 | ✅ Sprint 63 |
-| `BitLockerAdvanced.cs` | Pre-boot auth, TPM PCR policy, recovery | 12 | ⬜ Future |
-| `AppLockerWdac.cs` | AppLocker policy registry keys | 10 | ⬜ Future |
-| `HyperVAdvanced.cs` | vCPU scheduler, MMIO, vNUMA, SLAT | 10 | ⬜ Future |
-| `WindowsSandboxAdv.cs` | Sandbox networking, vGPU, clipboard isolation | 8 | ⬜ Future |
-| `PrinterAdvanced.cs` | Spooler hardening, Point-and-Print restrictions | 10 | ⬜ Future |
-| **Total new** | | **~100 tweaks → ~3 819 total** | |
-
-Plus continued sprint cycles (+50/sprint) reach **5 000 tweaks** by Sprint ~95.
-
----
-
-### Phase I — Testing Excellence (ongoing)
-
-| # | Item | Priority | Effort |
-|---|------|----------|--------|
-| I1 | **Virtual registry integration tests** — load a temporary hive with `RegLoadKey` API; run actual `Apply`/`Remove`/`Detect` on the isolated hive; no real system state touched | P1 | High |
-| I2 | **Screenshot/visual regression tests** — `WinAppDriver` or `UIAutomation` capture dialogs; diff against golden images in CI | P1 | High |
-| I3 | **BenchmarkDotNet suite** — `RegisterBuiltins()` time, `StatusMap()` throughput, `Search()` latency baselines. Regression tracked in CI artifact | P1 | Medium |
-| I4 | **Property-based tests (FsCheck)** — invariant checks on all 3 669 built-in tweaks: non-null ID, valid hive paths, no duplicate registry key+value combos | P2 | Low |
-| I5 | **Mutation testing (Stryker.NET)** — target 70%+ mutation score on Core library | P2 | Medium |
-
----
-
-### Recommended Execution Order
-
-```
-v3.9.0   Sprint 58-60  — Phase A (portable, auto-updater prep) + Phase B-B1 (virtual ListView)
-v3.9.1   Sprint 61-63  — Phase C (health score + smart scan + impact metadata)
-v3.9.2   Sprint 64-66  — Phase D-D1/D2/D3 (PowerShell module + compliance report)
-v4.0.0   Sprint 67-72  — Phase D complete + Phase E-E1 (WinForms polish + MSIX)
-v4.1.0   Sprint 73-82  — Phase E-E2 (WinUI 3 migration) + Phase F (community/marketplace)
-v4.2.0   Sprint 83-96  — Phase G (AI/NLP) + Phase H (new tweaks) + Phase I (testing)
-```
-
----
-
-### Success Metrics (v4.0.0 Definition of Done)
-
-| Metric | v3.8.0 | v4.0.0 Target |
-|--------|--------|---------------|
-| Tweaks | 3 669 | 4 500+ |
-| Tests | 1 414 | 2 000+ |
-| Code signed | ❌ | ✅ Authenticode |
-| Auto-updater | Detect-only | ✅ Download + install |
-| Portable mode | ❌ | ✅ |
-| Health score dashboard | ❌ | ✅ 4 sub-scores |
-| PowerShell module | ❌ | ✅ Full cmdlet set |
-| WinForms polish | Basic | ✅ Custom toggle controls, animations |
-| WinUI 3 | ❌ | 🔄 In progress (v4.1.0) |
-| Locales | 6 | 10+ |
-| Pack marketplace | Local-only | ✅ Online curated |
-| NLP search | Substring | ✅ Synonym-expanded |
-| Intune/GPO export | Partial | ✅ Full OMA-URI |
