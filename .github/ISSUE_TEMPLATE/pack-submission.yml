@@ -1,0 +1,134 @@
+name: "📦 Pack Submission"
+description: "Submit a community Tweak Pack for inclusion in the RegiLattice marketplace."
+title: "[Pack Submission] <pack-name> v<version> by @<github-username>"
+labels:
+  - "pack-submission"
+  - "community"
+assignees:
+  - "RajwanYair"
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Community Tweak Pack Submission
+
+        Thank you for contributing a Tweak Pack to RegiLattice!
+        Please fill in all required fields below. A maintainer will review and merge approved packs within 7 days.
+
+        **Requirements before submitting:**
+        - Pack must be hosted at a stable HTTPS URL (GitHub releases, raw GitHub, or personal CDN)
+        - Pack JSON must pass `regilattice validate-pack <url>` with 0 errors
+        - SHA-256 checksum must match the hosted file
+        - All tweaks must use declarative ApplyOps/RemoveOps/DetectOps — no code execution
+
+  - type: input
+    id: pack_name
+    attributes:
+      label: "Pack Name (slug)"
+      description: "Unique kebab-case identifier, e.g. gaming-booster-pro"
+      placeholder: "gaming-booster-pro"
+    validations:
+      required: true
+
+  - type: input
+    id: display_name
+    attributes:
+      label: "Display Name"
+      description: "Human-friendly name shown in the marketplace"
+      placeholder: "Gaming Booster Pro"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: "Version"
+      description: "Semantic version string (e.g. 1.0.0)"
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: author
+    attributes:
+      label: "Author (GitHub username)"
+      placeholder: "your-github-username"
+    validations:
+      required: true
+
+  - type: input
+    id: download_url
+    attributes:
+      label: "Download URL"
+      description: "Direct HTTPS link to the pack JSON file"
+      placeholder: "https://github.com/YourUser/my-pack/releases/download/v1.0.0/pack.json"
+    validations:
+      required: true
+
+  - type: input
+    id: sha256
+    attributes:
+      label: "SHA-256 Checksum"
+      description: "64-character hex checksum of the pack JSON file"
+      placeholder: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Pack Description"
+      description: "What does this pack do? Who is it for?"
+      placeholder: "A collection of 20 tweaks targeting competitive gaming."
+    validations:
+      required: true
+
+  - type: input
+    id: tweak_count
+    attributes:
+      label: "Number of Tweaks"
+      placeholder: "20"
+    validations:
+      required: true
+
+  - type: input
+    id: categories
+    attributes:
+      label: "Categories (comma-separated)"
+      placeholder: "Gaming, Performance, Network Optimization"
+
+  - type: input
+    id: tags
+    attributes:
+      label: "Tags (comma-separated)"
+      placeholder: "gaming, latency, gpu, fps"
+
+  - type: input
+    id: min_version
+    attributes:
+      label: "Minimum RegiLattice Version"
+      description: "The earliest version that supports this pack"
+      placeholder: "4.5.0"
+
+  - type: textarea
+    id: changelog
+    attributes:
+      label: "Changelog"
+      placeholder: "## 1.0.0\n- Initial release"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Submission Checklist"
+      options:
+        - label: "Pack JSON validates successfully with regilattice validate-pack"
+          required: true
+        - label: "SHA-256 checksum matches the hosted file"
+          required: true
+        - label: "All tweaks use declarative ops (no ApplyAction code execution)"
+          required: true
+        - label: "Download URL is stable and publicly accessible"
+          required: true
+        - label: "I have tested the pack on Windows 10 or Windows 11"
+          required: true

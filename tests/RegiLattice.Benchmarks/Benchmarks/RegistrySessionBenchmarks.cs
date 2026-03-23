@@ -21,8 +21,7 @@ public class RegistrySessionBenchmarks
     private IReadOnlyList<RegOp> _dwordOps = null!;
     private IReadOnlyList<RegOp> _checkOps = null!;
 
-    private const string WellKnownPath =
-        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+    private const string WellKnownPath = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
 
     [GlobalSetup]
     public void Setup()
@@ -37,17 +36,12 @@ public class RegistrySessionBenchmarks
             RegOp.SetDword(WellKnownPath, "BenchValue3", 1),
         ];
 
-        _checkOps =
-        [
-            RegOp.CheckDword(WellKnownPath, "HideFileExt", 0),
-            RegOp.CheckDword(WellKnownPath, "Hidden", 1),
-        ];
+        _checkOps = [RegOp.CheckDword(WellKnownPath, "HideFileExt", 0), RegOp.CheckDword(WellKnownPath, "Hidden", 1)];
     }
 
     /// <summary>DryRun SetDword — measures path-parse + log overhead with no real I/O.</summary>
     [Benchmark(Baseline = true)]
-    public void SetDword_DryRun() =>
-        _drySession.SetDword(WellKnownPath, "BenchTemp", 42);
+    public void SetDword_DryRun() => _drySession.SetDword(WellKnownPath, "BenchTemp", 42);
 
     /// <summary>Evaluate a batch of DryRun write ops — simulate an Apply operation.</summary>
     [Benchmark]

@@ -5,16 +5,16 @@ namespace RegiLattice.GUI.Controls;
 
 /// <summary>
 /// A double-buffered <see cref="Panel"/> that draws its own rounded-corner border
-/// and an optional Mica-like translucent tint background. Drop-in replacement for 
+/// and an optional Mica-like translucent tint background. Drop-in replacement for
 /// plain <see cref="Panel"/> cards in dialogs and the main form.
 /// </summary>
 public sealed class RoundedPanel : Panel
 {
-    private int    _cornerRadius = 10;
-    private Color  _borderColor  = Color.Transparent;
-    private int    _borderWidth  = 1;
-    private float  _tintAlpha    = 0f;          // 0 = solid BackColor, >0 = tinted
-    private Color  _tintColor    = Color.White;
+    private int _cornerRadius = 10;
+    private Color _borderColor = Color.Transparent;
+    private int _borderWidth = 1;
+    private float _tintAlpha = 0f; // 0 = solid BackColor, >0 = tinted
+    private Color _tintColor = Color.White;
 
     // ── Properties ─────────────────────────────────────────────────────────
     /// <summary>Corner radius in pixels (default 10).</summary>
@@ -22,7 +22,11 @@ public sealed class RoundedPanel : Panel
     public int CornerRadius
     {
         get => _cornerRadius;
-        set { _cornerRadius = value; Invalidate(); }
+        set
+        {
+            _cornerRadius = value;
+            Invalidate();
+        }
     }
 
     /// <summary>Border colour; transparent = no border (default).</summary>
@@ -30,7 +34,11 @@ public sealed class RoundedPanel : Panel
     public Color BorderColor
     {
         get => _borderColor;
-        set { _borderColor = value; Invalidate(); }
+        set
+        {
+            _borderColor = value;
+            Invalidate();
+        }
     }
 
     /// <summary>Border thickness in pixels (default 1).</summary>
@@ -38,7 +46,11 @@ public sealed class RoundedPanel : Panel
     public int BorderWidth
     {
         get => _borderWidth;
-        set { _borderWidth = value; Invalidate(); }
+        set
+        {
+            _borderWidth = value;
+            Invalidate();
+        }
     }
 
     /// <summary>
@@ -49,7 +61,11 @@ public sealed class RoundedPanel : Panel
     public float TintAlpha
     {
         get => _tintAlpha;
-        set { _tintAlpha = Math.Clamp(value, 0f, 1f); Invalidate(); }
+        set
+        {
+            _tintAlpha = Math.Clamp(value, 0f, 1f);
+            Invalidate();
+        }
     }
 
     /// <summary>Tint colour applied at <see cref="TintAlpha"/> opacity.</summary>
@@ -57,19 +73,24 @@ public sealed class RoundedPanel : Panel
     public Color TintColor
     {
         get => _tintColor;
-        set { _tintColor = value; Invalidate(); }
+        set
+        {
+            _tintColor = value;
+            Invalidate();
+        }
     }
 
     // ── Construction ───────────────────────────────────────────────────────
     public RoundedPanel()
     {
         SetStyle(
-            ControlStyles.OptimizedDoubleBuffer |
-            ControlStyles.AllPaintingInWmPaint  |
-            ControlStyles.UserPaint             |
-            ControlStyles.ResizeRedraw          |
-            ControlStyles.SupportsTransparentBackColor,
-            true);
+            ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.UserPaint
+                | ControlStyles.ResizeRedraw
+                | ControlStyles.SupportsTransparentBackColor,
+            true
+        );
     }
 
     // ── Paint ──────────────────────────────────────────────────────────────
@@ -78,11 +99,7 @@ public sealed class RoundedPanel : Panel
         Graphics g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        Rectangle r = new Rectangle(
-            _borderWidth,
-            _borderWidth,
-            Width  - _borderWidth * 2 - 1,
-            Height - _borderWidth * 2 - 1);
+        Rectangle r = new Rectangle(_borderWidth, _borderWidth, Width - _borderWidth * 2 - 1, Height - _borderWidth * 2 - 1);
 
         using var path = RoundedPath(r, _cornerRadius);
 
@@ -115,10 +132,10 @@ public sealed class RoundedPanel : Panel
     {
         int d = radius * 2;
         var path = new GraphicsPath();
-        path.AddArc(r.Left,           r.Top,            d, d, 180, 90);
-        path.AddArc(r.Right - d,      r.Top,            d, d, 270, 90);
-        path.AddArc(r.Right - d,      r.Bottom - d,     d, d,   0, 90);
-        path.AddArc(r.Left,           r.Bottom - d,     d, d,  90, 90);
+        path.AddArc(r.Left, r.Top, d, d, 180, 90);
+        path.AddArc(r.Right - d, r.Top, d, d, 270, 90);
+        path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+        path.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
         path.CloseFigure();
         return path;
     }
