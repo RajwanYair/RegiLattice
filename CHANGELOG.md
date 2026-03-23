@@ -4,6 +4,13 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.9] — 2026-05-15
+
+- **Sprint 139 (T8.3)**: 50 new tweaks across 5 new modules — `ShellRestrictionsPolicy.cs` (shellrst, 10), `BitsTransferPolicy.cs` (bitspol, 10), `OfflineFilesSyncPolicy.cs` (offsync, 10), `MsiInstallerPolicy.cs` (msipol, 10), `SmbServerPolicy.cs` (smbsrv, 10).
+- New categories: Shell Restrictions Policy, BITS Transfer Policy, Offline Files Sync Policy, MSI Installer Policy, SMB Server Policy.
+
+---
+
 ## [4.6.8] — 2026-05-15
 
 - **Sprint 138 (T8.2)**: 50 new tweaks across 5 new modules — `SmartScreenPolicy.cs` (smartscr, 10), `CredentialCachingPolicy.cs` (credcache, 10), `WindowsTimeGpoPolicy.cs` (timepol, 10), `FirewallLogPolicy.cs` (fwlog, 10), `LogonGpoPolicy.cs` (logonpol, 10).
