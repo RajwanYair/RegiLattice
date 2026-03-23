@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.3] — 2026-05-14
+
+- **Sprints 132–133 (T7.4)**: Plugin sandbox isolation — `PluginSandbox.cs` (named-pipe child-process execution, 30 s timeout), `SandboxOpDto`/`PluginSandboxRequest`/`PluginSandboxResponse` JSON protocol, `--plugin-host` CLI flag. 17 new tests.
+- Tests: 2,037 passing
+- Version bump: `4.6.2` → `4.6.3`
+
 ## [4.6.2] — 2026-05-13
 
 - **Sprint 131 (T7.3)**: Pack RSA-SHA256 signing — `PackSignatureVerifier.cs`, `PackTrustLevel` enum, `PackDef.SignatureUrl`/`TrustLevel`, `PackIndex.AuthorKeys`/`GetAuthorPublicKey()`. 13 new tests.

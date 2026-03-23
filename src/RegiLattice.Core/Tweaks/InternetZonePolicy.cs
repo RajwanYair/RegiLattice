@@ -11,16 +11,13 @@ using RegiLattice.Core.Models;
 internal static class InternetZonePolicy
 {
     // Root Internet Settings policy — applies machine-wide
-    private const string InetPol =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
+    private const string InetPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
 
     // Zone 3 = Internet (HKLM policy version overrides HKCU)
-    private const string Zone3 =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3";
+    private const string Zone3 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3";
 
     // IE SmartScreen / Phishing Filter
-    private const string PhishFilter =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\PhishingFilter";
+    private const string PhishFilter = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\PhishingFilter";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

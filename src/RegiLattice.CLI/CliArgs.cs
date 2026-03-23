@@ -131,4 +131,14 @@ internal sealed class CliArgs
 
     /// <summary>When true, lists only user-defined (custom) profiles.</summary>
     public bool ListUserProfiles { get; set; }
+
+    // ── Sprint 132 – plugin sandboxing ──────────────────────────────────
+    /// <summary>
+    /// When <c>true</c>, the process was spawned by <see cref="RegiLattice.Core.Plugins.PluginSandbox"/>
+    /// and should run in plugin-host mode: read ops from the named pipe, execute them, return result.
+    /// </summary>
+    public bool PluginHost { get; set; }
+
+    /// <summary>Named pipe name passed via <c>--plugin-host &lt;pipeName&gt;</c>.</summary>
+    public string? PluginPipeName { get; set; }
 }

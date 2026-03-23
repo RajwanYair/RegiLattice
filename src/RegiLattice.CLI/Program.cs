@@ -46,6 +46,10 @@ internal static class Program
         if (parsed is null)
             return 0; // --help or --version handled
 
+        // Plugin-host mode: spawned by PluginSandbox.ExecuteAsync — run isolated and exit.
+        if (parsed.PluginHost && parsed.PluginPipeName is not null)
+            return RegiLattice.Core.Plugins.PluginSandbox.RunHostAsync(parsed.PluginPipeName).GetAwaiter().GetResult();
+
         // Activate portable mode early so config paths resolve correctly.
         AppConfig.AutoDetectPortable();
         if (parsed.Portable)
@@ -2413,6 +2417,12 @@ internal static class Program
                     break;
                 case "--list-user-profiles":
                     p.ListUserProfiles = true;
+                    break;
+
+                case "--plugin-host":
+                    p.PluginHost = true;
+                    if (++i < args.Length)
+                        p.PluginPipeName = args[i];
                     break;
 
                 default:

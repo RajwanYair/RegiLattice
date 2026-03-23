@@ -13,11 +13,9 @@ internal static class AppVirtualization
 {
     private const string Client = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client";
     private const string Streaming = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Streaming";
-    private const string Integration =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Integration";
+    private const string Integration = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Integration";
     private const string Reporting = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Reporting";
-    private const string Virtualization =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Virtualization";
+    private const string Virtualization = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Virtualization";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

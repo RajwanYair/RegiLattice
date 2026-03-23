@@ -11,12 +11,10 @@ using RegiLattice.Core.Models;
 
 internal static class SensorPolicy
 {
-    private const string LocSensors =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
+    private const string LocSensors = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
 
     // CapabilityAccessManager ConsentStore — machine-wide capability deny
-    private const string CamBase =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
+    private const string CamBase = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

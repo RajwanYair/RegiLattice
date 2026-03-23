@@ -4,6 +4,31 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.3] — 2026-05-14
+
+### Sprints 132–133 — Plugin Sandbox Isolation (T7.4)
+
+#### Added
+
+- **`PluginSandbox.cs`** (new, `RegiLattice.Core.Plugins`): executes third-party `TweakPack` `RegOp` lists in an isolated child process via a named pipe with a configurable timeout (default 30 s).
+  - **`SandboxOpDto`** (internal): JSON DTO for a single `RegOp` — 9 typed fields (`Kind`, `Path`, `Name`, `DwordValue`, `StringValue`, `QwordValue`, `BinaryValue`, `MultiSzValue`) with `[JsonPropertyName]` camelCase serialisation.
+  - **`PluginSandboxRequest`** (internal): wire message sent to child — `{ bool DryRun, IReadOnlyList<SandboxOpDto> Ops }`.
+  - **`PluginSandboxResponse`** (internal): reply from child — `{ bool Success, string ErrorMessage }`.
+  - **`PluginSandboxResult`** (public): caller-facing result — `{ bool Success, string ErrorMessage, bool TimedOut }`.
+  - **`PluginSandbox.ToDto()`** / **`FromDto()`** (internal static): bidirectional mapping between `RegOp` and `SandboxOpDto` covering all 12 `RegOpKind` variants.
+  - **`PluginSandbox.ExecuteAsync()`** (public async): parent side — spawns child, creates a named pipe server, writes request JSON, reads response, enforces timeout. Returns `TimedOut=true` on `OperationCanceledException`; catches spawn-failure exceptions.
+  - **`PluginSandbox.RunHostAsync()`** (public async): child side — connects to parent pipe, deserialises request, executes ops via `RegistrySession`, serialises response, returns exit code 0 on success.
+- **`CliArgs.PluginHost`** and **`CliArgs.PluginPipeName`** properties: gate the child-process dispatch path.
+- **`Program.cs`** — `--plugin-host <pipeName>` flag: parsed before engine initialisation; dispatches immediately to `PluginSandbox.RunHostAsync()` and exits.
+- **17 new `PluginSandboxTests`** covering: 10 `ToDto` kind tests, `FromDto` round-trip (12 kinds), `PluginSandboxRequest`/`PluginSandboxResponse` JSON serialisation round-trips, error response serialisation, `ExecuteAsync` with non-existent executable, and `PluginSandboxResult` model defaults.
+
+#### Stats
+
+- Total tweaks: **4,158** (unchanged)
+- Tests: **2,037 passing** (+17)
+
+---
+
 ## [4.6.2] — 2026-05-13
 
 ### Sprint 131 — Pack RSA-SHA256 Signing Support (T7.3)
