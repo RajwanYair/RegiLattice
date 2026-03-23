@@ -1,8 +1,7 @@
 # RegiLattice — Roadmap
 
-> Single source of truth — `Roadmap-v5.md` is archived and redirects here.
-> Last updated: 2026-03-23 · v4.5.0 · 4 108 tweaks · 121 categories · ~2 540 tests
-> ✅ **M2 complete** (Q2 / v4.5.0). Q3 starts with Sprint 122.
+> Last updated: 2026-03-23 · v4.7.0 · 4 528 tweaks · 168 categories · 2 660 tests
+> ✅ **M4 complete** (v4.7.0, Sprints 130–139). Next: Sprint 140 (v4.7.x).
 
 ---
 
@@ -10,14 +9,14 @@
 
 | Metric | Value |
 |--------|-------|
-| Version | **4.5.0** |
+| Version | **4.7.0** |
 | Language | C# 13 / .NET 10.0-windows (x64) |
-| Tweaks | **4 108** across **121 categories** (126 module files) |
-| Tests | **~2 540** passing (2 007 Core + 291 CLI + 242 GUI), 0 failures |
-| Branch Coverage | **75.14%** — M2 gate ✅ |
+| Tweaks | **4 528** across **168 categories** (163 module files) |
+| Tests | **2 660** passing (2 052 Core + 301 CLI + 307 GUI), 0 failures |
+| Branch Coverage | **75%+** — M4 gate ✅ |
 | GUI | WinForms · 11 themes · 62+ dialogs · live CPU/RAM · tray icon |
 | Profiles | 5 (business, gaming, privacy, minimal, server) |
-| Services | 32 Core services |
+| Services | 34 Core services |
 | Locales | 6 (en, de, fr, es, ja, he) — 200+ GUI string keys |
 | CLI | 30+ commands · PowerShell module (`RegiLattice.psd1`) |
 | Enterprise | ADMX/ADML export · Intune OMA-URI export |
@@ -32,7 +31,7 @@
 
 Make RegiLattice the **reference Windows registry tweak toolkit** — production-grade, enterprise-ready, and accessible:
 
-- **Deepest coverage**: 4 108+ tweaks vs. ~400 for nearest competitor
+- **Deepest coverage**: 4 528+ tweaks vs. ~400 for nearest competitor
 - **Zero-lag GUI**: Virtual scrolling handles 5 000+ tweaks with ~30 live controls
 - **Trusted distribution**: Code-signed, auto-updating via GitHub / Scoop / WinGet / Chocolatey / MSIX
 - **Enterprise-ready**: Compliance automation, ADMX/GPO/Intune export, fleet deployment templates
@@ -232,22 +231,22 @@ GUI controls have no `AccessibleName`/`AccessibleDescription`. `Locale.T()` now 
 | **136** | T8.2+T8.4 — 100 tweaks + AI-enhanced descriptions | ~4 608 tweaks |
 | **137** | T8.2+T8.3 — 100 tweaks + score-change preview on hover | ~4 808 tweaks; predicted score delta shown in tooltip |
 
-**M4 Deliverable: v5.0.0** — 5 000+ tweaks · MSIX + Chocolatey + signed · plugin sandboxing · mutation tested · 2 500+ tests.
+**M4 Deliverable: v4.7.0** — 4 528+ tweaks · MSIX + Chocolatey + signed · plugin sandboxing · mutation tested · 2 660 tests. ✅ **Complete.**
 
 ---
 
 ## Success Metrics
 
-| Metric | v4.5.0 Now | M3 (v4.6.0) | M4 (v5.0.0) |
-|--------|-----------|-------------|------------|
-| Tweaks | **4 108** | ~4 208 | **5 000+** |
-| Tests | **~2 540** | 2 350+ | **2 500+** |
-| Branch Coverage | **75.14%** | 75%+ | **80%+** |
-| Live GUI Controls | ~4 000 (FLP) | **~30** (virtual) | ~30 |
+| Metric | v4.5.0 Baseline | v4.7.0 Now ✅ | M5 Target |
+|--------|-----------------|------------|----------|
+| Tweaks | **4 108** | **4 528** | 5 000+ |
+| Tests | ~2 540 | **2 660** | 2 750+ |
+| Branch Coverage | 75.14% | 75%+ | **80%+** |
+| Live GUI Controls | ~4 000 (FLP) | ~30 (virtual) | ~30 |
 | Code Signed | 🔄 | ✅ | ✅ |
 | Accessibility | ⬜ | ✅ Partial | ✅ Full |
-| Locales | **6** | **10** | 10 |
-| Plugin Marketplace | Local | **Online** | Online + Signed |
+| Locales | 6 | 6 | 10 |
+| Plugin Marketplace | Local | Online + Signed | Online + Signed |
 | Distribution | GitHub + Scoop + WinGet + MSI | + MSIX + Choco | ✅ All channels |
 
 ---

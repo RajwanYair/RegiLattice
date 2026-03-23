@@ -1,6 +1,6 @@
 #nullable enable
-using RegiLattice.Core.Models;
 using System.Collections.Generic;
+using RegiLattice.Core.Models;
 
 namespace RegiLattice.Core.Tweaks;
 
@@ -41,8 +41,7 @@ internal static class SmartScreenPolicy
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
-                "Forces SmartScreen to block unknown/malicious files instead of just warning. "
-                + "ShellSmartScreenLevel=Block. Default: Warn.",
+                "Forces SmartScreen to block unknown/malicious files instead of just warning. " + "ShellSmartScreenLevel=Block. Default: Warn.",
             Tags = ["smartscreen", "shell", "block", "policy"],
             ApplyOps = [RegOp.SetString(WinSys, "ShellSmartScreenLevel", "Block")],
             RemoveOps = [RegOp.DeleteValue(WinSys, "ShellSmartScreenLevel")],
@@ -101,8 +100,7 @@ internal static class SmartScreenPolicy
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
-                "Prevents users from bypassing SmartScreen filter warnings for malicious websites in IE/Edge Legacy. "
-                + "PreventOverride=1.",
+                "Prevents users from bypassing SmartScreen filter warnings for malicious websites in IE/Edge Legacy. " + "PreventOverride=1.",
             Tags = ["smartscreen", "ie", "override", "policy"],
             ApplyOps = [RegOp.SetDword(IEPhish, "PreventOverride", 1)],
             RemoveOps = [RegOp.DeleteValue(IEPhish, "PreventOverride")],
@@ -146,8 +144,7 @@ internal static class SmartScreenPolicy
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
-                "Enables Microsoft Edge SmartScreen detection and blocking of Potentially Unwanted Applications (PUA). "
-                + "SmartScreenPuaEnabled=1.",
+                "Enables Microsoft Edge SmartScreen detection and blocking of Potentially Unwanted Applications (PUA). " + "SmartScreenPuaEnabled=1.",
             Tags = ["smartscreen", "edge", "pua", "policy"],
             ApplyOps = [RegOp.SetDword(EdgePol, "SmartScreenPuaEnabled", 1)],
             RemoveOps = [RegOp.DeleteValue(EdgePol, "SmartScreenPuaEnabled")],

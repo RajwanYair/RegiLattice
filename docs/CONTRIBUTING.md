@@ -21,7 +21,7 @@ workflow, testing, and coding standards reference.
 
 1. Create or edit a module in `src/RegiLattice.Core/Tweaks/`.
 2. Define tweaks using the declarative `RegOp` pattern (preferred) or `Action`/`Func` delegates.
-3. Export them as `public static List<TweakDef> Tweaks { get; }`.
+3. Export them as `internal static IReadOnlyList<TweakDef> Tweaks { get; }`.
 4. Register the module in `TweakEngine.RegisterBuiltins()`.
 5. Run `dotnet test` to verify.
 
