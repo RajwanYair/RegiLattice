@@ -35,7 +35,6 @@ try {
     }
 
     Write-Host "[stryker] Done. Report: .tmp/stryker-output/mutation-report.html" -ForegroundColor Green
-}
-finally {
+} finally {
     Pop-Location
 }
