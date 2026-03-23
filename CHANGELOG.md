@@ -4,6 +4,15 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.7.0] — 2026-03-23 (M4 Milestone)
+
+- **M4 milestone release** (Sprints 130–139): 420 new tweaks, plugin signing & sandbox, Chocolatey distribution, virtual registry tests, Stryker.NET mutation testing infrastructure.
+- **4 528 tweaks** across **168 categories** (163 module files).
+- **2 660 tests** passing — 2 052 Core + 301 CLI + 307 GUI (0 failures).
+- Fix: `Ratings.Save()` cross-process retry to eliminate parallel-test `IOException` races.
+
+---
+
 ## [4.6.9] — 2026-05-15
 
 - **Sprint 139 (T8.3)**: 50 new tweaks across 5 new modules — `ShellRestrictionsPolicy.cs` (shellrst, 10), `BitsTransferPolicy.cs` (bitspol, 10), `OfflineFilesSyncPolicy.cs` (offsync, 10), `MsiInstallerPolicy.cs` (msipol, 10), `SmbServerPolicy.cs` (smbsrv, 10).

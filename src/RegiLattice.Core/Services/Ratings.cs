@@ -75,6 +75,20 @@ public static class Ratings
     {
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, json);
+        // Retry up to 5 times to handle cross-process file-lock races when test projects
+        // run in parallel and each writes to the same AppConfig.ConfigDir/ratings.json.
+        const int maxRetries = 5;
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            try
+            {
+                File.WriteAllText(FilePath, json);
+                return;
+            }
+            catch (IOException) when (attempt < maxRetries - 1)
+            {
+                Thread.Sleep(60 * (attempt + 1));
+            }
+        }
     }
 }
