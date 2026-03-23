@@ -4,6 +4,36 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.8] — 2026-05-15
+
+### Sprint 138 — 50 New Tweaks: 5 New Modules (T8.2)
+
+#### Added
+
+- `SmartScreenPolicy.cs` (10 tweaks, `smartscr`) — Windows Defender SmartScreen GPO policy:
+  shell enable/block-level, app install control, Edge PhishingFilter prevent-override,
+  Edge SmartScreen enable/PUA/force-enabled.
+- `CredentialCachingPolicy.cs` (10 tweaks, `credcache`) — Credential caching hardening:
+  CredSSP oracle mitigation (CVE-2018-0886), RDP RestrictedAdmin delegation,
+  WDigest disable, LSA PPL, domain cred/anonymous/LM-hash restrictions.
+- `WindowsTimeGpoPolicy.cs` (10 tweaks, `timepol`) — W32Time GPO policy path
+  (`SOFTWARE\Policies\Microsoft\W32Time\*`); NTP type/servers, client enable/poll/log,
+  server disable, phase/frequency correction rates.
+- `FirewallLogPolicy.cs` (10 tweaks, `fwlog`) — Windows Firewall logging GPO policy:
+  Domain/Private/Public profile dropped-packets, successful-connections, log-size, log-path.
+- `LogonGpoPolicy.cs` (10 tweaks, `logonpol`) — Logon screen privacy/security GPO policy:
+  hide last username, hide network UI, hide account details, disable ARSO, disable startup
+  sound, block MSA accounts, hide locked user ID, lockout attempts, disable lock-screen
+  notifications, hide power button.
+
+#### Stats
+
+- Tweaks: **4,308** (+50 from v4.6.7)
+- Categories: **141** (+5)
+- Core tests: **2,052** (0 failures)
+
+---
+
 ## [4.6.7] — 2026-05-14
 
 ### Sprint 137 — 50 New Tweaks: 5 New Modules (T8.2)
