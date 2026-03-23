@@ -4,6 +4,12 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [4.6.4] — 2026-05-14
+
+- **Sprint 134 (T6.3)**: Virtual registry integration tests — `VirtualRegistryTests.cs` (15 tests, GUID-scoped HKCU isolation, real Apply→Detect→Remove cycle, DryRun guard). No admin required, passes in CI.
+- Tests: 2,660 passing (2,052 Core + 301 CLI + 307 GUI)
+- Version bump: `4.6.3` → `4.6.4`
+
 ## [4.6.3] — 2026-05-14
 
 - **Sprints 132–133 (T7.4)**: Plugin sandbox isolation — `PluginSandbox.cs` (named-pipe child-process execution, 30 s timeout), `SandboxOpDto`/`PluginSandboxRequest`/`PluginSandboxResponse` JSON protocol, `--plugin-host` CLI flag. 17 new tests.
