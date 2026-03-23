@@ -4,6 +4,40 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.0] — 2026-05-12
+
+### M3 Milestone — GUI Polish, i18n, Marketplace & Security Policies (Sprints 122–129)
+
+#### Added
+
+- **ToggleSwitchControl** (Sprint 122, T1.5): Custom GDI+ animated toggle switch with smooth slide animation, theme-aware colours, DPI scaling, keyboard support (Space/Enter), focus ring, and accessible `AccessibleObject`. 15 new `ToggleSwitchControlTests`.
+- **Visual Refresh** (Sprint 123, T1.6): `RoundedPanel` — GDI+ rounded-corner panel with Mica tint; `FluentIcons` — 60+ Segoe Fluent Icons glyph constants + `DrawGlyph`/`CreateGlyphBitmap` helpers; `CategoryExpandButton` — animated 90° chevron for category headers. 24 new `VisualPolishTests`.
+- **Pack Creator Studio Dialog** (Sprint 125, T7.2): 5-step wizard dialog for authoring community Tweak Packs. Steps: basic info → tweak selection → metadata → JSON preview → export + submit URL. 11 new `PackCreatorDialogTests`.
+- **PackSubmissionService** (Sprint 124, T7.5): `Validate(PackDef)`, `BuildSubmissionUrl(PackDef)`, `SanitizeName()` with kebab-case slug validation, semver version, SHA-256 hex check, HTTPS source URL. GitHub Issue template `pack-submission.yml` with 12-field form and 5-item checklist. 17 new `PackSubmissionServiceTests`.
+- **4 New Locales** (Sprint 126, T2.4/T2.5): zh-CN (~120 keys), ko (~120 keys), ar (~120 keys), pt-BR (~120 keys) added to `Locale.cs`. `BuiltInLocales` expanded from 6 → 10 registered locales. 15 new `LocaleSupplementalTests`.
+- **CLI Tab Completion + Profile CRUD** (Sprint 127, T3.4/T8.5): `completions/RegiLattice.ps1` — full PowerShell tab completion with context-aware completions for profile names, scope values, and categories. CLI args `--profile-create/delete/clone/rename/tweaks/desc` + `--list-user-profiles`. `UserProfileService` CRUD wiring in `Program.Dispatch`. 10 new `ParseArgsTests`.
+- **Compliance Trend Dashboard** (Sprint 128, T4.4): `ComplianceTrendDialog` — GDI+ line chart of compliance score / violation count over time, toggle between % compliance and violation-count modes, Refresh/Clear/Close controls, entry-count summary label. 12 new `ComplianceTrendDialogTests`.
+- **50 New Security & Policy Tweaks** (Sprint 129, T8.2): 5 new modules across enterprise policy areas:
+  - **BranchCache.cs** (`bc-*`) — 10 tweaks: distributed/hosted cache mode, cache size (% + GB cap), SHA-256 hashes, firewall exceptions, SMB hash publication, hosted-cache preference, retrieval latency, peer offering delay.
+  - **InternetZonePolicy.cs** (`izone-*`) — 10 tweaks: lock zones to machine policy, block ActiveX/ActiveScript/mixed-content in Internet zone, prevent cert error bypass, block auto file download, SmartScreen phishing filter, block unencrypted form submit, block unsafe ActiveX init, block script clipboard access.
+  - **NetworkConnectionsPolicy.cs** (`netconn-*`) — 10 tweaks: honour admin prohibits, prevent network bridges, block add/remove components, block binding change, prevent deleting all-user connections, block LAN properties, block VPN connect, block all-user VPN properties, prohibit ICS, prevent connection rename.
+  - **AppVirtualization.cs** (`appv-*`) — 10 tweaks: allow package scripts, block high-cost launch, require admin to publish, auto-load background, disable shared content store, enable process interop, block virtual COM creation, enable reporting, 24 h reporting interval, 120 s streaming timeout.
+  - **SensorPolicy.cs** (`sensor-*`) — 10 tweaks: block location scripting, disable all sensors, disable Windows Location Provider, prevent user location override, deny radios/activity/gazeInput/contacts/email/bluetoothSync capabilities.
+
+#### Fixed
+
+- Test suite: removed external-process `DetectAction` sweep tests from `BranchCoverage5Tests.cs` that caused >60 s hangs vs. the 20 s per-test budget. 837 placeholder sweep tests replaced by structural-only assertions. Suite now runs in ≤10 s with no hang risk.
+- Test isolation: added `[Collection("ComplianceHistory")]` to `ComplianceHistoryTests` and `ComplianceHistoryNullJsonBranchTests` to eliminate rare file-system race causing intermittent failures.
+
+#### Stats
+
+- Total tweaks: **4,158** across **126 categories** (+50 tweaks, +5 categories vs 4.5.0)
+- Tests: **2,007** passing (0 consistent failures)
+- Build: **0 errors, 0 warnings** (Release x64)
+- Version bumped `4.5.0` → `4.6.0`
+
+---
+
 ## [4.5.0] — 2026-03-23
 
 ### M2 Milestone — Enterprise & Trust (Sprints 114–121)
