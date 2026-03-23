@@ -7,6 +7,19 @@ using System.Text.Json.Serialization;
 namespace RegiLattice.Core.Plugins;
 
 /// <summary>
+/// Per-author signing key registered in the marketplace index.
+/// The public key is stored as a PEM-encoded SubjectPublicKeyInfo string.
+/// </summary>
+public sealed record AuthorKey
+{
+    [JsonPropertyName("author")]
+    public string Author { get; init; } = "";
+
+    [JsonPropertyName("publicKeyPem")]
+    public string PublicKeyPem { get; init; } = "";
+}
+
+/// <summary>
 /// Represents the marketplace index fetched from the GitHub repository.
 /// Contains metadata for all available packs without their full tweak definitions.
 /// </summary>
@@ -20,6 +33,13 @@ public sealed class PackIndex
 
     [JsonPropertyName("packs")]
     public IReadOnlyList<PackDef> Packs { get; init; } = [];
+
+    /// <summary>
+    /// RSA-SHA256 public keys for pack authors who have registered signing credentials.
+    /// Keyed by author name (case-insensitive). Used by <see cref="PackSignatureVerifier"/>.
+    /// </summary>
+    [JsonPropertyName("authorKeys")]
+    public IReadOnlyList<AuthorKey> AuthorKeys { get; init; } = [];
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
@@ -37,5 +57,20 @@ public sealed class PackIndex
     public string ToJson()
     {
         return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+    }
+
+    /// <summary>
+    /// Look up the registered public key PEM for the given author name.
+    /// Returns <see langword="null"/> if no key is registered.
+    /// </summary>
+    public string? GetAuthorPublicKey(string author)
+    {
+        foreach (AuthorKey ak in AuthorKeys)
+        {
+            if (string.Equals(ak.Author, author, StringComparison.OrdinalIgnoreCase))
+                return ak.PublicKeyPem;
+        }
+
+        return null;
     }
 }

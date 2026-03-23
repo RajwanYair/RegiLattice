@@ -4,6 +4,34 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.2] — 2026-05-13
+
+### Sprint 131 — Pack RSA-SHA256 Signing Support (T7.3)
+
+#### Added
+
+- **`PackTrustLevel` enum** (`PackDef.cs`): three levels — `None`, `HashVerified`, `Signed` — representing the verified integrity state of a Tweak Pack at runtime.
+- **`PackDef` — `SignatureUrl` property**: optional URL pointing to the detached `.rlpack.sig` RSA signature file. Serialised in JSON pack index; empty string by default.
+- **`PackDef` — `TrustLevel` property**: runtime-only (not persisted); set by `DetermineTrustLevel()` after loading a pack.
+- **`PackSignatureVerifier.cs`** (new): RSA-PKCS#1-v1.5 / SHA-256 signing and verification for Tweak Packs.
+  - `Verify(ReadOnlySpan<byte>, signatureBase64, publicKeyPem)` — low-level verifier.
+  - `Verify(string packJson, signatureBase64, publicKeyPem)` — convenience overload for UTF-8 pack JSON.
+  - `DetermineTrustLevel(packJson, pack, sig?, pubKey?)` — resolves `PackTrustLevel`: `Signed` if RSA check passes, `HashVerified` if only SHA-256 matches, `None` otherwise.
+  - `Sign(packJson, privateKeyPem)` — returns base64 signature (author tooling).
+  - `GenerateKeyPair(keySize=2048)` — returns `(PublicKeyPem, PrivateKeyPem)` tuple (author tooling / tests).
+  - Enforces minimum 2048-bit RSA key size; throws `CryptographicException` on under-sized keys.
+- **`PackIndex` — `AuthorKey` record** and **`AuthorKeys` list**: pack marketplace index can now carry per-author public keys (PEM format), enabling automated trust resolution for all packs from a known author.
+- **`PackIndex.GetAuthorPublicKey(string author)`**: case-insensitive lookup returning the PEM public key for a named author, or `null` if not found.
+- **13 new `PackSignatureVerifierTests`** covering: key generation, sign+verify round-trip, tampered content detection, wrong-key rejection, empty/invalid base64 handling, `DetermineTrustLevel` for all three levels, and `PackIndex.GetAuthorPublicKey` including case-insensitive match.
+
+#### Stats
+
+- Total tweaks: **4,158** (unchanged)
+- Tests: **2,020 passing** (+13)
+- Version: `4.6.2`
+
+---
+
 ## [4.6.1] — 2026-05-12
 
 ### Sprint 130 — Chocolatey Package & Distribution Improvements (T5.3)
