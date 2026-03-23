@@ -111,6 +111,7 @@ public sealed class ComplianceHistoryNullJsonBranchTests : IDisposable
 //    Rate() calls AllRatings() internally with no file (T-branch), then saves the file.
 //    This test explicitly calls AllRatings() AFTER Rate() so the file exists → F-branch.
 
+[Collection("Ratings")]
 public sealed class RatingsFileExistsBranchTests : IDisposable
 {
     private readonly string _filePath;

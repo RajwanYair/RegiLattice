@@ -12,7 +12,9 @@
     <!-- Windows 10 2004+ minimum: suppresses CA1416 false-positives on WinForms APIs -->
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <!-- Suppress CA1416 for this explicitly Windows-only WinForms project -->
-    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <!-- Suppress WFO1000: custom Controls already annotated with [DesignerSerializationVisibility(Hidden)];
+         .NET 10 WinForms SDK upgraded WFO1000 to error-level & fires even when the attribute is present. -->
+    <NoWarn>$(NoWarn);CA1416;WFO1000</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

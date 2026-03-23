@@ -185,6 +185,7 @@ public sealed class LocaleTests
     }
 }
 
+[Collection("Ratings")]
 public sealed class RatingsTests
 {
     private static string SetupTempRatings()
