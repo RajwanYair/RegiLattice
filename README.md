@@ -52,7 +52,17 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
 - **Localization** — built-in English + German locale (48 strings)
 
-## Architecture
+## Use Cases
+
+| Who | What RegiLattice solves |
+|-----|------------------------|
+| **Privacy-conscious users** | Disable telemetry, activity tracking, Cortana, OneDrive sync, diagnostic data, and advertising IDs across 31 privacy categories in one pass |
+| **Gamers** | Reduce input lag, disable background services, optimize GPU scheduling, power plan, TCP stack, and HPET across 31 gaming categories |
+| **IT admins / sysadmins** | Batch-apply GPO-equivalent registry hardening (SEHOP, LSA-PPL, ASLR, SMB signing, UAC, BitLocker) with full rollback and dry-run mode |
+| **Corporate IT / MDM** | CorporateGuard blocks unsafe tweaks on domain-joined, Azure AD, and Intune-managed machines; `--force` override when authorized |
+| **Developers** | Declarative `TweakDef` + `RegOp` API, extensible plugin system, xUnit-tested, CLI for scripting and CI pipelines |
+| **Power users** | Apply a machine profile (business/gaming/privacy/minimal/server) in a single command; snapshot before/after, diff, restore |
+
 
 ```mermaid
 graph LR
@@ -62,22 +72,28 @@ graph LR
     end
 
     subgraph Core["RegiLattice.Core"]
-        TE[TweakEngine<br/>Register · Apply · Search]
+        TE[TweakEngine<br/>Register · Apply · Search · Filter]
         SM[SnapshotManager<br/>Save · Load · Restore]
         TV[TweakValidator<br/>Validate · CircularDeps]
         DR[DependencyResolver<br/>Resolve · Dependents]
-        TD[TweakDef<br/>RegOp · Scope]
-        RS[RegistrySession<br/>Read · Write · Backup]
-        CG[CorporateGuard]
+        TD[TweakDef<br/>RegOp · Scope · TweakKind]
+        RS[RegistrySession<br/>Read · Write · Backup · DryRun]
+        CG[CorporateGuard<br/>AD · AzureAD · Intune]
         PD[ProfileDefinitions<br/>5 profiles]
         SV[Services<br/>Analytics · Config · HW]
+        SV2[Services<br/>Ratings · Favorites · History]
+        SV3[Services<br/>Compliance · UserProfiles]
+        SV4[Services<br/>Locale · ShellRunner]
+        PM[Plugins<br/>PackManager · PackLoader]
     end
 
-    subgraph Tweaks["90 Tweak Modules"]
+    subgraph Tweaks["173 Tweak Modules"]
         T1[Performance.cs]
         T2[Privacy.cs]
-        T3[Gaming.cs]
-        TN[... 160 more]
+        T3[Security.cs]
+        T4[Gaming.cs]
+        T5[Networking.cs]
+        TN[... 168 more]
     end
 
     CLI --> TE
@@ -88,9 +104,16 @@ graph LR
     TE --> RS
     TE --> CG
     TE --> PD
+    TE --> PM
+    SV --> TE
+    SV2 --> TE
+    SV3 --> TE
+    SV4 --> TE
     T1 --> TD
     T2 --> TD
     T3 --> TD
+    T4 --> TD
+    T5 --> TD
     TN --> TD
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
@@ -117,7 +140,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (2 660 tests)
+# Run tests (2 661 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -229,11 +252,11 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 126 module files, 4 108 tweaks
+│   │   └── Tweaks/                          # 173 module files, 4 628 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
-│   │       ├── ...                          # 87 more
+│   │       ├── ...                          # 168 more
 │   │       └── Wsl.cs
 │   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
 │   │   ├── Program.cs                       # Entry point
@@ -280,7 +303,7 @@ RegiLattice/
 │   │   └── ConfigExporterTests.cs
 │   ├── RegiLattice.CLI.Tests/               # 301 xUnit tests
 │   │   └── ParseArgsTests.cs
-│   └── RegiLattice.GUI.Tests/               # 307 xUnit tests
+   ├── RegiLattice.GUI.Tests/               # 308 xUnit tests
 │       ├── ThemeTests.cs
 │       ├── PackageManagerValidationTests.cs
 │       └── AppIconsTests.cs
@@ -371,9 +394,38 @@ MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
-## Keywords
+## Keywords & GitHub Topics
 
-`windows-registry` · `windows-tweaks` · `windows-11` · `windows-10` · `registry-optimizer` ·
-`privacy-tweaks` · `performance-tweaks` · `system-optimization` · `debloat` · `winforms` ·
-`dotnet` · `csharp` · `registry-backup` · `windows-hardening` · `gaming-optimization` ·
-`corporate-safety` · `package-manager` · `tweak-toolkit` · `registry-editor` · `win11-tweaks`
+### Recommended GitHub Topics
+
+Set the following topics on the repository (GitHub UI → \"About\" gear → Topics):
+
+`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager`
+
+### Search Keywords
+
+<!-- GitHub indexes this content for code/repository search -->
+
+**Registry & System:**
+`windows-registry` · `registry-editor` · `registry-optimizer` · `registry-backup` · `registry-cleaner` · `registry-automation` · `registry-scripting` · `registry-policy` · `group-policy-alternative` · `windows-settings-manager` · `windows-configuration`
+
+**Privacy & Security:**
+`disable-telemetry` · `anti-telemetry` · `privacy-tools` · `privacy-tweaks` · `disable-tracking` · `windows-privacy` · `block-microsoft-telemetry` · `disable-cortana` · `disable-windows-search` · `disable-activity-tracking` · `windows-hardening` · `security-hardening` · `uac-management` · `lsa-protection` · `aslr-sehop` · `windows-firewall-rules` · `windows-defender-policy` · `bitlocker-policy` · `corporate-hardening` · `cis-benchmarks`
+
+**Performance & Gaming:**
+`windows-performance` · `performance-tweaks` · `gaming-optimization` · `latency-reduction` · `gpu-tweaks` · `cpu-optimization` · `ram-optimization` · `ssd-optimization` · `windows-gaming` · `game-mode` · `disable-animations` · `windows-startup-optimizer` · `power-plan` · `reduce-ram-usage` · `network-optimization` · `tcp-optimization` · `boot-optimization` · `responsiveness` · `input-lag` · `turbo-boost`
+
+**Debloat & Cleanup:**
+`debloat` · `debloat-windows` · `remove-bloatware` · `uninstall-apps` · `disable-bloatware` · `windows-cleanup` · `disk-cleanup` · `cortana-removal` · `onedrive-removal` · `telemetry-removal` · `windows-decrapifier` · `trim-windows` · `minimal-windows`
+
+**Windows Versions:**
+`windows-11-tweaks` · `windows-10-tweaks` · `win11` · `win10` · `windows-11-optimization` · `windows-11-privacy` · `windows-11-gaming` · `windows-11-debloat` · `windows-11-hardening`
+
+**Developer & IT:**
+`dotnet` · `dotnet-10` · `csharp-13` · `winforms` · `windows-forms` · `cli-tool` · `powershell-tool` · `windows-automation` · `sysadmin-tools` · `it-management` · `group-policy` · `gpo` · `intune-compatible` · `corporate-it` · `windows-deployment` · `scripting-windows` · `winget` · `chocolatey` · `scoop`
+
+**Package & Tool Management:**
+`package-manager` · `winget-integration` · `chocolatey-integration` · `scoop-integration` · `pip-integration` · `powershell-modules` · `tool-management` · `software-management`
+
+**Similar / Related Tools:**
+RegiLattice is a programmatic, fully reversible, and enterprise-safe alternative to tools in the same space as O\&O ShutUp10, W10Privacy, Winaero Tweaker, Chris Titus WinUtil, BloatyNosy, and sophia-script — built on .NET 10 with a declarative engine, CLI, WinForms GUI, xUnit test suite, and corporate network guard.
