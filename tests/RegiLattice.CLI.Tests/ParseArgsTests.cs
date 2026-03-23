@@ -1051,9 +1051,14 @@ public sealed class CliArgEdgeCaseTests
     [Fact]
     public void ParseArgs_ProfileCreate_WithTweaksAndDesc_SetsAll()
     {
-        var result = Program.ParseArgs(
-            ["--profile-create", "my-work", "--profile-tweaks", "perf-disable-animations,priv-disable-telemetry", "--profile-desc", "Work setup"]
-        );
+        var result = Program.ParseArgs([
+            "--profile-create",
+            "my-work",
+            "--profile-tweaks",
+            "perf-disable-animations,priv-disable-telemetry",
+            "--profile-desc",
+            "Work setup",
+        ]);
         Assert.NotNull(result);
         Assert.Equal("my-work", result.ProfileCreate);
         Assert.Equal("perf-disable-animations,priv-disable-telemetry", result.ProfileTweaks);

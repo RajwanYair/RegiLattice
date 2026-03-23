@@ -19,6 +19,8 @@ internal static class TimeSync
 
     private const string TimeZoneInfo = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation";
 
+    private const string VmicTimeProv = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\VMICTimeProvider";
+
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
         new TweakDef
@@ -203,6 +205,186 @@ internal static class TimeSync
             ApplyOps = [RegOp.SetDword(W32TimeNtpClient, "CrossSiteSyncFlags", 2)],
             RemoveOps = [RegOp.DeleteValue(W32TimeNtpClient, "CrossSiteSyncFlags")],
             DetectOps = [RegOp.CheckDword(W32TimeNtpClient, "CrossSiteSyncFlags", 2)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-max-pos-phase-correction",
+            Label = "Set Maximum Forward Time Correction to 1 Hour",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "phase", "correction", "sync"],
+            Description =
+                "Sets the maximum positive phase correction (MaxPosPhaseCorrection) to "
+                + "3600 seconds (1 hour). Prevents W32Time from jumping the clock forward by "
+                + "more than one hour in a single correction, protecting against rogue NTP servers.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "MaxPosPhaseCorrection", 3600)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "MaxPosPhaseCorrection")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "MaxPosPhaseCorrection", 3600)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-update-interval",
+            Label = "Set W32Time Clock Update Interval (100 000 units = 10 s)",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "update", "interval", "precision"],
+            Description =
+                "Sets the W32Time UpdateInterval to 100 000 (100 ms ticks × 100 000 = 10 s). "
+                + "Controls how often W32Time updates the local clock when it is in slew mode, "
+                + "reducing the time between small, smooth clock adjustments.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "UpdateInterval", 100000)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "UpdateInterval")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "UpdateInterval", 100000)],
+        },
+        new TweakDef
+        {
+            Id = "time-disable-event-logging",
+            Label = "Disable W32Time Verbose Event Log",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "event log", "logging", "privacy"],
+            Description =
+                "Sets W32Time EventLogFlags to 0, suppressing informational and debug "
+                + "entries in the System event log. Errors are still logged. Reduces "
+                + "noise in the event log on high-uptime servers.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "EventLogFlags", 0)],
+            RemoveOps = [RegOp.SetDword(W32TimeConfig, "EventLogFlags", 2)],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "EventLogFlags", 0)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-announce-flags",
+            Label = "Set W32Time Announce Flags (Reliable Time Source)",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "announce", "domain", "server"],
+            Description =
+                "Sets AnnounceFlags to 5 (0x05 = always reliable, always announce). "
+                + "Marks this computer as a reliable time source for domain clients. "
+                + "Recommended for PDC emulators and dedicated NTP servers.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "AnnounceFlags", 5)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "AnnounceFlags")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "AnnounceFlags", 5)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-hold-period",
+            Label = "Set W32Time Hold Period (5 Iterations)",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "hold period", "slew", "stability"],
+            Description =
+                "Sets HoldPeriod to 5. After a large phase correction, W32Time waits 5 "
+                + "poll intervals before adjusting frequencies again. Reduces instability "
+                + "from rapid successive corrections.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "HoldPeriod", 5)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "HoldPeriod")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "HoldPeriod", 5)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-local-clock-dispersion",
+            Label = "Set Local Clock Dispersion to 10 Seconds",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "dispersion", "precision", "peers"],
+            Description =
+                "Sets LocalClockDispersion to 10 seconds, which is the advertised "
+                + "uncertainty of the local clock to NTP peers. Lower values improve "
+                + "how this machine is ranked as a time source.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "LocalClockDispersion", 10)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "LocalClockDispersion")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "LocalClockDispersion", 10)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-large-phase-offset-threshold",
+            Label = "Set Large Phase Offset Threshold to 50 ms",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "large offset", "threshold", "spike"],
+            Description =
+                "Sets LargePhaseOffset to 50 000 000 (100 ns units = 5 s). When clock "
+                + "drift exceeds this threshold, W32Time steps instead of slewing. "
+                + "Setting to 50 ms (5 000 000) enables faster response to large drifts.",
+            ApplyOps = [RegOp.SetDword(W32TimeConfig, "LargePhaseOffset", 5000000)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "LargePhaseOffset")],
+            DetectOps = [RegOp.CheckDword(W32TimeConfig, "LargePhaseOffset", 5000000)],
+        },
+        new TweakDef
+        {
+            Id = "time-enable-ntp-server-provider",
+            Label = "Enable NTP Server (Share System Time via UDP/123)",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 4,
+            Tags = ["time", "ntp", "server", "share", "udp"],
+            Description =
+                "Enables the NtpServer time provider, allowing this machine to serve "
+                + "time via NTP on UDP port 123. Intended for machines that act as an "
+                + "internal NTP server for a local network.",
+            ApplyOps = [RegOp.SetDword(W32TimeNtpServer, "Enabled", 1)],
+            RemoveOps = [RegOp.SetDword(W32TimeNtpServer, "Enabled", 0)],
+            DetectOps = [RegOp.CheckDword(W32TimeNtpServer, "Enabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "time-disable-vmictimeprovider",
+            Label = "Disable Hyper-V / VM Integration Time Sync",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 4,
+            Tags = ["time", "hyper-v", "vm", "vmic", "virtualization"],
+            Description =
+                "Disables the VMICTimeProvider that synchronises the clock of Hyper-V "
+                + "guest VMs from the host. Use when the guest should use an independent "
+                + "NTP source instead of relying on the hypervisor clock.",
+            ApplyOps = [RegOp.SetDword(VmicTimeProv, "Enabled", 0)],
+            RemoveOps = [RegOp.SetDword(VmicTimeProv, "Enabled", 1)],
+            DetectOps = [RegOp.CheckDword(VmicTimeProv, "Enabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "time-set-ntp-poll-interval-1h",
+            Label = "Set NTP Client Poll Interval to 1 Hour",
+            Category = "Time Synchronization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["time", "ntp", "poll", "interval", "bandwidth"],
+            Description =
+                "Sets the NTP client SpecialPollInterval to 3600 seconds (1 hour). "
+                + "Reduces NTP traffic on low-bandwidth or metered connections while "
+                + "maintaining reasonable time accuracy.",
+            ApplyOps = [RegOp.SetDword(W32TimeNtpClient, "SpecialPollInterval", 3600)],
+            RemoveOps = [RegOp.DeleteValue(W32TimeNtpClient, "SpecialPollInterval")],
+            DetectOps = [RegOp.CheckDword(W32TimeNtpClient, "SpecialPollInterval", 3600)],
         },
     ];
 }

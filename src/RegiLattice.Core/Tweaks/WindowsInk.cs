@@ -19,6 +19,8 @@ internal static class WindowsInk
 
     private const string SuggestionPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization";
 
+    private const string CursorFeedback = @"HKEY_CURRENT_USER\Control Panel\Cursors";
+
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
         new TweakDef
@@ -196,6 +198,149 @@ internal static class WindowsInk
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore", "HarvestContacts", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore", "HarvestContacts", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore", "HarvestContacts", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-touch-visual-feedback",
+            Label = "Disable Touch Visual Feedback",
+            Category = "Touch & Pen",
+            Description =
+                "Removes the contact-point circle animations shown when touching the screen. "
+                + "Reduces visual noise and slightly improves rendering performance on touch-enabled displays.",
+            Tags = ["touch", "pen", "visual", "performance"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(CursorFeedback, "ContactVisualization", 0)],
+            RemoveOps = [RegOp.SetDword(CursorFeedback, "ContactVisualization", 1)],
+            DetectOps = [RegOp.CheckDword(CursorFeedback, "ContactVisualization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-pen-visual-feedback",
+            Label = "Disable Pen Visual Feedback",
+            Category = "Touch & Pen",
+            Description =
+                "Removes the cursor/halo effects shown when using a stylus. "
+                + "Useful on high-DPI tablets where the glow overlay obscures fine linework.",
+            Tags = ["pen", "stylus", "visual", "tablet"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(CursorFeedback, "PenVisualization", 0)],
+            RemoveOps = [RegOp.SetDword(CursorFeedback, "PenVisualization", 1)],
+            DetectOps = [RegOp.CheckDword(CursorFeedback, "PenVisualization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-pen-workspace-startup",
+            Label = "Hide Pen Workspace Button on Startup",
+            Category = "Touch & Pen",
+            Description =
+                "Prevents the Pen Workspace button from appearing in the taskbar notification area. "
+                + "Equivalent to unchecking 'Show the pen workspace button' in Pen & Windows Ink settings.",
+            Tags = ["pen", "workspace", "taskbar", "tablet"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
+            RemoveOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 1)],
+            DetectOps = [RegOp.CheckDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-pen-workspace-app-launch",
+            Label = "Block App Launches from Pen Workspace",
+            Category = "Touch & Pen",
+            Description =
+                "Disables the ability to launch apps from the Pen Workspace panel. "
+                + "Reduces attack surface on shared devices where pen-launched apps should be restricted.",
+            Tags = ["pen", "workspace", "launch", "security"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(InkUser, "PenWorkspaceAppLaunchAllowed", 0)],
+            RemoveOps = [RegOp.SetDword(InkUser, "PenWorkspaceAppLaunchAllowed", 1)],
+            DetectOps = [RegOp.CheckDword(InkUser, "PenWorkspaceAppLaunchAllowed", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-pen-right-click-hold",
+            Label = "Disable Pen Press-and-Hold for Right-Click",
+            Category = "Touch & Pen",
+            Description =
+                "Disables the 'press and hold' pen gesture that simulates a right-click. "
+                + "Prevents accidental context menus when resting the pen on the screen.",
+            Tags = ["pen", "gesture", "right-click", "tablet"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Touch", "TouchMode_hold", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Touch", "TouchMode_hold")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Touch", "TouchMode_hold", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-tablet-ink-policy",
+            Label = "Disable Ink Programs via Group Policy",
+            Category = "Touch & Pen",
+            Description =
+                "Applies the TabletPC policy to disable InkBall and other built-in ink-based games/apps. "
+                + "Recommended for corporate tablets to prevent access to entertainment apps.",
+            Tags = ["pen", "tablet", "policy", "games"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(InkPolicy, "DisableInkball", 1)],
+            RemoveOps = [RegOp.DeleteValue(InkPolicy, "DisableInkball")],
+            DetectOps = [RegOp.CheckDword(InkPolicy, "DisableInkball", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-handwriting-error-reports",
+            Label = "Disable Handwriting Error Reporting",
+            Category = "Touch & Pen",
+            Description =
+                "Blocks implicit collection of ink samples (strokes) used to improve handwriting recognition. "
+                + "Prevents ink input data from being sent to Microsoft for model training.",
+            Tags = ["pen", "handwriting", "privacy", "telemetry"],
+            NeedsAdmin = true,
+            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitInkCollection")],
+            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-handwriting-text-collection",
+            Label = "Disable Handwriting Text Data Collection",
+            Category = "Touch & Pen",
+            Description =
+                "Blocks implicit collection of handwritten text samples used to improve recognition accuracy. "
+                + "Complements 'ink-disable-handwriting-error-reports' for full input-data privacy.",
+            Tags = ["pen", "handwriting", "privacy", "text"],
+            NeedsAdmin = true,
+            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
+            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitTextCollection")],
+            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ink-set-pen-double-tap-speed",
+            Label = "Set Pen Double-Tap Speed to 400 ms",
+            Category = "Touch & Pen",
+            Description =
+                "Increases the pen double-tap recognition window to 400 ms (default 200 ms). "
+                + "Helps users with motor impairment or those using thick-nib styluses to register double-taps reliably.",
+            Tags = ["pen", "accessibility", "double-tap", "input"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(PenSettings, "DoubleTapTime", 400)],
+            RemoveOps = [RegOp.DeleteValue(PenSettings, "DoubleTapTime")],
+            DetectOps = [RegOp.CheckDword(PenSettings, "DoubleTapTime", 400)],
+        },
+        new TweakDef
+        {
+            Id = "ink-disable-pen-customization-page",
+            Label = "Disable Pen Customization Settings Page",
+            Category = "Touch & Pen",
+            Description =
+                "Hides the Pen Customization settings page from the Settings app via Group Policy. "
+                + "Prevents users from rebinding pen buttons on managed/shared devices.",
+            Tags = ["pen", "policy", "settings", "managed"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(InkPolicy, "DisablePenCustomization", 1)],
+            RemoveOps = [RegOp.DeleteValue(InkPolicy, "DisablePenCustomization")],
+            DetectOps = [RegOp.CheckDword(InkPolicy, "DisablePenCustomization", 1)],
         },
     ];
 }

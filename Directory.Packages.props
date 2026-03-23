@@ -11,5 +11,7 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageVersion Include="FsCheck" Version="2.16.6" />
+    <PackageVersion Include="FsCheck.Xunit" Version="2.16.6" />
   </ItemGroup>
 </Project>

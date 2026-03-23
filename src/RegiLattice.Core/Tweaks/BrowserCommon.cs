@@ -598,5 +598,216 @@ internal static class BrowserCommon
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
         },
+        new TweakDef
+        {
+            Id = "browser-disable-geolocation",
+            Label = "Block Browser Geolocation Access (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DefaultGeolocationSetting=2 to block all websites from detecting "
+                + "the user's physical location via the browser. Applies to Chrome and Edge.",
+            Tags = ["browser", "privacy", "geolocation", "location", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting", 2),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultGeolocationSetting", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultGeolocationSetting"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting", 2)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-notifications",
+            Label = "Block Browser Push Notifications (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DefaultNotificationsSetting=2 to block all websites from sending " + "browser push notifications. Applies to Chrome and Edge.",
+            Tags = ["browser", "privacy", "notifications", "push", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting", 2),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultNotificationsSetting", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultNotificationsSetting"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting", 2)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-webusb",
+            Label = "Block WebUSB API Access (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DefaultWebUsbGuardSetting=2 to prevent websites from accessing "
+                + "USB devices through the browser's WebUSB API. Reduces hardware attack surface.",
+            Tags = ["browser", "security", "webusb", "usb", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebUsbGuardSetting", 2),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebUsbGuardSetting", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebUsbGuardSetting"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebUsbGuardSetting"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebUsbGuardSetting", 2)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-web-bluetooth",
+            Label = "Block Web Bluetooth API Access (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DefaultWebBluetoothGuardSetting=2 to block websites from accessing "
+                + "Bluetooth devices via the Web Bluetooth API. Reduces wireless attack surface.",
+            Tags = ["browser", "security", "bluetooth", "web bluetooth", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebBluetoothGuardSetting", 2),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebBluetoothGuardSetting", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebBluetoothGuardSetting"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebBluetoothGuardSetting"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "DefaultWebBluetoothGuardSetting", 2)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-builtin-dns-client",
+            Label = "Disable Browser Built-In DNS Client (Chrome)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Chrome's built-in DNS resolver, forcing it to use the OS DNS "
+                + "stack instead. Ensures DNS queries respect system-level hosts file "
+                + "and DNS settings (BuiltInDnsClientEnabled=0).",
+            Tags = ["browser", "chrome", "dns", "privacy", "network", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "BuiltInDnsClientEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "BuiltInDnsClientEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "BuiltInDnsClientEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-url-keyed-metrics",
+            Label = "Disable URL-Keyed Anonymized Metrics (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the collection of statistics tied to specific URLs visited, "
+                + "preventing per-URL telemetry being sent to Google/Microsoft "
+                + "(UrlKeyedAnonymizedDataCollectionEnabled=0).",
+            Tags = ["browser", "privacy", "telemetry", "metrics", "url", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "UrlKeyedAnonymizedDataCollectionEnabled", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "UrlKeyedAnonymizedDataCollectionEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "UrlKeyedAnonymizedDataCollectionEnabled"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "UrlKeyedAnonymizedDataCollectionEnabled"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "UrlKeyedAnonymizedDataCollectionEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-webrtc-event-logs",
+            Label = "Disable WebRTC Event Log Collection (Chrome & Edge)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents the browser from collecting WebRTC event logs that can expose "
+                + "call and connection diagnostic data to web applications "
+                + "(WebRtcEventLogCollectionAllowed=0).",
+            Tags = ["browser", "privacy", "webrtc", "logging", "policy"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps =
+            [
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "WebRtcEventLogCollectionAllowed", 0),
+                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "WebRtcEventLogCollectionAllowed", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "WebRtcEventLogCollectionAllowed"),
+                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "WebRtcEventLogCollectionAllowed"),
+            ],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "WebRtcEventLogCollectionAllowed", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-force-safe-search",
+            Label = "Force Google SafeSearch (Chrome)",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Forces SafeSearch to be enabled on Google Search results in Chrome "
+                + "via enterprise policy. Useful in managed or family environments "
+                + "(ForceGoogleSafeSearch=1 or SafeSearchEnabled=1).",
+            Tags = ["browser", "chrome", "safesearch", "content-filter", "policy", "family"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch", 1)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-edge-read-aloud",
+            Label = "Disable Edge Read Aloud Feature",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Edge Read Aloud feature that reads web page content aloud "
+                + "using the device's text-to-speech engine. Reduces unused feature overhead.",
+            Tags = ["browser", "edge", "read aloud", "tts", "accessibility"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "browser-disable-edge-wallet",
+            Label = "Disable Microsoft Edge Wallet",
+            Category = "Browser Common",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Microsoft Edge Wallet feature (also called 'Microsoft Wallet') "
+                + "that promotes payment info, coupons and loyalty cards in the browser sidebar.",
+            Tags = ["browser", "edge", "wallet", "payments", "privacy", "advertising"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "WalletDonationEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "WalletDonationEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "WalletDonationEnabled", 0)],
+        },
     ];
 }
