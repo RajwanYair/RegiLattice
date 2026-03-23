@@ -56,25 +56,16 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_WithDwordHklmTweak_MapsToIntegerDataType()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-dword-hklm",
                 Label = "Test DWORD HKLM",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Values",
-                        "TestValue",
-                        1
-                    ),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Values", "TestValue", 1)],
                 RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Values", "TestValue")],
-                DetectOps =
-                [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Values", "TestValue", 1),
-                ],
+                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Values", "TestValue", 1)],
             }
         );
 
@@ -92,25 +83,16 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_WithStringHklmTweak_MapsToStringDataType()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-string-hklm",
                 Label = "Test REG_SZ HKLM",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetString(
-                        @"HKLM\SOFTWARE\Test\Values",
-                        "DnsPolicy",
-                        "SecureOnly"
-                    ),
-                ],
+                ApplyOps = [RegOp.SetString(@"HKLM\SOFTWARE\Test\Values", "DnsPolicy", "SecureOnly")],
                 RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Values", "DnsPolicy")],
-                DetectOps =
-                [
-                    RegOp.CheckString(@"HKLM\SOFTWARE\Test\Values", "DnsPolicy", "SecureOnly"),
-                ],
+                DetectOps = [RegOp.CheckString(@"HKLM\SOFTWARE\Test\Values", "DnsPolicy", "SecureOnly")],
             }
         );
 
@@ -127,20 +109,14 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_WithExpandStringTweak_MapsToStringDataType()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-expand-hklm",
                 Label = "Test REG_EXPAND_SZ HKLM",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetExpandString(
-                        @"HKLM\SOFTWARE\Test\Values",
-                        "DataPath",
-                        @"%SystemRoot%\Logs"
-                    ),
-                ],
+                ApplyOps = [RegOp.SetExpandString(@"HKLM\SOFTWARE\Test\Values", "DataPath", @"%SystemRoot%\Logs")],
                 RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Values", "DataPath")],
             }
         );
@@ -158,20 +134,14 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_WithQwordTweak_MapsToIntegerDataType()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-qword-hklm",
                 Label = "Test QWORD HKLM",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetQword(
-                        @"HKLM\SOFTWARE\Test\Values",
-                        "LargeCounter",
-                        9999999999L
-                    ),
-                ],
+                ApplyOps = [RegOp.SetQword(@"HKLM\SOFTWARE\Test\Values", "LargeCounter", 9999999999L)],
                 RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Values", "LargeCounter")],
             }
         );
@@ -189,74 +159,44 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_HklmPath_BuildsCorrectOmaUri()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-oma-uri-path-hklm",
                 Label = "Test OMA-URI path",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-                        "AllowTelemetry",
-                        0
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(
-                        @"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-                        "AllowTelemetry"
-                    ),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0)],
+                RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry")],
             }
         );
 
         var doc = IntuneOmaUriExporter.Build(engine);
 
         Assert.Equal(1, doc.MappedCount);
-        Assert.Equal(
-            "./Device/Vendor/MSFT/Registry/HKLM/SOFTWARE/Policies/Microsoft/Windows/DataCollection/AllowTelemetry",
-            doc.Settings[0].OmaUri
-        );
+        Assert.Equal("./Device/Vendor/MSFT/Registry/HKLM/SOFTWARE/Policies/Microsoft/Windows/DataCollection/AllowTelemetry", doc.Settings[0].OmaUri);
     }
 
     [Fact]
     public void Build_FullHkeyLocalMachinePath_NormalizedToHklm()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-full-hklm-path",
                 Label = "Test full HKEY_LOCAL_MACHINE path",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Sub\Key",
-                        "MyValue",
-                        1
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(
-                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Sub\Key",
-                        "MyValue"
-                    ),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Sub\Key", "MyValue", 1)],
+                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Test\Sub\Key", "MyValue")],
             }
         );
 
         var doc = IntuneOmaUriExporter.Build(engine);
 
         Assert.Equal(1, doc.MappedCount);
-        Assert.Equal(
-            "./Device/Vendor/MSFT/Registry/HKLM/SOFTWARE/Test/Sub/Key/MyValue",
-            doc.Settings[0].OmaUri
-        );
+        Assert.Equal("./Device/Vendor/MSFT/Registry/HKLM/SOFTWARE/Test/Sub/Key/MyValue", doc.Settings[0].OmaUri);
     }
 
     // ── Non-registry tweaks go to unmapped ────────────────────────────────
@@ -265,7 +205,8 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_NonRegistryTweak_GoesToUnmappedList()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-ps-tweak",
@@ -290,16 +231,14 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_HkcuTweak_ExcludedWhenMachineOnlyIsTrue()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-hkcu-filtered",
                 Label = "Test HKCU (machine-only filter)",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKCU\Software\Test\Values", "CuValue", 0),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test\Values", "CuValue", 0)],
                 RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Test\Values", "CuValue")],
             }
         );
@@ -315,16 +254,14 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_HkcuTweak_IncludedWhenMachineOnlyIsFalse()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-hkcu-included",
                 Label = "Test HKCU (all-scopes)",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKCU\Software\Test\Values", "CuValue", 1),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test\Values", "CuValue", 1)],
                 RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Test\Values", "CuValue")],
             }
         );
@@ -343,16 +280,14 @@ public sealed class IntuneExporterTests : IDisposable
         // A tweak whose ApplyOps is a single DeleteValue is unusual but valid.
         // DeleteValue is not a SetValue → cannot be mapped to OMA-URI.
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-delete-only",
                 Label = "Test delete-only apply",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Values", "OldValue"),
-                ],
+                ApplyOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Values", "OldValue")],
                 RemoveOps = [],
             }
         );
@@ -370,20 +305,14 @@ public sealed class IntuneExporterTests : IDisposable
     public void Export_WritesValidUtf8JsonFile()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-export-to-file",
                 Label = "Test Export",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKLM\SOFTWARE\Test\Export",
-                        "Flag",
-                        1
-                    ),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Test\Export", "Flag", 1)],
                 RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test\Export", "Flag")],
             }
         );
@@ -393,10 +322,7 @@ public sealed class IntuneExporterTests : IDisposable
 
         Assert.True(File.Exists(outPath));
         string json = File.ReadAllText(outPath, System.Text.Encoding.UTF8);
-        var doc = JsonSerializer.Deserialize<IntuneExportDocument>(
-            json,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-        );
+        var doc = JsonSerializer.Deserialize<IntuneExportDocument>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         Assert.NotNull(doc);
         Assert.Single(doc!.Settings);
     }
@@ -421,20 +347,19 @@ public sealed class IntuneExporterTests : IDisposable
     public void IntuneExportDocument_MappedAndUnmappedCounts_AreConsistent()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-mapped-1",
                 Label = "Mapped",
                 Category = "Test",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKLM\SOFTWARE\Test", "A", 0),
-                ],
+                ApplyOps = [RegOp.SetDword(@"HKLM\SOFTWARE\Test", "A", 0)],
                 RemoveOps = [RegOp.DeleteValue(@"HKLM\SOFTWARE\Test", "A")],
             }
         );
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-unmapped-1",
@@ -457,7 +382,8 @@ public sealed class IntuneExporterTests : IDisposable
     public void Build_MultipleApplyOps_ProducesOneSettingPerMappableOp()
     {
         var engine = new TweakEngine();
-        Reg(engine, 
+        Reg(
+            engine,
             new TweakDef
             {
                 Id = "test-multi-ops",
