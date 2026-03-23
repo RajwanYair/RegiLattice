@@ -4,6 +4,28 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.6.4] — 2026-05-14
+
+### Sprint 134 — Virtual Registry Integration Tests (T6.3)
+
+#### Added
+
+- **`VirtualRegistryTests.cs`** (new, `RegiLattice.Core.Tests`): 15 integration tests that exercise the real Windows registry without administrator rights, using a GUID-scoped HKCU isolation key that is created and cleaned up per-test.
+  - Basic round-trip reads/writes: `SetDword`, `SetString`, `SetQword`, `SetBinary`, `SetMultiSz`.
+  - Delete operations: `DeleteValue`, `DeleteTree`.
+  - `Evaluate()` detection: `CheckDword` true/false, `CheckMissing` before/after set, `CheckKeyMissing`.
+  - Full `Execute`→`Evaluate`→`Execute` (Apply→Detect→Remove) round-trip via `RegistrySession` directly.
+  - Full Apply→Detect→Remove cycle through `TweakEngine` using a real (non-DryRun) session.
+  - DryRun isolation guard: verifies that a DryRun write does not appear in the real registry.
+- **Implementation note**: `RegLoadKey`/`RegUnLoadKey` hive isolation requires `SeRestorePrivilege` (admin). The HKCU-subkey approach provides equivalent per-test isolation and runs on `windows-latest` CI runners without elevation.
+
+#### Stats
+
+- Total tweaks: **4,158** (unchanged)
+- Tests: **2,052 Core · 301 CLI · 307 GUI = 2,660 total** (+15)
+
+---
+
 ## [4.6.3] — 2026-05-14
 
 ### Sprints 132–133 — Plugin Sandbox Isolation (T7.4)

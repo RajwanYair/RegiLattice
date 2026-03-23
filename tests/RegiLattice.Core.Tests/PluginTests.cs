@@ -1112,11 +1112,7 @@ public sealed class PluginSandboxTests
     [Fact]
     public void Request_SerializesAndDeserializes_RoundTrip()
     {
-        var request = new PluginSandboxRequest
-        {
-            DryRun = true,
-            Ops = PluginSandbox.ToDto([RegOp.SetDword(@"HKCU\Test", "V", 99)]),
-        };
+        var request = new PluginSandboxRequest { DryRun = true, Ops = PluginSandbox.ToDto([RegOp.SetDword(@"HKCU\Test", "V", 99)]) };
 
         string json = System.Text.Json.JsonSerializer.Serialize(request, s_json);
         var restored = System.Text.Json.JsonSerializer.Deserialize<PluginSandboxRequest>(json, s_json);
