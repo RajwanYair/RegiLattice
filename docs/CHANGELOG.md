@@ -4,6 +4,36 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [4.5.0] — 2026-03-23
+
+### M2 Milestone — Enterprise & Trust (Sprints 114–121)
+
+#### Added
+
+- **IntuneOmaUriExporter.cs**: Full Intune Custom Configuration Profile OMA-URI export for HKLM-path Registry-kind tweaks. Maps to `./Device/Vendor/MSFT/Policy/Config/...` CSP format. Unmappable tweaks flagged with `[NOT_MAPPABLE]`. CLI `--export-intune <file>` and File → Export Intune Policy… in GUI.
+- **GroupPolicyExporter.cs** (enhanced): Full ADMX/ADML generation pipeline for all HKLM Registry-kind tweaks. Produces valid `.admx` + `.adml` importable in `gpedit.msc`. Per-tweak `Explain` text from `Description`. CLI `--export-gpo <file>`.
+- **AutoUpdater.cs** (enhanced Sprint 115): Download + guided install. `UpdateInfo.DownloadAsync()` fetches MSI to `%TEMP%`, verifies SHA-256 against GitHub release asset manifest, then offers "Install & Restart" in `UpdateCheckerDialog`. Never auto-installs without user confirmation.
+- **BenchmarkDotNet project** (Sprint 121): `tests/RegiLattice.Benchmarks/` — 8 TweakEngine benchmarks + 5 RegistrySession benchmarks. Baseline performance data established.
+- **Branch coverage 75.14%** (Sprint 121): `BranchCoverage7Tests.cs` — 10 new tests targeting 12 partial-coverage branches in Analytics, SnapshotManager, ComplianceHistory, Ratings, HealthScoreService, AppConfig, ScheduledTweakService, Favorites.
+- **200+ Locale keys** (Sprint 120): All GUI labels now routed through `Locale.T()`. String table expanded from 17 keys to 200+ keys covering all UI labels, button text, status messages, dialog titles, error messages across 6 languages (en/de/fr/es/ja/he).
+
+#### Enhanced
+
+- `UpdateCheckerDialog`: Progress bar during download, SHA-256 verification status, "Install & Restart" button (launches MSI, exits app).
+- `MainForm`: All menu captions, status bar messages, button labels, filter labels routed through `Locale.T()`.
+- CI/CD: `SHA256SUMS.txt` published alongside release artifacts. Smoke test step verifies CLI `--list` + `--validate` on published EXE.
+- Scoop manifest `scoop/regilattice.json`: auto-updated SHA-256 on each tagged release via CI.
+
+#### Stats
+
+- Total tweaks: **4,108** across **121 categories**
+- Tests: **1,944** passing (0 failures)
+- Branch coverage: **75.14%** (1741/2317) — M2 gate ✅
+- Build: **0 errors, 0 warnings** (Release x64)
+- Version bumped `4.4.0` → `4.5.0`
+
+---
+
 ## [4.4.0] — 2026-03-22
 
 ### Sprint 106 — 50 New Security & Hardening Tweaks (WDAC/ASR, BitLocker To Go, Device Install, LAPS, NTLM)
