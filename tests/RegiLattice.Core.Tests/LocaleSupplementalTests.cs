@@ -178,6 +178,7 @@ public sealed class LocaleSupplementalTests : IDisposable
         {
             if (File.Exists(tempFile))
                 File.Delete(tempFile);
+            Locale.SetLocale("en"); // reset so LoadLocaleFile overrides don't pollute later tests
         }
     }
 

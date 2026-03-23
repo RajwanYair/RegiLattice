@@ -60,9 +60,11 @@ public sealed record PingResult(string Host, int Sent, int Received, int Lost, d
                 var m = System.Text.RegularExpressions.Regex.Matches(l, @"(\d+)ms");
                 if (m.Count >= 3)
                 {
-                    double.TryParse(m[0].Value, out min);
-                    double.TryParse(m[1].Value, out max);
-                    double.TryParse(m[2].Value, out avg);
+                    // Use Groups[1].Value to extract the numeric capture group, not .Value
+                    // which includes the "ms" suffix and would cause TryParse to return 0.
+                    double.TryParse(m[0].Groups[1].Value, out min);
+                    double.TryParse(m[1].Groups[1].Value, out max);
+                    double.TryParse(m[2].Groups[1].Value, out avg);
                 }
             }
         }

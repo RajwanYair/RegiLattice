@@ -546,7 +546,8 @@ public static class Locale
         ["tip_force_check"] = "Contourner les restrictions r\u00e9seau d\u2019entreprise",
         ["tip_search_box"] = "Rechercher des ajustements (Ctrl+F)",
         ["tip_search_clear"] = "Effacer la recherche (Esc)",
-        ["tip_admin_badge"] = "Non ex\u00e9cut\u00e9 en tant qu\u2019administrateur \u2014 certains ajustements n\u00e9cessitent une \u00e9l\u00e9vation",
+        ["tip_admin_badge"] =
+            "Non ex\u00e9cut\u00e9 en tant qu\u2019administrateur \u2014 certains ajustements n\u00e9cessitent une \u00e9l\u00e9vation",
         ["tip_filter_label"] = "Filtrer les ajustements par statut actuel",
         ["tip_scope_label"] = "Filtrer les ajustements par port\u00e9e de registre (HKCU vs HKLM)",
 
@@ -1133,13 +1134,16 @@ public static class Locale
         ["status_skipped_hw"] = "SKIPPED (HW)",
 
         // ── Messages ──────────────────────────────────────────────────────
-        ["msg_reboot_pending"] = "{0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d3\u05d5\u05e8\u05e9\u05d9\u05dd \u05d0\u05ea\u05d7\u05d5\u05dc \u05de\u05e9\u05d9\u05d1.",
+        ["msg_reboot_pending"] =
+            "{0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d3\u05d5\u05e8\u05e9\u05d9\u05dd \u05d0\u05ea\u05d7\u05d5\u05dc \u05de\u05e9\u05d9\u05d1.",
         ["msg_reboot_title"] = "\u05d0\u05ea\u05d7\u05d5\u05dc \u05e0\u05d3\u05e8\u05e9",
         ["msg_no_selection"] = "\u05dc\u05d0 \u05e0\u05d1\u05d7\u05e8\u05d5 \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd.",
-        ["msg_apply_done"] = "\u05d4\u05d5\u05e4\u05e2\u05dc\u05d5 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4.",
+        ["msg_apply_done"] =
+            "\u05d4\u05d5\u05e4\u05e2\u05dc\u05d5 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4.",
         ["msg_remove_done"] = "\u05d4\u05d5\u05e1\u05e8\u05d5 {0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d1\u05d4\u05e6\u05dc\u05d7\u05d4.",
         ["msg_apply_failed"] = "\u05d4\u05d7\u05dc\u05d4 \u05e0\u05db\u05e9\u05dc\u05d4: {0}",
-        ["msg_batch_done"] = "\u05e4\u05e2\u05d5\u05dc\u05d4 \u05d4\u05d5\u05e9\u05dc\u05de\u05d4: {0} \u05d4\u05d5\u05e4\u05e2\u05dc\u05d5, {1} \u05e0\u05db\u05e9\u05dc\u05d5.",
+        ["msg_batch_done"] =
+            "\u05e4\u05e2\u05d5\u05dc\u05d4 \u05d4\u05d5\u05e9\u05dc\u05de\u05d4: {0} \u05d4\u05d5\u05e4\u05e2\u05dc\u05d5, {1} \u05e0\u05db\u05e9\u05dc\u05d5.",
         ["msg_validate_ok"] = "\u05d0\u05d9\u05de\u05d5\u05ea \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05e2\u05d1\u05e8.",
 
         // ── Tray icon ─────────────────────────────────────────────────────
@@ -1159,7 +1163,8 @@ public static class Locale
         ["ctx_open_regedit"] = "\u05e4\u05ea\u05d7 \u05d1\u05e2\u05d5\u05e8\u05da \u05d4\u05e8\u05e9\u05d5\u05de\u05d4",
 
         // ── Detail panel / Log ────────────────────────────────────────────
-        ["detail_none"] = "\u05d1\u05d7\u05e8 \u05d0\u05d9\u05e4\u05d5\u05df \u05dc\u05e6\u05e4\u05d9\u05d9\u05d4 \u05d1\u05e4\u05e8\u05d8\u05d9\u05dd.",
+        ["detail_none"] =
+            "\u05d1\u05d7\u05e8 \u05d0\u05d9\u05e4\u05d5\u05df \u05dc\u05e6\u05e4\u05d9\u05d9\u05d4 \u05d1\u05e4\u05e8\u05d8\u05d9\u05dd.",
         ["detail_category"] = "\u05e7\u05d8\u05d2\u05d5\u05e8\u05d9\u05d4:",
         ["detail_scope_label"] = "\u05d8\u05d5\u05d5\u05d7:",
         ["detail_tags_label"] = "\u05ea\u05d2\u05d9\u05d5\u05ea:",
@@ -1173,7 +1178,8 @@ public static class Locale
 
         // ── Miscellaneous ─────────────────────────────────────────────────
         ["cat_n_tweaks"] = "{0} \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd",
-        ["search_no_results"] = "\u05d0\u05d9\u05df \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d4\u05ea\u05d5\u05d0\u05de\u05d9\u05dd \u05dc-\u2018{0}\u2019.",
+        ["search_no_results"] =
+            "\u05d0\u05d9\u05df \u05d0\u05d9\u05e4\u05d5\u05e0\u05d9\u05dd \u05d4\u05ea\u05d5\u05d0\u05de\u05d9\u05dd \u05dc-\u2018{0}\u2019.",
         ["app_window_title"] = "RegiLattice",
         ["profile_none"] = "(\u05d0\u05d9\u05df)",
         ["btn_ok"] = "OK",
