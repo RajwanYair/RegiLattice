@@ -377,6 +377,10 @@ public sealed class SshHardeningBranchTests2
     {
         // Calls DetectSshdDirective(directive, expectedValue)
         // → `if (!File.Exists(SshdConfig)) return false;` T-branch
+        // Skip on machines that have OpenSSH Server installed (e.g. GitHub windows-latest runners).
+        if (System.IO.File.Exists(@"C:\ProgramData\ssh\sshd_config"))
+            return;
+
         var (td, _) = GetSshTweak();
         if (td?.DetectAction is null)
             return;
@@ -388,6 +392,10 @@ public sealed class SshHardeningBranchTests2
     [Fact]
     public void AllSshTweaks_DetectAction_ReturnsFalseWhenNoSshdConfig()
     {
+        // Skip on machines that have OpenSSH Server installed (e.g. GitHub windows-latest runners).
+        if (System.IO.File.Exists(@"C:\ProgramData\ssh\sshd_config"))
+            return;
+
         var session = new RegistrySession(dryRun: true);
         var engine = new TweakEngine(session);
         engine.RegisterBuiltins();
