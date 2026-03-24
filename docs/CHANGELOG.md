@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.15.0] — 2026-04-09 (Sprints 232–236)
+
+### Added
+
+- **BitLockerPolicy** (Sprint 232) — 10 BitLocker policy tweaks: require TPM, allow enhanced PIN, set minimum PIN length, require recovery password, back up recovery key to AD, disable recovery console, disable used-space-only encryption, disable auto-unlock for fixed drives, enforce hardware encryption, block non-compliant removable drives
+- **WinlogonPolicy** (Sprint 233) — 10 Winlogon policy tweaks: disable last username display, disable smart card removal notification, set CTRL+ALT+DEL warning, disable password change dialog, disable logon scripts in user context, disable logoff scripts in user context, disable shutdown scripts in user context, disable cached credentials, set max cached logons to 1, require password at resume
+- **PrintSpoolerPolicy** (Sprint 234) — 10 Print Spooler policy tweaks: disable printer driver installation by users, disable driver updates, redirect spool directory to secure location, disable web-based printing, disable per-machine printer connections, disable published printers in AD, set spool directory ACL, restrict printer driver installation source, disable Internet printing, restrict print driver package installation
+- **DeviceInstallPolicy** (Sprint 235) — 10 Device Install policy tweaks: block prohibited devices by setup class, prevent installation via PnP removable devices, block unmatched device IDs, set activity timeout to 30 s, disable system-restore on device install, log device install activities, deny device by hardware ID, disable signed driver non-compliance prompt, block installation of unspecified device classes, prevent co-installer registration
+- **UserProfilePolicy** (Sprint 236) — 10 User Profile policy tweaks: disable roaming profile changes, set max profile size, delete roaming profile cache on logoff, disable user profile advertising, block guest home folder creation, set home folder path permission, disable slow-link roaming profile, enforce mandatory profiles, delete temp profiles on logoff, disable profile quota notification
+
+#### Stats
+
+- Total tweaks: **5,575** (+50)
+- Categories: **273** (+5)
+- Module files: **268** (+5)
+- Tests: **2,693** (unchanged)
+- Version bumped `5.14.0` → `5.15.0`
+
 ## [5.14.0] — 2026-04-09 (Sprints 227–231)
 
 ### Added

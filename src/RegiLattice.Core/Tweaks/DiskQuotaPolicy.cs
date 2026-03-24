@@ -10,8 +10,7 @@ using RegiLattice.Core.Models;
 
 internal static class DiskQuotaPolicy
 {
-    private const string Key =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DiskQuota";
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DiskQuota";
 
     public static IReadOnlyList<TweakDef> Tweaks =>
         [
@@ -113,11 +112,9 @@ internal static class DiskQuotaPolicy
                 ImpactScore = 4,
                 SafetyRating = 4,
                 ImpactNote = "Each new user profile on NTFS volumes defaults to a 1 GiB hard quota.",
-                ApplyOps =
-                    [RegOp.SetQword(Key, "DefaultQuotaLimit", 1_073_741_824L)],
+                ApplyOps = [RegOp.SetQword(Key, "DefaultQuotaLimit", 1_073_741_824L)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DefaultQuotaLimit")],
-                DetectOps =
-                    [],
+                DetectOps = [],
             },
             new TweakDef
             {
@@ -132,11 +129,9 @@ internal static class DiskQuotaPolicy
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Warning event fires when a new user reaches 800 MiB of disk usage.",
-                ApplyOps =
-                    [RegOp.SetQword(Key, "DefaultQuotaThreshold", 838_860_800L)],
+                ApplyOps = [RegOp.SetQword(Key, "DefaultQuotaThreshold", 838_860_800L)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DefaultQuotaThreshold")],
-                DetectOps =
-                    [],
+                DetectOps = [],
             },
             new TweakDef
             {

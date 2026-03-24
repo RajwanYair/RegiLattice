@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class WinlogonPolicy
+{
+    private const string WlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Winlogon";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "wlpol-require-ctrl-alt-del",
+            Label = "Require Ctrl+Alt+Delete at Login",
+            Category = "Winlogon Policy",
+            Description = "Enforces the secure attention sequence (Ctrl+Alt+Delete) before the Windows logon screen appears.",
+            Tags = ["winlogon", "ctrl-alt-del", "logon", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Prevents login spoofing by requiring the hardware-intercepted SAS (Secure Attention Sequence).",
+            ApplyOps = [RegOp.SetDword(WlKey, "DisableCAD", 0)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "DisableCAD")],
+            DetectOps = [RegOp.CheckDword(WlKey, "DisableCAD", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-disable-autologon",
+            Label = "Disable Automatic Administrator Logon",
+            Category = "Winlogon Policy",
+            Description = "Prevents Windows from automatically logging in with a saved administrator account and password at startup.",
+            Tags = ["winlogon", "autologon", "logon", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Disabling AutoAdminLogon forces manual login; critical for devices in shared or public environments.",
+            ApplyOps = [RegOp.SetDword(WlKey, "AutoAdminLogon", 0)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "AutoAdminLogon")],
+            DetectOps = [RegOp.CheckDword(WlKey, "AutoAdminLogon", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-lock-on-smartcard-removal",
+            Label = "Lock Workstation on Smart Card Removal",
+            Category = "Winlogon Policy",
+            Description = "Automatically locks the workstation screen when the user removes their smart card from the reader.",
+            Tags = ["winlogon", "smart-card", "lock", "security", "mfa"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Value 1 = lock workstation; users must re-authenticate after removing their card.",
+            ApplyOps = [RegOp.SetDword(WlKey, "ScRemoveOption", 1)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "ScRemoveOption")],
+            DetectOps = [RegOp.CheckDword(WlKey, "ScRemoveOption", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-no-grace-period-after-screensaver",
+            Label = "No Grace Period After Screen Saver for Unlock",
+            Category = "Winlogon Policy",
+            Description = "Requires immediate credential entry after the screen saver activates, with no grace period delay.",
+            Tags = ["winlogon", "screen-saver", "lock", "grace-period", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Zero-second grace period; users must enter password immediately after screen saver starts.",
+            ApplyOps = [RegOp.SetDword(WlKey, "ScreenSaverGracePeriod", 0)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "ScreenSaverGracePeriod")],
+            DetectOps = [RegOp.CheckDword(WlKey, "ScreenSaverGracePeriod", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-enable-force-unlock-logon",
+            Label = "Force Credential Re-Entry on Workstation Unlock",
+            Category = "Winlogon Policy",
+            Description = "Requires full credential re-entry when unlocking a workstation, even if the same user locked it.",
+            Tags = ["winlogon", "unlock", "credentials", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Prevents pass-through unlock with cached session; full authentication required on every unlock.",
+            ApplyOps = [RegOp.SetDword(WlKey, "ForceUnlockLogon", 1)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "ForceUnlockLogon")],
+            DetectOps = [RegOp.CheckDword(WlKey, "ForceUnlockLogon", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-block-software-sas",
+            Label = "Block Software-Generated Secure Attention Sequence",
+            Category = "Winlogon Policy",
+            Description = "Prevents applications and services from programmatically generating the Ctrl+Alt+Delete SAS.",
+            Tags = ["winlogon", "sas", "security", "ctrl-alt-del"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Value 0 = only hardware can generate SAS; prevents malware from simulating the logon screen.",
+            ApplyOps = [RegOp.SetDword(WlKey, "SoftwareSASGeneration", 0)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "SoftwareSASGeneration")],
+            DetectOps = [RegOp.CheckDword(WlKey, "SoftwareSASGeneration", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-run-logon-scripts-sync",
+            Label = "Run Logon Scripts Synchronously",
+            Category = "Winlogon Policy",
+            Description = "Waits for all logon scripts to complete before presenting the user desktop.",
+            Tags = ["winlogon", "logon-scripts", "gpo", "synchronous"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Desktop shown only after all scripts finish; may increase logon time on complex environments.",
+            ApplyOps = [RegOp.SetDword(WlKey, "RunLogonScriptSync", 1)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "RunLogonScriptSync")],
+            DetectOps = [RegOp.CheckDword(WlKey, "RunLogonScriptSync", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-disable-boot-animation",
+            Label = "Disable Windows Boot Animation",
+            Category = "Winlogon Policy",
+            Description = "Skips the animated Windows splash screen during boot to reduce boot time and remove branding.",
+            Tags = ["winlogon", "boot", "animation", "performance"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Removes the spinning dots animation during Windows startup; marginal boot time improvement.",
+            ApplyOps = [RegOp.SetDword(WlKey, "EnableBootStatusPolicy", 0)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "EnableBootStatusPolicy")],
+            DetectOps = [RegOp.CheckDword(WlKey, "EnableBootStatusPolicy", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-hide-last-logon-user",
+            Label = "Hide Last Logged-On Username at Logon Screen",
+            Category = "Winlogon Policy",
+            Description = "Clears the username field at the Windows logon screen so it does not display the last signed-in account.",
+            Tags = ["winlogon", "last-user", "privacy", "logon", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Users must type their full username at each login; prevents username enumeration at the logon screen.",
+            ApplyOps = [RegOp.SetDword(WlKey, "DontDisplayLastUserName", 1)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "DontDisplayLastUserName")],
+            DetectOps = [RegOp.CheckDword(WlKey, "DontDisplayLastUserName", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wlpol-limit-cached-logons",
+            Label = "Limit Cached Domain Logon Credentials",
+            Category = "Winlogon Policy",
+            Description = "Restricts how many domain credentials Windows caches locally for offline logon situations.",
+            Tags = ["winlogon", "cached-logon", "credentials", "domain", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Caches only 2 domain accounts locally; reduces credential exposure if disk is compromised. Set to 0 to disable caching entirely.",
+            ApplyOps = [RegOp.SetDword(WlKey, "CachedLogonsCount", 2)],
+            RemoveOps = [RegOp.DeleteValue(WlKey, "CachedLogonsCount")],
+            DetectOps = [RegOp.CheckDword(WlKey, "CachedLogonsCount", 2)],
+        },
+    ];
+}
