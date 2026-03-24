@@ -1,5 +1,9 @@
 # ⚡ RegiLattice
 
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="RegiLattice — Windows Registry Tweaks Toolkit" width="100%"/>
+</p>
+
 > **Windows 10 / Windows 11 registry tweaks toolkit** — privacy hardening · performance optimizer · debloater · security hardening · group policy alternative · .NET 10 C# · WinForms GUI · CLI
 
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
@@ -31,6 +35,10 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 
 ## Highlights
 
+<p align="center">
+  <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
+</p>
+
 - **4 825 verified tweaks** across 198 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
@@ -53,6 +61,16 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
 - **Localization** — built-in English + German locale (48 strings)
+
+<p align="center">
+  <img src="docs/assets/features.svg" alt="RegiLattice Feature Categories" width="100%"/>
+</p>
+
+## How It Works
+
+<p align="center">
+  <img src="docs/assets/how-it-works.svg" alt="How RegiLattice Works — Browse, Preview, Apply, Verify, Revert" width="100%"/>
+</p>
 
 ## Use Cases
 
@@ -119,6 +137,16 @@ graph LR
     TN --> TD
     RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
 ```
+
+<p align="center">
+  <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture Overview" width="100%"/>
+</p>
+
+## Theme Gallery
+
+<p align="center">
+  <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
+</p>
 
 ## Tweak Categories (188)
 

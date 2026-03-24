@@ -153,6 +153,13 @@ public sealed class TweakDef
     /// </summary>
     public int SafetyRating { get; init; } = 4;
 
+    /// <summary>
+    /// Short human-readable description of the expected impact when this tweak is applied.
+    /// Shown in the detail panel and CLI output. Empty string = omitted from display.
+    /// Example: "Reduces boot time by ~2–5 s by disabling heavy startup services."
+    /// </summary>
+    public string ImpactNote { get; init; } = "";
+
     /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
     public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
 

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="180" fill="url(#bg)" rx="12"/>
+
+  <!-- Theme swatches -->
+  <g font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#a6adc8">
+    <!-- Catppuccin Mocha -->
+    <g transform="translate(30, 25)">
+      <rect width="200" height="40" rx="8" fill="#1e1e2e" stroke="#45475a" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#89b4fa"/><circle cx="38" cy="20" r="8" fill="#a6e3a1"/>
+      <circle cx="58" cy="20" r="8" fill="#f38ba8"/><circle cx="78" cy="20" r="8" fill="#f9e2af"/>
+      <circle cx="98" cy="20" r="8" fill="#cdd6f4"/><circle cx="118" cy="20" r="8" fill="#b4befe"/>
+      <text x="135" y="25" font-weight="600" fill="#cdd6f4">Mocha</text>
+    </g>
+
+    <!-- Catppuccin Latte -->
+    <g transform="translate(250, 25)">
+      <rect width="200" height="40" rx="8" fill="#eff1f5" stroke="#ccd0da" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#1e66f5"/><circle cx="38" cy="20" r="8" fill="#40a02b"/>
+      <circle cx="58" cy="20" r="8" fill="#d20f39"/><circle cx="78" cy="20" r="8" fill="#df8e1d"/>
+      <circle cx="98" cy="20" r="8" fill="#4c4f69"/><circle cx="118" cy="20" r="8" fill="#7287fd"/>
+      <text x="135" y="25" font-weight="600" fill="#4c4f69">Latte</text>
+    </g>
+
+    <!-- Nord -->
+    <g transform="translate(470, 25)">
+      <rect width="200" height="40" rx="8" fill="#2e3440" stroke="#3b4252" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#88c0d0"/><circle cx="38" cy="20" r="8" fill="#a3be8c"/>
+      <circle cx="58" cy="20" r="8" fill="#bf616a"/><circle cx="78" cy="20" r="8" fill="#ebcb8b"/>
+      <circle cx="98" cy="20" r="8" fill="#eceff4"/><circle cx="118" cy="20" r="8" fill="#b48ead"/>
+      <text x="135" y="25" font-weight="600" fill="#eceff4">Nord</text>
+    </g>
+
+    <!-- Dracula -->
+    <g transform="translate(690, 25)">
+      <rect width="200" height="40" rx="8" fill="#282a36" stroke="#44475a" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#bd93f9"/><circle cx="38" cy="20" r="8" fill="#50fa7b"/>
+      <circle cx="58" cy="20" r="8" fill="#ff5555"/><circle cx="78" cy="20" r="8" fill="#f1fa8c"/>
+      <circle cx="98" cy="20" r="8" fill="#f8f8f2"/><circle cx="118" cy="20" r="8" fill="#ff79c6"/>
+      <text x="135" y="25" font-weight="600" fill="#f8f8f2">Dracula</text>
+    </g>
+
+    <!-- Tokyo Night -->
+    <g transform="translate(910, 25)">
+      <rect width="200" height="40" rx="8" fill="#1a1b26" stroke="#24283b" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#7aa2f7"/><circle cx="38" cy="20" r="8" fill="#9ece6a"/>
+      <circle cx="58" cy="20" r="8" fill="#f7768e"/><circle cx="78" cy="20" r="8" fill="#e0af68"/>
+      <circle cx="98" cy="20" r="8" fill="#c0caf5"/><circle cx="118" cy="20" r="8" fill="#bb9af7"/>
+      <text x="135" y="25" font-weight="600" fill="#c0caf5">Tokyo</text>
+    </g>
+
+    <!-- Gruvbox Dark -->
+    <g transform="translate(30, 80)">
+      <rect width="200" height="40" rx="8" fill="#282828" stroke="#3c3836" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#83a598"/><circle cx="38" cy="20" r="8" fill="#b8bb26"/>
+      <circle cx="58" cy="20" r="8" fill="#fb4934"/><circle cx="78" cy="20" r="8" fill="#fabd2f"/>
+      <circle cx="98" cy="20" r="8" fill="#ebdbb2"/><circle cx="118" cy="20" r="8" fill="#d3869b"/>
+      <text x="135" y="25" font-weight="600" fill="#ebdbb2">Gruvbox</text>
+    </g>
+
+    <!-- Solarized Dark -->
+    <g transform="translate(250, 80)">
+      <rect width="200" height="40" rx="8" fill="#002b36" stroke="#073642" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#268bd2"/><circle cx="38" cy="20" r="8" fill="#859900"/>
+      <circle cx="58" cy="20" r="8" fill="#dc322f"/><circle cx="78" cy="20" r="8" fill="#b58900"/>
+      <circle cx="98" cy="20" r="8" fill="#93a1a1"/><circle cx="118" cy="20" r="8" fill="#6c71c4"/>
+      <text x="135" y="25" font-weight="600" fill="#93a1a1">Solarized</text>
+    </g>
+
+    <!-- One Dark Pro -->
+    <g transform="translate(470, 80)">
+      <rect width="200" height="40" rx="8" fill="#282c34" stroke="#3e4451" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#61afef"/><circle cx="38" cy="20" r="8" fill="#98c379"/>
+      <circle cx="58" cy="20" r="8" fill="#e06c75"/><circle cx="78" cy="20" r="8" fill="#e5c07b"/>
+      <circle cx="98" cy="20" r="8" fill="#abb2bf"/><circle cx="118" cy="20" r="8" fill="#c678dd"/>
+      <text x="135" y="25" font-weight="600" fill="#abb2bf">One Dark</text>
+    </g>
+
+    <!-- Rosé Pine -->
+    <g transform="translate(690, 80)">
+      <rect width="200" height="40" rx="8" fill="#191724" stroke="#26233a" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#31748f"/><circle cx="38" cy="20" r="8" fill="#9ccfd8"/>
+      <circle cx="58" cy="20" r="8" fill="#eb6f92"/><circle cx="78" cy="20" r="8" fill="#f6c177"/>
+      <circle cx="98" cy="20" r="8" fill="#e0def4"/><circle cx="118" cy="20" r="8" fill="#c4a7e7"/>
+      <text x="135" y="25" font-weight="600" fill="#e0def4">Rosé Pine</text>
+    </g>
+
+    <!-- Everforest -->
+    <g transform="translate(910, 80)">
+      <rect width="200" height="40" rx="8" fill="#2d353b" stroke="#343f44" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#7fbbb3"/><circle cx="38" cy="20" r="8" fill="#a7c080"/>
+      <circle cx="58" cy="20" r="8" fill="#e67e80"/><circle cx="78" cy="20" r="8" fill="#dbbc7f"/>
+      <circle cx="98" cy="20" r="8" fill="#d3c6aa"/><circle cx="118" cy="20" r="8" fill="#d699b6"/>
+      <text x="135" y="25" font-weight="600" fill="#d3c6aa">Everforest</text>
+    </g>
+
+    <!-- Cyberpunk -->
+    <g transform="translate(30, 135)">
+      <rect width="200" height="40" rx="8" fill="#0a0a1a" stroke="#1a1a3a" stroke-width="1"/>
+      <circle cx="18" cy="20" r="8" fill="#00d4ff"/><circle cx="38" cy="20" r="8" fill="#00ff88"/>
+      <circle cx="58" cy="20" r="8" fill="#ff0055"/><circle cx="78" cy="20" r="8" fill="#ffdd00"/>
+      <circle cx="98" cy="20" r="8" fill="#e0e0ff"/><circle cx="118" cy="20" r="8" fill="#ff00ff"/>
+      <text x="135" y="25" font-weight="600" fill="#e0e0ff">Cyberpunk</text>
+    </g>
+
+    <!-- Label -->
+    <text x="600" y="165" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="16" fill="#585b70">11 Switchable Colour Themes &#x2022; Dark &amp; Light &#x2022; Auto System Detection</text>
+  </g>
+</svg>

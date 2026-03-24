@@ -16,7 +16,13 @@
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}",
-        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "HTTP_PROXY": "${env:HTTP_PROXY}",
+        "HTTPS_PROXY": "${env:HTTPS_PROXY}",
+        "http_proxy": "${env:HTTP_PROXY}",
+        "https_proxy": "${env:HTTPS_PROXY}",
+        "NO_PROXY": "localhost,127.0.0.1,::1",
+        "no_proxy": "localhost,127.0.0.1,::1"
       }
     },
     "filesystem": {

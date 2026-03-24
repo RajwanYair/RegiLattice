@@ -2192,12 +2192,20 @@ public partial class MainForm : Form
                 }
             }
 
+            // Impact stars: ★★★★☆ (filled/empty U+2605/U+2606)
+            string impactStars = new string('\u2605', td.ImpactScore) + new string('\u2606', 5 - td.ImpactScore);
+            string safetyStars = new string('\u2605', td.SafetyRating) + new string('\u2606', 5 - td.SafetyRating);
+            string impactLine = $"\U0001F4CA Impact: {impactStars}  \u2502  Safety: {safetyStars}";
+            if (!string.IsNullOrWhiteSpace(td.ImpactNote))
+                impactLine += $"\n\u26A1 {td.ImpactNote}";
+
             // Use RTF approach for reliable rendering with dark backgrounds
             UpdateDetailBox(
                 $"{kindSymbol} {td.Label}   \u2502   {statusStr}   \u2502   {scopeStr}\n"
                     + $"ID: {td.Id}   \u2502   Admin: {(td.NeedsAdmin ? "Yes" : "No")}   \u2502   Corp Safe: {(td.CorpSafe ? "Yes" : "No")}\n"
                     + $"Tags: {tags}\n"
                     + $"Registry: {keys}\n"
+                    + $"{impactLine}\n"
                     + $"Description: {desc}\n"
                     + $"\U0001F4CB Expected: {expected}"
                     + beforeAfter
