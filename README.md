@@ -1,5 +1,7 @@
 # ⚡ RegiLattice
 
+> **Windows 10 / Windows 11 registry tweaks toolkit** — privacy hardening · performance optimizer · debloater · security hardening · group policy alternative · .NET 10 C# · WinForms GUI · CLI
+
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
@@ -8,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Version](https://img.shields.io/badge/version-5.0.0-blue)
 
-A comprehensive Windows registry tweak toolkit with **4 828 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10** for native performance on Windows 10/11.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **4 828 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
@@ -87,13 +89,13 @@ graph LR
         PM[Plugins<br/>PackManager · PackLoader]
     end
 
-    subgraph Tweaks["173 Tweak Modules"]
+    subgraph Tweaks["193 Tweak Modules"]
         T1[Performance.cs]
         T2[Privacy.cs]
         T3[Security.cs]
         T4[Gaming.cs]
         T5[Networking.cs]
-        TN[... 168 more]
+        TN[... 188 more]
     end
 
     CLI --> TE
@@ -252,7 +254,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 183 module files, 4 728 tweaks
+│   │   └── Tweaks/                          # 193 module files, 4 828 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -303,10 +305,10 @@ RegiLattice/
 │   │   └── ConfigExporterTests.cs
 │   ├── RegiLattice.CLI.Tests/               # 301 xUnit tests
 │   │   └── ParseArgsTests.cs
-   ├── RegiLattice.GUI.Tests/               # 308 xUnit tests
-│       ├── ThemeTests.cs
-│       ├── PackageManagerValidationTests.cs
-│       └── AppIconsTests.cs
+│   ├── RegiLattice.GUI.Tests/               # 308 xUnit tests
+│   │   ├── ThemeTests.cs
+│   │   ├── PackageManagerValidationTests.cs
+│   │   └── AppIconsTests.cs
 ├── winget/                                  # Winget package manifests
 ├── docs/                                    # Documentation
 └── .vscode/                                 # VS Code workspace settings
@@ -396,11 +398,17 @@ MIT — see [LICENSE](LICENSE) for details.
 
 ## Keywords & GitHub Topics
 
+### Repository Description *(GitHub UI → "About" gear → Description)*
+
+Paste this into the repository **Description** field for maximum GitHub search visibility:
+
+> Windows 10/11 registry tweaks toolkit — 4828 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+
 ### Recommended GitHub Topics
 
-Set the following topics on the repository (GitHub UI → \"About\" gear → Topics):
+Set the following topics on the repository (GitHub UI → "About" gear → Topics):
 
-`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager`
+`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager` `group-policy` `privacy-tools` `windows-debloat` `registry-automation` `tweak-engine`
 
 ### Search Keywords
 
@@ -427,5 +435,10 @@ Set the following topics on the repository (GitHub UI → \"About\" gear → Top
 **Package & Tool Management:**
 `package-manager` · `winget-integration` · `chocolatey-integration` · `scoop-integration` · `pip-integration` · `powershell-modules` · `tool-management` · `software-management`
 
+**Compliance & Audit:**
+`compliance-audit` · `drift-detection` · `policy-compliance` · `configuration-audit` · `baseline-hardening` · `cis-benchmarks` · `security-baseline` · `windows-compliance` · `it-policy-enforcement` · `change-tracking`
+
 **Similar / Related Tools:**
-RegiLattice is a programmatic, fully reversible, and enterprise-safe alternative to tools in the same space as O\&O ShutUp10, W10Privacy, Winaero Tweaker, Chris Titus WinUtil, BloatyNosy, and sophia-script — built on .NET 10 with a declarative engine, CLI, WinForms GUI, xUnit test suite, and corporate network guard.
+RegiLattice is a programmatic, fully reversible, and enterprise-safe alternative to tools in the same space as O\&O ShutUp10, W10Privacy, Winaero Tweaker, Chris Titus WinUtil, BloatyNosy, sophia-script, and Windows10Debloater — built on .NET 10 with a declarative engine, CLI, WinForms GUI, xUnit test suite, and corporate network guard.
+
+`shutup10-alternative` · `w10privacy-alternative` · `winaero-alternative` · `chris-titus-winutil-alternative` · `windows-decrapifier` · `debloat-windows-11` · `debloat-windows-10`
