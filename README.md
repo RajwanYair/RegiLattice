@@ -12,15 +12,15 @@
 ![Tests](https://img.shields.io/badge/tests-2693%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.4.0-blue)
+![Version](https://img.shields.io/badge/version-5.5.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5025 verified tweaks** across **218 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5075 verified tweaks** across **223 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.4.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.5.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -39,7 +39,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **5025 verified tweaks** across 218 categories — each fully reversible with apply + remove
+- **5075 verified tweaks** across 223 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -107,7 +107,7 @@ graph LR
         PM[Plugins<br/>PackManager · PackLoader]
     end
 
-    subgraph Tweaks["213 Tweak Modules"]
+    subgraph Tweaks["218 Tweak Modules"]
         T1[Performance.cs]
         T2[Privacy.cs]
         T3[Security.cs]
@@ -282,7 +282,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 213 module files, 5025 tweaks
+│   │   └── Tweaks/                          # 218 module files, 5075 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -430,7 +430,7 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 5025 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 5075 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 

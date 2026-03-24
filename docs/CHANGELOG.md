@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.5.0] — 2026-04-01 (Sprints 182–186)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`WindowsAttachmentsPolicy.cs`** — 10 tweaks (slug: `attach`) — File Attachment Manager zone enforcement (save zone info, anti-virus scan, MIME type blocking, unblock prevention)
+- **`WindowsMailPolicy.cs`** — 10 tweaks (slug: `winmail`) — Windows Mail enterprise lockdown (block HTML images, executable attachments, shopping/news feeds, import disable)
+- **`NetMeetingPolicy.cs`** — 10 tweaks (slug: `netmeet`) — Legacy NetMeeting hardening (disable app sharing, file transfer, remote desktop, audio/video, directory service)
+- **`CloudNotificationsPolicy.cs`** — 10 tweaks (slug: `cloudntf`) — WNS cloud notification governance (disable cloud/account/mirroring/promotional/diagnostic notifications)
+- **`ConferencingPolicy.cs`** — 10 tweaks (slug: `confer`) — Windows Meeting Space / PNRP lockdown (disable meeting space, invitations, P2P connections, people nearby)
+
+#### Stats
+
+- Total tweaks: **5 075** (+50 from v5.4.0)
+- Categories: **223** (+5 from v5.4.0)
+- Module files: **218** (+5 from v5.4.0)
+- Tests: **2 693** (unchanged)
+
+---
+
 ## [5.4.0] — 2026-04-01 (Sprints 177–181)
 
 ### Added

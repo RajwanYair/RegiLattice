@@ -1,0 +1,152 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class WindowsAttachmentsPolicy
+{
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Attachments";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "attach-dont-save-zone-info",
+            Label = "Attachments: Do Not Preserve Zone ID on Downloads",
+            Category = "Windows Attachments Policy",
+            Description = "Prevents Windows from saving the Zone Identifier (Zone.Identifier ADS stream) on files downloaded from the internet. When set, users will not receive SmartScreen or Open File security warnings for downloaded files. Use only if zone information is enforced by a separate security layer.",
+            Tags = ["attachments", "zone-id", "download", "smartscreen", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "SaveZoneInformation", 2)],
+            RemoveOps = [RegOp.DeleteValue(Key, "SaveZoneInformation")],
+            DetectOps = [RegOp.CheckDword(Key, "SaveZoneInformation", 2)],
+        },
+        new TweakDef
+        {
+            Id = "attach-always-scan-with-av",
+            Label = "Attachments: Require Antivirus Scan on File Open",
+            Category = "Windows Attachments Policy",
+            Description = "Forces Windows Attachment Manager to invoke the registered antivirus product before allowing the user to open any file attachment. Ensures executables and archives received via email or browser downloads are scanned prior to execution.",
+            Tags = ["attachments", "antivirus", "scan", "security", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "ScanWithAntiVirus", 3)],
+            RemoveOps = [RegOp.DeleteValue(Key, "ScanWithAntiVirus")],
+            DetectOps = [RegOp.CheckDword(Key, "ScanWithAntiVirus", 3)],
+        },
+        new TweakDef
+        {
+            Id = "attach-default-high-risk",
+            Label = "Attachments: Set Default File Type Risk to High",
+            Category = "Windows Attachments Policy",
+            Description = "Sets the default file type risk level for Attachment Manager to High (3). Files with unknown extension risk mappings are treated as high-risk and trigger a security prompt before execution. Protects against novel filetype exploit vectors.",
+            Tags = ["attachments", "file-type", "risk", "high", "security", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "DefaultFileTypeRisk", 3)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DefaultFileTypeRisk")],
+            DetectOps = [RegOp.CheckDword(Key, "DefaultFileTypeRisk", 3)],
+        },
+        new TweakDef
+        {
+            Id = "attach-show-zone-info-properties",
+            Label = "Attachments: Show Zone ID in File Properties (Zone Tab Visible)",
+            Category = "Windows Attachments Policy",
+            Description = "Ensures the Zone Information tab is visible in file properties for downloaded files. When HideZoneInfoOnProperties=0, users can inspect a file's zone origin, supporting security awareness and incident investigation.",
+            Tags = ["attachments", "zone-id", "properties", "transparency", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "HideZoneInfoOnProperties", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "HideZoneInfoOnProperties")],
+            DetectOps = [RegOp.CheckDword(Key, "HideZoneInfoOnProperties", 0)],
+        },
+        new TweakDef
+        {
+            Id = "attach-notify-blocked-executables",
+            Label = "Attachments: Notify User When Executable Attachment Is Blocked",
+            Category = "Windows Attachments Policy",
+            Description = "Enables user notification when Attachment Manager blocks a potentially unsafe file from being opened. Alerts are displayed when a download is prevented by file-type risk classification, improving user awareness that a file was quarantined.",
+            Tags = ["attachments", "notify", "block", "executable", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "NotifyOnRunBlockedFiles", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "NotifyOnRunBlockedFiles")],
+            DetectOps = [RegOp.CheckDword(Key, "NotifyOnRunBlockedFiles", 1)],
+        },
+        new TweakDef
+        {
+            Id = "attach-block-remote-file-open",
+            Label = "Attachments: Block Direct Open of Remote Files Without Save",
+            Category = "Windows Attachments Policy",
+            Description = "Prevents users from opening downloaded files without first saving them locally (where zone information and AV scanning are applied). Helps enforce the attachment scan pipeline for files opened directly from browser 'Open' prompts.",
+            Tags = ["attachments", "remote", "open", "block", "security", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "AllowInternetAccess", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowInternetAccess")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowInternetAccess", 0)],
+        },
+        new TweakDef
+        {
+            Id = "attach-disable-file-unblock",
+            Label = "Attachments: Prevent Users from Unblocking File Attachments",
+            Category = "Windows Attachments Policy",
+            Description = "Disables the 'Unblock' option on file properties for internet-zone downloads. Prevents users from bypassing attachment security by removing the zone identifier (Zone.Identifier stream) via the file's Properties → Security tab.",
+            Tags = ["attachments", "unblock", "zone-id", "bypass", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "NoUnblockAttachments", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "NoUnblockAttachments")],
+            DetectOps = [RegOp.CheckDword(Key, "NoUnblockAttachments", 1)],
+        },
+        new TweakDef
+        {
+            Id = "attach-force-zone-id-prompt",
+            Label = "Attachments: Force Security Warning Prompt for Internet-Zone Files",
+            Category = "Windows Attachments Policy",
+            Description = "Ensures the security warning dialog is always displayed when a user attempts to open files tagged with the Internet zone identifier. Prevents security-zone bypass for files copied into local folders that might otherwise strip zone data.",
+            Tags = ["attachments", "zone-id", "prompt", "internet-zone", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "ForceZoneIDPrompt", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "ForceZoneIDPrompt")],
+            DetectOps = [RegOp.CheckDword(Key, "ForceZoneIDPrompt", 1)],
+        },
+        new TweakDef
+        {
+            Id = "attach-disable-inheritance-bypass",
+            Label = "Attachments: Block Zone Inheritance Bypass for Attachments",
+            Category = "Windows Attachments Policy",
+            Description = "Prevents attachment processing from inheriting a lower-risk zone classification from parent application contexts. Ensures that all attachments opened from email clients or Office files are evaluated at the attachment's own zone level.",
+            Tags = ["attachments", "zone-inheritance", "bypass", "security", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "DisableInheritanceZoneMap", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableInheritanceZoneMap")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableInheritanceZoneMap", 1)],
+        },
+        new TweakDef
+        {
+            Id = "attach-block-mime-sniff-override",
+            Label = "Attachments: Block MIME-Type Sniffing as Risk Classification Override",
+            Category = "Windows Attachments Policy",
+            Description = "Prevents Attachment Manager from using MIME content-type sniffing to downgrade the risk classification of a file beyond its registered extension risk level. A JPEG served with an executable MIME type remains high-risk.",
+            Tags = ["attachments", "mime", "sniff", "risk-override", "security", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [Key],
+            ApplyOps = [RegOp.SetDword(Key, "BlockMimeTypeChange", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "BlockMimeTypeChange")],
+            DetectOps = [RegOp.CheckDword(Key, "BlockMimeTypeChange", 1)],
+        },
+    ];
+}
