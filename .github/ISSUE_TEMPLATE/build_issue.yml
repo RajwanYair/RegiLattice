@@ -1,0 +1,80 @@
+name: Build Issue
+description: Report a problem building RegiLattice from source
+title: "[Build]: "
+labels: ["build", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a build issue! Please include the full error output so we can reproduce it.
+        Common fixes are documented in [docs/Troubleshooting.md](../docs/Troubleshooting.md).
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Failing Component
+      options:
+        - "Full solution (RegiLattice.sln)"
+        - "RegiLattice.Core"
+        - "RegiLattice.GUI"
+        - "RegiLattice.CLI"
+        - "Tests (RegiLattice.Core.Tests)"
+        - "Tests (RegiLattice.CLI.Tests)"
+        - "Tests (RegiLattice.GUI.Tests)"
+        - "MSI installer (wixproj)"
+        - "dotnet publish (self-contained)"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Build Command Used
+      placeholder: |
+        dotnet build RegiLattice.sln -c Release -m:1
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Output
+      description: Paste the complete build error output (MSB code + file + line number).
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet
+    attributes:
+      label: .NET SDK Version
+      description: Output of `dotnet --version`
+      placeholder: "10.0.100"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Windows Version
+      placeholder: "Windows 11 23H2 (Build 22631)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: env_var
+    attributes:
+      label: MSBUILDDISABLENODEREUSE set?
+      description: This env var prevents MSB3492 cache-lock errors on OneDrive-hosted repos.
+      options:
+        - "Yes — $env:MSBUILDDISABLENODEREUSE = '1'"
+        - "No"
+        - "Not sure"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Anything else relevant — OneDrive sync, antivirus, custom Directory.Build.props, etc.

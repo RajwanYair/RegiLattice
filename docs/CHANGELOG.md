@@ -4,6 +4,31 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.6.0] — 2026-04-08 (Sprints 187–191)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`BiometricsConfigPolicy.cs`** — 10 tweaks (slug: `biopol`) — Windows Biometrics Group Policy: disable biometrics service, block domain biometric logon, disable secondary auth factor, enforce facial anti-spoofing, block enrollment, disable credential provider
+- **`AppConsentStorePolicy.cs`** — 10 tweaks (slug: `acspol`) — App Consent Store Policy: disable consent store, restrict auto consent grants, block sensitive consent, disable consent UX, require admin approval, block third-party consent
+- **`NetworkAccessProtPolicy.cs`** — 10 tweaks (slug: `nappol`) — Network Access Protection Policy: disable NAP client, DHCP/802.1X/VPN/IPSec quarantine control, disable auto-remediation, NAP UI and tray icon, policy auto-update
+- **`DefenderExclusionsPolicy.cs`** — 10 tweaks (slug: `defexclpol`) — Defender Exclusions Group Policy: block local admin exclusion merging, restrict path/process/extension/IP exclusions, enable exclusion audit logging, block temp and wildcard exclusions
+- **`SystemRecoveryOptionsPolicy.cs`** — 10 tweaks (slug: `sysrecpol`) — System Recovery Options Policy: disable startup repair, block recovery menu access, disable Reset PC, block WinRE CMD, disable recovery UI, block advanced tools
+
+#### Documentation
+
+- **`docs/Roadmap.md`** — Appended full 100-sprint tweak expansion plan (v5.6.0 through v5.25.0, Sprints 187–286) with version table, cadence rules, gap analysis workflow, and release checklist
+
+### Stats
+
+- Total tweaks: **5,125** (+50)
+- Categories: **228** (+5)
+- Module files: **223** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.5.0] — 2026-04-01 (Sprints 182–186)
 
 ### Added

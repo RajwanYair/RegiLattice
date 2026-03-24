@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "0 8 * * 1"
 
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   security-events: write
@@ -15,6 +19,9 @@ permissions:
 jobs:
   analyze:
     runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      MSBUILDDISABLENODEREUSE: 1
     strategy:
       fail-fast: false
       matrix:
@@ -27,13 +34,24 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-codeql-${{ hashFiles('**/*.csproj', 'Directory.Packages.props') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore RegiLattice.sln
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          queries: security-and-quality
 
       - name: Build
-        run: dotnet build RegiLattice.sln -c Release
+        run: dotnet build RegiLattice.sln -c Release --no-restore
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

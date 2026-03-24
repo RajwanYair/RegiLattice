@@ -1,3 +1,14 @@
+<!-- SEO / GitHub search keywords
+     windows registry tweaks windows 11 debloat privacy hardening performance optimizer
+     disable telemetry windows optimizer system hardening group policy alternative
+     registry editor winforms gui cli dotnet csharp tweak engine
+     shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
+     windows 11 tweaks windows 10 tweaks gaming optimization security hardening
+     registry backup corporate IT sysadmin gpo intune-compatible compliance audit
+     5125 tweaks 228 categories declarative regop engine dry-run snapshot diff
+     RegiLattice windows-optimizer tweak-manager registry-automation open-source
+-->
+
 # ⚡ RegiLattice
 
 <p align="center">
@@ -12,15 +23,15 @@
 ![Tests](https://img.shields.io/badge/tests-2693%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.5.0-blue)
+![Version](https://img.shields.io/badge/version-5.6.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5075 verified tweaks** across **223 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5125 verified tweaks** across **228 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.5.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.6.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -39,7 +50,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **5075 verified tweaks** across 223 categories — each fully reversible with apply + remove
+- **5125 verified tweaks** across 228 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -66,6 +77,51 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/features.svg" alt="RegiLattice Feature Categories" width="100%"/>
 </p>
 
+## Architecture
+
+<p align="center">
+  <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture — Core, GUI, CLI, Tweaks, Registry" width="100%"/>
+</p>
+
+```mermaid
+graph LR
+    subgraph Interfaces
+        CLI[RegiLattice.CLI<br/>25+ commands]
+        GUI[RegiLattice.GUI<br/>11 themes · WinForms]
+    end
+
+    subgraph Core["RegiLattice.Core (library)"]
+        TE[TweakEngine<br/>Register · Apply · Search · Filter]
+        RS[RegistrySession<br/>Read · Write · Backup · DryRun]
+        SM[SnapshotManager]
+        TV[TweakValidator]
+        DR[DependencyResolver]
+        CG[CorporateGuard]
+        SV[Services]
+        PM[Plugins / Packs]
+    end
+
+    subgraph Tweaks["223 Tweak Modules (5125 tweaks)"]
+        T1[Performance]
+        T2[Privacy]
+        T3[Security]
+        T4[Gaming]
+        TN[... 219 more]
+    end
+
+    CLI --> TE
+    GUI --> TE
+    TE --> RS
+    TE --> SM
+    TE --> TV
+    TE --> DR
+    TE --> CG
+    TE --> SV
+    TE --> PM
+    T1 & T2 & T3 & T4 & TN --> TE
+    RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
+```
+
 ## How It Works
 
 <p align="center">
@@ -83,74 +139,15 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 | **Developers** | Declarative `TweakDef` + `RegOp` API, extensible plugin system, xUnit-tested, CLI for scripting and CI pipelines |
 | **Power users** | Apply a machine profile (business/gaming/privacy/minimal/server) in a single command; snapshot before/after, diff, restore |
 
-
-```mermaid
-graph LR
-    subgraph Interfaces
-        CLI[RegiLattice.CLI<br/>Program.cs]
-        GUI[RegiLattice.GUI<br/>MainForm · Dialogs]
-    end
-
-    subgraph Core["RegiLattice.Core"]
-        TE[TweakEngine<br/>Register · Apply · Search · Filter]
-        SM[SnapshotManager<br/>Save · Load · Restore]
-        TV[TweakValidator<br/>Validate · CircularDeps]
-        DR[DependencyResolver<br/>Resolve · Dependents]
-        TD[TweakDef<br/>RegOp · Scope · TweakKind]
-        RS[RegistrySession<br/>Read · Write · Backup · DryRun]
-        CG[CorporateGuard<br/>AD · AzureAD · Intune]
-        PD[ProfileDefinitions<br/>5 profiles]
-        SV[Services<br/>Analytics · Config · HW]
-        SV2[Services<br/>Ratings · Favorites · History]
-        SV3[Services<br/>Compliance · UserProfiles]
-        SV4[Services<br/>Locale · ShellRunner]
-        PM[Plugins<br/>PackManager · PackLoader]
-    end
-
-    subgraph Tweaks["218 Tweak Modules"]
-        T1[Performance.cs]
-        T2[Privacy.cs]
-        T3[Security.cs]
-        T4[Gaming.cs]
-        T5[Networking.cs]
-        TN[... 188 more]
-    end
-
-    CLI --> TE
-    GUI --> TE
-    TE --> SM
-    TE --> TV
-    TE --> DR
-    TE --> RS
-    TE --> CG
-    TE --> PD
-    TE --> PM
-    SV --> TE
-    SV2 --> TE
-    SV3 --> TE
-    SV4 --> TE
-    T1 --> TD
-    T2 --> TD
-    T3 --> TD
-    T4 --> TD
-    T5 --> TD
-    TN --> TD
-    RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
-```
-
-<p align="center">
-  <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture Overview" width="100%"/>
-</p>
-
 ## Theme Gallery
 
 <p align="center">
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (188)
+## Tweak Categories (228)
 
-198 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, and more. Each tweak is fully reversible with apply/remove/detect operations.
+228 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
@@ -282,7 +279,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 218 module files, 5075 tweaks
+│   │   └── Tweaks/                          # 223 module files, 5125 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -430,13 +427,17 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 5075 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 5125 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 
 Set the following topics on the repository (GitHub UI → "About" gear → Topics):
 
-`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager` `group-policy` `privacy-tools` `windows-debloat` `registry-automation` `tweak-engine`
+`windows-registry` `registry-editor` `windows-tweaks` `windows-optimizer` `windows-11` `windows-10` `debloat` `privacy` `performance-optimization` `system-optimization` `gaming-optimization` `windows-hardening` `security-hardening` `registry-backup` `dotnet` `csharp` `winforms` `cli-tool` `open-source` `tweak-manager` `group-policy` `privacy-tools` `windows-debloat` `registry-automation` `tweak-engine` `gpo-alternative` `windows-11-tweaks` `windows-11-debloat` `windows-11-privacy` `windows-11-gaming` `windows-11-hardening` `disable-telemetry` `windows-decrapifier` `sysadmin-tools` `corporate-it` `compliance-audit` `drift-detection` `snapshot-diff` `dry-run` `declarative-config` `registry-policy` `winget` `chocolatey` `scoop`
+
+### Repository Description *(paste into GitHub → About gear → Description)*
+
+> Windows 10/11 registry tweaks toolkit — 5125 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
 
 ### Search Keywords
 

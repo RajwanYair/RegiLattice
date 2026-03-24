@@ -14,7 +14,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-shutdown-tracker",
             Label = "Reliability Policy: Disable Shutdown Event Tracker",
             Category = "Windows Reliability Policy",
-            Description = "Disables the Shutdown Event Tracker dialog that prompts users or admins for a reason when the system is shut down or restarted. Useful for desktops that do not require uptime tracking.",
+            Description =
+                "Disables the Shutdown Event Tracker dialog that prompts users or admins for a reason when the system is shut down or restarted. Useful for desktops that do not require uptime tracking.",
             Tags = ["reliability", "shutdown", "event-tracker", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -31,7 +32,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-rac-reporting",
             Label = "Reliability Policy: Disable RAC Problem Reporting to Microsoft",
             Category = "Windows Reliability Policy",
-            Description = "Disables the Reliability Analysis Component (RAC) from forwarding problem report data to Microsoft. RAC gathers application crash data and forwards it to Problem Reports and Solutions (WER).",
+            Description =
+                "Disables the Reliability Analysis Component (RAC) from forwarding problem report data to Microsoft. RAC gathers application crash data and forwards it to Problem Reports and Solutions (WER).",
             Tags = ["reliability", "rac", "wer", "reporting", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -48,7 +50,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-archive",
             Label = "Reliability Policy: Disable Reliability Data Archive",
             Category = "Windows Reliability Policy",
-            Description = "Disables the reliability history archive database written by the Reliability Analysis Component (RACAgent). Prevents creation and retention of Windows reliability scores and application failure records.",
+            Description =
+                "Disables the reliability history archive database written by the Reliability Analysis Component (RACAgent). Prevents creation and retention of Windows reliability scores and application failure records.",
             Tags = ["reliability", "archive", "rac", "history", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -65,7 +68,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-limit-archive-count",
             Label = "Reliability Policy: Limit Reliability Archive Maximum Count",
             Category = "Windows Reliability Policy",
-            Description = "Limits the number of reliability history records stored in the RAC database. Reducing the max archive count prevents unbounded growth of reliability data on low-disk-space endpoints.",
+            Description =
+                "Limits the number of reliability history records stored in the RAC database. Reducing the max archive count prevents unbounded growth of reliability data on low-disk-space endpoints.",
             Tags = ["reliability", "archive", "limit", "disk-space", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -82,7 +86,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-shutdown-reason-required",
             Label = "Reliability Policy: Disable Shutdown Reason Requirement",
             Category = "Windows Reliability Policy",
-            Description = "Removes the requirement for users to provide an annotated reason when shutting down or restarting the system. Complements the Shutdown Event Tracker disable for unattended workstations.",
+            Description =
+                "Removes the requirement for users to provide an annotated reason when shutting down or restarting the system. Complements the Shutdown Event Tracker disable for unattended workstations.",
             Tags = ["reliability", "shutdown", "reason", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -99,7 +104,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-shutdown-reason-display",
             Label = "Reliability Policy: Disable Shutdown Reason UI Display",
             Category = "Windows Reliability Policy",
-            Description = "Disables the on-screen display of shutdown reason annotations set by the Shutdown Event Tracker. Reduces noise in end-user shutdown flows where reason data is collected only for IT audit purposes.",
+            Description =
+                "Disables the on-screen display of shutdown reason annotations set by the Shutdown Event Tracker. Reduces noise in end-user shutdown flows where reason data is collected only for IT audit purposes.",
             Tags = ["reliability", "shutdown", "reason", "ui", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -116,7 +122,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-block-wer-auto-upload",
             Label = "Reliability Policy: Block WER Auto-Upload of Crash Dumps",
             Category = "Windows Reliability Policy",
-            Description = "Prevents Windows Error Reporting from automatically uploading minidumps and full memory dumps to Microsoft. Crash dumps can contain sensitive application data, PII, or credentials from process memory.",
+            Description =
+                "Prevents Windows Error Reporting from automatically uploading minidumps and full memory dumps to Microsoft. Crash dumps can contain sensitive application data, PII, or credentials from process memory.",
             Tags = ["reliability", "wer", "crash-dump", "upload", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -133,7 +140,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-wer-ui-prompt",
             Label = "Reliability Policy: Disable WER User Prompt Dialog",
             Category = "Windows Reliability Policy",
-            Description = "Suppresses the Windows Error Reporting prompt dialog when an application crashes. On headless or thin-client deployments, the WER dialog can block process termination and require remote intervention.",
+            Description =
+                "Suppresses the Windows Error Reporting prompt dialog when an application crashes. On headless or thin-client deployments, the WER dialog can block process termination and require remote intervention.",
             Tags = ["reliability", "wer", "dialog", "prompt", "headless", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -150,7 +158,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-limit-wer-queue-count",
             Label = "Reliability Policy: Limit WER Report Queue Size",
             Category = "Windows Reliability Policy",
-            Description = "Limits the maximum number of error reports held in the WER queue to a small number. On heavily-used endpoints, an unbounded WER queue can consume significant disk space.",
+            Description =
+                "Limits the maximum number of error reports held in the WER queue to a small number. On heavily-used endpoints, an unbounded WER queue can consume significant disk space.",
             Tags = ["reliability", "wer", "queue", "limit", "disk-space", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -167,7 +176,8 @@ internal static class WindowsReliabilityPolicy
             Id = "relpol-disable-wer-kernel-dump",
             Label = "Reliability Policy: Disable WER Kernel Fault/Dump Reporting",
             Category = "Windows Reliability Policy",
-            Description = "Disables Windows Error Reporting capture of kernel-mode fault data (BSoD minidumps). Prevents automatic transmission of kernel dump data to Microsoft after BSODs on sensitive systems.",
+            Description =
+                "Disables Windows Error Reporting capture of kernel-mode fault data (BSoD minidumps). Prevents automatic transmission of kernel dump data to Microsoft after BSODs on sensitive systems.",
             Tags = ["reliability", "wer", "kernel-dump", "bsod", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,

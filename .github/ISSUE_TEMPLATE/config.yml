@@ -1,5 +1,17 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/RajwanYair/RegiLattice/security/advisories/new
+    about: Report security vulnerabilities privately — do NOT use public issues for security bugs.
+  - name: Documentation
+    url: https://github.com/RajwanYair/RegiLattice/tree/main/docs
+    about: Browse the documentation before opening an issue.
+  - name: Troubleshooting Guide
+    url: https://github.com/RajwanYair/RegiLattice/blob/main/docs/Troubleshooting.md
+    about: Check the troubleshooting guide for common build errors, OneDrive cache issues, and registry access problems.
   - name: Discussion Forum
     url: https://github.com/RajwanYair/RegiLattice/discussions
-    about: Ask questions and share ideas in the discussions forum
+    about: Ask questions and share ideas in the discussions forum.
+  - name: Changelog
+    url: https://github.com/RajwanYair/RegiLattice/blob/main/docs/CHANGELOG.md
+    about: See what changed in recent releases.

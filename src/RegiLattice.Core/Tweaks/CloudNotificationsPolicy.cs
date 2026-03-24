@@ -13,7 +13,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-cloud-notifications",
             Label = "Cloud Notifications Policy: Disable All Cloud Notifications",
             Category = "Cloud Notifications Policy",
-            Description = "Disables the Windows Cloud Notification facility at the policy level. Cloud notifications enable Microsoft and app publishers to deliver system-level banners from cloud services without user-initiated sessions. Disabling prevents unsolicited messages from reaching the desktop.",
+            Description =
+                "Disables the Windows Cloud Notification facility at the policy level. Cloud notifications enable Microsoft and app publishers to deliver system-level banners from cloud services without user-initiated sessions. Disabling prevents unsolicited messages from reaching the desktop.",
             Tags = ["notifications", "cloud", "wns", "disable", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -30,7 +31,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-account-notifications",
             Label = "Cloud Notifications Policy: Block Microsoft Account Notifications",
             Category = "Cloud Notifications Policy",
-            Description = "Suppresses notifications related to Microsoft Account sign-in prompts, subscription reminders, and account health alerts delivered via the cloud notification channel. Reduces distracting prompts on managed devices where personal MSA usage is not permitted.",
+            Description =
+                "Suppresses notifications related to Microsoft Account sign-in prompts, subscription reminders, and account health alerts delivered via the cloud notification channel. Reduces distracting prompts on managed devices where personal MSA usage is not permitted.",
             Tags = ["notifications", "cloud", "microsoft-account", "msa", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -47,7 +49,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-block-network-usage",
             Label = "Cloud Notifications Policy: Block WNS Background Network Usage",
             Category = "Cloud Notifications Policy",
-            Description = "Prevents the Windows Notification Service (WNS) from establishing and maintaining persistent outbound connections to Microsoft's push notification servers. On metered or restricted networks, WNS background connections consume quota and expose device online status to Microsoft.",
+            Description =
+                "Prevents the Windows Notification Service (WNS) from establishing and maintaining persistent outbound connections to Microsoft's push notification servers. On metered or restricted networks, WNS background connections consume quota and expose device online status to Microsoft.",
             Tags = ["notifications", "cloud", "wns", "network", "metered", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -64,7 +67,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-push-to-install",
             Label = "Cloud Notifications Policy: Disable Push-to-Install Notifications",
             Category = "Cloud Notifications Policy",
-            Description = "Disables cloud-triggered push-to-install notifications that can silently queue OS app installation from the Microsoft Store or Intune. On non-MDM-managed endpoints, push-to-install is a covert app deployment vector.",
+            Description =
+                "Disables cloud-triggered push-to-install notifications that can silently queue OS app installation from the Microsoft Store or Intune. On non-MDM-managed endpoints, push-to-install is a covert app deployment vector.",
             Tags = ["notifications", "cloud", "push-to-install", "store", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -81,7 +85,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-wns-on-metered",
             Label = "Cloud Notifications Policy: Disable WNS on Metered Connections",
             Category = "Cloud Notifications Policy",
-            Description = "Prevents Windows Notification Service from using metered internet connections (mobile hotspot, cellular). WNS persistent connections on metered networks generate background data charges without user consent.",
+            Description =
+                "Prevents Windows Notification Service from using metered internet connections (mobile hotspot, cellular). WNS persistent connections on metered networks generate background data charges without user consent.",
             Tags = ["notifications", "cloud", "wns", "metered", "data", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -98,7 +103,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-notification-mirroring",
             Label = "Cloud Notifications Policy: Disable Cross-Device Notification Mirroring",
             Category = "Cloud Notifications Policy",
-            Description = "Disables notification mirroring — the feature that forwards a device's notifications to other Windows 10/11 machines signed in with the same Microsoft Account. Notification mirroring routes notification content through Microsoft cloud relays, creating potential data leakage.",
+            Description =
+                "Disables notification mirroring — the feature that forwards a device's notifications to other Windows 10/11 machines signed in with the same Microsoft Account. Notification mirroring routes notification content through Microsoft cloud relays, creating potential data leakage.",
             Tags = ["notifications", "cloud", "mirroring", "cross-device", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -115,7 +121,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-promotional-banners",
             Label = "Cloud Notifications Policy: Disable Microsoft Promotional Notification Banners",
             Category = "Cloud Notifications Policy",
-            Description = "Suppresses promotional and feature-suggestion notifications delivered through the Windows cloud notification channel. Microsoft uses cloud notifications to surface upgrade prompts, subscription upsells, and feature announcements which are disruptive in managed enterprise environments.",
+            Description =
+                "Suppresses promotional and feature-suggestion notifications delivered through the Windows cloud notification channel. Microsoft uses cloud notifications to surface upgrade prompts, subscription upsells, and feature announcements which are disruptive in managed enterprise environments.",
             Tags = ["notifications", "cloud", "promotional", "ads", "enterprise", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -132,7 +139,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-diagnostic-upload",
             Label = "Cloud Notifications Policy: Disable Diagnostic Payload in Cloud Notifications",
             Category = "Cloud Notifications Policy",
-            Description = "Prevents the WNS notification channel from including diagnostic telemetry payloads in cloud notification requests. Notification channel diagnostics include device health and engagement metrics that are forwarded to Microsoft without explicit user opt-in.",
+            Description =
+                "Prevents the WNS notification channel from including diagnostic telemetry payloads in cloud notification requests. Notification channel diagnostics include device health and engagement metrics that are forwarded to Microsoft without explicit user opt-in.",
             Tags = ["notifications", "cloud", "diagnostics", "telemetry", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -149,7 +157,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-block-background-refresh",
             Label = "Cloud Notifications Policy: Block Cloud Notification Background Refresh",
             Category = "Cloud Notifications Policy",
-            Description = "Prevents applications from refreshing cloud-sourced notification content in the background while not in use. Background notification refresh for cloud-connected apps creates persistent outbound connections to app backends that profile device online patterns.",
+            Description =
+                "Prevents applications from refreshing cloud-sourced notification content in the background while not in use. Background notification refresh for cloud-connected apps creates persistent outbound connections to app backends that profile device online patterns.",
             Tags = ["notifications", "cloud", "background", "refresh", "network", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -166,7 +175,8 @@ internal static class CloudNotificationsPolicy
             Id = "cloudntf-disable-focus-assist-override",
             Label = "Cloud Notifications Policy: Prevent Cloud Override of Focus Assist",
             Category = "Cloud Notifications Policy",
-            Description = "Blocks cloud services from overriding the local Focus Assist (Do Not Disturb) settings to deliver high-priority cloud notifications. Ensures user-configured quiet hours are respected even when Microsoft or app publishers classify a cloud notification as urgent.",
+            Description =
+                "Blocks cloud services from overriding the local Focus Assist (Do Not Disturb) settings to deliver high-priority cloud notifications. Ensures user-configured quiet hours are respected even when Microsoft or app publishers classify a cloud notification as urgent.",
             Tags = ["notifications", "cloud", "focus-assist", "do-not-disturb", "override", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
