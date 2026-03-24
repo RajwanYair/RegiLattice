@@ -10,8 +10,7 @@ using RegiLattice.Core.Models;
 
 internal static class NfcPolicy
 {
-    private const string Key =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NFC";
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NFC";
 
     public static IReadOnlyList<TweakDef> Tweaks =>
         [

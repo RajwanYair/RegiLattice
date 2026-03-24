@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class BitLockerPolicy
+{
+    private const string FveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "bde-require-tpm",
+            Label = "Require TPM for BitLocker Encryption",
+            Category = "BitLocker Policy",
+            Description = "Prevents BitLocker from being configured without a compatible Trusted Platform Module (TPM).",
+            Tags = ["bitlocker", "tpm", "fde", "encryption", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "BitLocker requires TPM; USB-key-only startup is blocked. Devices without TPM cannot enable BitLocker.",
+            ApplyOps = [RegOp.SetDword(FveKey, "EnableBDEWithNoTPM", 0)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "EnableBDEWithNoTPM")],
+            DetectOps = [RegOp.CheckDword(FveKey, "EnableBDEWithNoTPM", 0)],
+        },
+        new TweakDef
+        {
+            Id = "bde-allow-enhanced-pin",
+            Label = "Allow Enhanced BitLocker TPM PINs",
+            Category = "BitLocker Policy",
+            Description = "Permits the use of enhanced PINs (letters, symbols, and spaces) instead of only digits for BitLocker TPM startup.",
+            Tags = ["bitlocker", "tpm", "pin", "security", "encryption"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Increases PIN entropy; compatible with all modern UEFI firmware; users must set a new enhanced PIN.",
+            ApplyOps = [RegOp.SetDword(FveKey, "UseEnhancedPin", 1)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "UseEnhancedPin")],
+            DetectOps = [RegOp.CheckDword(FveKey, "UseEnhancedPin", 1)],
+        },
+        new TweakDef
+        {
+            Id = "bde-set-minimum-pin-8",
+            Label = "Set Minimum BitLocker TPM PIN Length to 8",
+            Category = "BitLocker Policy",
+            Description = "Requires the BitLocker TPM PIN to be at least 8 characters long.",
+            Tags = ["bitlocker", "tpm", "pin", "length", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "8-character minimum; longer PINs are allowed. Users must reset PINs shorter than 8 characters.",
+            ApplyOps = [RegOp.SetDword(FveKey, "MinimumPIN", 8)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "MinimumPIN")],
+            DetectOps = [RegOp.CheckDword(FveKey, "MinimumPIN", 8)],
+        },
+        new TweakDef
+        {
+            Id = "bde-require-recovery-password",
+            Label = "Require BitLocker Recovery Password",
+            Category = "BitLocker Policy",
+            Description = "Mandates that a 48-digit numerical recovery password is generated and saved before BitLocker can be enabled.",
+            Tags = ["bitlocker", "recovery", "password", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Recovery passwords must be saved before encryption begins; prevents lockout without a recovery path.",
+            ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryPassword", 2)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryPassword")],
+            DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryPassword", 2)],
+        },
+        new TweakDef
+        {
+            Id = "bde-backup-to-ad",
+            Label = "Back Up BitLocker Recovery Key to Active Directory",
+            Category = "BitLocker Policy",
+            Description = "Automatically backs up BitLocker recovery passwords and key packages to Active Directory DS.",
+            Tags = ["bitlocker", "recovery", "active-directory", "backup", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Recovery keys are escrowed in AD; requires domain-join and AD DS with BitLocker schema extension.",
+            ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryBackup", 1)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryBackup")],
+            DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryBackup", 1)],
+        },
+        new TweakDef
+        {
+            Id = "bde-block-without-ad-backup",
+            Label = "Block BitLocker if AD Recovery Backup Fails",
+            Category = "BitLocker Policy",
+            Description = "Prevents BitLocker from completing setup if the recovery password cannot be backed up to Active Directory.",
+            Tags = ["bitlocker", "recovery", "active-directory", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Encryption fails if AD backup is unreachable; ensures no device is encrypted without a recovery path.",
+            ApplyOps = [RegOp.SetDword(FveKey, "RequireActiveDirectoryBackup", 1)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "RequireActiveDirectoryBackup")],
+            DetectOps = [RegOp.CheckDword(FveKey, "RequireActiveDirectoryBackup", 1)],
+        },
+        new TweakDef
+        {
+            Id = "bde-store-password-and-key-package",
+            Label = "Store BitLocker Recovery Password and Key Package",
+            Category = "BitLocker Policy",
+            Description = "Configures AD backup to store both the recovery password and the full key package for maximum recovery options.",
+            Tags = ["bitlocker", "recovery", "active-directory", "key-package", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Value 3 = password + key package; provides both quick recovery and full forensic key reconstruction.",
+            ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryInfoToStore")],
+            DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
+        },
+        new TweakDef
+        {
+            Id = "bde-require-tpm-and-pin",
+            Label = "Require TPM + PIN for BitLocker OS Drive Startup",
+            Category = "BitLocker Policy",
+            Description = "Mandates both TPM presence and a user-supplied PIN for pre-boot BitLocker authentication on the OS drive.",
+            Tags = ["bitlocker", "tpm", "pin", "startup", "security", "mfa"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 3,
+            ImpactNote = "Two-factor startup (something you have + know); PIN required at every boot; remote start requires workarounds.",
+            ApplyOps = [RegOp.SetDword(FveKey, "UseTPMPIN", 2)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "UseTPMPIN")],
+            DetectOps = [RegOp.CheckDword(FveKey, "UseTPMPIN", 2)],
+        },
+        new TweakDef
+        {
+            Id = "bde-disable-recovery-usb",
+            Label = "Disable USB Recovery Key for BitLocker OS Drive",
+            Category = "BitLocker Policy",
+            Description = "Prevents a USB recovery key flash drive from being used as a recovery method for the BitLocker OS drive.",
+            Tags = ["bitlocker", "recovery", "usb", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Recovery via USB is blocked; only the 48-digit recovery password can be used for OS drive recovery.",
+            ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryDrive", 0)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryDrive")],
+            DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryDrive", 0)],
+        },
+        new TweakDef
+        {
+            Id = "bde-set-xts-aes-256",
+            Label = "Set BitLocker Encryption to XTS-AES-256",
+            Category = "BitLocker Policy",
+            Description = "Configures BitLocker to use XTS-AES-256 encryption for all new volumes, providing maximum encryption strength.",
+            Tags = ["bitlocker", "encryption", "aes-256", "xts", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Value 7 = XTS-AES-256; applies to new volumes; existing volumes retain their encryption method.",
+            ApplyOps = [RegOp.SetDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
+            RemoveOps = [RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsOs")],
+            DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
+        },
+    ];
+}
