@@ -1,0 +1,152 @@
+namespace RegiLattice.Core.Tweaks;
+
+using RegiLattice.Core.Models;
+
+internal static class OneDriveKfmPolicy
+{
+    private const string KfmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "odkfm-silent-opt-in",
+            Label = "OneDrive KFM: Silently Move Known Folders to OneDrive",
+            Category = "OneDrive KFM Policy",
+            Description = "Silently redirects Desktop, Documents, and Pictures to OneDrive without user interaction. Requires the tenant ID (GUID) to be set as the value data for KFMSilentOptIn.",
+            Tags = ["onedrive", "kfm", "known-folder-move", "backup", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetString(KfmKey, "KFMSilentOptIn", "")],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "KFMSilentOptIn")],
+            DetectOps = [RegOp.CheckMissing(KfmKey, "KFMSilentOptIn")],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-silent-opt-in-notification",
+            Label = "OneDrive KFM: Silent Opt-In with Toast Notification",
+            Category = "OneDrive KFM Policy",
+            Description = "Silently moves known folders to OneDrive and shows a toast notification to the user explaining the change. Less disruptive than prompting but still informative.",
+            Tags = ["onedrive", "kfm", "known-folder-move", "notification", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "KFMSilentOptInWithNotification", 1)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "KFMSilentOptInWithNotification")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "KFMSilentOptInWithNotification", 1)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-opt-in-wizard",
+            Label = "OneDrive KFM: Prompt Users to Move Known Folders (Wizard)",
+            Category = "OneDrive KFM Policy",
+            Description = "Prompts users with a guided wizard to move their Desktop, Documents, and Pictures folders to OneDrive. The user must confirm the move.",
+            Tags = ["onedrive", "kfm", "known-folder-move", "wizard", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetString(KfmKey, "KFMOptInWithWizard", "")],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "KFMOptInWithWizard")],
+            DetectOps = [RegOp.CheckMissing(KfmKey, "KFMOptInWithWizard")],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-silent-opt-out",
+            Label = "OneDrive KFM: Silently Redirect Known Folders Back to Local",
+            Category = "OneDrive KFM Policy",
+            Description = "Silently reverses Known Folder Move, redirecting Desktop, Documents, and Pictures back to local paths on the device without prompting the user.",
+            Tags = ["onedrive", "kfm", "known-folder-move", "revert", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "KFMSilentOptOut", 1)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "KFMSilentOptOut")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "KFMSilentOptOut", 1)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-force-update-ring",
+            Label = "OneDrive KFM: Set OneDrive Update Ring",
+            Category = "OneDrive KFM Policy",
+            Description = "Forces OneDrive Sync Client to use a specific update ring: 'Insider', 'Production', or 'Deferred'. Deferred delays updates by ~60 days for enterprise stability.",
+            Tags = ["onedrive", "update-ring", "enterprise", "update", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetString(KfmKey, "GPOSetUpdateRing", "Deferred")],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "GPOSetUpdateRing")],
+            DetectOps = [RegOp.CheckString(KfmKey, "GPOSetUpdateRing", "Deferred")],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-prevent-network-traffic-before-signin",
+            Label = "OneDrive KFM: Block Pre-Logon Network Traffic",
+            Category = "OneDrive KFM Policy",
+            Description = "Prevents the OneDrive Sync Client from making any network calls before user sign-in. Avoids unexpected traffic on secure/kiosk machines during boot.",
+            Tags = ["onedrive", "network", "privacy", "kiosk", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "PreventNetworkTrafficPreUserSignIn", 1)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "PreventNetworkTrafficPreUserSignIn")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "PreventNetworkTrafficPreUserSignIn", 1)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-min-disk-space",
+            Label = "OneDrive KFM: Set Minimum Free Disk Space Threshold",
+            Category = "OneDrive KFM Policy",
+            Description = "Sets the minimum local disk free space (in MB) below which OneDrive will warn users and pause sync. Default is 500 MB. Set to 2048 for safer enterprise deployments.",
+            Tags = ["onedrive", "disk-space", "quota", "enterprise", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "MinDiskSpaceLimitInMB", 2048)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "MinDiskSpaceLimitInMB")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "MinDiskSpaceLimitInMB", 2048)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-warning-disk-space",
+            Label = "OneDrive KFM: Set Low Disk Space Warning Threshold",
+            Category = "OneDrive KFM Policy",
+            Description = "Configures the early disk-space warning threshold for OneDrive (in MB). When free space drops below this value, a warning is shown before sync is blocked.",
+            Tags = ["onedrive", "disk-space", "warning", "enterprise", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "WarningMinDiskSpaceLimitInMB", 4096)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "WarningMinDiskSpaceLimitInMB")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "WarningMinDiskSpaceLimitInMB", 4096)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-disable-teamsite-automount",
+            Label = "OneDrive KFM: Disable SharePoint/Teams Auto-Mount",
+            Category = "OneDrive KFM Policy",
+            Description = "Prevents OneDrive from automatically syncing SharePoint team site document libraries without user action. Users must manually add sync folders in OneDrive.",
+            Tags = ["onedrive", "sharepoint", "teams", "auto-mount", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "AutoMountTeamSitesDisabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "AutoMountTeamSitesDisabled")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "AutoMountTeamSitesDisabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "odkfm-disable-first-delete-dialog",
+            Label = "OneDrive KFM: Disable First-Delete Recycle Bin Dialog",
+            Category = "OneDrive KFM Policy",
+            Description = "Suppresses the OneDrive 'Are you sure you want to delete?' confirmation dialog on first delete from a synced folder. Reduces friction for advanced users.",
+            Tags = ["onedrive", "delete", "dialog", "ux", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            RegistryKeys = [KfmKey],
+            ApplyOps = [RegOp.SetDword(KfmKey, "DisableFirstDeleteDialog", 1)],
+            RemoveOps = [RegOp.DeleteValue(KfmKey, "DisableFirstDeleteDialog")],
+            DetectOps = [RegOp.CheckDword(KfmKey, "DisableFirstDeleteDialog", 1)],
+        },
+    ];
+}

@@ -4,6 +4,43 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.3.0] — 2026-04-01 (Sprints 172–176)
+
+### Added
+
+#### Tweaks (50 new — 5 modules × 10 tweaks each)
+
+- **Enhanced Phishing Protection Policy** (`ephpol-*`, `EnhancedPhishingProtectionPolicy.cs`) — 10
+  tweaks for Windows Defender SmartScreen WTDS GPO (Win 11 22H2+): enable WTDS service; notify
+  unsafe app password reuse; warn on phishing sites; block password in plaintext files; audit-only
+  mode; enterprise indicators; block credential reuse across apps; enable logging; enforce service;
+  notify password change reuse.
+- **OneDrive KFM Policy** (`odkfm-*`, `OneDriveKfmPolicy.cs`) — 10 tweaks for OneDrive Known
+  Folder Move (KFM) GPO: silent opt-in with/without notification; opt-in wizard; silent opt-out;
+  force update ring to Deferred; prevent network traffic pre-signin; min/warning disk space
+  thresholds; disable TeamSite auto-mount; disable first-delete dialog.
+- **Windows Information Protection Policy** (`wippol-*`, `WindowsInfoProtectionPolicy.cs`) — 10
+  tweaks for WIP/EDP enterprise data protection GPO: block user decryption; require under-lock
+  protection; enable EDP; silent enforcement; block copy to personal apps; disable Bing for work
+  searches; revoke on MDM unenroll; show EDP icons; restrict clipboard; enterprise network isolation.
+- **SNMP Policy** (`snmppol-*`, `SnmpPolicy.cs`) — 10 tweaks for SNMP service hardening GPO:
+  enable auth failure traps; restrict permitted managers to localhost; remove default public
+  community; set private community to Read-Only; disable write community; enforce GPO policy;
+  disable SNMPv1; log auth failures to event log; block public network access; restrict trap receivers.
+- **Windows Connect Now Policy** (`wcnpol-*`, `WindowsConnectNowPolicy.cs`) — 10 tweaks for
+  WCN wireless device provisioning GPO: disable all registrars; disable execution service; disable
+  flash config provisioning; disable in-band 802.11 registrar; disable UPnP registrar; disable
+  WCN UI; disable auto device add; globally disable WCN; disable PIN-based connect; disable
+  push-button connect.
+
+#### Stats
+
+- Tweaks: **4975** across **213 categories** and **208 modules**
+- Tests: **2693** passing (0 failures)
+- Version bumped `5.2.0` → `5.3.0`
+
+---
+
 ## [5.2.0] — 2026-04-01 (Sprints 167–171)
 
 ### Added
