@@ -4,6 +4,14 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [5.7.0] — 2026-04-08 (Sprints 192–196)
+
+- **Sprints 192–196**: 50 new tweaks across 5 new policy modules — `WindowsSubsystemLinuxPolicy.cs` (wslpol), `AzureAdTenantPolicy.cs` (aadtenant), `NearbySharingPolicy.cs` (nshpol), `WindowsAiPolicy.cs` (aipol), `WinRmRemoteShellPolicy.cs` (rshpol).
+- **5175 tweaks** across **233 categories** (228 module files) — +50 tweaks, +5 categories, +5 modules vs v5.6.0.
+- **2693 tests** passing — 2052 Core + 301 CLI + 340 GUI (0 failures).
+
+---
+
 ## [5.1.0] — 2026-03-28 (Sprints 162–166)
 
 - **Sprints 162–166**: 50 new tweaks across 5 new policy modules — `WdagPolicy.cs`, `ErrorReportingPolicy.cs`, `InputMethodPolicy.cs`, `ContentDeliveryPolicy.cs`, `TerminalServicesPolicy.cs`.

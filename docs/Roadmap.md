@@ -455,12 +455,21 @@ This roadmap targets `v6.0.0` as the capstone release. It is structured for a si
 
 ---
 
-## Tweak Content Expansion Plan — v5.6.0 through v5.25.0 (Sprints 187–286)
+## Tweak Content Expansion Plan — v5.7.0 through v5.25.0 (Sprints 192–286)
 
 > **Standing cadence**: Every MINOR version bump = 5 sprints = 5 new tweak modules × 10 tweaks each = **+50 tweaks**.
 > **Release rule**: Every version bump **must be tagged and pushed immediately** — the tag push triggers
 > GitHub Actions `release.yml` which publishes self-contained GUI EXE, CLI EXE, and MSI to GitHub Releases.
 > No version bump may be committed without a corresponding `git tag vX.Y.Z && git push --tags`.
+
+### Baseline at v5.7.0 (current)
+
+| Metric | Value |
+|--------|-------|
+| Tweaks | 5,175 |
+| Categories | 233 |
+| Module files | 228 |
+| Tests | 2,693 |
 
 ### Baseline at v5.6.0
 
@@ -486,7 +495,7 @@ This roadmap targets `v6.0.0` as the capstone release. It is structured for a si
 | Version | Sprints | Module Focus Areas (5 modules, 10 tweaks each) | +Tweaks | Cumulative |
 |---------|---------|-----------------------------------------------|---------|-----------|
 | **v5.6.0** | 187–191 | Biometrics Config Policy · App Consent Store Policy · Network Access Protection Policy · Defender Exclusions Policy · System Recovery Options Policy | +50 | **5,125** |
-| **v5.7.0** | 192–196 | Remote Desktop Advanced Policy · Wireless Display Policy · Bluetooth LE Policy · USB Port Restriction Policy · Device Guard Advanced Policy | +50 | **5,175** |
+| **v5.7.0** ✅ | 192–196 | WSL Enterprise Policy · Azure AD Tenant Policy · Nearby Sharing Policy · Windows AI / Recall / Copilot+ Policy · WinRM Remote Shell Quota Policy | +50 | **5,175** |
 | **v5.8.0** | 197–201 | Certificate Auto-Enrollment Policy · Smart Card Logon Policy · Kerberos Advanced Policy · NTLM Authentication Policy · PKI Infrastructure Policy | +50 | **5,225** |
 | **v5.9.0** | 202–206 | Windows Spotlight Advanced Policy · Lock Screen Timeout Policy · Login Banner Policy · Session Lock Enforcement Policy · Screen Saver Policy | +50 | **5,275** |
 | **v5.10.0** | 207–211 | OneDrive for Business GPO · SharePoint Online Policy · Microsoft Teams Policy · Exchange Online Policy · Meeting Room Policy | +50 | **5,325** |
