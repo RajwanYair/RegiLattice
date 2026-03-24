@@ -11,8 +11,7 @@ using RegiLattice.Core.Models;
 
 internal static class NearbySharingPolicy
 {
-    private const string NearbyKey =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NearbySharing";
+    private const string NearbyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NearbySharing";
 
     public static IReadOnlyList<TweakDef> Tweaks =>
         [
