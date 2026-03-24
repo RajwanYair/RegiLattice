@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.12.0] — 2026-04-09 (Sprints 217–221)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`GroupPolicySettingsPolicy.cs`** — 10 tweaks (slug: `gppol`) — Group Policy Settings: disable slow-link GP skip, force reprocessing of changed GPOs, set 30-minute refresh interval, set zero random refresh offset, enable verbose GP logging, prevent users from overriding GP settings, apply GP synchronously at logon, enable RSoP logging, block local GPOs on domain members, require secure channel for GP download
+- **`MapsBrowserPolicy.cs`** — 10 tweaks (slug: `mapsbr`) — Maps & Browser Policy: disable automatic offline maps download, disable untriggered background network traffic, disable location for maps, block real-time traffic data, disable offline tile storage, disable Bing search integration, disable route/directions sharing, disable personalised map suggestions, disable indoor maps, disable 3D birds-eye view
+- **`BackgroundTransferPolicy.cs`** — 10 tweaks (slug: `bitsadv`) — Background Transfer Policy: limit max BITS bandwidth to 1 Mbps, limit max concurrent jobs to 5, limit files per job to 100, cap job download size to 4 GiB, cap job upload size to 1 GiB, block BITS uploads to internet destinations, require HTTPS for all transfers, set 7-day inactivity timeout, disable peer caching client, enable BITS transfer audit logging
+- **`AppCompatibilityPolicy.cs`** — 10 tweaks (slug: `appcompat`) — App Compatibility Policy: disable Program Compatibility Assistant, disable shim engine, disable removal program prompt, disable online SDB look-up, disable compatibility telemetry upload, allow only IT-approved shims, block users from installing SDB files, disable Compatibility Chooser UI, log shim application events, disable per-process compatibility override
+- **`EapNetworkPolicy.cs`** — 10 tweaks (slug: `eappol`) — EAP Network Policy: require server certificate validation, disable simple certificate selection, enable PEAP fast reconnect, disable identity privacy, require cryptobinding for PEAP, disable EAP-MD5, enable authentication event logging, set max auth failures to 3, require mutual authentication, block non-TLS EAP methods
+
+#### Stats
+
+- Total tweaks: **5,425** (+50)
+- Categories: **258** (+5)
+- Module files: **253** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.11.0] — 2026-04-09 (Sprints 212–216)
 
 ### Added
