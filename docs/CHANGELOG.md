@@ -4,6 +4,49 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.1.0] — 2026-03-28 (Sprints 162–166)
+
+### Added
+
+#### Tweaks (50 new — 5 modules × 10 tweaks each)
+
+- **Application Guard Policy** (`wdagpol-*`, `WdagPolicy.cs`) — 10 tweaks for Windows Defender
+  Application Guard (WDAG/AppHVSI) container isolation: enable WDAG; block clipboard
+  to/from container; disable printing; disable data persistence; block camera/mic; disable
+  vGPU; audit mode; block download to host; configure network isolation.
+- **Error Reporting Policy** (`werpol-*`, `ErrorReportingPolicy.cs`) — 10 tweaks for Windows
+  Error Reporting GPO control: disable WER; block internet send; suppress crash dialogs;
+  bypass throttling; disable logging; auto-approve reports; disable heap dumps; disable
+  queued reporting; disable unplanned shutdown reports; purge report archive.
+- **Input Method Policy** (`impol-*`, `InputMethodPolicy.cs`) — 10 tweaks for IME, touch
+  keyboard, and language input policies: disable language hotkey; restrict user locale;
+  disable touch keyboard auto-show; disable input personalisation; disable tablet mode
+  switch; disable handwriting sharing; disable emoji panel; block IME network access;
+  disable voice typing; disable cursor thickness change.
+- **Content Delivery Policy** (`cdpol-*`, `ContentDeliveryPolicy.cs`) — 10 tweaks for
+  Windows Spotlight, consumer auto-installs, and CDM machine-wide policies: disable consumer
+  experiences; disable Windows Spotlight; disable Spotlight action center; disable third-party
+  Spotlight; disable Start menu suggestions; disable Spotlight taskbar; disable OOBE tips;
+  disable content delivery auto-download; disable Office promotion; disable tailored experiences.
+- **Terminal Services Policy** (`tspol-*`, `TerminalServicesPolicy.cs`) — 10 tweaks for
+  Remote Desktop Services (RDS) Group Policy security hardening: require NLA; enforce high
+  encryption; active/idle/disconnect session timeouts; disable drive/clipboard/printer
+  redirection; single-session-per-user; enable automatic reconnect.
+
+#### Tests
+
+- **ExecutableValidationTests** (32 tests in `RegiLattice.GUI.Tests`) — PE structure
+  validation, assembly metadata checks, CLI smoke execution, and Font.ToHfont() validity
+  across all 11 themes. Directly targets the Font.ToHfont() GDI resource crash from v4.7.0.
+
+#### Stats
+
+- **4875 tweaks** across **203 categories** and **198 modules** (+50 tweaks, +5 categories, +5 modules vs v5.0.0)
+- **2693 tests** — 0 failures (Core 2052 + CLI 301 + GUI 340; +32 ExecutableValidation tests)
+- Version bumped `5.0.0` → `5.1.0`
+
+---
+
 ## [5.0.0] — 2026-03-24 (Sprints 152–161)
 
 ### Highlights
