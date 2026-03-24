@@ -22,7 +22,7 @@ RegiLattice.sln
 │   │                                   #   Favorites, HardwareInfo, Locale, Ratings,
 │   │                                   #   ShellRunner, SystemMonitor, TweakHistory
 │   ├── Plugins/                        # Tweak Pack marketplace (JSON packs)
-│   └── Tweaks/                         # 92 category modules × ~32 tweaks = 2 991 tweaks
+│   └── Tweaks/                         # 92 category modules × ~32 tweaks = 2991 tweaks
 ├── src/RegiLattice.GUI/                # WinForms app (depends on Core)
 │   ├── Theme.cs                        # 11-theme engine (ThemeDef records)
 │   ├── Forms/MainForm.cs               # Main window — categories, search, tray, log panel
@@ -31,7 +31,7 @@ RegiLattice.sln
 ├── src/RegiLattice.CLI/                # Console app (depends on Core)
 │   ├── Program.cs                      # 25+ commands via args parsing
 │   └── CliArgs.cs                      # Extracted CLI argument model
-└── tests/                              # 1 014 Core + 175 CLI + 225 GUI = 1 414 tests
+└── tests/                              # 1014 Core + 175 CLI + 225 GUI = 1414 tests
 ```
 
 ## Data Flow — Tweak Lifecycle

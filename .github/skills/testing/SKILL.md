@@ -10,7 +10,7 @@ argument-hint: "What to test (e.g. 'TweakEngine.Search', 'new service class', 'C
 
 | Project                         | Tests | Covers                                                                                                                                      |
 | ------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/RegiLattice.Core.Tests/` | 1 014 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
+| `tests/RegiLattice.Core.Tests/` | 1014 | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Snapshot, Validator, DependencyResolver, Favorites, TweakHistory, ConfigExporter |
 | `tests/RegiLattice.CLI.Tests/`  | 175   | CLI argument parsing, ConsoleColorizer                                                                                                      |
 | `tests/RegiLattice.GUI.Tests/`  | 225   | Theme, PackageManagerValidation, AppIcons                                                                                                   |
 
