@@ -27,6 +27,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableMeetingSpace", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableMeetingSpace")],
             DetectOps = [RegOp.CheckDword(Key, "DisableMeetingSpace", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Disables legacy peer-to-peer Meeting Space; removes unauthenticated ad-hoc collaboration channel.",
         },
         new TweakDef
         {
@@ -41,6 +44,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(InvKey, "NoInvitations", 1)],
             RemoveOps = [RegOp.DeleteValue(InvKey, "NoInvitations")],
             DetectOps = [RegOp.CheckDword(InvKey, "NoInvitations", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents PNRP-based peer invitations that broadcast user presence without authentication.",
         },
         new TweakDef
         {
@@ -55,6 +61,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoHosting", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoHosting")],
             DetectOps = [RegOp.CheckDword(Key, "NoHosting", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks machine from accepting inbound PNRP peer collaboration connections.",
         },
         new TweakDef
         {
@@ -69,6 +78,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoRemoteAppSharing", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoRemoteAppSharing")],
             DetectOps = [RegOp.CheckDword(Key, "NoRemoteAppSharing", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Closes unaudited application screen sharing in Windows conferencing sessions.",
         },
         new TweakDef
         {
@@ -83,6 +95,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoDocumentHandouts", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoDocumentHandouts")],
             DetectOps = [RegOp.CheckDword(Key, "NoDocumentHandouts", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents file distribution via PNRP channel that bypasses DLP controls.",
         },
         new TweakDef
         {
@@ -97,6 +112,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "MaxBandwidthKbps", 512)],
             RemoveOps = [RegOp.DeleteValue(Key, "MaxBandwidthKbps")],
             DetectOps = [RegOp.CheckDword(Key, "MaxBandwidthKbps", 512)],
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Caps conferencing bandwidth at 512 Kbps to prevent network saturation; adjust for high-bandwidth environments.",
         },
         new TweakDef
         {
@@ -111,6 +129,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoDirectP2PConnections", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoDirectP2PConnections")],
             DetectOps = [RegOp.CheckDword(Key, "NoDirectP2PConnections", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Forces relay-routing; prevents direct P2P connections that bypass network egress monitoring.",
         },
         new TweakDef
         {
@@ -125,6 +146,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoPeopleNearMe", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoPeopleNearMe")],
             DetectOps = [RegOp.CheckDword(Key, "NoPeopleNearMe", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Stops PNRP presence broadcasts exposing device name and user account on the local subnet.",
         },
         new TweakDef
         {
@@ -139,6 +163,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableMeetingAutoStart", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableMeetingAutoStart")],
             DetectOps = [RegOp.CheckDword(Key, "DisableMeetingAutoStart", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Prevents PNRP service activation on projector connect or login trigger events.",
         },
         new TweakDef
         {
@@ -153,6 +180,9 @@ internal static class ConferencingPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableRememberPasswords", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableRememberPasswords")],
             DetectOps = [RegOp.CheckDword(Key, "DisableRememberPasswords", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents meeting room passwords from being cached in Windows credential store.",
         },
     ];
 }

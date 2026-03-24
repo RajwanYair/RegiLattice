@@ -22,6 +22,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoNetMeeting", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoNetMeeting")],
             DetectOps = [RegOp.CheckDword(Key, "NoNetMeeting", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Completely disables legacy NetMeeting; removes unencrypted T.120/H.323 attack surface.",
         },
         new TweakDef
         {
@@ -36,6 +39,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoAppSharing", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoAppSharing")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoAppSharing", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks unencrypted application screen sharing over legacy T.120 protocol.",
         },
         new TweakDef
         {
@@ -50,6 +56,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoFileTransfer", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoFileTransfer")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoFileTransfer", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Eliminates DLP-bypassing file transfer over NetMeeting peer channel.",
         },
         new TweakDef
         {
@@ -64,6 +73,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoRemoteDesktopSharing", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoRemoteDesktopSharing")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoRemoteDesktopSharing", 1)],
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Closes unencrypted credential-free remote desktop sharing attack vector.",
         },
         new TweakDef
         {
@@ -78,6 +90,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoWhiteboard", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoWhiteboard")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoWhiteboard", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Removes shared whiteboard T.120 data channel; reduces legacy protocol attack surface.",
         },
         new TweakDef
         {
@@ -92,6 +107,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoChat", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoChat")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoChat", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Closes plaintext T.120 chat exfiltration path that bypasses modern DLP monitoring.",
         },
         new TweakDef
         {
@@ -106,6 +124,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoDirectoryService", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoDirectoryService")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoDirectoryService", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Stops ILS directory registration exposing user IP and online presence to directory queries.",
         },
         new TweakDef
         {
@@ -120,6 +141,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoAudio", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoAudio")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoAudio", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Disables unencrypted RTP VoIP; all voice should route through encrypted platforms (Teams, Cisco).",
         },
         new TweakDef
         {
@@ -134,6 +158,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoVideo", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoVideo")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoVideo", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Disables unencrypted H.263/RTP video conferencing on corporate networks.",
         },
         new TweakDef
         {
@@ -148,6 +175,9 @@ internal static class NetMeetingPolicy
             ApplyOps = [RegOp.SetDword(SysKey, "NoIncomingCalls", 1)],
             RemoveOps = [RegOp.DeleteValue(SysKey, "NoIncomingCalls")],
             DetectOps = [RegOp.CheckDword(SysKey, "NoIncomingCalls", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Prevents unsolicited inbound NetMeeting sessions on ports 1503/1720.",
         },
     ];
 }

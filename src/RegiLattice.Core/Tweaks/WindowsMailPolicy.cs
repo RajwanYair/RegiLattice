@@ -21,6 +21,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "ManualLaunchAllowed", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "ManualLaunchAllowed")],
             DetectOps = [RegOp.CheckDword(Key, "ManualLaunchAllowed", 0)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Prevents use of inbox Windows Mail on managed devices that require corporate mail clients.",
         },
         new TweakDef
         {
@@ -35,6 +38,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "TurnOffMailImport", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "TurnOffMailImport")],
             DetectOps = [RegOp.CheckDword(Key, "TurnOffMailImport", 1)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Prevents unauthorised account and message ingestion from non-corporate mail clients.",
         },
         new TweakDef
         {
@@ -49,6 +55,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "BlockHTTPImages", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "BlockHTTPImages")],
             DetectOps = [RegOp.CheckDword(Key, "BlockHTTPImages", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks email tracking pixels; prevents confirmation of email activity by marketers and threat actors.",
         },
         new TweakDef
         {
@@ -63,6 +72,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "TurnOffFeaturedUpdates", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "TurnOffFeaturedUpdates")],
             DetectOps = [RegOp.CheckDword(Key, "TurnOffFeaturedUpdates", 1)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Removes promotional update banners from Windows Mail UI on managed devices.",
         },
         new TweakDef
         {
@@ -77,6 +89,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "TurnOffHotmailContact", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "TurnOffHotmailContact")],
             DetectOps = [RegOp.CheckDword(Key, "TurnOffHotmailContact", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents corporate address book data from syncing to personal Microsoft accounts.",
         },
         new TweakDef
         {
@@ -91,6 +106,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "ForceHTMLMailAsPlainText", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "ForceHTMLMailAsPlainText")],
             DetectOps = [RegOp.CheckDword(Key, "ForceHTMLMailAsPlainText", 1)],
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Neutralises HTML email threat vector including phishing links and JavaScript; breaks rich text formatting.",
         },
         new TweakDef
         {
@@ -105,6 +123,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "BlockExecutableAttachments", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "BlockExecutableAttachments")],
             DetectOps = [RegOp.CheckDword(Key, "BlockExecutableAttachments", 1)],
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Blocks executable email attachments — the primary phishing initial-access vector.",
         },
         new TweakDef
         {
@@ -119,6 +140,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "TurnOffShopping", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "TurnOffShopping")],
             DetectOps = [RegOp.CheckDword(Key, "TurnOffShopping", 1)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Suppresses commercial promotional links within Windows Mail.",
         },
         new TweakDef
         {
@@ -133,6 +157,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "TurnOffNewsFeed", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "TurnOffNewsFeed")],
             DetectOps = [RegOp.CheckDword(Key, "TurnOffNewsFeed", 1)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Removes third-party news feed integration from Windows Mail.",
         },
         new TweakDef
         {
@@ -147,6 +174,9 @@ internal static class WindowsMailPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableCalendarIntegration", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableCalendarIntegration")],
             DetectOps = [RegOp.CheckDword(Key, "DisableCalendarIntegration", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents calendar data from syncing to unmanaged Microsoft Account stores.",
         },
     ];
 }
