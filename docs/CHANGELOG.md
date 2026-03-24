@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.8.0] — 2026-04-09 (Sprints 197–201)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`SmartCardCredProvPolicy.cs`** — 10 tweaks (slug: `scprov`) — Smart Card Credential Provider Policy: block certs without EKU, block signature-only keys, block expired certs, enumerate ECC certs, filter duplicate certs, force read all certs, normalise subject display, suppress X.509 hints, disallow plaintext PIN, enable logon-hours notification
+- **`WorkplaceJoinPolicy.cs`** — 10 tweaks (slug: `wpjoin`) — Workplace Join Policy: disable auto-join, block AAD workplace join, require TLS, require device integrity, require consent UI, disable silent registration, limit device count, enable join audit, block non-compliant devices, require secure channel
+- **`WirelessDisplayPolicy.cs`** — 10 tweaks (slug: `wdsply`) — Wireless Display (Miracast) Policy: block projection-to-PC, require PIN pairing (always), block receiver HID input, disable auto-discovery, block infrastructure projection, block Miracast broadcast, disable BLE pairing, limit connection count, require WPA2, block MDM input from receiver
+- **`EventForwardingPolicy.cs`** — 10 tweaks (slug: `evtfwd`) — Event Forwarding Policy (WEF): enable subscription manager, require encryption, require Kerberos auth, limit max forward rate, set retry interval, set heartbeat interval, set connection timeout, limit max queue size, use bandwidth-minimising delivery mode, enable event consolidation
+- **`LocationSensorsPolicy.cs`** — 10 tweaks (slug: `locsns`) — Location & Sensors Policy: disable all location services, disable scripted location access, disable hardware sensors, disable windowed location, disable Wi-Fi scan for geo-location, disable fused location provider, disable location history, disable cellular location data, disable geo-smoothing, deny all app location access
+
+### Stats
+
+- Total tweaks: **5,225** (+50)
+- Categories: **238** (+5)
+- Module files: **233** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.7.0] — 2026-04-08 (Sprints 192–196)
 
 ### Added
