@@ -46,7 +46,7 @@ Paste benchmark output here
 - **CPU:** (e.g., Intel Core i7-12700K)
 - **RAM:** (e.g., 32 GB)
 - **Runtime:** .NET 10.0
-- **RegiLattice:** (version 3.x.x)
+- **RegiLattice:** (e.g. 5.0.0)
 - **Tweaks loaded:** (number from `--stats`)
 
 ## Additional Context

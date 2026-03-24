@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project                  | Tests     | Covers                                                                                                                                                                         |
 | ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `RegiLattice.Core.Tests` | 1,483     | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor |
-| `RegiLattice.CLI.Tests`  | 154       | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
-| `RegiLattice.GUI.Tests`  | 242       | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **1,879** |                                                                                                                                                                                |
+| `RegiLattice.Core.Tests` | 2,052+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
+| `RegiLattice.CLI.Tests`  | 301+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
+| `RegiLattice.GUI.Tests`  | 308+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
+| **Total**                | **2,688+**|                                                                                                                                                                                |
 
 ## Running Tests
 
@@ -188,7 +188,7 @@ reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"htmlcov" -repor
 
 ### Coverage Targets
 
-| Component          | Target   | Actual (v3.5.0) | Notes                        |
+| Component          | Target   | Actual (v5.0.0) | Notes                        |
 | ------------------ | -------- | --------------- | ---------------------------- |
 | TweakDef model     | 95%+     | 100%            | Pure logic, fully testable   |
 | TweakEngine        | 90%+     | 87%             | Core business logic          |

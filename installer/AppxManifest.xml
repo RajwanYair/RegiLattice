@@ -6,13 +6,13 @@
   IgnorableNamespaces="uap rescap"
 >
   <!-- Version is replaced by CI during the release workflow -->
-  <Identity Name="YairRajwan.RegiLattice" Publisher="CN=YairRajwan" Version="1.0.0.0" ProcessorArchitecture="x64" />
+  <Identity Name="YairRajwan.RegiLattice" Publisher="CN=YairRajwan" Version="5.0.0.0" ProcessorArchitecture="x64" />
 
   <Properties>
     <DisplayName>RegiLattice</DisplayName>
     <PublisherDisplayName>YairRajwan</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
-    <Description>Windows Registry Tweak Toolkit — 4,158 verified tweaks across 126 categories</Description>
+    <Description>Windows Registry Tweak Toolkit — 4,825 verified tweaks across 198 categories</Description>
   </Properties>
 
   <Dependencies>

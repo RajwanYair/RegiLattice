@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 3.5.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 5.0.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -37,7 +37,7 @@ RegiLattice.sln
 │   │   │                        #   Locale, PipManager, Ratings, ShellRunner,
 │   │   │                        #   SystemMonitor, TweakHistory, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 92 category modules, ~2,991 tweaks
+│   │   └── Tweaks/              # 193 category modules, ~4,825 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
@@ -56,9 +56,9 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 1,014+ xUnit tests
-│   ├── RegiLattice.CLI.Tests/   # 175+ xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 225+ xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 2,052+ xUnit tests
+│   ├── RegiLattice.CLI.Tests/   # 301+ xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 308+ xUnit tests
 ├── .tmp/                        # Intermediate dev files (gitignored)
 └── archive/                     # Archived (untracked)
 ```

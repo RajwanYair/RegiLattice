@@ -1,7 +1,7 @@
 # RegiLattice — Plugin Marketplace Design
 
-> **Status**: Plan only — not yet implemented.
-> **Target**: v4.0.0+
+> **Status**: ✅ Implemented (v4.6.0+) — PackLoader, PackManager, PackIndex, and MarketplaceDialog are live.
+> **Original target**: v4.0.0+
 > **Author**: RajwanYair
 > **Created**: 2025-07-21
 
