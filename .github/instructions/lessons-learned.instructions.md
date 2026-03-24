@@ -912,21 +912,21 @@ If either is set outside that range the `--validate` command will report it as a
 
 **Scale guidance**:
 
-| ImpactScore | Meaning                                    | Example                              |
-| ----------- | ------------------------------------------ | ------------------------------------ |
-| 5           | Major benefit; changes visible behaviour   | Disable consumer experiences          |
-| 4           | Significant benefit; measurable effect     | Disable WER data upload               |
-| 3           | Moderate benefit; moderate effect          | Disable spotlight on action center    |
-| 2           | Minor benefit; subtle effect               | Disable CDM spotlight on taskbar      |
-| 1           | Marginal benefit; mostly cosmetic           | Suppress a rarely seen UI element     |
+| ImpactScore | Meaning                                  | Example                            |
+| ----------- | ---------------------------------------- | ---------------------------------- |
+| 5           | Major benefit; changes visible behaviour | Disable consumer experiences       |
+| 4           | Significant benefit; measurable effect   | Disable WER data upload            |
+| 3           | Moderate benefit; moderate effect        | Disable spotlight on action center |
+| 2           | Minor benefit; subtle effect             | Disable CDM spotlight on taskbar   |
+| 1           | Marginal benefit; mostly cosmetic        | Suppress a rarely seen UI element  |
 
-| SafetyRating | Meaning                                    | Example                              |
-| ------------ | ------------------------------------------ | ------------------------------------ |
-| 5            | Very safe; reversible; no side effects     | Disable Spotlight                     |
-| 4            | Safe for most users; minor caveats         | Disable WDAG clipboard                |
-| 3            | Moderate risk; admin-only subsystems       | Disable WER upload (may affect DR)    |
-| 2            | Elevated risk; test on non-prod first      | Disable Terminal Services features    |
-| 1            | High risk; can break functionality         | Block all remote desktop connections  |
+| SafetyRating | Meaning                                | Example                              |
+| ------------ | -------------------------------------- | ------------------------------------ |
+| 5            | Very safe; reversible; no side effects | Disable Spotlight                    |
+| 4            | Safe for most users; minor caveats     | Disable WDAG clipboard               |
+| 3            | Moderate risk; admin-only subsystems   | Disable WER upload (may affect DR)   |
+| 2            | Elevated risk; test on non-prod first  | Disable Terminal Services features   |
+| 1            | High risk; can break functionality     | Block all remote desktop connections |
 
 **When was this hit?** Batch 4 modules (`WindowsAttachmentsPolicy.cs`,
 `WindowsMailPolicy.cs`, `NetMeetingPolicy.cs`, `CloudNotificationsPolicy.cs`,
@@ -967,6 +967,7 @@ Select-String -Pattern '"ValueName"' -Path "src/RegiLattice.Core/Tweaks/*.cs"
 ```
 
 **Real example**: `WindowsReliabilityPolicy.cs` (v5.4.0) initially defined:
+
 - `WerKey\Disabled = 1` — already in `ApplicationRestartPolicy.cs`
 - `WerKey\DontSendAdditionalData = 1` — already in `ApplicationRestartPolicy.cs`
 - `WerKey\Disabled = 1` also in `AppCompatibility.cs`
@@ -1002,14 +1003,14 @@ must match the exact format including the space.
 
 **What to update on each version bump (6 files, listed in order)**:
 
-| File | What changes |
-|---|---|
-| `docs/assets/stats.svg` | Tweak count + category count (space-separated thousands) |
-| `Directory.Build.props` | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| `installer/Package.wxs` | `Version="X.Y.Z"` (no `.0` suffix here) |
-| `README.md` | Badge, download link, description line, features bullet, diagram count, folder tree count, footer |
-| `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules row |
-| `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section |
+| File                              | What changes                                                                                          |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `docs/assets/stats.svg`           | Tweak count + category count (space-separated thousands)                                              |
+| `Directory.Build.props`           | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| `installer/Package.wxs`           | `Version="X.Y.Z"` (no `.0` suffix here)                                                               |
+| `README.md`                       | Badge, download link, description line, features bullet, diagram count, folder tree count, footer     |
+| `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules row                                         |
+| `docs/CHANGELOG.md`               | Prepend new `## [X.Y.Z]` section                                                                      |
 
 ---
 
@@ -1039,6 +1040,7 @@ workspace directory but may start in history-picker state (no output for 4–5 s
 ## Policy Module 5×10 Cadence — Standing Pattern
 
 The current expansion pattern for each MINOR version bump is:
+
 - **5 new policy modules** per version bump
 - **10 tweaks per module** (all declarative `ApplyOps`/`RemoveOps`/`DetectOps`)
 - All keys under `HKLM\SOFTWARE\Policies\Microsoft\...` (machine-wide Group Policy)
@@ -1053,6 +1055,6 @@ Version history:
 | v5.3.0 | 5 | 50 | 172–176 |
 | v5.4.0 | 5 | 50 | 177–181 |
 | v5.5.0 | 5 | 50 | 182–186 |
+| v5.6.0 | 5 | 50 | 187–191 |
 
-**Next sprint**: 187–191 (v5.6.0). Run full gap analysis on all three phases before creating any module.
-
+**Next sprint**: 192–196 (v5.7.0). Run full gap analysis on all three phases before creating any module.

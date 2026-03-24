@@ -1,9 +1,10 @@
 ---
-name: New Tweak Proposal
-about: Propose a new registry tweak to add
-title: "[Tweak] "
-labels: tweak, enhancement
+name: New Tweak Proposal (legacy — use new_tweak.yml)
+about: Use the structured form instead (new_tweak.yml)
+title: ""
+labels: ""
 assignees: ''
+# This file is superseded by new_tweak.yml. Do not edit.
 ---
 
 ## Tweak Details

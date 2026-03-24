@@ -1,0 +1,98 @@
+name: Performance Issue
+description: Report a performance problem — slow startup, slow detection, high memory, UI freeze, etc.
+title: "[Perf]: "
+labels: ["performance", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a performance issue! Please provide as much profiling data as possible.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence describing the performance problem.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component / Operation
+      options:
+        - "GUI startup (window open time)"
+        - "RegisterBuiltins() — initial load"
+        - "StatusMap() — detection scan"
+        - "ApplyBatch() / RemoveBatch()"
+        - "Search / Filter"
+        - "Snapshot save / load"
+        - "CLI --list"
+        - "CLI --stats"
+        - "CLI --validate"
+        - "CLI --report"
+        - "Package manager dialog (Scoop / pip / Chocolatey / WinGet)"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed Performance
+      description: Numbers — time, memory, CPU, etc.
+      placeholder: |
+        Operation: StatusMap() over 5125 tweaks
+        Time taken: 45 seconds
+        Expected time: ~5 seconds
+        Memory used: 300 MB peak
+    validations:
+      required: true
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Profiling Data
+      description: Attach dotnet-trace, PerfView, Visual Studio Profiler, or `Measure-Command` results.
+      render: text
+
+  - type: textarea
+    id: benchmark
+    attributes:
+      label: Benchmark / Test Output
+      description: Run `dotnet test --filter "Category=Performance"` and paste results.
+      render: shell
+
+  - type: input
+    id: version
+    attributes:
+      label: RegiLattice Version
+      placeholder: "5.6.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Windows Version
+      placeholder: "Windows 11 23H2 (Build 22631)"
+    validations:
+      required: true
+
+  - type: input
+    id: cpu
+    attributes:
+      label: CPU
+      placeholder: "Intel Core i7-12700K"
+
+  - type: input
+    id: ram
+    attributes:
+      label: RAM
+      placeholder: "32 GB"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any relevant flags, category filter, specific tweaks, or repro steps.

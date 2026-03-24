@@ -59,6 +59,14 @@ jobs:
           path: "**/coverage.cobertura.xml"
           if-no-files-found: warn
 
+      - name: Validate TweakDef integrity
+        # Runs --validate to catch duplicate IDs, broken DependsOn, circular deps,
+        # and ImpactScore/SafetyRating out-of-range errors before merging.
+        run: >-
+          dotnet run --project src/RegiLattice.CLI/RegiLattice.CLI.csproj
+          -c Release --no-build
+          -- --validate
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:

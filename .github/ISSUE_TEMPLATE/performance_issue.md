@@ -1,9 +1,10 @@
 ---
-name: Performance Issue
-about: Report a performance problem (slow startup, slow detection, high memory, etc.)
-title: "[Perf] "
-labels: performance
+name: Performance Issue (legacy — use performance_issue.yml)
+about: Use the structured form instead (performance_issue.yml)
+title: ""
+labels: ""
 assignees: ''
+# This file is superseded by performance_issue.yml. Do not edit.
 ---
 
 ## Summary

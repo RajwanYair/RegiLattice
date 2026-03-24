@@ -14,7 +14,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-game-bar",
             Label = "Game Bar Policy: Disable Game Bar Overlay",
             Category = "Game Bar Policy",
-            Description = "Disables the Game Bar overlay (Win+G shortcut) via Group Policy. Game Bar can cause focus issues in enterprise applications when activated unexpectedly by keyboard shortcuts.",
+            Description =
+                "Disables the Game Bar overlay (Win+G shortcut) via Group Policy. Game Bar can cause focus issues in enterprise applications when activated unexpectedly by keyboard shortcuts.",
             Tags = ["gamebar", "overlay", "disable", "gaming", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -31,7 +32,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-auto-game-mode",
             Label = "Game Bar Policy: Disable Automatic Game Mode",
             Category = "Game Bar Policy",
-            Description = "Prevents Windows from automatically switching to Game Mode for detected full-screen applications. Game Mode reprioritizes GPU and CPU resources, which can cause performance degradation in non-game enterprise workloads.",
+            Description =
+                "Prevents Windows from automatically switching to Game Mode for detected full-screen applications. Game Mode reprioritizes GPU and CPU resources, which can cause performance degradation in non-game enterprise workloads.",
             Tags = ["gamebar", "game-mode", "auto", "cpu", "gpu", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -48,7 +50,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-nexus",
             Label = "Game Bar Policy: Disable Nova Game Bar Experience (Nexus)",
             Category = "Game Bar Policy",
-            Description = "Disables the Nexus (Nova) Game Bar experience via GPO. The Nexus interface provides an enhanced overlay for gaming stats, Xbox integration, and achievement notifications which are unnecessary on managed enterprise devices.",
+            Description =
+                "Disables the Nexus (Nova) Game Bar experience via GPO. The Nexus interface provides an enhanced overlay for gaming stats, Xbox integration, and achievement notifications which are unnecessary on managed enterprise devices.",
             Tags = ["gamebar", "nexus", "nova", "xbox", "overlay", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -65,7 +68,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-presence-writer",
             Label = "Game Bar Policy: Disable Game Bar Presence Writer",
             Category = "Game Bar Policy",
-            Description = "Disables the GameBarPresenceWriter process which monitors running games and reports activity to Xbox services. Reduces background telemetry and removes the Xbox social presence feature on managed devices.",
+            Description =
+                "Disables the GameBarPresenceWriter process which monitors running games and reports activity to Xbox services. Reduces background telemetry and removes the Xbox social presence feature on managed devices.",
             Tags = ["gamebar", "presence", "telemetry", "xbox", "background", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -82,7 +86,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-broadcast",
             Label = "Game Bar Policy: Disable Game Broadcasting",
             Category = "Game Bar Policy",
-            Description = "Disables the Game Bar broadcasting feature (Mixer/Beam/Xbox Live streaming) via Group Policy. Prevents users from live-streaming their screen via the overlay, eliminating a potential data leakage channel.",
+            Description =
+                "Disables the Game Bar broadcasting feature (Mixer/Beam/Xbox Live streaming) via Group Policy. Prevents users from live-streaming their screen via the overlay, eliminating a potential data leakage channel.",
             Tags = ["gamebar", "broadcast", "streaming", "xbox", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -99,7 +104,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-startup-panel",
             Label = "Game Bar Policy: Hide Game Bar Startup Panel",
             Category = "Game Bar Policy",
-            Description = "Prevents the Game Bar startup tips panel from appearing when a game or full-screen application is launched. Eliminates the 'Did you know the GameBar exists?' tip that appears on first game launch.",
+            Description =
+                "Prevents the Game Bar startup tips panel from appearing when a game or full-screen application is launched. Eliminates the 'Did you know the GameBar exists?' tip that appears on first game launch.",
             Tags = ["gamebar", "startup", "tips", "panel", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -116,7 +122,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-game-mode-global",
             Label = "Game Bar Policy: Disable Game Mode System-Wide",
             Category = "Game Bar Policy",
-            Description = "Disables Game Mode globally via the GameMode policy key. Game Mode allocates additional GPU and CPU resources to games, which can reduce determinism and throughput for productivity and CAD workloads on high-end machines.",
+            Description =
+                "Disables Game Mode globally via the GameMode policy key. Game Mode allocates additional GPU and CPU resources to games, which can reduce determinism and throughput for productivity and CAD workloads on high-end machines.",
             Tags = ["gamebar", "game-mode", "global", "cpu", "gpu", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -133,7 +140,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-clip-cursor",
             Label = "Game Bar Policy: Disable Cursor Clip in Game Bar",
             Category = "Game Bar Policy",
-            Description = "Prevents the Game Bar from clipping the cursor to the game window while the overlay is active. This avoids mouse pointer getting trapped inside a full-screen application when toggling the overlay.",
+            Description =
+                "Prevents the Game Bar from clipping the cursor to the game window while the overlay is active. This avoids mouse pointer getting trapped inside a full-screen application when toggling the overlay.",
             Tags = ["gamebar", "cursor", "clip", "overlay", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -150,7 +158,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-achievements-overlay",
             Label = "Game Bar Policy: Disable Achievement Notifications Overlay",
             Category = "Game Bar Policy",
-            Description = "Disables the in-game achievement / award notification overlay that appears via Xbox Game Bar when unlocking Steam, Epic Games, or Xbox achievements. Prevents distraction during enterprise workloads running in fullscreen mode.",
+            Description =
+                "Disables the in-game achievement / award notification overlay that appears via Xbox Game Bar when unlocking Steam, Epic Games, or Xbox achievements. Prevents distraction during enterprise workloads running in fullscreen mode.",
             Tags = ["gamebar", "achievements", "notifications", "xbox", "overlay", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -167,7 +176,8 @@ internal static class GameBarOverlayPolicy
             Id = "gamebarpol-disable-xbox-integration",
             Label = "Game Bar Policy: Disable Xbox Network Integration in Game Bar",
             Category = "Game Bar Policy",
-            Description = "Prevents Game Bar from connecting to Xbox Network services (friend status, party chat, activity feed). Disables the social layer that reports gaming activity to Microsoft and Xbox friends.",
+            Description =
+                "Prevents Game Bar from connecting to Xbox Network services (friend status, party chat, activity feed). Disables the social layer that reports gaming activity to Microsoft and Xbox friends.",
             Tags = ["gamebar", "xbox", "network", "social", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,

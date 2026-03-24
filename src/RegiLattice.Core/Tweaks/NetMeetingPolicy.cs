@@ -14,7 +14,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-netmeeting",
             Label = "NetMeeting Policy: Disable NetMeeting Service",
             Category = "NetMeeting Policy",
-            Description = "Disables Microsoft NetMeeting entirely via the policy key. NetMeeting is a legacy Windows collaboration tool that should be disabled in all modern enterprise environments as it uses unencrypted legacy protocols (T.120, H.323) with no modern authentication support.",
+            Description =
+                "Disables Microsoft NetMeeting entirely via the policy key. NetMeeting is a legacy Windows collaboration tool that should be disabled in all modern enterprise environments as it uses unencrypted legacy protocols (T.120, H.323) with no modern authentication support.",
             Tags = ["netmeeting", "legacy", "collaboration", "disable", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -31,7 +32,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-app-sharing",
             Label = "NetMeeting Policy: Disable Application Sharing",
             Category = "NetMeeting Policy",
-            Description = "Prevents NetMeeting from sharing application windows with remote participants. Application sharing over legacy NetMeeting is unencrypted and allows full control of the shared application without Windows authentication, making it a remote code execution risk.",
+            Description =
+                "Prevents NetMeeting from sharing application windows with remote participants. Application sharing over legacy NetMeeting is unencrypted and allows full control of the shared application without Windows authentication, making it a remote code execution risk.",
             Tags = ["netmeeting", "app-sharing", "remote", "security", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -48,7 +50,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-file-transfer",
             Label = "NetMeeting Policy: Disable File Transfer via NetMeeting",
             Category = "NetMeeting Policy",
-            Description = "Blocks the NetMeeting file transfer feature that allows participants to send files to each other during a conference. File transfer over NetMeeting bypasses DLP and AV controls and can be used for data exfiltration or malware delivery.",
+            Description =
+                "Blocks the NetMeeting file transfer feature that allows participants to send files to each other during a conference. File transfer over NetMeeting bypasses DLP and AV controls and can be used for data exfiltration or malware delivery.",
             Tags = ["netmeeting", "file-transfer", "dlp", "security", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -65,7 +68,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-remote-desktop-sharing",
             Label = "NetMeeting Policy: Disable Remote Desktop Sharing",
             Category = "NetMeeting Policy",
-            Description = "Disables the Remote Desktop Sharing feature in NetMeeting that allows unattended remote access to a machine. NetMeeting RDS does not require Windows credentials, runs without encryption, and represents a complete remote takeover risk on any network where the port is reachable.",
+            Description =
+                "Disables the Remote Desktop Sharing feature in NetMeeting that allows unattended remote access to a machine. NetMeeting RDS does not require Windows credentials, runs without encryption, and represents a complete remote takeover risk on any network where the port is reachable.",
             Tags = ["netmeeting", "remote-desktop", "rdp", "rds", "unattended", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -82,7 +86,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-whiteboard",
             Label = "NetMeeting Policy: Disable NetMeeting Whiteboard",
             Category = "NetMeeting Policy",
-            Description = "Disables the shared Whiteboard feature in NetMeeting. The whiteboard transmits screen content without encryption. Disabling it as part of a full NetMeeting hardening profile reduces the attack surface for legacy T.120 data channel exploits.",
+            Description =
+                "Disables the shared Whiteboard feature in NetMeeting. The whiteboard transmits screen content without encryption. Disabling it as part of a full NetMeeting hardening profile reduces the attack surface for legacy T.120 data channel exploits.",
             Tags = ["netmeeting", "whiteboard", "legacy", "t120", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -99,7 +104,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-chat",
             Label = "NetMeeting Policy: Disable NetMeeting Chat",
             Category = "NetMeeting Policy",
-            Description = "Disables the chat feature in NetMeeting. Chat transmits messages in plaintext over the T.120 channel. On modern networks, legacy chat channels are potential exfiltration paths that bypass modern DLP solutions monitoring HTTPS or SMTP.",
+            Description =
+                "Disables the chat feature in NetMeeting. Chat transmits messages in plaintext over the T.120 channel. On modern networks, legacy chat channels are potential exfiltration paths that bypass modern DLP solutions monitoring HTTPS or SMTP.",
             Tags = ["netmeeting", "chat", "plaintext", "exfiltration", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -116,7 +122,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-directory-service",
             Label = "NetMeeting Policy: Disable ILS Directory Service Registration",
             Category = "NetMeeting Policy",
-            Description = "Prevents NetMeeting from registering the current user with an ILS (Internet Locator Service) directory. ILS directories expose the user's IP address and NetMeeting status to anyone querying the directory server, creating a reconnaissance risk.",
+            Description =
+                "Prevents NetMeeting from registering the current user with an ILS (Internet Locator Service) directory. ILS directories expose the user's IP address and NetMeeting status to anyone querying the directory server, creating a reconnaissance risk.",
             Tags = ["netmeeting", "ils", "directory", "registration", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -133,7 +140,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-audio",
             Label = "NetMeeting Policy: Disable NetMeeting Audio (VoIP)",
             Category = "NetMeeting Policy",
-            Description = "Disables the audio (VoIP) component of NetMeeting. NetMeeting audio uses unencrypted RTP streams, making all voice content trivially interceptable by any network observer. On corporate networks, all voice comms should be routed through encrypted platforms (Teams, Cisco).",
+            Description =
+                "Disables the audio (VoIP) component of NetMeeting. NetMeeting audio uses unencrypted RTP streams, making all voice content trivially interceptable by any network observer. On corporate networks, all voice comms should be routed through encrypted platforms (Teams, Cisco).",
             Tags = ["netmeeting", "audio", "voip", "rtp", "encryption", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -150,7 +158,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-video",
             Label = "NetMeeting Policy: Disable NetMeeting Video Conferencing",
             Category = "NetMeeting Policy",
-            Description = "Disables the video conferencing feature of NetMeeting. NetMeeting video streams are unencrypted H.263-over-RTP. Video content captured without encryption on a corporate LAN is a significant information disclosure risk.",
+            Description =
+                "Disables the video conferencing feature of NetMeeting. NetMeeting video streams are unencrypted H.263-over-RTP. Video content captured without encryption on a corporate LAN is a significant information disclosure risk.",
             Tags = ["netmeeting", "video", "webcam", "h263", "encryption", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -167,7 +176,8 @@ internal static class NetMeetingPolicy
             Id = "netmeet-disable-incoming-calls",
             Label = "NetMeeting Policy: Block Incoming NetMeeting Calls",
             Category = "NetMeeting Policy",
-            Description = "Prevents the workstation from accepting incoming NetMeeting calls. Even on systems where NetMeeting is not actively used, the service may be listening on ports 1503/1720 if not explicitly blocked. This policy prevents spontaneous incoming session establishment.",
+            Description =
+                "Prevents the workstation from accepting incoming NetMeeting calls. Even on systems where NetMeeting is not actively used, the service may be listening on ports 1503/1720 if not explicitly blocked. This policy prevents spontaneous incoming session establishment.",
             Tags = ["netmeeting", "incoming", "block", "ports", "h323", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,

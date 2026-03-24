@@ -1,0 +1,115 @@
+name: Bug Report
+description: Report a bug or unexpected behaviour in RegiLattice
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill in the details below so we can reproduce and fix it.
+        If this is a **security vulnerability**, please use [private security reporting](https://github.com/RajwanYair/RegiLattice/security/advisories/new) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the issue.
+      placeholder: |
+        1. Launch RegiLattice.GUI.exe (or run: dotnet run --project src/RegiLattice.CLI -- ...)
+        2. Navigate to category '...' and select tweak '...'
+        3. Click Apply / Remove
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behaviour
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behaviour
+      description: What actually happened instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Interface Used
+      description: Which interface were you using when the bug occurred?
+      options:
+        - GUI (RegiLattice.GUI.exe)
+        - CLI (RegiLattice.exe / dotnet run)
+        - PowerShell module
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: RegiLattice Version
+      description: Which version are you running? (see About dialog or run with --version)
+      placeholder: "5.6.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Windows Version
+      description: Windows 10 or 11 and build number
+      placeholder: "Windows 11 23H2 (Build 22631)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: admin
+    attributes:
+      label: Running as Administrator
+      options:
+        - "Yes"
+        - "No"
+        - "Auto-elevated via UAC"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: corporate
+    attributes:
+      label: Corporate / Domain-Joined Machine
+      options:
+        - "No — personal machine"
+        - "Yes — Active Directory domain"
+        - "Yes — Azure AD / Entra ID"
+        - "Yes — Intune-managed"
+        - "Unknown"
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log Output
+      description: Paste any relevant log lines from the GUI log panel or `%LOCALAPPDATA%\RegiLattice\regilattice.log`
+      render: shell
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, registry export, error stack trace, or any other relevant information.

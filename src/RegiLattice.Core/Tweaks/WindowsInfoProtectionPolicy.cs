@@ -15,7 +15,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-allow-user-decrypt",
             Label = "WIP: Allow User to Decrypt Protected Files",
             Category = "Windows Information Protection Policy",
-            Description = "Allows the owner of a WIP-protected file to decrypt it. When disabled, only IT admins can remove protection. Enabled by default; disable for stricter DLP control.",
+            Description =
+                "Allows the owner of a WIP-protected file to decrypt it. When disabled, only IT admins can remove protection. Enabled by default; disable for stricter DLP control.",
             Tags = ["wip", "edp", "dlp", "data-protection", "encryption", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -32,7 +33,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-require-protection-under-lock",
             Label = "WIP: Require Protection While Under Lock",
             Category = "Windows Information Protection Policy",
-            Description = "Requires that WIP-protected data remain encrypted even when the device is locked. Prevents data access from unauthorized physical access when the screen is locked.",
+            Description =
+                "Requires that WIP-protected data remain encrypted even when the device is locked. Prevents data access from unauthorized physical access when the screen is locked.",
             Tags = ["wip", "edp", "lock-screen", "data-protection", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -49,7 +51,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-enable-edp",
             Label = "WIP: Enable Enterprise Data Protection",
             Category = "Windows Information Protection Policy",
-            Description = "Enables Windows Information Protection (formerly Enterprise Data Protection/EDP) on the device. Mode 3 = Block — prevents users from copying work data to personal apps.",
+            Description =
+                "Enables Windows Information Protection (formerly Enterprise Data Protection/EDP) on the device. Mode 3 = Block — prevents users from copying work data to personal apps.",
             Tags = ["wip", "edp", "dlp", "enterprise", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -66,7 +69,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-silent-mode",
             Label = "WIP: Set Silent Enforcement (Audit Without Block)",
             Category = "Windows Information Protection Policy",
-            Description = "Sets WIP/EDP to silent enforcement mode. Personal data leakage is logged to the event log but not blocked. Useful for piloting WIP before enforcing restrictions.",
+            Description =
+                "Sets WIP/EDP to silent enforcement mode. Personal data leakage is logged to the event log but not blocked. Useful for piloting WIP before enforcing restrictions.",
             Tags = ["wip", "edp", "dlp", "audit", "silent", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -83,7 +87,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-block-copy-to-personal",
             Label = "WIP: Block Copying Work Data to Personal Apps",
             Category = "Windows Information Protection Policy",
-            Description = "Enforces WIP to Block mode — users cannot copy, paste, or share protected work data to personal or unmanaged applications. The strictly enforced DLP level.",
+            Description =
+                "Enforces WIP to Block mode — users cannot copy, paste, or share protected work data to personal or unmanaged applications. The strictly enforced DLP level.",
             Tags = ["wip", "edp", "dlp", "block", "clipboard", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -100,7 +105,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-disable-bing-results-wip",
             Label = "WIP: Disable Bing Integration for Work Searches",
             Category = "Windows Information Protection Policy",
-            Description = "Prevents Windows Search from sending work-context search queries to Bing when WIP is enabled. Keeps enterprise search results isolated from the internet.",
+            Description =
+                "Prevents Windows Search from sending work-context search queries to Bing when WIP is enabled. Keeps enterprise search results isolated from the internet.",
             Tags = ["wip", "edp", "bing", "search", "privacy", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -117,7 +123,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-revoke-on-unenroll",
             Label = "WIP: Revoke Access Keys on MDM Unenrollment",
             Category = "Windows Information Protection Policy",
-            Description = "Automatically revokes WIP encryption keys when the device is unenrolled from MDM. Prevents access to protected work data after device management is removed.",
+            Description =
+                "Automatically revokes WIP encryption keys when the device is unenrolled from MDM. Prevents access to protected work data after device management is removed.",
             Tags = ["wip", "edp", "mdm", "revoke", "unenroll", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -134,7 +141,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-show-ede-icons",
             Label = "WIP: Show Enterprise Data Protection Icons on Protected Files",
             Category = "Windows Information Protection Policy",
-            Description = "Displays a work briefcase icon overlay on WIP-protected files in Explorer and on the Start menu to visually distinguish protected corporate data from personal files.",
+            Description =
+                "Displays a work briefcase icon overlay on WIP-protected files in Explorer and on the Start menu to visually distinguish protected corporate data from personal files.",
             Tags = ["wip", "edp", "icons", "explorer", "visibility", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -151,7 +159,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-restrict-clipboard",
             Label = "WIP: Restrict Clipboard Sharing Between Work and Personal",
             Category = "Windows Information Protection Policy",
-            Description = "Restricts clipboard operations to prevent copying WIP-protected (work) content into unmanaged (personal) applications. Prevents clipboard-based data exfiltration.",
+            Description =
+                "Restricts clipboard operations to prevent copying WIP-protected (work) content into unmanaged (personal) applications. Prevents clipboard-based data exfiltration.",
             Tags = ["wip", "edp", "clipboard", "dlp", "restriction", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -168,7 +177,8 @@ internal static class WindowsInfoProtectionPolicy
             Id = "wippol-enterprise-ip-isolation",
             Label = "WIP: Enable Enterprise Network Isolation",
             Category = "Windows Information Protection Policy",
-            Description = "Activates WIP network isolation policy — only IP ranges and domains defined in the enterprise network boundary list are treated as 'work' destinations.",
+            Description =
+                "Activates WIP network isolation policy — only IP ranges and domains defined in the enterprise network boundary list are treated as 'work' destinations.",
             Tags = ["wip", "edp", "network-isolation", "enterprise", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,

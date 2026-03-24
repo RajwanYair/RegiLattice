@@ -452,3 +452,108 @@ Four topics require timebox-bounded spikes before sprint commitment. Plan one sp
 ---
 
 This roadmap targets `v6.0.0` as the capstone release. It is structured for a single-developer project operating in sprint pairs, but every theme and task is decomposed to be independently assignable if the team scales. Each sprint is sized for approximately one week of focused work, producing at minimum one green build and one committed deliverable.
+
+---
+
+## Tweak Content Expansion Plan — v5.6.0 through v5.25.0 (Sprints 187–286)
+
+> **Standing cadence**: Every MINOR version bump = 5 sprints = 5 new tweak modules × 10 tweaks each = **+50 tweaks**.
+> **Release rule**: Every version bump **must be tagged and pushed immediately** — the tag push triggers
+> GitHub Actions `release.yml` which publishes self-contained GUI EXE, CLI EXE, and MSI to GitHub Releases.
+> No version bump may be committed without a corresponding `git tag vX.Y.Z && git push --tags`.
+
+### Baseline at v5.6.0
+
+| Metric | Value |
+|--------|-------|
+| Tweaks | 5,125 |
+| Categories | 228 |
+| Module files | 223 |
+| Tests | 2,693 |
+
+### Sprint Cadence Rules
+
+1. **1 module per sprint** — each sprint produces exactly one new tweak module (`.cs` file)
+2. **10 tweaks per module** — all declarative `ApplyOps`/`RemoveOps`/`DetectOps`, `NeedsAdmin = true`, `CorpSafe = true`
+3. **IDs globally unique** — run pre-commit ID scan before each new module
+4. **Gap analysis before each sprint** — confirm `PATH\ValueName` pairs are not in existing modules
+5. **`ImpactScore` + `SafetyRating` + `ImpactNote` set explicitly** on all new tweaks (no default reliance)
+6. **Commit after each sprint** — one commit per module; do not batch sprints into a single commit
+7. **Push + tag on every version bump** — required immediately; triggers release workflow
+
+### 100-Sprint Version Table
+
+| Version | Sprints | Module Focus Areas (5 modules, 10 tweaks each) | +Tweaks | Cumulative |
+|---------|---------|-----------------------------------------------|---------|-----------|
+| **v5.6.0** | 187–191 | Biometrics Config Policy · App Consent Store Policy · Network Access Protection Policy · Defender Exclusions Policy · System Recovery Options Policy | +50 | **5,125** |
+| **v5.7.0** | 192–196 | Remote Desktop Advanced Policy · Wireless Display Policy · Bluetooth LE Policy · USB Port Restriction Policy · Device Guard Advanced Policy | +50 | **5,175** |
+| **v5.8.0** | 197–201 | Certificate Auto-Enrollment Policy · Smart Card Logon Policy · Kerberos Advanced Policy · NTLM Authentication Policy · PKI Infrastructure Policy | +50 | **5,225** |
+| **v5.9.0** | 202–206 | Windows Spotlight Advanced Policy · Lock Screen Timeout Policy · Login Banner Policy · Session Lock Enforcement Policy · Screen Saver Policy | +50 | **5,275** |
+| **v5.10.0** | 207–211 | OneDrive for Business GPO · SharePoint Online Policy · Microsoft Teams Policy · Exchange Online Policy · Meeting Room Policy | +50 | **5,325** |
+| **v5.11.0** | 212–216 | Windows Hello PIN Complexity · Smart Card PIN Policy · FIDO2 Security Key Policy · Windows Credential Guard Advanced · Key Storage Provider Policy | +50 | **5,375** |
+| **v5.12.0** | 217–221 | RPC Endpoint Mapper Policy · DCOM Machine Launch Rights · DCOM App-Specific Launch · RPC Packet-Level Security · COM+ Component Services Policy | +50 | **5,425** |
+| **v5.13.0** | 222–226 | Defender ATP Sensor Policy · Defender Cloud-Delivered Protection · Defender Network Protection Advanced · Defender PUA Block Policy · Defender Real-Time Scan Policy | +50 | **5,475** |
+| **v5.14.0** | 227–231 | App-V Client Policy · MSIX App Attach Policy · App Installer GPO · Side-Loading Restrictions Policy · Microsoft Store for Business Policy | +50 | **5,525** |
+| **v5.15.0** | 232–236 | Windows Update Ring Policy · Update Deadline & Grace Period Policy · Forced Restart Options Policy · Driver Update Control Policy · Update Rollback Policy | +50 | **5,575** |
+| **v5.16.0** | 237–241 | File History Advanced Policy · Backup Operator Rights Policy · Cloud Backup Enforcement Policy · Volume Shadow Copy Policy · Backup Scheduling Policy | +50 | **5,625** |
+| **v5.17.0** | 242–246 | WDAG Application Guard Advanced · AppContainer Isolation Policy · Protected Process Light Policy · Code Integrity Enforcement Policy · CI Boot-Time Verification | +50 | **5,675** |
+| **v5.18.0** | 247–251 | Remote Assistance Control Policy · Remote Shell (WinRM) Policy · WinRM Authentication Policy · SSH Server Hardening Policy · Telnet Disable Policy | +50 | **5,725** |
+| **v5.19.0** | 252–256 | Speech Recognition Privacy Policy · Inking & Typing Personalization Policy · Activity History Advanced Policy · User Account Sync Control Policy · Timeline Data Policy | +50 | **5,775** |
+| **v5.20.0** | 257–261 | Mixed Reality Device Policy · Holographic First Run Policy · Spatial Audio Policy · XR Platform Control Policy · AR Application Policy | +50 | **5,825** |
+| **v5.21.0** | 262–266 | Provisioning Package Lock Policy · Enrollment Status Page Policy · Autopilot OOBE Policy · MDM Unenrollment Policy · OOBE Experience Policy | +50 | **5,875** |
+| **v5.22.0** | 267–271 | Data Access Control Policy · Resource Attribute Policy · Claims-Based Access Policy · Dynamic Access Control Policy · File Classification Policy | +50 | **5,925** |
+| **v5.23.0** | 272–276 | Windows Time Service (NTP) Policy · DirectAccess Client Policy · Always On VPN Profile Policy · Routing & Remote Access Policy · DNS Update Security Policy | +50 | **5,975** |
+| **v5.24.0** | 277–281 | Magnifier Advanced Policy · Narrator Verbosity Policy · Speech Recognition Accuracy Policy · Accessibility Sign-In Policy · Input Method Policy | +50 | **6,025** |
+| **v5.25.0** | 282–286 | Hyper-V Generation 2 Policy · WSL Distribution Control Policy · Container Network Isolation Policy · Windows Sandbox Advanced Policy · VM Integration Services Policy | +50 | **6,075** |
+
+### End-State at v5.25.0
+
+| Metric | Projected Value |
+|--------|----------------|
+| Tweaks | **6,075** |
+| Categories | **~328** (+100 new) |
+| Module files | **~323** (+100 new) |
+| Tests | **2,693+** (unchanged unless new test categories created) |
+
+### Pre-Sprint Gap Analysis Workflow
+
+Before executing any sprint from this table, always run all three phases:
+
+```powershell
+# Phase 1 — Registry key path not claimed
+Select-String -Pattern 'TargetKeyPath' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+
+# Phase 2 — Slug prefix not claimed
+Select-String -Pattern '"slug-' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+
+# Phase 3 — PATH\ValueName semantic conflict (most critical)
+Select-String -Pattern '"ValueNameToCheck"' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+```
+
+If a path or value is found in an existing module, shift to an alternative area from the same theme.
+The table above describes **themes and areas**, not fixed registry paths — every sprint requires gap analysis.
+
+### Release Checklist (Per Version Bump)
+
+When bumping from vX.Y.Z to vX.(Y+1).0, update ALL of the following before tagging:
+
+| File | What to Update |
+|------|---------------|
+| `Directory.Build.props` | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| `installer/Package.wxs` | `Version="X.Y.Z"` in `<Package>` element |
+| `README.md` | Version badge, tweak count, category count, download link |
+| `docs/assets/stats.svg` | Tweak count card, category count card (space-separated thousands: `6 075`) |
+| `docs/CHANGELOG.md` | Prepend `## [X.Y.Z] — YYYY-MM-DD (Sprints NNN–NNN)` section with blank lines after headings |
+| `.github/copilot-instructions.md` | Quick Facts table: Version row, Tweaks row |
+
+Then:
+
+```powershell
+dotnet build RegiLattice.sln -c Release -m:1    # must succeed
+dotnet test RegiLattice.sln --no-build -c Release   # must be 0 failures
+git add -A
+git commit -m "chore: bump version to vX.Y.Z — Sprint NNN-NNN (+50 tweaks)"
+git tag vX.Y.Z
+git push
+git push --tags   # ← TRIGGERS release.yml → publishes EXEs + MSI to GitHub Releases
+```

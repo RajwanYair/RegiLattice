@@ -15,7 +15,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-serial-keys",
             Label = "Accessibility Policy: Disable Serial Keys Support",
             Category = "Windows Accessibility Policy",
-            Description = "Disables Serial Keys accessibility support, which allows alternative input devices (joysticks, switches) connected to the serial port. Disabling reduces the attack surface on managed endpoints without physical accessibility hardware.",
+            Description =
+                "Disables Serial Keys accessibility support, which allows alternative input devices (joysticks, switches) connected to the serial port. Disabling reduces the attack surface on managed endpoints without physical accessibility hardware.",
             Tags = ["accessibility", "serial-keys", "input", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -32,7 +33,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-sound-sentry",
             Label = "Accessibility Policy: Disable SoundSentry Visual Flash",
             Category = "Windows Accessibility Policy",
-            Description = "Disables SoundSentry, which flashes the screen or a window when a critical sound plays. On enterprise environments with active CAD/3D rendering, unexpected screen flashes can interfere with rendering workflows.",
+            Description =
+                "Disables SoundSentry, which flashes the screen or a window when a critical sound plays. On enterprise environments with active CAD/3D rendering, unexpected screen flashes can interfere with rendering workflows.",
             Tags = ["accessibility", "soundsentry", "flash", "audio", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -49,7 +51,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-high-contrast-hotkey",
             Label = "Accessibility Policy: Disable High Contrast Mode Hotkey",
             Category = "Windows Accessibility Policy",
-            Description = "Prevents users from accidentally enabling High Contrast mode via the Left Alt+Left Shift+Print Screen keyboard shortcut. Avoids unexpected UI colour inversions that can disrupt productivity applications.",
+            Description =
+                "Prevents users from accidentally enabling High Contrast mode via the Left Alt+Left Shift+Print Screen keyboard shortcut. Avoids unexpected UI colour inversions that can disrupt productivity applications.",
             Tags = ["accessibility", "high-contrast", "hotkey", "keyboard", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -66,7 +69,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-toggle-keys",
             Label = "Accessibility Policy: Disable Toggle Keys Hotkey",
             Category = "Windows Accessibility Policy",
-            Description = "Disables activation of Toggle Keys (a beep when pressing Caps Lock, Num Lock, or Scroll Lock) via the Num Lock hotkey shortcut. Prevents unexpected beeping on endpoints with shared keyboards.",
+            Description =
+                "Disables activation of Toggle Keys (a beep when pressing Caps Lock, Num Lock, or Scroll Lock) via the Num Lock hotkey shortcut. Prevents unexpected beeping on endpoints with shared keyboards.",
             Tags = ["accessibility", "toggle-keys", "keyboard", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -83,7 +87,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-sticky-keys-hotkey",
             Label = "Accessibility Policy: Disable Sticky Keys Hotkey",
             Category = "Windows Accessibility Policy",
-            Description = "Disables the Sticky Keys prompt when Shift is pressed 5 times. Sticky Keys can interrupt gaming and productivity workflows when activated accidentally, and is better enabled via Settings if needed.",
+            Description =
+                "Disables the Sticky Keys prompt when Shift is pressed 5 times. Sticky Keys can interrupt gaming and productivity workflows when activated accidentally, and is better enabled via Settings if needed.",
             Tags = ["accessibility", "sticky-keys", "keyboard", "hotkey", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -100,7 +105,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-filter-keys-hotkey",
             Label = "Accessibility Policy: Disable Filter Keys Hotkey",
             Category = "Windows Accessibility Policy",
-            Description = "Disables the Filter Keys shortcut activated by holding the Right Shift key for 8 seconds. Filter Keys can cause significant input delay if triggered accidentally.",
+            Description =
+                "Disables the Filter Keys shortcut activated by holding the Right Shift key for 8 seconds. Filter Keys can cause significant input delay if triggered accidentally.",
             Tags = ["accessibility", "filter-keys", "keyboard", "hotkey", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -117,7 +123,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-bounce-keys",
             Label = "Accessibility Policy: Disable Bounce Keys for Keyboard Repeat",
             Category = "Windows Accessibility Policy",
-            Description = "Disables Bounce Keys (Filter Keys variant) that ignores brief multiple key presses. While useful for accessibility, this setting can reduce keyboard responsiveness when not needed.",
+            Description =
+                "Disables Bounce Keys (Filter Keys variant) that ignores brief multiple key presses. While useful for accessibility, this setting can reduce keyboard responsiveness when not needed.",
             Tags = ["accessibility", "bounce-keys", "filter-keys", "keyboard", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -134,7 +141,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-mouse-keys-hotkey",
             Label = "Accessibility Policy: Disable Mouse Keys Hotkey",
             Category = "Windows Accessibility Policy",
-            Description = "Disables activation of Mouse Keys via the Left Alt+Left Shift+Num Lock shortcut. Mouse Keys redirects numpad input to pointer movement, which is a common source of unexpected mouse behaviour on laptops.",
+            Description =
+                "Disables activation of Mouse Keys via the Left Alt+Left Shift+Num Lock shortcut. Mouse Keys redirects numpad input to pointer movement, which is a common source of unexpected mouse behaviour on laptops.",
             Tags = ["accessibility", "mouse-keys", "hotkey", "numpad", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -151,7 +159,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-magnifier-startup",
             Label = "Accessibility Policy: Disable Magnifier Auto-Start",
             Category = "Windows Accessibility Policy",
-            Description = "Prevents Windows Magnifier from starting automatically when a user signs in. Magnifier auto-start is sometimes triggered by a registry artefact on downgraded or re-imaged systems.",
+            Description =
+                "Prevents Windows Magnifier from starting automatically when a user signs in. Magnifier auto-start is sometimes triggered by a registry artefact on downgraded or re-imaged systems.",
             Tags = ["accessibility", "magnifier", "startup", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,
@@ -168,7 +177,8 @@ internal static class WindowsAccessibilityPolicy
             Id = "a11ypol-disable-narrator-startup",
             Label = "Accessibility Policy: Disable Narrator Auto-Start on Sign-In",
             Category = "Windows Accessibility Policy",
-            Description = "Prevents Windows Narrator (screen reader) from starting automatically at sign-in. Narrator auto-activation can be triggered by accessibility registry artefacts on shared or re-used endpoints.",
+            Description =
+                "Prevents Windows Narrator (screen reader) from starting automatically at sign-in. Narrator auto-activation can be triggered by accessibility registry artefacts on shared or re-used endpoints.",
             Tags = ["accessibility", "narrator", "screen-reader", "startup", "policy"],
             NeedsAdmin = true,
             CorpSafe = true,

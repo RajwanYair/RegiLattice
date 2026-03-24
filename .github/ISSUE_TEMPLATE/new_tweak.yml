@@ -1,0 +1,167 @@
+name: New Tweak Proposal
+description: Propose a new registry tweak or policy tweak to add to RegiLattice
+title: "[Tweak]: "
+labels: ["tweak", "enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new tweak! Please fill in all the details below.
+        For **bulk module proposals** (10+ related tweaks), open a Feature Request instead.
+        Ensure the registry path is not already covered — run `dotnet run --project src/RegiLattice.CLI -- --list` and search for the key.
+
+  - type: input
+    id: id
+    attributes:
+      label: Tweak ID (kebab-case)
+      description: Globally unique; must follow `{slug}-{verb}-{noun}` format. See slug table in copilot-instructions.md.
+      placeholder: "priv-disable-activity-tracking"
+    validations:
+      required: true
+
+  - type: input
+    id: label
+    attributes:
+      label: Label
+      description: Short human-readable name shown in the GUI and CLI.
+      placeholder: "Disable Activity Tracking"
+    validations:
+      required: true
+
+  - type: input
+    id: category
+    attributes:
+      label: Category
+      description: Must match an existing category name (run `--show-categories`) or propose a new one.
+      placeholder: "Privacy"
+    validations:
+      required: true
+
+  - type: textarea
+    id: registry
+    attributes:
+      label: Registry Keys
+      description: Full paths including hive. Format — one path per line.
+      placeholder: |
+        HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\...
+          ValueName (REG_DWORD) = 1    # applied state
+          (absent or 0)                # default / removed state
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What It Does
+      description: What changes and why a user would want it. Include `Default: X. Recommended: Y.`
+    validations:
+      required: true
+
+  - type: textarea
+    id: apply_ops
+    attributes:
+      label: Apply Logic (RegOp / ApplyAction)
+      placeholder: |
+        ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName", 1)]
+      render: csharp
+    validations:
+      required: true
+
+  - type: textarea
+    id: remove_ops
+    attributes:
+      label: Remove / Revert Logic
+      placeholder: |
+        RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName")]
+      render: csharp
+    validations:
+      required: true
+
+  - type: textarea
+    id: detect_ops
+    attributes:
+      label: Detect Logic
+      placeholder: |
+        DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...", "ValueName", 1)]
+      render: csharp
+    validations:
+      required: true
+
+  - type: dropdown
+    id: needs_admin
+    attributes:
+      label: Needs Admin
+      description: HKLM tweaks require admin. HKCU-only tweaks do not.
+      options:
+        - "Yes (HKLM)"
+        - "No (HKCU only)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: corp_safe
+    attributes:
+      label: Corp Safe
+      description: Is this safe to apply on corporate/domain-joined machines?
+      options:
+        - "Yes — safe on managed machines"
+        - "No — may conflict with group policy"
+    validations:
+      required: true
+
+  - type: input
+    id: min_build
+    attributes:
+      label: Minimum Windows Build
+      description: Enter 0 for all builds, or a specific build number (e.g. 22000 for Windows 11 only).
+      placeholder: "0"
+
+  - type: input
+    id: source_url
+    attributes:
+      label: Source / Reference URL
+      description: Microsoft docs, KB article, or ADMX template reference.
+      placeholder: "https://learn.microsoft.com/en-us/windows/..."
+
+  - type: dropdown
+    id: impact_score
+    attributes:
+      label: Impact Score (1–5)
+      description: "1 = marginal, 5 = major benefit"
+      options:
+        - "5 — Major: changes visible behavior for most users"
+        - "4 — Significant: measurable effect"
+        - "3 — Moderate"
+        - "2 — Minor: subtle effect"
+        - "1 — Marginal: mostly cosmetic"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: safety_rating
+    attributes:
+      label: Safety Rating (1–5)
+      description: "1 = risky, 5 = very safe and fully reversible"
+      options:
+        - "5 — Very safe, fully reversible, no side effects"
+        - "4 — Safe for most users"
+        - "3 — Moderate risk; admin-only subsystems"
+        - "2 — Elevated risk; test on non-prod first"
+        - "1 — High risk; can break functionality"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-Submission Checklist
+      options:
+        - label: Registry path verified — not already covered by an existing tweak
+          required: true
+        - label: Apply + Remove tested manually (reg add / reg delete or regedit)
+          required: true
+        - label: Tweak is fully reversible — remove restores exact default state
+          required: true
+        - label: ID is globally unique (confirmed via `--list` or `Select-String` scan)
+          required: true

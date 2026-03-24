@@ -1,0 +1,83 @@
+name: Feature Request
+description: Suggest a new feature, tweak category, GUI improvement, or CLI command for RegiLattice
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please describe your idea clearly below.
+        For a **new individual registry tweak**, use the "New Tweak Proposal" template instead.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences describing the feature you would like to see.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which part of RegiLattice would this affect?
+      options:
+        - New Tweak Category (10+ related tweaks)
+        - GUI / WinForms
+        - CLI (new command or flag)
+        - TweakEngine API
+        - Snapshot / Backup / Restore
+        - Plugin System / Marketplace
+        - Package Manager Dialogs
+        - Profile System
+        - Dependency Resolver
+        - Compliance / Audit / Drift Detection
+        - Localization / i18n
+        - Theme / Visual
+        - Performance
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this feature useful? What problem does it solve? Who would benefit from it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should it work? Include registry paths, CLI flags, API names, or UI sketches if relevant.
+      placeholder: |
+        Example: Add a `--profile-diff` CLI command that compares two profile outputs and shows which tweaks differ.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative approaches you have thought about, and why you prefer the proposed solution.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority / Impact
+      options:
+        - Nice to have
+        - Important — I use RegiLattice regularly and this would meaningfully help
+        - Critical — blocking a key use-case
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Mockups, links to similar tools, related tweak IDs, Windows knowledge base articles, etc.
