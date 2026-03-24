@@ -27,6 +27,7 @@ internal static class AccountProtection
             CorpSafe = true,
             ImpactScore = 5,
             SafetyRating = 5,
+            ImpactNote = "Blocks Mimikatz-style credential harvesting from LSASS memory.",
             Tags = ["wdigest", "lsass", "credentials", "password", "mimikatz", "security"],
             Description =
                 "Prevents Windows from storing plaintext passwords in LSASS memory via the "
@@ -46,6 +47,7 @@ internal static class AccountProtection
             CorpSafe = true,
             ImpactScore = 5,
             SafetyRating = 4,
+            ImpactNote = "Prevents LSASS injection attacks; strongly recommended for all Windows 10/11 systems.",
             Tags = ["lsa", "ppl", "protected process", "mimikatz", "credentials", "hardening"],
             Description =
                 "Enables LSASS.exe to run as a Protected Process Light (PPL). RunAsPPL=1 "

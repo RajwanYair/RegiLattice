@@ -461,6 +461,26 @@ internal static class Program
         Console.WriteLine($"  Has description: {tweaks.Count(t => !string.IsNullOrWhiteSpace(t.Description))}");
         Console.WriteLine($"  Has depends_on : {tweaks.Count(t => t.DependsOn.Count > 0)}");
         Console.WriteLine();
+        // Impact & safety distribution
+        Console.WriteLine("  Impact distribution (1=minimal, 5=major):");
+        for (int s = 5; s >= 1; s--)
+        {
+            int cnt = tweaks.Count(t => t.ImpactScore == s);
+            string stars = new string('\u2605', s) + new string('\u2606', 5 - s);
+            Console.WriteLine($"    {stars}  ({s})  {cnt, 4} tweaks");
+        }
+        Console.WriteLine();
+        Console.WriteLine("  Safety distribution (1=risky, 5=very safe):");
+        for (int s = 5; s >= 1; s--)
+        {
+            int cnt = tweaks.Count(t => t.SafetyRating == s);
+            string stars = new string('\u2605', s) + new string('\u2606', 5 - s);
+            Console.WriteLine($"    {stars}  ({s})  {cnt, 4} tweaks");
+        }
+        Console.WriteLine();
+        int quickWins = tweaks.Count(t => t.ImpactScore >= 4 && t.SafetyRating >= 4);
+        Console.WriteLine($"  Quick wins (Impact\u22654 && Safety\u22654): {quickWins}");
+        Console.WriteLine();
         Console.WriteLine($"{"Category", -30} Tweaks");
         Console.WriteLine("  " + new string('-', 38));
         foreach (var cat in byCat.Keys.Order())
@@ -748,13 +768,14 @@ internal static class Program
             Console.Write("Detecting status");
             var smap = _engine.StatusMap(parallel: true);
             Console.WriteLine(" done.");
-            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Status", -14} Label");
-            Console.WriteLine(new string('-', 80));
+            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Imp", -5} {"Status", -14} Label");
+            Console.WriteLine(new string('-', 86));
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
                 var stText = ColourisedStatus(st);
-                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {stText, -14} {td.Label}");
+                string impStars = new string('\u2605', td.ImpactScore) + new string('\u2606', 5 - td.ImpactScore);
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {impStars, -5} {stText, -14} {td.Label}");
             }
         }
         return 0;

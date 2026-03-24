@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="50%" style="stop-color:#181825"/>
+      <stop offset="100%" style="stop-color:#11111b"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#89b4fa"/>
+      <stop offset="100%" style="stop-color:#b4befe"/>
+    </linearGradient>
+    <linearGradient id="gridGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#313244;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#313244;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bgGrad)"/>
+
+  <!-- Grid pattern -->
+  <g stroke="url(#gridGrad)" stroke-width="0.5" fill="none">
+    <line x1="0" y1="80" x2="1280" y2="80"/>
+    <line x1="0" y1="160" x2="1280" y2="160"/>
+    <line x1="0" y1="240" x2="1280" y2="240"/>
+    <line x1="0" y1="320" x2="1280" y2="320"/>
+    <line x1="0" y1="400" x2="1280" y2="400"/>
+    <line x1="0" y1="480" x2="1280" y2="480"/>
+    <line x1="0" y1="560" x2="1280" y2="560"/>
+    <line x1="160" y1="0" x2="160" y2="640"/>
+    <line x1="320" y1="0" x2="320" y2="640"/>
+    <line x1="480" y1="0" x2="480" y2="640"/>
+    <line x1="640" y1="0" x2="640" y2="640"/>
+    <line x1="800" y1="0" x2="800" y2="640"/>
+    <line x1="960" y1="0" x2="960" y2="640"/>
+    <line x1="1120" y1="0" x2="1120" y2="640"/>
+  </g>
+
+  <!-- Decorative lattice nodes -->
+  <g fill="#89b4fa" opacity="0.15" filter="url(#softGlow)">
+    <circle cx="160" cy="160" r="60"/>
+    <circle cx="480" cy="80" r="40"/>
+    <circle cx="800" cy="240" r="50"/>
+    <circle cx="1120" cy="160" r="35"/>
+    <circle cx="320" cy="480" r="45"/>
+    <circle cx="960" cy="480" r="55"/>
+    <circle cx="640" cy="560" r="30"/>
+    <circle cx="1100" cy="520" r="40"/>
+  </g>
+
+  <!-- Lattice connection lines -->
+  <g stroke="#89b4fa" stroke-width="1" opacity="0.1">
+    <line x1="160" y1="160" x2="480" y2="80"/>
+    <line x1="480" y1="80" x2="800" y2="240"/>
+    <line x1="800" y1="240" x2="1120" y2="160"/>
+    <line x1="160" y1="160" x2="320" y2="480"/>
+    <line x1="800" y1="240" x2="960" y2="480"/>
+    <line x1="320" y1="480" x2="640" y2="560"/>
+    <line x1="640" y1="560" x2="960" y2="480"/>
+    <line x1="960" y1="480" x2="1100" y2="520"/>
+  </g>
+
+  <!-- Registry key decorative elements -->
+  <g font-family="'Cascadia Code', 'Fira Code', 'Consolas', monospace" font-size="11" fill="#585b70" opacity="0.35">
+    <text x="40" y="40">HKEY_LOCAL_MACHINE\SOFTWARE\Policies\...</text>
+    <text x="700" y="610">HKEY_CURRENT_USER\Software\Microsoft\Windows\...</text>
+    <text x="900" y="40">RegOp.SetDword(...)</text>
+    <text x="40" y="610">ApplyOps = [RegOp.CheckDword(...)]</text>
+  </g>
+
+  <!-- Lightning bolt icon -->
+  <g transform="translate(540, 160)" filter="url(#glow)">
+    <polygon points="50,0 20,70 45,70 30,120 85,45 58,45 75,0" fill="url(#accentGrad)"/>
+  </g>
+
+  <!-- Title -->
+  <text x="640" y="330" text-anchor="middle" font-family="'Segoe UI', 'Inter', Arial, sans-serif" font-weight="800" font-size="72" fill="#cdd6f4" letter-spacing="-1">
+    RegiLattice
+  </text>
+
+  <!-- Subtitle -->
+  <text x="640" y="375" text-anchor="middle" font-family="'Segoe UI', 'Inter', Arial, sans-serif" font-weight="400" font-size="20" fill="#a6adc8">
+    Windows Registry Tweaks Toolkit
+  </text>
+
+  <!-- Accent line -->
+  <rect x="520" y="395" width="240" height="3" rx="2" fill="url(#accentGrad)"/>
+
+  <!-- Stat pills -->
+  <g font-family="'Segoe UI', 'Inter', Arial, sans-serif">
+    <!-- Tweaks pill -->
+    <rect x="235" y="430" width="160" height="36" rx="18" fill="#313244"/>
+    <text x="252" y="454" font-size="13" font-weight="600" fill="#a6e3a1">&#x2713;</text>
+    <text x="268" y="454" font-size="14" font-weight="600" fill="#cdd6f4">4 825 Tweaks</text>
+
+    <!-- Categories pill -->
+    <rect x="415" y="430" width="175" height="36" rx="18" fill="#313244"/>
+    <text x="432" y="454" font-size="13" font-weight="600" fill="#89b4fa">&#x25A0;</text>
+    <text x="448" y="454" font-size="14" font-weight="600" fill="#cdd6f4">198 Categories</text>
+
+    <!-- Tests pill -->
+    <rect x="610" y="430" width="160" height="36" rx="18" fill="#313244"/>
+    <text x="627" y="454" font-size="13" font-weight="600" fill="#f9e2af">&#x2605;</text>
+    <text x="643" y="454" font-size="14" font-weight="600" fill="#cdd6f4">2 661 Tests</text>
+
+    <!-- Themes pill -->
+    <rect x="790" y="430" width="155" height="36" rx="18" fill="#313244"/>
+    <text x="807" y="454" font-size="13" font-weight="600" fill="#b4befe">&#x25CF;</text>
+    <text x="823" y="454" font-size="14" font-weight="600" fill="#cdd6f4">11 Themes</text>
+
+    <!-- Platform pill -->
+    <rect x="210" y="480" width="180" height="36" rx="18" fill="#313244"/>
+    <text x="227" y="504" font-size="13" font-weight="600" fill="#89b4fa">&#x229E;</text>
+    <text x="248" y="504" font-size="14" font-weight="600" fill="#cdd6f4">.NET 10 / C# 13</text>
+
+    <!-- Profiles pill -->
+    <rect x="410" y="480" width="160" height="36" rx="18" fill="#313244"/>
+    <text x="427" y="504" font-size="13" font-weight="600" fill="#f38ba8">&#x2665;</text>
+    <text x="443" y="504" font-size="14" font-weight="600" fill="#cdd6f4">5 Profiles</text>
+
+    <!-- CLI pill -->
+    <rect x="590" y="480" width="180" height="36" rx="18" fill="#313244"/>
+    <text x="607" y="504" font-size="13" font-weight="600" fill="#a6e3a1">&#x25B6;</text>
+    <text x="623" y="504" font-size="14" font-weight="600" fill="#cdd6f4">25+ CLI Cmds</text>
+
+    <!-- Pkg Mgrs pill -->
+    <rect x="790" y="480" width="190" height="36" rx="18" fill="#313244"/>
+    <text x="807" y="504" font-size="13" font-weight="600" fill="#f9e2af">&#x2261;</text>
+    <text x="823" y="504" font-size="14" font-weight="600" fill="#cdd6f4">5 Pkg Managers</text>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="640" y="565" text-anchor="middle" font-family="'Cascadia Code', 'Fira Code', monospace" font-size="13" fill="#585b70">
+    Privacy &#x2022; Performance &#x2022; Debloat &#x2022; Security &#x2022; Hardening &#x2022; Group Policy
+  </text>
+
+  <!-- Version badge bottom-right -->
+  <g transform="translate(1120, 590)">
+    <rect width="120" height="28" rx="14" fill="#313244"/>
+    <text x="60" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#89b4fa">v5.0.0</text>
+  </g>
+
+  <!-- MIT badge bottom-left -->
+  <g transform="translate(40, 590)">
+    <rect width="80" height="28" rx="14" fill="#313244"/>
+    <text x="40" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#a6e3a1">MIT</text>
+  </g>
+</svg>
