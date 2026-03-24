@@ -28,7 +28,7 @@ What actually happens.
 
 - **OS:** Windows 11 (build ...)
 - **Runtime:** .NET 10.0
-- **RegiLattice version:** 3.x.x
+- **RegiLattice version:** (e.g. 5.0.0)
 - **Admin:** Yes / No
 - **Corporate network:** Yes / No
 

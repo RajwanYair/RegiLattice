@@ -4,7 +4,7 @@ Thank you for your interest in contributing!
 
 ## Getting Started
 
-See the [Development Guide](docs/Development.md) for the full setup,
+See the [Development Guide](Development.md) for the full setup,
 workflow, testing, and coding standards reference.
 
 ## Quick Reference

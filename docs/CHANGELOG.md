@@ -4,7 +4,7 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [5.0.0] — 2026-03-27 (Sprints 152–161)
+## [5.0.0] — 2026-03-24 (Sprints 152–161)
 
 ### Highlights
 
@@ -71,7 +71,7 @@ policy, and Credential UI policy.
 
 ---
 
-## [4.9.0] — 2026-03-26 (Sprints 142–151)
+## [4.9.0] — 2026-03-23 (Sprints 142–151)
 
 ### Highlights
 
@@ -124,7 +124,7 @@ logon/display controls.
 
 ---
 
-## [4.8.0] — 2026-03-25 (Sprints 140–141)
+## [4.8.0] — 2026-03-22 (Sprints 140–141)
 
 ### Highlights
 

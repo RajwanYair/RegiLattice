@@ -1,7 +1,7 @@
 # RegiLattice — Development Guide
 
 > Local setup, workflow, testing, and contribution instructions for the C# codebase.
-> Last updated: 2026-03-18 · v3.5.0
+> Last updated: 2026-03-24 · v5.0.0
 
 ---
 
