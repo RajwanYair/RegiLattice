@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.13.0] — 2026-04-09 (Sprints 222–226)
+
+### Added
+
+- **LanmanServerPolicy** (Sprint 222) — 10 SMB server hardening tweaks: disable admin shares, ban plain-text auth, require packet signing, enforce SPN validation, restrict null sessions, auto-disconnect idle, disable WSD multicast, audit guest logon attempts
+- **LanmanWorkstationPolicy** (Sprint 223) — 10 SMB client hardening tweaks: block insecure guest auth, disable plain-text passwords, enable/require signing, enable encryption, disable SMBv1, require NTLMv2, audit logon events, disable multicast name resolution
+- **LapsPolicy** (Sprint 224) — 10 Windows LAPS policy tweaks: AD backup target, password age/length/complexity, post-auth reset+logoff, post-auth delay, AD encryption, expiry protection, audit policy, expiry notification
+- **SettingSyncPolicy** (Sprint 225) — 10 Settings Sync policy tweaks: disable all sync, block user override, disable credential/personalization/app/browser/start/accessibility/language sync, block sync on metered networks
+- **WindowsUpdatePolicy** (Sprint 226) — 10 Windows Update policy tweaks: disable WU access, block internet locations, exclude driver updates, disable OS upgrade, defer quality/feature updates with day counts, block Insider builds, set semi-annual channel
+
+#### Stats
+
+- Total tweaks: **5,475** (+50)
+- Categories: **263** (+5)
+- Module files: **258** (+5)
+
 ## [5.12.0] — 2026-04-09 (Sprints 217–221)
 
 ### Added

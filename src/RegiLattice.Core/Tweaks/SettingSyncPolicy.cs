@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class SettingSyncPolicy
+{
+    private const string SyncKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "syncsec-disable-all-setting-sync",
+            Label = "Disable All Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Disables the Windows settings synchronisation feature entirely and prevents users from re-enabling it.",
+            Tags = ["sync", "settings", "cloud", "privacy", "microsoft-account"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "All settings sync is stopped; value 2 = forced off, user cannot override.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-block-user-override",
+            Label = "Block User from Changing Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Prevents users from accessing the settings sync toggle in Windows Settings.",
+            Tags = ["sync", "settings", "user-override", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Removes the sync toggle from Settings UI; requires DisableSettingSync to also be set.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSyncUserOverride")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-credentials-sync",
+            Label = "Disable Credentials and Password Sync",
+            Category = "Settings Sync Policy",
+            Description = "Stops Windows from syncing saved passwords and credentials across devices via a Microsoft account.",
+            Tags = ["sync", "credentials", "password", "privacy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Prevents credential roaming; passwords stored locally only, not in Microsoft account cloud.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableCredentialsSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableCredentialsSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableCredentialsSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-personalization-sync",
+            Label = "Disable Personalization Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Prevents Windows from syncing wallpaper, colour, themes, and other personalisation settings to the cloud.",
+            Tags = ["sync", "personalization", "theme", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Personalization stays local; no roaming of desktop background or colour accent to other devices.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisablePersonalizationSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-app-settings-sync",
+            Label = "Disable App Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Stops Windows from uploading and syncing per-app settings to a Microsoft account in the cloud.",
+            Tags = ["sync", "app-settings", "cloud", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "App preferences remain on this device; switching to another device may require re-configuring apps.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableApplicationSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableApplicationSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableApplicationSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-browser-sync",
+            Label = "Disable Browser Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Disables syncing of Microsoft Edge / Internet Explorer browser settings, favourites, and history via sync.",
+            Tags = ["sync", "browser", "edge", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Browser favourites and history stay local; no cloud upload via Windows Settings Sync.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableWebBrowserSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-start-layout-sync",
+            Label = "Disable Start Menu Layout Sync",
+            Category = "Settings Sync Policy",
+            Description = "Prevents Windows from syncing the Start menu layout, pinned apps, and tile configuration to the cloud.",
+            Tags = ["sync", "start-menu", "layout", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Start menu customisation stays local; does not roam to other devices signed with the same account.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableStartLayoutSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableStartLayoutSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableStartLayoutSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-accessibility-sync",
+            Label = "Disable Accessibility Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Stops Windows from syncing accessibility options such as magnifier, narrator, and high contrast settings.",
+            Tags = ["sync", "accessibility", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Accessibility preferences remain device-local; must be re-configured on each device.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableAccessibilitySettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-sync-on-metered",
+            Label = "Disable Settings Sync on Metered Networks",
+            Category = "Settings Sync Policy",
+            Description = "Prevents Windows settings sync from running when the device is on a metered (pay-per-use) network connection.",
+            Tags = ["sync", "metered", "network", "data-usage", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents unexpected data charges on cellular / capped connections; sync resumes on unmetered networks.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSyncOnPaidNetwork")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
+        },
+        new TweakDef
+        {
+            Id = "syncsec-disable-language-sync",
+            Label = "Disable Language and Keyboard Settings Sync",
+            Category = "Settings Sync Policy",
+            Description = "Prevents Windows from syncing language preferences, keyboard layouts, and input method settings to the cloud.",
+            Tags = ["sync", "language", "keyboard", "input", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Language and IME configuration stays local; no roaming of locale settings across devices.",
+            ApplyOps = [RegOp.SetDword(SyncKey, "DisableLanguageSettingSync", 2)],
+            RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableLanguageSettingSync")],
+            DetectOps = [RegOp.CheckDword(SyncKey, "DisableLanguageSettingSync", 2)],
+        },
+    ];
+}
