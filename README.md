@@ -5,7 +5,7 @@
      shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
      windows 11 tweaks windows 10 tweaks gaming optimization security hardening
      registry backup corporate IT sysadmin gpo intune-compatible compliance audit
-     5325 tweaks 248 categories declarative regop engine dry-run snapshot diff
+     5375 tweaks 253 categories declarative regop engine dry-run snapshot diff
      RegiLattice windows-optimizer tweak-manager registry-automation open-source
 -->
 
@@ -23,15 +23,15 @@
 ![Tests](https://img.shields.io/badge/tests-2693%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.10.0-blue)
+![Version](https://img.shields.io/badge/version-5.11.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5325 verified tweaks** across **248 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **5375 verified tweaks** across **253 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.10.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.11.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -50,7 +50,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **5325 verified tweaks** across 248 categories — each fully reversible with apply + remove
+- **5375 verified tweaks** across 253 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
