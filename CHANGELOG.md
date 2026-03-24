@@ -7,24 +7,24 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 ## [5.0.0] — 2026-03-24 (Sprints 152–161)
 
 - **Sprints 152–161**: 100 new tweaks across 10 new modules — `AppCompatGpoPolicy.cs`, `CredentialUiPolicy.cs`, `DeliveryOptimizationPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `InternetPrintingPolicy.cs`, `SharedFoldersSmbPolicy.cs`, `StartMenuModernPolicy.cs`, `TabletPcInputPolicy.cs`, `TpmSecurityPolicy.cs`, `WcmConnectionPolicy.cs`.
-- **4 825 tweaks** across **198 categories** (193 module files). ← 3 confirmed functional duplicates removed.
-- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+- **4825 tweaks** across **198 categories** (193 module files). ← 3 confirmed functional duplicates removed.
+- **2661 tests** passing — 2052 Core + 301 CLI + 308 GUI (0 failures).
 
 ---
 
 ## [4.9.0] — 2026-03-23 (Sprints 142–151)
 
 - **Sprints 142–151**: 100 new tweaks across 10 new modules — `NetworkLltdPolicy.cs`, `WindowsMediaPolicyAdv.cs`, `DeviceProvisioningPolicy.cs`, `WindowsMapsPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `SystemRestoreGpoPolicy.cs`, `StartMenuModernPolicy.cs`, `CloudContentPolicy.cs`, `AppPrivacyPolicyAdv.cs`, `UserAccountControlAdvPolicy.cs`.
-- **4 728 tweaks** across **188 categories** (183 module files).
-- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+- **4728 tweaks** across **188 categories** (183 module files).
+- **2661 tests** passing — 2052 Core + 301 CLI + 308 GUI (0 failures).
 
 ---
 
 ## [4.8.0] — 2026-03-22 (Sprints 140–141)
 
 - **Sprints 140–141**: 100 new tweaks across 10 new modules — `AmsiScriptPolicy.cs`, `IECompatPolicy.cs`, `LogonCachePolicy.cs`, `BluetoothAdvPolicy.cs`, `ApplicationRestartPolicy.cs`, `ProcessMitigationPolicy.cs`, `RemoteAssistancePolicy.cs`, `NetworkHardenedPaths.cs`, `UsbStoragePolicy.cs`, `KioskAssignedAccess.cs`.
-- **4 628 tweaks** across **178 categories** (173 module files).
-- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+- **4628 tweaks** across **178 categories** (173 module files).
+- **2661 tests** passing — 2052 Core + 301 CLI + 308 GUI (0 failures).
 - Fix: parallel test race in `RatingsFileExistsBranchTests` / `RatingsTests` via `[Collection("Ratings")]`.
 - Fix: WFO1000 false-positive suppressed in GUI project (`NoWarn`).
 
@@ -33,8 +33,8 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 ## [4.7.0] — 2026-03-23 (M4 Milestone)
 
 - **M4 milestone release** (Sprints 130–139): 420 new tweaks, plugin signing & sandbox, Chocolatey distribution, virtual registry tests, Stryker.NET mutation testing infrastructure.
-- **4 528 tweaks** across **168 categories** (163 module files).
-- **2 660 tests** passing — 2 052 Core + 301 CLI + 307 GUI (0 failures).
+- **4528 tweaks** across **168 categories** (163 module files).
+- **2660 tests** passing — 2052 Core + 301 CLI + 307 GUI (0 failures).
 - Fix: `Ratings.Save()` cross-process retry to eliminate parallel-test `IOException` races.
 
 ---
@@ -102,8 +102,8 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Sprint 129 (T8.2)**: +50 policy tweaks — BranchCache, InternetZonePolicy, NetworkConnectionsPolicy, AppVirtualization, SensorPolicy (5 new modules)
 - Test suite hang fix: removed 837 external-process sweep tests; test isolation fix for ComplianceHistory race condition
 - Total: 4,158 tweaks · 126 categories · 2,007 tests
-- **2 007 tests** passing (0 consistent failures)
-- 4 108 tweaks, 121 categories
+- **2007 tests** passing (0 consistent failures)
+- 4108 tweaks, 121 categories
 - Version bumped `4.5.0` → `4.6.0`
 
 ## [4.4.0] — 2026-03-22
@@ -111,8 +111,8 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **Sprint 106**: 5 new security/hardening modules — WdacCodeIntegrity, BitLockerRemovable, DeviceInstallPolicies, LapsSecurity, NtlmAuthentication (+50 tweaks)
 - **New categories**: WDAC & Code Integrity, BitLocker To Go, Device Installation Policies, Local Admin Password (LAPS), NTLM Authentication
 - **Build**: 0 errors, 0 warnings (Release x64, .NET 10)
-- 4 108 tweaks, 121 categories, 126 module files
-- **1 858 tests** passing (1 325 Core + 291 CLI + 242 GUI)
+- 4108 tweaks, 121 categories, 126 module files
+- **1858 tests** passing (1325 Core + 291 CLI + 242 GUI)
 - Version bumped `4.3.0` → `4.4.0`
 
 ## [4.3.0] — 2026-03-22
@@ -121,28 +121,28 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - **9 new tweak modules** (Sprints 88–96): NetworkInterface, SystemShutdown, MicrosoftAccount, DeviceGuardVbs, WindowsInk, CloudExperience, UserActivity, WifiNetworking, PrintSpoolerSecurity
 - **New CLI flags**: `--compliance-history`, `--compliance-report auto`
 - **Build**: 0 errors, 0 warnings (Release x64, .NET 10)
-- 4 058 tweaks, 116 categories, 121 module files
-- **1 858 tests** passing (1 325 Core + 291 CLI + 242 GUI)
+- 4058 tweaks, 116 categories, 121 module files
+- **1858 tests** passing (1325 Core + 291 CLI + 242 GUI)
 - Version bumped `4.2.0` → `4.3.0`
 
 ## [4.2.0] — 2026-03-21
 
 - Sprint 77: RemoteManagement, SshHardening, KioskSharedPc, ActiveDirectory modules (+40 tweaks); HyperVAdvanced expanded +10
-- 3 868 tweaks across 107 categories; **1 647 tests** passing
+- 3868 tweaks across 107 categories; **1647 tests** passing
 - Version bumped `4.1.0` → `4.2.0`
 
 ## [4.0.0] — 2026-03-20
 
 - **Major release milestone** — all capabilities fully enabled: GUI, CLI, MSI installer, 11 themes, 5 profiles, CorporateGuard, dry-run, snapshot, package managers, plugin marketplace
 - **Anti-duplication quality system**: `no-duplication.instructions.md`, `SKILL.md`, `scripts/Audit-Duplications.ps1`, +4 duplication guard tests
-- 3 669 tweaks, 94 categories; **1 435 tests** passing (1 018 Core + 175 CLI + 242 GUI)
+- 3669 tweaks, 94 categories; **1435 tests** passing (1018 Core + 175 CLI + 242 GUI)
 - Version bumped `3.8.0` → `4.0.0`
 
 ## [3.7.3] — 2026-03-20
 
 - Title-bar icons added to 7 dialogs (`AboutDialog`, `WhatsNewDialog`, `PreferencesDialog`, and 4 more)
 - Repo standards: `README.md` rename, root `CONTRIBUTING.md`/`CHANGELOG.md` stubs, PR-template test count fix
-- Tests: **1 414** passing
+- Tests: **1414** passing
 
 ## [3.7.2] — 2026-03-20
 
@@ -155,6 +155,6 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 - 6 dialogs gained title-bar icons; icon audit completed
 - `SystemMonitor` live CPU/RAM monitoring (P/Invoke `GetSystemTimes`)
 - `TweakHistory` + `Favorites` services + tests
-- Total: 2 991 tweaks, 1 431 tests
+- Total: 2991 tweaks, 1431 tests
 
 [Full history →](docs/CHANGELOG.md)

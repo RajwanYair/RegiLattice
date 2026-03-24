@@ -166,7 +166,7 @@ feat(tweaks): Sprint 48 — 50 new tweaks (Bluetooth/Printing/TouchPen/Speech/St
 
 Bluetooth.cs +10, Printing.cs +10, TouchPen.cs +10, Speech.cs +10, Storage.cs +10
 5 dialog enhancements (+2 features each)
-Total: 3 046 tweaks, 1 387 tests (0 failures)
+Total: 3046 tweaks, 1387 tests (0 failures)
 ```
 
 ---

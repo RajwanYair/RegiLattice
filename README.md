@@ -14,7 +14,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Version](https://img.shields.io/badge/version-5.0.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **4 825 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **4825 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
@@ -39,7 +39,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **4 825 verified tweaks** across 198 categories — each fully reversible with apply + remove
+- **4825 verified tweaks** across 198 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -56,7 +56,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **2 661 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **2661 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -170,7 +170,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (2 661 tests)
+# Run tests (2661 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -282,7 +282,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 193 module files, 4 825 tweaks
+│   │   └── Tweaks/                          # 193 module files, 4825 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -318,7 +318,7 @@ RegiLattice/
 │       ├── CliArgs.cs                       # CLI argument model
 │       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/              # 2 052 xUnit tests
+│   ├── RegiLattice.Core.Tests/              # 2052 xUnit tests
 │   │   ├── TweakDefTests.cs
 │   │   ├── TweakEngineTests.cs
 │   │   ├── TweakEngineBuiltinsTests.cs

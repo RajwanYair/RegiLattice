@@ -14,7 +14,7 @@ I now have a complete picture of the project state. Let me write the roadmap.
 
 # RegiLattice — Next-Generation Development Roadmap
 
-> **Baseline:** v5.0.0 · 4 825 tweaks · 198 categories · 193 modules · 2 661 tests · 63 GUI dialogs · 34 Core services
+> **Baseline:** v5.0.0 · 4825 tweaks · 198 categories · 193 modules · 2661 tests · 63 GUI dialogs · 34 Core services
 > **Scope:** Full refactor and expansion — no restrictions
 > **Planning horizon:** 30 sprints across 3 milestones → v5.1, v5.2, v6.0
 > **Sprint numbering:** Continues from Sprint 161 (last v5.0.0 sprint)
@@ -67,7 +67,7 @@ Line coverage is strong (~95% on Core line coverage), but branch coverage is ~75
 
 ### Stretch Goals
 - Snapshot round-trip fuzz tests: generate random tweak ID sets, snapshot, restore, diff
-- Property tests for all 4 825 TweakDef instances: no null labels, valid hive prefixes, consistent DetectOps
+- Property tests for all 4825 TweakDef instances: no null labels, valid hive prefixes, consistent DetectOps
 
 ---
 
@@ -120,7 +120,7 @@ The `TweakEngine.RegisterBuiltins()` method is a manual 193-line registry of mod
 | C1 | **Source generator for tweak module auto-registration** | Write a `[TweakModule]` attribute and a Roslyn incremental source generator that scans for classes returning `IReadOnlyList<TweakDef>` and auto-registers them in `TweakEngine`. Eliminates the 193-line `RegisterBuiltins()` maintenance burden. Zero runtime reflection. | XL |
 | C2 | **`ITweakService` lifecycle interface** | Define `Init()`, `Flush()`, `Dispose()` contract. Migrate all 34 services to implement it. Register via a lightweight DI container (Microsoft.Extensions.DependencyInjection — already available via transitive deps). Enables testable, swappable service implementations. | L |
 | C3 | **Startup performance profiling** | Instrument `RegisterBuiltins()` and engine initialization with `System.Diagnostics.Stopwatch`. Target: cold start < 800 ms on low-end hardware (Celeron N4500 equivalent). Identify top 3 bottlenecks and fix. | M |
-| C4 | **Memory footprint audit** | Use `dotnet-counters` and a memory snapshot to find top allocators during a `Search()` + `StatusMap()` cycle. Target: < 150 MB working set at idle with all 4 825 tweaks loaded. | M |
+| C4 | **Memory footprint audit** | Use `dotnet-counters` and a memory snapshot to find top allocators during a `Search()` + `StatusMap()` cycle. Target: < 150 MB working set at idle with all 4825 tweaks loaded. | M |
 | C5 | **Eliminate all `List<T>` → `IReadOnlyList<T>` in service returns** | Audit all 34 services for `List<T>` returns exposed as public API. Replace with `IReadOnlyList<T>`. This is a clean-up pass—no logic changes. | S |
 | C6 | **`TweakDef` source compatibility layer** | Add a `[Obsolete]` on any `TweakDef` properties that will change in v6.0 (e.g., if `RegistryKeys` is superseded). Emit deprecation warnings at `compile` time 1 minor version before removal. | S |
 | C7 | **Nullable reference types audit** | Run `dotnet build /warnaserror:nullable` on all three projects and fix all suppressed `CS8xxx` nullability warnings. Target: zero nullable warnings with `TreatWarningsAsErrors` on all projects. | M |
@@ -289,18 +289,18 @@ Distribution covers GitHub Releases, Scoop, WinGet, MSI (WiX), MSIX. Release pip
 
 ### Context
 
-4 825 tweaks across 198 categories is a strong foundation. The next expansion focuses on quality over quantity: AI-enhanced descriptions, predictive impact scoring, conflict detection enrichment, and coverage of emerging Windows features (Windows 11 24H2/25H2+).
+4825 tweaks across 198 categories is a strong foundation. The next expansion focuses on quality over quantity: AI-enhanced descriptions, predictive impact scoring, conflict detection enrichment, and coverage of emerging Windows features (Windows 11 24H2/25H2+).
 
 ### Tasks
 
 | ID | Task | Description | Effort |
 |----|------|-------------|--------|
-| H1 | **AI-enhanced tweak descriptions** | One-time pass: run all 4 825 tweak `Description` fields through an LLM prompt (ChatGPT/Claude API or local Ollama) targeting: plain English, ~30 words, mentions real-world impact. Human review on output before commit. Stored as a data migration commit only. | M |
-| H2 | **Windows 11 24H2/25H2 tweak audit** | Cross-reference all 4 825 tweaks against KB articles for Windows 11 24H2 and 25H2 registry changes. Identify deprecated keys, changed value semantics, and new opportunities. Create `TweakCompatibility` field: `All`, `Min22H2`, `Min24H2`, `Deprecated`. | L |
+| H1 | **AI-enhanced tweak descriptions** | One-time pass: run all 4825 tweak `Description` fields through an LLM prompt (ChatGPT/Claude API or local Ollama) targeting: plain English, ~30 words, mentions real-world impact. Human review on output before commit. Stored as a data migration commit only. | M |
+| H2 | **Windows 11 24H2/25H2 tweak audit** | Cross-reference all 4825 tweaks against KB articles for Windows 11 24H2 and 25H2 registry changes. Identify deprecated keys, changed value semantics, and new opportunities. Create `TweakCompatibility` field: `All`, `Min22H2`, `Min24H2`, `Deprecated`. | L |
 | H3 | **Conflict enrichment** | Extend `ConflictDetector` to surface known Windows-enforced conflicts (e.g., "Cannot disable Windows Defender if Tamper Protection is on"). Map 50 common conflict pairs. Add conflict reason to `TweakDef.SideEffects`. | M |
 | H4 | **Predictive impact score preview** | Before applying a tweak, show the predicted `ImpactScore` delta across Privacy / Performance / Security dimensions as a tooltip overlay. Sources from existing `ImpactScoreService` data. | M |
-| H5 | **Sprint tweak expansion — 200 new tweaks** | Sprints 162–191 each add 10 tweaks to targeted categories. Priority: Windows 11 Recall, Windows Copilot AI, Hyper-V fine-grained, WDAG Application Guard, Microsoft Edge enterprise GPO. Total: 4 825 → 5 025+ | Ongoing |
-| H6 | **TweakDef `MinBuild` population audit** | Audit all 4 825 tweaks for missing or incorrect `MinBuild`. Cross-reference Windows build release notes. Especially important for 24H2+ registry additions. | M |
+| H5 | **Sprint tweak expansion — 200 new tweaks** | Sprints 162–191 each add 10 tweaks to targeted categories. Priority: Windows 11 Recall, Windows Copilot AI, Hyper-V fine-grained, WDAG Application Guard, Microsoft Edge enterprise GPO. Total: 4825 → 5025+ | Ongoing |
+| H6 | **TweakDef `MinBuild` population audit** | Audit all 4825 tweaks for missing or incorrect `MinBuild`. Cross-reference Windows build release notes. Especially important for 24H2+ registry additions. | M |
 | H7 | **Custom user-defined tweaks** | Allow users to define custom `TweakDef`-like entries via a JSON file in `%LOCALAPPDATA%\RegiLattice\custom-tweaks.json`. `TweakEngine` loads these at startup after built-ins. Validate with `TweakValidator` before registering. | L |
 
 ### Dependencies
@@ -419,8 +419,8 @@ H2 (Windows build audit) ──► H5 (tweak expansion) + H6 (MinBuild populatio
 
 | Metric | v5.0.0 Now | v5.1.0 | v5.2.0 | v6.0.0 |
 |--------|-----------|--------|--------|--------|
-| Tweaks | 4 825 | 4 925 | 5 025 | 5 250+ |
-| Tests | 2 661 | 2 750 | 2 900 | 3 100+ |
+| Tweaks | 4825 | 4925 | 5025 | 5250+ |
+| Tests | 2661 | 2750 | 2900 | 3100+ |
 | Branch coverage | ~75% | **≥ 80%** | 82% | **≥ 85%** |
 | Mutation kill score | Unknown | 60% | 65% | **≥ 70%** |
 | CLI subcommand structure | ❌ | ✅ | ✅ | ✅ |

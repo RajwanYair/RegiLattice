@@ -16,12 +16,12 @@ policy, and Credential UI policy.
 
 #### Stats
 
-- **4 825 tweaks** across **198 categories** and **193 modules** (3 confirmed functional duplicates removed)
-- **2 661 tests** — 0 failures (Core 2052 + CLI 301 + GUI 308)
+- **4825 tweaks** across **198 categories** and **193 modules** (3 confirmed functional duplicates removed)
+- **2661 tests** — 0 failures (Core 2052 + CLI 301 + GUI 308)
 
 #### Chore
 
-- Removed 3 confirmed functional duplicate tweaks: `printing-disable-spooler-service` (≡ `printing-disable-print-spooler`), `pst-disable-power-efficiency-diag` (≡ `pst-disable-power-efficiency`), `priv-privacy-disable-advertising-id` (HKCU-subset of `priv-disable-advertising-id`). Net count: 4 828 → 4 825.
+- Removed 3 confirmed functional duplicate tweaks: `printing-disable-spooler-service` (≡ `printing-disable-print-spooler`), `pst-disable-power-efficiency-diag` (≡ `pst-disable-power-efficiency`), `priv-privacy-disable-advertising-id` (HKCU-subset of `priv-disable-advertising-id`). Net count: 4828 → 4825.
 - Fixed `SECURITY.md` and `docs/SECURITY.md`: supported version `4.x → 5.x`.
 - Updated root `CHANGELOG.md` with v5.0.0 entry.
 
@@ -67,7 +67,7 @@ policy, and Credential UI policy.
 #### Tests
 
 - Search budget relaxed from 150ms → 250ms in `Search_CompletesUnder50ms` to accommodate
-  4 828 tweaks (baseline ~172ms at v5.0.0). Threshold note added for next review at 6 000 tweaks.
+  4828 tweaks (baseline ~172ms at v5.0.0). Threshold note added for next review at 6000 tweaks.
 
 ---
 
@@ -117,10 +117,10 @@ logon/display controls.
 
 ### Stats
 
-- Tweaks: **4 728** (+100 from v4.8.0)
+- Tweaks: **4728** (+100 from v4.8.0)
 - Categories: **188** (+10)
 - Module files: **183** (+10)
-- Tests: **2 661** (2 052 Core + 301 CLI + 308 GUI, 0 failures)
+- Tests: **2661** (2052 Core + 301 CLI + 308 GUI, 0 failures)
 
 ---
 
@@ -177,10 +177,10 @@ restart/crash control.
 
 ### Stats
 
-- Tweaks: **4 628** (+100 from v4.7.0)
+- Tweaks: **4628** (+100 from v4.7.0)
 - Categories: **178** (+10)
 - Module files: **173** (+10)
-- Tests: **2 661** (2 052 Core + 301 CLI + 308 GUI, 0 failures)
+- Tests: **2661** (2052 Core + 301 CLI + 308 GUI, 0 failures)
 
 ---
 
@@ -231,8 +231,8 @@ distribution and mutation-testing improvements.
 
 ### Stats
 
-- Total tweaks: **4 528** across **168 categories** (163 module files)
-- Total tests: **2 660** passing — 2 052 Core + 301 CLI + 307 GUI (0 failures)
+- Total tweaks: **4528** across **168 categories** (163 module files)
+- Total tests: **2660** passing — 2052 Core + 301 CLI + 307 GUI (0 failures)
 - Version bumped `4.6.0` → `4.7.0`
 
 ---
@@ -251,8 +251,8 @@ distribution and mutation-testing improvements.
 
 #### Stats
 
-- Total tweaks: ~4 258 across ~141 categories
-- Total tests: 2 052 (0 failures)
+- Total tweaks: ~4258 across ~141 categories
+- Total tests: 2052 (0 failures)
 
 ---
 
@@ -605,8 +605,8 @@ distribution and mutation-testing improvements.
 
 #### Stats
 
-- Tweaks: **4 058** across **116 categories** (121 module files)
-- Tests: **1 858** (1 325 Core + 291 CLI + 242 GUI), all passing
+- Tweaks: **4058** across **116 categories** (121 module files)
+- Tests: **1858** (1325 Core + 291 CLI + 242 GUI), all passing
 - Build: **0 errors, 0 warnings** (Release x64)
 - Version bumped `4.2.0` → `4.3.0`
 
@@ -632,8 +632,8 @@ distribution and mutation-testing improvements.
 
 #### Stats
 
-- Tweaks: **3 868** across **107 categories**
-- Tests: **1 647** (1 230 Core + 175 CLI + 242 GUI), all passing
+- Tweaks: **3868** across **107 categories**
+- Tests: **1647** (1230 Core + 175 CLI + 242 GUI), all passing
 - Version bumped `4.1.0` → `4.2.0`
 
 ---
@@ -702,10 +702,10 @@ newly introduced anti-duplication quality layer.
   - `.github/skills/no-duplication/SKILL.md` — 6-step audit workflow with PowerShell one-liners and resolution guide
   - `scripts/Audit-Duplications.ps1` — colour-coded audit script covering all 4 duplication layers; `exit 1` on hard violations
   - **+4 duplication guard tests** in `TweakEngineBuiltinsTests.cs`:
-    - `RegisterBuiltins_DuplicateRegistryOps_BelowRegressionThreshold` (threshold ≤ 1 200)
+    - `RegisterBuiltins_DuplicateRegistryOps_BelowRegressionThreshold` (threshold ≤ 1200)
     - `RegisterBuiltins_NoCrossModuleLabelAndPathCollision` (threshold ≤ 200, 128 groups detected as existing debt)
     - `RegisterBuiltins_CategorySlugs_MatchKnownPrefixes` (spot-checks 10 canonical category slug prefixes)
-    - `RegisterBuiltins_DetectDuplicateRegistryOps_ProducesUsableOutput` (scale smoke-test at 3 669 tweaks)
+    - `RegisterBuiltins_DetectDuplicateRegistryOps_ProducesUsableOutput` (scale smoke-test at 3669 tweaks)
 
 - **Next Phase Master Plan** appended to `docs/Roadmap.md` — 9-phase plan (v3.9 → v4.2) covering:
   - Phase A: Deduplication sprint (fix 128 cross-module label+path collisions, ~800 duplicate ops)
@@ -719,7 +719,7 @@ newly introduced anti-duplication quality layer.
 
 | Capability | Status |
 |---|---|
-| **3 669 verified tweaks** across 94 categories | ✅ |
+| **3669 verified tweaks** across 94 categories | ✅ |
 | **WinForms GUI** with 11 switchable themes | ✅ |
 | **CLI** with 25+ commands | ✅ |
 | **Interactive console menu** | ✅ |
@@ -738,12 +738,12 @@ newly introduced anti-duplication quality layer.
 | **Localization** — English + German (48 strings) | ✅ |
 | **Live CPU/RAM monitoring** in About dialog | ✅ |
 | **Automatic JSON backups** before every registry mutation | ✅ |
-| **1 435 tests** across 17 test files (0 failures) | ✅ |
+| **1435 tests** across 17 test files (0 failures) | ✅ |
 
 ### Stats
 
-- Tweaks: **3 669** across 94 categories (unchanged from v3.8.0)
-- Tests: **1 435** passing (1 018 Core + 175 CLI + 242 GUI) — +21 from v3.8.0
+- Tweaks: **3669** across 94 categories (unchanged from v3.8.0)
+- Tests: **1435** passing (1018 Core + 175 CLI + 242 GUI) — +21 from v3.8.0
 - Version bumped `3.8.0` → `4.0.0`
 
 ---
@@ -752,7 +752,7 @@ newly introduced anti-duplication quality layer.
 
 ### Added
 
-- **678 new tweaks** across 10 sprint cycles (Sprints 48–57), bringing the total to **3 669 verified tweaks** across **94 categories**:
+- **678 new tweaks** across 10 sprint cycles (Sprints 48–57), bringing the total to **3669 verified tweaks** across **94 categories**:
   - **Sprint 48** — Bluetooth (+10), Printing (+10), Touch & Pen (+10), Voice/Speech (+10), Storage (+10)
   - **Sprint 49** — AI/Copilot (+10), Scoop Tools (+10), Dev Drive (+10), Java (+10), M365 Copilot (+10)
   - **Sprint 50** — Gaming (+10), GPU/Graphics (+10), Boot (+10), Windows 11 (+10), Scheduled Tasks (+10)
@@ -766,8 +766,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Tweaks: **3 669** (was 2 991, +678)
-- Tests: **1 414** passing (1 014 Core + 175 CLI + 225 GUI) — unchanged
+- Tweaks: **3669** (was 2991, +678)
+- Tests: **1414** passing (1014 Core + 175 CLI + 225 GUI) — unchanged
 - Version bumped `3.7.3` → `3.8.0`
 
 ---
@@ -790,8 +790,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Tweaks: **2 991** (unchanged)
-- Tests: **1 414** passing (1 014 Core + 175 CLI + 225 GUI)
+- Tweaks: **2991** (unchanged)
+- Tests: **1414** passing (1014 Core + 175 CLI + 225 GUI)
 - Version bumped `3.7.2` → `3.7.3`
 
 ---
@@ -820,8 +820,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Tweaks: **2 991** (unchanged)
-- Tests: **1 431** passing (1 014 Core + 175 CLI + 242 GUI) — was 1 367
+- Tweaks: **2991** (unchanged)
+- Tests: **1431** passing (1014 Core + 175 CLI + 242 GUI) — was 1367
 
 ---
 
@@ -830,14 +830,14 @@ newly introduced anti-duplication quality layer.
 ### Changed
 
 - **Duplicate tweaks removed**: eliminated 11 confirmed duplicate tweak definitions
-  (3 194 → 3 183 tweaks across 92 categories)
-- **Test suite refactored**: `TweakEngineBuiltinsTests.cs` 1 956 → 480 lines;
+  (3194 → 3183 tweaks across 92 categories)
+- **Test suite refactored**: `TweakEngineBuiltinsTests.cs` 1956 → 480 lines;
   replaced 617 per-ID `[InlineData]` existence checks with a single
   `AllRegisteredTweaks_CanBeRetrievedById` Fact iterating all tweaks at runtime
-  — total test count 2 088 → **1 367 passing** (970 Core + 155 CLI + 242 GUI)
+  — total test count 2088 → **1367 passing** (970 Core + 155 CLI + 242 GUI)
 - **Dead code removed**: deleted `RegistryHives.cs` (11 lines) — `Hive.LM`/`Hive.CU`
   constants confirmed unused across all 93 tweak modules
-- **Roadmap trimmed**: `docs/Roadmap.md` 1 265 → ~430 lines; replaced exhaustive
+- **Roadmap trimmed**: `docs/Roadmap.md` 1265 → ~430 lines; replaced exhaustive
   Sprint 1–47b task tables (all completed) with compact sprint digest table
 - **Git workflow instructions updated**: `.github/instructions/git-workflow.instructions.md`
   updated to use .NET commands; added standing per-sprint commit mandate section
@@ -859,7 +859,7 @@ newly introduced anti-duplication quality layer.
 - **`TweakHistory.cs`** +2 members: `GetSummaryStats()` returns `HistorySummaryStats` record (action counts + top-5 tweaks by frequency); `ExportToJsonAsync(filePath)` exports full history as JSON
 - **`Favorites.cs`** +2 methods: `ExportToJsonAsync(filePath)` (sorted JSON array of IDs); `ImportFromJson(filePath)` (merge from JSON array, returns newly-added count)
 - **`AppConfig.cs`** +2 properties: `AutoBackupOnApply` (bool, default `true`, triggers registry backup before batch apply); `SnapshotOnProfileChange` (bool, default `true`, auto-snapshots before profile is applied)
-- **Tests**: +19 new tests — total 1 879 (all passing)
+- **Tests**: +19 new tests — total 1879 (all passing)
 
 ### Changed
 
@@ -900,7 +900,7 @@ newly introduced anti-duplication quality layer.
 - **MemoryCleanerDialog +2**: Auto-clean checkbox + threshold spinner with 30-second polling timer
 - **NetworkToolsDialog +2**: Ping tab (multi-host concurrent ping) + Traceroute tab (live `tracert` output)
 - **`TweakEngineBuiltinsTests.cs`** — 5 new `[Theory]` methods; 50 new `[InlineData]` entries covering all Sprint 45 tweaks
-- Total: **2 946 tweaks** (+50)
+- Total: **2946 tweaks** (+50)
 
 ---
 
@@ -940,8 +940,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Total tweaks: **2 896** (+50 from Sprint 43)
-- All Core tests: **1 394** (1394 Core) — all passing
+- Total tweaks: **2896** (+50 from Sprint 43)
+- All Core tests: **1394** (1394 Core) — all passing
 
 ---
 
@@ -983,8 +983,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Total tweaks: **2 846** (+50 from Sprint 42)
-- All tests: **1 740** (1344 Core + 154 CLI + 242 GUI) — all passing
+- Total tweaks: **2846** (+50 from Sprint 42)
+- All tests: **1740** (1344 Core + 154 CLI + 242 GUI) — all passing
 
 ---
 
@@ -1026,8 +1026,8 @@ newly introduced anti-duplication quality layer.
 
 ### Stats
 
-- Total tweaks: **2 846** (+50 from Sprint 42)
-- All tests: **1 740** (1344 Core + 154 CLI + 242 GUI) — all passing
+- Total tweaks: **2846** (+50 from Sprint 42)
+- All tests: **1740** (1344 Core + 154 CLI + 242 GUI) — all passing
 
 ---
 
@@ -1071,7 +1071,7 @@ newly introduced anti-duplication quality layer.
 ### Tests
 
 - +29 `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` covering all new tweak IDs
-- Total: **2 796 tweaks** (+29), **1 740 tests** (+29 passing)
+- Total: **2796 tweaks** (+29), **1740 tests** (+29 passing)
 
 ---
 
@@ -1123,8 +1123,8 @@ newly introduced anti-duplication quality layer.
 ### Tests
 
 - 31 new `[InlineData]` entries in `TweakEngineBuiltinsTests.cs` covering all new tweak IDs
-- Total: **1 711 tests** passing (1 315 Core + 154 CLI + 242 GUI, 1 intentional skip)
-- Tweaks: **2 767** across 92 categories
+- Total: **1711 tests** passing (1315 Core + 154 CLI + 242 GUI, 1 intentional skip)
+- Tweaks: **2767** across 92 categories
 
 ## [3.5.0] — 2026-03-18
 
@@ -1194,7 +1194,7 @@ newly introduced anti-duplication quality layer.
   when one or more tweaks are checked, updating live as checkboxes change
 - **`.gitignore` extended** — added `*.msi`, `*.wixpdb`, `*.wixobj`, `*.cab` to prevent
   WiX installer build outputs from being tracked
-- **README overhauled** — updated to reflect 2 610 tweaks, 1 199 tests, 11 themes,
+- **README overhauled** — updated to reflect 2610 tweaks, 1199 tests, 11 themes,
   added Download & Install section with MSI link, added Building the Installer section
   with step-by-step commands, corrected all stale counts and badges
 
@@ -1482,7 +1482,7 @@ newly introduced anti-duplication quality layer.
 - **Windows Health & Maintenance manager** — 19 system health commands
   (DISM, SFC, disk cleanup, network reset, chkdsk, power reports) with
   full dialog UI, admin badge, progress bar, and per-command log
-- **320 new tweaks** across expanded modules, bringing total to **2 301 tweaks**
+- **320 new tweaks** across expanded modules, bringing total to **2301 tweaks**
   across **89 categories**:
   - 8 modules expanded to ~20 tweaks each: EventLogging, SsdOptimization,
     AppCompatibility, BrowserCommon, Security, UserAccount, SystemRestore,
@@ -1512,7 +1512,7 @@ newly introduced anti-duplication quality layer.
 
 - Performance optimizations: tag index, search, HardwareInfo parallelization,
   Analytics caching, MainForm filter dedup, UpdateCounters single-pass
-- Updated all documentation with current statistics (2 301 tweaks, 89 categories,
+- Updated all documentation with current statistics (2301 tweaks, 89 categories,
   556 tests)
 
 ### Sprint 10 — Test Deepening & Engine Coverage
@@ -1611,7 +1611,7 @@ newly introduced anti-duplication quality layer.
 ### Fixed
 
 - **16 broken TweakDef headers** restored after multi-edit consumed `new TweakDef` openers
-  — all 1 981 tweaks register correctly again
+  — all 1981 tweaks register correctly again
 - **Build clean** — 0 warnings, 0 errors with `-warnaserror`
 
 ### Changed
@@ -1631,8 +1631,8 @@ that silently returned "Applied" without performing any action have been removed
 - **468 non-functional tweak stubs** across 66 modules — these had metadata (Id, Label,
   Category, Tags) but no ApplyOps, RemoveOps, DetectOps, or Action delegates. The engine
   silently returned `TweakResult.Applied` for these without performing any registry changes.
-- Tweak count reduced from ~1 828 to **1 360 verified functional tweaks**; subsequently
-  expanded back to **1 981** through multiple tweak addition campaigns
+- Tweak count reduced from ~1828 to **1360 verified functional tweaks**; subsequently
+  expanded back to **1981** through multiple tweak addition campaigns
 
 ### Added
 
@@ -1673,7 +1673,7 @@ C#/.NET 10 (WinForms, Microsoft.Win32.Registry). This is a clean-break major ver
 
 ### Added
 
-- **~1 828 tweaks** across 72 categories (migrated from Python with all registry logic preserved)
+- **~1828 tweaks** across 72 categories (migrated from Python with all registry logic preserved)
 - **WinForms GUI** replacing tkinter — native Windows look, double-buffered rendering,
   4 themes (Catppuccin Mocha/Latte, Nord, Dracula) with runtime switching and persistence
 - **TweakDef.RegOp** — 12 factory methods (SetDword, SetString, SetExpandString, SetQword,

@@ -16,7 +16,7 @@ Which operation is slow? (e.g., `AllTweaks()` load, `StatusMap()` detection, GUI
 
 ## Observed Performance
 
-- **Operation:** (e.g., `StatusMap()` over 1 360 tweaks)
+- **Operation:** (e.g., `StatusMap()` over 1360 tweaks)
 - **Time taken:** (e.g., 12 seconds)
 - **Expected time:** (e.g., ~2 seconds)
 - **Memory used:** (e.g., 150 MB peak)

@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-24 (v5.0.0, C# 13 / .NET 10.0-windows, ~4 825+ tweaks, 198 categories, 2 688 tests)
+> Last updated: 2026-03-24 (v5.0.0, C# 13 / .NET 10.0-windows, ~4825+ tweaks, 198 categories, 2688 tests)
 
 ---
 
@@ -855,9 +855,9 @@ as possible (match only the known format) to catch real content differences.
 ## Flaky Tests — Performance Budget Tests Must Scale with Tweak Count
 
 `Search_CompletesUnder50ms` and similar wall-clock assertions were written when the
-codebase had ~3 000 tweaks. As the tweak count grows, baseline search time grows
-proportionally. A budget that was safe at 3 000 tweaks fails non-deterministically at
-4 000+ tweaks.
+codebase had ~3000 tweaks. As the tweak count grows, baseline search time grows
+proportionally. A budget that was safe at 3000 tweaks fails non-deterministically at
+4000+ tweaks.
 
 **Pattern found in**: `TweakEngineBuiltinsTests.Search_CompletesUnder50ms`
 
@@ -865,8 +865,8 @@ Original: `Assert.True(sw.ElapsedMilliseconds < 50, ...)`
 Fixed to: `Assert.True(sw.ElapsedMilliseconds < 150, ...)` with a comment:
 
 ```csharp
-// Budget relaxed from 50ms → 150ms: 4 058 tweaks with synonym expansion;
-// baseline ~60ms on dev machine. Increase threshold if tweak count grows past 6 000.
+// Budget relaxed from 50ms → 150ms: 4058 tweaks with synonym expansion;
+// baseline ~60ms on dev machine. Increase threshold if tweak count grows past 6000.
 Assert.True(sw.ElapsedMilliseconds < 150, $"Search took {sw.ElapsedMilliseconds}ms (budget: 150ms)");
 ```
 
