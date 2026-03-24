@@ -7,8 +7,8 @@ guidelines — lives in **[docs/SECURITY.md](docs/SECURITY.md)**.
 
 | Version | Supported |
 |---------|-----------|
-| 4.x (latest) | ✅ Active support |
-| < 4.0 | ❌ Not supported |
+| 5.x (latest) | ✅ Active support |
+| < 5.0 | ❌ Not supported |
 
 To report a vulnerability, open a
 [GitHub Private Security Advisory](https://github.com/RajwanYair/RegiLattice/security/advisories/new).

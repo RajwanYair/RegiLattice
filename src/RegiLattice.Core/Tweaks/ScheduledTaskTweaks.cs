@@ -687,32 +687,6 @@ internal static class ScheduledTaskTweaks
         },
         new TweakDef
         {
-            Id = "pst-disable-power-efficiency-diag",
-            Label = "Disable Power Efficiency Diagnostics Task",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            KindHint = TweakKind.ScheduledTask,
-            Description = "Disables the AnalyzeSystem task that runs CPU power efficiency diagnostics in the background.",
-            Tags = ["scheduledtask", "power", "diagnostics", "performance", "cpu"],
-            ApplyAction = _ =>
-                ShellRunner.RunPowerShell(
-                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue | Out-Null"
-                ),
-            RemoveAction = _ =>
-                ShellRunner.RunPowerShell(
-                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue | Out-Null"
-                ),
-            DetectAction = () =>
-            {
-                var (_, stdout, _) = ShellRunner.RunPowerShell(
-                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Power Efficiency Diagnostics\\' -TaskName 'AnalyzeSystem' -ErrorAction SilentlyContinue).State -eq 'Disabled'"
-                );
-                return stdout.Trim().Equals("True", StringComparison.OrdinalIgnoreCase);
-            },
-        },
-        new TweakDef
-        {
             Id = "pst-disable-smart-screen-app-id",
             Label = "Disable SmartScreen App-ID Background Task",
             Category = "Scheduled Tasks",

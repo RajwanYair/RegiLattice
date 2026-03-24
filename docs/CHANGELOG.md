@@ -16,8 +16,14 @@ policy, and Credential UI policy.
 
 #### Stats
 
-- **4 828 tweaks** across **198 categories** and **193 modules**
+- **4 825 tweaks** across **198 categories** and **193 modules** (3 confirmed functional duplicates removed)
 - **2 661 tests** — 0 failures (Core 2052 + CLI 301 + GUI 308)
+
+#### Chore
+
+- Removed 3 confirmed functional duplicate tweaks: `printing-disable-spooler-service` (≡ `printing-disable-print-spooler`), `pst-disable-power-efficiency-diag` (≡ `pst-disable-power-efficiency`), `priv-privacy-disable-advertising-id` (HKCU-subset of `priv-disable-advertising-id`). Net count: 4 828 → 4 825.
+- Fixed `SECURITY.md` and `docs/SECURITY.md`: supported version `4.x → 5.x`.
+- Updated root `CHANGELOG.md` with v5.0.0 entry.
 
 ### Added
 

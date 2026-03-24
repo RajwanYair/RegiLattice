@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Version](https://img.shields.io/badge/version-5.0.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **4 828 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **4 825 verified tweaks** across **198 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
@@ -31,7 +31,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 
 ## Highlights
 
-- **4 828 verified tweaks** across 198 categories — each fully reversible with apply + remove
+- **4 825 verified tweaks** across 198 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -254,7 +254,7 @@ RegiLattice/
 │   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
 │   │   │   └── WinGetManager.cs             # WinGet package manager integration
 │   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 193 module files, 4 828 tweaks
+│   │   └── Tweaks/                          # 193 module files, 4 825 tweaks
 │   │       ├── Accessibility.cs
 │   │       ├── Performance.cs
 │   │       ├── Privacy.cs
@@ -402,7 +402,7 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 4828 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 4825 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 
