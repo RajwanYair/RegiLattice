@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.10.0] — 2026-04-09 (Sprints 207–211)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`AdvertisingInfoPolicy.cs`** — 10 tweaks (slug: `advinfo`) — Advertising Info Policy: disable Windows Advertising ID (RUID), disable personalised ad delivery, block user from re-enabling ad ID, disable interest profile building, disable cross-device ad sync, block location use for ads, block app ad consent dialogs, disable ad activity history, hide advertising settings page, disable diagnostic ad feedback
+- **`MessagingSecurityPolicy.cs`** — 10 tweaks (slug: `msgsec`) — Messaging Security Policy: disable messaging cloud sync, disable MMS/picture messages, disable RCS rich communication, block cloud backup, set 90-day message retention, disable message preview in notifications, block group messaging, disable read receipts, block premium SMS, disable smart reply
+- **`StorageHealthPolicy.cs`** — 10 tweaks (slug: `strhlt`) — Storage Health Policy: enable S.M.A.R.T. monitoring, enable failure prediction warnings, enable WMI health events, set 24-hour polling interval, enable SSD wear check, block health telemetry upload, enable volume integrity scan, enable Storage Spaces health, write health events to Event Log, alert when SSD spare < 10%
+- **`DeviceRegistrationPolicy.cs`** — 10 tweaks (slug: `devreg`) — Device Registration Policy: disable auto Azure AD registration, require TPM for registration, limit retry count (3), block personal MSA registration, block user-initiated registration, enable audit logging, require device compliance, set certificate validity (365 days), block stale device re-registration, block skipping enrollment status page
+- **`PackagedAppDebugPolicy.cs`** — 10 tweaks (slug: `padebug`) — Packaged App Debug Policy: disable Developer Mode, block debuggable package install, disable test signing, block loopback exemption, disable Windows Device Portal, block app diagnostic tracking, block background task debugger, block HTTP debug proxy, enforce package integrity on load, audit sideload attempts
+
+### Stats
+
+- Total tweaks: **5,325** (+50)
+- Categories: **248** (+5)
+- Module files: **243** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.9.0] — 2026-04-09 (Sprints 202–206)
 
 ### Added
