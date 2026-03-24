@@ -21,6 +21,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableCloudNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableCloudNotifications")],
             DetectOps = [RegOp.CheckDword(Key, "DisableCloudNotifications", 1)],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Disables all WNS push; may prevent Defender alerts and Store update notifications.",
         },
         new TweakDef
         {
@@ -35,6 +38,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableAccountNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableAccountNotifications")],
             DetectOps = [RegOp.CheckDword(Key, "DisableAccountNotifications", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Suppresses Microsoft Account subscription and health alerts on managed devices.",
         },
         new TweakDef
         {
@@ -49,6 +55,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoNotificationNetworkUsage", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoNotificationNetworkUsage")],
             DetectOps = [RegOp.CheckDword(Key, "NoNotificationNetworkUsage", 1)],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Prevents WNS persistent outbound connections; may break app push notifications.",
         },
         new TweakDef
         {
@@ -63,6 +72,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisablePushToInstall", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisablePushToInstall")],
             DetectOps = [RegOp.CheckDword(Key, "DisablePushToInstall", 1)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks cloud-triggered silent app installations from Microsoft Store or Intune.",
         },
         new TweakDef
         {
@@ -77,6 +89,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "AllowWNSConnectionOnMetered", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "AllowWNSConnectionOnMetered")],
             DetectOps = [RegOp.CheckDword(Key, "AllowWNSConnectionOnMetered", 0)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents WNS background data charges on metered or cellular connections.",
         },
         new TweakDef
         {
@@ -91,6 +106,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableNotificationMirroring", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableNotificationMirroring")],
             DetectOps = [RegOp.CheckDword(Key, "DisableNotificationMirroring", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Stops notification content routing through Microsoft cloud relays to other devices.",
         },
         new TweakDef
         {
@@ -105,6 +123,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisablePromotionalNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisablePromotionalNotifications")],
             DetectOps = [RegOp.CheckDword(Key, "DisablePromotionalNotifications", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Removes Microsoft upgrade prompts and upsells delivered via cloud notification channel.",
         },
         new TweakDef
         {
@@ -119,6 +140,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableDiagnosticInNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableDiagnosticInNotifications")],
             DetectOps = [RegOp.CheckDword(Key, "DisableDiagnosticInNotifications", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prevents device engagement metrics from being included in WNS diagnostic payloads.",
         },
         new TweakDef
         {
@@ -133,6 +157,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "BlockBackgroundNotificationRefresh", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "BlockBackgroundNotificationRefresh")],
             DetectOps = [RegOp.CheckDword(Key, "BlockBackgroundNotificationRefresh", 1)],
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Prevents apps maintaining persistent cloud connections when not in use.",
         },
         new TweakDef
         {
@@ -147,6 +174,9 @@ internal static class CloudNotificationsPolicy
             ApplyOps = [RegOp.SetDword(Key, "PreventFocusAssistOverride", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "PreventFocusAssistOverride")],
             DetectOps = [RegOp.CheckDword(Key, "PreventFocusAssistOverride", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Ensures user-configured quiet hours are not bypassed by cloud-classified urgent notifications.",
         },
     ];
 }

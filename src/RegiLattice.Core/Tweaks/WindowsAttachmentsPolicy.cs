@@ -21,6 +21,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "SaveZoneInformation", 2)],
             RemoveOps = [RegOp.DeleteValue(Key, "SaveZoneInformation")],
             DetectOps = [RegOp.CheckDword(Key, "SaveZoneInformation", 2)],
+            ImpactScore = 3,
+            SafetyRating = 2,
+            ImpactNote = "Removes Zone.Identifier protection; apply only if a separate DLP layer enforces download security.",
         },
         new TweakDef
         {
@@ -35,6 +38,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "ScanWithAntiVirus", 3)],
             RemoveOps = [RegOp.DeleteValue(Key, "ScanWithAntiVirus")],
             DetectOps = [RegOp.CheckDword(Key, "ScanWithAntiVirus", 3)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Ensures every attachment is antivirus-scanned before execution.",
         },
         new TweakDef
         {
@@ -49,6 +55,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DefaultFileTypeRisk", 3)],
             RemoveOps = [RegOp.DeleteValue(Key, "DefaultFileTypeRisk")],
             DetectOps = [RegOp.CheckDword(Key, "DefaultFileTypeRisk", 3)],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Unknown file extensions treated as high-risk; reduces novel-filetype exploit exposure.",
         },
         new TweakDef
         {
@@ -63,6 +72,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "HideZoneInfoOnProperties", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "HideZoneInfoOnProperties")],
             DetectOps = [RegOp.CheckDword(Key, "HideZoneInfoOnProperties", 0)],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Zone tab visible in file properties; aids security incident investigation.",
         },
         new TweakDef
         {
@@ -77,6 +89,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "NotifyOnRunBlockedFiles", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NotifyOnRunBlockedFiles")],
             DetectOps = [RegOp.CheckDword(Key, "NotifyOnRunBlockedFiles", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "User notified when an attachment is blocked rather than silently dropped.",
         },
         new TweakDef
         {
@@ -91,6 +106,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "AllowInternetAccess", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "AllowInternetAccess")],
             DetectOps = [RegOp.CheckDword(Key, "AllowInternetAccess", 0)],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Forces save-before-open workflow; ensures AV scan and zone tagging are applied to downloads.",
         },
         new TweakDef
         {
@@ -105,6 +123,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "NoUnblockAttachments", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "NoUnblockAttachments")],
             DetectOps = [RegOp.CheckDword(Key, "NoUnblockAttachments", 1)],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Prevents users removing Zone.Identifier via file Properties Unblock button.",
         },
         new TweakDef
         {
@@ -119,6 +140,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "ForceZoneIDPrompt", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "ForceZoneIDPrompt")],
             DetectOps = [RegOp.CheckDword(Key, "ForceZoneIDPrompt", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Security warning always shown for Internet-zone files regardless of folder location.",
         },
         new TweakDef
         {
@@ -133,6 +157,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "DisableInheritanceZoneMap", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DisableInheritanceZoneMap")],
             DetectOps = [RegOp.CheckDword(Key, "DisableInheritanceZoneMap", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Attachments from Office or email evaluated at their own zone level, not the calling app's.",
         },
         new TweakDef
         {
@@ -147,6 +174,9 @@ internal static class WindowsAttachmentsPolicy
             ApplyOps = [RegOp.SetDword(Key, "BlockMimeTypeChange", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "BlockMimeTypeChange")],
             DetectOps = [RegOp.CheckDword(Key, "BlockMimeTypeChange", 1)],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "MIME content-type sniffing cannot downgrade executable risk classification.",
         },
     ];
 }
