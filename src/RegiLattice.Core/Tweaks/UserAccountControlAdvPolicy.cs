@@ -11,11 +11,9 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class UserAccountControlAdvPolicy
 {
-    private const string UacAdv =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
+    private const string UacAdv = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
 
-    private const string Winlogon =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
+    private const string Winlogon = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -153,10 +151,7 @@ internal static class UserAccountControlAdvPolicy
             CorpSafe = true,
             ApplyOps = [RegOp.SetString(UacAdv, "LegalNoticeCaption", "Authorized Access Only")],
             RemoveOps = [RegOp.DeleteValue(UacAdv, "LegalNoticeCaption")],
-            DetectOps =
-            [
-                RegOp.CheckString(UacAdv, "LegalNoticeCaption", "Authorized Access Only"),
-            ],
+            DetectOps = [RegOp.CheckString(UacAdv, "LegalNoticeCaption", "Authorized Access Only")],
         },
         new TweakDef
         {

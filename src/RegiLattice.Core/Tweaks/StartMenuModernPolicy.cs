@@ -11,11 +11,9 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class StartMenuModernPolicy
 {
-    private const string ExplPol =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
+    private const string ExplPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
 
-    private const string SmExp =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StartMenuExperience";
+    private const string SmExp = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StartMenuExperience";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

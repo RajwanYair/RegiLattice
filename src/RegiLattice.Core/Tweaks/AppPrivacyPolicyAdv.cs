@@ -11,8 +11,7 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class AppPrivacyPolicyAdv
 {
-    private const string Policy =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
+    private const string Policy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
