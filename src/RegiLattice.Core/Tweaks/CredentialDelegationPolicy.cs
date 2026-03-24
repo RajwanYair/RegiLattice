@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class CredentialDelegationPolicy
+{
+    private const string CredDelKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "creddel-enable-restricted-admin",
+            Label = "Enable Restricted Admin Mode for RDP",
+            Category = "Credentials Delegation Policy",
+            Description = "Forces Remote Desktop connections to use Restricted Admin mode, preventing credential forwarding to remote hosts.",
+            Tags = ["credentials", "delegation", "rdp", "restricted-admin", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Prevents network credential forwarding over RDP; administrators must have local admin rights on target.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "RestrictedRemoteAdministration")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-disable-remote-host-delegation",
+            Label = "Disable Credential Delegation to Remote Hosts",
+            Category = "Credentials Delegation Policy",
+            Description = "Prevents Windows from forwarding saved credentials to remote hosts via CredSSP delegation.",
+            Tags = ["credentials", "delegation", "credssp", "remote", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks CredSSP-based credential forwarding; may break PowerShell remoting that passes credentials to third hop.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "DelegateComputerName", 0)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "DelegateComputerName")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "DelegateComputerName", 0)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-allow-only-ntlm-protected",
+            Label = "Restrict CredSSP to NTLM-Protected Servers Only",
+            Category = "Credentials Delegation Policy",
+            Description = "Limits CredSSP fresh credential delegation to servers that authenticate via NTLM challenge-response.",
+            Tags = ["credentials", "delegation", "ntlm", "credssp", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Restricts delegation context; safe when servers use NTLMv2; may block delegation to Kerberos-only servers.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-deny-default-credential-delegation",
+            Label = "Deny Default Credential Delegation",
+            Category = "Credentials Delegation Policy",
+            Description = "Prevents the default Windows behaviour of delegating credentials to any server when CredSSP is negotiated.",
+            Tags = ["credentials", "delegation", "default", "credssp", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks unmanaged credential delegation; admins must explicitly whitelist trusted servers.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "DenyDefaultCredentials", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyDefaultCredentials")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "DenyDefaultCredentials", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-deny-saved-credential-delegation",
+            Label = "Deny Saved Credential Delegation",
+            Category = "Credentials Delegation Policy",
+            Description = "Prevents Windows Credential Manager saved credentials from being forwarded to remote servers via CredSSP.",
+            Tags = ["credentials", "delegation", "saved", "credential-manager", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Stops cached credential reuse in CredSSP sessions; users must manually authenticate.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "DenySavedCredentials", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenySavedCredentials")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "DenySavedCredentials", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-deny-fresh-credential-delegation",
+            Label = "Deny Fresh Credential Delegation",
+            Category = "Credentials Delegation Policy",
+            Description = "Blocks CredSSP from forwarding freshly entered credentials to servers in all delegation categories.",
+            Tags = ["credentials", "delegation", "fresh", "credssp", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Prevents just-in-time credential forwarding; may break multi-hop PSRemoting workflows requiring CredSSP.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "DenyFreshCredentials", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyFreshCredentials")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "DenyFreshCredentials", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-require-remote-auth-mutual",
+            Label = "Require Mutual Authentication for Remote Sessions",
+            Category = "Credentials Delegation Policy",
+            Description = "Mandates that remote session targets present valid Kerberos or certificate credentials before accepting connections.",
+            Tags = ["credentials", "delegation", "mutual-auth", "kerberos", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Enforces server identity verification; prevents connection to spoofed or unauthenticated remote hosts.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "RequireMutualAuthentication", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "RequireMutualAuthentication")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "RequireMutualAuthentication", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-disable-credssp-v1",
+            Label = "Disable CredSSP Protocol Version 1",
+            Category = "Credentials Delegation Policy",
+            Description = "Disables CredSSP version 1 to enforce use of patched versions that mitigate credential forwarding vulnerabilities.",
+            Tags = ["credentials", "delegation", "credssp", "version", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Forces CredSSP v5+ which includes Oracle Remediation patches (CVE-2018-0886); old clients may fail.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "AllowEncryptionOracle", 0)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowEncryptionOracle")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "AllowEncryptionOracle", 0)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-audit-delegation-events",
+            Label = "Enable Credential Delegation Audit Logging",
+            Category = "Credentials Delegation Policy",
+            Description = "Records credential delegation events in the Security event log for monitoring and forensic analysis.",
+            Tags = ["credentials", "delegation", "audit", "logging", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Delegation attempts are logged; useful for detecting credential theft or misconfigured delegation policies.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "EnableCredentialDelegationAudit")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
+        },
+        new TweakDef
+        {
+            Id = "creddel-block-delegation-to-workgroups",
+            Label = "Block Credential Delegation to Workgroup Machines",
+            Category = "Credentials Delegation Policy",
+            Description = "Prevents credentials from being delegated to non-domain-joined (workgroup) computers to reduce attack surface.",
+            Tags = ["credentials", "delegation", "workgroup", "domain", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Domain credentials cannot be forwarded to workgroup machines; reduces lateral movement risk.",
+            ApplyOps = [RegOp.SetDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
+            RemoveOps = [RegOp.DeleteValue(CredDelKey, "BlockDelegationToWorkgroupComputers")],
+            DetectOps = [RegOp.CheckDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
+        },
+    ];
+}

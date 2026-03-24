@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.14.0] — 2026-04-09 (Sprints 227–231)
+
+### Added
+
+- **DeviceGuardPolicy** (Sprint 227) — 10 Device Guard / VBS tweaks: enable VBS, require Secure Boot + DMA, enable HVCI (no UEFI lock), require UEFI MAT, enable Credential Guard, System Guard Secure Launch, kernel shadow stack (CET), disable HVCI audit mode, block unsigned drivers, audit DeviceGuard status
+- **CredentialDelegationPolicy** (Sprint 228) — 10 CredSSP/delegation tweaks: enable Restricted Admin RDP, disable remote host delegation, NTLM-only CredSSP, deny default/saved/fresh credential delegation, require mutual authentication, disable CredSSP v1 (Oracle Remediation), audit delegation events, block delegation to workgroup machines
+- **WindowsBackupPolicy** (Sprint 229) — 10 Windows Backup policy tweaks: disable backup/restore/catalog viewer/system backup, suppress progress UI, disable online/network/scheduled/metered backup, hide control panel link
+- **WindowsFirewallPolicy** (Sprint 230) — 10 Windows Firewall policy tweaks: enable firewall on domain/private/public profiles, block inbound on domain/public, prevent local rule merging on domain/public, disable multicast unicast response on domain/public, disable notifications on public
+- **AppLockerPolicy** (Sprint 231) — 10 AppLocker policy tweaks: enforce EXE/MSI/Script/DLL/Appx rules, set EXE to audit mode, enable AppIDSvc auto-start, enable collection/performance logging, block user exception creation
+
+#### Stats
+
+- Total tweaks: **5,525** (+50)
+- Categories: **268** (+5)
+- Module files: **263** (+5)
+
 ## [5.13.0] — 2026-04-09 (Sprints 222–226)
 
 ### Added
