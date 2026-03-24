@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.11.0] — 2026-04-09 (Sprints 212–216)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`AutoPlayPolicy.cs`** — 10 tweaks (slug: `autoplay`) — AutoPlay Policy: disable AutoRun for all drive types, disable AutoPlay for removable/optical/network drives, set default AutoPlay action to none, block autorun.inf execution, block user override of AutoPlay settings, disable AutoPlay for cameras, audit media insertions, disable AutoPlay for MTP devices
+- **`NfcPolicy.cs`** — 10 tweaks (slug: `nfcpol`) — NFC Policy: disable NFC radio, disable tap-to-pay, disable tap-to-connect, disable NFC tag reading, disable NFC Secure Element, block all NFC in enterprise mode, disable NFC proximity data sharing, disable Host Card Emulation, enable NFC activity audit logging, block user NFC toggle in Settings
+- **`DiskQuotaPolicy.cs`** — 10 tweaks (slug: `diskquota`) — Disk Quota Policy: enable NTFS disk quotas, enforce quota limit (deny writes at limit), log quota-exceeded events, log warning-threshold events, apply quota to all subdirectories, set default per-user limit to 1 GiB, set default warning threshold to 800 MiB, block user override of quota settings, exempt removable volumes, exempt local administrators
+- **`WinRmPolicy.cs`** — 10 tweaks (slug: `winrmpol`) — WinRM Policy: disable Basic auth on client, disable Basic auth on service, require encrypted traffic on client, require encrypted traffic on service, disable Digest auth on client, disable CredSSP credential delegation client, disable CredSSP on service, restrict TrustedHosts to empty list, disable WinRM service autostart, enable WinRM session audit logging
+- **`WindowsAnytimeUpgradePolicy.cs`** — 10 tweaks (slug: `wanyu`) — Windows Anytime Upgrade Policy: disable Anytime Upgrade, disable Store-based OS upgrade, block product key entry UI, log upgrade attempts, suppress upgrade notifications, prevent edition downgrade, hide Activation Settings page, disable phone activation method, lock edition to IT-deployed edition, disable trial edition conversion
+
+#### Stats
+
+- Total tweaks: **5,375** (+50)
+- Categories: **253** (+5)
+- Module files: **248** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.10.0] — 2026-04-09 (Sprints 207–211)
 
 ### Added
