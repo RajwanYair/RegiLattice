@@ -4,10 +4,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>x64</Platforms>
-    <Version>5.13.0</Version>
-    <AssemblyVersion>5.13.0.0</AssemblyVersion>
-    <FileVersion>5.13.0.0</FileVersion>
-    <InformationalVersion>5.13.0</InformationalVersion>
+    <Version>5.14.0</Version>
+    <AssemblyVersion>5.14.0.0</AssemblyVersion>
+    <FileVersion>5.14.0.0</FileVersion>
+    <InformationalVersion>5.14.0</InformationalVersion>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
