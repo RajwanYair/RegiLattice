@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.9.0] — 2026-04-09 (Sprints 202–206)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`PersonalizationLockPolicy.cs`** — 10 tweaks (slug: `plock`) — Personalization Lock Policy: enforce no lock screen, enable lock screen image, block changing lock screen, prevent lock screen customisation, disable lock screen camera, suppress lock screen notifications, disable lock screen slideshow, block theme changes, block accent colour changes, disable transparency effects
+- **`ScreenSaverSecurityPolicy.cs`** — 10 tweaks (slug: `scrsvr`) — Screen Saver Security Policy: enforce screen saver activation, require password on resume, set 600 s inactivity timeout, block user timeout changes, block user screen saver changes, force blank screen saver, lock password-disable UI, set minimum 30 s wait, set maximum 3600 s limit, set zero grace period
+- **`NetworkConnectStatusPolicy.cs`** — 10 tweaks (slug: `ncsi`) — Network Connectivity Status Policy: disable NCSI active probing, disable global DNS probe, disable captive portal browser launch, enable corporate custom probe host, disable IPv6 probe, disable internet access check, hide network icon status warning, require corporate connectivity, set probe retry count (3), enable probe failure logging
+- **`DataUsageMeteringPolicy.cs`** — 10 tweaks (slug: `datuse`) — Data Usage Metering Policy: block background data on metered connections, block automatic roaming data use, warn at 80% data limit, block Store updates on metered, block usage telemetry upload, mark new Wi-Fi connections as metered, disable cost-based app limits, block Wi-Fi Sense hotspot sharing, set 5 GB monthly cellular limit, auto-reset counter on billing cycle
+- **`WcmWifiPolicy.cs`** — 10 tweaks (slug: `wcmpol`) — Wireless Connection Manager Policy: disable soft-disconnect from wired, disable simultaneous wired+Wi-Fi, disable hotspot auto-connect, allow manual Wi-Fi override, prefer wired over Wi-Fi, disable cellular fallback, block non-domain network connections on domain endpoints, disable auto network profile selection, set polling interval (60 s), disable managed Wi-Fi offload
+
+### Stats
+
+- Total tweaks: **5,275** (+50)
+- Categories: **243** (+5)
+- Module files: **238** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.8.0] — 2026-04-09 (Sprints 197–201)
 
 ### Added
