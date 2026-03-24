@@ -4,6 +4,14 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [5.1.0] — 2026-03-28 (Sprints 162–166)
+
+- **Sprints 162–166**: 50 new tweaks across 5 new policy modules — `WdagPolicy.cs`, `ErrorReportingPolicy.cs`, `InputMethodPolicy.cs`, `ContentDeliveryPolicy.cs`, `TerminalServicesPolicy.cs`.
+- **4875 tweaks** across **203 categories** (198 module files) — +50 tweaks, +5 categories, +5 modules vs v5.0.0.
+- **2693 tests** passing — 2052 Core + 301 CLI + 340 GUI (0 failures); +32 ExecutableValidationTests.
+
+---
+
 ## [5.0.0] — 2026-03-24 (Sprints 152–161)
 
 - **Sprints 152–161**: 100 new tweaks across 10 new modules — `AppCompatGpoPolicy.cs`, `CredentialUiPolicy.cs`, `DeliveryOptimizationPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `InternetPrintingPolicy.cs`, `SharedFoldersSmbPolicy.cs`, `StartMenuModernPolicy.cs`, `TabletPcInputPolicy.cs`, `TpmSecurityPolicy.cs`, `WcmConnectionPolicy.cs`.
