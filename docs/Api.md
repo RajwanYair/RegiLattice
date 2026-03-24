@@ -1,7 +1,7 @@
 # API Reference
 
 > Reference for the RegiLattice C# public API.
-> Last verified: 2026-03-24 · v5.0.0
+> Last verified: 2026-04-08 · v5.7.0
 
 ---
 
@@ -25,6 +25,8 @@ public sealed class TweakDef
     public string SideEffects { get; init; } = "";
     public string SourceUrl { get; init; } = "";
 
+    public string ExpectedResult { get; init; } = ""; // auto-generated if empty
+
     // Declarative RegOp pattern (~95% of tweaks)
     public IReadOnlyList<RegOp> ApplyOps { get; init; } = [];
     public IReadOnlyList<RegOp> RemoveOps { get; init; } = [];
@@ -34,9 +36,24 @@ public sealed class TweakDef
     public Action<bool>? ApplyAction { get; init; }
     public Action<bool>? RemoveAction { get; init; }
     public Func<bool>? DetectAction { get; init; }
+    public Action<bool>? UpdateAction { get; init; }  // package managers
+
+    // Kind & applicability
+    public TweakKind? KindHint { get; init; }
+    public Func<bool>? IsApplicable { get; init; }
+    public string ApplicabilityNote { get; init; } = "";
+    public string? PackSource { get; init; }
+
+    // Impact & safety metadata
+    public int ImpactScore { get; init; } = 3;   // 1 = minimal, 5 = major
+    public int SafetyRating { get; init; } = 4;  // 1 = risky, 5 = very safe
+    public string ImpactNote { get; init; } = "";
 
     // Computed
+    public TweakKind Kind { get; }               // auto-detected or from KindHint
+    public bool HasOperations { get; }           // ApplyOps.Count > 0 || ApplyAction != null
     public TweakScope Scope => ComputeScope();
+    public string GetExpectedResult();
 }
 `
 
@@ -94,7 +111,7 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 | Method | Signature | Description |
 |--------|-----------|-------------|
 | `Register` | `(TweakDef td)` | Register a single tweak (throws on duplicate ID) |
-| `RegisterBuiltins` | `()` | Register all 90 built-in tweak modules |
+| `RegisterBuiltins` | `()` | Register all 228 built-in tweak modules |
 | `AllTweaks` | `() -> IReadOnlyList<TweakDef>` | All registered tweaks |
 | `GetTweak` | `(string id) -> TweakDef?` | Look up by ID |
 

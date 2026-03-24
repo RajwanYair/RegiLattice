@@ -11,8 +11,7 @@ using RegiLattice.Core.Models;
 
 internal static class WinRmRemoteShellPolicy
 {
-    private const string ShellKey =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service\RemoteShell";
+    private const string ShellKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service\RemoteShell";
 
     public static IReadOnlyList<TweakDef> Tweaks =>
         [
