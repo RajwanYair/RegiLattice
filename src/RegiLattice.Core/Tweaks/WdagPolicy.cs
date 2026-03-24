@@ -30,9 +30,9 @@ internal static class WdagPolicy
                 + "browser-based exploits. AllowAppHVSI_ProviderSet = 1. "
                 + "Default: disabled. Requires Virtualization-Based Security (VBS) and Hyper-V.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
-            RemoveOps  = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 0)],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
+            RemoveOps = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 0)],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
         },
         new TweakDef
         {
@@ -50,9 +50,9 @@ internal static class WdagPolicy
                 + "Prevents credential theft and data exfiltration via clipboard paste into untrusted sites. "
                 + "Default: bidirectional clipboard (0). Hardened value: 1.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
-            RemoveOps  = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
+            RemoveOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
         },
         new TweakDef
         {
@@ -70,9 +70,9 @@ internal static class WdagPolicy
                 + "Prevents malicious container content from reaching host applications. "
                 + "Combine with wdagpol-disable-clipboard-to-container for full isolation (value 3).",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
-            RemoveOps  = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
+            RemoveOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
         },
         new TweakDef
         {
@@ -90,9 +90,9 @@ internal static class WdagPolicy
                 + "Prevents document exfiltration via printing from untrusted container sessions. "
                 + "Default: printing enabled (network, PDF, XPS, local printers all allowed).",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
-            RemoveOps  = [RegOp.DeleteValue(AppHvsi, "AppHVSIPrintingSettings")],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppHvsi, "AppHVSIPrintingSettings")],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
         },
         new TweakDef
         {
@@ -110,9 +110,9 @@ internal static class WdagPolicy
                 + "deleted when the container session ends. "
                 + "Default: persistence disabled. Some orgs enable it for usability — hardened value is 0.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AllowPersistence", 0)],
-            RemoveOps  = [RegOp.DeleteValue(AppHvsi, "AllowPersistence")],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AllowPersistence", 0)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AllowPersistence", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowPersistence")],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AllowPersistence", 0)],
         },
         new TweakDef
         {
@@ -130,9 +130,9 @@ internal static class WdagPolicy
                 + "Stops untrusted browser sessions from recording the user without consent. "
                 + "Default: access disabled. Must be explicitly enabled if required.",
             MinBuild = 18362,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
-            RemoveOps  = [RegOp.DeleteValue(AppHvsi, "AllowCameraMicrophoneRedirection")],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowCameraMicrophoneRedirection")],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
         },
         new TweakDef
         {
@@ -150,9 +150,9 @@ internal static class WdagPolicy
                 + "could potentially escape the container. Rendering falls back to software. "
                 + "Default: hardware GPU disabled for maximum isolation.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AllowVirtualGPU", 0)],
-            RemoveOps  = [RegOp.DeleteValue(AppHvsi, "AllowVirtualGPU")],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AllowVirtualGPU", 0)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AllowVirtualGPU", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowVirtualGPU")],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AllowVirtualGPU", 0)],
         },
         new TweakDef
         {
@@ -170,9 +170,9 @@ internal static class WdagPolicy
                 + "(Microsoft-Windows-Windows Defender Application Guard/Operational). "
                 + "Useful for SIEM integration and security monitoring of container activity.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 1)],
-            RemoveOps  = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 0)],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "AuditApplicationGuard", 1)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 1)],
+            RemoveOps = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 0)],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "AuditApplicationGuard", 1)],
         },
         new TweakDef
         {
@@ -190,9 +190,9 @@ internal static class WdagPolicy
                 + "Stops container-side malware payloads from escaping isolation via the Downloads folder. "
                 + "Default: download-to-host disabled for maximum isolation.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "SaveFilesToHost", 0)],
-            RemoveOps  = [RegOp.DeleteValue(AppHvsi, "SaveFilesToHost")],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "SaveFilesToHost", 0)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "SaveFilesToHost", 0)],
+            RemoveOps = [RegOp.DeleteValue(AppHvsi, "SaveFilesToHost")],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "SaveFilesToHost", 0)],
         },
         new TweakDef
         {
@@ -210,9 +210,9 @@ internal static class WdagPolicy
                 + "reach internal corporate resources, only the public internet. "
                 + "Prevents lateral movement from a compromised browser session to internal servers.",
             MinBuild = 16299,
-            ApplyOps   = [RegOp.SetDword(AppHvsi, "NetworkIsolation", 1)],
-            RemoveOps  = [RegOp.SetDword(AppHvsi, "NetworkIsolation", 0)],
-            DetectOps  = [RegOp.CheckDword(AppHvsi, "NetworkIsolation", 1)],
+            ApplyOps = [RegOp.SetDword(AppHvsi, "NetworkIsolation", 1)],
+            RemoveOps = [RegOp.SetDword(AppHvsi, "NetworkIsolation", 0)],
+            DetectOps = [RegOp.CheckDword(AppHvsi, "NetworkIsolation", 1)],
         },
     ];
 }

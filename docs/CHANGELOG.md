@@ -4,6 +4,46 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.2.0] — 2026-04-01 (Sprints 167–171)
+
+### Added
+
+#### Tweaks (50 new — 5 modules × 10 tweaks each)
+
+- **App Installer Policy** (`appins-*`, `AppInstallerPolicy.cs`) — 10 tweaks for WinGet /
+  MSIX App Installer machine-wide GPO: disable App Installer entirely; disable settings UI;
+  disable experimental features; disable local manifest installs; require hash validation;
+  disable ms-appinstaller protocol; disable additional sources; restrict to allowed sources;
+  disable default source; disable Microsoft Store source.
+- **Personalization Policy** (`prsnlz-*`, `PersonalizationPolicy.cs`) — 10 tweaks for lock
+  screen and personalization GPO: disable lock screen; disable lock screen camera; disable
+  lock screen slideshow; disable lock screen overlays; force default lock screen image;
+  prevent wallpaper change; hide background settings; hide screensaver settings; hide
+  appearance settings; prevent colour scheme change.
+- **Search Web Policy** (`srchweb-*`, `SearchWebPolicy.cs`) — 10 tweaks for Bing/cloud
+  search and Cortana GPO: disable cloud search; disable Cortana (policy); disable Cortana
+  above lock; disable web results in search; disable web search over metered connections;
+  disable search location; disable Bing integration; enforce SafeSearch; disable dynamic
+  content in Windows Sandbox; disable indexing of encrypted files.
+- **Data Collection Policy** (`datacol-*`, `DataCollectionPolicy.cs`) — 10 tweaks for
+  CEIP/DAST/feedback data collection GPO: disable opt-in notification; hide telemetry
+  settings UI; disable enterprise auth proxy; disable device delete button; disable feedback
+  notifications; disable device name in telemetry; disable CEIP; disable sample submission;
+  disable OneSetting downloads; disable diagnostic page.
+- **MDM Enrollment Policy** (`mdmpol-*`, `MdmEnrollmentPolicy.cs`) — 10 tweaks for MDM
+  enrollment and Windows Hello for Business GPO: disable auto MDM enroll; disable user
+  MDM registration; block Azure AD workplace join; disable auto workplace registration;
+  disable Windows Hello for Business; require TPM for WHFB; disable PIN recovery service;
+  disable Remote Windows Hello; disable biometrics for Hello; disable Dynamic Lock.
+
+#### Stats
+
+- Tweaks: **4925** across **208 categories** and **203 modules**
+- Tests: **2693** passing (0 failures)
+- Version bumped `5.1.0` → `5.2.0`
+
+---
+
 ## [5.1.0] — 2026-03-28 (Sprints 162–166)
 
 ### Added

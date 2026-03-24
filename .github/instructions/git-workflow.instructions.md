@@ -6,11 +6,15 @@ applyTo: "**"
 
 ## Core Principle
 
-**Commit often within a session. Push only at the end of a chat session.**
+**Commit often within a session. Push on every version bump.**
 
-This keeps the history granular for rollbacks while keeping the remote branch
-clean and reviewable. Never push mid-session — incomplete work belongs in
-local commits only.
+Every time a version is bumped (PATCH, MINOR, or MAJOR), that commit **must be tagged
+and pushed immediately** — this triggers the GitHub Actions `release.yml` workflow
+which publishes self-contained EXEs and MSI to GitHub Releases.
+
+Non-version-bump work (docs, config, intermediate sprints without a version change)
+stays in local commits until the next version bump. Never push non-versioned
+incremental work mid-session; only push when a versioned release is ready.
 
 ---
 
@@ -37,7 +41,20 @@ A "session" typically produces 3–10 commits covering distinct chunks of work.
 
 ### When to push
 
-Only after the **full chat session ends** and you have confirmed:
+**Push immediately on every version bump** — the tag push triggers the GitHub Actions
+`release.yml` workflow that publishes EXEs + MSI to GitHub Releases. This is a
+**standing rule** — every release must be published as soon as the version is tagged.
+
+```powershell
+# Every version bump must follow this exact sequence:
+git add -A
+git commit -m "feat(tweaks): Sprint NNN — N tweaks, vX.Y.Z\n\nTotal: NNNN tweaks, NNNN tests"
+git tag vX.Y.Z
+git push
+git push --tags   # ← triggers release.yml → publishes EXEs to GitHub Releases
+```
+
+For non-version-bump work, push criteria (at end of session):
 
 1. All relevant tests pass (full `dotnet test` suite, 0 failures)
 2. Release build succeeds with 0 errors, 0 warnings

@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-28 (v5.1.0, ~4875 tweaks, 203 categories, 2693 tests).
+> Last verified: 2026-04-01 (v5.2.0, ~4925 tweaks, 208 categories, 2693 tests).
 
 ## Companion Instruction Files
 
@@ -81,10 +81,10 @@ Rules:
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
 | Test     | xUnit 2.9.2 — 2,693 tests (2052 Core + 301 CLI + 340 GUI)                |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 5.1.0                                                                    |
+| Version  | 5.2.0                                                                    |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 4875 across 203 categories (198 module files)                           |
-| Tests    | 2693 passing (0 consistent failures)                                    |
+| Tweaks   | 4925 across 208 categories (203 module files)                            |
+| Tests    | 2693 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 9.0.3, xUnit 2.9.2, coverlet 6.0.2                     |
 
 ## Git Workflow (IMPORTANT — STANDING RULE)
@@ -95,9 +95,19 @@ Rules:
 
 - **Commit per logical phase/task** during a session (granular local history)
 - **Each commit must state** what phase it covers + total tweak/test counts if changed
-- **Push to GitHub only at end of a chat session** — never mid-session
+- **Push + tag on EVERY version bump** — NEVER defer a pushed tag; tag push triggers GitHub Actions `release.yml` which publishes EXEs + MSI to GitHub Releases
+- **Non-version-bump work** stays in local commits until wrapped into the next version bump
 - Commit message format: `type(scope): description` (Conventional Commits)
 - Full details: `.github/instructions/git-workflow.instructions.md`
+
+### Version Bump → Push Flow (MANDATORY every time)
+
+```powershell
+git add -A
+git commit -m "feat(tweaks): Sprint NNN — N tweaks, vX.Y.Z"
+git tag vX.Y.Z
+git push; git push --tags   # ← REQUIRED on every version bump
+```
 
 ---
 

@@ -12,7 +12,7 @@ internal static class ErrorReportingPolicy
 {
     private const string WerPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
     private const string WerConsent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\Consent";
-    private const string WerQueue    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\ExcludedApplications";
+    private const string WerQueue = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\ExcludedApplications";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -31,9 +31,9 @@ internal static class ErrorReportingPolicy
                 + "Disabled = 1. No crash reports are collected, stored, or sent to Microsoft. "
                 + "Default: enabled. Recommended for air-gapped or high-privacy deployments. "
                 + "Note: disabling WER also prevents WER-based crash analysis in Event Viewer.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "Disabled", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "Disabled", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "Disabled", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "Disabled", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "Disabled", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "Disabled", 1)],
         },
         new TweakDef
         {
@@ -49,9 +49,9 @@ internal static class ErrorReportingPolicy
                 "Prevents Windows Error Reporting from sending crash data over the internet to Microsoft. "
                 + "DontSendAdditionalData = 1. Crash data is still collected locally but not transmitted. "
                 + "Preferred privacy setting that retains local crash diagnostics while stopping uploads.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "DontSendAdditionalData", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "DontSendAdditionalData", 1)],
         },
         new TweakDef
         {
@@ -67,9 +67,9 @@ internal static class ErrorReportingPolicy
                 "Suppresses the 'Windows has stopped working' crash dialog box shown to users. "
                 + "DontShowUI = 1. Errors are still logged but users see no dialog. "
                 + "Recommended for kiosk deployments and unattended servers to avoid hanging on UI prompts.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "DontShowUI", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "DontShowUI", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "DontShowUI", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "DontShowUI", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "DontShowUI", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "DontShowUI", 1)],
         },
         new TweakDef
         {
@@ -86,9 +86,9 @@ internal static class ErrorReportingPolicy
                 + "BypassDataThrottling = 1. Ensures all crash reports are captured in corporate "
                 + "WER server deployments where local rate-limiting would mask incident scope. "
                 + "Default: throttling enabled. Use in conjunction with a corporate WER server.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "BypassDataThrottling", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "BypassDataThrottling", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "BypassDataThrottling", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "BypassDataThrottling", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "BypassDataThrottling", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "BypassDataThrottling", 1)],
         },
         new TweakDef
         {
@@ -104,9 +104,9 @@ internal static class ErrorReportingPolicy
                 "Prevents WER from writing crash report summaries to the Windows Application event log. "
                 + "LoggingDisabled = 1. Reduces noise in event logs on systems with frequent non-critical "
                 + "application crashes. Default: logging enabled.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "LoggingDisabled", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "LoggingDisabled", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "LoggingDisabled", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "LoggingDisabled", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "LoggingDisabled", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "LoggingDisabled", 1)],
         },
         new TweakDef
         {
@@ -123,9 +123,9 @@ internal static class ErrorReportingPolicy
                 + "DefaultConsent = 4 (send all data). Used in enterprise environments where crash data "
                 + "is routed to an internal WER server. Default: prompt user (1). "
                 + "Levels: 1=prompt, 2=basic params, 3=params+heap, 4=all data.",
-            ApplyOps   = [RegOp.SetDword(WerConsent, "DefaultConsent", 4)],
-            RemoveOps  = [RegOp.SetDword(WerConsent, "DefaultConsent", 1)],
-            DetectOps  = [RegOp.CheckDword(WerConsent, "DefaultConsent", 4)],
+            ApplyOps = [RegOp.SetDword(WerConsent, "DefaultConsent", 4)],
+            RemoveOps = [RegOp.SetDword(WerConsent, "DefaultConsent", 1)],
+            DetectOps = [RegOp.CheckDword(WerConsent, "DefaultConsent", 4)],
         },
         new TweakDef
         {
@@ -142,9 +142,9 @@ internal static class ErrorReportingPolicy
                 + "LocalDumps\\DumpType = 0 (no dump). Heap dumps can contain sensitive data "
                 + "including passwords, tokens, or PII present in application memory at crash time. "
                 + "Default: dumps enabled. Recommended for privacy-sensitive deployments.",
-            ApplyOps   = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 0)],
-            RemoveOps  = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 2)],
-            DetectOps  = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 0)],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 2)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 0)],
         },
         new TweakDef
         {
@@ -161,9 +161,9 @@ internal static class ErrorReportingPolicy
                 + "when connectivity is available. MaxQueueSizePercentage = 0. "
                 + "Prevents accumulation of potentially sensitive crash data in %LOCALAPPDATA%\\Microsoft\\Windows\\WER\\. "
                 + "Default: up to 10% of available disk quota used for queue.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "MaxQueueSizePercentage", 0)],
-            RemoveOps  = [RegOp.DeleteValue(WerPol, "MaxQueueSizePercentage")],
-            DetectOps  = [RegOp.CheckDword(WerPol, "MaxQueueSizePercentage", 0)],
+            ApplyOps = [RegOp.SetDword(WerPol, "MaxQueueSizePercentage", 0)],
+            RemoveOps = [RegOp.DeleteValue(WerPol, "MaxQueueSizePercentage")],
+            DetectOps = [RegOp.CheckDword(WerPol, "MaxQueueSizePercentage", 0)],
         },
         new TweakDef
         {
@@ -180,9 +180,9 @@ internal static class ErrorReportingPolicy
                 + "(power loss, hard resets). DisableArchive = 1 blocks archiving of these events. "
                 + "Reduces telemetry from power-sensitive environments such as laptops in unreliable "
                 + "power conditions. Default: reports sent on next boot.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "DisableArchive", 1)],
-            RemoveOps  = [RegOp.SetDword(WerPol, "DisableArchive", 0)],
-            DetectOps  = [RegOp.CheckDword(WerPol, "DisableArchive", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "DisableArchive", 1)],
+            RemoveOps = [RegOp.SetDword(WerPol, "DisableArchive", 0)],
+            DetectOps = [RegOp.CheckDword(WerPol, "DisableArchive", 1)],
         },
         new TweakDef
         {
@@ -199,9 +199,9 @@ internal static class ErrorReportingPolicy
                 + "%ProgramData%\\Microsoft\\Windows\\WER\\ReportArchive to be purged immediately. "
                 + "MaxArchiveCount = 1. Prevents long-term storage of crash dumps that may "
                 + "contain sensitive application memory. Default: reports kept for 1 year.",
-            ApplyOps   = [RegOp.SetDword(WerPol, "MaxArchiveCount", 1)],
-            RemoveOps  = [RegOp.DeleteValue(WerPol, "MaxArchiveCount")],
-            DetectOps  = [RegOp.CheckDword(WerPol, "MaxArchiveCount", 1)],
+            ApplyOps = [RegOp.SetDword(WerPol, "MaxArchiveCount", 1)],
+            RemoveOps = [RegOp.DeleteValue(WerPol, "MaxArchiveCount")],
+            DetectOps = [RegOp.CheckDword(WerPol, "MaxArchiveCount", 1)],
         },
     ];
 }

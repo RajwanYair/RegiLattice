@@ -9,11 +9,11 @@ using RegiLattice.Core.Models;
 
 internal static class InputMethodPolicy
 {
-    private const string IntlPol   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\International";
-    private const string TextInput  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TextInput";
+    private const string IntlPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\International";
+    private const string TextInput = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TextInput";
     private const string TabletInput = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC";
-    private const string ImePol    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\Desktop";
-    private const string LangPol   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\International";
+    private const string ImePol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\Desktop";
+    private const string LangPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\International";
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -33,9 +33,9 @@ internal static class InputMethodPolicy
                 + "PreventHotKeyFromSwitchingInputLanguage = 1. "
                 + "Prevents accidental language switches in multilingual enterprise environments. "
                 + "Default: hotkeys enabled.",
-            ApplyOps   = [RegOp.SetDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 1)],
-            RemoveOps  = [RegOp.SetDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 0)],
-            DetectOps  = [RegOp.CheckDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 1)],
+            ApplyOps = [RegOp.SetDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 1)],
+            RemoveOps = [RegOp.SetDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 0)],
+            DetectOps = [RegOp.CheckDword(IntlPol, "PreventHotKeyFromSwitchingInputLanguage", 1)],
         },
         new TweakDef
         {
@@ -52,9 +52,9 @@ internal static class InputMethodPolicy
                 + "PreventGeoIdChange = 1. Ensures consistent locale settings for enterprise software "
                 + "that relies on specific regional formats (date, number, currency). "
                 + "Default: users can change locale.",
-            ApplyOps   = [RegOp.SetDword(IntlPol, "PreventGeoIdChange", 1)],
-            RemoveOps  = [RegOp.SetDword(IntlPol, "PreventGeoIdChange", 0)],
-            DetectOps  = [RegOp.CheckDword(IntlPol, "PreventGeoIdChange", 1)],
+            ApplyOps = [RegOp.SetDword(IntlPol, "PreventGeoIdChange", 1)],
+            RemoveOps = [RegOp.SetDword(IntlPol, "PreventGeoIdChange", 0)],
+            DetectOps = [RegOp.CheckDword(IntlPol, "PreventGeoIdChange", 1)],
         },
         new TweakDef
         {
@@ -72,9 +72,9 @@ internal static class InputMethodPolicy
                 + "AllowTouchKeyboardAutoInvokeInDesktopMode = 0. "
                 + "Recommended for touchscreen PCs used in environments where the keyboard should not pop up "
                 + "automatically (kiosk / custom application deployments). Default: auto-show enabled.",
-            ApplyOps   = [RegOp.SetDword(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode")],
-            DetectOps  = [RegOp.CheckDword(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode", 0)],
+            ApplyOps = [RegOp.SetDword(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode")],
+            DetectOps = [RegOp.CheckDword(TextInput, "AllowTouchKeyboardAutoInvokeInDesktopMode", 0)],
         },
         new TweakDef
         {
@@ -92,9 +92,9 @@ internal static class InputMethodPolicy
                 + "RestrictImplicitTextCollection = 1. "
                 + "Prevents the input personalisation service from accumulating keystroke metadata "
                 + "in %APPDATA%\\Microsoft\\InputPersonalization. Default: collection enabled.",
-            ApplyOps   = [RegOp.SetDword(TextInput, "AllowLinguisticDataCollection", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TextInput, "AllowLinguisticDataCollection")],
-            DetectOps  = [RegOp.CheckDword(TextInput, "AllowLinguisticDataCollection", 0)],
+            ApplyOps = [RegOp.SetDword(TextInput, "AllowLinguisticDataCollection", 0)],
+            RemoveOps = [RegOp.DeleteValue(TextInput, "AllowLinguisticDataCollection")],
+            DetectOps = [RegOp.CheckDword(TextInput, "AllowLinguisticDataCollection", 0)],
         },
         new TweakDef
         {
@@ -112,9 +112,9 @@ internal static class InputMethodPolicy
                 + "DisableTabletModeChangeDialog = 1. "
                 + "Keeps the desktop mode consistently active regardless of hardware configuration. "
                 + "Useful for enterprise convertible deployments running desktop-only LOB applications.",
-            ApplyOps   = [RegOp.SetDword(TabletInput, "PreventTabletMode", 1)],
-            RemoveOps  = [RegOp.SetDword(TabletInput, "PreventTabletMode", 0)],
-            DetectOps  = [RegOp.CheckDword(TabletInput, "PreventTabletMode", 1)],
+            ApplyOps = [RegOp.SetDword(TabletInput, "PreventTabletMode", 1)],
+            RemoveOps = [RegOp.SetDword(TabletInput, "PreventTabletMode", 0)],
+            DetectOps = [RegOp.CheckDword(TabletInput, "PreventTabletMode", 1)],
         },
         new TweakDef
         {
@@ -132,9 +132,9 @@ internal static class InputMethodPolicy
                 + "Handwriting strokes and corrected words are not sent to Microsoft's cloud model. "
                 + "Default: sharing enabled to improve handwriting recognition. "
                 + "Recommended for devices that process sensitive handwritten data.",
-            ApplyOps   = [RegOp.SetDword(TextInput, "AllowHandwritingLMUpdate", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TextInput, "AllowHandwritingLMUpdate")],
-            DetectOps  = [RegOp.CheckDword(TextInput, "AllowHandwritingLMUpdate", 0)],
+            ApplyOps = [RegOp.SetDword(TextInput, "AllowHandwritingLMUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(TextInput, "AllowHandwritingLMUpdate")],
+            DetectOps = [RegOp.CheckDword(TextInput, "AllowHandwritingLMUpdate", 0)],
         },
         new TweakDef
         {
@@ -151,9 +151,9 @@ internal static class InputMethodPolicy
                 + "DisableEmojiInput = 1. "
                 + "Removes a non-essential UI element in locked-down or productivity-focused deployments. "
                 + "Default: Emoji Panel enabled. Symbols/emoji can still be inserted via other methods.",
-            ApplyOps   = [RegOp.SetDword(TabletInput, "DisableEmojiInput", 1)],
-            RemoveOps  = [RegOp.SetDword(TabletInput, "DisableEmojiInput", 0)],
-            DetectOps  = [RegOp.CheckDword(TabletInput, "DisableEmojiInput", 1)],
+            ApplyOps = [RegOp.SetDword(TabletInput, "DisableEmojiInput", 1)],
+            RemoveOps = [RegOp.SetDword(TabletInput, "DisableEmojiInput", 0)],
+            DetectOps = [RegOp.CheckDword(TabletInput, "DisableEmojiInput", 1)],
         },
         new TweakDef
         {
@@ -170,9 +170,9 @@ internal static class InputMethodPolicy
                 + "BlockImePlaceholder = 1. Stops third-party or built-in IMEs from making "
                 + "cloud-based word prediction or dictionary queries. "
                 + "Relevant for CJK (Chinese, Japanese, Korean) input environments with privacy requirements.",
-            ApplyOps   = [RegOp.SetDword(TextInput, "AllowInputDeviceUserInterface", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TextInput, "AllowInputDeviceUserInterface")],
-            DetectOps  = [RegOp.CheckDword(TextInput, "AllowInputDeviceUserInterface", 0)],
+            ApplyOps = [RegOp.SetDword(TextInput, "AllowInputDeviceUserInterface", 0)],
+            RemoveOps = [RegOp.DeleteValue(TextInput, "AllowInputDeviceUserInterface")],
+            DetectOps = [RegOp.CheckDword(TextInput, "AllowInputDeviceUserInterface", 0)],
         },
         new TweakDef
         {
@@ -191,9 +191,9 @@ internal static class InputMethodPolicy
                 + "Distinct from disabling Cortana voice — this only blocks the dictation shortcut. "
                 + "Default: voice typing enabled on supported hardware.",
             MinBuild = 22000,
-            ApplyOps   = [RegOp.SetDword(TextInput, "AllowVoiceTyping", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TextInput, "AllowVoiceTyping")],
-            DetectOps  = [RegOp.CheckDword(TextInput, "AllowVoiceTyping", 0)],
+            ApplyOps = [RegOp.SetDword(TextInput, "AllowVoiceTyping", 0)],
+            RemoveOps = [RegOp.DeleteValue(TextInput, "AllowVoiceTyping")],
+            DetectOps = [RegOp.CheckDword(TextInput, "AllowVoiceTyping", 0)],
         },
         new TweakDef
         {
@@ -210,9 +210,9 @@ internal static class InputMethodPolicy
                 + "NoPointerSettings = 1 via Desktop policy. "
                 + "Ensures consistent cursor appearance across all user sessions in kiosk and shared PC deployments. "
                 + "Default: users can change pointer size.",
-            ApplyOps   = [RegOp.SetDword(ImePol, "NoPointerSettings", 1)],
-            RemoveOps  = [RegOp.SetDword(ImePol, "NoPointerSettings", 0)],
-            DetectOps  = [RegOp.CheckDword(ImePol, "NoPointerSettings", 1)],
+            ApplyOps = [RegOp.SetDword(ImePol, "NoPointerSettings", 1)],
+            RemoveOps = [RegOp.SetDword(ImePol, "NoPointerSettings", 0)],
+            DetectOps = [RegOp.CheckDword(ImePol, "NoPointerSettings", 1)],
         },
     ];
 }

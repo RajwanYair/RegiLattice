@@ -29,9 +29,9 @@ internal static class TerminalServicesPolicy
                 + "UserAuthentication = 1. Prevents brute-force attacks against the Windows login screen "
                 + "by requiring valid credentials before the remote session is created. "
                 + "Default: NLA not enforced. This is the single most impactful RDS security hardening step.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "UserAuthentication", 1)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "UserAuthentication", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "UserAuthentication", 1)],
+            ApplyOps = [RegOp.SetDword(TsPol, "UserAuthentication", 1)],
+            RemoveOps = [RegOp.SetDword(TsPol, "UserAuthentication", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "UserAuthentication", 1)],
         },
         new TweakDef
         {
@@ -48,9 +48,9 @@ internal static class TerminalServicesPolicy
                 + "MinEncryptionLevel = 3 (1=Low, 2=Client-Compatible, 3=High, 4=FIPS). "
                 + "Prevents session eavesdropping on 40-bit or client-negotiated weaker ciphers. "
                 + "Default: client-compatible (2). Recommended: High (3) or FIPS (4) for sensitive data.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 3)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 2)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "MinEncryptionLevel", 3)],
+            ApplyOps = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 3)],
+            RemoveOps = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 2)],
+            DetectOps = [RegOp.CheckDword(TsPol, "MinEncryptionLevel", 3)],
         },
         new TweakDef
         {
@@ -67,9 +67,9 @@ internal static class TerminalServicesPolicy
                 + "MaxConnectionTime = 14400000 ms. "
                 + "Prevents orphaned or hijacked sessions from remaining active indefinitely. "
                 + "Default: no maximum connection time limit. Recommended for multi-user RDS servers.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "MaxConnectionTime", 14400000)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "MaxConnectionTime", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "MaxConnectionTime", 14400000)],
+            ApplyOps = [RegOp.SetDword(TsPol, "MaxConnectionTime", 14400000)],
+            RemoveOps = [RegOp.SetDword(TsPol, "MaxConnectionTime", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "MaxConnectionTime", 14400000)],
         },
         new TweakDef
         {
@@ -86,9 +86,9 @@ internal static class TerminalServicesPolicy
                 + "MaxIdleTime = 900000 ms. "
                 + "Frees server resources and closes unattended sessions that could be hijacked "
                 + "from an unlocked workstation. Default: no idle timeout. CIS benchmark recommended: 15 min.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "MaxIdleTime", 900000)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "MaxIdleTime", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "MaxIdleTime", 900000)],
+            ApplyOps = [RegOp.SetDword(TsPol, "MaxIdleTime", 900000)],
+            RemoveOps = [RegOp.SetDword(TsPol, "MaxIdleTime", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "MaxIdleTime", 900000)],
         },
         new TweakDef
         {
@@ -105,9 +105,9 @@ internal static class TerminalServicesPolicy
                 + "for more than 1 hour. MaxDisconnectionTime = 3600000 ms. "
                 + "Reclaims memory and CPU from abandoned sessions and limits re-attach window "
                 + "for stolen session tokens. Default: disconnected sessions kept indefinitely.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 3600000)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "MaxDisconnectionTime", 3600000)],
+            ApplyOps = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 3600000)],
+            RemoveOps = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "MaxDisconnectionTime", 3600000)],
         },
         new TweakDef
         {
@@ -124,9 +124,9 @@ internal static class TerminalServicesPolicy
                 + "fDisableCdm = 1. Stops users from copying files between the local machine "
                 + "and the RDS server via drive mapping. Key DLP control for preventing data exfiltration "
                 + "from terminal servers through redirected drives. Default: drive redirection allowed.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "fDisableCdm", 1)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "fDisableCdm", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "fDisableCdm", 1)],
+            ApplyOps = [RegOp.SetDword(TsPol, "fDisableCdm", 1)],
+            RemoveOps = [RegOp.SetDword(TsPol, "fDisableCdm", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "fDisableCdm", 1)],
         },
         new TweakDef
         {
@@ -143,9 +143,9 @@ internal static class TerminalServicesPolicy
                 + "fDisableClip = 1. Prevents copy-paste of sensitive data from the RDS server "
                 + "to the local machine and vice versa. Critical DLP control. "
                 + "Default: clipboard redirection allowed. CIS recommends disabling on shared RDS servers.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "fDisableClip", 1)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "fDisableClip", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "fDisableClip", 1)],
+            ApplyOps = [RegOp.SetDword(TsPol, "fDisableClip", 1)],
+            RemoveOps = [RegOp.SetDword(TsPol, "fDisableClip", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "fDisableClip", 1)],
         },
         new TweakDef
         {
@@ -162,9 +162,9 @@ internal static class TerminalServicesPolicy
                 + "fDisableCpm = 1. Stops users from printing sensitive server-side documents to "
                 + "local or home printers via the RDP session. "
                 + "Default: printer redirection enabled. Recommended for HIPAA/regulated environments.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "fDisableCpm", 1)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "fDisableCpm", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "fDisableCpm", 1)],
+            ApplyOps = [RegOp.SetDword(TsPol, "fDisableCpm", 1)],
+            RemoveOps = [RegOp.SetDword(TsPol, "fDisableCpm", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "fDisableCpm", 1)],
         },
         new TweakDef
         {
@@ -181,9 +181,9 @@ internal static class TerminalServicesPolicy
                 + "fSingleSessionPerUser = 1. Prevents the same account from being used across "
                 + "multiple simultaneous sessions, reducing session hijack risk and managing RDS CAL consumption. "
                 + "Default: multiple concurrent sessions per user allowed.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 1)],
-            RemoveOps  = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 0)],
-            DetectOps  = [RegOp.CheckDword(TsPol, "fSingleSessionPerUser", 1)],
+            ApplyOps = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 1)],
+            RemoveOps = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 0)],
+            DetectOps = [RegOp.CheckDword(TsPol, "fSingleSessionPerUser", 1)],
         },
         new TweakDef
         {
@@ -202,9 +202,9 @@ internal static class TerminalServicesPolicy
                 + "Improves user experience on unstable network links (Wi-Fi, VPN) by resuming the "
                 + "session without requiring a full new logon. "
                 + "Default: auto-reconnect enabled. This tweak explicitly enforces that policy.",
-            ApplyOps   = [RegOp.SetDword(TsPol, "fDisableAutoReconnect", 0)],
-            RemoveOps  = [RegOp.DeleteValue(TsPol, "fDisableAutoReconnect")],
-            DetectOps  = [RegOp.CheckDword(TsPol, "fDisableAutoReconnect", 0)],
+            ApplyOps = [RegOp.SetDword(TsPol, "fDisableAutoReconnect", 0)],
+            RemoveOps = [RegOp.DeleteValue(TsPol, "fDisableAutoReconnect")],
+            DetectOps = [RegOp.CheckDword(TsPol, "fDisableAutoReconnect", 0)],
         },
     ];
 }
