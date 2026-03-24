@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class LanmanServerPolicy
+{
+    private const string SrvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "lansrv-disable-auto-share-wks",
+            Label = "Disable Automatic Admin Shares (Workstation)",
+            Category = "LanMan Server Policy",
+            Description = "Prevents Windows from automatically creating administrative shares (C$, D$) on workstations.",
+            Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 3,
+            ImpactNote = "Removes hidden admin shares used for remote administration; may break management tools.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareWks", 0)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareWks")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-disable-auto-share-server",
+            Label = "Disable Automatic Admin Shares (Server)",
+            Category = "LanMan Server Policy",
+            Description = "Prevents Windows from automatically creating server-side default network shares (ADMIN$).",
+            Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 3,
+            ImpactNote = "Removes server-side default shares; may impact domain management and remote admin tools.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareServer", 0)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareServer")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareServer", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-disable-plain-text-password",
+            Label = "Disable Plain-Text Password Authentication (Server)",
+            Category = "LanMan Server Policy",
+            Description = "Prevents the SMB server from accepting unencrypted password authentication over the network.",
+            Tags = ["smb", "authentication", "lanman", "security", "password"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Blocks legacy clear-text SMB authentication; no impact on modern NTLMv2 or Kerberos clients.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "EnablePlainTextPassword", 0)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "EnablePlainTextPassword")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "EnablePlainTextPassword", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-enable-security-signature",
+            Label = "Enable SMB Server Security Signatures",
+            Category = "LanMan Server Policy",
+            Description = "Enables cryptographic packet signing for SMB server connections to detect in-transit tampering.",
+            Tags = ["smb", "signing", "lanman", "security", "integrity"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Enables SMB signing; small CPU overhead; highly recommended for all environments.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "EnableSecuritySignature", 1)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableSecuritySignature")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "EnableSecuritySignature", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-require-security-signature",
+            Label = "Require SMB Server Security Signature",
+            Category = "LanMan Server Policy",
+            Description = "Mandates that all SMB connections to this server use packet signing; unsigned clients are rejected.",
+            Tags = ["smb", "signing", "lanman", "security", "integrity", "enforce"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Enforces SMB signing; may break very old clients (Windows XP era) that do not support signing.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-enable-spn-validation",
+            Label = "Enable SMB Server SPN Validation",
+            Category = "LanMan Server Policy",
+            Description = "Requires clients to provide a valid Service Principal Name when connecting, preventing relay attacks.",
+            Tags = ["smb", "spn", "kerberos", "lanman", "security", "relay"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Hardens against NTLM relay attacks; minimal impact in domain-joined environments.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "SmbServerNameHardeningLevel")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-restrict-null-session",
+            Label = "Restrict Null Session Access",
+            Category = "LanMan Server Policy",
+            Description = "Blocks anonymous null-session connections from enumerating shares, users, and other resources.",
+            Tags = ["smb", "null-session", "anonymous", "lanman", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Prevents anonymous enumeration; safe for domain environments that use authenticated access.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "RestrictNullSessAccess", 1)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "RestrictNullSessAccess")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "RestrictNullSessAccess", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-auto-disconnect-idle",
+            Label = "Auto-Disconnect Idle SMB Sessions",
+            Category = "LanMan Server Policy",
+            Description = "Automatically disconnects idle SMB client sessions after 15 minutes to reduce resource exposure.",
+            Tags = ["smb", "session", "idle", "lanman", "resource"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Idle sessions disconnected after 15 minutes; transparent reconnect on next file access.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "AutoDisconnect", 15)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoDisconnect")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "AutoDisconnect", 15)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-disable-multicast",
+            Label = "Disable SMB WSD Multicast Discovery",
+            Category = "LanMan Server Policy",
+            Description = "Disables WS-Discovery multicast traffic used by SMB to advertise network shares on the local subnet.",
+            Tags = ["smb", "multicast", "discovery", "lanman", "network"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Stops SMB multicast probes; reduces network chatter; shares remain accessible via UNC path.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "EnableMulticast", 0)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableMulticast")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "EnableMulticast", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lansrv-audit-insecure-guest-logon",
+            Label = "Audit Insecure SMB Guest Logon Attempts",
+            Category = "LanMan Server Policy",
+            Description = "Logs an event whenever a client attempts an anonymous or guest SMB logon that would be rejected.",
+            Tags = ["smb", "audit", "guest", "lanman", "security", "logging"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Enables security auditing for rejected guest logins; adds entries to the Security event log.",
+            ApplyOps = [RegOp.SetDword(SrvKey, "AuditInsecureGuestLogon", 1)],
+            RemoveOps = [RegOp.DeleteValue(SrvKey, "AuditInsecureGuestLogon")],
+            DetectOps = [RegOp.CheckDword(SrvKey, "AuditInsecureGuestLogon", 1)],
+        },
+    ];
+}

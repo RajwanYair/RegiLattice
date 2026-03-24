@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class LapsPolicy
+{
+    private const string LapsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\LAPS";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "lapspol-enable-ad-backup",
+            Label = "Configure LAPS to Back Up Password to Active Directory",
+            Category = "LAPS Policy",
+            Description = "Directs Windows LAPS to store the managed local administrator password in Active Directory DS.",
+            Tags = ["laps", "password", "active-directory", "backup", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Enables centralised credential management; requires AD DS and LAPS schema extension.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "BackupDirectory", 2)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "BackupDirectory")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "BackupDirectory", 2)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-set-password-age-30",
+            Label = "Set LAPS Maximum Password Age to 30 Days",
+            Category = "LAPS Policy",
+            Description = "Configures the Windows LAPS managed account password to expire after a maximum of 30 days.",
+            Tags = ["laps", "password", "expiry", "rotation", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Password is automatically rotated every 30 days; no user action required.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PasswordAgeDays", 30)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordAgeDays")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PasswordAgeDays", 30)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-set-password-length-20",
+            Label = "Set LAPS Minimum Password Length to 20",
+            Category = "LAPS Policy",
+            Description = "Forces the LAPS-managed local administrator password to be at least 20 characters long.",
+            Tags = ["laps", "password", "length", "complexity", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Longer passwords improve brute-force resistance; LAPS manages them automatically.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PasswordLength", 20)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordLength")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PasswordLength", 20)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-set-password-complexity-full",
+            Label = "Set LAPS Password Complexity to Full",
+            Category = "LAPS Policy",
+            Description = "Requires the LAPS-generated password to include uppercase, lowercase, digits, and special characters.",
+            Tags = ["laps", "password", "complexity", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Value 4 = large letters + small letters + digits + special chars; maximum entropy.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PasswordComplexity", 4)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordComplexity")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PasswordComplexity", 4)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-post-auth-reset-logoff",
+            Label = "Reset LAPS Password and Log Off After Admin Use",
+            Category = "LAPS Policy",
+            Description = "Automatically resets the managed local admin password and logs off the session after it is used for authentication.",
+            Tags = ["laps", "password", "post-auth", "rotation", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Value 3 = reset password + terminate managed account logon sessions; prevents credential reuse.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationActions", 3)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationActions")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationActions", 3)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-set-post-auth-delay-24h",
+            Label = "Set LAPS Post-Auth Reset Delay to 24 Hours",
+            Category = "LAPS Policy",
+            Description = "Delays the post-authentication password reset for 24 hours to allow admin tasks to complete before rotation.",
+            Tags = ["laps", "password", "post-auth", "delay", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Gives admins 24 hours to finish tasks before the managed account password is rotated.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationResetDelay", 24)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationResetDelay")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationResetDelay", 24)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-enable-ad-encryption",
+            Label = "Encrypt LAPS Password in Active Directory",
+            Category = "LAPS Policy",
+            Description = "Stores the LAPS-managed password in Active Directory using AES-256 encryption instead of plain text.",
+            Tags = ["laps", "password", "encryption", "active-directory", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Password is AES-256 encrypted at rest in AD; requires Windows Server 2016 DC or later.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "ADPasswordEncryptionEnabled")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-enable-expiry-protection",
+            Label = "Enable LAPS Password Expiry Protection",
+            Category = "LAPS Policy",
+            Description = "Prevents the LAPS password expiry date from being set into the future by unauthorised parties.",
+            Tags = ["laps", "password", "expiry", "protection", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Blocks attackers from extending the LAPS password lifetime to avoid rotation.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordExpirationProtectionEnabled")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-enable-audit-policy",
+            Label = "Enable LAPS Audit Policy",
+            Category = "LAPS Policy",
+            Description = "Enables Windows LAPS audit logging to track password read and update events in the Security event log.",
+            Tags = ["laps", "audit", "logging", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Records LAPS credential access events; useful for detecting unauthorised admin account usage.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "AuditPolicyEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "AuditPolicyEnabled")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "AuditPolicyEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lapspol-set-expiry-notify-7d",
+            Label = "Notify 7 Days Before LAPS Password Expiry",
+            Category = "LAPS Policy",
+            Description = "Sends a warning notification to administrators 7 days before the LAPS-managed password expires.",
+            Tags = ["laps", "password", "expiry", "notification", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Generates an event log warning 7 days before password rotation; purely informational.",
+            ApplyOps = [RegOp.SetDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
+            RemoveOps = [RegOp.DeleteValue(LapsKey, "NotifyPasswordExpiryDays")],
+            DetectOps = [RegOp.CheckDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
+        },
+    ];
+}

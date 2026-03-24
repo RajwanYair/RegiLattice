@@ -1,0 +1,173 @@
+#nullable enable
+using RegiLattice.Core.Models;
+
+namespace RegiLattice.Core.Tweaks;
+
+internal static class LanmanWorkstationPolicy
+{
+    private const string WksKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
+
+    public static IReadOnlyList<TweakDef> Tweaks =>
+    [
+        new TweakDef
+        {
+            Id = "lanwks-block-insecure-guest-auth",
+            Label = "Block Insecure Guest Authentication",
+            Category = "LanMan Workstation Policy",
+            Description = "Prevents the SMB client from falling back to insecure guest authentication when a server rejects credentials.",
+            Tags = ["smb", "guest", "authentication", "lanman", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Blocks unauthenticated SMB guest connections; may prevent access to old NAS using anonymous shares.",
+            ApplyOps = [RegOp.SetDword(WksKey, "AllowInsecureGuestAuth", 0)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "AllowInsecureGuestAuth")],
+            DetectOps = [RegOp.CheckDword(WksKey, "AllowInsecureGuestAuth", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-disable-plain-text-password",
+            Label = "Disable Plain-Text Password Authentication (Client)",
+            Category = "LanMan Workstation Policy",
+            Description = "Stops the SMB workstation client from sending unencrypted passwords to network servers.",
+            Tags = ["smb", "authentication", "plaintext", "password", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 5,
+            ImpactNote = "Blocks clear-text SMB auth on the client side; no impact on NTLMv2 or Kerberos connections.",
+            ApplyOps = [RegOp.SetDword(WksKey, "EnablePlainTextPassword", 0)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "EnablePlainTextPassword")],
+            DetectOps = [RegOp.CheckDword(WksKey, "EnablePlainTextPassword", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-enable-security-signature",
+            Label = "Enable SMB Client Security Signatures",
+            Category = "LanMan Workstation Policy",
+            Description = "Enables cryptographic SMB packet signing on the client for outbound connections when the server supports it.",
+            Tags = ["smb", "signing", "client", "lanman", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Adds packet integrity verification; slight CPU overhead; compatible with all modern servers.",
+            ApplyOps = [RegOp.SetDword(WksKey, "EnableSecuritySignature", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSecuritySignature")],
+            DetectOps = [RegOp.CheckDword(WksKey, "EnableSecuritySignature", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-require-security-signature",
+            Label = "Require SMB Client Security Signature",
+            Category = "LanMan Workstation Policy",
+            Description = "Mandates that the SMB client use packet signing for all connections; unsigned servers are rejected.",
+            Tags = ["smb", "signing", "client", "lanman", "security", "enforce"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Enforces signing on all SMB connections; breaks access to servers that do not support signing.",
+            ApplyOps = [RegOp.SetDword(WksKey, "RequireSecuritySignature", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "RequireSecuritySignature")],
+            DetectOps = [RegOp.CheckDword(WksKey, "RequireSecuritySignature", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-enable-smb-encryption",
+            Label = "Enable SMB Client Encryption",
+            Category = "LanMan Workstation Policy",
+            Description = "Requests encrypted SMB connections wherever the server supports SMB 3.x encryption.",
+            Tags = ["smb", "encryption", "client", "lanman", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "End-to-end encryption for SMB traffic; requires SMB 3.x on both sides; silently ignored by older servers.",
+            ApplyOps = [RegOp.SetDword(WksKey, "EnableSMBEncryption", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSMBEncryption")],
+            DetectOps = [RegOp.CheckDword(WksKey, "EnableSMBEncryption", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-disable-smb1",
+            Label = "Disable SMBv1 Client Protocol",
+            Category = "LanMan Workstation Policy",
+            Description = "Disables the legacy SMBv1 dialect on the workstation client to prevent WannaCry-class exploits.",
+            Tags = ["smb", "smb1", "client", "lanman", "security", "legacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Eliminates SMBv1 support; may break access to Windows XP/2003 or old NAS that only support SMBv1.",
+            ApplyOps = [RegOp.SetDword(WksKey, "DisableSMB1", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "DisableSMB1")],
+            DetectOps = [RegOp.CheckDword(WksKey, "DisableSMB1", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-require-ntlmv2",
+            Label = "Require NTLMv2 Authentication (Client)",
+            Category = "LanMan Workstation Policy",
+            Description = "Prevents the SMB workstation client from using the weak NTLMv1 authentication protocol.",
+            Tags = ["smb", "ntlm", "ntlmv1", "client", "authentication", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Forces NTLMv2 or Kerberos; may affect connections to very old servers that only support NTLMv1.",
+            ApplyOps = [RegOp.SetDword(WksKey, "RequireNTLMv2", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "RequireNTLMv2")],
+            DetectOps = [RegOp.CheckDword(WksKey, "RequireNTLMv2", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-enable-logon-audit",
+            Label = "Enable SMB Workstation Logon Audit",
+            Category = "LanMan Workstation Policy",
+            Description = "Records authentication events for SMB workstation connections in the Security event log.",
+            Tags = ["smb", "audit", "logon", "client", "lanman", "logging"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Adds logon audit entries to the event log; useful for detecting lateral movement attempts.",
+            ApplyOps = [RegOp.SetDword(WksKey, "EnableLogonAuditing", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "EnableLogonAuditing")],
+            DetectOps = [RegOp.CheckDword(WksKey, "EnableLogonAuditing", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-disable-no-inplace-sharing",
+            Label = "Disable In-Place Sharing on Removable Media",
+            Category = "LanMan Workstation Policy",
+            Description = "Prevents in-place file sharing on removable storage media accessed through SMB workstation connections.",
+            Tags = ["smb", "removable", "sharing", "client", "lanman"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Blocks in-place sharing from removable drives; users must copy files to a local path first.",
+            ApplyOps = [RegOp.SetDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "NoInplaceSharingOnRemovableMedia")],
+            DetectOps = [RegOp.CheckDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lanwks-disable-multicast-name-resolution",
+            Label = "Disable SMB Multicast Name Resolution",
+            Category = "LanMan Workstation Policy",
+            Description = "Stops the SMB client from using LLMNR and NetBIOS multicast name resolution, reducing lateral movement risk.",
+            Tags = ["smb", "llmnr", "netbios", "multicast", "client", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Blocks LLMNR/NetBIOS name poisoning attacks; may slow discovery of shares without DNS entries.",
+            ApplyOps = [RegOp.SetDword(WksKey, "DisableMulticastNameResolution", 1)],
+            RemoveOps = [RegOp.DeleteValue(WksKey, "DisableMulticastNameResolution")],
+            DetectOps = [RegOp.CheckDword(WksKey, "DisableMulticastNameResolution", 1)],
+        },
+    ];
+}
