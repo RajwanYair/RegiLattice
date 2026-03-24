@@ -4,6 +4,14 @@ For the full changelog, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
 ---
 
+## [5.0.0] — 2026-03-24 (Sprints 152–161)
+
+- **Sprints 152–161**: 100 new tweaks across 10 new modules — `AppCompatGpoPolicy.cs`, `CredentialUiPolicy.cs`, `DeliveryOptimizationPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `InternetPrintingPolicy.cs`, `SharedFoldersSmbPolicy.cs`, `StartMenuModernPolicy.cs`, `TabletPcInputPolicy.cs`, `TpmSecurityPolicy.cs`, `WcmConnectionPolicy.cs`.
+- **4 825 tweaks** across **198 categories** (193 module files). ← 3 confirmed functional duplicates removed.
+- **2 661 tests** passing — 2 052 Core + 301 CLI + 308 GUI (0 failures).
+
+---
+
 ## [4.9.0] — 2026-03-26 (Sprints 142–151)
 
 - **Sprints 142–151**: 100 new tweaks across 10 new modules — `NetworkLltdPolicy.cs`, `WindowsMediaPolicyAdv.cs`, `DeviceProvisioningPolicy.cs`, `WindowsMapsPolicy.cs`, `DiagnosticDataViewerPolicy.cs`, `SystemRestoreGpoPolicy.cs`, `StartMenuModernPolicy.cs`, `CloudContentPolicy.cs`, `AppPrivacyPolicyAdv.cs`, `UserAccountControlAdvPolicy.cs`.

@@ -679,21 +679,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-disable-spooler-service",
-            Label = "Disable Print Spooler Service",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Print Spooler service entirely. Eliminates the attack surface from PrintNightmare and related spooler vulnerabilities. Use only on systems with no printing needs. Default: automatic start.",
-            Tags = ["printing", "spooler", "security", "services"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "printing-disable-fax-scan-service",
             Label = "Disable Windows Fax and Scan Service (WFS)",
             Category = "Printing",

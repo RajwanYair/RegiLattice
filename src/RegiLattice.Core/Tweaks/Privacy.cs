@@ -296,21 +296,6 @@ internal static class Privacy
         },
         new TweakDef
         {
-            Id = "priv-privacy-disable-advertising-id",
-            Label = "Disable Advertising ID",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows advertising ID for the current user. Prevents apps from using the ID for cross-app ad targeting. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["privacy", "advertising", "id", "tracking"],
-            RegistryKeys = [@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo"],
-            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "priv-privacy-disable-tailored-experiences",
             Label = "Disable Tailored Experiences",
             Category = "Privacy",

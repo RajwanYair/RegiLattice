@@ -9,9 +9,8 @@ report security vulnerabilities responsibly.
 
 | Version | Supported |
 |---------|-----------|
-| 4.x (latest) | ✅ Active security fixes |
-| 3.x | ❌ No longer supported |
-| 2.x | ❌ No longer supported |
+| 5.x (latest) | ✅ Active security fixes |
+| < 5.0 | ❌ No longer supported |
 | 1.x (Python) | ❌ Archived — no fixes |
 
 ---
