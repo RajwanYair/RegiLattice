@@ -240,6 +240,11 @@ public sealed class TweakDef
     public string ApplicabilityNote { get; init; } = ""; // reason when not applicable
     public string? PackSource { get; init; }          // plugin name if from pack
 
+    // Impact & safety metadata (Phase C — Intelligence Engine)
+    public int ImpactScore { get; init; } = 3;        // 1 = minimal benefit, 5 = major benefit
+    public int SafetyRating { get; init; } = 4;       // 1 = risky, 5 = very safe
+    public string ImpactNote { get; init; } = "";     // short human description of expected impact
+
     // Computed
     public TweakKind Kind { get; }                    // auto-detected from category/ops or KindHint
     public bool HasOperations { get; }                // ApplyOps.Count > 0 || ApplyAction != null
@@ -476,8 +481,9 @@ Canonical category slugs:
 2. Define `private const string Key = @"HKEY_...";` at module top
 3. Add `TweakDef` to the `Tweaks` list with `ApplyOps`/`RemoveOps`/`DetectOps`
 4. Ensure `Id` is **globally unique** kebab-case
-5. Register the module in `TweakEngine.RegisterBuiltins()` (one line)
-6. Run: `dotnet test`
+5. Set `ImpactScore` (1–5) and `SafetyRating` (1–5) explicitly — do not rely on defaults (3/4)
+6. Register the module in `TweakEngine.RegisterBuiltins()` (one line)
+7. Run: `dotnet test`
 
 ## Common Pitfalls
 
@@ -493,6 +499,9 @@ Canonical category slugs:
 - **`AppConfig.ConfigDir` not `DataRoot`**: The correct data-directory property on `AppConfig` is `ConfigDir` (returns `%LOCALAPPDATA%\RegiLattice` or portable path). `DataRoot` does **not exist** and causes `CS0117`. All Core services that persist data use `AppConfig.ConfigDir` — check existing usages before writing a new service.
 - **`ParseArgs()` returns `CliArgs?` — null-guard every test**: `ParseArgs()` in CLI `Program.cs` returns a nullable `CliArgs?`. Every xUnit test that calls it must have `Assert.NotNull(result)` before accessing any property, or `CS8602` fires. All tests in `ParseArgsTests.cs` follow this pattern — maintain it when adding new tests.
 - **MD022 in CHANGELOG.md**: Every `####` heading in `docs/CHANGELOG.md` must be followed by a blank line before any content (bullets, text). Markdownlint rule MD022 will surface as VS Code Problems warnings if missing. Always add a blank line after `#### Enhanced`, `#### Fixed`, `#### Stats` etc.
+- **`ImpactScore` / `SafetyRating` not set on new modules**: New `TweakDef` entries default to `ImpactScore=3` / `SafetyRating=4`. `TweakValidator` validates they are in range 1–5 but does NOT enforce explicit declaration. Always set both fields per-tweak with calibrated values. Modules missing these (e.g., Batch 4 v5.5.0 files) show generic scores in the Health Score dashboard.
+- **Policy module semantic conflict** — gap analysis must check `PATH\ValueName` pairs, not just key paths. `WerKey\Disabled` is used by both `ApplicationRestartPolicy.cs` and `AppCompatibility.cs`; blindly adding it in a new `Reliability` module created a third duplicate. Fix: grep `Select-String -Pattern '"ValueName"' -Path "src/RegiLattice.Core/Tweaks/*.cs"` before using any value name in well-known subsystems (WER, Defender, Update, BITS).
+- **`git -C "path"` over `cd path; git`**: For one-shot git operations in terminals that may have unstable cwd (history-picker state, Hebrew injection), always use `git -C "abs-path" <subcommand>`. The `-C` flag makes `git` change to that directory itself — immune to terminal cwd drift.
 
 ## File-by-File Quick Ref
 
