@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.4.0] — 2026-04-01 (Sprints 177–181)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`SidebarGadgetsPolicy.cs`** — 10 tweaks (slug: `sidebar`) — Windows Sidebar & Gadgets enterprise lockdown: turn-off sidebar, block unsupported packages, disable user/web/desktop/third-party gadgets, disable auto-update, require signed packages, block gadget gallery
+- **`CloudExperienceHostPolicy.cs`** — 10 tweaks (slug: `cehpol`) — Cloud Experience Host & OOBE policy: disable CXH, suppress privacy/account/location/network OOBE pages, skip machine OOBE, disable Cortana/Windows Hello/device-encryption OOBE screens, disable OOBE telemetry
+- **`GameBarOverlayPolicy.cs`** — 10 tweaks (slug: `gamebarpol`) — Game Bar & Game Mode GPO governance: disable Game Bar, block auto-game-mode, disable Nexus/presence-writer/broadcast/startup-panel, block game-mode globally, disable clip-cursor/achievements overlay/Xbox integration
+- **`WindowsAccessibilityPolicy.cs`** — 10 tweaks (slug: `a11ypol`) — Accessibility enterprise policy: disable serial-keys, sound-sentry, high-contrast hotkey, toggle/sticky/filter/bounce/mouse-keys hotkeys, prevent Magnifier startup, disable Narrator auto-start
+- **`WindowsReliabilityPolicy.cs`** — 10 tweaks (slug: `relpol`) — Reliability & WER policy: disable shutdown event tracker, block RAC reporting, disable reliability archive, limit archive count, suppress WER UI/auto-upload/kernel-dump logging, limit WER queue size, disable shutdown reason requirement/display
+
+#### Stats
+
+- Total tweaks: **5 025** (+50 from v5.3.0)
+- Categories: **218** (+5 from v5.3.0)
+- Module files: **213** (+5 from v5.3.0)
+- Tests: **2 693** (unchanged)
+
+---
+
 ## [5.3.0] — 2026-04-01 (Sprints 172–176)
 
 ### Added
