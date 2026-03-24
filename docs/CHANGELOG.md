@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.7.0] — 2026-04-08 (Sprints 192–196)
+
+### Added
+
+#### New Tweak Modules (+50 tweaks, +5 categories)
+
+- **`WindowsSubsystemLinuxPolicy.cs`** — 10 tweaks (slug: `wslpol`) — WSL Enterprise Group Policy: disable WSL, block kernel debugging, block custom kernel, block developer installs, disable disk mounting, block networking, disable systemd, block GPU compute, disable DNS tunneling, block virtual TPM
+- **`AzureAdTenantPolicy.cs`** — 10 tweaks (slug: `aadtenant`) — Azure AD Tenant Policy: block email/MSA sign-in, block non-enterprise AAD join, disable consumer app enrollment, enforce tenant restrictions, block guest accounts, block personal Microsoft accounts, require privacy consent, disable shared device sign-in, block AAD password reset from lock screen, disable cross-device cloud clipboard
+- **`NearbySharingPolicy.cs`** — 10 tweaks (slug: `nshpol`) — Nearby Sharing & Cross-Device Policy: disable Nearby Sharing, block paired device sharing, disable Phone Link message sync, block contacts sync, disable Phone Link from Settings, restrict scope to own devices, block Bluetooth file sharing, block Wi-Fi Direct sharing, disable activity feed sharing, block cross-device clipboard
+- **`WindowsAiPolicy.cs`** — 10 tweaks (slug: `aipol`) — Windows AI / Copilot+ / Recall Policy (Win 11 24H2+): disable Recall, disable snapshot saving, disable Copilot in Windows, disable AI data analysis, disable on-device AI processing, disable Click to Do, block AI experiences, disable content scanning, prevent background AI processing, disable automatic screenshot saving
+- **`WinRmRemoteShellPolicy.cs`** — 10 tweaks (slug: `rshpol`) — WinRM Remote Shell Quota Policy: disable remote shell access, limit shells per user (2), limit concurrent users (5), set idle timeout (1 min), set max run time (15 min), limit processes per shell (5), limit memory per shell (150 MB), block environment variable modification, block interactive shells, disable inbound WinRM shells
+
+### Stats
+
+- Total tweaks: **5,175** (+50)
+- Categories: **233** (+5)
+- Module files: **228** (+5)
+- Tests: **2,693** (unchanged)
+
+---
+
 ## [5.6.0] — 2026-04-08 (Sprints 187–191)
 
 ### Added
