@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="210" viewBox="0 0 1200 210">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#1e1e2e"/>
@@ -6,7 +6,7 @@
     </linearGradient>
   </defs>
 
-  <rect width="1200" height="180" fill="url(#bg)" rx="12"/>
+  <rect width="1200" height="210" fill="url(#bg)" rx="12"/>
 
   <!-- Theme swatches -->
   <g font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#a6adc8">
@@ -110,6 +110,6 @@
     </g>
 
     <!-- Label -->
-    <text x="600" y="165" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="16" fill="#585b70">11 Switchable Colour Themes &#x2022; Dark &amp; Light &#x2022; Auto System Detection</text>
+    <text x="600" y="200" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="16" fill="#585b70">11 Switchable Colour Themes &#x2022; Dark &amp; Light &#x2022; Auto System Detection</text>
   </g>
 </svg>

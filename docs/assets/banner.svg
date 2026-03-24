@@ -99,17 +99,17 @@
     <!-- Tweaks pill -->
     <rect x="235" y="430" width="160" height="36" rx="18" fill="#313244"/>
     <text x="252" y="454" font-size="13" font-weight="600" fill="#a6e3a1">&#x2713;</text>
-    <text x="268" y="454" font-size="14" font-weight="600" fill="#cdd6f4">4 825 Tweaks</text>
+    <text x="268" y="454" font-size="14" font-weight="600" fill="#cdd6f4">5 125 Tweaks</text>
 
     <!-- Categories pill -->
     <rect x="415" y="430" width="175" height="36" rx="18" fill="#313244"/>
     <text x="432" y="454" font-size="13" font-weight="600" fill="#89b4fa">&#x25A0;</text>
-    <text x="448" y="454" font-size="14" font-weight="600" fill="#cdd6f4">198 Categories</text>
+    <text x="448" y="454" font-size="14" font-weight="600" fill="#cdd6f4">228 Categories</text>
 
     <!-- Tests pill -->
     <rect x="610" y="430" width="160" height="36" rx="18" fill="#313244"/>
     <text x="627" y="454" font-size="13" font-weight="600" fill="#f9e2af">&#x2605;</text>
-    <text x="643" y="454" font-size="14" font-weight="600" fill="#cdd6f4">2 661 Tests</text>
+    <text x="643" y="454" font-size="14" font-weight="600" fill="#cdd6f4">2 693 Tests</text>
 
     <!-- Themes pill -->
     <rect x="790" y="430" width="155" height="36" rx="18" fill="#313244"/>
@@ -145,7 +145,7 @@
   <!-- Version badge bottom-right -->
   <g transform="translate(1120, 590)">
     <rect width="120" height="28" rx="14" fill="#313244"/>
-    <text x="60" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#89b4fa">v5.0.0</text>
+    <text x="60" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="600" fill="#89b4fa">v5.6.0</text>
   </g>
 
   <!-- MIT badge bottom-left -->
