@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-24 (v5.0.0, C# 13 / .NET 10.0-windows, ~4825+ tweaks, 198 categories, 2688 tests)
+> Last updated: 2026-03-24 (v5.5.0, C# 13 / .NET 10.0-windows, ~5075 tweaks, 223 categories, 2693 tests)
 
 ---
 
@@ -877,3 +877,182 @@ Assert.True(sw.ElapsedMilliseconds < 150, $"Search took {sw.ElapsedMilliseconds}
 3. When the threshold should be re-evaluated
 
 This makes future budget relaxations deliberate instead of surprising.
+
+---
+
+## `ImpactScore`, `SafetyRating`, `ImpactNote` — Set Explicitly on All New Tweaks
+
+These three fields were added to `TweakDef` as part of the Phase C Intelligence Engine
+(commit `1d01c3f`). They power the Health Score dashboard and Smart Scan recommendation
+engine. Modules created before the addition have explicit values; modules created after
+**should** set them explicitly rather than relying on defaults.
+
+```csharp
+// ✅ GOOD — explicit values per tweak, calibrated to actual impact and risk
+new TweakDef
+{
+    Id = "wdag-disable-clipboard-sharing",
+    ImpactScore = 4,    // 1 = minimal benefit, 5 = major benefit
+    SafetyRating = 5,   // 1 = risky, 5 = very safe
+    ImpactNote = "Reduces attack surface; may break clipboard paste into WDAG sessions.",
+    ...
+}
+
+// ⚠️ WARNING — relying on defaults (ImpactScore=3, SafetyRating=4) loses calibration
+new TweakDef
+{
+    Id = "attach-block-mime-change",
+    // No ImpactScore/SafetyRating → engine uses defaults 3/4
+    ...
+}
+```
+
+**TweakValidator** enforces `ImpactScore` and `SafetyRating` are in the range 1–5.
+If either is set outside that range the `--validate` command will report it as an error.
+
+**Scale guidance**:
+
+| ImpactScore | Meaning                                    | Example                              |
+| ----------- | ------------------------------------------ | ------------------------------------ |
+| 5           | Major benefit; changes visible behaviour   | Disable consumer experiences          |
+| 4           | Significant benefit; measurable effect     | Disable WER data upload               |
+| 3           | Moderate benefit; moderate effect          | Disable spotlight on action center    |
+| 2           | Minor benefit; subtle effect               | Disable CDM spotlight on taskbar      |
+| 1           | Marginal benefit; mostly cosmetic           | Suppress a rarely seen UI element     |
+
+| SafetyRating | Meaning                                    | Example                              |
+| ------------ | ------------------------------------------ | ------------------------------------ |
+| 5            | Very safe; reversible; no side effects     | Disable Spotlight                     |
+| 4            | Safe for most users; minor caveats         | Disable WDAG clipboard                |
+| 3            | Moderate risk; admin-only subsystems       | Disable WER upload (may affect DR)    |
+| 2            | Elevated risk; test on non-prod first      | Disable Terminal Services features    |
+| 1            | High risk; can break functionality         | Block all remote desktop connections  |
+
+**When was this hit?** Batch 4 modules (`WindowsAttachmentsPolicy.cs`,
+`WindowsMailPolicy.cs`, `NetMeetingPolicy.cs`, `CloudNotificationsPolicy.cs`,
+`ConferencingPolicy.cs`) were created in v5.5.0 without explicit `ImpactScore`/
+`SafetyRating`. The validator passes because defaults are valid, but the intelligence
+engine will surface these tweaks with generic scores instead of calibrated ones.
+Fix by adding explicit values per TweakDef during the next touch of those files.
+
+---
+
+## Policy Module Gap Analysis — Full Workflow
+
+Before creating any new policy module, run all three phases of the gap analysis:
+
+### Phase 1 — Registry path not already claimed
+
+```powershell
+# No hits = CLEAR to use
+Select-String -Pattern 'Policies\\[TargetKeyword]' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+```
+
+### Phase 2 — Slug not already claimed
+
+```powershell
+# No hits = CLEAR to use
+Select-String -Pattern '"slug-' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+```
+
+### Phase 3 — Semantic conflict check (same PATH\ValueName pair as existing tweak)
+
+This is the most important check and the easiest to miss. A tweak targeting a different
+_key_ in the same Windows subsystem (e.g., `Windows Error Reporting`, `Reliability`) can
+accidentally reuse an existing `PATH\ValueName` from a distant module.
+
+```powershell
+# Check specific value names across ALL modules before using them
+Select-String -Pattern '"ValueName"' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+```
+
+**Real example**: `WindowsReliabilityPolicy.cs` (v5.4.0) initially defined:
+- `WerKey\Disabled = 1` — already in `ApplicationRestartPolicy.cs`
+- `WerKey\DontSendAdditionalData = 1` — already in `ApplicationRestartPolicy.cs`
+- `WerKey\Disabled = 1` also in `AppCompatibility.cs`
+
+**Fix**: Replace duplicated ops with semantically distinct alternatives using a different
+key (`RelKey\ReasonRequired=0`, `RelKey\ShutdownReasonOn=0`).
+
+**Prevention rule**: When you know a module touches a well-known subsystem (WER, Defender,
+Windows Update, BITS, SNMP), always grep for that subsystem name in all modules:
+
+```powershell
+Select-String -Pattern 'Error Reporting|Windows Error' -Path "src/RegiLattice.Core/Tweaks/*.cs"
+```
+
+---
+
+## stats.svg Uses Space-Separated Thousands
+
+The `docs/assets/stats.svg` file uses **non-breaking space** (or regular space) as
+a thousands separator: `5 025`, `5 075` — **not** `5025`, `5075`.
+
+```xml
+<!-- ✅ GOOD — space-separated thousands as per style commit 7e464a8 -->
+<text ...>5 075</text>
+
+<!-- ❌ BAD — no separator; regex replacement will fail to find the old value -->
+<text ...>5075</text>
+```
+
+**Why**: Commit `7e464a8` ("style(docs): merge space-separated thousands") standardised
+all markdown and SVG files to use this format. `replace_string_in_file` against the SVG
+must match the exact format including the space.
+
+**What to update on each version bump (6 files, listed in order)**:
+
+| File | What changes |
+|---|---|
+| `docs/assets/stats.svg` | Tweak count + category count (space-separated thousands) |
+| `Directory.Build.props` | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| `installer/Package.wxs` | `Version="X.Y.Z"` (no `.0` suffix here) |
+| `README.md` | Badge, download link, description line, features bullet, diagram count, folder tree count, footer |
+| `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules row |
+| `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section |
+
+---
+
+## `git -C "path" command` for One-Shot Git Ops in Unstable Terminals
+
+When terminal state is unreliable (history-picker stuck, Hebrew char injection, cwd drift),
+use `git -C "absolute-path" <subcommand>` instead of `cd path; git <subcommand>`:
+
+```powershell
+# ✅ RELIABLE — cwd is irrelevant; git operates on the specified path
+git -C "c:\Users\ryair\...\RegiLattice" status --short
+git -C "c:\Users\ryair\...\RegiLattice" commit -m "message"
+git -C "c:\Users\ryair\...\RegiLattice" tag v5.5.0
+git -C "c:\Users\ryair\...\RegiLattice" push
+git -C "c:\Users\ryair\...\RegiLattice" ls-remote origin refs/tags/v5.5.0
+
+# ⚠️ FRAGILE — depends on the terminal's cwd being correct
+cd "c:\Users\ryair\...\RegiLattice"; git status --short
+```
+
+**Why it matters**: `run_in_terminal` opens background terminals that `cd` to the
+workspace directory but may start in history-picker state (no output for 4–5 seconds).
+`git -C` is immune to this — it works regardless of cwd.
+
+---
+
+## Policy Module 5×10 Cadence — Standing Pattern
+
+The current expansion pattern for each MINOR version bump is:
+- **5 new policy modules** per version bump
+- **10 tweaks per module** (all declarative `ApplyOps`/`RemoveOps`/`DetectOps`)
+- All keys under `HKLM\SOFTWARE\Policies\Microsoft\...` (machine-wide Group Policy)
+- `NeedsAdmin = true`, `CorpSafe = true` on all policy tweaks
+- `ImpactScore` and `SafetyRating` set explicitly per tweak
+
+Version history:
+| Version | Modules | Tweaks | Sprint range |
+|---------|---------|--------|---|
+| v5.1.0 | 5 | 50 | 162–166 |
+| v5.2.0 | 5 | 50 | 167–171 |
+| v5.3.0 | 5 | 50 | 172–176 |
+| v5.4.0 | 5 | 50 | 177–181 |
+| v5.5.0 | 5 | 50 | 182–186 |
+
+**Next sprint**: 187–191 (v5.6.0). Run full gap analysis on all three phases before creating any module.
+
