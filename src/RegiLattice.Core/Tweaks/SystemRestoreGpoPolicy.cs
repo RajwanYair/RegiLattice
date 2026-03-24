@@ -11,11 +11,9 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class SystemRestoreGpoPolicy
 {
-    private const string SrPol =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
+    private const string SrPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
 
-    private const string SrSettings =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore";
+    private const string SrSettings = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

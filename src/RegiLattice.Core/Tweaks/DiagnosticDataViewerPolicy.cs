@@ -11,8 +11,7 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class DiagnosticDataViewerPolicy
 {
-    private const string DataCol =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
+    private const string DataCol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

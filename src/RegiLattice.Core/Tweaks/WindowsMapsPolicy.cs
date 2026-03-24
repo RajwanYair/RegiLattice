@@ -12,14 +12,11 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class WindowsMapsPolicy
 {
-    private const string Maps =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps";
+    private const string Maps = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps";
 
-    private const string WinSearch =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
+    private const string WinSearch = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
 
-    private const string WinSearchCu =
-        @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Windows Search";
+    private const string WinSearchCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Windows Search";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [

@@ -11,11 +11,9 @@ namespace RegiLattice.Core.Tweaks;
 
 internal static class CloudContentPolicy
 {
-    private const string Cloud =
-        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
+    private const string Cloud = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
 
-    private const string CloudCu =
-        @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent";
+    private const string CloudCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent";
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
@@ -150,18 +148,9 @@ internal static class CloudContentPolicy
             Tags = ["cloud", "spotlight", "welcome", "policy"],
             NeedsAdmin = false,
             CorpSafe = true,
-            ApplyOps =
-            [
-                RegOp.SetDword(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
+            RemoveOps = [RegOp.DeleteValue(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience")],
+            DetectOps = [RegOp.CheckDword(CloudCu, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
         },
         new TweakDef
         {
