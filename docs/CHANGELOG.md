@@ -4,6 +4,45 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.19.0] — 2026-03-26
+
+### Added
+
+#### New Policy Modules (Sprints 252–256)
+
+- **Sprint 252 — ActiveX Installer Service Policy** (`axinst-*`, 10 tweaks)
+  — `ActiveXInstallerServicePolicy.cs`: enforce admin approval for ActiveX installs, block
+  silent/per-user/untrusted-zone installs, control logging, update, and OCX download.
+
+- **Sprint 253 — Scripted Diagnostics Policy** (`sdiag-*`, 10 tweaks)
+  — `ScriptedDiagnosticsPolicy.cs`: disable scripted diagnostics, online troubleshooters,
+  recommended troubleshooting, elevated troubleshooters, results upload, third-party
+  diagnostics, scheduled diagnostics, and troubleshooting history.
+
+- **Sprint 254 — Wi-Fi Hotspot Authentication Policy** (`hotspot-*`, 10 tweaks)
+  — `HotspotAuthenticationPolicy.cs`: disable captive portal detection, the Wi-Fi Sense
+  credentials-sharing feature, auto-connect to new networks, internet sharing, Hotspot 2.0,
+  manual hotspot, WLAN auto-config GPT policy, and credential caching.
+
+- **Sprint 255 — Early Launch Anti-Malware Policy** (`elam-*`, 10 tweaks)
+  — `EarlyLaunchAMPolicy.cs`: configure ELAM driver load policies (good-only, good+unknown,
+  critical-only), disable ELAM driver loading, increase scan timeout, enable event logging,
+  block unknown boot drivers, enable Network ELAM, Measured Boot, and boot log persistence.
+
+- **Sprint 256 — Certificate Auto-Enrollment Policy** (`certae-*`, 10 tweaks)
+  — `CertAutoEnrollmentPolicy.cs`: disable/enable machine and user certificate auto-enrollment
+  with AEPolicy values (0=off, 7=enroll+renew+archive), suppress  expiry notifications,
+  enable audit logging, disable offline domain join enrollment, enable key-based renewal,
+  disable PKI URL retrieval for air-gapped systems, and block weak certificate algorithms.
+
+#### Stats
+
+- Total tweaks: **5,775** (+50 from v5.18.0)
+- Total categories: **293** (+5)
+- Total tests: **2,660** (0 failures)
+
+---
+
 ## [5.18.0] — 2026-03-26
 
 ### Added
