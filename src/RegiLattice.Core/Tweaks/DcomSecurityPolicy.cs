@@ -29,7 +29,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "EnableDCOM")],
             DetectOps = [RegOp.CheckDword(OleKey, "EnableDCOM", 0)],
         },
-
         new TweakDef
         {
             Id = "dcom-restrict-anonymous-launch",
@@ -46,7 +45,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "LegacyAuthenticationLevel")],
             DetectOps = [RegOp.CheckDword(OleKey, "LegacyAuthenticationLevel", 6)],
         },
-
         new TweakDef
         {
             Id = "dcom-require-packet-privacy",
@@ -63,7 +61,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "LegacyImpersonationLevel")],
             DetectOps = [RegOp.CheckDword(OleKey, "LegacyImpersonationLevel", 2)],
         },
-
         new TweakDef
         {
             Id = "dcom-disable-com-internet-services",
@@ -80,7 +77,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "EnableRemoteConnect")],
             DetectOps = [RegOp.CheckDword(OleKey, "EnableRemoteConnect", 0)],
         },
-
         new TweakDef
         {
             Id = "dcom-restrict-access-by-policy",
@@ -97,7 +93,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(DcomKey, "MachineLaunchRestriction")],
             DetectOps = [RegOp.CheckDword(DcomKey, "MachineLaunchRestriction", 1)],
         },
-
         new TweakDef
         {
             Id = "dcom-restrict-access-limits-policy",
@@ -114,7 +109,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(DcomKey, "MachineAccessRestriction")],
             DetectOps = [RegOp.CheckDword(DcomKey, "MachineAccessRestriction", 1)],
         },
-
         new TweakDef
         {
             Id = "dcom-audit-launch-activation-failures",
@@ -131,7 +125,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "ActivationFailureLoggingLevel")],
             DetectOps = [RegOp.CheckDword(OleKey, "ActivationFailureLoggingLevel", 2)],
         },
-
         new TweakDef
         {
             Id = "dcom-disable-dcomscm-shortcut",
@@ -148,7 +141,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "CallFailureLoggingLevel")],
             DetectOps = [RegOp.CheckDword(OleKey, "CallFailureLoggingLevel", 2)],
         },
-
         new TweakDef
         {
             Id = "dcom-disable-persistent-activations",
@@ -165,7 +157,6 @@ internal static class DcomSecurityPolicy
             RemoveOps = [RegOp.DeleteValue(OleKey, "PersistActivationTimeout")],
             DetectOps = [RegOp.CheckDword(OleKey, "PersistActivationTimeout", 120)],
         },
-
         new TweakDef
         {
             Id = "dcom-block-remote-activation-for-standard-users",

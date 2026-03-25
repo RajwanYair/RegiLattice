@@ -30,7 +30,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbPolicyKey, "SupportedEncryptionTypes")],
             DetectOps = [RegOp.CheckDword(KerbPolicyKey, "SupportedEncryptionTypes", 2147483640)],
         },
-
         new TweakDef
         {
             Id = "kerb-disable-rc4-encryption",
@@ -42,12 +41,12 @@ internal static class KerberosEncryptionPolicy
             CorpSafe = true,
             ImpactScore = 5,
             SafetyRating = 3,
-            ImpactNote = "RC4 in Kerberos enables AS-REP roasting and other attacks. Removing it requires all principal accounts to have AES keys set.",
+            ImpactNote =
+                "RC4 in Kerberos enables AS-REP roasting and other attacks. Removing it requires all principal accounts to have AES keys set.",
             ApplyOps = [RegOp.SetDword(KerbPolicyKey, "SupportedEncryptionTypes", 2147483616)],
             RemoveOps = [RegOp.DeleteValue(KerbPolicyKey, "SupportedEncryptionTypes")],
             DetectOps = [RegOp.CheckDword(KerbPolicyKey, "SupportedEncryptionTypes", 2147483616)],
         },
-
         new TweakDef
         {
             Id = "kerb-require-aes256",
@@ -64,7 +63,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "SupportedEncryptionTypes")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "SupportedEncryptionTypes", 24)],
         },
-
         new TweakDef
         {
             Id = "kerb-set-max-ticket-age-600",
@@ -81,7 +79,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "MaxTicketAge")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "MaxTicketAge", 600)],
         },
-
         new TweakDef
         {
             Id = "kerb-set-max-renew-age-7days",
@@ -98,7 +95,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "MaxRenewAge")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "MaxRenewAge", 10080)],
         },
-
         new TweakDef
         {
             Id = "kerb-set-max-service-ticket-600",
@@ -115,7 +111,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "MaxServiceAge")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "MaxServiceAge", 600)],
         },
-
         new TweakDef
         {
             Id = "kerb-set-clock-skew-5min",
@@ -132,7 +127,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "SkewTime")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "SkewTime", 5)],
         },
-
         new TweakDef
         {
             Id = "kerb-enable-armoring",
@@ -149,7 +143,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbPolicyKey, "cbindingPolicy")],
             DetectOps = [RegOp.CheckDword(KerbPolicyKey, "cbindingPolicy", 2)],
         },
-
         new TweakDef
         {
             Id = "kerb-disable-upn-hint",
@@ -166,7 +159,6 @@ internal static class KerberosEncryptionPolicy
             RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "UseUpnForClientAuthEnabled")],
             DetectOps = [RegOp.CheckDword(KerbLsaKey, "UseUpnForClientAuthEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "kerb-set-preauthentication-required",
