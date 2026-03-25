@@ -4,7 +4,6 @@
     <AssemblyName>RegiLattice.Core</AssemblyName>
     <Authors>YairRajwan</Authors>
     <Description>RegiLattice Core — Native Windows registry tweak engine.</Description>
-    <PlatformTarget>x64</PlatformTarget>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -14,8 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- InternalsVisibleTo: all three consumers declared here — do not add a manual AssemblyInfo.cs -->
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>RegiLattice.Core.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>RegiLattice.GUI</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>RegiLattice.CLI</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 </Project>
