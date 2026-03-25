@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.37.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 21 — Sprints 342-346)
+
+- **PrintSpoolAdvPolicy** (`prtspool-*`) — 10 tweaks: disable point-and-print without elevation, restrict driver update to admin-only, block printer driver signature bypass, disable Web-based printing (IPP over HTTP), restrict share name enumeration, disable remote print spooler management, block Cross-site spooler exploitation via named pipe, restrict driver fallback on signature error, disable CUPS compatibility layer, and block MSXPS document conversion without sandbox.
+- **NetBiosPolicy** (`netbios-*`) — 10 tweaks: disable NetBIOS over TCP/IP globally, block WINS resolution, disable NetBIOS name registration broadcasting, restrict NetBIOS node type to B-node, disable NetBT datagram service, block LMHOSTS lookup, disable NetBIOS keepalive, restrict NetBT query scope, disable NetBIOS scope ID advertising, and block legacy NetBIOS session service port 139.
+- **WindowsHelloAdvPolicy** (`helloadv-*`) — 10 tweaks: require Windows Hello for domain authentication, disable Hello PIN setup for non-admins, restrict biometric data storage location, block Hello provisioning on shared devices, disable Hello companion device enrollment, restrict Hello key protection to TPM 2.0, block Hello credential delegation without attestation, disable Hello phone sign-in pairing, restrict Hello business deployment without MDM, and block Hello cross-account credential roaming.
+- **ActiveSetupPolicy** (`actsetup-*`) — 10 tweaks: disable Active Setup component execution, restrict Active Setup registry key modification, block unprivileged component installation via Active Setup, disable Active Setup version comparison on logon, restrict stub-path execution to signed binaries, block Active Setup HKCU write from HKLM keys, disable Active Setup in kiosk sessions, restrict Active Setup component removal, disable legacy IE Active Setup components, and block third-party Active Setup entries.
+- **CbsUpdatePolicy** (`cbsupd-*`) — 10 tweaks: enable auto-repair of CBS component corruption, restrict CBS component installation to admins, disable CBS store cleanup telemetry, block pending component removal without user consent, restrict DISM online image repair network access, disable CBS package staging telemetry, block CBS feature installation from untrusted sources, restrict CBS scan logging to system volume, disable optional component auto-install via Windows Update, and block CBS update agent downgrade.
+
+#### Stats
+
+- **Total tweaks**: 6625 → **6675** (+50)
+- **Total categories**: 378 → **383** (+5)
+- **Module files**: 373 → **378** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.36.0] — 2026-03-25
 
 ### Added
