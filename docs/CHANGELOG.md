@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.41.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 25 — Sprints 362-366)
+
+- **AppSiloAdvPolicy** (`appsilob-*`) — 10 tweaks: enforce cross-silo IPC isolation, restrict silo-level handle table sharing, block silo impersonation across privilege boundaries, disable silo-based app sharing without explicit policy, restrict cross-silo thread injection, block silo desktop queue access from other silos, restrict silo virtual memory region access, disable silo token impersonation leakage, block cross-silo pipe server auto-connect, and restrict silo-level ACL inheritance from parent sessions.
+- **PrintSpoolFinalPolicy** (`splfinal-*`) — 10 tweaks: enable print spooler cleanup on idle, restrict spooler temp file path to system volume, block spooler RPC listener on non-loopback, disable legacy XPS spool format, restrict print job retention time, block spooler child process creation, disable print processor auto-discovery, restrict spool item access to printing service account, block spooler HTTP/IPP listener outside domain, and disable print spooler browser integration.
+- **WinInetPolicy** (`wininet-*`) — 10 tweaks: enable Enhanced Protected Mode for Internet Explorer, restrict Internet zone object caching, disable automatic form fill-in in IE, block zone-based content download in EPM, restrict WinInet proxy auto-detection, disable legacy WinInet connection keep-alive override, restrict WinInet cookie persistence outside session, block WinInet cookie sharing between low and medium integrity zones, disable WinInet SSL error bypass, and restrict WinInet URL caching to session-only.
+- **UserAccountControlAdvPolicy** (`uac-*`) — 10 tweaks extending pre-existing module: restrict UAC elevation prompt to secure desktop, block COM object elevation without manifest, disable UAC virtualization for legacy apps, restrict file/registry virtualization scope, block UAC auto-approval for Microsoft-signed apps, disable UAC application compatibility bypass, restrict credential prompts during elevation to admin accounts, block UAC UIPI override from low-integrity processes, disable UAC behavior change via registry without Winlogon restart, and restrict UIA accessibility elevation path.
+- **WindowsInkWorkspaceAdvPolicy** (`inkwsadv-*`) — 10 tweaks: restrict Ink Workspace on lockscreen, disable Ink Workspace telemetry, block Windows Ink app suggestion feed, restrict sticky notes cloud sync, disable ink handwriting recognition data collection, block ink replay feature, restrict Ink Workspace in kiosk mode, disable ink-to-text conversion telemetry, block ink workspace whiteboard collaboration, and restrict inking personalization data sharing.
+
+#### Stats
+
+- **Total tweaks**: 6825 → **6875** (+50)
+- **Total categories**: 398 → **403** (+5)
+- **Module files**: 393 → **398** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.40.0] — 2026-03-25
 
 ### Added
