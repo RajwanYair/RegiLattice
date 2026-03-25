@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.22.0] — 2026-05-26
+
+### Added
+
+#### New Policy Modules (Sprints 267–271)
+
+- **Sprint 267** `RetailDemoPolicy` (10 tweaks) — Retail demo mode lockdown: disable demo mode, attract loop, auto sign-in, app provisioning, content delivery, experience provider, info banner, OOBE demo flow, cleanup revert, and interaction telemetry. Category: _Retail Demo Policy_.
+- **Sprint 268** `PushToInstallPolicy` (10 tweaks) — Push-to-Install controls: disable the service, remote push, auto provisioning, device management push, store notifications, telemetry, admin approval gate, unattended push, cross-device sync, and service wake. Category: _Push To Install Policy_.
+- **Sprint 269** `SecurityCenterPolicy` (10 tweaks) — Windows Security Center administration: disable WSC, spyware/antivirus/firewall/update/UAC/internet monitoring, hide tray icon, disable account protection monitoring and notification toasts. Category: _Security Center Policy_.
+- **Sprint 270** `WebThreatDefensePolicy` (10 tweaks) — Web Threat Defense engine controls: disable service, lock UI toggle, disable phishing filter, malicious-URL block, download reputation, cloud lookup, behaviour monitoring, telemetry upload, enhanced protection mode, and credential-entry warning. Category: _Web Threat Defense Policy_.
+- **Sprint 271** `VideoCapturePolicy` (10 tweaks) — Video capture governance: block the capture device, screen capture, live broadcast, game DVR capture, audio pairing, require admin, disable camera telemetry, virtual camera, MediaCapture UWP API, and background capture. Category: _Video Capture Policy_.
+
+#### Stats
+
+- Tweaks: 5,875 → **5,925** (+50)
+- Categories: 303 → **308** (+5)
+- Tests: 2,667 (unchanged)
+
+---
+
 ## [5.21.0] — 2026-03-28
 
 ### Added
