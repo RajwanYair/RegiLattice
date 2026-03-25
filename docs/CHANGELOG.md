@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.27.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 11 — Sprints 292-296)
+
+- **SharedPCPolicy** (`shpc-*`) — 10 tweaks: disable Shared PC mode, block guest account creation, restrict shared PC app deletion, disable maintenance window override, block shared PC account cleanup, disable Kiosk mode configuration, restrict PC sleep timeout in shared mode, disable shared PC usage guidelines, block shared PC sign-in branding, and restrict shared PC power button.
+- **NetworkListPolicy** (`netlst-*`) — 10 tweaks: delete all user network profiles on exit, disable network list service sharing, block per-user network location changes, disable network profile icon display, restrict unmanaged network name resolution, block wireless profile sharing, disable network location awareness auto-update, prevent home network detection, restrict public network profile assignment, and disable network connectivity notification.
+- **SensorServicePolicy** (`sensor-*`) — 10 tweaks: disable location scripting, block location provider service, restrict third-party sensor access, disable location telemetry reporting, block location accuracy override, disable location history storage, restrict geofencing API access, block background location collection, disable location-based advertising API, and restrict sensor data aggregation.
+- **TelephonyPolicy** (`telpol-*`) — 10 tweaks: disable call telemetry, block RCC profile registration, restrict telephony app background activity, disable modem diagnostics upload, block line app registration, restrict VOIP provider access, disable call log synchronization, block call forwarding configuration, restrict mobile broadband telemetry, and disable telephony service credential caching.
+- **PrintManagementPolicy** (`prtmgmt-*`) — 10 tweaks: disable MMC print management snap-in, restrict printer driver installation to admins, block point-and-print from untrusted servers, disable branch office direct printing, restrict Internet printing client, disable print queue diagnostic reporting, block printer auto-discovery via WSD, restrict print preview browser integration, disable print-via-email sharing, and restrict network print spooler access.
+
+#### Stats
+
+- **Total tweaks**: 6125 → **6175** (+50)
+- **Total categories**: 328 → **333** (+5)
+- **Module files**: 323 → **328** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.26.0] — 2026-03-25
 
 ### Added
