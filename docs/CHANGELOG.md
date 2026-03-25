@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.16.1] — 2026-03-25
+
+### Fixed
+
+- Updated stale NuGet version references across all documentation and instruction files to match `Directory.Packages.props` actuals
+- Corrected `global.json` SDK pin from `10.0.200` to `10.0.201` (installed latest patch)
+- Synced `docs/Development.md`, `docs/SECURITY.md`, `.github/instructions/workspace.instructions.md`, `.github/instructions/testing.instructions.md`, `.github/instructions/cicd.instructions.md`, `.github/copilot-instructions.md`, and `.github/instructions/lessons-learned.instructions.md` with current package versions
+
+#### Stats
+
+- Total tweaks: **5,625** (unchanged)
+- Categories: **278** (unchanged)
+- Tests: **2,703** passing — 2063 Core + 301 CLI + 339 GUI (0 failures)
+- Version bumped `5.16.0` → `5.16.1`
+
 ## [5.16.0] — 2026-04-09 (Sprints 237–241)
 
 ### Added

@@ -148,11 +148,11 @@ jobs:
 
 | Package                   | Current | Purpose                                    |
 | ------------------------- | ------- | ------------------------------------------ |
-| System.Management         | 9.0.3   | WMI queries (CorporateGuard, HardwareInfo) |
-| Microsoft.NET.Test.Sdk    | 17.11.1 | Test host                                  |
-| xunit                     | 2.9.2   | Test framework                             |
+| System.Management         | 10.0.5  | WMI queries (CorporateGuard, HardwareInfo) |
+| Microsoft.NET.Test.Sdk    | 17.14.1 | Test host                                  |
+| xunit                     | 2.9.3   | Test framework                             |
 | xunit.runner.visualstudio | 2.8.2   | VS test adapter                            |
-| coverlet.collector        | 6.0.2   | Code coverage                              |
+| coverlet.collector        | 6.0.4   | Code coverage                              |
 
 ## Release Workflow
 

@@ -496,7 +496,7 @@ XML `WriteEndElement()` comments (`// tagName`) are acceptable for readability i
 
 ## Assert.Contains Ambiguity with Collection Expressions
 
-xUnit 2.9.2’s `Assert.Contains<T>(T, collection)` is ambiguous when the collection
+xUnit 2.9.3’s `Assert.Contains<T>(T, collection)` is ambiguous when the collection
 is a C# 13 collection expression `["a", "b"]` (matches both `HashSet<T>` and
 `SortedSet<T>` overloads):
 

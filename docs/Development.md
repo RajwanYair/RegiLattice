@@ -65,11 +65,14 @@ This means project files only keep project-specific settings and references.
 
 | Package | Version | Scope |
 |---|---|---|
-| System.Management | 9.0.3 | Core |
-| xunit | 2.9.2 | Test projects |
+| System.Management | 10.0.5 | Core |
+| System.ServiceProcess.ServiceController | 10.0.5 | Core |
+| xunit | 2.9.3 | Test projects |
 | xunit.runner.visualstudio | 2.8.2 | Test projects |
-| Microsoft.NET.Test.Sdk | 17.11.1 | Test projects |
-| coverlet.collector | 6.0.2 | Test projects |
+| Microsoft.NET.Test.Sdk | 17.14.1 | Test projects |
+| coverlet.collector | 6.0.4 | Test projects |
+| BenchmarkDotNet | 0.15.8 | Benchmarks |
+| FsCheck.Xunit | 2.16.6 | Property-based tests |
 
 ---
 
