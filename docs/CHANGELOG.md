@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.23.0] — 2026-05-26
+
+### Added
+
+#### Enhanced
+
+- **ClipboardHistoryPolicy** (Sprint 272): 10 Group Policy tweaks for `Windows\ClipboardHistory` — disable history, cloud sync, enterprise roaming, pin items, image/HTML data, thumbnail preview, size limit, logoff clear, telemetry.
+- **PenWorkspaceGpoPolicy** (Sprint 273): 10 Group Policy tweaks for `Windows\PenWorkspace` — hide Pen Workspace button, disable above-lock ink, suppress onboarding, block handwriting panel, ink replay, pen-button shortcut, suggested apps, dictation, sticky notes on lock, telemetry.
+- **SuperFetchSysmainPolicy** (Sprint 274): 10 Group Policy tweaks for `Windows\SuperFetch` — disable SuperFetch/SysMain, Prefetcher, ReadyBoost, ReadyDrive, boot trace, app-launch prefetch, logon scenario, memory profiling, heap prefetch, telemetry.
+- **SpellingAndTypingPolicy** (Sprint 275): 10 Group Policy tweaks for `Windows\SpellingAndTyping` — block autocorrect, spell check, text prediction, misspelling highlights, typing insights, hardware keyboard suggestions, swipe typing, typing telemetry, handwriting samples, autocomplete.
+- **StorageManagementPolicy** (Sprint 276): 10 Group Policy tweaks for `Windows\StorageManagement` — restrict Storage Spaces UI, disable tiering, VSC notifications, disk cleanup prompt, NTFS 8.3 names, storage diagnostics, hot spare alert, data deduplication, Disk Management snap-in, low-disk warning.
+
+#### Stats
+
+- Tweaks: 5 925 → **5 975** (+50)
+- Categories: 308 → **313** (+5)
+- Tests: 2 667 (0 failures)
+
+---
+
 ## [5.22.0] — 2026-05-26
 
 ### Added
