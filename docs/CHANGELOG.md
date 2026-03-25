@@ -4,6 +4,46 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.20.0] — 2026-03-27
+
+### Added
+
+#### New Policy Modules (Sprints 257–261)
+
+- **Sprint 257 — Windows To Go Policy** (`wtg-*`, 10 tweaks)
+  — `WindowsToGoPolicy.cs`: disable sleep/hibernation in WTG workspaces, block workspace
+  creation, block boot from external media, disable offline folders, retail demo, metered sync,
+  cross-hardware deployment, enforce Secure Boot, disable automatic update.
+
+- **Sprint 258 — BitLocker FVE Policy** (`blfve-*`, 10 tweaks)
+  — `BitLockerFvePolicy.cs`: disable DRA recovery console, require TPM for OS drive, enforce
+  XTS-AES-256 for OS/fixed drives, require recovery key for OS volumes, deny write to
+  unprotected removable drives, enable pre-boot input protectors, disable standby with
+  BitLocker, backup recovery keys to AD, AES-128 for removable drives.
+
+- **Sprint 259 — Cloud Desktop Policy** (`clouddesk-*`, 10 tweaks)
+  — `CloudDesktopPolicy.cs`: disable Cloud PC entry points and provisioning, disable virtual
+  desktop agent and UAC bypass, disable SSO and telemetry, restrict region selection, block
+  clipboard/printer redirection in Cloud PC sessions, set max session idle timeout.
+
+- **Sprint 260 — Network Projection Policy** (`netproj-*`, 10 tweaks)
+  — `NetworkProjectionPolicy.cs`: disable legacy network projector wizard, disable 'Project to
+  This PC' (Miracast receiver), require PIN for pairing, restrict to secured Wi-Fi networks,
+  block source projection, disable wireless display infrastructure mode, disable Miracast
+  multicast discovery, enforce HDCP content protection, disable auto-trust of paired devices,
+  set wireless display auto-lock screen timeout.
+
+- **Sprint 261 — Windows Sandbox Policy** (`sbpol-*`, 10 tweaks)
+  — `WindowsSandboxPolicy.cs`: disable Sandbox entirely via GPO, disable networking and vGPU
+  inside Sandbox, block clipboard/printer redirection, disable microphone/camera input, prevent
+  mapped host folder access (read/write), restrict logon credential propagation into Sandbox.
+
+#### Stats
+
+- Tweaks: 5 775 → **5 825** (+50)
+- Categories: 293 → **298** (+5)
+- Tests: 2 660 → **2 667** (+7)
+
 ## [5.19.0] — 2026-03-26
 
 ### Added
