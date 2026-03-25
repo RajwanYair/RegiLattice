@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.29.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 13 — Sprints 302-306)
+
+- **FontProviderPolicy** (`fontprov-*`) — 10 tweaks: disable online font downloading, block DirectWrite font provider, restrict font installation to admins, disable automatic font update, block font telemetry reporting, restrict third-party font renderer loading, disable ClearType tuning data upload, block font substitution table modification, disable custom font caching, and restrict OpenType layout feature override.
+- **AppXPackagingPolicy** (`appxpkg-*`) — 10 tweaks: disable app sideloading, block developer mode package install, restrict MSIX package deployment, disable AppX debugging mode, block unsigned app package trust, restrict AppX network installation, disable AppX certificate bypass, block optional features via AppX, disable StreamedApps content delivery, and restrict MSIX launchers outside Store.
+- **DataIntegrityPolicy** (`dataintg-*`) — 10 tweaks: enable integrity checks for system files, restrict access to integrity-protected paths, disable integrity level downgrade, block process privilege escalation via integrity bypass, restrict medium-integrity browser sandbox modification, disable object integrity label override, block low-integrity write to user profile, restrict untrusted code access to high-integrity objects, disable SID integrity attribute bypass, and restrict discretionary ACL modification by low-integrity code.
+- **NtfsPolicy** (`ntfspol-*`) — 10 tweaks: disable last-access timestamp update, restrict 8.3 short-name creation, disable NTFS paging file deletion on shutdown, block unencrypted NTFS drive mounting, restrict NTFS quota enforcement bypass, disable NTFS transaction logging (TxF), block MFT zone reservation changes, disable NTFS reparse point following, restrict NTFS symbolic link creation, and disable NTFS volume shadow integrity tracking.
+- **CertValidationPolicy** (`certvld-*`) — 10 tweaks: disable automatic root certificate update, block untrusted root certificate installation, restrict third-party root CA auto-enrollment, disable EV certificate UI bypass, block certificate revocation check bypass, restrict OCSP responder URL override, disable cross-organization certificate trust, block pinned certificate override, restrict private CA cross-certification, and disable weak signature algorithm certificate acceptance.
+
+#### Stats
+
+- **Total tweaks**: 6225 → **6275** (+50)
+- **Total categories**: 338 → **343** (+5)
+- **Module files**: 333 → **338** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.28.0] — 2026-03-25
 
 ### Added
