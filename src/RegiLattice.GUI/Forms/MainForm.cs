@@ -354,11 +354,13 @@ public partial class MainForm : Form
 
         _treeView.BackColor = AppTheme.Bg;
         _treeView.ForeColor = AppTheme.Fg;
+        _treeView.Font = AppTheme.Regular;
         _treeView.BorderStyle = BorderStyle.None;
         _treeView.Indent = 20;
 
         _listView.BackColor = AppTheme.Surface;
         _listView.ForeColor = AppTheme.Fg;
+        _listView.Font = AppTheme.Regular;
         _listView.BorderStyle = BorderStyle.None;
         _listView.OwnerDraw = true;
         _listView.DrawColumnHeader -= OnDrawColumnHeader;
