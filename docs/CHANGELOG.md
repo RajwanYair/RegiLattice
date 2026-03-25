@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.40.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 24 — Sprints 357-361)
+
+- **HolographicDevicePolicy** (`holodv-*`) — 10 tweaks: restrict holographic device pairing to domain admin, disable Holographic Processing Unit telemetry, block Mixed Reality Portal auto-install, restrict holographic device driver auto-update, disable spatial mapping data upload, block Windows Mixed Reality first-run configuration, restrict holographic app sideloading, disable eye-tracking calibration data collection, restrict holographic sleep state policy override, and disable Windows Mixed Reality update notification.
+- **VirtualizationPolicy** (`virtz-*`) — 10 tweaks: restrict Hyper-V management to admins, disable Hyper-V VM migration without authorization, restrict Enhanced Session Mode to physical hosts, block untrusted virtual switch creation, disable VM snapshot auto-creation, restrict Hyper-V replica without encryption, block VHDX mount outside sandbox, disable Hyper-V GUI management via MMC for non-admins, restrict VM checkpoint creation frequency, and disable live migration without Kerberos delegation.
+- **TokenPrivilegePolicy** (`tokpriv-*`) — 10 tweaks: restrict SeDebugPrivilege assignment, block token privilege adjustment without authorization, restrict impersonation token creation to SYSTEM, disable token elevation via DCOM activation, block token privilege duplication across processes, restrict SeTakeOwnershipPrivilege to BUILTIN\\Administrators, disable token downgrade from SeTcbPrivilege, restrict token creation by services without explicit grant, block token privilege restoration after removal, and disable SeLoadDriverPrivilege for non-admin processes.
+- **CloudPrintPolicy** (`cldprt-*`) — 10 tweaks: disable cloud print service, block Mopria print discovery outside corporate network, restrict cloud print provider registration, disable automatic cloud print queue creation, block print job upload to cloud without consent, restrict cloud printer credential caching, disable printerExtension app association, block cloud print on non-AAD devices, restrict cloud print enterprise discovery URL override, and disable cloud print diagnostic data reporting.
+- **WindowsSandboxPolicy** (`sandbox-*`) — 10 tweaks extending pre-existing module: disable sandbox vGPU, restrict clipboard sharing into sandbox, block sandbox configuration file creation by standard users, disable audio input in sandbox sessions, restrict networking in sandbox to specific proxy, block sandbox video input access, restrict sandbox printer access, disable sandbox kernel debug mode, restrict sandbox session timeout, and block sandbox nested virtualization settings.
+
+#### Stats
+
+- **Total tweaks**: 6775 → **6825** (+50)
+- **Total categories**: 393 → **398** (+5)
+- **Module files**: 388 → **393** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.39.0] — 2026-03-25
 
 ### Added
