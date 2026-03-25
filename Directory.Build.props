@@ -8,10 +8,10 @@
          Configuration Manager to the x64 platform.  Both are required. -->
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
-    <Version>5.38.0</Version>
-    <AssemblyVersion>5.38.0.0</AssemblyVersion>
-    <FileVersion>5.38.0.0</FileVersion>
-    <InformationalVersion>5.38.0</InformationalVersion>
+    <Version>5.39.0</Version>
+    <AssemblyVersion>5.39.0.0</AssemblyVersion>
+    <FileVersion>5.39.0.0</FileVersion>
+    <InformationalVersion>5.39.0</InformationalVersion>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
