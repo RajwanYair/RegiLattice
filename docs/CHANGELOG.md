@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.33.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 17 — Sprints 322-326)
+
+- **DomainIsolationPolicy** (`domiso-*`) — 10 tweaks: enable IPsec domain isolation, restrict unauthenticated inbound connections, require Kerberos authentication for domain traffic, block non-domain machine communication, restrict IPsec mode negotiation, disable main-mode IKE SA reuse, block clear-text fallback for IPsec-protected traffic, restrict domain isolation exemption list modification, disable IPsec DoS protection bypass, and restrict quick-mode SA lifetime overrides.
+- **CacheManagerPolicy** (`cachemgr-*`) — 10 tweaks: disable offline caching of network files, restrict offline files sync on metered connections, block offline file auto-sync on slow links, disable transparent caching of remote files, restrict CSC (Client-Side Caching) folder location, disable encrypted offline file storage, block offline file sync notification toasts, restrict offline file access from low-privilege processes, disable offline file encryption key export, and restrict sync partnership creation.
+- **ObjectAccessPolicy** (`objacs-*`) — 10 tweaks: enable file system object auditing, restrict process handle duplication across integrity levels, disable object directory modification by low-privilege code, block handle inheritance bypass, restrict named object access outside session, enable registry key modification auditing, disable COM object creation from untrusted security contexts, restrict desktop object creation by low-privilege processes, block synchronization object creation from AppContainer, and restrict mutex/event granting across session boundaries.
+- **StoragePoolPolicy** (`stpool-*`) — 10 tweaks: restrict storage pool creation to admins, block automatic storage pool repair without user consent, disable tiered storage policy auto-assignment, restrict storage pool membership modification, disable pool usage telemetry reporting, block virtual disk auto-provisioning, restrict thin-provisioned volume creation, disable storage pool health notification balloons, restrict hotspare disk assignment, and block storage pool configuration export.
+- **FileSharePolicy** (`filshare-*`) — 10 tweaks: disable administrative share auto-creation (C$, ADMIN$), restrict SMB share permissions to admins, block hidden share creation by non-admins, disable anonymous share listing, restrict share discovery via WS-Discovery, block file share access from untrusted domains, disable offline share caching, restrict DFS namespace browsing to domain users, disable share access-based enumeration override, and restrict symbolic-link following within shares.
+
+#### Stats
+
+- **Total tweaks**: 6425 → **6475** (+50)
+- **Total categories**: 358 → **363** (+5)
+- **Module files**: 353 → **358** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.32.0] — 2026-03-25
 
 ### Added
