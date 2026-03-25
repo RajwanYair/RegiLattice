@@ -10,6 +10,7 @@ namespace RegiLattice.GUI.Tests;
 /// metadata, and that all theme fonts produce usable GDI+ handles.
 /// Catches issues like the v4.7.0 Font.ToHfont() crash on published builds.
 /// </summary>
+[Collection("AppTheme")]
 public sealed class ExecutableValidationTests
 {
     // ── PE / Assembly validation ─────────────────────────────────────────
