@@ -1,4 +1,4 @@
----
+﻿---
 applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 ---
 
@@ -1075,5 +1075,6 @@ Version history:
 | v5.23.0 | 5 | 50 | 272–276 |
 | v5.24.0 | 5 | 50 | 277–281 |
 | v5.25.0 | 5 | 50 | 282–286 |
+| v5.26.0 | 5 | 50 | 287–291 |
 
-**Next sprint**: 287–291 (v5.26.0). Run full gap analysis on all three phases before creating any module.
+**Next sprint**: 292–296 (v5.27.0). Run full gap analysis on all three phases before creating any module.

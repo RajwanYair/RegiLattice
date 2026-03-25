@@ -1,8 +1,27 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
+
+## [5.26.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 10 — Sprints 287-291)
+
+- **AppReadinessPolicy** (`apprdy-*`) — 10 tweaks: disable App Readiness service, disable staged content tracking, block app readiness telemetry upload, disable readiness diagnostic reporting, restrict app cache pre-population, disable scheduled readiness scans, block first-run readiness tasks, disable staged update validation, restrict app readiness data collection, and disable readiness-related background tasks.
+- **DataSensePolicy** (`dtsense-*`) — 10 tweaks: disable Data Sense traffic shaper, restrict WWAN background data usage, disable Wi-Fi usage telemetry, block Data Sense automatic configuration, disable background data usage reporting, restrict metered connection app access, disable Data Sense bandwidth optimizations, block usage history upload, disable data compression proxy, and restrict carrier data plan management.
+- **PageFilePolicy** (`pgfpol-*`) — 10 tweaks: ensure page file is enabled, disable automatic page file management, set minimum page file size, set maximum page file size, restrict page file creation to system drive, disable page file encryption, block page file reuse across sessions, disable page file diagnostics reporting, restrict page file location changes, and disable memory compression page file integration.
+- **VolumeShadowCopyPolicy** (`vscpol-*`) — 10 tweaks: disable VSS service, restrict shadow copy creation, disable boot VSS provider, block application-consistent snapshots, restrict VSS storage allocation, disable shadow copy scheduling, block remote VSS requests, disable differential area tracking, restrict VSS provider installation, and disable VSS diagnostic reporting.
+- **RestartManagerPolicy** (`rstmgr-*`) — 10 tweaks: disable Restart Manager, prevent app restarts after reboot, disable restart notification toasts, block graceful app shutdown via RM, disable RM timeout enforcement, restrict RM to admin-only, disable RM session logging, block RM MUI loading, disable RM COM server endpoint, and restrict RM cross-session operations.
+
+#### Stats
+
+- **Total tweaks**: 6075 → **6125** (+50)
+- **Total categories**: 323 → **328** (+5)
+- **Module files**: 318 → **323** (+5)
+- **Tests**: 2703 passing (0 failures)
 
 ## [5.25.0] — 2026-05-27
 
