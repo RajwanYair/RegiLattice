@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.32.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 16 — Sprints 317-321)
+
+- **EventTracingPolicy** (`evttrc-*`) — 10 tweaks: disable ETW telemetry sessions, restrict user-mode trace providers, block autologger creation, disable DiagTrack ETW session, restrict WPP software trace output, disable diagnostic data ETW provider, block NT Kernel Logger auto-start, restrict circular buffer trace sessions, disable performance counter ETW links, and restrict Event Log forwarding to external hosts.
+- **ProcessorPolicy** (`proccpol-*`) — 10 tweaks: disable speculative execution side-channel mitigations toggle, restrict CPU microcode update injection, disable hyperthreading via policy, restrict core parking policy changes, disable branch predictor flush telemetry, block CPU frequency scaling override, restrict hardware-enforced stack protection, disable AMD64 extended feature advertising, restrict XSAVE/XRESTORE extended state access, and disable processor power-state telemetry.
+- **CodeSigningPolicy** (`codesign-*`) — 10 tweaks: require signed drivers, block unsigned PowerShell script execution, restrict kernel driver signing to WHQL, disable test signing mode, block User Mode Code Integrity (UMCI) bypass, restrict non-ELAM driver loading before boot, disable legacy AuthenticCode signature bypass, restrict .NET assembly execution without strong name, block COM object registration without authenticode, and restrict DLL side-loading from user-writable paths.
+- **TrustProviderPolicy** (`trustprov-*`) — 10 tweaks: require full trust chain for Authenticode, block revoked certificate bypass, disable SHA1 signature acceptance for new code, restrict trust to Microsoft-issued roots, block PKCS#7 trust provider override, disable user-trust prompt for unrecognized publishers, restrict zone-based publisher trust decisions, disable trust from network drives, block executable trust override via user registry, and restrict publisher certificate time-stamp validation bypass.
+- **SmbEncryptionPolicy** (`smbenc-*`) — 10 tweaks: require SMB encryption on client connections, require SMB signing globally, disable NTLM fallback in SMB authentication, restrict SMBv1 protocol use, disable SMB plaintext password over network, require SMB packet signing for domain joins, block unencrypted SMB shares from remote clients, disable SMB3 decryption downgrade, restrict SMB named pipe remote access, and disable NetShare auto-reconnect.
+
+#### Stats
+
+- **Total tweaks**: 6375 → **6425** (+50)
+- **Total categories**: 353 → **358** (+5)
+- **Module files**: 348 → **353** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.31.0] — 2026-03-25
 
 ### Added
