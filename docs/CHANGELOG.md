@@ -4,6 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.24.0] — 2026-05-27
+
+### Added
+
+#### New Policy Modules (Batch 8 — Sprints 277-281)
+
+- **LanguageOptionsPolicy** (`langopt-*`) — 10 tweaks: block adding languages, restrict
+  language change, IME/OCR/speech/keyboard/handwriting telemetry opt-out, cloud
+  candidate block, language pack update block, and DoNotSyncLanguageSettings.
+- **TokenBrokerPolicy** (`tokbrk-*`) — 10 tweaks: disable WAM/Token Broker, persistent
+  token cache, background token refresh, AAD/MSA token sharing, implicit account
+  discovery, enterprise SSO, token lifetime cap (60 min), user-consent requirement, and
+  Token Broker telemetry opt-out.
+- **VirtualKeyboardPolicy** (`vkbd-*`) — 10 tweaks: suppress touch keyboard auto-popup,
+  emoji panel, keystroke sound, handwriting button, full-screen mode, keyboard
+  animations, voice dictation key, split/wide keyboard layouts, and keyboard telemetry.
+- **WebAuthnPolicy** (`wauthn-*`) — 10 tweaks: disable biometric fallback, cross-origin
+  auth, password fallback, cloud passkey sync, security key enrollment, NFC/Bluetooth
+  transport, and WebAuthn telemetry; require enterprise attestation and user verification.
+- **HealthAttestationPolicy** (`hltha-*`) — 10 tweaks: disable remote health attestation,
+  attestation telemetry/caching; require TPM-backed attestation; use private HAS URL;
+  enforce Secure Boot, BitLocker, ELAM, and VBS presence checks; set 60-minute refresh
+  interval.
+
+#### Stats
+
+- **Total tweaks**: 5975 → **6 025** (+50)
+- **Total categories**: 313 → **318** (+5)
+- **Module files**: 308 → **313** (+5)
+- **Tests**: 2063 passing (0 failures)
+
 ## [5.23.0] — 2026-05-26
 
 ### Added
