@@ -1057,5 +1057,15 @@ Version history:
 | v5.5.0 | 5 | 50 | 182–186 |
 | v5.6.0 | 5 | 50 | 187–191 |
 | v5.7.0 | 5 | 50 | 192–196 |
+| v5.8.0 | 5 | 50 | 197–201 |
+| v5.9.0 | 5 | 50 | 202–206 |
+| v5.10.0 | 5 | 50 | 207–211 |
+| v5.11.0 | 5 | 50 | 212–216 |
+| v5.12.0 | 5 | 50 | 217–221 |
+| v5.13.0 | 5 | 50 | 222–226 |
+| v5.14.0 | 5 | 50 | 227–231 |
+| v5.15.0 | 5 | 50 | 232–236 |
+| v5.16.0 | 5 | 50 | 237–241 |
+| v5.17.0 | 5 | 50 | 242–246 |
 
-**Next sprint**: 197–201 (v5.8.0). Run full gap analysis on all three phases before creating any module.
+**Next sprint**: 247–251 (v5.18.0). Run full gap analysis on all three phases before creating any module.

@@ -4,6 +4,40 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.17.0] — 2026-03-26
+
+### Added
+
+- **Sprint 242 — CD & Optical Media Policy** (`CdBurningPolicy.cs`, 10 tweaks, `cdbp-*`)
+  - Covers NoBurning machine/user policy, NoCDBurning Explorer policy, CD-ROM and DVD read/write/execute restrictions
+    via the RemovableStorageDevices class GUID keys, and NoAutoplayfornonVolume
+
+- **Sprint 243 — File History Policy** (`FileHistoryPolicy.cs`, 10 tweaks, `fhp-*`)
+  - Covers disabling File History, locking the on/off switch, backup interval, retention policies,
+    data-degradation protection, and Windows Backup Client disable flags (DisableFileBackup,
+    DisableSystemBackup, DisableRestoreUI, DisableRestoredUI)
+
+- **Sprint 244 — Network Diagnostics Policy** (`NetworkDiagnosticsPolicy.cs`, 10 tweaks, `ndiag-*`)
+  - Covers disabling the WDI network diagnostics helper engine, four WDI scenario guids (wireless,
+    network connectivity, performance, networking config), scripted diagnostics execution,
+    helper validation, remote server querying, and per-scenario execution-level restrictions
+
+- **Sprint 245 — OOBE & Setup Policy** (`OobePolicy.cs`, 10 tweaks, `oobe-*`)
+  - Covers DisablePrivacyExperience, SkipUserOOBE, SkipMachineOOBE, network connections wizard,
+    first-logon animation (Setup key), welcome screen (machine + user), Server Manager auto-open,
+    system tray balloon tips, and DisableUXFirstRunAnimation (post-upgrade)
+
+- **Sprint 246 — MSDTC Distributed Transactions Policy** (`MsdtcPolicy.cs`, 10 tweaks, `msdtc-*`)
+  - Covers AllowOnlySecureRpcCalls, FallbackToUnsecureRPCIfNecessary, TurnOffRpcSecurity,
+    and the full MSDTC\Security sub-key set: NetworkDtcAccess, client/inbound/outbound/transactions,
+    XaTransactions, LuTransactions
+
+#### Stats
+
+- Total tweaks: **5,675** (+50)
+- Total categories: **283** (+5)
+- Total tests: **2,667** (0 failures)
+
 ## [5.16.1] — 2026-03-25
 
 ### Fixed
