@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 5.1.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 5.16.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -15,8 +15,8 @@ Version 5.1.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 - **Build**: `dotnet build` via MSBuild / `RegiLattice.sln`
 - **GUI Framework**: WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more)
 - **CLI**: Args-based command parsing (25+ commands)
-- **Testing**: xUnit 2.9.2 + coverlet 6.0.2
-- **NuGet**: System.Management 9.0.3, Microsoft.NET.Test.Sdk 17.11.1
+- **Testing**: xUnit 2.9.3 + coverlet 6.0.4
+- **NuGet**: System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1
 - **Registry**: `Microsoft.Win32.Registry` via `RegistrySession` wrapper
 - **P/Invoke**: Only 2 calls (GetComputerNameExW, GlobalMemoryStatusEx)
 

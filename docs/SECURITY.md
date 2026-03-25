@@ -54,7 +54,7 @@ RegiLattice modifies the Windows registry. This carries inherent risk:
 
 | Package | Version | Publisher | Purpose |
 |---------|---------|-----------|---------|
-| System.Management | 9.0.3 | Microsoft | WMI queries (CorporateGuard, HardwareInfo) |
+| System.Management | 10.0.5 | Microsoft | WMI queries (CorporateGuard, HardwareInfo) |
 | Microsoft.Win32.Registry | (framework) | Microsoft | Registry access via RegistrySession |
 
 ---
