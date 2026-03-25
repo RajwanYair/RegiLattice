@@ -5,7 +5,7 @@
      shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
      windows 11 tweaks windows 10 tweaks gaming optimization security hardening
      registry backup corporate IT sysadmin gpo intune-compatible compliance audit
-     6025 tweaks 318 categories declarative regop engine dry-run snapshot diff
+     6075 tweaks 323 categories declarative regop engine dry-run snapshot diff
      RegiLattice windows-optimizer tweak-manager registry-automation open-source
 -->
 
@@ -23,15 +23,15 @@
 ![Tests](https://img.shields.io/badge/tests-2667%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.24.0-blue)
+![Version](https://img.shields.io/badge/version-5.25.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6025 verified tweaks** across **318 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6075 verified tweaks** across **323 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.24.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.25.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
