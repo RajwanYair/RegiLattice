@@ -4,13 +4,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="System.Management" Version="9.0.3" />
-    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="9.0.3" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageVersion Include="xunit" Version="2.9.2" />
+    <!-- Runtime: aligned to .NET 10.0 release train -->
+    <PackageVersion Include="System.Management" Version="10.0.5" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
+    <!-- Test infrastructure: latest 17.x (compatible with xunit 2.x) -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <!-- Benchmarking & property-based testing -->
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="FsCheck" Version="2.16.6" />
     <PackageVersion Include="FsCheck.Xunit" Version="2.16.6" />
   </ItemGroup>

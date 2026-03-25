@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Shared runner config: single source of truth in tests/xunit.runner.json -->
+    <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" Link="xunit.runner.json" />
   </ItemGroup>
 </Project>

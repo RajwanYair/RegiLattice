@@ -202,7 +202,9 @@ public sealed class ExecutableValidationTests
         bool exited = process.WaitForExit(10_000);
 
         Assert.True(exited, "CLI process did not exit within 10 seconds");
-        Assert.Contains("5.0.0", output);
+        // Check that a semantic-version string is present in the output,
+        // rather than hardcoding a specific version that becomes stale.
+        Assert.Matches(@"\d+\.\d+\.\d+", output);
     }
 
     // ── Font handle validation (catches Font.ToHfont crashes) ───────────
