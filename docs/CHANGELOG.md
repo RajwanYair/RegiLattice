@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.31.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 15 — Sprints 312-316)
+
+- **WindowsFlightingPolicy** (`flight-*`) — 10 tweaks: disable insider preview builds, block Windows Insider Program enrollment, restrict flighting data upload, disable preview build auto-install, block experimental feature toggle, restrict ring configuration override, disable telemetry-based feature rollout, block flight signing certificate trust, restrict Insider branch switching, and disable flight status badge display.
+- **CapabilityAccessPolicy** (`capacs-*`) — 10 tweaks: deny microphone access globally, deny camera access globally, restrict location access to approved apps, disable background app access, block notification cross-app access, restrict calendar data access, disable contact data access for third-party apps, block call history access, restrict messaging app integration, and disable account information access for apps.
+- **DynamicDataExchangePolicy** (`ddepol-*`) — 10 tweaks: disable DDE protocol, block DDE server lookup, restrict DDE inter-application communication, disable DDEML global server mode, block clipboard DDE data format, restrict DDE Auto-Execute on file open, disable OLE DDE server auto-registration, block Word DDE field execution, restrict Excel DDE link auto-update, and disable legacy DDE app startup.
+- **NetworkAdapterPolicy** (`netadp-*`) — 10 tweaks: disable NetBIOS over TCP/IP, restrict network adapter power management, block wake-on-LAN via unsolicited packets, disable large send offload (LSO), restrict RSS (Receive Side Scaling) auto-configuration, disable TCP/IP offload (TOE), block NDIS filter driver auto-install, restrict network adapter jumbo frame usage, disable TCP timestamp option, and restrict NIC teaming auto-configuration.
+- **Ipv6Policy** (`ipv6pol-*`) — 10 tweaks: disable IPv6 protocol stack, disable Teredo tunneling, disable ISATAP tunneling, disable 6to4 transitional protocol, restrict DHCPv6 auto-configuration, disable IPv6 default gateway assignment, block IPv6 over cellular (mobile broadband), disable IPv6 router advertisements, restrict IPv6 privacy address rotation, and disable IPv6 flow label generation.
+
+#### Stats
+
+- **Total tweaks**: 6325 → **6375** (+50)
+- **Total categories**: 348 → **353** (+5)
+- **Module files**: 343 → **348** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.30.0] — 2026-03-25
 
 ### Added
