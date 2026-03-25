@@ -4,6 +4,48 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.21.0] — 2026-03-28
+
+### Added
+
+#### New Policy Modules (Sprints 262–266)
+
+- **Sprint 262 — User Profiles Policy** (`uprof-*`, 10 tweaks)
+  — `UserProfilesPolicy.cs`: disable roaming profiles, slow-link detection, cached copy
+  deletion, profile size dialog timeout, wait on logoff, profile error notifications, guest
+  logon, slow-link GPO UI, user folder redirection, and profile quota enforcement.
+
+- **Sprint 263 — Game Explorer Policy** (`gex-*`, 10 tweaks)
+  — `GameExplorerPolicy.cs`: disable all Game Explorer access, block ratings downloads, hide
+  recommended games, prevent game launching, hide online games section, disable parental
+  controls, block automatic game updates, suppress game notifications, block game installation,
+  disable game activity logging.
+
+- **Sprint 264 — Media Foundation Policy** (`mfa-*`, 10 tweaks)
+  — `MediaFoundationPolicy.cs`: disable Frame Server camera mode, block untrusted codecs,
+  disable hardware video acceleration, disable transcoding APIs, block protected content
+  playback, disable network streaming, prevent automatic codec downloads, disable sharing APIs,
+  block DRM individualization, disable Media Foundation telemetry.
+
+- **Sprint 265 — Color Calibration Policy** (`colcal-*`, 10 tweaks)
+  — `ColorCalibrationPolicy.cs`: disable display color calibration tool, disable ICM/ICC
+  support, hide Color Management control panel, disable automatic calibration scheduling,
+  block user ICC profile installation, disable Night Light via policy, disable HDR support,
+  disable Windows Color System background service, lock absolute colorimetric rendering intent,
+  disable automatic color correction.
+
+- **Sprint 266 — Display Adapter Policy** (`dispadp-*`, 10 tweaks)
+  — `DisplayAdapterPolicy.cs`: block user display driver installation, force Standard VGA mode,
+  disable DXVA hardware video acceleration, disable GPU compute workloads (DirectCompute),
+  lock DPI scaling, lock display rotation, disable mirroring, lock display resolution, lock
+  refresh rate, lock colour depth.
+
+#### Stats
+
+- Total tweaks: **5 825 → 5 875** (+50)
+- Total categories: **298 → 303** (+5)
+- Tests: 2,667 (0 failures, all green)
+
 ## [5.20.0] — 2026-03-27
 
 ### Added
