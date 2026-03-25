@@ -30,7 +30,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "LmCompatibilityLevel")],
             DetectOps = [RegOp.CheckDword(LsaKey, "LmCompatibilityLevel", 5)],
         },
-
         new TweakDef
         {
             Id = "ntlm-disable-lmhash-storage",
@@ -47,7 +46,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "NoLMHash")],
             DetectOps = [RegOp.CheckDword(LsaKey, "NoLMHash", 1)],
         },
-
         new TweakDef
         {
             Id = "ntlm-require-ntlmv2-session-security-128",
@@ -64,7 +62,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(MsvKey, "NTLMMinClientSec")],
             DetectOps = [RegOp.CheckDword(MsvKey, "NTLMMinClientSec", 537395200)],
         },
-
         new TweakDef
         {
             Id = "ntlm-require-server-ntlmv2-128",
@@ -81,7 +78,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(MsvKey, "NTLMMinServerSec")],
             DetectOps = [RegOp.CheckDword(MsvKey, "NTLMMinServerSec", 537395200)],
         },
-
         new TweakDef
         {
             Id = "ntlm-restrict-outbound-to-domain",
@@ -98,7 +94,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictSendingNTLMTraffic")],
             DetectOps = [RegOp.CheckDword(LsaKey, "RestrictSendingNTLMTraffic", 2)],
         },
-
         new TweakDef
         {
             Id = "ntlm-deny-inbound-ntlm",
@@ -115,7 +110,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictReceivingNTLMTraffic")],
             DetectOps = [RegOp.CheckDword(LsaKey, "RestrictReceivingNTLMTraffic", 2)],
         },
-
         new TweakDef
         {
             Id = "ntlm-enable-audit-incoming",
@@ -132,7 +126,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "AuditReceivingNTLMTraffic")],
             DetectOps = [RegOp.CheckDword(LsaKey, "AuditReceivingNTLMTraffic", 2)],
         },
-
         new TweakDef
         {
             Id = "ntlm-enable-audit-outgoing",
@@ -149,7 +142,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "AuditNTLMInDomain")],
             DetectOps = [RegOp.CheckDword(LsaKey, "AuditNTLMInDomain", 7)],
         },
-
         new TweakDef
         {
             Id = "ntlm-disable-null-sessions",
@@ -166,7 +158,6 @@ internal static class NtlmAuthPolicy
             RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictAnonymous")],
             DetectOps = [RegOp.CheckDword(LsaKey, "RestrictAnonymous", 1)],
         },
-
         new TweakDef
         {
             Id = "ntlm-require-secure-channel-ntlmv2",

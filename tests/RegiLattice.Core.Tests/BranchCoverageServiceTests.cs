@@ -506,6 +506,7 @@ public sealed class ConfigExporterBranchTests : IDisposable
 /// <summary>
 /// Sprint 121 — Branch-coverage tests for <see cref="Ratings"/> edge paths.
 /// </summary>
+[Collection("Ratings")]
 public sealed class RatingsBranchTests
 {
     // ── AverageRating() when no ratings exist → returns null ─────────────────

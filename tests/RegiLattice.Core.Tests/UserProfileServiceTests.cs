@@ -133,7 +133,7 @@ public sealed class UserProfileServiceTests : IDisposable
         UserProfileService.Create("upd-test", "desc", FewTweakIds);
         string[] newIds = ["perf-disable-animations"];
         var updated = UserProfileService.Update("upd-test", newIds);
-        Assert.Equal(1, updated.TweakIds.Count);
+        Assert.Single(updated.TweakIds);
     }
 
     [Fact]

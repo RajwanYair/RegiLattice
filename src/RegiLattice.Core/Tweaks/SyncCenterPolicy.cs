@@ -30,7 +30,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(SyncMgrKey, "DisableSyncMgr")],
             DetectOps = [RegOp.CheckDword(SyncMgrKey, "DisableSyncMgr", 1)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-setup-wizard",
@@ -47,7 +46,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(SyncMgrKey, "DisableSyncScheduleCreation")],
             DetectOps = [RegOp.CheckDword(SyncMgrKey, "DisableSyncScheduleCreation", 1)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-offline-files",
@@ -64,7 +62,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "Enabled")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "Enabled", 0)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-user-configuration",
@@ -81,7 +78,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "NoConfigChanges")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "NoConfigChanges", 1)],
         },
-
         new TweakDef
         {
             Id = "syncctr-remove-folder-from-offline",
@@ -98,7 +94,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "NoMakeAvailableOffline")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "NoMakeAvailableOffline", 1)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-slow-link-mode",
@@ -115,7 +110,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "SlowLinkEnabled")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "SlowLinkEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-background-sync",
@@ -132,7 +126,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "BackgroundSyncEnabled")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "BackgroundSyncEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-logon-sync",
@@ -149,7 +142,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "SyncAtLogon")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "SyncAtLogon", 0)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-logoff-sync",
@@ -166,7 +158,6 @@ internal static class SyncCenterPolicy
             RemoveOps = [RegOp.DeleteValue(OfflineKey, "SyncAtLogoff")],
             DetectOps = [RegOp.CheckDword(OfflineKey, "SyncAtLogoff", 0)],
         },
-
         new TweakDef
         {
             Id = "syncctr-disable-reminders",

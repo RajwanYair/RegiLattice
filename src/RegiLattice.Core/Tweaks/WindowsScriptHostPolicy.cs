@@ -28,7 +28,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "Enabled")],
             DetectOps = [RegOp.CheckDword(WshKey, "Enabled", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-remote-scripts",
@@ -45,7 +44,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "Remote")],
             DetectOps = [RegOp.CheckDword(WshKey, "Remote", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-trustedcert-bypass",
@@ -62,7 +60,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "TrustPolicy")],
             DetectOps = [RegOp.CheckDword(WshKey, "TrustPolicy", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-activex-in-scripts",
@@ -79,7 +76,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "ActiveXScript")],
             DetectOps = [RegOp.CheckDword(WshKey, "ActiveXScript", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-embedded-scripts",
@@ -96,7 +92,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "EmbeddedScript")],
             DetectOps = [RegOp.CheckDword(WshKey, "EmbeddedScript", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-wscript-host",
@@ -113,7 +108,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "UseWINSAAPI")],
             DetectOps = [RegOp.CheckDword(WshKey, "UseWINSAAPI", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-script-logging",
@@ -130,7 +124,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "LogSecuritySuccesses")],
             DetectOps = [RegOp.CheckDword(WshKey, "LogSecuritySuccesses", 1)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-script-ui",
@@ -147,7 +140,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "SilentTerminate")],
             DetectOps = [RegOp.CheckDword(WshKey, "SilentTerminate", 1)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-legacy-vbscript",
@@ -164,7 +156,6 @@ internal static class WindowsScriptHostPolicy
             RemoveOps = [RegOp.DeleteValue(WshKey, "VBScriptEnabled")],
             DetectOps = [RegOp.CheckDword(WshKey, "VBScriptEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "wsh-disable-cscript-host",
