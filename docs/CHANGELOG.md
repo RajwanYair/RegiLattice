@@ -4,6 +4,41 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.18.0] — 2026-03-26
+
+### Added
+
+- **Sprint 247 — Work Folders Policy** (`WorkFoldersPolicy.cs`, 10 tweaks, `wf-*`)
+  - Covers machine/user Work Folders disable, force automatic setup, block server URL change,
+    require encryption, disable Work Folders UI, prevent sync settings change, disable background sync,
+    and set sync interval
+
+- **Sprint 248 — Mobility Center Policy** (`MobilityCenterPolicy.cs`, 10 tweaks, `mob-*`)
+  - Covers machine/user Mobility Center disable, presentation settings, battery tile, sync center tile,
+    display tile, screen rotation tile, wireless tile, volume tile, and context menu removal
+
+- **Sprint 249 — Windows Time Policy** (`WindowsTimePolicy.cs`, 10 tweaks, `wtime-*`)
+  - Covers NTP server URL (SetString), NTP type enforcement, enable NTP client, disable NTP server,
+    poll interval, max positive/negative phase correction, update interval, phase correction rate,
+    and spike watchdog
+
+- **Sprint 250 — Photo Acquisition Policy** (`PhotoAcquisitionPolicy.cs`, 10 tweaks, `photo-*`)
+  - Covers WIA camera/scanner disable, DisableAutoPlayForCamera machine/user, NeverDeleteOriginalFiles,
+    DisableTaggingOnAcquire, DisableRotateOnAcquire, DisableTitleOnAcquire,
+    DisableOpenFilesystemAfterAcquire, PreventDeviceMetadataFromNetwork (DeviceMetadata),
+    DisableScannerEvents, and DisableCameraEvents
+
+- **Sprint 251 — Fax Service Policy** (`FaxServicePolicy.cs`, 10 tweaks, `faxsvc-*`)
+  - Covers machine/user Fax disable, online fax block, cover pages disable, personal cover pages,
+    recipient book disable, TAPI-only restriction, inbound routing disable, archive disable,
+    and new account creation prevention
+
+#### Stats
+
+- Total tweaks: **5 725** (+50 from v5.17.0)
+- Categories: **288** (+5)
+- Tests: **2 649** (0 failures)
+
 ## [5.17.0] — 2026-03-26
 
 ### Added
