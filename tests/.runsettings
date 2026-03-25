@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <RunConfiguration>
-    <!-- Run the 3 test assemblies in parallel (one per project) -->
-    <MaxCpuCount>3</MaxCpuCount>
+    <!-- Run the 3 test assemblies serially to prevent shared-file race conditions
+         (ComplianceHistory tests in Core.Tests and GUI.Tests both use the same
+         compliance-history.json file; parallel execution causes non-deterministic
+         failures in AddEntry_ExceedsMaxEntries_TrimsOldestEntries). -->
+    <MaxCpuCount>1</MaxCpuCount>
     <!-- 60 s total session hard limit per assembly (each project runs separately, not as solution) -->
     <TestSessionTimeout>60000</TestSessionTimeout>
     <!-- 20 s per individual test — generous for slow CI systems -->

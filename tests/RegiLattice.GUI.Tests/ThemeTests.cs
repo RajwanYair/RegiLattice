@@ -3,6 +3,7 @@ using Xunit;
 namespace RegiLattice.GUI.Tests;
 
 /// <summary>Tests for AppTheme colours, fonts, and helpers.</summary>
+[Collection("AppTheme")]
 public sealed class ThemeTests
 {
     [Fact]
