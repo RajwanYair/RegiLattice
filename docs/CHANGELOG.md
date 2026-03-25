@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.30.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 14 — Sprints 307-311)
+
+- **AdhocNetworkPolicy** (`adhocnet-*`) — 10 tweaks: disable ad hoc network creation, block IBSS (peer-to-peer Wi-Fi) mode, restrict hosted network adapter sharing, disable Wi-Fi Direct legacy group owner, block ad hoc Bluetooth PAN creation, restrict ICS (Internet Connection Sharing), disable Wi-Fi Sense ad hoc join, block ad hoc network auto-connect, restrict bridge network interface creation, and disable ad hoc network device discovery.
+- **PrinterGpoPolicy** (`prtgpo-*`) — 10 tweaks: disable print spooler sharing over network, restrict printer driver version downgrade, block Internet printing via HTTP, disable background download of printer drivers, restrict printer connection via SMB, disable auto-publishing of printer connections, block driver signature bypass for print, restrict print path UNC browsing, disable Web Services for Devices (WSD) printer auto-discovery, and block legacy LPR/LPD port monitor.
+- **RemoteProcedureCallPolicy** (`rpcpol-*`) — 10 tweaks: enable RPC authentication, restrict unauthenticated RPC pipe access, disable RPC over HTTP on client, block DCOM remote activation without auth, restrict RPC endpoint mapper to authenticated callers, disable RPC null session connections, block legacy RPC endpoint usage, restrict RPC encryption level overrides, disable RPC client late binding, and restrict anonymous RPC interfaces.
+- **LicensingPolicy** (`licpol-*`) — 10 tweaks: disable activation status reporting to Microsoft, block KMS discovery via DNS, restrict license validation network connection, disable grace period status telemetry, block SLMV2 service token caching, restrict OEM activation key exposure, disable SPPUI notification popups, block software protection platform update, restrict activation over VPN bypass, and disable Windows Activation Technologies diagnostic.
+- **WindowsContainerPolicy** (`wincnt-*`) — 10 tweaks: disable container network access, restrict Hyper-V isolated container creation, block Docker Desktop service auto-install, disable Windows Sandbox integration, restrict container layer disk access, disable container telemetry reporting, block unauthenticated container registry pull, restrict container base image auto-update, disable Windows Subsystem for Linux container bridge, and restrict container host OS resource access.
+
+#### Stats
+
+- **Total tweaks**: 6275 → **6325** (+50)
+- **Total categories**: 343 → **348** (+5)
+- **Module files**: 338 → **343** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.29.0] — 2026-03-25
 
 ### Added
