@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.34.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 18 — Sprints 327-331)
+
+- **NetworkProfilePolicy** (`netprof-*`) — 10 tweaks: block automatic network profile changes, restrict public profile firewall modifications, disable unmanaged network profile creation, block private-to-public profile downgrade, restrict domain profile assignment outside corporate networks, disable profile switching notification, block network profile icon in system tray, restrict per-profile DNS suffix assignment, disable bridge network profile merging, and restrict Internet gateway detection override.
+- **WlanPolicy** (`wlanpol-*`) — 10 tweaks: disable auto-connect to open networks, restrict preferred Wi-Fi network modification, disable Wi-Fi Sense (shared credential networks), block WLAN hotspot 2.0 auto-connect, restrict Wi-Fi Direct advertisement, disable WLAN random MAC address rotation policy, block WLAN hidden SSID probing, restrict WLAN group policy profile import, disable Wi-Fi Protected Setup (WPS) PIN method, and restrict WLAN diagnostic data upload.
+- **AppxBundlePolicy** (`appxbnd-*`) — 10 tweaks: disable sideloading via AppX bundle, restrict app bundle installation from network paths, block AppX bundle differential update, disable app bundle dependency auto-resolution, restrict app bundle signature override, block app bundle language pack auto-install, disable app bundle installation in non-standard locations, restrict app bundle content streaming, disable app bundle update check on launch, and restrict bundled app re-deployment.
+- **DeploymentServicesPolicy** (`depsvc-*`) — 10 tweaks: disable WDS multicast deployment, restrict PXE boot to authorized servers, block TFTP service beyond WDS scope, disable WDS auto-start, restrict deployment image auto-refresh, block client multicast reception, restrict WDS client DHCP option override, disable WDS legacy client auto-configuration, restrict deployment image upload without authorization, and block anonymous WDS discovery.
+- **LegacyAuthPolicy** (`legauth-*`) — 10 tweaks: disable LM authentication response, disable NTLMv1 authentication, restrict NTLM SSP session security, block NTLM pass-through to third parties, disable LanManager password hash storage, restrict NTLMv2 session response downgrade, block plaintext credentials in NTLM, disable WDigest credential caching, restrict NTLM with non-Kerberos domain, and block legacy auth over TLS 1.0.
+
+#### Stats
+
+- **Total tweaks**: 6475 → **6525** (+50)
+- **Total categories**: 363 → **368** (+5)
+- **Module files**: 358 → **363** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.33.0] — 2026-03-25
 
 ### Added

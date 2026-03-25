@@ -1083,5 +1083,6 @@ Version history:
 | v5.31.0 | 5 | 50 | 312–316 |
 | v5.32.0 | 5 | 50 | 317–321 |
 | v5.33.0 | 5 | 50 | 322–326 |
+| v5.34.0 | 5 | 50 | 327–331 |
 
-**Next sprint**: 327–331 (v5.34.0). Run full gap analysis on all three phases before creating any module.
+**Next sprint**: 332–336 (v5.35.0). Run full gap analysis on all three phases before creating any module.
