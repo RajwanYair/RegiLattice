@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.36.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 20 — Sprints 337-341)
+
+- **UserRightsPolicy** (`usrrts-*`) — 10 tweaks: restrict SeDebugPrivilege to SYSTEM, block SeLoadDriver to non-admins, restrict SeImpersonatePrivilege to service accounts, disable guest account SeNetworkLogonRight, restrict SeBatchLogonRight to scheduled task service accounts, disable SeRemoteInteractiveLogon for non-admins, restrict SeCreateSymbolicLink to admins and WSL, block SeTakeOwnership from standard users, restrict SeBackupPrivilege to backup operators, and disable SeRelabelPrivilege for non-admins.
+- **CompartmentPolicy** (`compart-*`) — 10 tweaks: enable network compartmentalization between sessions, restrict cross-session socket access, disable per-user network stack modification, block cross-compartment routing without policy, restrict routing table modification to system, disable loopback across compartment boundaries, block IPv6 prefix delegation between compartments, restrict DNS resolver compartment override, disable DHCP scope cross-compartment lease sharing, and restrict network compartment creation to admins.
+- **ServiceAccountPolicy** (`svcact-*`) — 10 tweaks: enable Group Managed Service Accounts (gMSA), restrict service password changes to LSASS, disable service account interactive logon, restrict service account network logon without Kerberos, block service account credential extraction, disable service SID type change, restrict service account cross-domain access, block service principal name modification by standard users, disable service account token privilege escalation, and restrict Kerberos service ticket lifetime for service accounts.
+- **SecureChannelPolicy** (`secchan-*`) — 10 tweaks: require secure channel signing, require secure channel sealing (encryption), disable machine password changes via insecure channel, restrict secure channel establishment to domain DCs, block plain-text session key in secure channel, require strong keys for secure channel, disable maximum machine account password age bypass, restrict domain trust enumeration over secure channel, disable secure channel caching in session, and block RODC password replication via secure channel.
+- **CredentialManagerPolicy** (`credmgr-*`) — 10 tweaks: restrict credential delegation to allowed servers only, block NTLM credential pass-through, disable plain-text credential in Credential Manager, restrict wdigest credential caching, block credential roaming to cloud via Windows profile, disable saved RDP credentials, restrict web credentials manager access to admin, block auto-enrollment credential sharing, disable app container credential delegation, and restrict Windows Hello credential provider bypass.
+
+#### Stats
+
+- **Total tweaks**: 6575 → **6625** (+50)
+- **Total categories**: 373 → **378** (+5)
+- **Module files**: 368 → **373** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.35.0] — 2026-03-25
 
 ### Added
