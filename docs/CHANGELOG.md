@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.39.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 23 — Sprints 352-356)
+
+- **CrashDumpsPolicy** (`crshmp-*`) — 10 tweaks: disable crash report telemetry upload, restrict kernel dump creation to admins, block automatic minidump on app crash, disable live kernel dump, restrict WER crash dump storage path, block crash dump content including memory page data, disable crash dump file transmission to Microsoft, restrict crash dump accessibility to SYSTEM only, block app crash dump submission without user consent, and disable crash dump auto-deletion after upload.
+- **EnterpriseResourcePolicy** (`entres-*`) — 10 tweaks: enable enterprise resource access auditing, restrict cross-DLP-category data transfer, disable enterprise resource data exfiltration paths, block unclassified enterprise data sync to unsanctioned apps, restrict enterprise resource access to domain-joined devices, disable enterprise resource browsing in personal browser profiles, block enterprise content paste to personal apps, restrict app access by enterprise resource classification, disable enterprise resource access via external email clients, and restrict enterprise resource printing to approved printers.
+- **NetCfgPolicy** (`netcfg-*`) — 10 tweaks: disable NCSI active probe for captive portal detection, restrict TCP/IP auto-tuning level, disable congestion provider algorithm override, restrict ECN (Explicit Congestion Notification) use, disable TCP chimney offload globally, restrict TCP ACK frequency modification, disable RSS queue count auto-adjustment, restrict socket pool usage per process, disable TCP timestamp option for fingerprinting resistance, and restrict RSS indirection table auto-resize.
+- **SecureConnectionPolicy** (`seccxn-*`) — 10 tweaks: disable TLS 1.0 protocol, disable TLS 1.1 protocol, require TLS 1.2 minimum for WinHTTP, restrict cipher suite to approved set, disable 3DES cipher suites, block RC4 cipher suite in TLS, require Perfect Forward Secrecy (DHE/ECDHE), disable SSL 3.0 fallback, restrict TLS session resumption ticket lifetime, and block server certificate pinning bypass.
+- **WindowsPerformancePolicy** (`wnperf-*`) — 10 tweaks: restrict background app activity to foreground-only mode, disable visual effects for best performance policy, restrict CPU scheduling priority boost for foreground, disable memory working set trimming on idle, block disk defragmentation on SSDs, disable prefetch and superfetch for non-HDD systems, restrict background task CPU allocation, disable GPU scheduling priority override, restrict page file contiguous allocation, and disable power-throttling for background services.
+
+#### Stats
+
+- **Total tweaks**: 6725 → **6775** (+50)
+- **Total categories**: 388 → **393** (+5)
+- **Module files**: 383 → **388** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.38.0] — 2026-03-25
 
 ### Added
