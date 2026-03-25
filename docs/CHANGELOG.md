@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.16.0] — 2026-04-09 (Sprints 237–241)
+
+### Added
+
+- **WindowsScriptHostPolicy** (Sprint 237) — 10 WSH security tweaks: disable WSH, block remote scripts, disable trusted-cert bypass, block ActiveX in scripts, block embedded scripts, disable WScript interactive host, enable execution logging, suppress interactive UI, disable legacy VBScript engine, disable CScript console host
+- **NtlmAuthPolicy** (Sprint 238) — 10 NTLM restriction tweaks: deny NTLMv1 outbound (LmCompatibilityLevel=5), disable LM hash storage, require 128-bit NTLMv2 client session security, require 128-bit NTLMv2 server session security, restrict outbound NTLM to domain servers, deny all inbound NTLM, audit incoming NTLM, audit outgoing NTLM in domain, disable null session access, require NTLMv2 on secure channel
+- **DcomSecurityPolicy** (Sprint 239) — 10 DCOM security tweaks: disable remote DCOM launch/activation, restrict anonymous launch, require packet privacy, disable COM Internet Services (DCOM-over-HTTP), restrict access by machine launch restriction policy, restrict access limits policy, audit launch/activation failures, disable SCM shortcut activation, disable persistent activations timeout, block remote activation for standard users
+- **KerberosEncryptionPolicy** (Sprint 240) — 10 Kerberos hardening tweaks: disable DES encryption, disable RC4-HMAC, require AES256 on LSA, set max TGT age to 600 min, set max TGT renewal age to 7 days, set max service ticket age to 600 min, set clock skew to 5 min, enable FAST armoring (cbindingPolicy=2), disable UPN hint leakage, require preauthentication
+- **SyncCenterPolicy** (Sprint 241) — 10 Sync Center policy tweaks: disable Sync Center, disable setup wizard, disable Offline Files feature, prevent user configuration, remove 'Make Available Offline' context menu, disable slow-link mode, disable background sync, disable logon sync, disable logoff sync, disable reminder notifications
+
+#### Stats
+
+- Total tweaks: **5,625** (+50)
+- Categories: **278** (+5)
+- Module files: **273** (+5)
+- Tests: **2,693** (unchanged)
+- Version bumped `5.15.0` → `5.16.0`
+
 ## [5.15.0] — 2026-04-09 (Sprints 232–236)
 
 ### Added
