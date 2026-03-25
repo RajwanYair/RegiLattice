@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.28.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 12 — Sprints 297-301)
+
+- **AppContainerPolicy** (`appcont-*`) — 10 tweaks: disable loopback access for AppContainer apps, restrict AppContainer network isolation bypass, disable AppContainer capability brokering, block AppContainer printer access, restrict AppContainer local account access, disable AppContainer ambient authority, block capability grant auto-approval, restrict AppContainer cross-session communication, disable AppContainer capability prompts, and restrict low-privilege isolation bypass.
+- **NetworkQosPolicy** (`nqos-*`) — 10 tweaks: disable QoS reservation bandwidth, block DSCP marking override, restrict QoS policy application to admins, disable nonconforming packet throttling, block QoS policy auto-refresh, disable WFP QoS integration, restrict Diffserv per-application settings, disable guaranteed-service QoS, block Layer2 QoS marking, and restrict best-effort vs. controlled-load flow arbitration.
+- **HardwareDevicePolicy** (`hwdev-*`) — 10 tweaks: prevent unknown device installation, restrict device driver auto-installation, block non-admin hardware ID override, disable removable device installation, restrict device setup class whitelisting, disable USB mass storage auto-install, block hardware serial number reporting, restrict boot device installation, disable device metadata retrieval online, and restrict printer driver installation.
+- **DnsSecurePolicy** (`dnssec-*`) — 10 tweaks: disable multicast DNS (mDNS), restrict DNS suffix search list, disable LLMNR fallback, block dynamic DNS registration, disable DNS devolution, restrict primary DNS suffix updates, disable DNS cache flushing by apps, block split-brain DNS, restrict DNS over HTTPS template changes, and disable negative DNS caching optimizations.
+- **PortableDevicesPolicy** (`portdev-*`) — 10 tweaks: disable AutoPlay for portable devices, restrict WPD (Windows Portable Devices) installation, block MTP media sync auto-launch, disable phone companion app auto-connect, restrict portable device driver auto-update, disable media streaming from portable devices, block portable device credential prompt, restrict camera raw file access, disable portable device telemetry upload, and restrict portable device content indexing.
+
+#### Stats
+
+- **Total tweaks**: 6175 → **6225** (+50)
+- **Total categories**: 333 → **338** (+5)
+- **Module files**: 328 → **333** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.27.0] — 2026-03-25
 
 ### Added
