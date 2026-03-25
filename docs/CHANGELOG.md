@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.35.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 19 — Sprints 332-336)
+
+- **AppGuardPolicy** (`appgrd-*`) — 10 tweaks: enable Microsoft Defender Application Guard managed mode, restrict Application Guard network isolation, disable printing from MDAG sessions, block clipboard sharing into MDAG, restrict MDAG camera and microphone access, block persistent storage in MDAG containers, restrict MDAG GPU acceleration, disable MDAG save-as to host, restrict MDAG window position on taskbar, and disable MDAG enterprise site list synchronization.
+- **KioskBrowserPolicy** (`kiosk-*`) — 10 tweaks: enable kiosk mode browser restrictions, block address bar and navigation, restrict new tab page to approved content, disable downloads in kiosk sessions, block developer tools in kiosk mode, restrict kiosk browser printing, disable idle timeout reset, block kiosk session restoration on crash, restrict kiosk browser extension installation, and disable kiosk session clipboard access.
+- **DeviceEnrollmentPolicy** (`devenrl-*`) — 10 tweaks: disable MDM auto-enrollment, block personal device enrollment in enterprise MDM, restrict enrollment via Azure AD join, disable over-the-air device provisioning, block BYOD enrollment token creation, restrict enrollment status page skip, disable bulk AAD device join, restrict device enrollment credential caching, block re-enrollment after unenrollment, and restrict enrollment to approved UPN suffixes.
+- **MemoryIntegrityPolicy** (`memintg-*`) — 10 tweaks: enable Hypervisor-Protected Code Integrity (HVCI), disable kernel driver memory page mapping bypass, restrict MMIO-mapped device driver DMA, enable Kernel Data Protection, disable unsigned UEFI variable modification, restrict kernel stack pivot protection bypass, enable CET (Control-flow Enforcement Technology) for kernel, disable vulnerable driver blocklist bypass, restrict EFI runtime memory modification, and enable Secure Memory Overwrite.
+- **AuditEventPolicy** (`audevt-*`) — 10 tweaks: audit successful logon events, audit failed logon attempts, audit account privilege use, audit security group modification, audit process creation events, audit object access failures, audit system integrity violations, audit policy change events, audit user account management changes, and audit sensitive privilege use.
+
+#### Stats
+
+- **Total tweaks**: 6525 → **6575** (+50)
+- **Total categories**: 368 → **373** (+5)
+- **Module files**: 363 → **368** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.34.0] — 2026-03-25
 
 ### Added
