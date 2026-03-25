@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.38.0] — 2026-03-25
+
+### Added
+
+#### New Policy Modules (Batch 22 — Sprints 347-351)
+
+- **DesktopAnalyticsPolicy** (`dskanlyt-*`) — 10 tweaks: set commercial ID for Desktop Analytics, disable diagnostic data commercial sharing, block Desktop Analytics device enrollment, restrict Window Analytics data upload, disable app and update readiness enrollment, restrict Desktop Analytics diagnostic data level, block commercial data pipeline, disable deployment health telemetry, restrict update compliance reporting, and block device census commercial data collection.
+- **TpmAdvancedPolicy** (`tpmadv-*`) — 10 tweaks: enable Bitlocker TPM auto-provisioning, require TPM 2.0 for new device attestation, disable TPM firmware update via Windows Update, restrict TPM measured boot policy changes, enable TPM platform crypto provider, block TPM dictionary attack bypass, restrict TPM PCR extension outside bootmgr, disable software TPM (vTPM) without Hyper-V attestation, restrict TPM-based key storage to OS volume, and enable TPM quote-based remote attestation.
+- **AppSiloPolicy** (`appsiloa-*`) — 10 tweaks: enable silo isolation between apps, restrict cross-silo named pipe access, block cross-silo COM server activation, disable silo bypass via elevated token, restrict silo kernel object namespace sharing, block silo process exit event notification across silos, disable silo filesystem virtualization bypass, restrict registry silo write outside isolated views, block cross-silo security token use, and restrict silo desktop window station sharing.
+- **LockdownBrowsingPolicy** (`lkdwnbr-*`) — 10 tweaks: enable lockdown mode, restrict downloads in restricted zones, block ActiveX controls in low-integrity sessions, disable JavaScript in Restricted Sites zone, block cross-zone redirect with elevation, disable file download from network shares in IE, restrict MIME sniffing override, block clipboard operations from ActiveX, disable zone elevation without prompt, and restrict locked-down zone security level downgrade.
+- **RemoteCredentialGuardPolicy** (`rcgrd-*`) — 10 tweaks: enable Remote Credential Guard, restrict delegation to Remote Credential Guard mode, disable NTLM fallback in Remote Credential Guard, restrict Remote Credential Guard to domain accounts, block cached credential use without Remote Credential Guard, restrict Remote Credential Guard token lifetime, disable Remote Credential Guard pass-through for RDP, restrict Remote Credential Guard on non-domain-joined machines, block non-FIPS algorithms in Remote Credential Guard, and restrict Remote Credential Guard enrollment to LAPS accounts.
+
+#### Stats
+
+- **Total tweaks**: 6675 → **6725** (+50)
+- **Total categories**: 383 → **388** (+5)
+- **Module files**: 378 → **383** (+5)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.37.0] — 2026-03-25
 
 ### Added
