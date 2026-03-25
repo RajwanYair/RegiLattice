@@ -4,6 +4,38 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.25.0] — 2026-05-27
+
+### Added
+
+#### New Policy Modules (Batch 9 — Sprints 282-286)
+
+- **ReFSPolicy** (`refs-*`) — 10 tweaks: disable ReFS integrity checking, integrity streams,
+  auto-repair, short-name creation, last-access timestamp update, parity logging, metadata
+  checksum, large MFT reservation, delete notification (TRIM), and data compression.
+- **GraphicsDriversPolicy** (`gfxdrv-*`) — 10 tweaks: disable DXGI Flip Model override,
+  MPO (multi-plane overlay), VRR/AdaptiveSync, hardware GPU scheduler, Auto HDR, experimental
+  DX12 resource binding, graphics driver telemetry, fine-grained preemption, D3D12 WARP
+  updates, and display-required power request override.
+- **FeedbackPolicy** (`fbk-*`) — 10 tweaks: disable Feedback Hub notifications, Feedback Hub
+  submission, NPS surveys, telemetry upload, screen capture, Steps Recorder, in-app prompts,
+  voluntary data collection, and MSA account requirement; set feedback frequency to Never.
+- **SecureBootPolicy** (`secboot-*`) — 10 tweaks: enable db/dbx update and bootloader
+  revocation check; disable test-signing and custom PK enrollment; enforce UMCI, kernel CI,
+  ELAM-backed initial ramdisk, managed OS policy, and VBS presence; disable network unlock and
+  Secure Boot telemetry.
+- **ShutdownOptionsPolicy** (`shtdwn-*`) — 10 tweaks: disable Ctrl+Alt+Del shutdown, app
+  restart after reboot, automatic restart on BSOD, forced reboot notification, power button
+  shutdown, and hibernate option; require shutdown reason; zero logoff script wait; disable
+  Start Menu restart; enable shutdown event logging.
+
+#### Stats
+
+- **Total tweaks**: 6025 → **6 075** (+50)
+- **Total categories**: 318 → **323** (+5)
+- **Module files**: 313 → **318** (+5)
+- **Tests**: 2063 passing (0 failures)
+
 ## [5.24.0] — 2026-05-27
 
 ### Added
