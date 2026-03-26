@@ -23,15 +23,15 @@
 ![Tests](https://img.shields.io/badge/tests-2703%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.42.0-blue)
+![Version](https://img.shields.io/badge/version-5.43.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6925 verified tweaks** across **408 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6975 verified tweaks** across **413 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.42.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.43.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -101,7 +101,7 @@ graph LR
         PM[Plugins / Packs]
     end
 
-    subgraph Tweaks["408 Categories · 6925 tweaks"]
+    subgraph Tweaks["413 Categories · 6975 tweaks"]
         T1[Performance]
         T2[Privacy]
         T3[Security]
@@ -253,7 +253,7 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 ```mermaid
 graph TD
     subgraph SRC["📁 src/"]
-        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>403 Modules · 6925 tweaks · 408 categories"]
+        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>408 Modules · 6975 tweaks · 413 categories"]
         GUI["🖥️ RegiLattice.GUI<br/>WinForms · 11 Themes<br/>MainForm · 9 Dialogs · 5 Package Managers"]
         CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
     end
