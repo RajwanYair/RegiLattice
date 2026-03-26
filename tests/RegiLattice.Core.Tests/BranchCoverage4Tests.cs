@@ -17,6 +17,8 @@ using RegiLattice.Core.Registry;
 using RegiLattice.Core.Services;
 using Xunit;
 
+namespace RegiLattice.Core.Tests;
+
 // ── 1. PackLoader SHA256 & Optional-Field Branch Tests ──────────────────────
 
 public sealed class PackLoaderSha256BranchTests
@@ -464,7 +466,7 @@ public sealed class PackManagerUrlAndConflictBranchTests
 
 // ── 4. StartupManager Branch Tests ──────────────────────────────────────────
 
-public sealed class StartupManagerBranchTests
+public sealed class StartupManagerBranchTests2
 {
     [Fact]
     public void GetAllEntries_ReturnsNonNull()

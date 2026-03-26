@@ -4,6 +4,30 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.41.2] — 2026-03-26
+
+### Fixed
+
+#### Tests / Test Infrastructure
+
+- Added missing `namespace RegiLattice.Core.Tests;` to `BranchCoverage4Tests.cs`, `BranchCoverage5Tests.cs`, and `BranchCoverage6Tests.cs`. The absent declaration caused VS Code's test adapter to prepend `<RootNamespace>` to global-namespace classes, producing duplicate test-case IDs (`An item with the same key has already been added`).
+- Renamed `StartupManagerBranchTests` → `StartupManagerBranchTests2` in `BranchCoverage4Tests.cs` to resolve CS0101 duplicate-type collision with `BranchCoverage2Tests.cs`.
+
+#### CI / Dependencies
+
+- Upgraded GitHub Actions across all four workflow files (`ci.yml`, `release.yml`, `codeql.yml`, `powershell.yml`): `actions/checkout` v4 → v6, `actions/setup-dotnet` v4 → v5, `actions/cache` v4 → v5, `actions/upload-artifact` v4 → v7. Eliminates Node.js 20 deprecation warnings.
+- Upgraded `github/codeql-action/init`, `/analyze`, `/upload-sarif` v3 → v4 in `codeql.yml` and `powershell.yml`.
+- Bumped `coverlet.collector` 6.0.4 → 8.0.1 in `Directory.Packages.props`.
+
+### Stats
+
+- **Total tweaks**: 6875 (unchanged)
+- **Total categories**: 403 (unchanged)
+- **Tests**: 2968 passing (0 failures)
+- Version bumped `5.41.1` → `5.41.2`
+
+---
+
 ## [5.41.1] — 2026-03-26
 
 ### Fixed

@@ -377,6 +377,7 @@ public partial class MainForm : Form
 
         _logBox.BackColor = AppTheme.LogBg;
         _logBox.ForeColor = AppTheme.LogFg;
+        _logBox.Font = AppTheme.Mono;
 
         _listContextMenu.BackColor = AppTheme.Surface;
         _listContextMenu.ForeColor = AppTheme.Fg;

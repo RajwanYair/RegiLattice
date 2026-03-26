@@ -16,6 +16,8 @@ using RegiLattice.Core.Registry;
 using RegiLattice.Core.Services;
 using Xunit;
 
+namespace RegiLattice.Core.Tests;
+
 // ── 1. GitHubRelease / UpdateCheckContext deserialization tests ─────────────
 
 public sealed class GitHubReleaseJsonTests

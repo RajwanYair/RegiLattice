@@ -23,7 +23,7 @@
 ![Tests](https://img.shields.io/badge/tests-2703%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.41.1-blue)
+![Version](https://img.shields.io/badge/version-5.41.2-blue)
 
 A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6875 verified tweaks** across **403 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
@@ -31,7 +31,7 @@ A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system op
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.41.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.41.2](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -101,12 +101,12 @@ graph LR
         PM[Plugins / Packs]
     end
 
-    subgraph Tweaks["223 Tweak Modules (5125 tweaks)"]
+    subgraph Tweaks["403 Categories · 6875 tweaks"]
         T1[Performance]
         T2[Privacy]
         T3[Security]
         T4[Gaming]
-        TN[... 219 more]
+        TN[... 399 more]
     end
 
     CLI --> TE
