@@ -56,7 +56,7 @@ jobs:
           --logger "console;verbosity=minimal"
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: "**/coverage.cobertura.xml"
@@ -117,7 +117,7 @@ jobs:
 
       - name: Upload Stryker HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: stryker-report
           path: StrykerOutput/
