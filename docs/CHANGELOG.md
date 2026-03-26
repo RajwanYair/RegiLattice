@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.43.1] — 2026-04-01
+
+#### Fixed
+
+- **Startup crash fix** (`ArgumentException: Parameter is not valid` in `Font.ToLogFont`) —
+  `MainForm` constructor now loads config and calls `AppTheme.SetFontSize` **before**
+  `InitializeComponent()`. Previously, `InitializeComponent` captured `AppTheme.Regular`
+  (font A) for all controls, then `SetFontSize` disposed font A and created font B. When the
+  form was first shown and Win32 HWNDs were created, `ProgressBar.OnHandleCreated →
+  SetWindowFont → Font.ToHfont → ToLogFont` failed on the disposed font. Affects all users
+  whose saved `FontSize` differs from the 9pt default.
+- `ApplyTheme()` now re-assigns `Font = AppTheme.Regular` on the form at the start of each
+  call, ensuring the form's inherited font is always valid after a font-size change from
+  Preferences.
+
+#### Stats
+
+- Total tweaks: **6975** (unchanged)
+- Total tests: **2968** (unchanged)
+
 ## [5.43.0] — 2026-03-31
 
 #### Added
