@@ -4,6 +4,27 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.42.0] — 2026-03-30
+
+### Added
+
+#### New Policy Modules (Batch 26 — Sprints 367-371)
+
+- **PersonalDataEncryptionPolicy** (`pde-*`) — 10 tweaks: enable PDE on device, require BitLocker as prerequisite, block network account content access, wipe PDE keys on lock, enable PDE protection for Desktop/Documents/Pictures folders, enable PDE access audit events, restrict key backup to organisation, and require Windows Hello enrollment for PDE. MinBuild: 22621 (Win11 22H2+).
+- **SudoWindowsPolicy** (`sudopol-*`) — 10 tweaks: disable sudo for Windows, force new-window mode, disable inline execution mode, disable input-disabled mode, restrict sudo to Administrators group, enable elevation audit events, block network access from elevated processes, always prompt for credentials on elevation, log command-line arguments for elevated processes, and block sudo from unapproved shell hosts. MinBuild: 22631 (Win11 23H2+).
+- **ProtectedPrintModePolicy** (`wpp-*`) — 10 tweaks: enable Windows Protected Print mode, block legacy non-WPP print drivers, require driver signature verification, prevent user print driver installation, audit driver load events, block RAW format print jobs, block remote print driver installation via RPC (PrintNightmare mitigation), restrict to IPP protocol only, disable client-side print redirection in RDP sessions, and enable print spooler process isolation. MinBuild: 26100 (Win11 24H2+).
+- **AttentionSensingPolicy** (`attsens-*`) — 10 tweaks: disable attention sensing (gaze detection), disable presence sensing, disable wake-on-approach, disable lock-on-leave, disable screen dim on look-away, block user override of presence settings, disable adaptive dimming, require user consent before sensor activation, block presence sensing telemetry upload, and disable presence detection on lock screen. MinBuild: 22621 (Win11 22H2+).
+- **ConnectedCachePolicy** (`mcc-*`) — 10 tweaks: disable Microsoft Connected Cache client, restrict to enterprise MCC nodes, set MCC node hostname, block P2P Delivery Optimization (HTTP-only mode), limit background bandwidth to 50%, limit foreground bandwidth to 80%, set cache storage limit to 20 GB, disable content upload to peers, restrict DO peers to LAN only, and disable cache downloads on metered connections. MinBuild: 19041 (Win10 2004+/Win11).
+
+### Stats
+
+- **Total tweaks**: 6925 (+50)
+- **Total categories**: 408 (+5)
+- **Tests**: 2703 passing (0 failures)
+- Version bumped `5.41.2` → `5.42.0`
+
+---
+
 ## [5.41.2] — 2026-03-26
 
 ### Fixed
