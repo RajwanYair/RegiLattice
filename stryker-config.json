@@ -1,8 +1,8 @@
 {
   "stryker-config": {
-    "project": "src/RegiLattice.Core/RegiLattice.Core.csproj",
+    "project": "RegiLattice.Core.csproj",
     "test-projects": [
-      "tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj"
+      "../../tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj"
     ],
     "mutation-level": "Standard",
     "thresholds": {
@@ -22,21 +22,21 @@
       "Linq"
     ],
     "mutate": [
-      "src/RegiLattice.Core/TweakEngine.cs",
-      "src/RegiLattice.Core/Models/TweakDef.cs",
-      "src/RegiLattice.Core/Registry/RegistrySession.cs",
-      "src/RegiLattice.Core/TweakValidator.cs",
-      "src/RegiLattice.Core/DependencyResolver.cs",
-      "src/RegiLattice.Core/SnapshotManager.cs",
-      "src/RegiLattice.Core/Services/AppConfig.cs",
-      "src/RegiLattice.Core/Services/Favorites.cs",
-      "src/RegiLattice.Core/Services/Ratings.cs",
-      "src/RegiLattice.Core/Services/TweakHistory.cs",
-      "src/RegiLattice.Core/Services/ConfigExporter.cs",
-      "src/RegiLattice.Core/Plugins/PackLoader.cs",
-      "src/RegiLattice.Core/Plugins/PackManager.cs",
-      "src/RegiLattice.Core/Plugins/PackSignatureVerifier.cs",
-      "src/RegiLattice.Core/Plugins/PluginSandbox.cs"
+      "TweakEngine.cs",
+      "Models/TweakDef.cs",
+      "Registry/RegistrySession.cs",
+      "TweakValidator.cs",
+      "DependencyResolver.cs",
+      "SnapshotManager.cs",
+      "Services/AppConfig.cs",
+      "Services/Favorites.cs",
+      "Services/Ratings.cs",
+      "Services/TweakHistory.cs",
+      "Services/ConfigExporter.cs",
+      "Plugins/PackLoader.cs",
+      "Plugins/PackManager.cs",
+      "Plugins/PackSignatureVerifier.cs",
+      "Plugins/PluginSandbox.cs"
     ],
     "since": {
       "enabled": false
