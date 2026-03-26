@@ -9,6 +9,7 @@
     "github.vscode-github-actions",
     "eamodio.gitlens",
     "gruntfuggly.todo-tree",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "bierner.markdown-mermaid"
   ]
 }
