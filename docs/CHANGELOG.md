@@ -4,6 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.44.0] — 2026-04-01
+
+#### Added
+
+- **Sprint 377 — LSA Protection Policy** (`LsaProtectionPolicy.cs`, slug `lsapol`):
+  10 new Group Policy tweaks covering LSA PPL enforcement, credential delegation,
+  WDigest disable, NTLM audit, reversible-encryption protection, and Winlogon policy.
+- **Sprint 378 — Storage Sense Policy** (`StorageSensePolicy.cs`, slug `storsense`):
+  10 new Group Policy tweaks covering Storage Sense global disable/enable, temp file
+  cleanup, Downloads folder threshold, OneDrive dehydration, run cadence, and policy
+  enforcement for all users.
+- **Sprint 379 — Windows Installer Policy** (`WindowsInstallerPolicy.cs`, slug `msipl`):
+  10 new Group Policy tweaks covering AlwaysInstallElevated disable, user install
+  restriction, user-control disable, rollback disable, verbose logging, lockdown browse/
+  media/patch denial, patch-cache disable, and source-search network restriction.
+- **Sprint 380 — Edge Import & Privacy Policy** (`EdgeImportPrivacyPolicy.cs`, slug `edgeimp`):
+  10 new Group Policy tweaks covering blocking import of favorites, history, cookies,
+  homepage, open tabs, and search engine into Edge, plus disabling browsing history,
+  user feedback, SSL error bypass, and site-info telemetry.
+- **Sprint 381 — Legacy Edge Policy** (`LegacyEdgePolicy.cs`, slug `ledge`):
+  10 new Group Policy tweaks for the legacy EdgeHTML browser: blocking about:flags,
+  address-bar drop-down, tab preloading, disabling InPrivate browsing, enforcing
+  SmartScreen and preventing bypass, preventing flip-ahead, disabling home button,
+  blocking extension sideloading, and hiding the first-run page.
+
+#### Stats
+
+- Total tweaks: **7 025** (+50)
+- Total categories: **418** (+5)
+- Total tests: **2703** (unchanged)
+
 ## [5.43.1] — 2026-04-01
 
 #### Fixed
