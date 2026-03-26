@@ -67,18 +67,23 @@ public partial class MainForm : Form
     public MainForm()
     {
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-        InitializeComponent();
-        Text = "RegiLattice";
-        Icon = AppIcons.AppIcon;
 
-        // Load saved theme from config (or auto-detect from Windows)
+        // Load config and apply theme/font BEFORE InitializeComponent so that all
+        // AppTheme font references captured in Designer.cs are never stale.
+        // If SetFontSize ran AFTER InitializeComponent, every control that received
+        // a font via the designer would hold a reference to the old (disposed) font
+        // instance.  When the form is next shown and Win32 HWNDs are created,
+        // ProgressBar.OnHandleCreated → SetWindowFont → Font.ToHfont → ToLogFont
+        // fails with "Parameter is not valid" on the disposed font.  (bug: v5.43.0)
         var cfg = AppConfig.Load();
         string theme = string.IsNullOrEmpty(cfg.Theme) ? AppTheme.DetectSystemTheme() : cfg.Theme;
         AppTheme.SetTheme(theme);
-
-        // Apply saved font size (only if non-default to avoid redundant font creation)
         if (Math.Abs(cfg.FontSize - AppTheme.BaseFontSize) > 0.01f)
             AppTheme.SetFontSize(cfg.FontSize);
+
+        InitializeComponent();
+        Text = "RegiLattice";
+        Icon = AppIcons.AppIcon;
 
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         _profileScheduleTimer.Tick += OnProfileScheduleTick;
@@ -337,6 +342,11 @@ public partial class MainForm : Form
     private void ApplyTheme()
     {
         SuspendLayout();
+
+        // Keep Form.Font in sync with AppTheme.Regular so that any inherited-font
+        // control (e.g., ProgressBar) always gets a valid, non-disposed font when
+        // its Win32 HWND is created or recreated.
+        Font = AppTheme.Regular;
 
         BackColor = AppTheme.Bg;
         ForeColor = AppTheme.Fg;
