@@ -1,0 +1,155 @@
+name: Debug Diagnostics
+
+# Manual-only diagnostic workflow.
+# Trigger this when a CI run fails and you need more context than the standard
+# CI log provides. Captures full .NET info, verbose build output, crash dumps,
+# TRX test results, and uploads them all as artifacts for offline inspection.
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: "Which component to diagnose"
+        required: false
+        default: "all"
+        type: choice
+        options: [all, core, cli, gui]
+      verbose_build:
+        description: "Enable verbose (detailed) build output"
+        required: false
+        default: false
+        type: boolean
+      run_doctor:
+        description: "Run system health check (CLI --doctor)"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  MSBUILDDISABLENODEREUSE: 1
+
+jobs:
+  diagnostics:
+    name: Diagnostic run (${{ inputs.component }})
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cache NuGet
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      # ── Environment snapshot ─────────────────────────────────────────────
+      - name: Runner environment
+        shell: pwsh
+        run: |
+          Write-Host "::group::System info"
+          [PSCustomObject]@{
+            OS           = [System.Environment]::OSVersion.VersionString
+            Architecture = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
+            CPUs         = [System.Environment]::ProcessorCount
+            Memory_GB    = [Math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 1)
+            TempDir      = $env:TEMP
+            Workspace    = $env:GITHUB_WORKSPACE
+          } | Format-List
+          Write-Host "::endgroup::"
+
+          Write-Host "::group::.NET SDK info"
+          dotnet --info
+          Write-Host "::endgroup::"
+
+          Write-Host "::group::Installed .NET SDKs"
+          dotnet sdk check
+          Write-Host "::endgroup::"
+
+          Write-Host "::group::NuGet sources"
+          dotnet nuget list source
+          Write-Host "::endgroup::"
+
+          Write-Host "::group::Installed dotnet tools"
+          dotnet tool list --global
+          Write-Host "::endgroup::"
+
+      # ── Restore ──────────────────────────────────────────────────────────
+      - name: Restore
+        run: dotnet restore RegiLattice.sln --verbosity normal
+
+      # ── Build (with optional verbose output) ─────────────────────────────
+      - name: Build
+        shell: pwsh
+        run: |
+          $verbosity = if ('${{ inputs.verbose_build }}' -eq 'true') { 'detailed' } else { 'normal' }
+          $component = '${{ inputs.component }}'
+          $target = if ($component -eq 'all') {
+            'RegiLattice.sln'
+          } else {
+            switch ($component) {
+              'core' { 'src/RegiLattice.Core/RegiLattice.Core.csproj' }
+              'cli'  { 'src/RegiLattice.CLI/RegiLattice.CLI.csproj' }
+              'gui'  { 'src/RegiLattice.GUI/RegiLattice.GUI.csproj' }
+            }
+          }
+          Write-Host "Building: $target (verbosity=$verbosity)"
+          dotnet build $target -c Debug --no-restore --verbosity $verbosity
+
+      # ── Test with crash-dump on hang ─────────────────────────────────────
+      - name: Test (blame-crash enabled)
+        shell: pwsh
+        run: |
+          $component = '${{ inputs.component }}'
+          $target = if ($component -eq 'all') {
+            'RegiLattice.sln'
+          } else {
+            switch ($component) {
+              'core' { 'tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj' }
+              'cli'  { 'tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj' }
+              'gui'  { 'tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj' }
+            }
+          }
+          dotnet test $target `
+            --settings tests/.runsettings `
+            --blame-hang-timeout 60s `
+            --blame-crash `
+            --verbosity normal `
+            --no-build `
+            --logger "trx;LogFileName=debug-results.trx" `
+            --logger "console;verbosity=normal"
+
+      # ── TweakDef validation ──────────────────────────────────────────────
+      - name: Validate TweakDef integrity
+        run: >-
+          dotnet run --project src/RegiLattice.CLI/RegiLattice.CLI.csproj
+          -c Debug --no-build -- --validate
+
+      # ── System health (optional) ─────────────────────────────────────────
+      - name: System health check
+        if: inputs.run_doctor == true
+        run: >-
+          dotnet run --project src/RegiLattice.CLI/RegiLattice.CLI.csproj
+          -c Debug --no-build -- --doctor
+
+      # ── Collect everything ────────────────────────────────────────────────
+      - name: Upload diagnostic artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: debug-diagnostics-${{ github.run_number }}
+          path: |
+            **/*.trx
+            **/TestResults/
+            **/crash*.dmp
+            **/Sequence_*.xml
+          if-no-files-found: warn
+          retention-days: 7

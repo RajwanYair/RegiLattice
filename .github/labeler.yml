@@ -1,0 +1,55 @@
+# .github/labeler.yml
+# Path-based PR label rules consumed by .github/workflows/label.yml
+# (actions/labeler@v5 format — uses changed-files matchers)
+
+tweaks:
+  - changed-files:
+    - any-glob-to-any-file: "src/RegiLattice.Core/Tweaks/**"
+
+core:
+  - changed-files:
+    - any-glob-to-any-file: "src/RegiLattice.Core/**"
+    - all-globs-to-all-files: "!src/RegiLattice.Core/Tweaks/**"
+
+gui:
+  - changed-files:
+    - any-glob-to-any-file: "src/RegiLattice.GUI/**"
+
+cli:
+  - changed-files:
+    - any-glob-to-any-file: "src/RegiLattice.CLI/**"
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file: "tests/**"
+
+ci:
+  - changed-files:
+    - any-glob-to-any-file: ".github/workflows/**"
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "Directory.Packages.props"
+      - "Directory.Build.props"
+      - "global.json"
+      - "**/*.csproj"
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "docs/**"
+      - "*.md"
+      - ".github/**/*.md"
+
+installer:
+  - changed-files:
+    - any-glob-to-any-file: "installer/**"
+
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - ".github/dependabot.yml"
+      - "stryker-config.json"
+      - "Directory.Build.targets"
+      - ".runsettings"

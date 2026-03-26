@@ -36,10 +36,28 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "UTC"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 8
+    assignees:
+      - "RajwanYair"
     labels:
       - "dependencies"
-      - "github-actions"
+      - "ci"
     commit-message:
       prefix: "chore(ci)"
       include: "scope"
+    groups:
+      actions-core:
+        patterns:
+          - "actions/checkout"
+          - "actions/setup-dotnet"
+          - "actions/cache"
+          - "actions/upload-artifact"
+          - "actions/download-artifact"
+          - "actions/labeler"
+          - "actions/stale"
+          - "actions/dependency-review-action"
+          - "actions/github-script"
+      security-actions:
+        patterns:
+          - "github/codeql-action*"
+          - "step-security/*"
