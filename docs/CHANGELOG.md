@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.43.0] — 2026-03-31
+
+#### Added
+
+- **Sprint 372** — `SmartAppControlPolicy.cs`: 10 Smart App Control (SAC) policy tweaks (`sac-*`) — block policy change, enforcement mode, evaluation mode, signed publishers, script execution, cloud lookup, network paths, LoLBAS abuse, Intelligent Security Graph. MinBuild 22621.
+- **Sprint 373** — `NtlmAuthenticationPolicy.cs`: 10 NTLM restriction tweaks (`ntlm-*`) — restrict outgoing NTLM, block incoming, audit outgoing, disable NTLMv1, require session security, block NTLM over HTTP, require extended protection, domain audit, server allowlist, LDAP restriction.
+- **Sprint 374** — `KerberosArmoringPolicy.cs`: 10 Kerberos hardening tweaks (`krbadv-*`) — enable FAST armoring KDC/client, disable DES, require strict KDC validation, PKInit freshness, service ticket lifetime, TGT lifetime, renewal deadline, clock sync, disable RC4-HMAC.
+- **Sprint 375** — `HotpatchUpdatePolicy.cs`: 10 Windows Hotpatch tweaks (`hotpatch-*`) — enable/disable hotpatch, require code integrity, block rollback, audit events, limit deferred reboots, schedule baseline restart, disable telemetry, exclude drivers, require MDM enrollment. MinBuild 26100.
+- **Sprint 376** — `ModernStandbyPolicy.cs`: 10 Modern Standby (S0) tweaks (`mstandby-*`) — disable connected standby, block network, disable smart standby, disable background tasks, disable maintenance, disable fast startup, idle timeout, block wake timers, disable WoL, require password on resume. MinBuild 18362.
+
+#### Stats
+
+- Total tweaks: **6975** (+50)
+- Total categories: **413** (+5)
+- Test count: **2703** (unchanged)
+
 ## [5.42.0] — 2026-03-30
 
 ### Added
