@@ -108,7 +108,10 @@ jobs:
         run: dotnet tool restore
 
       - name: Build (for mutation)
-        run: dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Debug
+        # Build the full solution so all assembly references are present when
+        # Stryker scans the solution graph (avoids "could not find mutable
+        # assembly for RegiLattice.GUI.Tests" error in Stryker 4.x).
+        run: dotnet build RegiLattice.sln -c Debug
 
       - name: Run Stryker mutation tests
         # Break threshold is 55% — CI fails if mutation score drops below that.
