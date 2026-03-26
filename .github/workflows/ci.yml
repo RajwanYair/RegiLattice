@@ -136,9 +136,14 @@ jobs:
         # Run from src/RegiLattice.Core so Stryker does NOT auto-detect
         # RegiLattice.sln in CWD and enter solution-scan mode (which fails on
         # GUI.Tests — a WinForms project with no mutable assembly reference).
+        # STRYKER_BUILD=1 disables the %TEMP% build-path redirect in
+        # Directory.Build.props so Stryker's Buildalyzer can analyze projects
+        # using standard local bin/obj paths (required for design-time analysis).
         # Break threshold is 55% — CI fails if mutation score drops below that.
         # Target: 60%+ kill score on Core library (T6.6).
         working-directory: src/RegiLattice.Core
+        env:
+          STRYKER_BUILD: "1"
         run: dotnet stryker --config-file ../../stryker-config.json
 
       - name: Stryker diagnostics on failure
@@ -146,6 +151,8 @@ jobs:
         # Helps debug issues like missing assembly references or config problems.
         if: failure()
         working-directory: src/RegiLattice.Core
+        env:
+          STRYKER_BUILD: "1"
         shell: pwsh
         run: |
           Write-Host "::group::Stryker --diag output (first 150 lines)"

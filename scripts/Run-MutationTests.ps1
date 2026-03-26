@@ -34,8 +34,11 @@ try {
 
 # Run Stryker from src/RegiLattice.Core/ so it does NOT auto-detect RegiLattice.sln
 # and enter solution-scan mode (which fails on GUI.Tests).
+# STRYKER_BUILD=1 disables the %TEMP% build-path redirect in Directory.Build.props
+# so Stryker's Buildalyzer can analyze projects with standard local bin/obj paths.
 Push-Location $coreDir
 try {
+    $env:STRYKER_BUILD = '1'
     Write-Host "[stryker] Running mutation tests from: $coreDir" -ForegroundColor Cyan
     Write-Host "[stryker] Target >= 60% kill score..." -ForegroundColor Cyan
     dotnet stryker --config-file ../../stryker-config.json
@@ -46,5 +49,6 @@ try {
 
     Write-Host "[stryker] Done. Report: StrykerOutput/" -ForegroundColor Green
 } finally {
+    Remove-Item Env:STRYKER_BUILD -ErrorAction SilentlyContinue
     Pop-Location
 }
