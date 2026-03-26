@@ -4,6 +4,25 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.41.1] — 2026-03-26
+
+### Fixed
+
+#### CI / Maintenance
+
+- Fixed Stryker mutation-testing CI job crashing on startup due to invalid `output-path` and `log` config keys (not supported in Stryker 4.14.0 schema). Replaced with `verbosity: "info"` and added `solution: "RegiLattice.sln"` for reliable project discovery. Stryker report artifact path updated to `StrykerOutput/` (Stryker default).
+- Added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` workflow-level env var to both `ci.yml` and `release.yml` to eliminate Node.js 20 deprecation warnings. Workflows are now Node.js 24 compatible ahead of the June 2026 forced migration.
+
+#### Documentation
+
+- Replaced stale ASCII `## Project Structure` tree in README.md with a compact Mermaid `graph TD` diagram. Updated stale module/tweak/test counts (223→398 modules, 5125→6875 tweaks).
+
+#### Stats
+
+- **Total tweaks**: 6875 (unchanged)
+- **Total categories**: 403 (unchanged)
+- **Tests**: 2703 passing (0 failures)
+
 ## [5.41.0] — 2026-03-25
 
 ### Added
