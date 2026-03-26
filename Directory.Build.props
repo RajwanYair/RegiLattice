@@ -28,9 +28,11 @@
 
          CI: GITHUB_ACTIONS is always set, so the same env-var expansion works
          on both developer machines and GitHub Actions runners automatically. -->
-    <RegiLatticeLocalBuildRoot>$(TEMP)\RegiLattice-build\$(MSBuildProjectName)</RegiLatticeLocalBuildRoot>
-    <BaseIntermediateOutputPath>$(RegiLatticeLocalBuildRoot)\obj\</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(RegiLatticeLocalBuildRoot)\bin\</BaseOutputPath>
+    <!-- STRYKER_BUILD=1 disables the temp-path redirect so Stryker's Buildalyzer
+         can analyze the project with standard local bin/obj paths. -->
+    <RegiLatticeLocalBuildRoot Condition="'$(STRYKER_BUILD)' == ''">$(TEMP)\RegiLattice-build\$(MSBuildProjectName)</RegiLatticeLocalBuildRoot>
+    <BaseIntermediateOutputPath Condition="'$(STRYKER_BUILD)' == ''">$(RegiLatticeLocalBuildRoot)\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath Condition="'$(STRYKER_BUILD)' == ''">$(RegiLatticeLocalBuildRoot)\bin\</BaseOutputPath>
 
     <!-- Keep UseSharedCompilation=false as a belt-and-suspenders guard for
          any edge cases where the above redirect does not apply (e.g. custom
