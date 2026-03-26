@@ -1,5 +1,6 @@
 {
   "stryker-config": {
+    "solution": "RegiLattice.sln",
     "project": "RegiLattice.Core.csproj",
     "test-projects": [
       "tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj"
@@ -16,10 +17,7 @@
       "cleartext",
       "json"
     ],
-    "output-path": ".tmp/stryker-output",
-    "log": {
-      "log-level": "info"
-    },
+    "verbosity": "info",
     "ignore-mutations": [
       "string",
       "Linq"

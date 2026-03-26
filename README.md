@@ -23,7 +23,7 @@
 ![Tests](https://img.shields.io/badge/tests-2703%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.41.0-blue)
+![Version](https://img.shields.io/badge/version-5.41.1-blue)
 
 A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **6875 verified tweaks** across **403 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
@@ -250,93 +250,31 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 
 ## Project Structure
 
-```
-RegiLattice/
-├── RegiLattice.sln                          # Visual Studio solution
-├── Launch-RegiLattice.ps1                   # PowerShell launcher
-├── src/
-│   ├── RegiLattice.Core/                    # Core library (netstandard/net10.0)
-│   │   ├── TweakEngine.cs                   # Central tweak manager
-│   │   ├── SnapshotManager.cs               # Save/load/restore tweak state snapshots
-│   │   ├── TweakValidator.cs                # Tweak integrity validation & circular dep detection
-│   │   ├── DependencyResolver.cs            # Topological dependency resolution
-│   │   ├── Models/
-│   │   │   ├── TweakDef.cs                  # Immutable tweak definition + RegOp
-│   │   │   ├── ProfileDef.cs                # Profile definition model
-│   │   │   └── ProfileDefinitions.cs        # 5 hardcoded profiles
-│   │   ├── Registry/
-│   │   │   └── RegistrySession.cs           # Registry read/write/backup wrapper
-│   │   ├── Services/
-│   │   │   ├── Analytics.cs                 # Local usage analytics
-│   │   │   ├── AppConfig.cs                 # Configuration management
-│   │   │   ├── ChocolateyManager.cs         # Chocolatey package manager integration
-│   │   │   ├── CorporateGuard.cs            # Corporate network detection
-│   │   │   ├── Elevation.cs                 # UAC elevation helpers
-│   │   │   ├── HardwareInfo.cs              # Hardware detection + profile suggestion
-│   │   │   ├── Locale.cs                    # i18n string table
-│   │   │   ├── PipManager.cs                # pip package manager integration
-│   │   │   ├── Ratings.cs                   # Tweak rating system (1-5 stars)
-│   │   │   ├── ShellRunner.cs               # Safe process execution wrapper
-│   │   │   └── WinGetManager.cs             # WinGet package manager integration
-│   │   ├── Plugins/                          # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/                          # 223 module files, 5125 tweaks
-│   │       ├── Accessibility.cs
-│   │       ├── Performance.cs
-│   │       ├── Privacy.cs
-│   │       ├── ...                          # 168 more
-│   │       └── Wsl.cs
-│   ├── RegiLattice.GUI/                     # WinForms GUI (net10.0-windows)
-│   │   ├── Program.cs                       # Entry point
-│   │   ├── AppIcons.cs                      # Programmatic icon/bitmap generation
-│   │   ├── Theme.cs                         # 11-theme engine
-│   │   ├── Forms/
-│   │   │   ├── MainForm.cs                  # Main window
-│   │   │   ├── AboutDialog.cs               # About + hardware info
-│   │   │   ├── ChocolateyManagerDialog.cs
-│   │   │   ├── MarketplaceDialog.cs         # Tweak Pack marketplace browser
-│   │   │   ├── PipManagerDialog.cs
-│   │   │   ├── PSModuleManagerDialog.cs
-│   │   │   ├── ScoopManagerDialog.cs
-│   │   │   ├── ToolVersionsDialog.cs        # Installed tool version checker
-│   │   │   ├── WindowsHealthDialog.cs       # System health & maintenance
-│   │   │   └── WinGetManagerDialog.cs
-│   │   └── PackageManagers/                 # GUI-side package manager wrappers
-│   │       ├── PackageNameValidator.cs      # Shared name validation (regex)
-│   │       ├── ShellRunner.cs               # Process execution for GUI dialogs
-│   │       ├── ScoopManager.cs
-│   │       ├── PipManager.cs
-│   │       ├── PSModuleManager.cs
-│   │       ├── ChocolateyManager.cs
-│   │       ├── WinGetManager.cs
-│   │       ├── ToolVersionChecker.cs
-│   │       └── WindowsHealthManager.cs
-│   └── RegiLattice.CLI/                     # Console CLI (net10.0)
-│       ├── Program.cs                       # 25+ commands
-│       ├── CliArgs.cs                       # CLI argument model
-│       └── ConsoleColorizer.cs              # ANSI terminal colour helpers
-├── tests/
-│   ├── RegiLattice.Core.Tests/              # 2052 xUnit tests
-│   │   ├── TweakDefTests.cs
-│   │   ├── TweakEngineTests.cs
-│   │   ├── TweakEngineBuiltinsTests.cs
-│   │   ├── RegistrySessionTests.cs
-│   │   ├── ServicesTests.cs
-│   │   ├── PluginTests.cs
-│   │   ├── SnapshotManagerTests.cs
-│   │   ├── TweakValidatorTests.cs
-│   │   ├── DependencyResolverTests.cs
-│   │   ├── FavoritesTests.cs
-│   │   ├── TweakHistoryTests.cs
-│   │   └── ConfigExporterTests.cs
-│   ├── RegiLattice.CLI.Tests/               # 301 xUnit tests
-│   │   └── ParseArgsTests.cs
-│   ├── RegiLattice.GUI.Tests/               # 308 xUnit tests
-│   │   ├── ThemeTests.cs
-│   │   ├── PackageManagerValidationTests.cs
-│   │   └── AppIconsTests.cs
-├── winget/                                  # Winget package manifests
-├── docs/                                    # Documentation
-└── .vscode/                                 # VS Code workspace settings
+```mermaid
+graph TD
+    subgraph SRC["📁 src/"]
+        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>398 Modules · 6875 tweaks · 403 categories"]
+        GUI["🖥️ RegiLattice.GUI<br/>WinForms · 11 Themes<br/>MainForm · 9 Dialogs · 5 Package Managers"]
+        CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
+    end
+
+    subgraph TST["🧪 tests/  ·  2703 xUnit tests"]
+        CT["Core.Tests<br/>2063 tests · 12 files"]
+        CLT["CLI.Tests<br/>301 tests · 1 file"]
+        GT["GUI.Tests<br/>339 tests · 3 files"]
+    end
+
+    subgraph INFRA["🔧 Infrastructure & Docs"]
+        INST["📦 installer/ — WiX · MSI"]
+        DOCS["📄 docs/ — Api · Changelog · Security"]
+        GH["⚙️ .github/ — CI · Release · Skills"]
+    end
+
+    CLI -->|project ref| CORE
+    GUI -->|project ref| CORE
+    CT -.->|tests| CORE
+    CLT -.->|tests| CLI
+    GT -.->|tests| GUI
 ```
 
 ## Adding a Custom Tweak
