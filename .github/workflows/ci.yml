@@ -155,9 +155,9 @@ jobs:
           STRYKER_BUILD: "1"
         shell: pwsh
         run: |
-          Write-Host "::group::Stryker --diag output (first 150 lines)"
+          Write-Host "::group::Stryker --diag output (first 300 lines)"
           dotnet stryker --config-file ../../stryker-config.json --diag 2>&1 |
-            Select-Object -First 150 |
+            Select-Object -First 300 |
             ForEach-Object { Write-Host $_ }
           Write-Host "::endgroup::"
 
