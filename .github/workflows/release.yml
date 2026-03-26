@@ -220,16 +220,38 @@ jobs:
           Write-Host "Pushed $($nupkg.Name) to Chocolatey"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ inputs.tag_name || github.ref_name }}
-          files: |
-            publish/gui/RegiLattice.GUI.exe
-            publish/cli/RegiLattice.exe
-            publish/RegiLattice-*-win-x64.zip
-            publish/regilattice.*.nupkg
-            installer/bin/Release/**/*.msi
-            publish/*.msix
-            publish/SHA256SUMS.txt
-          generate_release_notes: true
-          fail_on_unmatched_files: false
+        # Uses the pre-installed gh CLI (no Node.js action — avoids node20 deprecation warnings).
+        # On re-runs (workflow_dispatch when release already exists), uploads artifacts only.
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          $files = [System.Collections.Generic.List[string]]::new()
+
+          # Required artifacts
+          if (Test-Path 'publish/gui/RegiLattice.GUI.exe') { $files.Add('publish/gui/RegiLattice.GUI.exe') }
+          if (Test-Path 'publish/cli/RegiLattice.exe')     { $files.Add('publish/cli/RegiLattice.exe') }
+          if (Test-Path 'publish/SHA256SUMS.txt')          { $files.Add('publish/SHA256SUMS.txt') }
+          # Optional artifacts (continue-on-error steps — may not exist)
+          Get-ChildItem 'publish' -Filter '*.zip'   -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          Get-ChildItem 'publish' -Filter '*.nupkg' -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          Get-ChildItem 'publish' -Filter '*.msix'  -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          if (Test-Path 'installer/bin/Release') {
+            Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue |
+              ForEach-Object { $files.Add($_.FullName) }
+          }
+
+          Write-Host "Release $tag — $($files.Count) artifact(s):"
+          $files | ForEach-Object { Write-Host "  $_" }
+
+          # Create release; if it already exists (workflow_dispatch re-run), upload files only
+          $null = gh release view $tag --json tagName 2>&1
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag already exists — uploading artifacts only"
+            if ($files.Count -gt 0) { gh release upload $tag @files --clobber }
+          } else {
+            gh release create $tag @files --generate-notes --title $tag
+          }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Write-Host "Release $tag published successfully"

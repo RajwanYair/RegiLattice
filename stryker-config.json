@@ -1,7 +1,6 @@
 {
   "stryker-config": {
-    "solution": "RegiLattice.sln",
-    "project": "RegiLattice.Core.csproj",
+    "project": "src/RegiLattice.Core/RegiLattice.Core.csproj",
     "test-projects": [
       "tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj"
     ],
