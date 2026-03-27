@@ -197,7 +197,7 @@ git push --tags
 ```
 
 **If notify-failure.yml creates a GH issue:** Close it once the next run is green.
-Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green as of <commit>."` 
+Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green as of <commit>."`
 
 ---
 
