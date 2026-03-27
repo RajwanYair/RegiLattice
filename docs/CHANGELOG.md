@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.48.0] — 2026-04-17
+
+#### Added
+
+- **Sprint 397 — WiaImageAcquisitionPolicy** (10 tweaks, slug `imgacquire`): Windows Image Acquisition scanner controls — STI interactive mode block, user device install restriction, transfer-without-policy disable, scan-to-fax disable, AutoPlay on camera disable, signed driver requirement, scan-to-SharePoint disable, scan-to-network-share disable, scan-to-email disable, scan destination restriction.
+- **Sprint 398 — InternetCommunicationPolicy** (10 tweaks, slug `inetcomm`): Internet communication management controls — restrict all internet communication, HTTP printing disable, Windows Update access disable, web communities disable, Event Viewer online help disable, Windows registration disable, Software Protection Platform ticket generation disable, task-scheduler download disable, online search disable, driver update via Windows Update disable.
+- **Sprint 399 — NtpGpoPolicy** (10 tweaks, slug `ntpgpo`): W32Time NTP Group Policy controls — NTP client enable, NTP sync type enforcement, cross-site sync flags, special poll interval (15 min), event log flags, max positive/negative phase correction (60 min each), peer back-off minimum/maximum, announce flags for authoritative DC.
+- **Sprint 400 — NetworkAccessProtectionPolicy** (10 tweaks, slug `napcomp`): Network Access Protection agent policy controls — NAP client enable, health certificate requirement, VPN SHV enable, auto-remediation disable, quarantine timeout (8 hours), PKI state-machine enable, DHCP enforcement, wired 802.1x enforcement, TS Gateway enforcement, IPsec enforcement.
+- **Sprint 401 — EasMdmPolicy** (10 tweaks, slug `easmdm`): Exchange ActiveSync MDM device policy enforcement — require device password, minimum password length (8), max failed attempts (10), inactivity screen lock (5 min), require device encryption, block Wi-Fi, block removable storage, block camera, block internet sharing/hotspot, block Bluetooth.
+
+#### Stats
+
+- Tweaks: 7,175 → 7,225 (+50 across 5 new modules)
+- Categories: 433 → 438 (+5)
+- Tests: 2,703 (unchanged)
+
 ## [5.47.0] — 2026-04-16
 
 #### Added
