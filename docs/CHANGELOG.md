@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.47.0] — 2026-04-16
+
+#### Added
+
+- **Sprint 392 — EnterpriseStateRoamingPolicy** (10 tweaks, slug `esroam`): Enterprise State Roaming sync controls — per-category disable for app settings, Start layout, desktop theme, browser settings, passwords, app sync; user override blocks; device account sync disable.
+- **Sprint 393 — FipsCompliancePolicy** (10 tweaks, slug `fips`): FIPS 140-2 compliance controls — FipsAlgorithmPolicy enable, machine key caching disable, strong key protection, DPAPI restriction, SHA-2 minimum, RC4 disable, weak hash algorithms, DES/3DES restriction, full certificate chain validation, TLS minimum version enforcement.
+- **Sprint 394 — HomeGroupPolicy** (10 tweaks, slug `homegroup`): HomeGroup and peer network sharing controls — HomeGroup disable/creation/join blocks, shared library access, network bridge and ICS block, Workplace Join toast, PNRP peer discovery, HomeGroup listener service.
+- **Sprint 395 — GpoFolderRedirPolicy** (10 tweaks, slug `folderredir`): Folder redirection GPO controls — cache rename on redirect, roaming profile download, quota notification suppress, synchronous policy wait, exclusive NTFS rights, localized subfolder names, content migration, UNC hardening, slow-link threshold, profile load timeout.
+- **Sprint 396 — GpoScriptsPolicy** (10 tweaks, slug `gposcripts`): GPO script execution controls — logon script synchronous execution, startup script sync, legacy logon hidden window, max script timeout (10 min), startup/logon/logoff/shutdown script visibility, user-first logon script order, non-interactive runtime limit (5 min).
+
+#### Stats
+
+- Tweaks: 7,125 → 7,175 (+50 across 5 new modules)
+- Categories: 428 → 433 (+5)
+- Tests: 2,703 (unchanged)
+
 ## [5.46.0] — 2026-04-16
 
 #### Added
