@@ -4,6 +4,29 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.49.0] — 2026-04-17
+
+#### Added
+
+- **Sprint 402 — WindowsFlightedFeaturesPolicy** (10 tweaks, slug `flight`): Windows Insider / flighted feature controls — flighting enable/disable, release preview disable, dev/beta channel block, build information reporting, feature review data, pre-release update deferral, OOBE bypass, branch readiness level lock, insider build install block.
+- **Sprint 403 — WindowsPauseUpdatesPolicy** (10 tweaks, slug `pauseupd`): Windows Update pause and deferral controls — pause feature updates, pause quality updates, feature update deferral (30/60/90 days), quality update deferral (7/14/30 days), active hours window, update from peer-to-peer disable, delivery optimization restrict, auto-reboot disable during active hours.
+- **Sprint 404 — GameDvrPolicy** (10 tweaks, slug `gamedvr`): Game DVR and Game Bar recording controls — Game DVR enable/disable, Game Bar enable/disable, background recording, audio capture during recording, microphone capture, send feedback to Xbox, cursor capture, Game Mode system-wide, broadcast pause, frame rate target.
+- **Sprint 405 — AppxProvisioningPolicy** (10 tweaks, slug `appxprov`): APPX/MSIX provisioning policy controls — disable provisioning, block sideloading, require signed packages, APPX install service block, developer unlock allow, non-enterprise source block, auto-update from store disable, shared PC provisioning, Xbox app provisioning, Microsoft Store push install disable.
+- **Sprint 406 — MobilityPolicy** (10 tweaks, slug `mob`): Windows Mobility policy controls — cellular data roaming, mobile hotspot, USB tethering, auto-WiFi-to-cellular switch, Bluetooth tethering, Data Sense, carrier auto-provisioning, WiFi Sense, roaming profile sync, WWAN/cellular UI.
+
+#### Fixed
+
+- CI workflows: `upload-artifact@v7` → `@v4` in `ci.yml` and `debug.yml` (v7 does not exist — caused upload step failures)
+- `ci.yml` Write job summary: `$env:RUNNER_STATUS` (undefined) → `$env:JOB_STATUS` with proper `env: JOB_STATUS: ${{ job.status }}` injection
+- `release.yml`: added post-release verification step — confirms GitHub release exists and contains `RegiLattice.GUI.exe` + `RegiLattice.exe` after publish
+- `.gitignore`: added `**/StrykerOutput/` and `BenchmarkDotNet.Artifacts/` to prevent generated mutation + benchmark outputs from being tracked
+
+#### Stats
+
+- Tweaks: 7,225 → 7,275 (+50 across 5 new modules)
+- Categories: 438 → 443 (+5)
+- Tests: 2,703 (unchanged)
+
 ## [5.48.0] — 2026-04-17
 
 #### Added

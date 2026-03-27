@@ -56,7 +56,7 @@ jobs:
           --logger "console;verbosity=minimal"
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: "**/coverage.cobertura.xml"
@@ -79,9 +79,11 @@ jobs:
 
       - name: Write job summary
         if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
         shell: pwsh
         run: |
-          $icon = if ($env:RUNNER_STATUS -eq 'success') { '\u2705' } else { '\u274c' }
+          $icon = if ($env:JOB_STATUS -eq 'success') { '\u2705' } else { '\u274c' }
           @"
           ## CI Build & Test Summary
 
@@ -163,7 +165,7 @@ jobs:
 
       - name: Upload Stryker HTML report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: stryker-report
           path: src/RegiLattice.Core/StrykerOutput/
