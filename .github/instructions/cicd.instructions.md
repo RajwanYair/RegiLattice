@@ -163,6 +163,44 @@ jobs:
 5. GitHub Actions builds release artifact
 6. Create GitHub Release with artifact attached
 
+## Post-Release Verification (MANDATORY after every tag push)
+
+> **This is a standing rule. Do NOT skip post-release verification.**
+
+After every `git push --tags`, wait 3–5 minutes then run:
+
+```powershell
+# 1. Check all workflow runs for the tag — all must show 'success'
+gh run list --repo RajwanYair/RegiLattice --limit 5
+
+# 2. Spot-check the release workflow job conclusions
+$runId = (gh run list --repo RajwanYair/RegiLattice --workflow release.yml --limit 1 --json databaseId | ConvertFrom-Json)[0].databaseId
+gh run view $runId --repo RajwanYair/RegiLattice --json jobs | ConvertFrom-Json | Select-Object -ExpandProperty jobs | Select-Object name,conclusion
+
+# 3. Verify the release exists with all expected artifacts
+gh release view vX.Y.Z --repo RajwanYair/RegiLattice
+```
+
+**Expected artifacts on every release:**
+- `RegiLattice.GUI.exe` — GUI portable (self-contained win-x64)
+- `RegiLattice.exe` — CLI portable (self-contained win-x64)
+- `SHA256SUMS.txt` — checksums file
+- `*.msi` — MSI installer (optional — WiX build may skip if toolchain unavailable)
+
+**If release.yml failed:**
+```powershell
+# Re-trigger by deleting and re-pushing the tag:
+git tag -d vX.Y.Z
+git push origin :refs/tags/vX.Y.Z
+git tag vX.Y.Z
+git push --tags
+```
+
+**If notify-failure.yml creates a GH issue:** Close it once the next run is green.
+Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green as of <commit>."` 
+
+---
+
 ## CI Best Practices
 
 - **NuGet cache**: key on `.csproj` hash to invalidate on dependency changes
@@ -170,3 +208,5 @@ jobs:
 - **Codecov**: use `codecov-action@v5`; set `fail_ci_if_error: false`
 - **Windows-only**: no matrix needed — single `windows-latest` runner
 - **Self-contained publish**: `-r win-x64 --self-contained true -p:PublishSingleFile=true`
+- **Stryker mutation testing**: runs from `src/RegiLattice.Core/` directory with `STRYKER_BUILD=1`; explicit `<TargetFramework>` required in Core and Core.Tests .csproj files for Buildalyzer compatibility
+- **`dotnet build` verbosity**: NEVER use `-q`/`--verbosity quiet` — causes question-build aborts; use no flag or `--verbosity minimal`

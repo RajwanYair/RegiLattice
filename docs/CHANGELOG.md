@@ -4,6 +4,48 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.45.0] — 2026-04-16
+
+#### Added
+
+- **Sprint 382 — Account Lockout Policy** (`AccountLockoutPolicy.cs`, slug `acctlkout`):
+  10 new Group Policy tweaks covering interactive logon controls — require Ctrl+Alt+Del,
+  restrict blank password over network, disable locked-account messages, disable automatic
+  admin logon, set RAS lockout count, configure RAS lockout reset interval, disable
+  logon-hours lock message, disable network unlock banner, enable screensaver-timeout
+  auto-lock, and suppress last-username display on logon screen.
+- **Sprint 383 — Built-in Admin Policy** (`BuiltinAdminPolicy.cs`, slug `biadmin`):
+  10 new Group Policy tweaks covering UAC and built-in account security — restrict
+  anonymous SAM enumeration, restrict anonymous pipe access, require Admin Approval Mode,
+  disable local SYSTEM blank password use, set UAC consent-prompt behaviour, block UAC
+  virtualization, require secure-desktop prompt, enable UAC installer detection, restrict
+  run-as logon, and enforce the main UAC switch.
+- **Sprint 384 — Camera Privacy Policy** (`CameraPrivacyPolicy.cs`, slug `camprivacy`):
+  10 new Group Policy tweaks covering webcam access control — block all Windows app camera
+  access, block background camera processes, disable camera roll cloud upload, disable
+  camera for lock screen, block desktop app camera, block Win32 non-packaged app webcam,
+  disable face-analysis background services, restrict Cortana camera, disable automatic
+  camera framing (AI), and require per-user camera consent.
+- **Sprint 385 — Control Panel Policy** (`ControlPanelPolicy.cs`, slug `ctrlpanel`):
+  10 new Group Policy tweaks restricting Control Panel access — disable all Control Panel
+  and PC Settings access, hide Personalization settings, hide User Accounts settings, hide
+  Add/Remove Programs, disable Change Password option, restrict network-connection add/
+  remove components, hide System Properties, disable Power Options page, and hide Windows
+  Update settings in Control Panel.
+- **Sprint 386 — Default Browser Policy** (`DefaultBrowserPolicy.cs`, slug `defbrowser`):
+  10 new Group Policy tweaks governing default browser enforcement — suppress Edge default
+  browser nag, disable IE first-run browser choice prompt, block Edge WebView2 protocol
+  handler, lock default browser for all users, suppress Edge startup browser suggestion,
+  disable Edge auto-setting itself on updates, disable Edge intent-picker redirect, prevent
+  Edge file-protocol interception, preserve default browser across Windows feature updates,
+  and disable Edge side-panel web content.
+
+#### Stats
+
+- **Tweaks**: 7 025 → 7 075 (+50)
+- **Categories**: 418 → 423 (+5)
+- **Tests**: 2 703 (unchanged)
+
 ## [5.44.0] — 2026-04-01
 
 #### Added
