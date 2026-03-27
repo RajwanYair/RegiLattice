@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-04-16 (v5.47.0, ~7175 tweaks, 433 categories, 2703 tests).
+> Last verified: 2026-04-16 (v5.48.0, ~7225 tweaks, 438 categories, 2703 tests).
 
 ## Companion Instruction Files
 
@@ -81,9 +81,9 @@ Rules:
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
 | Test     | xUnit 2.9.3 — 2,703 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 5.47.0                                                                   |
+| Version  | 5.48.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 7175 across 433 categories (428 module files)                            |
+| Tweaks   | 7225 across 438 categories (433 module files)                            |
 | Tests    | 2703 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
