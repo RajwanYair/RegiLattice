@@ -23,8 +23,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 #### Stats
 
-- Tweaks: 7,225 → 7,275 (+50 across 5 new modules)
-- Categories: 438 → 443 (+5)
+- Tweaks: 7,205 → 7,255 (+50 across 5 new modules) *(actual verified count)*
+- Categories: 434 → 439 (+5)
 - Tests: 2,703 (unchanged)
 
 ## [5.48.0] — 2026-04-17
