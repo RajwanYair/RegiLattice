@@ -145,9 +145,9 @@ graph LR
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (418)
+## Tweak Categories (439)
 
-418 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
+439 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
