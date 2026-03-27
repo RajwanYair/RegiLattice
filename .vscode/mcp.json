@@ -22,7 +22,9 @@
         "http_proxy": "${env:HTTP_PROXY}",
         "https_proxy": "${env:HTTPS_PROXY}",
         "NO_PROXY": "localhost,127.0.0.1,::1",
-        "no_proxy": "localhost,127.0.0.1,::1"
+        "no_proxy": "localhost,127.0.0.1,::1",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "npm_config_strict_ssl": "false"
       }
     },
     "filesystem": {
@@ -33,7 +35,9 @@
         "${workspaceFolder}"
       ],
       "env": {
-        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "npm_config_strict_ssl": "false"
       }
     },
     "project-docs": {
@@ -45,7 +49,9 @@
         "${workspaceFolder}\\docs"
       ],
       "env": {
-        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}"
+        "PATH": "${env:APPDATA}\\npm;${env:USERPROFILE}\\scoop\\shims;${env:USERPROFILE}\\scoop\\apps\\nvm\\current\\nodejs\\nodejs;${env:PROGRAMFILES}\\nodejs;${env:PATH}",
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "npm_config_strict_ssl": "false"
       }
     }
   }
