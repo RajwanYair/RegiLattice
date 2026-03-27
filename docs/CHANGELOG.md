@@ -4,6 +4,48 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.46.0] — 2026-04-16
+
+#### Added
+
+- **Sprint 387 — Device Lock GPO Policy** (`DeviceLockGpoPolicy.cs`, slug `devlockgpo`):
+  10 new Group Policy tweaks covering device lock and session security — disable Windows
+  Hello for Business enrollment, suppress post-logon provisioning prompt, disable PIN
+  recovery cloud service, require TPM chip for WHfB, enforce screensaver password, enforce
+  screensaver activation, set screensaver timeout to 600 s, disable lock-screen
+  notifications, disable camera on lock screen, and disable lock-screen notification apps.
+- **Sprint 388 — DFS Namespace Policy** (`DfsnPolicy.cs`, slug `dfsn`):
+  10 new Group Policy tweaks covering network connections and DFS clients — disable
+  long-path provider override, enable DFS client long-path support, restrict VPN
+  connection profile UI, restrict ICS sharing, restrict network location wizard, disable
+  Remote Access Connection Manager UI, prohibit network bridge creation, hide LAN
+  connection properties, prohibit deletion of network connections, and prohibit RAS
+  connect/disconnect.
+- **Sprint 389 — .NET Framework Policy** (`DotNetFrameworkPolicy.cs`, slug `dotnet`):
+  10 new Group Policy tweaks governing .NET Framework security — disable Authenticode
+  publisher trust prompt, disable ClickOnce untrusted publisher prompt, disable strong-name
+  bypass, disable legacy CAS/DCOM activation, disable JIT debugger prompt, disable NGen PDB
+  collection, prefer in-box runtime, disable publisher evidence, enforce latest CLR, and
+  disable .NET hosting in the IE WebBrowser control.
+- **Sprint 390 — Edge Extension Policy** (`EdgeExtensionPolicy.cs`, slug `edgeext`):
+  10 new Group Policy tweaks governing Edge extension security — block external extension
+  installs, disable DevTools, disable component updates, block extension allowed types,
+  disable native messaging user hosts, restrict Manifest V2 extensions, disable shopping
+  assistant, disable Edge Wallet checkout, enable SmartScreen for trusted downloads, and
+  enable Enhanced Security Mode (strict/JIT-disabled).
+- **Sprint 391 — Edge Startup Policy** (`EdgeStartupPolicy.cs`, slug `edgestart`):
+  10 new Group Policy tweaks governing Edge startup behaviour — set startup to New Tab
+  Page, disable startup boost preloading, disable sleeping tabs, disable performance
+  detector, disable NTP prerendering, lock NTP search box to Bing, set home page to NTP,
+  disable experimentation and A/B testing service, disable tab groups, and disable Edge
+  Workspaces sharing.
+
+#### Stats
+
+- **Tweaks**: 7 075 → 7 125 (+50)
+- **Categories**: 423 → 428 (+5)
+- **Tests**: 2 703 (unchanged)
+
 ## [5.45.0] — 2026-04-16
 
 #### Added
