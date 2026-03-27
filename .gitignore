@@ -48,7 +48,12 @@ htmlcov/
 **/TestResults/
 **/coverage.cobertura.xml
 **/diag*.txt
+# ── Mutation testing (Stryker.NET) ──────────────────────────────────────────
+**/StrykerOutput/
+mutation-report*/
 
+# ── Benchmark results ────────────────────────────────────────────────────────
+BenchmarkDotNet.Artifacts/
 # ── Profiling data ───────────────────────────────────────────
 *.dat
 *.nettrace

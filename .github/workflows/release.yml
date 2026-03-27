@@ -255,3 +255,38 @@ jobs:
           }
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "Release $tag published successfully"
+
+      - name: Verify release published cleanly
+        # Confirms the release exists on GitHub with the mandatory artifacts.
+        # Fails the workflow (and triggers notify-failure.yml → GH Issue) if
+        # the GUI or CLI EXE is missing from the release asset list.
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          # Retry up to 3 times — GitHub CDN may lag a few seconds after upload
+          $attempts = 0
+          do {
+            Start-Sleep -Seconds 5
+            $assets = gh release view $tag --json assets --jq '.assets[].name' 2>&1
+            $attempts++
+          } while ($LASTEXITCODE -ne 0 -and $attempts -lt 3)
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Release $tag not found on GitHub after $attempts attempt(s)"
+            exit 1
+          }
+
+          $assetList = $assets -split '\n' | Where-Object { $_ -ne '' }
+          Write-Host "Release $tag assets ($($assetList.Count)):"
+          $assetList | ForEach-Object { Write-Host "  $_" }
+
+          $missing = @()
+          if ($assetList -notcontains 'RegiLattice.GUI.exe') { $missing += 'RegiLattice.GUI.exe' }
+          if ($assetList -notcontains 'RegiLattice.exe')     { $missing += 'RegiLattice.exe' }
+          if ($missing.Count -gt 0) {
+            Write-Error "Release $tag is MISSING required assets: $($missing -join ', ')"
+            exit 1
+          }
+          Write-Host "\u2705 Release $tag verified — all required assets present"
