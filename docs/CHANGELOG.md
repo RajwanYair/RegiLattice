@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.51.0] — 2026-04-18
+
+#### Added
+
+- **Sprint 412 — EdgePrintAndPdfPolicy** (10 tweaks, slug `edgepdp`): Edge print and PDF handling controls — disable printing entirely, remove print header/footer, default to system printer, disable cloud print, block legacy printer drivers, open PDFs externally, disable PDF annotations, disable XFA forms, set PDF print rasterize DPI to 150, suppress Edge default PDF viewer recommendation.
+- **Sprint 413 — EdgeSearchAddressBarPolicy** (10 tweaks, slug `edgesrch`): Edge address bar and search controls — disable search suggestions, remove Bing from address bar provider, disable local intranet suggestions, disable network prediction/prefetch, disable DNS interception check, disable web service for navigation error pages, disable alternate error page web service, disable cloud Related Matches, disable sidebar search, disable typosquatting checker.
+- **Sprint 414 — EdgeMediaCapturePolicy** (10 tweaks, slug `edgemedia`): Edge media and device capture controls — block camera, block microphone, block screen capture, disable Google Cast, block Web Bluetooth API, block WebHID API, block WebUSB API, block Serial API, disable Gamepad API, disable AI math solver.
+- **Sprint 415 — EdgeTrackingProtectionPolicy** (10 tweaks, slug `edgetrack`): Edge tracking and privacy protection controls — enforce strict tracking prevention, clear cache on exit, disable user feedback/crash reporting, disable Signed HTTP Exchange, enforce SAB cross-origin isolation, disable Surf easter egg game, disable Immersive Reader grammar tools, block intrusive ads on violating sites, disable built-in DNS client, disable Lens region image search.
+- **Sprint 416 — EdgeInternetExplorerModePolicy** (10 tweaks, slug `iemode`): Edge Internet Explorer mode controls — disable IE integration level, block user reload in IE mode, block IE mode tab navigation to Edge mode, block local files from IE mode, block local pages from IE mode, disable intranet auto-redirect to IE, enable enhanced hang detection, block zone-marked MHT files from IE mode, set window.open width threshold to 0, disable cloud site list management.
+
+#### Stats
+
+- Tweaks: 7,305 → 7,355 (+50 across 5 new modules)
+- Categories: 444 → 449 (+5)
+- Tests: 2,667
+
 ## [5.50.0] — 2026-04-17
 
 #### Added
