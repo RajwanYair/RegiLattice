@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.53.0] — 2026-04-18
+
+#### Added
+
+- **Sprint 422 — FocusAssistPolicy** (10 tweaks, slug `fa`): Focus Assist (Quiet Hours) Group Policy controls — disable Quiet Hours feature-wide, disable automatic rules, disable Game Mode DnD, disable presentation-mode DnD, disable summary notification, disable full-screen app DnD, lock the priority list, disable out-of-hours rule, disable first-hour rule, force priority-only mode.
+- **Sprint 423 — InputPersonalizationPolicy** (10 tweaks, slug `inpp`): Input Personalization Group Policy controls — deny all input personalization telemetry, restrict ink collection, restrict text collection, disable inking/keyboard personalization, disable user dictionary sync, disable ink learning, disable text prediction, disable linguistic data collection, disable handwriting telemetry, disable input data upload.
+- **Sprint 424 — CrashDumpPolicy** (10 tweaks, slug `cdump`): Crash Dump & Error Recovery Group Policy controls — disable kernel crash dump, set mini dump mode, disable automatic reboot on crash, disable event log on crash, disable alert on crash, disable storage telemetry, disable dump log file, overwrite existing dump files, disable filter pages in dumps, disable dedicated dump file.
+- **Sprint 425 — WinHttpProxyPolicy** (10 tweaks, slug `whttp`): WinHTTP Proxy Group Policy controls — disable WPAD, disable automatic proxy detection, disable proxy bypass for local addresses, delete AutoConfigURL value, set connection timeout, set receive timeout, disable SSL vulnerability check, disable NTLM auth scheme, disable redirect following, disable WPAD DNS lookup.
+- **Sprint 426 — TimeSyncAdvPolicy** (10 tweaks, slug `tsap`): Advanced Time Synchronisation Group Policy controls — set NTP type, set NTP server, disable NoSync mode, set polling interval, set min poll interval, set max positive phase correction, set max negative phase correction, enable Hyper-V time provider, set large phase spike threshold, set event log flags.
+
+#### Stats
+
+- Tweaks: 7,405 → 7,455 (+50 across 5 new modules)
+- Categories: 454 → 459 (+5)
+- Tests: 2,742 (unchanged)
+
 ## [5.52.0] — 2026-04-18
 
 #### Added
