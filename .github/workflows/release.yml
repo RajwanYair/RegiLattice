@@ -54,7 +54,7 @@ jobs:
       - name: Test (Core)
         run: >-
           dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
-          -c Release --no-build
+          -c Release --no-restore
           --settings tests/.runsettings
           --blame-hang-timeout 30s
           --logger "console;verbosity=minimal"
@@ -62,7 +62,7 @@ jobs:
       - name: Test (CLI)
         run: >-
           dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj
-          -c Release --no-build
+          -c Release --no-restore
           --settings tests/.runsettings
           --blame-hang-timeout 30s
           --logger "console;verbosity=minimal"
@@ -70,7 +70,7 @@ jobs:
       - name: Test (GUI)
         run: >-
           dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj
-          -c Release --no-build
+          -c Release --no-restore
           --settings tests/.runsettings
           --blame-hang-timeout 30s
           --logger "console;verbosity=minimal"
