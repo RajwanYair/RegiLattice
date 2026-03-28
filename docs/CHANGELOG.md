@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.52.0] — 2026-04-18
+
+#### Added
+
+- **Sprint 417 — EdgeSecureBrowsingPolicy** (10 tweaks, slug `edgesec`): Edge secure browsing and connection controls — enforce online revocation checks, require revocation checks for local anchors, disable mixed-content auto-upgrade, disable HTTPS upgrades, block insecure private network requests, disable dinosaur easter egg, disable guest mode, disable ClickOnce support, disable HTTPS-only mode, disable SHA-1 for local anchors.
+- **Sprint 418 — EdgeProfileSignInPolicy** (10 tweaks, slug `edgeprof`): Edge profile and sign-in lockdown controls — enforce browser sign-in lockdown, disable implicit sign-in, disable guided account switch, disable profile separation, disable Azure AD SSO, disable floating workspace, discard browsing data on enterprise profile creation, restrict to on-prem domain-joined machines, hide Acrobat subscription button, disable InPrivate mode.
+- **Sprint 419 — EdgeNotificationsAndPopupPolicy** (10 tweaks, slug `edgenotif`): Edge notification, popup and sensor permission controls — block notifications by default, block popups by default, disable password reveal button, block geolocation by default, disable shopping list, disable related website sets, disable in-app support, block sensors by default, disable browser labs, disable full-screen mode.
+- **Sprint 420 — EdgeDownloadHistoryPolicy** (10 tweaks, slug `edgedl`): Edge download, history and telemetry controls — block all downloads, disable download location prompt, enforce Bing SafeSearch strict, delete browsing history on exit, disable Google Cast/media router, disable auto-update, disable "always open" external protocol checkbox, disable warn-before-exit prompt, hide Office shortcut in favorites, suppress unsupported OS warning.
+- **Sprint 421 — EdgeSmartScreenAndSiteIsolationPolicy** (10 tweaks, slug `edgessf`): Edge SmartScreen, site isolation and enterprise security controls — enable SmartScreen, enable SmartScreen PUA blocking, prevent SmartScreen override prompts, prevent file-level SmartScreen overrides, block clipboard API by default, enforce site-per-process isolation, block legacy extension points, disable Edge Discover sidebar, block vertical tabs, disable ADFS.
+- **Testing**: Added 39 new unit tests covering all Sprint 412-421 modules — ID uniqueness, HasOperations, label/description, ImpactScore/SafetyRating range, CorpSafe flag, registry key prefix, DetectOps path, intra-batch duplicate registry ops, and TweakValidator checks.
+- **Infrastructure**: Raised `TestSessionTimeout` in `tests/.runsettings` from 60 s → 300 s; the previous 60 s wall-clock limit caused "Test Run Aborted" on OneDrive-backed builds with 700+ tests loading in ~46 s.
+
+#### Stats
+
+- Tweaks: 7,355 → 7,405 (+50 across 5 new modules)
+- Categories: 449 → 454 (+5)
+- Tests: 2,742 (+39)
+
 ## [5.51.0] — 2026-04-18
 
 #### Added

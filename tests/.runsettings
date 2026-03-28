@@ -6,8 +6,10 @@
          compliance-history.json file; parallel execution causes non-deterministic
          failures in AddEntry_ExceedsMaxEntries_TrimsOldestEntries). -->
     <MaxCpuCount>1</MaxCpuCount>
-    <!-- 60 s total session hard limit per assembly (each project runs separately, not as solution) -->
-    <TestSessionTimeout>60000</TestSessionTimeout>
+    <!-- 300 s total session hard limit per assembly (each project runs separately, not as solution).
+         Raised from 60 s → 300 s: the Core.Tests assembly has 700+ tests and the 60 s wall-clock
+         limit caused "Test Run Aborted" on slower machines / OneDrive-backed builds. -->
+    <TestSessionTimeout>300000</TestSessionTimeout>
     <!-- 20 s per individual test — generous for slow CI systems -->
     <TestCaseTimeout>20000</TestCaseTimeout>
     <!--
