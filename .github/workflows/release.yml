@@ -48,9 +48,28 @@ jobs:
       - name: Build Release
         run: dotnet build RegiLattice.sln -c Release --no-restore
 
-      - name: Test
+      # Run test projects individually (not as solution) to guarantee sequential
+      # execution and prevent shared-file races between Core.Tests and GUI.Tests.
+      # See tests/.runsettings — MaxCpuCount=1 note.
+      - name: Test (Core)
         run: >-
-          dotnet test RegiLattice.sln
+          dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj
+          -c Release --no-build
+          --settings tests/.runsettings
+          --blame-hang-timeout 30s
+          --logger "console;verbosity=minimal"
+
+      - name: Test (CLI)
+        run: >-
+          dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj
+          -c Release --no-build
+          --settings tests/.runsettings
+          --blame-hang-timeout 30s
+          --logger "console;verbosity=minimal"
+
+      - name: Test (GUI)
+        run: >-
+          dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj
           -c Release --no-build
           --settings tests/.runsettings
           --blame-hang-timeout 30s
