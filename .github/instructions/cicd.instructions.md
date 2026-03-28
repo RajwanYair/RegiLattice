@@ -205,6 +205,10 @@ Use: `gh issue close <N> --repo RajwanYair/RegiLattice --comment "CI now green a
 
 - **NuGet cache**: key on `.csproj` hash to invalidate on dependency changes
 - **Build once, test from build**: use `--no-build` in test step after `dotnet build`
+- **Per-project test runs — MANDATORY**: NEVER use `dotnet test RegiLattice.sln`. Always run each
+  test project individually (Core → CLI → GUI). `dotnet test RegiLattice.sln` spawns Core.Tests and
+  GUI.Tests concurrently as separate processes, both writing to the same `compliance-history.json`
+  file, causing non-deterministic failures. See `tests/.runsettings` MaxCpuCount note.
 - **Codecov**: use `codecov-action@v5`; set `fail_ci_if_error: false`
 - **Windows-only**: no matrix needed — single `windows-latest` runner
 - **Self-contained publish**: `-r win-x64 --self-contained true -p:PublishSingleFile=true`
