@@ -6,88 +6,18 @@ applyTo: "**/*.cs,**/Tweaks/**,**/tests/**"
 
 > Prevention is cheaper than remediation.
 > Apply these rules when adding tweaks, reviewing code, or before every commit.
+>
+> **Full 4-layer rules, PowerShell audit commands, and step-by-step workflow:**
+> see `.github/skills/no-duplication/SKILL.md`
 
-## The 4 Layers of Duplication to Prevent
+## The 4 Duplication Layers (summary)
 
-### Layer 1 — ID Duplication (HARD BLOCK)
-
-**Rule**: Every tweak `Id` must be globally unique across all 94+ modules.
-
-`TweakEngine.Register()` throws `ArgumentException` on duplicate IDs — this is a
-compile-time-equivalent guard. A duplicate ID is always a bug.
-
-**Pre-commit check** (run before writing any new tweak):
-```powershell
-# Search all tweak modules for an ID before using it
-Select-String -Pattern '"new-tweak-id"' -Path src/RegiLattice.Core/Tweaks/*.cs
-```
-
-**Automated gate**: `TweakEngineBuiltinsTests.RegisterBuiltins_AllIdsUnique` — must be green.
-
----
-
-### Layer 2 — Functional / Ops Duplication (WARN → JUSTIFY OR REMOVE)
-
-**Rule**: No two `TweakDef` entries should write to the same registry `PATH\ValueName`
-(via `ApplyOps`). Writing the same value from two different tweaks means one of them:
-- Is in the wrong module (misfiled)
-- Is a redundant tweak that should be removed
-- Is a semantic duplicate with a different category claim
-
-`TweakValidator.DetectDuplicateRegistryOps()` finds all such cases.
-
-**Pre-commit check** (run after writing new tweaks):
-```powershell
-# Quick scan for literal duplicates in source files (catches most cases)
-Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'SetDword|SetString|SetExpandString|SetQword' |
-    ForEach-Object {
-        if ($_ -match '"(HKEY[^"]+|HKCU[^"]+|HKLM[^"]+)"') {
-            $path = $Matches[1]
-            if ($_ -match '",\s*"([^"]+)"') { "$path\$($Matches[1])" }
-        }
-    } | Group-Object | Where-Object Count -gt 1 | Select-Object -First 20 Count, Name
-```
-
-**Automated gate**: `TweakEngineBuiltinsTests.RegisterBuiltins_DuplicateRegistryOps_BelowRegressionThreshold`
-— the count must not exceed the current threshold. If your change increases the count, justify or remove the dupe.
-
-**Acceptable exceptions** (document with `// INTENTIONAL DUPLICATE:` comment):
-- Same registry key/value but semantically different context (e.g., telemetry key set by both
-  a "minimal" tweak and a "privacy hardening" tweak as different user journeys)
-- Cross-category coordination where both tweaks need to ensure the value is set (rare)
-
----
-
-### Layer 3 — Label Duplication (CONTEXTUAL)
-
-**Rule**: Identical `Label` strings across different modules are a smell but not always a bug.
-Same label + same registry path = almost certainly a true duplicate (must be removed).
-Same label + different registry paths = may be acceptable (same feature, different mechanism).
-
-**Pre-commit check**:
-```powershell
-# Find tweaks with duplicate labels
-Select-String -Path src/RegiLattice.Core/Tweaks/*.cs -Pattern 'Label = "' |
-    ForEach-Object { ($_ -split '"')[1] } |
-    Group-Object | Where-Object Count -gt 1 |
-    Sort-Object Count -Descending | Select-Object -First 20 Count, Name
-```
-
-**Automated gate**: `TweakEngineBuiltinsTests.RegisterBuiltins_NoCrossModuleLabelAndPathCollision`
-— same (Label + RegistryKeys[0]) across multiple categories = fail.
-
----
-
-### Layer 4 — Cross-Module Conceptual Duplication
-
-**Rule**: Two tweaks that achieve the same user-visible outcome through different registry
-paths should be merged into one tweak with multiple `ApplyOps`. Don't split the same
-function across two module files just because different registry paths are involved.
-
-**Detection approach**:
-- Same `Label`, same `Category`, different registry keys → likely should be one tweak
-- Same category slug prefix, very similar description → review for consolidation
-- Run `scripts/Audit-Duplications.ps1` for a comprehensive report
+| Layer | Severity | Auto-detected by |
+|---|---|---|
+| 1 — Duplicate ID | **HARD BLOCK** | `TweakEngine.Register()` + `RegisterBuiltins_AllIdsUnique` test |
+| 2 — Duplicate registry op (same `PATH\ValueName`) | **Warning** | `TweakValidator.DetectDuplicateRegistryOps()` + builtins threshold test |
+| 3 — Duplicate label (same human name in 2+ modules) | **Smell** | Label scan + `RegisterBuiltins_NoCrossModuleLabelAndPathCollision` test |
+| 4 — Conceptual duplicate (same outcome, different code path) | **Debt** | Manual review + `Audit-Duplications.ps1` |
 
 ---
 

@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.50.0] — 2026-04-17
+
+#### Added
+
+- **Sprint 407 — WindowsStoreForBusinessPolicy** (10 tweaks, slug `wsfb`): Windows Store for Business / private store enforcement — disable store apps, require private store only, disable automatic download/app updates, disable store purchase, block non-enterprise apps, disable store UI, disable store implicit access, disable in-app purchases, disable gaming store, disable store pre-install requirements.
+- **Sprint 408 — WindowsLogonOptionsPolicy** (10 tweaks, slug `wlogon`): Logon UI behaviour controls — disable last username display, disable last user account info, require Ctrl+Alt+Del, disable password reveal button, set legal notice caption, set legal notice text, disable fast user switching, disable unlocking from non-domain context, set machine inactivity lock limit, disable smart-card removal behavior none.
+- **Sprint 409 — WindowsEventLogAccessPolicy** (10 tweaks, slug `evtacc`): Event log channel size and access restrictions — set Security log 100 MB, set System log 50 MB, set Application log 50 MB, set PowerShell log 50 MB, Security log retain 7 days, Security log auto-backup, restrict guest access to Security/System/Application logs, System log auto-backup.
+- **Sprint 410 — WindowsDiagTrackPolicy** (10 tweaks, slug `diagtrk`): DiagTrack / Connected User Experiences & Telemetry service policies — set telemetry security-only level, disable opt-in change notifications, disable opt-in settings UI, disable enterprise auth proxy, disable device name in telemetry, limit diagnostic log collection, disable memory dump collection, limit dump collection size, disable OneSettings downloads, disable cloud clipboard integration.
+- **Sprint 411 — WindowsMediaPlayerPolicy** (10 tweaks, slug `wmplay`): Windows Media Player enterprise policies — disable auto codec download, disable network settings change, disable auto update check, disable internet streaming, disable DRM license acquisition, disable library sharing, disable online media information retrieval, disable usage reporting, disable remote skin/visualizer download, hide privacy tab in options.
+
+#### Stats
+
+- Tweaks: 7,255 → 7,305 (+50 across 5 new modules)
+- Categories: 439 → 444 (+5)
+- Tests: 2,703 (unchanged)
+
 ## [5.49.0] — 2026-04-17
 
 #### Added
