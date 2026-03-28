@@ -5,7 +5,7 @@
      shutup10 alternative w10privacy alternative O&O ShutUp10 winutil win11debloat
      windows 11 tweaks windows 10 tweaks gaming optimization security hardening
      registry backup corporate IT sysadmin gpo intune-compatible compliance audit
-     7255 tweaks 439 categories declarative regop engine dry-run snapshot diff
+     7455 tweaks 459 categories declarative regop engine dry-run snapshot diff
      RegiLattice windows-optimizer tweak-manager registry-automation open-source
 -->
 
@@ -20,18 +20,18 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-2703%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-2742%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-5.49.0-blue)
+![Version](https://img.shields.io/badge/version-5.53.0-blue)
 
-A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7255 verified tweaks** across **439 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
+A comprehensive **Windows 10 / Windows 11 registry tweak toolkit** and system optimizer — debloater · privacy hardening tool · performance optimizer · security hardening · group policy alternative — with **7455 verified tweaks** across **459 categories**, a **declarative RegOp engine**, a **full CLI** with 25+ commands, an **interactive console menu**, and a **WinForms GUI** with **11 switchable themes**. Built on **.NET 10 (C# 13)** for native performance on Windows 10/11 x64.
 
 ## Download & Install
 
 **Pre-built installer (recommended):**
 
-👉 **[Download RegiLattice v5.49.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
+👉 **[Download RegiLattice v5.53.0](https://github.com/RajwanYair/RegiLattice/releases/latest)** (MSI installer + portable EXE) from the [Releases page](https://github.com/RajwanYair/RegiLattice/releases)
 
 The MSI installer:
 - Installs **GUI** (`RegiLattice.GUI.exe`) under `Program Files\RegiLattice\GUI\`
@@ -50,7 +50,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/stats.svg" alt="RegiLattice Stats" width="100%"/>
 </p>
 
-- **7255 verified tweaks** across 439 categories — each fully reversible with apply + remove
+- **7455 verified tweaks** across 459 categories — each fully reversible with apply + remove
 - **Declarative RegOp pattern** — most tweaks defined as data (`ApplyOps`/`RemoveOps`/`DetectOps`), not code
 - **3 interfaces** — WinForms GUI, CLI with 25+ commands, interactive console menu
 - **WinForms GUI** — 11 switchable themes (Catppuccin Mocha/Latte, Nord, Dracula, Tokyo Night, Gruvbox Dark, Solarized Dark, One Dark Pro, Rosé Pine, Everforest, Cyberpunk), collapsible categories, scope badges (USER/MACHINE/BOTH), live search, checkbox selection, status filters, profile selector
@@ -67,7 +67,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **2703 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **2742 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -103,12 +103,12 @@ graph LR
         PM[Plugins / Packs]
     end
 
-    subgraph Tweaks["439 Categories · 7255 tweaks"]
+    subgraph Tweaks["459 Categories · 7455 tweaks"]
         T1[Performance]
         T2[Privacy]
         T3[Security]
         T4[Gaming]
-        TN[... 439 more]
+        TN[... 459 more]
     end
 
     CLI --> TE
@@ -147,9 +147,9 @@ graph LR
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (439)
+## Tweak Categories (459)
 
-439 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
+459 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
@@ -169,7 +169,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (2703 tests)
+# Run tests (2742 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -255,12 +255,12 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 ```mermaid
 graph TD
     subgraph SRC["📁 src/"]
-        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>436 Modules · 7255 tweaks · 439 categories"]
+        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>441 Modules · 7455 tweaks · 459 categories"]
         GUI["🖥️ RegiLattice.GUI<br/>WinForms · 11 Themes<br/>MainForm · 9 Dialogs · 5 Package Managers"]
         CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
     end
 
-    subgraph TST["🧪 tests/  ·  2703 xUnit tests"]
+    subgraph TST["🧪 tests/  ·  2742 xUnit tests"]
         CT["Core.Tests<br/>2063 tests · 12 files"]
         CLT["CLI.Tests<br/>301 tests · 1 file"]
         GT["GUI.Tests<br/>339 tests · 3 files"]
