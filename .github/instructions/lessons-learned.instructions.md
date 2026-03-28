@@ -7,7 +7,44 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-24 (v5.5.0, C# 13 / .NET 10.0-windows, ~5075 tweaks, 223 categories, 2693 tests)
+> Last updated: 2026-04-18 (v5.52.0, C# 13 / .NET 10.0-windows, ~7405 tweaks, 454 categories, 2742 tests)
+
+---
+
+## Cross-Assembly Test Race Condition — NEVER Use `dotnet test RegiLattice.sln`
+
+`dotnet test RegiLattice.sln` spawns all three test assemblies (Core.Tests, CLI.Tests,
+GUI.Tests) as **separate processes that run concurrently** on CI. Tests in different
+assemblies that write to the same on-disk file cause non-deterministic failures:
+
+| Failing test | Root cause |
+|---|---|
+| `GetHistory_NullJsonFile_ReturnsEmpty` | `ComplianceHistoryNullJsonBranchTests` wrote "null" to file; concurrently running `ComplianceTrendDialogTests` (GUI.Tests) overwrote it with real entries |
+| `TotalViolationsInLast_PartialCount_SumsOnlyLastN` | `ComplianceHistoryTests` added 5 entries; GUI.Tests tear-down truncated the file mid-test |
+
+**Fix (applied v5.52.0)**: Run each test project individually so they execute sequentially:
+
+```yaml
+# ✅ CORRECT — avoids cross-assembly file races
+- name: Test (Core)
+  run: dotnet test tests/RegiLattice.Core.Tests/RegiLattice.Core.Tests.csproj ...
+- name: Test (CLI)
+  run: dotnet test tests/RegiLattice.CLI.Tests/RegiLattice.CLI.Tests.csproj ...
+- name: Test (GUI)
+  run: dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj ...
+
+# ❌ BROKEN — runs Core.Tests and GUI.Tests concurrently
+- name: Test
+  run: dotnet test RegiLattice.sln ...
+```
+
+`tests/.runsettings` has `<MaxCpuCount>1</MaxCpuCount>` and a comment explaining this.
+The `xunit.runner.json` in tests/ has `"parallelizeAssembly": false` — but this only
+controls parallelism WITHIN one assembly, not across test runner processes.
+
+**Rule**: Every new test file that writes to disk (ratings, favorites, analytics,
+compliance history, etc.) MUST use `IDisposable` + temp-file or `[Collection("X")]`
+isolation. Files in `%LOCALAPPDATA%\RegiLattice\` are shared across all test assemblies.
 
 ---
 

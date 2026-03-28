@@ -79,6 +79,8 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 
 ## Architecture
 
+> Full architecture reference — Mermaid diagrams for data flow, class model, CI pipeline, and more: **[docs/Architecture.md](docs/Architecture.md)**
+
 <p align="center">
   <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture — Core, GUI, CLI, Tweaks, Registry" width="100%"/>
 </p>
