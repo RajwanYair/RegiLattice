@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.82.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 567-571): EdgeNewTabPagePolicy, EdgePasswordManagerPolicy, EdgeWorkProfilePolicy, EnterpriseDeviceManagementPolicy, EnterpriseResourceDeployPolicy.
+
+#### Stats
+
+- Total: **8895 tweaks**, 603 categories, 600 module files
+
+---
+
+
 ## [5.81.0] — 2026-03-29
 
 #### Added
