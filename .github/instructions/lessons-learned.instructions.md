@@ -1157,6 +1157,28 @@ action, but the error is not always obvious from the log.
 **Caught in v5.49.0**: `upload-artifact@v7` was pinned in `ci.yml` and `debug.yml`. v7 does
 not exist; the latest stable at that time was `@v4`. Fixed to `@v4`.
 
+**Caught in v5.74.0**: All 6 active workflows had a cluster of non-existent versions —
+`actions/checkout@v6`, `actions/setup-dotnet@v5`, `actions/cache@v5` (none of these major
+versions exist; latest stable is `@v4` for all three), plus `github/codeql-action/init@v4`,
+`github/codeql-action/analyze@v4`, and `github/codeql-action/upload-sarif@v4` (v4 does not
+exist for codeql-action; latest stable is `@v3`). Fixed in commit `bc51a02`.
+
+**Canonical stable versions (verified 2026-03-29)**:
+
+| Action | Latest Stable |
+|--------|--------------|
+| `actions/checkout` | `@v4` |
+| `actions/setup-dotnet` | `@v4` |
+| `actions/cache` | `@v4` |
+| `actions/upload-artifact` | `@v4` |
+| `github/codeql-action/init` | `@v3` |
+| `github/codeql-action/analyze` | `@v3` |
+| `github/codeql-action/upload-sarif` | `@v3` |
+| `actions/dependency-review-action` | `@v4` |
+| `actions/labeler` | `@v5` |
+| `actions/github-script` | `@v7` |
+| `actions/stale` | `@v9` |
+
 **Rule**: Before committing any new or bumped action version, verify it exists:
 
 1. Check the action's GitHub releases page (e.g., `https://github.com/actions/upload-artifact/releases`)
