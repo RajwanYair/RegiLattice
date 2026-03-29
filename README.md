@@ -108,7 +108,7 @@ graph LR
         T2[Privacy]
         T3[Security]
         T4[Gaming]
-        TN[... 459 more]
+        TN[... 460 more]
     end
 
     CLI --> TE
@@ -367,7 +367,7 @@ MIT — see [LICENSE](LICENSE) for details.
 
 Paste this into the repository **Description** field for maximum GitHub search visibility:
 
-> Windows 10/11 registry tweaks toolkit — 5125 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
+> Windows 10/11 registry tweaks toolkit — 7,505 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative. WinForms GUI + CLI. .NET 10, C# 13.
 
 ### Recommended GitHub Topics
 
@@ -377,7 +377,7 @@ Set the following topics on the repository (GitHub UI → "About" gear → Topic
 
 ### Repository Description *(paste into GitHub → About gear → Description)*
 
-> Windows 10/11 registry tweaks toolkit — 5125 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
+> Windows 10/11 registry tweaks toolkit — 7,505 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source.
 
 ### Search Keywords
 
