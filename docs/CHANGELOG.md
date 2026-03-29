@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.54.0] — 2026-04-19
+
+#### Added
+
+- **Sprint 427 — PushNotificationsPolicy** (10 tweaks, slug `pnp`): Windows Push Notification Service Group Policy controls — disable all toast notifications, disable lock-screen toasts, disable cloud notifications, disable live tile notifications, disable notification mirroring, disable app notifications via policy, disable WNS cloud toast delivery, restrict push notification app count, disable badge notifications on lock screen, disable user override of quiet settings.
+- **Sprint 428 — AddRemoveProgramsPolicy** (10 tweaks, slug `arpp`): Add or Remove Programs applet Group Policy controls — disable the applet entirely, hide Add New Programs tab, hide Windows Components tab, prevent changing installed programs, block the Remove Programs page, hide support information link, block adding programs from network, hide Services tab, hide Choose Programs interface, enforce default category view.
+- **Sprint 429 — InternetExplorerRestrictionsPolicy** (10 tweaks, slug `ierest`): Internet Explorer Restrictions Group Policy controls (IE mode in Edge) — disable context menu, disable Internet Options dialog, disable View Source, disable Favorites menu, disable download directory selection, disable Find Files, block links opening in new windows, disable toolbar, disable theater mode, prevent browser close.
+- **Sprint 430 — PrinterDirectoryServicesPolicy** (10 tweaks, slug `pdssp`): Printer Active Directory Directory Services publishing Group Policy controls — disable automatic printer publishing to AD, disable printer pruning, set pruning check interval, set pruning thread priority, enable pruning event logging, block non-published printer access, disable IPP web printing, limit DS server thread count, enforce printer pre-publication, set max pruning retry count.
+- **Sprint 431 — WindowsDiagnosticsInfraPolicy** (10 tweaks, slug `wdip`): Windows Diagnostic Infrastructure (WDI) Group Policy controls — disable scenario execution, disable diagnostic triggers, disable result summary collection, disable diagnostic task collection, disable scenario event logging, disable results caching, limit result persistence to 1 day, disable MSA-linked diagnostics, disable boot diagnostic collection, prevent diagnostic task execution via policy.
+
+#### Stats
+
+- Tweaks: 7,455 → 7,505 (+50 across 5 new modules)
+- Categories: 459 → 464 (+5)
+
 ## [5.53.0] — 2026-04-18
 
 #### Added
