@@ -25,6 +25,7 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
         [
             new ColumnHeader { Text = "Package", Width = 220 },
             new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Size", Width = 80 },
             new ColumnHeader { Text = "Status", Width = 140 },
         ];
 
@@ -39,8 +40,9 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
             string name = paren > 0 ? entry[..paren] : entry;
             string version = paren > 0 ? entry[(paren + 2)..].TrimEnd(')') : "";
             var item = new ListViewItem(name) { Tag = name };
-            item.SubItems.Add(version);
-            item.SubItems.Add("\u2714 Up to date");
+            item.SubItems.Add(version);            // Version
+            item.SubItems.Add("…");               // Size (computed lazily)
+            item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
         }
@@ -48,6 +50,7 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
         AppendLog($"Found {list.Count} installed package(s).", AppTheme.Green);
         RebuildQuickInstallButtons();
         _ = CheckOutdatedAsync(ct);
+        _ = CheckSizesAsync(ct);
     }
 
     private async Task CheckOutdatedAsync(CancellationToken ct)
@@ -66,8 +69,8 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && _outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[2].Text = "\u26A0 Update available";
-                    item.SubItems[2].ForeColor = AppTheme.Yellow;
+                    item.SubItems[3].Text = "\u26A0 Update available";
+                    item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
             SetOutdated(
@@ -86,4 +89,26 @@ internal sealed class ScoopManagerDialog : BasePackageManagerDialog
     protected override Task RemoveCoreAsync(string name, CancellationToken ct) => ScoopManager.UninstallAsync(name, ct);
 
     protected override Task UpgradeCoreAsync(string name, CancellationToken ct) => ScoopManager.UpgradeAsync(name, ct);
+
+    private async Task CheckSizesAsync(CancellationToken ct)
+    {
+        try
+        {
+            var sizes = await ScoopManager.GetInstalledSizesAsync(_installedNames, ct);
+            if (InvokeRequired)
+                Invoke(() => ApplySizes(sizes));
+            else
+                ApplySizes(sizes);
+        }
+        catch { /* ignore — size is optional */ }
+    }
+
+    private void ApplySizes(Dictionary<string, string> sizes)
+    {
+        foreach (ListViewItem item in _lstInstalled.Items)
+        {
+            if (item.Tag is string pkgName && sizes.TryGetValue(pkgName, out string? size))
+                item.SubItems[2].Text = size;
+        }
+    }
 }

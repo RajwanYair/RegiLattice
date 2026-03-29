@@ -127,4 +127,77 @@ internal static class PSModuleManager
         "Pester",
         "SqlServer",
     ];
+
+    /// <summary>
+    /// Returns a mapping of module name → module base directory path (highest version wins).
+    /// </summary>
+    internal static async Task<Dictionary<string, string>> GetModuleBasesAsync(
+        string scope = "CurrentUser",
+        CancellationToken ct = default
+    )
+    {
+        string script =
+            scope == "AllUsers"
+                ? "Get-Module -ListAvailable -EA SilentlyContinue | Group-Object Name | ForEach-Object { $_.Group | Sort-Object Version -Desc | Select-Object -First 1 } | ForEach-Object { \"$($_.Name)|$($_.ModuleBase)\" }"
+                : "Get-Module -ListAvailable -EA SilentlyContinue | Where-Object { $_.ModuleBase -like \"$($env:USERPROFILE)*\" } | Group-Object Name | ForEach-Object { $_.Group | Sort-Object Version -Desc | Select-Object -First 1 } | ForEach-Object { \"$($_.Name)|$($_.ModuleBase)\" }";
+        var (_, stdout, _) = await ShellRunner.RunPowerShellAsync(script, ct).ConfigureAwait(false);
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string line in stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        {
+            int pipe = line.IndexOf('|');
+            if (pipe > 0)
+                result[line[..pipe].Trim()] = line[(pipe + 1)..].Trim();
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Returns estimated install sizes per module by measuring each module's base directory.
+    /// Runs on the thread pool to avoid blocking the UI.
+    /// </summary>
+    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(
+        Dictionary<string, string> moduleBases,
+        CancellationToken ct = default
+    ) =>
+        Task.Run(
+            () =>
+            {
+                var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var (name, basePath) in moduleBases)
+                {
+                    if (ct.IsCancellationRequested)
+                        break;
+                    result[name] = Directory.Exists(basePath) ? FormatBytes(GetDirSize(basePath)) : "—";
+                }
+                return result;
+            },
+            ct
+        );
+
+    private static long GetDirSize(string path)
+    {
+        long size = 0;
+        try
+        {
+            foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    size += new FileInfo(file).Length;
+                }
+                catch { /* skip locked or inaccessible files */ }
+            }
+        }
+        catch { /* skip inaccessible root directory */ }
+        return size;
+    }
+
+    private static string FormatBytes(long bytes) =>
+        bytes switch
+        {
+            >= 1_073_741_824 => $"{bytes / 1_073_741_824.0:F1} GB",
+            >= 1_048_576 => $"{bytes / 1_048_576.0:F1} MB",
+            >= 1_024 => $"{bytes / 1_024.0:F0} KB",
+            _ => $"{bytes} B",
+        };
 }
