@@ -575,10 +575,10 @@ git push --tags   # ← TRIGGERS release.yml → publishes EXEs + MSI to GitHub 
 
 # v6.0.0 Major Release — Full Plan
 
-> **Drafted:** 2026-03-29  
-> **Baseline:** v5.54.0 · 7,505 tweaks · 464 categories · 461 modules · 2,742 tests · 11 themes · 25+ CLI commands  
-> **Target:** v6.0.0 by end of 2026  
-> **Sprint range:** 437–530+  
+> **Drafted:** 2026-03-29
+> **Baseline:** v5.54.0 · 7,505 tweaks · 464 categories · 461 modules · 2,742 tests · 11 themes · 25+ CLI commands
+> **Target:** v6.0.0 by end of 2026
+> **Sprint range:** 437–530+
 > **Nature:** The first true major version since the Python→C# migration — combines architectural modernization, new surface areas (REST API, Intelligence Engine), and breaking CLI changes.
 
 ## Updated State at v5.54.0

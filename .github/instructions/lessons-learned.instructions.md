@@ -1143,3 +1143,226 @@ Version history:
 | v5.54.0 | 5 | 50 | 427–431 |
 
 **Next sprint**: 432–436 (v5.55.0). Run full gap analysis on all three phases before creating any module.
+
+---
+
+## GitHub Actions — Non-Existent Version Tags Break CI Silently
+
+Pinning a GitHub Action to a version that does not exist (e.g., `actions/upload-artifact@v7`)
+causes the CI step to fail with a confusing message — the step runner can't find the
+action, but the error is not always obvious from the log.
+
+**Caught in v5.49.0**: `upload-artifact@v7` was pinned in `ci.yml` and `debug.yml`. v7 does
+not exist; the latest stable at that time was `@v4`. Fixed to `@v4`.
+
+**Rule**: Before committing any new or bumped action version, verify it exists:
+
+1. Check the action's GitHub releases page (e.g., `https://github.com/actions/upload-artifact/releases`)
+2. Or run `gh release list --repo actions/upload-artifact`
+
+```yaml
+# ✅ Verified — actions/upload-artifact@v4 is the latest stable
+- uses: actions/upload-artifact@v4
+
+# ❌ Silently broken — v7 does not exist
+- uses: actions/upload-artifact@v7
+```
+
+---
+
+## CI Job Status Variable — `$env:JOB_STATUS` Not `$env:RUNNER_STATUS`
+
+When writing a job summary or post-step in GitHub Actions via PowerShell, the variable
+`$env:RUNNER_STATUS` does **not exist**. The correct approach is to inject `job.status`
+as an explicit env var and reference `$env:JOB_STATUS`.
+
+**Caught in v5.49.0**: The CI write-job-summary step produced an empty status line
+because `$env:RUNNER_STATUS` expanded to the empty string.
+
+```yaml
+# ✅ CORRECT — inject job.status explicitly
+- name: Write Job Summary
+  if: always()
+  env:
+    JOB_STATUS: ${{ job.status }}
+  shell: pwsh
+  run: Write-Host "Job completed with status: $env:JOB_STATUS"
+
+# ❌ BROKEN — RUNNER_STATUS does not exist
+- name: Write Job Summary
+  shell: pwsh
+  run: Write-Host "Status: $env:RUNNER_STATUS"   # always empty
+```
+
+---
+
+## `TestSessionTimeout` Must Be ≥ 300 000ms for Large Test Suites on OneDrive
+
+The default `TestSessionTimeout` in earlier `.runsettings` was `60000` (60 s). With
+700+ tests in `RegiLattice.Core.Tests`, the OneDrive-hosted build takes **~46 seconds**
+just loading the test assembly — leaving only ~14 s for all 2100+ tests. This caused
+sporadic "Test Run Aborted" failures that appeared as non-deterministic CI failures.
+
+**Fixed in v5.52.0**: `TestSessionTimeout` raised to `300000` (300 s) in
+`tests/.runsettings`. This leaves ample time for the assembly to load and all tests to
+execute even on a slow OneDrive-backed drive.
+
+```xml
+<!-- ✅ CORRECT — 5-minute session budget for OneDrive-hosted builds -->
+<TestSessionTimeout>300000</TestSessionTimeout>
+
+<!-- ❌ Too tight — causes "Test Run Aborted" when test assembly loads in ~46s -->
+<TestSessionTimeout>60000</TestSessionTimeout>
+```
+
+**Rule**: If a CI run fails with "Test Run Aborted" (not a test failure, but the runner
+itself timing out), increase `TestSessionTimeout` by 5× before diagnosing test code.
+
+---
+
+## Package Registry Metadata Files Age Silently — Add to Version Bump Checklist
+
+`scoop/regilattice.json`, `winget/RegiLattice.*.yaml`, and
+`chocolatey/regilattice.nuspec` are maintained **manually and independently** from
+`Directory.Build.props`. They contain version numbers, tweak counts, category counts,
+and download URL templates that must match the release.
+
+**Found in v5.55.0 stale audit**: These files were stuck at v5.0.0 for 54 minor
+versions — across 54 MINOR version bumps and thousands of new tweaks, none of the
+package registry files were ever updated. The URL templates still pointed to the
+`v5.0.0` release asset.
+
+**Prevention**: These files are now added to the version bump checklist (see
+`git-workflow.instructions.md` — "What to update on each version bump"):
+
+| File | Fields to update |
+|---|---|
+| `scoop/regilattice.json` | `version`, `url`, `hash` (after release), description counts |
+| `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
+| `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
+| `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, description counts |
+| `chocolatey/regilattice.nuspec` | `<version>`, description counts, locale list |
+
+**Rule**: After every version bump, update all five files above BEFORE pushing the tag.
+
+---
+
+## README Mermaid Diagram Counts Are Hardcoded and Drift
+
+The Mermaid diagram in `README.md` uses hardcoded module and category counts:
+
+```mermaid
+   RL["RegiLattice Core
+ 461 Modules, 464 Categories"]
+```
+
+There is no automation to update these counts. Every sprint that adds modules WILL
+cause the diagram to show a stale count unless manually updated.
+
+**Found in v5.55.0 stale audit**: Diagram showed `446 Modules` when the actual
+count was `461` (a drift of 15 modules over ~15 sprints).
+
+**Rule**: When adding new tweak modules in a sprint:
+1. Update the Mermaid diagram module count (e.g., `461 Modules` → `466 Modules` when adding 5 new modules)
+2. Update the Mermaid category count if new categories are added
+3. These are separate from the `docs/assets/stats.svg` counts — both must be updated
+
+**Quick check command** (run after any sprint to verify diagram vs reality):
+```powershell
+$actual = (Get-ChildItem src/RegiLattice.Core/Tweaks/*.cs).Count
+$inDiagram = (Select-String -Path README.md -Pattern '(\d+) Modules').Matches[0].Groups[1].Value
+Write-Host "Actual modules: $actual | Diagram shows: $inDiagram"
+```
+
+---
+
+## xUnit v2 Test Stack — Intentional Version Holds Against Major Updates
+
+The test packages have newer major versions available but are intentionally held at
+v2-compatible versions:
+
+| Package | Pinned | Latest | Reason for hold |
+|---|---|---|---|
+| `Microsoft.NET.Test.Sdk` | 17.14.1 | 18.x | New test-host protocol; v18 breaks `.runsettings` format |
+| `xunit` | 2.9.3 | 3.x | xUnit v3 has new test class model — breaking migration |
+| `xunit.runner.visualstudio` | 2.8.2 | 3.x | v3 runner only works with xUnit v3 framework |
+| `FsCheck` | 2.16.6 | 3.x | FsCheck v3 changes attribute API and runner integration |
+| `FsCheck.Xunit` | 2.16.6 | 3.x | Same as FsCheck |
+
+**Rule**: These packages ONLY need updating as part of a dedicated xUnit v3 migration
+sprint — not during routine "update dependencies" maintenance. Attempting to bump
+any one of them in isolation will break the test build.
+
+**Comments in `Directory.Packages.props`** track these holds with the verification date.
+When undertaking the migration, update ALL of the above packages in one commit.
+
+---
+
+## `.gitignore` Must Include Stryker and BenchmarkDotNet Output Directories
+
+Local runs of mutation testing or BenchmarkDotNet create output directories that
+should never be tracked:
+
+```gitignore
+# ✅ Add to .gitignore
+**/StrykerOutput/
+BenchmarkDotNet.Artifacts/
+```
+
+**Caught in v5.49.0**: Running `dotnet-stryker` locally produced `StrykerOutput/`,
+and running `RegiLattice.Benchmarks` produced `BenchmarkDotNet.Artifacts/`. Both were
+appearing as untracked files in `git status` and polluting the working tree.
+
+**Rule**: Every tool that generates output to project-relative directories needs a
+`.gitignore` entry. This is most relevant for: Stryker, BenchmarkDotNet,
+`coveragereport/`, `htmlcov/`, and any tool that writes to the workspace root.
+
+---
+
+## `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` — Required for Modern GitHub Actions
+
+GitHub Actions that use JavaScript internally (e.g., `actions/checkout`,
+`actions/cache`, `codecov/codecov-action`) upgraded from Node 16/20 to Node 24. Setting
+the environment variable `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` at the job level
+ensures these actions run on Node 24 without showing deprecation warnings.
+
+```yaml
+# ✅ Set at job or workflow level for all CI, release, and debug jobs
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+```
+
+**When this matters**: Without the variable, GitHub Actions logs may show:
+`"Node.js 16 actions are deprecated. Please update..."` which can obscure real errors.
+Adding the variable to `env:` at the job level (not just inside steps) ensures it
+applies to all steps including setup steps.
+
+**Current state**: `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` is set in `ci.yml`,
+`release.yml`, and `debug.yml` at the job level. It is NOT needed in `stale.yml` or
+`dependency-review.yml` (those use GitHub-managed actions that handle this internally).
+
+---
+
+## CHANGELOG Date Discipline — Use Actual Commit Date, Not Planned Date
+
+When multiple sprint versions are written in a planning session or committed on the same
+day, there is a temptation to use the day of the sprint (planned or future date) instead
+of the actual commit date. This leads to CHANGELOG entries with future dates.
+
+**Found in v5.55.0 stale audit**: `v5.53.0` and `v5.54.0` had dates `2026-04-18` and
+`2026-04-19` respectively, but the audit was run on `2026-03-29` — making those dates
+3 weeks in the future. The `copilot-instructions.md` header also read `"Last verified:
+2026-04-19"` which was a future date.
+
+**Rule**: Always use `Get-Date -Format "yyyy-MM-dd"` to get today's actual date when
+writing CHANGELOG entries. If multiple releases are committed on the same day, they
+share the same date.
+
+```powershell
+# Get today's date for CHANGELOG header
+Get-Date -Format "yyyy-MM-dd"
+```
+
+**Why it matters**: Future dates in CHANGELOG cause confusion when auditing the project
+history ("when was this actually shipped?") and may break date-parsing tools or
+release notes generators.

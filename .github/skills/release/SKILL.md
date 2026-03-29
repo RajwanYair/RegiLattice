@@ -150,6 +150,79 @@ The actual uploaded filenames depend on the build and may not include the versio
 👉 **[Download RegiLattice-X.Y.Z-win-x64.msi](https://github.com/.../releases/latest)**
 ```
 
+## Pre-Push Sanity: Scrub Intel / Corporate Mentions
+
+**Run this BEFORE every tag push.** Commit messages, CI logs, and terminal output sometimes
+leak Intel-internal strings (proxy hostnames, corp network domains, OneDrive paths) into
+tracked files. This step catches them before they appear in the public GitHub history.
+
+### 1. Scan all tracked files for Intel / corporate strings
+
+```powershell
+# Strings to grep for (case-insensitive)
+$patterns = @(
+    'intel\.com',
+    'intel corporation',
+    'proxy.*intel',
+    'intel.*proxy',
+    'OneDrive.*Intel',
+    'Intel.*OneDrive',
+    '\bintel\b',         # standalone word; adjust if 'intel' appears legitimately (e.g. "intelligent")
+    'http_proxy',
+    'https_proxy',
+    'no_proxy',
+    'PROXY_HOST',
+    'ProxyAddress',
+    'ProxyServer',
+    'UseProxy',
+    'pac\.intel',
+    'webproxy',
+    'corporate.*proxy',
+    'proxy.*corporate'
+)
+
+$root = "c:\Users\ryair\OneDrive - Intel Corporation\Documents\MyScripts\RegiLattice"
+foreach ($pat in $patterns) {
+    $hits = git -C $root grep -Iin $pat -- '*.cs' '*.md' '*.yml' '*.yaml' '*.json' '*.wxs' '*.props' '*.targets' '*.ps1' '*.psm1' '*.psd1' 2>$null
+    if ($hits) { Write-Host "=== PATTERN: $pat ==="; $hits }
+}
+```
+
+### 2. Fix any hits before committing
+
+| Hit type | Action |
+|----------|--------|
+| Intel proxy URL in `.yml` / `.env` / config files | Delete the line or replace with an empty string / placeholder |
+| `http_proxy` / `https_proxy` env vars in workflow YAML | Remove entirely — GitHub-hosted runners don't need them |
+| `OneDrive - Intel Corporation` in a path embedded in source | Replace with a relative path or `%USERPROFILE%` placeholder |
+| `intel.com` in a comment, doc, or URL | Replace with the public equivalent or remove |
+| `ProxyAddress` / `ProxyServer` registry key in a tweak | This is a legitimate Windows registry tweak — keep it, but verify it uses the generic `HKCU\...\Internet Settings` path, not a hardcoded Intel URL |
+
+### 3. Proxy-related registry tweaks are ALLOWED — with conditions
+
+Tweaks that manage Windows proxy settings (e.g. `HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings`)
+are legitimate RegiLattice tweaks and must NOT be removed. Only remove hardcoded corporate values:
+
+```csharp
+// ✅ ALLOWED — generic proxy disable tweak, no Intel URL
+RegOp.SetDword(@"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "ProxyEnable", 0)
+
+// ❌ REMOVE — hardcoded corporate proxy server
+RegOp.SetString(@"HKCU\...\Internet Settings", "ProxyServer", "proxy.intel.com:911")
+```
+
+### 4. After cleanup, re-run the scan to confirm zero hits
+
+```powershell
+# Quick all-clear check
+git -C $root grep -Iin 'intel\.com\|proxy.*intel\|intel.*proxy\|OneDrive.*Intel' -- '*.cs' '*.md' '*.yml' '*.json' '*.wxs' '*.props'
+# Expected output: (empty)
+```
+
+Only proceed to `git tag` and `git push --tags` when the scan returns no hits.
+
+---
+
 ## What NOT to Do
 
 - **Don't bump version mid-session** — only bump when work is complete and tests pass
@@ -158,3 +231,4 @@ The actual uploaded filenames depend on the build and may not include the versio
 - **Don't forget `installer/Package.wxs`** — MSI silently embeds the old version otherwise
 - **Don't skip post-release verification** — the workflow can fail silently; always check Actions tab
 - **Don't hardcode a specific MSI filename** in README — it may not exist if WiX build fails
+- **Don't push before running the Intel/proxy scrub** — corporate strings in public commits are irreversible without a history rewrite

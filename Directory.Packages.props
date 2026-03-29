@@ -7,12 +7,23 @@
     <!-- Runtime: aligned to .NET 10.0 release train -->
     <PackageVersion Include="System.Management" Version="10.0.5" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
-    <!-- Test infrastructure: latest 17.x (compatible with xunit 2.x) -->
+    <!--
+      Test infrastructure — versioning notes (verified 2026-03-29):
+        Microsoft.NET.Test.Sdk  17.14.1 → 18.3.0 available but BREAKING (new test-host protocol).
+                                Intentionally held at 17.x until xunit v3 migration.
+        xunit                   2.9.3   → 3.x available but BREAKING API / runner change.
+                                This project is on xUnit v2; migrate in a dedicated sprint.
+        xunit.runner.visualstudio 2.8.2 → 3.1.5 is the xUnit v3 runner — incompatible with v2.
+                                Must stay on 2.x while on xUnit v2.
+        FsCheck / FsCheck.Xunit 2.16.6 → 3.3.2 has breaking API changes.
+                                Held at 2.x until migration; v3 needs different attribute usage.
+        coverlet.collector      8.0.1   — current as of 2026-03-29, no breaking updates.
+    -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageVersion Include="coverlet.collector" Version="8.0.1" />
-    <!-- Benchmarking & property-based testing -->
+    <!-- Benchmarking & property-based testing — current as of 2026-03-29 -->
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="FsCheck" Version="2.16.6" />
     <PackageVersion Include="FsCheck.Xunit" Version="2.16.6" />
