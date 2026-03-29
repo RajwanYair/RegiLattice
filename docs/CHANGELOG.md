@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.87.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 592-596): PrintQueuePolicy, PrintTicketPolicy, PrinterRedirectionPolicy, PrivilegeUseAuditPolicy, ProcessCreationAuditPolicy.
+
+#### Stats
+
+- Total: **9145 tweaks**, 628 categories, 625 module files
+
+---
+
+
 ## [5.86.0] — 2026-03-29
 
 #### Added
