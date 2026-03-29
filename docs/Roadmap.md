@@ -959,4 +959,494 @@ The following improvements can be implemented incrementally during the tweak exp
 
 ---
 
-*Roadmap updated 2026-03-29 · v5.54.0 → v6.0.0 plan · Themes I–N added · Sprint expansion extended to v5.80.0 · Next sprint: 432*
+---
+
+# v6.0.0 — "Next Level" Major Release Plan
+
+> **Drafted:** 2026-03-29
+> **Current baseline:** v5.54.0 · 7,505 tweaks · 464 categories · 461 modules · 2,742 tests · 11 themes
+> **Target release:** v6.0.0 — Q4 2026
+> **Breaking changes:** Yes — CLI subcommand structure, async engine API, AppConfig schema v2, source-generated module registration
+> **Sprint range:** 432+ (v5.55.0 tweak expansion continues in parallel; architectural sprints interleave)
+
+This plan is structured in **4 pillars** (Engine, Experience, Ecosystem, Operations) containing **16 workstreams** and **~120 deliverables** across 9 phases. Each phase produces a shippable increment.
+
+---
+
+## Pillar 1 — Engine Modernization
+
+### Workstream E1: Async Engine Core
+
+**Problem:** `TweakEngine.Apply()`, `Remove()`, `ApplyBatch()`, `StatusMap()` are synchronous. GUI calls them via `Task.Run()` but cannot cancel, report progress, or handle timeouts. With 7,505 tweaks, `StatusMap()` can block for 3+ seconds.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| E1.1 | **`ApplyAsync(id, CancellationToken)`** | Async overload of Apply/Remove that yields between registry writes. Returns `ValueTask<TweakResult>`. | M |
+| E1.2 | **`ApplyBatchAsync(ids, IProgress<BatchProgress>, CancellationToken)`** | Reports progress (applied/total/current ID). GUI binds progress bar directly. CLI `--progress` flag outputs JSON progress lines. | M |
+| E1.3 | **`StatusMapAsync(ids?, IProgress<StatusProgress>, CancellationToken)`** | Async parallel registry reads using `Task.WhenAll` with configurable degree-of-parallelism instead of `Parallel.For`. | M |
+| E1.4 | **`FilterAsync(predicate, CancellationToken)`** | Cancelable filter for GUI search-as-you-type. Previous keystroke cancels in-flight filter. Eliminates UI thread contention in MainForm search box. | S |
+| E1.5 | **`CancellationToken` propagation through services** | All service methods that call `RegistrySession.Execute()` accept optional `CancellationToken`. `RegistrySession.Execute()` checks token between ops. | M |
+
+**Exit criteria:** All `*Async` overloads have tests. GUI ApplyBatch shows live progress bar with cancel button.
+
+### Workstream E2: Thread Safety & Immutability Hardening
+
+**Problem:** `_statusCache` is a mutable `Dictionary<string, TweakResult>` without synchronization. `_cachedCategories` rebuilt during `Freeze()` is not atomic. Pack registration after Freeze is undefined.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| E2.1 | **`ConcurrentDictionary` for `_statusCache`** | Replace `Dictionary` with `ConcurrentDictionary<string, TweakResult>`. Status reads and writes become lock-free. | S |
+| E2.2 | **Freeze-gate assertions** | `Debug.Assert(_frozen)` at top of all read-only public API methods (`AllTweaks`, `Categories`, `Search`, `Filter`, `GetTweak`). Catches post-freeze `Register()` calls in debug builds. | S |
+| E2.3 | **Immutable frozen state** | After `Freeze()`, replace `_tweaksById` Dictionary with `FrozenDictionary<string, TweakDef>` (.NET 8+). Zero-allocation lookups. `_searchPairs` → `ImmutableArray`. | M |
+| E2.4 | **`IReadOnlyList<T>` sweep** | Audit all 35 services. Replace all `List<T>` public API returns with `IReadOnlyList<T>`. Zero mutable collections exposed. | S |
+| E2.5 | **Pack registration after Freeze** | Define behavior: `Register()` after `Freeze()` throws `InvalidOperationException`. `RegisterPack()` is the only post-freeze registration path (unfreezes, registers, re-freezes atomically). | S |
+
+**Exit criteria:** Zero `List<T>` in public API. `FrozenDictionary` used. `Debug.Assert(_frozen)` on all read paths.
+
+### Workstream E3: Source-Generated Module Registration
+
+**Problem:** `RegisterBuiltins()` is a 461-line method that manually calls `Register(ModuleName.Tweaks)` for every module. Adding a module requires editing this file. Reflection-based alternative adds startup cost.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| E3.1 | **`[TweakModule]` attribute** | Marker attribute: `[TweakModule("Privacy")]` annotates a class with a `public static IReadOnlyList<TweakDef> Tweaks` property. | S |
+| E3.2 | **Roslyn incremental source generator — PoC** | Scans for `[TweakModule]` classes, emits `GeneratedModuleRegistration.g.cs` with `RegisterAll(TweakEngine engine)` that calls `engine.Register(T.Tweaks)` for each. | L |
+| E3.3 | **Source generator — full rollout** | Remove `RegisterBuiltins()` body. Replace with single call: `GeneratedModuleRegistration.RegisterAll(this)`. All 461+ modules auto-registered. Zero runtime reflection. | M |
+| E3.4 | **Build-time duplicate ID detection** | Source generator also emits a compile-time check: if two modules have a tweak with the same `Id`, emit a diagnostic error (`RLTK001: Duplicate tweak ID`). Eliminates runtime `ArgumentException`. | M |
+| E3.5 | **Build-time duplicate registry op detection** | Extend generator to collect all `RegOp.SetDword`/`SetString` path+name pairs. Emit warning `RLTK002` for duplicate `PATH\ValueName` across modules. | M |
+
+**Exit criteria:** `RegisterBuiltins()` deleted. All modules discovered at compile time. Duplicate ID/op detection at build. Zero runtime reflection for module discovery.
+
+### Workstream E4: Performance Engineering
+
+**Problem:** Startup time, search latency, and memory footprint have never been measured. 7,505 TweakDef objects + search pairs + synonym map consume unknown memory. `Search()` is O(n × synonyms × string length).
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| E4.1 | **Startup profiling baseline** | Instrument `RegisterBuiltins()`, `Freeze()`, first `Search()`, first `StatusMap(100)`. Publish baseline to `.tmp/perf-baseline.md`. Measure on low-end (Celeron N4500) and high-end (i9-13900K). | S |
+| E4.2 | **Inverted search index** | At `Freeze()`, tokenize all `Id`, `Label`, `Description`, `Tags` into a `Dictionary<string, List<int>>` (token → tweak indices). `Search()` performs inverted index lookup → O(k) where k = matching token count, not O(n). | M |
+| E4.3 | **Lazy module loading** | `LazyTweakModule<T>` wrapper delays `T.Tweaks` property access until first category access. Profile shows < 5 modules needed at cold start. Target: 40% startup reduction. | M |
+| E4.4 | **Incremental StatusMap with TTL cache** | `StatusMap(since: TimeSpan)` re-checks only tweaks whose last detection is older than TTL. Default TTL: 5 min. Fresh results returned from cache. Reduces registry reads by 80%+ on repeated polls. | M |
+| E4.5 | **Memory audit + top-3 fix** | `dotnet-counters` snapshot during `Search() + StatusMap()` cycle. Fix top 3 allocation hotspots. Target: < 120 MB working set at idle with all 7,505 tweaks. | M |
+| E4.6 | **BenchmarkDotNet suite + CI gate** | Benchmarks: `RegisterBuiltins`, `Search("telemetry")`, `StatusMap(100)`, `Filter(Privacy)`. CI: fail on > 20% regression vs stored baseline JSON. | M |
+| E4.7 | **Cold start target: < 600 ms** | Combine E4.2 (index) + E4.3 (lazy) + E2.3 (FrozenDictionary) + E3.3 (source gen). Measure delta. Target: < 600 ms total engine init on Celeron N4500. | L |
+
+**Exit criteria:** Perf baseline published. Search < 5 ms. Startup < 600 ms on low-end. BenchmarkDotNet in CI.
+
+---
+
+## Pillar 2 — User Experience Excellence
+
+### Workstream UX1: CLI Architecture Overhaul
+
+**Problem:** 53-property `CliArgs` with flat `--flag` parsing. No subcommands, no structured JSON output, no stable exit code contract. Power users cannot reliably script against the CLI.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| UX1.1 | **`ICommand` interface + subcommand router** | `tweak apply <id>`, `tweak remove <id>`, `tweak status <id>`, `tweak update <id>`, `tweak what-if <ids...>`, `profile apply <name>`, `profile list`, `snapshot save <file>`, `snapshot restore <file>`, `snapshot diff <a> <b>`, `scan`, `serve`. Old `--flag` aliases preserved for backward compat. | L |
+| UX1.2 | **`--output json\|csv\|table`** | Default: `table`. `json` mode emits parseable payloads with stable schema. Exit codes: `0` = success, `1` = partial, `2` = invalid args, `3` = access denied, `4` = corp guard blocked. | M |
+| UX1.3 | **Grouped `--help` with sections** | Sections: Tweak Operations, Profiles, Snapshots, Export/Import, Diagnostics, System, Advanced. Each subcommand has `--help` with examples. | M |
+| UX1.4 | **Shell completions** | PowerShell `Register-ArgumentCompleter` for all subcommands + tweak IDs + category names. Publish `completions/RegiLattice.ps1` (enhanced). | M |
+| UX1.5 | **`regilattice batch apply <file>`** | Processes a text file of tweak IDs or a snapshot JSON. `--dry-run` works. Per-tweak result output. Returns exit code 1 if any failed. | S |
+| UX1.6 | **`--progress` flag for batch operations** | Machine-readable JSON progress lines to stderr: `{"applied": 42, "total": 100, "current": "priv-disable-telemetry", "eta_s": 12}`. | S |
+| UX1.7 | **`--dry-run --show-operations`** | Lists all registry changes that would be made in unified diff format: `+ HKLM\...\Value = 0 (DWORD)`, `- HKLM\...\Value [DELETE]`. | S |
+| UX1.8 | **CLI contract test project** | `RegiLattice.CLI.Contract.Tests` — every subcommand tested for: exit code, stdout JSON schema, no unhandled exceptions. | M |
+
+**Exit criteria:** All 25+ commands accessible via subcommands. JSON output on all listing/status. Exit codes documented and tested.
+
+### Workstream UX2: GUI Dashboard & Intelligence
+
+**Problem:** No home screen — app opens to an empty state until a category is selected. SmartScan and HealthScore services exist but have no GUI surface. Users lack actionable guidance.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| UX2.1 | **Dashboard home panel** | Replaces blank state. Shows: 3 score rings (Privacy, Performance, Security) from `HealthScoreService`, last 5 applied tweaks, top 5 Smart Scan recommendations, quick-access buttons (Apply Profile, Run Smart Scan, Open Snapshots). | L |
+| UX2.2 | **Smart Scan results panel** | "Scan Now" button triggers `SmartScanService.Scan()`. Results in a sortable ListView: tweak ID, label, reason, impact, safety. "Apply Selected" button. | M |
+| UX2.3 | **What-If preview modal** | "Simulate" button before batch apply opens a modal: projected score delta per dimension, conflicts introduced, dependencies unsatisfied, risk rating. Uses `WhatIfService.Simulate()`. | M |
+| UX2.4 | **Tweak detail pane enrichment** | Extend detail pane with: copyable registry path visualization, impact matrix (Privacy/Perf/Security deltas), "depended on by N tweaks" badge, conflict warnings, `DataConfidence` badge, "See similar" link. | M |
+| UX2.5 | **Undo/Redo system** | Command-pattern stack of `(TweakDef, Operation, Timestamp)`. `Ctrl+Z` undoes last apply/remove. `Ctrl+Y` redoes. Max 50 ops. Status bar: "Undo: Disabled Telemetry (2 min ago)". | L |
+| UX2.6 | **Saved filter presets** | Name + save a filter combination (scope + category + tags + query + status). Stored in `AppConfig`. Recall from dropdown. "Save as Preset" right-click on active filter bar. | M |
+| UX2.7 | **In-app What's New dialog** | Shows on first launch after upgrade. Auto-populated from CHANGELOG.md (parsed at build time into structured resource). Tweak count delta, new features, breaking changes. | S |
+| UX2.8 | **Onboarding wizard rework** | 5 steps: (1) Admin check, (2) Hardware-based profile suggestion with scored panel, (3) Dry-run preview of recommended tweaks, (4) One-click apply, (5) Create initial snapshot. Re-runnable from Help menu. | M |
+
+**Exit criteria:** Dashboard live with 3 score rings. Smart Scan functional. Undo/redo working. What's New shows on upgrade.
+
+### Workstream UX3: Accessibility & Internationalization
+
+**Problem:** No screen reader testing, incomplete `AccessibleName` on 63 dialogs, only 2 locales (en, de), no RTL support, no high-contrast theme, no system theme auto-follow.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| UX3.1 | **`.resx` locale migration** | Replace hand-rolled `Dictionary<string,Dictionary>` in `Locale.cs` with `.resx` files per locale. Runtime locale switching via `ResourceManager`. Satellite assemblies for each locale. | L |
+| UX3.2 | **4 new locales: zh-CN, ko, pt-BR, es** | Translations for all UI strings. Include right-to-left preparation. Community-reviewable translation files in `src/RegiLattice.GUI/Resources/`. | M |
+| UX3.3 | **High-contrast theme + system theme listener** | `SystemColors`-based high-contrast theme. Subscribe to `SystemEvents.UserPreferenceChanged` to auto-switch when Windows dark/light/high-contrast mode changes while app is running. | M |
+| UX3.4 | **AccessibleName audit — all 63 dialogs** | Add `AccessibleName` + `AccessibleDescription` to every interactive control. Full `TabIndex` chains. Test with Narrator. Target: WCAG 2.1 AA. | L |
+
+**Exit criteria:** 6+ locales. High-contrast theme. Narrator reads all controls. Auto-theme switch on OS change.
+
+---
+
+## Pillar 3 — Ecosystem & Extensibility
+
+### Workstream ECO1: Local REST API
+
+**Problem:** No machine-local API. Power users, VS Code extensions, and automation scripts have no programmatic access without shelling out to the CLI.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| ECO1.1 | **`regilattice serve` — Kestrel minimal API** | Localhost-only HTTP server (port 21397). `GET /tweaks`, `GET /tweaks/{id}`, `POST /tweaks/{id}/apply\|remove`, `GET /categories`, `GET /profiles`, `POST /profiles/{name}/apply`. API key auth (auto-generated UUID in AppConfig). | L |
+| ECO1.2 | **OpenAPI schema + Swagger UI** | `GET /openapi.json` — auto-generated. `GET /ui` — Swagger UI. Schema version-locked to RegiLattice version. Published as release artifact. | M |
+| ECO1.3 | **Server-Sent Events (SSE) change stream** | `GET /events` — text/event-stream of `{ type, tweakId, result, timestamp }` on every apply/remove. Enables real-time dashboards without polling. | M |
+| ECO1.4 | **Rate limiting + security hardening** | Max 60 req/min per API key. Bind `127.0.0.1` only (never `0.0.0.0`). TLS with self-signed cert. Log all `4xx`/`5xx` to `serve.log`. | M |
+| ECO1.5 | **REST API integration tests** | New `RegiLattice.API.Tests` project. Contract tests for all endpoints. 401 on missing key. 404 on unknown ID. Rate limit triggers 429. | M |
+
+**Security note:** Server binds exclusively to loopback. API key stored in AppConfig, never logged. All write ops logged to TweakHistory.
+
+### Workstream ECO2: Plugin Sandbox & SDK
+
+**Problem:** Third-party packs can include `ApplyAction` delegates that run in the host process with full trust. Malicious or buggy delegates can crash the host. No formal SDK or NuGet package for Core.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| ECO2.1 | **`ITweakModule` interface** | Formal contract: `string Name`, `string Category`, `IReadOnlyList<TweakDef> Tweaks`. Source generator targets this. Plugin SDK implements it. | S |
+| ECO2.2 | **Assembly-based plugin loading** | `TweakEngine.LoadPlugin(path)` loads .NET assembly via `AssemblyLoadContext`, scans for `ITweakModule`, registers tweaks with `PackSource = path`. CLI: `regilattice plugin load <dll>`. | L |
+| ECO2.3 | **Plugin delegate sandbox** | Third-party `ApplyAction`/`DetectAction` run in isolated child process via named pipes. 30s timeout. Child crash → `TweakResult.Error`, no host crash. | XL |
+| ECO2.4 | **Pack GPG/RSA signing + verification** | Author signs `.rlpack` with RSA key. `PackLoader` verifies against trust store. "Verified ✓" badge in MarketplaceDialog. Unsigned packs show warning. | M |
+| ECO2.5 | **NuGet package `RegiLattice.Core`** | Publish to NuGet.org. Full XML doc comments. `<GenerateDocumentationFile>true`. CI publishes on tag push. | M |
+| ECO2.6 | **`dotnet new regilattice-plugin` template** | Starter template: sample `ITweakModule` class, sample `.rlpack`, validation script. Published to NuGet template feed. | M |
+| ECO2.7 | **Pack schema export CLI** | `regilattice schema export --output schema.json` — JSON Schema for pack format. Enables VS Code autocompletion when editing `.rlpack` files. | S |
+
+**Exit criteria:** Plugin assemblies loadable. Sandbox isolates delegate execution. NuGet package published. Template installable.
+
+### Workstream ECO3: Cross-Platform CLI (Beta)
+
+**Problem:** RegiLattice is Windows-only. The CLI's search, filter, validate, export logic is platform-neutral but locked behind `net10.0-windows` TFM.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| ECO3.1 | **`[SupportedOSPlatform("windows")]` audit** | Annotate all P/Invoke, `Microsoft.Win32.Registry`, WinForms usages. Identify platform-neutral Core surface. | M |
+| ECO3.2 | **Multi-TFM for Core: `net10.0-windows;net10.0`** | Stub `RegistrySession` on non-Windows (all ops return `TweakResult.Unknown`). Search, filter, validate, export work cross-platform. | L |
+| ECO3.3 | **Multi-TFM for CLI: `net10.0`** | Windows-only commands (`apply`, `remove`, `status`) return `"registry unavailable"`. `--list`, `--search`, `--validate`, `--export-json` work universally. | M |
+| ECO3.4 | **Linux/macOS publish in CI** | `release.yml` publishes `RegiLatticeCLI-linux-x64` and `RegiLatticeCLI-osx-arm64` as GitHub Release assets. | M |
+| ECO3.5 | **Homebrew tap** | `regilattice/homebrew-tap` repository. Formula installs macOS CLI binary. CI auto-updates SHA on tag push. | S |
+
+**Exit criteria:** CLI runs on Ubuntu 22.04 + macOS 14 for read-only commands. Published as GitHub Release assets.
+
+---
+
+## Pillar 4 — Operations & Quality
+
+### Workstream OPS1: Testing Hardening
+
+**Problem:** Line coverage is 94.9% but branch coverage is 56.8%. Mutation score is unknown. No E2E GUI tests. CLI integration untested. No performance regression gate.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| OPS1.1 | **Test isolation audit** | Move all file-writing tests to `Path.GetTempPath()` + `IDisposable` cleanup. No test writes to `%LOCALAPPDATA%\RegiLattice\`. | M |
+| OPS1.2 | **Stryker.NET — 70% kill target** | Run mutation testing on Core. Fix surviving mutants in TweakEngine, RegistrySession, TweakValidator, DependencyResolver. | L |
+| OPS1.3 | **FsCheck property tests** | Generate 10,000 random `TweakDef` instances: no null labels, valid hive prefixes, consistent DetectOps. Test `Register()` with arbitrary valid defs. | M |
+| OPS1.4 | **FlaUI E2E GUI smoke tests** | New `RegiLattice.E2E.Tests` project. 5 scenarios: launch, apply dry-run, switch theme, open 3 dialogs, close. Runs on CI as optional gate. | L |
+| OPS1.5 | **CLI integration tests** | Test all 25+ commands end-to-end against built `RegiLattice.dll` in dry-run mode. Validate exit codes, stdout structure, no unhandled exceptions. | M |
+| OPS1.6 | **Branch coverage gate ≥ 80%** | Codecov with `fail_ci_if_error: true; threshold: -0.5%`. Target branch coverage ≥ 80% (up from 56.8%). | M |
+| OPS1.7 | **Performance regression CI gate** | BenchmarkDotNet diff against stored baseline. Fail CI if `RegisterBuiltins`, `Search`, `StatusMap`, or `Filter` regresses > 20%. | M |
+
+**Exit criteria:** Stryker ≥ 70% kill. Branch coverage ≥ 80%. FlaUI smoke tests in CI. Perf gate running.
+
+### Workstream OPS2: CI/CD & Distribution
+
+**Problem:** No code signing, no Dependabot, no formatter gate, no reproducible build verification, no staged rollout.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| OPS2.1 | **Authenticode code signing** | EV certificate. Sign GUI EXE, CLI EXE, MSI in `release.yml`. `signtool verify /pa` passes. | L |
+| OPS2.2 | **Automated release notes** | CI extracts CHANGELOG.md section for current tag → GitHub Release body. Tweak count delta and test count delta vs previous tag. | M |
+| OPS2.3 | **Dependabot + vulnerability scanning** | NuGet + GitHub Actions dependency PRs. `dotnet list package --vulnerable` in CI. Fail on high/critical CVEs. | S |
+| OPS2.4 | **`dotnet format --verify-no-changes` CI gate** | Catch formatting drift before merge. No more CSharpier diff noise in `get_errors`. | S |
+| OPS2.5 | **Reproducible builds** | Build twice, compare SHA-256. Document reproducibility in README. Fix `DateTime.UtcNow` embedded timestamps (use git commit timestamp instead). | M |
+| OPS2.6 | **Staged rollout workflow** | Publish as `pre-release`. Monitor 48 hours. Auto-promote to `latest` if zero bug-labeled issues. | L |
+| OPS2.7 | **Smoke test matrix** | Post-publish: install MSI silently, run `--validate` + `--stats`, check exit 0. Test on `windows-2022` and `windows-2025`. | M |
+| OPS2.8 | **Chocolatey auto-submit** | CI on tag: update SHA, `choco push` via `CHOCO_API_KEY`. Verify install on clean VM. | M |
+
+**Exit criteria:** Signed releases. Auto release notes. Dependabot active. Staged rollout for all MINOR+ bumps.
+
+### Workstream OPS3: Enterprise & Compliance
+
+**Problem:** CIS/DISA STIG baselines, SCAP export, webhook alerts, and deployment manifests are planned but unbuilt.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| OPS3.1 | **User-defined baseline profiles** | Save current applied state as named baseline. `--baseline-create <name>`, `--baseline-compare <name>`. | M |
+| OPS3.2 | **CIS/DISA STIG baseline templates** | 4 built-in baselines as JSON: `cis-l1-desktop`, `cis-l1-server`, `disa-stig-win11`, `regilattice-recommended`. | M |
+| OPS3.3 | **Audit log CEF export** | `--export-audit-log --format cef\|jsonl <output>`. SIEM-ready for Splunk, Sentinel, Elastic. | M |
+| OPS3.4 | **Webhook drift alerts** | POST JSON to configured URL on compliance drift. Slack/Teams/generic. No credentials stored — URL only. | M |
+| OPS3.5 | **SCAP/XCCDF export** | Generate SCAP-compatible XML from GroupPolicy-kind tweaks. Import into OpenSCAP, STIG Viewer. | XL |
+| OPS3.6 | **Deployment manifest** | `deployment.json` schema: profiles + overrides + blacklist. `regilattice deploy --manifest file`. Reusable GitHub Action `regilattice/deploy-action`. | L |
+| OPS3.7 | **DSC resource module (v3)** | PowerShell DSC v3 compatible. `Test-DscConfiguration` detects drift. `Set-DscConfiguration` applies. | L |
+
+**Exit criteria:** 4 baselines ship. CEF export valid. Webhook fires on drift. SCAP importable in STIG Viewer.
+
+### Workstream OPS4: Config & Build Modernization
+
+**Problem:** AppConfig has 34 flat JSON properties with no schema, no sections, no migration path. `Directory.Build.props` has OneDrive workarounds. No build-time analyzer enforcement.
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| OPS4.1 | **AppConfig schema v2** | Restructure into nested sections: `{ "engine": {...}, "gui": {...}, "scheduler": {...}, "api": {...} }`. JSON Schema validation. Migration script from v1. | M |
+| OPS4.2 | **`<WarningsAsErrors>` for nullable** | `CS8600;CS8602;CS8603;CS8604` promoted to errors in `Directory.Build.props`. Zero nullable warnings. | S |
+| OPS4.3 | **`<EnforceCodeStyleInBuild>true`** | IDE0051 (dead code), IDE0052 (unused members) enforced at build. | S |
+| OPS4.4 | **`<AnalysisLevel>latest-all`** | Activate all Roslyn analyzer categories. Suppress only justified warnings via `GlobalSuppressions.cs`. | S |
+| OPS4.5 | **Version automation for package manifests** | Single `Directory.Build.props` as source-of-truth. MSBuild target updates `scoop/regilattice.json`, `winget/*.yaml`, `chocolatey/*.nuspec` version at build time. | M |
+| OPS4.6 | **XML doc comments — full Core pass** | `<summary>`, `<param>`, `<returns>` on all public/protected members. `CS1591` as error. Auto-generate `docs/Api.md` in CI. | L |
+
+**Exit criteria:** AppConfig v2 with migration. Zero nullable warnings. All public API documented. Version auto-syncs to package manifests.
+
+---
+
+## Intelligence Engine Phase 2
+
+### Workstream INT1: Smart Scan & Recommendations
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| INT1.1 | **`SmartScanService.Scan()` full implementation** | Returns `ScanReport`: unapplied tweaks ranked by `ImpactScore × SafetyRating` within detected profile, conflicting applied tweaks, obsoleted tweaks, estimated apply time. | L |
+| INT1.2 | **`WhatIfService.Simulate(tweakIds[])`** | Projected score delta per dimension. Conflict list. Unmet dependencies. Risk rating. Exposed in GUI as "Simulate" button and CLI `tweak what-if`. | M |
+| INT1.3 | **Conflict map — 100 explicit pairs** | `TweakDef.Conflicts[]` populated. `TweakValidator` warns on conflicts. GUI shows conflict badge on detail pane. | M |
+| INT1.4 | **Nudge system** | After apply/remove, check for complementary tweaks. Queue one-time info bar in GUI, stdout line in CLI. Max 2 nudges per session. | M |
+| INT1.5 | **`DataConfidence` enum** | `Verified`, `Community`, `Inferred`. All 7,505 tweaks tagged. GUI tooltip. CLI `--filter confidence=verified`. | S |
+| INT1.6 | **Trend analytics** | `TrendReport`: most-applied this week/month, category rates, health score velocity. Sparklines on dashboard. | M |
+| INT1.7 | **Scheduled compliance scan** | Background timer (configurable hours). Drift vs baseline → tray notification. `--schedule N` config. | L |
+| INT1.8 | **Custom user-defined tweaks** | Load from `custom-tweaks.json` in `%LOCALAPPDATA%\RegiLattice\`. Validated by `TweakValidator`. Registered after builtins. | L |
+
+---
+
+## Documentation & Developer Experience
+
+| ID | Deliverable | Description | Effort |
+|----|-------------|-------------|--------|
+| DOC.1 | **Architecture Decision Records (ADR)** | `docs/adr/` directory. ADR-001: Why WinForms, ADR-002: Why declarative TweakDef, ADR-003: Why source generator, ADR-004: Why localhost API. Template follows MADR format. | S |
+| DOC.2 | **Deployment & Administration Guide** | `docs/Deployment.md`: MSI silent install, portable mode, centralized config, GPO deployment prep, config file reference. | M |
+| DOC.3 | **Plugin Authoring Guide** | `docs/PluginAuthoring.md`: create pack, use RegOp factories, `ITweakModule` interface, test with `ValidatePackJson`, submit to marketplace. Ship `template.rlpack` starter. | M |
+| DOC.4 | **Troubleshooting expansion** | Expand `docs/Troubleshooting.md` to 20+ items: common errors, revert procedures, performance tuning, known issues per OS version. | M |
+| DOC.5 | **SECURITY.md expansion** | Vulnerability disclosure process, security hardening checklist for admins, signed release verification instructions. | S |
+| DOC.6 | **REST API quickstart** | `docs/RestApi.md`: start server, authenticate, query tweaks, apply via REST, subscribe to SSE events. Code samples in PowerShell, Python, and curl. | M |
+| DOC.7 | **Updated instruction files** | Sync `workspace.instructions.md`, `testing.instructions.md`, `copilot-instructions.md` with actual v6.0.0 counts, new services, new CLI commands. | S |
+
+---
+
+## v6.0.0 Phase Schedule
+
+### Phase 1 — Code Health Foundation (Sprints 437–442)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 437 | OPS4 | OPS4.2 (nullable errors) · OPS4.3 (code style) · OPS4.4 (analyzers) |
+| 438 | OPS1 | OPS1.1 (test isolation) · E2.4 (IReadOnlyList sweep) |
+| 439 | E4 | E4.1 (perf baseline) · E4.6 (BenchmarkDotNet scaffolding) |
+| 440 | E4, E2 | E4.2 (search index) · E2.1 (ConcurrentDictionary) · E2.2 (freeze-gate) |
+| 441 | E3 | E3.1 ([TweakModule] attribute) · E3.2 (source generator PoC) |
+| 442 | OPS1 | OPS1.2 (Stryker baseline) · OPS1.6 (coverage gate) |
+
+**Phase 1 gate:** Nullable warnings at zero. BenchmarkDotNet running. Source gen PoC working. Stryker baseline measured. Coverage ≥ 80% branch.
+
+### Phase 2 — CLI Overhaul (Sprints 443–448)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 443 | UX1 | UX1.1 (subcommand router — tweak commands) |
+| 444 | UX1 | UX1.1 (profile + snapshot subcommands) |
+| 445 | UX1 | UX1.2 (JSON output + exit codes) |
+| 446 | UX1 | UX1.3 (grouped help) · UX1.4 (shell completions) |
+| 447 | UX1 | UX1.8 (CLI contract tests) · UX1.5 (batch mode) |
+| 448 | UX1 | UX1.6 (progress flag) · UX1.7 (dry-run show-ops) |
+
+**Phase 2 gate:** All CLI commands work via subcommands. JSON output on all listing/status. Contract tests green. Old `--flags` backward compatible.
+
+### Phase 3 — Intelligence Engine (Sprints 449–454)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 449 | INT1 | INT1.1 (SmartScan) · INT1.5 (DataConfidence) |
+| 450 | INT1 | INT1.3 (Conflict map — 100 pairs) |
+| 451 | INT1 | INT1.2 (WhatIf simulation) |
+| 452 | INT1 | INT1.4 (Nudge system) · INT1.6 (Trend analytics) |
+| 453 | INT1 | INT1.7 (Scheduled scan) |
+| 454 | INT1 | INT1.8 (Custom user tweaks) |
+
+**Phase 3 gate:** Smart Scan functional. 100 conflict pairs. WhatIf simulation working. Custom tweaks loadable.
+
+### Phase 4 — REST API (Sprints 455–459)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 455 | ECO1 | ECO1.1 (serve command — read endpoints) |
+| 456 | ECO1 | ECO1.1 (write endpoints + auth) · ECO1.4 (rate limiting) |
+| 457 | ECO1 | ECO1.3 (SSE events) · ECO1.2 (OpenAPI) |
+| 458 | ECO1 | ECO1.5 (API integration tests) |
+| 459 | E1 | E1.1 (ApplyAsync) · E1.2 (ApplyBatchAsync) · E1.5 (CancellationToken) |
+
+**Phase 4 gate:** REST API serving. SSE streaming. Swagger UI. API tests green. Async engine core working.
+
+### Phase 5 — GUI Excellence (Sprints 460–467)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 460 | UX2 | UX2.5 (Undo/Redo) |
+| 461 | UX2 | UX2.1 (Dashboard home — 3 score rings) |
+| 462 | UX2 | UX2.2 (Smart Scan panel) · UX2.3 (What-If modal) |
+| 463 | UX2 | UX2.4 (Detail pane enrichment) |
+| 464 | UX2 | UX2.8 (Onboarding wizard) · UX2.7 (What's New) |
+| 465 | UX2 | UX2.6 (Saved filter presets) |
+| 466 | UX3 | UX3.1 (.resx migration) · UX3.2 (4 new locales) |
+| 467 | UX3 | UX3.3 (High-contrast + system follow) · UX3.4 (Accessibility) |
+
+**Phase 5 gate:** Dashboard live. Undo/Redo. 6+ locales. Accessibility WCAG 2.1 AA on all interactive controls.
+
+### Phase 6 — Architecture Completion (Sprints 468–474)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 468 | E3 | E3.3 (Source gen full rollout — all 461+ modules) · E3.4 (build-time dupe ID) |
+| 469 | E4 | E4.3 (Lazy loading) · E4.5 (Memory fix) · E4.7 (Cold start target) |
+| 470 | E2, E1 | E2.3 (FrozenDictionary) · E2.5 (Pack registration) · E1.3 (StatusMapAsync) |
+| 471 | ECO2 | ECO2.1 (ITweakModule) · ECO2.5 (NuGet package) · OPS4.6 (XML docs) |
+| 472 | ECO2 | ECO2.2 (Assembly plugin loading) · ECO2.6 (dotnet new template) |
+| 473 | ECO2 | ECO2.3 (Plugin sandbox — phase 1) · ECO2.4 (Pack signing) |
+| 474 | OPS1 | OPS1.4 (FlaUI E2E) · OPS1.5 (CLI integration tests) |
+
+**Phase 6 gate:** Source gen live. `RegisterBuiltins()` deleted. Startup < 600 ms. NuGet published. Plugin loading + sandbox. E2E tests.
+
+### Phase 7 — Distribution & Enterprise (Sprints 475–483)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 475 | OPS2 | OPS2.1 (Authenticode signing) |
+| 476 | OPS2 | OPS2.2 (Auto release notes) · OPS2.5 (Reproducible builds) |
+| 477 | OPS2 | OPS2.8 (Chocolatey auto-submit) · OPS2.7 (Smoke test matrix) |
+| 478 | OPS2 | OPS2.6 (Staged rollout) · OPS2.3 (Dependabot) · OPS2.4 (format gate) |
+| 479 | OPS3 | OPS3.1 (User baselines) · OPS3.2 (CIS/STIG templates) |
+| 480 | OPS3 | OPS3.3 (CEF export) · OPS3.4 (Webhook alerts) |
+| 481 | OPS3 | OPS3.5 (SCAP/XCCDF) |
+| 482 | OPS3 | OPS3.6 (Deployment manifest) · OPS3.7 (DSC v3) |
+| 483 | ECO3 | ECO3.1 (Platform audit) · ECO3.2 (Multi-TFM Core) |
+
+**Phase 7 gate:** Signed releases. CIS/STIG baselines. SCAP export. Staged rollout. Chocolatey auto-submit.
+
+### Phase 8 — Cross-Platform & Polish (Sprints 484–492)
+
+| Sprint | Workstream | Key Deliverables |
+|--------|------------|-----------------|
+| 484 | ECO3 | ECO3.3 (Multi-TFM CLI) · ECO3.4 (Linux/macOS publish) |
+| 485 | ECO3 | ECO3.5 (Homebrew tap) |
+| 486 | ECO2 | ECO2.3 (Sandbox phase 2 — timeout + crash) · ECO2.7 (Schema export) |
+| 487 | INT1 | INT1.3 (Conflict map expansion to 200 pairs) |
+| 488 | E3 | E3.5 (Build-time dupe registry op detection) |
+| 489 | E4 | E4.4 (Incremental StatusMap with TTL) |
+| 490 | DOC | DOC.1–DOC.7 (All documentation deliverables) |
+| 491 | OPS1 | OPS1.3 (FsCheck property tests) · OPS1.7 (Perf regression gate) |
+| 492 | OPS1 | OPS1.2 (Stryker final pass ≥ 70%) |
+
+**Phase 8 gate:** Cross-platform CLI on GitHub Releases. Homebrew tap. Plugin sandbox complete. All docs updated. Stryker ≥ 70%.
+
+### Phase 9 — v6.0.0 Release Gate (Sprints 493–495)
+
+| Sprint | Deliverable |
+|--------|-------------|
+| 493 | Integration test marathon: full suite in dry-run against real registry. Zero failures. |
+| 494 | Performance gate: startup < 600 ms, search < 5 ms, memory < 120 MB. BenchmarkDotNet CI gate green. |
+| 495 | **v6.0.0 release**: Update all version files, CHANGELOG, README, stats.svg, installer. Tag `v6.0.0`. Push. Verify release workflow. |
+
+---
+
+## v6.0.0 Success Metrics
+
+| Metric | v5.54.0 (Now) | v6.0.0 Target | Delta |
+|--------|--------------|---------------|-------|
+| Tweaks | 7,505 | 9,000+ | +1,500 |
+| Categories | 464 | 540+ | +76 |
+| Tests | 2,742 | 3,400+ | +658 |
+| Branch coverage | ~56.8% | **≥ 80%** | +23% |
+| Mutation kill score | Unknown | **≥ 70%** | — |
+| Cold start time | Unknown | **< 600 ms** | — |
+| Search latency | Unknown | **< 5 ms** | — |
+| Working set (idle) | Unknown | **< 120 MB** | — |
+| CLI subcommands | ❌ | ✅ | new |
+| JSON output all CLI | ❌ | ✅ | new |
+| REST API (localhost) | ❌ | ✅ | new |
+| Source generator | ❌ | ✅ | new |
+| Async engine | ❌ | ✅ | new |
+| FrozenDictionary | ❌ | ✅ | new |
+| Intelligence Engine v2 | ❌ | ✅ | new |
+| Smart Scan | stub | ✅ (full) | new |
+| Dashboard home | ❌ | ✅ | new |
+| Undo/redo | ❌ | ✅ | new |
+| Authenticode signed | ❌ | ✅ | new |
+| Custom user tweaks | ❌ | ✅ | new |
+| SCAP/XCCDF export | ❌ | ✅ | new |
+| NuGet package (Core) | ❌ | ✅ | new |
+| Cross-platform CLI | ❌ | ✅ (beta) | new |
+| Plugin sandboxed | ❌ | ✅ | new |
+| FlaUI E2E tests | ❌ | ✅ (5 scenarios) | new |
+| Locales | 2 (en, de) | **6+** | +4 |
+| Accessibility | partial | **WCAG 2.1 AA** | new |
+| Homebrew tap | ❌ | ✅ | new |
+
+---
+
+## v6.0.0 Risk Register
+
+| # | Risk | Likelihood | Impact | Mitigation |
+|---|------|-----------|--------|------------|
+| R19 | Source generator complexity exceeds estimate | Medium | High | 3-sprint spike (441→468); fallback: `[ModuleInitializer]` + reflection scan |
+| R20 | Kestrel adds significant size to single-file publish | High | Low | If > 20 MB increase, use `HttpListener` (built-in) |
+| R21 | FlaUI instability in headless CI | Medium | Medium | Scope to 5 scenarios; optional gate |
+| R22 | Async engine migration breaks existing GUI code | Medium | High | Introduce async overloads alongside sync; deprecate sync in v6.1 |
+| R23 | AppConfig v2 migration breaks user configs | Medium | High | Auto-migration in `AppConfig.Load()`: detect v1 schema, convert to v2, write back |
+| R24 | Named-pipe plugin sandbox latency > 200 ms/op | Medium | High | Batch ops per pipe call; benchmark in spike sprint |
+| R25 | Cross-platform RegistrySession stubs confuse users | Low | Medium | Clear `PlatformNotSupportedException` messages; GUI-only on Windows |
+| R26 | EV certificate procurement delay | High | Medium | Order 3 sprints ahead; use self-signed in interim |
+| R27 | FrozenDictionary requires .NET 8+ APIs | Low | Low | Already on .NET 10 — no issue |
+| R28 | SCAP mapping coverage < 25% | High | Medium | v1 targets GroupPolicy-kind only (~1000 tweaks); `[UNMAPPED]` flag for rest |
+
+---
+
+## Breaking Changes Summary (v5.x → v6.0.0)
+
+| Change | Category | Migration Path |
+|--------|----------|----------------|
+| CLI subcommand structure | CLI | All `--flag` aliases preserved. New `tweak <verb>` syntax is additive. Deprecation warnings in v5.80. |
+| `AppConfig` JSON schema v2 (nested) | Config | Auto-migration in `AppConfig.Load()`. Old flat schema detected and converted on first load. |
+| `RegisterBuiltins()` removed | Engine | Replaced by source-generated `RegisterAll()`. External code calling `RegisterBuiltins()` should call `RegisterAll()` instead. |
+| Async engine overloads | Engine | Sync methods still exist but marked `[Obsolete]`. Async preferred. |
+| `FrozenDictionary` for internal state | Engine | No public API change. Internal only. Requires .NET 8+ (already on .NET 10). |
+| Exit code contract for CLI | CLI | `0` = success, `1` = partial, `2` = invalid args, `3` = access denied, `4` = corp guard. Previously all non-zero were undefined. |
+| `ITweakModule` interface required for plugins | Plugins | Existing `.rlpack` JSON packs unaffected. Only assembly-based plugins need `ITweakModule`. |
+
+---
+
+## Dependency Graph
+
+```
+OPS4.2 (nullable) ─────────────► E3.2 (source gen PoC) ──► E3.3 (full rollout)
+OPS1.1 (test isolation) ─────► OPS1.2 (Stryker)
+E4.1 (perf baseline) ─────────► E4.7 (cold start target)
+E4.2 (search index) ──────────► E4.7
+E3.3 (source gen) ────────────► E4.7
+E2.3 (FrozenDictionary) ─────► E4.7
+UX1.1 (subcommands) ──────────► UX1.2 (JSON output) ──► UX1.8 (contract tests)
+UX1.1 ─────────────────────────► UX1.4 (completions)
+UX1.1 ─────────────────────────► ECO1.1 (serve subcommand)
+INT1.1 (SmartScan) ───────────► UX2.2 (GUI surface)
+INT1.2 (WhatIf) ──────────────► UX2.3 (GUI modal)
+ECO2.1 (ITweakModule) ────────► E3.2 (source gen targets it)
+ECO2.1 ────────────────────────► ECO2.2 (assembly loading)
+ECO2.2 ────────────────────────► ECO2.3 (sandbox)
+ECO3.1 (platform audit) ──────► ECO3.2 (multi-TFM Core) ──► ECO3.3 (multi-TFM CLI)
+OPS2.1 (signing) ─────────────► OPS2.8 (Chocolatey publish)
+OPS2.7 (smoke tests) ─────────► OPS2.6 (staged rollout)
+OPS3.1 (user baselines) ──────► OPS3.2 (CIS/STIG templates)
+OPS4.6 (XML docs) ────────────► ECO2.5 (NuGet package)
+```
+
+---
+
+*Roadmap updated 2026-03-29 · v6.0.0 "Next Level" plan appended · 4 pillars, 16 workstreams, ~120 deliverables · 9 phases (sprints 437–495) · Next sprint: 432*

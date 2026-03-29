@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.55.0] — 2026-03-29
+
+#### Added
+
+- **Sprint 432 — IisHardeningPolicy** (10 tweaks, slug `iisharden`): IIS Web Server Security Hardening via HTTP.sys and W3SVC registry parameters — limit max request buffer size, cap HTTP header field length, block restricted URL characters, enforce URL segment length limit, force UTF-8 encoding, set connection timeout, limit TCP listen backlog, disable socket pooling, cap max simultaneous connections, enable kernel error request logging.
+- **Sprint 433 — SqlServerAuditPolicy** (10 tweaks, slug `sqlaup`): SQL Server Security and Audit Configuration — enable full login auditing (success + failure), enforce Windows Authentication-only mode, disable Named Pipes protocol, disable Shared Memory protocol, ensure TCP/IP is enabled, hide SQL instance from network browsers, record xp\_cmdshell disabled state, set error log retention to 10 files, disable OLAP remote connections flag, force TLS encryption for all connections.
+- **Sprint 434 — WindowsAdcsPolicy** (10 tweaks, slug `adcspol`): Active Directory Certificate Services Security Policy — protect root certificate store CRL retrieval, disable automatic root certificate updates, enforce strong private key protection, require smart card for interactive logon, enable smart card PIN lockout after 5 failures, disable certificate key archival to CA, disable certificate auto-publication to LDAP, enforce CNG algorithm policy, disable certificate enrollment UI for non-admins, require full certificate chain validation.
+- **Sprint 435 — AdfsFederationPolicy** (10 tweaks, slug `adfspol`): Active Directory Federation Services Security Policy — enable Extranet Smart Lockout, set lockout threshold to 5, disable WIA fallback, require TLS certificate authentication, require PKCE for OAuth2 code flow, disable device auth bypass, enable token replay detection, require EPA extended protection, disable prompt=login bypass, enable ADFS audit events.
+- **Sprint 436 — KerberoastMitigationPolicy** (10 tweaks, slug `kerbmit`): Kerberoasting Attack Mitigation — disable RC4 and enforce AES-128/256 for service tickets, reduce service ticket lifetime, reduce TGT lifetime, tighten clock skew tolerance to 2 minutes, enable KDC PAC signature validation, block unconstrained delegation, reduce ticket renewal window to 4 days, enable FAST armoring, block NTLM delegation session security, enforce client-side KDC pre-authentication requirement.
+
+#### Stats
+
+- Tweaks: 7,505 → 7,555 (+50 across 5 new modules)
+- Categories: 464 → 469 (+5)
+
 ## [5.54.0] — 2026-03-29
 
 #### Added
