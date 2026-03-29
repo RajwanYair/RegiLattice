@@ -204,4 +204,60 @@ internal static class ScoopManager
         "doxygen",
         "graphviz",
     ];
+
+    /// <summary>
+    /// Returns estimated install sizes per package by measuring each package's directory under
+    /// <c>~\scoop\apps\&lt;name&gt;</c>. Runs on the thread pool to avoid blocking the UI.
+    /// </summary>
+    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(
+        HashSet<string> installedNames,
+        CancellationToken ct = default
+    ) =>
+        Task.Run(
+            () =>
+            {
+                string scoopApps = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    "scoop",
+                    "apps"
+                );
+                var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (string name in installedNames)
+                {
+                    if (ct.IsCancellationRequested)
+                        break;
+                    string dir = Path.Combine(scoopApps, name);
+                    result[name] = Directory.Exists(dir) ? FormatBytes(GetDirSize(dir)) : "—";
+                }
+                return result;
+            },
+            ct
+        );
+
+    private static long GetDirSize(string path)
+    {
+        long size = 0;
+        try
+        {
+            foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    size += new FileInfo(file).Length;
+                }
+                catch { /* skip locked or inaccessible files */ }
+            }
+        }
+        catch { /* skip inaccessible root directory */ }
+        return size;
+    }
+
+    private static string FormatBytes(long bytes) =>
+        bytes switch
+        {
+            >= 1_073_741_824 => $"{bytes / 1_073_741_824.0:F1} GB",
+            >= 1_048_576 => $"{bytes / 1_048_576.0:F1} MB",
+            >= 1_024 => $"{bytes / 1_024.0:F0} KB",
+            _ => $"{bytes} B",
+        };
 }

@@ -27,6 +27,7 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
         [
             new ColumnHeader { Text = "Package", Width = 300 },
             new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Size", Width = 80 },
             new ColumnHeader { Text = "Status", Width = 140 },
         ];
 
@@ -50,8 +51,9 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
         foreach (var entry in list)
         {
             var item = new ListViewItem(entry) { Tag = entry };
-            item.SubItems.Add("");
-            item.SubItems.Add("\u2714 Up to date");
+            item.SubItems.Add("");             // Version
+            item.SubItems.Add("—");            // Size
+            item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
         }
@@ -73,8 +75,8 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && _outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[2].Text = "\u26A0 Update available";
-                    item.SubItems[2].ForeColor = AppTheme.Yellow;
+                    item.SubItems[3].Text = "\u26A0 Update available";
+                    item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
             SetOutdated(
@@ -102,8 +104,9 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
             foreach (var entry in list)
             {
                 var item = new ListViewItem(entry) { Tag = entry };
-                item.SubItems.Add("");
-                item.SubItems.Add(_installedNames.Contains(entry) ? "\u2714 Installed" : "");
+                item.SubItems.Add("");        // Version
+                item.SubItems.Add("—");       // Size
+                item.SubItems.Add(_installedNames.Contains(entry) ? "\u2714 Installed" : ""); // Status
                 item.ForeColor = AppTheme.Fg;
                 _lstInstalled.Items.Add(item);
             }

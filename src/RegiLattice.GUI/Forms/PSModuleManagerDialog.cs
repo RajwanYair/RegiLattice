@@ -27,6 +27,7 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
         [
             new ColumnHeader { Text = "Module", Width = 240 },
             new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Size", Width = 80 },
             new ColumnHeader { Text = "Status", Width = 140 },
         ];
 
@@ -68,8 +69,9 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
         foreach (var m in list)
         {
             var item = new ListViewItem(m) { Tag = m };
-            item.SubItems.Add("");
-            item.SubItems.Add("Installed");
+            item.SubItems.Add("");           // Version
+            item.SubItems.Add("…");          // Size (computed lazily)
+            item.SubItems.Add("Installed");  // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
         }
@@ -77,6 +79,7 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
         AppendLog($"Found {list.Count} module(s) in scope '{scope}'.", AppTheme.Green);
         RebuildQuickInstallButtons();
         _ = CheckOutdatedAsync(scope, ct);
+        _ = CheckSizesAsync(scope, ct);
     }
 
     private async Task CheckOutdatedAsync(string scope, CancellationToken ct)
@@ -89,7 +92,7 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string name && _outdatedNames.Contains(name))
                 {
-                    item.SubItems[2].Text = "\u26A0 Update available";
+                    item.SubItems[3].Text = "\u26A0 Update available";
                     item.ForeColor = AppTheme.Yellow;
                 }
             }
@@ -116,5 +119,28 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
     {
         string scope = _cmbScope.SelectedItem?.ToString() ?? "CurrentUser";
         return PSModuleManager.UpdateAsync(name, scope, ct);
+    }
+
+    private async Task CheckSizesAsync(string scope, CancellationToken ct)
+    {
+        try
+        {
+            var bases = await PSModuleManager.GetModuleBasesAsync(scope, ct);
+            var sizes = await PSModuleManager.GetInstalledSizesAsync(bases, ct);
+            if (InvokeRequired)
+                Invoke(() => ApplySizes(sizes));
+            else
+                ApplySizes(sizes);
+        }
+        catch { /* ignore — size is optional */ }
+    }
+
+    private void ApplySizes(Dictionary<string, string> sizes)
+    {
+        foreach (ListViewItem item in _lstInstalled.Items)
+        {
+            if (item.Tag is string name && sizes.TryGetValue(name, out string? size))
+                item.SubItems[2].Text = size;
+        }
     }
 }

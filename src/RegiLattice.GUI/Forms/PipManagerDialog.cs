@@ -28,6 +28,7 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
         [
             new ColumnHeader { Text = "Package", Width = 220 },
             new ColumnHeader { Text = "Version", Width = 140 },
+            new ColumnHeader { Text = "Size", Width = 80 },
             new ColumnHeader { Text = "Status", Width = 140 },
         ];
 
@@ -72,8 +73,9 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             string name = paren > 0 ? entry[..paren] : entry;
             string version = paren > 0 ? entry[(paren + 2)..].TrimEnd(')') : "";
             var item = new ListViewItem(name) { Tag = name };
-            item.SubItems.Add(version);
-            item.SubItems.Add("\u2714 Up to date");
+            item.SubItems.Add(version);            // Version
+            item.SubItems.Add("—");               // Size
+            item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
         }
@@ -99,8 +101,8 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[2].Text = "\u26A0 Update available";
-                    item.SubItems[2].ForeColor = AppTheme.Yellow;
+                    item.SubItems[3].Text = "\u26A0 Update available";
+                    item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
             SetOutdated(
