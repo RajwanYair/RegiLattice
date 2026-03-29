@@ -139,7 +139,7 @@ internal static class ChocolateyManager
                 string chocoLib = Path.Combine(
                     Environment.GetEnvironmentVariable("ChocolateyInstall")
                         ?? Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.ProgramData),
+                            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                             "chocolatey"
                         ),
                     "lib"
