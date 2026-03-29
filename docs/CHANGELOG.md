@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.93.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 622-626): WindowsUpdateNotificationPolicy, WindowsUpdateScanPolicy, WindowsUpdateUsoPolicy, WinsNameResolutionPolicy, WslDistroManagementPolicy.
+
+#### Stats
+
+- Total: **9445 tweaks**, 658 categories, 655 module files
+
+---
+
+
 ## [5.92.0] — 2026-03-29
 
 #### Added
