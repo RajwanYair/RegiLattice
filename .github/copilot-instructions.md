@@ -1,8 +1,8 @@
-# RegiLattice — Copilot Instructions
+﻿# RegiLattice — Copilot Instructions
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-03-29 (v5.94.0, ~9495 tweaks, 663 categories, 2742 tests).
+> Last verified: 2026-03-29 (v5.94.0, ~9,205 tweaks, 632 categories, 2,742 tests).
 
 ## Companion Instruction Files
 
@@ -83,7 +83,7 @@ Rules:
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
 | Version  | 5.94.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 9495 across 663 categories (660 module files)                            |
+| Tweaks   | 9,205 across 632 categories (660 module files)                           |
 | Tests    | 2742 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
@@ -115,7 +115,7 @@ git push; git push --tags   # ← REQUIRED on every version bump
 
 > Full annotated solution tree: see `.github/instructions/workspace.instructions.md` — Solution Structure section.
 
-Key namespaces: `RegiLattice.Core` (engine + models + registry + 464-category tweak modules), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 2742 total.
+Key namespaces: `RegiLattice.Core` (engine + models + registry + 632-category tweak modules), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 2742 total.
 
 ### TweakDef Model
 

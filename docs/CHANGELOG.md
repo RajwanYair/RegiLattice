@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 #### Stats
 
-- Total: **9495 tweaks**, 663 categories, 660 module files
+- Total: **9,205 tweaks**, 632 categories, 660 module files
 
 ---
 
