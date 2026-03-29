@@ -566,3 +566,397 @@ git tag vX.Y.Z
 git push
 git push --tags   # ← TRIGGERS release.yml → publishes EXEs + MSI to GitHub Releases
 ```
+
+---
+
+---
+
+---
+
+# v6.0.0 Major Release — Full Plan
+
+> **Drafted:** 2026-03-29  
+> **Baseline:** v5.54.0 · 7,505 tweaks · 464 categories · 461 modules · 2,742 tests · 11 themes · 25+ CLI commands  
+> **Target:** v6.0.0 by end of 2026  
+> **Sprint range:** 437–530+  
+> **Nature:** The first true major version since the Python→C# migration — combines architectural modernization, new surface areas (REST API, Intelligence Engine), and breaking CLI changes.
+
+## Updated State at v5.54.0
+
+The tweak expansion cadence has outpaced the original projection by ~1400 tweaks (reached 7,505 vs. the v5.25.0 target of 6,075). The sprint numbering is now at 431. Architectural work from the original Themes A–G remains largely deferred. This plan addresses that.
+
+| Metric | v5.0.0 Baseline | v5.54.0 Actual | v6.0.0 Target |
+|--------|----------------|----------------|---------------|
+| Tweaks | 4,825 | **7,505** | **8,000+** |
+| Categories | 198 | **464** | 500+ |
+| Tests | 2,661 | **2,742** | **3,200+** |
+| Branch coverage | ~75% | ~75% | **≥ 85%** |
+| Mutation kill score | Unknown | Unknown | **≥ 70%** |
+| Startup time | Unknown | Unknown | **< 800 ms** |
+| CLI subcommands | ❌ | ❌ | ✅ |
+| Source generator | ❌ | ❌ | ✅ |
+| REST API | ❌ | ❌ | ✅ |
+| Intelligence Engine v2 | ❌ | ❌ | ✅ |
+| Dashboard home | ❌ | ❌ | ✅ |
+| Undo/redo | ❌ | ❌ | ✅ |
+| Authenticode signed | ❌ | ❌ | ✅ |
+| Custom user tweaks | ❌ | ❌ | ✅ |
+| SCAP/XCCDF export | ❌ | ❌ | ✅ |
+| Cross-platform CLI | ❌ | ❌ | ✅ (beta) |
+
+---
+
+## New Themes for v6.0.0
+
+### Theme I — Local REST API & Background Service
+
+#### Context
+
+RegiLattice is used only interactively (GUI or CLI). Power users, home-lab operators, VS Code extensions, and automation scripts have no stable machine-local API to query tweak status, trigger applies, or receive events. A lightweight `localhost`-only HTTP service fills this gap without any cloud dependency.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| I1 | **`regilattice serve` command** | Start a `localhost`-only HTTP server (Kestrel minimal API, `Microsoft.AspNetCore.App` trimmed). Default port: `21397` (configurable). Endpoints: `GET /tweaks`, `GET /tweaks/{id}`, `POST /tweaks/{id}/apply`, `POST /tweaks/{id}/remove`, `GET /tweaks/{id}/status`, `GET /categories`, `GET /profiles`, `POST /profiles/{name}/apply`. API key required (auto-generated UUID in `AppConfig`, shown on first start). | L |
+| I2 | **OpenAPI schema** | Auto-generate `swagger.json` at `GET /openapi.json`. Serve Swagger UI at `GET /ui`. Schema version-locked to RegiLattice version. Publish `regilattice-api.yaml` as a GitHub release artifact per version. | M |
+| I3 | **Server-Sent Events (SSE) change stream** | `GET /events` returns a text/event-stream of `{ type: "apply"\|"remove"\|"detect", tweakId, result, timestamp }`. Enables home-lab dashboards and VS Code status bar extension without polling. | M |
+| I4 | **VS Code extension (companion)** | New repo `regilattice-vscode`. Connects to the REST API. Status bar shows `[3 tweaks unapplied]`. Command palette: `RegiLattice: Apply Tweak`, `RegiLattice: Open Dashboard`. Ships independently, published to VS Code Marketplace. | XL |
+| I5 | **API rate limiting & auth hardening** | Enforce: max 60 req/min per API key. Block all non-loopback network interfaces (bind `127.0.0.1` only, never `0.0.0.0`). Log all `4xx`/`5xx` requests to `%LOCALAPPDATA%\RegiLattice\serve.log`. SSL/TLS with a self-signed cert generated at first run. | M |
+| I6 | **PowerShell REST client module** | `RegiLattice.REST.psd1` — thin wrapper around the REST endpoints using `Invoke-RestMethod`. Exports `Get-RLTweak`, `Invoke-RLApply`, `Invoke-RLRemove`, `Watch-RLEvents`. Ships in the `powershell/` directory. | S |
+
+#### Security Note
+The server MUST bind exclusively to `127.0.0.1`. The auto-generated API key (stored in `AppConfig`, never logged) prevents other localhost processes from issuing commands. All write operations (`apply`, `remove`) log to `TweakHistory` just like GUI/CLI operations.
+
+---
+
+### Theme J — Intelligence Engine Phase 2: Smart Scan & Recommendations
+
+#### Context
+
+`ImpactScore`, `SafetyRating`, and `ImpactNote` are now populated on all tweaks. `HealthScoreService` computes a privacy/perf/security score. The next step is proactive: surface *actionable* recommendations, model *what-if* scenarios, and create a machine-driven Smart Scan that synthesizes hardware, profile, and applied history.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| J1 | **Smart Scan engine** | `SmartScanService.Scan()` returns a `ScanReport` with: (a) unapplied tweaks ranked by `(ImpactScore * SafetyRating)` within the user's detected profile, (b) conflicting currently-applied tweaks, (c) tweaks obsoleted by newer entries, (d) estimated time to apply. Replaces the ad-hoc profile suggestions. | L |
+| J2 | **What-If Analysis** | `WhatIfService.Simulate(tweakIds[])` returns a `WhatIfResult`: projected score delta per dimension (Privacy/Perf/Security), list of conflicts that would be introduced, list of dependencies not yet satisfied, risk rating. Exposed in GUI as "Simulate" button before batch apply. | M |
+| J3 | **Conflict map enrichment** | Extend `TweakDef` with `Conflicts[]` — explicit list of tweak IDs that this tweak is incompatible with. Populate 100 known pairs. `TweakEngine.ValidateTweaks()` warns on detected conflicts. GUI shows conflict warning in detail pane. | M |
+| J4 | **Recommendation "nudge" system** | After each apply/remove operation, `NudgeService` checks if any complementary tweaks are unapplied and queues a one-time notification (info bar in GUI, stdout in CLI). "You applied priv-disable-telemetry — 3 related privacy tweaks are still off." Max 2 nudges per session. | M |
+| J5 | **Trend analytics dashboard** | `AnalyticsService` already records apply/remove. New: `TrendReport` aggregating most-applied tweaks this week/month, category application rate, and "improvement velocity" (how fast the health score is changing). Shown as sparklines on the dashboard home. | M |
+| J6 | **Scheduled background scan** | `ScheduledScanService` runs a compliance scan every N hours (configurable). If drift detected vs. the last saved baseline, shows a system tray notification. `--schedule <hours>` CLI flag to configure. Runs as a user-mode timer, no service installation required. | L |
+| J7 | **Model-Confidence flag** | Add `DataConfidence` enum to `TweakDef`: `Verified` (tested in registry), `Community` (reported by users), `Inferred` (derived from ADMX/docs). Surface in GUI tooltip. Filter in CLI: `--filter confidence=verified`. | S |
+
+---
+
+### Theme K — Performance & Scale
+
+#### Context
+
+Startup time and memory footprint have never been measured. With 7,505 tweaks, `RegisterBuiltins()` calls 461 `Tweaks` property getters at startup. `Search()` builds a LINQ pipeline over 7,505 objects. `StatusMap()` can issue 7,505 registry reads. These are the three performance-critical paths.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| K1 | **Startup profiling & baseline** | Instrument with `System.Diagnostics.Stopwatch`. Measure: cold start time, `RegisterBuiltins()` time, first `Search()` time, first `StatusMap()` time. Publish results as `perf-baseline.md` in `.tmp/`. | S |
+| K2 | **Lazy module loading** | Instead of calling all 461 `Tweaks` getters at startup, load modules on first category access. Profile at startup shows < 5 modules needed on cold start. Implement `LazyTweakModule` wrapper. Target: reduce cold start by 40%. | M |
+| K3 | **Search index pre-computation** | At registration time, build a pre-computed search index: tokenize all `Id`, `Label`, `Description`, `Tags` into a `Dictionary<string, List<TweakDef>>`. `Search()` performs inverted index lookup instead of LINQ scan. Target: `Search("telemetry")` < 5 ms on 7,500 tweaks. | M |
+| K4 | **Incremental `StatusMap()`** | `StatusMap()` with `ids: null` reads up to 7,505 registry keys. Add `StatusMap(since: DateTime)` that re-checks only tweaks whose last-detected status is older than N minutes. Cache status with TTL per tweak. | M |
+| K5 | **Source generator for module auto-registration** | Roslyn incremental source generator emits a `GeneratedTweakModules.cs` file that calls `Register(module.Tweaks)` for all 461 modules — replacing the 461-line `RegisterBuiltins()`. Zero runtime reflection. Build-time only. | XL |
+| K6 | **Memory footprint audit** | Use `dotnet-counters` to measure GC allocation during `Search()` + `StatusMap()` cycle. Target: < 150 MB working set at idle. Fix top 3 allocation hotspots. | S |
+| K7 | **BenchmarkDotNet suite + CI gate** | Add `RegiLattice.Benchmarks` project. Benchmarks: `RegisterBuiltins`, `Search("telemetry")`, `StatusMap(parallel:true, 100 ids)`, `Filter(category="Privacy")`. CI: fail if any benchmark regresses > 20% vs published baseline. | M |
+
+---
+
+### Theme L — Developer SDK & Extensibility
+
+#### Context
+
+`PackLoader` handles JSON packs but there is no documented .NET API for embedding RegiLattice in other tools, no IntelliSense-friendly NuGet package, and no starter template. Making `RegiLattice.Core` a first-class library opens the ecosystem.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| L1 | **NuGet package — `RegiLattice.Core`** | Publish `RegiLattice.Core` to NuGet.org. Add `<PackageId>`, `<Description>`, `<PackageTags>`, `<PackageProjectUrl>`, `<PackageIcon>`, `<GenerateDocumentationFile>true`. CI publishes on each tag push to a NuGet GitHub release asset and optionally to nuget.org via `NUGET_API_KEY` secret. | M |
+| L2 | **XML doc comments — full pass** | Add `<summary>`, `<param>`, `<returns>`, `<example>` XML doc comments to all `public` and `protected` members in `RegiLattice.Core`. Fail CI if public member is undocumented (via `CS1591` with `TreatWarningsAsErrors`). | L |
+| L3 | **Plugin SDK starter template** | `dotnet new regilattice-plugin` template that creates a `MyCustomTweaks.cs` with a sample `TweakModule`, wires up `PackLoader.LoadFromAssembly()`, and includes a `PackLoader.ValidatePackJson` call. Published to `dotnet new --list`. | M |
+| L4 | **`ITweakModule` interface** | Formalize the module contract: `string Name { get; }`, `string Category { get; }`, `IReadOnlyList<TweakDef> Tweaks { get; }`. Source generator (K5) targets this interface. Plugin SDK (L3) implements it. Enables third-party modules loaded at runtime. | S |
+| L5 | **Assembly-based plugin loading** | `TweakEngine.LoadPlugin(assemblyPath)` loads a .NET assembly, scans for `ITweakModule` implementors, registers their tweaks with `PackSource = assemblyPath`. Isolate via `AssemblyLoadContext`. CLI: `regilattice plugin load <dll>`. | L |
+| L6 | **Schema export for pack authoring** | `regilattice schema export --output regilattice-pack-schema.json` emits a JSON Schema document describing the pack format. Enables IDE autocompletion and validation in VS Code when editing `.rlpack` files. | S |
+
+---
+
+### Theme M — Cross-Platform CLI
+
+#### Context
+
+RegiLattice is `net10.0-windows` only today. The registry access and WinForms code are Windows-specific, but the CLI's core logic — search, filter, validate, export — is pure logic. A multi-TFM build allowing `dotnet run` on Linux/macOS (without registry operations) opens RegiLattice to server admins and CI pipelines running on non-Windows.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| M1 | **TFM conditional compilation audit** | Annotate all P/Invoke, `Microsoft.Win32.Registry`, and `WinForms` usages with `[SupportedOSPlatform("windows")]`. Identify which `Core` services can compile on net10.0 (non-Windows TFM). | M |
+| M2 | **`net10.0` target for RegiLattice.Core** | Add `<TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>` to `RegiLattice.Core.csproj`. Stub out `RegistrySession` on non-Windows (all operations return `TweakResult.Unknown`). SnapshotManager, TweakValidator, TweakEngine search/filter/export work fully on all platforms. | L |
+| M3 | **`net10.0` target for RegiLattice.CLI** | Build CLI for `net10.0` (cross-platform). Remove Windows-specific commands (`apply`, `remove`, `status` return `[registry unavailable on this platform]`). `--list`, `--search`, `--validate`, `--export-json`, `--profile list` work on all platforms. | M |
+| M4 | **Linux/macOS self-contained publish in CI** | Add `publish-linux` and `publish-macos` jobs to `release.yml`. Upload `RegiLatticeCLI-linux-x64` and `RegiLatticeCLI-osx-x64` as GitHub Release assets. | M |
+| M5 | **Homebrew tap** | Create `regilattice/homebrew-tap` repository. Formula installs `RegiLatticeCLI-osx-x64`. CI auto-updates the formula SHA on each tag push. | M |
+
+---
+
+### Theme N — Home Lab & Automation Integration
+
+#### Context
+
+Power users deploy RegiLattice as part of machine provisioning (Ansible, Packer, WinPE). Currently they must shell out to the CLI. Native integrations with common automation tools reduce friction and errors.
+
+#### Tasks
+
+| ID | Task | Description | Effort |
+|----|------|-------------|--------|
+| N1 | **Ansible collection `regilattice.windows`** | Write `modules/regilattice_tweak.py` (Python Ansible module). Uses CLI `--output json` as backend. Supports `state: present\|absent\|query`. Published to Ansible Galaxy. | L |
+| N2 | **Packer provisioner plugin** | Write `packer-plugin-regilattice` in Go (or PowerShell wrapper). `type = "regilattice"` in Packer HCL applies a profile or list of tweak IDs during image build. | L |
+| N3 | **GitHub Actions action** | `regilattice/apply-action@v1` — composite action that installs RegiLattice CLI and applies a list of tweak IDs or a profile. Input: `tweaks`, `profile`, `dry-run`. Output: `applied_count`, `failed_count`. | M |
+| N4 | **WinPE integration guide** | Document how to include `RegiLatticeCLI.exe` in a WinPE/WinRE image, call `--profile server` during bare-metal provisioning, and verify with `--validate`. | S |
+| N5 | **DSC resource module v2** | Rewrite `RegiLatticeDSC` for DSC v3 (PowerShell 7.5+). Uses the REST API (I1) as backend for resource discovery. Compatible with `Test-DscConfiguration` and Azure Machine Configuration. | L |
+
+---
+
+## v6.0.0 Sprint Plan
+
+**Baseline assumption:** Sprint 437 is the next available sprint after the current v5.55.0 tweak expansion begins.
+
+### Phase 1 — Code Health Foundation (Sprints 437–442)
+
+> Prerequisite to everything else. Zero-overhead quality gates that unlock safe refactoring.
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **437** | C, A | Nullable audit (`#nullable enable` + `CS8xxx` → 0 warnings) · Dead code sweep (IDE0051/IDE0052) | `dotnet build /warnaserror:nullable` passes on all 3 projects |
+| **438** | A | Test isolation audit — move all file-writing tests to `Path.GetTempPath()` · Add `[Collection]` guards | No test writes to `%LOCALAPPDATA%\RegiLattice\` during `dotnet test` |
+| **439** | K | Startup profiling baseline (K1) · BenchmarkDotNet suite scaffolding (K7) | `perf-baseline.md` committed; `RegisterBuiltins` time measured |
+| **440** | K | Search index pre-computation (K3) · `IReadOnlyList<T>` sweep in all services (C5) | `Search("telemetry")` < 5 ms; zero `List<T>` in public API returns |
+| **441** | C | `ITweakModule` interface (L4) · Source generator spike — PoC registers 5 modules (K5 milestone 1) | Generator PoC builds; registers 5 real modules without `RegisterBuiltins()` |
+| **442** | A | Stryker.NET baseline run · Coverage gate in CI (A2, A8) | Stryker runs in CI; kill score measured; branch coverage badge ≥ 80% |
+
+### Phase 2 — CLI Overhaul (Sprints 443–448)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **443** | B | `ICommand` interface · Subcommand router · `tweak apply\|remove\|status\|update` (B1 phase 1) | Old `--` flags still work; `regilattice tweak apply <id>` works |
+| **444** | B | `profile apply\|list`, `snapshot save\|restore\|diff` subcommands (B1 phase 2) | All snapshot CLI workflows use new subcommands |
+| **445** | B | `--output json\|csv\|table` on all listing/status commands (B2) · Exit code contract (0-4) | JSON output matches documented schema; exit codes correct in all branches |
+| **446** | B | Grouped contextual `--help` (B3) · Shell completions for all subcommands + tweak IDs (B6) | `regilattice --help` shows grouped sections; PowerShell tab-complete works |
+| **447** | B | CLI contract tests project `RegiLattice.CLI.Contract.Tests` (A5) | Every subcommand has ≥ 1 contract test; exit codes tested |
+| **448** | B | PowerShell module `RegiLattice.psd1` parity — new cmdlets matching B1 subcommands (B4) | `Get-RLTweak`, `Invoke-RLApply`, `Get-RLProfile` all functional |
+
+### Phase 3 — Intelligence Engine Phase 2 (Sprints 449–454)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **449** | J | `SmartScanService.Scan()` + `ScanReport` model (J1) | `regilattice scan` returns ranked unapplied tweaks by `ImpactScore × SafetyRating` |
+| **450** | J | Conflict map — 100 pairs populated in `TweakDef.Conflicts[]` (J3) | `--validate` reports conflicts; GUI detail pane shows conflict badge |
+| **451** | J | `WhatIfService.Simulate()` (J2) — CLI: `regilattice tweak what-if <ids...>` | Returns score delta + conflict list before apply; dry-run implied |
+| **452** | J | `NudgeService` (J4) + trend analytics `TrendReport` (J5) | After apply, nudge shows complementary tweaks; dashboard shows trend sparklines |
+| **453** | J | `DataConfidence` enum on `TweakDef` (J7) · `--filter confidence=verified` (CLI) | All 7,505 tweaks have a DataConfidence value; CLI filter works |
+| **454** | J | `ScheduledScanService` — tray notification on drift (J6) · `--schedule N` config | Tray notification fires on compliance drift; configurable schedule |
+
+### Phase 4 — Local REST API (Sprints 455–459)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **455** | I | Kestrel minimal API scaffolding · `regilattice serve` command · `GET /tweaks`, `/categories` (I1 phase 1) | Server starts; `Invoke-RestMethod http://localhost:21397/tweaks` returns JSON |
+| **456** | I | Write endpoints: `POST /tweaks/{id}/apply\|remove` · Auth: API key header (I1 phase 2, I5) | Apply/remove via REST works; unauthenticated calls return `401` |
+| **457** | I | `GET /events` SSE change stream (I3) · OpenAPI schema + Swagger UI (I2) | SSE stream emits events on apply/remove; `GET /openapi.json` is valid |
+| **458** | I | `RegiLattice.REST.psd1` PowerShell client module (I6) | `Get-RLTweak`, `Invoke-RLApply` use REST backend; Pester tests pass |
+| **459** | I | REST API integration tests (new test project `RegiLattice.API.Tests`) | All endpoints have contract tests; 401 on missing key; 404 on unknown ID |
+
+### Phase 5 — GUI Excellence (Sprints 460–467)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **460** | D | `TweakOperationHistory` (undo/redo stack) — `Ctrl+Z`/`Ctrl+Y` (D1) | Last 50 operations undoable; status bar shows undo hint |
+| **461** | D | Dashboard home screen `DashboardPanel` — 3 score rings + recent tweaks (D3) | Dashboard shows live privacy/perf/security rings sourced from `HealthScoreService` |
+| **462** | D | Smart Scan results panel on dashboard (J1 → GUI surface) | Dashboard shows "Top 5 Recommended" from `SmartScanService` |
+| **463** | D | Tweak detail pane enrichment — registry path, impact matrix, conflict badges (D6) | Detail pane shows full registry path (copyable) + impact delta visualization |
+| **464** | D | What-If preview modal (J2 → GUI surface) | "Simulate" button opens modal with score preview before batch apply |
+| **465** | D | Onboarding rework wizard — hardware detection, dry-run preview, one-click apply (D2) | Wizard guides new users through 5 steps; creates initial snapshot |
+| **466** | D | In-app What's New dialog (D7) · Saved filter presets (D4) | What's New auto-populated from CHANGELOG; 5 presets saveable in AppConfig |
+| **467** | D | Accessibility completion pass — `AccessibleName` + `TabIndex` on all dialogs (D5) | Narrator reads all interactive controls; no missing `AccessibleName` warnings |
+
+### Phase 6 — Architecture Completion (Sprints 468–474)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **468** | K | Source generator full rollout — all 461 modules auto-registered (K5) | `RegisterBuiltins()` replaced by generated code; all 2,742 tests still pass |
+| **469** | K | Lazy module loading (K2) · Memory footprint fix — top 3 allocations (K6) | Cold start < 800 ms; working set < 150 MB at idle |
+| **470** | C | `ITweakService` lifecycle — `Init()`, `Flush()`, `Dispose()` on all 15 services (C2) | All services implement `ITweakService`; DI container wires them |
+| **471** | L | NuGet package publishing `RegiLattice.Core` (L1) · XML doc comments full pass (L2) | `dotnet add package RegiLattice.Core` works; all public members have `<summary>` |
+| **472** | L | Assembly-based plugin loading (L5) · `dotnet new regilattice-plugin` template (L3) | `regilattice plugin load MyPlugin.dll` registers custom tweaks; template installable |
+| **473** | H | Custom user-defined tweaks from `custom-tweaks.json` (H7) | Users define tweaks in JSON; loaded at startup; validated by `TweakValidator` |
+| **474** | A | FlaUI E2E test suite — 5 GUI smoke scenarios (A4) | App launches, applies tweak in dry-run, theme switches, dialogs open — all in CI |
+
+### Phase 7 — Distribution & Enterprise (Sprints 475–483)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **475** | F | Authenticode code-signing integration in `release.yml` (F1) | GUI EXE + CLI EXE + MSI all signed; `signtool verify /pa` passes in CI |
+| **476** | F | Automated release notes from CHANGELOG.md (F3) · Reproducible builds verification (F8) | GitHub Release body auto-populated; two builds produce identical SHA-256 |
+| **477** | F | Chocolatey auto-submit CI step (F4) · Smoke test matrix on Win11 22H2 + 24H2 (F5) | `choco install regilattice` works on clean VM within 2 minutes of tag push |
+| **478** | F | Staged rollout workflow `staged-release.yml` (F6) · Auto-updater rollback (F2) | Pre-release auto-promotes to latest after 48 h with zero bug reports |
+| **479** | E | User-defined baseline profiles (E4) · CIS/DISA STIG baseline templates (E6) | `--baseline-compare cis-l1-desktop` works; 4 built-in baselines ship in repo |
+| **480** | E | Audit log CEF export (E3) · Webhook drift alerts (E7) | `--export-audit-log --format cef` emits valid CEF; Teams webhook fires on drift |
+| **481** | E | SCAP/XCCDF export for GroupPolicy-kind tweaks (E1) | SCAP XML imports into STIG Viewer; ≥ 200 tweaks mapped to XCCDF rule IDs |
+| **482** | E | Deployment manifest (E5) · GitHub reusable workflow `regilattice/deploy-action` | `regilattice deploy --manifest deployment.json` applies profiles + overrides |
+| **483** | N | `regilattice/apply-action@v1` GitHub Actions composite action (N3) | Action installs CLI + applies tweaks in < 2 min on `windows-latest` runner |
+
+### Phase 8 — Cross-Platform & Plugin Ecosystem (Sprints 484–492)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **484** | M | TFM audit: annotate all `[SupportedOSPlatform("windows")]` usages (M1) | Zero `CA1416` warnings with `TreatWarningsAsErrors` on net10.0 build |
+| **485** | M | `net10.0` multi-TFM for `RegiLattice.Core` (M2) — stub `RegistrySession` on non-Windows | Core compiles on Linux; search/filter/validate/export work cross-platform |
+| **486** | M | `net10.0` multi-TFM for CLI (M3) · Linux/macOS publish in CI (M4) | CLI `--list`, `--search`, `--export-json` run on Ubuntu 22.04 + macOS 14 |
+| **487** | M | Homebrew tap `regilattice/homebrew-tap` (M5) | `brew install regilattice/tap/regilattice` works on macOS |
+| **488** | G | Pack GPG/RSA signing + verification (G2) · "Verified ✓" badge in Marketplace | Signed packs display badge; unsigned show warning dialog |
+| **489** | G | Pack versioning + dependency resolution (G3) · Pack update notifications (G5) | `PackDef.Version` enables `--update-packs`; circular pack deps blocked |
+| **490** | G | Community submission CI pipeline (G4) · Pack schema export CLI (L6) | GitHub Issue template validates pack JSON in CI; schema export produces valid JSON Schema |
+| **491** | G | Plugin sandbox — phase 1: named-pipe protocol (G1 milestone 1) | Single `ApplyAction` delegate runs in isolated child process via named pipe |
+| **492** | G | Plugin sandbox — phase 2: timeout + crash containment (G1 milestone 2) | 30 s timeout enforced; child crash returns `TweakResult.Error`; no host crash |
+
+### Phase 9 — v6.0.0 Final Gate (Sprints 493–495)
+
+| Sprint | Theme | Deliverable | Exit Criteria |
+|--------|-------|-----------|---------------|
+| **493** | All | Integration testing marathon — run full suite against real registry (dry-run mode) | 0 test failures; Stryker ≥ 70% kill; E2E smoke tests pass |
+| **494** | All | Performance gate: startup < 800 ms · memory < 150 MB · SearchIndex < 5 ms (K7 CI gate) | All perf benchmarks pass; no regressions vs Sprint 439 baseline |
+| **495** | All | v6.0.0 release: update Directory.Build.props, CHANGELOG, README, stats.svg, installer · tag v6.0.0 | `git tag v6.0.0; git push --tags` triggers full release workflow; all artifacts signed |
+
+**v6.0.0 milestone gate:** Source generator live · CLI subcommands complete · REST API serving · Intelligence Engine Phase 2 · Dashboard home · Undo/redo · Authenticode signed · Custom tweaks · SCAP export · NuGet package · Cross-platform CLI · Plugin sandboxed · FlaUI E2E · Stryker ≥ 70%.
+
+---
+
+## Sprint Expansion Table — v5.55.0 through v5.80.0
+
+> **Continuing the standing 5×10 cadence** (5 modules × 10 tweaks = +50 tweaks per MINOR bump).
+> Next sprint is **432** (v5.55.0 starts there).
+
+| Version | Sprints | Module Focus Areas (5 modules, 10 tweaks each) | +Tweaks | Cumulative |
+|---------|---------|-----------------------------------------------|---------|-----------|
+| **v5.55.0** | 432–436 | IIS Web Server Hardening Policy · SQL Server Access Audit Policy · Active Directory CS (ADCS) Policy · ADFS Federation Policy · Kerberoast Mitigation Policy | +50 | **7,555** |
+| **v5.56.0** | 437–441 | Windows Defender Firewall Advanced Policy · IPSec Rule Enforcement Policy · Network Location Awareness Policy · DNS-over-HTTPS (DoH) Enforcement Policy · Proxy Bypass Policy | +50 | **7,605** |
+| **v5.57.0** | 442–446 | Clipboard History Advanced Policy · Clipboard Redirection Policy (RDS) · Shared Clipboard Control Policy · Universal Clipboard Sync Policy · Clipboard Data Sensitivity Policy | +50 | **7,655** |
+| **v5.58.0** | 447–451 | Windows Terminal Advanced Config Policy · PowerShell 7 Execution Mode Policy · ISE Deprecation Enforcement Policy · Script Block Logging Advanced Policy · Remote PowerShell (JEA) Policy | +50 | **7,705** |
+| **v5.59.0** | 452–456 | Microsoft Edge WebView2 Policy · Edge Application Guard Policy · Edge Sleeping Tabs Policy · Edge Site Isolation Policy · Edge Early Hints Policy | +50 | **7,755** |
+| **v5.60.0** | 457–461 | Azure AD Conditional Access Compliance Policy · Entra ID Device Registration Policy · Azure AD PRT SSO Policy · Azure AD SSPR Writeback Policy · Hybrid Join DNS Suffix Policy | +50 | **7,805** |
+| **v5.61.0** | 462–466 | Virtualization-Based Security (VBS) Enforcement Policy · HVCI (Memory Integrity) Policy · Secure Launch (D-RTM) Policy · System Guard Runtime Monitor Policy · Kernel DMA Protection Policy | +50 | **7,855** |
+| **v5.62.0** | 467–471 | Windows Subsystem for Android Policy · Android App Debugging Policy · WSA Network Isolation Policy · Android Sensor Access Policy · WSA Storage Allocation Policy | +50 | **7,905** |
+| **v5.63.0** | 472–476 | Print Spooler Advanced Hardening Policy · Printer Driver Isolation Policy · Internet Printing Protocol Policy · WSD Print Discovery Policy · IPP Everywhere Policy | +50 | **7,955** |
+| **v5.64.0** | 477–481 | Windows Hello for Business Advanced Policy · Passwordless Authentication Policy · Biometric Sign-In Policy · Portable Device Authentication Policy · Certificate-Based Authentication (CBA) Policy | +50 | **8,005** |
+| **v5.65.0** | 482–486 | Recall AI Indexing Advanced Policy · Copilot+ Feature Gate Policy · Windows AI Platform Policy · NPU Workload Control Policy · AI Content Moderation Policy | +50 | **8,055** |
+| **v5.66.0** | 487–491 | Storage Spaces Advanced Policy · ReFS Integrity Streams Policy · Disk Quota Advanced Policy · Virtual Disk Service Policy · Storage Bus Cache Policy | +50 | **8,105** |
+| **v5.67.0** | 492–496 | Windows Event Forwarding Advanced Policy · Subscriptions Management Policy · Channel Access Permissions Policy · Event Log Transport Security Policy · Log Archival Policy | +50 | **8,155** |
+| **v5.68.0** | 497–501 | Network Bridge Control Policy · LLTD Topology Discovery Policy · HomeGroup Remnant Cleanup Policy · Network Adapter Advanced Policy · NIC Teaming Policy | +50 | **8,205** |
+| **v5.69.0** | 502–506 | Microsoft Defender SmartScreen V2 Policy · Reputation-Based Protection Policy · Exploit Guard (EMET Successor) Policy · Controlled Folder Access Advanced Policy · Network Protection Advanced Policy | +50 | **8,255** |
+| **v5.70.0** | 507–511 | Font Embedding Restriction Policy · OpenType Layout Feature Policy · Variable Font Control Policy · Font Smoothing Advanced Policy · System Font Substitution Policy | +50 | **8,305** |
+| **v5.71.0** | 512–516 | Direct3D Feature Level Policy · GPU Scheduler Advanced Policy · WDDM Driver Store Policy · Hardware-Accelerated GPU Scheduling Policy · Display Power Management Policy | +50 | **8,355** |
+| **v5.72.0** | 517–521 | Xbox Game Bar Advanced Policy · Game Mode Scheduler Policy · DirectX Diagnostic Policy · Hardware Performance Counter Policy · GPU-P Partitioning Policy | +50 | **8,405** |
+| **v5.73.0** | 522–526 | Microsoft Store Advanced APT Policy · Private Store URL Policy · App License Acquisition Policy · In-App Purchase Control Policy · Store App Auto-Update Policy | +50 | **8,455** |
+| **v5.74.0** | 527–531 | Windows Sandbox Security Baseline Policy · Container Isolation Advanced Policy · Docker Desktop Integration Policy · WSL2 Network Backend Policy · Hyper-V Quick Create Policy | +50 | **8,505** |
+| **v5.75.0** | 532–536 | Roaming User Profile Advanced Policy · Folder Redirection Quota Policy · User State Migration Tool (USMT) Policy · AppData Virtual Store Policy · Profile Space Enforcement Policy | +50 | **8,555** |
+| **v5.76.0** | 537–541 | Error Reporting Advanced Bucketing Policy · WER Silent Submission Policy · Windows Quality Update Reporting Policy · Feedback Hub Diagnostic Policy · Reliability Event Filter Policy | +50 | **8,605** |
+| **v5.77.0** | 542–546 | Active Setup Policy · App Paths Control Policy · Shell Infrastructure Advanced Policy · StartMenuExperience Restriction Policy · Legacy IE Component Policy | +50 | **8,655** |
+| **v5.78.0** | 547–551 | Kernel Event Tracing Advanced Policy · ETW Session Quota Policy · WPP Software Tracing Policy · Circular Kernel Context Logger Policy · NT Kernel Logger Policy | +50 | **8,705** |
+| **v5.79.0** | 552–556 | Delivery Optimization Advanced Edge Cache Policy · LEDBAT+ Bandwidth Policy · DO Upload Throttle Policy · DO Network Type Restriction Policy · DO VPN Detection Policy | +50 | **8,755** |
+| **v5.80.0** | 557–561 | Time Zone Change Restriction Policy · DST Override Policy · NTP Source Hardening Policy · Secure Time Seeding Policy · Clock Drift Alert Policy | +50 | **8,805** |
+
+### End-State at v5.80.0 (Before v6.0.0 Architectural Work)
+
+| Metric | Projected Value |
+|--------|----------------|
+| Tweaks | **8,805** |
+| Categories | **~540** |
+| Module files | **~535** |
+| Minimum tests | **2,742** (test expansion happens in v6.0.0 architectural phase) |
+
+---
+
+## v6.0.0 Success Metrics
+
+| Metric | v5.54.0 (Now) | v5.80.0 (Pre-v6) | v6.0.0 Target |
+|--------|--------------|-----------------|---------------|
+| Tweaks | 7,505 | 8,805 | **9,000+** |
+| Tests | 2,742 | ~2,742 | **3,400+** |
+| Branch coverage | ~75% | ~75% | **≥ 85%** |
+| Mutation kill score | Unknown | Unknown | **≥ 70%** |
+| Cold start time | Unknown | Measured | **< 800 ms** |
+| Working set (idle) | Unknown | Measured | **< 150 MB** |
+| Search latency | Unknown | Measured | **< 5 ms** |
+| CLI subcommand structure | ❌ | ❌ | ✅ |
+| JSON output on all CLI | ❌ | ❌ | ✅ |
+| REST API (localhost) | ❌ | ❌ | ✅ |
+| Source generator | ❌ | ❌ | ✅ |
+| Intelligence Engine v2 | ❌ | ❌ | ✅ |
+| Dashboard home screen | ❌ | ❌ | ✅ |
+| Undo/redo | ❌ | ❌ | ✅ |
+| Authenticode signed | ❌ | ❌ | ✅ |
+| Custom user tweaks | ❌ | ❌ | ✅ |
+| SCAP/XCCDF export | ❌ | ❌ | ✅ |
+| NuGet package (Core) | ❌ | ❌ | ✅ |
+| Cross-platform CLI | ❌ | ❌ | ✅ (beta) |
+| Plugin sandboxed | ❌ | ❌ | ✅ |
+| FlaUI E2E tests | ❌ | ❌ | ✅ (5 scenarios) |
+| Locales | 2 (en, de) | 2 | **6+** |
+
+---
+
+## v6.0.0 Risk Register
+
+| # | Risk | Likelihood | Impact | Mitigation |
+|---|------|-----------|--------|------------|
+| R11 | Source generator (K5) debuggability | Medium | High | 3-sprint spike (441, 468); fallback = reflection scan at startup |
+| R12 | Kestrel adds 20 MB to single-file publish size | High | Low | Benchmark before commit; if > 15 MB increase, use `HttpListener` (built-in) instead |
+| R13 | FlaUI E2E instability in headless CI | Medium | Medium | Scope to 5 scenarios; not a blocking gate; `--no-e2e` CI flag available |
+| R14 | Cross-platform CLI registry stub misuse | Low | High | Annotate all stubs with `[SupportedOSPlatform]`; every stub method throws `PlatformNotSupportedException` with a clear message |
+| R15 | SCAP mapping coverage < 25% of tweaks | High | Medium | Define `[UNMAPPED]` flag; v1 only maps GroupPolicy-kind tweaks (~800–1000 tweaks); full mapping across all kinds is v6.1 |
+| R16 | CI runner time increases significantly (E2E + Stryker + contract tests) | Medium | Low | Parallelize test projects; E2E as optional nightly job; Stryker: incremental scan targeting changed files only |
+| R17 | NuGet API key compromise | Low | High | Use GitHub Environments with `required reviewers` gate for NuGet publish step; rotate key if exposed |
+| R18 | Named-pipe latency for plugin sandbox (G1) > 200 ms | Medium | High | Benchmark in Sprint 491 before full rollout; if too slow, batch ops per call to amortize roundtrip |
+
+---
+
+## Code & Config Improvements — Immediate (Pre-v6.0.0)
+
+The following improvements can be implemented incrementally during the tweak expansion sprints (v5.55–v5.80) without a version bump or breaking change:
+
+### Documentation
+- Update `workspace.instructions.md` Solution Structure tree to reflect current 461-module reality (stub the `Tweaks/` listing)
+- Update `testing.instructions.md` test counts from actual projects (currently slightly stale)
+- Add `docs/Api.md` scaffolding that auto-populates from XML doc comments in CI
+
+### CI/CD
+- Add `MSBUILDDISABLENODEREUSE=1` to root `.env.ps1` export guard (already set but check for edge cases)
+- Add `dotnet format --verify-no-changes` as a CI step to catch CSharpier formatting before it reaches the editor
+- Upgrade GitHub Actions runners: pin `actions/setup-dotnet@v4` SHA + upgrade to .NET 10 RC if available
+
+### Testing
+- Add "total tweak count" assertion to `TweakEngineBuiltinsTests`: `Assert.Equal(7505, engine.AllTweaks().Count)` — currently only checks a minimum (`> N`)
+- Add `RegisterBuiltins_AllModulesHaveAtLeast1Tweak` test to catch accidentally empty modules
+- Add performance timing assertion: `RegisterBuiltins_CompletesUnder2s`
+
+### Config
+- Add `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>` to `Directory.Build.props` scoped to `CS8xxx` nullable warnings only — use `<WarningsAsErrors>$(WarningsAsErrors);CS8600;CS8602;CS8603</WarningsAsErrors>`
+- Add `<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>` to enforce IDE analyzers at build time (IDE0051 dead code, IDE0052 unused members)
+- Add `<AnalysisLevel>latest-all</AnalysisLevel>` to activate all Roslyn analyzer rules
+
+### Performance Pre-work
+- Move `private static readonly` LINQ expressions in `TweakEngine` to pre-compiled delegates (eliminates repeated delegate allocation per `Filter()` call)
+- Cache `Categories()` result (currently recomputes from `_TWEAKS_BY_CAT.Keys` on each call — should be frozen after `Freeze()`)
+- Add `Freeze()` call verification: `Debug.Assert(_frozen)` at the top of all read-only public API methods
+
+---
+
+*Roadmap updated 2026-03-29 · v5.54.0 → v6.0.0 plan · Themes I–N added · Sprint expansion extended to v5.80.0 · Next sprint: 432*
