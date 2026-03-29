@@ -1,8 +1,20 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
+
+## [5.75.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 532–536): AccountManagementAuditPolicy, ActiveDirectoryServicesPolicy, AdReplicationPolicy, AiCopilotWebPolicy, AiInferencePolicy.
+
+#### Stats
+
+- Total: **8545 tweaks**, 568 categories, 565 module files
+
+---
 
 ## [5.74.0] — 2026-03-29
 
