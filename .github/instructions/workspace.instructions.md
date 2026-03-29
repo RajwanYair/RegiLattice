@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 5.16.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 5.54.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -18,7 +18,7 @@ Version 5.16.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 - **Testing**: xUnit 2.9.3 + coverlet 6.0.4
 - **NuGet**: System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1
 - **Registry**: `Microsoft.Win32.Registry` via `RegistrySession` wrapper
-- **P/Invoke**: Only 2 calls (GetComputerNameExW, GlobalMemoryStatusEx)
+- **P/Invoke**: Only 4 calls (GetComputerNameExW, GlobalMemoryStatusEx, GetSystemTimes, GlobalMemoryStatusEx×2)
 
 ## Solution Structure
 
@@ -37,7 +37,7 @@ RegiLattice.sln
 │   │   │                        #   Locale, PipManager, Ratings, ShellRunner,
 │   │   │                        #   SystemMonitor, TweakHistory, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 193 category modules, ~4,825 tweaks
+│   │   └── Tweaks/              # 461+ category modules, 7,505 tweaks
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
@@ -56,9 +56,9 @@ RegiLattice.sln
 │       ├── CliArgs.cs           # CLI argument model
 │       └── ConsoleColorizer.cs  # ANSI terminal colour helpers
 ├── tests/
-│   ├── RegiLattice.Core.Tests/  # 2,052+ xUnit tests
+│   ├── RegiLattice.Core.Tests/  # 2,102+ xUnit tests
 │   ├── RegiLattice.CLI.Tests/   # 301+ xUnit tests
-│   └── RegiLattice.GUI.Tests/   # 308+ xUnit tests
+│   └── RegiLattice.GUI.Tests/   # 339+ xUnit tests
 ├── .tmp/                        # Intermediate dev files (gitignored)
 └── archive/                     # Archived (untracked)
 ```
