@@ -147,9 +147,9 @@ graph LR
   <img src="docs/assets/themes-preview.svg" alt="11 Switchable Colour Themes" width="100%"/>
 </p>
 
-## Tweak Categories (459)
+## Tweak Categories (464)
 
-459 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
+464 categories spanning privacy, performance, security, accessibility, gaming, networking, browser hardening, developer tools, identity, biometrics, compliance, voice access, app consent, and more. Each tweak is fully reversible with apply/remove/detect operations.
 
 See `--show-categories` for the full list with tweak counts, or use `--stats` for a complete breakdown.
 
@@ -255,13 +255,13 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 ```mermaid
 graph TD
     subgraph SRC["📁 src/"]
-        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>446 Modules · 7505 tweaks · 464 categories"]
+        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>461 Modules · 7505 tweaks · 464 categories"]
         GUI["🖥️ RegiLattice.GUI<br/>WinForms · 11 Themes<br/>MainForm · 9 Dialogs · 5 Package Managers"]
         CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
     end
 
     subgraph TST["🧪 tests/  ·  2742 xUnit tests"]
-        CT["Core.Tests<br/>2063 tests · 12 files"]
+        CT["Core.Tests<br/>2102 tests · 12 files"]
         CLT["CLI.Tests<br/>301 tests · 1 file"]
         GT["GUI.Tests<br/>339 tests · 3 files"]
     end

@@ -14,7 +14,7 @@
   <metadata>
     <id>regilattice</id>
     <!-- Version is replaced by the release workflow during choco pack -->
-    <version>5.0.0</version>
+    <version>5.54.0</version>
     <packageSourceUrl>https://github.com/RajwanYair/RegiLattice/tree/main/chocolatey</packageSourceUrl>
     <owners>RajwanYair</owners>
     <title>RegiLattice</title>
@@ -28,11 +28,11 @@
     <docsUrl>https://github.com/RajwanYair/RegiLattice/blob/main/docs/Development.md</docsUrl>
     <bugTrackerUrl>https://github.com/RajwanYair/RegiLattice/issues</bugTrackerUrl>
     <tags>registry tweaks windows optimization privacy performance security gui cli admin</tags>
-    <summary>Windows Registry Tweak Toolkit — 4,825 tweaks across 198 categories</summary>
+    <summary>Windows Registry Tweak Toolkit — 7,505 tweaks across 464 categories</summary>
     <description><![CDATA[
 ## RegiLattice
 
-A comprehensive Windows registry tuning toolkit featuring **4,825 expert-curated tweaks** across **198 categories** — from privacy hardening and performance optimisation to security policies and enterprise management.
+A comprehensive Windows registry tuning toolkit featuring **7,505 expert-curated tweaks** across **464 categories** — from privacy hardening and performance optimisation to security policies and enterprise management.
 
 ### Features
 
@@ -43,7 +43,7 @@ A comprehensive Windows registry tuning toolkit featuring **4,825 expert-curated
 - **Corporate Guard** — auto-detects managed environments and blocks unsafe tweaks
 - **Snapshot & restore** — export/import current registry state as JSON
 - **Scheduled compliance monitoring** with trend dashboard and drift alerts
-- **10+ locales** including en, de, fr, ja, es, zh-CN, ko, ar, pt-BR, pl
+- **2 locales** (English and German)
 - **Plugin marketplace** for community Tweak Packs
 - **Export to ADMX/ADML and Intune OMA-URI** for enterprise deployment
 
