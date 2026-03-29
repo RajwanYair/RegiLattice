@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.77.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 542-546): BackupEncryptionPolicy, CertRevocationPolicy, CloudBackupRetentionPolicy, CloudFileSyncPolicy, CloudPcWindows365Policy.
+
+#### Stats
+
+- Total: **8645 tweaks**, 578 categories, 575 module files
+
+---
+
+
 ## [5.76.0] — 2026-03-29
 
 #### Added
