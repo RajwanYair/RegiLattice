@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.76.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 537-541): AiSafetyPolicy, AlwaysOnVpnPolicy, ApplicationGuardPersistencePolicy, AsrAttackSurfacePolicy, AzureVirtualDesktopPolicy.
+
+#### Stats
+
+- Total: **8595 tweaks**, 573 categories, 570 module files
+
+---
+
+
 ## [5.75.0] — 2026-03-29
 
 #### Added
