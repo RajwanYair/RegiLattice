@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.86.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 587-591): OneDriveSyncPolicy, PkiPublicKeyServicesPolicy, PlayToDevicePolicy, PrintAuditPolicy, PrintJobManagementPolicy.
+
+#### Stats
+
+- Total: **9095 tweaks**, 623 categories, 620 module files
+
+---
+
+
 ## [5.85.0] — 2026-03-29
 
 #### Added
