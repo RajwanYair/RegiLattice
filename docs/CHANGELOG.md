@@ -4,7 +4,7 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [5.54.0] — 2026-04-19
+## [5.54.0] — 2026-03-29
 
 #### Added
 
@@ -19,7 +19,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Tweaks: 7,455 → 7,505 (+50 across 5 new modules)
 - Categories: 459 → 464 (+5)
 
-## [5.53.0] — 2026-04-18
+## [5.53.0] — 2026-03-29
 
 #### Added
 
@@ -35,7 +35,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 454 → 459 (+5)
 - Tests: 2,742 (unchanged)
 
-## [5.52.0] — 2026-04-18
+## [5.52.0] — 2026-03-29
 
 #### Added
 
@@ -53,7 +53,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 449 → 454 (+5)
 - Tests: 2,742 (+39)
 
-## [5.51.0] — 2026-04-18
+## [5.51.0] — 2026-03-29
 
 #### Added
 
@@ -69,7 +69,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 444 → 449 (+5)
 - Tests: 2,667
 
-## [5.50.0] — 2026-04-17
+## [5.50.0] — 2026-03-29
 
 #### Added
 
@@ -85,7 +85,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 439 → 444 (+5)
 - Tests: 2,703 (unchanged)
 
-## [5.49.0] — 2026-04-17
+## [5.49.0] — 2026-03-29
 
 #### Added
 
@@ -108,7 +108,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 434 → 439 (+5)
 - Tests: 2,703 (unchanged)
 
-## [5.48.0] — 2026-04-17
+## [5.48.0] — 2026-03-29
 
 #### Added
 
@@ -124,7 +124,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 433 → 438 (+5)
 - Tests: 2,703 (unchanged)
 
-## [5.47.0] — 2026-04-16
+## [5.47.0] — 2026-03-29
 
 #### Added
 
@@ -140,7 +140,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Categories: 428 → 433 (+5)
 - Tests: 2,703 (unchanged)
 
-## [5.46.0] — 2026-04-16
+## [5.46.0] — 2026-03-29
 
 #### Added
 
@@ -182,7 +182,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Categories**: 423 → 428 (+5)
 - **Tests**: 2 703 (unchanged)
 
-## [5.45.0] — 2026-04-16
+## [5.45.0] — 2026-03-29
 
 #### Added
 
@@ -224,7 +224,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Categories**: 418 → 423 (+5)
 - **Tests**: 2 703 (unchanged)
 
-## [5.44.0] — 2026-04-01
+## [5.44.0] — 2026-03-29
 
 #### Added
 
@@ -255,7 +255,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total categories: **418** (+5)
 - Total tests: **2703** (unchanged)
 
-## [5.43.1] — 2026-04-01
+## [5.43.1] — 2026-03-29
 
 #### Fixed
 
@@ -275,7 +275,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total tweaks: **6975** (unchanged)
 - Total tests: **2968** (unchanged)
 
-## [5.43.0] — 2026-03-31
+## [5.43.0] — 2026-03-29
 
 #### Added
 
@@ -291,7 +291,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total categories: **413** (+5)
 - Test count: **2703** (unchanged)
 
-## [5.42.0] — 2026-03-30
+## [5.42.0] — 2026-03-29
 
 ### Added
 

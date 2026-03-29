@@ -1,7 +1,7 @@
 # API Reference
 
 > Reference for the RegiLattice C# public API.
-> Last verified: 2026-04-08 · v5.7.0
+> Last verified: 2026-03-29 · v5.54.0
 
 ---
 
