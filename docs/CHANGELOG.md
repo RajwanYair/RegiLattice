@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.90.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 607-611): TeamsCallingPolicy, TeamsMeetingAudioPolicy, TeamsMessagingPolicy, TerminalServicesAdvPolicy, TpmRecoveryPolicy.
+
+#### Stats
+
+- Total: **9295 tweaks**, 643 categories, 640 module files
+
+---
+
+
 ## [5.89.0] — 2026-03-29
 
 #### Added
