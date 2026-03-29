@@ -77,4 +77,213 @@ public sealed class StartupManagerTests
         var b = new StartupEntry("id1", "App", "cmd.exe", StartupLocation.RegistryUser, true);
         Assert.Equal(a, b);
     }
+
+    // ── AddRegistryEntry — input validation ──────────────────────────
+
+    [Fact]
+    public void AddRegistryEntry_NullName_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => StartupManager.AddRegistryEntry(null!, @"C:\test.exe"));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_EmptyName_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("", @"C:\test.exe"));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_WhitespaceName_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("   ", @"C:\test.exe"));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_NullCommand_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => StartupManager.AddRegistryEntry("TestApp", null!));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_EmptyCommand_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("TestApp", ""));
+    }
+
+    [Fact]
+    public void AddRegistryEntry_WhitespaceCommand_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry("TestApp", "   "));
+    }
+
+    // ── AddRegistryEntry — round-trip (add + cleanup) ────────────────
+
+    [Fact]
+    public void AddRegistryEntry_NewEntry_AppearsInGetAllEntries()
+    {
+        const string testName = "RegiLatticeTestEntry_Do_Not_Use";
+        // Ensure clean state
+        try
+        {
+            StartupManager.Delete(new StartupEntry($"RegistryUser|{testName}", testName, "", StartupLocation.RegistryUser, true));
+        }
+        catch
+        { /* ignore if not present */
+        }
+
+        try
+        {
+            StartupManager.AddRegistryEntry(testName, @"C:\Windows\System32\notepad.exe");
+            var entries = StartupManager.GetAllEntries();
+            Assert.Contains(
+                entries,
+                e => e.Name.Equals(testName, StringComparison.OrdinalIgnoreCase) && e.Location == StartupLocation.RegistryUser && e.IsEnabled
+            );
+        }
+        finally
+        {
+            // Clean up: delete the test entry regardless of outcome
+            try
+            {
+                var toDelete = StartupManager.GetAllEntries().FirstOrDefault(e => e.Name.Equals(testName, StringComparison.OrdinalIgnoreCase));
+                if (toDelete is not null)
+                    StartupManager.Delete(toDelete);
+            }
+            catch
+            { /* best-effort cleanup */
+            }
+        }
+    }
+
+    [Fact]
+    public void AddRegistryEntry_DuplicateName_ThrowsArgumentException()
+    {
+        const string testName = "RegiLatticeTestDupe_Do_Not_Use";
+        // Ensure clean state
+        try
+        {
+            StartupManager.Delete(new StartupEntry($"RegistryUser|{testName}", testName, "", StartupLocation.RegistryUser, true));
+        }
+        catch
+        { /* ignore */
+        }
+
+        try
+        {
+            StartupManager.AddRegistryEntry(testName, @"C:\Windows\System32\notepad.exe");
+            Assert.Throws<ArgumentException>(() => StartupManager.AddRegistryEntry(testName, @"C:\Windows\System32\notepad.exe"));
+        }
+        finally
+        {
+            try
+            {
+                var toDelete = StartupManager.GetAllEntries().FirstOrDefault(e => e.Name.Equals(testName, StringComparison.OrdinalIgnoreCase));
+                if (toDelete is not null)
+                    StartupManager.Delete(toDelete);
+            }
+            catch
+            { /* best-effort cleanup */
+            }
+        }
+    }
+
+    // ── ExportEntriesAsync ────────────────────────────────────────────
+
+    [Fact]
+    public async Task ExportEntriesAsync_CreatesJsonFile()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"rl-startup-test-{Guid.NewGuid():N}.json");
+        try
+        {
+            await StartupManager.ExportEntriesAsync(path);
+            Assert.True(File.Exists(path));
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ExportEntriesAsync_FileContainsValidJson()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"rl-startup-test-{Guid.NewGuid():N}.json");
+        try
+        {
+            await StartupManager.ExportEntriesAsync(path);
+            string json = await File.ReadAllTextAsync(path);
+            Assert.False(string.IsNullOrWhiteSpace(json));
+            // Must be a JSON array (can be empty [] or populated)
+            string trimmed = json.Trim();
+            Assert.True(trimmed.StartsWith('['), $"Expected JSON array, got: {trimmed[..Math.Min(50, trimmed.Length)]}");
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ExportEntriesAsync_EmptyPath_ThrowsArgumentException()
+    {
+        await Assert.ThrowsAsync<ArgumentException>(() => StartupManager.ExportEntriesAsync(""));
+    }
+
+    [Fact]
+    public async Task ExportEntriesAsync_WhitespacePath_ThrowsArgumentException()
+    {
+        await Assert.ThrowsAsync<ArgumentException>(() => StartupManager.ExportEntriesAsync("   "));
+    }
+
+    // ── SetEnabled — no-op guard ──────────────────────────────────────
+
+    [Fact]
+    public void SetEnabled_WhenAlreadyEnabled_DoesNotThrow()
+    {
+        // Create a folder entry (already enabled) — SetEnabled(enable=true) is a no-op
+        var entry = new StartupEntry(
+            Id: "FolderUser|FakeApp",
+            Name: "FakeApp",
+            Command: @"C:\nonexistent\app.lnk",
+            Location: StartupLocation.FolderUser,
+            IsEnabled: true
+        );
+        // Should return immediately without throwing (IsEnabled already matches)
+        var ex = Record.Exception(() => StartupManager.SetEnabled(entry, enable: true));
+        Assert.Null(ex);
+    }
+
+    [Fact]
+    public void SetEnabled_WhenAlreadyDisabled_DoesNotThrow()
+    {
+        var entry = new StartupEntry(
+            Id: "FolderUser|FakeApp",
+            Name: "FakeApp",
+            Command: @"C:\nonexistent\app.disabled",
+            Location: StartupLocation.FolderUser,
+            IsEnabled: false
+        );
+        var ex = Record.Exception(() => StartupManager.SetEnabled(entry, enable: false));
+        Assert.Null(ex);
+    }
+
+    // ── StartupLocation enum ─────────────────────────────────────────
+
+    [Theory]
+    [InlineData(StartupLocation.RegistryUser)]
+    [InlineData(StartupLocation.RegistryMachine)]
+    [InlineData(StartupLocation.FolderUser)]
+    [InlineData(StartupLocation.FolderAllUsers)]
+    public void StartupLocation_AllValues_AreDefined(StartupLocation loc)
+    {
+        Assert.True(Enum.IsDefined(loc));
+    }
+
+    [Fact]
+    public void StartupLocation_HasExactlyFourValues()
+    {
+        Assert.Equal(4, Enum.GetValues<StartupLocation>().Length);
+    }
 }
