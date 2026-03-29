@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.94.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 627-631): WslFileSystemPolicy, WslKernelUpdatePolicy, WslMemoryLimitsPolicy, WslSecurityHardeningPolicy, XboxCloudGamingPolicy.
+
+#### Stats
+
+- Total: **9495 tweaks**, 663 categories, 660 module files
+
+---
+
+
 ## [5.93.0] — 2026-03-29
 
 #### Added
