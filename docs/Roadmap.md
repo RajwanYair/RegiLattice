@@ -56,16 +56,19 @@ Line coverage is strong (~95% on Core line coverage), but branch coverage is ~75
 | A8 | **Coverage delta gate on PRs** | Add `codecov/codecov-action` with `fail_ci_if_error: true` and `threshold: 0.5%` drop. Generate badge from Codecov. Enforce branch coverage ≥ 80% (up from 75%). | S |
 
 ### Dependencies
+
 - A1 requires elevated CI runner configuration (investigate before commit)
 - A2 requires A7 first (shared state makes mutation runs flaky)
 - A4 requires WinAppDriver installation on CI agent (investigate agent support)
 - A5 requires B2 (CLI structured output must be built before it can be contract-tested)
 
 ### Risks
+
 - `RegLoadKey` elevation in `windows-latest` GitHub runner — may need `windows-latest` self-hosted runner. Verify with a spike before sprint commit.
 - WinAppDriver v1.x is unmaintained; FlaUI is the safer choice. Decision needed before A4 sprint.
 
 ### Stretch Goals
+
 - Snapshot round-trip fuzz tests: generate random tweak ID sets, snapshot, restore, diff
 - Property tests for all 4825 TweakDef instances: no null labels, valid hive prefixes, consistent DetectOps
 
@@ -91,16 +94,19 @@ Line coverage is strong (~95% on Core line coverage), but branch coverage is ~75
 | B8 | **`--watch` mode for status** | `regilattice tweak status <id> --watch` polls every N seconds (configurable) and outputs only on change. Enables live monitoring in CI or provisioning pipelines. | S |
 
 ### Dependencies
+
 - B2 before B5 (REPL can reuse JSON output internals)
 - B1 before B4, B5, B6, B7 (subcommand structure is the foundation)
 - A5 (CLI contract tests) should be written *alongside* B1 and B2, not after
 
 ### Risks
+
 - Breaking existing scripts using `--flags` — mitigated by keeping all flags as aliases
 - `regilattice shell` REPL: readline-like input on Windows has edge cases with CJK input; scope to ASCII-safe input initially
 - Exit code redefinition is a semver-breaking change — must be documented in CHANGELOG as breaking change for v6.0.0, not v5.x
 
 ### Stretch Goals
+
 - `regilattice doctor --fix` that detects and auto-applies missing recommended tweaks based on profile
 - OpenAPI-style schema for `--output json` payloads, published as `cli-schema.json` in the repo
 - `regilattice changelog <id>` that shows what changed for a tweak across versions (from git log)
@@ -128,15 +134,18 @@ The `TweakEngine.RegisterBuiltins()` method is a manual 193-line registry of mod
 | C9 | **API surface documentation** | Add XML `<summary>` doc comments to all `public` and `protected` members in `RegiLattice.Core`. Generate Api.md via `xmldoc2md` in CI. Fail CI if public API has undocumented members. | M |
 
 ### Dependencies
+
 - C1 requires C2 (services need lifecycle before engine initialization order matters)
 - C3 and C4 are independent profiling spikes — run as parallel investigations
 - C7 should be done before C1 (fewer noise warnings during generator development)
 
 ### Risks
+
 - C1 (source generator): Incremental generators have complex debugging paths. Spike required before sprint commit. If generator proves too complex, acceptable fallback is T4 (convention-based scanning via reflection at startup).
 - C2 (DI container): Introducing Microsoft.Extensions.DependencyInjection adds a new dependency. Verify size impact on single-file publish before committing.
 
 ### Stretch Goals
+
 - AOT (Ahead-of-Time) publication support: mark all delegates as `[DynamicallyAccessedMembers]`-safe, enable `PublishAot=true` for CLI, measure startup time improvement
 - Extract `RegiLattice.Core` to its own NuGet package on NuGet.org — enables third-party tooling on top of the engine
 
@@ -164,16 +173,19 @@ The GUI has 63 dialogs, virtual scrolling, and 11 themes. The next step is quali
 | D10 | **WinUI 3 migration investigation** | 2-sprint spike: build a single `MainForm`-equivalent WinUI 3 page with Mica material, TreeView categories, virtual `ListView`, and animated `ToggleSwitch`. Measure: LOC delta, startup time, DPI quality vs WinForms. Decide: full migration in v6.1 or visual polish WinForms-only. | XL |
 
 ### Dependencies
+
 - D3 (Dashboard) depends on `HealthScoreService` being production-quality (verify before sprint)
 - D8 (`.resx` migration) must precede the 4 new locales; RTL Arabic needs WinForms `RightToLeftLayout` audit
 - D10 (WinUI spike) is a decision gate — results determine v6.1 roadmap direction
 - D1 (undo/redo) must coordinate with the existing `TweakHistory` service — extend, don't duplicate
 
 ### Risks
+
 - D8 RTL Arabic: WinForms `RightToLeftLayout = true` can break custom-drawn controls. All 63 dialogs need verification.
 - D10: WinUI 3 requires Windows App SDK packaging and changes how single-file publish works — significant impact on installer strategy.
 
 ### Stretch Goals
+
 - Drag-to-reorder favourites with persistent order in `Favorites.cs`
 - Side-by-side profile diff view: compare two profile snapshots visually
 - "Tweak of the day" suggestion panel on dashboard with reason and link
@@ -199,16 +211,19 @@ ADMX/ADML and Intune OMA-URI export are complete. Compliance scanning is basic. 
 | E7 | **Compliance drift email/webhook alerts** | `ScheduledTweakService` can POST a JSON payload to a configured webhook URL (Slack, Teams, generic) on compliance drift. Configurable in `AppConfig`. No credentials stored — webhook URL only. | M |
 
 ### Dependencies
+
 - E1 (SCAP) requires identification of which tweaks map to DISA STIG/CIS controls — requires research spike
 - E4 (user baselines) before E6 (built-in baselines use the same storage/comparison engine)
 - E5 (manifest) requires B1 (CLI subcommand architecture)
 - E7 (webhooks) requires security review — webhook URL in config file is not a secret but content must not leak sensitive system state
 
 ### Risks
+
 - SCAP/XCCDF mapping: only a fraction of tweaks will have exact DISA STIG rule IDs. Define scope clearly before sprint — partial coverage with `[UNMAPPED]` flagging is acceptable.
 - DSC resources (E2): DSC is in maintenance mode in PowerShell 7+. Investigate DSC v2/v3 compatibility before full commitment.
 
 ### Stretch Goals
+
 - Ansible role that wraps CLI apply/remove commands
 - Terraform provider (proof of concept) with `regilattice_tweak` resource
 - Fleet dashboard SaaS concept (out of scope for this roadmap — flag as v7.0 investigation)
@@ -235,16 +250,19 @@ Distribution covers GitHub Releases, Scoop, WinGet, MSI (WiX), MSIX. Release pip
 | F8 | **Build reproducibility** | Enable deterministic builds (`<Deterministic>true</Deterministic>` already in Directory.Build.props). Add CI step to build twice and compare SHA-256 of output binaries. Document reproducibility status in README. | M |
 
 ### Dependencies
+
 - F1 (code signing) must come before F4 (Chocolatey won't accept unsigned EXEs from unknown publishers)
 - F3 (automated release notes) before F6 (staged rollout needs good release notes to evaluate)
 - F5 (smoke test matrix) must be green before F6 (staged rollout safety gate)
 
 ### Risks
+
 - F1: EV certificate procurement takes 1-2 weeks; plan purchase 2 sprints ahead of signing integration sprint
 - F6: Auto-promoting from pre-release with a 48-hour window needs robust issue label discipline — define the process clearly in CONTRIBUTING.md before automating it
 - F8: Reproducibility is hard with `DateTime.UtcNow` embedded in generated resources (e.g., `WhatsNewDialog`) — audit all build-time embedded timestamps
 
 ### Stretch Goals
+
 - Windows Package Manager (WinGet) auto-PR submission on release (currently manual)
 - macOS/Linux Homebrew tap for the CLI-only build (cross-platform stretch, requires .NET multi-TFM)
 - SBOM (Software Bill of Materials) generation per release via `dotnet sbom-tool`
@@ -269,16 +287,19 @@ Distribution covers GitHub Releases, Scoop, WinGet, MSI (WiX), MSIX. Release pip
 | G6 | **Developer SDK documentation** | Write `docs/PluginAuthoring.md`: how to create a pack, use all 12 RegOp factories, use `ApplyAction` delegates, test with `PackLoader.ValidatePackJson`, submit to marketplace. Ship a `template.rlpack` starter. | M |
 
 ### Dependencies
+
 - G1 (sandbox) requires stable `ITweakService` lifecycle (C2) so the child process can be correctly initialized
 - G2 (GPG signing) before G4 (community submissions should be signed before the pipeline is promoted)
 - G3 (pack versioning) before G5 (update check needs version comparison)
 - G6 (developer docs) can be written in parallel with G1–G5
 
 ### Risks
+
 - G1 (process isolation): Named pipe latency per `RegOp` is measurable. Benchmark a batch of 100 `SetDword` calls via pipe before committing to this architecture. If latency > 200 ms per call, evaluate `AppDomain` (removed in .NET Core) → must use out-of-process.
 - G2 (GPG): Windows GPG toolchain is less standard than Linux. Evaluate using .NET Cryptography APIs (RSA/Ed25519) instead of GPG for self-contained operation.
 
 ### Stretch Goals
+
 - Pack rating system: users rate installed packs 1–5 stars; aggregated rating displayed in marketplace
 - Pack categories and tags in marketplace UI (currently flat list)
 - Hot-reload of packs without app restart (watch `.rlpack` file for changes)
@@ -304,16 +325,19 @@ Distribution covers GitHub Releases, Scoop, WinGet, MSI (WiX), MSIX. Release pip
 | H7 | **Custom user-defined tweaks** | Allow users to define custom `TweakDef`-like entries via a JSON file in `%LOCALAPPDATA%\RegiLattice\custom-tweaks.json`. `TweakEngine` loads these at startup after built-ins. Validate with `TweakValidator` before registering. | L |
 
 ### Dependencies
+
 - H1 (AI descriptions) is a data-only change — no code changes required; can run in parallel with any sprint
 - H2 (Windows version audit) should inform H5 (tweak expansion content) and H6 (`MinBuild` population)
 - H7 (custom tweaks) requires C2 (service lifecycle) for correct loading order
 
 ### Risks
+
 - H1: LLM output quality varies. Risk of hallucinated "facts" about registry value semantics. Mandatory human review pass before merge.
 - H2: Windows 11 25H2 registry changes are not fully documented at time of writing — needs continuous monitoring.
 - H7: User-defined tweaks create a support surface. Validate thoroughly; document clearly that custom tweaks are unsupported.
 
 ### Stretch Goals
+
 - Machine-learning tweak recommender: based on `TweakHistory` of what users actually apply, surface a "Users like you also applied" panel
 - Tweak health scoring: flag tweaks that have not been verified against the latest Windows build as `[NEEDS VERIFICATION]`
 
@@ -339,6 +363,7 @@ H2 (Windows build audit) ──► H5 (tweak expansion) + H6 (MinBuild populatio
 ## Sprint Plan
 
 ### Milestone 1 — v5.1.0: Hardening & Developer Experience
+
 **Sprints 162–167 · ~6 sprints · Target: May 2026**
 
 | Sprint | Theme | Key Deliverables | Exit Criteria |
@@ -355,6 +380,7 @@ H2 (Windows build audit) ──► H5 (tweak expansion) + H6 (MinBuild populatio
 ---
 
 ### Milestone 2 — v5.2.0: UX & Power Features
+
 **Sprints 168–177 · ~10 sprints · Target: August 2026**
 
 | Sprint | Theme | Key Deliverables | Exit Criteria |
@@ -375,6 +401,7 @@ H2 (Windows build audit) ──► H5 (tweak expansion) + H6 (MinBuild populatio
 ---
 
 ### Milestone 3 — v6.0.0: Architecture Renaissance & Platform
+
 **Sprints 178–191 · ~14 sprints · Target: December 2026**
 
 | Sprint | Theme | Key Deliverables | Exit Criteria |
@@ -626,6 +653,7 @@ RegiLattice is used only interactively (GUI or CLI). Power users, home-lab opera
 | I6 | **PowerShell REST client module** | `RegiLattice.REST.psd1` — thin wrapper around the REST endpoints using `Invoke-RestMethod`. Exports `Get-RLTweak`, `Invoke-RLApply`, `Invoke-RLRemove`, `Watch-RLEvents`. Ships in the `powershell/` directory. | S |
 
 #### Security Note
+
 The server MUST bind exclusively to `127.0.0.1`. The auto-generated API key (stored in `AppConfig`, never logged) prevents other localhost processes from issuing commands. All write operations (`apply`, `remove`) log to `TweakHistory` just like GUI/CLI operations.
 
 ---
@@ -933,26 +961,31 @@ Power users deploy RegiLattice as part of machine provisioning (Ansible, Packer,
 The following improvements can be implemented incrementally during the tweak expansion sprints (v5.55–v5.80) without a version bump or breaking change:
 
 ### Documentation
+
 - Update `workspace.instructions.md` Solution Structure tree to reflect current 461-module reality (stub the `Tweaks/` listing)
 - Update `testing.instructions.md` test counts from actual projects (currently slightly stale)
 - Add `docs/Api.md` scaffolding that auto-populates from XML doc comments in CI
 
 ### CI/CD
+
 - Add `MSBUILDDISABLENODEREUSE=1` to root `.env.ps1` export guard (already set but check for edge cases)
 - Add `dotnet format --verify-no-changes` as a CI step to catch CSharpier formatting before it reaches the editor
 - Upgrade GitHub Actions runners: pin `actions/setup-dotnet@v4` SHA + upgrade to .NET 10 RC if available
 
 ### Testing
+
 - Add "total tweak count" assertion to `TweakEngineBuiltinsTests`: `Assert.Equal(7505, engine.AllTweaks().Count)` — currently only checks a minimum (`> N`)
 - Add `RegisterBuiltins_AllModulesHaveAtLeast1Tweak` test to catch accidentally empty modules
 - Add performance timing assertion: `RegisterBuiltins_CompletesUnder2s`
 
 ### Config
+
 - Add `<TreatWarningsAsErrors>true</TreatWarningsAsErrors>` to `Directory.Build.props` scoped to `CS8xxx` nullable warnings only — use `<WarningsAsErrors>$(WarningsAsErrors);CS8600;CS8602;CS8603</WarningsAsErrors>`
 - Add `<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>` to enforce IDE analyzers at build time (IDE0051 dead code, IDE0052 unused members)
 - Add `<AnalysisLevel>latest-all</AnalysisLevel>` to activate all Roslyn analyzer rules
 
 ### Performance Pre-work
+
 - Move `private static readonly` LINQ expressions in `TweakEngine` to pre-compiled delegates (eliminates repeated delegate allocation per `Filter()` call)
 - Cache `Categories()` result (currently recomputes from `_TWEAKS_BY_CAT.Keys` on each call — should be frozen after `Freeze()`)
 - Add `Freeze()` call verification: `Debug.Assert(_frozen)` at the top of all read-only public API methods
