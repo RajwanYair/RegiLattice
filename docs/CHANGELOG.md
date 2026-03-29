@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.85.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 582-586): MdmRegistrationPolicy, MediaPlayerAdvPolicy, NetIoOffloadPolicy, NetworkMonitoringPolicy, NeuralProcessingPolicy.
+
+#### Stats
+
+- Total: **9045 tweaks**, 618 categories, 615 module files
+
+---
+
+
 ## [5.84.0] — 2026-03-29
 
 #### Added
