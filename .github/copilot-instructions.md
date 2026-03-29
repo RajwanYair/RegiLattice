@@ -79,7 +79,7 @@ Rules:
 | -------- | ------------------------------------------------------------------------ |
 | Language | C# 13 / .NET 10.0-windows (x64)                                          |
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
-| Test     | xUnit 2.9.3 — 2,667 tests (0 failures)                                   |
+| Test     | xUnit 2.9.3 — 2,742 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
 | Version  | 5.54.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
@@ -113,96 +113,9 @@ git push; git push --tags   # ← REQUIRED on every version bump
 
 ## Architecture at a Glance
 
-```
-RegiLattice.sln
-├── src/
-│   ├── RegiLattice.Core/            # Class library — engine, models, registry, services
-│   │   ├── TweakEngine.cs           # Central tweak manager (register, apply, search, profiles)
-│   │   ├── SnapshotManager.cs       # Save/load/restore tweak state snapshots
-│   │   ├── TweakValidator.cs        # Tweak integrity validation & circular dep detection
-│   │   ├── DependencyResolver.cs    # Topological dependency resolution
-│   │   ├── Models/
-│   │   │   ├── TweakDef.cs          # Immutable tweak definition + RegOp + TweakScope + TweakResult
-│   │   │   ├── CategoryIcons.cs     # TweakKind symbols for CLI/GUI display
-│   │   │   ├── ProfileDef.cs        # Profile definition model
-│   │   │   └── ProfileDefinitions.cs # 5 hardcoded profiles
-│   │   ├── Registry/
-│   │   │   └── RegistrySession.cs   # Registry read/write/backup/execute wrapper
-│   │   ├── Services/
-│   │   │   ├── Analytics.cs         # Local usage analytics
-│   │   │   ├── AppConfig.cs         # Configuration management
-│   │   │   ├── ChocolateyManager.cs # Chocolatey package manager integration
-│   │   │   ├── CorporateGuard.cs    # Corporate network detection (P/Invoke + WMI)
-│   │   │   ├── Elevation.cs         # UAC elevation helpers
-│   │   │   ├── HardwareInfo.cs      # Hardware detection + profile suggestion
-│   │   │   ├── Locale.cs            # i18n string table (English + German)
-│   │   │   ├── PipManager.cs        # pip package manager integration
-│   │   │   ├── Ratings.cs           # Tweak rating system (1-5 stars)
-│   │   │   ├── ShellRunner.cs       # Safe process execution wrapper
-│   │   │   ├── SystemMonitor.cs     # Live CPU/RAM/uptime monitoring (P/Invoke)
-│   │   │   └── WinGetManager.cs     # WinGet package manager integration
-│   │   ├── Plugins/                 # Tweak Pack system (JSON marketplace)
-│   │   │   ├── PackDef.cs           # Pack metadata record
-│   │   │   ├── PackLoader.cs        # JSON→TweakDef converter with validation
-│   │   │   ├── PackManager.cs       # Install, uninstall, update, marketplace
-│   │   │   └── PackIndex.cs         # Remote marketplace index model
-│   │   └── Tweaks/                  # 94 category modules, 3669 tweaks total
-│   │       ├── Accessibility.cs
-│   │       ├── Performance.cs
-│   │       ├── Privacy.cs
-│   │       ├── ...                  # 90 more
-│   │       └── Wsl.cs
-│   ├── RegiLattice.GUI/            # WinForms application
-│   │   ├── Program.cs              # Entry point
-│   │   ├── AppIcons.cs             # Programmatic icon/bitmap generation
-│   │   ├── Theme.cs                # 4-theme engine (ThemeDef record, runtime switching)
-│   │   ├── Forms/
-│   │   │   ├── MainForm.cs         # Main window (categories, search, filters, profiles)
-│   │   │   ├── AboutDialog.cs      # About + hardware info
-│   │   │   ├── ChocolateyManagerDialog.cs
-│   │   │   ├── MarketplaceDialog.cs # Tweak Pack marketplace browser
-│   │   │   ├── PipManagerDialog.cs
-│   │   │   ├── PSModuleManagerDialog.cs
-│   │   │   ├── ScoopManagerDialog.cs
-│   │   │   ├── ToolVersionsDialog.cs # Installed tool version checker
-│   │   │   ├── WindowsHealthDialog.cs # System health & maintenance
-│   │   │   └── WinGetManagerDialog.cs
-│   │   └── PackageManagers/        # GUI-side package manager wrappers
-│   │       ├── PackageNameValidator.cs # Shared name validation (regex)
-│   │       ├── ShellRunner.cs       # Process execution for GUI dialogs
-│   │       ├── ScoopManager.cs
-│   │       ├── PipManager.cs
-│   │       ├── PSModuleManager.cs
-│   │       ├── ChocolateyManager.cs
-│   │       ├── WinGetManager.cs
-│   │       ├── ToolVersionChecker.cs
-│   │       └── WindowsHealthManager.cs
-│   └── RegiLattice.CLI/           # Console application
-│       ├── Program.cs             # 25+ commands via args parsing
-│       ├── CliArgs.cs             # CLI argument model (extracted from Program)
-│       └── ConsoleColorizer.cs    # ANSI terminal colour helpers
-├── tests/
-│   ├── RegiLattice.Core.Tests/    # 1121 xUnit tests
-│   │   ├── TweakDefTests.cs
-│   │   ├── TweakEngineTests.cs
-│   │   ├── TweakEngineBuiltinsTests.cs
-│   │   ├── RegistrySessionTests.cs
-│   │   ├── ServicesTests.cs
-│   │   ├── PluginTests.cs
-│   │   ├── SnapshotManagerTests.cs
-│   │   ├── TweakValidatorTests.cs
-│   │   ├── DependencyResolverTests.cs
-│   │   ├── FavoritesTests.cs
-│   │   ├── TweakHistoryTests.cs
-│   │   └── ConfigExporterTests.cs
-│   ├── RegiLattice.CLI.Tests/     # 175 xUnit tests
-│   │   └── ParseArgsTests.cs      # CLI parsing + ConsoleColorizer tests
-│   └── RegiLattice.GUI.Tests/    # 242 xUnit tests
-│       ├── ThemeTests.cs
-│       ├── PackageManagerValidationTests.cs
-│       └── AppIconsTests.cs
-└── archive/                      # Archived Python v1.x + old NativeGUI (untracked)
-```
+> Full annotated solution tree: see `.github/instructions/workspace.instructions.md` — Solution Structure section.
+
+Key namespaces: `RegiLattice.Core` (engine + models + registry + 464-category tweak modules), `RegiLattice.GUI` (WinForms, 11 themes), `RegiLattice.CLI` (25+ commands). Tests live in `tests/` — 3 projects, 2742 total.
 
 ### TweakDef Model
 
@@ -255,16 +168,7 @@ public sealed class TweakDef
 
 ### TweakKind — 8 Operation Variants
 
-| Kind             | Typical Pattern                  | Example Category               |
-| ---------------- | -------------------------------- | ------------------------------ |
-| `Registry`       | RegOps on HKCU/HKLM              | Privacy, Performance, Explorer |
-| `PowerShell`     | PSH cmdlet or script block       | PowerShell Tweaks              |
-| `SystemCommand`  | bcdedit, dism, netsh, fsutil     | Boot, Network Optimization     |
-| `ServiceControl` | sc.exe, Set-Service              | Services                       |
-| `ScheduledTask`  | schtasks, Register-ScheduledTask | Scheduled Tasks                |
-| `FileConfig`     | JSON, INI, .wslconfig            | WSL, Windows Terminal          |
-| `GroupPolicy`    | HKLM\...\Policies\... paths      | Security, Hardening            |
-| `PackageManager` | scoop, pip, chocolatey, winget   | Package Management             |
+> Full table with `TweakDef Fields Used` per kind: see `.github/instructions/workspace.instructions.md` — TweakKind section.
 
 ### TweakResult — 7 Outcomes
 
@@ -458,22 +362,9 @@ Canonical category slugs:
 
 ## Test Infrastructure
 
-- `tests/RegiLattice.Core.Tests/TweakDefTests.cs` — TweakDef model, RegOp factories, scope computation
-- `tests/RegiLattice.Core.Tests/TweakEngineTests.cs` — engine registration, lookup, search, profiles, batch ops
-- `tests/RegiLattice.Core.Tests/TweakEngineBuiltinsTests.cs` — RegisterBuiltins integration, ID uniqueness, profiles, categories, search/filter
-- `tests/RegiLattice.Core.Tests/RegistrySessionTests.cs` — session helpers, dry-run, path parsing, read/write ops
-- `tests/RegiLattice.Core.Tests/ServicesTests.cs` — Analytics, Config, CorporateGuard, Elevation, HardwareInfo, Locale, Ratings
-- `tests/RegiLattice.Core.Tests/PluginTests.cs` — PackLoader, PackManager, PackIndex, TweakEngine pack integration, Locale
-- `tests/RegiLattice.Core.Tests/SnapshotManagerTests.cs` — Save/Load/Restore, round-trip, edge cases
-- `tests/RegiLattice.Core.Tests/TweakValidatorTests.cs` — Valid tweaks, empty fields, duplicates, circular deps, broken deps
-- `tests/RegiLattice.Core.Tests/DependencyResolverTests.cs` — Resolve topological sort, Dependents reverse lookup, circular detection
-- `tests/RegiLattice.Core.Tests/FavoritesTests.cs` — Add, Remove, Toggle, IsFavorite, case-insensitive, Flush/Reload
-- `tests/RegiLattice.Core.Tests/TweakHistoryTests.cs` — Record apply/remove/update, Recent, ForTweak, MaxEntries, Flush/Reload
-- `tests/RegiLattice.Core.Tests/ConfigExporterTests.cs` — Export JSON, Import 3 formats, Validate, RoundTrip
-- `tests/RegiLattice.CLI.Tests/ParseArgsTests.cs` — CLI argument parsing, flags, options, scope, positional args
-- `tests/RegiLattice.GUI.Tests/ThemeTests.cs` — theme switching, colour attributes, all 4 themes, system theme detection
-- `tests/RegiLattice.GUI.Tests/PackageManagerValidationTests.cs` — package name validation, tool version checking
-- `tests/RegiLattice.GUI.Tests/AppIconsTests.cs` — AppIcons bitmap/icon validity, cache invalidation safety
+> Full test file inventory and coverage targets: see `.github/instructions/testing.instructions.md` — Test File Structure section.
+
+Projects: `RegiLattice.Core.Tests` (2102 tests), `RegiLattice.CLI.Tests` (301 tests), `RegiLattice.GUI.Tests` (339 tests). Total: 2742.
 
 ## Adding a New Tweak — Checklist
 
@@ -487,21 +378,15 @@ Canonical category slugs:
 
 ## Common Pitfalls
 
-- **Duplicate IDs**: `TweakEngine.Register()` will throw on duplicate IDs. Each `Id` must be unique across ALL modules.
-- **RegOp paths**: Use full hive names `HKEY_LOCAL_MACHINE\...` or `HKEY_CURRENT_USER\...` (abbreviations `HKLM\...` / `HKCU\...` also accepted).
-- **P/Invoke**: Only 4 P/Invoke calls in the entire codebase — `GetComputerNameExW` (CorporateGuard), `GlobalMemoryStatusEx` (HardwareInfo), `GetSystemTimes` + `GlobalMemoryStatusEx` (SystemMonitor). Prefer `Microsoft.Win32.Registry` for all registry access.
-- **Module already exists**: Before creating any new tweak module, always `list_dir` the `Tweaks/` directory or `Test-Path` the file. `create_file` fails silently if the file already exists; if it does exist, read it first and edit rather than recreate.
-- **Intra-module duplicate ops**: After writing all 10 tweaks in a new module, scan for duplicate `PATH\ValueName` pairs within the same file. The last 1–2 tweaks are the most likely copy-paste victims. Fix by using a distinct policy key.
-- **`get_errors` shows CSharpier whitespace diffs**: "Replace ⏎ with ..." / "Delete ·" diagnostics are CSharpier formatting issues, not CS compiler errors. Ignore them when diagnosing build failures — only act on CS-prefixed errors.
-- **OneDrive CoreCompile cache lock**: If `dotnet build` fails with `Building target "CoreCompile" completely`, run `Get-ChildItem "$env:TEMP\RegiLattice-build\RegiLattice.Core\obj" -Recurse -Filter "RegiLattice.Core.csproj.CoreCompileInputs.cache" | Remove-Item -Force` and retry. The path depth varies — `obj\<Config>\net10.0-windows\` when built from the terminal, `obj\x64\<Config>\net10.0-windows\` when VS uses the x64 Solution Platform. If it persists, delete the whole `$env:TEMP\RegiLattice-build\RegiLattice.Core` dir and retry twice. The build task (`build: Solution (Debug)`) in VS Code handles this automatically.
-- **`GenerateTargetFrameworkMonikerAttribute` after nuclear cache clear**: After `Remove-Item "$env:TEMP\RegiLattice-build\RegiLattice.Core" -Recurse -Force`, all three projects (Core, CLI, GUI) may fail with `Building target "GenerateTargetFrameworkMonikerAttribute" completely`. Retrying the solution build does NOT fix it — the Roslyn server holds stale state. Fix: `dotnet build-server shutdown`, then build each project individually in dependency order (Core → CLI → GUI → test projects), then retry the solution build. Full sequence in `lessons-learned.instructions.md` (Symptom 4).
-- **Terminal Hebrew character injection**: A `ב` prefix on commands (e.g., `בdotnet`) is a VS Code terminal buffer artefact — the actual command still runs. Check `$LASTEXITCODE` to confirm success; do not retry just because of the prefix error.
-- **`AppConfig.ConfigDir` not `DataRoot`**: The correct data-directory property on `AppConfig` is `ConfigDir` (returns `%LOCALAPPDATA%\RegiLattice` or portable path). `DataRoot` does **not exist** and causes `CS0117`. All Core services that persist data use `AppConfig.ConfigDir` — check existing usages before writing a new service.
-- **`ParseArgs()` returns `CliArgs?` — null-guard every test**: `ParseArgs()` in CLI `Program.cs` returns a nullable `CliArgs?`. Every xUnit test that calls it must have `Assert.NotNull(result)` before accessing any property, or `CS8602` fires. All tests in `ParseArgsTests.cs` follow this pattern — maintain it when adding new tests.
-- **MD022 in CHANGELOG.md**: Every `####` heading in `docs/CHANGELOG.md` must be followed by a blank line before any content (bullets, text). Markdownlint rule MD022 will surface as VS Code Problems warnings if missing. Always add a blank line after `#### Enhanced`, `#### Fixed`, `#### Stats` etc.
-- **`ImpactScore` / `SafetyRating` not set on new modules**: New `TweakDef` entries default to `ImpactScore=3` / `SafetyRating=4`. `TweakValidator` validates they are in range 1–5 but does NOT enforce explicit declaration. Always set both fields per-tweak with calibrated values. Modules missing these (e.g., Batch 4 v5.5.0 files) show generic scores in the Health Score dashboard.
-- **Policy module semantic conflict** — gap analysis must check `PATH\ValueName` pairs, not just key paths. `WerKey\Disabled` is used by both `ApplicationRestartPolicy.cs` and `AppCompatibility.cs`; blindly adding it in a new `Reliability` module created a third duplicate. Fix: grep `Select-String -Pattern '"ValueName"' -Path "src/RegiLattice.Core/Tweaks/*.cs"` before using any value name in well-known subsystems (WER, Defender, Update, BITS).
-- **`git -C "path"` over `cd path; git`**: For one-shot git operations in terminals that may have unstable cwd (history-picker state, Hebrew injection), always use `git -C "abs-path" <subcommand>`. The `-C` flag makes `git` change to that directory itself — immune to terminal cwd drift.
+> Full list of 47 hard-won lessons: see `.github/instructions/lessons-learned.instructions.md`.
+
+Top 5 most critical:
+
+- **Duplicate IDs**: `TweakEngine.Register()` throws on duplicate IDs — every `Id` must be globally unique across ALL modules. Search before adding.
+- **Module already exists**: Before `create_file`, always `list_dir` the `Tweaks/` directory. `create_file` fails silently if the file exists — read first and edit instead.
+- **`AppConfig.ConfigDir` not `DataRoot`**: The correct data-directory property is `ConfigDir`. `DataRoot` does **not exist** → `CS0117`.
+- **`get_errors` shows CSharpier diffs**: "Replace ⏎ with ..." diagnostics are formatter issues, not CS compiler errors. Only act on CS-prefixed errors.
+- **OneDrive CoreCompile cache lock**: If build fails with `"Building target 'CoreCompile' completely"`, delete `$env:TEMP\RegiLattice-build\RegiLattice.Core` and retry. Set `MSBUILDDISABLENODEREUSE=1`.
 
 ## File-by-File Quick Ref
 
