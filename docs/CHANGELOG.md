@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.83.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 572-576): FileShareWitnessPolicy, FirmwareUpdatePolicy, GameStreamingPolicy, GamingPerformancePolicy, Ieee8021xPolicy.
+
+#### Stats
+
+- Total: **8945 tweaks**, 608 categories, 605 module files
+
+---
+
+
 ## [5.82.0] — 2026-03-29
 
 #### Added
