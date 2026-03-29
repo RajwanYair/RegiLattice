@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.88.0] — 2026-03-29
+
+#### Added
+
+5 new Group Policy policy modules, 50 tweaks (Sprints 597-601): RadiusAuthPolicy, RemoteNetworkAccessPolicy, SecureBootDbxPolicy, SharepointOnlinePolicy, SkyDrivePolicy.
+
+#### Stats
+
+- Total: **9195 tweaks**, 633 categories, 630 module files
+
+---
+
+
 ## [5.87.0] — 2026-03-29
 
 #### Added
