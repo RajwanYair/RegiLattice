@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — 2026-03-30
+
+#### Refactored
+
+- Consolidated 552 mechanical sprint policy modules (10 tweaks each) into 24 domain-grouped `Policy*.cs` files
+- File count: 665 → 130 modules (−81%), category count: 637 → 135 (−79%)
+- Nested private static class pattern: each source module preserved verbatim as `private static class _SourceName { Data }` inside its domain file
+- C# 13 collection spread `[.. _Source.Data, ...]` used in each domain outer `Tweaks` property
+- `TweakEngine.RegisterBuiltins()` updated: added `|| type.IsNested` skip guard to prevent nested helper classes from being double-registered
+- All 9,190 tweaks retained — zero content removed
+
+#### Stats
+
+- Total: **9,190 tweaks**, 135 categories, 130 module files
+- Tests: 2,293 Core + 301 CLI + 340 GUI = 2,934 passing (0 failures)
+
 ## [5.97.0] — 2026-03-30
 
 #### Removed

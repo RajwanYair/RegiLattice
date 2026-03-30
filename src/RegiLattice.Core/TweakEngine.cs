@@ -104,8 +104,8 @@ public sealed class TweakEngine
 
         foreach (var type in typeof(Tweaks.Accessibility).Assembly.GetTypes())
         {
-            if (type.Namespace != tweaksNs || !type.IsClass || !type.IsAbstract || !type.IsSealed)
-                continue; // skip non-static classes
+            if (type.Namespace != tweaksNs || !type.IsClass || !type.IsAbstract || !type.IsSealed || type.IsNested)
+                continue; // skip non-static classes and nested helper classes
 
             var prop = type.GetProperty("Tweaks", bindingFlags);
             if (prop?.GetValue(null) is IReadOnlyList<TweakDef> tweaks)
