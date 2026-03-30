@@ -8,24 +8,6 @@ internal static class Display
     [
         new TweakDef
         {
-            Id = "display-disable-dpi-scaling",
-            Label = "Disable DPI Scaling Override",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables the Windows 8-style DPI scaling override, forcing the system DPI setting for all applications.",
-            Tags = ["display", "dpi", "scaling"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DpiScalingVer"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 0),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
-        },
-        new TweakDef
-        {
             Id = "display-force-96dpi",
             Label = "Force 96 DPI (100% Scaling)",
             Category = "Display",
@@ -198,21 +180,6 @@ internal static class Display
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "display-force-gpu-scaling",
-            Label = "Force GPU Scaling Mode",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Enables GPU-based DPI scaling (Win8DpiScaling) for sharper rendering on non-native resolutions. Default: Disabled. Recommended: Enabled for high-DPI displays.",
-            Tags = ["display", "gpu", "scaling", "dpi", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
         },
         new TweakDef
         {
@@ -518,20 +485,6 @@ internal static class Display
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback", 0)],
-        },
-        new TweakDef
-        {
-            Id = "display-enable-high-contrast-mode",
-            Label = "Enable High Contrast Mode",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables Windows High Contrast accessibility mode for better visibility. Default: disabled.",
-            Tags = ["display", "accessibility", "high-contrast"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "127")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\HighContrast", "Flags", "127")],
         },
         new TweakDef
         {

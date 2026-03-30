@@ -384,30 +384,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-disable-search-highlights",
-            Label = "Disable Dynamic Search Box Highlights",
-            Category = "Widgets & News",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the dynamic search box highlights that show trending topics. Removes news and promotional content from the search interface. Default: Enabled. Recommended: Disabled.",
-            Tags = ["widgets", "search", "highlights", "news", "bing"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "widgets-disable-widget-board",
             Label = "Disable Widgets Board Completely",
             Category = "Widgets & News",

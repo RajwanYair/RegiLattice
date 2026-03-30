@@ -251,21 +251,6 @@ internal static class Recovery
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent", 1)],
         },
-        new TweakDef
-        {
-            Id = "recovery-enable-overwrite-dump",
-            Label = "Enable Overwrite of Existing Dump",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Allows the system to overwrite existing crash dump files when a new crash occurs. Saves disk space by not accumulating old dumps. Default: enabled.",
-            Tags = ["recovery", "crash", "dump", "disk-space"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
-        },
 
         new TweakDef
         {
@@ -392,20 +377,6 @@ internal static class Recovery
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 1)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-overwrite-existing-dump",
-            Label = "Overwrite Existing Crash Dump File",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Allows overwriting the existing MEMORY.DMP crash dump file on subsequent crashes. Saves disk space. Default: varies.",
-            Tags = ["recovery", "crash-dump", "overwrite", "disk-space"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
         },
     ];
 }

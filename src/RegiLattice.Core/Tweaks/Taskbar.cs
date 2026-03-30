@@ -401,47 +401,6 @@ internal static class Taskbar
         },
         new TweakDef
         {
-            Id = "tb-hide-ink-workspace-button",
-            Label = "Hide Ink Workspace Taskbar Button",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Windows Ink Workspace button from the taskbar. Default: visible on pen-enabled devices.",
-            Tags = ["taskbar", "ink", "workspace", "hide"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
-                    "PenWorkspaceButtonDesiredVisibility",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-news-feed-taskbar",
-            Label = "Disable News & Interests Feed",
-            Category = "Taskbar",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the News & Interests feed widget via Group Policy. Removes weather/news from the taskbar. Default: enabled.",
-            Tags = ["taskbar", "news", "interests", "feed", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
-        },
-        new TweakDef
-        {
             Id = "tb-taskbar-multi-display-show-all",
             Label = "Show Taskbar on All Displays",
             Category = "Taskbar",

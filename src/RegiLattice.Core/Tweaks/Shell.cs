@@ -24,21 +24,6 @@ internal static class Shell
 
         new TweakDef
         {
-            Id = "shell-show-hidden-files",
-            Label = "Show Hidden Files in Explorer",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows hidden files and folders in File Explorer.",
-            Tags = ["shell", "explorer", "hidden", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-        },
-
-        new TweakDef
-        {
             Id = "shell-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
             Category = "Shell",
@@ -364,27 +349,6 @@ internal static class Shell
             ],
             RemoveOps = [RegOp.DeleteTree(@"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\TakeOwnership")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\TakeOwnership", "", "Take Ownership")],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-thumbnail-cache",
-            Label = "Disable Thumbnail Cache (Thumbs.db) Creation",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets DisableThumbnailCache=1 in Explorer Advanced. Prevents Windows from creating and updating Thumbs.db hidden thumbnail cache files inside folders, keeping directories clean.",
-            Tags = ["shell", "explorer", "thumbnail", "cache"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1),
-            ],
         },
         new TweakDef
         {

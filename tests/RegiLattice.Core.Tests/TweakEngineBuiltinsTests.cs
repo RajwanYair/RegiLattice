@@ -225,7 +225,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     {
         var byCat = _engine.TweaksByCategory();
         Assert.True(byCat.ContainsKey("System Optimization"));
-        Assert.True(byCat["System Optimization"].Count >= 30, $"Expected ≥30 System Optimization tweaks, got {byCat["System Optimization"].Count}");
+        Assert.True(byCat["System Optimization"].Count >= 28, $"Expected ≥28 System Optimization tweaks, got {byCat["System Optimization"].Count}");
     }
 
     [Fact]

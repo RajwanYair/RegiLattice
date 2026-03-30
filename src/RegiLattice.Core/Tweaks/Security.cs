@@ -319,20 +319,6 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-disable-remote-registry",
-            Label = "Disable Remote Registry Service",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets the Remote Registry service to disabled. Prevents remote access to the Windows registry, reducing attack surface.",
-            Tags = ["security", "remote-registry", "service", "attack-surface"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "sec-block-unsigned-drivers",
             Label = "Block Unsigned Driver Installation",
             Category = "Security",
@@ -449,21 +435,6 @@ internal static class Security
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-rdp-clipboard-sync",
-            Label = "Disable RDP Clipboard Redirection",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents clipboard contents from being redirected between RDP client and server sessions, reducing data exfiltration risk over remote connections.",
-            Tags = ["security", "rdp", "clipboard", "data-loss", "redirection"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
         },
         new TweakDef
         {

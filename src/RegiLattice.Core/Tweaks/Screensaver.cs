@@ -436,27 +436,5 @@ internal static class Screensaver
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "ss-disable-logon-screen-animation",
-            Label = "Disable Logon Screen Animation",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = true,
-            Description = "Disables the first-logon animation shown after Windows installation or major updates. Default: enabled.",
-            Tags = ["logon", "animation", "first-run", "lock-screen"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-        },
     ];
 }

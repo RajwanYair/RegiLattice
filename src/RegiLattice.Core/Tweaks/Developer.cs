@@ -693,37 +693,6 @@ internal static class Developer
         },
         new TweakDef
         {
-            Id = "dev-disable-auto-default-printer",
-            Label = "Disable Automatic Default Printer Switching",
-            Category = "Dev Drive / Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets LegacyDefaultPrinterMode=1 in Windows settings. Prevents Windows 10/11 from silently changing the default printer to the most recently used one, which interrupts developer scripts and CI pipelines that rely on a fixed default printer.",
-            Tags = ["developer", "printer", "default", "productivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
-        },
-
-        new TweakDef
-        {
-            Id = "dev-show-hidden-files",
-            Label = "Show Hidden Files and Folders in Explorer",
-            Category = "Dev Drive / Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets Hidden=1 in Explorer Advanced. Makes dotfiles, hidden config files, and .git folders visible in Explorer, which is essential for development work.",
-            Tags = ["developer", "explorer", "hidden", "files"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-        },
-        new TweakDef
-        {
             Id = "dev-show-super-hidden-files",
             Label = "Show OS-Protected Super-Hidden Files in Explorer",
             Category = "Dev Drive / Developer",

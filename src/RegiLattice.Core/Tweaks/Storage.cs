@@ -63,27 +63,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-storage-disable-thumbs-db",
-            Label = "Disable Thumbs.db on Network Folders",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from creating hidden Thumbs.db thumbnail cache files in network folders. Avoids lock conflicts and clutter on shared drives. Default: enabled (Thumbs.db created). Recommended: disabled.",
-            Tags = ["storage", "thumbs", "network", "cache", "explorer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "stor-storage-compact-os",
             Label = "Enable Compact OS Compression Flag",
             Category = "Storage",
@@ -309,20 +288,6 @@ internal static class Storage
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "NukeOnDelete", 0)],
         },
 
-        new TweakDef
-        {
-            Id = "stor-disable-delivery-optimization-cache",
-            Label = "Disable Delivery Optimization Cache",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets Delivery Optimization to HTTP only (no LAN or Internet sharing). Reduces disk usage. Default: LAN.",
-            Tags = ["storage", "delivery-optimization", "cache", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-        },
         new TweakDef
         {
             Id = "stor-compact-os",
@@ -576,21 +541,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-set-delivery-opt-limit",
-            Label = "Limit Delivery Optimisation Download Bandwidth",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Limits Delivery Optimisation download bandwidth to 25% of available connection. Prevents Windows Updates from saturating the network. Default: unlimited.",
-            Tags = ["storage", "delivery-optimisation", "bandwidth", "windows-update"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-        },
-        new TweakDef
-        {
             Id = "stor-disable-volume-shadow-auto",
             Label = "Disable Automatic VSS Shadow Copies",
             Category = "Storage",
@@ -822,21 +772,6 @@ internal static class Storage
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLinkTracking", 1)],
-        },
-        new TweakDef
-        {
-            Id = "stor-disable-vss-autostart",
-            Label = "Set Volume Shadow Copy Service to Manual",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Changes the Volume Shadow Copy Service (VSS) from automatic to manual start. VSS starts on demand when backups or restore points are triggered. Default: automatic.",
-            Tags = ["storage", "vss", "shadow-copy", "services"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS", "Start", 3)],
         },
         new TweakDef
         {

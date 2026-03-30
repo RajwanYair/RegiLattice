@@ -185,24 +185,5 @@ internal static class SecurityAuditPolicy
             RemoveOps = [RegOp.DeleteValue(Lsa, "EveryoneIncludesAnonymous")],
             DetectOps = [RegOp.CheckDword(Lsa, "EveryoneIncludesAnonymous", 0)],
         },
-        new TweakDef
-        {
-            Id = "audit-disable-cached-credentials",
-            Label = "Reduce Cached Domain Logon Credentials to 0",
-            Category = "Security Audit Policy",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 4,
-            SafetyRating = 3,
-            Tags = ["audit", "cached credentials", "domain", "security", "hardening"],
-            Description =
-                "Sets the number of cached domain logon credentials to 0. Prevents "
-                + "domain users from signing in if the DC is unreachable. Hardens against "
-                + "offline credential extraction attacks. WARNING: domain logon requires "
-                + "network connectivity to DC.",
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "10")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "0")],
-        },
     ];
 }

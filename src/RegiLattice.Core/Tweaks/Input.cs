@@ -162,29 +162,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-disable-touch-feedback",
-            Label = "Disable Touch Visual Feedback",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables visual feedback animations for touch and pen input. Removes the circle/ripple effect on touch and gesture indicators. Default: Enabled. Recommended: Disabled on non-touch devices.",
-            Tags = ["input", "touch", "pen", "feedback", "visual"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 31),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
-        },
-        new TweakDef
-        {
             Id = "input-increase-keyboard-repeat-rate",
             Label = "Increase Keyboard Repeat Rate",
             Category = "Input",
@@ -358,20 +335,6 @@ internal static class Input
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "10")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "4")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "10")],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-gesture-visualizations",
-            Label = "Disable Gesture Visual Feedback",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes visual arrow animations shown during multi-finger gestures. Default: enabled on touch devices.",
-            Tags = ["input", "gesture", "visual", "feedback"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 31)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 0)],
         },
         new TweakDef
         {

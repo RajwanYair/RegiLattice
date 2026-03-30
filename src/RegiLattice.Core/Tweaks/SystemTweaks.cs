@@ -8,21 +8,6 @@ internal static class SystemTweaks
     [
         new TweakDef
         {
-            Id = "sys-disable-reserved-storage",
-            Label = "Disable Reserved Storage (~7 GB)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Reserved Storage which holds ~7 GB for updates.",
-            Tags = ["system", "disk", "storage", "cleanup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager", "ShippedWithReserves", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager", "ShippedWithReserves", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager", "ShippedWithReserves", 0)],
-        },
-
-        new TweakDef
-        {
             Id = "sys-high-timer-resolution",
             Label = "Enable High Timer Resolution (Perf)",
             Category = "System",

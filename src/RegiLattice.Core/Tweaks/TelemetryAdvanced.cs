@@ -272,20 +272,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-steps-recorder",
-            Label = "Disable Steps Recorder (PSR)",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Steps Recorder (Problem Steps Recorder). Prevents screen capture telemetry. Default: enabled.",
-            Tags = ["telemetry", "steps-recorder", "psr", "capture"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-kms-client-emulation",
             Label = "Disable KMS Client Online AVS Validation",
             Category = "Telemetry Advanced",
@@ -388,36 +374,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-telemetry-disable-connected-user",
-            Label = "Disable Connected User Experiences",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Connected User Experiences and Telemetry service (DiagTrack). Prevents background telemetry data transmission. Default: AUTO.",
-            Tags = ["telemetry", "diagtrack", "connected-user", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "telem-telemetry-disable-diagnostic-log",
-            Label = "Disable Diagnostic Log Collection",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the dmwappushservice (Device Management Wireless Application Protocol Push) used for diagnostic data upload. Default: AUTO.",
-            Tags = ["telemetry", "diagnostic", "wap", "push"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "telem-telemetry-set-max-size",
             Label = "Set Telemetry Cache Max Size to 0 MB",
             Category = "Telemetry Advanced",
@@ -429,21 +385,6 @@ internal static class TelemetryAdvanced
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize", 0)],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-uar-reporting",
-            Label = "Disable User Activity Reporting (AppCompat)",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableUAR=1 in AppCompat policy. Stops the Application Compatibility engine from recording and uploading user activity data used for app compatibility telemetry.",
-            Tags = ["telemetry", "app-compat", "user-activity", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
         },
         new TweakDef
         {
@@ -637,21 +578,6 @@ internal static class TelemetryAdvanced
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "telem-set-delivery-opt-http-only",
-            Label = "Set Delivery Optimisation to HTTP Only (No P2P)",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DODownloadMode=0 in Delivery Optimisation policy. Restricts Windows Update downloads to direct Microsoft CDN connections only, disabling peer-to-peer seeding that shares bandwidth and data with other devices.",
-            Tags = ["telemetry", "delivery-optimization", "p2p", "privacy", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
         },
         new TweakDef
         {
