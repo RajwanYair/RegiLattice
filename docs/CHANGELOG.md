@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.97.0] — 2026-03-30
+
+#### Removed
+
+- Removed 313 duplicate TweakDef entries across 60+ modules (consolidation Phases 2–5)
+- Canonical ownership established for 60+ frequently-duplicated registry values
+- No features removed — all unique tweak operations preserved
+
+#### Stats
+
+- Total: **9,190 tweaks**, 637 categories, 665 module files
+- Tests: 2,301 Core + 301 CLI + 339 GUI = 2,941 passing (0 failures)
+- Net reduction from consolidation: 334 TweakDefs removed (9,524 → 9,190)
+
+---
+
 ## [5.96.0] — 2026-03-30
 
 #### Added

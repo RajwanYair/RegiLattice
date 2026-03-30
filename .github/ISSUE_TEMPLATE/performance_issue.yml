@@ -42,7 +42,7 @@ body:
       label: Observed Performance
       description: Numbers — time, memory, CPU, etc.
       placeholder: |
-        Operation: StatusMap() over 7,505 tweaks
+        Operation: StatusMap() over 9,190 tweaks
         Time taken: 45 seconds
         Expected time: ~5 seconds
         Memory used: 300 MB peak
