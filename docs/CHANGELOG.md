@@ -4,7 +4,7 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased] — 2026-03-30
+## [5.98.0] — 2026-03-30
 
 #### Refactored
 

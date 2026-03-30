@@ -2,4 +2,4 @@
 
 For the complete version history, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
-Latest: **v5.97.0** (2026-03-30) — PATCH: Consolidation — removed 313 duplicate TweakDefs across 60+ modules — 9,190 tweaks, 637 categories, 665 modules, 2,941 tests.
+Latest: **v5.98.0** (2026-03-30) — PATCH: Consolidation — merged 552 sprint policy modules into 24 domain Policy*.cs files — 9,190 tweaks, 135 categories, 130 modules, 2,934 tests.

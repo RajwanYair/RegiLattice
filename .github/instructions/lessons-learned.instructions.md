@@ -1166,8 +1166,9 @@ Version history:
 | v5.95.0 | 0 | -21 | — (consolidation: removed 21 duplicates) |
 | v5.96.0 | 5 | 50 | 632–636 |
 | v5.97.0 | 0 | -313 | — (consolidation: removed 313 cross-module duplicate tweaks) |
+| v5.98.0 | 0 | 0 | — (consolidation: merged 552 policy modules into 24 domain files; 665→130 modules, 637→135 categories) |
 
-**Current version**: v5.97.0 — 9,190 tweaks, 135 categories, 130 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v5.98.0 — 9,190 tweaks, 135 categories, 130 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
