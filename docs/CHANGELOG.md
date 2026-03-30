@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.96.0] — 2026-03-30
+
+#### Added
+
+- 5 new Group Policy policy modules, 50 tweaks (Sprints 632–636): WindowsSearchIndexingAdvancedPolicy, BranchCachePolicy, TaskSchedulerSecurityPolicy, WindowsDeploymentServicesPolicy, VpnRemoteAccessPolicy
+
+#### Stats
+
+- Total: **9,234 tweaks**, 637 categories, 665 module files
+- Tests: 2,301 Core + 301 CLI + 339 GUI = 2,941 passing (0 failures)
+
+---
+
 ## [5.95.0] — 2026-03-30
 
 #### Fixed
