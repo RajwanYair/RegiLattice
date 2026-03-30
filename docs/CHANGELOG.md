@@ -4,6 +4,31 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.99.0] — 2026-03-30
+
+#### Refactored
+
+- Consolidated 32 secondary tweak modules into 17 primary files — module count reduced from 130 → 98 files
+- Category count reduced from 135 → 101 categories (34 redundant categories merged)
+- Merged categories: Power Management + Energy Saver → Power; Network Optimization + DNS → Network;
+  System Optimization + Registry Management → Performance / System; Night Light → Display;
+  Windows Recall → Privacy; Xbox / Game Bar → Gaming; Dev Drive → Developer;
+  M365 Copilot + Copilot+ Features → AI / Copilot; Windows Hello + User Activity → User Account;
+  BitLocker Advanced + Trusted Launch → Encryption; Hyper-V Adv + Windows Sandbox → Virtualization;
+  Recovery + System Restore → Backup & Recovery; Screensaver → Lock Screen; Virtual Desktops → Snap;
+  Crash & Diagnostics + Time Sync → Maintenance; Command Line → PowerShell;
+  Window Appearance → Desktop Customization; Indexing & Search → Cortana & Search;
+  Scoop Tools → Package Management; RealVNC → Remote Desktop; Cloud Experience → Cloud Storage;
+  Printer Advanced → Printing; Scheduled Task Tweaks → Scheduled Tasks; Windows Ink → Touch & Pen
+- All tweak IDs unchanged — zero behavior regression; all 9,190 tweaks retained
+- ProfileDefinitions updated to use consolidated category names
+- 3 test files updated to reflect new category structure
+
+#### Stats
+
+- Total: **9,190 tweaks**, 101 categories, 98 module files
+- Tests: 2,291 Core + 301 CLI + 339 GUI = 2,931 passing (0 failures)
+
 ## [5.98.0] — 2026-03-30
 
 #### Refactored
