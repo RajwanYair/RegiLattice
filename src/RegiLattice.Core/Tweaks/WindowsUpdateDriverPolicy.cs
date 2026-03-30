@@ -1,4 +1,4 @@
-// RegiLattice.Core — Tweaks/WindowsUpdateDriverPolicy.cs
+﻿// RegiLattice.Core — Tweaks/WindowsUpdateDriverPolicy.cs
 // Device driver installation restriction and signing policy (Sprint 599).
 // Category: "WU Driver Update Policy" | Slug: wudrv
 // Key: HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions
@@ -20,7 +20,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-deny-unidentified-device-installation",
             Label = "WU Driver: Block Installation of Unidentified Device Drivers",
             Category = "WU Driver Update Policy",
-            Description = "Sets DenyUnidentifiedDeviceInstallation=1 in DeviceInstall\Restrictions policy. Prevents Windows from installing drivers for hardware devices that are not in the Windows Driver Store and do not have a matching entry in Windows Update. " +
+            Description = "Sets DenyUnidentifiedDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from installing drivers for hardware devices that are not in the Windows Driver Store and do not have a matching entry in Windows Update. " +
                 "Unidentified devices are a common attack vector — malicious USB devices can present as unknown hardware that auto-installs a malicious driver. This policy requires all devices to have a recognized driver before they can function.",
             Tags = ["driver", "device", "security", "usb", "policy"],
             NeedsAdmin = true,
@@ -37,7 +37,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-deny-removable-device-driver-install",
             Label = "WU Driver: Block Automatic Driver Installation for Removable Devices",
             Category = "WU Driver Update Policy",
-            Description = "Sets DenyRemovableDeviceInstallation=1 in DeviceInstall\Restrictions policy. Prevents Windows from automatically installing drivers for any removable device. " +
+            Description = "Sets DenyRemovableDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from automatically installing drivers for any removable device. " +
                 "Removable devices (USB storage, USB hubs, card readers, portable audio devices) are frequently connected in enterprise environments. Without this policy, each new removable device triggers an automatic driver installation from WU, bypassing IT-managed driver sets and potentially installing unsigned or vulnerable drivers.",
             Tags = ["driver", "removable", "usb", "device", "policy"],
             NeedsAdmin = true,
@@ -71,7 +71,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-prevent-device-class-installations",
             Label = "WU Driver: Enable Device Class Installation Restriction Policy",
             Category = "WU Driver Update Policy",
-            Description = "Sets DenyDeviceClasses=1 in DeviceInstall\Restrictions policy. Activates the device class restriction feature that, when combined with a list of blocked device class GUIDs, prevents installation of entire categories of devices. " +
+            Description = "Sets DenyDeviceClasses=1 in DeviceInstall\\Restrictions policy. Activates the device class restriction feature that, when combined with a list of blocked device class GUIDs, prevents installation of entire categories of devices. " +
                 "This policy enables the enforcement of device class blocklists (e.g., blocking all Bluetooth adapters, all wireless adapters, or all imaging devices) across the enterprise without per-device ID management.",
             Tags = ["driver", "device-class", "restriction", "enterprise", "policy"],
             NeedsAdmin = true,
@@ -88,7 +88,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-enable-device-id-restriction-policy",
             Label = "WU Driver: Enable Device ID-Based Installation Restriction",
             Category = "WU Driver Update Policy",
-            Description = "Sets DenyDeviceIDs=1 in DeviceInstall\Restrictions policy. Activates the device ID restriction feature. When enabled, Windows checks all device hardware IDs against a configured deny list. " +
+            Description = "Sets DenyDeviceIDs=1 in DeviceInstall\\Restrictions policy. Activates the device ID restriction feature. When enabled, Windows checks all device hardware IDs against a configured deny list. " +
                 "Device ID restrictions are more granular than class restrictions and allow blocking specific problematic hardware models (e.g., a specific USB key brand with a known firmware vulnerability) while permitting similar hardware from other vendors.",
             Tags = ["driver", "device-id", "restriction", "security", "policy"],
             NeedsAdmin = true,
@@ -105,7 +105,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-log-driver-install-restriction-events",
             Label = "WU Driver: Enable Event Logging for Blocked Driver Installations",
             Category = "WU Driver Update Policy",
-            Description = "Sets WritePolicy=1 in DeviceInstall\Restrictions policy. Enables Windows to write an event log entry whenever a device installation is blocked by Device Installation Policy. " +
+            Description = "Sets WritePolicy=1 in DeviceInstall\\Restrictions policy. Enables Windows to write an event log entry whenever a device installation is blocked by Device Installation Policy. " +
                 "Without this, blocked installations fail silently, making it impossible to audit what hardware was attempted and blocked. With logging enabled, security teams can monitor for repeated installation attempts which may indicate hardware-based persistence attempts.",
             Tags = ["driver", "logging", "audit", "security", "policy"],
             NeedsAdmin = true,
@@ -122,7 +122,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-disable-windows-error-reporting-driver",
             Label = "WU Driver: Disable Driver Crash Data Upload to Microsoft",
             Category = "WU Driver Update Policy",
-            Description = "Sets DisableDriverLookup=1 in DeviceInstall\Restrictions policy. Prevents Windows from looking up driver information and uploading crash data to the Microsoft Windows Error Reporting service when a device driver causes an error. " +
+            Description = "Sets DisableDriverLookup=1 in DeviceInstall\\Restrictions policy. Prevents Windows from looking up driver information and uploading crash data to the Microsoft Windows Error Reporting service when a device driver causes an error. " +
                 "In regulated environments, data sovereignty requirements may prohibit telemetry of driver crash details (device type, hardware ID, crash context) from being transmitted to Microsoft's cloud infrastructure.",
             Tags = ["driver", "telemetry", "privacy", "wer", "policy"],
             NeedsAdmin = true,
@@ -139,7 +139,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-prevent-non-admin-driver-install",
             Label = "WU Driver: Restrict Driver Installation to Administrators Only",
             Category = "WU Driver Update Policy",
-            Description = "Sets PreventInstallationOfDevicesNotDescribedByOtherPolicySettings=1 in DeviceInstall\Restrictions policy. Sets a default-deny posture for device installation: only devices explicitly permitted by an allowlist policy are installed. All others are blocked. " +
+            Description = "Sets PreventInstallationOfDevicesNotDescribedByOtherPolicySettings=1 in DeviceInstall\\Restrictions policy. Sets a default-deny posture for device installation: only devices explicitly permitted by an allowlist policy are installed. All others are blocked. " +
                 "This inverts the default Windows behaviour (allow-by-default) into a deny-by-default stance that requires active IT involvement to introduce any new device type into the environment.",
             Tags = ["driver", "device", "allowlist", "default-deny", "policy"],
             NeedsAdmin = true,
@@ -173,7 +173,7 @@ internal static class WindowsUpdateDriverPolicy
             Id = "wudrv-allow-admin-override-device-restriction",
             Label = "WU Driver: Allow Administrators to Override Device Installation Policy",
             Category = "WU Driver Update Policy",
-            Description = "Sets AllowAdminInstall=1 in DeviceInstall\Restrictions policy. When device installation restrictions are in effect (including deny-by-default), this allows users in the local Administrators group to install any device regardless of policy restrictions. " +
+            Description = "Sets AllowAdminInstall=1 in DeviceInstall\\Restrictions policy. When device installation restrictions are in effect (including deny-by-default), this allows users in the local Administrators group to install any device regardless of policy restrictions. " +
                 "This maintains an escape hatch for IT staff to provision new hardware on managed endpoints without requiring a Group Policy update cycle, while standard users remain restricted.",
             Tags = ["driver", "admin", "override", "device", "policy"],
             NeedsAdmin = true,
