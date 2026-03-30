@@ -358,30 +358,7 @@ internal static class Adobe
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bToggleToDoList")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bToggleToDoList", 0)],
         },
-        new TweakDef
-        {
-            Id = "adobe-disable-adobe-cloud",
-            Label = "Disable Adobe Cloud Services",
-            Category = "Adobe",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Adobe Creative Cloud online services and sync features. Prevents background cloud communication. Default: enabled.",
-            Tags = ["adobe", "cloud", "sync", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cCloud", "bDisableADCFileStore", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "adobe-disable-adobe-javascript",

@@ -141,20 +141,7 @@ internal static class UserAccount
                 return false;
             },
         },
-        new TweakDef
-        {
-            Id = "uac-hide-last-username",
-            Label = "Hide Last Logged-On Username at Sign-In",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Hides the last user name on the login screen. Users must type both username and password.",
-            Tags = ["uac", "security", "logon", "privacy"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 1)],
-        },
+
         new TweakDef
         {
             Id = "uac-disable-credential-guard-lock-timeout",
@@ -170,20 +157,7 @@ internal static class UserAccount
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 0)],
         },
-        new TweakDef
-        {
-            Id = "uac-require-ctrl-alt-del",
-            Label = "Require Ctrl+Alt+Del at Logon",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires pressing Ctrl+Alt+Del before the logon screen appears. Prevents spoofed login screens.",
-            Tags = ["uac", "security", "logon", "hardening"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableCAD", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableCAD", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableCAD", 0)],
-        },
+
         new TweakDef
         {
             Id = "uac-set-lockout-duration-30",
@@ -246,20 +220,7 @@ internal static class UserAccount
             RemoveOps = [RegOp.SetDword(UacKey, "ValidateAdminCodeSignatures", 0)],
             DetectOps = [RegOp.CheckDword(UacKey, "ValidateAdminCodeSignatures", 1)],
         },
-        new TweakDef
-        {
-            Id = "uac-restrict-blank-password",
-            Label = "Restrict Blank Password to Console Only",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents accounts with blank passwords from being used for network logons. Only local console access is allowed.",
-            Tags = ["uac", "security", "password", "blank", "network"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse", 1)],
-        },
+
         new TweakDef
         {
             Id = "uac-enable-installer-detection",

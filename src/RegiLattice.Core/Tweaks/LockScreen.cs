@@ -51,30 +51,7 @@ internal static class LockScreen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
         },
-        new TweakDef
-        {
-            Id = "lock-hide-last-username",
-            Label = "Hide Last Logged-In Username",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Hides the last logged-in username on the login screen. Users must type their username manually. Default: 0 (show). Recommended: 1 (hide) for security.",
-            Tags = ["lockscreen", "username", "security", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLastUserName", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "lock-verbose-login-messages",
@@ -157,21 +134,7 @@ internal static class LockScreen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
         },
-        new TweakDef
-        {
-            Id = "lock-require-ctrl-alt-del",
-            Label = "Require Ctrl+Alt+Del on Login Screen",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Requires users to press Ctrl+Alt+Del before the login dialog appears. Prevents keystroke loggers from intercepting credentials. Default: not required. Recommended: required for high-security environments.",
-            Tags = ["lockscreen", "ctrl-alt-del", "security", "login", "credentials"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "DisableCAD", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "DisableCAD", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "DisableCAD", 0)],
-        },
+
         new TweakDef
         {
             Id = "lock-disable-password-reveal",

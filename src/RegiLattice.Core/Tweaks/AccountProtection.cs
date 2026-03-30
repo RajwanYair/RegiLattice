@@ -95,42 +95,8 @@ internal static class AccountProtection
             RemoveOps = [RegOp.DeleteValue(LsaKey, "DisableDomainCreds")],
             DetectOps = [RegOp.CheckDword(LsaKey, "DisableDomainCreds", 1)],
         },
-        new TweakDef
-        {
-            Id = "acctprot-hide-last-username",
-            Label = "Hide Last Username on Login Screen",
-            Category = "Account Protection",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["login", "username", "privacy", "security", "winlogon"],
-            Description =
-                "Prevents Windows from displaying the last logged-in username on the login "
-                + "screen. DontDisplayLastUserName=1. Prevents attackers with physical access "
-                + "from knowing valid account names for brute-force login attempts.",
-            ApplyOps = [RegOp.SetDword(WinlogonKey, "DontDisplayLastUserName", 1)],
-            RemoveOps = [RegOp.DeleteValue(WinlogonKey, "DontDisplayLastUserName")],
-            DetectOps = [RegOp.CheckDword(WinlogonKey, "DontDisplayLastUserName", 1)],
-        },
-        new TweakDef
-        {
-            Id = "acctprot-require-ctrl-alt-del",
-            Label = "Require Ctrl+Alt+Del for Secure Login",
-            Category = "Account Protection",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["ctrl alt del", "login", "security", "winlogon"],
-            Description =
-                "Requires the Ctrl+Alt+Del key combination before the login screen appears. "
-                + "DisableCAD=0 (enabled secure attention sequence). Prevents rogue programs "
-                + "from simulating the login dialog to harvest credentials (SAS protection).",
-            ApplyOps = [RegOp.SetDword(SystemPolicy, "DisableCAD", 0)],
-            RemoveOps = [RegOp.DeleteValue(SystemPolicy, "DisableCAD")],
-            DetectOps = [RegOp.CheckDword(SystemPolicy, "DisableCAD", 0)],
-        },
+
+
         new TweakDef
         {
             Id = "acctprot-display-last-logon-info",
@@ -167,24 +133,7 @@ internal static class AccountProtection
             RemoveOps = [RegOp.DeleteValue(LsaKey, "LocalAccountTokenFilterPolicy")],
             DetectOps = [RegOp.CheckDword(LsaKey, "LocalAccountTokenFilterPolicy", 0)],
         },
-        new TweakDef
-        {
-            Id = "acctprot-limit-blank-passwords-network",
-            Label = "Restrict Blank-Password Accounts to Local Console Only",
-            Category = "Account Protection",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 5,
-            Tags = ["password", "blank password", "network", "security", "local account"],
-            Description =
-                "Prevents accounts with blank passwords from being used for network or remote "
-                + "logons. LimitBlankPasswordUse=1 — such accounts may only log in at the local "
-                + "physical console. Stops empty-password accounts from being exploited remotely.",
-            ApplyOps = [RegOp.SetDword(LsaKey, "LimitBlankPasswordUse", 1)],
-            RemoveOps = [RegOp.DeleteValue(LsaKey, "LimitBlankPasswordUse")],
-            DetectOps = [RegOp.CheckDword(LsaKey, "LimitBlankPasswordUse", 1)],
-        },
+
         new TweakDef
         {
             Id = "acctprot-audit-lsa-anonymous",
