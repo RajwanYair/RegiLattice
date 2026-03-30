@@ -88,23 +88,22 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Command Line")]
-    [InlineData("PowerShell")]
+    [InlineData("PowerShell")] // was "Command Line" — merged into PowerShell
     [InlineData("Hardening")]
     [InlineData("Developer")]
     [InlineData("Memory")]
     [InlineData("Disk Cleanup")]
     [InlineData("Debloat")]
-    [InlineData("Network Optimization")]
-    [InlineData("Power Management")]
+    [InlineData("Network")] // was "Network Optimization" — merged into Network
+    [InlineData("Power")] // was "Power Management" — merged into Power
     [InlineData("SSD Optimization")]
     [InlineData("App Compatibility")]
     [InlineData("User Account")]
     [InlineData("Browser Common")]
-    [InlineData("Windows Recall")]
+    [InlineData("Privacy")] // was "Windows Recall" — merged into Privacy
     [InlineData("Proxy & VPN")]
     [InlineData("Event Logging")]
-    [InlineData("System Restore")]
+    [InlineData("Backup & Recovery")] // was "System Restore" — merged into Backup & Recovery
     [InlineData("Scheduled Tasks")]
     [InlineData("Security")]
     public void RegisterBuiltins_CategoryExists(string category)
@@ -206,26 +205,34 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 
     // ── Category counts ─────────────────────────────────────────────────
 
+    // Window Appearance was merged into Desktop Customization (v5.99.0 consolidation)
     [Fact]
-    public void RegisterBuiltins_HasWindowAppearanceCategory() => Assert.Contains("Window Appearance", _engine.Categories());
+    public void RegisterBuiltins_HasWindowAppearanceCategory() => Assert.Contains("Desktop Customization", _engine.Categories());
 
     [Fact]
     public void RegisterBuiltins_WindowAppearance_HasAtLeast40Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
-        Assert.True(byCat.ContainsKey("Window Appearance"));
-        Assert.True(byCat["Window Appearance"].Count >= 40, $"Expected ≥40 Window Appearance tweaks, got {byCat["Window Appearance"].Count}");
+        Assert.True(byCat.ContainsKey("Desktop Customization"));
+        Assert.True(
+            byCat["Desktop Customization"].Count >= 40,
+            $"Expected ≥40 Desktop Customization tweaks, got {byCat["Desktop Customization"].Count}"
+        );
     }
 
+    // System Optimization was merged into Performance (v5.99.0 consolidation)
     [Fact]
-    public void RegisterBuiltins_HasSystemOptimizationCategory() => Assert.Contains("System Optimization", _engine.Categories());
+    public void RegisterBuiltins_HasSystemOptimizationCategory() => Assert.Contains("Performance", _engine.Categories());
 
     [Fact]
     public void RegisterBuiltins_SystemOptimization_HasAtLeast30Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
-        Assert.True(byCat.ContainsKey("System Optimization"));
-        Assert.True(byCat["System Optimization"].Count >= 28, $"Expected ≥28 System Optimization tweaks, got {byCat["System Optimization"].Count}");
+        Assert.True(byCat.ContainsKey("Performance"));
+        Assert.True(
+            byCat["Performance"].Count >= 28,
+            $"Expected ≥28 Performance tweaks (merged from System Optimization), got {byCat["Performance"].Count}"
+        );
     }
 
     [Fact]
@@ -884,11 +891,11 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         // Spot-checks that tweaks in key categories use the canonical ID slug.
         // Catches misfiled or incorrectly prefixed tweaks added in future sprints.
         // Full slug table: see copilot-instructions.md "Tweak ID Naming Convention".
+        // Note: Privacy is excluded because it now legitimately contains recall- prefix tweaks (merged from WindowsRecall)
+        // Note: Performance is excluded because it now legitimately contains sysopt- prefix tweaks (merged from SystemOptimization)
+        // Note: Gaming is excluded because it now legitimately contains xbgb- prefix tweaks (merged from XboxGameBar)
         var checkedCategories = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            ["Privacy"] = "priv-",
-            ["Performance"] = "perf-",
-            ["Gaming"] = "game-",
             ["Services"] = "svc-",
             ["Windows Update"] = "wu-",
             ["Security"] = "sec-",
