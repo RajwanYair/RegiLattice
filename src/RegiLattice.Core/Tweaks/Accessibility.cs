@@ -243,21 +243,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-widen-caret",
-            Label = "Widen Text Cursor (Caret)",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Increases the text cursor (caret) width from 1px to 3px. Makes the blinking text cursor easier to locate visually. Default: 1px. Recommended: 3px for visibility.",
-            Tags = ["accessibility", "caret", "cursor", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", 3)],
-        },
-        new TweakDef
-        {
             Id = "acc-increase-focus-border",
             Label = "Increase Focus Border Width",
             Category = "Accessibility",
@@ -416,20 +401,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-increase-repeat-rate",
-            Label = "Maximize Keyboard Repeat Rate",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the keyboard repeat rate to the fastest setting (31 repeats/sec). Characters repeat quicker when a key is held.",
-            Tags = ["accessibility", "keyboard", "repeat-rate", "speed"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "20")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
-        },
-        new TweakDef
-        {
             Id = "acc-disable-ease-of-access-hotkey",
             Label = "Disable Ease of Access Center Hotkey",
             Category = "Accessibility",
@@ -499,20 +470,6 @@ internal static class Accessibility
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier", "FollowCaret", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier", "FollowCaret")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier", "FollowCaret", 0)],
-        },
-        new TweakDef
-        {
-            Id = "acc-set-wider-caret",
-            Label = "Set Wider Text Cursor (Caret Width)",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the text cursor (caret) width to 3 pixels for improved visibility.",
-            Tags = ["accessibility", "cursor", "text"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", "3")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CaretWidth", "3")],
         },
         new TweakDef
         {

@@ -144,21 +144,6 @@ internal static class PrinterAdvanced
         },
         new TweakDef
         {
-            Id = "prnta-disable-default-printer-auto-switch",
-            Label = "Disable Windows Auto-Switching Default Printer",
-            Category = "Printing",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["printing", "default printer", "usability", "location"],
-            Description =
-                "Prevents Windows from automatically changing the default printer based on the last-used printer per location. "
-                + "Locks the user-selected default printer so it doesn't silently change when connecting to different networks.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "prnta-disable-banner-page",
             Label = "Disable Printer Banner/Separator Page",
             Category = "Printing",

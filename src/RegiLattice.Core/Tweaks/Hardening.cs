@@ -313,20 +313,6 @@ internal static class Hardening
         },
         new TweakDef
         {
-            Id = "harden-disable-cached-logons",
-            Label = "Limit Cached Logon Credentials to 2",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Limits cached domain logons stored on the machine from 10 (default) to 2, reducing credential theft risk.",
-            Tags = ["hardening", "security", "credentials", "domain"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "2")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "10")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "2")],
-        },
-        new TweakDef
-        {
             Id = "harden-disable-admin-shares",
             Label = "Disable Administrative Shares (C$, ADMIN$)",
             Category = "Hardening",
@@ -369,20 +355,6 @@ internal static class Hardening
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
-        },
-        new TweakDef
-        {
-            Id = "harden-disable-remote-registry",
-            Label = "Disable Remote Registry Service",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Remote Registry service to prevent remote access to the registry. Default: manual (enabled on demand).",
-            Tags = ["hardening", "remote-registry", "service", "security", "attack-surface"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry", "Start", 4)],
         },
         new TweakDef
         {

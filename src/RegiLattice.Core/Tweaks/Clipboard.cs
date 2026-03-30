@@ -53,21 +53,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-disable-rdp-clipboard",
-            Label = "Disable RDP Clipboard Redirection",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables clipboard sharing in Remote Desktop sessions. Prevents data leakage via copy/paste in RDP. Default: 0 (allowed). Recommended: 1 (disabled) for security.",
-            Tags = ["clipboard", "rdp", "security", "remote"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-        },
-        new TweakDef
-        {
             Id = "clip-instant-drag-delay",
             Label = "Set Instant Drag Delay (0 ms)",
             Category = "Clipboard & Drag-Drop",
@@ -373,21 +358,6 @@ internal static class Clipboard
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableSmartPaste", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableSmartPaste", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableSmartPaste", 1)],
-        },
-        new TweakDef
-        {
-            Id = "clip-rdp-policy-no-redirect",
-            Label = "Disable Clipboard Redirect in RDP",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables clipboard redirection during Remote Desktop sessions. Prevents clipboard data from crossing the RDP boundary. Default: allowed.",
-            Tags = ["clipboard", "rdp", "redirect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
         },
         // ── Sprint 47 additions ───────────────────────────────────────────────
         new TweakDef

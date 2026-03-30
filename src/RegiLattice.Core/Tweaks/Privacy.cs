@@ -771,30 +771,6 @@ internal static class Privacy
         },
         new TweakDef
         {
-            Id = "priv-disable-search-highlights",
-            Label = "Disable Search Highlights (Bing Content)",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables search highlights that show trending Bing content in the search box. Removes distracting web content from taskbar.",
-            Tags = ["privacy", "search", "highlights", "bing"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "priv-disable-cloud-content-search",
             Label = "Disable Cloud Content Search (OneDrive/Outlook)",
             Category = "Privacy",

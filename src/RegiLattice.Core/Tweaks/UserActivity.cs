@@ -114,24 +114,6 @@ internal static class UserActivity
         },
         new TweakDef
         {
-            Id = "activity-disable-recent-in-quick-access",
-            Label = "Disable Recent Files in Quick Access",
-            Category = "User Activity",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 1,
-            SafetyRating = 5,
-            Tags = ["activity", "recent files", "quick access", "explorer"],
-            Description =
-                "Stops File Explorer from showing recently opened files in the "
-                + "Quick Access panel. ShowRecent=0. Complements disable-frequent-places "
-                + "for full Quick Access privacy.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-        },
-        new TweakDef
-        {
             Id = "activity-disable-jump-lists",
             Label = "Disable Jump Lists in Taskbar and Start",
             Category = "User Activity",

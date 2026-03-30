@@ -23,20 +23,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-maintenance-wakeup",
-            Label = "Disable Automatic Maintenance Wake-Up",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from waking the PC to run automatic maintenance tasks. Default: Enabled. Recommended: Disabled.",
-            Tags = ["maintenance", "power", "wakeup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-disk-diagnostics",
             Label = "Disable Disk Diagnostics",
             Category = "Maintenance",
@@ -129,36 +115,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal", 0)],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-compatibility-assistant",
-            Label = "Disable Compatibility Assistant",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Program Compatibility Assistant via Group Policy. Prevents compatibility shims from being applied automatically. Default: Enabled. Recommended: Disabled for power users.",
-            Tags = ["maintenance", "compatibility", "pca", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-auto-wakeup",
-            Label = "Disable Automatic Maintenance Wakeup",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables automatic maintenance from waking the PC. Prevents unexpected wakeups for maintenance tasks. Default: Enabled. Recommended: Disabled for always-on PCs.",
-            Tags = ["maintenance", "wakeup", "automatic", "sleep"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
         },
         new TweakDef
         {
@@ -504,21 +460,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
-        },
-
-        new TweakDef
-        {
-            Id = "maint-disable-frequent-in-explorer",
-            Label = "Hide Frequent Folders in Quick Access",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the 'Frequent Folders' section from File Explorer Quick Access, giving a cleaner navigation pane.",
-            Tags = ["maintenance", "explorer", "frequent-folders", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
         },
     ];
 }

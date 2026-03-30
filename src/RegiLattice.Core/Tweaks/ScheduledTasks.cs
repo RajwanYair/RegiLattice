@@ -33,21 +33,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-task-disable-dmwappush",
-            Label = "Disable WAP Push Service (dmwappushsvc)",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the WAP Push Message Routing Service used by telemetry for device management messages. Default: 3 (manual). Recommended: 4 (disabled).",
-            Tags = ["tasks", "wappush", "telemetry", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "schtask-task-disable-maps-update",
             Label = "Disable Offline Maps Auto-Update",
             Category = "Scheduled Tasks",
@@ -102,21 +87,6 @@ internal static class ScheduledTasks
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-compat-appraiser",
-            Label = "Disable Compatibility Appraiser",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Compatibility Appraiser that collects program telemetry. Reduces CPU and disk usage. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "compatibility", "appraiser", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
         },
         new TweakDef
         {

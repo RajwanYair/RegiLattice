@@ -863,21 +863,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "boot-overwrite-memory-dump",
-            Label = "Always Overwrite Previous Memory Dump",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Forces Windows to always overwrite an existing memory dump file (Overwrite=1) instead of keeping multiple dump files. Prevents disk space accumulation from repeated crashes. Default: 1 (overwrite).",
-            Tags = ["boot", "dump", "disk", "crash"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
-        },
-        new TweakDef
-        {
             Id = "boot-enable-nmi-crash-dump",
             Label = "Enable NMI-Triggered Crash Dump",
             Category = "Boot",

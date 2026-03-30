@@ -284,34 +284,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-ink-workspace",
-            Label = "Hide Windows Ink Workspace Button",
-            Category = "Startup",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the Windows Ink Workspace button from the taskbar. Default: hidden on non-pen devices. Recommended: hidden for clean taskbar.",
-            Tags = ["startup", "ink", "pen", "taskbar", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
-                    "PenWorkspaceButtonDesiredVisibility",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-auto-restart-apps",
             Label = "Disable Auto Restart of Apps After Sign-In",
             Category = "Startup",

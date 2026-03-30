@@ -6,21 +6,6 @@ internal static class DevDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-
-        new TweakDef
-        {
-            Id = "dev-scan-cpu-limit",
-            Label = "Limit Defender Scan CPU to 15%",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces Defender background scan CPU usage to 15% (default: 50%). Prevents compilation stalls during scheduled scans.",
-            Tags = ["dev-drive", "defender", "cpu", "scan"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 15)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 50)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan", "AvgCPULoadFactor", 15)],
-        },
         new TweakDef
         {
             Id = "dev-disable-filter-attach",
@@ -491,21 +476,6 @@ internal static class DevDrive
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
-        },
-        new TweakDef
-        {
-            Id = "dev-disable-program-compat-assistant",
-            Label = "Disable Program Compatibility Assistant",
-            Category = "Dev Drive / Developer Tools",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Program Compatibility Assistant that prompts users to run programs in compatibility mode. Removes nag prompts on dev workstations. Default: enabled.",
-            Tags = ["dev", "compat", "assistant", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
         },
         new TweakDef
         {

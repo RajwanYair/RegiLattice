@@ -421,30 +421,6 @@ internal static class Cortana
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "cortana-disable-searchbox-suggestions",
-            Label = "Disable Search Box Suggestions",
-            Category = "Cortana & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables search suggestions and recommendations in the Windows Search box. Reduces network traffic and distractions. Default: enabled.",
-            Tags = ["cortana", "searchbox", "suggestions", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-        },
         // ── Sprint 21 additions ─────────────────────────────────────────────
 
         new TweakDef

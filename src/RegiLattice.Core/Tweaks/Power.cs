@@ -148,21 +148,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-usb-suspend",
-            Label = "Disable USB Selective Suspend",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables USB selective suspend power management. Prevents USB devices from disconnecting during use. Default: Enabled (0). Recommended: Disabled (1) for desktops.",
-            Tags = ["power", "usb", "suspend", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-        },
-        new TweakDef
-        {
             Id = "power-disable-hdd-powerdown",
             Label = "Disable Hard Disk Power Down",
             Category = "Power",
@@ -267,21 +252,6 @@ internal static class Power
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-usb-selective-suspend",
-            Label = "Disable USB Selective Suspend",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables USB selective suspend. Prevents USB devices from being powered down to save energy, improving reliability. Default: enabled.",
-            Tags = ["power", "usb", "selective-suspend", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
         },
         new TweakDef
         {
@@ -490,21 +460,6 @@ internal static class Power
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut", 1)],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-usb-power-save",
-            Label = "Disable USB Power Save (Global)",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables USB selective suspend at the global USB driver level. Prevents USB devices from being powered down to save energy. Default: enabled.",
-            Tags = ["power", "usb", "suspend", "peripherals"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
         },
         new TweakDef
         {
