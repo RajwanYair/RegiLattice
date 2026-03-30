@@ -125,7 +125,7 @@ internal sealed class DependencyGraphDialog : Form
         _btnClose.Anchor = AnchorStyles.Right | AnchorStyles.Top;
         pnlButtons.Controls.Add(_btnClose);
 
-        pnlRight.Controls.AddRange([_btnClose, _lblDetail, _tree]);
+        pnlRight.Controls.AddRange([_lblDetail, pnlButtons, _tree]);
 
         Controls.AddRange([pnlLeft, pnlRight]);
 

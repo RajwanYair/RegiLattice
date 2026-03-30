@@ -688,7 +688,7 @@ The 5×10 policy cadence continues independently of the feature sprints above. E
 # Phase 1 — Registry key path not already claimed
 Select-String -Pattern 'TargetKeyPath' -Path "src/RegiLattice.Core/Tweaks/*.cs"
 
-# Phase 2 — Slug prefix not already claimed  
+# Phase 2 — Slug prefix not already claimed
 Select-String -Pattern '"slug-' -Path "src/RegiLattice.Core/Tweaks/*.cs"
 
 # Phase 3 — PATH\ValueName semantic conflict (most critical — prevents duplicate ops)

@@ -92,16 +92,22 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
         {
             var outdated = await PipManager.ListOutdatedAsync(ct);
             var outdatedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var versionMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var entry in outdated)
             {
                 int paren = entry.IndexOf(" (", StringComparison.Ordinal);
-                outdatedNames.Add(paren > 0 ? entry[..paren] : entry);
+                string name = paren > 0 ? entry[..paren] : entry;
+                outdatedNames.Add(name);
+                if (paren > 0)
+                    versionMap[name] = entry[(paren + 2)..].TrimEnd(')');
             }
             foreach (ListViewItem item in _lstInstalled.Items)
             {
                 if (item.Tag is string pkgName && outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[3].Text = "\u26A0 Update available";
+                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel)
+                        ? $"\u26A0 {vLabel}"
+                        : "\u26A0 Update available";
                     item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }

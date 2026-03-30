@@ -1,6 +1,7 @@
 // RegiLattice.Core — Services/UpdateCheckService.cs
 // Auto-update check via GitHub Releases API (Phase 10 #97).
 
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -38,6 +39,7 @@ public static class UpdateCheckService
 
     /// <summary>
     /// Queries the GitHub Releases API and returns update availability info.
+    /// Respects system proxy settings and HTTPS_PROXY / HTTP_PROXY environment variables.
     /// Returns an <see cref="UpdateInfo"/> with <c>Error</c> set on network/parse failures.
     /// </summary>
     public static async Task<UpdateInfo> CheckAsync(CancellationToken ct = default)
@@ -45,10 +47,7 @@ public static class UpdateCheckService
         var current = CurrentVersion;
         try
         {
-            using var http = new HttpClient();
-            http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("RegiLattice", current));
-            http.Timeout = TimeSpan.FromSeconds(15);
-
+            using var http = CreateHttpClient(current);
             var json = await http.GetStringAsync(GitHubApiUrl, ct).ConfigureAwait(false);
             var release = JsonSerializer.Deserialize(json, UpdateCheckContext.Default.GitHubRelease);
 
@@ -80,6 +79,41 @@ public static class UpdateCheckService
         {
             return Error(current, $"Unexpected error: {ex.Message}");
         }
+    }
+
+    /// <summary>
+    /// Creates an <see cref="HttpClient"/> that honours the system proxy and
+    /// HTTPS_PROXY / HTTP_PROXY environment variables (common in corporate environments).
+    /// </summary>
+    private static HttpClient CreateHttpClient(string version)
+    {
+        var handler = new HttpClientHandler
+        {
+            UseProxy = true,
+            UseDefaultCredentials = true,
+            PreAuthenticate = true,
+        };
+
+        // Honour HTTPS_PROXY / HTTP_PROXY env vars (set by corporate proxy tools or wsl2 forwarders)
+        string? envProxy =
+            Environment.GetEnvironmentVariable("HTTPS_PROXY")
+            ?? Environment.GetEnvironmentVariable("https_proxy")
+            ?? Environment.GetEnvironmentVariable("HTTP_PROXY")
+            ?? Environment.GetEnvironmentVariable("http_proxy");
+
+        if (!string.IsNullOrEmpty(envProxy) && Uri.TryCreate(envProxy, UriKind.Absolute, out var proxyUri))
+        {
+            handler.Proxy = new WebProxy(proxyUri) { UseDefaultCredentials = true };
+        }
+        else
+        {
+            // Fall back to the system-configured proxy (WinINet / WinHTTP)
+            handler.Proxy = WebRequest.GetSystemWebProxy();
+        }
+
+        var http = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(20) };
+        http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("RegiLattice", version));
+        return http;
     }
 
     private static UpdateInfo Error(string current, string message) =>
