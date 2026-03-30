@@ -604,21 +604,6 @@ internal static class Copilot
 
         new TweakDef
         {
-            Id = "ai-disable-typing-insights",
-            Label = "Disable Typing Insights (AI Learning)",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Disables Windows typing insights which collects typing patterns to improve AI input predictions. Stops keyboard usage data from being uploaded. Default: enabled.",
-            Tags = ["ai", "typing", "privacy", "keyboard"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-windows-tips",
             Label = "Disable Windows Tips & Suggestions (GPO)",
             Category = "AI / Copilot",
@@ -631,24 +616,6 @@ internal static class Copilot
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableSoftLanding", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-consumer-features",
-            Label = "Disable Windows Consumer AI Features (GPO)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables consumer AI features and auto-installed apps via Group Policy. Effective on Pro/Enterprise editions. Blocks Microsoft from pushing consumer apps to the Start menu. Default: enabled on consumer Windows.",
-            Tags = ["ai", "consumer", "debloat", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
-            ],
         },
         new TweakDef
         {

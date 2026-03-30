@@ -214,20 +214,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-superfetch",
-            Label = "Disable Superfetch / SysMain",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the SysMain (Superfetch) service via registry. Reduces disk I/O on systems with SSD. Default: enabled.",
-            Tags = ["maintenance", "superfetch", "sysmain", "disk"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "maint-increase-disk-cleanup-sageset",
             Label = "Configure Disk Cleanup for All Categories",
             Category = "Maintenance",
@@ -489,20 +475,7 @@ internal static class Maintenance
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "maint-reduce-app-kill-timeout",
-            Label = "Reduce Application Kill Timeout on Shutdown (2s)",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces time Windows waits for apps to respond during shutdown before force-killing them to 2 seconds (default: 20s).",
-            Tags = ["maintenance", "shutdown", "performance", "timeout"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
-        },
+
         new TweakDef
         {
             Id = "maint-disable-desktop-cleanup-wizard",
@@ -560,21 +533,7 @@ internal static class Maintenance
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "CrashOnAuditFail", 0)],
         },
-        new TweakDef
-        {
-            Id = "maint-disable-show-recent-in-explorer",
-            Label = "Hide Recent Files in Quick Access",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the 'Recent Files' section from the File Explorer Quick Access panel. Files are still accessible via direct navigation.",
-            Tags = ["maintenance", "explorer", "recent-files", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-        },
+
         new TweakDef
         {
             Id = "maint-disable-frequent-in-explorer",

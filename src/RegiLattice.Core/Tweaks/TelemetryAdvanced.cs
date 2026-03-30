@@ -358,21 +358,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-usage-tracking",
-            Label = "Disable App Launch Usage Tracking",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables app launch tracking used to sort Start Menu and search results. Reduces telemetry data collection. Default: enabled.",
-            Tags = ["telemetry", "usage", "tracking", "start-menu"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-win-error-reporting",
             Label = "Disable Windows Error Reporting (Policy)",
             Category = "Telemetry Advanced",

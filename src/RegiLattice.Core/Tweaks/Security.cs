@@ -97,35 +97,6 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-disable-llmnr",
-            Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables LLMNR protocol, preventing man-in-the-middle and credential relay attacks on local networks. Use DNS instead.",
-            Tags = ["security", "llmnr", "network", "mitm", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-netbios",
-            Label = "Disable NetBIOS over TCP/IP (Policy)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables NetBIOS name resolution over TCP/IP via policy registry. Reduces attack surface from legacy name resolution poisoning.",
-            Tags = ["security", "netbios", "network", "hardening", "legacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
             Id = "sec-disable-wpad",
             Label = "Disable WPAD (Web Proxy Auto-Discovery)",
             Category = "Security",
@@ -206,23 +177,6 @@ internal static class Security
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-autorun-all",
-            Label = "Disable AutoRun for All Drives",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables AutoRun for all drive types. Prevents malware from auto-executing when removable media is inserted.",
-            Tags = ["security", "autorun", "usb", "hardening", "malware"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
         },
         new TweakDef
         {

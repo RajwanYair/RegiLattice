@@ -318,20 +318,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-disable-cursor-blink",
-            Label = "Disable Cursor Blink",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the cursor blink rate to infinite (non-blinking). Reduces minor CPU/GPU load. Default: 530ms blink.",
-            Tags = ["display", "cursor", "blink", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "-1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "-1")],
-        },
-        new TweakDef
-        {
             Id = "display-set-dpi-scaling-override",
             Label = "Force Per-Monitor DPI Awareness",
             Category = "Display",

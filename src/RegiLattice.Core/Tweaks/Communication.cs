@@ -187,36 +187,6 @@ internal static class Communication
         },
         new TweakDef
         {
-            Id = "comm-disable-typing-insights",
-            Label = "Disable Typing Insights",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables typing insights and suggestions that analyze your typing patterns. Improves privacy. Default: Enabled. Recommended: Disabled.",
-            Tags = ["communication", "typing", "insights", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\input\Settings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\input\Settings", "InsightsEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\input\Settings", "InsightsEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\input\Settings", "InsightsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-online-speech",
-            Label = "Disable Online Speech Recognition",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables online speech recognition that sends voice data to Microsoft for processing. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["communication", "speech", "voice", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-        },
-        new TweakDef
-        {
             Id = "comm-disable-skype-telemetry-user",
             Label = "Disable Skype Telemetry (User)",
             Category = "Communication",

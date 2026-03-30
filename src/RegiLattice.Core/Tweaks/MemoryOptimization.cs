@@ -326,20 +326,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "mem-disable-superfetch-service",
-            Label = "Set SysMain (Superfetch) Service to Manual",
-            Category = "Memory",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the SysMain service (Superfetch) to manual start. Reduces memory and I/O overhead on SSD systems.",
-            Tags = ["memory", "performance", "ssd", "service", "superfetch"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "mem-enable-large-pages",
             Label = "Enable Large Pages for Performance",
             Category = "Memory",

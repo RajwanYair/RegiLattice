@@ -334,20 +334,6 @@ internal static class Recovery
         },
         new TweakDef
         {
-            Id = "recovery-clear-crash-control-send",
-            Label = "Disable Crash Dump Upload to Microsoft",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from uploading crash dump data to Microsoft error reporting servers. Default: upload enabled.",
-            Tags = ["recovery", "crash-dump", "upload", "privacy", "error-reporting"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "recovery-set-dump-folder-path",
             Label = "Set Minidump Folder to C:\\Minidumps",
             Category = "Recovery",

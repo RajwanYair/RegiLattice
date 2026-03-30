@@ -129,50 +129,7 @@ internal static class DevDrive
             ],
         },
 
-        new TweakDef
-        {
-            Id = "dev-disable-memory-compression",
-            Label = "Disable Paging Executive (Keep Code in RAM)",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from paging out kernel and driver code to disk. Improves compilation speed on systems with ≥16 GB RAM. Default: Disabled (0). Recommended: Enabled for dev.",
-            Tags = ["dev-drive", "memory", "paging", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "DisablePagingExecutive",
-                    1
-                ),
-            ],
-        },
 
-        new TweakDef
-        {
-            Id = "dev-disable-power-throttle",
-            Label = "Disable Power Throttling (All Processes)",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows 10/11 power throttling for all processes globally. Ensures build tools always run at full CPU frequency. Default: Enabled. Recommended: Disabled for desktop dev machines.",
-            Tags = ["dev-drive", "power", "throttle", "performance", "cpu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
 
         new TweakDef
         {
@@ -225,20 +182,7 @@ internal static class DevDrive
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive", 1)],
         },
-        new TweakDef
-        {
-            Id = "dev-show-file-extensions",
-            Label = "Show File Extensions in Explorer",
-            Category = "Dev Drive / Developer Tools",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows file extensions for all file types in Windows Explorer. Essential for developers. Default: hidden.",
-            Tags = ["dev", "explorer", "file-extensions", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-        },
+
         new TweakDef
         {
             Id = "dev-disable-last-access",

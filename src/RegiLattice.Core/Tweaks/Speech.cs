@@ -494,20 +494,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-voice-typing-auto-punctuation",
-            Label = "Disable Voice Typing Auto-Punctuation",
-            Category = "Voice Access & Speech",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables automatic insertion of punctuation during voice typing. Default: auto-punctuation enabled.",
-            Tags = ["speech", "voice-typing", "punctuation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-cortana-voice-activation",
             Label = "Disable Cortana Voice Activation",
             Category = "Voice Access & Speech",

@@ -74,20 +74,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-toggle-keys",
-            Label = "Disable Toggle Keys Beep",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Toggle Keys beep when pressing Num/Caps/Scroll Lock.",
-            Tags = ["input", "accessibility", "gaming"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "62")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\ToggleKeys", "Flags", "0")],
-        },
-        new TweakDef
-        {
             Id = "input-mouse-scroll-lines",
             Label = "Set Mouse Scroll to 5 Lines",
             Category = "Input",
@@ -113,21 +99,6 @@ internal static class Input
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-touch-kb-auto",
-            Label = "Disable Touch Keyboard Auto-Invoke",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents the touch keyboard from automatically appearing on desktops without touchscreens. Default: Enabled. Recommended: Disabled.",
-            Tags = ["input", "touch", "keyboard", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
         },
         new TweakDef
         {
@@ -308,21 +279,6 @@ internal static class Input
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
         },
-        new TweakDef
-        {
-            Id = "input-touch-keyboard-disable",
-            Label = "Disable Touch Keyboard Auto-Launch",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the touch keyboard from auto-launching when tapping text fields on non-tablet devices. Default: auto-launch on touch devices.",
-            Tags = ["input", "touch", "keyboard", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-        },
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
         {
@@ -402,20 +358,6 @@ internal static class Input
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "10")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "4")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverWidth", "10")],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-touch-visualizations",
-            Label = "Disable Touch Visual Feedback",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes visual ripple effects shown at touch points. Reduces visual clutter on touchscreen devices. Default: enabled.",
-            Tags = ["input", "touch", "visual", "feedback"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
         },
         new TweakDef
         {

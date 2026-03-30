@@ -253,21 +253,6 @@ internal static class Taskbar
         },
         new TweakDef
         {
-            Id = "tb-disable-jump-lists",
-            Label = "Disable Taskbar Jump Lists",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables jump list and recent program tracking on the taskbar. Prevents Windows from storing recently used file history in taskbar. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["taskbar", "jump-list", "recent", "privacy", "history"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-        },
-        new TweakDef
-        {
             Id = "tb-disable-recent-docs",
             Label = "Disable Recent Documents Tracking",
             Category = "Taskbar",
@@ -681,21 +666,6 @@ internal static class Taskbar
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 2)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 2)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-start-track-programs",
-            Label = "Stop Tracking Launched Programs in Start Menu",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets Start_TrackProgs=0 in Explorer Advanced. Prevents Windows from recording which programs are launched via Start Menu, disabling the Most Used and Recently Added tracking inputs.",
-            Tags = ["taskbar", "start-menu", "tracking", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
         },
         new TweakDef
         {

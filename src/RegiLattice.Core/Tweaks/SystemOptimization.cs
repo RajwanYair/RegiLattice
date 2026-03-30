@@ -287,20 +287,7 @@ internal static class SystemOptimization
             RemoveOps = [RegOp.SetDword(WinLogon, "AutoRestartShell", 0)],
             DetectOps = [RegOp.CheckDword(WinLogon, "AutoRestartShell", 1)],
         },
-        new TweakDef
-        {
-            Id = "sysopt-verbose-logon-messages",
-            Label = "Verbose Boot/Logon Status Messages",
-            Category = "System Optimization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shows detailed status messages during boot and logon (like Linux boot messages).",
-            Tags = ["optimization", "boot", "verbose", "messages"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-        },
+
         // ── Explorer & Shell Performance ─────────────────────────────────
 
         new TweakDef
@@ -345,20 +332,7 @@ internal static class SystemOptimization
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "3000")],
         },
-        new TweakDef
-        {
-            Id = "sysopt-wait-to-kill-app-timeout",
-            Label = "Reduce Wait to Kill App Timeout (3s)",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the wait time before force-killing apps at shutdown from 20s to 3s.",
-            Tags = ["optimization", "shutdown", "timeout", "kill"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "3000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "3000")],
-        },
+
         // ── Security & LSA ───────────────────────────────────────────────
 
         new TweakDef
@@ -407,37 +381,7 @@ internal static class SystemOptimization
         },
         // ── Visual Effects Minimal ───────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-visual-effects-best-performance",
-            Label = "Visual Effects: Best Performance",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables most visual effects (animations, shadows, smooth edges) for maximum performance.",
-            Tags = ["optimization", "visual", "performance", "effects"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 0)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-taskbar-animations",
-            Label = "Disable Taskbar Animations",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops taskbar button animation effects for reduced CPU usage.",
-            Tags = ["optimization", "taskbar", "animation", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-        },
+
         // ── Misc Performance ─────────────────────────────────────────────
 
         new TweakDef

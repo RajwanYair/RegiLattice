@@ -459,23 +459,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-disable-consumer-features",
-            Label = "Disable Cloud-Delivered Consumer Content",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables cloud-delivered consumer content (pre-installed suggestions, promoted apps). Default: enabled.",
-            Tags = ["widgets", "consumer", "content", "suggestions"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "widgets-disable-tips-tricks-suggestions",
             Label = "Disable Tips, Tricks, and Suggestions",
             Category = "Widgets & News",
@@ -510,24 +493,6 @@ internal static class Widgets
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "widgets-news-disable-cloud-consumer-features",
-            Label = "Disable Cloud Consumer Features",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables cloud-based consumer features like app suggestions and promotional content in Start menu. Enterprise policy. Default: enabled.",
-            Tags = ["widgets", "cloud", "consumer", "features"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
             ],
         },
         new TweakDef
@@ -750,24 +715,6 @@ internal static class Widgets
                     "DisableTailoredExperiencesWithDiagnosticData",
                     1
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "widgets-disable-consumer-features-gpo",
-            Label = "Disable Windows Consumer Features (Policy)",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsConsumerFeatures=1 via CloudContent policy. Prevents automatic installation of suggested apps, Candy Crush-style promotions, and other consumer-targeted content in Start.",
-            Tags = ["widgets", "consumer", "apps", "debloat", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
             ],
         },
         new TweakDef

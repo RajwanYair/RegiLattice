@@ -147,23 +147,6 @@ internal static class CameraPrivacyPolicy
         },
         new TweakDef
         {
-            Id = "camprivacy-disable-automatic-camera-framing",
-            Label = "Camera Privacy Policy: Disable Camera Auto-Framing (Background Effects)",
-            Category = "Camera Privacy Policy",
-            Description = "Disables automatic camera framing and background segmentation processing performed on camera frames. These features process every camera frame in real-time using on-device ML inference. Disabling reduces continuous background processing and prevents inadvertent frame analysis by AI subsystems.",
-            Tags = ["camera", "auto-framing", "background effects", "machine learning", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Disables Windows AI data analysis on camera frames; frees background CPU/NPU cycles.",
-        },
-        new TweakDef
-        {
             Id = "camprivacy-require-user-consent-camera",
             Label = "Camera Privacy Policy: Default Camera Consent to User-Controlled",
             Category = "Camera Privacy Policy",

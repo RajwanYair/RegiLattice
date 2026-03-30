@@ -6,20 +6,7 @@ internal static class Shell
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "shell-disable-recent-files",
-            Label = "Disable Recent Files in Quick Access",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents recently opened files from appearing in Quick Access.",
-            Tags = ["shell", "explorer", "privacy", "recent"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-        },
+
         new TweakDef
         {
             Id = "shell-compact-file-explorer",
@@ -34,20 +21,7 @@ internal static class Shell
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
         },
-        new TweakDef
-        {
-            Id = "shell-show-file-extensions",
-            Label = "Show File Extensions in Explorer",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Displays file extensions (e.g. .txt, .exe) in File Explorer.",
-            Tags = ["shell", "explorer", "extensions", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-        },
+
         new TweakDef
         {
             Id = "shell-show-hidden-files",
@@ -62,64 +36,7 @@ internal static class Shell
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
         },
-        new TweakDef
-        {
-            Id = "shell-disable-aero-shake",
-            Label = "Disable Aero Shake",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Aero Shake (shaking a window to minimize others). Prevents accidental minimization. Default: Enabled. Recommended: Disabled.",
-            Tags = ["shell", "aero", "shake", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-snap-flyout",
-            Label = "Disable Snap Assist Flyout",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Snap Assist suggestion flyout when snapping windows. Windows still snap but without the layout suggestion popup. Default: Enabled. Recommended: Disabled for power users.",
-            Tags = ["shell", "snap", "flyout", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-shake-minimize",
-            Label = "Disable Shake to Minimize",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Aero Shake gesture that minimizes all other windows. Default: Enabled. Recommended: Disabled.",
-            Tags = ["shell", "shake", "minimize", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-snap-assist",
-            Label = "Disable Snap Assist Suggestions",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Snap Assist window arrangement suggestions. Default: Enabled. Recommended: Disabled for power users.",
-            Tags = ["shell", "snap", "assist", "multitasking"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
-        },
+
         new TweakDef
         {
             Id = "shell-disable-ink-workspace",
@@ -556,34 +473,7 @@ internal static class Shell
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
         },
-        new TweakDef
-        {
-            Id = "shell-disable-sync-provider-notif",
-            Label = "Disable Cloud Sync Provider Notifications in Explorer",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ShowSyncProviderNotifications=0 in Explorer Advanced. Hides the OneDrive, Google Drive, and third-party cloud sync promotional banners and notifications inside Explorer.",
-            Tags = ["shell", "explorer", "sync", "notifications", "onedrive"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "ShowSyncProviderNotifications",
-                    0
-                ),
-            ],
-        },
+
         new TweakDef
         {
             Id = "shell-restore-previous-folders",
@@ -623,36 +513,7 @@ internal static class Shell
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "shell-disable-balloon-tips",
-            Label = "Disable Notification Balloon Tips",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets EnableBalloonTips=0 in Explorer Advanced. Suppresses the legacy balloon-tip notifications that appear from system tray icons.",
-            Tags = ["shell", "explorer", "balloons", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
-        },
-        new TweakDef
-        {
-            Id = "shell-launch-to-this-pc",
-            Label = "Open Explorer to This PC Instead of Quick Access",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets LaunchTo=1 in Explorer Advanced. Opens new Explorer windows to the This PC view (showing all drives) instead of Quick Access. Useful for direct disk and drive navigation.",
-            Tags = ["shell", "explorer", "this-pc", "quick-access"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-        },
+
         new TweakDef
         {
             Id = "shell-disable-recent-docs-policy",

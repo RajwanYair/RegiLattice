@@ -114,23 +114,6 @@ internal static class BuiltinAdminPolicy
         },
         new TweakDef
         {
-            Id = "biadmin-uac-prompt-on-secure-desktop",
-            Label = "Built-in Admin Policy: Show UAC Elevation Prompt on Secure Desktop",
-            Category = "Built-in Admin Policy",
-            Description = "Ensures that UAC elevation prompts are always displayed on the secure desktop (isolated input desktop), preventing user-mode software from spoofing the UAC dialog or capturing keystrokes entered in the elevation prompt. This is the default but may be changed by policy on some corporate images.",
-            Tags = ["uac", "secure desktop", "elevation", "builtin", "admin", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1)],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Prevents UAC spoof UIs; elevation prompt is shown on isolated secure desktop.",
-        },
-        new TweakDef
-        {
             Id = "biadmin-disable-uac-installer-detection",
             Label = "Built-in Admin Policy: Enable UAC Installer Detection for All Users",
             Category = "Built-in Admin Policy",

@@ -115,49 +115,8 @@ internal static class Boot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
         },
-        new TweakDef
-        {
-            Id = "boot-disable-paging-executive",
-            Label = "Disable Paging Executive",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Keeps kernel and drivers in physical RAM instead of paging to disk. Improves system responsiveness on machines with ample RAM. Default: Paging allowed. Recommended: Disabled.",
-            Tags = ["boot", "paging", "kernel", "memory", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "DisablePagingExecutive",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "boot-reduce-wait-kill-app",
-            Label = "Reduce Wait-to-Kill App Timeout",
-            Category = "Boot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Reduces WaitToKillAppTimeout to 2 seconds (default: 20s). Windows force-terminates unresponsive apps faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
-            Tags = ["boot", "shutdown", "app", "timeout", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
-        },
+
+
         new TweakDef
         {
             Id = "boot-clear-pagefile",
@@ -992,20 +951,6 @@ internal static class Boot
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 0)],
         },
-        new TweakDef
-        {
-            Id = "boot-enable-lsa-ppl",
-            Label = "Enable LSASS Protected Process Light (PPL)",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Runs the Local Security Authority Subsystem (lsass.exe) as a Protected Process Light (PPL) by setting RunAsPPL=1. Prevents non-authorised processes from reading LSASS memory (credential dumping). Requires UEFI Secure Boot. Default: disabled.",
-            Tags = ["boot", "lsass", "security", "ppl", "credential-protection"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-        },
+
     ];
 }

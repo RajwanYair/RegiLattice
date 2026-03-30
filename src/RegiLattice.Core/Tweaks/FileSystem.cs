@@ -699,54 +699,6 @@ internal static class FileSystem
         },
         new TweakDef
         {
-            Id = "fs-require-smb-signing-client",
-            Label = "Require SMB Signing on Client Side",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireSecuritySignature=1 in LanmanWorkstation parameters. The SMB client will only connect to servers that support packet signing, preventing NTLM relay attacks on file shares.",
-            Tags = ["filesystem", "smb", "signing", "security", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fs-require-smb-signing-server",
-            Label = "Require SMB Signing on Server Side",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireSecuritySignature=1 in LanmanServer parameters. Clients must use signed SMB packets when accessing shares served by this machine.",
-            Tags = ["filesystem", "smb", "signing", "security", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fs-disable-ntfs-compression-global",
             Label = "Disable NTFS Compression System-Wide",
             Category = "File System",

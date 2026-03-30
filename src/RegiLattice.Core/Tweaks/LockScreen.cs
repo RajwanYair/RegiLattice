@@ -54,21 +54,6 @@ internal static class LockScreen
 
         new TweakDef
         {
-            Id = "lock-verbose-login-messages",
-            Label = "Enable Verbose Logon Status Messages",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Shows detailed status messages during logon/logoff instead of generic 'Please wait'. Default: not set. Recommended: 1 (verbose).",
-            Tags = ["lockscreen", "verbose", "status", "login", "debug"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "VerboseStatus", 1)],
-        },
-        new TweakDef
-        {
             Id = "lock-disable-lock-screen-ads",
             Label = "Disable Lock Screen Ads/Tips",
             Category = "Lock Screen & Login",
@@ -191,21 +176,6 @@ internal static class LockScreen
                     5
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "lock-verbose-logon-messages",
-            Label = "Enable Verbose Logon Messages",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Shows detailed status messages during logon/logoff (e.g., 'Applying computer settings'). Useful for troubleshooting. Default: disabled.",
-            Tags = ["lockscreen", "logon", "verbose", "debug"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
         },
         new TweakDef
         {
@@ -560,51 +530,6 @@ internal static class LockScreen
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "lock-require-screensaver-password",
-            Label = "Require Password to Unlock Screen Saver",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ScreenSaverIsSecure=1 in Desktop. Ensures that resuming from a screen saver always triggers the Windows lock screen requiring password entry.",
-            Tags = ["lock-screen", "screensaver", "password", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-        },
-        new TweakDef
-        {
-            Id = "lock-set-screensaver-5min",
-            Label = "Set Screen Saver Timeout to 5 Minutes",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ScreenSaveTimeOut=300 in Desktop. Activates the screen saver (and by extension locks the session when combined with ScreenSaverIsSecure) after 5 minutes of inactivity.",
-            Tags = ["lock-screen", "screensaver", "timeout", "inactivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
-        },
-        new TweakDef
-        {
-            Id = "lock-enable-verbose-status",
-            Label = "Show Verbose Boot and Shutdown Status Messages",
-            Category = "Lock Screen & Login",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets VerboseStatus=1 in System policies. Replaces the generic \"Please wait\" spinning ring with detailed status messages (e.g. \"Applying user settings\") during startup, login, and shutdown.",
-            Tags = ["lock-screen", "boot", "verbose", "status"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
         },
         new TweakDef
         {

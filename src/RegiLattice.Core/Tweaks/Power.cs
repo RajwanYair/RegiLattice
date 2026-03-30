@@ -234,21 +234,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-throttling-policy",
-            Label = "Disable Power Throttling (Modern Standby)",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets PowerThrottlingOff=1 to globally disable power throttling for all processes. Prevents Windows from reducing background process CPU clocks. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["power", "throttling", "modern-standby", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
-        new TweakDef
-        {
             Id = "power-disable-sleep-away",
             Label = "Disable Hibernate Boot and Sleep Away",
             Category = "Power",
@@ -505,21 +490,6 @@ internal static class Power
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Pci\Parameters", "ASPMOptOut", 1)],
-        },
-        new TweakDef
-        {
-            Id = "power-disable-power-throttling",
-            Label = "Disable Power Throttling",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Intel Speed Shift / power throttling. Prevents Windows from reducing CPU frequency for power savings. Default: enabled.",
-            Tags = ["power", "throttling", "cpu", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
         },
         new TweakDef
         {

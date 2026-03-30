@@ -24,20 +24,7 @@ internal static class Hardening
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
         },
-        new TweakDef
-        {
-            Id = "harden-enable-lsa-protection",
-            Label = "Enable LSA Protection (RunAsPPL)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Runs LSASS as a Protected Process Light to prevent credential dumping attacks.",
-            Tags = ["hardening", "security", "lsa", "credential"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-        },
+
         new TweakDef
         {
             Id = "harden-restrict-ntlm-outgoing",
@@ -298,43 +285,8 @@ internal static class Hardening
                 RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)"),
             ],
         },
-        new TweakDef
-        {
-            Id = "harden-disable-remote-assistance",
-            Label = "Disable Remote Assistance",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Remote Assistance to prevent unauthorised remote sessions.",
-            Tags = ["hardening", "security", "remote", "assistance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-        },
-        new TweakDef
-        {
-            Id = "harden-enable-smb-signing",
-            Label = "Require SMB Signing (Client)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires SMB packet signing on the client side to prevent relay and MitM attacks.",
-            Tags = ["hardening", "security", "smb", "signing"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-        },
+
+
         new TweakDef
         {
             Id = "harden-enable-smb-signing-server",
@@ -358,20 +310,7 @@ internal static class Hardening
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "harden-disable-llmnr",
-            Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables LLMNR which is vulnerable to poisoning/relay attacks (Responder, Inveigh).",
-            Tags = ["hardening", "security", "llmnr", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
+
         new TweakDef
         {
             Id = "harden-enforce-smb-encryption",

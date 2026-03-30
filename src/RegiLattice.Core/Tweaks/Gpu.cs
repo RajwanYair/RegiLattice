@@ -339,20 +339,6 @@ internal static class Gpu
         },
         new TweakDef
         {
-            Id = "gpu-disable-power-throttle",
-            Label = "Disable GPU Power Throttling",
-            Category = "GPU / Graphics",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables GPU power throttling. Forces the GPU to operate at full power. May increase power consumption. Default: enabled.",
-            Tags = ["gpu", "throttle", "power", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
-        new TweakDef
-        {
             Id = "gpu-force-software-cursor",
             Label = "Force Software Cursor",
             Category = "GPU / Graphics",
@@ -751,36 +737,6 @@ internal static class Gpu
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime", 60)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrLimitTime", 60)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-smooth-fonts",
-            Label = "Disable Font Smoothing (GPU Rendering)",
-            Category = "GPU / Graphics",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows font smoothing (anti-aliasing). Reduces GPU compositing work for text rendering. Useful on high-DPI displays where sub-pixel rendering is less needed. Default: enabled.",
-            Tags = ["gpu", "font", "smoothing", "rendering", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-cleartype",
-            Label = "Switch Font Smoothing from ClearType to Standard",
-            Category = "GPU / Graphics",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Switches font smoothing from ClearType (sub-pixel, type 2) to standard anti-aliasing (grayscale, type 1). Reduces LCD sub-pixel rendering overhead in DWM. Default: ClearType (type 2) on Windows.",
-            Tags = ["gpu", "cleartype", "font", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 1)],
         },
     ];
 }
