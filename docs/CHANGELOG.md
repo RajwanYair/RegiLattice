@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [5.95.0] — 2026-03-30
+
+#### Fixed
+
+- Fixed CS1009 escape sequence errors in WindowsUpdateDriverPolicy.cs (unblocks all releases since v5.75.0)
+
+#### Removed
+
+- Removed 21 duplicate registry tweaks across 11 modules (DontDisplayLastUserName ×6, DisableCAD ×4, LimitBlankPasswordUse ×3, dark-mode theme ×7, AllowTelemetry conflict ×1)
+- Removed conflicting `compat-set-diagnostic-data-basic` (set AllowTelemetry=1, conflicting with Privacy.cs =0)
+
+#### Stats
+
+- Total: **9,184 tweaks**, 632 categories, 660 module files
+- Tests: 2,301 Core + 301 CLI + 339 GUI = 2,941 passing (0 failures)
+
+---
+
 ## [5.94.0] — 2026-03-29
 
 #### Added

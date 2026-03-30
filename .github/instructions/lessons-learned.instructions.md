@@ -1164,7 +1164,7 @@ Version history:
 | v5.93.0 | 5 | 50 | 622–626 |
 | v5.94.0 | 5 | 50 | 627–631 |
 
-**Current version**: v5.94.0 — 9,205 tweaks, 632 categories, 660 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v5.95.0 — 9,184 tweaks, 632 categories, 660 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
