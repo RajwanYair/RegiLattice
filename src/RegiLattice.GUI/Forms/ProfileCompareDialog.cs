@@ -42,6 +42,8 @@ internal sealed class ProfileCompareDialog : Form
         InitUI();
         ApplyTheme();
         LoadProfiles();
+        // Auto-run comparison so results are visible immediately on open
+        Load += (_, _) => RunComparison();
     }
 
     // ── UI Construction ────────────────────────────────────────────────
@@ -211,7 +213,7 @@ internal sealed class ProfileCompareDialog : Form
 
     private void Populate(string nameA, string nameB)
     {
-        _listView.SuspendLayout();
+        _listView.BeginUpdate();
         _listView.Items.Clear();
 
         // Update column headers to profile names
@@ -256,7 +258,7 @@ internal sealed class ProfileCompareDialog : Form
             _listView.Items.Add(item);
         }
 
-        _listView.ResumeLayout(true);
+        _listView.EndUpdate();
 
         _lblSummary.Text =
             $"Total: {_rows.Count} tweaks   |   In {nameA}: {onlyInA + inBoth}   |   "

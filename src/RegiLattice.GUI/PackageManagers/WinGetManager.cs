@@ -96,7 +96,7 @@ internal static class WinGetManager
             .RunAsync("winget", ["upgrade", "--disable-interactivity", "--accept-source-agreements"], ct, TimeSpan.FromSeconds(60))
             .ConfigureAwait(false);
 
-        return ParseWinGetTable(stdout);
+        return ParseWinGetOutdatedTable(stdout);
     }
 
     internal static readonly string[] PopularPackages =
@@ -135,6 +135,68 @@ internal static class WinGetManager
             string entry = dblSpace > 0 ? line[..dblSpace].Trim() : line;
             if (entry.Length > 0)
                 results.Add(entry);
+        }
+
+        return results.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
+    /// <summary>
+    /// Parses `winget upgrade` fixed-width output, extracting "name (currentVer → availableVer)" entries.
+    /// Falls back to name-only when column positions cannot be determined.
+    /// </summary>
+    private static List<string> ParseWinGetOutdatedTable(string output)
+    {
+        var lines = output.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        var results = new List<string>();
+        bool pastHeader = false;
+        int versionStart = -1;
+        int availableStart = -1;
+
+        foreach (var rawLine in lines)
+        {
+            string line = rawLine.TrimEnd();
+
+            if (!pastHeader)
+            {
+                // Identify the header line by presence of both "Version" and "Available" columns
+                if (versionStart < 0
+                    && line.IndexOf("Version", StringComparison.OrdinalIgnoreCase) >= 0
+                    && line.IndexOf("Available", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    versionStart = line.IndexOf("Version", StringComparison.OrdinalIgnoreCase);
+                    availableStart = line.IndexOf("Available", StringComparison.OrdinalIgnoreCase);
+                }
+                if (line.StartsWith('-') && line.Length > 10)
+                    pastHeader = true;
+                continue;
+            }
+
+            if (line.Length == 0)
+                continue;
+
+            // First column: package name up to first double-space
+            int dblSpace = line.IndexOf("  ", StringComparison.Ordinal);
+            string name = dblSpace > 0 ? line[..dblSpace].Trim() : line.Trim();
+            if (string.IsNullOrEmpty(name))
+                continue;
+
+            // Extract version columns when positions are known
+            if (versionStart > 0 && availableStart > versionStart && line.Length > versionStart)
+            {
+                string curVer = line[versionStart..Math.Min(availableStart, line.Length)].Trim();
+                int endAvail = line.IndexOf("  ", availableStart, StringComparison.Ordinal);
+                string newVer = line.Length > availableStart
+                    ? (endAvail > availableStart ? line[availableStart..endAvail].Trim() : line[availableStart..].Trim())
+                    : string.Empty;
+
+                if (!string.IsNullOrEmpty(curVer) && !string.IsNullOrEmpty(newVer))
+                {
+                    results.Add($"{name} ({curVer} \u2192 {newVer})");
+                    continue;
+                }
+            }
+
+            results.Add(name);
         }
 
         return results.OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();

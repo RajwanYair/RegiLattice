@@ -60,7 +60,7 @@ internal sealed class ProfileWizardDialog : Form
         MaximizeBox = false;
         MinimizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
-        ClientSize = new Size(520, 320);
+        ClientSize = new Size(520, 360);
         BackColor = AppTheme.Bg;
         ForeColor = AppTheme.Fg;
         Font = AppTheme.Regular;
@@ -133,18 +133,18 @@ internal sealed class ProfileWizardDialog : Form
         };
         _btnNo.FlatAppearance.BorderColor = AppTheme.Border;
 
-        // Result panel (initially hidden)
+        // Result panel (initially hidden) — offset by Padding.Top so it clears below the header
         _resultPanel = new Panel
         {
-            Size = new Size(460, 180),
-            Location = new Point(0, 0),
+            Size = new Size(460, 200),
+            Location = new Point(0, 16),
             BackColor = AppTheme.Bg,
             Visible = false,
         };
         _lblResult = new Label
         {
             AutoSize = false,
-            Size = new Size(460, 100),
+            Size = new Size(460, 110),
             Location = new Point(0, 0),
             ForeColor = AppTheme.Fg,
             Font = AppTheme.Bold,
@@ -153,7 +153,7 @@ internal sealed class ProfileWizardDialog : Form
         {
             Text = "Use this profile →",
             Size = new Size(180, 36),
-            Location = new Point(0, 110),
+            Location = new Point(0, 120),
             BackColor = AppTheme.Accent,
             ForeColor = AppTheme.Bg,
             FlatStyle = FlatStyle.Flat,
@@ -163,7 +163,7 @@ internal sealed class ProfileWizardDialog : Form
         {
             Text = "Close",
             Size = new Size(100, 36),
-            Location = new Point(192, 110),
+            Location = new Point(192, 120),
             BackColor = AppTheme.Surface2,
             ForeColor = AppTheme.Fg,
             FlatStyle = FlatStyle.Flat,
