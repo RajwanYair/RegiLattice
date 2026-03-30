@@ -115,11 +115,11 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     // ── Categories are registered (appear in engine.Categories()) ────────
 
     [Theory]
-    [InlineData("Xbox / Game Bar")]
-    [InlineData("Windows Hello")]
+    [InlineData("Gaming")] // was "Xbox / Game Bar" — merged into Gaming
+    [InlineData("User Account")] // was "Windows Hello" — merged into User Account
     [InlineData("Smart App Control")]
-    [InlineData("Energy Saver")]
-    [InlineData("Copilot+ Features")]
+    [InlineData("Power")] // was "Energy Saver" — merged into Power
+    [InlineData("AI / Copilot")] // was "Copilot+ Features" — merged into AI / Copilot
     public void Module_CategoryIsRegisteredInEngine(string categoryName)
     {
         var engine = BuildEngine();
@@ -198,10 +198,9 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("BitLocker Advanced")]
+    [InlineData("Encryption")] // was "BitLocker Advanced" — merged into Encryption
     [InlineData("Application Control Policy")]
-    [InlineData("Hyper-V Advanced")]
-    [InlineData("Windows Sandbox")]
+    [InlineData("Virtualization")] // was "Hyper-V Advanced" / "Windows Sandbox" — merged into Virtualization
     public void Sprint69_NewCategories_RegisteredInEngine(string categoryName)
     {
         var engine = BuildEngine();
