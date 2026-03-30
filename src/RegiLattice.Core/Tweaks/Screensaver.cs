@@ -64,23 +64,6 @@ internal static class Screensaver
         },
         new TweakDef
         {
-            Id = "ss-enable-secure-desktop",
-            Label = "Enable Secure Desktop for UAC",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Show UAC prompts on secure desktop (anti-spoofing). Default: enabled. Recommended: enabled.",
-            Tags = ["uac", "secure-desktop", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 0)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ss-disable-lock-slideshow",
             Label = "Disable Lock Screen Slideshow",
             Category = "Screensaver & Lock",

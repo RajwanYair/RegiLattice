@@ -687,20 +687,6 @@ internal static class Cortana
         },
         new TweakDef
         {
-            Id = "cortana-hide-copilot-taskbar-button",
-            Label = "Hide Copilot Button from Taskbar",
-            Category = "Cortana & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets ShowCopilotButton=0 in Explorer Advanced. Removes the Copilot launch button from the Windows 11 taskbar.",
-            Tags = ["cortana", "copilot", "taskbar", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
             Id = "cortana-disable-spelling-in-search",
             Label = "Disable Spelling Correction in Search",
             Category = "Cortana & Search",

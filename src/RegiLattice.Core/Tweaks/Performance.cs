@@ -20,36 +20,7 @@ internal static class Performance
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
         },
-        new TweakDef
-        {
-            Id = "perf-disable-paging-executive",
-            Label = "Disable Paging of Kernel to Disk",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Keeps kernel and drivers in RAM; reduces system stutter under memory pressure.",
-            Description = "Keeps kernel and drivers in physical RAM instead of paging them to disk, improving system responsiveness.",
-            Tags = ["performance", "memory", "kernel", "paging"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePagingExecutive", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "DisablePagingExecutive",
-                    1
-                ),
-            ],
-        },
+
         new TweakDef
         {
             Id = "perf-optimize-processor-scheduling",

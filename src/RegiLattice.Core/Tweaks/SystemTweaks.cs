@@ -20,20 +20,7 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager", "ShippedWithReserves", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager", "ShippedWithReserves", 0)],
         },
-        new TweakDef
-        {
-            Id = "sys-disable-remote-assistance",
-            Label = "Disable Remote Assistance",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Remote Assistance to reduce attack surface.",
-            Tags = ["system", "security", "remote"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-        },
+
         new TweakDef
         {
             Id = "sys-high-timer-resolution",
@@ -58,38 +45,7 @@ internal static class SystemTweaks
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "sys-disable-uac-dimming",
-            Label = "Disable UAC Secure Desktop Dimming",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the dimmed secure desktop for UAC prompts. UAC still prompts but without screen dimming (faster). Default: Enabled. Recommended: Disabled for power users.",
-            Tags = ["system", "uac", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "PromptOnSecureDesktop", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sys-verbose-boot-status",
-            Label = "Enable Verbose Boot Messages",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shows detailed status messages during Windows startup and shutdown instead of the generic loading screen.",
-            Tags = ["system", "boot", "diagnostics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-        },
+
         new TweakDef
         {
             Id = "sys-disable-activity-history",
@@ -239,38 +195,7 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval", 0)],
         },
-        new TweakDef
-        {
-            Id = "sys-disable-power-throttling",
-            Label = "Disable Power Throttling",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Windows power throttling which limits background app performance. Default: Enabled. Recommended: Disabled for desktops.",
-            Tags = ["system", "power", "throttling", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-autoplay-all-drives",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables AutoPlay for all drive types (USB, CD, network). Prevents malware auto-execution. Default: enabled.",
-            Tags = ["system", "autoplay", "security", "drives"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-        },
+
         new TweakDef
         {
             Id = "sys-enable-utc-hardware-clock",
@@ -286,20 +211,7 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal", 1)],
         },
-        new TweakDef
-        {
-            Id = "sys-increase-irp-stack-size",
-            Label = "Increase IRP Stack Size",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the I/O Request Packet stack size to 32. Improves network file sharing performance. Default: 15.",
-            Tags = ["system", "irp", "network", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-        },
+
         new TweakDef
         {
             Id = "sys-disable-error-reporting-queue",
@@ -315,21 +227,7 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
         },
-        new TweakDef
-        {
-            Id = "sys-verbose-logon",
-            Label = "Enable Verbose Logon Messages",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Displays detailed status messages during Windows logon and logoff. Shows service startup progress instead of generic messages. Default: standard messages.",
-            Tags = ["system", "logon", "verbose", "status"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-        },
+
         new TweakDef
         {
             Id = "sys-pagefile-encrypt-off",

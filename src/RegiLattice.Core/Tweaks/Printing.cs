@@ -592,20 +592,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-disable-fax-service",
-            Label = "Disable Fax Service",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Fax service. Frees resources if fax functionality is not required. Default: manual start.",
-            Tags = ["printing", "fax", "services"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "printing-disable-lpr-monitor",
             Label = "Disable LPR Port Monitor",
             Category = "Printing",
@@ -676,21 +662,6 @@ internal static class Printing
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableBrowsing", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableBrowsing")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableBrowsing", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-fax-scan-service",
-            Label = "Disable Windows Fax and Scan Service (WFS)",
-            Category = "Printing",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Fax and Scan service (wfs). Removes fax capability and associated surface area. Default: manual/disabled on most systems.",
-            Tags = ["printing", "fax", "services"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
         },
         new TweakDef
         {

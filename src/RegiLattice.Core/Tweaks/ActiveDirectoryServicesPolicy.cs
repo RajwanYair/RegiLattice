@@ -129,42 +129,6 @@ internal static class ActiveDirectoryServicesPolicy
             },
             new TweakDef
             {
-                Id = "addsvc-disable-llmnr-name-resolution",
-                Label = "AD Services: Disable LLMNR (Link-Local Multicast Name Resolution)",
-                Category = "Active Directory Services Policy",
-                Description =
-                    "Sets EnableMulticast=0 in the DNS policy key. Disables LLMNR (Link-Local Multicast Name Resolution, RFC 4795). LLMNR is a fallback name resolution protocol that responds to multicast queries on the local network segment for hostnames that DNS cannot resolve. Tools like Responder exploit LLMNR by responding to all multicast queries and capturing the NTLM authentication attempts that clients send when trying to connect to the (fake) host. Disabling LLMNR eliminates this attack vector entirely — clients fall back to DNS or NetBIOS only, and Responder cannot intercept LLMNR-triggered authentication.",
-                Tags = ["llmnr", "responder", "ntlm-capture", "name-resolution", "poisoning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote =
-                    "LLMNR disabled. Hostnames that cannot be resolved by DNS will not fall back to LLMNR. In environments where LLMNR is the only way certain devices are discoverable (e.g., some IoT devices with no DNS entry), those devices will become unreachable by hostname. This is the recommended configuration in all enterprise environments.",
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            },
-            new TweakDef
-            {
-                Id = "addsvc-disable-nbns-name-resolution",
-                Label = "AD Services: Disable NetBIOS Name Service (NBT-NS) for Name Resolution",
-                Category = "Active Directory Services Policy",
-                Description =
-                    "Sets NodeType=2 in the TCPIP\\Parameters hive (value 2 = P-node, point-to-point/WINS only; disables B-node broadcast). NetBIOS Name Service (NBT-NS port UDP 137) is a broadcast-based name resolution protocol similar to LLMNR. Responder and other NTLM capture tools exploit NBT-NS by responding to broadcast queries. Setting NodeType=2 disables NetBIOS broadcasts for name resolution — clients use WINS or DNS only, eliminating the broadcast attack surface. This is the complementary control to disabling LLMNR: together, they prevent all broadcast-based name resolution poisoning attacks.",
-                Tags = ["netbios", "nbt-ns", "responder", "ntlm-capture", "broadcast"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote =
-                    "NetBIOS B-node broadcasts disabled for name resolution. Clients no longer broadcast NetBIOS queries for unresolved names. Legacy network resources that are discoverable only via NetBIOS broadcast (no DNS or WINS entry) will become unreachable. Survey the network for NetBIOS-dependent resources before enforcing. WINS environments are unaffected (P-node uses WINS directly).",
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            },
-            new TweakDef
-            {
                 Id = "addsvc-require-ldap-server-integrity",
                 Label = "AD Services: Require DC-Side LDAP Server Signing (Integrity Check)",
                 Category = "Active Directory Services Policy",

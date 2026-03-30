@@ -39,36 +39,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-disable-game-dvr",
-            Label = "Disable Game DVR Captures",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Game DVR background recording and captures. Frees GPU encoder resources and reduces disk I/O. Default: Enabled. Recommended: Disabled.",
-            Tags = ["multimedia", "game-dvr", "recording", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-screensaver",
-            Label = "Disable Screen Saver",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows screen saver. Prevents screen saver from activating during idle periods. Default: Enabled. Recommended: Disabled on desktops.",
-            Tags = ["multimedia", "screensaver", "display", "idle"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
-        },
-        new TweakDef
-        {
             Id = "media-set-wallpaper-quality",
             Label = "Set Wallpaper JPEG Quality to Maximum",
             Category = "Multimedia",
@@ -184,21 +154,6 @@ internal static class Multimedia
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "EnableFirstLogonAnimation", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-cursor-blink",
-            Label = "Disable Text Cursor Blinking",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables cursor blinking in text fields (CursorBlinkRate=-1). Reduces visual distraction for users who find blinking cursors disruptive. Default: 530 ms.",
-            Tags = ["multimedia", "cursor", "blink", "accessibility", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "-1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "-1")],
         },
         new TweakDef
         {
@@ -381,23 +336,6 @@ internal static class Multimedia
                     "SystemResponsiveness",
                     0
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-dvd-autorun",
-            Label = "Disable DVD/CD AutoRun",
-            Category = "Multimedia",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from automatically running programmes on inserted optical discs.",
-            Tags = ["multimedia", "autorun", "security", "dvd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
             ],
         },
         new TweakDef

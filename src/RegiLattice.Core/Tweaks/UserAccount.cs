@@ -362,20 +362,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-lock-workstation-on-screensaver",
-            Label = "Lock Workstation on Screensaver Resume",
-            Category = "User Account",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Requires a password when the screensaver exits, ensuring the session is locked after inactivity.",
-            Tags = ["uac", "security", "screensaver", "lock", "hardening"],
-            RegistryKeys = [$@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-            RemoveOps = [RegOp.SetString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
-            DetectOps = [RegOp.CheckString($@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-        },
-        new TweakDef
-        {
             Id = "uac-disable-microsoft-account-logon",
             Label = "Disable Microsoft Account User Authentication",
             Category = "User Account",

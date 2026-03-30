@@ -416,20 +416,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-reduce-repeat-delay",
-            Label = "Reduce Keyboard Repeat Delay",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the keyboard repeat delay to the shortest setting (250ms). Keys start repeating faster when held down.",
-            Tags = ["accessibility", "keyboard", "repeat-delay", "speed"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-        },
-        new TweakDef
-        {
             Id = "acc-increase-repeat-rate",
             Label = "Maximize Keyboard Repeat Rate",
             Category = "Accessibility",
@@ -470,35 +456,6 @@ internal static class Accessibility
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "400")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
-        },
-        new TweakDef
-        {
-            Id = "acc-disable-on-screen-keyboard-auto",
-            Label = "Disable On-Screen Keyboard Auto-Launch on Tablet",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents the touch keyboard from automatically appearing when a text field is focused in tablet mode. Useful for keyboard-attached tablets.",
-            Tags = ["accessibility", "on-screen-keyboard", "tablet", "touch"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-        },
-        new TweakDef
-        {
-            Id = "acc-increase-cursor-blink-rate",
-            Label = "Increase Cursor Blink Rate",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the cursor blink rate to 200ms (default ~530ms). The faster blinking makes the cursor easier to locate.",
-            Tags = ["accessibility", "cursor", "blink", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "200")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "530")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorBlinkRate", "200")],
         },
         new TweakDef
         {

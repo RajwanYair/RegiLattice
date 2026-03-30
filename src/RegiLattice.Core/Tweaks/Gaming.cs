@@ -223,21 +223,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-disable-mouse-acceleration",
-            Label = "Disable Mouse Acceleration for Gaming",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows mouse acceleration (enhance pointer precision). Provides 1:1 mouse movement for FPS games. Default: enabled.",
-            Tags = ["gaming", "mouse", "acceleration", "precision"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
-        },
-        new TweakDef
-        {
             Id = "game-disable-auto-gamemode",
             Label = "Disable Auto Game Mode Detection",
             Category = "Gaming",
@@ -979,21 +964,6 @@ internal static class Gaming
                     "High"
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-mouse-fix-off",
-            Label = "Disable Mouse Pointer Precision Enhancement",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the 'Enhance Pointer Precision' mouse acceleration feature. Raw mouse input without acceleration is preferred by most FPS/competitive gamers for consistent aim.",
-            Tags = ["gaming", "mouse", "acceleration", "pointer", "precision", "fps"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
         },
         new TweakDef
         {

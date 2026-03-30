@@ -183,24 +183,6 @@ internal static class PowerShellTweaks
         },
         new TweakDef
         {
-            Id = "ps-set-high-perf-visual-effects",
-            Label = "Set Visual Effects to Best Performance",
-            Category = "PowerShell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            KindHint = TweakKind.PowerShell,
-            Description = "Disables all visual effects (animations, shadows, transparency) for maximum performance.",
-            Tags = ["powershell", "performance", "visual", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 0)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ps-disable-diagnostics-hub",
             Label = "Disable Diagnostics Hub Service",
             Category = "PowerShell",

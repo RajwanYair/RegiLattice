@@ -58,20 +58,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-disable-llmnr",
-            Label = "Disable LLMNR",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Link-Local Multicast Name Resolution. Mitigates LLMNR poisoning attacks on enterprise networks.",
-            Tags = ["network", "security", "llmnr", "enterprise"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
             Id = "net-disable-wpad",
             Label = "Disable WPAD Auto-Proxy",
             Category = "Network",
@@ -472,34 +458,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-disable-link-local-multicast",
-            Label = "Disable Link-Local Multicast Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables LLMNR which can be exploited for credential relay attacks. DNS should be used instead. Default: enabled.",
-            Tags = ["network", "llmnr", "multicast", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
-            Id = "net-disable-netbios-over-tcpip",
-            Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables NetBIOS over TCP/IP. Reduces attack surface from NBT-NS poisoning. May break legacy SMB. Default: enabled.",
-            Tags = ["network", "netbios", "tcpip", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
             Id = "net-block-non-domain-wifi",
             Label = "Block Non-Domain WiFi Networks",
             Category = "Network",
@@ -585,30 +543,6 @@ internal static class Network
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 1)],
-        },
-        new TweakDef
-        {
-            Id = "net-smb2-require-signing",
-            Label = "Require SMB Client Signing",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Requires SMB packet signing on the workstation (client) side. Protects against SMB relay attacks. May impact legacy device compatibility. Default: not required.",
-            Tags = ["network", "smb", "signing", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
         },
         new TweakDef
         {

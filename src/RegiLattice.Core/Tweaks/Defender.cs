@@ -270,21 +270,7 @@ internal static class Defender
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0)],
         },
-        new TweakDef
-        {
-            Id = "sec-enable-lsa-protection",
-            Label = "Enable LSA Protection (RunAsPPL)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables Local Security Authority (LSA) protection by running LSASS as a Protected Process Light (PPL). Mitigates credential theft. Default: Disabled. Recommended: Enabled.",
-            Tags = ["security", "lsa", "lsass", "ppl", "credential"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPL", 1)],
-        },
+
         new TweakDef
         {
             Id = "sec-enable-spectre-mitigations",
@@ -436,40 +422,8 @@ internal static class Defender
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "sec-disable-autorun",
-            Label = "Disable AutoRun for All Drive Types",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables AutoRun/AutoPlay for all drive types via policy (NoDriveTypeAutoRun=255). Prevents malware spread via USB drives and CD-ROMs. Default: Partial. Recommended: Fully disabled.",
-            Tags = ["security", "autorun", "autoplay", "usb", "policy", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-remote-assistance",
-            Label = "Disable Windows Remote Assistance",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Windows Remote Assistance (fAllowToGetHelp=0). Eliminates a remote access vector not typically needed on workstations. Default: Enabled. Recommended: Disabled.",
-            Tags = ["security", "remote-assistance", "rdp", "access", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
-            SideEffects = "Windows Remote Assistance invitations cannot be sent or accepted.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-        },
+
+
         new TweakDef
         {
             Id = "sec-enable-sehop",

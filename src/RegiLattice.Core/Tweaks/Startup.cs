@@ -197,21 +197,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-app-tracking",
-            Label = "Disable Startup App Tracking",
-            Category = "Startup",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables tracking of which programs are launched from Start menu. Improves privacy and reduces write I/O. Default: Enabled. Recommended: Disabled.",
-            Tags = ["startup", "tracking", "privacy", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-last-known-good",
             Label = "Disable Last Known Good Boot Option",
             Category = "Startup",
@@ -232,20 +217,6 @@ internal static class Startup
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "LastKnownGood", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "startup-verbose-boot",
-            Label = "Enable Verbose Boot Messages",
-            Category = "Startup",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Shows detailed status messages during boot and shutdown. Default: Disabled. Recommended: Enabled for troubleshooting.",
-            Tags = ["startup", "boot", "verbose", "debug"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
         },
         new TweakDef
         {
@@ -366,20 +337,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-        },
-        new TweakDef
-        {
-            Id = "startup-verbose-boot-messages",
-            Label = "Enable Verbose Boot Status Messages",
-            Category = "Startup",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shows detailed status messages during boot and shutdown. Useful for troubleshooting slow startups. Default: disabled.",
-            Tags = ["startup", "verbose", "boot", "debug"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
         },
         new TweakDef
         {

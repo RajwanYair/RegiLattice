@@ -360,20 +360,6 @@ internal static class CommandLineTweaks
 
         new TweakDef
         {
-            Id = "cmd-disable-netbios-broadcast",
-            Label = "Disable NetBIOS Broadcast Resolution",
-            Category = "Command Line",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables NetBIOS name resolution via broadcast to reduce network noise and attack surface.",
-            Tags = ["netsh", "netbios", "security", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
             Id = "cmd-enable-ntp-high-freq",
             Label = "Set NTP Polling to High Frequency",
             Category = "Command Line",

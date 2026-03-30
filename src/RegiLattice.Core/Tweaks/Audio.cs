@@ -118,20 +118,6 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-disable-speech-recognition",
-            Label = "Disable Online Speech Recognition",
-            Category = "Audio",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Opts out of online speech recognition, preventing voice data from being sent to Microsoft cloud services.",
-            Tags = ["audio", "speech", "recognition", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-        },
-        new TweakDef
-        {
             Id = "audio-exclusive-priority",
             Label = "Set Audio Exclusive Mode Priority",
             Category = "Audio",

@@ -757,22 +757,5 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetString(Desktop, "FontSmoothing", "2")],
             DetectOps = [RegOp.CheckString(Desktop, "FontSmoothing", "0")],
         },
-        new TweakDef
-        {
-            Id = "winapp-disable-drop-shadow",
-            Label = "Disable Window Drop Shadows",
-            Category = "Window Appearance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the drop shadow effect around window edges for a flat appearance.",
-            Tags = ["appearance", "shadow", "drop", "window"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 3)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 3),
-            ],
-        },
     ];
 }

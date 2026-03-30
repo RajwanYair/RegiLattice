@@ -245,20 +245,7 @@ internal static class Developer
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "dev-increase-irp-stack-size",
-            Label = "Increase IRP Stack Size (Network/Disk I/O)",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the I/O Request Packet stack size from 15 to 32. Improves performance for heavy disk/network I/O workloads.",
-            Tags = ["developer", "disk", "network", "performance", "irp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-        },
+
         new TweakDef
         {
             Id = "dev-enable-wsl2",
@@ -719,21 +706,7 @@ internal static class Developer
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Windows", "LegacyDefaultPrinterMode", 1)],
         },
-        new TweakDef
-        {
-            Id = "dev-explorer-show-extensions",
-            Label = "Show File Extensions in Explorer",
-            Category = "Dev Drive / Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets HideFileExt=0 in Explorer Advanced. Forces Explorer to display file extensions for all files, removing a common source of confusion when working with source files.",
-            Tags = ["developer", "explorer", "extensions", "files"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-        },
+
         new TweakDef
         {
             Id = "dev-show-hidden-files",
@@ -764,21 +737,7 @@ internal static class Developer
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
         },
-        new TweakDef
-        {
-            Id = "dev-enable-full-path-in-titlebar",
-            Label = "Show Full Path in Explorer Title Bar",
-            Category = "Dev Drive / Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets FullPath=1 in Explorer CabinetState. Forces Explorer to show the complete directory path in the title bar and address bar instead of just the folder name.",
-            Tags = ["developer", "explorer", "path", "title-bar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-        },
+
         new TweakDef
         {
             Id = "dev-disable-hide-file-ext-zone-info",

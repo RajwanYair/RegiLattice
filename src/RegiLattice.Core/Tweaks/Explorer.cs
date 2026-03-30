@@ -604,21 +604,7 @@ internal static class Explorer
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "explorer-disable-balloon-tips",
-            Label = "Disable System Tray Balloon Tips",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables old-style popup balloon notifications in the system tray. Modern toast notifications are unaffected. Default: enabled (1). Recommended: disabled.",
-            Tags = ["explorer", "balloon", "tips", "notifications", "tray", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableBalloonTips", 0)],
-        },
+
         new TweakDef
         {
             Id = "explorer-open-to-this-pc",
@@ -633,20 +619,7 @@ internal static class Explorer
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
         },
-        new TweakDef
-        {
-            Id = "explorer-disable-aero-shake",
-            Label = "Disable Aero Shake",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Aero Shake (shaking a window to minimize all others). Prevents accidental minimization. Default: enabled.",
-            Tags = ["explorer", "aero-shake", "window", "minimize"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-        },
+
         new TweakDef
         {
             Id = "explorer-expand-to-open-folder",

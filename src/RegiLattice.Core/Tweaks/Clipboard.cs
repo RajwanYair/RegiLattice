@@ -181,24 +181,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-disable-drag-shadow",
-            Label = "Disable Drop Shadow on Dragged Items",
-            Category = "Clipboard & Drag-Drop",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets visual effects to custom mode which removes the drop shadow on dragged objects. Improves drag-drop rendering performance on older GPUs. Default: Enabled.",
-            Tags = ["clipboard", "drag", "shadow", "visual", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 0)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects", "VisualFXSetting", 2),
-            ],
-        },
-        new TweakDef
-        {
             Id = "clip-disable-clipboard-history",
             Label = "Disable Clipboard History",
             Category = "Clipboard & Drag-Drop",
