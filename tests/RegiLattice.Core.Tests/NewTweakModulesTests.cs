@@ -199,7 +199,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 
     [Theory]
     [InlineData("BitLocker Advanced")]
-    [InlineData("AppLocker & WDAC")]
+    [InlineData("Application Control Policy")]
     [InlineData("Hyper-V Advanced")]
     [InlineData("Windows Sandbox")]
     public void Sprint69_NewCategories_RegisteredInEngine(string categoryName)
@@ -356,11 +356,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Edge Print & PDF Policy")]
-    [InlineData("Edge Search & Address Bar Policy")]
-    [InlineData("Edge Media Capture Policy")]
-    [InlineData("Edge Tracking Protection Policy")]
-    [InlineData("Edge IE Mode Policy")]
+    [InlineData("Browser Policy")]
     public void Sprint412_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
@@ -525,11 +521,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Edge Secure Browsing Policy")]
-    [InlineData("Edge Profile & Sign-In Policy")]
-    [InlineData("Edge Notifications & Popup Policy")]
-    [InlineData("Edge Download & History Policy")]
-    [InlineData("Edge SmartScreen & Site Isolation Policy")]
+    [InlineData("Browser Policy")]
     public void Sprint417_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
