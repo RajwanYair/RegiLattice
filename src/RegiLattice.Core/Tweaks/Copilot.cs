@@ -143,20 +143,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-ai-widgets",
-            Label = "Disable AI-Enhanced Widgets Feed",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the AI-enhanced News and Interests widgets feed via Dsh policy.",
-            Tags = ["ai", "copilot", "widgets"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-        },
-        new TweakDef
-        {
             Id = "ai-copilot-disable-recall",
             Label = "Disable Recall Feature",
             Category = "AI / Copilot",
@@ -302,20 +288,6 @@ internal static class Copilot
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-bing-search-suggestions",
-            Label = "Disable Bing Copilot Search Suggestions",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Bing-powered AI search suggestions in the Start menu. Default: enabled.",
-            Tags = ["ai", "bing", "search", "suggestions"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
         },
         new TweakDef
         {

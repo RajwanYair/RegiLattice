@@ -142,23 +142,6 @@ internal static class ProcessMitigationPolicy
         },
         new TweakDef
         {
-            Id = "prctmtg-enable-safe-dll-search-mode",
-            Label = "Process Mitigation: Enable Safe DLL Search Mode (Mitigate DLL Hijack)",
-            Category = "Process Mitigation Policy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            RegistryKeys = [SessMgr],
-            Tags = ["dll-hijack", "search-mode", "safe", "exploit-mitigation", "security"],
-            Description =
-                "Sets SafeDllSearchMode=1 in Session Manager. Moves the current directory to a "
-                + "lower priority in the DLL search order so that system32 is searched first. "
-                + "Default: 1 (already enabled). Explicit enforcement ensures no policy regression.",
-            ApplyOps = [RegOp.SetDword(SessMgr, "SafeDllSearchMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(SessMgr, "SafeDllSearchMode")],
-            DetectOps = [RegOp.CheckDword(SessMgr, "SafeDllSearchMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "prctmtg-protect-svc-with-emet",
             Label = "Process Mitigation: Enable Kernel Patch Protection (KPP) Enforcement",
             Category = "Process Mitigation Policy",

@@ -445,20 +445,6 @@ internal static class Accessibility
         },
         new TweakDef
         {
-            Id = "acc-set-menu-show-delay",
-            Label = "Reduce Menu Show Delay",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the delay before menus appear to 50ms (default 400ms). Makes context menus and submenus feel instant.",
-            Tags = ["accessibility", "menu", "delay", "responsiveness"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "400")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "50")],
-        },
-        new TweakDef
-        {
             Id = "acc-disable-auto-correct",
             Label = "Disable Auto-Correct for Touch Keyboard",
             Category = "Accessibility",

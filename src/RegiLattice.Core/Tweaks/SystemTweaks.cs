@@ -124,20 +124,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-disable-fast-startup",
-            Label = "Disable Fast Startup (HiberBoot)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Fast Startup (hybrid shutdown). Ensures clean boot every time. Default: Enabled. Recommended: Disabled.",
-            Tags = ["system", "fast-startup", "hiberboot", "boot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "sys-disable-error-reporting",
             Label = "Disable Windows Error Reporting",
             Category = "System",
