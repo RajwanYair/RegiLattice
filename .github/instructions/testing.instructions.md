@@ -15,10 +15,10 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 
 | Project                  | Tests     | Covers                                                                                                                                                                         |
 | ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `RegiLattice.Core.Tests` | 2,052+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
+| `RegiLattice.Core.Tests` | 2,102+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
 | `RegiLattice.CLI.Tests`  | 301+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
-| `RegiLattice.GUI.Tests`  | 340+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **2,693+**|                                                                                                                                                                                |
+| `RegiLattice.GUI.Tests`  | 339+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
+| **Total**                | **2,742+**|                                                                                                                                                                                |
 
 ## Running Tests
 
@@ -131,14 +131,15 @@ public void Register_NullTweak_ThrowsArgumentNullException()
 
 ```csharp
 [Fact]
-public void Categories_ReturnsAll69Categories()
+public void Categories_ReturnsAllCategories()
 {
     var engine = new TweakEngine();
     engine.RegisterBuiltins();
 
     var categories = engine.Categories();
 
-    Assert.Equal(69, categories.Count);
+    // Actual count varies as modules are added; verify it's substantial
+    Assert.True(categories.Count > 600);
     Assert.Contains("Privacy", categories);
     Assert.Contains("Performance", categories);
 }

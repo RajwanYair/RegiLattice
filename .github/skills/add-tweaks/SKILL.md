@@ -63,7 +63,7 @@ new TweakDef
 
 - **Verbatim strings**: Always use `@"HKEY_..."` — never bare strings (escape sequence bug)
 - **HasOperations gate**: `TweakEngine.Register()` silently skips tweaks with no `ApplyOps` and no `ApplyAction`
-- **Unique IDs across ALL 92 modules** — duplicates throw `ArgumentException` at startup
+- **Unique IDs across ALL 660 modules** — duplicates throw `ArgumentException` at startup
 - **Registry path format**: Full hive names preferred (`HKEY_LOCAL_MACHINE\...`); abbreviations (`HKLM\...`) also accepted
 - **Duplicate scan before writing**:
   ```powershell

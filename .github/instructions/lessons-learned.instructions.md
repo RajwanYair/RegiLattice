@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-29 (v5.54.0, C# 13 / .NET 10.0-windows, ~7505 tweaks, 464 categories, 2742 tests)
+> Last updated: 2026-03-30 (v5.95.0, C# 13 / .NET 10.0-windows, ~9184 tweaks, 632 categories, 2742 tests)
 
 ---
 
@@ -1163,6 +1163,7 @@ Version history:
 | v5.92.0 | 5 | 50 | 617–621 |
 | v5.93.0 | 5 | 50 | 622–626 |
 | v5.94.0 | 5 | 50 | 627–631 |
+| v5.95.0 | 0 | -21 | — (consolidation: removed 21 duplicates) |
 
 **Current version**: v5.95.0 — 9,184 tweaks, 632 categories, 660 modules. Run full gap analysis on all three phases before creating any new module.
 

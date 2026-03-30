@@ -145,7 +145,7 @@ Registry.SetValue(@"HKEY_CURRENT_USER\...", "Value", 1);
 
 ## P/Invoke — Minimize and Document
 
-Only 2 P/Invoke calls exist in the codebase. Any new P/Invoke must be justified:
+Only 4 P/Invoke calls exist in the codebase (GetComputerNameExW, GlobalMemoryStatusEx ×2, GetSystemTimes). Any new P/Invoke must be justified:
 
 ```csharp
 // ✅ Good — documented, DllImport with exact signature
