@@ -76,3 +76,7 @@ current-ids.txt
 .tmp/
 
 .fake
+
+# ── Local scratch / planning notes (not tracked) ─────────────
+C0 - FE HBI changes.txt
+Think deep and plan a full refactor.txt
