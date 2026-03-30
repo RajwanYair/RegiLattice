@@ -7,7 +7,7 @@ applyTo: "**"
 ## Project Overview
 
 Windows-only .NET development workspace for the **RegiLattice** registry tweak toolkit.
-Version 5.54.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
+Version 5.95.0 — C# 13 / .NET 10.0-windows, migrated from Python v1.x.
 
 ## Technical Stack
 
@@ -37,7 +37,7 @@ RegiLattice.sln
 │   │   │                        #   Locale, PipManager, Ratings, ShellRunner,
 │   │   │                        #   SystemMonitor, TweakHistory, WinGetManager
 │   │   ├── Plugins/             # Tweak Pack system (JSON marketplace)
-│   │   └── Tweaks/              # 461+ category modules, 7,505 tweaks
+│   │   └── Tweaks/              # 660 module files, 9,184 tweaks across 632 categories
 │   ├── RegiLattice.GUI/         # WinForms application
 │   │   ├── Program.cs           # Entry point
 │   │   ├── AppIcons.cs          # Programmatic icon/bitmap generation
@@ -169,7 +169,7 @@ dotnet publish src/RegiLattice.GUI/RegiLattice.GUI.csproj -c Release -r win-x64 
 - **No hardcoded credentials** — use environment variables or `%LOCALAPPDATA%`
 - **No `Process.Start` with user input** — parameterize all commands
 - **Registry access via RegistrySession** — never raw `Registry.SetValue`
-- **P/Invoke minimized** — only 2 calls in entire codebase, both documented
+- **P/Invoke minimized** — only 4 calls in entire codebase (GetComputerNameExW, GlobalMemoryStatusEx ×2, GetSystemTimes), all documented
 - **CorporateGuard** — detects managed environments and blocks unsafe tweaks
 - **DryRun mode** — preview changes before applying
 
