@@ -21,21 +21,7 @@ internal static class FileSystem
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EFS", "EfsConfiguration", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EFS", "EfsConfiguration", 1)],
         },
-        new TweakDef
-        {
-            Id = "fs-increase-irp-stack",
-            Label = "Increase IRP Stack Size",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Increases the I/O Request Packet (IRP) stack size for the LanmanServer service. Improves reliability and throughput for network file sharing with many concurrent connections. Default: 15. Recommended: 50 for file servers or heavy SMB workloads.",
-            Tags = ["filesystem", "irp", "network", "smb", "file-sharing", "lanman"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 50)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 15)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 50)],
-        },
+
         new TweakDef
         {
             Id = "fs-disable-remote-diff-compression",
@@ -486,21 +472,7 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
         },
-        new TweakDef
-        {
-            Id = "fs-set-io-queue-depth",
-            Label = "Increase I/O Queue Depth",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the I/O request packet (IRP) stack size for deeper driver stacks. Improves throughput with advanced storage controllers.",
-            Tags = ["filesystem", "io", "queue", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
-        },
+
         new TweakDef
         {
             Id = "fs-enable-win32-long-paths-policy",
@@ -642,21 +614,6 @@ internal static class FileSystem
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "fs-enable-safe-dll-search",
-            Label = "Enforce Safe DLL Search Order",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SafeDllSearchMode=1. Ensures Windows searches System32 before the current working directory when loading DLLs. Mitigates DLL planting / search-order hijacking attacks.",
-            Tags = ["filesystem", "dll", "security", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
         },
         new TweakDef
         {

@@ -736,21 +736,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-logon-provider-ads",
-            Label = "Disable Login Provider Suggestions",
-            Category = "Startup",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables sign-in provider suggestions and ads (e.g., PIN setup prompts, Microsoft account suggestions) at the login screen.",
-            Tags = ["startup", "login", "ads", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-edge-prelaunch",
             Label = "Disable Edge Pre-Launch at Login",
             Category = "Startup",

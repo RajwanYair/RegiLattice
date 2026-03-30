@@ -534,21 +534,6 @@ internal static class Shell
         },
         new TweakDef
         {
-            Id = "shell-separate-process-per-window",
-            Label = "Run Each Explorer Window in a Separate Process",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets SeparateProcess=1 in Explorer Advanced. Forces each Explorer window to run in its own process. A crash in one window will not bring down other open windows.",
-            Tags = ["shell", "explorer", "stability", "process"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
-        },
-        new TweakDef
-        {
             Id = "shell-show-status-bar",
             Label = "Show Status Bar in Explorer Windows",
             Category = "Shell",

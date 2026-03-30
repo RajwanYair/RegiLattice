@@ -124,39 +124,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-menu-show-instant",
-            Label = "Instant Context Menu (0 ms Delay)",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets MenuShowDelay to 0, making context menus and pop-up menus appear instantly. Default: 400 ms. Recommended: 0 for power users.",
-            Tags = ["multimedia", "menu", "delay", "performance", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "400")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "MenuShowDelay", "0")],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-logon-anim",
-            Label = "Disable First-Logon Animation",
-            Category = "Multimedia",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the animated user-tile / Getting Ready screen shown on first logon after updates. Speeds up login for domain and managed devices. Default: Enabled.",
-            Tags = ["multimedia", "logon", "animation", "boot", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "EnableFirstLogonAnimation", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "EnableFirstLogonAnimation", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "EnableFirstLogonAnimation", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "media-reduce-tooltip-delay",
             Label = "Instant Tooltip Display (0 ms)",
             Category = "Multimedia",

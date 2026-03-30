@@ -492,34 +492,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-hang-boot-timeout",
-            Label = "Reduce Hung-App Boot Timeout (Auto Kill)",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the HungAppTimeout to 2000 ms so Windows auto-closes unresponsive apps faster on shutdown.",
-            Tags = ["maintenance", "shutdown", "performance", "timeout"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "2000")],
-        },
-        new TweakDef
-        {
-            Id = "maint-auto-end-tasks-on-shutdown",
-            Label = "Auto-End Tasks on Shutdown (No Prompt)",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables AutoEndTasks so Windows automatically terminates applications that are blocking shutdown without asking the user.",
-            Tags = ["maintenance", "shutdown", "performance", "auto-kill"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-crash-on-audit-fail",
             Label = "Disable Crash-on-Audit-Full (Security)",
             Category = "Maintenance",

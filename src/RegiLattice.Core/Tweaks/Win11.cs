@@ -6,24 +6,7 @@ internal static class Win11
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "w11-disable-widgets",
-            Label = "Disable Widgets (News & Interests)",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Removes the Widgets button from the taskbar and disables the feed.",
-            Tags = ["win11", "taskbar", "debloat"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh",
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-            ],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-        },
+
         new TweakDef
         {
             Id = "w11-win11-disable-suggested-actions",
@@ -62,30 +45,7 @@ internal static class Win11
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
         },
-        new TweakDef
-        {
-            Id = "w11-disable-recommendations",
-            Label = "Disable Start Menu Recommendations",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the 'Recommended' section in the Win11 Start Menu that shows recently opened files and suggested apps. Default: enabled. Recommended: disabled.",
-            Tags = ["win11", "start-menu", "recommendations", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-cross-device",
@@ -103,20 +63,7 @@ internal static class Win11
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableCdp", 0)],
         },
 
-        new TweakDef
-        {
-            Id = "w11-taskbar-left",
-            Label = "Align Taskbar to the Left",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Aligns the Windows 11 taskbar icons to the left instead of center. Default: center. Recommended: personal preference.",
-            Tags = ["win11", "taskbar", "alignment", "left"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-rounded-corners",
@@ -637,21 +584,7 @@ internal static class Win11
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "w11-never-combine-taskbar",
-            Label = "Never Combine Taskbar Buttons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22631,
-            Description = "Shows separate taskbar buttons for every window instead of grouping by app. Requires 23H2+.",
-            Tags = ["win11", "taskbar", "combine", "buttons"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-        },
+
         new TweakDef
         {
             Id = "w11-restore-right-click",
@@ -732,36 +665,8 @@ internal static class Win11
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoTaskGrouping")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoTaskGrouping", 1)],
         },
-        new TweakDef
-        {
-            Id = "w11-win11-disable-widgets",
-            Label = "Disable Widgets Taskbar Button",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Widgets (Weather/News) button from the taskbar for the current user.",
-            Tags = ["win11", "widgets", "taskbar", "debloat"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDa", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDa")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDa", 0)],
-        },
-        new TweakDef
-        {
-            Id = "w11-taskbar-combine-never",
-            Label = "Never Combine Taskbar Buttons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets TaskbarGlomLevel=2 to never combine taskbar buttons, showing each open window as a separate button with label. Default: combine when taskbar is full (0).",
-            Tags = ["win11", "taskbar", "combine", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-        },
+
+
         new TweakDef
         {
             Id = "w11-clock-seconds",
@@ -804,31 +709,7 @@ internal static class Win11
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
         },
 
-        new TweakDef
-        {
-            Id = "w11-start-recent-recs-off",
-            Label = "Hide Recent Recommendations from Start Menu",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets Start_IrisRecommendations=0 to remove the 'Recommended' files and apps section from the Start menu. Reduces telemetry-driven content. Default: 1.",
-            Tags = ["win11", "start-menu", "recommendations", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_IrisRecommendations", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "w11-taskbar-wiggle-off",
@@ -948,21 +829,7 @@ internal static class Win11
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "w11-set-explorer-open-this-pc",
-            Label = "Open File Explorer to This PC by Default",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Configures File Explorer to open to 'This PC' (drives) instead of 'Quick Access' or 'Home'. Gives immediate access to disk drives on launch. Default: Quick Access / Home.",
-            Tags = ["w11", "explorer", "this-pc", "default", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-notification-center",
@@ -1023,30 +890,7 @@ internal static class Win11
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
         },
-        new TweakDef
-        {
-            Id = "w11-disable-first-logon-animation",
-            Label = "Disable First Logon Animated Intro",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the 'Hi, here are some things to get started' first-time logon animation screen. Speeds up new user account first login. Default: animation plays on first login.",
-            Tags = ["w11", "logon", "animation", "performance", "ui"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-shutdown-tracking",

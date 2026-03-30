@@ -508,21 +508,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-fast-startup",
-            Label = "Disable Fast Startup (Hybrid Boot)",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Fast Startup which saves kernel state to disk. Ensures clean boots and avoids driver issues. Default: enabled.",
-            Tags = ["performance", "fast-startup", "hybrid-boot", "shutdown"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power", "HiberbootEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-background-apps",
             Label = "Disable Background Apps (Policy)",
             Category = "Performance",
@@ -703,21 +688,7 @@ internal static class Performance
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "perf-increase-irp-stack",
-            Label = "Increase IRP Stack Size",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the I/O Request Packet stack size to 30, improving performance for complex I/O operations and network shares. Default: 15.",
-            Tags = ["performance", "irp", "io", "network", "stack"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 30)],
-        },
+
         new TweakDef
         {
             Id = "perf-disable-explorer-search-history",

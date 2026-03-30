@@ -328,20 +328,7 @@ internal static class Notifications
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "notif-disable-badge-icons",
-            Label = "Disable Taskbar Badge Notifications",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables notification badge counters on taskbar app icons. Default: Enabled. Recommended: Disabled.",
-            Tags = ["notifications", "badge", "taskbar", "icons"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-        },
+
         new TweakDef
         {
             Id = "notif-quiet-hours",
@@ -588,20 +575,7 @@ internal static class Notifications
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", "5")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", "3")],
         },
-        new TweakDef
-        {
-            Id = "notif-disable-badge-notifications",
-            Label = "Disable Badge Notifications on Taskbar",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables badge (count) notifications on taskbar app icons. Default: enabled.",
-            Tags = ["notifications", "badge", "taskbar", "count"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-        },
+
         new TweakDef
         {
             Id = "notif-disable-suggested-notifications",

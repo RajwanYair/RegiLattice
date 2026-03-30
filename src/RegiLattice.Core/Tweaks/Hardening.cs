@@ -78,20 +78,6 @@ internal static class Hardening
         },
         new TweakDef
         {
-            Id = "harden-enable-safe-search-mode",
-            Label = "Enable Safe DLL Search Mode (CWD Last)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Places the current directory last in the DLL search order to mitigate DLL preloading/hijacking attacks.",
-            Tags = ["hardening", "security", "dll", "hijacking"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "harden-restrict-remote-sam",
             Label = "Restrict Remote SAM Access (SDDL)",
             Category = "Hardening",
@@ -614,18 +600,6 @@ internal static class Hardening
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 1)],
-        },
-        new TweakDef
-        {
-            Id = "harden-safe-dll-search-mode",
-            Label = "Enable safe DLL search mode (prevent DLL hijacking)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["hardening", "dll", "hijacking", "search", "security"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
         },
         new TweakDef
         {

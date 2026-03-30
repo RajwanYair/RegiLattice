@@ -532,21 +532,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-widget-disable-bg-updates",
-            Label = "Disable Widget Background Updates",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables background widget content updates and feed refreshes. Reduces network traffic and CPU usage. Default: auto-updates.",
-            Tags = ["widgets", "background", "updates", "feed"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0)],
-        },
-        new TweakDef
-        {
             Id = "widgets-disable-feeds-policy",
             Label = "Disable Windows Feeds / News Bar (Policy)",
             Category = "Widgets & News",

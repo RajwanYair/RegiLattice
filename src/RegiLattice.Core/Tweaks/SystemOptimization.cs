@@ -288,51 +288,6 @@ internal static class SystemOptimization
             DetectOps = [RegOp.CheckDword(WinLogon, "AutoRestartShell", 1)],
         },
 
-        // ── Explorer & Shell Performance ─────────────────────────────────
-
-        new TweakDef
-        {
-            Id = "sysopt-explorer-separate-process",
-            Label = "Open Explorer Windows in Separate Process",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Runs each Explorer window as a separate process — one crash won't kill the shell.",
-            Tags = ["optimization", "explorer", "process", "stability"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SeparateProcess", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-auto-end-tasks",
-            Label = "Auto-End Non-Responsive Tasks on Shutdown",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Automatically ends hung applications during shutdown instead of prompting the user.",
-            Tags = ["optimization", "shutdown", "tasks", "hang"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "AutoEndTasks", "1")],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-hung-app-timeout-short",
-            Label = "Reduce Hung App Timeout (3s)",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the time Windows waits for unresponsive apps from 5s to 3s before the End Task prompt.",
-            Tags = ["optimization", "timeout", "hang", "responsiveness"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "3000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "3000")],
-        },
-
         // ── Security & LSA ───────────────────────────────────────────────
 
         new TweakDef
@@ -384,20 +339,7 @@ internal static class SystemOptimization
 
         // ── Misc Performance ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-increase-irp-stack-size",
-            Label = "Increase IRP Stack Size (32)",
-            Category = "System Optimization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the I/O request packet stack size to 32 for better performance with network shares and layered drivers.",
-            Tags = ["optimization", "irp", "network", "driver"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "IRPStackSize", 32)],
-        },
+
         new TweakDef
         {
             Id = "sysopt-smb-size-req-buffer",
@@ -544,20 +486,6 @@ internal static class SystemOptimization
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-delivery-optimization",
-            Label = "Disable Delivery Optimization (P2P Updates)",
-            Category = "System Optimization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from sharing update downloads with other PCs on the Internet — reduces bandwidth.",
-            Tags = ["optimization", "update", "delivery", "p2p"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
         },
     ];
 }
